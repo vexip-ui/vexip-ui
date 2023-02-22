@@ -10,6 +10,8 @@ export type {
   TableColumnType,
   FilterOptions,
   SorterOptions,
+  FilterProfile,
+  SorterProfile,
   BaseColumn,
   OrderColumn,
   SelectionColumn,

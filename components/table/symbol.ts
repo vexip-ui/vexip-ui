@@ -132,7 +132,8 @@ export type SorterProfile<D = Data, Val extends string | number = string | numbe
   D,
   Val
 > & {
-  type: 'asc' | 'desc'
+  type: 'asc' | 'desc',
+  order: number
 }
 
 export interface StoreOptions {
@@ -160,6 +161,8 @@ export interface StoreOptions {
   tooltipWidth: number | string,
   singleSorter: boolean,
   singleFilter: boolean,
+  customSorter: boolean,
+  customFilter: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 

@@ -121,7 +121,8 @@ type SorterProfile<D = Data, Val extends string | number = string | number> = Co
   D,
   Val
 > & {
-  type: 'asc' | 'desc'
+  type: 'asc' | 'desc',
+  order: number
 }
 
 interface TableRowPayload {
@@ -183,6 +184,8 @@ interface TableHeadPayload {
 | single-sorter   | `boolean`                                                | After setting, it will limit the table to only one column to enable sorting                                                                           | `false`        | -       |
 | single-filter   | `boolean`                                                | After setting, it will limit the table to only one column to enable filtering                                                                         | `false`        | -       |
 | locale          | `LocaleConfig['table']`                                  | Set the locale config                                                                                                                                 | `null`         | `2.1.0` |
+| custom-sorter   | `boolean`                                                | Set whether use custom sorter, will dispatch event without internal sorting if enabled                                                                | `false`        | `2.1.4` |
+| custom-filter   | `boolean`                                                | Set whether use custom filter, will dispatch event without internal filtering if enabled                                                              | `false`        | `2.1.4` |
 
 ### Table Events
 

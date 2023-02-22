@@ -68,6 +68,8 @@ export function useStore(options: StoreOptions) {
     tooltipWidth: options.tooltipWidth,
     singleSorter: options.singleSorter,
     singleFilter: options.singleFilter,
+    customSorter: options.customSorter,
+    customFilter: options.customFilter,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -109,10 +111,14 @@ export function useStore(options: StoreOptions) {
   setVirtual(state, options.virtual)
 
   const filteredData = computed(() => {
-    return filterData(state.filters, state.rowData, state.singleFilter)
+    return state.customFilter
+      ? state.rowData
+      : filterData(state.filters, state.rowData, state.singleFilter)
   })
   const sortedData = computed(() => {
-    return sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
+    return state.customSorter
+      ? filteredData.value
+      : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
   })
   const processedData = computed(() => {
     return pageData(state.currentPage, state.pageSize, sortedData.value)
@@ -213,6 +219,8 @@ export function useStore(options: StoreOptions) {
     setSingleSorter: setSingleSorter.bind(null, state),
     setSingleFilter: setSingleFilter.bind(null, state),
     setDragging: setDragging.bind(null, state),
+    setCustomSorter: setCustomSorter.bind(null, state),
+    setCustomFilter: setCustomFilter.bind(null, state),
 
     handleSort: handleSort.bind(null, state),
     clearSort: clearSort.bind(null, state),
@@ -576,6 +584,14 @@ export function useStore(options: StoreOptions) {
 
   function setDragging(state: StoreState, dragging: boolean) {
     state.dragging = !!dragging
+  }
+
+  function setCustomSorter(state: StoreState, able: boolean) {
+    state.customSorter = !!able
+  }
+
+  function setCustomFilter(state: StoreState, able: boolean) {
+    state.customFilter = !!able
   }
 
   function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {

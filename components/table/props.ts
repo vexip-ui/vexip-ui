@@ -21,6 +21,8 @@ import type {
   TableColumnOptions,
   SorterOptions,
   FilterOptions,
+  SorterProfile,
+  FilterProfile,
   RowPropFn,
   CellPropFn,
   HeadPropFn,
@@ -28,19 +30,19 @@ import type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
-export interface FilterProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  active: string | number | (string | number)[] | null
-}
+// export interface FilterProfile {
+//   name: string,
+//   key: string | number,
+//   metaData: Data,
+//   active: string | number | (string | number)[] | null
+// }
 
-export interface SortProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  type: 'asc' | 'desc' | null
-}
+// export interface SortProfile {
+//   name: string,
+//   key: string | number,
+//   metaData: Data,
+//   type: 'asc' | 'desc' | null
+// }
 
 export const tableProps = buildProps({
   locale: localeProp('table'),
@@ -84,6 +86,8 @@ export const tableProps = buildProps({
   headClass: [String, Object, Array, Function] as PropType<ClassType | HeadPropFn<ClassType>>,
   headStyle: [String, Object, Array, Function] as PropType<StyleType | HeadPropFn<StyleType>>,
   headAttrs: [Object, Function] as PropType<Record<string, any> | HeadPropFn<Record<string, any>>>,
+  customSorter: booleanProp,
+  customFilter: booleanProp,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
@@ -99,7 +103,7 @@ export const tableProps = buildProps({
   onRowDrop: eventProp<(row: Data, type: DropType, event: DragEvent) => void>(),
   onRowDragEnd: eventProp<(row: Data, allRows: Data[], event: DragEvent) => void>(),
   onRowFilter: eventProp<(profiles: FilterProfile[], filteredRow: Data[]) => void>(),
-  onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>(),
+  onRowSort: eventProp<(profiles: SorterProfile[], sortedRow: Data[]) => void>(),
   onCellEnter: eventProp<(payload: TableCellPayload) => void>(),
   onCellLeave: eventProp<(payload: TableCellPayload) => void>(),
   onCellClick: eventProp<(payload: TableCellPayload) => void>(),

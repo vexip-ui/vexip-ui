@@ -1,10 +1,17 @@
 <template>
-  <Table :columns="columns" :data="data" :width="1000"></Table>
+  <Table
+    :columns="columns"
+    :data="data"
+    :width="1000"
+    @row-sort="handleRowSort"
+  ></Table>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineColumns } from 'vexip-ui'
+
+import type { SorterProfile } from 'vexip-ui'
 
 const columns = ref(
   defineColumns([
@@ -71,4 +78,8 @@ const data = ref([
     age: '26'
   }
 ])
+
+function handleRowSort(profiles: SorterProfile[]) {
+  console.info(profiles)
+}
 </script>

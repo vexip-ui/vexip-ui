@@ -235,7 +235,9 @@ export default defineComponent({
       cellAttrs: null,
       headClass: null,
       headStyle: null,
-      headAttrs: null
+      headAttrs: null,
+      customSorter: false,
+      customFilter: false
     })
 
     const nh = useNameHelper('table')
@@ -295,6 +297,8 @@ export default defineComponent({
       tooltipWidth: props.tooltipWidth,
       singleSorter: props.singleSorter,
       singleFilter: props.singleFilter,
+      customSorter: props.customSorter,
+      customFilter: props.customFilter,
       expandRenderer: props.expandRenderer
     })
 
@@ -404,6 +408,8 @@ export default defineComponent({
       setSingleSorter,
       setSingleFilter,
       setDragging,
+      setCustomSorter,
+      setCustomFilter,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -445,6 +451,8 @@ export default defineComponent({
     watch(() => props.tooltipWidth, setTooltipWidth)
     watch(() => props.singleSorter, setSingleSorter)
     watch(() => props.singleFilter, setSingleFilter)
+    watch(() => props.customSorter, setCustomSorter)
+    watch(() => props.customFilter, setCustomFilter)
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)
@@ -585,7 +593,7 @@ export default defineComponent({
             name: column.name,
             key: column.key,
             metaData: column.metaData!,
-            active: filters[key].active
+            active: filters[key].active!
           }
         })
 
@@ -608,7 +616,8 @@ export default defineComponent({
             name: column.name,
             key: column.key,
             metaData: column.metaData!,
-            type: sorters[key].type
+            type: sorters[key].type!,
+            order: sorters[key].order
           }
         })
 

@@ -121,7 +121,8 @@ type SorterProfile<D = Data, Val extends string | number = string | number> = Co
   D,
   Val
 > & {
-  type: 'asc' | 'desc'
+  type: 'asc' | 'desc',
+  order: number
 }
 
 interface TableRowPayload {
@@ -183,6 +184,8 @@ interface TableHeadPayload {
 | single-sorter   | `boolean`                                                | 设置后将限制表格只能有一列开启排序                           | `false`        | -       |
 | single-filter   | `boolean`                                                | 设置后将限制表格只能有一列开启过滤                           | `false`        | -       |
 | locale          | `LocaleConfig['table']`                                  | 设置多语言配置                                               | `null`         | `2.1.0` |
+| custom-sorter   | `boolean`                                                | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4` |
+| custom-filter   | `boolean`                                                | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4` |
 
 ### Table 事件
 

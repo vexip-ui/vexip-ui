@@ -5,6 +5,7 @@
     :data="data"
     :width="1000"
     :row-height="40"
+    @row-filter="handleRowFilter"
   ></Table>
   <Button style="margin-top: 10px;" @click="clearFilter">
     清除过滤
@@ -15,7 +16,7 @@
 import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
 
-import type { Table } from 'vexip-ui'
+import type { Table, FilterProfile } from 'vexip-ui'
 
 interface RowData {
   id: string,
@@ -116,6 +117,10 @@ const data = ref([
     age: '26'
   }
 ])
+
+function handleRowFilter(profiles: FilterProfile[]) {
+  console.info(profiles)
+}
 
 function clearFilter() {
   table.value?.clearFilter()
