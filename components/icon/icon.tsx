@@ -42,14 +42,14 @@ export default defineComponent({
 
     if (props.spin) {
       warnOnce(
-        "[vexip-ui:Icon] 'spin' prop has been deprecated, pluse set the 'effect' prop to" +
+        "[vexip-ui:Icon] 'spin' prop has been deprecated, please set the 'effect' prop to" +
           " 'spin-in' or 'spin-out' to replace it"
       )
     }
 
     if (props.pulse) {
       warnOnce(
-        "[vexip-ui:Icon] 'pulse' prop has been deprecated, pluse set the 'effect' prop to" +
+        "[vexip-ui:Icon] 'pulse' prop has been deprecated, please set the 'effect' prop to" +
           " 'pulse-in' or 'pulse-out' to replace it"
       )
     }

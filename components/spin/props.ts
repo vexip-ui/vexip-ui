@@ -1,6 +1,7 @@
 import { buildProps, booleanProp, classProp, eventProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const spinProps = buildProps({
@@ -17,6 +18,7 @@ export const spinProps = buildProps({
   maskColor: String,
   maskClass: classProp,
   transitionName: String,
+  iconEffect: String as PropType<IconEffect>,
   onMaskClick: eventProp<(event: MouseEvent) => void>(),
   onShow: eventProp(),
   onHide: eventProp()

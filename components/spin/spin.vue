@@ -21,8 +21,7 @@
         <slot name="content">
           <div :class="nh.be('icon')">
             <slot name="icon">
-              <Icon v-if="props.spin" effect="spin-in" :icon="props.icon"></Icon>
-              <Icon v-else effect="pulse-in" :icon="props.icon"></Icon>
+              <Icon :effect="effect" :icon="props.icon"></Icon>
             </slot>
           </div>
           <div v-if="hasTip" :class="nh.be('tip')">
@@ -51,8 +50,7 @@
       <slot name="content">
         <div :class="nh.be('icon')">
           <slot name="icon">
-            <Icon v-if="props.spin" effect="spin-in" :icon="props.icon"></Icon>
-            <Icon v-else effect="pulse-in" :icon="props.icon"></Icon>
+            <Icon :effect="effect" :icon="props.icon"></Icon>
           </slot>
         </div>
         <div v-if="hasTip" :class="nh.be('tip')">
@@ -69,7 +67,7 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { toNumber } from '@vexip-ui/utils'
+import { toNumber, warnOnce } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 import { spinProps } from './props'
 
@@ -94,11 +92,22 @@ export default defineComponent({
       hideMask: false,
       maskColor: '',
       maskClass: null,
-      transitionName: () => nh.ns('fade')
+      transitionName: () => nh.ns('fade'),
+      iconEffect: null
     })
+
+    if (props.spin) {
+      warnOnce(
+        "[vexip-ui:Spin] 'spin' prop has been deprecated, please set the 'icon-effect'" +
+          " prop to 'spin-in' or 'spin-out' to replace it"
+      )
+    }
 
     const currentActive = ref(props.active)
 
+    const effect = computed(() => {
+      return props.iconEffect || (props.spin ? 'spin-in' : 'pulse-in')
+    })
     const hasTip = computed(() => !!(props.tip || slots.tip))
     const maskStyle = computed(() => {
       const style = {} as any
@@ -164,6 +173,7 @@ export default defineComponent({
 
       currentActive,
 
+      effect,
       hasTip,
       maskStyle,
 
