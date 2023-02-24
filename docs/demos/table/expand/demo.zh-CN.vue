@@ -1,5 +1,5 @@
 <template>
-  <Table :data="data" :width="800">
+  <Table :data="data" :width="800" @row-expand="handleExpand">
     <TableColumn type="expand" id-key="expand" fixed>
       <template #default="{ row, leftFixed, rightFixed }">
         <Grid
@@ -32,6 +32,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+import type { TableRowPayload } from 'vexip-ui'
 
 const data = ref([
   {
@@ -76,4 +78,8 @@ const data = ref([
     age: '26'
   }
 ])
+
+function handleExpand({ row, expanded }: TableRowPayload) {
+  console.info(row, expanded!)
+}
 </script>

@@ -129,7 +129,9 @@ interface TableRowPayload {
   row: Data,
   key: Key,
   index: number,
-  event: Event
+  event: Event,
+  checked?: boolean,
+  expanded?: boolean
 }
 
 interface TableCellPayload {
@@ -197,9 +199,9 @@ interface TableHeadPayload {
 | row-click        | Emitted when a row is clicked, returns row data, row index and row position index                                                    | `(payload: TableRowPayload)`                                                            | -       |
 | row-dblclick     | Emitted when a row is double-clicked, returns row data, row index and row position index                                             | `(payload: TableRowPayload)`                                                            | `2.0.1` |
 | row-contextmenu  | Emitted when a row is right-clicked, returns row data, row index and row position index                                              | `(payload: TableRowPayload)`                                                            | `2.0.1` |
-| row-check        | Emitted when a row checkbox is checked, returns row data, check state, row index and row position index                              | `(payload: Omit<TableRowPayload, 'event'> & { checked: boolean })`                      | -       |
+| row-check        | Emitted when a row checkbox is checked, returns row data, check state, row index and row position index                              | `(payload: TableRowPayload)`                                                            | -       |
 | row-check-all    | Emitted when all is selected, returns whether the current state is all selected and whether it is partially selected                 | `(checked: boolean, partial: boolean)`                                                  | -       |
-| row-expand       | Emitted when the expanded state of row expansion content changes, returns row data, expanded state, row index and row position index | `(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean })`                     | -       |
+| row-expand       | Emitted when the expanded state of row expansion content changes, returns row data, expanded state, row index and row position index | `(payload: TableRowPayload)`                                                            | -       |
 | row-drag-start   | Emitted when the row is about to start dragging, returns the data of the current row                                                 | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
 | row-drag-over    | Emitted when a row is being dragged, returns the data of the previous row                                                            | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
 | row-drop         | Emitted when a row is dropped by another dragged row, returns the data and drop type of the current row (before and after)           | `(data: Record<string, unknown>, dropType?: 'before ' \| 'after', event: DragEvent)`    | -       |

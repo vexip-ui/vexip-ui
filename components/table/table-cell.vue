@@ -18,7 +18,7 @@
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
       :disabled="disableCheckRows[row.key]"
-      @click.prevent.stop="handleCheckRow(row)"
+      @click.prevent.stop="handleCheckRow(row, $event)"
     ></Checkbox>
     <span v-else-if="isOrder(column)" :class="nh.be('order')">
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
@@ -30,7 +30,7 @@
           [nh.be('expand')]: true,
           [nh.bem('expand', 'active')]: row.expanded
         }"
-        @click.stop="handleExpandRow(row)"
+        @click.stop="handleExpandRow(row, $event)"
       >
         <Icon><AngleRight></AngleRight></Icon>
       </div>
@@ -263,23 +263,23 @@ export default defineComponent({
       }
     }
 
-    function handleCheckRow(row: RowState) {
+    function handleCheckRow(row: RowState, event: MouseEvent) {
       if (!getters.disableCheckRows[row.key]) {
         const checked = !row.checked
         const { data, key, index } = row
 
         mutations.handleCheck(key, checked)
-        tableAction.emitRowCheck({ row: data, key, index, checked })
+        tableAction.emitRowCheck({ row: data, key, index, event, checked })
       }
     }
 
-    function handleExpandRow(row: RowState) {
+    function handleExpandRow(row: RowState, event: MouseEvent) {
       if (!getters.disableExpandRows[row.key]) {
         const expanded = !row.expanded
         const { data, key, index } = row
 
         mutations.handleExpand(key, expanded)
-        tableAction.emitRowExpand({ row: data, key, index, expanded })
+        tableAction.emitRowExpand({ row: data, key, index, event, expanded })
       }
     }
 

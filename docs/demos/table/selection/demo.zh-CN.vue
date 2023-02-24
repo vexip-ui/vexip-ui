@@ -62,6 +62,6 @@ const data = ref([
 ])
 
 function getSelectedRows() {
-  return table.value?.getSelected() ?? []
+  console.info(table.value?.getSelected() ?? [])
 }
 </script>

@@ -218,7 +218,9 @@ export interface TableRowPayload {
   row: Data,
   key: Key,
   index: number,
-  event: Event
+  event: Event,
+  checked?: boolean,
+  expanded?: boolean
 }
 
 export interface TableCellPayload {
@@ -244,9 +246,9 @@ export interface TableAction {
   emitRowClick(payload: TableRowPayload): void,
   emitRowDblclick(payload: TableRowPayload): void,
   emitRowContextmenu(payload: TableRowPayload): void,
-  emitRowCheck(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }): void,
+  emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
-  emitRowExpand(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }): void,
+  emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
   emitRowFilter(): void,
   emitRowSort(): void,
   handleRowDragStart(rowInstance: RowInstance, event: DragEvent): void,

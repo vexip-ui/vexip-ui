@@ -129,7 +129,9 @@ interface TableRowPayload {
   row: Data,
   key: Key,
   index: number,
-  event: Event
+  event: Event,
+  checked?: boolean,
+  expanded?: boolean
 }
 
 interface TableCellPayload {
@@ -197,9 +199,9 @@ interface TableHeadPayload {
 | row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -       |
 | row-dblclick     | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
 | row-contextmenu  | 当右击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
-| row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: Omit<TableRowPayload, 'event'> & { checked: boolean })`                      | -       |
+| row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: TableRowPayload)`                                                            | -       |
 | row-check-all    | 当进行了全选时触发，返回当前是否为全选状态以及是否处于部分全选状态           | `(checked: boolean, partial: boolean)`                                                  | -       |
-| row-expand       | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | `(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean })`                     | -       |
+| row-expand       | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | `(payload: TableRowPayload)`                                                            | -       |
 | row-drag-start   | 当行将要开始拖拽时触发，返回当前行的数据                                     | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
 | row-drag-over    | 当行正在拖拽时触发，返回前行的数据                                           | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
 | row-drop         | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | `(data: Record<string, unknown>, dropType?: 'before' \| 'after', event: DragEvent)`     | -       |

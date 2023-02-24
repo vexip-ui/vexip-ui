@@ -94,10 +94,9 @@ export const tableProps = buildProps({
   onRowClick: eventProp<(payload: TableRowPayload) => void>(),
   onRowDblclick: eventProp<(payload: TableRowPayload) => void>(),
   onRowContextmenu: eventProp<(payload: TableRowPayload) => void>(),
-  onRowCheck: eventProp<(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }) => void>(),
+  onRowCheck: eventProp<(payload: TableRowPayload) => void>(),
   onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
-  onRowExpand:
-    eventProp<(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }) => void>(),
+  onRowExpand: eventProp<(payload: TableRowPayload) => void>(),
   onRowDragStart: eventProp<(row: Data, event: DragEvent) => void>(),
   onRowDragOver: eventProp<(row: Data, event: DragEvent) => void>(),
   onRowDrop: eventProp<(row: Data, type: DropType, event: DragEvent) => void>(),
