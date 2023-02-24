@@ -5,6 +5,7 @@
   <br />
   <br />
   <Table
+    use-y-bar
     :data="data"
     :width="1000"
     :row-height="40"

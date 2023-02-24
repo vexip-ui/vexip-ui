@@ -376,13 +376,12 @@ export function useStore(options: StoreOptions) {
       if (oldDataMap[key]) {
         row = oldDataMap[key]
 
-        if (row.data !== item) {
-          const { checked, height, expanded } = Object.assign(row.data, item)
+        const { checked, height, expanded } =
+          row.data !== item ? Object.assign(row.data, item) : row.data
 
-          row.checked = !isNull(checked) ? !!checked : row.checked
-          row.height = !isNull(height) ? toNumber(height) : row.height
-          row.expanded = !isNull(expanded) ? !!expanded : row.expanded
-        }
+        row.checked = !isNull(checked) ? !!checked : row.checked
+        row.height = !isNull(height) ? toNumber(height) : row.height
+        row.expanded = !isNull(expanded) ? !!expanded : row.expanded
       } else {
         const { checked, height, expanded } = item
 
@@ -817,7 +816,9 @@ export function useStore(options: StoreOptions) {
     return { able, type, order, method }
   }
 
-  function parseFilter(filter: FilterOptions = { able: false, options: [] }): ParsedFilterOptions {
+  function parseFilter(filter?: FilterOptions | null): ParsedFilterOptions {
+    filter = filter || { able: false, options: [] }
+
     const { able = true, multiple = false, active = null, method = null } = filter
     // 防止内部变化触发 deep watch
     const options = deepClone(filter.options ?? [])

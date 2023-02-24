@@ -47,7 +47,7 @@ export default defineComponent({
         static: true
       },
       width: null,
-      filter: () => ({} as FilterOptions),
+      filter: null,
       sorter: false,
       renderer: {
         default: null,

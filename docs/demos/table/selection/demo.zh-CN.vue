@@ -6,7 +6,7 @@
     <TableColumn name="Job" id-key="job"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
-  <Button @click="getSelectedRows">
+  <Button style="margin-top: 10px;" @click="getSelectedRows">
     获取选择的行
   </Button>
 </template>
