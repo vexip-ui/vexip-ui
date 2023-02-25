@@ -1,3 +1,27 @@
+## [2.1.4](https://github.com/vexip-ui/vexip-ui/compare/v2.1.3...v2.1.4) (2023-02-25)
+
+### Bug Fixes
+
+- **date-picker:** cannot focus end input when in range mode ([5ea7b59](https://github.com/vexip-ui/vexip-ui/commit/5ea7b59bc23043ebc5e06f0407feb6a1b160e996))
+- **date-picker:** ensure clearable prop wroks when no passing value ([68854b8](https://github.com/vexip-ui/vexip-ui/commit/68854b8f2505cbbf992b5ef535292382d51ed048)), closes [#258](https://github.com/vexip-ui/vexip-ui/issues/258)
+- **hooks:** improve useHover using useListener ([007dba8](https://github.com/vexip-ui/vexip-ui/commit/007dba8308e3199d08f9e65c4a3d96297031d6e5))
+- **input:** make sync effective when under FormItem ([207ef20](https://github.com/vexip-ui/vexip-ui/commit/207ef20b4b624d8e4717f151b410de1e7e03009e)), closes [#267](https://github.com/vexip-ui/vexip-ui/issues/267)
+- **layout:** improve user dropdown position ([b91291b](https://github.com/vexip-ui/vexip-ui/commit/b91291b73208ca6414f8cead5410fa1c03404ecf))
+- **radio:** should not be selected when in loading and loading-lock ([#260](https://github.com/vexip-ui/vexip-ui/issues/260)) ([3d79c9f](https://github.com/vexip-ui/vexip-ui/commit/3d79c9f256c09bb44c5e69489ac1e90926e921d5))
+- **select:** internal filter should filter by label ([bf39188](https://github.com/vexip-ui/vexip-ui/commit/bf391884d7a086ddd6915663c998bb8cd568c398)), closes [#265](https://github.com/vexip-ui/vexip-ui/issues/265)
+- **select:** normalize space and enter key behavior ([75ee99b](https://github.com/vexip-ui/vexip-ui/commit/75ee99beb13b26309027dd8b6cb5efdd4d7dbccb))
+- **select:** unexpect emit focus event when blur ([3e0afca](https://github.com/vexip-ui/vexip-ui/commit/3e0afca821060305891f257e1324412824bb57a3)), closes [#264](https://github.com/vexip-ui/vexip-ui/issues/264)
+- **table:** cannot refresh row states by data directly ([b9bb46d](https://github.com/vexip-ui/vexip-ui/commit/b9bb46d40fe1ce1ad4a23e790f70bcf178353297))
+- **table:** improve column sorter and filter able default true ([688dba4](https://github.com/vexip-ui/vexip-ui/commit/688dba40524ec5d56b10aa669329a7973ba45bfd))
+
+### Features
+
+- **calendar:** support two way binding for year and month ([f7469e9](https://github.com/vexip-ui/vexip-ui/commit/f7469e9d4bcc4ed91e9e1a157083a4bbab3a0485)), closes [#259](https://github.com/vexip-ui/vexip-ui/issues/259)
+- **native-scroll:** add ensureInView api method ([cb860d4](https://github.com/vexip-ui/vexip-ui/commit/cb860d496ce9401b0f6c98af469c8bd57cec560c))
+- **select:** emit filter-input event ([12bcfb3](https://github.com/vexip-ui/vexip-ui/commit/12bcfb36a9b0746ca5e8e145b0dcf9973ca6a977)), closes [#271](https://github.com/vexip-ui/vexip-ui/issues/271)
+- **spin:** add icon-effect prop ([0d9470f](https://github.com/vexip-ui/vexip-ui/commit/0d9470fe92469e2ce9802856dcfd3f37461a1d13))
+- **table:** support custom sorter and filter ([bb0f4af](https://github.com/vexip-ui/vexip-ui/commit/bb0f4afda1b43d4f4bfdac526bf6721b0410c08e)), closes [#269](https://github.com/vexip-ui/vexip-ui/issues/269)
+
 ## [2.1.3](https://github.com/vexip-ui/vexip-ui/compare/v2.1.2...v2.1.3) (2023-02-08)
 
 ### Bug Fixes
