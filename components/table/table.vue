@@ -426,7 +426,6 @@ export default defineComponent({
     watch(
       () => props.data,
       value => {
-        debugger
         setPageSize(props.pageSize || value.length)
         setData(value)
 
