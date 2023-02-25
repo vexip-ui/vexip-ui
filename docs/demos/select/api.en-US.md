@@ -86,6 +86,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | focus         | Emitted when the control element is focused, returns the event object                                                                    | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | Emitted when the control element loses focus, returns the event object                                                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | update:label  | Emitted when option value changes, used to quickly get label of current option                                                           | `(label: string)`                                                  | `2.0.0` |
+| filter-input  | Emitted when the search content input, returns the value input                                                                           | `(value: string)`                                                  | `2.1.4` |
 
 ### Select Slots
 

@@ -64,7 +64,8 @@ export const selectProps = buildProps({
   onChange: eventProp<(value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
-  onClear: eventProp()
+  onClear: eventProp(),
+  onFilterInput: eventProp<(value: string) => void>()
 })
 
 export type SelectProps = ExtractPropTypes<typeof selectProps>

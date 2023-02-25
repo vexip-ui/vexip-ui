@@ -86,6 +86,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
 | update:label  | 当选项值改变时触发，用于快速当前选项的标签值                         | `(label: string)`                                                  | `2.0.0` |
+| filter-input  | 当搜索内容输入时触发，返回当前输入框的值                             | `(value: string)`                                                  | `2.1.4` |
 
 ### Select 插槽
 

@@ -860,11 +860,11 @@ export default defineComponent({
       updateHitting(currentIndex.value)
     }
 
-    function handleTagClose(value: string | number) {
-      handleSelect(optionValueMap.get(value)!)
+    function handleTagClose(value?: string | number | null) {
+      !isNull(value) && handleSelect(optionValueMap.get(value))
     }
 
-    function handleSelect(option: SelectOptionState) {
+    function handleSelect(option?: SelectOptionState | null) {
       if (!option) return
 
       const selected = isSelected(option)
@@ -1042,6 +1042,8 @@ export default defineComponent({
 
         updatePopper()
       })
+
+      emitEvent(props.onFilterInput, currentFilter.value)
     }
 
     function handleFilterKeyDown(event: KeyboardEvent) {
@@ -1049,7 +1051,7 @@ export default defineComponent({
 
       if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
         event.stopPropagation()
-        handleTagClose(currentValues.value.at(-1)!)
+        handleTagClose(currentValues.value.at(-1))
       }
     }
 
