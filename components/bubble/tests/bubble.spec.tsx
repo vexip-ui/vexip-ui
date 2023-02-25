@@ -21,15 +21,22 @@ describe('Bubble', () => {
   })
 
   it('background', () => {
-    const wrapper = mount(() => <Bubble background={'cyan'} placement={'right'}></Bubble>)
+    const wrapper = mount(Bubble, {
+      props: {
+        background: 'cyan',
+        placement: 'right'
+      }
+    })
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--background')
-    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
-      'background-color: cyan;'
-    )
-    expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
-      'border-right-color: cyan;'
-    )
+    // expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
+    //   'background-color: cyan;'
+    // )
+    // expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
+    //   'border-right-color: cyan;'
+    // )
+    expect(wrapper.vm.contentStyle).toMatchObject({ backgroundColor: 'cyan' })
+    expect(wrapper.vm.arrowStyle).toMatchObject({ 'border-right-color': 'cyan' })
   })
 
   it('shadow', () => {

@@ -200,7 +200,7 @@ describe('Split', () => {
 
     await nextTick()
     await buttons[0].trigger('click')
-    expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 0;')
+    expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 0px;')
     expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 100%;')
 
     await buttons[1].trigger('click')
@@ -209,7 +209,7 @@ describe('Split', () => {
 
     await buttons[1].trigger('click')
     expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 100%;')
-    expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 0;')
+    expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 0px;')
 
     await buttons[0].trigger('click')
     expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 50%;')

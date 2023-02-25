@@ -50,7 +50,7 @@ describe('Loading', () => {
     await nextFrame()
     vi.runAllTimers()
     await nextFrame()
-    expect(wrapper.find('.vxp-loading').attributes('style')).toContain('top: 0;')
+    expect(wrapper.find('.vxp-loading').attributes('style')).toContain('top: 0px;')
 
     wrapper.unmount()
     wrapper = mount(Loading)
@@ -60,7 +60,7 @@ describe('Loading', () => {
     await nextFrame()
     vi.runAllTimers()
     await nextFrame()
-    expect(wrapper.find('.vxp-loading').attributes('style')).toContain('bottom: 0;')
+    expect(wrapper.find('.vxp-loading').attributes('style')).toContain('bottom: 0px;')
   })
 
   it('stroke width', async () => {

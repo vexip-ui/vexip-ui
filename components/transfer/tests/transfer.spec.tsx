@@ -119,14 +119,14 @@ describe('Transfer', () => {
     const { source, target } = getPanels(wrapper)
     const buttons = wrapper.findAll('.vxp-button')
 
-    expect(buttons[0].attributes('disabled')).toEqual('true')
-    expect(buttons[1].attributes('disabled')).toEqual('true')
+    expect(buttons[0].attributes('disabled')).toEqual('')
+    expect(buttons[1].attributes('disabled')).toEqual('')
 
     await source.find('.vxp-transfer__option').trigger('click')
-    expect(buttons[0].attributes('disabled')).toEqual('false')
+    expect(buttons[0].attributes('disabled')).toBeUndefined()
 
     await target.find('.vxp-transfer__option').trigger('click')
-    expect(buttons[1].attributes('disabled')).toEqual('false')
+    expect(buttons[1].attributes('disabled')).toBeUndefined()
   })
 
   it('change', async () => {

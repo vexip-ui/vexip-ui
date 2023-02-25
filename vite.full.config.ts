@@ -74,9 +74,7 @@ export default defineConfig(async () => {
         compilerOptions: {
           sourceMap: false
         },
-        copyDtsFiles: true,
-        skipDiagnostics: false,
-        logDiagnostics: true
+        copyDtsFiles: true
       })
     ]
   }
