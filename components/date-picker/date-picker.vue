@@ -52,7 +52,7 @@
         <template v-if="usingRange">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
-              <Icon style="padding-top: 1px;">
+              <Icon style="padding-top: 1px">
                 <ArrowRightArrowLeft></ArrowRightArrowLeft>
               </Icon>
             </slot>
@@ -1001,17 +1001,23 @@ export default defineComponent({
       const target = event.target as Node
       currentVisible.value = true
 
-      handleFocused()
-      toggleCurrentState('start')
-
       if (wrapper.value && target) {
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
+        const index = units.findIndex(unit => unit === target || unit.contains(target))
 
-        if (!units.some(unit => unit === target || unit.contains(target))) {
+        if (!~index) {
           startState.column = null
           endState.column = null
         }
+
+        if (usingRange.value && index >= units.length / 2) {
+          toggleCurrentState('end')
+        } else {
+          toggleCurrentState('start')
+        }
       }
+
+      handleFocused()
     }
 
     function handleInput(value: number) {
