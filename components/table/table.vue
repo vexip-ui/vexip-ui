@@ -10,7 +10,6 @@
       <slot></slot>
     </div>
     <Scroll
-      v-if="useXScroll"
       inherit
       use-x-bar
       mode="horizontal"
@@ -24,6 +23,7 @@
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
+        ref="mainScroll"
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
@@ -39,26 +39,6 @@
         </TableBody>
       </Scroll>
     </Scroll>
-    <template v-else>
-      <TableHead ref="thead"></TableHead>
-      <Scroll
-        ref="mainScroll"
-        inherit
-        :class="[nh.be('body-wrapper'), props.scrollClass.major]"
-        :height="bodyScrollHeight"
-        :scroll-y="bodyScroll"
-        :delta-y="props.scrollDeltaY"
-        @scroll="handleBodyScroll"
-        @y-enabled-change="handleYScrollEnableChange"
-        @ready="syncVerticalScroll"
-      >
-        <TableBody>
-          <template #empty="{ isFixed }">
-            <slot name="empty" :is-fixed="isFixed"></slot>
-          </template>
-        </TableBody>
-      </Scroll>
-    </template>
     <div
       v-if="leftFixedColumns.length"
       :class="{
@@ -68,7 +48,6 @@
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
-        ref="mainScroll"
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
