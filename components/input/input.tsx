@@ -1,4 +1,4 @@
-import { defineComponent, ref, toRef, computed, watch, Transition, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, nextTick, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { useHover } from '@vexip-ui/hooks'
@@ -178,7 +178,6 @@ export default defineComponent({
       value => {
         currentValue.value = toNotNullString(value)
         lastValue = currentValue.value
-        setFieldValue(currentValue.value)
         limitValueLength()
       }
     )

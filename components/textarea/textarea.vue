@@ -111,7 +111,6 @@ export default defineComponent({
       value => {
         currentValue.value = value
         lastValue = value
-        setFieldValue(value)
       }
     )
 

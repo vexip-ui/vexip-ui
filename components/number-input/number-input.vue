@@ -277,7 +277,6 @@ export default defineComponent({
       value => {
         currentValue.value = isNull(value) ? NaN : value
         lastValue = currentValue.value
-        setFieldValue(currentValue.value!)
       }
     )
 
