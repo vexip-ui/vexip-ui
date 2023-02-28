@@ -21,7 +21,6 @@
         <slot></slot>
       </NativeScroll>
     </main>
-    <section id="toc-anchor" class="toc-anchor"></section>
   </section>
 </template>
 
@@ -161,34 +160,6 @@ function scrollToElement(element: Element) {
 
     @include query-media('lg') {
       padding-top: var(--header-height);
-    }
-  }
-
-  .toc-anchor {
-    position: absolute;
-    top: calc(var(--header-height) + var(--sub-menu-height) + 40px);
-    right: 10px;
-    display: none;
-    width: var(--anchor-width);
-
-    @include query-media('lg') {
-      top: calc(var(--header-height) + 40px);
-    }
-
-    .vxp-anchor {
-      width: 100%;
-      font-size: 12px;
-
-      &__link {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-
-    @include query-media('xl') {
-      display: block;
     }
   }
 }

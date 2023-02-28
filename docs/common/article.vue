@@ -1,9 +1,14 @@
 <template>
-  <article ref="wrapper" class="article">
-    <slot></slot>
-    <Portal to="#toc-anchor">
+  <Row ref="wrapper" tag="article" class="article">
+    <ResizeObserver @resize="handleContentResize">
+      <Column flex="auto">
+        <slot></slot>
+      </Column>
+    </ResizeObserver>
+    <Column flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
       <Anchor
         v-model:active="currentActive"
+        class="toc-anchor"
         :offset="15"
         bind-hash
         :style="{ visibility: !loading ? undefined : 'hidden' }"
@@ -12,15 +17,16 @@
           {{ item.name }}
         </AnchorLink>
       </Anchor>
-    </Portal>
-  </article>
+    </Column>
+  </Row>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from './toc-anchor'
 
 import type { PropType } from 'vue'
+import type { RowExposed } from 'vexip-ui'
 
 const props = defineProps({
   active: {
@@ -38,8 +44,20 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:active'])
 
+const wrapper = ref<RowExposed>()
+const wrapperEl = computed(() => wrapper.value?.$el)
+
 const currentActive = ref(props.active)
-const { anchors, wrapper, refreshAnchor } = ussTocAnchor(props.anchorLevel || 3)
+const { anchors, refreshAnchor } = ussTocAnchor(props.anchorLevel || 3, wrapperEl)
+
+const contentHeight = ref(1000)
+
+const contentStyle = computed(() => ({
+  height: `${contentHeight.value}px`,
+  paddingTop: '80px',
+  paddingLeft: '50px',
+  marginRight: '-50px'
+}))
 
 watch(
   () => props.active,
@@ -58,6 +76,21 @@ watch(currentActive, value => {
 })
 
 defineExpose({ refreshAnchor })
+
+if (import.meta.env.DEV) {
+  // For HMR
+  onMounted(refreshAnchor)
+}
+
+function handleContentResize(entry: ResizeObserverEntry) {
+  const box = entry.borderBoxSize?.[0]
+
+  if (box) {
+    contentHeight.value = box.blockSize
+  } else {
+    contentHeight.value = entry.contentRect.height
+  }
+}
 </script>
 
 <style lang="scss">
@@ -71,8 +104,28 @@ defineExpose({ refreshAnchor })
     padding: 16px 60px 60px;
   }
 
-  @include query-media('xl') {
-    padding-right: calc(var(--anchor-width) + 50px);
+  .toc-anchor {
+    position: sticky;
+    top: 40px;
+    right: 10px;
+    display: none;
+    width: var(--anchor-width);
+
+    .vxp-anchor {
+      width: 100%;
+      font-size: 12px;
+
+      &__link {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    @include query-media('xl') {
+      display: block;
+    }
   }
 }
 </style>
