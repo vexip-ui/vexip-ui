@@ -1,11 +1,11 @@
 <template>
   <Row ref="wrapper" tag="article" class="article">
     <ResizeObserver @resize="handleContentResize">
-      <Column flex="auto">
+      <Column flex="auto" style="min-width: 0">
         <slot></slot>
       </Column>
     </ResizeObserver>
-    <Column flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
+    <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
       <Anchor
         v-model:active="currentActive"
         class="toc-anchor"
@@ -98,10 +98,19 @@ function handleContentResize(entry: ResizeObserverEntry) {
 
 .article {
   position: relative;
+  flex-wrap: nowrap;
   padding: 16px 30px 30px;
 
-  @include query-media('lg') {
+  @include query-media('xl') {
     padding: 16px 60px 60px;
+  }
+
+  &__aside {
+    display: none;
+
+    @include query-media('xl') {
+      display: var(--vxp-column-display);
+    }
   }
 
   .toc-anchor {

@@ -76,7 +76,7 @@
         <Bars></Bars>
       </Icon>
     </Button>
-    <div style="flex: auto;"></div>
+    <div style="flex: auto"></div>
     <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
       <template v-for="menu in menus" :key="menu.label">
         <li v-if="menu.to" class="vxp-menu__item vxp-menu__item--no-icon" role="none">
@@ -249,34 +249,21 @@ function formatComponentName(name: string) {
     align-items: center;
     height: 100%;
     padding: 0 16px 0 20px;
-    font-family:
-      Avenir,
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Roboto,
-      'Helvetica Neue',
-      Arial,
-      'Noto Sans',
-      sans-serif,
-      'Apple Color Emoji',
-      'Segoe UI Emoji',
-      'Segoe UI Symbol',
+    font-family: Avenir, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+      Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
       'Noto Color Emoji';
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
 
     @include query-media('lg') {
+      justify-content: center;
       width: var(--aside-width);
       padding: 0;
-      padding-left: 16px;
     }
 
     @include query-media('xl') {
-      justify-content: center;
       width: var(--aside-width-large);
-      padding-left: 0;
     }
 
     &,
