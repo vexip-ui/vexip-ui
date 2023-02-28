@@ -977,6 +977,7 @@ export default defineComponent({
 
         emittedValue = props.multiple ? [] : ''
 
+        syncInputValue()
         emitEvent(props.onChange, emittedValue, props.multiple ? [] : '')
         emit('update:value', emittedValue)
         emitEvent(props.onClear)

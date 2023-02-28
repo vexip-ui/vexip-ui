@@ -1,5 +1,5 @@
 <template>
-  <Select filter :options="options"></Select>
+  <Select filter clearable :options="options"></Select>
   <br />
   <br />
   <Select

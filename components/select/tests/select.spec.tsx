@@ -494,6 +494,27 @@ describe('Select', () => {
     expect(wrapper.findAll('.vxp-option').length).toEqual(2)
   })
 
+  // #277
+  it('filter clearable', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        filter: true,
+        clearable: true,
+        options: OPTIONS
+      }
+    })
+    const selector = wrapper.find('.vxp-select__selector')
+    const input = wrapper.find('.vxp-select__input')
+
+    await wrapper.find('.vxp-option').trigger('click')
+    expect((input.element as HTMLInputElement).value).toEqual(OPTIONS[0])
+
+    await selector.trigger('mouseenter')
+    await wrapper.find('.vxp-select__clear').trigger('click')
+    expect((input.element as HTMLInputElement).value).toEqual('')
+  })
+
   it('delete tag when filter in multiple', async () => {
     const wrapper = mount(Select, {
       props: {
