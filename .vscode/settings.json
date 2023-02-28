@@ -27,5 +27,6 @@
     "vue-postcss",
     "xml",
     "xsl"
-  ]
+  ],
+  "volar.inlayHints.eventArgumentInInlineHandlers": false
 }
