@@ -1,3 +1,11 @@
+## [2.1.5](https://github.com/vexip-ui/vexip-ui/compare/v2.1.4...v2.1.5) (2023-02-28)
+
+### Bug Fixes
+
+- **form:** dynamic remove array type fields fail ([5c810fe](https://github.com/vexip-ui/vexip-ui/commit/5c810fea5d19fb8e2238edc24709468aaaf6f3ab)), closes [#274](https://github.com/vexip-ui/vexip-ui/issues/274)
+- **select:** ensure label clear when using filter in signle select ([35e11c2](https://github.com/vexip-ui/vexip-ui/commit/35e11c2248035909f2ffc43c4559f25f83ec0d07)), closes [#277](https://github.com/vexip-ui/vexip-ui/issues/277)
+- **table:** improve table horizontal scroll ([b99aaa1](https://github.com/vexip-ui/vexip-ui/commit/b99aaa143a25c58869197bd2b5843301aae33547)), closes [#273](https://github.com/vexip-ui/vexip-ui/issues/273)
+
 ## [2.1.4](https://github.com/vexip-ui/vexip-ui/compare/v2.1.3...v2.1.4) (2023-02-25)
 
 ### Bug Fixes
