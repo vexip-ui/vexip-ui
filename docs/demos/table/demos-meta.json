@@ -14,5 +14,6 @@
   "pagination",
   "draggable",
   "virtual",
-  "toggle-data"
+  "toggle-data",
+  "refresh"
 ]
