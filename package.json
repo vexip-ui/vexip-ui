@@ -166,5 +166,12 @@
     "lib/components/*/style.cjs",
     "style/**/*.scss",
     "theme/**/*.css"
-  ]
+  ],
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "vue"
+      ]
+    }
+  }
 }

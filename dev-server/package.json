@@ -5,13 +5,9 @@
     "serve": "vite"
   },
   "dependencies": {
-    "vue": "^3.2.40",
     "vue-router": "^4.1.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.1.0",
-    "@vitejs/plugin-vue-jsx": "^2.0.1",
-    "unplugin-vue-components": "^0.22.7",
-    "vite": "^3.1.4"
+    "unplugin-vue-components": "^0.22.7"
   }
 }

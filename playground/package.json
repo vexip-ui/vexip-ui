@@ -17,14 +17,14 @@
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "vexip-ui": "workspace:^",
-    "vue": "^3.2.45"
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.5",
-    "@types/prettier": "^2.7.1",
-    "@vitejs/plugin-vue": "^3.2.0",
-    "@vitejs/plugin-vue-jsx": "^2.1.1",
-    "vite": "^3.2.4",
+    "@types/prettier": "^2.7.2",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.0",
+    "vite": "^4.1.4",
     "vue-router": "^4.1.6"
   }
 }

@@ -53,12 +53,5 @@
   },
   "peerDependencies": {
     "vue": "^3.2.25"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "vue"
-      ]
-    }
   }
 }
