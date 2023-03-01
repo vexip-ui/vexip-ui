@@ -707,6 +707,7 @@ export default defineComponent({
         if (!emittedValue || !isSameValue(value, emittedValue)) {
           emittedValue = value
           initValueAndLabel(value)
+          syncInputValue()
         }
       }
     )

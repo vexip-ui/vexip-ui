@@ -515,6 +515,21 @@ describe('Select', () => {
     expect((input.element as HTMLInputElement).value).toEqual('')
   })
 
+  it('delay set value in filter', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        filter: true,
+        options: OPTIONS
+      }
+    })
+
+    await nextTick()
+    await wrapper.setProps({ value: OPTIONS[0] })
+
+    const input = wrapper.find('.vxp-select__input')
+    expect((input.element as HTMLInputElement).value).toEqual(OPTIONS[0])
+  })
+
   it('delete tag when filter in multiple', async () => {
     const wrapper = mount(Select, {
       props: {
