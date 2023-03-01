@@ -1,1 +1,9 @@
-["basis", "center", "drag", "loading", "resize", "simple"]
+[
+  "basis",
+  "center",
+  "drag",
+  "loading",
+  "resize",
+  "simple",
+  "position"
+]

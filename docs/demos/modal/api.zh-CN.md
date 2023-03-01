@@ -3,12 +3,12 @@
 | 名称            | 类型                                  | 说明                                                                                                                  | 默认值           | 始于    |
 | --------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------- | ------- |
 | active          | `boolean`                             | 设置模态框是否显示，可以使用 `v-model` 双向绑定                                                                       | `false`          | -       |
-| width           | `` number \| 'auto' \| `${number}` `` | 设置模态框的初始宽度                                                                                                  | `'auto'`         | -       |
+| width           | `` number \| 'auto' \| `${number}` `` | 设置模态框的初始宽度，为 `'auto'` 时自动计算                                                                          | `'auto'`         | -       |
 | height          | `` number \| 'auto' \| `${number}` `` | 设置模态框的初始高度，为 `'auto'` 时自动计算                                                                          | `'auto'`         | -       |
-| top             | `` number \| 'auto' \| `${number}` `` | 设置模态框距离顶部的初始距离，为 auto 时自动居中                                                                      | `100`            | -       |
-| left            | `` number \| 'auto' \| `${number}` `` | 设置模态框距离左侧的初始距离，为 auto 时自动居中                                                                      | `'auto'`         | -       |
-| bottom          | `` number \| 'auto' \| `${number}` `` | 设置模态框距离底部的初始距离，为 auto 时自动计算                                                                      | `'auto'`         | -       |
-| right           | `` number \| 'auto' \| `${number}` `` | 设置模态框距离右侧的初始距离，为 auto 时自动计算                                                                      | `'auto'`         | -       |
+| top             | `` number \| 'auto' \| `${number}` `` | 设置模态框距离顶部的初始距离，为 `'auto'` 时自动计算                                                                  | `'auto'`         | -       |
+| left            | `` number \| 'auto' \| `${number}` `` | 设置模态框距离左侧的初始距离，为 `'auto'` 时自动计算                                                                  | `'auto'`         | -       |
+| bottom          | `` number \| 'auto' \| `${number}` `` | 设置模态框距离底部的初始距离，为 `'auto'` 时自动计算                                                                  | `'auto'`         | -       |
+| right           | `` number \| 'auto' \| `${number}` `` | 设置模态框距离右侧的初始距离，为 `'auto'` 时自动计算                                                                  | `'auto'`         | -       |
 | title           | `string`                              | 设置模态框的标题                                                                                                      | `''`             | -       |
 | closable        | `boolean`                             | 设置是否具有关闭按钮                                                                                                  | `true`           | -       |
 | mask-close      | `boolean`                             | 设置是否可以点击遮罩层关闭                                                                                            | `true`           | -       |

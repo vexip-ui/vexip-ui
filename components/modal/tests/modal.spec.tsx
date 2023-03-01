@@ -267,4 +267,24 @@ describe('Modal', () => {
     await nextTick()
     expect(modal.classes()).not.toContain('vxp-modal__wrapper--resizing')
   })
+
+  it('position', async () => {
+    const wrapper = mount(Modal, {
+      props: {
+        active: true,
+        right: 10,
+        width: 100,
+        bottom: 10,
+        height: 100
+      }
+    })
+    const modal = wrapper.find('.vxp-modal__wrapper')
+
+    expect(modal.attributes('style')).toContain('top: auto;')
+    expect(modal.attributes('style')).toContain('bottom: 10px;')
+    expect(modal.attributes('style')).toContain('height: 100px;')
+    expect(modal.attributes('style')).toContain('right: 10px;')
+    expect(modal.attributes('style')).toContain('width: 100px;')
+    expect(modal.attributes('style')).not.toContain('left:')
+  })
 })

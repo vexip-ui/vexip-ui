@@ -90,7 +90,7 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isPromise, toNumber } from '@vexip-ui/utils'
+import { isNull, isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 import { modalProps } from './props'
 
@@ -125,10 +125,7 @@ export default defineComponent({
       },
       width: positionProp,
       height: positionProp,
-      top: {
-        default: 100,
-        validator: positionValidator
-      },
+      top: positionProp,
       left: positionProp,
       right: positionProp,
       bottom: positionProp,
@@ -282,20 +279,32 @@ export default defineComponent({
         props.modalClass
       ]
     })
+    const uslessTop = computed(() => {
+      return (
+        props.top === 'auto' &&
+        !isNull(props.bottom) &&
+        props.bottom !== 'auto' &&
+        currentHeight.value !== 'auto'
+      )
+    })
+    const uslessLeft = computed(() => {
+      return (
+        props.left === 'auto' &&
+        !isNull(props.right) &&
+        props.right !== 'auto' &&
+        currentWidth.value !== 'auto'
+      )
+    })
     const wrapperStyle = computed(() => {
       const fixedHeight = currentHeight.value !== 'auto'
 
       return [
         props.modalStyle,
         {
-          top: `${currentTop.value}px`,
-          right:
-            fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
-          bottom:
-            fixedHeight || !props.bottom || props.bottom === 'auto'
-              ? undefined
-              : `${props.bottom}px`,
-          left: `${currentLeft.value}px`,
+          top: uslessTop.value ? 'auto' : `${currentTop.value}px`,
+          right: isNull(props.right) || props.right === 'auto' ? undefined : `${props.right}px`,
+          bottom: isNull(props.bottom) || props.bottom === 'auto' ? undefined : `${props.bottom}px`,
+          left: uslessLeft.value ? undefined : `${currentLeft.value}px`,
           width: `${currentWidth.value}px`,
           height: fixedHeight ? `${currentHeight.value}px` : undefined
         }
