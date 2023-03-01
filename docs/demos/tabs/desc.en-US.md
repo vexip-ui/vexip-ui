@@ -1,1 +1,1 @@
-标签页可提供多个平级的区域，以将一些大量内容进行收纳和展现，保持界面整洁。
+Tabs can provide multiple areas at the same level to store and display a large amount of content and keep the interface tidy.
