@@ -42,6 +42,10 @@ export default defineConfig(({ command }) => {
     optimizeDeps: {
       include: ['@vexip-ui/icons']
     },
+    esbuild: {
+      drop: ['debugger'],
+      pure: ['console.log']
+    },
     server: {
       port: 9000,
       host: '0.0.0.0',

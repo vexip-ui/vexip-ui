@@ -29,6 +29,10 @@ export default defineConfig(({ command }) => {
       ],
       dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui']
     },
+    esbuild: {
+      drop: ['debugger'],
+      pure: ['console.log']
+    },
     server: {
       port: 6012,
       fs: {

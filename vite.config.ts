@@ -71,6 +71,10 @@ export default defineConfig(async () => {
         { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
       ]
     },
+    esbuild: {
+      drop: ['debugger'],
+      pure: ['console.log']
+    },
     build: {
       outDir: 'es',
       sourcemap: sourceMap,
