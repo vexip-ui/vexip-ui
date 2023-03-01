@@ -1,9 +1,6 @@
 {
   "typescript.tsdk": "./node_modules/typescript/lib",
   "npm.packageManager": "pnpm",
-  "[vue]": {
-    "editor.defaultFormatter": "Vue.volar"
-  },
   "stylelint.enable": true,
   "stylelint.validate": [
     "css",
@@ -28,5 +25,11 @@
     "xml",
     "xsl"
   ],
-  "volar.inlayHints.eventArgumentInInlineHandlers": false
+  "volar.inlayHints.eventArgumentInInlineHandlers": false,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  }
 }
