@@ -60,6 +60,12 @@ $table: map.merge(
   border-collapse: collapse;
   border: $border-a transparent;
 
+  &__wrapper {
+    .#{$namespace}-scroll__wrapper {
+      min-width: 100%;
+    }
+  }
+
   &__head,
   &__body {
     position: relative;
