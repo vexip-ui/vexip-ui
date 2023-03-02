@@ -3,6 +3,9 @@
 ```ts
 type Data = Record<string, any>
 
+type NodeDropType = 'before' | 'inner' | 'after'
+type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
+
 interface NodeKeyConfig {
   id?: string,
   parent?: string,
@@ -18,12 +21,6 @@ interface NodeKeyConfig {
   readonly?: string,
   arrow?: string,
   checkbox?: string
-}
-
-enum DropType {
-  BEFORE,
-  INNER,
-  AFTER
 }
 
 type TreeNodeProps = {
@@ -72,6 +69,7 @@ type TreeNodeProps = {
 | ignore-case   | `boolean`                                                              | 设置在使用内置的过滤时是否忽略大小写                                                                                                                                    | `false`        | `2.0.0` |
 | node-props    | `Data \| ((data: Data, node: TreeNodeProps) => Data)`                  | 设置所有子节点根元素的 html 属性                                                                                                                                        | `null`         | `2.0.0` |
 | locale        | `LocaleConfig['tree']`                                                 | 设置多语言配置                                                                                                                                                          | `null`         | `2.1.0` |
+| link-line     | `boolean \| TreeLinkLine`                                              | 设置是否添加连接线                                                                                                                                                      | `false`        | `2.1.6` |
 
 ### Tree 事件
 
@@ -85,7 +83,7 @@ type TreeNodeProps = {
 | node-reduce | 当节点被收起时触发，返回当前节点的数据和节点对象                                               | `(data: Data, node: TreeNodeProps)`                               | -    |
 | drag-start  | 当节点将要开始拖拽时触发，返回当前节点的数据和节点对象                                         | `(data: Data, node: TreeNodeProps)`                               | -    |
 | drag-over   | 当节点正在拖拽时触发，返回当前节点的数据和节点对象                                             | `(data: Data, node: TreeNodeProps)`                               | -    |
-| drop        | 当节点被其他的拖拽节点放入时触发，返回当前节点的数据和节点对象                                 | `(data: Data, node: TreeNodeProps， dropType: DropType)`          | -    |
+| drop        | 当节点被其他的拖拽节点放入时触发，返回当前节点的数据和节点对象                                 | `(data: Data, node: TreeNodeProps， dropType: NodeDropType)`      | -    |
 | drag-end    | 当节点结束拖拽时触发，返回当前节点的数据和节点对象                                             | `(data: Data, node: TreeNodeProps)`                               | -    |
 | label-click | 当节点标签被点击时触发，返回当前节点的数据和节点对象                                           | `(data: Data, node: TreeNodeProps)`                               | -    |
 

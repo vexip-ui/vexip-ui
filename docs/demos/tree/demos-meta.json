@@ -9,5 +9,6 @@
   "async-load",
   "slot",
   "control",
-  "floor-select"
+  "floor-select",
+  "link-line"
 ]

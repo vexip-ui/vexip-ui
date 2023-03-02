@@ -3,6 +3,7 @@ import type { InjectionKey } from 'vue'
 export type Key = string | number
 export type Data = Record<string, any>
 export type NodeDropType = 'before' | 'inner' | 'after'
+export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 
 export interface NodeKeyConfig {
   id?: string,
@@ -70,6 +71,7 @@ export interface TreeState {
   arrow: boolean | 'auto',
   checkbox: boolean,
   suffixCheckbox: boolean,
+  linkLine: false | TreeLinkLine,
   renderer: RenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,

@@ -1,5 +1,5 @@
 <template>
-  <ButtonGroup type="primary">
+  <ButtonGroup type="primary" style="margin-bottom: 10px">
     <Button @click="select">
       选择节点
     </Button>

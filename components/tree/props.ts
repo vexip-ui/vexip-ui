@@ -4,7 +4,8 @@ import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
   Data,
-  DropType,
+  TreeLinkLine,
+  NodeDropType,
   NodeKeyConfig,
   TreeNodeProps,
   RenderFn,
@@ -41,6 +42,10 @@ export const treeProps = buildProps({
   filter: [String, Function] as PropType<string | FilterFn>,
   ignoreCase: booleanProp,
   nodeProps: [Object, Function] as PropType<Data | NodePropsFn>,
+  linkLine: {
+    type: [Boolean, String] as PropType<boolean | TreeLinkLine>,
+    default: null
+  },
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
@@ -49,7 +54,7 @@ export const treeProps = buildProps({
   onNodeReduce: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
-  onDrop: eventProp<(data: Data, node: TreeNodeProps, type: DropType) => void>(),
+  onDrop: eventProp<(data: Data, node: TreeNodeProps, type: NodeDropType) => void>(),
   onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onLabelClick: eventProp<(data: Data, node: TreeNodeProps) => void>()
 })

@@ -8,6 +8,7 @@
     tabindex="-1"
     :aria-disabled="isDisabled"
     :aria-grabbed="draggable && dragging ? 'true' : undefined"
+    :style="{ [nh.cv('depth')]: depth }"
     @click.left="handleClick"
     @focus="focused = true"
     @blur="focused = false"
@@ -26,7 +27,7 @@
       :toggle-expand="handleToggleExpand"
       :toggle-select="handleToggleSelect"
     >
-      <div :class="nh.be('content')" :style="contentStyle">
+      <div :class="nh.be('content')">
         <span
           ref="arrowEl"
           :class="{
@@ -95,7 +96,11 @@
     </slot>
   </li>
   <CollapseTransition :appear="appear" @after-enter="updateVisible" @after-leave="updateVisible">
-    <ul v-if="showChildren" :class="nh.be('list')">
+    <ul
+      v-if="showChildren"
+      :class="[nh.be('list'), !last && hasLinkLine && nh.bem('list', 'link-line')]"
+      :style="{ [nh.cv('depth')]: depth }"
+    >
       <TreeNode
         v-for="(item, index) in node.children"
         :key="index"
@@ -122,6 +127,7 @@
         :child-matched="item.childMatched"
         :upper-matched="item.upperMatched"
         :node-props="nodeProps"
+        :last="index === node.children.length - 1"
       >
         <template #default="payload: any">
           <slot v-bind="payload"></slot>
@@ -249,6 +255,10 @@ export default defineComponent({
     nodeProps: {
       type: Function as PropType<NodePropsFn>,
       default: noop
+    },
+    last: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -302,31 +312,20 @@ export default defineComponent({
     const isReadonly = computed(() => parentState.readonly || props.readonly)
     const depth = computed(() => parentState.depth + 1)
     const secondary = computed(() => !props.matched && (props.childMatched || props.upperMatched))
+    const hasLinkLine = computed(() => !!treeState.linkLine && depth.value > 0)
     const className = computed(() => {
       return {
         [nh.be('node')]: true,
+        [nh.bem('node', 'last')]: props.last,
         [nh.bem('node', 'selected')]: props.selected,
         [nh.bem('node', 'expanded')]: props.expanded,
         [nh.bem('node', 'disabled')]: isDisabled.value,
         [nh.bem('node', 'readonly')]: isReadonly.value,
         [nh.bem('node', 'secondary')]: secondary.value,
         [nh.bem('node', 'dragging')]: dragging.value,
-        [nh.bem('node', 'drag-over')]: isDragOver.value
-      }
-    })
-    const contentStyle = computed(() => {
-      let indent = props.indent
-
-      if (typeof indent === 'number') {
-        indent = `${indent}px`
-      }
-
-      return {
-        paddingLeft: depth.value
-          ? depth.value === 1
-            ? indent
-            : `calc(${depth.value} * ${indent})`
-          : 0
+        [nh.bem('node', 'drag-over')]: isDragOver.value,
+        [nh.bem('node', 'link-line')]: hasLinkLine.value,
+        [nh.bem('node', 'no-arrow')]: !hasArrow.value
       }
     })
     const showChildren = computed(() => {
@@ -511,8 +510,8 @@ export default defineComponent({
       isReadonly,
       depth,
       secondary,
+      hasLinkLine,
       className,
-      contentStyle,
       showChildren,
       hasArrow,
       hasCheckbox,

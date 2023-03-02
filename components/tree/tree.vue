@@ -6,12 +6,13 @@
     tabindex="-1"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
+    :style="style"
   >
     <span
       ref="trap"
       tabindex="0"
       aria-hidden="true"
-      style="width: 0; height: 0; overflow: hidden; outline: none;"
+      style="width: 0; height: 0; overflow: hidden; outline: none"
       @focus="handleTreeFocus"
     ></span>
     <ul :class="nh.be('list')">
@@ -152,7 +153,8 @@ export default defineComponent({
       noCascaded: false,
       filter: '',
       ignoreCase: false,
-      nodeProps: null
+      nodeProps: null,
+      linkLine: false
     })
 
     const nh = useNameHelper('tree')
@@ -206,6 +208,16 @@ export default defineComponent({
       })
     })
     const labelKey = computed(() => keyConfig.value.label)
+    const linkLine = computed(() => {
+      return props.linkLine === true ? 'dashed' : props.linkLine === 'none' ? false : props.linkLine
+    })
+    const style = computed(() => {
+      return {
+        [nh.cv('indent-width')]:
+          typeof props.indent === 'number' ? `${props.indent}px` : props.indent,
+        [nh.cv('link-line-type')]: linkLine.value || undefined
+      }
+    })
 
     function createDefaultFilter(value: string) {
       const pattern = props.ignoreCase ? String(value).toLocaleLowerCase() : value
@@ -266,6 +278,7 @@ export default defineComponent({
         arrow: toRef(props, 'arrow'),
         checkbox: toRef(props, 'checkbox'),
         suffixCheckbox: toRef(props, 'suffixCheckbox'),
+        linkLine,
         renderer: toRef(props, 'renderer'),
         dragging,
         boundAsyncLoad,
@@ -964,6 +977,7 @@ export default defineComponent({
       indicatorShow,
       anyMatched,
       labelKey,
+      style,
       childrenKey: computed(() => keyConfig.value.children),
       getNodeProps: computed(() => {
         return typeof props.nodeProps === 'function' ? props.nodeProps : () => props.nodeProps

@@ -21,8 +21,13 @@ $tree: map.merge(
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
     label-radius: get-css-var('radius-base'),
+    node-span: 6px,
     arrow-size: 22px,
-    indicator-color: get-css-var('color-primary-base')
+    indicator-color: get-css-var('color-primary-base'),
+    indent-width: 16px,
+    deepth: -1,
+    link-line-type: 'dashed',
+    link-line-color: get-css-var('border-color-base')
   ),
   $tree
 );
@@ -36,9 +41,28 @@ $tree: map.merge(
 
   position: relative;
 
+  $arrow: get-css-var('tree-arrow-size');
+  $indent: get-css-var('tree-indent-width');
+  $depth: get-css-var('tree-depth');
+  $link-line: 1px get-css-var('tree-link-line-type') get-css-var('tree-link-line-color');
+
   &__list,
   &__node {
     list-style: none;
+
+    &--link-line {
+      position: relative;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
+        pointer-events: none;
+        content: '';
+        border-left: $link-line;
+      }
+    }
   }
 
   &__list {
@@ -47,14 +71,38 @@ $tree: map.merge(
   }
 
   &__node {
-    // margin: 6px 0;
-    padding-top: 6px;
+    padding-top: get-css-var('tree-node-span');
     outline: 0;
+
+    &--link-line {
+      &::after {
+        position: absolute;
+        bottom: calc(50% - #{get-css-var('tree-node-span')});
+        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
+        width: calc(#{$indent} * 0.5);
+        pointer-events: none;
+        content: '';
+        border-bottom: $link-line;
+      }
+    }
+
+    &--last {
+      &::before {
+        bottom: calc(50% - #{get-css-var('tree-node-span')});
+      }
+    }
+
+    &--no-arrow {
+      &::after {
+        width: calc(#{$indent} * 0.5 + #{$arrow});
+      }
+    }
   }
 
   &__content {
     display: flex;
     align-items: center;
+    padding-left: calc(#{$depth} * #{$indent});
   }
 
   &__label {

@@ -3,6 +3,9 @@
 ```ts
 type Data = Record<string, any>
 
+type NodeDropType = 'before' | 'inner' | 'after'
+type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
+
 interface NodeKeyConfig {
   id?: string,
   parent?: string,
@@ -18,12 +21,6 @@ interface NodeKeyConfig {
   readonly?: string,
   arrow?: string,
   checkbox?: string
-}
-
-enum DropType {
-  BEFORE,
-  INNER,
-  AFTER
 }
 
 type TreeNodeProps = {
@@ -72,6 +69,7 @@ type TreeNodeProps = {
 | ignore-case   | `boolean`                                                              | Set whether to ignore case when using built-in filtering                                                                                                                                                                                         | `false`        | `2.0.0` |
 | node-props    | `Data \| ((data: Data, node: TreeNodeProps) => Data)`                  | Set the html attributes of the root element of all child nodes                                                                                                                                                                                   | `null`         | `2.0.0` |
 | locale        | `LocaleConfig['tree']`                                                 | Set the locale config                                                                                                                                                                                                                            | `null`         | `2.1.0` |
+| link-line     | `boolean \| TreeLinkLine`                                              | Set whether to add link line                                                                                                                                                                                                                     | `false`        | `2.1.6` |
 
 ### Tree Events
 
@@ -85,7 +83,7 @@ type TreeNodeProps = {
 | node-reduce | Emitted when a node is collapsed, returns the data and node object of the current node                                                                                  | `(data: Data, node: TreeNodeProps)`                               | -     |
 | drag-start  | Emitted when the node is about to start dragging, returns the data and node object of the current node                                                                  | `(data: Data, node: TreeNodeProps)`                               | -     |
 | drag-over   | Emitted when the node is being dragged, returns the current node's data and node object                                                                                 | `(data: Data, node: TreeNodeProps)`                               | -     |
-| drop        | Emitted when a node is dropped by another dragged node, returns the current node's data and node object                                                                 | `(data: Data, node: TreeNodeProps, dropType: DropType)`           | -     |
+| drop        | Emitted when a node is dropped by another dragged node, returns the current node's data and node object                                                                 | `(data: Data, node: TreeNodeProps, dropType: NodeDropType)`       | -     |
 | drag-end    | Emitted when the node finishes dragging, returns the data and node object of the current node                                                                           | `(data: Data, node: TreeNodeProps)`                               | -     |
 | label-click | Emitted when a node label is clicked, returns the current node data and node object                                                                                     | `(data: Data, node: TreeNodeProps)`                               | -     |
 
