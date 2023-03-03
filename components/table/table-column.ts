@@ -4,7 +4,7 @@ import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTION } from './symbol'
 
-import type { Data, TableColumnType, FilterOptions, RowState, ColumnWithKey } from './symbol'
+import type { Data, TableColumnType, RowState, ColumnWithKey } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 

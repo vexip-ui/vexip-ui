@@ -30,19 +30,6 @@ import type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
-// export interface FilterProfile {
-//   name: string,
-//   key: string | number,
-//   metaData: Data,
-//   active: string | number | (string | number)[] | null
-// }
-
-// export interface SortProfile {
-//   name: string,
-//   key: string | number,
-//   metaData: Data,
-//   type: 'asc' | 'desc' | null
-// }
 
 export const tableProps = buildProps({
   locale: localeProp('table'),

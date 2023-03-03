@@ -5,7 +5,7 @@ import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
-export type Data = Record<string, unknown>
+export type Data = Record<string, any>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
 export type DropType = 'before' | 'after' | 'none'
 
@@ -200,13 +200,6 @@ export interface StoreState extends StoreOptions {
   heightBITree: BITree,
   virtualData: RowState[],
   totalHeight: number
-}
-
-export interface StoreGetters {
-  readonly filteredData: RowState[],
-  readonly processedData: RowState[],
-  readonly disableCheckRows: Record<Key, boolean>,
-  readonly disableExpandRows: Record<Key, boolean>
 }
 
 export interface RowInstance {

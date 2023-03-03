@@ -27,8 +27,7 @@ import type {
   ColumnWithKey,
   RowState,
   StoreOptions,
-  StoreState,
-  StoreGetters
+  StoreState
 } from './symbol'
 
 let indexId = 1
@@ -92,23 +91,23 @@ export function useStore(options: StoreOptions) {
     totalHeight: options.rowMinHeight * options.data.length
   }) as StoreState
 
-  setColumns(state, options.columns)
+  setColumns(options.columns)
 
-  setData(state, options.data)
-  setCurrentPage(state, options.currentPage)
-  setPageSize(state, options.pageSize)
+  setData(options.data)
+  setCurrentPage(options.currentPage)
+  setPageSize(options.pageSize)
 
-  setRowClass(state, options.rowClass)
-  setRowStyle(state, options.rowStyle)
-  setRowAttrs(state, options.rowAttrs)
-  setCellClass(state, options.cellClass)
-  setCellStyle(state, options.cellStyle)
-  setCellAttrs(state, options.cellAttrs)
-  setHeadClass(state, options.headClass)
-  setHeadStyle(state, options.headStyle)
-  setHeadAttrs(state, options.headAttrs)
-  setHighlight(state, options.highlight)
-  setVirtual(state, options.virtual)
+  setRowClass(options.rowClass)
+  setRowStyle(options.rowStyle)
+  setRowAttrs(options.rowAttrs)
+  setCellClass(options.cellClass)
+  setCellStyle(options.cellStyle)
+  setCellAttrs(options.cellAttrs)
+  setHeadClass(options.headClass)
+  setHeadStyle(options.headStyle)
+  setHeadAttrs(options.headAttrs)
+  setHighlight(options.highlight)
+  setVirtual(options.virtual)
 
   const filteredData = computed(() => {
     return state.customFilter
@@ -172,7 +171,7 @@ export function useStore(options: StoreOptions) {
     state.heightBITree = markRaw(
       createBITree(filteredData.value.length, state.rowHeight || state.rowMinHeight)
     )
-    updateTotalHeight(state)
+    updateTotalHeight()
   })
 
   const getters = reactive({
@@ -186,57 +185,57 @@ export function useStore(options: StoreOptions) {
   const mutations = {
     // 这两个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
-    setColumns: debounceMinor(setColumns.bind(null, state)),
-    setData: debounceMinor(setData.bind(null, state)),
+    setColumns: debounceMinor(setColumns),
+    setData: debounceMinor(setData),
 
-    setDataKey: setDataKey.bind(null, state),
-    setCurrentPage: setCurrentPage.bind(null, state),
-    setPageSize: setPageSize.bind(null, state),
-    setRowClass: setRowClass.bind(null, state),
-    setRowStyle: setRowStyle.bind(null, state),
-    setRowAttrs: setRowAttrs.bind(null, state),
-    setCellClass: setCellClass.bind(null, state),
-    setCellStyle: setCellStyle.bind(null, state),
-    setCellAttrs: setCellAttrs.bind(null, state),
-    setHeadClass: setHeadClass.bind(null, state),
-    setHeadStyle: setHeadStyle.bind(null, state),
-    setHeadAttrs: setHeadAttrs.bind(null, state),
-    setTableWidth: setTableWidth.bind(null, state),
-    setColumnWidth: setColumnWidth.bind(null, state),
-    setRowHeight: setRowHeight.bind(null, state),
-    setBorderHeight: setBorderHeight.bind(null, state),
-    setGlobalRowHeight: setGlobalRowHeight.bind(null, state),
-    setMinRowHeight: setMinRowHeight.bind(null, state),
-    setVirtual: setVirtual.bind(null, state),
-    setRowDraggable: setRowDraggable.bind(null, state),
-    setRowExpandHeight: setRowExpandHeight.bind(null, state),
-    setBodyScroll: setBodyScroll.bind(null, state),
-    setHighlight: setHighlight.bind(null, state),
-    setRowHover: setRowHover.bind(null, state),
-    setLocale: setLocale.bind(null, state),
-    setTooltipTheme: setTooltipTheme.bind(null, state),
-    setTooltipWidth: setTooltipWidth.bind(null, state),
-    setSingleSorter: setSingleSorter.bind(null, state),
-    setSingleFilter: setSingleFilter.bind(null, state),
-    setDragging: setDragging.bind(null, state),
-    setCustomSorter: setCustomSorter.bind(null, state),
-    setCustomFilter: setCustomFilter.bind(null, state),
+    setDataKey,
+    setCurrentPage,
+    setPageSize,
+    setRowClass,
+    setRowStyle,
+    setRowAttrs,
+    setCellClass,
+    setCellStyle,
+    setCellAttrs,
+    setHeadClass,
+    setHeadStyle,
+    setHeadAttrs,
+    setTableWidth,
+    setColumnWidth,
+    setRowHeight,
+    setBorderHeight,
+    setGlobalRowHeight,
+    setMinRowHeight,
+    setVirtual,
+    setRowDraggable,
+    setRowExpandHeight,
+    setBodyScroll,
+    setHighlight,
+    setRowHover,
+    setLocale,
+    setTooltipTheme,
+    setTooltipWidth,
+    setSingleSorter,
+    setSingleFilter,
+    setDragging,
+    setCustomSorter,
+    setCustomFilter,
 
-    handleSort: handleSort.bind(null, state),
-    clearSort: clearSort.bind(null, state),
-    handleFilter: handleFilter.bind(null, state),
-    clearFilter: clearFilter.bind(null, state),
-    toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
-    refreshRowIndex: refreshRowIndex.bind(null, state),
-    updateTotalHeight: debounceMinor(updateTotalHeight.bind(null, state)),
-    handleCheck: handleCheck.bind(null, state, getters),
-    handleCheckAll: handleCheckAll.bind(null, state, getters),
-    clearCheckAll: clearCheckAll.bind(null, state, getters),
-    setRenderRows: setRenderRows.bind(null, state, getters),
-    handleExpand: handleExpand.bind(null, state, getters)
+    handleSort,
+    clearSort,
+    handleFilter,
+    clearFilter,
+    toggleFilterItemActive,
+    refreshRowIndex,
+    updateTotalHeight: debounceMinor(updateTotalHeight),
+    handleCheck,
+    handleCheckAll,
+    clearCheckAll,
+    setRenderRows,
+    handleExpand
   }
 
-  function setColumns(state: StoreState, columns: TableColumnOptions[]) {
+  function setColumns(columns: TableColumnOptions[]) {
     columns = Array.from(columns).sort((prev, next) => {
       return (prev.order || 0) - (next.order || 0)
     })
@@ -326,7 +325,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setDataKey(state: StoreState, field: string) {
+  function setDataKey(field: string) {
     const oldDataKey = state.dataKey
 
     if (!isNull(field) && oldDataKey !== field) {
@@ -347,7 +346,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setData(state: StoreState, data: Data[]) {
+  function setData(data: Data[]) {
     const clonedData = []
     const dataMap: Record<Key, RowState> = {}
     const { dataKey, idMaps } = state
@@ -410,63 +409,54 @@ export function useStore(options: StoreOptions) {
     state.rowData = clonedData
     state.dataMap = dataMap
 
-    computePartial(state)
+    computePartial()
   }
 
-  function setCurrentPage(state: StoreState, currentPage: number) {
+  function setCurrentPage(currentPage: number) {
     state.currentPage = currentPage ?? 1
   }
 
-  function setPageSize(state: StoreState, pageSize: number) {
+  function setPageSize(pageSize: number) {
     state.pageSize = pageSize || state.rowData.length
   }
 
-  function setRowClass(state: StoreState, rowClass: ClassType | RowPropFn<ClassType>) {
+  function setRowClass(rowClass: ClassType | RowPropFn<ClassType>) {
     state.rowClass = rowClass ?? ''
   }
 
-  function setRowStyle(state: StoreState, rowStyle: StyleType | RowPropFn<StyleType>) {
+  function setRowStyle(rowStyle: StyleType | RowPropFn<StyleType>) {
     state.rowStyle = rowStyle ?? ''
   }
 
-  function setRowAttrs(
-    state: StoreState,
-    rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>
-  ) {
+  function setRowAttrs(rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>) {
     state.rowAttrs = rowAttrs ?? null!
   }
 
-  function setCellClass(state: StoreState, cellClass: ClassType | CellPropFn<ClassType>) {
+  function setCellClass(cellClass: ClassType | CellPropFn<ClassType>) {
     state.cellClass = cellClass ?? ''
   }
 
-  function setCellStyle(state: StoreState, cellStyle: StyleType | CellPropFn<StyleType>) {
+  function setCellStyle(cellStyle: StyleType | CellPropFn<StyleType>) {
     state.cellStyle = cellStyle ?? ''
   }
 
-  function setCellAttrs(
-    state: StoreState,
-    cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>
-  ) {
+  function setCellAttrs(cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>) {
     state.cellAttrs = cellAttrs ?? null!
   }
 
-  function setHeadClass(state: StoreState, headClass: ClassType | HeadPropFn<ClassType>) {
+  function setHeadClass(headClass: ClassType | HeadPropFn<ClassType>) {
     state.headClass = headClass ?? ''
   }
 
-  function setHeadStyle(state: StoreState, headStyle: StyleType | HeadPropFn<StyleType>) {
+  function setHeadStyle(headStyle: StyleType | HeadPropFn<StyleType>) {
     state.headStyle = headStyle ?? ''
   }
 
-  function setHeadAttrs(
-    state: StoreState,
-    headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>
-  ) {
+  function setHeadAttrs(headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>) {
     state.headAttrs = headAttrs ?? null!
   }
 
-  function setTableWidth(state: StoreState, width: number) {
+  function setTableWidth(width: number) {
     width = toNumber(width)
 
     const { columns, widths } = state
@@ -507,103 +497,103 @@ export function useStore(options: StoreOptions) {
     state.width = width
   }
 
-  function setColumnWidth(state: StoreState, key: Key, width: number) {
+  function setColumnWidth(key: Key, width: number) {
     if (state.widths[key]) {
       state.widths[key] = width
     }
   }
 
-  function setRowHeight(state: StoreState, key: Key, height: number) {
+  function setRowHeight(key: Key, height: number) {
     if (state.dataMap[key] && state.dataMap[key].height !== height) {
       state.dataMap[key].height = height
     }
   }
 
-  function setBorderHeight(state: StoreState, key: Key, height: number) {
+  function setBorderHeight(key: Key, height: number) {
     if (state.dataMap[key]) {
       state.dataMap[key].borderHeight = height
     }
   }
 
-  function setGlobalRowHeight(state: StoreState, height: number) {
+  function setGlobalRowHeight(height: number) {
     state.rowHeight = height
   }
 
-  function setMinRowHeight(state: StoreState, height: number) {
+  function setMinRowHeight(height: number) {
     state.rowMinHeight = height
   }
 
-  function setRowDraggable(state: StoreState, draggable: boolean) {
+  function setRowDraggable(draggable: boolean) {
     state.rowDraggable = !!draggable
   }
 
-  function setRowExpandHeight(state: StoreState, key: Key, height: number) {
+  function setRowExpandHeight(key: Key, height: number) {
     if (state.dataMap[key]) {
       state.dataMap[key].expandHeight = height
     }
   }
 
-  function setBodyScroll(state: StoreState, scroll: number) {
+  function setBodyScroll(scroll: number) {
     state.bodyScroll = scroll
   }
 
-  function setHighlight(state: StoreState, able: boolean) {
+  function setHighlight(able: boolean) {
     state.highlight = !!able
   }
 
-  function setVirtual(state: StoreState, virtual: boolean) {
+  function setVirtual(virtual: boolean) {
     state.virtual = !!virtual
   }
 
-  function setRowHover(state: StoreState, key: Key, hover: boolean) {
+  function setRowHover(key: Key, hover: boolean) {
     if (state.dataMap[key]) {
       state.dataMap[key].hover = hover
     }
   }
 
-  function setLocale(state: StoreState, locale: LocaleConfig['table']) {
+  function setLocale(locale: LocaleConfig['table']) {
     state.locale = locale
   }
 
-  function setTooltipTheme(state: StoreState, theme: TooltipTheme) {
+  function setTooltipTheme(theme: TooltipTheme) {
     state.tooltipTheme = theme
   }
 
-  function setTooltipWidth(state: StoreState, theme: number | string) {
+  function setTooltipWidth(theme: number | string) {
     state.tooltipWidth = theme
   }
 
-  function setSingleSorter(state: StoreState, able: boolean) {
+  function setSingleSorter(able: boolean) {
     state.singleSorter = !!able
   }
 
-  function setSingleFilter(state: StoreState, able: boolean) {
+  function setSingleFilter(able: boolean) {
     state.singleFilter = !!able
   }
 
-  function setDragging(state: StoreState, dragging: boolean) {
+  function setDragging(dragging: boolean) {
     state.dragging = !!dragging
   }
 
-  function setCustomSorter(state: StoreState, able: boolean) {
+  function setCustomSorter(able: boolean) {
     state.customSorter = !!able
   }
 
-  function setCustomFilter(state: StoreState, able: boolean) {
+  function setCustomFilter(able: boolean) {
     state.customFilter = !!able
   }
 
-  function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
+  function handleSort(key: Key, type: ParsedSorterOptions['type']) {
     if (state.sorters[key]) {
       if (state.singleSorter && type) {
-        clearSort(state)
+        clearSort()
       }
 
       state.sorters[key].type = type
     }
   }
 
-  function clearSort(state: StoreState) {
+  function clearSort() {
     const sorters = state.sorters
 
     for (const key of Object.keys(sorters)) {
@@ -611,17 +601,17 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
+  function handleFilter(key: Key, active: ParsedFilterOptions['active']) {
     if (state.filters[key]) {
       if (state.singleFilter && (Array.isArray(active) ? active.length : active)) {
-        clearFilter(state)
+        clearFilter()
       }
 
       state.filters[key].active = active
     }
   }
 
-  function clearFilter(state: StoreState) {
+  function clearFilter() {
     const filters = state.filters
 
     for (const key of Object.keys(filters)) {
@@ -633,7 +623,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
+  function handleCheck(key: Key, checked: boolean) {
     const { dataMap } = state
     const { disableCheckRows } = getters
 
@@ -641,10 +631,10 @@ export function useStore(options: StoreOptions) {
       dataMap[key].checked = !!checked
     }
 
-    computePartial(state)
+    computePartial()
   }
 
-  function handleCheckAll(state: StoreState, getters: StoreGetters) {
+  function handleCheckAll() {
     const { rowData, checkedAll } = state
     const { disableCheckRows } = getters
 
@@ -677,10 +667,10 @@ export function useStore(options: StoreOptions) {
     state.checkedAll = checked
     state.partial = false
 
-    computePartial(state)
+    computePartial()
   }
 
-  function clearCheckAll(state: StoreState, getters: StoreGetters) {
+  function clearCheckAll() {
     const { rowData } = state
     const { disableCheckRows } = getters
 
@@ -693,10 +683,10 @@ export function useStore(options: StoreOptions) {
     state.checkedAll = false
     state.partial = false
 
-    computePartial(state)
+    computePartial()
   }
 
-  function computePartial(state: StoreState) {
+  function computePartial() {
     const data = state.rowData
 
     let hasChecked = false
@@ -728,7 +718,7 @@ export function useStore(options: StoreOptions) {
     state.partial = partial
   }
 
-  function setRenderRows(state: StoreState, getters: StoreGetters, start: number, end: number) {
+  function setRenderRows(start: number, end: number) {
     const { startRow, endRow, heightBITree, virtualData } = state
 
     if (start === startRow && end === endRow) return
@@ -754,7 +744,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleExpand(state: StoreState, getters: StoreGetters, key: Key, expanded: boolean) {
+  function handleExpand(key: Key, expanded: boolean) {
     const { dataMap } = state
     const { disableExpandRows } = getters
 
@@ -763,10 +753,12 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function toggleFilterItemActive(
-    state: StoreState,
-    options: { key: Key, value: number | string | null, active?: boolean, disableOthers?: boolean }
-  ) {
+  function toggleFilterItemActive(options: {
+    key: Key,
+    value: number | string | null,
+    active?: boolean,
+    disableOthers?: boolean
+  }) {
     const { key, value, active = false, disableOthers = false } = options
 
     if (state.filters[key]) {
@@ -786,7 +778,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function refreshRowIndex(state: StoreState) {
+  function refreshRowIndex() {
     const data = state.rowData
 
     for (let i = 0, len = data.length; i < len; ++i) {
@@ -794,7 +786,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function updateTotalHeight(state: StoreState) {
+  function updateTotalHeight() {
     const { heightBITree, currentPage, pageSize, rowData } = state
 
     if (heightBITree) {

@@ -2,7 +2,7 @@
 
 ```ts
 type Key = string | number | symbol
-type Data = Record<string, unknown>
+type Data = Record<string, any>
 type RowPropFn<P = any> = (data: Data, index: number) => P
 type DropType = 'before' | 'after' | 'none'
 
@@ -46,8 +46,6 @@ interface SorterOptions<D = Data> {
   order?: number, // 优先级
   method?: null | ((prev: D, next: D) => number)
 }
-
-type ParsedSorterOptions = Required<SorterOptions>
 
 interface BaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
