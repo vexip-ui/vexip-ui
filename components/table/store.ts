@@ -14,6 +14,7 @@ import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
+  TableKeyConfig,
   RowPropFn,
   CellPropFn,
   HeadPropFn,
@@ -69,6 +70,7 @@ export function useStore(options: StoreOptions) {
     singleFilter: options.singleFilter,
     customSorter: options.customSorter,
     customFilter: options.customFilter,
+    keyConfig: options.keyConfig,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -220,6 +222,7 @@ export function useStore(options: StoreOptions) {
     setDragging,
     setCustomSorter,
     setCustomFilter,
+    setKeyConfig,
 
     handleSort,
     clearSort,
@@ -349,9 +352,11 @@ export function useStore(options: StoreOptions) {
   function setData(data: Data[]) {
     const clonedData = []
     const dataMap: Record<Key, RowState> = {}
-    const { dataKey, idMaps } = state
+    const { dataKey, keyConfig, idMaps } = state
     const oldDataMap = state.dataMap
     const hidden = !!state.virtual
+
+    const { checked: checkedKey, height: heightKey, expanded: expandedKey } = keyConfig
 
     dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
       key: TABLE_HEAD_KEY
@@ -375,14 +380,17 @@ export function useStore(options: StoreOptions) {
       if (oldDataMap[key]) {
         row = oldDataMap[key]
 
-        const { checked, height, expanded } =
-          row.data !== item ? Object.assign(row.data, item) : row.data
+        const {
+          [checkedKey]: checked,
+          [heightKey]: height,
+          [expandedKey]: expanded
+        } = row.data !== item ? Object.assign(row.data, item) : row.data
 
         row.checked = !isNull(checked) ? !!checked : row.checked
         row.height = !isNull(height) ? toNumber(height) : row.height
         row.expanded = !isNull(expanded) ? !!expanded : row.expanded
       } else {
-        const { checked, height, expanded } = item
+        const { [checkedKey]: checked, [heightKey]: height, [expandedKey]: expanded } = item
 
         row = {
           key,
@@ -591,6 +599,10 @@ export function useStore(options: StoreOptions) {
 
       state.sorters[key].type = type
     }
+  }
+
+  function setKeyConfig(keyConfig: Required<TableKeyConfig>) {
+    state.keyConfig = keyConfig
   }
 
   function clearSort() {

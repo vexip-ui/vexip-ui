@@ -9,6 +9,13 @@ export type Data = Record<string, any>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
 export type DropType = 'before' | 'after' | 'none'
 
+export interface TableKeyConfig {
+  id?: string,
+  checked?: string,
+  height?: string,
+  expanded?: string
+}
+
 export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
@@ -163,6 +170,7 @@ export interface StoreOptions {
   singleFilter: boolean,
   customSorter: boolean,
   customFilter: boolean,
+  keyConfig: Required<TableKeyConfig>,
   expandRenderer: ExpandRenderFn | null
 }
 

@@ -6,6 +6,7 @@ export type TableExposed = InstanceType<typeof Table>
 export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
 export type { TableProps, TableCProps } from './props'
 export type {
+  TableKeyConfig,
   RowPropFn,
   TableColumnType,
   FilterOptions,

@@ -137,6 +137,7 @@ import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type {
   DropType,
+  TableKeyConfig,
   TableColumnOptions,
   RowState,
   RowInstance,
@@ -144,6 +145,13 @@ import type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
+
+const defaultKeyConfig: Required<TableKeyConfig> = {
+  id: 'id',
+  checked: 'checked',
+  height: 'height',
+  expanded: 'expanded'
+}
 
 export default defineComponent({
   name: 'Table',
@@ -166,7 +174,7 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      dataKey: DEFAULT_KEY_FIELD,
+      dataKey: null,
       width: null,
       height: null,
       rowClass: null,
@@ -216,7 +224,8 @@ export default defineComponent({
       headStyle: null,
       headAttrs: null,
       customSorter: false,
-      customFilter: false
+      customFilter: false,
+      keyConfig: () => ({})
     })
 
     const nh = useNameHelper('table')
@@ -250,6 +259,19 @@ export default defineComponent({
     })
 
     const locale = useLocale('table', userLocale)
+    const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+    const dataKey = computed(() => {
+      if (isDefined(props.dataKey)) {
+        warnOnce(
+          "[vexip-ui:Table] 'data-key' prop has been deprecated, plesae " +
+            "using 'id' option of 'key-config' prop to instead it"
+        )
+
+        return props.keyConfig.id ?? props.dataKey
+      }
+
+      return keyConfig.value.id
+    })
 
     const store = useStore({
       columns: props.columns as TableColumnOptions[],
@@ -263,7 +285,7 @@ export default defineComponent({
       headClass: props.headClass,
       headStyle: props.headStyle,
       headAttrs: props.headAttrs,
-      dataKey: props.dataKey,
+      dataKey: dataKey.value,
       highlight: props.highlight,
       currentPage: props.currentPage,
       pageSize: props.pageSize,
@@ -278,6 +300,7 @@ export default defineComponent({
       singleFilter: props.singleFilter,
       customSorter: props.customSorter,
       customFilter: props.customFilter,
+      keyConfig: keyConfig.value,
       expandRenderer: props.expandRenderer
     })
 
@@ -371,6 +394,7 @@ export default defineComponent({
 
     const {
       setColumns,
+      setDataKey,
       setData,
       setPageSize,
       setRowClass,
@@ -389,6 +413,7 @@ export default defineComponent({
       setDragging,
       setCustomSorter,
       setCustomFilter,
+      setKeyConfig,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -402,6 +427,7 @@ export default defineComponent({
       },
       { immediate: true, deep: true }
     )
+    watch(dataKey, setDataKey)
     watch(
       () => props.data,
       value => {
@@ -432,6 +458,14 @@ export default defineComponent({
     watch(() => props.singleFilter, setSingleFilter)
     watch(() => props.customSorter, setCustomSorter)
     watch(() => props.customFilter, setCustomFilter)
+    watch(
+      keyConfig,
+      config => {
+        setKeyConfig(config)
+        setData(props.data)
+      },
+      { deep: true }
+    )
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)

@@ -6,6 +6,13 @@ type Data = Record<string, any>
 type RowPropFn<P = any> = (data: Data, index: number) => P
 type DropType = 'before' | 'after' | 'none'
 
+interface TableKeyConfig {
+  id?: string,
+  checked?: string,
+  height?: string,
+  expanded?: string
+}
+
 type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
@@ -186,6 +193,7 @@ interface TableHeadPayload {
 | locale          | `LocaleConfig['table']`                                  | 设置多语言配置                                               | `null`         | `2.1.0` |
 | custom-sorter   | `boolean`                                                | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4` |
 | custom-filter   | `boolean`                                                | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4` |
+| key-config      | `TableKeyConfig`                                         | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6` |
 
 ### Table 事件
 

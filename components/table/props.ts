@@ -14,6 +14,7 @@ import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Data,
   DropType,
+  TableKeyConfig,
   ExpandRenderFn,
   ColumnRenderFn,
   HeadRenderFn,
@@ -75,6 +76,7 @@ export const tableProps = buildProps({
   headAttrs: [Object, Function] as PropType<Record<string, any> | HeadPropFn<Record<string, any>>>,
   customSorter: booleanProp,
   customFilter: booleanProp,
+  keyConfig: Object as PropType<TableKeyConfig>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
