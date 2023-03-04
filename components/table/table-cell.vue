@@ -24,7 +24,7 @@
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
     <template v-else-if="isExpand(column)">
-      <div
+      <button
         v-if="!disableExpandRows[row.key]"
         :class="{
           [nh.be('expand')]: true,
@@ -33,7 +33,7 @@
         @click.stop="handleExpandRow(row, $event)"
       >
         <Icon><AngleRight></AngleRight></Icon>
-      </div>
+      </button>
     </template>
   </div>
   <div
@@ -48,6 +48,23 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
+    <template v-if="usingTree && column.first">
+      <span
+        :class="nh.be('pad')"
+        :style="{
+          [nh.cv('row-depth')]: row.depth
+        }"
+      ></span>
+      <button
+        :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
+        @click="handleExpandTree(row)"
+      >
+        <Icon>
+          <Minus v-if="row.treeExpanded"></Minus>
+          <Plus v-else></Plus>
+        </Icon>
+      </button>
+    </template>
     <Ellipsis
       v-if="!column.noEllipsis"
       inherit
@@ -90,7 +107,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { AngleRight } from '@vexip-ui/icons'
+import { AngleRight, Plus, Minus } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -113,7 +130,9 @@ export default defineComponent({
     Ellipsis,
     Icon,
     Renderer,
-    AngleRight
+    AngleRight,
+    Plus,
+    Minus
   },
   props: {
     row: {
@@ -283,6 +302,14 @@ export default defineComponent({
       }
     }
 
+    function handleExpandTree(row: RowState) {
+      if (!row.children?.length) return
+
+      const expanded = !row.treeExpanded
+
+      mutations.handleTreeExpand(row.key, expanded)
+    }
+
     return {
       nh,
 
@@ -293,6 +320,7 @@ export default defineComponent({
       tooltipWidth: toRef(state, 'tooltipWidth'),
       disableCheckRows: toRef(getters, 'disableCheckRows'),
       disableExpandRows: toRef(getters, 'disableExpandRows'),
+      usingTree: toRef(getters, 'usingTree'),
 
       isFunction,
       isSelection,
@@ -305,7 +333,8 @@ export default defineComponent({
       handleDblclick,
       handleContextmenu,
       handleCheckRow,
-      handleExpandRow
+      handleExpandRow,
+      handleExpandTree
     }
   }
 })

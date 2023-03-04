@@ -77,6 +77,8 @@ export const tableProps = buildProps({
   customSorter: booleanProp,
   customFilter: booleanProp,
   keyConfig: Object as PropType<TableKeyConfig>,
+  disabledTree: booleanProp,
+  rowIndent: [String, Number],
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),

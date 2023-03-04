@@ -133,7 +133,7 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type {
   DropType,
@@ -148,9 +148,11 @@ import type {
 
 const defaultKeyConfig: Required<TableKeyConfig> = {
   id: 'id',
+  children: 'children',
   checked: 'checked',
   height: 'height',
-  expanded: 'expanded'
+  expanded: 'expanded',
+  treeExpanded: 'treeExpanded'
 }
 
 export default defineComponent({
@@ -225,7 +227,9 @@ export default defineComponent({
       headAttrs: null,
       customSorter: false,
       customFilter: false,
-      keyConfig: () => ({})
+      keyConfig: () => ({}),
+      disabledTree: false,
+      rowIndent: '16px'
     })
 
     const nh = useNameHelper('table')
@@ -301,6 +305,7 @@ export default defineComponent({
       customSorter: props.customSorter,
       customFilter: props.customFilter,
       keyConfig: keyConfig.value,
+      disabledTree: props.disabledTree,
       expandRenderer: props.expandRenderer
     })
 
@@ -350,22 +355,24 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
+      const style = {
+        [nh.cv('row-indent-width')]:
+          typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
+      }
       const width = tableWidth.value ?? props.width
 
       if (width !== null) {
         if (typeof width === 'string' && parseFloat(width).toString() !== width) {
-          return {
-            width
-          }
-        }
-
-        return {
-          width: `${width}px`,
-          minWidth: `${width}px`
+          style.width = width
+        } else {
+          Object.assign(style, {
+            width: `${width}px`,
+            minWidth: `${width}px`
+          })
         }
       }
 
-      return {}
+      return style
     })
     const useXScroll = computed(() => {
       return !!(props.width && (state.leftFixedColumns.length || state.rightFixedColumns.length))
@@ -414,6 +421,7 @@ export default defineComponent({
       setCustomSorter,
       setCustomFilter,
       setKeyConfig,
+      setDisabledTree,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -465,6 +473,13 @@ export default defineComponent({
         setData(props.data)
       },
       { deep: true }
+    )
+    watch(
+      () => props.disabledTree,
+      value => {
+        setDisabledTree(value)
+        setData(props.data)
+      }
     )
 
     function syncBarScroll() {

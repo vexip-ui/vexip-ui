@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 1000px;">
+  <div style="max-width: 1000px">
     <Table
       :data="data"
       :current-page="currentPage"
@@ -13,7 +13,7 @@
       <TableColumn id-key="found" name="Found"></TableColumn>
       <TableColumn id-key="progress" name="Progress"></TableColumn>
     </Table>
-    <div style="margin: 10px 10px 0; text-align: right;">
+    <div style="margin: 10px 10px 0; text-align: right">
       <Pagination
         v-model:active="currentPage"
         page-jump
@@ -68,10 +68,10 @@ function randomDate() {
 
 function formatDate(date: Date) {
   const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+  const month = `${date.getMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getDate()}`.padStart(2, '0')
 
-  return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+  return `${year}-${month}-${day}`
 }
 
 function toggleChecked(row: RowData, checked: boolean) {

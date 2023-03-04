@@ -71,6 +71,7 @@ export function useStore(options: StoreOptions) {
     customSorter: options.customSorter,
     customFilter: options.customFilter,
     keyConfig: options.keyConfig,
+    disabledTree: options.disabledTree,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -168,6 +169,9 @@ export function useStore(options: StoreOptions) {
 
     return disableExpandRows
   })
+  const usingTree = computed(() => {
+    return !state.disabledTree && state.rowData.some(row => row.children?.length)
+  })
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -181,7 +185,8 @@ export function useStore(options: StoreOptions) {
     sortedData,
     processedData,
     disableCheckRows,
-    disableExpandRows
+    disableExpandRows,
+    usingTree
   })
 
   const mutations = {
@@ -223,6 +228,7 @@ export function useStore(options: StoreOptions) {
     setCustomSorter,
     setCustomFilter,
     setKeyConfig,
+    setDisabledTree,
 
     handleSort,
     clearSort,
@@ -235,7 +241,8 @@ export function useStore(options: StoreOptions) {
     handleCheckAll,
     clearCheckAll,
     setRenderRows,
-    handleExpand
+    handleExpand,
+    handleTreeExpand
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -249,6 +256,8 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns = []
     const leftFixedColumns = []
     const columnTypes = ['order', 'selection', 'expand']
+
+    let firstMarked = false
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
@@ -289,6 +298,9 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
+      } else if (!firstMarked) {
+        column.first = true
+        firstMarked = true
       }
 
       let key = column.key
@@ -349,74 +361,132 @@ export function useStore(options: StoreOptions) {
     }
   }
 
+  function refreshIndex() {
+    const { rowData } = state
+
+    for (let i = 0, len = rowData.length; i < len; ++i) {
+      rowData[i].index = i
+    }
+  }
+
+  function collectUnderRows(row: RowState, result: RowState[] = []) {
+    if (row.treeExpanded && row.children?.length) {
+      for (const childRow of row.children) {
+        result.push(childRow)
+        collectUnderRows(childRow, result)
+      }
+    }
+
+    return result
+  }
+
   function setData(data: Data[]) {
-    const clonedData = []
+    const clonedData: RowState[] = []
     const dataMap: Record<Key, RowState> = {}
-    const { dataKey, keyConfig, idMaps } = state
+    const { dataKey, keyConfig, idMaps, disabledTree } = state
     const oldDataMap = state.dataMap
     const hidden = !!state.virtual
 
-    const { checked: checkedKey, height: heightKey, expanded: expandedKey } = keyConfig
+    const {
+      children: childrenKey,
+      checked: checkedKey,
+      height: heightKey,
+      expanded: expandedKey,
+      treeExpanded: treeExpandedKey
+    } = keyConfig
 
     dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
       key: TABLE_HEAD_KEY
     }
 
-    for (let i = 0, len = data.length; i < len; ++i) {
-      const item = data[i]
+    function parseRow(origin: Data[], result: RowState[], parent?: RowState) {
+      for (let i = 0, len = origin.length; i < len; ++i) {
+        const item = origin[i]
 
-      let key = item[dataKey] as Key
-
-      if (isNull(key)) {
-        key = idMaps.get(item)!
+        let key = item[dataKey] as Key
 
         if (isNull(key)) {
-          key = getIndexId()
-        }
-      }
+          key = idMaps.get(item)!
 
-      let row: RowState
-
-      if (oldDataMap[key]) {
-        row = oldDataMap[key]
-
-        const {
-          [checkedKey]: checked,
-          [heightKey]: height,
-          [expandedKey]: expanded
-        } = row.data !== item ? Object.assign(row.data, item) : row.data
-
-        row.checked = !isNull(checked) ? !!checked : row.checked
-        row.height = !isNull(height) ? toNumber(height) : row.height
-        row.expanded = !isNull(expanded) ? !!expanded : row.expanded
-      } else {
-        const { [checkedKey]: checked, [heightKey]: height, [expandedKey]: expanded } = item
-
-        row = {
-          key,
-          hidden,
-          checked: !!checked,
-          height: toNumber(height),
-          borderHeight: 0,
-          expanded: !!expanded,
-          hover: false,
-          expandHeight: 0,
-          index: -1,
-          data: item
+          if (isNull(key)) {
+            key = getIndexId()
+          }
         }
 
-        idMaps.set(item, key)
-      }
+        let row: RowState
 
-      // 行的初始位置索引
-      row.index = i
-      clonedData.push(row)
-      dataMap[key] = row
+        if (oldDataMap[key]) {
+          row = oldDataMap[key]
+
+          const {
+            [checkedKey]: checked,
+            [heightKey]: height,
+            [expandedKey]: expanded,
+            [treeExpandedKey]: treeExpanded
+          } = row.data !== item ? Object.assign(row.data, item) : row.data
+
+          row.checked = !isNull(checked) ? !!checked : row.checked
+          row.height = !isNull(height) ? toNumber(height) : row.height
+          row.expanded = !isNull(expanded) ? !!expanded : row.expanded
+          row.treeExpanded = isNull(treeExpanded) ? !!treeExpanded : row.treeExpanded
+        } else {
+          const {
+            [checkedKey]: checked,
+            [heightKey]: height,
+            [expandedKey]: expanded,
+            [treeExpandedKey]: treeExpanded
+          } = item
+
+          row = {
+            key,
+            hidden,
+            checked: !!checked,
+            height: toNumber(height),
+            borderHeight: 0,
+            expanded: !!expanded,
+            hover: false,
+            expandHeight: 0,
+            index: -1,
+            children: [],
+            depth: 0,
+            treeExpanded: !!treeExpanded,
+            data: item
+          }
+
+          idMaps.set(item, key)
+        }
+
+        if (parent) {
+          row.parent = parent.key
+          row.depth = parent.depth + 1
+        }
+
+        const children = row.data[childrenKey]
+        children?.length && parseRow(children, (row.children = []), row)
+
+        result.push(row)
+        dataMap[key] = row
+      }
     }
 
-    state.rowData = clonedData
+    parseRow(data, clonedData)
+
     state.dataMap = dataMap
 
+    if (!disabledTree) {
+      const rowData: RowState[] = []
+
+      for (const row of clonedData) {
+        rowData.push(row)
+        collectUnderRows(row, rowData)
+      }
+
+      state.rowData = rowData
+    } else {
+      state.rowData = clonedData
+    }
+
+    refreshIndex()
     computePartial()
   }
 
@@ -425,7 +495,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setPageSize(pageSize: number) {
-    state.pageSize = pageSize || state.rowData.length
+    state.pageSize = pageSize || 0
   }
 
   function setRowClass(rowClass: ClassType | RowPropFn<ClassType>) {
@@ -605,6 +675,10 @@ export function useStore(options: StoreOptions) {
     state.keyConfig = keyConfig
   }
 
+  function setDisabledTree(disabled: boolean) {
+    state.disabledTree = !!disabled
+  }
+
   function clearSort() {
     const sorters = state.sorters
 
@@ -763,6 +837,27 @@ export function useStore(options: StoreOptions) {
     if (dataMap[key] && !disableExpandRows[key]) {
       dataMap[key].expanded = !!expanded
     }
+  }
+
+  function handleTreeExpand(key: Key, expanded: boolean) {
+    if (!usingTree.value) return
+
+    const { dataMap, rowData } = state
+    const row = dataMap[key]
+
+    if (!row.children?.length) return
+
+    const underRows = collectUnderRows({ ...row, treeExpanded: true })
+
+    if (expanded) {
+      rowData.splice(row.index + 1, 0, ...underRows)
+    } else {
+      rowData.splice(row.index + 1, underRows.length)
+    }
+
+    row.treeExpanded = !!expanded
+
+    refreshIndex()
   }
 
   function toggleFilterItemActive(options: {
@@ -939,7 +1034,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function pageData(currentPage: number, pageSize: number, data: RowState[]) {
-    return data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    return pageSize > 0 ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data
   }
 
   type Store = Readonly<{

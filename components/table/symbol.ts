@@ -11,9 +11,11 @@ export type DropType = 'before' | 'after' | 'none'
 
 export interface TableKeyConfig {
   id?: string,
+  children?: string,
   checked?: string,
   height?: string,
-  expanded?: string
+  expanded?: string,
+  treeExpanded?: string
 }
 
 export type Accessor<D = Data, Val extends string | number = string | number> = (
@@ -107,7 +109,11 @@ export type TableColumnOptions<D = Data, Val extends string | number = string | 
 export type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
-> = TableColumnOptions<D, Val> & { key: Key }
+> = TableColumnOptions<D, Val> & {
+  key: Key,
+  /** @internal */
+  first?: boolean
+}
 
 export type ColumnRenderFn = (data: {
   row: any,
@@ -143,6 +149,23 @@ export type SorterProfile<D = Data, Val extends string | number = string | numbe
   order: number
 }
 
+export interface RowState {
+  key: Key,
+  index: number,
+  hidden: boolean,
+  hover: boolean,
+  checked: boolean,
+  height: number,
+  borderHeight: number,
+  expanded: boolean,
+  expandHeight: number,
+  parent?: Key,
+  children: RowState[],
+  depth: number,
+  treeExpanded: boolean,
+  data: Data
+}
+
 export interface StoreOptions {
   columns: TableColumnOptions[],
   data: Data[],
@@ -171,20 +194,8 @@ export interface StoreOptions {
   customSorter: boolean,
   customFilter: boolean,
   keyConfig: Required<TableKeyConfig>,
+  disabledTree: boolean,
   expandRenderer: ExpandRenderFn | null
-}
-
-export interface RowState {
-  key: Key,
-  index: number,
-  hidden: boolean,
-  hover: boolean,
-  checked: boolean,
-  height: number,
-  borderHeight: number,
-  expanded: boolean,
-  expandHeight: number,
-  data: Data
 }
 
 export interface StoreState extends StoreOptions {
