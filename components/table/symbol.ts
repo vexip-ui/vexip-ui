@@ -163,6 +163,7 @@ export interface RowState {
   children: RowState[],
   depth: number,
   treeExpanded: boolean,
+  partial: boolean,
   data: Data
 }
 
@@ -195,6 +196,7 @@ export interface StoreOptions {
   customFilter: boolean,
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
+  noCascaded: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 
@@ -204,7 +206,7 @@ export interface StoreState extends StoreOptions {
   width: number,
   rightFixedColumns: ColumnWithKey[],
   leftFixedColumns: ColumnWithKey[],
-  dataMap: Record<Key, RowState>,
+  rowMap: Map<Key, RowState>,
   idMaps: WeakMap<Data, Key>,
   checkedAll: boolean,
   partial: boolean,

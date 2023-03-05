@@ -229,7 +229,8 @@ export default defineComponent({
       customFilter: false,
       keyConfig: () => ({}),
       disabledTree: false,
-      rowIndent: '16px'
+      rowIndent: '16px',
+      noCascaded: false
     })
 
     const nh = useNameHelper('table')
@@ -306,6 +307,7 @@ export default defineComponent({
       customFilter: props.customFilter,
       keyConfig: keyConfig.value,
       disabledTree: props.disabledTree,
+      noCascaded: props.noCascaded,
       expandRenderer: props.expandRenderer
     })
 
@@ -422,6 +424,7 @@ export default defineComponent({
       setCustomFilter,
       setKeyConfig,
       setDisabledTree,
+      setNoCascaded,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -481,6 +484,7 @@ export default defineComponent({
         setData(props.data)
       }
     )
+    watch(() => props.noCascaded, setNoCascaded)
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)

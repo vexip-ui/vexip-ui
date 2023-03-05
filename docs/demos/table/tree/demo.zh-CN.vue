@@ -27,6 +27,8 @@ data[0].children = mockData(5, 3)
 data[0].treeExpanded = true
 data[0].children[1].children = mockData(8, 2)
 
+data[2].children = mockData(10, 2)
+
 function mockData(idStart = 0, size = 5) {
   const data: RowData[] = []
 

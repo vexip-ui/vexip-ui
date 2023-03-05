@@ -17,7 +17,9 @@
       :class="nh.be('selection')"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
-      :disabled="disableCheckRows[row.key]"
+      :disabled="disableCheckRows.has(row.key)"
+      :partial="row.partial"
+      :control="!!row.children?.length"
       @click.prevent.stop="handleCheckRow(row, $event)"
     ></Checkbox>
     <span v-else-if="isOrder(column)" :class="nh.be('order')">
@@ -25,7 +27,7 @@
     </span>
     <template v-else-if="isExpand(column)">
       <button
-        v-if="!disableExpandRows[row.key]"
+        v-if="!disableExpandRows.has(row.key)"
         :class="{
           [nh.be('expand')]: true,
           [nh.bem('expand', 'active')]: row.expanded
@@ -157,6 +159,8 @@ export default defineComponent({
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 
     const nh = useNameHelper('table')
+    const disableCheckRows = toRef(getters, 'disableCheckRows')
+    const disableExpandRows = toRef(getters, 'disableExpandRows')
 
     const className = computed(() => {
       let customClass = null
@@ -283,7 +287,7 @@ export default defineComponent({
     }
 
     function handleCheckRow(row: RowState, event: MouseEvent) {
-      if (!getters.disableCheckRows[row.key]) {
+      if (!disableCheckRows.value.has(row.key)) {
         const checked = !row.checked
         const { data, key, index } = row
 
@@ -293,7 +297,7 @@ export default defineComponent({
     }
 
     function handleExpandRow(row: RowState, event: MouseEvent) {
-      if (!getters.disableExpandRows[row.key]) {
+      if (!disableExpandRows.value.has(row.key)) {
         const expanded = !row.expanded
         const { data, key, index } = row
 
@@ -318,8 +322,8 @@ export default defineComponent({
       attrs,
       tooltipTheme: toRef(state, 'tooltipTheme'),
       tooltipWidth: toRef(state, 'tooltipWidth'),
-      disableCheckRows: toRef(getters, 'disableCheckRows'),
-      disableExpandRows: toRef(getters, 'disableExpandRows'),
+      disableCheckRows,
+      disableExpandRows,
       usingTree: toRef(getters, 'usingTree'),
 
       isFunction,
