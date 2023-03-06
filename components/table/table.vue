@@ -99,7 +99,11 @@
       v-if="props.rowDraggable"
       v-show="indicatorShow"
       ref="indicator"
-      :class="nh.be('indicator')"
+      :class="[
+        nh.be('indicator'),
+        indicatorType === 'before' && nh.bem('indicator', 'before'),
+        indicatorType === 'after' && nh.bem('indicator', 'after')
+      ]"
     ></div>
   </div>
 </template>
@@ -133,10 +137,10 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { DropType, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type {
-  DropType,
+  Key,
   TableKeyConfig,
   TableColumnOptions,
   RowState,
@@ -240,6 +244,7 @@ export default defineComponent({
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
     const indicatorShow = ref(false)
+    const indicatorType = ref(DropType.BEFORE)
     const templateColumns = ref(new Set<TableColumnOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
@@ -428,7 +433,8 @@ export default defineComponent({
       clearSort,
       clearFilter,
       refreshRowIndex,
-      clearCheckAll
+      clearCheckAll,
+      getParentRow
     } = mutations
 
     watch(
@@ -663,13 +669,16 @@ export default defineComponent({
     let dragState: {
       draggingRow: RowState,
       tableRect: DOMRect,
-      dropType?: DropType
+      willDropRow: RowState | null,
+      dropType: DropType
     } | null
 
     function handleRowDragStart(rowInstance: RowInstance, event: DragEvent) {
       dragState = {
         draggingRow: rowInstance.row,
-        tableRect: wrapper.value!.getBoundingClientRect()
+        tableRect: wrapper.value!.getBoundingClientRect(),
+        willDropRow: null,
+        dropType: DropType.BEFORE
       }
 
       setDragging(true)
@@ -681,57 +690,113 @@ export default defineComponent({
 
       const dropRowRect = rowInstance.el.getBoundingClientRect()
       const tableRect = dragState.tableRect
-      const prevPercent = 0.5
+      const prevPercent = 0.25
+      const nextPercent = 0.75
       const distance = event.clientY - dropRowRect.top
       const dropRowHeight = dropRowRect.height
 
-      let dropType: DropType = 'none'
+      let dropType: DropType
       let indicatorTop = -9999
+      let isIndicatorShow = true
 
       if (distance < dropRowHeight * prevPercent) {
-        dropType = 'before'
+        dropType = DropType.BEFORE
         indicatorTop = dropRowRect.top - tableRect.top
-      } else {
-        dropType = 'after'
+      } else if (distance > dropRowHeight * nextPercent) {
+        dropType = DropType.AFTER
         indicatorTop = dropRowRect.bottom - tableRect.top
+      } else {
+        dropType = DropType.INNER
+        isIndicatorShow = false
       }
 
-      indicator.value!.style.top = `${indicatorTop - 2}px`
+      if (indicator.value) {
+        indicator.value.style.top = `${indicatorTop - 2}px`
+      }
 
-      // dragState.willDropRow = rowInstance.row
+      dragState.willDropRow = rowInstance.row
       dragState.dropType = dropType
 
-      indicatorShow.value = true
+      indicatorShow.value = isIndicatorShow
+      indicatorType.value = dropType
+
       emitEvent(props.onRowDragOver, rowInstance.row.data, event)
+    }
+
+    function isLeftInsideRight(left: RowState, right: RowState) {
+      if (!left || !right) return true
+
+      while (left) {
+        if (left === right || left.key === right.key) {
+          return true
+        }
+
+        left = getParentRow(left.key)!
+      }
+
+      return false
     }
 
     function handleRowDrop(rowInstance: RowInstance, event: DragEvent) {
       if (!dragState) return
 
-      const { draggingRow, dropType } = dragState
-      const willDropRow = rowInstance.row
+      const { draggingRow, willDropRow, dropType } = dragState
+      const { rowData } = state
 
-      if (draggingRow.key === willDropRow.key) return
+      if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
 
-      const rowData = state.rowData
+      let currentKey: Key
+      let parent: RowState | null
 
-      let index = rowData.findIndex(row => row.key === willDropRow.key)
+      if (draggingRow) {
+        parent = getParentRow(draggingRow.key)
 
-      if (~index) {
-        const originIndex = rowData.findIndex(row => row.key === draggingRow.key)
-
-        removeArrayItem(rowData, row => row.key === draggingRow.key)
-
-        if (originIndex > index && dropType === 'after') {
-          index += 1
-        } else if (originIndex < index && dropType === 'before') {
-          index -= 1
+        if (parent) {
+          removeArrayItem(parent.children, row => row.key === currentKey)
         }
 
-        rowData.splice(index, 0, draggingRow)
-        refreshRowIndex()
-        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
+        currentKey = draggingRow.key
+        removeArrayItem(rowData, row => row.key === currentKey)
       }
+
+      if (dropType === DropType.INNER) {
+        if (!Array.isArray(willDropRow.children)) {
+          willDropRow.children = []
+        }
+
+        const children = Array.from(willDropRow.children)
+
+        children.push(draggingRow)
+        willDropRow.children = children
+        draggingRow.parent = willDropRow.key
+        draggingRow.depth = willDropRow.depth + 1
+      } else {
+        parent = getParentRow(willDropRow.key)
+        currentKey = willDropRow.key
+
+        if (parent) {
+          const index = parent.children.findIndex(row => row.key === currentKey)
+
+          if (~index) {
+            parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
+
+            draggingRow.parent = parent.key
+            draggingRow.depth = parent.depth + 1
+          }
+        } else {
+          draggingRow.parent = undefined
+          draggingRow.depth = 0
+        }
+
+        const index = rowData.findIndex(row => row.key === currentKey)
+
+        if (~index) {
+          rowData.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
+        }
+      }
+
+      refreshRowIndex()
+      emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
     }
 
     function handleRowDragEnd(event: DragEvent) {
@@ -881,6 +946,7 @@ export default defineComponent({
       yScrollPercent,
       headHeight,
       indicatorShow,
+      indicatorType,
       leftFixedColumns: toRef(state, 'leftFixedColumns'),
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),

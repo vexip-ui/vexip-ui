@@ -7,7 +7,13 @@ import type { TableStore } from './store'
 export type Key = string | number | symbol
 export type Data = Record<string, any>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
-export type DropType = 'before' | 'after' | 'none'
+export type RowDropType = 'before' | 'after' | 'inner'
+
+export const enum DropType {
+  BEFORE = 'before',
+  INNER = 'inner',
+  AFTER = 'after'
+}
 
 export interface TableKeyConfig {
   id?: string,

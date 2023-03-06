@@ -244,7 +244,8 @@ export function useStore(options: StoreOptions) {
     clearCheckAll,
     setRenderRows,
     handleExpand,
-    handleTreeExpand
+    handleTreeExpand,
+    getParentRow
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -360,14 +361,6 @@ export function useStore(options: StoreOptions) {
         row.key = key
         idMaps.set(row.data, key)
       })
-    }
-  }
-
-  function refreshIndex() {
-    const { rowData } = state
-
-    for (let i = 0, len = rowData.length; i < len; ++i) {
-      rowData[i].index = i
     }
   }
 
@@ -493,7 +486,7 @@ export function useStore(options: StoreOptions) {
       state.rowData = clonedData
     }
 
-    refreshIndex()
+    refreshRowIndex()
     computePartial()
   }
 
@@ -947,7 +940,7 @@ export function useStore(options: StoreOptions) {
 
     row.treeExpanded = !!expanded
 
-    refreshIndex()
+    refreshRowIndex()
   }
 
   function toggleFilterItemActive(options: {
@@ -1125,6 +1118,17 @@ export function useStore(options: StoreOptions) {
 
   function pageData(currentPage: number, pageSize: number, data: RowState[]) {
     return pageSize > 0 ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data
+  }
+
+  function getParentRow(key: Key) {
+    const { rowMap } = state
+    const row = rowMap.get(key)
+
+    if (row?.parent) {
+      return rowMap.get(row.parent) ?? null
+    }
+
+    return null
   }
 
   type Store = Readonly<{
