@@ -20,6 +20,15 @@
     );
   }
 
+  .#{c.$namespace}-checkbox-vars {
+    @include c.define-preset-values(
+      'checkbox',
+      (
+        signal-bg-color-disabled: c.get-css-var('fill-color-hover')
+      )
+    );
+  }
+
   .#{c.$namespace}-menu-vars {
     @include c.define-preset-values(
       'menu',

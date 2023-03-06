@@ -49,9 +49,7 @@ $checkbox: map.merge(
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
-  transition:
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
+  transition: get-css-var('transition-background'), get-css-var('transition-border'),
     get-css-var('transition-shadow');
 
   &--border {
@@ -82,9 +80,7 @@ $checkbox: map.merge(
     background-color: get-css-var('checkbox-signal-bg-color');
     border: get-css-var('border-shape') get-css-var('checkbox-b-color');
     border-radius: get-css-var('checkbox-signal-radius');
-    transition:
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
+    transition: get-css-var('transition-background'), get-css-var('transition-border'),
       get-css-var('transition-shadow');
 
     &::before {
@@ -99,22 +95,18 @@ $checkbox: map.merge(
       position: absolute;
       top: calc(50% - 1px);
       left: 50%;
-      width:
-        calc(
-          get-css-var('checkbox-signal-size') * 0.25 + get-css-var('checkbox-signal-thick') * 0.5 -
+      width: calc(
+        get-css-var('checkbox-signal-size') * 0.25 + get-css-var('checkbox-signal-thick') * 0.5 -
           0.5px
-        );
+      );
       height: calc(get-css-var('checkbox-signal-size') * 0.5);
       content: '';
       background-color: transparent;
       border: solid get-css-var('checkbox-signal-check-color');
       border-width: 0 get-css-var('checkbox-signal-thick') get-css-var('checkbox-signal-thick') 0;
       opacity: 0%;
-      transition:
-        width get-css-var('transition-base'),
-        height get-css-var('transition-base'),
-        get-css-var('transition-background'),
-        get-css-var('transition-opacity'),
+      transition: width get-css-var('transition-base'), height get-css-var('transition-base'),
+        get-css-var('transition-background'), get-css-var('transition-opacity'),
         get-css-var('transition-transform');
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }
@@ -246,7 +238,7 @@ $checkbox: map.merge(
   }
 
   &--disabled#{&}--checked &__signal {
-    background-color: get-css-var('checkbox-b-color-disabled');
+    background-color: get-css-var('checkbox-signal-bg-color-disabled');
   }
 
   &__input {
