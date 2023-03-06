@@ -649,14 +649,61 @@ describe('Table', () => {
 
     await runScrollTimers()
 
-    let row = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
 
-    expect(row.length).toEqual(6)
-    expect(row[0].find('.vxp-table__cell').text()).toEqual(data[0].label)
+    expect(rows.length).toEqual(6)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual(data[0].label)
 
     await wrapper.setProps({ currentPage: 2 })
-    row = wrapper.findAll('.vxp-table__body .vxp-table__row')
-    expect(row.length).toEqual(4)
-    expect(row[0].find('.vxp-table__cell').text()).toEqual(data[6].label)
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toEqual(4)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual(data[6].label)
+  })
+
+  it('tree data', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      }
+    ]
+
+    const data = Array.from<any, any>({ length: 3 }, (_, i) => ({ label: `l${i}` }))
+    data[0].children = Array.from({ length: 3 }, (_, i) => ({ label: `l${3 + i}` }))
+    data[0].treeExpanded = true
+    data[0].children[0].children = Array.from({ length: 3 }, (_, i) => ({ label: `l${6 + i}` }))
+
+    const wrapper = mount(() => (
+      <Table columns={columns} data={data}>
+        <TableColumn id-key={'label'} name={'Label'}></TableColumn>
+        <TableColumn id-key={'label1'} name={'Label1'}></TableColumn>
+      </Table>
+    ))
+
+    let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+
+    expect(rows.length).toEqual(6)
+    expect(rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').exists()).toBe(true)
+    expect(
+      rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes()
+    ).not.toContain('vxp-table__tree-expand--hidden')
+    expect(rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').exists()).toBe(true)
+    expect(
+      rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes()
+    ).not.toContain('vxp-table__tree-expand--hidden')
+    expect(rows[1].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
+      '--vxp-table-row-depth: 1;'
+    )
+
+    await rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toEqual(9)
+    expect(rows[2].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
+      '--vxp-table-row-depth: 2;'
+    )
+
+    await rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toEqual(3)
   })
 })
