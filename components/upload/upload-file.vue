@@ -29,7 +29,7 @@
         <div :class="nh.be('actions')">
           <span
             v-if="props.file.status === 'uploading'"
-            style="margin-right: 0.5em;"
+            style="margin-right: 0.5em"
             :class="nh.be('percentage')"
           >
             {{ `${percentage}%` }}
@@ -67,7 +67,7 @@
           <div :class="nh.be('thumbnail')">
             <template v-if="props.file.status === 'uploading'">
               <div v-if="props.listType === 'thumbnail'" :class="nh.be('progress')">
-                <span style="margin-bottom: 0.3em;">
+                <span style="margin-bottom: 0.3em">
                   {{ props.loadingText ?? locale.uploading }}
                 </span>
                 <Progress
@@ -77,7 +77,7 @@
                   :percentage="props.file.percentage"
                   :precision="props.precision"
                 ></Progress>
-                <span style="margin-top: 3px;" :class="nh.be('percentage')">
+                <span style="margin-top: 3px" :class="nh.be('percentage')">
                   {{ `${percentage}%` }}
                 </span>
               </div>
@@ -92,7 +92,7 @@
               :alt="fileName"
             />
             <template v-else>
-              {{ transformfileToBase64(props.file) }}
+              {{ imageToBase64(props.file) }}
               <slot name="icon" :file="props.file">
                 <Renderer
                   v-if="useIconRenderer"
@@ -251,13 +251,12 @@ export default defineComponent({
       emitEvent(props.onPreview, file)
     }
 
-    function transformfileToBase64(file: FileState) {
-      if (!file.source) return
+    function imageToBase64(file: FileState) {
+      if (!file.source || !isImage(props.file)) return
 
       const reader = new FileReader()
 
       reader.readAsDataURL(file.source)
-
       reader.onload = () => {
         if (file.status !== StatusType.DELETE) {
           file.base64 = reader.result?.toString() ?? null
@@ -278,7 +277,7 @@ export default defineComponent({
       getFileIcon,
       handleDelete,
       handlePreview,
-      transformfileToBase64
+      imageToBase64
     }
   }
 })
