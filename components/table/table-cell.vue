@@ -187,9 +187,9 @@ export default defineComponent({
       ]
     })
     const style = computed(() => {
-      const width = state.widths[props.column.key]
+      const width = state.widths.get(props.column.key) || 0
 
-      let customStyle: any = ''
+      let customStyle
 
       if (typeof state.cellStyle === 'function') {
         customStyle = state.cellStyle(

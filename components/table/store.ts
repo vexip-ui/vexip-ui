@@ -82,9 +82,9 @@ export function useStore(options: StoreOptions) {
     idMaps: new WeakMap(),
     checkedAll: false,
     partial: false,
-    widths: {},
-    sorters: {},
-    filters: {},
+    widths: new Map(),
+    sorters: new Map(),
+    filters: new Map(),
     bodyScroll: 0,
     padTop: 0,
     startRow: 0,
@@ -317,9 +317,9 @@ export function useStore(options: StoreOptions) {
       const fixed = column.fixed
 
       // 独立属性解析时注意隔断同对象引用
-      widths[key] = column.width || 100
-      sorters[key] = parseSorter(column.sorter)
-      filters[key] = parseFilter(column.filter)
+      widths.set(key, column.width || 100)
+      sorters.set(key, parseSorter(column.sorter))
+      filters.set(key, parseFilter(column.filter))
 
       column.key = key
 
@@ -562,22 +562,21 @@ export function useStore(options: StoreOptions) {
     // 剩余空间有多时, 均分到弹性列
     // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
     if (flexColumnCount) {
-      flexUnitWidth = flexWidth / flexColumnCount
+      flexUnitWidth = Math.floor(flexWidth / flexColumnCount)
     }
 
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
-      const key = column.key
 
-      widths[key] = flexUnitWidth
+      widths.set(column.key, flexUnitWidth)
     }
 
     state.width = width
   }
 
   function setColumnWidth(key: Key, width: number) {
-    if (state.widths[key]) {
-      state.widths[key] = width
+    if (state.widths.has(key)) {
+      state.widths.set(key, width)
     }
   }
 
@@ -656,24 +655,6 @@ export function useStore(options: StoreOptions) {
     state.dragging = !!dragging
   }
 
-  function setCustomSorter(able: boolean) {
-    state.customSorter = !!able
-  }
-
-  function setCustomFilter(able: boolean) {
-    state.customFilter = !!able
-  }
-
-  function handleSort(key: Key, type: ParsedSorterOptions['type']) {
-    if (state.sorters[key]) {
-      if (state.singleSorter && type) {
-        clearSort()
-      }
-
-      state.sorters[key].type = type
-    }
-  }
-
   function setKeyConfig(keyConfig: Required<TableKeyConfig>) {
     state.keyConfig = keyConfig
   }
@@ -686,31 +667,49 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
+  function setCustomSorter(able: boolean) {
+    state.customSorter = !!able
+  }
+
+  function setCustomFilter(able: boolean) {
+    state.customFilter = !!able
+  }
+
+  function handleSort(key: Key, type: ParsedSorterOptions['type']) {
+    if (state.sorters.has(key)) {
+      if (state.singleSorter && type) {
+        clearSort()
+      }
+
+      state.sorters.get(key)!.type = type
+    }
+  }
+
   function clearSort() {
     const sorters = state.sorters
 
-    for (const key of Object.keys(sorters)) {
-      sorters[key].type = null
+    for (const sorter of sorters.values()) {
+      sorter.type = null
     }
   }
 
   function handleFilter(key: Key, active: ParsedFilterOptions['active']) {
-    if (state.filters[key]) {
+    if (state.filters.has(key)) {
       if (state.singleFilter && (Array.isArray(active) ? active.length : active)) {
         clearFilter()
       }
 
-      state.filters[key].active = active
+      state.filters.get(key)!.active = active
     }
   }
 
   function clearFilter() {
     const filters = state.filters
 
-    for (const key of Object.keys(filters)) {
-      filters[key].active = null
+    for (const filter of filters.values()) {
+      filter.active = null
 
-      for (const option of filters[key].options) {
+      for (const option of filter.options) {
         option.active = false
       }
     }
@@ -951,8 +950,8 @@ export function useStore(options: StoreOptions) {
   }) {
     const { key, value, active = false, disableOthers = false } = options
 
-    if (state.filters[key]) {
-      const filterOptions = state.filters[key].options
+    if (state.filters.has(key)) {
+      const filterOptions = state.filters.get(key)!.options
 
       if (disableOthers) {
         for (let i = 0, len = filterOptions.length; i < len; ++i) {
@@ -1028,18 +1027,11 @@ export function useStore(options: StoreOptions) {
     return { able, options: formattedOptions, multiple, active, method }
   }
 
-  function filterData(
-    filters: Record<Key, ParsedFilterOptions>,
-    data: RowState[],
-    isSingle: boolean
-  ) {
-    const keys = Object.keys(filters)
+  function filterData(filters: Map<Key, ParsedFilterOptions>, data: RowState[], isSingle: boolean) {
     const usedFilter: ParsedFilterOptions[] = []
     const filterData: RowState[] = []
 
-    for (let i = 0, len = keys.length; i < len; ++i) {
-      const key = keys[i]
-      const filter = filters[key]
+    for (const filter of filters.values()) {
       const { able, active, method } = filter
 
       if (able && active && typeof method === 'function') {
@@ -1075,17 +1067,16 @@ export function useStore(options: StoreOptions) {
   }
 
   function sortData(
-    sorters: Record<Key, ParsedSorterOptions>,
+    sorters: Map<Key, ParsedSorterOptions>,
     data: RowState[],
     columns: TableColumnOptions[],
     isSingle: boolean
   ) {
-    const keys = Object.keys(sorters)
     const usedSorter = []
 
-    for (let i = 0, len = keys.length; i < len; ++i) {
-      const key = keys[i] as keyof RowState
-      const { able, type, order, method } = sorters[key]
+    for (const [_key, sorter] of sorters) {
+      const key = _key as keyof RowState
+      const { able, type, order, method } = sorter
 
       if (able && type) {
         const column = columns.find(item => item.key === key)

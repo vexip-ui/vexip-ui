@@ -203,7 +203,7 @@ export default defineComponent({
       for (let i = 0, len = columns.length; i < len; ++i) {
         const column = columns[i]
         const key = column.key
-        const columnWidth = widths[key]
+        const columnWidth = widths.get(key) || 0
 
         width += columnWidth
       }

@@ -146,7 +146,13 @@ import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
-import type { SelectionColumn, TypeColumn, ColumnWithKey } from './symbol'
+import type {
+  SelectionColumn,
+  TypeColumn,
+  ColumnWithKey,
+  ParsedSorterOptions,
+  ParsedFilterOptions
+} from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
 
@@ -200,9 +206,9 @@ export default defineComponent({
       ]
     })
     const style = computed(() => {
-      const width = state.widths[props.column.key]
+      const width = state.widths.get(props.column.key) || 0
 
-      let customStyle: any = ''
+      let customStyle
 
       if (typeof state.headStyle === 'function') {
         customStyle = state.headStyle(props.column, props.index)
@@ -232,10 +238,10 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
     const sorter = computed(() => {
-      return state.sorters[props.column.key] || {}
+      return state.sorters.get(props.column.key) || ({} as ParsedSorterOptions)
     })
     const filter = computed(() => {
-      return state.filters[props.column.key] || {}
+      return state.filters.get(props.column.key) || ({} as ParsedFilterOptions)
     })
     const hasFilterActive = computed(() => {
       const options = filter.value.options ?? []

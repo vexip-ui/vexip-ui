@@ -1,8 +1,8 @@
 <template>
-  <Table :columns="columns" :data="data" :width="1000">
+  <Table :columns="columns" :data="data">
     <TableColumn name="First Name" id-key="firstName" :order="0">
       <template #default="{ row }">
-        <Icon style="margin-right: 8px;">
+        <Icon style="margin-right: 8px">
           <User></User>
         </Icon>
         {{ row.firstName }}

@@ -622,16 +622,16 @@ export default defineComponent({
     function emitRowFilter() {
       const { columns, filters } = state
       const columnMap = transformListToMap(columns, 'key')
-      const profiles = Object.keys(filters)
-        .filter(key => filters[key].active)
+      const profiles = Array.from(filters.keys())
+        .filter(key => filters.get(key)!.active)
         .map(key => {
-          const column = columnMap[key]
+          const column = columnMap[key as string]
 
           return {
             name: column.name,
             key: column.key,
             metaData: column.metaData!,
-            active: filters[key].active!
+            active: filters.get(key)!.active!
           }
         })
 
@@ -645,17 +645,18 @@ export default defineComponent({
     function emitRowSort() {
       const { columns, sorters } = state
       const columnMap = transformListToMap(columns, 'key')
-      const profiles = Object.keys(sorters)
-        .filter(key => sorters[key].type)
+      const profiles = Array.from(sorters.keys())
+        .filter(key => sorters.get(key)!.type)
         .map(key => {
-          const column = columnMap[key]
+          const column = columnMap[key as string]
+          const sorter = sorters.get(key)!
 
           return {
             name: column.name,
             key: column.key,
             metaData: column.metaData!,
-            type: sorters[key].type!,
-            order: sorters[key].order
+            type: sorter.type!,
+            order: sorter.order
           }
         })
 
