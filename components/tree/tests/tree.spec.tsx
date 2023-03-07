@@ -321,19 +321,83 @@ describe('Tree', () => {
   it('node disabled', async () => {
     const onNodeSelect = vi.fn()
     const onNodeChange = vi.fn()
+    const onNodeExpand = vi.fn()
     const data = [
       {
         id: 1,
         label: 'n1',
         disabled: true
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
       }
     ]
     const wrapper = mount(() => (
-      <Tree data={data} checkbox onNodeSelect={onNodeSelect} onNodeChange={onNodeChange}></Tree>
+      <Tree
+        data={data}
+        checkbox
+        onNodeSelect={onNodeSelect}
+        onNodeChange={onNodeChange}
+        onNodeExpand={onNodeExpand}
+      ></Tree>
     ))
 
     await nextTick()
-    expect(wrapper.find('.vxp-tree__node').classes()).toContain('vxp-tree__node--disabled')
+    const nodes = wrapper.findAll('.vxp-tree__node')
+
+    nodes.forEach(node => {
+      expect(node.classes()).toContain('vxp-tree__node--disabled')
+      expect(node.find('.vxp-tree__arrow').classes()).toContain('vxp-tree__arrow--disabled')
+      expect(node.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--disabled')
+      expect(node.find('.vxp-tree__checkbox').classes()).toContain('vxp-checkbox--disabled')
+    })
+
+    await wrapper.find('.vxp-tree__label').trigger('click')
+    expect(wrapper.find('.vxp-tree__node').classes()).not.toContain('vxp-tree__node--selected')
+    expect(onNodeSelect).not.toHaveBeenCalled()
+
+    await wrapper.find('.vxp-tree__checkbox').trigger('click')
+    expect(wrapper.find('.vxp-tree__checkbox').classes()).not.toContain('vxp-checkbox--checked')
+    expect(onNodeChange).not.toHaveBeenCalled()
+
+    await wrapper.find('.vxp-tree__arrow').trigger('click')
+    expect(wrapper.find('.vxp-tree__arrow').classes()).not.toContain('vxp-tree__arrow--expanded')
+    expect(onNodeExpand).not.toHaveBeenCalled()
+  })
+
+  it('node disabled options', async () => {
+    const onNodeSelect = vi.fn()
+    const onNodeChange = vi.fn()
+    const onNodeExpand = vi.fn()
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+        selectDisabled: true,
+        expandDisabled: true,
+        checkDisabled: true
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => (
+      <Tree
+        data={data}
+        checkbox
+        onNodeSelect={onNodeSelect}
+        onNodeChange={onNodeChange}
+        onNodeExpand={onNodeExpand}
+      ></Tree>
+    ))
+
+    await nextTick()
+    expect(wrapper.find('.vxp-tree__arrow').classes()).toContain('vxp-tree__arrow--disabled')
+    expect(wrapper.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--disabled')
     expect(wrapper.find('.vxp-tree__checkbox').classes()).toContain('vxp-checkbox--disabled')
 
     await wrapper.find('.vxp-tree__label').trigger('click')
@@ -343,6 +407,10 @@ describe('Tree', () => {
     await wrapper.find('.vxp-tree__checkbox').trigger('click')
     expect(wrapper.find('.vxp-tree__checkbox').classes()).not.toContain('vxp-checkbox--checked')
     expect(onNodeChange).not.toHaveBeenCalled()
+
+    await wrapper.find('.vxp-tree__arrow').trigger('click')
+    expect(wrapper.find('.vxp-tree__arrow').classes()).not.toContain('vxp-tree__arrow--expanded')
+    expect(onNodeExpand).not.toHaveBeenCalled()
   })
 
   it('draggable', async () => {
