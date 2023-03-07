@@ -33,7 +33,8 @@
           :class="{
             [nh.be('arrow')]: true,
             [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
-            [nh.bem('arrow', 'expanded')]: expanded
+            [nh.bem('arrow', 'expanded')]: expanded,
+            [nh.bem('arrow', 'disabled')]: isDisabled || expandDisabled
           }"
           :aria-hidden="!loading && !hasArrow"
           @click.stop="handleToggleExpand()"
@@ -48,7 +49,7 @@
           :tab-index="-1"
           :control="hasArrow"
           :checked="checked"
-          :disabled="isDisabled"
+          :disabled="isDisabled || checkDisabled"
           :partial="partial"
           @click.prevent.stop="handleToggleCheck()"
         ></Checkbox>
@@ -57,7 +58,7 @@
             [nh.be('label')]: true,
             [nh.bem('label', 'focused')]: focused,
             [nh.bem('label', 'selected')]: selected,
-            [nh.bem('label', 'disabled')]: isDisabled,
+            [nh.bem('label', 'disabled')]: isDisabled || selectDisabled,
             [nh.bem('label', 'readonly')]: isReadonly,
             [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
             [nh.bem('label', 'secondary')]: secondary
@@ -88,7 +89,7 @@
           :tab-index="-1"
           :control="hasArrow"
           :checked="checked"
-          :disabled="isDisabled"
+          :disabled="isDisabled || checkDisabled"
           :partial="partial"
           @click.prevent.stop="handleToggleCheck()"
         ></Checkbox>
@@ -128,6 +129,9 @@
         :upper-matched="item.upperMatched"
         :node-props="nodeProps"
         :last="index === node.children.length - 1"
+        :select-disabled="item.selectDisabled"
+        :expand-disabled="item.expandDisabled"
+        :check-disabled="item.checkDisabled"
       >
         <template #default="payload: any">
           <slot v-bind="payload"></slot>
@@ -259,6 +263,18 @@ export default defineComponent({
     last: {
       type: Boolean,
       default: false
+    },
+    selectDisabled: {
+      type: Boolean,
+      default: false
+    },
+    expandDisabled: {
+      type: Boolean,
+      default: false
+    },
+    checkDisabled: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -308,8 +324,12 @@ export default defineComponent({
     const isDragOver = ref(false)
     const focused = ref(false)
 
-    const isDisabled = computed(() => parentState.disabled || props.disabled)
-    const isReadonly = computed(() => parentState.readonly || props.readonly)
+    const isDisabled = computed(() => {
+      return (!treeState.noCascaded && parentState.disabled) || props.disabled
+    })
+    const isReadonly = computed(() => {
+      return (!treeState.noCascaded && parentState.readonly) || props.readonly
+    })
     const depth = computed(() => parentState.depth + 1)
     const secondary = computed(() => !props.matched && (props.childMatched || props.upperMatched))
     const hasLinkLine = computed(() => !!treeState.linkLine && depth.value > 0)
@@ -388,7 +408,7 @@ export default defineComponent({
     }
 
     function handleToggleCheck(able = !props.checked) {
-      if (isDisabled.value) return
+      if (isDisabled.value || props.checkDisabled) return
 
       setValue('checked', able)
       setValue('partial', false)
@@ -399,7 +419,7 @@ export default defineComponent({
     }
 
     async function handleToggleExpand(able = !props.expanded) {
-      if (props.loading || isDisabled.value) return
+      if (props.loading || isDisabled.value || props.expandDisabled) return
 
       if (able && treeState.boundAsyncLoad && !loaded.value) {
         setValue('loading', true)
@@ -419,7 +439,7 @@ export default defineComponent({
     }
 
     function handleToggleSelect(able = !props.selected) {
-      if (isDisabled.value) return
+      if (isDisabled.value || props.selectDisabled) return
 
       if (props.floorSelect) {
         return handleToggleExpand()

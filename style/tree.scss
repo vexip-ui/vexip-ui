@@ -23,6 +23,8 @@ $tree: map.merge(
     label-radius: get-css-var('radius-base'),
     node-span: 6px,
     arrow-size: 22px,
+    arrow-color: inherit,
+    arrow-color-disabled: get-css-var('content-color-disabled'),
     indicator-color: get-css-var('color-primary-base'),
     indent-width: 16px,
     deepth: -1,
@@ -163,14 +165,22 @@ $tree: map.merge(
     width: get-css-var('tree-arrow-size');
     height: get-css-var('tree-arrow-size');
     margin-right: 3px;
+    color: get-css-var('tree-arrow-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
 
     &--transparent {
-      color: transparent;
+      visibility: hidden;
+      opacity: 0%;
     }
 
     &--expanded .#{$namespace}-icon {
       transform: rotate(90deg);
+    }
+
+    &--disabled {
+      color: get-css-var('tree-arrow-color-disabled');
+      cursor: not-allowed;
     }
   }
 

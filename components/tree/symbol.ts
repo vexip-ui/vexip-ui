@@ -19,7 +19,10 @@ export interface NodeKeyConfig {
   loaded?: string,
   readonly?: string,
   arrow?: string,
-  checkbox?: string
+  checkbox?: string,
+  selectDisabled?: string,
+  expandDisabled?: string,
+  checkDisabled?: string
 }
 
 export const enum DropType {
@@ -42,6 +45,9 @@ export type TreeNodeProps<D = Data> = {
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
+  selectDisabled: boolean,
+  expandDisabled: boolean,
+  checkDisabled: boolean,
   data: D,
   /* @internal */
   partial: boolean,
@@ -71,6 +77,7 @@ export interface TreeState {
   arrow: boolean | 'auto',
   checkbox: boolean,
   suffixCheckbox: boolean,
+  noCascaded: boolean,
   linkLine: false | TreeLinkLine,
   renderer: RenderFn,
   dragging: boolean,

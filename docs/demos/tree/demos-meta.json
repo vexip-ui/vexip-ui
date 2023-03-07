@@ -3,6 +3,7 @@
   "checkbox",
   "suffix-checkbox",
   "no-cascaded",
+  "disabled",
   "filter",
   "drag",
   "props",

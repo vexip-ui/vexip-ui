@@ -1,0 +1,52 @@
+<template>
+  <Tree :data="data" checkbox></Tree>
+</template>
+
+<script setup lang="ts">
+const data = [
+  {
+    id: 1,
+    label: '动物',
+    parent: 0,
+    expanded: true
+  },
+  {
+    id: 2,
+    label: '鸟类',
+    parent: 5,
+    expanded: true,
+    expandDisabled: true
+  },
+  {
+    id: 3,
+    label: '无脊椎动物',
+    parent: 1,
+    expanded: true,
+    disabled: true
+  },
+  {
+    id: 4,
+    label: '哺乳动物',
+    parent: 5,
+    checkDisabled: true
+  },
+  {
+    id: 5,
+    label: '脊椎动物',
+    parent: 1,
+    expanded: true,
+    checkDisabled: true
+  },
+  {
+    id: 6,
+    label: '喜鹊',
+    parent: 2,
+    selectDisabled: true
+  },
+  {
+    id: 7,
+    label: '蚯蚓',
+    parent: 3
+  }
+]
+</script>

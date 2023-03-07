@@ -42,6 +42,9 @@
         :child-matched="item.childMatched"
         :upper-matched="item.upperMatched"
         :node-props="getNodeProps"
+        :select-disabled="item.selectDisabled"
+        :expand-disabled="item.expandDisabled"
+        :check-disabled="item.checkDisabled"
       >
         <template #default="payload">
           <slot name="node" v-bind="payload"></slot>
@@ -107,7 +110,10 @@ const defaultKeyConfig: Required<NodeKeyConfig> = {
   loaded: 'loaded',
   readonly: 'readonly',
   arrow: 'arrow',
-  checkbox: 'checkbox'
+  checkbox: 'checkbox',
+  selectDisabled: 'selectDisabled',
+  expandDisabled: 'expandDisabled',
+  checkDisabled: 'checkDisabled'
 }
 
 export default defineComponent({
@@ -182,12 +188,14 @@ export default defineComponent({
       loaded: false,
       readonly: false,
       arrow: 'auto' as boolean | 'auto',
-      checkbox: null! as boolean
+      // will follow checkbox prop of tree when not set (be null)
+      checkbox: null! as boolean,
+      selectDisabled: false,
+      expandDisabled: false,
+      checkDisabled: false
     }
 
-    const keyConfig = computed(() => {
-      return { ...defaultKeyConfig, ...props.keyConfig }
-    })
+    const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
     const parsedOptions = computed(() => {
       return {
         keyField: keyConfig.value.id,
@@ -278,6 +286,7 @@ export default defineComponent({
         arrow: toRef(props, 'arrow'),
         checkbox: toRef(props, 'checkbox'),
         suffixCheckbox: toRef(props, 'suffixCheckbox'),
+        noCascaded: toRef(props, 'noCascaded'),
         linkLine,
         renderer: toRef(props, 'renderer'),
         dragging,
@@ -395,7 +404,10 @@ export default defineComponent({
         loaded: loadedKey,
         readonly: readonlyKey,
         arrow: arrowKey,
-        checkbox: checkboxKey
+        checkbox: checkboxKey,
+        selectDisabled: selectDisabledKey,
+        expandDisabled: expandDisabledKey,
+        checkDisabled: checkDisabledKey
       } = keyConfig.value
 
       for (let i = 0, len = data.length; i < len; ++i) {
@@ -417,7 +429,10 @@ export default defineComponent({
             [loadedKey]: loaded = node.loaded,
             [readonlyKey]: readonly = node.readonly,
             [arrowKey]: arrow = node.arrow,
-            [checkboxKey]: checkbox = node.checkbox
+            [checkboxKey]: checkbox = node.checkbox,
+            [selectDisabledKey]: selectDisabled = node.selectDisabled,
+            [expandDisabledKey]: expandDisabled = node.expandDisabled,
+            [checkDisabledKey]: checkDisabled = node.checkDisabled
           } = item
 
           node.visible = visible
@@ -430,6 +445,9 @@ export default defineComponent({
           node.readonly = readonly
           node.arrow = arrow
           node.checkbox = checkbox
+          node.selectDisabled = selectDisabled
+          node.expandDisabled = expandDisabled
+          node.checkDisabled = checkDisabled
         } else {
           node = createNodeItem(item)
           nodeMaps.set(id, node)
@@ -479,7 +497,10 @@ export default defineComponent({
         loaded: loadedKey,
         readonly: readonlyKey,
         arrow: arrowKey,
-        checkbox: checkboxKey
+        checkbox: checkboxKey,
+        selectDisabled: selectDisabledKey,
+        expandDisabled: expandDisabledKey,
+        checkDisabled: checkDisabledKey
       } = keyConfig.value
 
       const {
@@ -492,7 +513,10 @@ export default defineComponent({
         [loadedKey]: loaded = defaults.loaded,
         [readonlyKey]: readonly = defaults.readonly,
         [arrowKey]: arrow = defaults.arrow,
-        [checkboxKey]: checkbox = defaults.checkbox
+        [checkboxKey]: checkbox = defaults.checkbox,
+        [selectDisabledKey]: selectDisabled = defaults.selectDisabled,
+        [expandDisabledKey]: expandDisabled = defaults.expandDisabled,
+        [checkDisabledKey]: checkDisabled = defaults.checkDisabled
       } = data
       const id = data[idKey]
       const parent = data[parentKey]
@@ -512,6 +536,9 @@ export default defineComponent({
         readonly,
         arrow,
         checkbox,
+        selectDisabled,
+        expandDisabled,
+        checkDisabled,
         partial: false,
         matched: false,
         childMatched: false,
@@ -575,7 +602,7 @@ export default defineComponent({
       if (!props.noCascaded) {
         const nodeList = [originNode].concat(
           // 需要包含被禁用且被勾选的节点
-          flattedData.value.filter(item => item.disabled && item.checked)
+          flattedData.value.filter(item => (item.disabled || item.checkDisabled) && item.checked)
         )
 
         for (let i = 0, len = nodeList.length; i < len; ++i) {
