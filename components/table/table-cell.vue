@@ -17,15 +17,17 @@
       :class="nh.be('selection')"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
-      :disabled="disableCheckRows[row.key]"
+      :disabled="disableCheckRows.has(row.key)"
+      :partial="row.partial"
+      :control="!!row.children?.length"
       @click.prevent.stop="handleCheckRow(row, $event)"
     ></Checkbox>
     <span v-else-if="isOrder(column)" :class="nh.be('order')">
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
     <template v-else-if="isExpand(column)">
-      <div
-        v-if="!disableExpandRows[row.key]"
+      <button
+        v-if="!disableExpandRows.has(row.key)"
         :class="{
           [nh.be('expand')]: true,
           [nh.bem('expand', 'active')]: row.expanded
@@ -33,7 +35,7 @@
         @click.stop="handleExpandRow(row, $event)"
       >
         <Icon><AngleRight></AngleRight></Icon>
-      </div>
+      </button>
     </template>
   </div>
   <div
@@ -48,6 +50,23 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
+    <template v-if="usingTree && column.first">
+      <span
+        :class="nh.be('pad')"
+        :style="{
+          [nh.cv('row-depth')]: row.depth
+        }"
+      ></span>
+      <button
+        :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
+        @click="handleExpandTree(row)"
+      >
+        <Icon>
+          <Minus v-if="row.treeExpanded"></Minus>
+          <Plus v-else></Plus>
+        </Icon>
+      </button>
+    </template>
     <Ellipsis
       v-if="!column.noEllipsis"
       inherit
@@ -90,7 +109,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { AngleRight } from '@vexip-ui/icons'
+import { AngleRight, Plus, Minus } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -113,7 +132,9 @@ export default defineComponent({
     Ellipsis,
     Icon,
     Renderer,
-    AngleRight
+    AngleRight,
+    Plus,
+    Minus
   },
   props: {
     row: {
@@ -138,6 +159,8 @@ export default defineComponent({
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 
     const nh = useNameHelper('table')
+    const disableCheckRows = toRef(getters, 'disableCheckRows')
+    const disableExpandRows = toRef(getters, 'disableExpandRows')
 
     const className = computed(() => {
       let customClass = null
@@ -264,7 +287,7 @@ export default defineComponent({
     }
 
     function handleCheckRow(row: RowState, event: MouseEvent) {
-      if (!getters.disableCheckRows[row.key]) {
+      if (!disableCheckRows.value.has(row.key)) {
         const checked = !row.checked
         const { data, key, index } = row
 
@@ -274,13 +297,21 @@ export default defineComponent({
     }
 
     function handleExpandRow(row: RowState, event: MouseEvent) {
-      if (!getters.disableExpandRows[row.key]) {
+      if (!disableExpandRows.value.has(row.key)) {
         const expanded = !row.expanded
         const { data, key, index } = row
 
         mutations.handleExpand(key, expanded)
         tableAction.emitRowExpand({ row: data, key, index, event, expanded })
       }
+    }
+
+    function handleExpandTree(row: RowState) {
+      if (!row.children?.length) return
+
+      const expanded = !row.treeExpanded
+
+      mutations.handleTreeExpand(row.key, expanded)
     }
 
     return {
@@ -291,8 +322,9 @@ export default defineComponent({
       attrs,
       tooltipTheme: toRef(state, 'tooltipTheme'),
       tooltipWidth: toRef(state, 'tooltipWidth'),
-      disableCheckRows: toRef(getters, 'disableCheckRows'),
-      disableExpandRows: toRef(getters, 'disableExpandRows'),
+      disableCheckRows,
+      disableExpandRows,
+      usingTree: toRef(getters, 'usingTree'),
 
       isFunction,
       isSelection,
@@ -305,7 +337,8 @@ export default defineComponent({
       handleDblclick,
       handleContextmenu,
       handleCheckRow,
-      handleExpandRow
+      handleExpandRow,
+      handleExpandTree
     }
   }
 })

@@ -71,12 +71,14 @@ export function useStore(options: StoreOptions) {
     customSorter: options.customSorter,
     customFilter: options.customFilter,
     keyConfig: options.keyConfig,
+    disabledTree: options.disabledTree,
+    noCascaded: options.noCascaded,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
     rightFixedColumns: [],
     leftFixedColumns: [],
-    dataMap: {},
+    rowMap: new Map(),
     idMaps: new WeakMap(),
     checkedAll: false,
     partial: false,
@@ -129,7 +131,7 @@ export function useStore(options: StoreOptions) {
     const selection = state.columns.find(item => (item as SelectionColumn).type === 'selection') as
       | SelectionColumn
       | undefined
-    const disableCheckRows: Record<Key, boolean> = {}
+    const disableCheckRows = new Set<Key>()
 
     if (selection && typeof selection.disableRow === 'function') {
       const isDisabled = selection.disableRow
@@ -138,7 +140,7 @@ export function useStore(options: StoreOptions) {
         const row = rowData[i]
 
         if (isDisabled(row.data)) {
-          disableCheckRows[row.key] = true
+          disableCheckRows.add(row.key)
         }
       }
     }
@@ -150,7 +152,7 @@ export function useStore(options: StoreOptions) {
     const expand = state.columns.find(item => (item as ExpandColumn).type === 'expand') as
       | ExpandColumn
       | undefined
-    const disableExpandRows: Record<Key, boolean> = {}
+    const disableExpandRows = new Set<Key>()
 
     if (expand && typeof expand.disableRow === 'function') {
       const isDisabled = expand.disableRow
@@ -161,12 +163,15 @@ export function useStore(options: StoreOptions) {
         if (isDisabled(row.data)) {
           const key = row.key
 
-          disableExpandRows[key] = true
+          disableExpandRows.add(key)
         }
       }
     }
 
     return disableExpandRows
+  })
+  const usingTree = computed(() => {
+    return !state.disabledTree && state.rowData.some(row => row.children?.length)
   })
 
   watchEffect(() => {
@@ -181,7 +186,8 @@ export function useStore(options: StoreOptions) {
     sortedData,
     processedData,
     disableCheckRows,
-    disableExpandRows
+    disableExpandRows,
+    usingTree
   })
 
   const mutations = {
@@ -223,6 +229,8 @@ export function useStore(options: StoreOptions) {
     setCustomSorter,
     setCustomFilter,
     setKeyConfig,
+    setDisabledTree,
+    setNoCascaded,
 
     handleSort,
     clearSort,
@@ -235,7 +243,9 @@ export function useStore(options: StoreOptions) {
     handleCheckAll,
     clearCheckAll,
     setRenderRows,
-    handleExpand
+    handleExpand,
+    handleTreeExpand,
+    getParentRow
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -249,6 +259,8 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns = []
     const leftFixedColumns = []
     const columnTypes = ['order', 'selection', 'expand']
+
+    let firstMarked = false
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
@@ -289,6 +301,9 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
+      } else if (!firstMarked) {
+        column.first = true
+        firstMarked = true
       }
 
       let key = column.key
@@ -349,74 +364,129 @@ export function useStore(options: StoreOptions) {
     }
   }
 
+  function collectUnderRows(row: RowState, result: RowState[] = []) {
+    if (row.treeExpanded && row.children?.length) {
+      for (const childRow of row.children) {
+        result.push(childRow)
+        collectUnderRows(childRow, result)
+      }
+    }
+
+    return result
+  }
+
   function setData(data: Data[]) {
-    const clonedData = []
-    const dataMap: Record<Key, RowState> = {}
-    const { dataKey, keyConfig, idMaps } = state
-    const oldDataMap = state.dataMap
+    const clonedData: RowState[] = []
+    const rowMap = new Map<Key, RowState>()
+    const { dataKey, keyConfig, idMaps, disabledTree } = state
+    const oldDataMap = state.rowMap
     const hidden = !!state.virtual
 
-    const { checked: checkedKey, height: heightKey, expanded: expandedKey } = keyConfig
+    const {
+      children: childrenKey,
+      checked: checkedKey,
+      height: heightKey,
+      expanded: expandedKey,
+      treeExpanded: treeExpandedKey
+    } = keyConfig
 
-    dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
-      key: TABLE_HEAD_KEY
-    }
+    rowMap.set(
+      TABLE_HEAD_KEY,
+      oldDataMap.get(TABLE_HEAD_KEY) ||
+        ({
+          key: TABLE_HEAD_KEY
+        } as RowState)
+    )
 
-    for (let i = 0, len = data.length; i < len; ++i) {
-      const item = data[i]
+    function parseRow(origin: Data[], result: RowState[], parent?: RowState) {
+      for (let i = 0, len = origin.length; i < len; ++i) {
+        const item = origin[i]
 
-      let key = item[dataKey] as Key
-
-      if (isNull(key)) {
-        key = idMaps.get(item)!
+        let key = item[dataKey] as Key
 
         if (isNull(key)) {
-          key = getIndexId()
-        }
-      }
+          key = idMaps.get(item)!
 
-      let row: RowState
-
-      if (oldDataMap[key]) {
-        row = oldDataMap[key]
-
-        const {
-          [checkedKey]: checked,
-          [heightKey]: height,
-          [expandedKey]: expanded
-        } = row.data !== item ? Object.assign(row.data, item) : row.data
-
-        row.checked = !isNull(checked) ? !!checked : row.checked
-        row.height = !isNull(height) ? toNumber(height) : row.height
-        row.expanded = !isNull(expanded) ? !!expanded : row.expanded
-      } else {
-        const { [checkedKey]: checked, [heightKey]: height, [expandedKey]: expanded } = item
-
-        row = {
-          key,
-          hidden,
-          checked: !!checked,
-          height: toNumber(height),
-          borderHeight: 0,
-          expanded: !!expanded,
-          hover: false,
-          expandHeight: 0,
-          index: -1,
-          data: item
+          if (isNull(key)) {
+            key = getIndexId()
+          }
         }
 
-        idMaps.set(item, key)
-      }
+        let row: RowState
 
-      // 行的初始位置索引
-      row.index = i
-      clonedData.push(row)
-      dataMap[key] = row
+        if (oldDataMap.has(key)) {
+          row = oldDataMap.get(key)!
+
+          const {
+            [checkedKey]: checked,
+            [heightKey]: height,
+            [expandedKey]: expanded,
+            [treeExpandedKey]: treeExpanded
+          } = row.data !== item ? Object.assign(row.data, item) : row.data
+
+          row.checked = !isNull(checked) ? !!checked : row.checked
+          row.height = !isNull(height) ? toNumber(height) : row.height
+          row.expanded = !isNull(expanded) ? !!expanded : row.expanded
+          row.treeExpanded = isNull(treeExpanded) ? !!treeExpanded : row.treeExpanded
+        } else {
+          const {
+            [checkedKey]: checked,
+            [heightKey]: height,
+            [expandedKey]: expanded,
+            [treeExpandedKey]: treeExpanded
+          } = item
+
+          row = {
+            key,
+            hidden,
+            checked: !!checked,
+            height: toNumber(height),
+            borderHeight: 0,
+            expanded: !!expanded,
+            hover: false,
+            expandHeight: 0,
+            index: -1,
+            children: [],
+            depth: 0,
+            treeExpanded: !!treeExpanded,
+            partial: false,
+            data: item
+          }
+
+          idMaps.set(item, key)
+        }
+
+        if (parent) {
+          row.parent = parent.key
+          row.depth = parent.depth + 1
+        }
+
+        const children = row.data[childrenKey]
+        children?.length && parseRow(children, (row.children = []), row)
+
+        result.push(row)
+        rowMap.set(key, row)
+      }
     }
 
-    state.rowData = clonedData
-    state.dataMap = dataMap
+    parseRow(data, clonedData)
 
+    state.rowMap = rowMap
+
+    if (!disabledTree) {
+      const rowData: RowState[] = []
+
+      for (const row of clonedData) {
+        rowData.push(row)
+        collectUnderRows(row, rowData)
+      }
+
+      state.rowData = rowData
+    } else {
+      state.rowData = clonedData
+    }
+
+    refreshRowIndex()
     computePartial()
   }
 
@@ -425,7 +495,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setPageSize(pageSize: number) {
-    state.pageSize = pageSize || state.rowData.length
+    state.pageSize = pageSize || 0
   }
 
   function setRowClass(rowClass: ClassType | RowPropFn<ClassType>) {
@@ -512,14 +582,17 @@ export function useStore(options: StoreOptions) {
   }
 
   function setRowHeight(key: Key, height: number) {
-    if (state.dataMap[key] && state.dataMap[key].height !== height) {
-      state.dataMap[key].height = height
+    const { rowMap } = state
+    const row = rowMap.get(key)
+
+    if (row && row.height !== height) {
+      row.height = height
     }
   }
 
   function setBorderHeight(key: Key, height: number) {
-    if (state.dataMap[key]) {
-      state.dataMap[key].borderHeight = height
+    if (state.rowMap.has(key)) {
+      state.rowMap.get(key)!.borderHeight = height
     }
   }
 
@@ -536,8 +609,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setRowExpandHeight(key: Key, height: number) {
-    if (state.dataMap[key]) {
-      state.dataMap[key].expandHeight = height
+    if (state.rowMap.has(key)) {
+      state.rowMap.get(key)!.expandHeight = height
     }
   }
 
@@ -554,8 +627,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setRowHover(key: Key, hover: boolean) {
-    if (state.dataMap[key]) {
-      state.dataMap[key].hover = hover
+    if (state.rowMap.has(key)) {
+      state.rowMap.get(key)!.hover = hover
     }
   }
 
@@ -605,6 +678,14 @@ export function useStore(options: StoreOptions) {
     state.keyConfig = keyConfig
   }
 
+  function setDisabledTree(disabled: boolean) {
+    state.disabledTree = !!disabled
+  }
+
+  function setNoCascaded(noCascaded: boolean) {
+    state.noCascaded = !!noCascaded
+  }
+
   function clearSort() {
     const sorters = state.sorters
 
@@ -635,14 +716,90 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleCheck(key: Key, checked: boolean) {
-    const { dataMap } = state
+  function updateCheckedUpward(key: Key) {
+    const { rowMap } = state
+
+    if (!rowMap.has(key)) return
+
+    let row = rowMap.get(key)!
+
+    while (!isNull(row.parent)) {
+      const parentKey = row.parent
+
+      if (!rowMap.has(parentKey)) break
+
+      const parent = rowMap.get(parentKey)!
+
+      if (row.checked === parent.checked && row.partial === parent.partial) break
+
+      if (row.checked) {
+        parent.checked = parent.children.every(child => child.checked)
+        parent.partial = !parent.checked
+      } else {
+        parent.checked = false
+        parent.partial = parent.children.some(child => child.checked || child.partial)
+      }
+
+      row = parent
+    }
+  }
+
+  function updateCheckedDown(key: Key) {
+    const { rowMap } = state
     const { disableCheckRows } = getters
 
-    if (dataMap[key] && !disableCheckRows[key]) {
-      dataMap[key].checked = !!checked
+    if (!rowMap.has(key)) return
+
+    const row = rowMap.get(key)!
+    const checked = row.checked
+    const partial = row.partial
+
+    const loop = Array.from(row.children)
+
+    let currentRow
+
+    while (loop.length) {
+      currentRow = loop.shift()!
+
+      if (disableCheckRows.has(currentRow.key)) continue
+
+      currentRow.checked = checked
+      currentRow.partial = partial
+
+      if (currentRow.children?.length) {
+        loop.push(...currentRow.children)
+      }
+    }
+  }
+
+  function computeChecked(key: Key) {
+    const { rowMap, rowData } = state
+    const { disableCheckRows } = getters
+
+    if (!rowMap.has(key)) return
+
+    const rowList = [rowMap.get(key)!].concat(
+      // 需要包含被禁用且被勾选的节点
+      rowData.filter(row => disableCheckRows.has(row.key) && row.checked)
+    )
+
+    for (let i = 0, len = rowList.length; i < len; ++i) {
+      updateCheckedUpward(rowList[i].key)
+      updateCheckedDown(rowList[i].key)
+    }
+  }
+
+  function handleCheck(key: Key, checked: boolean) {
+    const { rowMap, noCascaded } = state
+    const { disableCheckRows } = getters
+    const row = rowMap.get(key)
+
+    if (row && !disableCheckRows.has(key)) {
+      row.checked = !!checked
+      row.partial = false
     }
 
+    !noCascaded && computeChecked(key)
     computePartial()
   }
 
@@ -653,14 +810,14 @@ export function useStore(options: StoreOptions) {
     let checked = !checkedAll
 
     // 阻断 disabled 元素对全选的影响
-    if (Object.keys(disableCheckRows).length) {
+    if (disableCheckRows.size) {
       // 由于被禁用的元素不可被操作，如果存在被禁用的元素且该状态为未被选中，则全选时仍然是 partial 状态
       // 假设除了禁用的元素，其余元素均为选中状态（此时对于用户来说属于已经全选，点击的期望是取消全选）
       let partialCheckedAll = true
 
       for (const row of rowData) {
         // 检查是否存在非禁用的且未被选中的元素（如有则证明现在不是全选，用户点击的期望是进行全选）
-        if (!disableCheckRows[row.key] && !row.checked) {
+        if (!disableCheckRows.has(row.key) && !row.checked) {
           partialCheckedAll = false
 
           break
@@ -671,7 +828,7 @@ export function useStore(options: StoreOptions) {
     }
 
     for (const row of rowData) {
-      if (!disableCheckRows[row.key]) {
+      if (!disableCheckRows.has(row.key)) {
         row.checked = checked
       }
     }
@@ -687,7 +844,7 @@ export function useStore(options: StoreOptions) {
     const { disableCheckRows } = getters
 
     for (const row of rowData) {
-      if (!disableCheckRows[row.key]) {
+      if (!disableCheckRows.has(row.key)) {
         row.checked = false
       }
     }
@@ -757,12 +914,33 @@ export function useStore(options: StoreOptions) {
   }
 
   function handleExpand(key: Key, expanded: boolean) {
-    const { dataMap } = state
+    const { rowMap } = state
     const { disableExpandRows } = getters
 
-    if (dataMap[key] && !disableExpandRows[key]) {
-      dataMap[key].expanded = !!expanded
+    if (rowMap.has(key) && !disableExpandRows.has(key)) {
+      rowMap.get(key)!.expanded = !!expanded
     }
+  }
+
+  function handleTreeExpand(key: Key, expanded: boolean) {
+    if (!usingTree.value) return
+
+    const { rowMap, rowData } = state
+    const row = rowMap.get(key)
+
+    if (!row?.children?.length) return
+
+    const underRows = collectUnderRows({ ...row, treeExpanded: true })
+
+    if (expanded) {
+      rowData.splice(row.index + 1, 0, ...underRows)
+    } else {
+      rowData.splice(row.index + 1, underRows.length)
+    }
+
+    row.treeExpanded = !!expanded
+
+    refreshRowIndex()
   }
 
   function toggleFilterItemActive(options: {
@@ -939,7 +1117,18 @@ export function useStore(options: StoreOptions) {
   }
 
   function pageData(currentPage: number, pageSize: number, data: RowState[]) {
-    return data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    return pageSize > 0 ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data
+  }
+
+  function getParentRow(key: Key) {
+    const { rowMap } = state
+    const row = rowMap.get(key)
+
+    if (row?.parent) {
+      return rowMap.get(row.parent) ?? null
+    }
+
+    return null
   }
 
   type Store = Readonly<{

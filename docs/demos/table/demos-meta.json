@@ -12,6 +12,7 @@
   "order",
   "expand",
   "pagination",
+  "tree",
   "draggable",
   "virtual",
   "toggle-data",

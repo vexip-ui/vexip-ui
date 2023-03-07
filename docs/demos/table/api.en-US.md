@@ -194,6 +194,9 @@ interface TableHeadPayload {
 | custom-sorter   | `boolean`                                                | Set whether use custom sorter, will dispatch event without internal sorting if enabled                                                                | `false`        | `2.1.4` |
 | custom-filter   | `boolean`                                                | Set whether use custom filter, will dispatch event without internal filtering if enabled                                                              | `false`        | `2.1.4` |
 | key-config      | `TableKeyConfig`                                         | Set the key names when parsing `data`                                                                                                                 | `{}`           | `2.1.6` |
+| disabled-tree   | `boolean`                                                | Set whether to disable automatic parsing tree data                                                                                                    | `false`        | `2.1.6` |
+| row-indent      | `string \| number`                                       | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6` |
+| no-cascaded     | `boolean`                                                | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6` |
 
 ### Table Events
 

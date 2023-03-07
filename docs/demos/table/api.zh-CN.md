@@ -194,6 +194,9 @@ interface TableHeadPayload {
 | custom-sorter   | `boolean`                                                | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4` |
 | custom-filter   | `boolean`                                                | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4` |
 | key-config      | `TableKeyConfig`                                         | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6` |
+| disabled-tree   | `boolean`                                                | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6` |
+| row-indent      | `string \| number`                                       | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6` |
+| no-cascaded     | `boolean`                                                | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6` |
 
 ### Table 事件
 

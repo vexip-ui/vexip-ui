@@ -21,11 +21,16 @@ $table: map.merge(
     row-bg-color-hover: get-css-var('color-primary-opacity-8'),
     row-bg-color-stripe: get-css-var('fill-color-background'),
     row-b-color-bottom: get-css-var('border-color-light-1'),
+    row-indent-width: 16px,
+    row-depth: -1,
     cell-v-padding: 6px,
     cell-h-padding: 6px,
     cell-b-color-right: get-css-var('border-color-light-2'),
-    expand-arrow-color: get-css-var('content-color-secondary'),
-    expand-arrow-size: 20px,
+    expand-color: get-css-var('content-color-secondary'),
+    expand-size: 20px,
+    tree-expand-color: get-css-var('content-color-secondary'),
+    tree-expand-color-hover: get-css-var('color-primary-base'),
+    tree-expand-size: 20px,
     sorter-color: get-css-var('content-color-placeholder'),
     sorter-color-hover: get-css-var('content-color-secondary'),
     sorter-color-active: get-css-var('color-primary-base'),
@@ -37,7 +42,7 @@ $table: map.merge(
     filter-item-bg-color: transparent,
     filter-item-bg-color-hover: get-css-var('fill-color-hover'),
     filter-item-bg-color-active: get-css-var('table-filter-item-bg-color-hover'),
-    indicator-color: get-css-var('color-primary-base'),
+    indicator-color: get-css-var('color-primary-opacity-6'),
     empty-color: get-css-var('content-color-placeholder')
   ),
   $table
@@ -227,19 +232,49 @@ $table: map.merge(
     margin: 0;
   }
 
-  &__expand {
+  &__expand,
+  &__tree-expand {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('table-expand-arrow-size');
-    height: get-css-var('table-expand-arrow-size');
-    color: get-css-var('table-expand-arrow-color');
+    padding: 0;
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+  }
+
+  &__expand {
+    width: get-css-var('table-expand-size');
+    height: get-css-var('table-expand-size');
+    color: get-css-var('table-expand-color');
     transition: get-css-var('transition-transform');
 
     &--active {
       transform: rotate(90deg);
     }
+  }
+
+  &__tree-expand {
+    width: get-css-var('table-tree-expand-size');
+    height: get-css-var('table-tree-expand-size');
+    margin-right: 6px;
+    color: get-css-var('table-tree-expand-color');
+    transition: get-css-var('transition-color');
+
+    &:hover {
+      color: get-css-var('table-tree-expand-color-hover');
+    }
+
+    &--hidden {
+      pointer-events: none;
+      visibility: hidden;
+      opacity: 0%;
+    }
+  }
+
+  &__pad {
+    width: calc(#{get-css-var('table-row-indent-width')} * #{get-css-var('table-row-depth')});
   }
 
   &__sorter {
@@ -413,7 +448,33 @@ $table: map.merge(
     z-index: 10;
     height: 1px;
     will-change: top;
-    background-color: get-css-var('table-indicator-color');
+    pointer-events: none;
+
+    &::after {
+      position: absolute;
+      right: 0;
+      left: 0;
+      height: 12px;
+      content: '';
+    }
+
+    &--before::after {
+      top: 0;
+      background-image: linear-gradient(
+        to bottom,
+        #{get-css-var('table-indicator-color')},
+        transparent
+      );
+    }
+
+    &--after::after {
+      bottom: 0;
+      background-image: linear-gradient(
+        to top,
+        #{get-css-var('table-indicator-color')},
+        transparent
+      );
+    }
   }
 
   &__empty {
