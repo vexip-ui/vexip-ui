@@ -66,6 +66,8 @@ $table: map.merge(
   border: $border-a transparent;
 
   &__wrapper {
+    width: 100%;
+
     .#{$namespace}-scroll__wrapper {
       min-width: 100%;
     }

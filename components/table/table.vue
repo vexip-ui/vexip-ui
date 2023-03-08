@@ -10,12 +10,12 @@
       <slot></slot>
     </div>
     <Scroll
+      ref="xScroll"
       inherit
       use-x-bar
       mode="horizontal"
       :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
       :bar-class="nh.bem('bar', 'horizontal')"
-      :width="props.width"
       :bar-fade="props.barFade"
       :delta-x="50"
       @scroll="handleXScroll"
@@ -250,6 +250,7 @@ export default defineComponent({
     const yScrollEnable = ref(false)
 
     const wrapper = ref<HTMLElement>()
+    const xScroll = ref<InstanceType<typeof Scroll>>()
     const thead = ref<InstanceType<typeof TableHead>>()
     const mainScroll = ref<InstanceType<typeof Scroll>>()
     const indicator = ref<HTMLElement>()
@@ -515,21 +516,14 @@ export default defineComponent({
       if (isDefined(width)) {
         if (typeof width === 'string' && parseFloat(width).toString() !== width) {
           tableWidth.value = width
-
-          nextTick(() => {
-            wrapper.value && setTableWidth(wrapper.value.offsetWidth)
-          })
         } else {
-          const numberWidth = toNumber(width)
-
-          tableWidth.value = `${numberWidth}px`
-          setTableWidth(numberWidth)
+          tableWidth.value = `${toNumber(width)}px`
         }
-      } else {
-        nextTick(() => {
-          wrapper.value && setTableWidth(wrapper.value.offsetWidth)
-        })
       }
+
+      nextTick(() => {
+        xScroll.value?.$el && setTableWidth(xScroll.value?.$el.offsetWidth)
+      })
     }
 
     function computeBodyHeight() {
@@ -962,6 +956,7 @@ export default defineComponent({
       store,
 
       wrapper,
+      xScroll,
       thead,
       mainScroll,
       indicator,

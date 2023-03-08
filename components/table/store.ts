@@ -562,7 +562,7 @@ export function useStore(options: StoreOptions) {
     // 剩余空间有多时, 均分到弹性列
     // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
     if (flexColumnCount) {
-      flexUnitWidth = Math.floor(flexWidth / flexColumnCount)
+      flexUnitWidth = flexWidth / flexColumnCount
     }
 
     for (let i = 0; i < flexColumnCount; ++i) {
