@@ -1,3 +1,21 @@
+## [2.1.6](https://github.com/vexip-ui/vexip-ui/compare/v2.1.5...v2.1.6) (2023-03-08)
+
+### Bug Fixes
+
+- **checkbox:** improve signal background color in dark mode ([6fbbc22](https://github.com/vexip-ui/vexip-ui/commit/6fbbc22b0db0c92f3eae7e5017656df3cde031cb))
+- **modal:** custom position not effective ([b144f9c](https://github.com/vexip-ui/vexip-ui/commit/b144f9cd014f782b706536ded0afa761f3cdbf5d))
+- **select:** incorrect label color when delay set value in filter mode ([68169c0](https://github.com/vexip-ui/vexip-ui/commit/68169c068adbeb6bbe44c28c80a443895b10f719))
+- **table:** ensure fill entire table when columns total width small than table ([b69cdb5](https://github.com/vexip-ui/vexip-ui/commit/b69cdb5c7e4bada0ad230037bbbf652cf38cccbf))
+- **table:** incorrect scroll width when have not fixed width column ([e93bd1c](https://github.com/vexip-ui/vexip-ui/commit/e93bd1cc8921de452fd3c572c8bb20ca73ac4fc4)), closes [#278](https://github.com/vexip-ui/vexip-ui/issues/278)
+- **upload:** infinite read not image file when using card type ([eceb63c](https://github.com/vexip-ui/vexip-ui/commit/eceb63c9d4087009dc73a7ce55d2a2b986f5612f))
+
+### Features
+
+- **table:** add key-config prop ([da36218](https://github.com/vexip-ui/vexip-ui/commit/da36218a7f51b0d34e218b50cc9c42042ebca979))
+- **table:** support parsing tree data ([#279](https://github.com/vexip-ui/vexip-ui/issues/279)) ([763f50b](https://github.com/vexip-ui/vexip-ui/commit/763f50b49afbb58ae89aef21ff79848def8911d1))
+- **tree:** support create link line for nodes ([ea3110a](https://github.com/vexip-ui/vexip-ui/commit/ea3110a44bcda2b8cce4b09f55ee3fb96daa9ad2))
+- **tree:** support more fine grained disabled options ([82d4877](https://github.com/vexip-ui/vexip-ui/commit/82d487755c8018e906694170fd069fd66b01e819))
+
 ## [2.1.5](https://github.com/vexip-ui/vexip-ui/compare/v2.1.4...v2.1.5) (2023-02-28)
 
 ### Bug Fixes
