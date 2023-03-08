@@ -1,9 +1,9 @@
-import type { NativeScroll } from '@/components/native-scroll'
+import type { NativeScrollExposed } from '@/components/native-scroll'
 
 export interface VirtualListExposed {
-  scroll: InstanceType<typeof NativeScroll> | null,
-  wrapper: HTMLElement | null,
-  list: HTMLElement | null,
+  scroll?: NativeScrollExposed,
+  wrapper?: HTMLElement,
+  list?: HTMLElement,
   scrollOffset: number,
   scrollTo: (top: number, behavior?: ScrollBehavior) => void,
   scrollBy: (delta: number, behavior?: ScrollBehavior) => void,

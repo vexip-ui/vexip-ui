@@ -56,11 +56,11 @@ import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
 import type { ComponentInternalInstance } from 'vue'
-import type { NativeScroll } from '@/components/native-scroll'
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
 import type { AnchorLinkState, AnchorState } from './symbol'
 
-type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
+type ScrollType = NativeScrollExposed & InstanceType<typeof Scroll>
 
 export default defineComponent({
   name: 'Anchor',

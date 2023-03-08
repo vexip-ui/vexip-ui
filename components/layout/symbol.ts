@@ -2,7 +2,7 @@ import type { InjectionKey } from 'vue'
 import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuMarkerType, MenuGroupType, MenuExposed } from '@/components/menu'
-import type { NativeScroll } from '@/components/native-scroll'
+import type { NativeScrollExposed } from '@/components/native-scroll'
 
 export type LayoutSignType = 'aside' | 'header'
 export type LayoutConfig = 'nav' | 'color' | 'theme'
@@ -57,18 +57,18 @@ export interface LayoutState {
 }
 
 export interface LayoutExposed {
-  scroll: InstanceType<typeof NativeScroll> | null,
-  menu: MenuExposed | null,
+  scroll?: NativeScrollExposed,
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
 export interface LayoutHeaderExposed {
-  menu: MenuExposed | null,
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
 export interface LayoutAsideExposed {
-  menu: MenuExposed | null,
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 

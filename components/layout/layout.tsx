@@ -12,6 +12,7 @@ import { layoutProps } from './props'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   LayoutConfig,
   LayoutSignType,
@@ -71,9 +72,9 @@ export default defineComponent({
     const { isMounted } = useMounted()
 
     const section = ref<HTMLElement>()
-    const scroll = ref<InstanceType<typeof NativeScroll>>()
-    const header = ref<LayoutHeaderExposed | null>(null)
-    const aside = ref<LayoutAsideExposed | null>(null)
+    const scroll = ref<NativeScrollExposed>()
+    const header = ref<LayoutHeaderExposed>()
+    const aside = ref<LayoutAsideExposed>()
 
     const affixMatched = useMediaQuery(toRef(props, 'headerFixed'))
     const expandMatched = useMediaQuery(toRef(props, 'asideFixed'))
@@ -109,7 +110,7 @@ export default defineComponent({
     const signInHeader = computed(() => {
       return props.noAside || currentSignType.value === 'header' || state.expanded
     })
-    const menu = computed(() => aside.value?.menu || header.value?.menu || null)
+    const menu = computed(() => aside.value?.menu || header.value?.menu)
     const isDark = ref(props.darkMode)
 
     provide(LAYOUT_STATE, state)

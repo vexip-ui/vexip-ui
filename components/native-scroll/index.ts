@@ -1,9 +1,5 @@
-import NativeScroll from './native-scroll.vue'
-
-export { NativeScroll }
+export { default as NativeScroll } from './native-scroll'
 export { animateScrollTo } from './helper'
 
-export type NativeScrollExposed = InstanceType<typeof NativeScroll>
-
 export type { NativeScrollProps, NativeScrollCProps } from './props'
-export type { NativeScrollMode } from './symbol'
+export type { NativeScrollMode, NativeScrollExposed } from './symbol'

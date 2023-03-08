@@ -51,7 +51,7 @@ export default defineComponent({
     const currentSignType = ref<LayoutSignType>(props.signType)
     const currentUserDropped = ref(props.userDropped)
 
-    const menu = ref<MenuExposed | null>(null)
+    const menu = ref<MenuExposed>()
 
     const { isMounted } = useMounted()
 

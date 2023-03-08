@@ -38,7 +38,7 @@ export default defineComponent({
 
     const top = ref<HTMLElement>()
     const bottom = ref<HTMLElement>()
-    const menu = ref<MenuExposed | null>(null)
+    const menu = ref<MenuExposed>()
 
     const className = computed(() => {
       return [

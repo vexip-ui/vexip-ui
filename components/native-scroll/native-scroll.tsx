@@ -1,4 +1,3 @@
-<script lang="tsx">
 import {
   defineComponent,
   ref,
@@ -677,4 +676,3 @@ export default defineComponent({
     }
   }
 })
-</script>
