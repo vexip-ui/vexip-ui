@@ -449,7 +449,6 @@ export default defineComponent({
     watch(
       () => props.data,
       value => {
-        setPageSize(props.pageSize || value.length)
         setData(value)
 
         refreshPercentScroll()
