@@ -1,66 +1,25 @@
-<template>
-  <div
-    ref="wrapper"
-    :class="className"
-    :style="style"
-    @mousedown="handleMouseDown"
-    @wheel.exact="handleWheel($event, 'vertical')"
-    @wheel.shift="handleWheel($event, 'horizontal')"
-  >
-    <ResizeObserver throttle :on-resize="handleResize">
-      <component
-        :is="props.scrollTag || 'div'"
-        ref="content"
-        v-bind="props.scrollAttrs"
-        :class="wrapperClass"
-        :style="[props.scrollAttrs?.style, props.scrollStyle]"
-        @scroll.exact="handleScroll($event, 'vertical')"
-        @scroll.shift="handleScroll($event, 'horizontal')"
-      >
-        <slot></slot>
-      </component>
-    </ResizeObserver>
-    <Scrollbar
-      v-if="props.useXBar"
-      ref="xBar"
-      inherit
-      placement="bottom"
-      :class="[nh.bem('bar', 'horizontal'), props.barClass]"
-      :fade="props.barFade"
-      :bar-length="xBarLength"
-      :disabled="!enableXScroll"
-      :appear="props.appear"
-      :duration="props.barDuration"
-      :use-track="props.useBarTrack"
-      @scroll-start="handleBarScrollStart('horizontal')"
-      @scroll="handleXBarScroll"
-      @scroll-end="handleBarScrollEnd('horizontal')"
-    ></Scrollbar>
-    <Scrollbar
-      v-if="props.useYBar"
-      ref="yBar"
-      inherit
-      placement="right"
-      :class="[nh.bem('bar', 'vertical'), props.barClass]"
-      :fade="props.barFade"
-      :bar-length="yBarLength"
-      :disabled="!enableYScroll"
-      :appear="props.appear"
-      :duration="props.barDuration"
-      :use-track="props.useBarTrack"
-      @scroll-start="handleBarScrollStart('vertical')"
-      @scroll="handleYBarScroll"
-      @scroll-end="handleBarScrollEnd('vertical')"
-    ></Scrollbar>
-  </div>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
+<script lang="tsx">
+import {
+  defineComponent,
+  ref,
+  computed,
+  watch,
+  toRef,
+  onBeforeUnmount,
+  nextTick,
+  renderSlot
+} from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
+import {
+  USE_TOUCH,
+  isClient,
+  isElement,
+  isTrue,
+  createEventEmitter,
+  flatVNodes
+} from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
@@ -80,7 +39,7 @@ export default defineComponent({
   },
   props: nativeScrollProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { slots, expose }) {
     const props = useProps('nativeScroll', _props, {
       scrollClass: null,
       scrollStyle: null,
@@ -124,10 +83,13 @@ export default defineComponent({
     const scrolling = ref(false)
 
     const wrapper = ref<HTMLElement>()
+    const xBar = ref<InstanceType<typeof Scrollbar>>()
+    const yBar = ref<InstanceType<typeof Scrollbar>>()
 
     const {
       contentElement,
 
+      content,
       currentScroll,
       percentX,
       percentY,
@@ -158,7 +120,10 @@ export default defineComponent({
         emitEvent(props.onResize, entry)
       },
       onBeforeRefresh: stopAutoplay,
-      onAfterRefresh: startAutoplay
+      onAfterRefresh: () => {
+        syncBarScroll()
+        startAutoplay()
+      }
     })
 
     /* autoplay */
@@ -296,6 +261,40 @@ export default defineComponent({
       ]
     })
 
+    const willMutate = ref(false)
+
+    function handleMutate() {
+      willMutate.value = true
+      nextTick(() => {
+        refresh()
+        willMutate.value = false
+      })
+    }
+
+    let observer: MutationObserver | undefined
+
+    function createMutation() {
+      if (!isClient || !contentElement.value) return
+
+      observer = new MutationObserver(handleMutate)
+      observer.observe(contentElement.value, {
+        childList: true
+      })
+    }
+
+    function clearMutation() {
+      observer?.disconnect()
+      observer = undefined
+    }
+
+    watch(
+      contentElement,
+      () => {
+        clearMutation()
+        createMutation()
+      },
+      { immediate: true }
+    )
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
     })
@@ -303,8 +302,33 @@ export default defineComponent({
       emitEvent(props.onYEnabledChange, value)
     })
 
-    const xBar = ref<InstanceType<typeof Scrollbar>>()
-    const yBar = ref<InstanceType<typeof Scrollbar>>()
+    expose({
+      percentX,
+      percentY,
+      currentScroll,
+      xScrollLimit,
+      yScrollLimit,
+
+      xBarLength,
+      yBarLength,
+      enableXScroll,
+      enableYScroll,
+
+      wrapper,
+      content: contentElement,
+      xBar,
+      yBar,
+
+      refresh,
+      scrollTo,
+      scrollBy,
+      scrollToElement,
+      ensureInView,
+      getXScrollLimit,
+      getYScrollLimit,
+      addScrollListener,
+      removeScrollListener
+    })
 
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)
@@ -411,9 +435,11 @@ export default defineComponent({
       }
     }
 
-    function handleScroll(event: Event, type: 'vertical' | 'horizontal') {
+    function handleScroll(event: UIEvent) {
       event.stopPropagation()
       event.preventDefault()
+
+      const type = contentElement.value?.scrollLeft !== currentScroll.x ? 'horizontal' : 'vertical'
 
       if (contentElement.value) {
         const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
@@ -441,6 +467,7 @@ export default defineComponent({
 
     function handleBarScrollStart(type: 'vertical' | 'horizontal') {
       usingBar.value = true
+      prepareScroll()
       emitEvent(props.onBarScrollStart, {
         type,
         clientX: currentScroll.x,
@@ -452,6 +479,7 @@ export default defineComponent({
 
     function handleBarScrollEnd(type: 'vertical' | 'horizontal') {
       usingBar.value = false
+      startAutoplay()
       emitEvent(props.onBarScrollEnd, {
         type,
         clientX: currentScroll.x,
@@ -554,46 +582,98 @@ export default defineComponent({
       emitter.off('scroll', listener)
     }
 
-    return {
-      props,
-      nh,
-      percentX,
-      percentY,
-      currentScroll,
-      xScrollLimit,
-      yScrollLimit,
+    return () => {
+      const Content = (props.scrollTag || 'div') as 'div'
+      const children = renderSlot(slots, 'default').children
 
-      className,
-      style,
-      wrapperClass,
-      xBarLength,
-      yBarLength,
-      enableXScroll,
-      enableYScroll,
-
-      wrapper,
-      content: contentElement,
-      xBar,
-      yBar,
-
-      handleResize,
-      handleMouseDown,
-      handleScroll,
-      handleWheel,
-      handleBarScrollStart,
-      handleBarScrollEnd,
-      handleXBarScroll,
-      handleYBarScroll,
-
-      refresh,
-      scrollTo,
-      scrollBy,
-      scrollToElement,
-      ensureInView,
-      getXScrollLimit,
-      getYScrollLimit,
-      addScrollListener,
-      removeScrollListener
+      return (
+        <div
+          ref={wrapper}
+          class={className.value}
+          style={style.value}
+          onMousedown={handleMouseDown}
+          onWheel={event => handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')}
+        >
+          <ResizeObserver on-resize={handleResize}>
+            <Content
+              ref={contentElement}
+              {...props.scrollAttrs}
+              class={wrapperClass.value}
+              style={[props.scrollAttrs?.style, props.scrollStyle]}
+              onScroll={handleScroll}
+            >
+              {slots.extra && (
+                <div
+                  class={nh.be('extra')}
+                  style={{
+                    width: willMutate.value ? undefined : `${content.scrollWidth}px`,
+                    height: willMutate.value ? undefined : `${content.scrollHeight}px`
+                  }}
+                >
+                  <div
+                    class={nh.be('extra-inner')}
+                    style={{
+                      width: `${content.offsetWidth}px`,
+                      height: `${content.offsetHeight}px`
+                    }}
+                  >
+                    {slots.extra?.({
+                      refresh,
+                      scrollTo,
+                      scrollBy,
+                      scrollToElement,
+                      ensureInView
+                    })}
+                  </div>
+                </div>
+              )}
+              {slots.default &&
+                flatVNodes(children).map((vnode, index) => {
+                  vnode.key = index
+                  return (
+                    <ResizeObserver key={index} on-resize={handleResize}>
+                      {() => vnode}
+                    </ResizeObserver>
+                  )
+                })}
+            </Content>
+          </ResizeObserver>
+          {props.useXBar && (
+            <Scrollbar
+              ref={xBar}
+              inherit
+              placement={'bottom'}
+              class={[nh.bem('bar', 'horizontal'), props.barClass]}
+              fade={props.barFade}
+              bar-length={xBarLength.value}
+              disabled={!enableXScroll.value}
+              appear={props.appear}
+              duration={props.barDuration}
+              use-track={props.useBarTrack}
+              onScrollStart={() => handleBarScrollStart('horizontal')}
+              onScroll={handleXBarScroll}
+              onScrollEnd={() => handleBarScrollEnd('horizontal')}
+            ></Scrollbar>
+          )}
+          {props.useYBar && (
+            <Scrollbar
+              ref={yBar}
+              inherit
+              placement={'right'}
+              class={[nh.bem('bar', 'vertical'), props.barClass]}
+              fade={props.barFade}
+              bar-length={yBarLength.value}
+              disabled={!enableYScroll.value}
+              appear={props.appear}
+              duration={props.barDuration}
+              use-track={props.useBarTrack}
+              onScrollStart={() => handleBarScrollStart('vertical')}
+              onScroll={handleYBarScroll}
+              onScrollEnd={() => handleBarScrollEnd('vertical')}
+            ></Scrollbar>
+          )}
+        </div>
+      )
     }
   }
 })

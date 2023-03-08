@@ -30,6 +30,22 @@
     overflow-y: hidden;
   }
 
+  &__extra {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__extra-inner {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   &--both > &__bar--horizontal {
     width: calc(100% - get-css-var('scrollbar-width') + 1px);
   }

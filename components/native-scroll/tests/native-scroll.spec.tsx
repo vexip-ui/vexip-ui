@@ -227,6 +227,7 @@ describe('NativeScroll', () => {
       autoplay: true
     })
 
+    vi.runAllTimers()
     expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
   })
 

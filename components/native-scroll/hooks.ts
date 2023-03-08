@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useMounted, isHiddenElement } from '@vexip-ui/hooks'
-import { isElement, multipleFixed, boundRange } from '@vexip-ui/utils'
+import { isElement, multipleFixed, boundRange, debounceMinor } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
@@ -150,7 +150,7 @@ export function useScrollWrapper({
     }
   })
 
-  function refresh() {
+  const refresh = debounceMinor(() => {
     if (typeof onBeforeRefresh === 'function') {
       onBeforeRefresh()
     }
@@ -161,7 +161,7 @@ export function useScrollWrapper({
         onAfterRefresh()
       }
     }, 0)
-  }
+  })
 
   function scrollTo(clientX: number, clientY: number, duration = 500) {
     return new Promise<void>(resolve => {
@@ -220,6 +220,7 @@ export function useScrollWrapper({
   return {
     contentElement,
 
+    content,
     currentScroll,
     percentX,
     percentY,
