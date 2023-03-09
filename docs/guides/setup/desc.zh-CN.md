@@ -72,6 +72,13 @@ yarn add vexip-ui
 
 欢迎你的加入！你可以查阅 [贡献指南](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。
 
+或者你可以赞助我以帮助项目更好的发展！
+
+<img
+  src="/wechat-sponsor.png"
+  style="width: 240px;"
+/>
+
 ## 贡献者
 
 感谢他们的所做的一切贡献！
