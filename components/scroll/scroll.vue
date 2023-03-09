@@ -18,9 +18,12 @@
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"
       >
-        <slot></slot>
+        <slot v-bind="getSlotParams()"></slot>
       </component>
     </ResizeObserver>
+    <div :class="nh.be('extra')" :style="extraStyle">
+      <slot name="extra" v-bind="getSlotParams()"></slot>
+    </div>
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
@@ -132,6 +135,9 @@ export default defineComponent({
     const transitionDuration = ref<number>(-1)
     const mode = computed(() => (props.mode === 'horizontal-exact' ? 'horizontal' : props.mode))
 
+    const xBar = ref<InstanceType<typeof Scrollbar>>()
+    const yBar = ref<InstanceType<typeof Scrollbar>>()
+
     const {
       wrapperElement,
       contentElement,
@@ -163,7 +169,10 @@ export default defineComponent({
         emitEvent(props.onResize, entry)
       },
       onBeforeRefresh: stopAutoplay,
-      onAfterRefresh: startAutoplay
+      onAfterRefresh: () => {
+        syncBarScroll()
+        startAutoplay()
+      }
     })
 
     /* autoplay */
@@ -312,6 +321,12 @@ export default defineComponent({
         }
       ]
     })
+    const extraStyle = computed(() => {
+      return {
+        width: mode.value !== 'vertical' ? `${wrapper.width}px` : undefined,
+        height: mode.value !== 'horizontal' ? `${wrapper.height}px` : undefined
+      }
+    })
 
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
@@ -322,9 +337,6 @@ export default defineComponent({
     watch(isReady, value => {
       if (value) emitEvent(props.onReady)
     })
-
-    const xBar = ref<InstanceType<typeof Scrollbar>>()
-    const yBar = ref<InstanceType<typeof Scrollbar>>()
 
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)
@@ -592,6 +604,22 @@ export default defineComponent({
       }
     }
 
+    function getSlotParams() {
+      return {
+        scrollX: -currentScroll.x,
+        scrollY: -currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value,
+        enableXScroll: enableXScroll.value,
+        enableYScroll: enableYScroll.value,
+        refresh,
+        scrollTo,
+        scrollBy,
+        scrollToElement,
+        ensureInView
+      }
+    }
+
     function scrollTo(clientX: number, clientY: number, duration?: number) {
       setDuration(duration)
 
@@ -648,14 +676,6 @@ export default defineComponent({
           })
         }
       }
-    }
-
-    function getXScrollLimit() {
-      return [0, -xScrollLimit.value]
-    }
-
-    function getYScrollLimit() {
-      return [0, -yScrollLimit.value]
     }
 
     function scrollToElement(el: string | Element, duration?: number, offset = 0) {
@@ -718,6 +738,14 @@ export default defineComponent({
       scrollBy(clientX, clientY, duration)
     }
 
+    function getXScrollLimit() {
+      return [0, -xScrollLimit.value]
+    }
+
+    function getYScrollLimit() {
+      return [0, -yScrollLimit.value]
+    }
+
     function addScrollListener(listener: EventHandler) {
       emitter.on('scroll', listener)
     }
@@ -738,6 +766,7 @@ export default defineComponent({
       style,
       wrapperClass,
       wrapperStyle,
+      extraStyle,
       xBarLength,
       yBarLength,
       enableXScroll,
@@ -757,14 +786,15 @@ export default defineComponent({
       handleXBarScroll,
       handleYBarScroll,
       ensureScrollOffset,
+      getSlotParams,
 
       refresh,
       scrollTo,
       scrollBy,
-      getXScrollLimit,
-      getYScrollLimit,
       scrollToElement,
       ensureInView,
+      getXScrollLimit,
+      getYScrollLimit,
       addScrollListener,
       removeScrollListener
     }

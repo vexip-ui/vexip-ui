@@ -257,6 +257,7 @@ export function useScrollWrapper({
     contentElement,
 
     wrapper,
+    content,
     isReady,
     currentScroll,
     percentX,

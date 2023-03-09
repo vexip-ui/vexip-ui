@@ -1,3 +1,22 @@
+### 预设类型
+
+```ts
+interface NativeScrollSlotParams {
+  scrollX: number,
+  scrollY: number,
+  percentX: number,
+  percentY: number,
+  enableXScroll: Readonly<boolean>,
+  enableYScroll: Readonly<boolean>,
+  content?: HTMLElement,
+  refresh: () => void,
+  scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
+  scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,
+  scrollToElement: (el: string | Element, duration?: number, offset?: number) => Promise<void>,
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+}
+```
+
 ### NativeScroll 属性
 
 | 名称             | 类型                                                     | 说明                                                                          | 默认值       | 始于     |
@@ -38,9 +57,10 @@
 
 ### NativeScroll 插槽
 
-| 名称    | 说明           | 参数 | 始于 |
-| ------- | -------------- | ---- | ---- |
-| defalut | 滚动内容的插槽 | -    | -    |
+| 名称    | 说明           | 参数                     | 始于    |
+| ------- | -------------- | ------------------------ | ------- |
+| defalut | 滚动内容的插槽 | `NativeScrollSlotParams` | -       |
+| extra   | 额外内容的插槽 | `NativeScrollSlotParams` | `2.1.7` |
 
 ### NativeScroll 方法
 

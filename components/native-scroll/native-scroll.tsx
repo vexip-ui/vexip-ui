@@ -531,6 +531,22 @@ export default defineComponent({
       })
     }
 
+    function getSlotParams() {
+      return {
+        scrollX: currentScroll.x,
+        scrollY: currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value,
+        enableXScroll: enableXScroll.value,
+        enableYScroll: enableYScroll.value,
+        refresh,
+        scrollTo,
+        scrollBy,
+        scrollToElement,
+        ensureInView
+      }
+    }
+
     function getXScrollLimit() {
       return [0, xScrollLimit.value]
     }
@@ -583,7 +599,7 @@ export default defineComponent({
 
     return () => {
       const Content = (props.scrollTag || 'div') as 'div'
-      const children = renderSlot(slots, 'default').children
+      const children = renderSlot(slots, 'default', getSlotParams()).children
 
       return (
         <div
@@ -616,13 +632,7 @@ export default defineComponent({
                       height: `${content.offsetHeight}px`
                     }}
                   >
-                    {slots.extra?.({
-                      refresh,
-                      scrollTo,
-                      scrollBy,
-                      scrollToElement,
-                      ensureInView
-                    })}
+                    {slots.extra?.(getSlotParams())}
                   </div>
                 </div>
               )}

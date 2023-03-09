@@ -59,6 +59,14 @@ $scroll: map.merge(
     @include clear-both;
   }
 
+  &__extra {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   &--both > &__bar--horizontal {
     width: calc(100% - get-css-var('scrollbar-width') + 1px);
   }

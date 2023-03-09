@@ -1,3 +1,21 @@
+### Preset Types
+
+```ts
+interface ScrollSlotParams {
+  scrollX: number,
+  scrollY: number,
+  percentX: number,
+  percentY: number,
+  enableXScroll: number,
+  enableYScroll: number,
+  refresh: () => void,
+  scrollTo: (clientX: number, clientY: number, duration?: number) => void,
+  scrollBy: (deltaX: number, deltaY: number, duration?: number) => void,
+  scrollToElement: (el: string | Element, duration?: number, offset?: number) => void,
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+}
+```
+
 ### Scroll Props
 
 | Name             | Type                                                         | Description                                                                                                                                      | Default      | Since    |
@@ -41,9 +59,10 @@
 
 ### Scroll Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| defalut | Slot for scrolling content | -          | -     |
+| Name    | Description                | Parameters         | Since   |
+| ------- | -------------------------- | ------------------ | ------- |
+| defalut | Slot for scrolling content | `ScrollSlotParams` | -       |
+| extra   | Slot for extra content     | `ScrollSlotParams` | `2.1.7` |
 
 ### Scroll Methods
 
