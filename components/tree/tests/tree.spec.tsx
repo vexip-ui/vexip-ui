@@ -497,4 +497,21 @@ describe('Tree', () => {
     expect(nodes[0].text()).toEqual('n1')
     expect(nodes[1].text()).toEqual('n2')
   })
+
+  it('post create', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      }
+    ]
+    const postCreate = (node: any) => {
+      node.selected = true
+    }
+    const wrapper = mount(() => <Tree data={data} post-create={postCreate}></Tree>)
+
+    await nextTick()
+    const node = wrapper.find('.vxp-tree__node')
+    expect(node.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--selected')
+  })
 })

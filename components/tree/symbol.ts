@@ -2,10 +2,10 @@ import type { InjectionKey } from 'vue'
 
 export type Key = string | number
 export type Data = Record<string, any>
-export type NodeDropType = 'before' | 'inner' | 'after'
+export type TreeNodeDropType = 'before' | 'inner' | 'after'
 export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 
-export interface NodeKeyConfig {
+export interface TreeNodeKeyConfig {
   id?: string,
   parent?: string,
   label?: string,
@@ -59,7 +59,8 @@ export type TreeNodeProps<D = Data> = {
   upperMatched: boolean
 }
 
-export type RenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
+export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
+export type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
 export type AsyncLoadFn<D = Data> = (
   data: D,
   node: Readonly<TreeNodeProps<D>>
@@ -79,7 +80,7 @@ export interface TreeState {
   suffixCheckbox: boolean,
   noCascaded: boolean,
   linkLine: false | TreeLinkLine,
-  renderer: RenderFn,
+  renderer: TreeNodeRenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,
   updateVisibleNodeEls(): void,
