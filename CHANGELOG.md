@@ -1,3 +1,27 @@
+## [2.1.7](https://github.com/vexip-ui/vexip-ui/compare/v2.1.6...v2.1.7) (2023-03-11)
+
+### Bug Fixes
+
+- **sapce:** render nothing when no items ([858a55b](https://github.com/vexip-ui/vexip-ui/commit/858a55bbb12e1d262493263a7edd3296f4cd818e))
+- table tree rendering async data cannot be expanded ([#280](https://github.com/vexip-ui/vexip-ui/issues/280)) ([285539b](https://github.com/vexip-ui/vexip-ui/commit/285539b7d9ac0a6f0ba672a08f190b0a1b61140f))
+- **table:** unexpect horizontal scroll appear ([84598bf](https://github.com/vexip-ui/vexip-ui/commit/84598bfe41e1318a037f7c5be2e8f7731ee0aa5f)), closes [#278](https://github.com/vexip-ui/vexip-ui/issues/278)
+
+### Features
+
+- **native-scroll:** support add extra content via slot ([54de8b5](https://github.com/vexip-ui/vexip-ui/commit/54de8b5ad538ae77a147a99b17b6f8a3038f95ac))
+- **scroll:** support add extra content via slot ([931b4d1](https://github.com/vexip-ui/vexip-ui/commit/931b4d177e43c4d01fa942e20e3ff57bb443cd1d))
+- **tree:** support post process each node when created ([7292d64](https://github.com/vexip-ui/vexip-ui/commit/7292d64629c8b4dbff7ab7ab6c360e1a67a3a60a))
+- **utils:** add flatVNodes method ([35bd9e6](https://github.com/vexip-ui/vexip-ui/commit/35bd9e6c9acedd4be60df5bc2638a1ceb73139c0))
+
+### types
+
+- **table:** normalize all types start with `Table` ([ca375b7](https://github.com/vexip-ui/vexip-ui/commit/ca375b7ffb492b0ec18fbe2d40a225e1de6b2c2d))
+
+### BREAKING CHANGES
+
+- **table:** All types of Table component currently start with
+  `Table` prefix, e.g. `FilterOptions` -> `TableFilterOptions`
+
 ## [2.1.6](https://github.com/vexip-ui/vexip-ui/compare/v2.1.5...v2.1.6) (2023-03-08)
 
 ### Bug Fixes
