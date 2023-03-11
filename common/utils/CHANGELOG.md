@@ -1,3 +1,9 @@
+# [1.10.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.9.2...utils@1.10.0) (2023-03-11)
+
+### Features
+
+- **utils:** add flatVNodes method ([35bd9e6](https://github.com/vexip-ui/vexip-ui/commit/35bd9e6c9acedd4be60df5bc2638a1ceb73139c0))
+
 ## [1.9.2](https://github.com/vexip-ui/vexip-ui/compare/utils@1.9.1...utils@1.9.2) (2023-01-29)
 
 ### Bug Fixes
