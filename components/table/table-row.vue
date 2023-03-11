@@ -71,7 +71,7 @@ import { isFunction } from '@vexip-ui/utils'
 import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { RowState, ExpandColumn, ColumnWithKey } from './symbol'
+import type { TableRowState, TableExpandColumn, ColumnWithKey } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',
@@ -81,7 +81,7 @@ export default defineComponent({
   },
   props: {
     row: {
-      type: Object as PropType<RowState>,
+      type: Object as PropType<TableRowState>,
       default: () => ({})
     },
     index: {
@@ -166,8 +166,8 @@ export default defineComponent({
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
     const expandColumn = computed(() => {
-      return state.columns.find(column => (column as ExpandColumn).type === 'expand') as
-        | ExpandColumn
+      return state.columns.find(column => (column as TableExpandColumn).type === 'expand') as
+        | TableExpandColumn
         | undefined
     })
     const expandRenderer = computed(() => state.expandRenderer)
@@ -185,7 +185,7 @@ export default defineComponent({
     const leftFixed = computed(() => computeFixedWidth(state.leftFixedColumns))
     const rightFixed = computed(() => computeFixedWidth(state.rightFixedColumns))
 
-    function getRowHeight(row: RowState) {
+    function getRowHeight(row: TableRowState) {
       if (!row) return 0
 
       return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)

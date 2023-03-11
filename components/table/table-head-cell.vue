@@ -147,10 +147,10 @@ import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  SelectionColumn,
-  TypeColumn,
+  TableSelectionColumn,
+  TableTypeColumn,
   ColumnWithKey,
-  ParsedSorterOptions,
+  ParsedTableSorterOptions,
   ParsedFilterOptions
 } from './symbol'
 
@@ -199,7 +199,9 @@ export default defineComponent({
       return [
         nh.be('head-cell'),
         {
-          [nh.bem('head-cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type)
+          [nh.bem('head-cell', 'center')]: columnTypes.includes(
+            (props.column as TableTypeColumn).type
+          )
         },
         props.column.className || null,
         customClass
@@ -238,7 +240,7 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
     const sorter = computed(() => {
-      return state.sorters.get(props.column.key) || ({} as ParsedSorterOptions)
+      return state.sorters.get(props.column.key) || ({} as ParsedTableSorterOptions)
     })
     const filter = computed(() => {
       return state.filters.get(props.column.key) || ({} as ParsedFilterOptions)
@@ -275,8 +277,8 @@ export default defineComponent({
       }, 0)
     })
 
-    function isSelection(column: unknown): column is SelectionColumn {
-      return (column as TypeColumn).type === 'selection'
+    function isSelection(column: unknown): column is TableSelectionColumn {
+      return (column as TableTypeColumn).type === 'selection'
     }
 
     function buildEventPayload(event: Event) {

@@ -15,18 +15,18 @@ import type {
   Key,
   Data,
   TableKeyConfig,
-  RowPropFn,
-  CellPropFn,
-  HeadPropFn,
-  FilterOptions,
+  TableRowPropFn,
+  TableCellPropFn,
+  TableHeadPropFn,
+  TableFilterOptions,
   ParsedFilterOptions,
-  SorterOptions,
-  ParsedSorterOptions,
-  SelectionColumn,
-  ExpandColumn,
+  TableSorterOptions,
+  ParsedTableSorterOptions,
+  TableSelectionColumn,
+  TableExpandColumn,
   TableColumnOptions,
   ColumnWithKey,
-  RowState,
+  TableRowState,
   StoreOptions,
   StoreState
 } from './symbol'
@@ -128,9 +128,9 @@ export function useStore(options: StoreOptions) {
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
-    const selection = state.columns.find(item => (item as SelectionColumn).type === 'selection') as
-      | SelectionColumn
-      | undefined
+    const selection = state.columns.find(
+      item => (item as TableSelectionColumn).type === 'selection'
+    ) as TableSelectionColumn | undefined
     const disableCheckRows = new Set<Key>()
 
     if (selection && typeof selection.disableRow === 'function') {
@@ -149,8 +149,8 @@ export function useStore(options: StoreOptions) {
   })
   const disableExpandRows = computed(() => {
     const rowData = processedData.value
-    const expand = state.columns.find(item => (item as ExpandColumn).type === 'expand') as
-      | ExpandColumn
+    const expand = state.columns.find(item => (item as TableExpandColumn).type === 'expand') as
+      | TableExpandColumn
       | undefined
     const disableExpandRows = new Set<Key>()
 
@@ -364,7 +364,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function collectUnderRows(row: RowState, result: RowState[] = []) {
+  function collectUnderRows(row: TableRowState, result: TableRowState[] = []) {
     if (row.treeExpanded && row.children?.length) {
       for (const childRow of row.children) {
         result.push(childRow)
@@ -376,8 +376,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setData(data: Data[]) {
-    const clonedData: RowState[] = []
-    const rowMap = new Map<Key, RowState>()
+    const clonedData: TableRowState[] = []
+    const rowMap = new Map<Key, TableRowState>()
     const { dataKey, keyConfig, idMaps, disabledTree } = state
     const oldDataMap = state.rowMap
     const hidden = !!state.virtual
@@ -395,10 +395,10 @@ export function useStore(options: StoreOptions) {
       oldDataMap.get(TABLE_HEAD_KEY) ||
         ({
           key: TABLE_HEAD_KEY
-        } as RowState)
+        } as TableRowState)
     )
 
-    function parseRow(origin: Data[], result: RowState[], parent?: RowState) {
+    function parseRow(origin: Data[], result: TableRowState[], parent?: TableRowState) {
       for (let i = 0, len = origin.length; i < len; ++i) {
         const item = origin[i]
 
@@ -412,7 +412,7 @@ export function useStore(options: StoreOptions) {
           }
         }
 
-        let row: RowState
+        let row: TableRowState
 
         if (oldDataMap.has(key)) {
           row = oldDataMap.get(key)!
@@ -474,7 +474,7 @@ export function useStore(options: StoreOptions) {
     state.rowMap = rowMap
 
     if (!disabledTree) {
-      const rowData: RowState[] = []
+      const rowData: TableRowState[] = []
 
       for (const row of clonedData) {
         rowData.push(row)
@@ -498,39 +498,39 @@ export function useStore(options: StoreOptions) {
     state.pageSize = pageSize || 0
   }
 
-  function setRowClass(rowClass: ClassType | RowPropFn<ClassType>) {
+  function setRowClass(rowClass: ClassType | TableRowPropFn<ClassType>) {
     state.rowClass = rowClass ?? ''
   }
 
-  function setRowStyle(rowStyle: StyleType | RowPropFn<StyleType>) {
+  function setRowStyle(rowStyle: StyleType | TableRowPropFn<StyleType>) {
     state.rowStyle = rowStyle ?? ''
   }
 
-  function setRowAttrs(rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>) {
+  function setRowAttrs(rowAttrs: Record<string, any> | TableRowPropFn<Record<string, any>>) {
     state.rowAttrs = rowAttrs ?? null!
   }
 
-  function setCellClass(cellClass: ClassType | CellPropFn<ClassType>) {
+  function setCellClass(cellClass: ClassType | TableCellPropFn<ClassType>) {
     state.cellClass = cellClass ?? ''
   }
 
-  function setCellStyle(cellStyle: StyleType | CellPropFn<StyleType>) {
+  function setCellStyle(cellStyle: StyleType | TableCellPropFn<StyleType>) {
     state.cellStyle = cellStyle ?? ''
   }
 
-  function setCellAttrs(cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>) {
+  function setCellAttrs(cellAttrs: Record<string, any> | TableCellPropFn<Record<string, any>>) {
     state.cellAttrs = cellAttrs ?? null!
   }
 
-  function setHeadClass(headClass: ClassType | HeadPropFn<ClassType>) {
+  function setHeadClass(headClass: ClassType | TableHeadPropFn<ClassType>) {
     state.headClass = headClass ?? ''
   }
 
-  function setHeadStyle(headStyle: StyleType | HeadPropFn<StyleType>) {
+  function setHeadStyle(headStyle: StyleType | TableHeadPropFn<StyleType>) {
     state.headStyle = headStyle ?? ''
   }
 
-  function setHeadAttrs(headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>) {
+  function setHeadAttrs(headAttrs: Record<string, any> | TableHeadPropFn<Record<string, any>>) {
     state.headAttrs = headAttrs ?? null!
   }
 
@@ -675,7 +675,7 @@ export function useStore(options: StoreOptions) {
     state.customFilter = !!able
   }
 
-  function handleSort(key: Key, type: ParsedSorterOptions['type']) {
+  function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {
     if (state.sorters.has(key)) {
       if (state.singleSorter && type) {
         clearSort()
@@ -990,14 +990,14 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
+  function parseSorter(sorter: boolean | TableSorterOptions = false): ParsedTableSorterOptions {
     const raw = typeof sorter === 'boolean' ? { able: sorter } : sorter
     const { able = true, type = null, order = 0, method = null } = raw
 
     return { able, type, order, method }
   }
 
-  function parseFilter(filter?: FilterOptions | null): ParsedFilterOptions {
+  function parseFilter(filter?: TableFilterOptions | null): ParsedFilterOptions {
     filter = filter || { able: false, options: [] }
 
     const { able = true, multiple = false, active = null, method = null } = filter
@@ -1027,9 +1027,13 @@ export function useStore(options: StoreOptions) {
     return { able, options: formattedOptions, multiple, active, method }
   }
 
-  function filterData(filters: Map<Key, ParsedFilterOptions>, data: RowState[], isSingle: boolean) {
+  function filterData(
+    filters: Map<Key, ParsedFilterOptions>,
+    data: TableRowState[],
+    isSingle: boolean
+  ) {
     const usedFilter: ParsedFilterOptions[] = []
-    const filterData: RowState[] = []
+    const filterData: TableRowState[] = []
 
     for (const filter of filters.values()) {
       const { able, active, method } = filter
@@ -1067,15 +1071,15 @@ export function useStore(options: StoreOptions) {
   }
 
   function sortData(
-    sorters: Map<Key, ParsedSorterOptions>,
-    data: RowState[],
+    sorters: Map<Key, ParsedTableSorterOptions>,
+    data: TableRowState[],
     columns: TableColumnOptions[],
     isSingle: boolean
   ) {
     const usedSorter = []
 
     for (const [_key, sorter] of sorters) {
-      const key = _key as keyof RowState
+      const key = _key as keyof TableRowState
       const { able, type, order, method } = sorter
 
       if (able && type) {
@@ -1088,7 +1092,7 @@ export function useStore(options: StoreOptions) {
           order,
           type,
           method: method ?? undefined,
-          accessor(row: RowState) {
+          accessor(row: TableRowState) {
             if (typeof accessor === 'function') {
               return accessor(row.data, row.index)
             }
@@ -1107,7 +1111,7 @@ export function useStore(options: StoreOptions) {
     return sortByProps(data, usedSorter)
   }
 
-  function pageData(currentPage: number, pageSize: number, data: RowState[]) {
+  function pageData(currentPage: number, pageSize: number, data: TableRowState[]) {
     return pageSize > 0 ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data
   }
 

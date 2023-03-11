@@ -3,8 +3,8 @@
 ```ts
 type Key = string | number | symbol
 type Data = Record<string, any>
-type RowPropFn<P = any> = (data: Data, index: number) => P
-type DropType = 'before' | 'after' | 'none'
+type TableRowPropFn<P = any> = (data: Data, index: number) => P
+type TableRowDropType = 'before' | 'after' | 'none'
 
 interface TableKeyConfig {
   id?: string,
@@ -27,7 +27,7 @@ type ExpandRenderFn = (data: {
 
 type TableColumnType = 'order' | 'selection' | 'expand'
 
-type FilterOptions<D = Data, Val extends string | number = string | number> =
+type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
     options: (string | { value: Val, label?: string, active?: boolean })[],
@@ -43,18 +43,14 @@ type FilterOptions<D = Data, Val extends string | number = string | number> =
     method?: null | ((active: Val[], data: D) => boolean)
   }
 
-interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
-  options: { value: string | number, label: string, active: boolean }[]
-}
-
-interface SorterOptions<D = Data> {
+interface TableSorterOptions<D = Data> {
   able?: boolean,
   type?: null | 'asc' | 'desc',
   order?: number, // 优先级
   method?: null | ((prev: D, next: D) => number)
 }
 
-interface BaseColumn<D = Data, Val extends string | number = string | number> {
+interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
   key?: keyof D,
   metaData?: Data,
@@ -63,8 +59,8 @@ interface BaseColumn<D = Data, Val extends string | number = string | number> {
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
-  filter?: FilterOptions<D, Val>,
-  sorter?: boolean | SorterOptions<D>,
+  filter?: TableFilterOptions<D, Val>,
+  sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
   accessor?: Accessor<D, Val>,
@@ -72,57 +68,57 @@ interface BaseColumn<D = Data, Val extends string | number = string | number> {
   headRenderer?: RenderFn
 }
 
-interface OrderColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+interface TableOrderColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-interface SelectionColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-interface ExpandColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+interface TableExpandColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-type TypeColumn<D = Data, Val extends string | number = string | number> =
-  | OrderColumn<D, Val>
-  | SelectionColumn<D, Val>
-  | ExpandColumn<D, Val>
+type TableTypeColumn<D = Data, Val extends string | number = string | number> =
+  | TableOrderColumn<D, Val>
+  | TableSelectionColumn<D, Val>
+  | TableExpandColumn<D, Val>
 type TableColumnOptions<D = Data, Val extends string | number = string | number> =
-  | BaseColumn<D, Val>
-  | TypeColumn<D, Val>
+  | TableBaseColumn<D, Val>
+  | TableTypeColumn<D, Val>
 type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
 
-type CellPropFn<P = any> = (
+type TableCellPropFn<P = any> = (
   data: Data,
   column: ColumnWithKey,
   rowIndex: number,
   columnIndex: number
 ) => P
-type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
+type TableHeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
 
 type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
   'name' | 'key' | 'metaData'
 >
-type FilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+type TableFilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
   D,
   Val
 > & {
   active: Val | Val[]
 }
-type SorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+type TableSorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
   D,
   Val
 > & {
@@ -157,46 +153,46 @@ interface TableHeadPayload {
 
 ### Table Props
 
-| Name            | Type                                                     | Description                                                                                                                                           | Default        | Since   |
-| --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- |
-| columns         | `TableColumnOptions<any, any>[]`                         | Table column configuration, refer to TableColumn properties below                                                                                     | `[]`           | -       |
-| data            | `Data[]`                                                 | Table data source                                                                                                                                     | `[]`           | -       |
-| data-key        | `string`                                                 | The index field of the data source, the value of this field needs to be unique in the data source                                                     | `'id'`         | -       |
-| width           | `number`                                                 | The width of the table, used when there are fixed columns                                                                                             | `null`         | -       |
-| height          | `number`                                                 | The height of the table, beyond which it will become scrollable                                                                                       | `null`         | -       |
-| row-class       | `ClassType \| RowPropFn<ClassType>`                      | Custom class name for row                                                                                                                             | `null`         | -       |
-| row-style       | `StyleType \| RowPropFn<StyleType>`                      | Custom style for row                                                                                                                                  | `null`         | `2.0.1` |
-| row-attrs       | `Record<string, any> \| RowPropFn<Record<string, any>>`  | Custom attributes of row                                                                                                                              | `null`         | `2.0.1` |
-| cell-class      | `ClassType \| CellPropFn<ClassType>`                     | Custom class name of cell                                                                                                                             | `null`         | `2.0.1` |
-| cell-style      | `StyleType \| CellPropFn<StyleType>`                     | Custom style for cell                                                                                                                                 | `null`         | `2.0.1` |
-| cell-attrs      | `Record<string, any> \| CellPropFn<Record<string, any>>` | Custom attributes of cell                                                                                                                             | `null`         | `2.0.1` |
-| head-class      | `ClassType \| HeadPropFn<ClassType>`                     | Custom class name of the head cell                                                                                                                    | `null`         | `2.0.1` |
-| head-style      | `StyleType \| HeadPropFn<StyleType>`                     | Custom style for head cell                                                                                                                            | `null`         | `2.0.1` |
-| head-attrs      | `Record<string, any> \| HeadPropFn<Record<string, any>>` | Custom attributes for head cell                                                                                                                       | `null`         | `2.0.1` |
-| stripe          | `boolean`                                                | Set whether to apply zebra stripes to the table                                                                                                       | `false`        | -       |
-| border          | `boolean`                                                | Set whether the table has an outer border and a vertical border                                                                                       | `false`        | -       |
-| highlight       | `boolean`                                                | Set whether the table row is highlighted when the mouse moves in                                                                                      | `false`        | -       |
-| use-y-bar       | `boolean`                                                | Set whether the table uses vertical scroll bar                                                                                                        | `false`        | -       |
-| bar-fade        | `number`                                                 | Set the fade time of the scroll bar, if it is less than `300`, turn off the fade effect                                                               | `1500`         | -       |
-| scroll-delta-y  | `number`                                                 | Set the vertical scroll distance of the table                                                                                                         | `20`           | -       |
-| row-draggable   | `boolean`                                                | Set whether the table row can be dragged and sorted                                                                                                   | `false`        | -       |
-| row-height      | `number`                                                 | Set the row height of the table, if not set, the table row height will be dynamically calculated                                                      | `null`         | -       |
-| render-count    | `number`                                                 | Set the maximum number of rows to be rendered in the table, usually used for rendering a large amount of data, and a fixed row height needs to be set | `null`         | -       |
-| scroll-class    | `ScrollClass`                                            | Set the custom type of each scroll component of the table                                                                                             | `{}`           | -       |
-| expand-renderer | `ExpandRenderFn`                                         | Set the rendering method of row expansion content                                                                                                     | `null`         | -       |
-| current-page    | `number`                                                 | Set the data page currently displayed in the table                                                                                                    | `1`            | -       |
-| page-size       | `number`                                                 | Set the amount of data per page of the table, when it is `0`, paging is disabled                                                                      | `0`            | -       |
-| transparent     | `boolean`                                                | Set whether the table is transparent, this property has lower priority than other built-in style properties                                           | `false`        | -       |
-| empty-text      | `string`                                                 | Set the prompt when the table is empty                                                                                                                | `locale.empty` | -       |
-| single-sorter   | `boolean`                                                | After setting, it will limit the table to only one column to enable sorting                                                                           | `false`        | -       |
-| single-filter   | `boolean`                                                | After setting, it will limit the table to only one column to enable filtering                                                                         | `false`        | -       |
-| locale          | `LocaleConfig['table']`                                  | Set the locale config                                                                                                                                 | `null`         | `2.1.0` |
-| custom-sorter   | `boolean`                                                | Set whether use custom sorter, will dispatch event without internal sorting if enabled                                                                | `false`        | `2.1.4` |
-| custom-filter   | `boolean`                                                | Set whether use custom filter, will dispatch event without internal filtering if enabled                                                              | `false`        | `2.1.4` |
-| key-config      | `TableKeyConfig`                                         | Set the key names when parsing `data`                                                                                                                 | `{}`           | `2.1.6` |
-| disabled-tree   | `boolean`                                                | Set whether to disable automatic parsing tree data                                                                                                    | `false`        | `2.1.6` |
-| row-indent      | `string \| number`                                       | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6` |
-| no-cascaded     | `boolean`                                                | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6` |
+| Name            | Type                                                          | Description                                                                                                                                           | Default        | Since   |
+| --------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- |
+| columns         | `TableColumnOptions<any, any>[]`                              | Table column configuration, refer to TableColumn properties below                                                                                     | `[]`           | -       |
+| data            | `Data[]`                                                      | Table data source                                                                                                                                     | `[]`           | -       |
+| data-key        | `string`                                                      | The index field of the data source, the value of this field needs to be unique in the data source                                                     | `'id'`         | -       |
+| width           | `number`                                                      | The width of the table, used when there are fixed columns                                                                                             | `null`         | -       |
+| height          | `number`                                                      | The height of the table, beyond which it will become scrollable                                                                                       | `null`         | -       |
+| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | Custom class name for row                                                                                                                             | `null`         | -       |
+| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | Custom style for row                                                                                                                                  | `null`         | `2.0.1` |
+| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | Custom attributes of row                                                                                                                              | `null`         | `2.0.1` |
+| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | Custom class name of cell                                                                                                                             | `null`         | `2.0.1` |
+| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | Custom style for cell                                                                                                                                 | `null`         | `2.0.1` |
+| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | Custom attributes of cell                                                                                                                             | `null`         | `2.0.1` |
+| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | Custom class name of the head cell                                                                                                                    | `null`         | `2.0.1` |
+| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | Custom style for head cell                                                                                                                            | `null`         | `2.0.1` |
+| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | Custom attributes for head cell                                                                                                                       | `null`         | `2.0.1` |
+| stripe          | `boolean`                                                     | Set whether to apply zebra stripes to the table                                                                                                       | `false`        | -       |
+| border          | `boolean`                                                     | Set whether the table has an outer border and a vertical border                                                                                       | `false`        | -       |
+| highlight       | `boolean`                                                     | Set whether the table row is highlighted when the mouse moves in                                                                                      | `false`        | -       |
+| use-y-bar       | `boolean`                                                     | Set whether the table uses vertical scroll bar                                                                                                        | `false`        | -       |
+| bar-fade        | `number`                                                      | Set the fade time of the scroll bar, if it is less than `300`, turn off the fade effect                                                               | `1500`         | -       |
+| scroll-delta-y  | `number`                                                      | Set the vertical scroll distance of the table                                                                                                         | `20`           | -       |
+| row-draggable   | `boolean`                                                     | Set whether the table row can be dragged and sorted                                                                                                   | `false`        | -       |
+| row-height      | `number`                                                      | Set the row height of the table, if not set, the table row height will be dynamically calculated                                                      | `null`         | -       |
+| render-count    | `number`                                                      | Set the maximum number of rows to be rendered in the table, usually used for rendering a large amount of data, and a fixed row height needs to be set | `null`         | -       |
+| scroll-class    | `ScrollClass`                                                 | Set the custom type of each scroll component of the table                                                                                             | `{}`           | -       |
+| expand-renderer | `ExpandRenderFn`                                              | Set the rendering method of row expansion content                                                                                                     | `null`         | -       |
+| current-page    | `number`                                                      | Set the data page currently displayed in the table                                                                                                    | `1`            | -       |
+| page-size       | `number`                                                      | Set the amount of data per page of the table, when it is `0`, paging is disabled                                                                      | `0`            | -       |
+| transparent     | `boolean`                                                     | Set whether the table is transparent, this property has lower priority than other built-in style properties                                           | `false`        | -       |
+| empty-text      | `string`                                                      | Set the prompt when the table is empty                                                                                                                | `locale.empty` | -       |
+| single-sorter   | `boolean`                                                     | After setting, it will limit the table to only one column to enable sorting                                                                           | `false`        | -       |
+| single-filter   | `boolean`                                                     | After setting, it will limit the table to only one column to enable filtering                                                                         | `false`        | -       |
+| locale          | `LocaleConfig['table']`                                       | Set the locale config                                                                                                                                 | `null`         | `2.1.0` |
+| custom-sorter   | `boolean`                                                     | Set whether use custom sorter, will dispatch event without internal sorting if enabled                                                                | `false`        | `2.1.4` |
+| custom-filter   | `boolean`                                                     | Set whether use custom filter, will dispatch event without internal filtering if enabled                                                              | `false`        | `2.1.4` |
+| key-config      | `TableKeyConfig`                                              | Set the key names when parsing `data`                                                                                                                 | `{}`           | `2.1.6` |
+| disabled-tree   | `boolean`                                                     | Set whether to disable automatic parsing tree data                                                                                                    | `false`        | `2.1.6` |
+| row-indent      | `string \| number`                                            | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6` |
+| no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6` |
 
 ### Table Events
 
@@ -215,7 +211,7 @@ interface TableHeadPayload {
 | row-drag-over    | Emitted when a row is being dragged, returns the data of the previous row                                                            | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
 | row-drop         | Emitted when a row is dropped by another dragged row, returns the data and drop type of the current row (before and after)           | `(data: Record<string, unknown>, dropType?: 'before ' \| 'after', event: DragEvent)`    | -       |
 | row-drag-end     | Emitted when the row ends dragging, returns the data of the previous row and the data of all rows                                    | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -       |
-| row-filter       | Emitted when table data filtering occurs, returns the column information that participated in the filtering and the filtered data    | `(profiles: FilterProfile[], filteredRow: Data[])`                                      | -       |
+| row-filter       | Emitted when table data filtering occurs, returns the column information that participated in the filtering and the filtered data    | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -       |
 | row-sort         | Emitted when the table data is sorted, returns the column information and sorted data that participated in the sorting               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -       |
 | cell-enter       | Triggered when the mouse moves into a cell, returns row data, row index, row position index, column data and column index            | `(payload: TableCellPayload)`                                                           | `2.0.1` |
 | cell-leave       | Triggered when the mouse moves out of the cell, returns row data, row index, row position index, column data and column index        | `(payload: TableCellPayload)`                                                           | `2.0.1` |
@@ -258,8 +254,8 @@ interface TableHeadPayload {
 | attrs         | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1` |
 | type          | `'order' \| 'selection' \| 'expand'`   | Set built-in type of the column                                                                                                              | `null`      | -       |
 | width         | `number`                               | Set column width                                                                                                                             | `null`      | -       |
-| filter        | `FilterOptions<any, any>`              | Configure filter for the column                                                                                                              | `null`      | -       |
-| sorter        | `boolean \| SorterOptions<any>`        | Configure the sorter for the column                                                                                                          | `null`      | -       |
+| filter        | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                                              | `null`      | -       |
+| sorter        | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                                                          | `null`      | -       |
 | order         | `number`                               | The rendering order of the column                                                                                                            | `0`         | -       |
 | renderer      | `ColumnRenderFn`                       | Custom render function                                                                                                                       | `null`      | -       |
 | head-renderer | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -       |

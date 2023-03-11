@@ -19,7 +19,7 @@ import { useNameHelper } from '@vexip-ui/config'
 import { TABLE_STORE, TABLE_HEAD_KEY } from './symbol'
 
 import type { PropType } from 'vue'
-import type { RowState } from './symbol'
+import type { TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableHead',
@@ -69,7 +69,7 @@ export default defineComponent({
       }
     })
     const headRow = computed(
-      () => state.rowMap.get(TABLE_HEAD_KEY) || ({ key: TABLE_HEAD_KEY } as RowState)
+      () => state.rowMap.get(TABLE_HEAD_KEY) || ({ key: TABLE_HEAD_KEY } as TableRowState)
     )
 
     return {

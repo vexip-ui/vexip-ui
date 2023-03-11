@@ -11,7 +11,7 @@
 import { ref } from 'vue'
 import { defineColumns } from 'vexip-ui'
 
-import type { SorterProfile } from 'vexip-ui'
+import type { TableSorterProfile } from 'vexip-ui'
 
 const columns = ref(
   defineColumns([
@@ -79,7 +79,7 @@ const data = ref([
   }
 ])
 
-function handleRowSort(profiles: SorterProfile[]) {
+function handleRowSort(profiles: TableSorterProfile[]) {
   console.info(profiles)
 }
 </script>

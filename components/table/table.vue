@@ -143,7 +143,7 @@ import type {
   Key,
   TableKeyConfig,
   TableColumnOptions,
-  RowState,
+  TableRowState,
   RowInstance,
   TableRowPayload,
   TableCellPayload,
@@ -661,9 +661,9 @@ export default defineComponent({
     }
 
     let dragState: {
-      draggingRow: RowState,
+      draggingRow: TableRowState,
       tableRect: DOMRect,
-      willDropRow: RowState | null,
+      willDropRow: TableRowState | null,
       dropType: DropType
     } | null
 
@@ -717,7 +717,7 @@ export default defineComponent({
       emitEvent(props.onRowDragOver, rowInstance.row.data, event)
     }
 
-    function isLeftInsideRight(left: RowState, right: RowState) {
+    function isLeftInsideRight(left: TableRowState, right: TableRowState) {
       if (!left || !right) return true
 
       while (left) {
@@ -740,7 +740,7 @@ export default defineComponent({
       if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
 
       let currentKey: Key
-      let parent: RowState | null
+      let parent: TableRowState | null
 
       if (draggingRow) {
         parent = getParentRow(draggingRow.key)

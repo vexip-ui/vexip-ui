@@ -6,8 +6,8 @@ import type { TableStore } from './store'
 
 export type Key = string | number | symbol
 export type Data = Record<string, any>
-export type RowPropFn<P = any> = (data: Data, index: number) => P
-export type RowDropType = 'before' | 'after' | 'inner'
+export type TableRowPropFn<P = any> = (data: Data, index: number) => P
+export type TableRowDropType = 'before' | 'after' | 'inner'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -38,7 +38,7 @@ export type ExpandRenderFn = (data: {
 
 export type TableColumnType = 'order' | 'selection' | 'expand'
 
-export type FilterOptions<D = Data, Val extends string | number = string | number> =
+export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
     options: (string | { value: Val, label?: string, active?: boolean })[],
@@ -54,20 +54,20 @@ export type FilterOptions<D = Data, Val extends string | number = string | numbe
     method?: null | ((active: Val[], data: D) => boolean)
   }
 
-export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
+export interface ParsedFilterOptions extends Omit<Required<TableFilterOptions>, 'options'> {
   options: { value: string | number, label: string, active: boolean }[]
 }
 
-export interface SorterOptions<D = Data> {
+export interface TableSorterOptions<D = Data> {
   able?: boolean,
   type?: null | 'asc' | 'desc',
   order?: number, // 优先级
   method?: null | ((prev: D, next: D) => number)
 }
 
-export type ParsedSorterOptions = Required<SorterOptions>
+export type ParsedTableSorterOptions = Required<TableSorterOptions>
 
-export interface BaseColumn<D = Data, Val extends string | number = string | number> {
+export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
   key?: keyof D,
   metaData?: Data,
@@ -76,8 +76,8 @@ export interface BaseColumn<D = Data, Val extends string | number = string | num
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
-  filter?: FilterOptions<D, Val>,
-  sorter?: boolean | SorterOptions<D>,
+  filter?: TableFilterOptions<D, Val>,
+  sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
   accessor?: Accessor<D, Val>,
@@ -85,33 +85,33 @@ export interface BaseColumn<D = Data, Val extends string | number = string | num
   headRenderer?: RenderFn
 }
 
-export interface OrderColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-export interface SelectionColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+export interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-export interface ExpandColumn<D = Data, Val extends string | number = string | number>
-  extends BaseColumn<D, Val> {
+export interface TableExpandColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-export type TypeColumn<D = Data, Val extends string | number = string | number> =
-  | OrderColumn<D, Val>
-  | SelectionColumn<D, Val>
-  | ExpandColumn<D, Val>
+export type TableTypeColumn<D = Data, Val extends string | number = string | number> =
+  | TableOrderColumn<D, Val>
+  | TableSelectionColumn<D, Val>
+  | TableExpandColumn<D, Val>
 export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
-  | BaseColumn<D, Val>
-  | TypeColumn<D, Val>
+  | TableBaseColumn<D, Val>
+  | TableTypeColumn<D, Val>
 export type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
@@ -129,33 +129,33 @@ export type ColumnRenderFn = (data: {
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
 
-export type CellPropFn<P = any> = (
+export type TableCellPropFn<P = any> = (
   data: Data,
   column: ColumnWithKey,
   rowIndex: number,
   columnIndex: number
 ) => P
-export type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
+export type TableHeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
 
 export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
   'name' | 'key' | 'metaData'
 >
-export type FilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
-  D,
-  Val
-> & {
+export type TableFilterProfile<
+  D = Data,
+  Val extends string | number = string | number
+> = ColumnProfile<D, Val> & {
   active: Val | Val[]
 }
-export type SorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
-  D,
-  Val
-> & {
+export type TableSorterProfile<
+  D = Data,
+  Val extends string | number = string | number
+> = ColumnProfile<D, Val> & {
   type: 'asc' | 'desc',
   order: number
 }
 
-export interface RowState {
+export interface TableRowState {
   key: Key,
   index: number,
   hidden: boolean,
@@ -166,7 +166,7 @@ export interface RowState {
   expanded: boolean,
   expandHeight: number,
   parent?: Key,
-  children: RowState[],
+  children: TableRowState[],
   depth: number,
   treeExpanded: boolean,
   partial: boolean,
@@ -176,15 +176,15 @@ export interface RowState {
 export interface StoreOptions {
   columns: TableColumnOptions[],
   data: Data[],
-  rowClass: ClassType | RowPropFn<ClassType>,
-  rowStyle: StyleType | RowPropFn<StyleType>,
-  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>,
-  cellClass: ClassType | CellPropFn<ClassType>,
-  cellStyle: StyleType | CellPropFn<StyleType>,
-  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>,
-  headClass: ClassType | HeadPropFn<ClassType>,
-  headStyle: StyleType | HeadPropFn<StyleType>,
-  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>,
+  rowClass: ClassType | TableRowPropFn<ClassType>,
+  rowStyle: StyleType | TableRowPropFn<StyleType>,
+  rowAttrs: Record<string, any> | TableRowPropFn<Record<string, any>>,
+  cellClass: ClassType | TableCellPropFn<ClassType>,
+  cellStyle: StyleType | TableCellPropFn<StyleType>,
+  cellAttrs: Record<string, any> | TableCellPropFn<Record<string, any>>,
+  headClass: ClassType | TableHeadPropFn<ClassType>,
+  headStyle: StyleType | TableHeadPropFn<StyleType>,
+  headAttrs: Record<string, any> | TableHeadPropFn<Record<string, any>>,
   dataKey: string,
   highlight: boolean,
   currentPage: number,
@@ -208,16 +208,16 @@ export interface StoreOptions {
 
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
-  rowData: RowState[],
+  rowData: TableRowState[],
   width: number,
   rightFixedColumns: ColumnWithKey[],
   leftFixedColumns: ColumnWithKey[],
-  rowMap: Map<Key, RowState>,
+  rowMap: Map<Key, TableRowState>,
   idMaps: WeakMap<Data, Key>,
   checkedAll: boolean,
   partial: boolean,
   widths: Map<Key, number>,
-  sorters: Map<Key, ParsedSorterOptions>,
+  sorters: Map<Key, ParsedTableSorterOptions>,
   filters: Map<Key, ParsedFilterOptions>,
   bodyScroll: number,
   padTop: number,
@@ -225,13 +225,13 @@ export interface StoreState extends StoreOptions {
   endRow: number,
   dragging: boolean,
   heightBITree: BITree,
-  virtualData: RowState[],
+  virtualData: TableRowState[],
   totalHeight: number
 }
 
 export interface RowInstance {
   el?: HTMLElement | null,
-  row: RowState
+  row: TableRowState
 }
 
 export interface TableRowPayload {

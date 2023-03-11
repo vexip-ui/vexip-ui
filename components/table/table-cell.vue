@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isTypeColumn(column)"
+    v-if="isTableTypeColumn(column)"
     :class="className"
     role="cell"
     :style="style"
@@ -114,11 +114,11 @@ import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  RowState,
-  OrderColumn,
-  SelectionColumn,
-  ExpandColumn,
-  TypeColumn,
+  TableRowState,
+  TableOrderColumn,
+  TableSelectionColumn,
+  TableExpandColumn,
+  TableTypeColumn,
   ColumnWithKey,
   TableAction
 } from './symbol'
@@ -138,7 +138,7 @@ export default defineComponent({
   },
   props: {
     row: {
-      type: Object as PropType<RowState>,
+      type: Object as PropType<TableRowState>,
       default: () => ({})
     },
     rowIndex: {
@@ -179,7 +179,7 @@ export default defineComponent({
       return [
         nh.be('cell'),
         {
-          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type),
+          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TableTypeColumn).type),
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
         props.column.className || null,
@@ -229,19 +229,19 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
 
-    function isSelection(column: unknown): column is SelectionColumn {
-      return (column as TypeColumn).type === 'selection'
+    function isSelection(column: unknown): column is TableSelectionColumn {
+      return (column as TableTypeColumn).type === 'selection'
     }
 
-    function isOrder(column: unknown): column is OrderColumn {
-      return (column as TypeColumn).type === 'order'
+    function isOrder(column: unknown): column is TableOrderColumn {
+      return (column as TableTypeColumn).type === 'order'
     }
 
-    function isExpand(column: unknown): column is ExpandColumn {
-      return (column as TypeColumn).type === 'expand'
+    function isExpand(column: unknown): column is TableExpandColumn {
+      return (column as TableTypeColumn).type === 'expand'
     }
 
-    function isTypeColumn(column: unknown): column is TypeColumn {
+    function isTableTypeColumn(column: unknown): column is TableTypeColumn {
       return isSelection(column) || isOrder(column) || isExpand(column)
     }
 
@@ -286,7 +286,7 @@ export default defineComponent({
       }
     }
 
-    function handleCheckRow(row: RowState, event: MouseEvent) {
+    function handleCheckRow(row: TableRowState, event: MouseEvent) {
       if (!disableCheckRows.value.has(row.key)) {
         const checked = !row.checked
         const { data, key, index } = row
@@ -296,7 +296,7 @@ export default defineComponent({
       }
     }
 
-    function handleExpandRow(row: RowState, event: MouseEvent) {
+    function handleExpandRow(row: TableRowState, event: MouseEvent) {
       if (!disableExpandRows.value.has(row.key)) {
         const expanded = !row.expanded
         const { data, key, index } = row
@@ -306,7 +306,7 @@ export default defineComponent({
       }
     }
 
-    function handleExpandTree(row: RowState) {
+    function handleExpandTree(row: TableRowState) {
       if (!row.children?.length) return
 
       const expanded = !row.treeExpanded
@@ -330,7 +330,7 @@ export default defineComponent({
       isSelection,
       isOrder,
       isExpand,
-      isTypeColumn,
+      isTableTypeColumn,
       handleMouseEnter,
       handleMouseLeave,
       handleClick,

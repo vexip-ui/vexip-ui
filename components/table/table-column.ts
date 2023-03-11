@@ -4,7 +4,7 @@ import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTION } from './symbol'
 
-import type { Data, TableColumnType, RowState, ColumnWithKey } from './symbol'
+import type { Data, TableColumnType, TableRowState, ColumnWithKey } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 
@@ -145,7 +145,7 @@ export default defineComponent({
           return isNull(result) ? '' : String(result)
         }
 
-        const result = (row as RowState)[options.key as unknown as keyof RowState]
+        const result = (row as TableRowState)[options.key as unknown as keyof TableRowState]
 
         return isNull(result) ? '' : String(result)
       }
