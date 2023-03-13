@@ -621,6 +621,10 @@ export default defineComponent({
       return collectedFiles
     }
 
+    function preventDefault(event: Event) {
+      event.preventDefault()
+    }
+
     function renderNormalAction() {
       return !props.allowDrag && !props.disabledClick
         ? (
@@ -726,6 +730,7 @@ export default defineComponent({
               accept={acceptString.value}
               webkitdirectory={props.directory}
               onChange={handleInputChange}
+              onSubmit={preventDefault}
             />
           )}
           {props.image

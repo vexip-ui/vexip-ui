@@ -58,6 +58,7 @@
           tabindex="-1"
           role="combobox"
           aria-autocomplete="list"
+          @submit.prevent
           @input="handleInput"
           @keydown.enter="handleEnter"
           @keydown="handleKeyDown"

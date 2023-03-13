@@ -328,6 +328,10 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
+    function preventDefault(event: Event) {
+      event.preventDefault()
+    }
+
     const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
 
     function renderPrefix() {
@@ -462,6 +466,7 @@ export default defineComponent({
             onKeypress={handleKeyPress}
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
+            onSubmit={preventDefault}
           />
           {renderSuffix()}
           {props.maxLength > 0 ? renderCount() : null}

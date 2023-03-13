@@ -37,6 +37,7 @@
       :class="nh.be('input')"
       :checked="currentValue"
       :disabled="isDisabled"
+      @submit.prevent
       @change="handleChange()"
     />
   </label>

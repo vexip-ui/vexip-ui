@@ -30,6 +30,7 @@
       :aria-valuenow="preciseNumber"
       :aria-valuemin="props.min !== -Infinity ? props.min : undefined"
       :aria-valuemax="props.max !== Infinity ? props.max : undefined"
+      @submit.prevent
       @blur="handleBlur"
       @focus="handleFocus"
       @keypress="handleKeyPress"

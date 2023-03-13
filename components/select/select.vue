@@ -104,6 +104,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
               />
@@ -123,6 +124,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                @submit.prevent
                 @input="handleFilterInput"
               />
             </template>

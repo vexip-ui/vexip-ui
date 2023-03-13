@@ -21,6 +21,7 @@
       :checked="currentValue === props.label"
       :disabled="isDisabled || (isLoading && isLoadingLock)"
       :tabindex="props.tabIndex"
+      @submit.prevent
       @change="handleChange"
     />
   </label>
