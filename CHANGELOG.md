@@ -1,3 +1,15 @@
+## [2.1.8](https://github.com/vexip-ui/vexip-ui/compare/v2.1.7...v2.1.8) (2023-03-13)
+
+### Bug Fixes
+
+- **number-input:** expected render vaild unit of number ([e7612b3](https://github.com/vexip-ui/vexip-ui/commit/e7612b3f875c10bd772b34c645ee0ef1258ab538)), closes [#281](https://github.com/vexip-ui/vexip-ui/issues/281)
+- prevent submit event of inner input elements ([66ce737](https://github.com/vexip-ui/vexip-ui/commit/66ce737cf8d9c3d9702f62094a90b6cb5c33c0a5)), closes [#275](https://github.com/vexip-ui/vexip-ui/issues/275)
+- **scroll:** incorrect extra content z-index ([8bfb9f4](https://github.com/vexip-ui/vexip-ui/commit/8bfb9f4f020a78949a53c57e12b0b95986dcd334))
+
+### Features
+
+- **number-input:** support custom empty value type ([a07b245](https://github.com/vexip-ui/vexip-ui/commit/a07b24595ab113dbb3ae7201ec69ad15f8034d69))
+
 ## [2.1.7](https://github.com/vexip-ui/vexip-ui/compare/v2.1.6...v2.1.7) (2023-03-11)
 
 ### Bug Fixes
