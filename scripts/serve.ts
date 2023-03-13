@@ -2,7 +2,7 @@ import { resolve } from 'node:path'
 import fs from 'fs-extra'
 import minimist from 'minimist'
 import { format } from 'prettier'
-import { rootDir, prettierConfig, logger, run, specifyComponent } from './utils'
+import { rootDir, prettierConfig, logger, run, specifyComponent, queryIdlePort } from './utils'
 
 const { readdirSync, statSync, existsSync, writeFileSync } = fs
 
@@ -19,7 +19,7 @@ const args = minimist<{
 }>(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s
-const port = args.port || args.p || '8008'
+const argPort = args.port || args.p || '8008'
 const prodMode = args.prod
 const lang = args.lang || args.l
 const theme = args.theme || args.t
@@ -28,7 +28,11 @@ const langs = ['zh-CN', 'en-US']
 
 const devDir = resolve(rootDir, 'dev-server')
 
+let port = parseFloat(argPort) || 8008
+
 async function main() {
+  port = await queryIdlePort(port)
+
   if (theme) {
     await serveTheme()
   } else {
@@ -89,7 +93,7 @@ async function serveComponent() {
       NODE_ENV: prodMode ? 'production' : 'development',
       TARGET: target,
       DEMOS: JSON.stringify(demos),
-      PORT: port,
+      PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
       THEME: theme ? 'true' : ''
     }
@@ -102,7 +106,7 @@ async function serveTheme() {
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',
-      PORT: port,
+      PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
       THEME: 'true'
     }
