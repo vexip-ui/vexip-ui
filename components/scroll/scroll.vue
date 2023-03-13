@@ -9,6 +9,9 @@
     @wheel.exact="handleWheel($event, mode === 'horizontal-exact' ? 'horizontal' : 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
+    <div :class="nh.be('extra')" :style="extraStyle">
+      <slot name="extra" v-bind="getSlotParams()"></slot>
+    </div>
     <ResizeObserver throttle :on-resize="handleResize">
       <component
         :is="props.scrollTag || 'div'"
@@ -21,9 +24,6 @@
         <slot v-bind="getSlotParams()"></slot>
       </component>
     </ResizeObserver>
-    <div :class="nh.be('extra')" :style="extraStyle">
-      <slot name="extra" v-bind="getSlotParams()"></slot>
-    </div>
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
