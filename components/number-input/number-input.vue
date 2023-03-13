@@ -105,7 +105,9 @@ import { numberInputProps } from './props'
 
 type InputEventType = 'input' | 'change'
 
+const numberRE = /^-?[0-9]*\.?[0-9]*$/
 const isNullOrNaN = (value: unknown) => isNull(value) || Number.isNaN(value)
+const isEmpty = (value: unknown) => !value && value !== 0
 
 export default defineComponent({
   name: 'NumberInput',
@@ -173,7 +175,7 @@ export default defineComponent({
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
-    const currentValue = ref(props.value)
+    const currentValue = ref<string | number>(props.value)
     const inputting = ref(false)
 
     const inputControl = ref<HTMLInputElement>()
@@ -207,7 +209,7 @@ export default defineComponent({
       }
     })
 
-    let lastValue: number | null = props.value
+    let lastValue = props.value
 
     const className = computed(() => {
       const [display, fade] = (props.controlType || 'right').split('-')
@@ -252,14 +254,12 @@ export default defineComponent({
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
-      return !isNullOrNaN(currentValue.value) && currentValue.value >= props.max
+      return !isNullOrNaN(currentValue.value) && toNumber(currentValue.value) >= props.max
     })
     const minusDisabled = computed(() => {
-      return !isNullOrNaN(currentValue.value) && currentValue.value <= props.min
+      return !isNullOrNaN(currentValue.value) && toNumber(currentValue.value) <= props.min
     })
-    const hasValue = computed(() => {
-      return currentValue.value || currentValue.value === 0
-    })
+    const hasValue = computed(() => !!(currentValue.value || currentValue.value === 0))
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
@@ -368,9 +368,9 @@ export default defineComponent({
       const type = event.type as InputEventType
       const stringValue = (event.target as HTMLInputElement).value
 
-      let value = stringValue
+      let value = stringValue.trim()
 
-      if (!/^-?[0-9]*\.?[0-9]*$/.test(stringValue)) {
+      if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
         const floatValue = parseFloat(stringValue)
 
         if (Number.isNaN(floatValue)) {
@@ -384,12 +384,14 @@ export default defineComponent({
 
       inputting.value = type === 'input'
 
-      setValue(toNumber(value), type)
+      setValue(value, type)
     }
 
-    function setValue(value: number, type: InputEventType) {
+    function setValue(value: string | number, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = boundRange(value, props.min, props.max)
+        currentValue.value = isEmpty(value)
+          ? NaN
+          : boundRange(toNumber(value), props.min, props.max)
       } else {
         currentValue.value = value
       }
@@ -398,26 +400,28 @@ export default defineComponent({
     }
 
     function emitChangeEvent(type: InputEventType) {
+      const value = isEmpty(currentValue.value) ? NaN : toNumber(currentValue.value)
+
       type = type === 'input' ? 'input' : 'change'
 
       if (type === 'change') {
-        if (lastValue === currentValue.value) return
+        if (lastValue === value) return
 
-        lastValue = currentValue.value
+        lastValue = value
 
-        !props.sync && setFieldValue(currentValue.value!)
-        emitEvent(props.onChange, currentValue.value)
+        !props.sync && setFieldValue(value)
+        emitEvent(props.onChange, value)
 
         if (!props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       } else {
-        props.sync && setFieldValue(currentValue.value!)
-        emitEvent(props.onInput, currentValue.value!)
+        props.sync && setFieldValue(value)
+        emitEvent(props.onInput, value)
 
         if (props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       }
