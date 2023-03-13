@@ -170,7 +170,8 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: 'pulse-in',
       sync: false,
-      controlType: 'right'
+      controlType: 'right',
+      emptyType: 'NaN'
     })
 
     const nh = useNameHelper('number-input')
@@ -249,8 +250,8 @@ export default defineComponent({
     const formattedValue = computed(() => {
       if (typeof preciseNumber.value !== 'number') return preciseNumber.value ?? ''
 
-      return typeof props.formatter === 'function'
-        ? props.formatter(preciseNumber.value)
+      return !inputting.value && typeof props.formatter === 'function'
+        ? props.formatter(preciseNumber.value as number)
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
@@ -399,8 +400,19 @@ export default defineComponent({
       emitChangeEvent(type)
     }
 
+    function getEmptyValue() {
+      switch (props.emptyType) {
+        case 'undefined':
+          return undefined! as number
+        case 'null':
+          return null! as number
+        default:
+          return NaN
+      }
+    }
+
     function emitChangeEvent(type: InputEventType) {
-      const value = isEmpty(currentValue.value) ? NaN : toNumber(currentValue.value)
+      const value = isEmpty(currentValue.value) ? getEmptyValue() : toNumber(currentValue.value)
 
       type = type === 'input' ? 'input' : 'change'
 
@@ -431,7 +443,7 @@ export default defineComponent({
       setValue(NaN, 'change')
 
       if (props.sync) {
-        emit('update:value', currentValue.value)
+        emit('update:value', getEmptyValue())
         validateField()
       }
 

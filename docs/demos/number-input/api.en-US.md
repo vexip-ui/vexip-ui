@@ -2,6 +2,7 @@
 
 ```ts
 type NumberInputControlType = 'right' | 'left' | 'right-fade' | 'left-fade' | 'none'
+type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 ```
 
 ### NumberInput Props
@@ -37,6 +38,7 @@ type NumberInputControlType = 'right' | 'left' | 'right-fade' | 'left-fade' | 'n
 | sync           | `boolean`                                        | Set whether sync input mode                                                 | `false`     | `2.0.6`  |
 | control-type   | `NumberInputControlType`                         | Set the control type                                                        | `'right'`   | `2.0.17` |
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                       | `null`      | `2.1.0`  |
+| empty-type     | `NumberInputEmptyType`                           | Set the type of empty value                                                 | `'NaN'`     | `2.1.8`  |
 
 ### NumberInput Events
 
