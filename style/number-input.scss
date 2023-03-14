@@ -8,22 +8,11 @@
   @include basis;
   @include input.handler;
 
-  padding-right: calc(get-css-var('input-h-padding') + 20px);
-
-  // @at-root {
-  //   & {
-  //     padding-right: calc(get-css-var('input-h-padding') + 20px);
-
-  //     &--action-left {
-  //       padding: get-css-var('input-h-padding');
-  //       padding-left: calc(get-css-var('input-h-padding') + 20px);
-  //     }
-
-  //     &--action-none {
-  //       padding: get-css-var('input-h-padding');
-  //     }
-  //   }
-  // }
+  @at-root {
+    & {
+      padding-right: calc(get-css-var('input-h-padding') + 20px);
+    }
+  }
 
   &__clear,
   &__loading {
@@ -77,11 +66,8 @@
 
   &--control-fade {
     padding: $padding;
-    transition:
-      padding get-css-var('transition-base'),
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+    transition: padding get-css-var('transition-base'), get-css-var('transition-background'),
+      get-css-var('transition-border'), get-css-var('transition-shadow');
 
     #{$plus},
     #{$minus} {
