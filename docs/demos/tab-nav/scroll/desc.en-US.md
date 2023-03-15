@@ -1,3 +1,3 @@
-### Scroll
+### Scrollable
 
-Two-way binding is possible using `v-model:active`.
+When the number of tab navigation is too large, internal scroll will be automatically activated.
