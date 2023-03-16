@@ -38,6 +38,7 @@
     "execa": "^6.1.0",
     "kolorist": "^1.6.0",
     "tsup": "^6.2.3",
-    "unplugin-vue-components": "^0.22.7"
+    "unplugin-vue-components": "^0.22.7",
+    "vite": "^4.1.4"
   }
 }

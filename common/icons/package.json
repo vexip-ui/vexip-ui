@@ -45,11 +45,13 @@
   "devDependencies": {
     "@types/node": "^18.7.23",
     "@types/prettier": "^2.7.1",
+    "@vitejs/plugin-vue": "2.3.3",
     "execa": "^6.1.0",
     "fast-glob": "^3.2.12",
     "fs-extra": "^10.1.0",
     "kolorist": "^1.6.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "vite": "2.9.15"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

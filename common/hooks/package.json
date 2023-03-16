@@ -36,5 +36,8 @@
   },
   "peerDependencies": {
     "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "vite": "^4.1.4"
   }
 }
