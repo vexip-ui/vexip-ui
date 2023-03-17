@@ -2,8 +2,7 @@ import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
@@ -28,6 +27,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const icons = useIcons()
     const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
     const currentExpanded = ref(props.expanded)
@@ -183,7 +183,13 @@ export default defineComponent({
                 )
               : (
               <div class={nh.be('reduce-handler')} onClick={() => toggleReduce()}>
-                <Icon icon={currentReduced.value ? Indent : Outdent}></Icon>
+                {currentReduced.value
+                  ? (
+                  <Icon {...icons.value.indent}></Icon>
+                    )
+                  : (
+                  <Icon {...icons.value.outdent}></Icon>
+                    )}
               </div>
                 )}
           </div>
@@ -193,9 +199,7 @@ export default defineComponent({
                   slots.expand(getSlotParams())
                 )
               : (
-              <Icon>
-                <CaretRight></CaretRight>
-              </Icon>
+              <Icon {...icons.value.caretRight}></Icon>
                 )}
           </div>
         </CustomTag>

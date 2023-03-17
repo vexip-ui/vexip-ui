@@ -52,9 +52,7 @@
         <template v-if="usingRange">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
-              <Icon style="padding-top: 1px">
-                <ArrowRightArrowLeft></ArrowRightArrowLeft>
-              </Icon>
+              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
             </slot>
           </div>
           <DateControl
@@ -95,7 +93,7 @@
         }"
       >
         <slot name="suffix">
-          <Icon :icon="props.suffix || CalendarR"></Icon>
+          <Icon v-biind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
         </slot>
       </div>
       <div
@@ -104,10 +102,14 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -177,6 +179,7 @@ import {
 import {
   useNameHelper,
   useProps,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -196,7 +199,6 @@ import {
   startOfMonth,
   warnOnce
 } from '@vexip-ui/utils'
-import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 import { datePickerTypes } from './symbol'
@@ -212,9 +214,7 @@ export default defineComponent({
     DateControl,
     DatePanel,
     Icon,
-    Portal,
-    CircleXmark,
-    ArrowRightArrowLeft
+    Portal
   },
   props: datePickerProps,
   emits: ['update:value', 'update:visible'],
@@ -284,7 +284,7 @@ export default defineComponent({
       isRange: null,
       range: null,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
       loadingEffect: 'pulse-in',
       min: null,
@@ -1354,10 +1354,9 @@ export default defineComponent({
     }
 
     return {
-      CalendarR,
-
       props,
       nh,
+      icons: useIcons(),
       idFor,
       currentVisible,
       focused,

@@ -30,9 +30,7 @@
         </div>
         <div :class="nh.be('control')">
           <div :class="nh.be('marker')">
-            <Icon v-if="!currentVisible && isEmpty">
-              <Xmark></Xmark>
-            </Icon>
+            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.cross"></Icon>
             <div
               v-else
               :style="{
@@ -61,9 +59,7 @@
                 [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else :class="nh.be('arrow')">
-              <ChevronDown></ChevronDown>
-            </Icon>
+            <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
           </slot>
         </div>
         <div
@@ -72,10 +68,14 @@
         ></div>
         <transition :name="nh.ns('fade')" appear>
           <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-            <Icon><CircleXmark></CircleXmark></Icon>
+            <Icon v-bind="icons.clear"></Icon>
           </div>
           <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-            <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+            <Icon
+              v-bind="icons.loading"
+              :effect="props.loadingEffect || icons.loading.effect"
+              :icon="props.loadingIcon || icons.loading.icon"
+            ></Icon>
           </div>
         </transition>
       </slot>
@@ -196,6 +196,7 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
@@ -211,7 +212,6 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { colorPickerProps } from './props'
 
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
@@ -254,10 +254,7 @@ export default defineComponent({
     ColorPalette,
     Icon,
     Input,
-    Portal,
-    Xmark,
-    ChevronDown,
-    CircleXmark
+    Portal
   },
   props: colorPickerProps,
   emits: ['update:value', 'update:visible'],
@@ -275,6 +272,7 @@ export default defineComponent({
     } = useFieldStore<Color | null>(() => reference.value?.focus())
 
     const nh = useNameHelper('color-picker')
+    const icons = useIcons()
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
@@ -309,7 +307,7 @@ export default defineComponent({
       noSuffix: false,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
       loadingEffect: 'pulse-in'
     })
@@ -681,6 +679,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       locale: useLocale('colorPicker', toRef(props, 'locale')),
       idFor,
       isEmpty,

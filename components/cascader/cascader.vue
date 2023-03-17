@@ -112,9 +112,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else :class="nh.be('arrow')">
-            <ChevronDown></ChevronDown>
-          </Icon>
+          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -123,10 +121,14 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -212,13 +214,13 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
-import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { cascaderProps } from './props'
 
 import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
@@ -243,9 +245,7 @@ export default defineComponent({
     Overflow,
     Portal,
     Tag,
-    Tooltip,
-    ChevronDown,
-    CircleXmark
+    Tooltip
   },
   props: cascaderProps,
   emits: ['update:value', 'update:visible'],
@@ -314,11 +314,14 @@ export default defineComponent({
       tagType: null,
       emptyText: null,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
       loadingEffect: 'pulse-in',
       transparent: false
     })
+
+    const icons = useIcons()
+    const locale = useLocale('select', toRef(props, 'locale'))
 
     const currentVisible = ref(props.visible)
     const currentValues = ref<string[]>([])
@@ -405,7 +408,7 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select', toRef(props, 'locale'))
+
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
@@ -1164,6 +1167,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       locale,
       idFor,
       currentVisible,

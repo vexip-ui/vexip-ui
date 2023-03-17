@@ -2,7 +2,7 @@
   <section :class="className" :role="inGroup ? 'tab' : undefined" :aria-expanded="currentExpanded">
     <div :class="nh.be('header')" @click="handleToggle">
       <div :class="nh.be('arrow')">
-        <Icon><ChevronRight></ChevronRight></Icon>
+        <Icon v-bind="icons.arrowRight"></Icon>
       </div>
       <slot name="title">
         <div v-if="props.icon" :class="nh.be('icon')">
@@ -25,9 +25,8 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
-import { ChevronRight } from '@vexip-ui/icons'
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -37,8 +36,7 @@ export default defineComponent({
   name: 'CollapsePanel',
   components: {
     CollapseTransition,
-    Icon,
-    ChevronRight
+    Icon
   },
   props: collapsePanelProps,
   emits: ['update:expanded'],
@@ -64,6 +62,7 @@ export default defineComponent({
     const collapseState = inject(COLLAPSE_STATE, null)
 
     const nh = useNameHelper('collapse')
+    const icons = useIcons()
     const currentExpanded = ref(props.expanded)
     const currentLabel = ref<string | number>('')
 
@@ -159,6 +158,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       inGroup: !!collapseState,
       currentExpanded,
 

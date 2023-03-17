@@ -86,7 +86,7 @@ async function serveComponent() {
     'utf-8'
   )
 
-  await run('vite', ['serve'], {
+  await run('pnpm', ['serve'], {
     cwd: devDir,
     stdio: 'inherit',
     env: {
@@ -101,7 +101,7 @@ async function serveComponent() {
 }
 
 async function serveTheme() {
-  await run('vite', ['serve'], {
+  await run('pnpm', ['serve'], {
     cwd: devDir,
     stdio: 'inherit',
     env: {
