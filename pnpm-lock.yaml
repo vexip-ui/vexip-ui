@@ -134,13 +134,10 @@ importers:
       '@juggle/resize-observer': ^3.4.0
       '@popperjs/core': ^2.11.6
       '@vexip-ui/utils': workspace:^
-      vite: ^4.1.4
     dependencies:
       '@juggle/resize-observer': 3.4.0
       '@popperjs/core': 2.11.6
       '@vexip-ui/utils': link:../utils
-    devDependencies:
-      vite: 4.1.4
 
   common/icons:
     specifiers:
@@ -173,7 +170,6 @@ importers:
       local-pkg: ^0.4.2
       tsup: ^6.2.3
       unplugin-vue-components: ^0.22.7
-      vite: ^4.1.4
     dependencies:
       '@vexip-ui/utils': link:../utils
       local-pkg: 0.4.2
@@ -183,13 +179,9 @@ importers:
       kolorist: 1.6.0
       tsup: 6.4.0
       unplugin-vue-components: 0.22.9
-      vite: 4.1.4_@types+node@18.11.9
 
   common/utils:
-    specifiers:
-      vite: ^4.1.4
-    devDependencies:
-      vite: 4.1.4
+    specifiers: {}
 
   dev-server:
     specifiers:
@@ -9408,40 +9400,6 @@ packages:
       terser:
         optional: true
     dependencies:
-      esbuild: 0.16.17
-      postcss: 8.4.21
-      resolve: 1.22.1
-      rollup: 3.17.2
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
-  /vite/4.1.4_@types+node@18.11.9:
-    resolution: {integrity: sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 18.11.9
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1

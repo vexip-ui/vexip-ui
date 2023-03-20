@@ -29,8 +29,5 @@
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/utils"
-  },
-  "devDependencies": {
-    "vite": "^4.1.4"
   }
 }
