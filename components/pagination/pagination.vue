@@ -24,9 +24,7 @@
         @keydown.space="handlePrev"
       >
         <slot name="prev">
-          <Icon :scale="0.8">
-            <ChevronLeft></ChevronLeft>
-          </Icon>
+          <Icon v-bind="icons.arrowLeft" :scale="0.8"></Icon>
         </slot>
       </li>
       <li
@@ -69,12 +67,13 @@
         @mouseleave="handleLeavePrevEllipsis"
       >
         <transition :name="nh.ns('fade')">
-          <Icon v-if="inPrevEllipsis" :scale="0.8">
-            <AnglesLeft></AnglesLeft>
-          </Icon>
-          <Icon v-else :scale="0.8" style="position: absolute;">
-            <Ellipsis></Ellipsis>
-          </Icon>
+          <Icon v-if="inPrevEllipsis" v-bind="icons.anglesLeft" :scale="0.8"></Icon>
+          <Icon
+            v-else
+            v-bind="icons.ellipsis"
+            :scale="0.8"
+            style="position: absolute"
+          ></Icon>
         </transition>
       </li>
       <template v-if="currentPagers.length">
@@ -120,12 +119,13 @@
         @mouseleave="handleLeaveNextEllipsis"
       >
         <transition :name="nh.ns('fade')">
-          <Icon v-if="inNextEllipsis" :scale="0.8">
-            <AnglesRight></AnglesRight>
-          </Icon>
-          <Icon v-else :scale="0.8" style="position: absolute;">
-            <Ellipsis></Ellipsis>
-          </Icon>
+          <Icon v-if="inNextEllipsis" v-bind="icons.anglesRight" :scale="0.8"></Icon>
+          <Icon
+            v-else
+            v-bind="icons.ellipsis"
+            :scale="0.8"
+            style="position: absolute"
+          ></Icon>
         </transition>
       </li>
       <li
@@ -167,9 +167,7 @@
         @keydown.space="handleNext"
       >
         <slot name="next">
-          <Icon :scale="0.8">
-            <ChevronRight></ChevronRight>
-          </Icon>
+          <Icon v-bind="icons.arrowRight" :scale="0.8"></Icon>
         </slot>
       </li>
     </ul>
@@ -229,11 +227,11 @@ import {
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
-import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   getCountWord,
   getCountWordOnly,
   createSizeProp,
@@ -256,12 +254,7 @@ export default defineComponent({
   components: {
     Icon,
     NumberInput,
-    Select,
-    ChevronRight,
-    ChevronLeft,
-    AnglesRight,
-    AnglesLeft,
-    Ellipsis
+    Select
   },
   props: paginationProps,
   emits: ['update:active', 'update:page-size'],
@@ -663,6 +656,8 @@ export default defineComponent({
       props,
       nh,
       locale,
+      icons: useIcons(),
+
       currentPagers,
       currentActive,
       currentPageSize,

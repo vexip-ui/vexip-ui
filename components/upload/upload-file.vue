@@ -35,21 +35,19 @@
             {{ `${percentage}%` }}
           </span>
           <div v-if="props.file.status === 'success'" :class="[nh.be('icon'), nh.be('success')]">
-            <Icon><CircleCheck></CircleCheck></Icon>
+            <Icon v-bind="icons.success"></Icon>
           </div>
           <div v-else-if="props.file.status === 'fail'" :class="[nh.be('icon'), nh.be('fail')]">
-            <Icon><CircleExclamation></CircleExclamation></Icon>
+            <Icon v-bind="icons.warning"></Icon>
           </div>
           <div
             v-else-if="props.file.status === 'uploading'"
             :class="[nh.be('icon'), nh.be('loading')]"
           >
-            <Icon effect="pulse-in">
-              <Spinner></Spinner>
-            </Icon>
+            <Icon v-bind="icons.loading"></Icon>
           </div>
           <button :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
-            <Icon><TrashCanR></TrashCanR></Icon>
+            <Icon v-bind="icons.delete"></Icon>
           </button>
         </div>
         <div v-if="props.file.status === 'uploading'" :class="nh.be('progress')">
@@ -81,9 +79,7 @@
                   {{ `${percentage}%` }}
                 </span>
               </div>
-              <Icon v-else effect="pulse-in" :scale="1.8">
-                <Spinner></Spinner>
-              </Icon>
+              <Icon v-else v-bind="icons.loading" :scale="1.8"></Icon>
             </template>
             <img
               v-else-if="showThumb"
@@ -135,14 +131,10 @@
               :disabled="!props.canPreview(props.file)"
               @click="handlePreview(props.file)"
             >
-              <Icon :scale="1.4">
-                <EyeR></EyeR>
-              </Icon>
+              <Icon v-bind="icons.preview" :scale="1.4"></Icon>
             </button>
             <button :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
-              <Icon :scale="1.4">
-                <TrashCanR></TrashCanR>
-              </Icon>
+              <Icon v-bind="icons.delete" :scale="1.4"></Icon>
             </button>
           </div>
         </div>
@@ -157,8 +149,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
 import { uploadFileProps } from './props'
 import { iconMaps } from './file-icon'
@@ -189,12 +180,7 @@ export default defineComponent({
     CollapseTransition,
     Icon,
     Progress,
-    Renderer,
-    CircleCheck,
-    CircleExclamation,
-    Spinner,
-    EyeR,
-    TrashCanR
+    Renderer
   },
   props: uploadFileProps,
   emits: [],
@@ -268,6 +254,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('upload', toRef(props, 'locale')),
+      icons: useIcons(),
 
       useIconRenderer,
       fileName,

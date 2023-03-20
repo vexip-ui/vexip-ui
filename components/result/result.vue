@@ -25,18 +25,11 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, createSizeProp } from '@vexip-ui/config'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, createSizeProp } from '@vexip-ui/config'
 import { resultProps } from './props'
 
 import type { ResultType } from './symbol'
 
-const predefinedIcons = {
-  info: CircleInfo,
-  success: CircleCheck,
-  warning: CircleExclamation,
-  error: CircleXmark
-}
 const resultTypes = Object.freeze<ResultType[]>(['info', 'success', 'warning', 'error'])
 
 export default defineComponent({
@@ -59,12 +52,16 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('result')
+    const icons = useIcons()
 
-    const iconComp = computed(() => {
-      if (props.icon) return props.icon
+    const predefinedIcons = computed(() => ({
+      info: icons.value.info,
+      success: icons.value.success,
+      warning: icons.value.warning,
+      error: icons.value.error
+    }))
 
-      return predefinedIcons[props.type] ?? null
-    })
+    const iconComp = computed(() => props.icon || predefinedIcons.value[props.type])
     const hasTitle = computed(() => slots.title || props.title)
     const hasIcon = computed(() => slots.icon || props.type || props.icon)
     const hasDescription = computed(() => slots.description || props.description)

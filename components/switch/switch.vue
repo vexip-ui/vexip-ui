@@ -16,7 +16,11 @@
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+        <Icon
+          v-bind="icons.loading"
+          :effect="props.loadingEffect || icons.loading.effect"
+          :icon="props.loadingIcon || icons.loading.icon"
+        ></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
         <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
@@ -50,12 +54,12 @@ import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
-import { Spinner } from '@vexip-ui/icons'
 import { switchProps } from './props'
 
 export default defineComponent({
@@ -80,7 +84,7 @@ export default defineComponent({
       openColor: '',
       closeColor: '',
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingEffect: 'pulse-in',
       openIcon: null,
       closeIcon: null,
@@ -159,6 +163,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
       idFor,
       currentValue,
 

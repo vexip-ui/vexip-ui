@@ -3,8 +3,14 @@ import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  useIcons,
+  createStateProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { transferProps } from './props'
 
@@ -53,13 +59,14 @@ export default defineComponent({
       targetTitle: null,
       deepState: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
       loadingEffect: 'pulse-in'
     })
 
     const nh = useNameHelper('transfer')
     const locale = useLocale('transfer', toRef(props, 'locale'))
+    const icons = useIcons()
 
     const currentValue = ref<Set<string | number>>(null!)
     const sourceSelected = ref(new Set<string | number>())
@@ -296,11 +303,7 @@ export default defineComponent({
                     onClick={handleToTarget}
                   >
                     {{
-                      icon: () => (
-                        <Icon label="to right">
-                          <ChevronRight></ChevronRight>
-                        </Icon>
-                      )
+                      icon: () => <Icon {...icons.value.arrowRight} label="to right"></Icon>
                     }}
                   </Button>,
                   <Button
@@ -316,11 +319,7 @@ export default defineComponent({
                     onClick={handleToSource}
                   >
                     {{
-                      icon: () => (
-                        <Icon label="to left">
-                          <ChevronLeft></ChevronLeft>
-                        </Icon>
-                      )
+                      icon: () => <Icon {...icons.value.arrowLeft} label="to left"></Icon>
                     }}
                   </Button>
                 ]}

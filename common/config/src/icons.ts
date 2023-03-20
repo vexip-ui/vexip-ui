@@ -54,7 +54,8 @@ import {
   Moon,
   ArrowRightFromBracket,
   Indent,
-  Outdent
+  Outdent,
+  MagnifyingGlass
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
 
@@ -120,7 +121,8 @@ export interface IconsConfig {
   dark: IconConfig,
   signOut: IconConfig,
   indent: IconConfig,
-  outdent: IconConfig
+  outdent: IconConfig,
+  search: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -180,7 +182,8 @@ const iconMap: IconsConfig = {
   dark: Moon,
   signOut: ArrowRightFromBracket,
   indent: Indent,
-  outdent: Outdent
+  outdent: Outdent,
+  search: MagnifyingGlass
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

@@ -42,13 +42,12 @@
           </span>
           <Icon
             v-if="isGroup"
+            v-bind="icons.arrowDown"
             :class="{
               [nh.be('arrow')]: true,
               [nh.bem('arrow', 'visible')]: groupExpanded
             }"
-          >
-            <ChevronDown></ChevronDown>
-          </Icon>
+          ></Icon>
         </div>
       </template>
       <span :class="nh.be('tooltip-title')">
@@ -110,8 +109,7 @@ import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
-import { ChevronDown } from '@vexip-ui/icons'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
@@ -129,8 +127,7 @@ const MenuItem = defineComponent({
     Icon,
     Tooltip,
     Portal,
-    Renderer,
-    ChevronDown
+    Renderer
   },
   props: menuItemProps,
   emits: [],
@@ -425,6 +422,7 @@ const MenuItem = defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
       groupExpanded,
       transferTo,
 

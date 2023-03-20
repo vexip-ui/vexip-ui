@@ -16,9 +16,7 @@
         {{ label }}
       </slot>
       <button v-if="isClosable" :class="nh.be('close')" @click.stop="handleClose">
-        <Icon>
-          <Xmark></Xmark>
-        </Icon>
+        <Icon v-bind="icons.close"></Icon>
       </button>
     </div>
   </li>
@@ -27,8 +25,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
-import { Xmark } from '@vexip-ui/icons'
+import { useNameHelper, useIcons, eventProp, emitEvent } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -37,8 +34,7 @@ import type { ItemState } from './symbol'
 export default defineComponent({
   name: 'TabNavItem',
   components: {
-    Icon,
-    Xmark
+    Icon
   },
   props: {
     label: {
@@ -143,6 +139,7 @@ export default defineComponent({
 
     return {
       nh,
+      icons: useIcons(),
       index,
       total,
 

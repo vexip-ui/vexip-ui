@@ -34,7 +34,7 @@
         }"
         @click.stop="handleExpandRow(row, $event)"
       >
-        <Icon><AngleRight></AngleRight></Icon>
+        <Icon v-bind="icons.angleRight"></Icon>
       </button>
     </template>
   </div>
@@ -61,10 +61,8 @@
         :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
         @click="handleExpandTree(row)"
       >
-        <Icon>
-          <Minus v-if="row.treeExpanded"></Minus>
-          <Plus v-else></Plus>
-        </Icon>
+        <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
+        <Icon v-else v-bind="icons.plus"></Icon>
       </button>
     </template>
     <Ellipsis
@@ -107,9 +105,8 @@ import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { AngleRight, Plus, Minus } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -131,10 +128,7 @@ export default defineComponent({
     Checkbox,
     Ellipsis,
     Icon,
-    Renderer,
-    AngleRight,
-    Plus,
-    Minus
+    Renderer
   },
   props: {
     row: {
@@ -316,6 +310,7 @@ export default defineComponent({
 
     return {
       nh,
+      icons: useIcons(),
 
       className,
       style,

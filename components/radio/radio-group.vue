@@ -17,7 +17,6 @@
 import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
 import { useFieldStore } from '@/components/form'
-import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -58,7 +57,7 @@ export default defineComponent({
         static: true
       },
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
       loadingEffect: 'pulse-in'
     })

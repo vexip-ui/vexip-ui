@@ -41,7 +41,7 @@
         }"
         @click="handleSortAsc()"
       >
-        <Icon><CaretUp></CaretUp></Icon>
+        <Icon v-bind="icons.caretUp"></Icon>
       </span>
       <span
         :class="{
@@ -50,7 +50,7 @@
         }"
         @click="handleSortDesc()"
       >
-        <Icon><CaretDown></CaretDown></Icon>
+        <Icon v-bind="icons.caretDown"></Icon>
       </span>
     </div>
     <Tooltip
@@ -72,7 +72,7 @@
     >
       <template #trigger>
         <div :class="nh.be('filter-trigger')">
-          <Icon><Filter></Filter></Icon>
+          <Icon v-bind="icons.filter"></Icon>
         </div>
       </template>
       <template v-if="filter.multiple" #default>
@@ -140,9 +140,8 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -163,10 +162,7 @@ export default defineComponent({
     Checkbox,
     Icon,
     Renderer,
-    Tooltip,
-    CaretUp,
-    CaretDown,
-    Filter
+    Tooltip
   },
   props: {
     column: {
@@ -391,6 +387,7 @@ export default defineComponent({
     return {
       nh,
       locale: toRef(state, 'locale'),
+      icons: useIcons(),
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),
