@@ -1,11 +1,12 @@
 import { computed, provide, inject, unref } from 'vue'
 
-import type { App, ComputedRef, Ref } from 'vue'
+import type { App, ComputedRef } from 'vue'
+import type { MaybeRef } from './types'
 
 export const PROVIDED_NAMESPACE = '__vxp-provided-namespace'
 export const globalNamespace = computed(() => 'vxp')
 
-export function configNamespace(sourceNamespace: string | Ref<string>, app?: App) {
+export function configNamespace(sourceNamespace: MaybeRef<string>, app?: App) {
   if (app) {
     const namespace = computed(() => {
       const namespace = unref(sourceNamespace)
@@ -33,7 +34,7 @@ export function useNamespace() {
  *
  * For css vars name, the namespace is fixed to 'vxp' (not responsive).
  */
-export function useNameHelper(block: string, namespace: Ref<string> | string = useNamespace()) {
+export function useNameHelper(block: string, namespace: MaybeRef<string> = useNamespace()) {
   /**
    * @returns `${namespace}-${block}`
    */

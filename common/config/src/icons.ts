@@ -64,15 +64,15 @@ import {
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
 
-import type { App, ComputedRef, Ref } from 'vue'
+import type { App, ComputedRef } from 'vue'
 import type { ClassType, StyleType } from './props'
+import type { MaybeRef } from './types'
 
 export const PROVIDED_ICONS = '__vxp-provided-icons'
 
-type MaybeRef<T> = T | Ref<T>
-type IconValue = Record<string, any> | (() => any)
+export type IconValue = Record<string, any> | (() => any)
 
-interface IconOptions {
+export interface IconOptions {
   effect?: string,
   scale?: number,
   label?: string,
@@ -82,8 +82,8 @@ interface IconOptions {
   style?: StyleType
 }
 
-type IconArrayValue = [IconValue, IconOptions?]
-type IconConfig = IconValue | IconArrayValue
+export type IconArrayValue = [IconValue, IconOptions?]
+export type IconConfig = IconValue | IconArrayValue
 
 export interface IconsConfig {
   loading: IconConfig,
