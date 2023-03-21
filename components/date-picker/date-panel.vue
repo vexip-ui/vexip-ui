@@ -114,6 +114,7 @@
               :range="range"
               :min="min"
               :max="max"
+              :week-start="weekStart"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>
@@ -277,6 +278,10 @@ export default defineComponent({
     selectingType: {
       type: String as PropType<'start' | 'end'>,
       default: 'start'
+    },
+    weekStart: {
+      type: Number,
+      default: null
     }
   },
   emits: [

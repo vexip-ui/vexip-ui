@@ -149,6 +149,7 @@
             :has-error="startError || endError"
             :selecting-type="hoveredLarge ? 'end' : 'start'"
             :locale="mergedLocale"
+            :week-start="props.weekStart"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @confirm="handleEnter"
@@ -292,7 +293,8 @@ export default defineComponent({
       outsideClose: true,
       outsideCancel: false,
       placeholder: null,
-      unitReadonly: false
+      unitReadonly: false,
+      weekStart: null
     })
 
     if (isDefined(props.noFiller)) {
