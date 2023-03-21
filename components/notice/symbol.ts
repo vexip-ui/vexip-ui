@@ -10,7 +10,7 @@ export interface NoticeOptions extends Record<string, any> {
   key?: Key,
   icon?: Record<string, any> | (() => any),
   iconColor?: string,
-  type?: NoticeType,
+  type?: NoticeType | null,
   duration?: number,
   className?: string | Record<string, any>,
   style?: string | Record<string, any>,

@@ -6,7 +6,7 @@ export type ToastType = 'success' | 'warning' | 'error' | 'loading'
 export type ToastPosition = 'top' | 'center' | 'bottom'
 
 export interface ToastOptions extends Record<string, any> {
-  type?: ToastType,
+  type?: ToastType | null,
   content?: string,
   icon?: Record<string, any> | (() => any) | null,
   iconProps?: IconMinorProps,

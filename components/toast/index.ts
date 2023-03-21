@@ -1,7 +1,6 @@
 import { createApp, createVNode, render, markRaw } from 'vue'
 import Component from './toast.vue'
 import { isClient, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { Check, Exclamation, Xmark, Spinner } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { ToastType, ToastOptions, ToastInstance } from './symbol'
@@ -19,21 +18,11 @@ interface AipMethod {
 }
 
 const conveniences: Record<ToastType, Record<string, any>> = {
-  success: {
-    icon: Check
-  },
-  warning: {
-    icon: Exclamation
-  },
-  error: {
-    icon: Xmark
-  },
+  success: {},
+  warning: {},
+  error: {},
   loading: {
-    icon: Spinner,
-    showMask: true,
-    iconProps: {
-      effect: 'pulse-in'
-    }
+    showMask: true
   }
 }
 
@@ -49,6 +38,7 @@ export class ToastManager {
 
   private _mountedApp: App<unknown> | null
   private _instance: ToastInstance | null
+  private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
   private _timer: ReturnType<typeof setTimeout> | null
 
@@ -60,6 +50,7 @@ export class ToastManager {
 
     this._mountedApp = null
     this._instance = null
+    this._innerApp = null
     this._container = null
     this._timer = null
     this.name = 'Toast'
@@ -98,10 +89,15 @@ export class ToastManager {
   }
 
   clone() {
-    return new ToastManager(this.defaults)
+    const manager = new ToastManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+
+    return manager
   }
 
   destroy() {
+    this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
   }
@@ -114,8 +110,11 @@ export class ToastManager {
     const { property, ...others } = options
 
     this.config(others)
-    app.config.globalProperties[property || '$toast'] = this
     this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$toast) {
+      app.config.globalProperties[property || '$toast'] = this
+    }
   }
 
   private _getInstance() {
@@ -124,8 +123,8 @@ export class ToastManager {
         console.warn('[vexip-ui:Toast]: App missing, the plugin maybe not installed.')
 
         this._container = document.createElement('div')
-        this._mountedApp = createApp(Component)
-        this._instance = this._mountedApp.mount(this._container) as ToastInstance
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as ToastInstance
       } else {
         const vnode = createVNode(Component, null, null)
 
@@ -163,7 +162,13 @@ export class ToastManager {
     }
 
     const toast = this._getInstance()
-    const item: ToastOptions = { ...this.defaults, ...convenienceOptions, ...options, onClose }
+    const item: ToastOptions = {
+      ...this.defaults,
+      ...convenienceOptions,
+      ...options,
+      type,
+      onClose
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)

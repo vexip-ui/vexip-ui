@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, createVNode, render } from 'vue'
 import Component from './contextmenu.vue'
 import { isClient, destroyObject } from '@vexip-ui/utils'
 
@@ -10,12 +10,14 @@ export type { ContextmenuConfig, ContextmenuOptions }
 export class ContextmenuManager {
   name: string
 
+  private _mountedApp: App<unknown> | null
   private _instance: ContextmenuInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
   private _pending: Promise<Key[] | null> | null
 
   constructor() {
+    this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
@@ -35,6 +37,7 @@ export class ContextmenuManager {
 
   destroy() {
     this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -42,29 +45,54 @@ export class ContextmenuManager {
     return false
   }
 
-  install(app: App) {
-    app.config.globalProperties.$contextmenu = this
+  install(app: App, options: { property?: string } = {}) {
+    const { property } = options
+
+    this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$contextmenu) {
+      app.config.globalProperties[property || '$contextmenu'] = this
+    }
   }
 
   private _getInstance() {
     if (this._pending) {
       let innerApp = this._innerApp
+      let container = this._container
 
       const unmount = () => {
         innerApp?.unmount()
+        container && render(null, container)
+
         innerApp = null
+        container = null
       }
 
       this._pending.finally(unmount)
       this._instance!.handleCancel()
     } else {
       this._innerApp?.unmount()
+      this._container && render(null, this._container)
     }
 
-    this._container = document.createElement('div')
-    this._innerApp = createApp(Component)
-    this._instance = this._innerApp.mount(this._container) as ContextmenuInstance
     this._pending = null
+
+    if (!this._mountedApp) {
+      console.warn('[vexip-ui:Contextmenu]: App missing, the plugin maybe not installed.')
+
+      this._container = document.createElement('div')
+      this._innerApp = createApp(Component)
+      this._instance = this._innerApp.mount(this._container) as ContextmenuInstance
+    } else {
+      const vnode = createVNode(Component, null, null)
+
+      this._container = document.createElement('div')
+      vnode.appContext = this._mountedApp._context
+
+      render(vnode, this._container, false)
+
+      this._instance = vnode.component!.proxy as ContextmenuInstance
+    }
 
     document.body.appendChild(this._container.firstElementChild!)
 

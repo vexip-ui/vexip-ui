@@ -55,17 +55,33 @@ import {
   ArrowRightFromBracket,
   Indent,
   Outdent,
-  MagnifyingGlass
+  MagnifyingGlass,
+  ArrowRotateLeft,
+  ArrowRotateRight,
+  Repeat,
+  Expand,
+  Compress
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
 
 import type { App, ComputedRef, Ref } from 'vue'
+import type { ClassType, StyleType } from './props'
 
 export const PROVIDED_ICONS = '__vxp-provided-icons'
 
 type MaybeRef<T> = T | Ref<T>
 type IconValue = Record<string, any> | (() => any)
-type IconOptions = { effect?: string }
+
+interface IconOptions {
+  effect?: string,
+  scale?: number,
+  label?: string,
+  title?: string,
+  flip?: 'horizontal' | 'vertical' | 'both',
+  class?: ClassType,
+  style?: StyleType
+}
+
 type IconArrayValue = [IconValue, IconOptions?]
 type IconConfig = IconValue | IconArrayValue
 
@@ -122,7 +138,15 @@ export interface IconsConfig {
   signOut: IconConfig,
   indent: IconConfig,
   outdent: IconConfig,
-  search: IconConfig
+  search: IconConfig,
+  rotateRight: IconConfig,
+  rotateLeft: IconConfig,
+  flipX: IconConfig,
+  flipY: IconConfig,
+  zoomIn: IconConfig,
+  zoonOut: IconConfig,
+  fullScreen: IconConfig,
+  resetScreen: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -183,7 +207,15 @@ const iconMap: IconsConfig = {
   signOut: ArrowRightFromBracket,
   indent: Indent,
   outdent: Outdent,
-  search: MagnifyingGlass
+  search: MagnifyingGlass,
+  rotateRight: ArrowRotateRight,
+  rotateLeft: ArrowRotateLeft,
+  flipX: Repeat,
+  flipY: [Repeat, { style: 'transform: rotate(90deg)' }],
+  zoomIn: Plus,
+  zoonOut: Minus,
+  fullScreen: Expand,
+  resetScreen: Compress
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])
