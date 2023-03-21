@@ -16,11 +16,13 @@ export class ConfirmManager {
 
   private _mountedApp: App<unknown> | null
   private _instance: ConfirmInstance | null
+  private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
 
   constructor(options: Partial<ConfirmOptions> = {}) {
     this._mountedApp = null
     this._instance = null
+    this._innerApp = null
     this._container = null
     this.name = 'Confirm'
     this.defaults = {}
@@ -58,10 +60,15 @@ export class ConfirmManager {
   }
 
   clone() {
-    return new ConfirmManager(this.defaults)
+    const manager = new ConfirmManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+
+    return manager
   }
 
   destroy() {
+    this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
   }
@@ -70,10 +77,15 @@ export class ConfirmManager {
     return false
   }
 
-  install(app: App, options: Partial<ConfirmOptions> = {}) {
-    this.config(options)
-    app.config.globalProperties.$confirm = this
+  install(app: App, options: Partial<ConfirmOptions> & { property?: string } = {}) {
+    const { property, ...others } = options
+
+    this.config(others)
     this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$confirm) {
+      app.config.globalProperties[property || '$confirm'] = this
+    }
   }
 
   private _getInstance() {
@@ -82,8 +94,8 @@ export class ConfirmManager {
         console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not installed.')
 
         this._container = document.createElement('div')
-        this._mountedApp = createApp(Component)
-        this._instance = this._mountedApp.mount(this._container) as ConfirmInstance
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as ConfirmInstance
       } else {
         const vnode = createVNode(Component, null, null)
 

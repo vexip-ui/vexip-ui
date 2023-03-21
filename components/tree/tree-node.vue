@@ -39,8 +39,8 @@
           :aria-hidden="!loading && !hasArrow"
           @click.stop="handleToggleExpand()"
         >
-          <Icon v-if="loading" effect="pulse-in"><Spinner></Spinner></Icon>
-          <Icon v-else><ChevronRight></ChevronRight></Icon>
+          <Icon v-if="loading" v-bind="icons.loading"></Icon>
+          <Icon v-else v-bind="icons.arrowRight"></Icon>
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
@@ -150,10 +150,9 @@ import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { isNull, noop } from '@vexip-ui/utils'
-import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -165,9 +164,7 @@ export default defineComponent({
     Checkbox,
     CollapseTransition,
     Icon,
-    Renderer,
-    ChevronRight,
-    Spinner
+    Renderer
   },
   inheritAttrs: false,
   props: {
@@ -523,6 +520,8 @@ export default defineComponent({
 
     return {
       nh,
+      icons: useIcons(),
+
       dragging,
       focused,
 

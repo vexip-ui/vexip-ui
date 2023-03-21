@@ -3,8 +3,7 @@ import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
-import { useNameHelper, useProps, createSizeProp, emitEvent } from '@vexip-ui/config'
-import { Spinner } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, createSizeProp, emitEvent } from '@vexip-ui/config'
 import { isClient, parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { buttonProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
@@ -29,8 +28,8 @@ export default defineComponent({
       disabled: () => (fieldActions ? fieldActions.disabled.value : false),
       loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
-      loadingIcon: Spinner,
-      loadingEffect: 'pulse-in',
+      loadingIcon: null,
+      loadingEffect: null,
       icon: null,
       color: null,
       buttonType: {
@@ -46,6 +45,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, null)
 
     const nh = useNameHelper('button')
+    const icons = useIcons()
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
       return !slots.default
@@ -222,7 +222,11 @@ export default defineComponent({
                 slots.loading()
               )
             : (
-            <Icon effect={props.loadingEffect} icon={props.loadingIcon}></Icon>
+            <Icon
+              {...icons.value.loading}
+              effect={props.loadingEffect || icons.value.loading.effect}
+              icon={props.loadingIcon || icons.value.loading.icon}
+            ></Icon>
               )}
         </div>
       )

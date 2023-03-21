@@ -32,9 +32,7 @@
           </div>
           <button v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
             <slot name="close">
-              <Icon :scale="1.2" label="close">
-                <Xmark></Xmark>
-              </Icon>
+              <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
             </slot>
           </button>
         </div>
@@ -85,10 +83,9 @@ import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isPromise, toNumber } from '@vexip-ui/utils'
-import { Xmark } from '@vexip-ui/icons'
 import { drawerProps } from './props'
 
 import type { DrawerPlacement } from './symbol'
@@ -102,8 +99,7 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    Masker,
-    Xmark
+    Masker
   },
   props: drawerProps,
   emits: ['update:active'],
@@ -331,6 +327,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
       locale: useLocale('drawer', toRef(props, 'locale')),
       currentActive,
       resizing,

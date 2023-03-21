@@ -55,9 +55,7 @@
             @click="handleExchangeClick"
           >
             <slot name="exchange">
-              <Icon style="padding-top: 1px;">
-                <ArrowRightArrowLeft></ArrowRightArrowLeft>
-              </Icon>
+              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
             </slot>
           </div>
           <TimeControl
@@ -98,7 +96,7 @@
         }"
       >
         <slot name="suffix">
-          <Icon :icon="props.suffix || ClockR"></Icon>
+          <Icon v-bind="icons.clock" :icon="props.suffix || icons.clock.icon"></Icon>
         </slot>
       </div>
       <div
@@ -107,10 +105,14 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -212,6 +214,7 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -219,7 +222,6 @@ import {
   makeSentence
 } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
-import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 
@@ -235,9 +237,7 @@ export default defineComponent({
     Icon,
     Portal,
     TimeControl,
-    TimeWheel,
-    CircleXmark,
-    ArrowRightArrowLeft
+    TimeWheel
   },
   props: timePickerProps,
   emits: ['update:value', 'update:visible'],
@@ -301,9 +301,9 @@ export default defineComponent({
       noSuffix: false,
       exchange: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       min: null,
       max: null,
       outsideClose: true,
@@ -885,10 +885,9 @@ export default defineComponent({
     }
 
     return {
-      ClockR,
-
       props,
       nh,
+      icons: useIcons(),
       locale,
       idFor,
       isHover,

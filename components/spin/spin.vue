@@ -21,7 +21,11 @@
         <slot name="content">
           <div :class="nh.be('icon')">
             <slot name="icon">
-              <Icon :effect="effect" :icon="props.icon"></Icon>
+              <Icon
+                v-bind="icons.loading"
+                :icon="props.icon || icons.loading.icon"
+                :effect="effect || icons.loading.effect"
+              ></Icon>
             </slot>
           </div>
           <div v-if="hasTip" :class="nh.be('tip')">
@@ -50,7 +54,11 @@
       <slot name="content">
         <div :class="nh.be('icon')">
           <slot name="icon">
-            <Icon :effect="effect" :icon="props.icon"></Icon>
+            <Icon
+              v-bind="icons.loading"
+              :icon="props.icon || icons.loading.icon"
+              :effect="effect || icons.loading.effect"
+            ></Icon>
           </slot>
         </div>
         <div v-if="hasTip" :class="nh.be('tip')">
@@ -66,9 +74,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { toNumber, warnOnce } from '@vexip-ui/utils'
-import { Spinner } from '@vexip-ui/icons'
 import { spinProps } from './props'
 
 export default defineComponent({
@@ -84,7 +91,7 @@ export default defineComponent({
         default: false,
         static: true
       },
-      icon: Spinner,
+      icon: null,
       spin: false,
       inner: false,
       delay: false,
@@ -106,7 +113,7 @@ export default defineComponent({
     const currentActive = ref(props.active)
 
     const effect = computed(() => {
-      return props.iconEffect || (props.spin ? 'spin-in' : 'pulse-in')
+      return props.iconEffect || (props.spin ? 'spin-in' : undefined)
     })
     const hasTip = computed(() => !!(props.tip || slots.tip))
     const maskStyle = computed(() => {
@@ -170,6 +177,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
 
       currentActive,
 

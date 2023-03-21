@@ -34,9 +34,7 @@
         <div :class="nh.be('pad')"></div>
         <button :class="nh.be('add')" @click="handleAdd">
           <slot name="add">
-            <Icon :scale="1.2">
-              <Plus></Plus>
-            </Icon>
+            <Icon v-bind="icons.plus" :scale="1.2"></Icon>
           </slot>
         </button>
       </li>
@@ -67,8 +65,7 @@ import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 import { Scroll } from '@/components/scroll'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { Plus } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { tabNavProps } from './props'
@@ -91,8 +88,7 @@ export default defineComponent({
     Icon,
     ResizeObserver,
     Scroll,
-    TabNavItem,
-    Plus
+    TabNavItem
   },
   props: tabNavProps,
   emits: ['update:active'],
@@ -252,6 +248,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
 
       className,
       markerStyle,

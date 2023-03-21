@@ -56,22 +56,22 @@
     ></div>
     <transition :name="nh.ns('fade')" appear>
       <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-        <Icon><CircleXmark></CircleXmark></Icon>
+        <Icon v-bind="icons.clear"></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-        <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+        <Icon
+          v-bind="icons.loading"
+          :effect="props.loadingEffect || icons.loading.effect"
+          :icon="props.loadingIcon || icons.loading.icon"
+        ></Icon>
       </div>
     </transition>
     <template v-if="props.controlType !== 'none'">
       <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-        <Icon :scale="0.8">
-          <CaretUp></CaretUp>
-        </Icon>
+        <Icon v-bind="icons.caretUp" :scale="0.8"></Icon>
       </div>
       <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-        <Icon :scale="0.8">
-          <CaretDown></CaretDown>
-        </Icon>
+        <Icon v-bind="icons.caretDown" :scale="0.8"></Icon>
       </div>
     </template>
   </div>
@@ -86,6 +86,7 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
@@ -100,7 +101,6 @@ import {
   plus,
   minus
 } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { numberInputProps } from './props'
 
 type InputEventType = 'input' | 'change'
@@ -112,10 +112,7 @@ const isEmpty = (value: unknown) => !value && value !== 0
 export default defineComponent({
   name: 'NumberInput',
   components: {
-    Icon,
-    CaretUp,
-    CaretDown,
-    CircleXmark
+    Icon
   },
   props: numberInputProps,
   emits: ['update:value'],
@@ -166,9 +163,9 @@ export default defineComponent({
       debounce: false,
       clearable: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       sync: false,
       controlType: 'right',
       emptyType: 'NaN'
@@ -473,6 +470,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input', toRef(props, 'locale')),
+      icons: useIcons(),
       idFor,
       focused,
       isHover,

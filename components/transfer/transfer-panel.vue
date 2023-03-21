@@ -23,9 +23,7 @@
           :title="locale.reverse"
           @click="handleReverse"
         >
-          <Icon :scale="1.2">
-            <Retweet></Retweet>
-          </Icon>
+          <Icon v-bind="icons.retweet" :scale="1.2"></Icon>
         </div>
         <div :class="nh.be('counter')">
           {{ `${currentSelected.size}/${visibleOptions.length}` }}
@@ -37,7 +35,11 @@
         </span>
         <CollapseTransition appear horizontal fade-effect>
           <div v-if="loading" :class="nh.be('loading')">
-            <Icon :effect="loadingEffect" :icon="loadingIcon"></Icon>
+            <Icon
+              v-bind="icons.loading"
+              :effect="loadingEffect || icons.loading.effect"
+              :icon="loadingIcon || icons.loading.icon"
+            ></Icon>
           </div>
         </CollapseTransition>
       </slot>
@@ -49,13 +51,16 @@
         inherit
         clearable
         :disabled="disabled"
-        :suffix="MagnifyingGlass"
         :placeholder="searching ? undefined : locale.search"
         @keydown.stop
         @input="currentFilter = $event"
         @focus="searching = true"
         @blur="searching = false"
-      ></Input>
+      >
+        <template #suffix>
+          <Icon v-bind="icons.search"></Icon>
+        </template>
+      </Input>
     </div>
     <ResizeObserver v-if="paged || $slots.body" throttle @resize="computePageSize">
       <ul ref="body" :class="nh.be('body')" role="listbox">
@@ -101,11 +106,10 @@
       <slot name="footer" v-bind="getSlotPayload()">
         <div :class="nh.be('pagination')">
           <Icon
+            v-bind="icons.arrowLeft"
             :class="[nh.be('page-plus'), currentPage <= 1 && nh.bem('page-plus', 'disabled')]"
             @click="handlePageChange(currentPage - 1)"
-          >
-            <ChevronLeft></ChevronLeft>
-          </Icon>
+          ></Icon>
           <NumberInput
             inherit
             :value="currentPage"
@@ -115,19 +119,18 @@
             :max="totalPages"
             @change="handlePageChange"
           ></NumberInput>
-          <span style="margin: 0 4px;">/</span>
+          <span style="margin: 0 4px">/</span>
           <span>
             {{ totalPages }}
           </span>
           <Icon
+            v-bind="icons.arrowRight"
             :class="[
               nh.be('page-minus'),
               currentPage >= totalPages && nh.bem('page-minus', 'disabled')
             ]"
             @click="handlePageChange(currentPage + 1)"
-          >
-            <ChevronRight></ChevronRight>
-          </Icon>
+          ></Icon>
         </div>
       </slot>
     </div>
@@ -144,8 +147,7 @@ import { NumberInput } from '@/components/number-input'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
-import { MagnifyingGlass, Retweet, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
-import { useNameHelper, useLocale, stateProp } from '@vexip-ui/config'
+import { useNameHelper, useIcons, stateProp } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
@@ -164,10 +166,7 @@ export default defineComponent({
     NumberInput,
     Renderer,
     ResizeObserver,
-    VirtualList,
-    Retweet,
-    ChevronRight,
-    ChevronLeft
+    VirtualList
   },
   props: {
     type: {
@@ -623,9 +622,8 @@ export default defineComponent({
     }
 
     return {
-      MagnifyingGlass,
-
       nh,
+      icons: useIcons(),
       currentSelected,
       pageSize,
       currentPage,

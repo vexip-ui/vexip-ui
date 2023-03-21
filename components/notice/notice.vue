@@ -34,7 +34,11 @@
         aria-atomic="true"
         :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
       >
-        <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
+        <div
+          v-if="item.icon || (item.type && effectiveTypes.includes(item.type))"
+          :class="nh.be('icon')"
+          :style="{ color: item.iconColor }"
+        >
           <Renderer
             v-if="typeof item.icon === 'function'"
             :renderer="item.icon"
@@ -45,6 +49,12 @@
             :icon="item.icon"
             :scale="!item.content && typeof item.renderer !== 'function' ? 1 : 2"
             :style="[{ color: item.iconColor }, item.icon.style]"
+          ></Icon>
+          <Icon
+            v-else
+            v-bind="predefinedIcons[item.type!]"
+            :scale="!item.content && typeof item.renderer !== 'function' ? 1 : 2"
+            :style="{ color: item.iconColor }"
           ></Icon>
         </div>
         <div :class="nh.be('wrapper')">
@@ -82,9 +92,7 @@
           </template>
         </div>
         <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key!)">
-          <Icon label="close">
-            <Xmark></Xmark>
-          </Icon>
+          <Icon v-bind="icons.close" label="close"></Icon>
         </button>
       </div>
     </template>
@@ -92,24 +100,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { Xmark } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 
 import type { Key, NoticePlacement } from './symbol'
+
+const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+const assertiveTypes = Object.freeze(['success', 'warning', 'error'])
 
 export default defineComponent({
   name: 'Notice',
   components: {
     Icon,
     Renderer,
-    Popup,
-    Xmark
+    Popup
   },
   setup() {
+    const icons = useIcons()
+
+    const predefinedIcons = computed(() => ({
+      info: icons.value.info,
+      success: icons.value.success,
+      warning: icons.value.warning,
+      error: icons.value.error
+    }))
+
     const placement = ref<NoticePlacement>('top-right')
     const popup = ref<InstanceType<typeof Popup>>()
 
@@ -127,9 +145,13 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('notice'),
-      effectiveTypes: ['info', 'success', 'warning', 'error'],
-      assertiveTypes: ['success', 'warning', 'error'],
+      icons,
+
+      effectiveTypes,
+      assertiveTypes,
+
       placement,
+      predefinedIcons,
 
       popup,
 

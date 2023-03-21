@@ -161,9 +161,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else :class="nh.be('arrow')">
-            <ChevronDown></ChevronDown>
-          </Icon>
+          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -172,10 +170,14 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -243,9 +245,11 @@
                     {{ option.label }}
                   </span>
                   <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                    <Icon v-if="isSelected(option)" :class="nh.be('check')">
-                      <Check></Check>
-                    </Icon>
+                    <Icon
+                      v-if="isSelected(option)"
+                      v-bind="icons.check"
+                      :class="nh.be('check')"
+                    ></Icon>
                   </transition>
                 </slot>
               </Option>
@@ -287,12 +291,12 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
-import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { selectProps } from './props'
 
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -339,10 +343,7 @@ export default defineComponent({
     Portal,
     Tag,
     Tooltip,
-    VirtualList,
-    Check,
-    CircleXmark,
-    ChevronDown
+    VirtualList
   },
   props: selectProps,
   emits: ['update:value', 'update:visible', 'update:label'],
@@ -398,9 +399,9 @@ export default defineComponent({
       emptyText: null,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       keyConfig: () => ({}),
       filter: false,
       ignoreCase: false,
@@ -1071,6 +1072,7 @@ export default defineComponent({
       props,
       nh,
       locale,
+      icons: useIcons(),
       idFor,
       currentVisible,
       currentValues,

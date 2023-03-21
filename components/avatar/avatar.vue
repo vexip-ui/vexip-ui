@@ -20,12 +20,11 @@
       :alt="props.alt"
       @error="fallbackFail = true"
     />
-    <Icon
-      v-else-if="icon"
-      :class="nh.be('icon')"
-      :icon="icon"
-      :scale="props.iconScale"
-    ></Icon>
+    <template v-else-if="icon || $slots.icon">
+      <slot name="icon">
+        <Icon :class="nh.be('icon')" :icon="icon" :scale="props.iconScale"></Icon>
+      </slot>
+    </template>
     <ResizeObserver v-else :on-resize="scaleText">
       <span ref="text" :class="nh.be('text')">
         <slot></slot>

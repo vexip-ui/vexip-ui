@@ -1,7 +1,6 @@
-import { createApp, markRaw } from 'vue'
+import { createApp, markRaw, createVNode, render } from 'vue'
 import Component from './notice.vue'
 import { isClient, isNull, isObject, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
@@ -20,21 +19,6 @@ interface AipMethod {
   (title: string, content: string, duration?: number): () => void,
   /** @internal */
   (options: FuzzyOptions, duration?: number): () => void
-}
-
-const conveniences: Record<NoticeType, { icon: Record<string, any> }> = {
-  info: {
-    icon: CircleInfo
-  },
-  success: {
-    icon: CircleCheck
-  },
-  warning: {
-    icon: CircleExclamation
-  },
-  error: {
-    icon: CircleXmark
-  }
 }
 
 const placementWhiteList: NoticePlacement[] = [
@@ -60,6 +44,7 @@ export class NoticeManager {
   warning: AipMethod
   error: AipMethod
 
+  private _mountedApp: App<unknown> | null
   private _instance: NoticeInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
@@ -71,6 +56,7 @@ export class NoticeManager {
       duration: options.duration ? toNumber(options.duration) : 4000
     }
 
+    this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
@@ -136,7 +122,11 @@ export class NoticeManager {
   }
 
   clone() {
-    return new NoticeManager(this.defaults)
+    const manager = new NoticeManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+
+    return manager
   }
 
   clear() {
@@ -145,6 +135,7 @@ export class NoticeManager {
 
   destroy() {
     this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -156,17 +147,31 @@ export class NoticeManager {
     const { property, ...others } = options
 
     this.config(others)
-    app.config.globalProperties[property || '$notice'] = this
+    this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$notice) {
+      app.config.globalProperties[property || '$notice'] = this
+    }
   }
 
   private _getInstance() {
     if (!this._instance) {
-      this._container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      this._innerApp = createApp(Component)
-      this._instance = this._innerApp.mount(this._container) as NoticeInstance
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Notice]: App missing, the plugin maybe not installed.')
+
+        this._container = document.createElement('div')
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as NoticeInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
+
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
+
+        render(vnode, this._container, false)
+
+        this._instance = vnode.component!.proxy as NoticeInstance
+      }
 
       document.body.appendChild(this._container.firstElementChild!)
     }
@@ -200,7 +205,6 @@ export class NoticeManager {
 
     const key = options.key ?? getKey()
     const notice = this._getInstance()
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
     let timer: ReturnType<typeof setTimeout>
 
@@ -213,11 +217,13 @@ export class NoticeManager {
       }
     }
 
-    const item: NoticeOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const item: NoticeOptions = {
+      ...this.defaults,
+      ...options,
       key,
       type,
       onClose
-    })
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)

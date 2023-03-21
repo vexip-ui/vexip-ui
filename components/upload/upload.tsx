@@ -3,9 +3,15 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  useIcons,
+  createStateProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload as IUpload, Spinner, Plus } from '@vexip-ui/icons'
 import { uploadProps } from './props'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
@@ -36,8 +42,7 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    UploadList,
-    CloudArrowUp
+    UploadList
   },
   props: uploadProps,
   emits: ['update:file-list'],
@@ -106,9 +111,9 @@ export default defineComponent({
       buttonLabel: null,
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       defaultFiles: () => [],
       // 'canPreview' using UploadFile default
       listStyle: null
@@ -116,6 +121,7 @@ export default defineComponent({
 
     const nh = useNameHelper('upload')
     const locale = useLocale('upload', toRef(props, 'locale'))
+    const icons = useIcons()
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
@@ -633,14 +639,22 @@ export default defineComponent({
             ref={button}
             inherit
             size={size.value}
-            icon={IUpload}
             type={props.state}
             disabled={props.disabled}
             loading={props.loading}
-            loading-icon={props.loadingIcon}
-            loading-effect={props.loadingEffect}
           >
-            {props.buttonLabel ?? locale.value.upload}
+            {{
+              default: () => props.buttonLabel ?? locale.value.upload,
+              icon: () => <Icon {...icons.value.upload}></Icon>,
+              loading: () => (
+                <Icon
+                  {...icons.value.loading}
+                  class={nh.be('loading-icon')}
+                  effect={props.loadingEffect || icons.value.loading.effect}
+                  icon={props.loadingIcon || icons.value.loading.icon}
+                ></Icon>
+              )
+            }}
           </Button>
           {slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
         </>
@@ -651,9 +665,11 @@ export default defineComponent({
           class={[nh.be('drag-panel'), props.disabled && nh.bem('drag-panel', 'disabled')]}
           tabindex={0}
         >
-          <Icon class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]} scale={4}>
-            <CloudArrowUp></CloudArrowUp>
-          </Icon>
+          <Icon
+            {...icons.value.cloud}
+            class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+            scale={4}
+          ></Icon>
           {slots.tip
             ? (
                 slots.tip()
@@ -662,9 +678,10 @@ export default defineComponent({
             <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
               )}
           <Icon
+            {...icons.value.loading}
             class={nh.be('loading-icon')}
-            effect={props.loadingEffect}
-            icon={props.loadingIcon}
+            effect={props.loadingEffect || icons.value.loading.effect}
+            icon={props.loadingIcon || icons.value.loading.icon}
             style={{ opacity: props.loading ? '100%' : '0%' }}
           ></Icon>
         </div>
@@ -685,20 +702,20 @@ export default defineComponent({
               {props.loading
                 ? (
                 <Icon
+                  {...icons.value.loading}
                   class={nh.be('loading-icon')}
-                  effect={props.loadingEffect}
-                  icon={props.loadingIcon}
+                  effect={props.loadingEffect || icons.value.loading.effect}
+                  icon={props.loadingIcon || icons.value.loading.icon}
                   style={{ marginBottom: '6px' }}
                 ></Icon>
                   )
                 : (
                 <Icon
+                  {...icons.value.plus}
                   class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
                   scale={1.2}
                   style={{ marginBottom: '6px' }}
-                >
-                  <Plus></Plus>
-                </Icon>
+                ></Icon>
                   )}
               <span>{props.buttonLabel ?? locale.value.upload}</span>
             </>

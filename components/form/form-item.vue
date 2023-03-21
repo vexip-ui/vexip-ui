@@ -24,7 +24,7 @@
       type="hidden"
       :name="props.prop"
       :value="inputValue"
-      style="display: none;"
+      style="display: none"
     />
     <label
       v-if="hasLabel"
@@ -37,7 +37,7 @@
       <slot name="label">
         <Tooltip v-if="props.help || $slots.help" transfer>
           <template #trigger>
-            <Icon :class="nh.be('help')"><CircleQuestionR></CircleQuestionR></Icon>
+            <Icon v-bind="icons.help" :class="nh.be('help')"></Icon>
           </template>
           <slot name="help">
             <div :class="nh.be('help-tip')">
@@ -85,8 +85,14 @@ import {
 import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
-import { CircleQuestionR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, useWordSpace, makeSentence } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  useIcons,
+  useWordSpace,
+  makeSentence
+} from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
@@ -101,8 +107,7 @@ export default defineComponent({
   components: {
     Column,
     Icon,
-    Tooltip,
-    CircleQuestionR
+    Tooltip
   },
   inheritAttrs: true,
   props: formItemProps,
@@ -428,6 +433,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons: useIcons(),
       isError,
       errorTip,
 

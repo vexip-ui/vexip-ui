@@ -3,14 +3,13 @@ import { mergeObjects } from '@vexip-ui/utils'
 import { zhCNLocale } from './zh-CN'
 import { enUSLocale } from './en-US'
 
-import type { App, ComputedRef, Ref } from 'vue'
+import type { App, ComputedRef } from 'vue'
 import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
+import type { MaybeRef } from '../types'
 
 export * from './helper'
 export * from './zh-CN'
 export * from './en-US'
-
-type MaybeRef<T> = T | Ref<T>
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())

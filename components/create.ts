@@ -1,9 +1,15 @@
 import { computed, unref } from 'vue'
-import { configNamespace, configProps, configLocale, configZIndex } from '@vexip-ui/config'
+import {
+  configNamespace,
+  configProps,
+  configLocale,
+  configZIndex,
+  configIcons
+} from '@vexip-ui/config'
 import { toCapitalCase } from '@vexip-ui/utils'
 
 import type { Ref, App } from 'vue'
-import type { LocaleOptions } from '@vexip-ui/config'
+import type { LocaleOptions, IconsOptions } from '@vexip-ui/config'
 import type { PropsOptions } from './props'
 
 type MaybeRef<T> = T | Ref<T>
@@ -13,7 +19,8 @@ export interface InstallOptions {
   namespace?: MaybeRef<string>,
   props?: MaybeRef<PropsOptions>,
   locale?: MaybeRef<LocaleOptions>,
-  zIndex?: MaybeRef<number>
+  zIndex?: MaybeRef<number>,
+  icons?: MaybeRef<IconsOptions>
 }
 
 export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | 'en-US') {
@@ -23,7 +30,8 @@ export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | '
       namespace = '',
       props = {},
       locale = { locale: defaultLocale },
-      zIndex
+      zIndex,
+      icons = {}
     } = options
 
     const withDefaultLocale = computed(() => {
@@ -33,6 +41,7 @@ export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | '
     configNamespace(namespace, app)
     configProps(props, app)
     configLocale(withDefaultLocale, app)
+    configIcons(icons, app)
 
     if (typeof zIndex === 'number') {
       configZIndex(zIndex, app)

@@ -1,7 +1,6 @@
-import { createApp, markRaw } from 'vue'
+import { createApp, markRaw, createVNode, render } from 'vue'
 import Component from './message.vue'
 import { isClient, isNull, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
@@ -16,21 +15,6 @@ interface AipMethod {
   (content: string, duration?: number): () => void,
   /** @internal */
   (options: FuzzyOptions, duration?: number): () => void
-}
-
-const conveniences: Record<MessageType, { icon: Record<string, any> }> = {
-  info: {
-    icon: CircleInfo
-  },
-  success: {
-    icon: CircleCheck
-  },
-  warning: {
-    icon: CircleExclamation
-  },
-  error: {
-    icon: CircleXmark
-  }
 }
 
 const placementWhiteList: MessagePlacement[] = ['top', 'bottom']
@@ -51,6 +35,7 @@ export class MessageManager {
   warning: AipMethod
   error: AipMethod
 
+  private _mountedApp: App<unknown> | null
   private _instance: MessageInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
@@ -61,6 +46,7 @@ export class MessageManager {
       duration: options.duration ? toNumber(options.duration) : 3000
     }
 
+    this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
@@ -126,7 +112,11 @@ export class MessageManager {
   }
 
   clone() {
-    return new MessageManager(this.defaults)
+    const manager = new MessageManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+
+    return manager
   }
 
   clear() {
@@ -135,6 +125,7 @@ export class MessageManager {
 
   destroy() {
     this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -146,17 +137,31 @@ export class MessageManager {
     const { property, ...others } = options
 
     this.config(others)
-    app.config.globalProperties[property || '$message'] = this
+    this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$message) {
+      app.config.globalProperties[property || '$message'] = this
+    }
   }
 
   private _getInstance() {
     if (!this._instance) {
-      this._container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      this._innerApp = createApp(Component)
-      this._instance = this._innerApp.mount(this._container) as MessageInstance
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Message]: App missing, the plugin maybe not installed.')
+
+        this._container = document.createElement('div')
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as MessageInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
+
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
+
+        render(vnode, this._container, false)
+
+        this._instance = vnode.component!.proxy as MessageInstance
+      }
 
       document.body.appendChild(this._container.firstElementChild!)
     }
@@ -173,7 +178,6 @@ export class MessageManager {
 
     const key = options.key ?? getKey()
     const message = this._getInstance()
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
     let timer: ReturnType<typeof setTimeout>
 
@@ -186,11 +190,13 @@ export class MessageManager {
       }
     }
 
-    const item: MessageOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const item: MessageOptions = {
+      ...this.defaults,
+      ...options,
       key,
       type,
       onClose
-    })
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)

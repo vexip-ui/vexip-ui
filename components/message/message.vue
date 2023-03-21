@@ -33,7 +33,11 @@
         :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
       >
         <div :class="nh.be('wrapper')">
-          <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
+          <div
+            v-if="item.icon || (item.type && effectiveTypes.includes(item.type))"
+            :class="nh.be('icon')"
+            :style="{ color: item.iconColor }"
+          >
             <Renderer
               v-if="typeof item.icon === 'function'"
               :renderer="item.icon"
@@ -43,6 +47,11 @@
               v-else-if="item.icon"
               :icon="item.icon"
               :style="[{ color: item.iconColor }, item.icon.style]"
+            ></Icon>
+            <Icon
+              v-else
+              v-bind="predefinedIcons[item.type!]"
+              :style="{ color: item.iconColor }"
             ></Icon>
           </div>
           <Renderer
@@ -58,9 +67,7 @@
           </template>
         </div>
         <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key!)">
-          <Icon label="close">
-            <Xmark></Xmark>
-          </Icon>
+          <Icon v-bind="icons.close" label="close"></Icon>
         </button>
       </div>
     </template>
@@ -72,20 +79,30 @@ import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { Xmark } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 
 import type { Key, MessagePlacement } from './symbol'
+
+const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+const assertiveTypes = Object.freeze(['success', 'warning', 'error'])
 
 export default defineComponent({
   name: 'Message',
   components: {
     Icon,
     Renderer,
-    Popup,
-    Xmark
+    Popup
   },
   setup() {
+    const icons = useIcons()
+
+    const predefinedIcons = computed(() => ({
+      info: icons.value.info,
+      success: icons.value.success,
+      warning: icons.value.warning,
+      error: icons.value.error
+    }))
+
     const placement = ref<MessagePlacement>('top')
     const popup = ref<InstanceType<typeof Popup>>()
 
@@ -103,13 +120,15 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('message'),
-      effectiveTypes: ['info', 'success', 'warning', 'error'],
-      assertiveTypes: ['success', 'warning', 'error'],
+      icons,
+
+      effectiveTypes,
+      assertiveTypes,
+
       placement,
 
-      placementCenter: computed(() => {
-        return `${placement.value}-center` as const
-      }),
+      predefinedIcons,
+      placementCenter: computed(() => `${placement.value}-center` as const),
 
       popup,
 

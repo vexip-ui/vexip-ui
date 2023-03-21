@@ -6,12 +6,12 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
-import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'
@@ -79,9 +79,9 @@ export default defineComponent({
       plainPassword: false,
       clearable: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       transparent: false,
       sync: false
     })
@@ -89,6 +89,7 @@ export default defineComponent({
     const initValue = toNotNullString(props.value)
 
     const nh = useNameHelper('input')
+    const icons = useIcons()
     const focused = ref(false)
     const currentValue = ref(initValue)
     const showPassword = ref(false)
@@ -164,7 +165,9 @@ export default defineComponent({
         ? toNotNullString(props.formatter(currentValue.value))
         : currentValue.value
     })
-    const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
+    const passwordIcon = computed(() =>
+      showPassword.value ? icons.value.plainText : icons.value.cipherText
+    )
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
@@ -376,7 +379,7 @@ export default defineComponent({
       if (showClear.value) {
         return (
           <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
-            <Icon icon={CircleXmark}></Icon>
+            <Icon {...icons.value.clear}></Icon>
           </div>
         )
       }
@@ -384,7 +387,11 @@ export default defineComponent({
       if (props.loading) {
         return (
           <div key={'loading'} class={[nh.be('icon'), nh.be('loading')]}>
-            <Icon effect={props.loadingEffect} icon={props.loadingIcon}></Icon>
+            <Icon
+              {...icons.value.loading}
+              effect={props.loadingEffect || icons.value.loading.effect}
+              icon={props.loadingIcon || icons.value.loading.icon}
+            ></Icon>
           </div>
         )
       }
@@ -429,7 +436,7 @@ export default defineComponent({
                   slots.password({ plain: showPassword.value })
                 )
               : (
-              <Icon icon={passwordIcon.value}></Icon>
+              <Icon {...passwordIcon.value}></Icon>
                 )}
           </div>
         )

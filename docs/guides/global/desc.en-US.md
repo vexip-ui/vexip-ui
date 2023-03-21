@@ -1,6 +1,6 @@
 # Global Config
 
-Vexip UI provides some configurations to change components behavior when install.
+Vexip UI provides some configurations to change components behavior when install, includes **props default value**, **component namespace**, **i18n** and **internal icons of components**.
 
 ## Props Default Value
 
@@ -38,7 +38,7 @@ Imagine, in an application with hundreds of form controls, a requirement to chan
 
 Lousy work.
 
-By using Vexip UI, you just need to pass an object in the second parameter of `app.use` and specify the `props` option:
+And now, you just need to pass an object in the second parameter of `app.use` and specify the `props` option:
 
 ```ts
 import { createApp } from 'vue'
@@ -67,7 +67,7 @@ createApp(App)
 
 Once set, the default value of the `size` prop of these components will be changed to `'large'`。
 
-You can also change the default value of partial components with the `props` prop of the ConfigProvider component, please refer to the ConfigProvider [Documentation](/en-US/components/config-provider).
+You can also change the default value of partial components with the `props` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
 
 ## Namespace
 
@@ -138,4 +138,47 @@ app.use(install, {
 })
 ```
 
-> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts).
+You can also change i18n of partial components with the `locale` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+
+If you want to configure a other language, you need do it yourself by following the full i18n options.
+
+> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5).
+
+## Internal Icons
+
+Part of components include internal icons which place inside components and cannot be controlled by users.
+
+Most of those components have provided props or slots to custom internal icons, but it will be a unhappy work if you need to batch replace any icon (such as loading icon).
+
+So Vexip UI provides a way to globally config internal icons of components.
+
+Internal icons can be configured by passing the `icons` option in the second parameter when calling `app.use`.
+
+```ts
+import { Xmark, CircleXmark, Spinner } from '@vexip-ui/icons'
+
+app.use(install, {
+  icons: {
+    close: Xmark,
+
+    // can be a function that returns a component
+    clear: () => CircleXmark,
+
+    // can be an array, and set parameters in second item
+    loading: [
+      Spinner,
+      { effect: 'pulse-in' }
+    ]
+  }
+})
+```
+
+You can also change internal icons of partial components with the `icons` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+
+> The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88).
+
+Finally, let's take a look at an actual effect after configuration:
+
+<IconDemo></IconDemo>
+
+> The details code can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/docs/common/icon-demo).

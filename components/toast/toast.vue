@@ -5,9 +5,12 @@
       [nh.bs('vars')]: true,
       [nh.bm('text-only')]: state.textOnly
     }"
+    role="alert"
     :style="{
       zIndex: state.zIndex
     }"
+    aria-atomic="true"
+    aria-live="assertive"
   >
     <transition :name="nh.ns('fade')">
       <div
@@ -29,13 +32,20 @@
       >
         <Renderer v-if="isFunction(state.renderer)" :renderer="state.renderer"></Renderer>
         <template v-else>
-          <div v-if="state.icon" :class="nh.be('icon')">
+          <div
+            v-if="state.icon || (state.type && effectiveTypes.includes(state.type))"
+            :class="nh.be('icon')"
+          >
             <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
             <Icon
-              v-else
+              v-else-if="state.icon"
               :icon="state.icon"
               :scale="1.8"
               v-bind="state.iconProps"
+            ></Icon>
+            <Icon
+              v-else
+              v-bind="{ ...predefinedIcons[state.type!], scale: 1.8, ...state.iconProps }"
             ></Icon>
           </div>
           <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
@@ -49,14 +59,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted, nextTick } from 'vue'
+import { defineComponent, reactive, computed, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
+import { useNameHelper, useProps, useZIndex, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { toastProps } from './props'
 
-import type { ToastOptions } from './symbol'
+import type { ToastType, ToastOptions } from './symbol'
+
+const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])
 
 export default defineComponent({
   name: 'Toast',
@@ -87,9 +99,20 @@ export default defineComponent({
       parseHtml: false
     })
 
+    const zIndex = useZIndex()
+    const icons = useIcons()
+
+    const predefinedIcons = computed(() => ({
+      success: icons.value.plainSuccess,
+      warning: icons.value.plainWarning,
+      error: icons.value.plainError,
+      loading: icons.value.loading
+    }))
+
     const state = reactive({
       visible: false,
       zIndex: 0,
+      type: null as ToastType | null,
       content: '',
       icon: props.icon,
       iconProps: props.iconProps as any,
@@ -113,10 +136,11 @@ export default defineComponent({
     })
 
     async function openToast(options: ToastOptions) {
-      state.zIndex = useZIndex().value
+      state.zIndex = zIndex.value
 
       await mounted
 
+      state.type = options.type ?? null
       state.content = options.content ?? ''
       state.icon = options.icon ?? props.icon
       state.iconProps = options.iconProps ?? props.iconProps
@@ -131,7 +155,7 @@ export default defineComponent({
       state.renderer = isFunction(options.renderer) ? options.renderer : props.renderer
       state.onClose = options.onClose || null
 
-      state.textOnly = !state.icon
+      state.textOnly = !state.icon && !(state.type && effectiveTypes.includes(state.type))
 
       if (isFunction(state.renderer)) {
         const render = state.renderer
@@ -154,6 +178,7 @@ export default defineComponent({
     function handleReset() {
       if (state.visible) return
 
+      state.type = null
       state.content = ''
       state.icon = props.icon
       state.iconProps = props.iconProps
@@ -185,6 +210,9 @@ export default defineComponent({
     return {
       props,
       nh,
+      effectiveTypes,
+      predefinedIcons,
+
       state,
 
       isFunction,
