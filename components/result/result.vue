@@ -2,7 +2,7 @@
   <div :class="className" :style="style">
     <div v-if="hasIcon" :class="nh.be('icon')">
       <slot name="icon">
-        <Icon :class="nh.be('icon')" :icon="iconComp" :style="{ color: props.iconColor }"></Icon>
+        <Icon v-bind="iconComp" :class="nh.be('icon')" :style="{ color: props.iconColor }"></Icon>
       </slot>
     </div>
     <div v-if="hasTitle" :class="nh.be('title')">
@@ -61,7 +61,9 @@ export default defineComponent({
       error: icons.value.error
     }))
 
-    const iconComp = computed(() => props.icon || predefinedIcons.value[props.type])
+    const iconComp = computed(() => {
+      return props.icon ? { icon: props.icon } : predefinedIcons.value[props.type]
+    })
     const hasTitle = computed(() => slots.title || props.title)
     const hasIcon = computed(() => slots.icon || props.type || props.icon)
     const hasDescription = computed(() => slots.description || props.description)

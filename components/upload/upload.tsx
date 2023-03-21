@@ -113,7 +113,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       defaultFiles: () => [],
       // 'canPreview' using UploadFile default
       listStyle: null

@@ -93,7 +93,7 @@
         }"
       >
         <slot name="suffix">
-          <Icon v-biind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
+          <Icon v-bind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
         </slot>
       </div>
       <div
@@ -286,7 +286,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       min: null,
       max: null,
       outsideClose: true,

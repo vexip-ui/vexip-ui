@@ -29,7 +29,7 @@ export default defineComponent({
       loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
       loadingIcon: null,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       icon: null,
       color: null,
       buttonType: {

@@ -303,7 +303,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       min: null,
       max: null,
       outsideClose: true,

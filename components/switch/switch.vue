@@ -85,7 +85,7 @@ export default defineComponent({
       closeColor: '',
       loading: () => loading.value,
       loadingIcon: null,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       openIcon: null,
       closeIcon: null,
       openText: '',

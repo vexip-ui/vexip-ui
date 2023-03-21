@@ -401,7 +401,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       keyConfig: () => ({}),
       filter: false,
       ignoreCase: false,

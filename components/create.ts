@@ -9,7 +9,7 @@ import {
 import { toCapitalCase } from '@vexip-ui/utils'
 
 import type { Ref, App } from 'vue'
-import type { LocaleOptions } from '@vexip-ui/config'
+import type { LocaleOptions, IconsOptions } from '@vexip-ui/config'
 import type { PropsOptions } from './props'
 
 type MaybeRef<T> = T | Ref<T>
@@ -20,7 +20,7 @@ export interface InstallOptions {
   props?: MaybeRef<PropsOptions>,
   locale?: MaybeRef<LocaleOptions>,
   zIndex?: MaybeRef<number>,
-  icons?: MaybeRef<any>
+  icons?: MaybeRef<IconsOptions>
 }
 
 export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | 'en-US') {
