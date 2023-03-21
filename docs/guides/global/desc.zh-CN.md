@@ -142,7 +142,7 @@ app.use(install, {
 
 如果你想配置其他的语言，你需要根据完整的配置项自行完成。
 
-> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts)。
+> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5)。
 
 ## 内置图标
 
@@ -174,6 +174,8 @@ app.use(install, {
 ```
 
 结合 ConfigProvider 组件的 `icons` 属性，你还可以为局部的区域自定义图标，详情请查阅 [ConfigProvider 文档](/zh-CN/components/config-provider)。
+
+> 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)。
 
 最后，我们来看一个实际的效果替换后的效果：
 

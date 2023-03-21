@@ -142,7 +142,7 @@ You can also change i18n of partial components with the `locale` prop of the Con
 
 If you want to configure a other language, you need do it yourself by following the full i18n options.
 
-> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts).
+> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5).
 
 ## Internal Icons
 
@@ -174,6 +174,8 @@ app.use(install, {
 ```
 
 You can also change internal icons of partial components with the `icons` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+
+> The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88).
 
 Finally, let's take a look at an actual effect after configuration:
 
