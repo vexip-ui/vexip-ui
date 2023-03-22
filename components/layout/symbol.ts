@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, ComponentPublicInstance } from 'vue'
 import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuMarkerType, MenuGroupType, MenuExposed } from '@/components/menu'
@@ -51,23 +51,24 @@ export interface LayoutState {
   affixed: boolean,
   scrollY: number,
   affixMatched: boolean,
-  expanded: boolean,
+  expandMatched: boolean,
+  useExpand: boolean,
   reduced: boolean,
   navConfig: boolean
 }
 
-export interface LayoutExposed {
+export interface LayoutExposed extends ComponentPublicInstance {
   scroll?: NativeScrollExposed,
   menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
-export interface LayoutHeaderExposed {
+export interface LayoutHeaderExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
-export interface LayoutAsideExposed {
+export interface LayoutAsideExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }

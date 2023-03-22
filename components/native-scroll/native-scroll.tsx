@@ -637,13 +637,8 @@ export default defineComponent({
                 </div>
               )}
               {slots.default &&
-                flatVNodes(children).map((vnode, index) => {
-                  vnode.key = index
-                  return (
-                    <ResizeObserver key={index} on-resize={handleResize}>
-                      {() => vnode}
-                    </ResizeObserver>
-                  )
+                flatVNodes(children).map(vnode => {
+                  return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
                 })}
             </Content>
           </ResizeObserver>

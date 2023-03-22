@@ -41,17 +41,6 @@ interface LayoutFooterLink {
   target?: string,
   children?: Array<Omit<LayoutFooterLink, 'children'>>
 }
-
-interface LayoutState {
-  isLayout: boolean,
-  locked: boolean,
-  affixed: boolean,
-  scrollY: number,
-  affixMatched: boolean,
-  expanded: boolean,
-  reduced: boolean,
-  navConfig: boolean
-}
 ```
 
 ### Layout 属性

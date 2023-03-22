@@ -1,3 +1,4 @@
+import type { ComponentPublicInstance } from 'vue'
 import type { ScrollMode } from '@/components/scroll'
 import type { EventHandler } from '@vexip-ui/utils'
 
@@ -34,7 +35,7 @@ export interface NativeScrollSlotParams {
   ensureInView: (el: string | Element, duration?: number, offset?: number) => void
 }
 
-export interface NativeScrollExposed {
+export interface NativeScrollExposed extends ComponentPublicInstance {
   percentX: number,
   percentY: number,
   currentScroll: {
