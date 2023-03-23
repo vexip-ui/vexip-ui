@@ -18,6 +18,7 @@
     :xl="props.xl"
     :xxl="props.xxl"
     :flex="props.flex"
+    :use-flex="columnFlex"
   >
     <input
       v-if="isNative"
@@ -260,6 +261,9 @@ export default defineComponent({
 
       return value
     })
+    const columnFlex = computed(() => {
+      return { justify: props.action ? 'center' : 'start', align: 'middle' } as const
+    })
 
     const instances = new Set<any>()
 
@@ -446,6 +450,7 @@ export default defineComponent({
       hasLabel,
       computedlabelWidth,
       controlStyle,
+      columnFlex,
 
       labelEl,
 
