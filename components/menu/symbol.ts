@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, ComponentPublicInstance } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 
@@ -54,7 +54,7 @@ export interface MenuState {
   doForEachItem(cb: (item: MenuItemState) => void): void
 }
 
-export interface MenuExposed {
+export interface MenuExposed extends ComponentPublicInstance {
   expandItemByLabel: (label: string) => void
 }
 

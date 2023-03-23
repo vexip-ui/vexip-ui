@@ -1,3 +1,5 @@
+import type { ComponentPublicInstance } from 'vue'
+
 export type UploadListType = 'name' | 'detail' | 'thumbnail' | 'card'
 export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 
@@ -77,7 +79,7 @@ export interface DirectoryReader {
   ) => void
 }
 
-export interface UploadExposed {
+export interface UploadExposed extends ComponentPublicInstance {
   execute: () => Promise<false | any[]>,
   handleDelete: (file: FileState) => void
 }

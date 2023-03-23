@@ -1,3 +1,5 @@
+import type { ComponentPublicInstance } from 'vue'
+
 export interface TransferKeyConfig {
   value?: string,
   label?: string,
@@ -19,7 +21,7 @@ export type TransferFilter = (
   type: 'source' | 'target'
 ) => boolean
 
-export interface TransferExposed {
+export interface TransferExposed extends ComponentPublicInstance {
   handleToTarget: () => void,
   handleToSource: () => void,
   handlePanelFocus: (type: 'source' | 'target') => void,

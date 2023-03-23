@@ -1,6 +1,7 @@
+import type { ComponentPublicInstance } from 'vue'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 
-export interface VirtualListExposed {
+export interface VirtualListExposed extends ComponentPublicInstance {
   scroll?: NativeScrollExposed,
   wrapper?: HTMLElement,
   list?: HTMLElement,
