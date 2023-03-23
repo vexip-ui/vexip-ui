@@ -86,7 +86,8 @@ export default defineComponent({
       affixed: false,
       scrollY: 0,
       affixMatched,
-      expanded: false,
+      expandMatched,
+      useExpand: false,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside)
     })
@@ -108,18 +109,24 @@ export default defineComponent({
       return isClient ? document.documentElement : null
     })
     const signInHeader = computed(() => {
-      return props.noAside || currentSignType.value === 'header' || state.expanded
+      return props.noAside || currentSignType.value === 'header' || state.useExpand
     })
     const menu = computed(() => aside.value?.menu || header.value?.menu)
     const isDark = ref(props.darkMode)
+    const viewHeight = ref(100)
+
+    const style = computed(() => {
+      return {
+        [nh.cv('view-height')]: `${viewHeight.value}px`
+      }
+    })
 
     provide(LAYOUT_STATE, state)
 
     expose({ scroll, menu, expandMenuByLabel })
 
     watch(affixMatched, value => {
-      state.affixMatched = value
-      state.affixed = !state.affixMatched && state.scrollY >= 50
+      state.affixed = !value && state.scrollY >= 50
     })
     watch(
       () => props.reduced,
@@ -190,10 +197,10 @@ export default defineComponent({
       emit('update:dark-mode', isDark)
     }
 
-    function handleScroll({ clientY }: { clientY: number }) {
-      state.scrollY = clientY
-      state.affixed = !state.affixMatched && clientY >= 50
-    }
+    // function handleScroll({ clientY }: { clientY: number }) {
+    //   // state.scrollY = clientY
+    //   // state.affixed = !state.affixMatched && clientY >= 50
+    // }
 
     function handleUserAction(label: string, meta: Record<string, any>) {
       emitEvent(props.onUserAction, label, meta)
@@ -201,6 +208,17 @@ export default defineComponent({
 
     function expandMenuByLabel(label: string) {
       menu.value?.expandItemByLabel(label)
+    }
+
+    function handleResize() {
+      if (scroll.value?.$el) {
+        viewHeight.value = scroll.value.$el.offsetHeight
+      }
+    }
+
+    function stopAndPrevent(event: Event) {
+      event.stopPropagation()
+      event.preventDefault()
     }
 
     function getSlotParams() {
@@ -259,6 +277,10 @@ export default defineComponent({
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
           onToggleTheme={handleToggleTheme}
+          {...{
+            onWheel: stopAndPrevent,
+            onMousemove: stopAndPrevent
+          }}
         >
           {{
             left:
@@ -284,25 +306,31 @@ export default defineComponent({
       }
 
       return (
-        <LayoutAside
-          ref={aside}
-          v-model:reduced={asideReduced.value}
-          menus={props.menus}
-          menu-props={props.menuProps}
-          fixed={props.asideFixed}
-          onReducedChange={toggleReduce}
-          onMenuSelect={handleMenuSelect}
-        >
-          {{
-            top:
-              slots['aside-top'] ||
-              slots.asideTop ||
-              (() => (!signInHeader.value ? renderSign() : null)),
-            default: slots['aside-main'] || slots.asideMain || null,
-            bottom: slots['aside-bottom'] || slots.asideBottom || null,
-            expand: slots['aside-expand'] || slots.asideExpand || null
-          }}
-        </LayoutAside>
+        <div class={[nh.be('sider'), !expandMatched.value && nh.bem('sider', 'away')]}>
+          <LayoutAside
+            ref={aside}
+            v-model:reduced={asideReduced.value}
+            menus={props.menus}
+            menu-props={props.menuProps}
+            fixed={props.asideFixed}
+            onReducedChange={toggleReduce}
+            onMenuSelect={handleMenuSelect}
+            {...{
+              onWheel: stopAndPrevent,
+              onMousemove: stopAndPrevent
+            }}
+          >
+            {{
+              top:
+                slots['aside-top'] ||
+                slots.asideTop ||
+                (() => (!signInHeader.value ? renderSign() : null)),
+              default: slots['aside-main'] || slots.asideMain || null,
+              bottom: slots['aside-bottom'] || slots.asideBottom || null,
+              expand: slots['aside-expand'] || slots.asideExpand || null
+            }}
+          </LayoutAside>
+        </div>
       )
     }
 
@@ -339,61 +367,38 @@ export default defineComponent({
       )
     }
 
-    function renderScroll() {
-      return (
-        <NativeScroll
-          ref={scroll}
-          scroll-class={[
-            nh.be('scroll'),
-            expandMatched.value && nh.bem('scroll', 'away'),
-            asideReduced.value && nh.bem('scroll', 'reduced')
-          ]}
-          height={'100%'}
-          use-y-bar
-          bar-class={nh.be('scrollbar')}
-          onScroll={handleScroll}
-        >
-          {renderMain()}
-          {props.footer && renderFooter()}
-        </NativeScroll>
-      )
-    }
-
     return () => {
       const CustomTag = (props.tag || 'section') as any
 
       return (
-        <CustomTag class={className.value}>
-          {currentSignType.value === 'aside'
-            ? [
-                renderAside(),
-                <section
-                  ref={section}
-                  class={[
-                    nh.be('section'),
-                    {
-                      [nh.bem('section', 'away')]: expandMatched.value,
-                      [nh.bem('section', 'reduced')]: asideReduced.value,
-                      [nh.bem('section', 'locked')]: state.locked
-                    }
-                  ]}
-                >
-                  <div class={nh.be('container')}>
-                    {renderHeader()}
-                    {renderScroll()}
-                  </div>
-                </section>
-              ]
-            : [
-                renderHeader(),
-                <section class={nh.be('section')}>
-                  <div class={nh.be('container')}>
-                    {renderAside()}
-                    {renderScroll()}
-                  </div>
-                </section>
+        <NativeScroll
+          ref={scroll}
+          class={className.value}
+          style={style.value}
+          use-y-bar
+          bar-class={nh.be('scrollbar')}
+          onResize={handleResize}
+        >
+          <CustomTag class={nh.be('wrapper')}>
+            {currentSignType.value === 'header' && renderHeader()}
+            {renderAside()}
+            <section
+              ref={section}
+              class={[
+                nh.be('section'),
+                {
+                  [nh.bem('section', 'away')]: expandMatched.value,
+                  [nh.bem('section', 'reduced')]: asideReduced.value,
+                  [nh.bem('section', 'locked')]: state.locked
+                }
               ]}
-        </CustomTag>
+            >
+              {currentSignType.value === 'aside' && renderHeader()}
+              {renderMain()}
+              {props.footer && renderFooter()}
+            </section>
+          </CustomTag>
+        </NativeScroll>
       )
     }
   }

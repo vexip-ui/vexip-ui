@@ -10,7 +10,7 @@
         {{ route.name }}
       </router-link>
     </Cell>
-    <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px;">
+    <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px">
       <ThemeSwitch></ThemeSwitch>
     </Cell>
   </Grid>
@@ -71,6 +71,7 @@ body {
 }
 
 .dev-main {
+  position: relative;
   height: calc(100% - 50px);
   padding: 20px;
   overflow: auto;

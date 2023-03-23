@@ -76,7 +76,8 @@ export default defineComponent({
     watch(
       matched,
       value => {
-        layoutState.expanded = !value
+        layoutState.useExpand = !value
+        currentExpanded.value = false
       },
       { immediate: true }
     )
@@ -109,6 +110,7 @@ export default defineComponent({
     }
 
     function toggleExpand(target = !currentExpanded.value) {
+      console.log('1', target)
       currentExpanded.value = target
 
       emitEvent(props.onExpandedChange, target)

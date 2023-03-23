@@ -12,6 +12,7 @@
 $layout: () !default;
 $layout: map.merge(
   (
+    view-height: 100vh,
     aside-width: 240px,
     aside-bg-color: get-css-var('bg-color-base'),
     aside-b-color: get-css-var('border-color-light-2'),
@@ -33,15 +34,33 @@ $layout: map.merge(
 
   @include basis;
 
-  position: relative;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    min-height: get-css-var('layout-view-height');
+  }
+
+  &--no-aside &__wrapper,
+  &--header-main &__wrapper {
+    flex-direction: column;
+  }
+
+  &__sider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: calc(get-css-var('z-index-popper') + 100);
+    display: flex;
+    pointer-events: none;
+  }
 
   &__aside {
     @include basis;
 
-    position: absolute;
+    position: sticky;
     top: 0;
     bottom: 0;
     left: 0;
@@ -49,11 +68,11 @@ $layout: map.merge(
     display: flex;
     flex-direction: column;
     width: get-css-var('layout-aside-width');
+    max-height: get-css-var('layout-view-height');
+    pointer-events: all;
     background-color: get-css-var('layout-aside-bg-color');
     border-right: get-css-var('layout-aside-border');
-    transition:
-      width get-css-var('transition-base'),
-      get-css-var('transition-border'),
+    transition: width get-css-var('transition-base'), get-css-var('transition-border'),
       get-css-var('transition-transform');
     transform: translateX(-100%);
 
@@ -71,15 +90,20 @@ $layout: map.merge(
     }
 
     &-top {
+      display: flex;
+      flex-shrink: 0;
       width: 100%;
     }
 
     &-main {
+      display: flex;
       flex: 1 0 0%;
       width: 100%;
     }
 
     &-bottom {
+      display: flex;
+      flex-shrink: 0;
       width: 100%;
     }
 
@@ -89,8 +113,13 @@ $layout: map.merge(
     }
   }
 
-  &--header-main &__aside--fixed {
-    top: get-css-var('layout-header-height');
+  &--header-main &__aside {
+    &--fixed {
+      top: get-css-var('layout-header-height');
+      max-height: calc(
+        #{get-css-var('layout-view-height')} - #{get-css-var('layout-header-height')}
+      );
+    }
   }
 
   &__section {
@@ -109,25 +138,17 @@ $layout: map.merge(
   }
 
   &--header-main &__section {
-    @include query-media('lg') {
-      padding-left: 0;
-    }
+    height: auto;
   }
 
   &--no-aside &__section {
     padding-left: 0;
   }
 
-  &__container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
   &__header {
     @include basis;
 
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
     z-index: 1;
@@ -138,17 +159,20 @@ $layout: map.merge(
     padding: 0 16px;
     background-color: get-css-var('layout-header-bg-color');
     border-bottom: get-css-var('layout-header-border');
-    transition:
-      height get-css-var('transition-base'),
-      get-css-var('transition-border'),
+    transition: height get-css-var('transition-base'), get-css-var('transition-border'),
       get-css-var('transition-transform');
 
     &--affixed {
       transform: translateY(-100%);
     }
 
+    &--away {
+      position: relative;
+    }
+
     &-left {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       height: 100%;
     }
@@ -163,6 +187,7 @@ $layout: map.merge(
 
     &-right {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       height: 100%;
     }
@@ -174,26 +199,6 @@ $layout: map.merge(
       & > .#{$namespace}-menu__item {
         height: get-css-var('layout-header-height');
       }
-    }
-  }
-
-  &__scroll {
-    width: 100%;
-    height: 100%;
-    padding-top: get-css-var('layout-header-height');
-  }
-
-  $scroll: #{&}__scroll;
-
-  &--header-main &__scroll {
-    transition: padding-left get-css-var('transition-base');
-
-    &--away {
-      padding-left: get-css-var('layout-aside-width');
-    }
-
-    &--away#{$scroll}--reduced {
-      padding-left: 64px;
     }
   }
 
@@ -226,6 +231,7 @@ $layout: map.merge(
     align-items: center;
     height: get-css-var('layout-header-height');
     cursor: pointer;
+    transition: height get-css-var('transition-base');
 
     &-name {
       width: calc(100% - 64px);
