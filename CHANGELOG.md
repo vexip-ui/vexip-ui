@@ -1,3 +1,17 @@
+## [2.1.9](https://github.com/vexip-ui/vexip-ui/compare/v2.1.8...v2.1.9) (2023-03-23)
+
+### Bug Fixes
+
+- **config:** passing default null to avoid warning ([44c813b](https://github.com/vexip-ui/vexip-ui/commit/44c813b98a9aac9697573c9bfa70cee86ccf6f61))
+- **form:** unexpected display using with Column when hmr ([fc9318d](https://github.com/vexip-ui/vexip-ui/commit/fc9318d835263d43f0e2cbb4d524b9a1ef90a9d1))
+- **number-input:** incoorect suffix icon position ([b759fea](https://github.com/vexip-ui/vexip-ui/commit/b759feac6dce1ee5f9871109b4409923802916d3)), closes [#284](https://github.com/vexip-ui/vexip-ui/issues/284)
+- **tabs:** header will shrink if content too height ([cc46454](https://github.com/vexip-ui/vexip-ui/commit/cc46454ea738f3790448d2c4ca14ce34a17dd6c9))
+
+### Features
+
+- **config:** support custom icons via config ([#287](https://github.com/vexip-ui/vexip-ui/issues/287)) ([d665f10](https://github.com/vexip-ui/vexip-ui/commit/d665f103c6ba76571dd146496358d0de481a1752))
+- **date-picker:** support set week start for panel ([619385e](https://github.com/vexip-ui/vexip-ui/commit/619385e8aedcbab83da8c1506ba562d8d2b2ffc0)), closes [#286](https://github.com/vexip-ui/vexip-ui/issues/286)
+
 ## [2.1.8](https://github.com/vexip-ui/vexip-ui/compare/v2.1.7...v2.1.8) (2023-03-13)
 
 ### Bug Fixes
