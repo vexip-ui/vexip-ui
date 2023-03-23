@@ -1,12 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './avatar.scss';
-@use './dropdown.scss';
-@use './linker.scss';
-@use './menu.scss';
-@use './native-scroll.scss';
-@use './switch.scss';
 
 $layout: () !default;
 $layout: map.merge(

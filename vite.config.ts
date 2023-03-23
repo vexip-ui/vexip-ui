@@ -115,7 +115,14 @@ export default defineConfig(async () => {
           resolveId(id) {
             if (id.startsWith('@/style')) {
               return {
-                id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/css/$1.css'),
+                id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/style/$1.scss'),
+                external: 'absolute'
+              }
+            }
+
+            if (id.startsWith('@/css')) {
+              return {
+                id: id.replace(/@\/css\/(.+).css$/, 'vexip-ui/css/$1.css'),
                 external: 'absolute'
               }
             }

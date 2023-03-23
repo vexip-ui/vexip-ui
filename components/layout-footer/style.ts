@@ -1,1 +1,2 @@
-import '@/style/layout.scss'
+import '@/components/preset/style'
+import '@/style/layout-footer.scss'

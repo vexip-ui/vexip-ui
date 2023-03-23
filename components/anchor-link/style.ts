@@ -1,1 +1,2 @@
-import '@/style/anchor.scss'
+import '@/components/preset/style'
+import '@/style/anchor-link.scss'

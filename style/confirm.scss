@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './modal.scss';
 
 $confirm: () !default;
 $confirm: map.merge(

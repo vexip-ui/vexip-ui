@@ -1,10 +1,7 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './button.scss';
-@use './calendar-panel.scss';
 @use './input.scss' as input;
-@use './wheel.scss';
 
 $date-picker: () !default;
 $date-picker: map.merge(

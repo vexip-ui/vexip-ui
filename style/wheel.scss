@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './scroll.scss';
 
 $wheel: () !default;
 $wheel: map.merge(

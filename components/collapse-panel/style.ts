@@ -1,1 +1,2 @@
-import '@/style/collapse.scss'
+import '@/components/preset/style'
+import '@/style/collapse-panel.scss'

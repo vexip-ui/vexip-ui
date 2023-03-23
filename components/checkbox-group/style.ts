@@ -1,1 +1,2 @@
-import '@/style/checkbox.scss'
+import '@/components/preset/style'
+import '@/style/checkbox-group.scss'

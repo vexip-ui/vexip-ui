@@ -1,1 +1,2 @@
-import '@/style/carousel.scss'
+import '@/components/preset/style'
+import '@/style/carousel-item.scss'

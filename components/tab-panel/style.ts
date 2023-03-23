@@ -1,1 +1,2 @@
-import '@/style/tabs.scss'
+import '@/components/preset/style'
+import '@/style/tab-panel.scss'

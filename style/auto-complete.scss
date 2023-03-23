@@ -1,5 +1,4 @@
 @use './design' as *;
-@use './select.scss';
 
 .#{$namespace}-auto-complete {
   &__input {

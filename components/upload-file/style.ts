@@ -1,1 +1,2 @@
-import '@/style/upload.scss'
+import '@/components/preset/style'
+import '@/style/upload-file.scss'

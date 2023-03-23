@@ -1,9 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './masker.scss';
-@use './skeleton.scss';
-@use './viewer.scss';
 
 $image: () !default;
 $image: map.merge(

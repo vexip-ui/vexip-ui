@@ -1,1 +1,2 @@
-import '@/style/timeline.scss'
+import '@/components/preset/style'
+import '@/style/timeline-item.scss'

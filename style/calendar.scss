@@ -2,9 +2,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './column.scss';
-@use './number-input.scss';
-@use './row.scss';
 
 $calendar: () !default;
 $calendar: map.merge(
@@ -25,7 +22,7 @@ $calendar: map.merge(
     date-b-color-disabled: get-css-var('border-color-light-2'),
     date-b-color-outside: get-css-var('border-color-light-1'),
     date-border: get-css-var('calendar-date-b-width') get-css-var('calendar-date-b-style')
-    get-css-var('calendar-date-b-color'),
+      get-css-var('calendar-date-b-color'),
     content-height: 90px,
     content-v-padding: 4px,
     content-h-padding: 4px
@@ -95,9 +92,7 @@ $calendar: map.merge(
     background-color: get-css-var('calendar-date-bg-color');
     border-top: get-css-var('calendar-date-border');
     outline: 0;
-    transition:
-      get-css-var('transition-color'),
-      get-css-var('transition-background'),
+    transition: get-css-var('transition-color'), get-css-var('transition-background'),
       get-css-var('transition-border');
 
     &:hover,

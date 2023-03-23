@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './masker.scss';
 
 $drawer: () !default;
 $drawer: map.merge(

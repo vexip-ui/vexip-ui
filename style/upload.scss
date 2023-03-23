@@ -1,8 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './button.scss';
-@use './progress.scss';
 
 $upload: () !default;
 $upload: map.merge(
@@ -112,8 +110,7 @@ $upload: map.merge(
     overflow: hidden;
     vertical-align: middle;
     cursor: pointer;
-    border:
-      get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
+    border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
       get-css-var('upload-panel-b-color');
     border-radius: get-css-var('upload-file-radius');
     outline: 0;
@@ -165,8 +162,7 @@ $upload: map.merge(
     overflow: hidden;
     cursor: pointer;
     background-color: get-css-var('upload-panel-bg-color');
-    border:
-      get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
+    border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
       get-css-var('upload-panel-b-color');
     border-radius: get-css-var('upload-panel-radius');
     outline: 0;

@@ -1,8 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './column.scss';
-@use './row.scss';
 
 $form: () !default;
 $form: map.merge(
