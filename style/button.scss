@@ -2,7 +2,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './icon.scss';
 
 $button: () !default;
 $button: map.merge(
@@ -86,11 +85,8 @@ $button: map.merge(
   border: get-css-var('button-border');
   border-radius: get-css-var('button-radius');
   outline: 0;
-  transition:
-    get-css-var('transition-color'),
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
-    get-css-var('transition-shadow');
+  transition: get-css-var('transition-color'), get-css-var('transition-background'),
+    get-css-var('transition-border'), get-css-var('transition-shadow');
 
   &:hover {
     color: get-css-var('button-color-hover');

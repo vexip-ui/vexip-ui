@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './icon.scss';
 
 $collapse: () !default;
 $collapse: map.merge(

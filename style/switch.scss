@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './icon.scss';
 
 $switch: () !default;
 $switch: map.merge(
@@ -43,11 +42,8 @@ $switch: map.merge(
   user-select: none;
   background-color: get-css-var('switch-bg-color');
   border-radius: 30px;
-  transition:
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
-    get-css-var('transition-shadow'),
-    get-css-var('transition-opacity');
+  transition: get-css-var('transition-background'), get-css-var('transition-border'),
+    get-css-var('transition-shadow'), get-css-var('transition-opacity');
 
   &--small {
     @include define-preset-values(

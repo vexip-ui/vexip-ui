@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use './design' as *;
-@use './icon.scss';
 
 $input: () !default;
 $input: map.merge(
@@ -54,9 +53,7 @@ $input: map.merge(
     border: get-css-var('border-shape') get-css-var('input-b-color');
     border-radius: get-css-var('input-radius');
     outline: 0;
-    transition:
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
+    transition: get-css-var('transition-background'), get-css-var('transition-border'),
       get-css-var('transition-shadow');
 
     &:hover {
