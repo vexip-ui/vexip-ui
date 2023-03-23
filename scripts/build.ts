@@ -35,6 +35,7 @@ async function main() {
     }
   })
   await run('pnpm', ['build:style'])
+  await run('pnpm', ['copy-style'])
 
   logger.ln()
 

@@ -1,4 +1,4 @@
 import '@/components/preset/css'
-import '@/components/option/style'
-import '@/components/virtual-list/style'
+import '@/components/option/css'
+import '@/components/virtual-list/css'
 import '@/css/cascader.css'

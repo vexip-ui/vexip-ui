@@ -1,5 +1,5 @@
 import '@/components/preset/css'
-import '@/components/masker/style'
-import '@/components/skeleton/style'
-import '@/components/viewer/style'
+import '@/components/masker/css'
+import '@/components/skeleton/css'
+import '@/components/viewer/css'
 import '@/css/image.css'

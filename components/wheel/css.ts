@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/scroll/style'
+import '@/components/scroll/css'
 import '@/css/wheel.css'

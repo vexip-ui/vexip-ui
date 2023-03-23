@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/bubble/style'
+import '@/components/bubble/css'
 import '@/css/progress.css'

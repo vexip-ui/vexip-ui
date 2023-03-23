@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/select/style'
+import '@/components/select/css'
 import '@/css/auto-complete.css'

@@ -1,4 +1,4 @@
 import '@/components/preset/css'
-import '@/components/button/style'
-import '@/components/masker/style'
+import '@/components/button/css'
+import '@/components/masker/css'
 import '@/css/modal.css'

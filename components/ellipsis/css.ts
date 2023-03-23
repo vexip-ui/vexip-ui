@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/tooltip/style'
+import '@/components/tooltip/css'
 import '@/css/ellipsis.css'

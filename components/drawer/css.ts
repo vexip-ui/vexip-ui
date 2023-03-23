@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/masker/style'
+import '@/components/masker/css'
 import '@/css/drawer.css'

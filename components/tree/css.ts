@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/checkbox/style'
+import '@/components/checkbox/css'
 import '@/css/tree.css'

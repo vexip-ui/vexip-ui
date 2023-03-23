@@ -1,3 +1,3 @@
 import '@/components/preset/css'
-import '@/components/modal/style'
+import '@/components/modal/css'
 import '@/css/confirm.css'
