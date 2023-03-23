@@ -234,7 +234,9 @@ export const globalIcons = computed(() => {
 
 export function configIcons(icons: MaybeRef<IconsOptions>, app?: App) {
   const upstreamIcons =
-    app || !getCurrentScope() ? globalIcons : inject<ComputedRef<IconsConfig>>(PROVIDED_ICONS)
+    app || !getCurrentScope()
+      ? globalIcons
+      : inject<ComputedRef<IconsConfig> | null>(PROVIDED_ICONS, null)
   const normalizedIcons = computed(() => {
     const normalizedIcons: Partial<IconsConfig> = {}
     const unrefIcons = unref(icons)
