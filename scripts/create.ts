@@ -92,7 +92,17 @@ async function create(name: string) {
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'style.ts'),
-      source: `import '@/style/${kebabCaseName}.scss'\n`
+      source: `
+        import '@/components/preset/style'
+        import '@/style/${kebabCaseName}.scss'
+      `
+    },
+    {
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'css.ts'),
+      source: `
+        import '@/components/preset/css'
+        import '@/css/${kebabCaseName}.css'
+      `
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'props.ts'),
