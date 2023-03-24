@@ -76,17 +76,9 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
   name = toKebabCase(name)
 
   if (importStyle === 'sass') {
-    return [
-      'vexip-ui/style/preset.scss',
-      ...(importDarkTheme ? ['vexip-ui/style/dark/preset.scss'] : []),
-      `vexip-ui/style/${name}.scss`
-    ]
+    return [...(importDarkTheme ? ['vexip-ui/es/style/dark'] : []), `vexip-ui/es/style/${name}`]
   } else if (importStyle === true || importStyle === 'css') {
-    return [
-      'vexip-ui/css/preset.css',
-      ...(importDarkTheme ? ['vexip-ui/themes/dark/index.css'] : []),
-      `vexip-ui/css/${name}.css`
-    ]
+    return [...(importDarkTheme ? ['vexip-ui/es/css/dark'] : []), `vexip-ui/es/css/${name}`]
   }
 }
 

@@ -1,14 +1,11 @@
 {
   "name": "vexip-ui",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
   "description": "A Vue 3 UI library, Highly customizable property values, Full TypeScript, Performance should be good",
   "packageManager": "pnpm@7.14.2",
-  "main": "lib/components/index.cjs",
-  "module": "es/components/index.mjs",
-  "types": "dist/components/index.d.ts",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
     "props": "tsx scripts/props.ts",
@@ -30,7 +27,6 @@
     "build:utils": "pnpm -C common/utils build && pnpm i",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
-    "copy-style": "tsx scripts/copy-style.ts",
     "create": "tsx scripts/create.ts",
     "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** directives/** playground/** dev-server/** docs/**",
     "lint:scripts": "eslint --fix --ext .js,.ts scripts/**",
@@ -48,6 +44,36 @@
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
   },
+  "main": "lib/index.cjs",
+  "module": "es/index.mjs",
+  "types": "dist/components/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./es/index.mjs",
+      "require": "./lib/index.cjs",
+      "types": "./dist/components/index.d.ts"
+    },
+    "./es": "./es/index.mjs",
+    "./lib": "./lib/index.cjs",
+    "./es/*.mjs": "./es/*.mjs",
+    "./es/*": "./es/*.mjs",
+    "./lib/*.cjs": "./lib/*.cjs",
+    "./lib/*": "./lib/*.cjs",
+    "./package.json": "./package.json",
+    "./*": "./*"
+  },
+  "sideEffects": [
+    "dist/*",
+    "css/*.css",
+    "es/components/*/style.mjs",
+    "es/style/*",
+    "es/css/*",
+    "lib/components/*/style.cjs",
+    "lib/style/*",
+    "lib/css/*",
+    "style/**/*.scss",
+    "theme/**/*.css"
+  ],
   "files": [
     "css",
     "dist",
@@ -59,21 +85,6 @@
     "meta-data.json",
     "types.d.ts"
   ],
-  "exports": {
-    ".": {
-      "import": "./es/components/index.mjs",
-      "require": "./lib/components/index.cjs",
-      "types": "./dist/components/index.d.ts"
-    },
-    "./es": "./es/components/index.mjs",
-    "./lib": "./lib/components/index.cjs",
-    "./es/*.mjs": "./es/components/*/index.mjs",
-    "./es/*": "./es/components/*/index.mjs",
-    "./lib/*.cjs": "./lib/components/*/index.cjs",
-    "./lib/*": "./lib/components/*/index.cjs",
-    "./package.json": "./package.json",
-    "./*": "./*"
-  },
   "keywords": [
     "flex",
     "components",
@@ -160,14 +171,6 @@
   "peerDependencies": {
     "vue": "^3.2.25"
   },
-  "sideEffects": [
-    "dist/*",
-    "css/*.css",
-    "es/components/*/style.mjs",
-    "lib/components/*/style.cjs",
-    "style/**/*.scss",
-    "theme/**/*.css"
-  ],
   "pnpm": {
     "peerDependencyRules": {
       "ignoreMissing": [

@@ -1,1 +1,1 @@
-import '@/css/icon.css'
+import '@/components/preset/css'
