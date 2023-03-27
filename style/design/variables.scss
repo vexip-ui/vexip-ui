@@ -3,51 +3,11 @@
 
 @use 'sass:color';
 @use 'sass:map';
-@use 'sass:list';
 @use 'sass:math';
-@use 'sass:meta';
+
+@use '../shared/variables.scss' as *;
 
 $namespace: 'vxp' !default;
-
-@function to-css-var-name($name-units...) {
-  // variable prefix is fixed to '--vxp'
-  $name: '--vxp';
-
-  @each $unit in $name-units {
-    @if $unit != '' {
-      $name: $name + '-' + $unit;
-    }
-  }
-
-  @return $name;
-}
-
-@function get-css-var($name-units...) {
-  @return var(#{to-css-var-name($name-units...)});
-}
-
-@mixin define-css-var($name-units, $value) {
-  #{to-css-var-name($name-units...)}: #{$value};
-}
-
-@mixin define-preset-values($base-name, $style-map, $inspect: false) {
-  @each $name in map.keys($style-map) {
-    @include define-css-var(
-      ($base-name, $name),
-      if($inspect, #{meta.inspect(map.get($style-map, $name))}, map.get($style-map, $name))
-    );
-  }
-}
-
-@mixin define-preset-style($base-name, $style-map) {
-  @each $name in map.keys($style-map) {
-    $style-units: map.get($style-map, $name);
-
-    @if list.length($style-units) != 0 {
-      @include define-css-var(($base-name, $name), get-css-var($style-units...));
-    }
-  }
-}
 
 $types: primary, info, success, warning, error;
 
@@ -82,11 +42,11 @@ $color-map: map.deep-merge(
       (
         $type: (
           '#{$mode}-#{$i}':
-          color.mix(
-            $mixed-color,
-            map.get($color-map, $type, 'base'),
-            math.percentage(math.div($i, 10))
-          )
+            color.mix(
+              $mixed-color,
+              map.get($color-map, $type, 'base'),
+              math.percentage(math.div($i, 10))
+            )
         )
       ),
       $color-map
@@ -100,7 +60,7 @@ $color-map: map.deep-merge(
       (
         $type: (
           'opacity-#{$i}':
-          rgba(map.get($color-map, $type, 'base'), math.percentage(math.div(10 - $i, 10)))
+            rgba(map.get($color-map, $type, 'base'), math.percentage(math.div(10 - $i, 10)))
         )
       ),
       $color-map

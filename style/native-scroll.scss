@@ -1,3 +1,4 @@
+@use './shared' as *;
 @use './design' as *;
 
 .#{$namespace}-native-scroll {

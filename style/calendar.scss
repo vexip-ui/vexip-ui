@@ -1,6 +1,7 @@
 @use 'sass:math';
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $calendar: () !default;

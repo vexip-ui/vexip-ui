@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $anchor: () !default;
@@ -12,7 +13,7 @@ $anchor: map.merge(
     track-style: solid,
     track-color: get-css-var('border-color-light-2'),
     track: get-css-var('anchor-track-width') get-css-var('anchor-track-style')
-    get-css-var('anchor-track-color'),
+      get-css-var('anchor-track-color'),
     track-color-active: get-css-var('anchor-link-color-active'),
     pointer-size: 8px,
     pointer-bg-color: get-css-var('color-white'),

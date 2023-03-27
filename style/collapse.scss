@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $collapse: () !default;

@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:math';
+
 @use './variables.scss' as *;
 
 @mixin inherit-basis {
