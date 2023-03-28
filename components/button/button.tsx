@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, inject } from 'vue'
+import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
 import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
@@ -47,6 +47,9 @@ export default defineComponent({
     const nh = useNameHelper('button')
     const icons = useIcons()
     const pulsing = ref(false)
+    const index = ref(0)
+    const isLast = ref(false)
+
     const isIconOnly = computed(() => {
       return !slots.default
     })
@@ -71,7 +74,9 @@ export default defineComponent({
         [nh.bm('circle')]: props.circle,
         [nh.bm('icon-only')]: isIconOnly.value,
         [nh.bm(size.value)]: size.value !== 'default',
-        [nh.bm('pulsing')]: pulsing.value
+        [nh.bm('pulsing')]: pulsing.value,
+        [nh.bm('first')]: index.value === 1,
+        [nh.bm('last')]: isLast.value
       }
     })
     const colorMap = computed(() => {
@@ -196,6 +201,16 @@ export default defineComponent({
 
       return {}
     })
+
+    if (groupState) {
+      const state = reactive({ index, isLast })
+
+      groupState.increaseItem(state)
+
+      onBeforeUnmount(() => {
+        groupState.decreaseItem(state)
+      })
+    }
 
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return

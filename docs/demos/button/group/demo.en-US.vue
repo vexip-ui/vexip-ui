@@ -14,10 +14,25 @@
   <br />
   <br />
   <ButtonGroup circle type="primary">
-    <Button> Button 1 </Button>
-    <Button> Button 2 </Button>
-    <Button type="warning">
+    <Tooltip reverse>
+      <template #trigger>
+        <Button> Button 1 </Button>
+      </template>
+      Button 1
+    </Tooltip>
+    <Tooltip reverse>
+      <template #trigger>
+        <Button> Button 2 </Button>
+      </template>
+      Button 2
+    </Tooltip>
+    <Tooltip reverse>
+      <template #trigger>
+        <Button type="warning">
+          Button 3
+        </Button>
+      </template>
       Button 3
-    </Button>
+    </Tooltip>
   </ButtonGroup>
 </template>

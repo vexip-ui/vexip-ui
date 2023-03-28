@@ -476,26 +476,28 @@ $button: map.merge(
           z-index: 2;
         }
 
-        &:first-child {
+        &--first {
+          margin-right: 0;
           border-radius: get-css-var('button-radius') 0 0 get-css-var('button-radius');
         }
 
-        &:last-child {
+        &--last {
+          margin-right: 0;
           border-radius: 0 get-css-var('button-radius') get-css-var('button-radius') 0;
         }
 
-        &:not(:last-child) {
+        &:not(#{$self}--last) {
           margin-right: -1px;
         }
       }
 
       &--circle {
         #{$self} {
-          &:first-child {
+          &--first {
             border-radius: get-css-var('button-height') 0 0 get-css-var('button-height');
           }
 
-          &:last-child {
+          &--last {
             border-radius: 0 get-css-var('button-height') get-css-var('button-height') 0;
           }
         }
