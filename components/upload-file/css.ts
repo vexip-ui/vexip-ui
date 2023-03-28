@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/upload-file.css'
+import '@/components/upload/css'
+import '@/css/anchor-link.css'

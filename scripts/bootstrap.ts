@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { statSync, existsSync } from 'node:fs'
+import { cpus } from 'node:os'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import {
@@ -8,7 +9,8 @@ import {
   prettierConfig,
   logger,
   components as allComponents,
-  toCapitalCase
+  toCapitalCase,
+  runParallel
 } from './utils'
 
 async function main() {
@@ -176,11 +178,13 @@ async function main() {
   await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
   await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
 
-  await Promise.all(
-    allComponents
-      .filter(component => !existsSync(`style/${component}.scss`))
-      .map(component => writeFile(`style/${component}.scss`, '', 'utf-8'))
-  )
+  await runParallel(cpus().length, allComponents, async component => {
+    const scssPath = resolve(rootDir, `style/${component}.scss`)
+
+    if (!existsSync(scssPath)) {
+      await writeFile(scssPath, '', 'utf-8')
+    }
+  })
 
   const styleIndex =
     "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +

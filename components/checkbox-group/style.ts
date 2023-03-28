@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/checkbox-group.scss'
+import '@/components/checkbox/style'
+import '@/style/anchor-link.scss'

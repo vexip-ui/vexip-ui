@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/collapse-panel.css'
+import '@/components/collapse/css'
+import '@/css/anchor-link.css'

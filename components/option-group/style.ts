@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/option-group.scss'
+import '@/components/option/style'
+import '@/style/anchor-link.scss'

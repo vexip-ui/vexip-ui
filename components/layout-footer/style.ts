@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/layout-footer.scss'
+import '@/components/layout/style'
+import '@/style/anchor-link.scss'

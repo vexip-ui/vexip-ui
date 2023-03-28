@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/avatar-group.scss'
+import '@/components/avatar/style'
+import '@/style/anchor-link.scss'

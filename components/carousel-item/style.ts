@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/carousel-item.scss'
+import '@/components/carousel/style'
+import '@/style/anchor-link.scss'

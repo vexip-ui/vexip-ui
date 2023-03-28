@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/table-column.css'
+import '@/components/table/css'
+import '@/css/anchor-link.css'

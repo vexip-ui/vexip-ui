@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/tab-nav-item.scss'
+import '@/components/tab-nav/style'
+import '@/style/anchor-link.scss'

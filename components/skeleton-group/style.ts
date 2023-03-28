@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/skeleton-group.scss'
+import '@/components/skeleton/style'
+import '@/style/anchor-link.scss'

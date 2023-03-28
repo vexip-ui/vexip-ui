@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/dropdown-list.scss'
+import '@/components/dropdown/style'
+import '@/style/anchor-link.scss'

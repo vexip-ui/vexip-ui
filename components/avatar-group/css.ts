@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/avatar-group.css'
+import '@/components/avatar/css'
+import '@/css/anchor-link.css'

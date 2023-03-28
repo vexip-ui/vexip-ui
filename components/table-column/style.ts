@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/table-column.scss'
+import '@/components/table/style'
+import '@/style/anchor-link.scss'

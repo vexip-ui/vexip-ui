@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/upload-list.scss'
+import '@/components/upload/style'
+import '@/style/anchor-link.scss'

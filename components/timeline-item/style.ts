@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/timeline-item.scss'
+import '@/components/timeline/style'
+import '@/style/anchor-link.scss'

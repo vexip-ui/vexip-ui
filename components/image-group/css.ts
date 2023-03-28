@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/image-group.css'
+import '@/components/image/css'
+import '@/css/anchor-link.css'

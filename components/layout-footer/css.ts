@@ -1,2 +1,3 @@
 import '@/components/preset/css'
-import '@/css/layout-footer.css'
+import '@/components/layout/css'
+import '@/css/anchor-link.css'

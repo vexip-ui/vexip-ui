@@ -1,2 +1,3 @@
 import '@/components/preset/style'
-import '@/style/collapse-transition.scss'
+import '@/components/collapse/style'
+import '@/style/anchor-link.scss'

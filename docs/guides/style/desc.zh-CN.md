@@ -102,7 +102,7 @@ createApp(App).use(install).mount('#app')
 
 如果你正在使用按需引入，则需要一些额外的配置，这里我们以 vite 为例，Webpack 同理。
 
-首先需要准备一个单独的文件存放变量，并改用 `@forward...with` 修改变量：
+首先需要准备一个单独的文件，并改用 `@forward...with` 修改变量：
 
 ```scss
 // style/variables.scss

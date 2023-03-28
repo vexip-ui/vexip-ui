@@ -1,3 +1,3 @@
 import '@/components/preset/style'
-import '@/components/button/style'
-import '@/style/form-reset.scss'
+import '@/components/form/style'
+import '@/style/anchor-link.scss'
