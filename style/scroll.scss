@@ -1,7 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './scrollbar.scss';
 
 $scroll: () !default;
 $scroll: map.merge(

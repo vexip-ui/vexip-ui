@@ -16,16 +16,15 @@
   "exports": {
     ".": {
       "require": "./lib/index.js",
-      "import": "./es/index.mjs"
+      "import": "./es/index.mjs",
+      "types": "./types/index.d.ts"
     },
-    "./brands/*": {
-      "require": "./lib/brands/*",
-      "import": "./es/brands/*"
-    },
-    "./regular/*": {
-      "require": "./lib/regular/*",
-      "import": "./es/regular/*"
-    },
+    "./es": "./es/index.mjs",
+    "./lib": "./lib/index.js",
+    "./es/*.mjs": "./es/*.mjs",
+    "./es/*": "./es/*.mjs",
+    "./lib/*.js": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
     "./package.json": "./package.json",
     "./*": "./*"
   },

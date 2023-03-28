@@ -1,7 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './tooltip.scss';
 
 $slider: () !default;
 $slider: map.merge(
@@ -152,9 +152,7 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition:
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow'),
+    transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
       get-css-var('transition-transform');
 
     &:hover {
@@ -215,8 +213,7 @@ $slider: map.merge(
     height: $marker-size;
     pointer-events: none;
     background-color: get-css-var('slider-handler-bg-color');
-    border:
-      get-css-var('slider-handler-b-width') solid
+    border: get-css-var('slider-handler-b-width') solid
       get-css-var('slider-handler-b-color-disabled');
     border-radius: $marker-size;
 

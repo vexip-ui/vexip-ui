@@ -102,6 +102,12 @@ module.exports = {
         'no-sequences': 'off',
         '@typescript-eslint/no-var-requires': 'off'
       }
+    },
+    {
+      files: ['**/*.md/*.*'],
+      rules: {
+        'import/order': 'off'
+      }
     }
   ],
   globals: {

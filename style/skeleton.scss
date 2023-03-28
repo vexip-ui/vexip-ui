@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $skeleton: () !default;
@@ -98,13 +99,12 @@ $skeleton: map.merge(
     inset: 0 -150%;
     pointer-events: none;
     content: '';
-    background-image:
-      linear-gradient(
-        to right,
-        transparent 25%,
-        get-css-var('skeleton-shine-color') 37%,
-        transparent 63%
-      );
+    background-image: linear-gradient(
+      to right,
+      transparent 25%,
+      get-css-var('skeleton-shine-color') 37%,
+      transparent 63%
+    );
     animation: #{$namespace}-skeleton-loading 2000ms ease infinite;
   }
 

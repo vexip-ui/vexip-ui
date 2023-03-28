@@ -1,7 +1,9 @@
 @use 'sass:map';
 
+@use './shared/variables.scss' as *;
 @use './design/variables.scss' as *;
 @use './animation';
+@use './icon.scss';
 
 :root {
   @include define-css-var('color-black', $color-black);

@@ -1,7 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './bubble.scss';
 
 $progress: () !default;
 $progress: map.merge(
@@ -59,11 +59,9 @@ $progress: map.merge(
     pointer-events: none;
     content: '';
     background-color: get-css-var('progress-activated-color');
-    animation:
-      #{$namespace}-progress-flowing
-      get-css-var('progress-animation-duration')
-      get-css-var('progress-animation-timing')
-      infinite;
+    animation: #{$namespace}-progress-flowing get-css-var('progress-animation-duration') get-css-var(
+        'progress-animation-timing'
+      ) infinite;
   }
 
   @keyframes #{$namespace}-progress-flowing {

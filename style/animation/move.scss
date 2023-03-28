@@ -1,4 +1,5 @@
 @use '../design/variables.scss' as *;
+@use '../shared/variables.scss' as *;
 
 $-popup-types: (
   top: 'Y(-100%)',

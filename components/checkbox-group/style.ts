@@ -1,1 +1,3 @@
-import '@/style/checkbox.scss'
+import '@/components/preset/style'
+import '@/components/checkbox/style'
+import '@/style/anchor-link.scss'

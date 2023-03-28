@@ -1,8 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
-@use './tooltip.scss';
 
 $menu: () !default;
 $menu: map.merge(
@@ -122,11 +121,8 @@ $menu: map.merge(
     user-select: none;
     background-color: get-css-var('menu-bg-color');
     outline: 0;
-    transition:
-      padding-left get-css-var('transition-base'),
-      get-css-var('transition-color'),
-      get-css-var('transition-background'),
-      get-css-var('transition-shadow');
+    transition: padding-left get-css-var('transition-base'), get-css-var('transition-color'),
+      get-css-var('transition-background'), get-css-var('transition-shadow');
 
     &::after {
       position: absolute;

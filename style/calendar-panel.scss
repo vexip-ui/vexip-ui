@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $calendar-panel: () !default;
@@ -25,7 +26,7 @@ $calendar-panel: map.merge(
     index-b-color-outside: get-css-var('border-color-opacity-1'),
     index-size: 28px,
     index-border: get-css-var('calendar-index-b-width') get-css-var('calendar-index-b-style')
-    get-css-var('calendar-index-b-color'),
+      get-css-var('calendar-index-b-color'),
     index-radius: get-css-var('radius-base'),
     range-bg-color: get-css-var('color-primary-opacity-8'),
     range-opacity: 60%

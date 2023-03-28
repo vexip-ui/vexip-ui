@@ -1,8 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './number-input.scss';
-@use './select.scss';
 
 $pagination: () !default;
 $pagination: map.merge(
@@ -68,11 +67,8 @@ $pagination: map.merge(
     border: get-css-var('pagination-border');
     border-radius: get-css-var('pagination-radius');
     outline: 0;
-    transition:
-      get-css-var('transition-color'),
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+    transition: get-css-var('transition-color'), get-css-var('transition-background'),
+      get-css-var('transition-border'), get-css-var('transition-shadow');
 
     &:last-of-type {
       margin-right: 0;

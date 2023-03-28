@@ -1,7 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
 
 $tab-nav: () !default;
 $tab-nav: map.merge(
@@ -166,9 +166,7 @@ $tab-nav: map.merge(
     color: get-css-var('tab-nav-card-color');
     background-color: get-css-var('tab-nav-card-bg-color');
     border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color');
-    transition:
-      get-css-var('transition-color'),
-      get-css-var('transition-background'),
+    transition: get-css-var('transition-color'), get-css-var('transition-background'),
       get-css-var('transition-border');
 
     &:hover,
@@ -253,11 +251,8 @@ $tab-nav: map.merge(
   &__track {
     position: absolute;
     pointer-events: none;
-    transition:
-      top get-css-var('transition-base'),
-      left get-css-var('transition-base'),
-      width get-css-var('transition-base'),
-      height get-css-var('transition-base');
+    transition: top get-css-var('transition-base'), left get-css-var('transition-base'),
+      width get-css-var('transition-base'), height get-css-var('transition-base');
   }
 
   $card: #{&}--card;

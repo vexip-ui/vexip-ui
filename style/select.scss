@@ -1,14 +1,8 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
-@use './native-scroll.scss';
 @use './input.scss' as input;
-@use './option.scss';
-@use './overflow.scss';
-@use './tag.scss';
-@use './tooltip.scss';
-@use './virtual-list.scss';
 
 $select: () !default;
 $select: map.merge(

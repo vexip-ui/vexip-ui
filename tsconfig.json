@@ -38,6 +38,7 @@
     "dev-server",
     "directives",
     "playground",
+    "index.ts",
     "types.d.ts"
   ],
   "exclude": [

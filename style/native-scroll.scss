@@ -1,5 +1,5 @@
+@use './shared' as *;
 @use './design' as *;
-@use './scrollbar.scss';
 
 .#{$namespace}-native-scroll {
   @include basis;

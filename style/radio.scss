@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $radio: () !default;
@@ -46,9 +47,7 @@ $radio: map.merge(
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
-  transition:
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
+  transition: get-css-var('transition-background'), get-css-var('transition-border'),
     get-css-var('transition-shadow');
 
   &--border {
@@ -100,9 +99,7 @@ $radio: map.merge(
       background-color: get-css-var('radio-signal-bg-color-checked');
       border-radius: 50%;
       opacity: 0%;
-      transition:
-        get-css-var('transition-background'),
-        get-css-var('transition-opacity'),
+      transition: get-css-var('transition-background'), get-css-var('transition-opacity'),
         get-css-var('transition-transform');
       transform: translate(-50%, -50%) scale(0);
     }
@@ -342,8 +339,7 @@ $radio: map.merge(
       }
 
       &:focus-within {
-        box-shadow:
-          -1px 0 0 0 get-css-var('radio-b-color-checked'),
+        box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked'),
           get-css-var('radio-shadow-focus');
 
         &::after {
@@ -351,11 +347,8 @@ $radio: map.merge(
           left: -3px;
           height: calc(100% + 6px);
           background-color: get-css-var('radio-s-color-focus');
-          transition:
-            top get-css-var('transition-base'),
-            left get-css-var('transition-base'),
-            height get-css-var('transition-base'),
-            get-css-var('transition-background');
+          transition: top get-css-var('transition-base'), left get-css-var('transition-base'),
+            height get-css-var('transition-base'), get-css-var('transition-background');
         }
       }
 

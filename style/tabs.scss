@@ -1,5 +1,5 @@
+@use './shared' as *;
 @use './design' as *;
-@use './tab-nav.scss';
 
 .#{$namespace}-tabs {
   @include basis;
