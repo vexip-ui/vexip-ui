@@ -207,6 +207,23 @@ export default defineConfig(async () => ({
 }))
 ```
 
+Resolver 的选项可以通过编辑器的提示或者在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts#L7) 查看。
+
+如果你还用到了 `Message` 这样的插件类组件，需要在使用前调用 `App.use` 方法进行安装，以确保可以获取应用上下文的配置：
+
+```ts
+import { createApp } from 'vue'
+import App from './app.vue'
+
+createApp(App)
+  .use(Confirm)
+  .use(Contextmenu)
+  .use(Loading)
+  .use(Message)
+  .use(Notice)
+  .use(Toast)
+```
+
 至此，包括图标类组件在内的所有组件都可以自动引入了。
 
 ### Webpack
