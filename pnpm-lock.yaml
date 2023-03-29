@@ -165,6 +165,7 @@ importers:
     specifiers:
       '@types/node': ^18.7.23
       '@vexip-ui/utils': workspace:^
+      compare-versions: 6.0.0-rc.1
       execa: ^6.1.0
       kolorist: ^1.6.0
       local-pkg: ^0.4.2
@@ -172,6 +173,7 @@ importers:
       unplugin-vue-components: ^0.22.7
     dependencies:
       '@vexip-ui/utils': link:../utils
+      compare-versions: 6.0.0-rc.1
       local-pkg: 0.4.2
     devDependencies:
       '@types/node': 18.11.9
@@ -3149,6 +3151,10 @@ packages:
       array-ify: 1.0.0
       dot-prop: 5.3.0
     dev: true
+
+  /compare-versions/6.0.0-rc.1:
+    resolution: {integrity: sha512-cFhkjbGY1jLFWIV7KegECbfuyYPxSGvgGkdkfM+ibboQDoPwg2FRHm5BSNTOApiauRBzJIQH7qvOJs2sW5ueKQ==}
+    dev: false
 
   /compressible/2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}

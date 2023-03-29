@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { toKebabCase, isNull } from '@vexip-ui/utils'
-import { resolveModule } from 'local-pkg'
+import { getPackageInfoSync, resolveModule } from 'local-pkg'
+import { compare } from 'compare-versions'
 
 import type { ComponentInfo, ComponentResolver } from 'unplugin-vue-components/types'
 
@@ -43,6 +44,34 @@ export interface VexipUIResolverOptions {
   iconPrefix?: string
 }
 
+function throwLoadError() {
+  throw new Error('[vexip-ui:plugins] failed to load vexip-ui, have you installed it?')
+}
+
+let version: string | undefined
+let lowerVersion = false
+
+function queryVersion() {
+  try {
+    version =
+      getPackageInfoSync('vexip-ui')?.version ??
+      getPackageInfoSync('vexip-ui', { paths: [resolveModule('vexip-ui') || process.cwd()] })
+        ?.version
+
+    if ((lowerVersion = compare(version!, '2.1.10', '<'))) {
+      console.warn(
+        '[vexip-ui:plugins] style has been refactored in vexip-ui@2.1.10, you better ' +
+          'upgrade it to support import style via esm.'
+      )
+    }
+  } catch (e) {
+    console.error(e)
+    throwLoadError()
+  }
+
+  if (!version) throwLoadError()
+}
+
 let components: string[] | undefined
 let styleAlias: Record<string, string> | undefined
 let directives: Record<string, string[]> | undefined
@@ -60,7 +89,7 @@ function queryMetaData() {
     directives = metaData.directives
   } catch (e) {
     console.error(e)
-    throw new Error('[vexip-ui:plugins] failed to load vexip-ui, have you installed it?')
+    throwLoadError()
   }
 }
 
@@ -74,6 +103,22 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
   }
 
   name = toKebabCase(name)
+
+  if (lowerVersion) {
+    if (importStyle === 'sass') {
+      return [
+        'vexip-ui/style/preset.scss',
+        ...(importDarkTheme ? ['vexip-ui/style/dark/preset.scss'] : []),
+        `vexip-ui/style/${name}.scss`
+      ]
+    } else if (importStyle === true || importStyle === 'css') {
+      return [
+        'vexip-ui/css/preset.css',
+        ...(importDarkTheme ? ['vexip-ui/themes/dark/index.css'] : []),
+        `vexip-ui/css/${name}.css`
+      ]
+    }
+  }
 
   if (importStyle === 'sass') {
     return [...(importDarkTheme ? ['vexip-ui/es/style/dark'] : []), `vexip-ui/es/style/${name}`]
@@ -172,9 +217,8 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
     {
       type: 'component',
       resolve: name => {
-        if (!components) {
-          queryMetaData()
-        }
+        !version && queryVersion()
+        !components && queryMetaData()
 
         return resolveComponent(name, options)
       }
@@ -182,9 +226,8 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
     {
       type: 'directive',
       resolve: name => {
-        if (!directives) {
-          queryMetaData()
-        }
+        !version && queryVersion()
+        !directives && queryMetaData()
 
         return resolveDirective(name, options)
       }
