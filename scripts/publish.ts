@@ -8,11 +8,23 @@ const args = minimist<{
   tag?: string
 }>(process.argv.slice(2))
 
-const inputPkg = args._[0]
+const target = args._[0]
 const isDryRun = args.dry || args.d
 const releaseTag = args.tag || args.t
 
 async function main() {
+  let inputPkg = ''
+
+  if (target?.startsWith('v')) {
+    inputPkg = 'vexip-ui'
+  } else if (target?.includes('@')) {
+    [inputPkg] = target.split('@')
+
+    if (['hooks', 'icons', 'plugins', 'utils'].includes(inputPkg)) {
+      inputPkg = `common/${inputPkg}`
+    }
+  }
+
   const { pkgDir, currentVersion } = await getPackageInfo(inputPkg)
 
   logger.withStartLn(() => logger.infoText('Publishing package...'))
