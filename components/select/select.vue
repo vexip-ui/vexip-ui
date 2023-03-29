@@ -119,7 +119,9 @@
                 ref="input"
                 :class="nh.be('input')"
                 :disabled="props.disabled"
-                :placeholder="currentLabels[0] || (props.placeholder ?? locale.placeholder)"
+                :placeholder="
+                  hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
+                "
                 autocomplete="off"
                 tabindex="-1"
                 role="combobox"
@@ -141,7 +143,7 @@
             "
             :class="nh.be('placeholder')"
           >
-            {{ props.placeholder ?? locale.placeholder }}
+            {{ hittingLabel ?? props.placeholder ?? locale.placeholder }}
           </span>
         </slot>
       </div>
@@ -409,7 +411,8 @@ export default defineComponent({
       transparent: false,
       maxTagCount: 0,
       noRestTip: false,
-      tagType: null
+      tagType: null,
+      noPreview: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -444,6 +447,7 @@ export default defineComponent({
     })
 
     const optionValues = reactive(new Set<string | number>())
+    const hittingOption = ref<SelectOptionState>()
     const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
 
@@ -673,6 +677,9 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
+    const hittingLabel = computed(() => {
+      return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
+    })
 
     watch(
       () => props.visible,
@@ -791,14 +798,20 @@ export default defineComponent({
 
     function updateHitting(hitting: number, ensureInView = true) {
       currentIndex.value = hitting
+      hittingOption.value = undefined
+
       let index = -1
 
       optionStates.value.forEach(option => {
         if (!option.hidden) {
           index += 1
           option.hitting = hitting === index
+
+          if (option.hitting) {
+            hittingOption.value = option
+          }
         } else {
-          option.hitting = hitting === index
+          option.hitting = false
         }
       })
 
@@ -1095,6 +1108,7 @@ export default defineComponent({
       showClear,
       normalOptions,
       optionParentMap,
+      hittingLabel,
 
       wrapper,
       reference,

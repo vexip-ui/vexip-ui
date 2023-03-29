@@ -1,5 +1,5 @@
 <template>
-  <Select v-model:value="value" :options="options" @focus="focus"></Select>
+  <Select v-model:value="value" :options="options"></Select>
   <p>当前值：{{ value }}</p>
   <Select placeholder="空选项"></Select>
 </template>
@@ -23,10 +23,6 @@ const options = [
     value: 3
   }
 ]
-
-function focus() {
-  console.log('a')
-}
 </script>
 
 <style scoped>
