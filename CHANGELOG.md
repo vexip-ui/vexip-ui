@@ -1,3 +1,27 @@
+## [2.1.10](https://github.com/vexip-ui/vexip-ui/compare/v2.1.9...v2.1.10) (2023-03-29)
+
+### Bug Fixes
+
+- **button:** incorrect style in circle group when with tooltip ([947c360](https://github.com/vexip-ui/vexip-ui/commit/947c360ce12ab4cd7a14cbe9546d2c5bc99e7683)), closes [#289](https://github.com/vexip-ui/vexip-ui/issues/289)
+- content shrink when body too long in Modal and Drawer ([43cfd87](https://github.com/vexip-ui/vexip-ui/commit/43cfd8746d82f61a83f2637bf3a1d5f296e8e750))
+- **wheel:** arrows not render with warning ([0e7d4cd](https://github.com/vexip-ui/vexip-ui/commit/0e7d4cd9663eb3404b2a7cbdccd14f7336c82586)), closes [#292](https://github.com/vexip-ui/vexip-ui/issues/292)
+
+### Code Refactoring
+
+- switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+### Features
+
+- **select:** support dynamic preview current hitting option's label ([a27ba4a](https://github.com/vexip-ui/vexip-ui/commit/a27ba4a39d9209940038d3ae1b1f9217efe862f5))
+
+### BREAKING CHANGES
+
+- The scss and css style files no longer contains dependent
+  styles for its component. Currently the relationship of styles are included in ts
+  (js) files which are use to import the styles. Change the import way of style like:
+  `vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import
+  preset style manually.
+
 ## [2.1.9](https://github.com/vexip-ui/vexip-ui/compare/v2.1.8...v2.1.9) (2023-03-23)
 
 ### Bug Fixes
