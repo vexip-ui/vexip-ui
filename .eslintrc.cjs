@@ -59,6 +59,7 @@ module.exports = {
     {
       files: ['components/**/*.vue'],
       rules: {
+        '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/consistent-type-imports': [
           'error',
           {

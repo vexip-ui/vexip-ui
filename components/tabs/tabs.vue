@@ -92,7 +92,7 @@ export default defineComponent({
 
     const currentActive = ref(props.active)
     const currentIndex = ref(0)
-    const itemStates = ref(new Set<ItemState>())
+    const itemStates = reactive(new Set<ItemState>())
     const isTransition = ref(false)
 
     const mainStyle = computed(() => {
@@ -100,9 +100,7 @@ export default defineComponent({
         transform: `translateX(-${currentIndex.value}00%) translateZ(0)`
       }
     })
-    const itemList = computed(() => {
-      return Array.from(itemStates.value)
-    })
+    const itemList = computed(() => Array.from(itemStates))
 
     const refreshLabels = debounceMinor(() => {
       itemList.value.forEach((item, index) => {
@@ -116,9 +114,7 @@ export default defineComponent({
       }
     })
     const computeIndex = debounceMinor(() => {
-      const index = Array.from(itemStates.value).findIndex(
-        item => item.label === currentActive.value
-      )
+      const index = itemList.value.findIndex(item => item.label === currentActive.value)
 
       if (~index) {
         currentIndex.value = index
@@ -142,9 +138,6 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    // watch(currentIndex, () => {
-    //   isTransition.value = true
-    // })
 
     onMounted(computeIndex)
 
@@ -153,12 +146,12 @@ export default defineComponent({
     }
 
     function increaseItem(item: ItemState) {
-      itemStates.value.add(item)
+      itemStates.add(item)
       refreshLabels()
     }
 
     function decreaseItem(item: ItemState) {
-      itemStates.value.delete(item)
+      itemStates.delete(item)
       refreshLabels()
     }
 
