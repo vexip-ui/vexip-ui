@@ -15,7 +15,7 @@
       ]"
       @click="handlePrev"
     >
-      <Icon :icon="prevIcon"></Icon>
+      <Icon v-bind="prevIcon"></Icon>
     </div>
     <div :class="nh.be('scroll')">
       <Scroll
@@ -73,7 +73,7 @@
       ]"
       @click="handleNext"
     >
-      <Icon :icon="nextIcon"></Icon>
+      <Icon v-bind="nextIcon"></Icon>
     </div>
   </div>
 </template>
