@@ -1,6 +1,6 @@
 <template>
   <Row tag="nav" class="theme-nav" align="middle">
-    <h2 style="margin: 0 20px 0 0; pointer-events: none;">
+    <h2 style="margin: 0 20px 0 0; pointer-events: none">
       Theme Playground
     </h2>
     <ThemeSwitch></ThemeSwitch>
@@ -45,22 +45,22 @@
           <br />
         </template>
         <template v-for="state in states" :key="state">
-          <Input :state="state" style="margin-right: 20px;"></Input>
+          <Input :state="state" style="margin-right: 20px"></Input>
           <NumberInput :state="state"></NumberInput>
           <br />
           <br />
         </template>
-        <Input disabled style="margin-right: 20px;"></Input>
+        <Input disabled style="margin-right: 20px"></Input>
         <NumberInput disabled></NumberInput>
         <br />
         <br />
         <template v-for="state in states" :key="state">
-          <Select :options="options" :state="state" style="margin-right: 20px;"></Select>
+          <Select :options="options" :state="state" style="margin-right: 20px"></Select>
           <AutoComplete :options="options" :state="state"></AutoComplete>
           <br />
           <br />
         </template>
-        <Select :options="options" disabled style="margin-right: 20px;"></Select>
+        <Select :options="options" disabled style="margin-right: 20px"></Select>
         <AutoComplete :options="options" disabled></AutoComplete>
         <br />
         <br />
@@ -137,12 +137,12 @@
           v-for="(meta, index) in tooltipMeta"
           :key="index"
           :justify="meta.justify"
-          style="max-width: 600px; margin: 0 auto 10px;"
+          style="max-width: 600px; margin: 0 auto 10px"
         >
           <template v-for="placement in meta.placements" :key="placement">
             <Tooltip theme="dark" :placement="placement" transfer>
               <template #trigger>
-                <span style="padding: 0 5px;">
+                <span style="padding: 0 5px">
                   <Button>{{ placement }}</Button>
                 </span>
               </template>
@@ -167,17 +167,17 @@
         <Textarea disabled :max-length="100"></Textarea>
         <br />
         <br />
-        <Collapse style="max-width: 600px;">
+        <Collapse style="max-width: 600px">
           <CollapsePane v-for="n in 3" :key="n" :title="`Title ${n}`">
-            <p>Some Content</p>
-            <p>Some Content</p>
+            <p>Some content</p>
+            <p>Some content</p>
           </CollapsePane>
         </Collapse>
         <br />
-        <Collapse card style="max-width: 600px;">
+        <Collapse card style="max-width: 600px">
           <CollapsePane v-for="n in 3" :key="n" :title="`Title ${n}`">
-            <p>Some Content</p>
-            <p>Some Content</p>
+            <p>Some content</p>
+            <p>Some content</p>
           </CollapsePane>
         </Collapse>
       </NativeScroll>
@@ -207,9 +207,9 @@
           resizable
           title="Title"
         >
-          <p>Some Content</p>
-          <p>Some Content</p>
-          <p>Some Content</p>
+          <p>Some content</p>
+          <p>Some content</p>
+          <p>Some content</p>
         </Drawer>
         <Modal
           v-model:active="modalActive"
@@ -219,17 +219,17 @@
           title="Title"
           :width="500"
         >
-          <p>Some Content</p>
-          <p>Some Content</p>
-          <p>Some Content</p>
+          <p>Some content</p>
+          <p>Some content</p>
+          <p>Some content</p>
         </Modal>
         <br />
         <br />
-        <div style="display: flex;">
-          <Button type="primary" style="margin-right: 20px;" @click="spinActive = !spinActive">
+        <div style="display: flex">
+          <Button type="primary" style="margin-right: 20px" @click="spinActive = !spinActive">
             Switch
           </Button>
-          <Spin :active="spinActive" tip="Loading..." style="width: 600px;">
+          <Spin :active="spinActive" tip="Loading..." style="width: 600px">
             <Alert icon type="success" title="Title">
               Some alert content
             </Alert>
@@ -242,7 +242,7 @@
           allow-drag
           directory
           hidden-files
-          style="max-width: 720px;"
+          style="max-width: 720px"
         ></Upload>
         <TabNav>
           <TabNavItem
@@ -271,13 +271,13 @@
             icon
             closable
             :type="type"
-            style="max-width: 720px;"
+            style="max-width: 720px"
           >
             Some alert content
           </Alert>
         </template>
         <template v-for="n in 2" :key="n">
-          <Breadcrumb :border="n === 2" style="max-width: 720px; margin-bottom: 10px;">
+          <Breadcrumb :border="n === 2" style="max-width: 720px; margin-bottom: 10px">
             <BreadcrumbItem>This Computer</BreadcrumbItem>
             <BreadcrumbItem>Document (D:)</BreadcrumbItem>
             <BreadcrumbItem>ui-library</BreadcrumbItem>
@@ -285,9 +285,9 @@
           </Breadcrumb>
         </template>
         <br />
-        <div style="display: flex;">
+        <div style="display: flex">
           <template v-for="n in 2" :key="n">
-            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-right: 20px;">
+            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-right: 20px">
               <MenuItem
                 v-for="meta in menuMeta"
                 :key="meta.label"
@@ -302,7 +302,7 @@
         </div>
         <br />
         <template v-for="(meta, index) in messageMeta" :key="index">
-          <span style="padding: 0 10px;">
+          <span style="padding: 0 10px">
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
@@ -323,7 +323,7 @@
           <br />
         </template>
         <template v-for="(meta, index) in messageMeta" :key="index">
-          <span style="padding: 0 10px;">
+          <span style="padding: 0 10px">
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
@@ -367,7 +367,7 @@
           <TableColumn type="order" id-key="order" fixed></TableColumn>
           <TableColumn type="expand" id-key="expand" fixed>
             <template #default="{ row }">
-              <Grid style="padding: 20px 40px;">
+              <Grid style="padding: 20px 40px">
                 <Cell :width="12">
                   Full Name: {{ `${row.firstName} ${row.lastName}` }}
                 </Cell>
@@ -413,20 +413,20 @@
           </TableColumn>
         </Table>
         <br />
-        <div style="display: flex;">
-          <Timeline both-sides style="width: 50%; max-width: 360px;">
+        <div style="display: flex">
+          <Timeline both-sides style="width: 50%; max-width: 360px">
             <TimelineItem v-for="meta in timelineMeta" :key="meta.date" :type="meta.type">
-              <p style="margin: 0 0 6px;">
+              <p style="margin: 0 0 6px">
                 {{ meta.date }}
               </p>
-              <Card style="width: 100%;">
+              <Card style="width: 100%">
                 {{ meta.content }}
               </Card>
             </TimelineItem>
           </Timeline>
-          <Timeline pending style="width: calc(50% - 30px); max-width: 300px; margin-left: 30px;">
+          <Timeline pending style="width: calc(50% - 30px); max-width: 300px; margin-left: 30px">
             <TimelineItem v-for="meta in timelineMeta" :key="meta.date" :type="meta.type">
-              <p style="margin: 0 0 6px;">
+              <p style="margin: 0 0 6px">
                 {{ meta.date }}
               </p>
               <Card>{{ meta.content }}</Card>
@@ -440,7 +440,7 @@
           loop
           arrow="inside"
           pointer="outside"
-          style="width: 720px;"
+          style="width: 720px"
           :view-size="1"
           :autoplay="5000"
         >
@@ -450,7 +450,7 @@
             </div>
           </CarouselItem>
         </Carousel>
-        <Carousel loop :active-offset="1" style="width: 720px;">
+        <Carousel loop :active-offset="1" style="width: 720px">
           <CarouselItem v-for="n in 5" :key="n">
             <template #default="{ active }">
               <div class="carousel-block" :style="{ transform: `scaleY(${active ? 1 : 0.83})` }">

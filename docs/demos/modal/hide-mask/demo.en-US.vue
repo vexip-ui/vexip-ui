@@ -7,6 +7,7 @@
     transfer
     title="Title"
     :width="500"
+    hide-mask
   >
     <p>Some content</p>
     <p>Some content</p>

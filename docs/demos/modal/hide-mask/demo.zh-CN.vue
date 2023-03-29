@@ -1,16 +1,17 @@
 <template>
   <Button type="primary" @click="active = !active">
-    Open
+    打开
   </Button>
   <Modal
     v-model:active="active"
     transfer
-    title="Title"
+    title="标题"
     :width="500"
+    hide-mask
   >
-    <p>Some content</p>
-    <p>Some content</p>
-    <p>Some content</p>
+    <p>一些内容</p>
+    <p>一些内容</p>
+    <p>一些内容</p>
   </Modal>
 </template>
 

@@ -2,13 +2,13 @@
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
       ref="wrapper"
+      v-bind="$attrs"
       :class="className"
       tabindex="-1"
       :style="{
         pointerEvents: wrapShow ? undefined : 'none',
         visibility: wrapShow ? undefined : 'hidden'
       }"
-      v-bind="$attrs"
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
     >
@@ -27,7 +27,7 @@
         ref="topTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
       <transition :appear="props.autoRemove" :name="props.transitionName">
         <slot :show="currentActive"></slot>
@@ -36,7 +36,7 @@
         ref="bottomTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
     </div>
   </Portal>
