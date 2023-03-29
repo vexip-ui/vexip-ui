@@ -7,7 +7,7 @@ on:
       - icons*
       - hooks*
       - utils*
-      - hooks*
+      - plugins*
 
 jobs:
   publish:
