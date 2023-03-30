@@ -1,3 +1,5 @@
+## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.3.1...plugins@1.3.2) (2023-03-30)
+
 ## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.1...plugins@1.3.1) (2023-03-29)
 
 ### Bug Fixes
