@@ -35,6 +35,9 @@ jobs:
       - name: Build common packages
         run: pnpm run build:common
 
+      - name: Build plugins
+        run: pnpm run build:plugins
+
       - name: Build
         run: pnpm run build
 
