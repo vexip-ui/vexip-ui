@@ -19,7 +19,6 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
 // const componentsDir = resolve(__dirname, 'components')
 
 const logLevel = process.env.LOG_LEVEL
-const sourceMap = process.env.SOURCE_MAP === 'true'
 
 const prePlugins = (plugins: Plugin[]): Plugin[] => {
   return plugins.map(plugin => ({ ...plugin, enforce: 'pre', apply: 'build' }))
@@ -79,7 +78,7 @@ export default defineConfig(async () => {
     },
     build: {
       outDir: 'es',
-      sourcemap: sourceMap,
+      sourcemap: true,
       lib: {
         entry: resolve(__dirname, 'index.ts'),
         name: 'VexipUI'

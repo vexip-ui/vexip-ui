@@ -19,7 +19,6 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
 const componentsDir = resolve(__dirname, 'components')
 
 const logLevel = process.env.LOG_LEVEL
-const sourceMap = process.env.SOURCE_MAP === 'true'
 
 const outDir = 'dist'
 
@@ -42,7 +41,7 @@ export default defineConfig(async () => {
     },
     build: {
       outDir,
-      sourcemap: sourceMap,
+      sourcemap: false,
       lib: {
         entry: resolve(componentsDir, 'full-lib.ts'),
         formats: ['es', 'cjs', 'iife'],

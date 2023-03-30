@@ -6,13 +6,10 @@ import { logger, run, rootDir, components, runParallel } from './utils'
 
 const args = minimist<{
   d?: boolean,
-  dev?: boolean,
-  s?: boolean,
-  sourcemap?: boolean
+  dev?: boolean
 }>(process.argv.slice(2))
 
 const devOnly = args.dev || args.d
-const sourceMap = args.sourcemap || args.s
 
 const env = devOnly ? 'development' : 'production'
 
@@ -23,8 +20,7 @@ async function main() {
   await run('pnpm', ['props'])
   await run('vite', ['build', '--config', 'vite.config.ts'], {
     env: {
-      NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
+      NODE_ENV: env
     }
   })
 
@@ -33,8 +29,7 @@ async function main() {
   await run('vite', ['build', '--config', 'vite.full.config.ts'], {
     stdio: 'inherit',
     env: {
-      NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
+      NODE_ENV: env
     }
   })
   await run('pnpm', ['build:style'])
