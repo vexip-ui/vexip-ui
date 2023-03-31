@@ -36,7 +36,7 @@ export type ExpandRenderFn = (data: {
   rowIndex: number
 }) => any
 
-export type TableColumnType = 'order' | 'selection' | 'expand'
+export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
@@ -105,10 +105,17 @@ export interface TableExpandColumn<D = Data, Val extends string | number = strin
   disableRow?: (data: Data) => boolean
 }
 
+export interface TableDragColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
+  type: 'drag',
+  disableRow?: (data: Data) => boolean
+}
+
 export type TableTypeColumn<D = Data, Val extends string | number = string | number> =
   | TableOrderColumn<D, Val>
   | TableSelectionColumn<D, Val>
   | TableExpandColumn<D, Val>
+  | TableDragColumn<D, Val>
 export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
   | TableBaseColumn<D, Val>
   | TableTypeColumn<D, Val>
@@ -170,6 +177,7 @@ export interface TableRowState {
   depth: number,
   treeExpanded: boolean,
   partial: boolean,
+  dragging: boolean,
   data: Data
 }
 
@@ -229,7 +237,7 @@ export interface StoreState extends StoreOptions {
   totalHeight: number
 }
 
-export interface RowInstance {
+export interface TableRowInstance {
   el?: HTMLElement | null,
   row: TableRowState
 }
@@ -258,7 +266,7 @@ export interface TableHeadPayload {
   event: Event
 }
 
-export interface TableAction {
+export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
   emitRowEnter(payload: TableRowPayload): void,
@@ -271,9 +279,9 @@ export interface TableAction {
   emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
   emitRowFilter(): void,
   emitRowSort(): void,
-  handleRowDragStart(rowInstance: RowInstance, event: DragEvent): void,
-  handleRowDragOver(rowInstance: RowInstance, event: DragEvent): void,
-  handleRowDrop(rowInstance: RowInstance, event: DragEvent): void,
+  handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent): void,
+  handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent): void,
+  handleRowDrop(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDragEnd(event: DragEvent): void,
   emitCellEnter(payload: TableCellPayload): void,
   emitCellLeave(payload: TableCellPayload): void,
@@ -295,6 +303,7 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
 /**
  * 表格组件的顶层 Api
  */
-export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION')
-
+export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')
+
+export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']

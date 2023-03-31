@@ -96,7 +96,7 @@
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
-      v-if="props.rowDraggable"
+      v-if="usingDrag"
       v-show="indicatorShow"
       ref="indicator"
       :class="[
@@ -137,14 +137,14 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DropType, TABLE_STORE, TABLE_ACTION } from './symbol'
+import { DropType, TABLE_STORE, TABLE_ACTIONS } from './symbol'
 
 import type {
   Key,
   TableKeyConfig,
   TableColumnOptions,
   TableRowState,
-  RowInstance,
+  TableRowInstance,
   TableRowPayload,
   TableCellPayload,
   TableHeadPayload
@@ -318,7 +318,7 @@ export default defineComponent({
     })
 
     provide(TABLE_STORE, store)
-    provide(TABLE_ACTION, {
+    provide(TABLE_ACTIONS, {
       increaseColumn,
       decreaseColumn,
       emitRowEnter,
@@ -406,6 +406,7 @@ export default defineComponent({
     const allColumns = computed(() => {
       return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
+    const usingDrag = computed(() => props.rowDraggable || getters.hasDragColumn)
 
     const {
       setColumns,
@@ -667,7 +668,7 @@ export default defineComponent({
       dropType: DropType
     } | null
 
-    function handleRowDragStart(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
       dragState = {
         draggingRow: rowInstance.row,
         tableRect: wrapper.value!.getBoundingClientRect(),
@@ -679,7 +680,7 @@ export default defineComponent({
       emitEvent(props.onRowDragStart, rowInstance.row.data, event)
     }
 
-    function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent) {
       if (!dragState || !rowInstance.el) return
 
       const dropRowRect = rowInstance.el.getBoundingClientRect()
@@ -731,7 +732,7 @@ export default defineComponent({
       return false
     }
 
-    function handleRowDrop(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow, willDropRow, dropType } = dragState
@@ -744,12 +745,12 @@ export default defineComponent({
 
       if (draggingRow) {
         parent = getParentRow(draggingRow.key)
+        currentKey = draggingRow.key
 
         if (parent) {
           removeArrayItem(parent.children, row => row.key === currentKey)
         }
 
-        currentKey = draggingRow.key
         removeArrayItem(rowData, row => row.key === currentKey)
       }
 
@@ -951,6 +952,7 @@ export default defineComponent({
       barLength,
       bodyScrollHeight,
       totalHeight: toRef(state, 'totalHeight'),
+      usingDrag,
 
       store,
 

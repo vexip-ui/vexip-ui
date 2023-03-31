@@ -25,7 +25,7 @@ type ExpandRenderFn = (data: {
   rowIndex: number
 }) => any
 
-type TableColumnType = 'order' | 'selection' | 'expand'
+type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
 type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
@@ -85,6 +85,12 @@ interface TableSelectionColumn<D = Data, Val extends string | number = string | 
 interface TableExpandColumn<D = Data, Val extends string | number = string | number>
   extends TableBaseColumn<D, Val> {
   type: 'expand',
+  disableRow?: (data: Data) => boolean
+}
+
+interface TableDragColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
+  type: 'drag',
   disableRow?: (data: Data) => boolean
 }
 
@@ -252,7 +258,7 @@ interface TableHeadPayload {
 | class-name    | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -       |
 | style         | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1` |
 | attrs         | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1` |
-| type          | `'order' \| 'selection' \| 'expand'`   | 设置内置特定类型列                                                           | `null`      | -       |
+| type          | `TableColumnType`                      | 设置内置特定类型列                                                           | `null`      | -       |
 | width         | `number`                               | 设置列宽                                                                     | `null`      | -       |
 | filter        | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                               | `null`      | -       |
 | sorter        | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                               | `null`      | -       |

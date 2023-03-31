@@ -60,7 +60,8 @@ import {
   ArrowRotateRight,
   Repeat,
   Expand,
-  Compress
+  Compress,
+  GripLinesVertical
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
 
@@ -146,7 +147,8 @@ export interface IconsConfig {
   zoomIn: IconConfig,
   zoonOut: IconConfig,
   fullScreen: IconConfig,
-  resetScreen: IconConfig
+  resetScreen: IconConfig,
+  dragger: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -215,7 +217,8 @@ const iconMap: IconsConfig = {
   zoomIn: Plus,
   zoonOut: Minus,
   fullScreen: Expand,
-  resetScreen: Compress
+  resetScreen: Compress,
+  dragger: GripLinesVertical
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

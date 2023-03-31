@@ -12,7 +12,7 @@
     @contextmenu="handleContextmenu"
   >
     <Checkbox
-      v-if="isSelection(column)"
+      v-if="isSelectionColumn(column)"
       inherit
       :class="nh.be('selection')"
       :checked="row.checked"
@@ -22,10 +22,10 @@
       :control="!!row.children?.length"
       @click.prevent.stop="handleCheckRow(row, $event)"
     ></Checkbox>
-    <span v-else-if="isOrder(column)" :class="nh.be('order')">
+    <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
-    <template v-else-if="isExpand(column)">
+    <template v-else-if="isExpandColumn(column)">
       <button
         v-if="!disableExpandRows.has(row.key)"
         :class="{
@@ -35,6 +35,15 @@
         @click.stop="handleExpandRow(row, $event)"
       >
         <Icon v-bind="icons.angleRight"></Icon>
+      </button>
+    </template>
+    <template v-else-if="isDragColumn(column)">
+      <button
+        v-if="!disableDragRows.has(row.key)"
+        :class="nh.be('dragger')"
+        @mousedown="handleDragRow(row)"
+      >
+        <Icon v-bind="icons.dragger"></Icon>
       </button>
     </template>
   </div>
@@ -107,7 +116,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTIONS, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -115,12 +124,10 @@ import type {
   TableOrderColumn,
   TableSelectionColumn,
   TableExpandColumn,
+  TableDragColumn,
   TableTypeColumn,
-  ColumnWithKey,
-  TableAction
+  ColumnWithKey
 } from './symbol'
-
-const columnTypes = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableCell',
@@ -150,11 +157,12 @@ export default defineComponent({
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject<TableAction>(TABLE_ACTION)!
+    const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const disableCheckRows = toRef(getters, 'disableCheckRows')
     const disableExpandRows = toRef(getters, 'disableExpandRows')
+    const disableDragRows = toRef(getters, 'disableDragRows')
 
     const className = computed(() => {
       let customClass = null
@@ -223,20 +231,29 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
 
-    function isSelection(column: unknown): column is TableSelectionColumn {
+    function isSelectionColumn(column: unknown): column is TableSelectionColumn {
       return (column as TableTypeColumn).type === 'selection'
     }
 
-    function isOrder(column: unknown): column is TableOrderColumn {
+    function isOrderColumn(column: unknown): column is TableOrderColumn {
       return (column as TableTypeColumn).type === 'order'
     }
 
-    function isExpand(column: unknown): column is TableExpandColumn {
+    function isExpandColumn(column: unknown): column is TableExpandColumn {
       return (column as TableTypeColumn).type === 'expand'
     }
 
+    function isDragColumn(column: unknown): column is TableDragColumn {
+      return (column as TableTypeColumn).type === 'drag'
+    }
+
     function isTableTypeColumn(column: unknown): column is TableTypeColumn {
-      return isSelection(column) || isOrder(column) || isExpand(column)
+      return (
+        isSelectionColumn(column) ||
+        isOrderColumn(column) ||
+        isExpandColumn(column) ||
+        isDragColumn(column)
+      )
     }
 
     function buildEventPayload(event: Event) {
@@ -251,32 +268,32 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellEnter(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellEnter(buildEventPayload(event))
       }
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellLeave(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellLeave(buildEventPayload(event))
       }
     }
 
     function handleClick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellClick(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellClick(buildEventPayload(event))
       }
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellDblclick(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellDblclick(buildEventPayload(event))
       }
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellContextmenu(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellContextmenu(buildEventPayload(event))
       }
     }
 
@@ -286,7 +303,7 @@ export default defineComponent({
         const { data, key, index } = row
 
         mutations.handleCheck(key, checked)
-        tableAction.emitRowCheck({ row: data, key, index, event, checked })
+        tableActions.emitRowCheck({ row: data, key, index, event, checked })
       }
     }
 
@@ -296,7 +313,13 @@ export default defineComponent({
         const { data, key, index } = row
 
         mutations.handleExpand(key, expanded)
-        tableAction.emitRowExpand({ row: data, key, index, event, expanded })
+        tableActions.emitRowExpand({ row: data, key, index, event, expanded })
+      }
+    }
+
+    function handleDragRow(row: TableRowState) {
+      if (!disableDragRows.value.has(row.key)) {
+        mutations.handleDrag(row.key, true)
       }
     }
 
@@ -319,12 +342,14 @@ export default defineComponent({
       tooltipWidth: toRef(state, 'tooltipWidth'),
       disableCheckRows,
       disableExpandRows,
+      disableDragRows,
       usingTree: toRef(getters, 'usingTree'),
 
       isFunction,
-      isSelection,
-      isOrder,
-      isExpand,
+      isSelectionColumn,
+      isOrderColumn,
+      isExpandColumn,
+      isDragColumn,
       isTableTypeColumn,
       handleMouseEnter,
       handleMouseLeave,
@@ -333,6 +358,7 @@ export default defineComponent({
       handleContextmenu,
       handleCheckRow,
       handleExpandRow,
+      handleDragRow,
       handleExpandTree
     }
   }

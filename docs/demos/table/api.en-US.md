@@ -25,7 +25,7 @@ type ExpandRenderFn = (data: {
   rowIndex: number
 }) => any
 
-type TableColumnType = 'order' | 'selection' | 'expand'
+type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
 type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
@@ -85,6 +85,12 @@ interface TableSelectionColumn<D = Data, Val extends string | number = string | 
 interface TableExpandColumn<D = Data, Val extends string | number = string | number>
   extends TableBaseColumn<D, Val> {
   type: 'expand',
+  disableRow?: (data: Data) => boolean
+}
+
+interface TableDragColumn<D = Data, Val extends string | number = string | number>
+  extends TableBaseColumn<D, Val> {
+  type: 'drag',
   disableRow?: (data: Data) => boolean
 }
 
@@ -252,7 +258,7 @@ interface TableHeadPayload {
 | class-name    | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | -       |
 | style         | `StyleType`                            | Custom style for the column                                                                                                                  | `null`      | `2.0.1` |
 | attrs         | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1` |
-| type          | `'order' \| 'selection' \| 'expand'`   | Set built-in type of the column                                                                                                              | `null`      | -       |
+| type          | `TableColumnType`                      | Set built-in type of the column                                                                                                              | `null`      | -       |
 | width         | `number`                               | Set column width                                                                                                                             | `null`      | -       |
 | filter        | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                                              | `null`      | -       |
 | sorter        | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                                                          | `null`      | -       |

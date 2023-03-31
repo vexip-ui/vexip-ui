@@ -110,7 +110,6 @@ export default defineComponent({
     }
 
     function toggleExpand(target = !currentExpanded.value) {
-      console.log('1', target)
       currentExpanded.value = target
 
       emitEvent(props.onExpandedChange, target)

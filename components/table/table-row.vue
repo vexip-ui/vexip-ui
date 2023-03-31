@@ -3,7 +3,7 @@
     v-if="!row.hidden"
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
-    :draggable="draggable"
+    :draggable="draggable || row.dragging"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
@@ -11,8 +11,8 @@
     @contextmenu="handleContextmenu"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
-    @dragend="handleDragEnd"
     @drop="handleDrop"
+    @dragend="handleDragEnd"
   >
     <div
       ref="rowEl"
@@ -56,19 +56,19 @@ import {
   defineComponent,
   ref,
   reactive,
+  toRef,
   computed,
   inject,
   watch,
   onMounted,
   onUpdated,
-  nextTick,
-  toRef
+  nextTick
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
+import { TABLE_STORE, TABLE_ACTIONS, TABLE_HEAD_KEY } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { TableRowState, TableExpandColumn, ColumnWithKey } from './symbol'
@@ -98,8 +98,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { state, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject(TABLE_ACTION)!
+    const { state, getters, mutations } = inject(TABLE_STORE)!
+    const tableAction = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
 
@@ -184,6 +184,9 @@ export default defineComponent({
     })
     const leftFixed = computed(() => computeFixedWidth(state.leftFixedColumns))
     const rightFixed = computed(() => computeFixedWidth(state.rightFixedColumns))
+    const cellDraggable = computed(() => {
+      return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
 
     function getRowHeight(row: TableRowState) {
       if (!row) return 0
@@ -340,13 +343,17 @@ export default defineComponent({
     }
 
     function handleDragStart(event: DragEvent) {
-      if (!draggable.value) return
+      if (!draggable.value && !cellDraggable.value) return
 
       tableAction.handleRowDragStart(instance, event)
     }
 
+    function shoudProcessDrag() {
+      return (draggable.value || cellDraggable.value) && dragging.value
+    }
+
     function handleDragOver(event: DragEvent) {
-      if (!draggable.value || !dragging.value) return
+      if (!shoudProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
 
       event.stopPropagation()
       event.preventDefault()
@@ -354,18 +361,20 @@ export default defineComponent({
     }
 
     function handleDrop(event: DragEvent) {
-      if (!draggable.value || !dragging.value) return
+      if (!shoudProcessDrag()) return
 
       event.stopPropagation()
       event.preventDefault()
       tableAction.handleRowDrop(instance, event)
+      nextTick(() => mutations.handleDrag(rowKey.value, false))
     }
 
     function handleDragEnd(event: DragEvent) {
-      if (!draggable.value || !dragging.value) return
+      if (!shoudProcessDrag()) return
 
       event.stopPropagation()
       tableAction.handleRowDragEnd(event)
+      nextTick(() => mutations.handleDrag(rowKey.value, false))
     }
 
     return {

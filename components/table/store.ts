@@ -1,13 +1,14 @@
 import { reactive, computed, watchEffect, markRaw } from 'vue'
 import {
   isNull,
+  toFalse,
   debounceMinor,
   toNumber,
   sortByProps,
   deepClone,
   createBITree
 } from '@vexip-ui/utils'
-import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 
 import type { ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
@@ -24,6 +25,7 @@ import type {
   ParsedTableSorterOptions,
   TableSelectionColumn,
   TableExpandColumn,
+  TableDragColumn,
   TableColumnOptions,
   ColumnWithKey,
   TableRowState,
@@ -128,13 +130,13 @@ export function useStore(options: StoreOptions) {
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
-    const selection = state.columns.find(
+    const selectionColumn = state.columns.find(
       item => (item as TableSelectionColumn).type === 'selection'
     ) as TableSelectionColumn | undefined
     const disableCheckRows = new Set<Key>()
 
-    if (selection && typeof selection.disableRow === 'function') {
-      const isDisabled = selection.disableRow
+    if (selectionColumn && typeof selectionColumn.disableRow === 'function') {
+      const isDisabled = selectionColumn.disableRow
 
       for (let i = 0, len = rowData.length; i < len; ++i) {
         const row = rowData[i]
@@ -149,30 +151,53 @@ export function useStore(options: StoreOptions) {
   })
   const disableExpandRows = computed(() => {
     const rowData = processedData.value
-    const expand = state.columns.find(item => (item as TableExpandColumn).type === 'expand') as
-      | TableExpandColumn
-      | undefined
+    const expandColumn = state.columns.find(
+      item => (item as TableExpandColumn).type === 'expand'
+    ) as TableExpandColumn | undefined
     const disableExpandRows = new Set<Key>()
 
-    if (expand && typeof expand.disableRow === 'function') {
-      const isDisabled = expand.disableRow
+    if (expandColumn && typeof expandColumn.disableRow === 'function') {
+      const isDisabled = expandColumn.disableRow
 
       for (let i = 0, len = rowData.length; i < len; ++i) {
         const row = rowData[i]
 
         if (isDisabled(row.data)) {
-          const key = row.key
-
-          disableExpandRows.add(key)
+          disableExpandRows.add(row.key)
         }
       }
     }
 
     return disableExpandRows
   })
+  const disableDragRows = computed(() => {
+    const rowData = processedData.value
+    const dragColumn = state.columns.find(item => (item as TableDragColumn).type === 'drag') as
+      | TableDragColumn
+      | undefined
+    const disableDragRows = new Set<Key>()
+
+    if (dragColumn && typeof dragColumn.disableRow === 'function') {
+      const isDisabled = dragColumn.disableRow
+
+      for (let i = 0, len = rowData.length; i < len; ++i) {
+        const row = rowData[i]
+
+        if (isDisabled(row.data)) {
+          disableDragRows.add(row.key)
+        }
+      }
+    }
+
+    return disableDragRows
+  })
   const usingTree = computed(() => {
     return !state.disabledTree && state.rowData.some(row => row.children?.length)
   })
+  const hasDragColumn = computed(() => {
+    return !!state.columns.find(column => 'type' in column && column.type === 'drag')
+  })
+  const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -187,7 +212,10 @@ export function useStore(options: StoreOptions) {
     processedData,
     disableCheckRows,
     disableExpandRows,
-    usingTree
+    disableDragRows,
+    usingTree,
+    hasDragColumn,
+    rowDragging
   })
 
   const mutations = {
@@ -244,6 +272,7 @@ export function useStore(options: StoreOptions) {
     clearCheckAll,
     setRenderRows,
     handleExpand,
+    handleDrag,
     handleTreeExpand,
     getParentRow
   }
@@ -258,7 +287,6 @@ export function useStore(options: StoreOptions) {
     const normalColumns = []
     const rightFixedColumns = []
     const leftFixedColumns = []
-    const columnTypes = ['order', 'selection', 'expand']
 
     let firstMarked = false
 
@@ -284,7 +312,7 @@ export function useStore(options: StoreOptions) {
             column.checkboxSize = column.checkboxSize || 'default'
 
             if (typeof column.disableRow !== 'function') {
-              column.disableRow = () => false
+              column.disableRow = toFalse
             }
 
             if (isNull(column.width)) column.width = 40
@@ -293,7 +321,16 @@ export function useStore(options: StoreOptions) {
           }
           case 'expand': {
             if (typeof column.disableRow !== 'function') {
-              column.disableRow = () => false
+              column.disableRow = toFalse
+            }
+
+            if (isNull(column.width)) column.width = 40
+
+            break
+          }
+          case 'drag': {
+            if (typeof column.disableRow !== 'function') {
+              column.disableRow = toFalse
             }
 
             if (isNull(column.width)) column.width = 40
@@ -450,6 +487,7 @@ export function useStore(options: StoreOptions) {
             depth: 0,
             treeExpanded: !!treeExpanded,
             partial: false,
+            dragging: false,
             data: item
           }
 
@@ -918,6 +956,15 @@ export function useStore(options: StoreOptions) {
 
     if (rowMap.has(key) && !disableExpandRows.has(key)) {
       rowMap.get(key)!.expanded = !!expanded
+    }
+  }
+
+  function handleDrag(key: Key, dragging: boolean) {
+    const { rowMap } = state
+    const { disableDragRows } = getters
+
+    if (rowMap.has(key) && !disableDragRows.has(key)) {
+      rowMap.get(key)!.dragging = !!dragging
     }
   }
 

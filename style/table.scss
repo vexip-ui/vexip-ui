@@ -29,6 +29,8 @@ $table: map.merge(
     cell-b-color-right: get-css-var('border-color-light-2'),
     expand-color: get-css-var('content-color-secondary'),
     expand-size: 20px,
+    dragger-color: get-css-var('content-color-secondary'),
+    dragger-size: 20px,
     tree-expand-color: get-css-var('content-color-secondary'),
     tree-expand-color-hover: get-css-var('color-primary-base'),
     tree-expand-size: 20px,
@@ -236,6 +238,7 @@ $table: map.merge(
   }
 
   &__expand,
+  &__dragger,
   &__tree-expand {
     display: flex;
     align-items: center;
@@ -256,6 +259,14 @@ $table: map.merge(
     &--active {
       transform: rotate(90deg);
     }
+  }
+
+  &__dragger {
+    width: get-css-var('table-dragger-size');
+    height: get-css-var('table-dragger-size');
+    color: get-css-var('table-dragger-color');
+    cursor: grab;
+    transition: get-css-var('transition-transform');
   }
 
   &__tree-expand {

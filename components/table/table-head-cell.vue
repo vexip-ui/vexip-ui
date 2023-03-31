@@ -142,7 +142,7 @@ import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -176,7 +176,7 @@ export default defineComponent({
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject(TABLE_ACTION)!
+    const tableAction = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
