@@ -217,6 +217,7 @@ async function create(name: string) {
       source: `
         @use 'sass:map';
 
+        @use './shared' as *;
         @use './design' as *;
 
         $${kebabCaseName}: () !default;
@@ -337,7 +338,7 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(filePath, source)
+        await fs.writeFile(filePath, prettier.format(source, { ...prettierConfig, parser: 'scss' }))
         await stylelint.lint({
           cwd: rootDir,
           fix: true,
