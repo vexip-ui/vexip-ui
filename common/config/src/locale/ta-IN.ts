@@ -3,9 +3,7 @@ import { defineLocaleConfig } from './helper'
 export function taINLocale() {
   return defineLocaleConfig({
     locale: 'ta-IN',
-
-  // if false, the spaces will be removed when make sentence
-  wordSpace: true,
+    wordSpace: true,
 
   calendar: {
     year: '',
@@ -171,4 +169,5 @@ export function taINLocale() {
     fullScreenExit: 'முழுத்திரயிலிருந்து வெளியேறு',
     reset: 'மீள்துவக்கு '
   }
+})
 }
