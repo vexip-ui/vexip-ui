@@ -171,14 +171,3 @@ export interface LocaleConfig {
     reset: 'மீள்துவக்கு '
   }
 }
-
-export type LocaleOptions = DeepPartial<LocaleConfig>
-export type LocaleNames = Exclude<keyof LocaleConfig, 'locale' | 'wordSpace'>
-
-export function defineLocale(locale: LocaleOptions) {
-  return locale
-}
-
-export function defineLocaleConfig(locale: LocaleConfig) {
-  return locale
-}
