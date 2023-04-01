@@ -1,6 +1,7 @@
-import type { DeepPartial } from '../types'
+import { defineLocaleConfig } from './helper'
 
-export interface LocaleConfig {
+export function taINLocale() {
+  return defineLocaleConfig({
     locale: 'ta-IN',
 
   // if false, the spaces will be removed when make sentence
