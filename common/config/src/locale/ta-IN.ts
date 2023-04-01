@@ -45,7 +45,7 @@ export function taINLocale() {
 
   datePicker: {
     confirm: 'உறுதிபடுத்து',
-    cancel: 'நிராகரி'
+    cancel: 'நிராகரி',
     placeholder: {
       year: 'வருடம்',
       month: 'மாதம்',
