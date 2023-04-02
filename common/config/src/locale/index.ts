@@ -2,6 +2,7 @@ import { computed, provide, inject, unref } from 'vue'
 import { mergeObjects } from '@vexip-ui/utils'
 import { zhCNLocale } from './zh-CN'
 import { enUSLocale } from './en-US'
+import { taINLocale } from './ta-IN'
 
 import type { App, ComputedRef } from 'vue'
 import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
@@ -22,6 +23,8 @@ export function getDefaultLocaleConfig(locale?: string) {
   switch (locale) {
     case 'en-US':
       return enUSLocale()
+    case 'ta-IN':
+      return taINLocale()
     default:
       return zhCNLocale()
   }
