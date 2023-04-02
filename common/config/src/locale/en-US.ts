@@ -29,6 +29,12 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    captcha: {
+      toRight: 'Please slide to the right',
+      slide: 'Please slide to a suitable position',
+      success: 'Test successful'
+    },
+
     checkbox: {
       all: 'All'
     },

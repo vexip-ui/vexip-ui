@@ -176,6 +176,22 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
 }
 
 /**
+ * Random a number within the given range.
+ *
+ * @param max The max number
+ * @param min The min number, 0 if not given
+ */
+export function random(max: number, min = 0) {
+  if (min === max) return min
+
+  if (min > max) {
+    [min, max] = [max, min]
+  }
+
+  return Math.random() * (max - min) + min
+}
+
+/**
  * Return digits length of a number.
  *
  * @param number The input number

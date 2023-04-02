@@ -16,6 +16,7 @@ const components = [
   'ButtonGroup',
   'Calendar',
   'CalendarPanel',
+  'Captcha',
   'Card',
   'Carousel',
   'CarouselItem',

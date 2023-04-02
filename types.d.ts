@@ -14,6 +14,7 @@ declare module 'vue' {
     ButtonGroup: typeof import('vexip-ui')['ButtonGroup'],
     Calendar: typeof import('vexip-ui')['Calendar'],
     CalendarPanel: typeof import('vexip-ui')['CalendarPanel'],
+    Captcha: typeof import('vexip-ui')['Captcha'],
     Card: typeof import('vexip-ui')['Card'],
     Carousel: typeof import('vexip-ui')['Carousel'],
     CarouselItem: typeof import('vexip-ui')['CarouselItem'],

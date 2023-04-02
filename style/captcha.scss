@@ -1,0 +1,125 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$captcha: () !default;
+$captcha: map.merge(
+  (
+    slider-height: 32px,
+    slider-radius: get-css-var('radius-base'),
+    slider-bg-color: get-css-var('fill-color-background'),
+    filler-bg-color: get-css-var('color-primary-opacity-3'),
+    filler-bg-color-success: get-css-var('color-success-opacity-3'),
+    filler-transition: 'transform 0ms ease',
+    tip-color: get-css-var('content-color-base'),
+    tip-color-fill: get-css-var('color-white'),
+    tip-transition: 'background-position 0ms ease',
+    trigger-width: 32px,
+    trigger-color: get-css-var('content-color-third'),
+    trigger-color-hover: get-css-var('color-primary-base'),
+    trigger-color-success: get-css-var('color-success-base'),
+    trigger-bg-color: get-css-var('fill-color-base'),
+    trigger-transition: 'left 0ms ease'
+  ),
+  $captcha
+);
+
+.#{$namespace}-captcha {
+  &-vars {
+    @include define-preset-values('captcha', $captcha);
+  }
+
+  @include basis;
+
+  &__slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: get-css-var('captcha-slider-height');
+    padding: 0 calc(#{get-css-var('captcha-trigger-width')} * 0.5);
+    background-color: get-css-var('captcha-slider-bg-color');
+    border: get-css-var('border-light-2');
+    border-radius: get-css-var('captcha-slider-radius');
+  }
+
+  &__filler {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: get-css-var('captcha-filler-bg-color');
+    border-radius: get-css-var('captcha-slider-radius');
+    will-change: transform;
+    transition: get-css-var('transition-background'), get-css-var('captcha-filler-transition');
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+
+    &--success {
+      background-color: get-css-var('captcha-filler-bg-color-success');
+    }
+  }
+
+  &__tip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    white-space: nowrap;
+    background-image: linear-gradient(
+      to right,
+      get-css-var('captcha-tip-color'),
+      get-css-var('captcha-tip-color') 50%,
+      get-css-var('captcha-tip-color-fill') 50%
+    );
+    background-position: 0%;
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-size: 200% 100%;
+    transition: get-css-var('captcha-tip-transition');
+  }
+
+  &__track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__trigger {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var('captcha-trigger-width');
+    color: get-css-var('captcha-trigger-color');
+    cursor: move;
+    background-color: get-css-var('captcha-trigger-bg-color');
+    border-radius: get-css-var('captcha-slider-radius');
+    will-change: left;
+    transition: get-css-var('transition-color'), get-css-var('captcha-trigger-transition');
+    transform: translate3d(-50%, 0, 0);
+
+    &:hover,
+    &--focused {
+      color: get-css-var('captcha-trigger-color-hover');
+    }
+
+    &--success {
+      &,
+      &:hover {
+        color: get-css-var('captcha-trigger-color-success');
+      }
+    }
+  }
+}

@@ -29,6 +29,12 @@ export function zhCNLocale() {
       week7: '日'
     },
 
+    captcha: {
+      toRight: '请滑动到最右侧',
+      slide: '请滑动到适当的位置',
+      success: '验证成功'
+    },
+
     checkbox: {
       all: '全选'
     },
