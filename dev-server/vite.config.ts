@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import comp from 'unplugin-vue-components/vite'
-import pcssEnv from 'postcss-preset-env'
+import autoprefixer from 'autoprefixer'
 
 if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
@@ -69,7 +69,7 @@ export default defineConfig(() => {
     },
     css: {
       postcss: {
-        plugins: [pcssEnv]
+        plugins: [autoprefixer]
       }
     },
     plugins: [
