@@ -1,3 +1,14 @@
+## [2.1.11](https://github.com/vexip-ui/vexip-ui/compare/v2.1.10...v2.1.11) (2023-04-03)
+
+### Bug Fixes
+
+- **plugins:** support vexip-ui version lower than 2.1.10 ([7e747d2](https://github.com/vexip-ui/vexip-ui/commit/7e747d2882e22aa1acc9b36e082a256675911259))
+
+### Features
+
+- **locale:** internally support Tamil language ([#293](https://github.com/vexip-ui/vexip-ui/issues/293)) ([0331ec7](https://github.com/vexip-ui/vexip-ui/commit/0331ec75caac7f7b0c63598c352125dfcd0c5831))
+- **table:** support add column with drag type to create handler ([89df1fc](https://github.com/vexip-ui/vexip-ui/commit/89df1fc2a57ef370d43be7cabca7ff6730e5518e))
+
 ## [2.1.10](https://github.com/vexip-ui/vexip-ui/compare/v2.1.9...v2.1.10) (2023-03-29)
 
 ### Bug Fixes
