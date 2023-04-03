@@ -40,9 +40,10 @@
     "markdown-it-anchor": "^8.6.7",
     "markdown-it-container": "^3.0.0",
     "postcss": "^8.4.21",
-    "postcss-discard-duplicates": "^5.1.0",
+    "postcss-preset-env": "^8.3.0",
+    "postcss-discard-duplicates": "^6.0.0",
     "sass": "^1.58.3",
-    "vite": "^4.1.4",
+    "vite": "^4.2.1",
     "vite-plugin-vue-markdown": "^0.22.4"
   }
 }

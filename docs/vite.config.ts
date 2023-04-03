@@ -4,6 +4,7 @@ import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
+import pcssEnv from 'postcss-preset-env'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-vue-markdown'
 import { cyan, green, red } from 'kolorist'
@@ -59,7 +60,7 @@ export default defineConfig(({ command }) => {
     },
     css: {
       postcss: {
-        plugins: useServer ? [] : [discardCss as any]
+        plugins: [pcssEnv, ...(useServer ? [] : [discardCss])]
       }
     },
     plugins: [

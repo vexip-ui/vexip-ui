@@ -175,6 +175,9 @@
     "peerDependencyRules": {
       "ignoreMissing": [
         "vue"
+      ],
+      "allowAny": [
+        "@csstools/*"
       ]
     }
   }
