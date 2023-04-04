@@ -275,7 +275,6 @@ export default defineComponent({
       () => props.value,
       value => {
         currentValue.value = isNull(value) ? NaN : value
-        lastValue = currentValue.value
       }
     )
 
@@ -368,6 +367,7 @@ export default defineComponent({
 
       let value = stringValue.trim()
 
+      debugger
       if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
         const floatValue = parseFloat(stringValue)
 

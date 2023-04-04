@@ -410,8 +410,9 @@ describe('NumberInput', () => {
   })
 
   it('sync', async () => {
+    const onChange = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { sync: true }
+      props: { sync: true, onChange }
     })
     const input = wrapper.find('input').element
 
@@ -420,5 +421,10 @@ describe('NumberInput', () => {
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
+
+    emitChange(input, NUMBER)
+    vi.runAllTimers()
+    await nextTick()
+    expect(onChange).toHaveBeenCalledWith(NUMBER)
   })
 })
