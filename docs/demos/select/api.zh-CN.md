@@ -72,6 +72,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | tag-type        | `TagType`                                        | 设置多选模式下标签的类型                                                  | `null`         | `2.1.0`  |
 | locale          | `LocaleConfig['select']`                         | 设置多语言配置                                                            | `null`         | `2.1.0`  |
 | no-preview      | `boolean`                                        | 设置是否禁用选项标签动态预览功能                                          | `false`        | `2.1.10` |
+| remote          | `boolean`                                        | 是否开启远程模式                                                          | `false`        | `2.1.12` |
 
 ### Select 事件
 

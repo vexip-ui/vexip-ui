@@ -413,8 +413,7 @@ export default defineComponent({
       noRestTip: false,
       tagType: null,
       noPreview: false,
-      remote: false,
-      persist: () => []
+      remote: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -452,22 +451,6 @@ export default defineComponent({
     const hittingOption = ref<SelectOptionState>()
     const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
-    // const persistMap = computed(() => {
-    //   const { value: valueKey, label: labelKey } = keyConfig.value
-    //   const map = new Map<string | number, string>()
-
-    //   for (const option of props.persist) {
-    //     const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
-    //     const value = rawOption[valueKey]
-    //     const label = rawOption[labelKey] || String(value)
-
-    //     if (isNull(value) || map.has(value)) continue
-
-    //     map.set(value, label)
-    //   }
-
-    //   return map
-    // })
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
@@ -486,7 +469,6 @@ export default defineComponent({
       props.keyConfig.divided
       props.keyConfig.noTitle
       props.options
-      props.persist
       /* eslint-enable */
 
       updateTrigger.value++
@@ -564,29 +546,6 @@ export default defineComponent({
               .reverse()
           )
         }
-      }
-
-      for (const option of props.persist) {
-        const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
-        const value = rawOption[valueKey]
-
-        if (isNull(value) || map.has(value)) continue
-
-        const optionState = reactive({
-          value,
-          disabled: false,
-          divided: false,
-          noTitle: false,
-          label: rawOption[labelKey] || String(value),
-          group: false,
-          depth: -1,
-          parent: null,
-          hidden: true,
-          hitting: false,
-          data: option
-        }) as SelectOptionState
-
-        map.set(value, optionState)
       }
 
       optionValueMap = map
@@ -728,7 +687,6 @@ export default defineComponent({
     function getOptionFromMap(value?: string | number | null) {
       if (isNull(value)) return null
 
-      debugger
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
     }
 
@@ -820,13 +778,41 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
-        const option = getOptionFromMap(value)
+        let option = getOptionFromMap(value)
 
         if (option) {
           selectedValues.push(option.value)
           selectedLabels.push(option.label)
+
+          if (!cachedSelected.has(option.value)) {
+            cachedSelected.set(option.value, option)
+          }
+        } else if (props.remote) {
+          option = reactive({
+            value,
+            disabled: false,
+            divided: false,
+            noTitle: false,
+            label: String(value),
+            group: false,
+            depth: -1,
+            parent: null,
+            hidden: true,
+            hitting: false,
+            data: value
+          }) as SelectOptionState
+
+          cachedSelected.set(value, option)
+          selectedValues.push(value)
+          selectedLabels.push(option.label)
         }
       })
+
+      for (const cachedValue of Array.from(cachedSelected.keys())) {
+        if (!valueSet.has(cachedValue)) {
+          cachedSelected.delete(cachedValue)
+        }
+      }
 
       currentValues.value = selectedValues
       currentLabels.value = selectedLabels
@@ -882,7 +868,7 @@ export default defineComponent({
     function filterOptions(inputValue: string) {
       const filter = props.filter
 
-      if (!filter || props.remote) return
+      if (!filter) return
 
       if (!inputValue) {
         optionStates.value.forEach(state => {

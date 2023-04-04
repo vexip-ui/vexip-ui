@@ -1,5 +1,6 @@
 <template>
   <Select
+    v-model:value="value"
     clearable
     remote
     filter
@@ -9,6 +10,7 @@
   <br />
   <br />
   <Select
+    v-model:value="values"
     multiple
     clearable
     remote
@@ -27,9 +29,7 @@ interface Option {
   value: number
 }
 
-const options = ref<Option[]>([])
-
-const remoteOptions = [
+const remoteOptions: Option[] = [
   { label: 'Beijing', value: 1 },
   { label: 'Tianjin', value: 2 },
   { label: 'Shanghai', value: 3 },
@@ -53,6 +53,10 @@ const remoteOptions = [
   { label: 'Yichun', value: 21 },
   { label: 'Guangzhou', value: 22 }
 ]
+
+const value = ref<number>()
+const values = ref<number[]>([remoteOptions[0].value])
+const options = ref<Option[]>(remoteOptions.slice(0, 1))
 
 let timer: ReturnType<typeof setTimeout>
 

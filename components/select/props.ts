@@ -58,7 +58,6 @@ export const selectProps = buildProps({
   tagType: String as PropType<TagType>,
   noPreview: booleanProp,
   remote: booleanProp,
-  persist: Array as PropType<SelectRawOption[]>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),
