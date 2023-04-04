@@ -1,31 +1,26 @@
 <template>
-  <p>Current values: {{ values }}</p>
-  <Select
-    v-model:value="values"
-    multiple
-    clearable
-    option-check
-    :options="options"
-  ></Select>
+  <Select filter :options="options"></Select>
   <br />
   <br />
   <Select
     multiple
     clearable
-    option-check
-    :max-tag-count="3"
+    :filter="fitler"
     :options="options"
   ></Select>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { SelectFilter } from 'vexip-ui'
 
-const values = ref<number[]>([])
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `Option ${i + 1}`,
   value: i + 1
 }))
+
+const fitler: SelectFilter = (filterValue, option) => {
+  return option.label.toLocaleLowerCase().includes(filterValue.toLocaleUpperCase())
+}
 </script>
 
 <style scoped>

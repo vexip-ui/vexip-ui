@@ -412,7 +412,9 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false
+      noPreview: false,
+      remote: false,
+      persist: () => []
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -450,8 +452,26 @@ export default defineComponent({
     const hittingOption = ref<SelectOptionState>()
     const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
+    // const persistMap = computed(() => {
+    //   const { value: valueKey, label: labelKey } = keyConfig.value
+    //   const map = new Map<string | number, string>()
+
+    //   for (const option of props.persist) {
+    //     const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
+    //     const value = rawOption[valueKey]
+    //     const label = rawOption[labelKey] || String(value)
+
+    //     if (isNull(value) || map.has(value)) continue
+
+    //     map.set(value, label)
+    //   }
+
+    //   return map
+    // })
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+
+    const cachedSelected = new Map<string | number, SelectOptionState>()
 
     let optionValueMap = new Map<string | number, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
@@ -466,6 +486,7 @@ export default defineComponent({
       props.keyConfig.divided
       props.keyConfig.noTitle
       props.options
+      props.persist
       /* eslint-enable */
 
       updateTrigger.value++
@@ -503,7 +524,7 @@ export default defineComponent({
         const group = !!rawOption[groupKey]
         const value = rawOption[valueKey]
 
-        if (!group && isNull(value)) return
+        if (!group && isNull(value)) continue
 
         const label = rawOption[labelKey] || String(value)
         const {
@@ -543,6 +564,29 @@ export default defineComponent({
               .reverse()
           )
         }
+      }
+
+      for (const option of props.persist) {
+        const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
+        const value = rawOption[valueKey]
+
+        if (isNull(value) || map.has(value)) continue
+
+        const optionState = reactive({
+          value,
+          disabled: false,
+          divided: false,
+          noTitle: false,
+          label: rawOption[labelKey] || String(value),
+          group: false,
+          depth: -1,
+          parent: null,
+          hidden: true,
+          hitting: false,
+          data: option
+        }) as SelectOptionState
+
+        map.set(value, optionState)
       }
 
       optionValueMap = map
@@ -681,6 +725,13 @@ export default defineComponent({
       return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
     })
 
+    function getOptionFromMap(value?: string | number | null) {
+      if (isNull(value)) return null
+
+      debugger
+      return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
+    }
+
     watch(
       () => props.visible,
       value => {
@@ -769,7 +820,7 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
-        const option = optionValueMap.get(value)
+        const option = getOptionFromMap(value)
 
         if (option) {
           selectedValues.push(option.value)
@@ -831,7 +882,7 @@ export default defineComponent({
     function filterOptions(inputValue: string) {
       const filter = props.filter
 
-      if (!filter) return
+      if (!filter || props.remote) return
 
       if (!inputValue) {
         optionStates.value.forEach(state => {
@@ -878,7 +929,7 @@ export default defineComponent({
     }
 
     function handleTagClose(value?: string | number | null) {
-      !isNull(value) && handleSelect(optionValueMap.get(value))
+      !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
     function handleSelect(option?: SelectOptionState | null) {
@@ -892,6 +943,8 @@ export default defineComponent({
           removeArrayItem(userOptions.value, item => item.value === value)
           optionValueMap.delete(value)
         }
+
+        cachedSelected.delete(value)
       } else {
         if (!props.multiple) {
           userOptions.value.length = 0
@@ -903,6 +956,8 @@ export default defineComponent({
           userOptions.value.push(newOption)
           optionValueMap.set(value, newOption)
         }
+
+        cachedSelected.set(option.value, option)
       }
 
       emitEvent(props[props.multiple && selected ? 'onCancel' : 'onSelect'], value, option.data)
@@ -940,7 +995,7 @@ export default defineComponent({
         emitEvent(
           props.onChange,
           emittedValue,
-          emittedValue.map(value => optionValueMap.get(value)?.data ?? '')
+          emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
         emit('update:value', emittedValue)
         emit('update:label', currentLabels.value)
@@ -986,6 +1041,8 @@ export default defineComponent({
         for (const option of userOptions.value) {
           optionValueMap.delete(option.value)
         }
+
+        cachedSelected.clear()
 
         userOptions.value.length = 0
         currentValues.value.length = 0
