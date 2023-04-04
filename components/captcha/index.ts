@@ -1,6 +1,4 @@
-import Captcha from './captcha.vue'
-
-export { Captcha }
-export type CaptchaExposed = InstanceType<typeof Captcha>
+export { default as Captcha } from './captcha'
 
 export type { CaptchaProps, CaptchaCProps } from './props'
+export type { CaptchaType, CaptchaExposed } from './symbol'

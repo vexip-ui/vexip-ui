@@ -81,8 +81,6 @@ $captcha: map.merge(
       get-css-var('captcha-tip-color-fill') 50%
     );
     background-position: 0%;
-    /* stylelint-disable-next-line property-no-vendor-prefix */
-    -webkit-background-clip: text;
     background-clip: text;
     background-size: 200% 100%;
     transition: get-css-var('captcha-tip-transition');
@@ -111,12 +109,14 @@ $captcha: map.merge(
     transform: translate3d(-50%, 0, 0);
 
     &:hover,
+    &:focus,
     &--focused {
       color: get-css-var('captcha-trigger-color-hover');
     }
 
     &--success {
       &,
+      &:focus,
       &:hover {
         color: get-css-var('captcha-trigger-color-success');
       }

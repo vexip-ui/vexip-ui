@@ -1,47 +1,3 @@
-<template>
-  <div :class="className" tabindex="-1">
-    <div :class="nh.be('slider')">
-      <div
-        :class="{
-          [nh.be('filler')]: true,
-          [nh.bem('filler', 'success')]: isSuccess
-        }"
-        :style="fillerStyle"
-        @transitionend="afterReset"
-      ></div>
-      <div
-        :class="{
-          [nh.be('tip')]: true,
-          [nh.bem('tip', 'success')]: isSuccess
-        }"
-        :style="tipStyle"
-      >
-        <slot name="tip" :success="isSuccess">
-          {{ isSuccess ? props.successTip ?? locale.success : props.tip ?? normalTip }}
-        </slot>
-      </div>
-      <div ref="track" :class="nh.be('track')">
-        <div
-          ref="trigger"
-          :class="{
-            [nh.be('trigger')]: true,
-            [nh.bem('trigger', 'focused')]: dragging,
-            [nh.bem('trigger', 'success')]: isSuccess
-          }"
-          tabindex="0"
-          :style="triggerStyle"
-        >
-          <slot name="trigger" :success="isSuccess">
-            <Icon v-if="isSuccess" v-bind="icons.check"></Icon>
-            <Icon v-else v-bind="icons.anglesRight"></Icon>
-          </slot>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
@@ -51,12 +7,9 @@ import { captchaProps } from './props'
 
 export default defineComponent({
   name: 'Captcha',
-  components: {
-    Icon
-  },
   props: captchaProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { slots, expose }) {
     const props = useProps('captcha', _props, {
       type: 'slide',
       loading: false,
@@ -70,9 +23,10 @@ export default defineComponent({
 
     const nh = useNameHelper('captcha')
     const locale = useLocale('captcha')
+    const icons = useIcons()
 
     const currentLeft = ref(0)
-    const currentTarget = ref(props.slideTarget ?? random(100))
+    const currentTarget = ref(props.slideTarget ?? random(80, 20))
     const resetting = ref(false)
     const isSuccess = ref(false)
 
@@ -164,9 +118,11 @@ export default defineComponent({
     watch(
       () => props.slideTarget,
       value => {
-        currentTarget.value = value ?? currentTarget.value ?? random(100)
+        currentTarget.value = value ?? currentTarget.value ?? random(80, 20)
       }
     )
+
+    expose({ refresh })
 
     function verifyPosition() {
       currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
@@ -176,26 +132,70 @@ export default defineComponent({
       resetting.value = false
     }
 
-    return {
-      props,
-      nh,
-      locale,
-      icons: useIcons(),
-      currentLeft,
-      isSuccess,
+    function refresh() {
+      currentTarget.value = props.slideTarget ?? random(80, 20)
+    }
 
-      dragging,
-      className,
-      fillerStyle,
-      tipStyle,
-      triggerStyle,
-      normalTip,
-
-      trigger,
-      track,
-
-      afterReset
+    return () => {
+      return (
+        <div class={className.value} tabindex={-1}>
+          <div class={nh.be('slider')}>
+            <div
+              class={{
+                [nh.be('filler')]: true,
+                [nh.bem('filler', 'loading')]: props.loading,
+                [nh.bem('filler', 'success')]: isSuccess.value
+              }}
+              style={fillerStyle.value}
+              onTransitionend={afterReset}
+            ></div>
+            <div
+              class={{
+                [nh.be('tip')]: true,
+                [nh.bem('tip', 'focused')]: dragging.value,
+                [nh.bem('tip', 'loading')]: props.loading,
+                [nh.bem('tip', 'success')]: isSuccess.value
+              }}
+              style={tipStyle.value}
+            >
+              {slots.tip
+                ? slots.tip({ success: isSuccess.value })
+                : isSuccess.value
+                  ? props.successTip ?? locale.value.success
+                  : props.tip ?? normalTip.value}
+            </div>
+            <div ref={track} class={nh.be('track')}>
+              <div
+                ref={trigger}
+                class={{
+                  [nh.be('trigger')]: true,
+                  [nh.bem('trigger', 'focused')]: dragging.value,
+                  [nh.bem('trigger', 'loading')]: props.loading,
+                  [nh.bem('trigger', 'success')]: isSuccess.value
+                }}
+                tabindex={0}
+                style={triggerStyle.value}
+              >
+                {slots.trigger
+                  ? (
+                      slots.trigger({ success: isSuccess.value })
+                    )
+                  : isSuccess.value
+                    ? (
+                  <Icon {...icons.value.check}></Icon>
+                      )
+                    : props.loading
+                      ? (
+                  <Icon {...icons.value.loading}></Icon>
+                        )
+                      : (
+                  <Icon {...icons.value.anglesRight}></Icon>
+                        )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     }
   }
 })
-</script>
