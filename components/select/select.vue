@@ -868,7 +868,7 @@ export default defineComponent({
     function filterOptions(inputValue: string) {
       const filter = props.filter
 
-      if (!filter) return
+      if (!filter || props.remote) return
 
       if (!inputValue) {
         optionStates.value.forEach(state => {
