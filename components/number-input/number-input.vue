@@ -106,7 +106,6 @@ import { numberInputProps } from './props'
 type InputEventType = 'input' | 'change'
 
 const numberRE = /^-?[0-9]*\.?[0-9]*$/
-const isNullOrNaN = (value: unknown) => isNull(value) || Number.isNaN(value)
 const isEmpty = (value: unknown) => !value && value !== 0
 
 export default defineComponent({
@@ -251,12 +250,6 @@ export default defineComponent({
         ? props.formatter(preciseNumber.value as number)
         : preciseNumber.value.toString()
     })
-    const plusDisabled = computed(() => {
-      return !isNullOrNaN(currentValue.value) && toNumber(currentValue.value) >= props.max
-    })
-    const minusDisabled = computed(() => {
-      return !isNullOrNaN(currentValue.value) && toNumber(currentValue.value) <= props.min
-    })
     const hasValue = computed(() => !!(currentValue.value || currentValue.value === 0))
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
@@ -274,7 +267,9 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = isNull(value) ? NaN : value
+        if (!focused.value || !numberRE.test(String(currentValue.value))) {
+          currentValue.value = isNull(value) ? NaN : value
+        }
       }
     )
 
@@ -301,10 +296,6 @@ export default defineComponent({
     }
 
     function plusNumber(event: MouseEvent) {
-      if (plusDisabled.value) {
-        return
-      }
-
       !focused.value && focus()
       changeStep(
         'plus',
@@ -313,10 +304,6 @@ export default defineComponent({
     }
 
     function minusNumber(event: MouseEvent) {
-      if (minusDisabled.value) {
-        return
-      }
-
       !focused.value && focus()
       changeStep(
         'minus',
@@ -367,7 +354,6 @@ export default defineComponent({
 
       let value = stringValue.trim()
 
-      debugger
       if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
         const floatValue = parseFloat(stringValue)
 
@@ -387,9 +373,7 @@ export default defineComponent({
 
     function setValue(value: string | number, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = isEmpty(value)
-          ? NaN
-          : boundRange(toNumber(value), props.min, props.max)
+        currentValue.value = isEmpty(value) ? NaN : toNumber(value)
       } else {
         currentValue.value = value
       }
@@ -409,20 +393,27 @@ export default defineComponent({
     }
 
     function emitChangeEvent(type: InputEventType) {
-      const value = isEmpty(currentValue.value) ? getEmptyValue() : toNumber(currentValue.value)
+      const empty = isEmpty(currentValue.value)
+      const value = empty ? getEmptyValue() : toNumber(currentValue.value)
 
       type = type === 'input' ? 'input' : 'change'
 
       if (type === 'change') {
-        if (lastValue === value) return
+        const boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
+        const boundChange = boundValue !== value
 
-        lastValue = value
+        if (!empty) {
+          currentValue.value = boundValue
+        }
 
-        !props.sync && setFieldValue(value)
-        emitEvent(props.onChange, value)
+        if (!props.sync && lastValue === boundValue) return
 
-        if (!props.sync) {
-          emit('update:value', value)
+        lastValue = boundValue
+        ;(!props.sync || boundChange) && setFieldValue(boundValue)
+        emitEvent(props.onChange, boundValue)
+
+        if (!props.sync || boundChange) {
+          emit('update:value', boundValue)
           validateField()
         }
       } else {
@@ -481,8 +472,6 @@ export default defineComponent({
       inputStyle,
       preciseNumber,
       formattedValue,
-      plusDisabled,
-      minusDisabled,
       hasValue,
       showClear,
       inputValue,
