@@ -90,6 +90,11 @@ export function taINLocale() {
       cancel: 'நிராகரி'
     },
 
+    numberInput: {
+      placeholder: 'தயவுசெய்து எண் உள்ளிடவும்',
+      outOfRange: 'வரம்புக்கு வெளியே'
+    },
+
     pagination: {
       page: 'பக்கம் | பக்கங்கள்',
       perPage: '/ பக்கம்',

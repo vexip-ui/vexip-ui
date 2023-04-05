@@ -27,6 +27,7 @@
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
       role="spinbutton"
+      :title="outOfRange ? locale.outOfRange : undefined"
       :aria-valuenow="preciseNumber"
       :aria-valuemin="props.min !== -Infinity ? props.min : undefined"
       :aria-valuemax="props.max !== Infinity ? props.max : undefined"
@@ -107,6 +108,7 @@ type InputEventType = 'input' | 'change'
 
 const numberRE = /^-?[0-9]*\.?[0-9]*$/
 const isEmpty = (value: unknown) => !value && value !== 0
+const isNullOrNaN = (value: unknown) => isNull(value) || Number.isNaN(value)
 
 export default defineComponent({
   name: 'NumberInput',
@@ -208,11 +210,18 @@ export default defineComponent({
 
     let lastValue = props.value
 
+    const outOfRange = computed(() => {
+      return (
+        !isNullOrNaN(currentValue.value) &&
+        (toNumber(currentValue.value) > props.max || toNumber(currentValue.value) < props.min)
+      )
+    })
     const className = computed(() => {
       const [display, fade] = (props.controlType || 'right').split('-')
 
       return [
         nh.b(),
+        nh.bs('vars'),
         nh.ns('input-vars'),
         {
           [nh.bm('inherit')]: props.inherit,
@@ -222,7 +231,8 @@ export default defineComponent({
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm(`control-${display}`)]: display !== 'right',
-          [nh.bm('control-fade')]: fade
+          [nh.bm('control-fade')]: fade,
+          [nh.bm('out-of-range')]: outOfRange.value
         }
       ]
     })
@@ -460,12 +470,13 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('input', toRef(props, 'locale')),
+      locale: useLocale('numberInput', toRef(props, 'locale')),
       icons: useIcons(),
       idFor,
       focused,
       isHover,
 
+      outOfRange,
       className,
       hasPrefix,
       hasSuffix,

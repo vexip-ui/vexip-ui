@@ -4,7 +4,19 @@
 @use './design' as *;
 @use './input.scss' as input;
 
+$number-input: () !default;
+$number-input: map.merge(
+  (
+    control-color-out: get-css-var('color-error-base')
+  ),
+  $number-input
+);
+
 .#{$namespace}-number-input {
+  &-vars {
+    @include define-preset-values('number-input', $number-input);
+  }
+
   @include basis;
   @include input.handler;
 
@@ -12,6 +24,10 @@
     & {
       padding-right: calc(get-css-var('input-h-padding') + 20px);
     }
+  }
+
+  &--out-of-range &__control {
+    color: get-css-var('number-input-control-color-out');
   }
 
   &__clear,

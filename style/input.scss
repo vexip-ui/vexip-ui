@@ -158,6 +158,7 @@ $input: map.merge(
     border: 0;
     border-radius: get-css-var('input-radius');
     outline: 0;
+    transition: get-css-var('transition-color');
 
     &:disabled {
       cursor: not-allowed;

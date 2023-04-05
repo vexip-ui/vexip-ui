@@ -91,6 +91,11 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  numberInput: {
+    placeholder: string,
+    outOfRange: string
+  },
+
   pagination: {
     page: string,
     perPage: string,

@@ -427,4 +427,25 @@ describe('NumberInput', () => {
     await nextTick()
     expect(onChange).toHaveBeenCalledWith(NUMBER)
   })
+
+  it('range', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(NumberInput, {
+      props: { min: 5, max: 10, onChange }
+    })
+    const input = wrapper.find('input').element
+
+    emitChange(input, 11)
+    await nextTick()
+    expect(onChange).toHaveBeenLastCalledWith(10)
+
+    emitChange(input, 4)
+    await nextTick()
+    expect(onChange).toHaveBeenLastCalledWith(5)
+
+    emitInput(input, 11)
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-number-input').classes()).toContain('vxp-number-input--out-of-range')
+  })
 })
