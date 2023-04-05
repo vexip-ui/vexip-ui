@@ -591,4 +591,49 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__control').text()).toEqual('l')
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
   })
+
+  it('remote', async () => {
+    const onFilterInput = vi.fn((value: string) => {
+      wrapper.setProps({
+        options: OPTIONS.filter(o => o.includes(value))
+      })
+    })
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        options: [],
+        multiple: true,
+        filter: true,
+        onFilterInput
+      }
+    })
+    const input = wrapper.find('input').element
+
+    expect(wrapper.findAll('.vxp-option').length).toEqual(0)
+
+    emitInput(input, '2')
+    await nextTick()
+
+    let options = wrapper.findAll('.vxp-option')
+    expect(options.length).toEqual(1)
+    expect(options[0].text()).toEqual(OPTIONS[1])
+
+    await options[0].trigger('click')
+
+    let tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
+    expect(tags.length).toEqual(1)
+    expect(tags[0].text()).toEqual(OPTIONS[1])
+
+    emitInput(input, '3')
+    await nextTick()
+    options = wrapper.findAll('.vxp-option')
+    expect(options.length).toEqual(1)
+    expect(options[0].text()).toEqual(OPTIONS[2])
+
+    await options[0].trigger('click')
+    tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
+    expect(tags.length).toEqual(2)
+    expect(tags[0].text()).toEqual(OPTIONS[1])
+    expect(tags[1].text()).toEqual(OPTIONS[2])
+  })
 })

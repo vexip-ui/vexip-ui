@@ -1,4 +1,5 @@
 <template>
+  <p>当前值：{{ values }}</p>
   <Select
     v-model:value="values"
     multiple
@@ -6,7 +7,8 @@
     option-check
     :options="options"
   ></Select>
-  <p>当前值：{{ values }}</p>
+  <br />
+  <br />
   <Select
     multiple
     clearable
