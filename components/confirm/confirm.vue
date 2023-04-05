@@ -21,6 +21,7 @@
         </div>
         <button
           v-if="closableR"
+          type="button"
           :class="nh.be('close')"
           @mousedown.stop
           @click="handleCancel"
@@ -74,6 +75,7 @@
       </div>
       <button
         v-if="closableR && !title"
+        type="button"
         :class="nh.be('close')"
         @mousedown.stop
         @click="handleCancel"

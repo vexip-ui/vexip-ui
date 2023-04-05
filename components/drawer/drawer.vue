@@ -30,7 +30,12 @@
               {{ props.title }}
             </slot>
           </div>
-          <button v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
+          <button
+            v-if="props.closable"
+            type="button"
+            :class="nh.be('close')"
+            @click="handleClose()"
+          >
             <slot name="close">
               <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
             </slot>
@@ -113,11 +118,11 @@ export default defineComponent({
       },
       width: {
         default: 280,
-        validator: value => value > 0
+        validator: value => typeof value === 'string' || value > 0
       },
       height: {
         default: 280,
-        validator: value => value > 0
+        validator: value => typeof value === 'string' || value > 0
       },
       placement: {
         default: 'right',

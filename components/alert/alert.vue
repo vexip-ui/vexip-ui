@@ -20,7 +20,12 @@
           <slot v-else></slot>
         </div>
       </div>
-      <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
+      <button
+        v-if="props.closable"
+        type="button"
+        :class="nh.be('close')"
+        @click="handleClose"
+      >
         <slot name="close">
           <Icon v-bind="icons.close" label="close"></Icon>
         </slot>

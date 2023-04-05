@@ -32,7 +32,7 @@
       </slot>
       <li v-if="props.showAdd || $slots.add" :class="nh.be('item')" role="none">
         <div :class="nh.be('pad')"></div>
-        <button :class="nh.be('add')" @click="handleAdd">
+        <button type="button" :class="nh.be('add')" @click="handleAdd">
           <slot name="add">
             <Icon v-bind="icons.plus" :scale="1.2"></Icon>
           </slot>

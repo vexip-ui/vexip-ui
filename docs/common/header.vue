@@ -42,7 +42,7 @@
       </Menu>
     </div>
     <Dropdown class="language" trigger="click">
-      <button class="language-trigger">
+      <button type="button" class="language-trigger">
         <Icon label="language" :scale="2">
           <Language></Language>
         </Icon>

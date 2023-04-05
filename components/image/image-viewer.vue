@@ -18,6 +18,7 @@
       </Viewer>
       <template v-if="srcList.length > 1">
         <button
+          type="button"
           :class="[nh.be('prev'), prevDisabled && nh.bem('prev', 'disabled')]"
           @click.stop="handlePrev"
         >
@@ -28,6 +29,7 @@
           </slot>
         </button>
         <button
+          type="button"
           :class="[nh.be('next'), nextDisabled && nh.bem('next', 'disabled')]"
           @click.stop="handleNext"
         >
@@ -38,7 +40,7 @@
           </slot>
         </button>
       </template>
-      <button :class="nh.be('close')" @click.stop="handleClose">
+      <button type="button" :class="nh.be('close')" @click.stop="handleClose">
         <slot name="close">
           <div :class="nh.be('close-handler')">
             <Icon v-bind="icons.close" :scale="1.4" label="close"></Icon>

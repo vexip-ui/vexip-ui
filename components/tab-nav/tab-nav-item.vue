@@ -15,7 +15,12 @@
       <slot>
         {{ label }}
       </slot>
-      <button v-if="isClosable" :class="nh.be('close')" @click.stop="handleClose">
+      <button
+        v-if="isClosable"
+        type="button"
+        :class="nh.be('close')"
+        @click.stop="handleClose"
+      >
         <Icon v-bind="icons.close"></Icon>
       </button>
     </div>

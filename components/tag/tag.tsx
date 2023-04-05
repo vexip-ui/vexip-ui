@@ -109,7 +109,7 @@ export default defineComponent({
       if (!props.closable) return null
 
       return (
-        <button class={nh.be('close')} onClick={handleClose}>
+        <button type={'button'} class={nh.be('close')} onClick={handleClose}>
           <Icon {...icons.value.close} label="close"></Icon>
         </button>
       )
