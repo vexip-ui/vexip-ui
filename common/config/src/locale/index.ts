@@ -1,8 +1,6 @@
 import { computed, provide, inject, unref } from 'vue'
 import { mergeObjects } from '@vexip-ui/utils'
 import { zhCNLocale } from './zh-CN'
-import { enUSLocale } from './en-US'
-import { taINLocale } from './ta-IN'
 
 import type { App, ComputedRef } from 'vue'
 import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
@@ -11,23 +9,23 @@ import type { MaybeRef } from '../types'
 export * from './helper'
 export * from './zh-CN'
 export * from './en-US'
+export * from './ta-IN'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())
+
+const cached = new Map<string, LocaleConfig>()
 
 export function getDefaultLocaleConfig(locale?: string) {
   if (!locale) {
     return globalLocal.value
   }
 
-  switch (locale) {
-    case 'en-US':
-      return enUSLocale()
-    case 'ta-IN':
-      return taINLocale()
-    default:
-      return zhCNLocale()
-  }
+  return cached.get(locale) || globalLocal.value
+}
+
+export function registerLocale(locale: LocaleConfig) {
+  locale.locale && cached.set(locale.locale, locale)
 }
 
 export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
