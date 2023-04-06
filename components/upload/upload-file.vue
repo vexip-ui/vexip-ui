@@ -46,7 +46,11 @@
           >
             <Icon v-bind="icons.loading"></Icon>
           </div>
-          <button :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
+          <button
+            type="button"
+            :class="[nh.be('icon'), nh.be('close')]"
+            @click="handleDelete(props.file)"
+          >
             <Icon v-bind="icons.delete"></Icon>
           </button>
         </div>
@@ -121,6 +125,7 @@
           >
             <div v-if="props.listType === 'thumbnail'" :class="nh.be('mask')"></div>
             <button
+              type="button"
               :class="[
                 nh.be('icon'),
                 nh.be('action'),
@@ -133,7 +138,11 @@
             >
               <Icon v-bind="icons.preview" :scale="1.4"></Icon>
             </button>
-            <button :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
+            <button
+              type="button"
+              :class="[nh.be('icon'), nh.be('action')]"
+              @click="handleDelete(props.file)"
+            >
               <Icon v-bind="icons.delete" :scale="1.4"></Icon>
             </button>
           </div>

@@ -10,8 +10,8 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus="handleFocus"
-      @blur="handleBlur"
+      @focus="!props.filter && handleFocus($event)"
+      @blur="!props.filter && handleBlur($event)"
     >
       <div
         v-if="hasPrefix"
@@ -98,7 +98,11 @@
             >
               <input
                 ref="input"
-                :class="[nh.be('input'), nh.bem('input', 'multiple')]"
+                :class="[
+                  nh.be('input'),
+                  nh.bem('input', 'multiple'),
+                  currentVisible && nh.bem('input', 'visible')
+                ]"
                 :disabled="props.disabled"
                 autocomplete="off"
                 tabindex="-1"
@@ -107,6 +111,8 @@
                 @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -117,7 +123,7 @@
             <template v-if="props.filter">
               <input
                 ref="input"
-                :class="nh.be('input')"
+                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
                 :placeholder="
                   hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
@@ -128,6 +134,8 @@
                 aria-autocomplete="list"
                 @submit.prevent
                 @input="handleFilterInput"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
             </template>
             <template v-else>
@@ -412,7 +420,8 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false
+      noPreview: false,
+      remote: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -452,6 +461,8 @@ export default defineComponent({
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+
+    const cachedSelected = new Map<string | number, SelectOptionState>()
 
     let optionValueMap = new Map<string | number, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
@@ -503,7 +514,7 @@ export default defineComponent({
         const group = !!rawOption[groupKey]
         const value = rawOption[valueKey]
 
-        if (!group && isNull(value)) return
+        if (!group && isNull(value)) continue
 
         const label = rawOption[labelKey] || String(value)
         const {
@@ -681,6 +692,12 @@ export default defineComponent({
       return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
     })
 
+    function getOptionFromMap(value?: string | number | null) {
+      if (isNull(value)) return null
+
+      return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
+    }
+
     watch(
       () => props.visible,
       value => {
@@ -769,13 +786,41 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
-        const option = optionValueMap.get(value)
+        let option = getOptionFromMap(value)
 
         if (option) {
           selectedValues.push(option.value)
           selectedLabels.push(option.label)
+
+          if (!cachedSelected.has(option.value)) {
+            cachedSelected.set(option.value, option)
+          }
+        } else if (props.remote) {
+          option = reactive({
+            value,
+            disabled: false,
+            divided: false,
+            noTitle: false,
+            label: String(value),
+            group: false,
+            depth: -1,
+            parent: null,
+            hidden: true,
+            hitting: false,
+            data: value
+          }) as SelectOptionState
+
+          cachedSelected.set(value, option)
+          selectedValues.push(value)
+          selectedLabels.push(option.label)
         }
       })
+
+      for (const cachedValue of Array.from(cachedSelected.keys())) {
+        if (!valueSet.has(cachedValue)) {
+          cachedSelected.delete(cachedValue)
+        }
+      }
 
       currentValues.value = selectedValues
       currentLabels.value = selectedLabels
@@ -831,7 +876,7 @@ export default defineComponent({
     function filterOptions(inputValue: string) {
       const filter = props.filter
 
-      if (!filter) return
+      if (!filter || props.remote) return
 
       if (!inputValue) {
         optionStates.value.forEach(state => {
@@ -878,7 +923,7 @@ export default defineComponent({
     }
 
     function handleTagClose(value?: string | number | null) {
-      !isNull(value) && handleSelect(optionValueMap.get(value))
+      !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
     function handleSelect(option?: SelectOptionState | null) {
@@ -892,6 +937,8 @@ export default defineComponent({
           removeArrayItem(userOptions.value, item => item.value === value)
           optionValueMap.delete(value)
         }
+
+        cachedSelected.delete(value)
       } else {
         if (!props.multiple) {
           userOptions.value.length = 0
@@ -903,6 +950,8 @@ export default defineComponent({
           userOptions.value.push(newOption)
           optionValueMap.set(value, newOption)
         }
+
+        cachedSelected.set(option.value, option)
       }
 
       emitEvent(props[props.multiple && selected ? 'onCancel' : 'onSelect'], value, option.data)
@@ -940,7 +989,7 @@ export default defineComponent({
         emitEvent(
           props.onChange,
           emittedValue,
-          emittedValue.map(value => optionValueMap.get(value)?.data ?? '')
+          emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
         emit('update:value', emittedValue)
         emit('update:label', currentLabels.value)
@@ -986,6 +1035,8 @@ export default defineComponent({
         for (const option of userOptions.value) {
           optionValueMap.delete(option.value)
         }
+
+        cachedSelected.clear()
 
         userOptions.value.length = 0
         currentValues.value.length = 0

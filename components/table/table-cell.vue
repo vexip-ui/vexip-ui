@@ -28,6 +28,7 @@
     <template v-else-if="isExpandColumn(column)">
       <button
         v-if="!disableExpandRows.has(row.key)"
+        type="button"
         :class="{
           [nh.be('expand')]: true,
           [nh.bem('expand', 'active')]: row.expanded
@@ -40,6 +41,7 @@
     <template v-else-if="isDragColumn(column)">
       <button
         v-if="!disableDragRows.has(row.key)"
+        type="button"
         :class="nh.be('dragger')"
         @mousedown="handleDragRow(row)"
       >
@@ -67,6 +69,7 @@
         }"
       ></span>
       <button
+        type="button"
         :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
         @click="handleExpandTree(row)"
       >

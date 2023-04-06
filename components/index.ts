@@ -113,15 +113,7 @@ import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } fr
 import { buildInstall } from './create'
 import { install as installDirectives } from '@/directives'
 
-export type {
-  ComponentSize,
-  ComponentState,
-  LocaleConfig,
-  LocaleNames,
-  LocaleOptions
-} from '@vexip-ui/config'
 export type { PropsOptions } from './props'
-
 export { version } from './version'
 
 const components = [

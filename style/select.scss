@@ -107,6 +107,7 @@ $select: map.merge(
     height: 100%;
     padding: 0;
     color: inherit;
+    pointer-events: none;
     user-select: auto;
     background-color: transparent;
     border: 0;
@@ -114,6 +115,10 @@ $select: map.merge(
 
     &--multiple {
       min-width: 1px;
+    }
+
+    &--visible {
+      pointer-events: auto;
     }
 
     &::placeholder {

@@ -15,8 +15,9 @@
     <Column flex="0">
       <button
         v-show="transferTo"
+        type="button"
         class="action"
-        style="margin-right: 0;"
+        style="margin-right: 0"
         @click="settingActive = true"
       >
         <Icon :scale="1.3">
@@ -40,7 +41,12 @@
           </div>
         </div>
         <div class="section">
-          <button class="action" :title="locale.theme" @click="toggleDark">
+          <button
+            type="button"
+            class="action"
+            :title="locale.theme"
+            @click="toggleDark"
+          >
             <Icon v-if="isDarkTheme" :scale="1.3">
               <Moon></Moon>
             </Icon>
@@ -48,23 +54,43 @@
               <Sun></Sun>
             </Icon>
           </button>
-          <button class="action" :title="locale.share" @click="copyLink">
+          <button
+            type="button"
+            class="action"
+            :title="locale.share"
+            @click="copyLink"
+          >
             <Icon :scale="1.3">
               <ShareNodes></ShareNodes>
             </Icon>
           </button>
-          <button class="action" :title="locale.download" @click="download">
+          <button
+            type="button"
+            class="action"
+            :title="locale.download"
+            @click="download"
+          >
             <Icon :scale="1.3">
               <Download></Download>
             </Icon>
           </button>
-          <button class="action" :title="locale.format" @click="formatCodes">
+          <button
+            type="button"
+            class="action"
+            :title="locale.format"
+            @click="formatCodes"
+          >
             <Icon :scale="1.3">
               <CheckDouble></CheckDouble>
             </Icon>
           </button>
           <Dropdown v-model:visible="cdnPanelVisible" class="action" trigger="click">
-            <button class="action" :title="locale.cdn" style="margin-right: 0;">
+            <button
+              type="button"
+              class="action"
+              :title="locale.cdn"
+              style="margin-right: 0"
+            >
               <Icon :scale="1.3">
                 <Rocket></Rocket>
               </Icon>
@@ -77,7 +103,7 @@
                 <Button
                   type="primary"
                   size="small"
-                  style="margin-top: 6px;"
+                  style="margin-top: 6px"
                   @click="applyCdn"
                 >
                   {{ locale.apply }}
@@ -85,7 +111,12 @@
               </DropdownList>
             </template>
           </Dropdown>
-          <button class="action" :title="locale.reset" @click="reset">
+          <button
+            type="button"
+            class="action"
+            :title="locale.reset"
+            @click="reset"
+          >
             <Icon :scale="1.3">
               <ArrowRotateLeft></ArrowRotateLeft>
             </Icon>
@@ -313,9 +344,7 @@ async function formatCodes() {
   background-color: var(--vxp-bg-color-base);
   border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
-  transition:
-    var(--vxp-transition-background),
-    var(--vxp-transition-border),
+  transition: var(--vxp-transition-background), var(--vxp-transition-border),
     var(--vxp-transition-shadow);
 
   .dark & {

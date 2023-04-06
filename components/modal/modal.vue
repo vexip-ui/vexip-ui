@@ -33,6 +33,7 @@
             </div>
             <button
               v-if="props.closable"
+              type="button"
               :class="nh.be('close')"
               @pointerdown.stop
               @mousedown.stop

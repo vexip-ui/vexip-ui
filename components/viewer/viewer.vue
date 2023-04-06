@@ -26,6 +26,7 @@
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
           <button
+            type="button"
             :class="{
               [nh.be('action')]: true,
               [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
@@ -282,10 +283,17 @@ export default defineComponent({
 
       return layout === 'left' || layout === 'right'
     })
+    const toolbarFade = computed(() => {
+      return typeof props.toolbarFade === 'number'
+        ? props.toolbarFade
+        : props.toolbarFade
+          ? 1500
+          : 0
+    })
     const toolbarClass = computed(() => {
       return {
         [nh.be('toolbar')]: true,
-        [nh.bem('toolbar', 'active')]: props.toolbarFade < 300 || toolbarActive.value,
+        [nh.bem('toolbar', 'active')]: toolbarFade.value < 300 || toolbarActive.value,
         [nh.bem('toolbar', props.toolbarPlacement)]: true,
         [nh.bem('toolbar', 'vertical')]: toolbarVertical.value
       }
@@ -444,13 +452,10 @@ export default defineComponent({
     function handleLeaveToolbar() {
       clearTimeout(timer.toolbarFade)
 
-      const fade =
-        typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
-
-      if (fade > 0) {
+      if (toolbarFade.value >= 300) {
         timer.toolbarFade = setTimeout(() => {
           toolbarActive.value = false
-        }, fade)
+        }, toolbarFade.value)
       }
     }
 

@@ -16,6 +16,7 @@
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
           <button
+            type="button"
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
@@ -23,6 +24,7 @@
             <Icon v-bind="fullIcons[0]" :scale="0.6"></Icon>
           </button>
           <button
+            type="button"
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)

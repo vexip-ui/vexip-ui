@@ -72,6 +72,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | tag-type        | `TagType`                                        | Set the type of label in multi-select mode                                                                                                                    | `null`         | `2.1.0`  |
 | locale          | `LocaleConfig['select']`                         | Set the locale config                                                                                                                                         | `null`         | `2.1.0`  |
 | no-preview      | `boolean`                                        | Set whether to disable the option label dynamic preview                                                                                                       | `false`        | `2.1.10` |
+| remote          | `boolean`                                        | Whether to enable remote mode                                                                                                                                 | `false`        | `2.1.12` |
 
 ### Select Events
 

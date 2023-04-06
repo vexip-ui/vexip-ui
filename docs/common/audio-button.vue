@@ -1,5 +1,5 @@
 <template>
-  <button class="audio-button" @click="handleClick">
+  <button type="button" class="audio-button" @click="handleClick">
     <Icon :scale="1.2">
       <HeadphonesSimple></HeadphonesSimple>
     </Icon>

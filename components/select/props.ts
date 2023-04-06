@@ -57,6 +57,7 @@ export const selectProps = buildProps({
   noRestTip: booleanProp,
   tagType: String as PropType<TagType>,
   noPreview: booleanProp,
+  remote: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

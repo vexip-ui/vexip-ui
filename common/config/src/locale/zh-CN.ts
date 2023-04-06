@@ -96,6 +96,11 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    numberInput: {
+      placeholder: '请输入数字',
+      outOfRange: '超出范围'
+    },
+
     pagination: {
       page: '页',
       perPage: '条/页',

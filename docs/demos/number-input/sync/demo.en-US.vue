@@ -2,8 +2,10 @@
   <NumberInput
     v-model:value="value"
     sync
-    clearable=""
-    style="max-width: 300px;"
+    clearable
+    :min="-10"
+    :max="10"
+    style="max-width: 300px"
   ></NumberInput>
   <p>Number Input Value: {{ value }}</p>
 </template>

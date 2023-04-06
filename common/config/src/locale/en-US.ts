@@ -96,6 +96,11 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    numberInput: {
+      placeholder: 'Please input number',
+      outOfRange: 'Out of range'
+    },
+
     pagination: {
       page: 'Page | Pages',
       perPage: '/ Page',

@@ -21,7 +21,7 @@
     <Column :class="`${prefix}__actions`">
       <Tooltip reverse transfer>
         <template #trigger>
-          <button :class="`${prefix}__action`">
+          <button type="button" :class="`${prefix}__action`">
             <Icon :scale="1.1" @click="copyCodes">
               <CopyR></CopyR>
             </Icon>
@@ -31,7 +31,7 @@
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button :class="`${prefix}__action`">
+          <button type="button" :class="`${prefix}__action`">
             <Icon :scale="1.1" :label="t('common.editInGithub')" @click="editInGithub">
               <PenToSquareR></PenToSquareR>
             </Icon>
@@ -41,7 +41,7 @@
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button :class="`${prefix}__action`">
+          <button type="button" :class="`${prefix}__action`">
             <Icon :scale="1.1" :label="t('common.editInPlayground')" @click="editOnPlayground">
               <PaperPlaneR></PaperPlaneR>
             </Icon>
@@ -51,7 +51,7 @@
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button :class="`${prefix}__action`">
+          <button type="button" :class="`${prefix}__action`">
             <Icon
               :scale="1.1"
               :label="codeExpanded ? t('common.hideCode') : t('common.showCode')"
@@ -72,7 +72,7 @@
             <span v-for="n in codeLines" :key="n"></span>
           </span>
         </div>
-        <button :class="`${prefix}__reduce`" @click="expandCodes">
+        <button type="button" :class="`${prefix}__reduce`" @click="expandCodes">
           <Icon><ChevronUp></ChevronUp></Icon>
           <span :class="`${prefix}__tip`">
             {{ t('common.hideCode') }}
@@ -380,9 +380,7 @@ function editOnPlayground() {
     margin-right: -80px;
     white-space: nowrap;
     opacity: 0%;
-    transition:
-      margin var(--vxp-transition-base),
-      var(--vxp-transition-color),
+    transition: margin var(--vxp-transition-base), var(--vxp-transition-color),
       var(--vxp-transition-opacity);
   }
 

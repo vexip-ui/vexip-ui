@@ -91,7 +91,12 @@
             </template>
           </template>
         </div>
-        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key!)">
+        <button
+          v-if="item.closable"
+          type="button"
+          :class="nh.be('close')"
+          @click="remove(item.key!)"
+        >
           <Icon v-bind="icons.close" label="close"></Icon>
         </button>
       </div>
