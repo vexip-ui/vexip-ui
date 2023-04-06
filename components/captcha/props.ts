@@ -10,6 +10,7 @@ export const captchaProps = buildProps({
   slideTarget: Number,
   tip: String,
   successTip: String,
+  image: String,
   onBeforeTest: Function as PropType<(checked: boolean) => unknown>,
   onSuccess: eventProp(),
   onFail: eventProp()

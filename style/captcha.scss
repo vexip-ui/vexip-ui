@@ -32,6 +32,23 @@ $captcha: map.merge(
 
   @include basis;
 
+  &__image {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 1px;
+  }
+
+  &__width-detector {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 1px;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0%;
+  }
+
   &__slider {
     position: relative;
     display: flex;

@@ -1,8 +1,9 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
+import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { toFixed, boundRange, random } from '@vexip-ui/utils'
+import { toFixed, boundRange, random, debounce } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 export default defineComponent({
@@ -18,7 +19,8 @@ export default defineComponent({
         validator: value => value >= 0 || value <= 100
       },
       tip: null,
-      successTip: null
+      successTip: null,
+      image: null
     })
 
     const nh = useNameHelper('captcha')
@@ -31,6 +33,7 @@ export default defineComponent({
     const isSuccess = ref(false)
 
     const track = ref<HTMLElement>()
+    const canvas = ref<HTMLCanvasElement>()
 
     const usedTarget = computed(() => (props.type === 'slide' ? 100 : currentTarget.value))
 
@@ -124,12 +127,38 @@ export default defineComponent({
 
     expose({ refresh })
 
+    const handleImageResize = debounce((entry: ResizeObserverEntry) => {
+      if (!canvas.value) return
+
+      const width = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width
+      const height = Math.round((width / 16) * 9)
+
+      canvas.value.width = width
+      canvas.value.height = height
+
+      drawImage()
+    }, 16)
+
     function verifyPosition() {
       currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
     }
 
     function afterReset() {
       resetting.value = false
+    }
+
+    function drawImage() {
+      const canvasEl = canvas.value
+      const ctx = canvasEl?.getContext('2d')
+
+      if (!canvasEl || !ctx || !props.image) return
+
+      const image = new Image()
+
+      image.src = props.image
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
+      }
     }
 
     function refresh() {
@@ -139,6 +168,12 @@ export default defineComponent({
     return () => {
       return (
         <div class={className.value} tabindex={-1}>
+          <div class={nh.be('image')}>
+            <ResizeObserver onResize={handleImageResize}>
+              <div class={nh.be('width-detector')}></div>
+            </ResizeObserver>
+            <canvas ref={canvas}></canvas>
+          </div>
           <div class={nh.be('slider')}>
             <div
               class={{
