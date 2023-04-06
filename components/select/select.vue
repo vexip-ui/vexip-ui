@@ -10,8 +10,8 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus="handleFocus"
-      @blur="handleBlur"
+      @focus="!props.filter && handleFocus($event)"
+      @blur="!props.filter && handleBlur($event)"
     >
       <div
         v-if="hasPrefix"
@@ -98,7 +98,11 @@
             >
               <input
                 ref="input"
-                :class="[nh.be('input'), nh.bem('input', 'multiple')]"
+                :class="[
+                  nh.be('input'),
+                  nh.bem('input', 'multiple'),
+                  currentVisible && nh.bem('input', 'visible')
+                ]"
                 :disabled="props.disabled"
                 autocomplete="off"
                 tabindex="-1"
@@ -107,6 +111,8 @@
                 @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -117,7 +123,7 @@
             <template v-if="props.filter">
               <input
                 ref="input"
-                :class="nh.be('input')"
+                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
                 :placeholder="
                   hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
@@ -128,6 +134,8 @@
                 aria-autocomplete="list"
                 @submit.prevent
                 @input="handleFilterInput"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
             </template>
             <template v-else>
