@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { registerLocale, enUSLocale } from 'vexip-ui'
 import { createI18n } from 'vue-i18n'
 import { zhCN } from './zh-CN'
 import { enUS } from './en-US'
@@ -27,3 +28,5 @@ export const i18n = createI18n({
 export const vexipuiLocale = ref<LocaleOptions>({
   locale: 'zh-CN'
 })
+
+registerLocale(enUSLocale())

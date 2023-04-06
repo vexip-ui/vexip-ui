@@ -116,14 +116,24 @@ After set, all components name will be prefixed with `V`.
 I18n can be configured by passing the `locale` option in the second parameter when calling `app.use`.
 
 ```ts
+import { enUSLocale } from 'vexip-ui'
+
 app.use(install, {
-  locale: {
-    locale: 'en-US'
-  }
+  locale: enUSLocale()
 })
 ```
 
-The default language used can be set through `locale.locale`. Currently, Vexip UI provides two built-in languages, `'zh-CN'` and `'en-US'`.
+The default language of Vexip UI is `'zh-CN'`. You can register a locale via `registerLocale` method, and then change the locale config via `locale.locale` property.
+
+```ts
+import { registerLocale, enUSLocale } from 'vexip-ui'
+
+registerLocale(enUSLocale())
+
+app.use(install, {
+  locale: { locale: 'en-US' }
+})
+```
 
 Also you can customize the i18n for each components:
 

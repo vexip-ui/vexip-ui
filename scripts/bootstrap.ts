@@ -45,18 +45,9 @@ async function main() {
     } from './typography'
 
     import { install as installDirectives } from '@/directives'
-
     import { buildInstall } from './create'
 
-    export type {
-      ComponentSize,
-      ComponentState,
-      LocaleConfig,
-      LocaleNames,
-      LocaleOptions
-    } from '@vexip-ui/config'
     export type { PropsOptions } from './props'
-
     export { version } from './version'
 
     const components = [
