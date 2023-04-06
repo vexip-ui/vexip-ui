@@ -1,3 +1,27 @@
+## [2.1.12](https://github.com/vexip-ui/vexip-ui/compare/v2.1.11...v2.1.12) (2023-04-06)
+
+### Bug Fixes
+
+- **number-input:** ensure emit change event in sync mode ([aab42ab](https://github.com/vexip-ui/vexip-ui/commit/aab42ab4170859ee89d2896eca2d9944d4b42f38)), closes [#296](https://github.com/vexip-ui/vexip-ui/issues/296)
+- **number-input:** unexpected behavior in sync mode ([9c77dc3](https://github.com/vexip-ui/vexip-ui/commit/9c77dc3b1b37719987e15175ac5b20c4c6e47559)), closes [#299](https://github.com/vexip-ui/vexip-ui/issues/299)
+- **select:** correctly emit focus and blur events ([e9ee8ce](https://github.com/vexip-ui/vexip-ui/commit/e9ee8ce265e975b3b3a869c966d892ec17fe8f24)), closes [#300](https://github.com/vexip-ui/vexip-ui/issues/300)
+- specific type value for internal buttons ([0a39d69](https://github.com/vexip-ui/vexip-ui/commit/0a39d697b434aa7b55afe502da0b649a48c16c32)), closes [#297](https://github.com/vexip-ui/vexip-ui/issues/297)
+
+### Code Refactoring
+
+- **config:** external locale config for on demand import ([#302](https://github.com/vexip-ui/vexip-ui/issues/302)) ([86eab10](https://github.com/vexip-ui/vexip-ui/commit/86eab101f4fbf1579e2ac2cf7abe299e1faf6583))
+
+### Features
+
+- **number-input:** add out of range effect for input control ([078681c](https://github.com/vexip-ui/vexip-ui/commit/078681c23a4158c35ec4e9714601b504ef8c359c))
+- **select:** support remote mode ([#301](https://github.com/vexip-ui/vexip-ui/issues/301)) ([e5da199](https://github.com/vexip-ui/vexip-ui/commit/e5da1993f0f2110128570abb08b09835b19c75da))
+
+### BREAKING CHANGES
+
+- **config:** `en-US` and `ta-IN` isn't included in internal locale config no longer.
+  Now these config are exported independently, using e.g. `import { enUSLocale } from 'vexip-ui'`
+  to import locale config that you want to use. See docs about global config for more details.
+
 ## [2.1.11](https://github.com/vexip-ui/vexip-ui/compare/v2.1.10...v2.1.11) (2023-04-03)
 
 ### Bug Fixes
