@@ -33,7 +33,7 @@ export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
     const locale = computed(() => {
       const locale = unref(sourceLocale)
 
-      return mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false)
+      return mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
     })
 
     app.provide(PROVIDED_LOCALE, locale)
@@ -41,13 +41,13 @@ export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
     const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
     const locale = computed(() => {
       const locale = unref(sourceLocale)
-      const providedLocale = mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
+      // const providedLocale = mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
 
       if (!upstreamLocale?.value) {
-        return providedLocale
+        return mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
       }
 
-      return mergeObjects(upstreamLocale.value as any, providedLocale)
+      return mergeObjects(upstreamLocale.value as any, locale)
     })
 
     provide(PROVIDED_LOCALE, locale)

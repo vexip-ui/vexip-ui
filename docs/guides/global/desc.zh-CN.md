@@ -116,14 +116,24 @@ createApp(App).use(install, { prefix: 'V' })
 在调用 `app.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。
 
 ```ts
+import { enUSLocale } from 'vexip-ui'
+
 app.use(install, {
-  locale: {
-    locale: 'zh-CN'
-  }
+  locale: enUSLocale()
 })
 ```
 
-通过 `locale.locale` 可以设置使用的默认语言，目前 Vexip UI 提供了 `'zh-CN'` 和 `'en-US'` 两种内置语言。
+Vexip UI 的默认语言为 `'zh-CN'`，你可以通过 `registerLocale` 方法注册一个国际化配置，随后通过修改 `locale.locale` 属性快速切换。
+
+```ts
+import { registerLocale, enUSLocale } from 'vexip-ui'
+
+registerLocale(enUSLocale())
+
+app.use(install, {
+  locale: { locale: 'en-US' }
+})
+```
 
 同时你还可以定制化一些组件的国际化：
 
