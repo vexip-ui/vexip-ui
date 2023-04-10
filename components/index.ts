@@ -65,6 +65,7 @@ import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
 import { Pagination } from './pagination'
+import { Popper } from './popper'
 import { Popup } from './popup'
 import { Portal } from './portal'
 import { Progress } from './progress'
@@ -178,6 +179,7 @@ const components = [
   OptionGroup,
   Overflow,
   Pagination,
+  Popper,
   Popup,
   Portal,
   Progress,
@@ -313,6 +315,7 @@ export * from './option'
 export * from './option-group'
 export * from './overflow'
 export * from './pagination'
+export * from './popper'
 export * from './popup'
 export * from './portal'
 export * from './progress'

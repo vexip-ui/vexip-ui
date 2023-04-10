@@ -62,6 +62,7 @@ declare module 'vue' {
     OptionGroup: typeof import('vexip-ui')['OptionGroup'],
     Overflow: typeof import('vexip-ui')['Overflow'],
     Pagination: typeof import('vexip-ui')['Pagination'],
+    Popper: typeof import('vexip-ui')['Popper'],
     Popup: typeof import('vexip-ui')['Popup'],
     Portal: typeof import('vexip-ui')['Portal'],
     Progress: typeof import('vexip-ui')['Progress'],
