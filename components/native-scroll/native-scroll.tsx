@@ -131,7 +131,7 @@ export default defineComponent({
     const canAutoplay = computed(() => {
       return (
         props.mode !== 'both' &&
-        (isTrue(props.autoplay) || props.autoplay > 1000) &&
+        (isTrue(props.autoplay) || +props.autoplay > 1000) &&
         ((props.mode === 'horizontal' && enableXScroll.value) ||
           (props.mode === 'vertical' && enableYScroll.value))
       )
@@ -264,8 +264,8 @@ export default defineComponent({
 
     function handleMutate() {
       willMutate.value = true
-      nextTick(() => {
-        refresh()
+      nextTick(refresh)
+      requestAnimationFrame(() => {
         willMutate.value = false
       })
     }
