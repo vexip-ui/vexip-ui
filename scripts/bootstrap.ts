@@ -8,6 +8,7 @@ import {
   rootDir,
   prettierConfig,
   logger,
+  componentsDir,
   components as allComponents,
   toCapitalCase,
   runParallel
@@ -179,7 +180,8 @@ async function main() {
 
   const styleIndex =
     "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +
-    allComponents.map(component => `@use './${component}.scss';`).join('\n') +
+    // allComponents.map(component => `@use './${component}.scss';`).join('\n') +
+    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') +
     '\n'
   const stylePath = resolve(rootDir, 'style/index.scss')
 
@@ -219,6 +221,62 @@ async function readDirectives() {
   )
 
   return directives
+}
+
+async function topologicalStyle() {
+  const importRE = /import '@\/components\/(.+)\/style'/
+  const depsMap = new Map<string, string[]>()
+
+  await runParallel(cpus().length, allComponents, async component => {
+    const deps: string[] = []
+    const path = resolve(componentsDir, component, 'style.ts')
+
+    depsMap.set(component, deps)
+
+    if (!existsSync(path)) {
+      return
+    }
+
+    let match: RegExpMatchArray | null
+
+    for (const line of (await readFile(path, 'utf-8')).split('\n')) {
+      if ((match = line.match(importRE)) && match[1] !== 'preset' && match[1] !== 'icon') {
+        deps.push(match[1])
+      }
+    }
+  })
+
+  const list: string[] = ['icon']
+  const walkedSet = new Set<string>()
+
+  const push = (deps: string[]) => {
+    for (const dep of deps) {
+      if (walkedSet.has(dep)) {
+        continue
+      }
+
+      walkedSet.add(dep)
+
+      if (depsMap.has(dep)) {
+        push(depsMap.get(dep)!)
+      }
+
+      list.push(dep)
+    }
+  }
+
+  walkedSet.add('icon')
+
+  for (const [component, deps] of depsMap) {
+    push(deps)
+
+    if (!walkedSet.has(component)) {
+      walkedSet.add(component)
+      list.push(component)
+    }
+  }
+
+  return list
 }
 
 main().catch(error => {
