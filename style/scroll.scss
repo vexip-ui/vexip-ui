@@ -22,17 +22,10 @@ $scroll: map.merge(
   position: relative;
   overflow: hidden;
 
-  &--vertical > &__wrapper {
-    display: block;
-  }
-
-  &--horizontal > &__wrapper,
-  &--both > &__wrapper {
-    display: inline-block;
-  }
-
   &__wrapper {
     position: relative;
+    display: flex;
+    flex-direction: column;
     vertical-align: top;
     will-change: transform;
     transition-timing-function: get-css-var('scroll-move-timing');
@@ -50,6 +43,10 @@ $scroll: map.merge(
       display: inline-block;
     }
 
+    & > * {
+      flex-shrink: 0;
+    }
+
     // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
     &--scrolling > *,
     &--using-bar > * {
@@ -57,6 +54,15 @@ $scroll: map.merge(
     }
 
     @include clear-both;
+  }
+
+  // &--vertical > &__wrapper {
+  //   display: flex;
+  // }
+
+  &--horizontal > &__wrapper,
+  &--both > &__wrapper {
+    display: inline-flex;
   }
 
   &__extra {

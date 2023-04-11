@@ -9,7 +9,7 @@
     <div v-show="false" role="none">
       <slot></slot>
     </div>
-    <Scroll
+    <NativeScroll
       ref="xScroll"
       inherit
       use-x-bar
@@ -22,7 +22,7 @@
       @x-enabled-change="xScrollEnabled = $event"
     >
       <TableHead ref="thead"></TableHead>
-      <Scroll
+      <NativeScroll
         ref="mainScroll"
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
@@ -37,8 +37,8 @@
             <slot name="empty" :is-fixed="isFixed"></slot>
           </template>
         </TableBody>
-      </Scroll>
-    </Scroll>
+      </NativeScroll>
+    </NativeScroll>
     <div
       v-if="leftFixedColumns.length"
       :class="{
@@ -47,7 +47,7 @@
       }"
     >
       <TableHead fixed="left"></TableHead>
-      <Scroll
+      <NativeScroll
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
@@ -60,7 +60,7 @@
             <slot name="empty" :is-fixed="isFixed"></slot>
           </template>
         </TableBody>
-      </Scroll>
+      </NativeScroll>
     </div>
     <div
       v-if="rightFixedColumns.length"
@@ -70,7 +70,7 @@
       }"
     >
       <TableHead fixed="right"></TableHead>
-      <Scroll
+      <NativeScroll
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
@@ -81,7 +81,7 @@
         <TableBody fixed="right">
           <slot></slot>
         </TableBody>
-      </Scroll>
+      </NativeScroll>
     </div>
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
@@ -122,7 +122,7 @@ import {
 } from 'vue'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import { Scroll } from '@/components/scroll'
+import { NativeScroll } from '@/components/native-scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
@@ -139,6 +139,7 @@ import { tableProps } from './props'
 import { useStore } from './store'
 import { DropType, TABLE_STORE, TABLE_ACTIONS } from './symbol'
 
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   Key,
   TableKeyConfig,
@@ -162,7 +163,7 @@ const defaultKeyConfig: Required<TableKeyConfig> = {
 export default defineComponent({
   name: 'Table',
   components: {
-    Scroll,
+    NativeScroll,
     Scrollbar,
     TableHead,
     TableBody
@@ -250,9 +251,9 @@ export default defineComponent({
     const yScrollEnable = ref(false)
 
     const wrapper = ref<HTMLElement>()
-    const xScroll = ref<InstanceType<typeof Scroll>>()
+    const xScroll = ref<NativeScrollExposed>()
     const thead = ref<InstanceType<typeof TableHead>>()
-    const mainScroll = ref<InstanceType<typeof Scroll>>()
+    const mainScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
