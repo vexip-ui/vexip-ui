@@ -297,6 +297,7 @@ $menu: map.merge(
   &__arrow {
     position: absolute;
     right: 22px;
+    color: get-css-var('menu-arrow-color');
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
