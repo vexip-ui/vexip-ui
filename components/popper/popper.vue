@@ -2,6 +2,7 @@
   <Portal :to="props.to">
     <transition
       :name="props.transition"
+      :appear="props.appear"
       @before-enter="emitHookEvent('be', $event)"
       @enter="emitHookEvent('e', $event)"
       @after-enter="emitHookEvent('ae', $event)"
@@ -44,7 +45,8 @@ export default defineComponent({
       visible: false,
       alive: false,
       to: '',
-      transition: () => nh.ns('drop')
+      transition: () => nh.ns('drop'),
+      appear: false
     })
 
     const wrapper = ref<HTMLElement>()

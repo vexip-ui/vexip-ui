@@ -8,6 +8,7 @@ export const popperProps = buildProps({
   alive: booleanProp,
   to: String,
   transition: String,
+  appear: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),
   onAfterEnter: eventProp<(el: Element) => void>(),
