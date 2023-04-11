@@ -54,6 +54,7 @@ export default defineComponent({
   setup(props) {
     const handleDelete = inject(DELETE_HANDLER, noop)
     const nh = useNameHelper('popup')
+    const getIndex = useZIndex()
 
     const wrapper = ref<HTMLElement>()
 
@@ -71,7 +72,7 @@ export default defineComponent({
 
     return {
       nh,
-      zIndex: useZIndex(),
+      zIndex: getIndex(),
       transition,
 
       wrapper,

@@ -53,5 +53,6 @@ export function useZIndex() {
     ? inject<ComputedRef<number>>(PROVIDED_Z_INDEX, globalZIndex)
     : globalZIndex
 
-  return computed(() => zIndex.value + counter++)
+  // return computed(() => zIndex.value + counter++)
+  return () => zIndex.value + counter++
 }

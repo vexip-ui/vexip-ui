@@ -191,90 +191,81 @@
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-leave="currentFilter = ''">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop
-        >
-          <VirtualList
-            ref="virtualList"
-            inherit
-            :class="[nh.be('list'), props.listClass]"
-            :style="{
-              height: listHeight,
-              maxHeight: `${props.maxListHeight}px`
-            }"
-            :items="totalOptions"
-            :item-size="32"
-            use-y-bar
-            :height="'100%'"
-            id-key="value"
-            :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-              role: 'listbox',
-              ariaLabel: 'options'
-            }"
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop
+      @after-leave="currentFilter = ''"
+    >
+      <VirtualList
+        ref="virtualList"
+        inherit
+        :class="[nh.be('list'), props.listClass]"
+        :style="{
+          height: listHeight,
+          maxHeight: `${props.maxListHeight}px`
+        }"
+        :items="totalOptions"
+        :item-size="32"
+        use-y-bar
+        :height="'100%'"
+        id-key="value"
+        :items-attrs="{
+          class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+          role: 'listbox',
+          ariaLabel: 'options'
+        }"
+      >
+        <template #default="{ item: option, index }">
+          <li
+            v-if="option.group"
+            :class="[nh.ns('option-vars'), nh.be('group')]"
+            :title="option.label"
           >
-            <template #default="{ item: option, index }">
-              <li
-                v-if="option.group"
-                :class="[nh.ns('option-vars'), nh.be('group')]"
-                :title="option.label"
+            <slot name="group" :option="option" :index="index">
+              <div
+                :class="[nh.be('label'), nh.bem('label', 'group')]"
+                :style="{ paddingLeft: `${option.depth * 6}px` }"
               >
-                <slot name="group" :option="option" :index="index">
-                  <div
-                    :class="[nh.be('label'), nh.bem('label', 'group')]"
-                    :style="{ paddingLeft: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </div>
-                </slot>
-              </li>
-              <Option
-                v-else
-                :label="option.label"
-                :value="option.value"
-                :disabled="option.disabled"
-                :divided="option.divided"
-                :no-title="option.noTitle"
-                :hitting="option.hitting"
-                :selected="isSelected(option)"
-                no-hover
-                @select="handleSelect(option)"
-                @mousemove="updateHitting(index, false)"
-              >
-                <slot :option="option" :index="index" :selected="isSelected(option)">
-                  <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
-                    {{ option.label }}
-                  </span>
-                  <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                    <Icon
-                      v-if="isSelected(option)"
-                      v-bind="icons.check"
-                      :class="nh.be('check')"
-                    ></Icon>
-                  </transition>
-                </slot>
-              </Option>
-            </template>
-            <template #empty>
-              <div :class="nh.be('empty')">
-                <slot name="empty">
-                  {{ props.emptyText ?? locale.empty }}
-                </slot>
+                {{ option.label }}
               </div>
-            </template>
-          </VirtualList>
-        </div>
-      </transition>
-    </Portal>
+            </slot>
+          </li>
+          <Option
+            v-else
+            :label="option.label"
+            :value="option.value"
+            :disabled="option.disabled"
+            :divided="option.divided"
+            :no-title="option.noTitle"
+            :hitting="option.hitting"
+            :selected="isSelected(option)"
+            no-hover
+            @select="handleSelect(option)"
+            @mousemove="updateHitting(index, false)"
+          >
+            <slot :option="option" :index="index" :selected="isSelected(option)">
+              <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
+                {{ option.label }}
+              </span>
+              <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                <Icon v-if="isSelected(option)" v-bind="icons.check" :class="nh.be('check')"></Icon>
+              </transition>
+            </slot>
+          </Option>
+        </template>
+        <template #empty>
+          <div :class="nh.be('empty')">
+            <slot name="empty">
+              {{ props.emptyText ?? locale.empty }}
+            </slot>
+          </div>
+        </template>
+      </VirtualList>
+    </Popper>
   </div>
 </template>
 
@@ -284,7 +275,7 @@ import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
@@ -309,6 +300,7 @@ import {
 import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type { SelectKeyConfig, SelectValue, SelectOptionState } from './symbol'
 
@@ -350,7 +342,7 @@ export default defineComponent({
     NativeScroll,
     Option,
     Overflow,
-    Portal,
+    Popper,
     Tag,
     Tooltip,
     VirtualList
@@ -565,12 +557,14 @@ export default defineComponent({
     const wrapper = useClickOutside(handleClickOutside)
     const input = ref<HTMLInputElement>()
     const device = ref<HTMLElement>()
-    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed>()
+    const virtualList = ref<VirtualListExposed>()
+    const popper = ref<PopperExposed>()
 
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
@@ -712,8 +706,8 @@ export default defineComponent({
         requestAnimationFrame(() => {
           updatePopper()
 
-          if (wrapper.value && popper.value) {
-            popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
+          if (wrapper.value && popper.value?.wrapper) {
+            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
           }
         })
 

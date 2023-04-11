@@ -77,10 +77,6 @@ $tooltip: map.merge(
   $size: get-css-var('tooltip-arrow-size');
 
   &__popper {
-    @include basis;
-
-    z-index: get-css-var('z-index-popper');
-
     &[data-popper-placement^='top'] {
       padding: 5px 0 10px;
 

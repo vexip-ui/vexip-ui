@@ -114,6 +114,12 @@ export default defineComponent({
         style[horizontalStyle] = '24px'
       }
 
+      const zIndex = parseInt(item.zIndex as string)
+
+      if (!Number.isNaN(zIndex)) {
+        style.zIndex = zIndex
+      }
+
       return style
     }
 
@@ -183,7 +189,6 @@ export default defineComponent({
       let item = options.key ? find(options.key as Key) : null
 
       if (!item?.visible) {
-        // const zIndex = useZIndex('popup')
         const index = getIndex()
         const key = (options.key as Key) ?? nh.bs(`${index}`)
 
@@ -206,7 +211,6 @@ export default defineComponent({
             },
             options,
             {
-              // zIndex,
               height: 0,
               visible: true,
               verticalPosition: currentVertical

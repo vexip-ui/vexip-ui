@@ -64,6 +64,7 @@ const components = [
   'OptionGroup',
   'Overflow',
   'Pagination',
+  'Popper',
   'Popup',
   'Portal',
   'Progress',

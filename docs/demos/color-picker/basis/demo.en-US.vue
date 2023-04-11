@@ -1,4 +1,5 @@
 <template>
+  <p>Current Value: {{ color }}</p>
   <ColorPicker v-model:value="color"></ColorPicker>
 </template>
 
@@ -7,5 +8,5 @@ import { ref } from 'vue'
 
 import type { Color } from 'vexip-ui'
 
-const color = ref<Color | null>(null)
+const color = ref<Color>()
 </script>

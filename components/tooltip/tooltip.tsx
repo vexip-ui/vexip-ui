@@ -6,10 +6,9 @@ import {
   watch,
   createTextVNode,
   mergeProps,
-  Fragment,
-  Transition
+  Fragment
 } from 'vue'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import {
   useClickOutside,
@@ -21,15 +20,13 @@ import {
 import { isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { VirtualElement } from '@vexip-ui/hooks'
 
 const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Tooltip',
-  components: {
-    Portal
-  },
   inheritAttrs: true,
   props: tooltipProps,
   emits: ['update:visible'],
@@ -76,6 +73,7 @@ export default defineComponent({
         if ('getBoundingClientRect' in virtual) {
           return virtual as VirtualElement
         }
+
         if ('x' in virtual && 'y' in virtual) {
           return {
             getBoundingClientRect: () => ({
@@ -97,11 +95,15 @@ export default defineComponent({
     })
 
     useClickOutside(handleClickOutside, originalTrigger)
-    const { popper, transferTo, updatePopper } = usePopper({
+
+    const popper = ref<PopperExposed>()
+    const popperEl = computed(() => popper.value?.wrapper)
+    const { transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       reference,
-      wrapper: originalTrigger
+      wrapper: originalTrigger,
+      popper: popperEl
     })
 
     const tipStyle = computed(() => {
@@ -121,8 +123,8 @@ export default defineComponent({
     useListener(trigger, 'click', handleTriggerClick)
     useListener(trigger, 'focus', handleTriggerFocus)
     useListener(trigger, 'blur', handleTriggerBlur)
-    useListener(popper, 'mouseenter', handleTriggerEnter)
-    useListener(popper, 'mouseleave', handleTriggerLeave)
+    useListener(popperEl, 'mouseenter', handleTriggerEnter)
+    useListener(popperEl, 'mouseleave', handleTriggerLeave)
 
     watch(
       () => props.visible,
@@ -242,6 +244,10 @@ export default defineComponent({
       rendering.value = currentVisible.value
     }
 
+    function stopPropagation(event: MouseEvent) {
+      event.stopPropagation()
+    }
+
     return () => {
       const CustomTag = props.wrapper
         ? ((props.wrapper === true ? 'span' : props.wrapper) as any)
@@ -249,9 +255,6 @@ export default defineComponent({
       const triggers = slots.trigger?.()
       const triggerVNode = triggers ? triggers[0] : null
 
-      const stopPropagation = (event: MouseEvent) => {
-        event.stopPropagation()
-      }
       const renderTrigger = () => {
         if (!triggerVNode) return null
 
@@ -282,38 +285,35 @@ export default defineComponent({
             <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
               )),
         !props.disabled && (
-          <Portal to={transferTo.value}>
-            {(props.tipAlive || rendering.value) && (
-              <Transition appear name={props.transitionName}>
-                <div
-                  v-show={currentVisible.value}
-                  ref={popper}
-                  class={{
-                    [nh.be('popper')]: true,
-                    [nh.bs('vars')]: true,
-                    [nh.bem('popper', 'inherit')]: transferTo.value !== 'body',
-                    [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
-                    [nh.bem('popper', 'no-hover')]: props.noHover,
-                    [nh.bem('popper', 'no-arrow')]: props.noArrow
-                  }}
-                  role={'tooltip'}
-                  tabindex={-1}
-                  onClick={stopPropagation}
-                  onAnimationend={syncRendering}
-                  onTransitionend={syncRendering}
-                >
-                  <div
-                    class={[!props.raw && nh.be('tip'), props.tipClass]}
-                    role={'tooltip'}
-                    style={tipStyle.value}
-                  >
-                    {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
-                    {slots.default?.()}
-                  </div>
-                </div>
-              </Transition>
-            )}
-          </Portal>
+          <Popper
+            ref={popper}
+            class={{
+              [nh.be('popper')]: true,
+              [nh.bs('vars')]: true,
+              [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
+              [nh.bem('popper', 'no-hover')]: props.noHover,
+              [nh.bem('popper', 'no-arrow')]: props.noArrow
+            }}
+            appear
+            visible={currentVisible.value}
+            alive={props.tipAlive}
+            to={transferTo.value}
+            transition={props.transitionName}
+            role={'tooltip'}
+            tabindex={-1}
+            onClick={stopPropagation}
+            onAnimationend={syncRendering}
+            onTransitionend={syncRendering}
+          >
+            <div
+              class={[!props.raw && nh.be('tip'), props.tipClass]}
+              role={'tooltip'}
+              style={tipStyle.value}
+            >
+              {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
+              {slots.default?.()}
+            </div>
+          </Popper>
         )
       ]
     }

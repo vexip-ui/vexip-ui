@@ -5,6 +5,7 @@ export type DropdownTrigger = 'hover' | 'click' | 'custom'
 type SelectHandler = (labels: (string | number)[], metas: Array<Record<string, any>>) => void
 
 export interface DropdownState {
+  alive: boolean,
   handleSelect: SelectHandler,
   handleTriggerEnter: () => void,
   handleTriggerLeave: () => void

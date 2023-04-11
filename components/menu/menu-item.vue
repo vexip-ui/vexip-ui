@@ -63,29 +63,24 @@
         </slot>
       </ul>
     </CollapseTransition>
-    <Portal v-if="isGroup && isUsePopper" :to="transferTo">
-      <transition :name="transition" appear @after-leave="popperShow = false">
-        <div
-          v-if="!transferTo || popperShow"
-          v-show="popperShow && showGroup"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            isHorizontal && nh.bem('popper', 'drop'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @mouseenter="handleMouseEnter"
-          @mouseleave="handleMouseLeave"
-        >
-          <ul :class="nh.be('list')">
-            <slot name="group">
-              <Renderer :renderer="renderChildren"></Renderer>
-            </slot>
-          </ul>
-        </div>
-      </transition>
-    </Portal>
+    <Popper
+      v-if="isGroup && isUsePopper"
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars'), isHorizontal && nh.bem('popper', 'drop')]"
+      :visible="popperShow && showGroup"
+      :alive="!transferTo || popperShow"
+      :to="transferTo"
+      :transition="transition"
+      @after-leave="popperShow = false"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
+      <ul :class="nh.be('list')">
+        <slot name="group">
+          <Renderer :renderer="renderChildren"></Renderer>
+        </slot>
+      </ul>
+    </Popper>
   </li>
 </template>
 
@@ -106,7 +101,7 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
@@ -115,6 +110,7 @@ import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
 import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
+import type { PopperExposed } from '@/components/popper'
 import type { Placement } from '@vexip-ui/hooks'
 import type { MenuOptions } from './symbol'
 
@@ -126,7 +122,7 @@ const MenuItem = defineComponent({
     CollapseTransition,
     Icon,
     Tooltip,
-    Portal,
+    Popper,
     Renderer
   },
   props: menuItemProps,
@@ -173,10 +169,12 @@ const MenuItem = defineComponent({
     const markerType = computed(() => menuState?.markerType || 'right')
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
-      wrapper
+      wrapper,
+      popper: computed(() => popper.value?.wrapper)
     })
 
     const isGroup = computed(() => !!(slots.group || props.children?.length))

@@ -16,6 +16,7 @@ export const dropdownProps = buildProps({
   dropClass: classProp,
   appear: booleanProp,
   meta: Object as PropType<Record<string, any>>,
+  alive: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
   onClickOutside: eventProp(),

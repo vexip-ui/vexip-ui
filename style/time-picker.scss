@@ -16,7 +16,6 @@ $time-picker: map.merge(
     separator-color: get-css-var('content-color-disabled'),
     exchange-color: get-css-var('content-color-third'),
     exchange-color-hover: get-css-var('color-primary-base'),
-    popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
     pane-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
@@ -133,10 +132,6 @@ $time-picker: map.merge(
   }
 
   &__popper {
-    @include basis;
-
-    z-index: get-css-var('time-picker-popper-z-index');
-    display: flex;
     padding: 8px 0;
   }
 

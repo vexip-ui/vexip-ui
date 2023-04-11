@@ -132,61 +132,56 @@
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName" @enter="handlePanelsEnter">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop
-        >
-          <div
-            :class="{
-              [nh.be('panels')]: true,
-              [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
-            }"
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop
+      @enter="handlePanelsEnter"
+    >
+      <div
+        :class="{
+          [nh.be('panels')]: true,
+          [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
+        }"
+      >
+        <template v-if="optionsList[0] && optionsList[0].length">
+          <CascaderPanel
+            v-for="(items, index) in optionsList"
+            :key="index"
+            :ref="(panel: any) => panel && panelElList.push(panel)"
+            :options="items"
+            :opened-id="openedIds[index]"
+            :values="currentValues"
+            :ready="isPopperShow"
+            :multiple="props.multiple"
+            :is-async="isAsyncLoad"
+            :merged="usingMerged"
+            :no-cascaded="props.noCascaded"
+            @select="handleOptionSelect($event, index)"
+            @hover="usingHover && handlePanelOpen($event, index)"
+            @check="handleOptionCheck($event)"
+            @open="handlePanelKeyOpen($event, index)"
+            @back="handlePanelBack"
+            @close="currentVisible = false"
           >
-            <template v-if="optionsList[0] && optionsList[0].length">
-              <CascaderPanel
-                v-for="(items, index) in optionsList"
-                :key="index"
-                :ref="(panel: any) => panel && panelElList.push(panel)"
-                :options="items"
-                :opened-id="openedIds[index]"
-                :values="currentValues"
-                :ready="isPopperShow"
-                :multiple="props.multiple"
-                :is-async="isAsyncLoad"
-                :merged="usingMerged"
-                :no-cascaded="props.noCascaded"
-                @select="handleOptionSelect($event, index)"
-                @hover="usingHover && handlePanelOpen($event, index)"
-                @check="handleOptionCheck($event)"
-                @open="handlePanelKeyOpen($event, index)"
-                @back="handlePanelBack"
-                @close="currentVisible = false"
-              >
-                <template #default="payload">
-                  <slot v-bind="payload"></slot>
-                </template>
-                <template #label="payload">
-                  <slot name="label" v-bind="payload"></slot>
-                </template>
-              </CascaderPanel>
+            <template #default="payload">
+              <slot v-bind="payload"></slot>
             </template>
-            <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
-              <slot name="empty">
-                {{ props.emptyText ?? locale.empty }}
-              </slot>
-            </div>
-          </div>
+            <template #label="payload">
+              <slot name="label" v-bind="payload"></slot>
+            </template>
+          </CascaderPanel>
+        </template>
+        <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
+          <slot name="empty">
+            {{ props.emptyText ?? locale.empty }}
+          </slot>
         </div>
-      </transition>
-    </Portal>
+      </div>
+    </Popper>
   </div>
 </template>
 
@@ -206,7 +201,8 @@ import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Overflow } from '@/components/overflow'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
+// import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
@@ -223,6 +219,7 @@ import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
 
 const ID_KEY = Symbol('ID_KEY')
@@ -243,7 +240,7 @@ export default defineComponent({
     Icon,
     NativeScroll,
     Overflow,
-    Portal,
+    Popper,
     Tag,
     Tooltip
   },
@@ -401,10 +398,12 @@ export default defineComponent({
     })
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)

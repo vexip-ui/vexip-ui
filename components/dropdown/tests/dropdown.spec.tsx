@@ -10,7 +10,7 @@ vi.useFakeTimers()
 describe('Dropdown', () => {
   it('render', () => {
     const wrapper = mount(() => (
-      <Dropdown>
+      <Dropdown visible>
         {{
           default: () => 'Dropdown',
           drop: () => (
@@ -37,7 +37,7 @@ describe('Dropdown', () => {
   })
 
   it('transfer', async () => {
-    const wrapper = mount(() => <Dropdown transfer></Dropdown>)
+    const wrapper = mount(() => <Dropdown transfer visible></Dropdown>)
 
     await nextTick()
     await nextTick()
@@ -70,15 +70,13 @@ describe('Dropdown', () => {
     ))
 
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown').trigger('mouseenter')
     vi.runAllTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).not.toContain(
-      'display: none;'
-    )
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
@@ -86,7 +84,7 @@ describe('Dropdown', () => {
     vi.runAllTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(onToggle).toHaveBeenLastCalledWith(false)
   })
@@ -158,15 +156,13 @@ describe('Dropdown', () => {
     ))
 
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown__trigger').trigger('click')
     vi.runAllTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).not.toContain(
-      'display: none;'
-    )
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
@@ -174,7 +170,7 @@ describe('Dropdown', () => {
     vi.runAllTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(onToggle).toHaveBeenLastCalledWith(false)
   })
@@ -218,12 +214,12 @@ describe('Dropdown', () => {
     expect(onSelect).toHaveBeenCalled()
     expect(onSelect).toHaveBeenCalledWith(['2', '2-1'], [{}, {}])
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(innerDropdown.classes()).not.toContain('vxp-dropdown--visible')
+    expect(wrapper.find('.inner-dropdown').exists()).toBe(false)
   })
 
   it('item divided', () => {
     const wrapper = mount(() => (
-      <Dropdown>
+      <Dropdown visible>
         {{
           default: () => 'Dropdown',
           drop: () => (
@@ -239,7 +235,7 @@ describe('Dropdown', () => {
   })
 
   it('drop class', () => {
-    const wrapper = mount(() => <Dropdown drop-class={'test'}></Dropdown>)
+    const wrapper = mount(() => <Dropdown visible drop-class={'test'}></Dropdown>)
 
     expect(wrapper.find('.vxp-dropdown__popper').classes()).toContain('test')
   })
@@ -265,5 +261,12 @@ describe('Dropdown', () => {
 
     await items[1].trigger('click')
     expect(onSelect).toHaveBeenCalledWith(['2'], [{ a: 2 }])
+  })
+
+  it('alive', () => {
+    const wrapper = mount(() => <Dropdown alive></Dropdown>)
+
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
+    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
   })
 })
