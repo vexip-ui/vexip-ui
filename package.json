@@ -179,6 +179,9 @@
       "allowAny": [
         "@csstools/*"
       ]
+    },
+    "patchedDependencies": {
+      "conventional-changelog-angular@5.0.13": "patches/conventional-changelog-angular@5.0.13.patch"
     }
   }
 }

@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  conventional-changelog-angular@5.0.13:
+    hash: bt5jdeh6dstlk3cxr5jp7pjy4e
+    path: patches/conventional-changelog-angular@5.0.13.patch
+
 importers:
 
   .:
@@ -779,7 +784,7 @@ packages:
     engines: {node: '>=v14'}
     dependencies:
       '@commitlint/types': 17.4.4
-      conventional-changelog-angular: 5.0.13
+      conventional-changelog-angular: 5.0.13_bt5jdeh6dstlk3cxr5jp7pjy4e
       conventional-commits-parser: 3.2.4
     dev: true
 
@@ -3384,13 +3389,14 @@ packages:
     engines: {node: '>= 0.6'}
     dev: true
 
-  /conventional-changelog-angular/5.0.13:
+  /conventional-changelog-angular/5.0.13_bt5jdeh6dstlk3cxr5jp7pjy4e:
     resolution: {integrity: sha512-i/gipMxs7s8L/QeuavPF2hLnJgH6pEZAttySB6aiQLWcX3puWDL3ACVmvBhJGxnAy52Qc15ua26BufY6KpmrVA==}
     engines: {node: '>=10'}
     dependencies:
       compare-func: 2.0.0
       q: 1.5.1
     dev: true
+    patched: true
 
   /conventional-changelog-atom/2.0.8:
     resolution: {integrity: sha512-xo6v46icsFTK3bb7dY/8m2qvc8sZemRgdqLb/bjpBsH2UyOS8rKNTgcb5025Hri6IpANPApbXMg15QLb1LJpBw==}
@@ -3517,7 +3523,7 @@ packages:
     resolution: {integrity: sha512-ryhi3fd1mKf3fSjbLXOfK2D06YwKNic1nC9mWqybBHdObPd8KJ2vjaXZfYj1U23t+V8T8n0d7gwnc9XbIdFbyQ==}
     engines: {node: '>=10'}
     dependencies:
-      conventional-changelog-angular: 5.0.13
+      conventional-changelog-angular: 5.0.13_bt5jdeh6dstlk3cxr5jp7pjy4e
       conventional-changelog-atom: 2.0.8
       conventional-changelog-codemirror: 2.0.8
       conventional-changelog-conventionalcommits: 4.6.3
