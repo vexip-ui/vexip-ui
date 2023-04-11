@@ -18,6 +18,7 @@
         ref="wrapper"
         v-bind="$attrs"
         :class="[nh.b(), props.to !== 'body' && nh.bm('inherit')]"
+        :style="{ zIndex: props.to && props.visible ? zIndex : undefined }"
       >
         <slot></slot>
       </div>
@@ -26,9 +27,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useZIndex, emitEvent } from '@vexip-ui/config'
 import { popperProps } from './props'
 
 export default defineComponent({
@@ -48,8 +49,20 @@ export default defineComponent({
       transition: () => nh.ns('drop'),
       appear: false
     })
+    const getIndex = useZIndex()
+
+    const zIndex = ref(0)
 
     const wrapper = ref<HTMLElement>()
+
+    watch(
+      () => props.visible,
+      value => {
+        if (props.to && value) {
+          zIndex.value = getIndex()
+        }
+      }
+    )
 
     function emitHookEvent(name: 'be' | 'e' | 'ae' | 'ec' | 'bl' | 'l' | 'al' | 'lc', el: Element) {
       switch (name) {
@@ -83,6 +96,7 @@ export default defineComponent({
     return {
       nh,
       props,
+      zIndex,
 
       wrapper,
 
