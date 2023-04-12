@@ -305,11 +305,7 @@ export default defineComponent({
             onAnimationend={syncRendering}
             onTransitionend={syncRendering}
           >
-            <div
-              class={[!props.raw && nh.be('tip'), props.tipClass]}
-              role={'tooltip'}
-              style={tipStyle.value}
-            >
+            <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
               {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
               {slots.default?.()}
             </div>
