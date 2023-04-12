@@ -7,7 +7,7 @@
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  Highly customizable property values, Full TypeScript, Performance pretty good
+  Highly customizability, full TypeScript, performance pretty good
 </p>
 
 <p align="center">

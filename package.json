@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
-  "description": "A Vue 3 UI library, Highly customizable property values, Full TypeScript, Performance should be good",
+  "description": "A Vue 3 UI library, Highly customizability, full TypeScript, performance pretty good",
   "packageManager": "pnpm@7.14.2",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
