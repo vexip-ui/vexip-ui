@@ -1,3 +1,19 @@
+## [2.1.13](https://github.com/vexip-ui/vexip-ui/compare/v2.1.12...v2.1.13) (2023-04-12)
+
+
+### 🐞 Bug Fixes
+
+* **scroll:** improve extra slot not render when no content ([4dfccb8](https://github.com/vexip-ui/vexip-ui/commit/4dfccb8a7725023117ace6dfed4910c23dafb6c8))
+* **style:** topological sorting for style import ([a36d606](https://github.com/vexip-ui/vexip-ui/commit/a36d6064d544b33da331ea760f1419f83c391f11))
+
+
+### 🔨 Code Refactoring
+
+* **config:** dynamic z-index for popper-type components ([#305](https://github.com/vexip-ui/vexip-ui/issues/305)) ([2ce5cec](https://github.com/vexip-ui/vexip-ui/commit/2ce5cec0de293a2db390cf977df7229026851e86))
+* **table:** switch to using NativeScroll ([4e10ea2](https://github.com/vexip-ui/vexip-ui/commit/4e10ea2e9c254fd87469c27c695e248f759cd6bf))
+
+
+
 ## [2.1.12](https://github.com/vexip-ui/vexip-ui/compare/v2.1.11...v2.1.12) (2023-04-06)
 
 
