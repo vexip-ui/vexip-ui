@@ -24,5 +24,9 @@
     },
     "lib": ["esnext", "dom"]
   },
-  "include": [".", "../types.d.ts"]
+  "include": [
+    "**/*",
+    ".vitepress/**/*",
+    "../types.d.ts"
+  ]
 }
