@@ -1,3 +1,14 @@
+## [2.1.14](https://github.com/vexip-ui/vexip-ui/compare/v2.1.13...v2.1.14) (2023-04-13)
+
+
+### ✨ Features
+
+* **icons:** upgrate font-awesome to 6.4.0 ([74a47cb](https://github.com/vexip-ui/vexip-ui/commit/74a47cb9efefdb696835b41828515eaac6e23aaf))
+* **layout:** add fixed-main prop ([969f512](https://github.com/vexip-ui/vexip-ui/commit/969f512874356d24fb26a711047ef1c1928648b4))
+* **utils:** add normalizePath method ([4411b49](https://github.com/vexip-ui/vexip-ui/commit/4411b496bef1548d7c48c2dc8999d642dd1f2b75))
+
+
+
 ## [2.1.13](https://github.com/vexip-ui/vexip-ui/compare/v2.1.12...v2.1.13) (2023-04-12)
 
 
