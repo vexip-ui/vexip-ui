@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
-import { defineConfig } from 'vitepress'
+import { toKebabCase } from '@vexip-ui/utils'
 import { splitVendorChunkPlugin } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
@@ -9,13 +9,17 @@ import discardCss from 'postcss-discard-duplicates'
 import zipPlugin from './plugins/zip'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
+import { getGuideConfig } from './config/guide'
+import { getComponentConfig } from './config/component'
+
+import type { UserConfig } from 'vitepress'
 
 const useServer = process.env.NODE_ENV === 'development'
 const docsRoot = resolve(__dirname, '..')
 
 const pkg = JSON.parse(readFileSync(resolve(docsRoot, '../package.json'), 'utf-8'))
 
-export default defineConfig({
+export default <UserConfig>{
   vite: {
     define: {
       __SSR__: JSON.stringify(process.env.SSR === 'true'),
@@ -78,8 +82,56 @@ export default defineConfig({
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
   markdown: {
-    typographer: false,
+    // typographer: false,
     highlight,
     config: markdownItSetup
+  },
+  themeConfig: {
+    nav: [
+      { key: 'guides', i18n: 'common.guides', link: '/guide/setup' },
+      { key: 'components', i18n: 'common.components', link: '/component/button' },
+      { key: 'playground', i18n: 'common.playground', to: 'https://playground.vexipui.com' }
+    ],
+    asideMenus: getAsideMenus(),
+    outline: {
+      '/guide/': 2,
+      '/component/': 3
+    }
+  },
+  locales: {
+    'en-US': {
+      label: 'en-US',
+      lang: 'en-US'
+    },
+    'zh-CN': {
+      label: 'zh-CN',
+      lang: 'zh-CN'
+    }
   }
-})
+}
+
+function getAsideMenus() {
+  return {
+    '/guide/': getGuideConfig().map(guide => {
+      return {
+        key: guide.name,
+        link: `/guide/${guide.name}`,
+        i18n: `guide.${guide.i18n}`
+      }
+    }),
+    '/component/': getComponentConfig().map(group => {
+      return {
+        key: group.name,
+        i18n: `group.${group.name}`,
+        count: true,
+        items: group.components.map(component => ({
+          key: component.name,
+          link: `/component/${toKebabCase(component.name)}`,
+          i18n: `component.${component.name}`,
+          since: component.since,
+          orgin: component.name
+        }))
+      }
+    })
+  }
+}

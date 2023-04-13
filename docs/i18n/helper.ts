@@ -30,7 +30,7 @@ export interface I18nConfig {
     warning: string,
     error: string
   },
-  guides: {
+  guide: {
     introduction: string,
     gettingStart: string,
     globalConfig: string,
@@ -47,7 +47,7 @@ export interface I18nConfig {
     effect: string,
     else: string
   },
-  components: {
+  component: {
     Button: string,
     Icon: string,
     Linker: string,

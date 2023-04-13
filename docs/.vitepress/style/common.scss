@@ -99,3 +99,10 @@ p .vxp-linker {
     opacity: 100%;
   }
 }
+
+div[class*='language-'] {
+  & > button.copy,
+  & > span.lang {
+    display: none;
+  }
+}

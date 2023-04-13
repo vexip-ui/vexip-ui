@@ -32,7 +32,7 @@ export const enUS = defineI18n({
     warning: 'Attention',
     error: 'Warning'
   },
-  guides: {
+  guide: {
     introduction: 'Introduction',
     gettingStart: 'Getting Start',
     globalConfig: 'Global Config',
@@ -49,7 +49,7 @@ export const enUS = defineI18n({
     effect: 'Effect',
     else: 'Else'
   },
-  components: {
+  component: {
     Button: 'Button',
     Icon: 'Icon',
     Linker: 'Linker',

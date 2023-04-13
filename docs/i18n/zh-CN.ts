@@ -32,7 +32,7 @@ export const zhCN = defineI18n({
     warning: '注意',
     error: '警告'
   },
-  guides: {
+  guide: {
     introduction: '介绍',
     gettingStart: '快速上手',
     globalConfig: '全局配置',
@@ -49,7 +49,7 @@ export const zhCN = defineI18n({
     effect: '反应',
     else: '其他'
   },
-  components: {
+  component: {
     Button: '按钮',
     Icon: '图标',
     Linker: '链接',
