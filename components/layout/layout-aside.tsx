@@ -13,7 +13,7 @@ export default defineComponent({
   props: layoutAsideProps,
   emits: ['update:reduced', 'update:expanded'],
   setup(_props, { slots, emit, expose }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutAside', _props, {
       tag: 'aside',
       reduced: false,
       menus: {

@@ -68,6 +68,9 @@ export interface LayoutHeaderExposed extends ComponentPublicInstance {
   expandMenuByLabel: (label: string) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface LayoutMainExposed extends ComponentPublicInstance {}
+
 export interface LayoutAsideExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
