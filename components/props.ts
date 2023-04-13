@@ -41,6 +41,7 @@ import type { LayoutCProps } from './layout'
 import type { LayoutAsideCProps } from './layout-aside'
 import type { LayoutFooterCProps } from './layout-footer'
 import type { LayoutHeaderCProps } from './layout-header'
+import type { LayoutMainCProps } from './layout-main'
 import type { LinkerCProps } from './linker'
 import type { MaskerCProps } from './masker'
 import type { MenuCProps } from './menu'
@@ -148,6 +149,7 @@ export interface PropsOptions {
   layoutAside?: LayoutAsideCProps,
   layoutFooter?: LayoutFooterCProps,
   layoutHeader?: LayoutHeaderCProps,
+  layoutMain?: LayoutMainCProps,
   linker?: LinkerCProps,
   masker?: MaskerCProps,
   menu?: MenuCProps,

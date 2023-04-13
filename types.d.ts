@@ -50,6 +50,7 @@ declare module 'vue' {
     LayoutAside: typeof import('vexip-ui')['LayoutAside'],
     LayoutFooter: typeof import('vexip-ui')['LayoutFooter'],
     LayoutHeader: typeof import('vexip-ui')['LayoutHeader'],
+    LayoutMain: typeof import('vexip-ui')['LayoutMain'],
     Linker: typeof import('vexip-ui')['Linker'],
     Masker: typeof import('vexip-ui')['Masker'],
     Menu: typeof import('vexip-ui')['Menu'],

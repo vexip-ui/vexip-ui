@@ -52,6 +52,7 @@ const components = [
   'LayoutAside',
   'LayoutFooter',
   'LayoutHeader',
+  'LayoutMain',
   'Linker',
   'Masker',
   'Menu',
