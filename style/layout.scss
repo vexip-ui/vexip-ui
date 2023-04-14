@@ -35,6 +35,10 @@ $layout: map.merge(
     position: relative;
     display: flex;
     min-height: get-css-var('layout-view-height');
+
+    &--fixed {
+      height: get-css-var('layout-view-height');
+    }
   }
 
   &--no-aside &__wrapper,

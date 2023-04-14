@@ -381,7 +381,7 @@ export default defineComponent({
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >
-          <CustomTag class={nh.be('wrapper')}>
+          <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
             {currentSignType.value === 'header' && renderHeader()}
             {renderAside()}
             <section
