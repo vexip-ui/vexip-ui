@@ -96,7 +96,7 @@
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
-      v-if="usingDrag"
+      v-if="props.rowDraggable"
       v-show="indicatorShow"
       ref="indicator"
       :class="[
@@ -257,6 +257,8 @@ export default defineComponent({
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
+    let isMounted = false
+
     const userLocale = computed(() => {
       if (isDefined(props.emptyText)) {
         warnOnce(
@@ -407,7 +409,6 @@ export default defineComponent({
     const allColumns = computed(() => {
       return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
-    const usingDrag = computed(() => props.rowDraggable || getters.hasDragColumn)
 
     const {
       setColumns,
@@ -444,6 +445,7 @@ export default defineComponent({
       allColumns,
       value => {
         setColumns(value)
+        isMounted && computeTableWidth()
       },
       { immediate: true, deep: true }
     )
@@ -501,13 +503,16 @@ export default defineComponent({
     const handlerResize = debounce(refresh)
 
     onMounted(() => {
-      watch(bodyScrollHeight, refreshPercentScroll)
+      isMounted = true
 
+      watch(bodyScrollHeight, refreshPercentScroll)
       refresh()
       window.addEventListener('resize', handlerResize)
     })
 
     onBeforeUnmount(() => {
+      isMounted = false
+
       window.removeEventListener('resize', handlerResize)
     })
 
@@ -953,7 +958,6 @@ export default defineComponent({
       barLength,
       bodyScrollHeight,
       totalHeight: toRef(state, 'totalHeight'),
-      usingDrag,
 
       store,
 
