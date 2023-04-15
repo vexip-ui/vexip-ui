@@ -117,6 +117,11 @@ preset style manually.
 * **tabs:** header will shrink if content too height ([cc46454](https://github.com/vexip-ui/vexip-ui/commit/cc46454ea738f3790448d2c4ca14ce34a17dd6c9))
 
 
+### 👓 Types
+
+* manual exposed should exnted ComponentPublicInstance ([783a8e9](https://github.com/vexip-ui/vexip-ui/commit/783a8e9f3671c799f319c725cc97f84cfd14db54))
+
+
 ### 🔨 Code Refactoring
 
 * **Layout:** adjust structure of elements for more concise ([#288](https://github.com/vexip-ui/vexip-ui/issues/288)) ([06e82ec](https://github.com/vexip-ui/vexip-ui/commit/06e82ec1d179ab91d780041763fe8ff40daf08e9)), closes [#285](https://github.com/vexip-ui/vexip-ui/issues/285)
@@ -155,6 +160,18 @@ preset style manually.
 * **sapce:** render nothing when no items ([858a55b](https://github.com/vexip-ui/vexip-ui/commit/858a55bbb12e1d262493263a7edd3296f4cd818e))
 * table tree rendering async data cannot be expanded ([#280](https://github.com/vexip-ui/vexip-ui/issues/280)) ([285539b](https://github.com/vexip-ui/vexip-ui/commit/285539b7d9ac0a6f0ba672a08f190b0a1b61140f))
 * **table:** unexpect horizontal scroll appear ([84598bf](https://github.com/vexip-ui/vexip-ui/commit/84598bfe41e1318a037f7c5be2e8f7731ee0aa5f)), closes [#278](https://github.com/vexip-ui/vexip-ui/issues/278)
+
+
+### 👓 Types
+
+* **native-scroll:** multiple define instance type ([bd5a408](https://github.com/vexip-ui/vexip-ui/commit/bd5a408d375a3f8cf8e320e45b29fcf84bcf07d2))
+* **table:** normalize all types start with `Table` ([ca375b7](https://github.com/vexip-ui/vexip-ui/commit/ca375b7ffb492b0ec18fbe2d40a225e1de6b2c2d))
+
+
+### ❌ Breaking Changes
+
+* **table:** All types of Table component currently start with
+`Table` prefix, e.g. `FilterOptions` -> `TableFilterOptions`
 
 
 
@@ -216,6 +233,11 @@ preset style manually.
 * **select:** unexpect emit focus event when blur ([3e0afca](https://github.com/vexip-ui/vexip-ui/commit/3e0afca821060305891f257e1324412824bb57a3)), closes [#264](https://github.com/vexip-ui/vexip-ui/issues/264)
 * **table:** cannot refresh row states by data directly ([b9bb46d](https://github.com/vexip-ui/vexip-ui/commit/b9bb46d40fe1ce1ad4a23e790f70bcf178353297))
 * **table:** improve column sorter and filter able default true ([688dba4](https://github.com/vexip-ui/vexip-ui/commit/688dba40524ec5d56b10aa669329a7973ba45bfd))
+
+
+### 👓 Types
+
+* **table:** improve row event payload (TableRowPayload) ([07f5a30](https://github.com/vexip-ui/vexip-ui/commit/07f5a308993d3f3fc9bb856d5bb2bfec248d7bc7))
 
 
 
@@ -311,6 +333,14 @@ preset style manually.
 * **utils:** using pointerdown event for touch action ([e03462f](https://github.com/vexip-ui/vexip-ui/commit/e03462fa2eabbfc247cfc206a6a26fc4d33169ab))
 
 
+### 👓 Types
+
+* export exposed type for all components ([#233](https://github.com/vexip-ui/vexip-ui/issues/233)) ([dc38c14](https://github.com/vexip-ui/vexip-ui/commit/dc38c14bfb7698d9daeac0214b0755c4caa5a682))
+* imporve components prop type to show the original definition ([70a17be](https://github.com/vexip-ui/vexip-ui/commit/70a17be085590ce4c440f3c985fec2cfe78923aa))
+* improve Object.freeze type inferring ([c20c3a8](https://github.com/vexip-ui/vexip-ui/commit/c20c3a8820b7178a9e8c9b252f19dd5f08bd8800))
+* **utils:** improve toCapitalCase type inferring ([#236](https://github.com/vexip-ui/vexip-ui/issues/236)) ([de29f21](https://github.com/vexip-ui/vexip-ui/commit/de29f21c18bfa15ecb4c4fec2da9dba204d4e6b5))
+
+
 ### 🔨 Code Refactoring
 
 * **icon:** migrate `spin` and `pulse` props into `effect` prop ([#213](https://github.com/vexip-ui/vexip-ui/issues/213)) ([c7443d2](https://github.com/vexip-ui/vexip-ui/commit/c7443d28bfaf47ab1e5456faf4822282630bd997))
@@ -333,6 +363,12 @@ preset style manually.
 * **switch:** misalignment of signal occurs during transition ([1bd5da5](https://github.com/vexip-ui/vexip-ui/commit/1bd5da56346844a9091c89020ffee78cf107c9c6))
 * **table:** column fixed effect displayed when scroll not enable ([6d75dcf](https://github.com/vexip-ui/vexip-ui/commit/6d75dcf160c268d6bac339f3c1208518ac850798))
 * **upload:** count-limit not effective in image mode ([f356f11](https://github.com/vexip-ui/vexip-ui/commit/f356f11919e1bb86a7bd2e066b398cdf728f0d50))
+
+
+### 👓 Types
+
+* **input:** improve change and input event types ([c2ad375](https://github.com/vexip-ui/vexip-ui/commit/c2ad375e853653e0e720f6501a6019b0378542c8))
+* **tab-nav:** improve change and close event types ([cfb72b0](https://github.com/vexip-ui/vexip-ui/commit/cfb72b05b07ff8cccbc83deedaeec54224e6c1fa))
 
 
 
@@ -392,6 +428,11 @@ preset style manually.
 * **table:** should assign row data when set new data ([2518203](https://github.com/vexip-ui/vexip-ui/commit/2518203c45bd9c91b29a562d7857574bdd87270f))
 
 
+### 👓 Types
+
+* support config functional default props ([05b08ff](https://github.com/vexip-ui/vexip-ui/commit/05b08ffc315259b247c9ebb625d3377a1ee32c17))
+
+
 
 ## [2.0.16](https://github.com/vexip-ui/vexip-ui/compare/v2.0.15...v2.0.16) (2022-12-01)
 
@@ -427,6 +468,11 @@ preset style manually.
 
 * **table:** should use wrapper width to compute when width not set ([d628403](https://github.com/vexip-ui/vexip-ui/commit/d6284032aa91bc4a1e89ba0c9075516167aad0db))
 * **upload:** error when passing null to file-list ([b6f5df4](https://github.com/vexip-ui/vexip-ui/commit/b6f5df44a707bd2c239ef3c26fd2c2835869fb13))
+
+
+### 👓 Types
+
+* **config:** add default property for PropsOptions ([f3e4580](https://github.com/vexip-ui/vexip-ui/commit/f3e45802ccbef1793e4c5e563dd019d19d92c534))
 
 
 
@@ -470,6 +516,12 @@ preset style manually.
 * **select:** label not render when value is falsy ([5cbc2bf](https://github.com/vexip-ui/vexip-ui/commit/5cbc2bf00d576069b724888441a39a862cff4bb4)), closes [#207](https://github.com/vexip-ui/vexip-ui/issues/207)
 
 
+### 👓 Types
+
+* **modal:** improve size and position props types ([f5acd3d](https://github.com/vexip-ui/vexip-ui/commit/f5acd3d73bed39fcd58844e79878c646aa783cd9))
+* **table:** improve helper functions type inferring ([141ca48](https://github.com/vexip-ui/vexip-ui/commit/141ca488c93889a503b97af853741e6025671b5f))
+
+
 ### 🔨 Code Refactoring
 
 * extract props definitions and create props config types ([#205](https://github.com/vexip-ui/vexip-ui/issues/205)) ([8f2f5e8](https://github.com/vexip-ui/vexip-ui/commit/8f2f5e8f58d846b72d42d960d28f76805cdda572))
@@ -494,6 +546,11 @@ preset style manually.
 * **number-input:** value not clear when in sync mode ([608f2b5](https://github.com/vexip-ui/vexip-ui/commit/608f2b5527bd2b5fde6d88e20737db1eeb8e0eee))
 * **overflow:** should refresh when wrapper resize ([5102c40](https://github.com/vexip-ui/vexip-ui/commit/5102c40d3fea565eca0a91277333e3439b5bd0d1))
 * **tabs:** panel height should follow content ([e9a25ea](https://github.com/vexip-ui/vexip-ui/commit/e9a25eac42a16e1aec52610c22f20ffd00979592)), closes [#191](https://github.com/vexip-ui/vexip-ui/issues/191)
+
+
+### 👓 Types
+
+* add InputExposed and UploadExposed ([4ca0cbe](https://github.com/vexip-ui/vexip-ui/commit/4ca0cbefd1fdd1a42531689673c28cfa0c202e71))
 
 
 
@@ -535,6 +592,11 @@ preset style manually.
 * **tab-nav:** active not update when dynamic with using index as key ([aacc76a](https://github.com/vexip-ui/vexip-ui/commit/aacc76a250388dd096050e4f6d3d37de80305649))
 * **table:** missing body bottom border style ([8aaf0a3](https://github.com/vexip-ui/vexip-ui/commit/8aaf0a3056769d0ba1a277338dd9c3eed1a227b5))
 * **upload:** should show thumbnial when only non-base64 url ([18c26de](https://github.com/vexip-ui/vexip-ui/commit/18c26def771898cc4ca49cd4f8ae9a4ff71a1e26))
+
+
+### 👓 Types
+
+* **layout:** fix menu options type ([e909ea3](https://github.com/vexip-ui/vexip-ui/commit/e909ea35ea5541da7a61d8da9fbca554beb991c2))
 
 
 
@@ -591,6 +653,13 @@ preset style manually.
 * **upload:** image thumbnail not effective ([b71b5dc](https://github.com/vexip-ui/vexip-ui/commit/b71b5dc231949542a3a0ad54ff9161675dfde786))
 
 
+### 👓 Types
+
+* improve to support `ref<HTMLElement>()` ([#188](https://github.com/vexip-ui/vexip-ui/issues/188)) ([5c50d3b](https://github.com/vexip-ui/vexip-ui/commit/5c50d3b8a8bebd1381ff9bf0901238c26d9a9297))
+* **layout:** fix LayoutMenuProps type ([cbc9191](https://github.com/vexip-ui/vexip-ui/commit/cbc9191c5c8e525ea5dddfa7b139f50e0915c885))
+* **props:** refactor ClassType and StyleType ([d54ea6f](https://github.com/vexip-ui/vexip-ui/commit/d54ea6faec2425bb7cc152153483c35f529af33d))
+
+
 ### 🔨 Code Refactoring
 
 * **row:** switch to use css vars to control gap ([4fd998d](https://github.com/vexip-ui/vexip-ui/commit/4fd998d56271390e82472afd7bfa8d3a9bd0589c)), closes [#187](https://github.com/vexip-ui/vexip-ui/issues/187)
@@ -638,6 +707,11 @@ preset style manually.
 * **input:** not effective debounce prop ([46c5d31](https://github.com/vexip-ui/vexip-ui/commit/46c5d31f29aa390f441e278874f6bbcebddee093))
 * **layout:** add style dependencies ([04edd03](https://github.com/vexip-ui/vexip-ui/commit/04edd03b4dfcb7079d6d51ecc19a53cdca6116d6))
 * **plugins:** support typography style alias ([f89cfef](https://github.com/vexip-ui/vexip-ui/commit/f89cfefbe43da61c4fce258e5d55166f89b9b152))
+
+
+### 👓 Types
+
+* fix type errors ([8b0a24d](https://github.com/vexip-ui/vexip-ui/commit/8b0a24d9a7cba27b76a5cc46e9d276ea5a6e0a59))
 
 
 
@@ -739,6 +813,12 @@ preset style manually.
 * **form:** rename label-position to label-align ([ad593bb](https://github.com/vexip-ui/vexip-ui/commit/ad593bb29c9ba56c67b78c0f43b87ddc3dc8cecb))
 * **slider:** incorrect judge to emit input event ([f13656e](https://github.com/vexip-ui/vexip-ui/commit/f13656e97ddf96b19675d698b60bdb23bc0a5591))
 * **table:** unstable row rendering ([4546389](https://github.com/vexip-ui/vexip-ui/commit/45463890af9b120eb587563dda813a2084f604a5))
+
+
+### 👓 Types
+
+* **menu:** add MenuExposed interface ([c8e05b6](https://github.com/vexip-ui/vexip-ui/commit/c8e05b6dee7e1b9caad63e440017d3f192ab9381))
+* normalize timer types ([c885e1c](https://github.com/vexip-ui/vexip-ui/commit/c885e1c0f0a179e2db3cbc1c48112c069ac489e9))
 
 
 ### 🔨 Code Refactoring
@@ -1020,6 +1100,11 @@ CollapsePanel and TabPanel instead.
 * useClickoutside directly passing a callback ([ebf4842](https://github.com/vexip-ui/vexip-ui/commit/ebf4842eafab6175a929e0e2cb26cca88a6b2347))
 
 
+### 👓 Types
+
+* **mixins:** fix useClickOutside target param type ([76e64cd](https://github.com/vexip-ui/vexip-ui/commit/76e64cd230df49238d139615957c94e994df70e0))
+
+
 ### 🔨 Code Refactoring
 
 * auto bind when control component under FormItem ([#93](https://github.com/vexip-ui/vexip-ui/issues/93)) ([e04fc2f](https://github.com/vexip-ui/vexip-ui/commit/e04fc2f2ea4652f48062a75158546743994908cc))
@@ -1061,6 +1146,11 @@ not render wrapper element by default.
 * **time-ago:** cannot resolve locale config ([b073ff8](https://github.com/vexip-ui/vexip-ui/commit/b073ff840d9d7eaec0d496dc718ff8409486cfea))
 * **utils:** imrpove number operations loop ([5d10739](https://github.com/vexip-ui/vexip-ui/commit/5d10739ec7a1fe1d083128c469f10e7d845bf681))
 * **wheel:** cannot scroll when min or max value effectively ([05198d4](https://github.com/vexip-ui/vexip-ui/commit/05198d45ec2051516561a21ec5ba9049617223f4))
+
+
+### 👓 Types
+
+* **config:** imrpove ClassType and StyleType ([5f42e7b](https://github.com/vexip-ui/vexip-ui/commit/5f42e7bdf2fe7a9455e940b720d6cc1ca96d4cde))
 
 
 
@@ -1208,6 +1298,11 @@ max props to instead it.
 * **select:** ensure init value when async load options ([f4e44b3](https://github.com/vexip-ui/vexip-ui/commit/f4e44b3238fa0043e7b3588417ba980e28d55620)), closes [#38](https://github.com/vexip-ui/vexip-ui/issues/38)
 
 
+### 👓 Types
+
+* export config types ([6bfb6a2](https://github.com/vexip-ui/vexip-ui/commit/6bfb6a2822d37c9369cf1c1add1321ea10210f8c))
+
+
 
 # [2.0.0-beta.6](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2022-06-14)
 
@@ -1242,6 +1337,11 @@ max props to instead it.
 * **style:** remove unnecessary padding vars ([ae30e20](https://github.com/vexip-ui/vexip-ui/commit/ae30e20d2d12a90aceb6c88e9f07df0be98a9701))
 * **tree:** improve node padding style ([6db9bed](https://github.com/vexip-ui/vexip-ui/commit/6db9bedfa66d036beec7f12b0baed0427b7aece0))
 * **utils:** flatTree not init id when nonexists ([e298729](https://github.com/vexip-ui/vexip-ui/commit/e29872966070450c17c28f6882f9c1e6dd662d29))
+
+
+### 👓 Types
+
+* **utils:** change mergeObjects param type ([f2b3b7b](https://github.com/vexip-ui/vexip-ui/commit/f2b3b7b7fc9e12ef656e640a30baf9f0afded3ac))
 
 
 ### 🔨 Code Refactoring
@@ -1332,6 +1432,12 @@ to instead.
 * **tag:** content default no wrap ([ef5a1c0](https://github.com/vexip-ui/vexip-ui/commit/ef5a1c0ded6f4ffaa4308715f31dfab4f01651be))
 * **tag:** remove built-in transition ([74af492](https://github.com/vexip-ui/vexip-ui/commit/74af4925b4ca388ae3ff5b8d71d83153f99a375b))
 * **tree:** controllable slot params ([eb8421e](https://github.com/vexip-ui/vexip-ui/commit/eb8421e628fc534cb36f9ea8430c1f1007573071))
+
+
+### 👓 Types
+
+* fix upload and wheel types ([7cd7f0d](https://github.com/vexip-ui/vexip-ui/commit/7cd7f0d07dcc9a16ec46107c84db7da709527025))
+* **table:** some accurate prop types ([7b68561](https://github.com/vexip-ui/vexip-ui/commit/7b68561b78b93e9429f4a3675ec701345a07e3d7))
 
 
 
@@ -1493,6 +1599,11 @@ styles anymore.
 * **scrollbar:** use-track should default false ([d6f8e6c](https://github.com/vexip-ui/vexip-ui/commit/d6f8e6ca444fd163b6c460c2772c86c5c61f843a))
 
 
+### 👓 Types
+
+* **anchor:** add NativeScroll type and accurate container type ([969ef5e](https://github.com/vexip-ui/vexip-ui/commit/969ef5e09cddc18bafbeffc7eb863873576f551d))
+
+
 
 # [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/v1.2.1...v1.3.0) (2022-04-18)
 
@@ -1563,6 +1674,14 @@ styles anymore.
 * install options should be optional ([0934c3c](https://github.com/vexip-ui/vexip-ui/commit/0934c3c36d863c30eb27ec4f38842392b51c7486))
 * support Date type for ConfiguruseConfiguredProps ([05607e6](https://github.com/vexip-ui/vexip-ui/commit/05607e66cfff949fe5a21b05d594acaeb5a776b5))
 * **table:** no recalculate when add rows ([741400e](https://github.com/vexip-ui/vexip-ui/commit/741400e112bf4437d47c7ed6898956a08a230021))
+
+
+### 👓 Types
+
+* **common:** accurately sortByProps types ([c303f55](https://github.com/vexip-ui/vexip-ui/commit/c303f552a5f2ec3bfc70ae5befe9a901a60866e4))
+* **common:** optimize transform utils types ([1e8e9f5](https://github.com/vexip-ui/vexip-ui/commit/1e8e9f50d8adfc256635277a3e465763754e5690))
+* **table:** fix type infer errors ([e01fb37](https://github.com/vexip-ui/vexip-ui/commit/e01fb37a716ce7673fdb41bfac44a448594e0dce))
+* **tree:** fix type infer errors ([ff2cff0](https://github.com/vexip-ui/vexip-ui/commit/ff2cff013d06d6d152fab7e61943b455c4717414))
 
 
 ### ❌ Breaking Changes
@@ -1641,6 +1760,12 @@ install config instead.
 * **scroll:** start autoplay when mounted ([5d6dfa6](https://github.com/vexip-ui/vexip-ui/commit/5d6dfa6f84e06107344e7d9d9272635f69d45061))
 * **slider:** error value when step is not 1 ([4c2b2b9](https://github.com/vexip-ui/vexip-ui/commit/4c2b2b996d6b4611ecdc117375d009a34d879b8b))
 * **time-picker:** clear should trigger change event ([92e9ba7](https://github.com/vexip-ui/vexip-ui/commit/92e9ba7e573ae924e911cd2361613b42e9195981))
+
+
+### 👓 Types
+
+* export global components interface ([94f16d3](https://github.com/vexip-ui/vexip-ui/commit/94f16d352126563c0f58802841301958407b9170))
+* replace ChildVNode to any ([b0bbd2b](https://github.com/vexip-ui/vexip-ui/commit/b0bbd2b0aa19bdf797f4b209f8855d598ac14dad))
 
 
 ### ❌ Breaking Changes
@@ -1773,6 +1898,12 @@ install config instead.
 
 * **auto-complete:** hitting wrong after filter options ([7317ed6](https://github.com/vexip-ui/vexip-ui/commit/7317ed6848484505a3c61fa2f0cc2d9b60d84e4b))
 * **masker:** transfer prop has no effect ([fd2173e](https://github.com/vexip-ui/vexip-ui/commit/fd2173e1c45599305d8e8abda0a93d423e222cd6))
+
+
+### 👓 Types
+
+* exports object prop type define ([a1eb5da](https://github.com/vexip-ui/vexip-ui/commit/a1eb5da4241dfa50b14436aff6dfd3ad22cb9680))
+* fix potential template type errors ([5b45744](https://github.com/vexip-ui/vexip-ui/commit/5b457445347411cc23a067f1a5d3c4baedfe91f2))
 
 
 
