@@ -748,7 +748,7 @@ export default defineComponent({
       const { draggingRow, willDropRow, dropType } = dragState
       const { rowData } = state
 
-      if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
+      if (!willDropRow || isLeftInsideRight(draggingRow, willDropRow)) return
 
       let currentKey: Key
       let parent: TableRowState | null
