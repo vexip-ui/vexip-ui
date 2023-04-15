@@ -96,7 +96,7 @@
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
-      v-if="props.rowDraggable"
+      v-if="props.rowDraggable || hasDragColumn"
       v-show="indicatorShow"
       ref="indicator"
       :class="[
@@ -249,6 +249,7 @@ export default defineComponent({
     const templateColumns = ref(new Set<TableColumnOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
+    const hasDragColumn = ref(false)
 
     const wrapper = ref<HTMLElement>()
     const xScroll = ref<NativeScrollExposed>()
@@ -446,6 +447,9 @@ export default defineComponent({
       value => {
         setColumns(value)
         isMounted && computeTableWidth()
+        nextTick(() => {
+          hasDragColumn.value = getters.hasDragColumn
+        })
       },
       { immediate: true, deep: true }
     )
@@ -951,6 +955,7 @@ export default defineComponent({
       leftFixedColumns: toRef(state, 'leftFixedColumns'),
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),
+      hasDragColumn,
 
       className,
       style,
