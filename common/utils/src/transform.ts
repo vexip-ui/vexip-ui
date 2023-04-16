@@ -9,6 +9,10 @@ export function callIfFunc<T>(value: T | (() => T)) {
   return isFunction(value) ? value() : value
 }
 
+export function normalizePath(path: string) {
+  return path.replace(/\/+/g, '/')
+}
+
 /**
  * 根据数组元素中某个或多个属性的值转换为映射
  *

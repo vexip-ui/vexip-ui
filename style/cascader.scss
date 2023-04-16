@@ -124,14 +124,6 @@ $cascader: map.merge(
     user-select: none;
   }
 
-  &__popper {
-    @include basis;
-
-    z-index: get-css-var('z-index-popper');
-    display: flex;
-    padding: 5px 0;
-  }
-
   &__panels {
     position: relative;
     display: flex;

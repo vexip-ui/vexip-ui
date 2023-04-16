@@ -4,7 +4,6 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["../*"],
-      "vexip-ui/es/*": ["../components/*"],
       "vexip-ui": ["../components"]
     }
   },

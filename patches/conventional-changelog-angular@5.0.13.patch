@@ -1,0 +1,57 @@
+diff --git a/writer-opts.js b/writer-opts.js
+index d5de1a3ade560a49022eb96095aa67374141ddbb..9ee7d102917c8b3a4aea73605ea91d089ec89b34 100644
+--- a/writer-opts.js
++++ b/writer-opts.js
+@@ -29,32 +29,38 @@ function getWriterOpts () {
+       const issues = []
+ 
+       commit.notes.forEach(note => {
+-        note.title = 'BREAKING CHANGES'
++        note.title = '❌ Breaking Changes'
+         discard = false
+       })
+ 
+       if (commit.type === 'feat') {
+-        commit.type = 'Features'
++        commit.type = '✨ Features'
+       } else if (commit.type === 'fix') {
+-        commit.type = 'Bug Fixes'
++        commit.type = '🐞 Bug Fixes'
+       } else if (commit.type === 'perf') {
+-        commit.type = 'Performance Improvements'
++        commit.type = '⚡ Performance Improvements'
++      } else if (commit.type === 'refactor') {
++        commit.type = '🔨 Code Refactoring'
++      } else if (commit.type === 'type' || commit.type === 'types') {
++        commit.type = '👓 Types'
+       } else if (commit.type === 'revert' || commit.revert) {
+-        commit.type = 'Reverts'
++        commit.type = '💔 Reverts'
+       } else if (discard) {
+         return
+       } else if (commit.type === 'docs') {
+-        commit.type = 'Documentation'
++        commit.type = '📜 Documentation'
+       } else if (commit.type === 'style') {
+-        commit.type = 'Styles'
+-      } else if (commit.type === 'refactor') {
+-        commit.type = 'Code Refactoring'
+-      } else if (commit.type === 'test') {
+-        commit.type = 'Tests'
++        commit.type = '🎨 Styles'
++      } else if (commit.type === 'test' || commit.type === 'tests') {
++        commit.type = '🩺 Tests'
+       } else if (commit.type === 'build') {
+-        commit.type = 'Build System'
+-      } else if (commit.type === 'ci') {
+-        commit.type = 'Continuous Integration'
++        commit.type = '🚩 Build System'
++      } else if (commit.type === 'ci' || commit.type === 'workflow') {
++        commit.type = '🛫 Continuous Integration'
++      } else if (commit.type === 'chore') {
++        commit.type = '🍬 Chore'
++      } else {
++        return
+       }
+ 
+       if (commit.scope === '*') {

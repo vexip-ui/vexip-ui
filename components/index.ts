@@ -51,6 +51,7 @@ import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
+import { LayoutMain } from './layout-main'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -66,6 +67,7 @@ import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
 import { Pagination } from './pagination'
+import { Popper } from './popper'
 import { Popup } from './popup'
 import { Portal } from './portal'
 import { Progress } from './progress'
@@ -168,6 +170,7 @@ const components = [
   LayoutAside,
   LayoutFooter,
   LayoutHeader,
+  LayoutMain,
   Linker,
   Masker,
   Menu,
@@ -180,6 +183,7 @@ const components = [
   OptionGroup,
   Overflow,
   Pagination,
+  Popper,
   Popup,
   Portal,
   Progress,
@@ -301,6 +305,7 @@ export * from './layout'
 export * from './layout-aside'
 export * from './layout-footer'
 export * from './layout-header'
+export * from './layout-main'
 export * from './linker'
 export * from './loading'
 export * from './masker'
@@ -316,6 +321,7 @@ export * from './option'
 export * from './option-group'
 export * from './overflow'
 export * from './pagination'
+export * from './popper'
 export * from './popup'
 export * from './portal'
 export * from './progress'

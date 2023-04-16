@@ -20,7 +20,7 @@ export default defineComponent({
   props: layoutHeaderProps,
   emits: ['update:sign-type', 'update:color', 'update:user-dropped', 'update:dark-mode'],
   setup(_props, { slots, emit, expose }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutHeader', _props, {
       locale: null,
       tag: 'header',
       logo: '',

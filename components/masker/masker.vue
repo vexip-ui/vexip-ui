@@ -6,6 +6,7 @@
       :class="className"
       tabindex="-1"
       :style="{
+        zIndex,
         pointerEvents: wrapShow ? undefined : 'none',
         visibility: wrapShow ? undefined : 'hidden'
       }"
@@ -45,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useZIndex, emitEvent } from '@vexip-ui/config'
 import { isPromise, queryTabables } from '@vexip-ui/utils'
 import { maskerProps } from './props'
 
@@ -76,7 +77,10 @@ export default defineComponent({
       autoRemove: false
     })
 
+    const getIndex = useZIndex()
+
     const currentActive = ref(props.active)
+    const zIndex = ref(0)
     const wrapShow = ref(props.active)
 
     const wrapper = ref<HTMLElement>()
@@ -127,6 +131,7 @@ export default defineComponent({
         }
       } else {
         prevFocusdEl = document.activeElement as HTMLElement
+        zIndex.value = getIndex()
       }
 
       emitEvent(props.onToggle, value)
@@ -202,6 +207,7 @@ export default defineComponent({
       props,
       nh,
       currentActive,
+      zIndex,
       wrapShow,
 
       className,

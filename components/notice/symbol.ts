@@ -14,6 +14,7 @@ export interface NoticeOptions extends Record<string, any> {
   duration?: number,
   className?: string | Record<string, any>,
   style?: string | Record<string, any>,
+  zIndex?: number,
   background?: boolean | string,
   color?: boolean | string,
   closable?: boolean,

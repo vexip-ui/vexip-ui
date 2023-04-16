@@ -15,7 +15,6 @@ $date-picker: map.merge(
     unit-bg-color-error: get-css-var('color-error-opacity-1'),
     separator-color: get-css-var('content-color-disabled'),
     exchange-color: get-css-var('content-color-third'),
-    popper-z-index: get-css-var('z-index-popper'),
     panel-bg-color: get-css-var('bg-color-base'),
     panel-border-radius: get-css-var('radius-base'),
     panel-shadow: get-css-var('shadow-base'),
@@ -146,10 +145,6 @@ $date-picker: map.merge(
   }
 
   &__popper {
-    @include basis;
-
-    z-index: get-css-var('date-picker-popper-z-index');
-    display: flex;
     padding: 8px 0;
   }
 

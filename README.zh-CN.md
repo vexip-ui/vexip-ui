@@ -7,7 +7,7 @@
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  高度可定制化的属性值，全量的 TypeScript，性能很不错
+  高度可定制化，全量 TypeScript，性能很不错
 </p>
 
 <p align="center">

@@ -4,7 +4,7 @@ export const zhCN = defineI18n({
   common: {
     language: '中文',
     makeInterest: '创造有趣的开发体验',
-    slogan: '高度可定制化的属性值，全量的 TypeScript，性能很不错',
+    slogan: '高度可定制化，全量 TypeScript，性能很不错',
     getStarted: '开始使用',
     getComponents: '浏览组件',
     changePrefix: '换个组件名前缀',

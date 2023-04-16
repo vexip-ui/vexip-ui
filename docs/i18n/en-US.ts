@@ -4,7 +4,7 @@ export const enUS = defineI18n({
   common: {
     language: 'English',
     makeInterest: 'Make interesting in development',
-    slogan: 'Highly customizable property values, Full TypeScript, Performance pretty good',
+    slogan: 'Highly customizability, full TypeScript, performance pretty good',
     getStarted: 'Get started',
     getComponents: 'Components',
     changePrefix: 'Change Component Name Prefix',

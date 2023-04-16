@@ -30,6 +30,11 @@
     overflow-y: hidden;
   }
 
+  &--horizontal > &__wrapper,
+  &--both > &__wrapper {
+    display: inline-block;
+  }
+
   &__extra {
     position: absolute;
     top: 0;

@@ -1,3 +1,26 @@
+# [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/icons@1.1.0...icons@1.2.0) (2023-04-13)
+
+
+### ✨ Features
+
+* **icons:** upgrate font-awesome to 6.4.0 ([74a47cb](https://github.com/vexip-ui/vexip-ui/commit/74a47cb9efefdb696835b41828515eaac6e23aaf))
+
+
+### 🔨 Code Refactoring
+
+* switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+
+### ❌ Breaking Changes
+
+* The scss and css style files no longer contains dependent 
+styles for  its component. Currently the relationship of styles are included in ts 
+(js) files which are use to import the styles. Change the import way of style like: 
+`vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import 
+preset style manually.
+
+
+
 # [1.1.0](https://github.com/vexip-ui/vexip-ui/compare/icons@1.0.3...icons@1.1.0) (2023-01-29)
 
 ### Features

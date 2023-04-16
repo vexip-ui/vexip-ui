@@ -92,6 +92,8 @@ $table: map.merge(
   }
 
   &__body-wrapper {
+    display: inline-block;
+    vertical-align: top;
     border-bottom: $border-a get-css-var('table-b-color');
   }
 

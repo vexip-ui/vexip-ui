@@ -15,24 +15,26 @@
       <slot></slot>
     </div>
     <DropdownDrop>
-      <Portal :to="transferTo">
-        <transition :name="props.transitionName" :appear="props.appear">
-          <div
-            v-show="currentVisible"
-            ref="popper"
-            :class="[
-              nh.be('popper'),
-              nh.bs('vars'),
-              isNested ? nh.bem('popper', 'nested') : null,
-              props.dropClass
-            ]"
-            @mouseenter="handleTriggerEnter"
-            @mouseleave="handleTriggerLeave"
-          >
-            <slot name="drop"></slot>
-          </div>
-        </transition>
-      </Portal>
+      <Popper
+        ref="popper"
+        :class="[
+          nh.be('popper'),
+          nh.bs('vars'),
+          isNested ? nh.bem('popper', 'nested') : null,
+          props.dropClass
+        ]"
+        :visible="currentVisible"
+        :alive="isAlive || popperAlive"
+        :to="transferTo"
+        :transition="props.transitionName"
+        :appear="props.appear"
+        @mouseenter="handleTriggerEnter"
+        @mouseleave="handleTriggerLeave"
+        @after-enter="popperAlive = true"
+        @after-leave="popperAlive = false"
+      >
+        <slot name="drop"></slot>
+      </Popper>
     </DropdownDrop>
   </div>
 </template>
@@ -41,6 +43,7 @@
 import {
   defineComponent,
   ref,
+  reactive,
   toRef,
   computed,
   watch,
@@ -49,7 +52,7 @@ import {
   inject,
   provide
 } from 'vue'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
@@ -57,13 +60,14 @@ import { dropdownProps } from './props'
 import { useLabel } from './hooks'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
+import type { PopperExposed } from '@/components/popper'
 import type { Placement } from '@vexip-ui/hooks'
 
 export default defineComponent({
   name: 'Dropdown',
   components: {
     DropdownDrop,
-    Portal
+    Popper
   },
   props: dropdownProps,
   emits: ['update:visible'],
@@ -91,7 +95,8 @@ export default defineComponent({
       transfer: false,
       dropClass: null,
       appear: false,
-      meta: null
+      meta: null,
+      alive: false
     })
 
     const parentState = inject(DROPDOWN_STATE, null)
@@ -101,12 +106,15 @@ export default defineComponent({
     const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
+    const popperAlive = ref(false)
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true,
       offset: isNested ? [-5, 0] : undefined
     })
@@ -120,13 +128,18 @@ export default defineComponent({
         [nh.bm('visible')]: currentVisible.value
       }
     })
+    const isAlive = computed(() => parentState?.alive || props.alive)
 
     provide(SELECT_HANDLER, null)
-    provide(DROPDOWN_STATE, {
-      handleSelect,
-      handleTriggerEnter,
-      handleTriggerLeave
-    })
+    provide(
+      DROPDOWN_STATE,
+      reactive({
+        alive: isAlive,
+        handleSelect,
+        handleTriggerEnter,
+        handleTriggerLeave
+      })
+    )
 
     watch(
       () => props.visible,
@@ -229,12 +242,14 @@ export default defineComponent({
       isNested,
       currentVisible,
       transferTo,
+      popperAlive,
+
+      className,
+      isAlive,
 
       wrapper,
       reference,
       popper,
-
-      className,
 
       handleTriggerEnter,
       handleTriggerLeave,

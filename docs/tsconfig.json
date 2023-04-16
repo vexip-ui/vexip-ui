@@ -20,7 +20,6 @@
     "paths": {
       "@/*": ["../*"],
       "@docs/*": ["./*"],
-      "vexip-ui/es/*": ["../components/*"],
       "vexip-ui": [".."]
     },
     "lib": ["esnext", "dom"]

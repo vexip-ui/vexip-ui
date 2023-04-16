@@ -36,6 +36,7 @@ export const layoutProps = buildProps({
   miniHeaderSign: booleanStringProp,
   verticalLinks: booleanStringProp,
   darkMode: booleanProp,
+  fixedMain: booleanProp,
   onReducedChange: eventProp<(target: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
   onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
@@ -94,6 +95,14 @@ export const layoutHeaderProps = buildProps({
 
 export type LayoutHeaderProps = ExtractPropTypes<typeof layoutHeaderProps>
 export type LayoutHeaderCProps = ConfigurableProps<LayoutHeaderProps, 'user' | 'menus'>
+
+export const layoutMainProps = buildProps({
+  tag: String,
+  fixed: booleanProp
+})
+
+export type LayoutMainProps = ExtractPropTypes<typeof layoutMainProps>
+export type LayoutMainCProps = ConfigurableProps<LayoutMainProps>
 
 export const layoutFooterProps = buildProps({
   tag: String,

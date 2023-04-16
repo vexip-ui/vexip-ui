@@ -99,7 +99,7 @@ export default defineComponent({
       parseHtml: false
     })
 
-    const zIndex = useZIndex()
+    const getIndex = useZIndex()
     const icons = useIcons()
 
     const predefinedIcons = computed(() => ({
@@ -136,7 +136,7 @@ export default defineComponent({
     })
 
     async function openToast(options: ToastOptions) {
-      state.zIndex = zIndex.value
+      state.zIndex = getIndex()
 
       await mounted
 

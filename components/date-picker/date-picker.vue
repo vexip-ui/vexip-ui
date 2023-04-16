@@ -113,53 +113,45 @@
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.ns('calendar-vars'),
-            nh.ns('time-picker-vars'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop="handleFocused"
-        >
-          <DatePanel
-            ref="panel"
-            :type="props.type"
-            :start-value="startState.dateValue"
-            :end-value="endState.dateValue"
-            :start-activated="startState.activated"
-            :end-activated="endState.activated"
-            :value-type="currentState"
-            :shortcuts="props.shortcuts"
-            :confirm-text="props.confirmText"
-            :cancel-text="props.cancelText"
-            :today="props.today"
-            :no-action="props.noAction"
-            :steps="props.steps"
-            :range="usingRange"
-            :min="props.min"
-            :max="props.max"
-            :disabled-date="isDateDisabled"
-            :disabled-time="isTimeDisabled"
-            :has-error="startError || endError"
-            :selecting-type="hoveredLarge ? 'end' : 'start'"
-            :locale="mergedLocale"
-            :week-start="props.weekStart"
-            @shortcut="handleShortcut"
-            @change="handlePanelChange"
-            @confirm="handleEnter"
-            @cancel="handleCancel"
-            @hover="handleDateHover"
-            @time-change="handleTimeChange"
-          ></DatePanel>
-        </div>
-      </transition>
-    </Portal>
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.ns('time-picker-vars'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop="handleFocused"
+    >
+      <DatePanel
+        ref="panel"
+        :type="props.type"
+        :start-value="startState.dateValue"
+        :end-value="endState.dateValue"
+        :start-activated="startState.activated"
+        :end-activated="endState.activated"
+        :value-type="currentState"
+        :shortcuts="props.shortcuts"
+        :confirm-text="props.confirmText"
+        :cancel-text="props.cancelText"
+        :today="props.today"
+        :no-action="props.noAction"
+        :steps="props.steps"
+        :range="usingRange"
+        :min="props.min"
+        :max="props.max"
+        :disabled-date="isDateDisabled"
+        :disabled-time="isTimeDisabled"
+        :has-error="startError || endError"
+        :selecting-type="hoveredLarge ? 'end' : 'start'"
+        :locale="mergedLocale"
+        :week-start="props.weekStart"
+        @shortcut="handleShortcut"
+        @change="handlePanelChange"
+        @confirm="handleEnter"
+        @cancel="handleCancel"
+        @hover="handleDateHover"
+        @time-change="handleTimeChange"
+      ></DatePanel>
+    </Popper>
   </div>
 </template>
 
@@ -168,7 +160,7 @@ import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import { Icon } from '@/components/icon'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
 import {
   useHover,
@@ -204,6 +196,7 @@ import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 import { datePickerTypes } from './symbol'
 
+import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType } from './symbol'
 
@@ -215,7 +208,7 @@ export default defineComponent({
     DateControl,
     DatePanel,
     Icon,
-    Portal
+    Popper
   },
   props: datePickerProps,
   emits: ['update:value', 'update:visible'],
@@ -322,10 +315,12 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)

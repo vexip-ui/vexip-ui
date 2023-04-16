@@ -22,7 +22,6 @@ $menu: map.merge(
     marker-bg-color: get-css-var('color-primary-base'),
     popper-bg-color: get-css-var('bg-color-base'),
     popper-b-color: get-css-var('border-color-light-2'),
-    popper-z-index: get-css-var('z-index-popper'),
     popper-radius: get-css-var('radius-base'),
     popper-s-color: get-css-var('shadow-color-base'),
     group-color: get-css-var('content-color-secondary'),
@@ -73,9 +72,6 @@ $menu: map.merge(
   }
 
   &__popper {
-    @include basis;
-
-    z-index: get-css-var('menu-popper-z-index');
     padding: 0;
     transform-origin: 0 0 !important;
 
@@ -301,6 +297,7 @@ $menu: map.merge(
   &__arrow {
     position: absolute;
     right: 22px;
+    color: get-css-var('menu-arrow-color');
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 

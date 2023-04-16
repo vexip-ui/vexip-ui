@@ -9,7 +9,7 @@
     @wheel.exact="handleWheel($event, mode === 'horizontal-exact' ? 'horizontal' : 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
-    <div :class="nh.be('extra')" :style="extraStyle">
+    <div v-if="$slots.extra" :class="nh.be('extra')">
       <slot name="extra" v-bind="getSlotParams()"></slot>
     </div>
     <ResizeObserver throttle :on-resize="handleResize">
@@ -181,7 +181,7 @@ export default defineComponent({
     const canAutoplay = computed(() => {
       return (
         mode.value !== 'both' &&
-        (isTrue(props.autoplay) || props.autoplay > 1000) &&
+        (isTrue(props.autoplay) || +props.autoplay > 1000) &&
         ((mode.value === 'horizontal' && enableXScroll.value) ||
           (mode.value === 'vertical' && enableYScroll.value))
       )
@@ -321,12 +321,12 @@ export default defineComponent({
         }
       ]
     })
-    const extraStyle = computed(() => {
-      return {
-        width: mode.value !== 'vertical' ? `${wrapper.width}px` : undefined,
-        height: mode.value !== 'horizontal' ? `${wrapper.height}px` : undefined
-      }
-    })
+    // const extraStyle = computed(() => {
+    //   return {
+    //     width: mode.value !== 'vertical' ? `${wrapper.width}px` : undefined,
+    //     height: mode.value !== 'horizontal' ? `${wrapper.height}px` : undefined
+    //   }
+    // })
 
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
@@ -766,7 +766,7 @@ export default defineComponent({
       style,
       wrapperClass,
       wrapperStyle,
-      extraStyle,
+      // extraStyle,
       xBarLength,
       yBarLength,
       enableXScroll,
