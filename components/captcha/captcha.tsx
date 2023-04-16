@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { toFixed, boundRange, random, debounce } from '@vexip-ui/utils'
+import { isNull, toFixed, boundRange, random, debounce } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 export default defineComponent({
@@ -16,11 +16,15 @@ export default defineComponent({
       loading: false,
       slideTarget: {
         default: null,
-        validator: value => value >= 0 || value <= 100
+        validator: value => isNull(value) || value >= 0 || value <= 100
       },
       tip: null,
       successTip: null,
-      image: null
+      image: null,
+      tolerance: {
+        default: null,
+        validator: value => isNull(value) || value >= 0
+      }
     })
 
     const nh = useNameHelper('captcha')
@@ -36,6 +40,7 @@ export default defineComponent({
     const canvas = ref<HTMLCanvasElement>()
 
     const usedTarget = computed(() => (props.type === 'slide' ? 100 : currentTarget.value))
+    const tolerance = computed(() => (props.type === 'slide' ? 0 : props.tolerance ?? 2))
 
     let widthLimit: number
     let leftStartAt: number
@@ -69,12 +74,15 @@ export default defineComponent({
         verifyPosition()
       },
       onEnd: () => {
-        if (currentLeft.value && currentLeft.value !== usedTarget.value) {
+        const matched = matchTarget(currentLeft.value)
+
+        if (currentLeft.value && !matched) {
           resetting.value = true
           currentLeft.value = 0
 
           emitEvent(props.onFail)
-        } else if (currentLeft.value === usedTarget.value) {
+        } else if (matched) {
+          currentLeft.value = usedTarget.value
           isSuccess.value = true
 
           emitEvent(props.onSuccess)
@@ -116,6 +124,9 @@ export default defineComponent({
         default:
           return locale.value.toRight
       }
+    })
+    const hasImage = computed(() => {
+      return (props.type === 'slide-image' || props.type === 'rotate-image') && props.image
     })
 
     watch(
@@ -165,15 +176,21 @@ export default defineComponent({
       currentTarget.value = props.slideTarget ?? random(80, 20)
     }
 
+    function matchTarget(value: number) {
+      return Math.abs(usedTarget.value - value) <= tolerance.value
+    }
+
     return () => {
       return (
         <div class={className.value} tabindex={-1}>
-          <div class={nh.be('image')}>
-            <ResizeObserver onResize={handleImageResize}>
-              <div class={nh.be('width-detector')}></div>
-            </ResizeObserver>
-            <canvas ref={canvas}></canvas>
-          </div>
+          {hasImage.value && (
+            <div class={nh.be('image')}>
+              <ResizeObserver onResize={handleImageResize}>
+                <div class={nh.be('width-detector')}></div>
+              </ResizeObserver>
+              <canvas ref={canvas}></canvas>
+            </div>
+          )}
           <div class={nh.be('slider')}>
             <div
               class={{
