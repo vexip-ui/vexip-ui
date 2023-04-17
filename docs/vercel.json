@@ -4,5 +4,8 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "buildCommand": "pnpm -w run build:common && pnpm -w run build && pnpm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "github": {
+    "silent": true
+  }
 }
