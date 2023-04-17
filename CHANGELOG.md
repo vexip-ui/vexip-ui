@@ -1,3 +1,23 @@
+## [2.1.15](https://github.com/vexip-ui/vexip-ui/compare/v2.1.14...v2.1.15) (2023-04-17)
+
+
+### 🐞 Bug Fixes
+
+* **layout:** fixed wrapper height when `fixed-main` ([f47d9a6](https://github.com/vexip-ui/vexip-ui/commit/f47d9a689b284a6eb1c73b6390b323442d0273f3))
+* **table:** ensure ignore when row drop to its parent ([3543510](https://github.com/vexip-ui/vexip-ui/commit/354351024c242119fc9f8043e941e21b321813e9))
+* **table:** ensure render indicator when using drag column ([388ffec](https://github.com/vexip-ui/vexip-ui/commit/388ffecaa9d77367fac775d049b5969770422dc3))
+* **table:** infinitely rerender when using primitive object in TableColumn ([19f5f55](https://github.com/vexip-ui/vexip-ui/commit/19f5f5534b38de71553e6ad5798ffe57b1a97d0b)), closes [#303](https://github.com/vexip-ui/vexip-ui/issues/303)
+
+
+### 👓 Types
+
+* **auto-complete:** improve scalability for events ([4b4357c](https://github.com/vexip-ui/vexip-ui/commit/4b4357cfad93b8aae2f605b12ec68ce865ac0605))
+* **breadcrumb:** improve scalability for events ([70b9224](https://github.com/vexip-ui/vexip-ui/commit/70b9224315019f5dddfc70686c4ea678c5900f18))
+* **cascader:** improve scalability for events ([9a67006](https://github.com/vexip-ui/vexip-ui/commit/9a6700675d7700886ed29b90c2219c4c81e94820))
+* **select:** improve scalability for events ([db88b69](https://github.com/vexip-ui/vexip-ui/commit/db88b69120ee366dad12583097d21067225e10a8))
+
+
+
 ## [2.1.14](https://github.com/vexip-ui/vexip-ui/compare/v2.1.13...v2.1.14) (2023-04-13)
 
 
