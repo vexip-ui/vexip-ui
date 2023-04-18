@@ -17,18 +17,18 @@ import type { TagType } from '@/components/tag'
 import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectFilter } from './symbol'
 
 type SelectEvent =
-  | ((value: string | number, data: SelectRawOption) => void)
-  | ((value: string, data: SelectRawOption) => void)
-  | ((value: number, data: SelectRawOption) => void)
+  | ((value: string | number, data: any) => void)
+  | ((value: string, data: any) => void)
+  | ((value: number, data: any) => void)
 
 type ChangeEvent =
-  | ((value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void)
-  | ((value: string | number, data: SelectRawOption) => void)
-  | ((value: string, data: SelectRawOption) => void)
-  | ((value: number, data: SelectRawOption) => void)
-  | ((values: (string | number)[], data: SelectRawOption[]) => void)
-  | ((values: string[], data: SelectRawOption[]) => void)
-  | ((values: number[], data: SelectRawOption[]) => void)
+  | ((value: SelectValue, data: any | any[]) => void)
+  | ((value: string | number, data: any) => void)
+  | ((value: string, data: any) => void)
+  | ((value: number, data: any) => void)
+  | ((values: (string | number)[], data: any[]) => void)
+  | ((values: string[], data: any[]) => void)
+  | ((values: number[], data: any[]) => void)
 
 export const selectProps = buildProps({
   size: sizeProp,

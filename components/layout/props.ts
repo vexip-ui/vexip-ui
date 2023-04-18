@@ -39,8 +39,8 @@ export const layoutProps = buildProps({
   fixedMain: booleanProp,
   onReducedChange: eventProp<(target: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
-  onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-  onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
+  onMenuSelect: eventProp<(label: string, meta: any) => void>(),
+  onUserAction: eventProp<(label: string, meta: any) => void>(),
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
   onColorChange: eventProp<(color: string) => void>(),
   onToggleTheme: eventProp<(isDark: boolean) => void>()
@@ -61,7 +61,7 @@ export const layoutAsideProps = buildProps({
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
-  onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
+  onMenuSelect: eventProp<(label: string, meta: any) => void>()
 })
 
 export type LayoutAsideProps = ExtractPropTypes<typeof layoutAsideProps>
@@ -85,11 +85,11 @@ export const layoutHeaderProps = buildProps({
   darkMode: booleanProp,
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
   onColorChange: eventProp<(color: string) => void>(),
-  onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
+  onUserAction: eventProp<(label: string, meta: any) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
   onDropChange: eventProp<(target: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
-  onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
+  onMenuSelect: eventProp<(label: string, meta: any) => void>(),
   onToggleTheme: eventProp<(isDark: boolean) => void>()
 })
 

@@ -208,14 +208,17 @@ export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {})
 
     const id = item[keyField]
 
-    if (hasRootId ? item[parentField] === rootId : !item[parentField]) {
+    if (parentField && (hasRootId ? item[parentField] === rootId : !item[parentField])) {
       (item as any)[parentField] = rootId
     }
 
     for (let i = 0, len = children.length; i < len; ++i) {
       const child = children[i]
 
-      child[parentField] = id
+      if (parentField) {
+        child[parentField] = id
+      }
+
       loop.push(child)
     }
 
