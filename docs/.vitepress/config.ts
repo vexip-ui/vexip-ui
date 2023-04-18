@@ -6,7 +6,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
-import zipPlugin from './plugins/zip'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
 import { getGuideConfig } from './config/guide'
@@ -68,8 +67,7 @@ export default <UserConfig>{
       i18n({
         compositionOnly: false,
         include: resolve(docsRoot, 'i18n')
-      }),
-      zipPlugin()
+      })
     ]
   },
   head: [
@@ -134,7 +132,7 @@ function getAsideMenus() {
           link: `/component/${toKebabCase(component.name)}`,
           i18n: `component.${component.name}`,
           since: component.since,
-          orgin: component.name
+          origin: component.name
         }))
       }
     })

@@ -33,10 +33,13 @@ const menus = computed<AsideMenuItem[]>(() => {
   return []
 })
 const flattedMenus = computed(() => {
-  return flatTree(menus.value, { keyField: 'key', childField: 'items' }).filter(
-    menu => !menu.items?.length && menu.link
-  )
+  return flatTree(menus.value, {
+    keyField: 'key',
+    childField: 'items',
+    parentField: '' as any
+  }).filter(menu => !menu.items?.length && menu.link)
 })
+const hasGroup = computed(() => !!menus.value.find(menu => menu.items?.length))
 
 watch(
   () => route.path,
@@ -68,6 +71,7 @@ function selectMenu(_: string, meta: AsideMenuItem) {
     v-model:active="currentMenu"
     marker-type="left"
     class="aside-menu"
+    :style="{ marginTop: hasGroup ? undefined : '40px' }"
     @select="selectMenu"
   >
     <template v-for="menu in menus" :key="menu.key">
@@ -119,3 +123,32 @@ function selectMenu(_: string, meta: AsideMenuItem) {
     </template>
   </Menu>
 </template>
+
+<style scoped lang="scss">
+.aside-menu {
+  &__tag {
+    margin-left: 4px;
+    font-size: 10px;
+    transform: scale(0.8);
+  }
+
+  &__sub-name {
+    margin-left: 8px;
+    color: var(--vxp-content-color-secondary);
+    transition: var(--vxp-transition-color);
+
+    .vxp-menu__label:hover & {
+      color: var(--vxp-content-color-secondary);
+    }
+
+    .vxp-menu__item--selected .vxp-menu__label & {
+      color: var(--vxp-color-primary-opacity-3);
+    }
+  }
+
+  .vxp-menu__title {
+    display: flex;
+    align-items: center;
+  }
+}
+</style>

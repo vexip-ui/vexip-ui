@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { GithubB, Language } from '@vexip-ui/icons'
+// import { vexipuiLocale } from '../i18n'
 
 import ThemeSwitch from './theme-switch.vue'
 
@@ -32,8 +33,8 @@ function changeLanguage(lang: string) {
 </script>
 
 <template>
-  <Dropdown class="language" trigger="click">
-    <button type="button" class="language-trigger">
+  <Dropdown class="language" trigger="click" drop-class="language__drop">
+    <button type="button" class="language__trigger">
       <Icon label="language" :scale="2">
         <Language></Language>
       </Icon>
@@ -70,7 +71,7 @@ function changeLanguage(lang: string) {
   margin-right: 24px;
   cursor: pointer;
 
-  &-trigger {
+  &__trigger {
     display: flex;
     padding: 0;
     color: var(--vxp-content-color-base);
@@ -78,6 +79,10 @@ function changeLanguage(lang: string) {
     background-color: transparent;
     border: 0;
   }
+}
+
+:global(.language__drop) {
+  z-index: calc(var(--header-z-index) + 1) !important;
 }
 
 .theme {

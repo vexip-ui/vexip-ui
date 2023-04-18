@@ -106,7 +106,7 @@ function toComponentDoc(fullName: string) {
 @use '../style/mixins.scss' as *;
 
 .vxp-layout__header {
-  z-index: 3000;
+  z-index: var(--header-z-index);
   padding: 0;
 
   &--reduced {

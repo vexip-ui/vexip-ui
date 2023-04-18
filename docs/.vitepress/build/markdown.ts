@@ -11,11 +11,12 @@ export function markdownItSetup(md: MarkdownIt) {
     .use(useContainer)
     .use(useCodeWrapper)
     .use(useTableWrapper)
+    .use(useTag)
 }
 
 function renderPermalink(
   slug: string,
-  opts: anchor.AnchorOptions,
+  _opts: anchor.AnchorOptions,
   state: StateCore,
   index: number
 ) {
@@ -113,5 +114,39 @@ function useTableWrapper(md: MarkdownIt) {
   }
   md.renderer.rules.table_close = () => {
     return '</table></div>'
+  }
+}
+
+function useTag(md: MarkdownIt) {
+  const tagRE = /^\^\[([^\]]*)\](?:\(([^)]*)\))?/
+  const typeShortcuts: Record<string, string> = {
+    '!d': 'error'
+  }
+
+  md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
+    const raw = state.src.slice(state.pos, state.posMax)
+    const matched = raw.match(tagRE)
+
+    if (!matched) return false
+    if (silent) return true
+
+    const token = state.push('tag', 'tag', 0)
+
+    token.content = matched[1].trim()
+    token.info = (matched[2] || '').trim()
+    token.level = state.level
+
+    state.pos += matched[0].length
+
+    return true
+  })
+
+  md.renderer.rules.tag = (tokens, index) => {
+    const token = tokens[index]
+    const { content, info } = token
+
+    const type = typeShortcuts[info] || info
+
+    return `<Tag type="${type}" simple>${content}</Tag>`
   }
 }
