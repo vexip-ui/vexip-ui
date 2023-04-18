@@ -59,11 +59,11 @@ export default defineComponent({
       color: '',
       miniHeaderSign: 'lg',
       verticalLinks: 'md',
-      darkMode: null
+      darkMode: null,
+      fixedMain: false
     })
 
     const nh = useNameHelper('layout')
-    const scrollHeight = ref(0)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
@@ -297,39 +297,41 @@ export default defineComponent({
     }
 
     function renderAside() {
-      if (slots.aside) {
-        return slots.aside(getSlotParams())
-      }
-
       if (props.noAside) {
         return null
       }
 
       return (
-        <div class={[nh.be('sider'), !expandMatched.value && nh.bem('sider', 'away')]}>
-          <LayoutAside
-            ref={aside}
-            v-model:reduced={asideReduced.value}
-            menus={props.menus}
-            menu-props={props.menuProps}
-            fixed={props.asideFixed}
-            onReducedChange={toggleReduce}
-            onMenuSelect={handleMenuSelect}
-            {...{
-              onWheel: stopAndPrevent,
-              onMousemove: stopAndPrevent
-            }}
-          >
-            {{
-              top:
-                slots['aside-top'] ||
-                slots.asideTop ||
-                (() => (!signInHeader.value ? renderSign() : null)),
-              default: slots['aside-main'] || slots.asideMain || null,
-              bottom: slots['aside-bottom'] || slots.asideBottom || null,
-              expand: slots['aside-expand'] || slots.asideExpand || null
-            }}
-          </LayoutAside>
+        <div
+          class={[nh.be('sider'), !expandMatched.value && nh.bem('sider', 'away')]}
+          onWheel={stopAndPrevent}
+          onMousemove={stopAndPrevent}
+        >
+          {slots.aside
+            ? (
+                slots.aside(getSlotParams())
+              )
+            : (
+            <LayoutAside
+              ref={aside}
+              v-model:reduced={asideReduced.value}
+              menus={props.menus}
+              menu-props={props.menuProps}
+              fixed={props.asideFixed}
+              onReducedChange={toggleReduce}
+              onMenuSelect={handleMenuSelect}
+            >
+              {{
+                top:
+                  slots['aside-top'] ||
+                  slots.asideTop ||
+                  (() => (!signInHeader.value ? renderSign() : null)),
+                default: slots['aside-main'] || slots.asideMain || null,
+                bottom: slots['aside-bottom'] || slots.asideBottom || null,
+                expand: slots['aside-expand'] || slots.asideExpand || null
+              }}
+            </LayoutAside>
+              )}
         </div>
       )
     }
@@ -340,7 +342,7 @@ export default defineComponent({
       }
 
       return (
-        <LayoutMain style={{ minHeight: `${scrollHeight.value}px` }}>
+        <LayoutMain fixed={props.fixedMain}>
           {{
             default: slots.main
           }}
@@ -379,7 +381,7 @@ export default defineComponent({
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >
-          <CustomTag class={nh.be('wrapper')}>
+          <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
             {currentSignType.value === 'header' && renderHeader()}
             {renderAside()}
             <section

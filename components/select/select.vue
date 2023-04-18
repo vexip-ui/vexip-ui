@@ -302,7 +302,10 @@ import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectValue, SelectOptionState } from './symbol'
+import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
+
+type SelectListener = (value: string | number, data: SelectRawOption) => void
+type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -948,7 +951,11 @@ export default defineComponent({
         cachedSelected.set(option.value, option)
       }
 
-      emitEvent(props[props.multiple && selected ? 'onCancel' : 'onSelect'], value, option.data)
+      emitEvent(
+        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectListener,
+        value,
+        option.data
+      )
       handleChange(option)
 
       if (props.multiple) {
@@ -981,7 +988,7 @@ export default defineComponent({
 
         setFieldValue(emittedValue)
         emitEvent(
-          props.onChange,
+          props.onChange as ChangeListener,
           emittedValue,
           emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
@@ -1000,7 +1007,7 @@ export default defineComponent({
           emittedValue = option.value
 
           setFieldValue(emittedValue)
-          emitEvent(props.onChange, emittedValue, option.data)
+          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
           emit('update:value', emittedValue)
           emit('update:label', currentLabels.value[0])
           validateField()
@@ -1040,7 +1047,7 @@ export default defineComponent({
         emittedValue = props.multiple ? [] : ''
 
         syncInputValue()
-        emitEvent(props.onChange, emittedValue, props.multiple ? [] : '')
+        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
         emit('update:value', emittedValue)
         emitEvent(props.onClear)
         clearField(emittedValue!)

@@ -1,5 +1,5 @@
 diff --git a/writer-opts.js b/writer-opts.js
-index d5de1a3ade560a49022eb96095aa67374141ddbb..e94d832a45cb2cbcec2c084d6486206111cd2bd5 100644
+index d5de1a3ade560a49022eb96095aa67374141ddbb..9ee7d102917c8b3a4aea73605ea91d089ec89b34 100644
 --- a/writer-opts.js
 +++ b/writer-opts.js
 @@ -29,32 +29,38 @@ function getWriterOpts () {
@@ -22,7 +22,7 @@ index d5de1a3ade560a49022eb96095aa67374141ddbb..e94d832a45cb2cbcec2c084d64862061
 +        commit.type = '⚡ Performance Improvements'
 +      } else if (commit.type === 'refactor') {
 +        commit.type = '🔨 Code Refactoring'
-+      } else if (commit.type === 'type') {
++      } else if (commit.type === 'type' || commit.type === 'types') {
 +        commit.type = '👓 Types'
        } else if (commit.type === 'revert' || commit.revert) {
 -        commit.type = 'Reverts'
@@ -36,9 +36,10 @@ index d5de1a3ade560a49022eb96095aa67374141ddbb..e94d832a45cb2cbcec2c084d64862061
 -        commit.type = 'Styles'
 -      } else if (commit.type === 'refactor') {
 -        commit.type = 'Code Refactoring'
-+        commit.type = '🎨 Styles'
-       } else if (commit.type === 'test') {
+-      } else if (commit.type === 'test') {
 -        commit.type = 'Tests'
++        commit.type = '🎨 Styles'
++      } else if (commit.type === 'test' || commit.type === 'tests') {
 +        commit.type = '🩺 Tests'
        } else if (commit.type === 'build') {
 -        commit.type = 'Build System'

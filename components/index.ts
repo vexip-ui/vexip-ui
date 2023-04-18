@@ -50,6 +50,7 @@ import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
+import { LayoutMain } from './layout-main'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -167,6 +168,7 @@ const components = [
   LayoutAside,
   LayoutFooter,
   LayoutHeader,
+  LayoutMain,
   Linker,
   Masker,
   Menu,
@@ -300,6 +302,7 @@ export * from './layout'
 export * from './layout-aside'
 export * from './layout-footer'
 export * from './layout-header'
+export * from './layout-main'
 export * from './linker'
 export * from './loading'
 export * from './masker'

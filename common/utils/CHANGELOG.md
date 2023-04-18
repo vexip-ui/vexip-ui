@@ -1,3 +1,12 @@
+# [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.10.2...utils@1.11.0) (2023-04-13)
+
+
+### ✨ Features
+
+* **utils:** add normalizePath method ([4411b49](https://github.com/vexip-ui/vexip-ui/commit/4411b496bef1548d7c48c2dc8999d642dd1f2b75))
+
+
+
 ## [1.10.2](https://github.com/vexip-ui/vexip-ui/compare/utils@1.10.1...utils@1.10.2) (2023-04-03)
 
 ## [1.10.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.10.0...utils@1.10.1) (2023-03-23)

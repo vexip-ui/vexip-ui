@@ -98,6 +98,9 @@ import { autoCompleteProps } from './props'
 
 import type { AutoCompleteRawOption } from './symbol'
 
+type ChangeListener = (value: string | number, data: AutoCompleteRawOption) => void
+type EnterListener = (value: string | number) => void
+
 export default defineComponent({
   name: 'AutoComplete',
   components: {
@@ -291,7 +294,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emitEvent(props.onSelect, value, data)
+      emitEvent(props.onSelect as ChangeListener, value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -326,7 +329,7 @@ export default defineComponent({
       const option = optionStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
-      emitEvent(props.onChange, currentValue.value, option?.data || null!)
+      emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
       validateField()
 
@@ -398,7 +401,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emitEvent(props.onEnter, currentValue.value)
+      emitEvent(props.onEnter as EnterListener, currentValue.value)
       control.value?.blur()
       visible.value = false
     }

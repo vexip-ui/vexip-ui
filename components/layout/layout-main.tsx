@@ -1,20 +1,20 @@
 import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { layoutMainProps } from './props'
 
 export default defineComponent({
   name: 'LayoutMain',
-  props: {
-    tag: String
-  },
+  props: layoutMainProps,
   setup(_props, { slots }) {
-    const props = useProps('layout', _props, {
-      tag: 'main'
+    const props = useProps('layoutMain', _props, {
+      tag: 'main',
+      fixed: false
     })
 
     const nh = useNameHelper('layout')
 
     const className = computed(() => {
-      return [nh.be('main')]
+      return [nh.be('main'), props.fixed && nh.bem('main', 'fixed')]
     })
 
     return () => {

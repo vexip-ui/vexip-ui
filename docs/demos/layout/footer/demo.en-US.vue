@@ -5,11 +5,11 @@
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
-    copyright="Vexip UI - by qmhc"
+    copyright="Vexip UI - made with ❤️ by qmhc"
     :links="links"
   >
     <template #main>
-      <div style="width: 100%; height: 800px; padding: 20px;">
+      <div style="width: 100%; height: 800px; padding: 20px">
         Scroll to the bottom
       </div>
     </template>

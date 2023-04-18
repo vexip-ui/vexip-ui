@@ -1,10 +1,19 @@
 import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 import type { LogLevel } from 'vite'
 
 const logLevel = process.env.LOG_LEVEL
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
+
+const externalPkgs = ['@vue'].concat(
+  Object.keys(pkg.dependencies || {}),
+  Object.keys(pkg.peerDependencies || {})
+)
+const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
 export default defineConfig(async () => {
   return {
@@ -18,7 +27,7 @@ export default defineConfig(async () => {
       },
       rollupOptions: {
         input: [resolve(__dirname, 'vue/index.ts')],
-        external: ['vue'],
+        external,
         output: [
           {
             format: 'cjs',
