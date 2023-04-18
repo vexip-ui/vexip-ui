@@ -1,9 +1,9 @@
-import '../style/index.scss'
+import './style/index.scss'
 
 import { install } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
 import prismjs from 'prismjs'
-import Layout from '../app.vue'
+import Layout from './app.vue'
 import NotFound from '../../views/not-found.vue'
 import Markdown from '../../common/markdown.vue'
 import AudioButton from '../../common/audio-button.vue'

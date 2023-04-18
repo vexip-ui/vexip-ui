@@ -88,9 +88,14 @@ export default <UserConfig>{
   },
   themeConfig: {
     nav: [
-      { key: 'guides', i18n: 'common.guides', link: '/guide/setup' },
-      { key: 'components', i18n: 'common.components', link: '/component/button' },
-      { key: 'playground', i18n: 'common.playground', to: 'https://playground.vexipui.com' }
+      { key: 'guides', i18n: 'common.guides', link: '/guide/setup', activeMatch: '/guide/' },
+      {
+        key: 'components',
+        i18n: 'common.components',
+        link: '/component/button',
+        activeMatch: '/component/'
+      },
+      { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' }
     ],
     asideMenus: getAsideMenus(),
     outline: {

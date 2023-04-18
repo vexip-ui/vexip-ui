@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
+import { ref } from 'vue'
 import MajorColor from './major-color.vue'
 import Wave from './wave.vue'
 import { Message } from 'vexip-ui'
@@ -7,12 +7,11 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vitepress'
 import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
 
-const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
+// const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'homepage'
-const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
-const language = computed(() => globalState.language)
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const wave = ref<InstanceType<typeof Wave>>()
 const sign = ref<HTMLElement>()
@@ -22,11 +21,11 @@ const waveTop = ref(494)
 const demoPrefix = ref(getDemoPrefix())
 
 function getStarted() {
-  router.go(`/${globalState.language}/guides/setup`)
+  router.go(`/${locale.value}/guide/setup`)
 }
 
 function getComponents() {
-  router.go(`/${globalState.language}/components`)
+  router.go(`/${locale.value}/component`)
 }
 
 function refreshWave() {
@@ -50,7 +49,7 @@ function handleSvaePrefix() {
     <NativeScroll use-y-bar @resize="handleResize">
       <div :class="`${prefix}__wave`">
         <div :class="`${prefix}__wave-block`"></div>
-        <Wave ref="wave"></Wave>
+        <Wave ref="wave" style="position: relative"></Wave>
       </div>
       <div ref="sign" :class="`${prefix}__sign`">
         <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
@@ -79,19 +78,12 @@ function handleSvaePrefix() {
           </Button>
         </template>
       </Input>
-      <MajorColor
-        :class="`${prefix}__colors`"
-        :language="language"
-        @change="refreshWave"
-      ></MajorColor>
+      <MajorColor :class="`${prefix}__colors`" @change="refreshWave"></MajorColor>
     </NativeScroll>
-    <Linker v-if="language === 'zh-CN'" class="cn-record" to="https://beian.miit.gov.cn/">
-      粤ICP备2020125887号-1
-    </Linker>
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .homepage {
   --wave-top: 494px;
 
@@ -114,10 +106,6 @@ function handleSvaePrefix() {
     &-block {
       height: var(--wave-top);
       background-image: linear-gradient(to bottom, transparent, var(--vxp-color-primary-opacity-8));
-    }
-
-    .wave {
-      position: relative;
     }
   }
 
@@ -180,13 +168,6 @@ function handleSvaePrefix() {
   &__colors {
     position: relative;
     width: 100%;
-  }
-
-  .cn-record {
-    position: absolute;
-    right: 15px;
-    bottom: 10px;
-    color: var(--vxp-content-color-placeholder);
   }
 }
 </style>

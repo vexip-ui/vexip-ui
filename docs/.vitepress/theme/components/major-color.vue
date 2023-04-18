@@ -5,13 +5,6 @@ import { isClient, randomColor } from '@vexip-ui/utils'
 import { useI18n } from 'vue-i18n'
 import { computeSeriesColors } from '../common/series-color'
 
-defineProps({
-  language: {
-    type: String,
-    default: __ROLLBACK_LANG__
-  }
-})
-
 const emit = defineEmits(['change'])
 const { t } = useI18n()
 

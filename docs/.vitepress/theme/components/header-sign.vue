@@ -1,0 +1,83 @@
+<script setup lang="ts">
+import { useRouter } from 'vitepress'
+import { useI18n } from 'vue-i18n'
+
+const router = useRouter()
+const i18n = useI18n({ useScope: 'global' })
+
+const version = __VERSION__
+
+function toHomepage() {
+  router.go(`/${i18n.locale.value}/`)
+}
+</script>
+
+<template>
+  <a class="sign" @click="toHomepage">
+    <img class="sign__logo" src="/vexip-ui.svg" alt="vexip-ui" />
+    <span class="sign__title"> Vexip UI </span>
+    <Tag class="sign__version">
+      {{ `v${version}` }}
+    </Tag>
+  </a>
+</template>
+
+<style scoped lang="scss">
+@use '../style/mixins.scss' as *;
+
+.sign {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: 100%;
+  padding: 0 16px 0 20px;
+  font-family: Avenir, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+
+  @include query-media('lg') {
+    justify-content: center;
+    width: var(--aside-width);
+    padding: 0;
+  }
+
+  @include query-media('xl') {
+    width: var(--aside-width-large);
+  }
+
+  &,
+  &:hover {
+    color: var(--vxp-content-color-primary);
+  }
+
+  &__logo {
+    height: 32px;
+
+    @include query-media('lg') {
+      margin-right: 14px;
+    }
+  }
+
+  &__title {
+    display: none;
+    white-space: nowrap;
+
+    @include query-media('lg') {
+      display: block;
+    }
+  }
+
+  &__version {
+    display: none;
+
+    @include query-media('lg') {
+      display: block;
+      margin: 2px 0 0 6px;
+      transform: scale(0.8);
+    }
+  }
+}
+</style>
