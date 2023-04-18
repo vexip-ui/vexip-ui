@@ -20,9 +20,9 @@ export const menuProps = buildProps({
   router: Object as PropType<Router>,
   manualRoute: booleanProp,
   indent: [String, Number],
-  onSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-  onExpand: eventProp<(label: string, meta: Record<string, any>) => void>(),
-  onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()
+  onSelect: eventProp<(label: string, meta: any) => void>(),
+  onExpand: eventProp<(label: string, meta: any) => void>(),
+  onReduce: eventProp<(label: string, meta: any) => void>()
 })
 
 export type MenuProps = ExtractPropTypes<typeof menuProps>
