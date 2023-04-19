@@ -159,7 +159,7 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} height={scrollHeight.value}>
+          <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
             {slots.default
               ? (
                   slots.default(getSlotParams())
