@@ -59,7 +59,7 @@ function openOutsidePage(url?: string) {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '../style/mixins.scss' as *;
 
 .navigation {

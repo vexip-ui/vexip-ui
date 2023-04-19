@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+const { t } = useI18n({ useScope: 'global' })
+const router = useRouter()
+
+function backHomepage() {
+  router.push('/')
+}
+</script>
+
 <template>
   <section class="not-found">
     <span class="not-found__content">
@@ -12,19 +24,7 @@
   </section>
 </template>
 
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-
-const { t } = useI18n({ useScope: 'global' })
-const router = useRouter()
-
-function backHomepage() {
-  router.push('/')
-}
-</script>
-
-<style scoped lang="scss">
+<style lang="scss">
 .not-found {
   display: flex;
   flex-direction: column;

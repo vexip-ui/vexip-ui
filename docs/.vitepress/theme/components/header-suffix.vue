@@ -63,7 +63,7 @@ function changeLanguage(lang: string) {
   </Linker>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '../style/mixins.scss' as *;
 
 .language {
@@ -79,10 +79,10 @@ function changeLanguage(lang: string) {
     background-color: transparent;
     border: 0;
   }
-}
 
-:global(.language__drop) {
-  z-index: calc(var(--header-z-index) + 1) !important;
+  &__drop {
+    z-index: calc(var(--header-z-index) + 1) !important;
+  }
 }
 
 .theme {

@@ -15,7 +15,7 @@ export function ussTocAnchor(initLevel: 2 | 3 = 2, wrapper = ref<HTMLElement>())
 
     Array.from(
       wrapper.value.querySelectorAll(
-        `.demo, :not(.demo__description) > .markdown h${level}.anchor > .anchor__title[id]`
+        `.demo, :not(.demo__description) > h${level}.anchor > .anchor__title[id]`
       )
     ).forEach(el => {
       let id: string

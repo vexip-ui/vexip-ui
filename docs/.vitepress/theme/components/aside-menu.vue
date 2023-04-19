@@ -124,7 +124,7 @@ function selectMenu(_: string, meta: AsideMenuItem) {
   </Menu>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .aside-menu {
   &__tag {
     margin-left: 4px;

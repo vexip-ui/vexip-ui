@@ -45,12 +45,15 @@ export default <UserConfig>{
       include: ['@vexip-ui/icons']
     },
     esbuild: {
-      drop: ['debugger'],
-      pure: ['console.log']
+      drop: useServer ? undefined : ['debugger'],
+      pure: useServer ? undefined : ['console.log']
     },
     server: {
       port: 9000,
-      host: '0.0.0.0'
+      host: '0.0.0.0',
+      fs: {
+        allow: ['..']
+      }
     },
     build: {
       reportCompressedSize: false,

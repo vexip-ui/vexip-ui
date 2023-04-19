@@ -1,26 +1,3 @@
-<template>
-  <Row ref="wrapper" tag="article" class="article">
-    <ResizeObserver @resize="handleContentResize">
-      <Column flex="auto" style="min-width: 0">
-        <slot></slot>
-      </Column>
-    </ResizeObserver>
-    <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
-      <Anchor
-        v-model:active="currentActive"
-        class="toc-anchor"
-        :offset="15"
-        bind-hash
-        :style="{ visibility: !loading ? undefined : 'hidden' }"
-      >
-        <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
-          {{ item.name }}
-        </AnchorLink>
-      </Anchor>
-    </Column>
-  </Row>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from '../common/toc-anchor'
@@ -91,6 +68,29 @@ function handleContentResize(entry: ResizeObserverEntry) {
   refreshAnchor()
 }
 </script>
+
+<template>
+  <Row ref="wrapper" tag="article" class="article">
+    <ResizeObserver @resize="handleContentResize">
+      <Column flex="auto" style="min-width: 0">
+        <slot></slot>
+      </Column>
+    </ResizeObserver>
+    <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
+      <Anchor
+        v-model:active="currentActive"
+        class="toc-anchor"
+        :offset="15"
+        bind-hash
+        :style="{ visibility: !loading ? undefined : 'hidden' }"
+      >
+        <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
+          {{ item.name }}
+        </AnchorLink>
+      </Anchor>
+    </Column>
+  </Row>
+</template>
 
 <style lang="scss">
 @use '../style/mixins.scss' as *;

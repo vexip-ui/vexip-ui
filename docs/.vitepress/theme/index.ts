@@ -9,6 +9,7 @@ import { computeSeriesColors } from './common/series-color'
 
 import Layout from './app.vue'
 import NotFound from './components/not-found.vue'
+import Demo from './components/demo.vue'
 import AudioButton from './components/audio-button.vue'
 import IconDemo from './components/icon-demo.vue'
 
@@ -47,6 +48,7 @@ function syncThemeColors() {
 
 function enhanceApp(app: App) {
   app
+    .component('Demo', Demo)
     .component('AudioButton', AudioButton)
     .component('IconDemo', IconDemo)
     .use(i18n)

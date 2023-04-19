@@ -1,8 +1,19 @@
+<script setup lang="ts">
+import IconLoading from './icon-loading.vue'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n({ useScope: 'global' })
+
+const icons = {
+  loading: IconLoading
+}
+</script>
+
 <template>
   <Icon :scale="2">
     <IconLoading></IconLoading>
   </Icon>
-  <ConfigProvider :icons="icons" :locale="{ locale: language }">
+  <ConfigProvider :icons="icons" :locale="{ locale: locale as string }">
     <Space vertical>
       <Button type="primary" loading>
         Loading
@@ -11,16 +22,3 @@
     </Space>
   </ConfigProvider>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import IconLoading from './icon-loading.vue'
-import { useI18n } from 'vue-i18n'
-
-const i18n = useI18n({ useScope: 'global' })
-const language = computed(() => i18n.locale.value as string)
-
-const icons = {
-  loading: IconLoading
-}
-</script>

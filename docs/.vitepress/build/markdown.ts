@@ -65,17 +65,18 @@ function useLinkTarget(md: MarkdownIt, target = '_blank') {
 }
 
 function useContainer(md: MarkdownIt) {
-  md.use(...createContainer('info'))
-    .use(...createContainer('warning'))
-    .use(...createContainer('error'))
+  md.use(...createAlertContainer('info'))
+    .use(...createAlertContainer('warning'))
+    .use(...createAlertContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1 ? '<div v-pre>\n' : '</div>\n'
       }
     })
+    .use(...createDemoContainer())
 }
 
-function createContainer(type: string) {
+function createAlertContainer(type: string) {
   return [
     container,
     type,
@@ -84,13 +85,33 @@ function createContainer(type: string) {
         const token = tokens[index]
 
         if (token.nesting === 1) {
-          const title = token.info.replace(type, '').trim()
+          const title = token.info.slice(type.length).trim()
           const titleProp = title ? `title="${title}"` : `:title="$t('alert.${type}')"`
 
           return `<Alert type="${type}" icon ${titleProp}>\n`
         }
 
         return '</Alert>\n'
+      }
+    }
+  ] as const
+}
+
+function createDemoContainer() {
+  return [
+    container,
+    'demo',
+    {
+      render(tokens: Token[], index: number) {
+        const token = tokens[index]
+
+        if (token.nesting === 1) {
+          const src = token.info.slice('demo'.length).trim()
+
+          return `<Demo src="${src}">\n`
+        } else {
+          return '</Demo>\n'
+        }
       }
     }
   ] as const

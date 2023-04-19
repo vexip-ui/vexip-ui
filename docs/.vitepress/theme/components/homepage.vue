@@ -83,7 +83,7 @@ function handleSvaePrefix() {
   </section>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .homepage {
   --wave-top: 494px;
 

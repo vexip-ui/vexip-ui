@@ -1,12 +1,3 @@
-<template>
-  <button type="button" class="audio-button" @click="handleClick">
-    <Icon :scale="1.2">
-      <HeadphonesSimple></HeadphonesSimple>
-    </Icon>
-    <audio ref="audio" :src="src"></audio>
-  </button>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { HeadphonesSimple } from '@vexip-ui/icons'
@@ -26,6 +17,15 @@ function handleClick() {
   audio.value.play()
 }
 </script>
+
+<template>
+  <button type="button" class="audio-button" @click="handleClick">
+    <Icon :scale="1.2">
+      <HeadphonesSimple></HeadphonesSimple>
+    </Icon>
+    <audio ref="audio" :src="src"></audio>
+  </button>
+</template>
 
 <style lang="scss">
 .audio-button {

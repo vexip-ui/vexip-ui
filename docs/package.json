@@ -4,7 +4,7 @@
   "scripts": {
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "vitepress dev",
+    "serve": "cross-env NODE_ENV=development vitepress dev",
     "serve:ssr": "cross-env SSR=true tsx server.ts"
   },
   "type": "module",
