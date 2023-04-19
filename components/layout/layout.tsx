@@ -391,7 +391,8 @@ export default defineComponent({
                 {
                   [nh.bem('section', 'away')]: expandMatched.value,
                   [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: state.locked
+                  [nh.bem('section', 'locked')]: state.locked,
+                  [nh.bem('section', 'fixed')]: props.fixedMain
                 }
               ]}
             >
