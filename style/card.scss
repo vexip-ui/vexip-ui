@@ -48,8 +48,10 @@ $card: map.merge(
 
   &__header {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: space-between;
+    min-height: 0;
     padding: 14px 16px;
     border-bottom: get-css-var('card-divider');
   }
@@ -59,6 +61,8 @@ $card: map.merge(
   }
 
   &__content {
+    flex: 1 0 auto;
+    min-height: 0;
     padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding');
   }
 }
