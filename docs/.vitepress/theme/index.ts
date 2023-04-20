@@ -8,7 +8,6 @@ import { langOptions, i18n, vexipuiLocale } from './i18n'
 import { computeSeriesColors } from './common/series-color'
 
 import Layout from './app.vue'
-import NotFound from './components/not-found.vue'
 import Demo from './components/demo.vue'
 import AudioButton from './components/audio-button.vue'
 import IconDemo from './components/icon-demo.vue'
@@ -19,7 +18,6 @@ import type { App } from 'vue'
 import type { Router } from 'vitepress'
 
 export default {
-  NotFound,
   Layout,
   enhanceApp({ app, router }: { app: App, router: Router }) {
     (prismjs as any).manual = false

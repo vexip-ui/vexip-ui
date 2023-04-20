@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vitepress'
 
 const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 
 function backHomepage() {
-  router.push('/')
+  router.go('/')
 }
 </script>
 
@@ -29,8 +29,7 @@ function backHomepage() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
-  padding-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
   background-image: linear-gradient(to bottom, transparent, var(--vxp-color-primary-opacity-8));
 
   &__content {

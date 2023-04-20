@@ -11,6 +11,7 @@ import HeaderSign from './components/header-sign.vue'
 import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
+import NotFound from './components/not-found.vue'
 
 const { theme, page } = useData()
 
@@ -57,7 +58,7 @@ function toComponentDoc(fullName: string) {
 <template>
   <Layout
     sign-type="header"
-    :no-aside="page.frontmatter.homepage"
+    :no-aside="page.frontmatter.homepage || page.isNotFound"
     :style="{
       height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width-large)',
@@ -96,6 +97,7 @@ function toComponentDoc(fullName: string) {
       <span></span>
     </template>
     <Homepage v-if="page.frontmatter.homepage"></Homepage>
+    <NotFound v-else-if="page.isNotFound"></NotFound>
     <Article v-else :anchor-level="outline">
       <Content class="markdown"></Content>
     </Article>
