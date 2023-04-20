@@ -1,45 +1,43 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
-import { docDir, rootDir } from './utils'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
 
-const pkg = JSON.parse(readFileSync(resolve(rootDir, 'package.json'), 'utf-8'))
+const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 
-export default defineConfig(({ mode }) => {
-  const useServer = mode === 'development'
+export default defineConfig(({ command }) => {
+  const isServe = command === 'serve'
 
   return {
     define: {
-      __SSR__: JSON.stringify(process.env.SSR === 'true'),
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
       __VERSION__: JSON.stringify(pkg.version || '')
     },
     resolve: {
       alias: [
-        { find: /^@docs\/(.+)/, replacement: resolve(docDir, '$1') },
-        ...(useServer
+        { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
+        ...(isServe
           ? [
-              { find: /^@\/(.+)/, replacement: resolve(docDir, '../$1') },
+              { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
               {
                 find: /^@vexip-ui\/((?!icons).+)/,
-                replacement: resolve(docDir, '../common/$1/src')
+                replacement: resolve(__dirname, '../common/$1/src')
               },
-              { find: /^vexip-ui$/, replacement: resolve(docDir, '../index.ts') }
+              { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
             ]
           : [])
       ],
-      dedupe: useServer ? ['../components', 'vue'] : ['vue']
+      dedupe: isServe ? ['../components', 'vue'] : ['vue']
     },
     optimizeDeps: {
       include: ['@vexip-ui/icons']
     },
     esbuild: {
-      drop: ['debugger'],
-      pure: ['console.log']
+      drop: isServe ? undefined : ['debugger'],
+      pure: isServe ? undefined : ['console.log']
     },
     server: {
       port: 9000,
@@ -51,7 +49,7 @@ export default defineConfig(({ mode }) => {
     },
     css: {
       postcss: {
-        plugins: [autoprefixer, ...(useServer ? [] : [discardCss])]
+        plugins: [autoprefixer, ...(isServe ? [] : [discardCss])]
       }
     },
     plugins: [
@@ -59,7 +57,7 @@ export default defineConfig(({ mode }) => {
       splitVendorChunkPlugin(),
       i18n({
         compositionOnly: false,
-        include: resolve(docDir, 'i18n')
+        include: resolve(__dirname, 'i18n')
       })
     ]
   }

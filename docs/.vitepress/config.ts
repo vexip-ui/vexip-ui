@@ -5,8 +5,10 @@ import { getGuideConfig } from './config/guide'
 import { getComponentConfig } from './config/component'
 
 import type { UserConfig } from 'vitepress'
+import type { ThemeConfig } from './theme/types'
 
-export default <UserConfig>{
+export default <UserConfig<ThemeConfig>>{
+  titleTemplate: 'Vexip UI',
   head: [
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
@@ -14,7 +16,6 @@ export default <UserConfig>{
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }]
   ],
-  titleTemplate: 'Vexip UI',
   markdown: {
     highlight,
     config: markdownItSetup
