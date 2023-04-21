@@ -136,6 +136,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
     }
   }
 
+  h1 > .vxp-tag {
+    margin-left: 8px;
+  }
+
   .md-table {
     th:nth-child(1),
     td:nth-child(1) {
