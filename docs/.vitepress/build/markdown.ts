@@ -85,7 +85,7 @@ function createAlertContainer(type: string) {
         const token = tokens[index]
 
         if (token.nesting === 1) {
-          const title = token.info.slice(type.length).trim()
+          const title = token.info.replace(type, '').trim()
           const titleProp = title ? `title="${title}"` : `:title="$t('alert.${type}')"`
 
           return `<Alert type="${type}" icon ${titleProp}>\n`
@@ -104,9 +104,10 @@ function createDemoContainer() {
     {
       render(tokens: Token[], index: number) {
         const token = tokens[index]
+        const demoReg = /^demo\s*(.*)$/
 
         if (token.nesting === 1) {
-          const src = token.info.slice('demo'.length).trim()
+          const src = token.info.trim().match(demoReg)?.[1].trim()
 
           return `<Demo src="${src}">\n`
         } else {
