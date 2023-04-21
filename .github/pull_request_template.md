@@ -13,8 +13,12 @@ Before submitting the PR, please make sure you do the following:
 
 ### Description
 
+<!-- Clear and concise description of what the PR is solving. -->
+
 ### Linked Issues
 
-### Additional context
+<!-- Fix #123. Fix #666. -->
 
-<!-- e.g. is there anything you'd like reviewers to focus on? -->
+### Additional Context
+
+<!-- Any other context or screenshots about the PR here. -->
