@@ -12,37 +12,11 @@ Three sizes are built in, or you can set `size` to a specific size.
 
 :::
 
-:::demo avatar/badge
-
-### With Badge
-
-Can be combined with Badge component.
-
-:::
-
 :::demo avatar/circle
 
 ### Image Avatar
 
 Add the `circle` prop to make the avatar circle.
-
-:::
-
-:::demo avatar/error
-
-### Fallback
-
-When using an image, an error event will be emiited if the image load fails.
-
-it will try to reload using the value as the source address if you set `fallback-src` prop.
-
-:::
-
-:::demo avatar/group
-
-### Avatar Group
-
-Combined with the AvatarGroup component, you can flexibly create avatar groups.
 
 :::
 
@@ -63,6 +37,32 @@ Set the value of `icon-scale` prop to adjust the scaling of the icon.
 Using the default slot allows using text as an avatar, and the text is automatically scaled based on the avatar size.
 
 You can combine the `gap` prop to set the padding on both sides of the avatar.
+
+:::
+
+:::demo avatar/badge
+
+### With Badge
+
+Can be combined with Badge component.
+
+:::
+
+:::demo avatar/error
+
+### Fallback
+
+When using an image, an error event will be emiited if the image load fails.
+
+it will try to reload using the value as the source address if you set `fallback-src` prop.
+
+:::
+
+:::demo avatar/group
+
+### Avatar Group
+
+Combined with the AvatarGroup component, you can flexibly create avatar groups.
 
 :::
 

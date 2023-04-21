@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo fullscreen/basis
+:::demo full-screen/basis
 
 ### 基础用法
 
@@ -12,7 +12,7 @@
 
 :::
 
-:::demo fullscreen/ref
+:::demo full-screen/ref
 
 ### Ref 用法
 
@@ -20,7 +20,7 @@
 
 :::
 
-:::demo fullscreen/tooltip
+:::demo full-screen/tooltip
 
 ### 全屏提示
 

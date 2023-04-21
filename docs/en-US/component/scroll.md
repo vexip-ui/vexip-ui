@@ -12,6 +12,22 @@ The most common usage is to set the value of the `height` prop for Scroll. Then 
 
 :::
 
+:::demo scroll/bar
+
+### Scrollbar
+
+Add the `use-y-bar` prop to add a scroll bar to the scroll area.
+
+:::
+
+:::demo scroll/height
+
+### Adaptive Height
+
+Setting `height` prop to a valid CSS height percentage value will make the scroll area adapt to the height of its parent element according to the percentage.
+
+:::
+
 :::demo scroll/auto
 
 ### Auto Scroll
@@ -24,29 +40,11 @@ Setting the value of the `autoplay` prop to a number will automatically scroll a
 
 :::
 
-:::demo scroll/bar
+:::demo scroll/track
 
-### Scrollbar
+### Scrollbar Track
 
-Add the `use-y-bar` prop to add a scroll bar to the scroll area.
-
-:::
-
-:::demo scroll/extra
-
-### Extra Content
-
-You can add some extra content above the scroll view via `extra` slot.
-
-This demo shows how to create a back to top button quickly.
-
-:::
-
-:::demo scroll/height
-
-### Adaptive Height
-
-Setting `height` prop to a valid CSS height percentage value will make the scroll area adapt to the height of its parent element according to the percentage.
+Adding the `use-bar-track` property enables scrollbar track interaction, making it look like a native scrollbar.
 
 :::
 
@@ -60,11 +58,13 @@ Normally, you still need to scroll with pressing shift key. If you want to scrol
 
 :::
 
-:::demo scroll/track
+:::demo scroll/extra
 
-### Scrollbar Track
+### Extra Content
 
-Adding the `use-bar-track` property enables scrollbar track interaction, making it look like a native scrollbar.
+You can add some extra content above the scroll view via `extra` slot.
+
+This demo shows how to create a back to top button quickly.
 
 :::
 

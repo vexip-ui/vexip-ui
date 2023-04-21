@@ -12,6 +12,22 @@ Simplest usage. Confirm is using `Promise` inside, which can be used with `async
 
 :::
 
+:::demo confirm/type
+
+### Confirm Type
+
+Set the `confirmType` option to change the type of the confirm button.
+
+:::
+
+:::demo confirm/text
+
+### Button Text
+
+Set the `confirmType` and `cancelText` options to customize the content of the confirm and cancel buttons.
+
+:::
+
 :::demo confirm/icon
 
 ### Custom Icon
@@ -24,27 +40,11 @@ When you need more fine-grained control of the icon, you can set `icon` as a fun
 
 :::
 
-:::demo confirm/text
-
-### Button Text
-
-Set the `confirmType` and `cancelText` options to customize the content of the confirm and cancel buttons.
-
-:::
-
 :::demo confirm/title
 
 ### Add Title
 
 Setting the `title` option can add a title, so we can change the layout style.
-
-:::
-
-:::demo confirm/type
-
-### Confirm Type
-
-Set the `confirmType` option to change the type of the confirm button.
 
 :::
 

@@ -12,14 +12,6 @@ Basic usage, you can use `v-model:active` for two-way binding.
 
 :::
 
-:::demo tabs/align
-
-### Tab Alignment
-
-The alignment of tab items can be set via the `align` prop.
-
-:::
-
 :::demo tabs/card
 
 ### Card Mode
@@ -33,22 +25,6 @@ Add the `card` prop to enable card mode.
 ### Disabled
 
 Add a `disabled` prop to TabPanel to disable a tab navigation.
-
-:::
-
-:::demo tabs/dynamic
-
-### Dynamic Tabs
-
-This demo demonstrates how to dynamically add and remove tabs navigation.
-
-:::
-
-:::demo tabs/extra
-
-### Extra Content
-
-You can add extra content to the front and rear of nav respectively via `prefix` and `suffix` slots.
 
 :::
 
@@ -68,11 +44,35 @@ You can add a `label` slot for each tab when you need to customize the navigatio
 
 :::
 
+:::demo tabs/align
+
+### Tab Alignment
+
+The alignment of tab items can be set via the `align` prop.
+
+:::
+
 :::demo tabs/placement
 
 ### Tab Placement
 
 The placement of tab items can be set via the `placement` prop.
+
+:::
+
+:::demo tabs/extra
+
+### Extra Content
+
+You can add extra content to the front and rear of nav respectively via `prefix` and `suffix` slots.
+
+:::
+
+:::demo tabs/dynamic
+
+### Dynamic Tabs
+
+This demo demonstrates how to dynamically add and remove tabs navigation.
 
 :::
 

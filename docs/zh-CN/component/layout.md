@@ -20,27 +20,11 @@
 
 :::
 
-:::demo layout/adjust
+:::demo layout/footer
 
-### 调整大小
+### 添加页脚
 
-通过 CSS 变量可以轻松调整头部高度和边栏的宽度。
-
-:::
-
-:::demo layout/custom-aside
-
-### 自定义边栏
-
-可能你想要自定义边栏的内容，你可以通过插槽轻松实现。
-
-:::
-
-:::demo layout/custom-header
-
-### 自定义头部
-
-可能你想要自定义头部的内容，你可以通过插槽轻松实现。
+添加 `footer` 属性可以添加页脚，结合 `copyright` 和 `links` 属性可以快速配置页脚内容。
 
 :::
 
@@ -52,11 +36,19 @@
 
 :::
 
-:::demo layout/footer
+:::demo layout/no-aside
 
-### 添加页脚
+### 无边栏
 
-添加 `footer` 属性可以添加页脚，结合 `copyright` 和 `links` 属性可以快速配置页脚内容。
+添加 `no-aside` 属性可以去掉边栏，此时菜单会在头部。
+
+:::
+
+:::demo layout/adjust
+
+### 调整大小
+
+通过 CSS 变量可以轻松调整头部高度和边栏的宽度。
 
 :::
 
@@ -74,11 +66,19 @@
 
 :::
 
-:::demo layout/no-aside
+:::demo layout/custom-header
 
-### 无边栏
+### 自定义头部
 
-添加 `no-aside` 属性可以去掉边栏，此时菜单会在头部。
+可能你想要自定义头部的内容，你可以通过插槽轻松实现。
+
+:::
+
+:::demo layout/custom-aside
+
+### 自定义边栏
+
+可能你想要自定义边栏的内容，你可以通过插槽轻松实现。
 
 :::
 

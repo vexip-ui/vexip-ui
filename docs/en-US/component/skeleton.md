@@ -12,19 +12,19 @@ Use it as an inline element to create the effect of a paragraph.
 
 :::
 
+:::demo skeleton/shape
+
+### Skeleton Shape
+
+The shape of the skeleton can be changed via the `round` and `circle` props.
+
+:::
+
 :::demo skeleton/activated
 
 ### Activated Status
 
 Add the `activated` prop to make the skeleton activated.
-
-:::
-
-:::demo skeleton/group
-
-### Skeleton Group
-
-Sometimes it is a little troublesome to set props and switch one by one skeleton.
 
 :::
 
@@ -36,11 +36,11 @@ Using the `loading` prop can be convenient when switching content.
 
 :::
 
-:::demo skeleton/shape
+:::demo skeleton/group
 
-### Skeleton Shape
+### Skeleton Group
 
-The shape of the skeleton can be changed via the `round` and `circle` props.
+Sometimes it is a little troublesome to set props and switch one by one skeleton.
 
 :::
 

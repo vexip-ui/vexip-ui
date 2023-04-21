@@ -2,7 +2,7 @@
 
 ## Demos
 
-:::demo virtuallist/basis
+:::demo virtual-list/basis
 
 ### Simple Example
 
@@ -12,7 +12,7 @@ Since the height of elements is not fixed, each element will calculate its real 
 
 :::
 
-:::demo virtuallist/fixed
+:::demo virtual-list/fixed
 
 ### Fixed Height
 

@@ -10,19 +10,19 @@
 
 :::
 
-:::demo scrollbar/style
-
-### 修改样式
-
-通过 `width`、`bar-color` 和 `track-color` 可以分别调整滚动条的宽度、条颜色和轨道颜色。
-
-:::
-
 :::demo scrollbar/track
 
 ### 滚动条轨道
 
 和基础用法一样，加个 `use-track` 属性，然后就会有一个可以交互的轨道。
+
+:::
+
+:::demo scrollbar/style
+
+### 修改样式
+
+通过 `width`、`bar-color` 和 `track-color` 可以分别调整滚动条的宽度、条颜色和轨道颜色。
 
 :::
 

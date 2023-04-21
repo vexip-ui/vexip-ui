@@ -10,22 +10,6 @@ Each panel can expand and contract independently without affecting each other.
 
 :::
 
-:::demo collapse/accordion
-
-### Accordion
-
-Adding the `accordion` prop enables accordion mode, in which only one panel can be expanded at a time.
-
-:::
-
-:::demo collapse/arrow
-
-### Adjust Arrow
-
-Adding the value of the `arrow-type` prop can change the position of the panel arrow or hide the arrow.
-
-:::
-
 :::demo collapse/card
 
 ### Card Mode
@@ -39,6 +23,22 @@ Add the `card` prop to enable card mode.
 ### Borderless Mode
 
 Add `ghost` prop to enable borderless mode, this attribute has no effect in card mode.
+
+:::
+
+:::demo collapse/accordion
+
+### Accordion
+
+Adding the `accordion` prop enables accordion mode, in which only one panel can be expanded at a time.
+
+:::
+
+:::demo collapse/arrow
+
+### Adjust Arrow
+
+Adding the value of the `arrow-type` prop can change the position of the panel arrow or hide the arrow.
 
 :::
 

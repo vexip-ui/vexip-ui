@@ -34,19 +34,45 @@ const model = reactive({} as Model)
 
 :::
 
-:::demo form/disabled
+:::demo form/validate
 
-### 禁用表单
+### 自定义验证
 
-添加 `disabled` 属性可以禁用其下所有控件，包括按钮。
+设置 `rules` 属性的值可以自定义每个字段的校验规则。
+
+也可以单独为一个 FormItem 组件单独设置 `rules` 属性来进行校验。
 
 :::
 
-:::demo form/dynamic
+:::demo form/manual
 
-### 动态项
+### 手动验证
 
-这个示例演示了如何动态地控制表单项的增减与删除。
+通过 Form 组件实例的 `validate` 方法可以手动触发表单验证。
+
+:::
+
+:::demo form/label
+
+### 标签对齐
+
+通过 `label-align` 属性可以改变表单标签的位置。
+
+:::
+
+:::demo form/inline
+
+### 行内表单
+
+添加 `inline` 属性可以使表单变为行内布局。
+
+:::
+
+:::demo form/size
+
+### 表单大小
+
+通过 `size` 属性可以改变其下所有控件的大小，包括按钮。
 
 :::
 
@@ -60,27 +86,11 @@ const model = reactive({} as Model)
 
 :::
 
-:::demo form/inline
+:::demo form/disabled
 
-### 行内表单
+### 禁用表单
 
-添加 `inline` 属性可以使表单变为行内布局。
-
-:::
-
-:::demo form/label
-
-### 标签对齐
-
-通过 `label-align` 属性可以改变表单标签的位置。
-
-:::
-
-:::demo form/layout
-
-### 表单布局
-
-表单内置了行布局（一维栅格）的大部分功能，因此你可以像使用行布局组件那样使用它。
+添加 `disabled` 属性可以禁用其下所有控件，包括按钮。
 
 :::
 
@@ -92,19 +102,11 @@ const model = reactive({} as Model)
 
 :::
 
-:::demo form/manual
+:::demo form/dynamic
 
-### 手动验证
+### 动态项
 
-通过 Form 组件实例的 `validate` 方法可以手动触发表单验证。
-
-:::
-
-:::demo form/native
-
-### 原生表单
-
-设置 `action` 属性的值可以使用原生的表单提交。
+这个示例演示了如何动态地控制表单项的增减与删除。
 
 :::
 
@@ -118,21 +120,19 @@ const model = reactive({} as Model)
 
 :::
 
-:::demo form/size
+:::demo form/native
 
-### 表单大小
+### 原生表单
 
-通过 `size` 属性可以改变其下所有控件的大小，包括按钮。
+设置 `action` 属性的值可以使用原生的表单提交。
 
 :::
 
-:::demo form/validate
+:::demo form/layout
 
-### 自定义验证
+### 表单布局
 
-设置 `rules` 属性的值可以自定义每个字段的校验规则。
-
-也可以单独为一个 FormItem 组件单独设置 `rules` 属性来进行校验。
+表单内置了行布局（一维栅格）的大部分功能，因此你可以像使用行布局组件那样使用它。
 
 :::
 

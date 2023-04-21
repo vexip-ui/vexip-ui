@@ -12,6 +12,14 @@ The simplest usage, a pure calendar.
 
 :::
 
+:::demo calendar/week-start
+
+### Week Start
+
+The first day of the week can be changed via the `week-start` prop.
+
+:::
+
 :::demo calendar/schedule
 
 ### Schedule
@@ -19,14 +27,6 @@ The simplest usage, a pure calendar.
 The content of the rendered calendar cell can be customized via the `content` slot.
 
 If you think the native scroll bar is not cool, you can add a scroll component by yourself.
-
-:::
-
-:::demo calendar/week-start
-
-### Week Start
-
-The first day of the week can be changed via the `week-start` prop.
 
 :::
 

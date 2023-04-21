@@ -2,7 +2,7 @@
 
 ## 代码示例
 
-:::demo virtuallist/basis
+:::demo virtual-list/basis
 
 ### 简单例子
 
@@ -12,7 +12,7 @@
 
 :::
 
-:::demo virtuallist/fixed
+:::demo virtual-list/fixed
 
 ### 固定高度
 

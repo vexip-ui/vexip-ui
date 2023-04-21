@@ -34,19 +34,45 @@ A comprehensive form example.
 
 :::
 
-:::demo form/disabled
+:::demo form/validate
 
-### Disable Form
+### Custom Validation
 
-Adding `disabled` prop to disable all control components which under it, includes buttons.
+Set the value of the `rules` prop to customize the validation rules for each field.
+
+You can also set the `rules` prop for an FormItem component individually for validation.
 
 :::
 
-:::demo form/dynamic
+:::demo form/manual
 
-### Dynamic Items
+### Manual Validate
 
-This example demonstrates how to create and delete form items.
+Form validation can be triggered manually via the `validate` method of the Form component instance.
+
+:::
+
+:::demo form/label
+
+### Label Align
+
+The position of the form label can be changed with the `label-align` prop.
+
+:::
+
+:::demo form/inline
+
+### Inline Form
+
+Adding the `inline` prop makes the form inline.
+
+:::
+
+:::demo form/size
+
+### Form Size
+
+The size of all control components under the form can be changed via the `size` prop, including buttons.
 
 :::
 
@@ -60,27 +86,11 @@ Or use the slot of the same name for customization, if that's not enough you sho
 
 :::
 
-:::demo form/inline
+:::demo form/disabled
 
-### Inline Form
+### Disable Form
 
-Adding the `inline` prop makes the form inline.
-
-:::
-
-:::demo form/label
-
-### Label Align
-
-The position of the form label can be changed with the `label-align` prop.
-
-:::
-
-:::demo form/layout
-
-### Form Layout
-
-Form has built in most of the features of the Row component (one-dimensional grid), so you can use it just like the row component.
+Adding `disabled` prop to disable all control components which under it, includes buttons.
 
 :::
 
@@ -92,19 +102,11 @@ Adding `loading` prop to make all control components into loading which under it
 
 :::
 
-:::demo form/manual
+:::demo form/dynamic
 
-### Manual Validate
+### Dynamic Items
 
-Form validation can be triggered manually via the `validate` method of the Form component instance.
-
-:::
-
-:::demo form/native
-
-### Native Form
-
-Set the value of the `action` prop to use native form submission.
+This example demonstrates how to create and delete form items.
 
 :::
 
@@ -118,21 +120,19 @@ After adding the `prue` prop, the FormItem will directly render the contents of 
 
 :::
 
-:::demo form/size
+:::demo form/native
 
-### Form Size
+### Native Form
 
-The size of all control components under the form can be changed via the `size` prop, including buttons.
+Set the value of the `action` prop to use native form submission.
 
 :::
 
-:::demo form/validate
+:::demo form/layout
 
-### Custom Validation
+### Form Layout
 
-Set the value of the `rules` prop to customize the validation rules for each field.
-
-You can also set the `rules` prop for an FormItem component individually for validation.
+Form has built in most of the features of the Row component (one-dimensional grid), so you can use it just like the row component.
 
 :::
 

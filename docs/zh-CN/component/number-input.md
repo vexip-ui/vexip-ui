@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo numberinput/basis
+:::demo number-input/basis
 
 ### 基础用法
 
@@ -12,23 +12,7 @@
 
 :::
 
-:::demo numberinput/clearable
-
-### 可清空
-
-添加 `clearable` 属性可以使控件值可清空。
-
-:::
-
-:::demo numberinput/control-type
-
-### 基础用法
-
-通过 `action-type` 属性可以改变控件放置位置或显隐方式。
-
-:::
-
-:::demo numberinput/disabled
+:::demo number-input/disabled
 
 ### 禁用状态
 
@@ -36,15 +20,23 @@
 
 :::
 
-:::demo numberinput/formatter
+:::demo number-input/size
 
-### 格式化
+### 改变尺寸
 
-通过 `formatter` 属性可以提供一个格式化方法，将会在非输入状态是显示格式化后的值。
+设置 `size` 属性的值可以改变输入框的尺寸，目前一共提供了三种尺寸供选择。
 
 :::
 
-:::demo numberinput/icon
+:::demo number-input/clearable
+
+### 可清空
+
+添加 `clearable` 属性可以使控件值可清空。
+
+:::
+
+:::demo number-input/icon
 
 ### 内嵌图标
 
@@ -52,7 +44,39 @@
 
 :::
 
-:::demo numberinput/loading
+:::demo number-input/range
+
+### 数值范围
+
+通过 `min` 和 `max` 属性可以分别设置数值的最大和最小值。
+
+:::
+
+:::demo number-input/precision
+
+### 数值精度
+
+通过 `precision` 属性可以设置数值保留的精度。
+
+:::
+
+:::demo number-input/formatter
+
+### 格式化
+
+通过 `formatter` 属性可以提供一个格式化方法，将会在非输入状态是显示格式化后的值。
+
+:::
+
+:::demo number-input/step
+
+### 变化幅度
+
+设置 `step` 属性可以改变每次增减数值的幅度。
+
+:::
+
+:::demo number-input/loading
 
 ### 加载状态
 
@@ -62,51 +86,27 @@
 
 :::
 
-:::demo numberinput/precision
-
-### 数值精度
-
-通过 `precision` 属性可以设置数值保留的精度。
-
-:::
-
-:::demo numberinput/range
-
-### 数值范围
-
-通过 `min` 和 `max` 属性可以分别设置数值的最大和最小值。
-
-:::
-
-:::demo numberinput/size
-
-### 改变尺寸
-
-设置 `size` 属性的值可以改变输入框的尺寸，目前一共提供了三种尺寸供选择。
-
-:::
-
-:::demo numberinput/state
-
-### 不同状态
-
-通过 `state` 可以设置不同的状态。
-
-:::
-
-:::demo numberinput/step
-
-### 变化幅度
-
-设置 `step` 属性可以改变每次增减数值的幅度。
-
-:::
-
-:::demo numberinput/sync
+:::demo number-input/sync
 
 ### 同步输入
 
 默认情况下双向绑定是基于 `change` 事件，添加了 `sync` 属性后将变为基于 `input` 事件。
+
+:::
+
+:::demo number-input/control-type
+
+### 基础用法
+
+通过 `action-type` 属性可以改变控件放置位置或显隐方式。
+
+:::
+
+:::demo number-input/state
+
+### 不同状态
+
+通过 `state` 可以设置不同的状态。
 
 :::
 

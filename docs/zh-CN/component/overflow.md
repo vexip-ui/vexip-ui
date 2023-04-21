@@ -10,19 +10,19 @@
 
 :::
 
-:::demo overflow/max-count
-
-### 最大数量
-
-通过 `max-count` 属性可以手动控制显示的最大数量。
-
-:::
-
 :::demo overflow/no-items
 
 ### 不传入子元素
 
 不使用 `items` 属性时可以通过默认插槽直接渲染子元素。
+
+:::
+
+:::demo overflow/max-count
+
+### 最大数量
+
+通过 `max-count` 属性可以手动控制显示的最大数量。
 
 :::
 

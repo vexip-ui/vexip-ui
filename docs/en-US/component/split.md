@@ -12,11 +12,11 @@ Left and right splits are formed by passing in the `left` and `right` slots.
 
 :::
 
-:::demo split/full
+:::demo split/vertical
 
-### Full Screen Pane
+### Vertical Split
 
-Add the `can-full` attribute to enable the full screen function of the panel, and click the button in the middle of the handle to switch the full screen.
+Add `vertical` to enable top-bottom splitting. At this time, the `left` slot is the top pane content, and the `right` slot is the bottom pane content.
 
 :::
 
@@ -32,19 +32,19 @@ It is suitable for scenarios where there is a lot of panel content and the perfo
 
 :::
 
+:::demo split/full
+
+### Full Screen Pane
+
+Add the `can-full` attribute to enable the full screen function of the panel, and click the button in the middle of the handle to switch the full screen.
+
+:::
+
 :::demo split/nesting
 
 ### Nesting Usage
 
 Can be nested by itself.
-
-:::
-
-:::demo split/vertical
-
-### Vertical Split
-
-Add `vertical` to enable top-bottom splitting. At this time, the `left` slot is the top pane content, and the `right` slot is the bottom pane content.
 
 :::
 

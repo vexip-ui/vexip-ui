@@ -20,6 +20,14 @@ Add the `disabled` prop to set the disabled state.
 
 :::
 
+:::demo checkbox/size
+
+### Checkbox Size
+
+There are three built-in sizes, which are set by `size`.
+
+:::
+
 :::demo checkbox/group
 
 ### Checkbox Group
@@ -28,11 +36,35 @@ Use the CheckboxGroup to easily generate a series of checkboxes from an array st
 
 :::
 
+:::demo checkbox/vertical
+
+### Vertical Layout
+
+Add the `vertical` prop to CheckboxGroup to achieve vertical alignment.
+
+:::
+
+:::demo checkbox/total
+
+### Check all Control
+
+When you need to achieve check all, you only need to add a checkbox with the `control` prop to the checkbox group.
+
+:::
+
 :::demo checkbox/layout
 
 ### Flexible Layout
 
 Combined with the layout component, you can flexibly customize the layout of the checkbox group.
+
+:::
+
+:::demo checkbox/options
+
+### Options
+
+A checkbox group can be quickly generated via the `options` prop.
 
 :::
 
@@ -46,43 +78,11 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 :::
 
-:::demo checkbox/options
-
-### Options
-
-A checkbox group can be quickly generated via the `options` prop.
-
-:::
-
-:::demo checkbox/size
-
-### Checkbox Size
-
-There are three built-in sizes, which are set by `size`.
-
-:::
-
 :::demo checkbox/state
 
 ### Different States
 
 Different states can be set via `state`.
-
-:::
-
-:::demo checkbox/total
-
-### Check all Control
-
-When you need to achieve check all, you only need to add a checkbox with the `control` prop to the checkbox group.
-
-:::
-
-:::demo checkbox/vertical
-
-### Vertical Layout
-
-Add the `vertical` prop to CheckboxGroup to achieve vertical alignment.
 
 :::
 

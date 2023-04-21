@@ -12,6 +12,26 @@ This method can receive a string or object, which will be used as the toast cont
 
 :::
 
+:::demo toast/type
+
+### Toast Types
+
+The toast with preset type can be opened by calling different methods.
+
+There are currently four built-in preset types in the component, which are opened by calling `success`, `warning`, `error` and `loading` respectively.
+
+The `loading` method contains an invisible mask by default, which blocks the interaction of the page.
+
+:::
+
+:::demo toast/position
+
+### Position
+
+The position of the toast can be controlled by the `position` option, which are top, center and bottom.
+
+:::
+
 :::demo toast/close
 
 ### Closable
@@ -32,6 +52,16 @@ When set to `0`, the toast will not be closed automatically, you need to set it 
 
 :::
 
+:::demo toast/mask
+
+### Invisibility Mask
+
+Set the `closable` option to `true` to make toast clickable to close.
+
+Also, this example shows how to use the Toast component in a composition API.
+
+:::
+
 :::demo toast/icon
 
 ### Custom Icon
@@ -44,24 +74,6 @@ When you need more fine-grained control over the icon, the icon option can be se
 
 :::
 
-:::demo toast/mask
-
-### Invisibility Mask
-
-Set the `closable` option to `true` to make toast clickable to close.
-
-Also, this example shows how to use the Toast component in a composition API.
-
-:::
-
-:::demo toast/position
-
-### Position
-
-The position of the toast can be controlled by the `position` option, which are top, center and bottom.
-
-:::
-
 :::demo toast/render
 
 ### Render Method
@@ -69,18 +81,6 @@ The position of the toast can be controlled by the `position` option, which are 
 A custom rendering method for toast can be set via the `renderer` option.
 
 Often it is better to use with `tsx`.
-
-:::
-
-:::demo toast/type
-
-### Toast Types
-
-The toast with preset type can be opened by calling different methods.
-
-There are currently four built-in preset types in the component, which are opened by calling `success`, `warning`, `error` and `loading` respectively.
-
-The `loading` method contains an invisible mask by default, which blocks the interaction of the page.
 
 :::
 

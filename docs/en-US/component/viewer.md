@@ -20,14 +20,6 @@ Sometimes will be used with modal.
 
 :::
 
-:::demo viewer/static
-
-### No Transition
-
-Sometimes you may want the change to be more immediate, so you can disable the transition effect.
-
-:::
-
 :::demo viewer/switch
 
 ### Switch Content
@@ -41,6 +33,14 @@ This example demonstrates how to toggle the content of the viewer.
 ### Toolbar Placement
 
 Toolbars can be placed in an appropriate position via the `toolbar-placement` prop.
+
+:::
+
+:::demo viewer/static
+
+### No Transition
+
+Sometimes you may want the change to be more immediate, so you can disable the transition effect.
 
 :::
 

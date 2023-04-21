@@ -12,19 +12,11 @@
 
 :::
 
-:::demo switch/color
+:::demo switch/size
 
-### 开关底色
+### 不同大小
 
-通过 `open-color` 和 `close-color` 可以指定开关的底色。
-
-:::
-
-:::demo switch/icon
-
-### 自定义图标
-
-通过 `open-icon` 和 `close-icon` 可以自定义手柄上的图标。
+内置三种大小，或者自定义。
 
 :::
 
@@ -36,19 +28,11 @@
 
 :::
 
-:::demo switch/size
+:::demo switch/color
 
-### 不同大小
+### 开关底色
 
-内置三种大小，或者自定义。
-
-:::
-
-:::demo switch/state
-
-### 不同状态
-
-通过 `state` 可以设置不同的状态。
+通过 `open-color` 和 `close-color` 可以指定开关的底色。
 
 :::
 
@@ -57,6 +41,22 @@
 ### 内嵌文字
 
 通过 `open-text` 和 `close-text` 可以设置开关的内部文字。
+
+:::
+
+:::demo switch/icon
+
+### 自定义图标
+
+通过 `open-icon` 和 `close-icon` 可以自定义手柄上的图标。
+
+:::
+
+:::demo switch/state
+
+### 不同状态
+
+通过 `state` 可以设置不同的状态。
 
 :::
 

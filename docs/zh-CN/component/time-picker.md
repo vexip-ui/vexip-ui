@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo timepicker/basis
+:::demo time-picker/basis
 
 ### 基础用法
 
@@ -14,25 +14,7 @@
 
 :::
 
-:::demo timepicker/bound
-
-### 限制范围
-
-通过 `min` 和 `max` 属性，可以快速的设置时间的可选范围。
-
-常规情况下，这两个属性会限制形成单边或双边限制，如果你想要一个中间限制，你可以使 `min` 的值大于 `max`。
-
-:::
-
-:::demo timepicker/filler
-
-### 自定义填充
-
-设置 `filler` 属性的值可以修改选择输入框中的填充符。
-
-:::
-
-:::demo timepicker/labels
+:::demo time-picker/labels
 
 ### 时间标签
 
@@ -40,35 +22,15 @@
 
 :::
 
-:::demo timepicker/loading
+:::demo time-picker/filler
 
-### 加载状态
+### 自定义填充
 
-通过 `loading` 属性可以时间选择器器的加载状态。
-
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+设置 `filler` 属性的值可以修改选择输入框中的填充符。
 
 :::
 
-:::demo timepicker/range
-
-### 范围选择
-
-添加 `range` 属性可以开启范围选择模式。
-
-范围选择模式下，时间选择框的返回值将变为一个包含开始和结束时间的数组。
-
-:::
-
-:::demo timepicker/shortcuts
-
-### 快捷时间
-
-通过 `shortcuts` 属性可以添加快捷时间。
-
-:::
-
-:::demo timepicker/step
+:::demo time-picker/step
 
 ### 调整跨度
 
@@ -78,13 +40,41 @@
 
 :::
 
-:::demo timepicker/unit-readonly
+:::demo time-picker/range
 
-### 输入框只读
+### 范围选择
 
-添加 `unit-readonly` 属性可以使输入框内的控件只读，用户只能通过面板选择时间。
+添加 `range` 属性可以开启范围选择模式。
 
-注意，这将无法键入时间，使组件失去部分可访问性。
+范围选择模式下，时间选择框的返回值将变为一个包含开始和结束时间的数组。
+
+:::
+
+:::demo time-picker/bound
+
+### 限制范围
+
+通过 `min` 和 `max` 属性，可以快速的设置时间的可选范围。
+
+常规情况下，这两个属性会限制形成单边或双边限制，如果你想要一个中间限制，你可以使 `min` 的值大于 `max`。
+
+:::
+
+:::demo time-picker/shortcuts
+
+### 快捷时间
+
+通过 `shortcuts` 属性可以添加快捷时间。
+
+:::
+
+:::demo time-picker/loading
+
+### 加载状态
+
+通过 `loading` 属性可以时间选择器器的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
 
 :::
 

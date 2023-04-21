@@ -8,7 +8,7 @@ In order to support smooth scrolling, the performance may be poor in situations 
 
 ## Demos
 
-:::demo nativescroll/basis
+:::demo native-scroll/basis
 
 ### Basis Usage
 
@@ -16,7 +16,23 @@ The most common usage is to set the value of the `height` prop for NativeScroll.
 
 :::
 
-:::demo nativescroll/auto
+:::demo native-scroll/bar
+
+### Scrollbar
+
+Add the `use-y-bar` prop to add a scroll bar to the scroll area.
+
+:::
+
+:::demo native-scroll/height
+
+### Adaptive Height
+
+Setting `height` to a valid CSS height percentage value will make the scroll area adapt to the height of its parent element according to the percentage.
+
+:::
+
+:::demo native-scroll/auto
 
 ### Auto Scroll
 
@@ -26,33 +42,15 @@ Setting the value of the `autoplay` prop to a number will automatically scroll a
 
 :::
 
-:::demo nativescroll/bar
+:::demo native-scroll/track
 
-### Scrollbar
+### Scrollbar Track
 
-Add the `use-y-bar` prop to add a scroll bar to the scroll area.
-
-:::
-
-:::demo nativescroll/extra
-
-### Extra Content
-
-You can add some extra content above the scroll view via `extra` slot.
-
-This demo shows how to create a back to top button quickly.
+Add the `use-bar-track` prop to enable track interaction for scroll bars.
 
 :::
 
-:::demo nativescroll/height
-
-### Adaptive Height
-
-Setting `height` to a valid CSS height percentage value will make the scroll area adapt to the height of its parent element according to the percentage.
-
-:::
-
-:::demo nativescroll/horizontal
+:::demo native-scroll/horizontal
 
 ### Horizontal Scroll
 
@@ -62,11 +60,13 @@ Note that you still need to scroll with pressing shift key. If you want to scrol
 
 :::
 
-:::demo nativescroll/track
+:::demo native-scroll/extra
 
-### Scrollbar Track
+### Extra Content
 
-Add the `use-bar-track` prop to enable track interaction for scroll bars.
+You can add some extra content above the scroll view via `extra` slot.
+
+This demo shows how to create a back to top button quickly.
 
 :::
 

@@ -12,26 +12,6 @@ Use `url` prop to set the upload destination address, which will be automaticall
 
 :::
 
-:::demo upload/default-files
-
-### Default Files
-
-The `default-files` prop allows you to set static default files that will not be processed on upload.
-
-:::
-
-:::demo upload/directory
-
-### Directory Upload
-
-Add the `directory` prop to enable folder upload mode.
-
-When using the click-to-upload interaction, only folders can be uploaded due to browser limitations.
-
-Note that this feature only works in browsers that support `webkitdirectory`.
-
-:::
-
 :::demo upload/drag
 
 ### Drop Upload
@@ -40,11 +20,11 @@ Add the `allow-drag` prop to enable drag and drop upload mode.
 
 :::
 
-:::demo upload/image
+:::demo upload/default-files
 
-### Image Mode
+### Default Files
 
-Adding the `image` prop to enable image upload mode, after which the `accept` and `list-type` props will be invalid.
+The `default-files` prop allows you to set static default files that will not be processed on upload.
 
 :::
 
@@ -66,11 +46,11 @@ It is also possible to explicitly set the `manual` prop to enable manual upload 
 
 :::
 
-:::demo upload/multiple
+:::demo upload/image
 
-### Multiple Upload
+### Image Mode
 
-Adding the `multiple` prop to enable multiple files upload.
+Adding the `image` prop to enable image upload mode, after which the `accept` and `list-type` props will be invalid.
 
 :::
 
@@ -91,6 +71,26 @@ If you want to append those selected files to the file list, you can add the `se
 Add the `hidden-files` prop to disable the internal file listing display.
 
 And you can achieve the effect of a separate file list with the UploadList component. Of course you can write it by yourself.
+
+:::
+
+:::demo upload/multiple
+
+### Multiple Upload
+
+Adding the `multiple` prop to enable multiple files upload.
+
+:::
+
+:::demo upload/directory
+
+### Directory Upload
+
+Add the `directory` prop to enable folder upload mode.
+
+When using the click-to-upload interaction, only folders can be uploaded due to browser limitations.
+
+Note that this feature only works in browsers that support `webkitdirectory`.
 
 :::
 

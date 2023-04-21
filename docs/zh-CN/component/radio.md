@@ -14,22 +14,6 @@
 
 :::
 
-:::demo radio/border
-
-### 边框样式
-
-添加 `border` 属性可以设置单选框组为边框样式。
-
-:::
-
-:::demo radio/button
-
-### 按钮样式
-
-添加 `button` 属性可以设置单选框组为按钮样式。
-
-:::
-
 :::demo radio/disabled
 
 ### 禁用状态
@@ -46,13 +30,27 @@
 
 :::
 
-:::demo radio/loading
+:::demo radio/vertical
 
-### 加载状态
+### 垂直排列
 
-通过 `loading` 属性可以控制单选框的加载状态。
+添加 `vertical` 属性可以设置单选框组垂直布局。
 
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+:::
+
+:::demo radio/border
+
+### 边框样式
+
+添加 `border` 属性可以设置单选框组为边框样式。
+
+:::
+
+:::demo radio/button
+
+### 按钮样式
+
+添加 `button` 属性可以设置单选框组为按钮样式。
 
 :::
 
@@ -64,19 +62,21 @@
 
 :::
 
+:::demo radio/loading
+
+### 加载状态
+
+通过 `loading` 属性可以控制单选框的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+
+:::
+
 :::demo radio/state
 
 ### 不同状态
 
 通过 `state` 可以设置不同的状态。
-
-:::
-
-:::demo radio/vertical
-
-### 垂直排列
-
-添加 `vertical` 属性可以设置单选框组垂直布局。
 
 :::
 

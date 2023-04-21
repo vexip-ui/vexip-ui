@@ -12,19 +12,19 @@
 
 :::
 
+:::demo skeleton/shape
+
+### 骨架形状
+
+通过 `round` 和 `circle` 属性可以改变骨架屏的形状。
+
+:::
+
 :::demo skeleton/activated
 
 ### 激活状态
 
 添加 `activated` 属性可以使骨架屏处于激活状态。
-
-:::
-
-:::demo skeleton/group
-
-### 骨架屏组
-
-有时候一个个骨架屏设置属性与切换略麻烦。
 
 :::
 
@@ -36,11 +36,11 @@
 
 :::
 
-:::demo skeleton/shape
+:::demo skeleton/group
 
-### 骨架形状
+### 骨架屏组
 
-通过 `round` 和 `circle` 属性可以改变骨架屏的形状。
+有时候一个个骨架屏设置属性与切换略麻烦。
 
 :::
 

@@ -2,7 +2,7 @@
 
 ## Demos
 
-:::demo timeago/basis
+:::demo time-ago/basis
 
 ### Basis Usage
 
@@ -10,7 +10,7 @@ Simplest usage.
 
 :::
 
-:::demo timeago/interval
+:::demo time-ago/interval
 
 ### Auto Refresh
 

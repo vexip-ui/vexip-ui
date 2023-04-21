@@ -12,11 +12,27 @@ Simplest usage.
 
 :::
 
+:::demo timeline/pending
+
+### Pending
+
+Adding the `pending` prop makes the last node appear as in-progress.
+
+:::
+
 :::demo timeline/flip
 
 ### Content Flip
 
 Add the `flip` prop to quickly place the node content on the other side.
+
+:::
+
+:::demo timeline/sides
+
+### Both Side Mode
+
+There was a demand for design like this, and it was born.
 
 :::
 
@@ -27,22 +43,6 @@ Add the `flip` prop to quickly place the node content on the other side.
 Add the `horizontal` prop to make the timeline horizontal.
 
 In both-sides mode, if you don't want the component to automatically calculate the height, then you can give an inline style height yourself.
-
-:::
-
-:::demo timeline/pending
-
-### Pending
-
-Adding the `pending` prop makes the last node appear as in-progress.
-
-:::
-
-:::demo timeline/sides
-
-### Both Side Mode
-
-There was a demand for design like this, and it was born.
 
 :::
 

@@ -12,23 +12,13 @@ In the simplest usage, options under the same parent must have different values.
 
 :::
 
-:::demo cascader/async-load
+:::demo cascader/hover
 
-### Async Load
+### Hover Trigger
 
-Binding a function with `on-async-load` prop enables asynchronous loading mode.
+Add the `hover-trigger` prop to enable the mouseover trigger to expand the lower panel.
 
-Added `merge-tags` prop in multi-select mode to make parent options selectable if children are not fully loaded.
-
-Note that enabling `merge-tags` in asynchronous loading will cause the control value to be merged into the value of the parent option, which is different from the behavior of non-asynchronous loading.
-
-:::
-
-:::demo cascader/brief-label
-
-### Brief Label
-
-Adding the `brief-label` prop makes it possible to display only the last section of the label.
+This feature has no effect when asynchronous loading is enabled.
 
 :::
 
@@ -40,23 +30,19 @@ Add the `clearable` prop to enable clearing of values.
 
 :::
 
-:::demo cascader/hover
+:::demo cascader/multiple
 
-### Hover Trigger
+### Multiple
 
-Add the `hover-trigger` prop to enable the mouseover trigger to expand the lower panel.
-
-This feature has no effect when asynchronous loading is enabled.
+Add `multiple` prop to enable multiple selection mode.
 
 :::
 
-:::demo cascader/loading
+:::demo cascader/size
 
-### Loading
+### Change Size
 
-The loading state of the cascader can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+You can change the size by setting the value of the `size` prop. Currently.
 
 :::
 
@@ -72,24 +58,6 @@ If you want all labels to show at all times, just set it to `Infinity`.
 
 :::
 
-:::demo cascader/merged
-
-### Merge Tags
-
-Add `merge-tags` prop in multi-select mode to enable merging tags.
-
-When on, when all children of an option are selected, the labels displayed as the parent option are merged.
-
-:::
-
-:::demo cascader/multiple
-
-### Multiple
-
-Add `multiple` prop to enable multiple selection mode.
-
-:::
-
 :::demo cascader/no-cascaded
 
 ### No Cascaded Options
@@ -100,11 +68,43 @@ In this mode, it is best to ensure that the `label` of all parent-child options 
 
 :::
 
-:::demo cascader/size
+:::demo cascader/brief-label
 
-### Change Size
+### Brief Label
 
-You can change the size by setting the value of the `size` prop. Currently.
+Adding the `brief-label` prop makes it possible to display only the last section of the label.
+
+:::
+
+:::demo cascader/merged
+
+### Merge Tags
+
+Add `merge-tags` prop in multi-select mode to enable merging tags.
+
+When on, when all children of an option are selected, the labels displayed as the parent option are merged.
+
+:::
+
+:::demo cascader/async-load
+
+### Async Load
+
+Binding a function with `on-async-load` prop enables asynchronous loading mode.
+
+Added `merge-tags` prop in multi-select mode to make parent options selectable if children are not fully loaded.
+
+Note that enabling `merge-tags` in asynchronous loading will cause the control value to be merged into the value of the parent option, which is different from the behavior of non-asynchronous loading.
+
+:::
+
+:::demo cascader/loading
+
+### Loading
+
+The loading state of the cascader can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
 
 :::
 

@@ -10,14 +10,6 @@ The basic usage, pass in a value of `0` ~ `100` via `percentage` prop.
 
 :::
 
-:::demo progress/activated
-
-### Activated State
-
-Adding the `activated` prop makes the progress bar activated.
-
-:::
-
 :::demo progress/bubble
 
 ### Tooltip
@@ -41,6 +33,14 @@ This prop supports passing in a valid color value, an array of colors, or a func
 ### Progress Content
 
 The content of the progress prompt can be customized through the default slot.
+
+:::
+
+:::demo progress/activated
+
+### Activated State
+
+Adding the `activated` prop makes the progress bar activated.
 
 :::
 

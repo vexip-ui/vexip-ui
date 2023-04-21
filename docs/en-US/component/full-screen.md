@@ -4,7 +4,7 @@ This component will help you quickly display some content in full screen.
 
 ## Demos
 
-:::demo fullscreen/basis
+:::demo full-screen/basis
 
 ### Basis Usage
 
@@ -12,7 +12,7 @@ You can get `exit`, `enter` and `toggle` methods via `v-slot` to control the con
 
 :::
 
-:::demo fullscreen/ref
+:::demo full-screen/ref
 
 ### Ref Usage
 
@@ -20,7 +20,7 @@ You can also get component instance via `ref` and trigger `exit`, `enter` and `t
 
 :::
 
-:::demo fullscreen/tooltip
+:::demo full-screen/tooltip
 
 ### Basis Usage
 

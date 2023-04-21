@@ -12,6 +12,28 @@ This method can receive a string or object, which will be used as the message co
 
 :::
 
+:::demo message/type
+
+### Message Types
+
+The messages with preset type can be opened by calling different methods.
+
+There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
+
+:::
+
+:::demo message/style
+
+### Preset Style
+
+Set the `color` option to `true` to make the preset type message has a colorful text.
+
+Set the `background` option to `true` to make the preset type message has a background color.
+
+When the preset color does not meet the requirements, you can pass in a valid color value to realize color customization.
+
+:::
+
 :::demo message/close
 
 ### Closable
@@ -51,28 +73,6 @@ When you need more fine-grained control over the icon, the `icon` option can be 
 A custom rendering method for message can be set via the `renderer` option.
 
 Often it is better to use with `tsx`.
-
-:::
-
-:::demo message/style
-
-### Preset Style
-
-Set the `color` option to `true` to make the preset type message has a colorful text.
-
-Set the `background` option to `true` to make the preset type message has a background color.
-
-When the preset color does not meet the requirements, you can pass in a valid color value to realize color customization.
-
-:::
-
-:::demo message/type
-
-### Message Types
-
-The messages with preset type can be opened by calling different methods.
-
-There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
 
 :::
 

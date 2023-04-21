@@ -26,32 +26,6 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 :::
 
-:::demo icon/custom
-
-### 自定义图标
-
-去外面随便找个 svg 图标丢进来，彩色也可以。
-
-:::
-
-:::demo icon/package
-
-### 不同类型
-
-默认情况下，会直接使用 `solid` 下的图标。
-
-若想使用其他图标集，参考最上方的命名转换规则的说明，这里不重复了。
-
-:::
-
-:::demo icon/pulse
-
-### 脉冲效果
-
-设置 `effect` 属性为 `pulse-in` 或 `pulse-out` 可以让图标具有脉冲效果。
-
-:::
-
 :::demo icon/scale
 
 ### 调整尺寸
@@ -65,6 +39,32 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 ### 旋转效果
 
 设置 `effect` 属性为 `spin-in` 或 `spin-out` 可以让图标原地转圈。
+
+:::
+
+:::demo icon/pulse
+
+### 脉冲效果
+
+设置 `effect` 属性为 `pulse-in` 或 `pulse-out` 可以让图标具有脉冲效果。
+
+:::
+
+:::demo icon/package
+
+### 不同类型
+
+默认情况下，会直接使用 `solid` 下的图标。
+
+若想使用其他图标集，参考最上方的命名转换规则的说明，这里不重复了。
+
+:::
+
+:::demo icon/custom
+
+### 自定义图标
+
+去外面随便找个 svg 图标丢进来，彩色也可以。
 
 :::
 

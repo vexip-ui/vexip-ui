@@ -12,6 +12,14 @@ Simplest usage.
 
 :::
 
+:::demo breadcrumb/options
+
+### Using Options
+
+Breadcrumb items can be quickly created via the `options` prop.
+
+:::
+
 :::demo breadcrumb/border
 
 ### Border Mode
@@ -25,14 +33,6 @@ Add the `border` prop to enable border mode.
 ### File Navigation
 
 A use case similar to the breadcrumb navigation at the top of the Windows 10 file manager.
-
-:::
-
-:::demo breadcrumb/options
-
-### Using Options
-
-Breadcrumb items can be quickly created via the `options` prop.
 
 :::
 

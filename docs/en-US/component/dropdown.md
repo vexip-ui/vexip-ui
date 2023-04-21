@@ -12,19 +12,19 @@ Simplest dropdown menu.
 
 :::
 
-:::demo dropdown/custom
-
-### Custom Content
-
-In addition to using the built-in components, you can customize the content of the slot.
-
-:::
-
 :::demo dropdown/nesting
 
 ### Nesting Usage
 
 Dropdown can be nested to achieve cascading effects.
+
+:::
+
+:::demo dropdown/custom
+
+### Custom Content
+
+In addition to using the built-in components, you can customize the content of the slot.
 
 :::
 

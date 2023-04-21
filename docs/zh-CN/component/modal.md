@@ -22,11 +22,11 @@
 
 :::
 
-:::demo modal/drag
+:::demo modal/long-content
 
-### 可拖拽
+### 长内容
 
-添加 `draggable` 属性可以开启模态框的拖拽功能。
+当内容过长时，可以结合滚动组件一同使用。
 
 :::
 
@@ -38,29 +38,19 @@
 
 :::
 
+:::demo modal/drag
+
+### 可拖拽
+
+添加 `draggable` 属性可以开启模态框的拖拽功能。
+
+:::
+
 :::demo modal/loading
 
 ### 加载状态
 
 添加 `loading` 属性可以使确认按钮显示为加载状态，通常配合 `on-before-close` 使用。
-
-:::
-
-:::demo modal/long-content
-
-### 长内容
-
-当内容过长时，可以结合滚动组件一同使用。
-
-:::
-
-:::demo modal/position
-
-### 自定义位置
-
-Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height` 和 `left`、`right`、`width`。
-
-两个方向都可以通过设置其中的两个属性来自定义模态框的空间关系。
 
 :::
 
@@ -79,6 +69,16 @@ Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height
 不设置 `title` 属性和同名插槽可以使模态框头部隐藏。
 
 添加 `no-footer` 属性可以禁用模态框的默认底部操作栏。
+
+:::
+
+:::demo modal/position
+
+### 自定义位置
+
+Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height` 和 `left`、`right`、`width`。
+
+两个方向都可以通过设置其中的两个属性来自定义模态框的空间关系。
 
 :::
 

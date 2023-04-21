@@ -12,35 +12,19 @@ By seting the `type` prop to: `primary`, `info`, `success`, `warning` and `error
 
 :::
 
-:::demo button/badge
-
-### Inner Badge
-
-The inner badge can be set via the `badge` prop.
-
-:::
-
-:::demo button/custom
-
-### Custom Color
-
-You can custom the major color throught the `color` prop.
-
-:::
-
-:::demo button/dashed
-
-### Dashed Button
-
-Add the `dashed` prop can change button to dashed.
-
-:::
-
 :::demo button/disabled
 
 ### Disabled Button
 
 Adding the `disabled` prop to make the button disabled.
+
+:::
+
+:::demo button/simple
+
+### Simple Button
+
+Simple buttons use light tones and are often used on minimalist pages.
 
 :::
 
@@ -52,13 +36,37 @@ The ghost button turns the background transparent and is often used on colored b
 
 :::
 
-:::demo button/group
+:::demo button/text
 
-### Button Group
+### Text Button
 
-Using ButtonGroup can easily combine multiple buttons, which are mostly used in a series of functional button layouts.
+Adding the `text` prop to make the button look like normal text.
 
-The ButtonGroup size and type can be set uniformly, and you can also set the type of each Button individually.
+With the `tag` prop, you can make it look like a normal link.
+
+:::
+
+:::demo button/dashed
+
+### Dashed Button
+
+Add the `dashed` prop can change button to dashed.
+
+:::
+
+:::demo button/badge
+
+### Inner Badge
+
+The inner badge can be set via the `badge` prop.
+
+:::
+
+:::demo button/size
+
+### Button Size
+
+There are three built-in sizes, which are set by `size`.
 
 :::
 
@@ -80,29 +88,21 @@ Adding the `loading` prop to make the button in loading.
 
 :::
 
-:::demo button/simple
+:::demo button/custom
 
-### Simple Button
+### Custom Color
 
-Simple buttons use light tones and are often used on minimalist pages.
-
-:::
-
-:::demo button/size
-
-### Button Size
-
-There are three built-in sizes, which are set by `size`.
+You can custom the major color throught the `color` prop.
 
 :::
 
-:::demo button/text
+:::demo button/group
 
-### Text Button
+### Button Group
 
-Adding the `text` prop to make the button look like normal text.
+Using ButtonGroup can easily combine multiple buttons, which are mostly used in a series of functional button layouts.
 
-With the `tag` prop, you can make it look like a normal link.
+The ButtonGroup size and type can be set uniformly, and you can also set the type of each Button individually.
 
 :::
 

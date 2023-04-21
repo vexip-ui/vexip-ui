@@ -8,7 +8,7 @@
 
 ## 代码示例
 
-:::demo nativescroll/basis
+:::demo native-scroll/basis
 
 ### 基础用法
 
@@ -16,7 +16,23 @@
 
 :::
 
-:::demo nativescroll/auto
+:::demo native-scroll/bar
+
+### 滚动条
+
+添加 `use-y-bar` 属性，可以为滚动区域添加一个滚动条。
+
+:::
+
+:::demo native-scroll/height
+
+### 自适应高度
+
+设置 `height` 一个有效的 css 高度百分比值，可以使滚动区域根据百分比自适应其父元素的高度。
+
+:::
+
+:::demo native-scroll/auto
 
 ### 自动滚动
 
@@ -26,33 +42,15 @@
 
 :::
 
-:::demo nativescroll/bar
+:::demo native-scroll/track
 
-### 滚动条
+### 滚动轨道
 
-添加 `use-y-bar` 属性，可以为滚动区域添加一个滚动条。
-
-:::
-
-:::demo nativescroll/extra
-
-### 额外内容
-
-通过 `extra` 插槽可以添加一些游离在滚动之外的内容。
-
-这个例子演示了如何快速添加一个返回顶部的按钮。
+添加 `use-bar-track` 属性可以开启滚动条的轨道交互。
 
 :::
 
-:::demo nativescroll/height
-
-### 自适应高度
-
-设置 `height` 一个有效的 css 高度百分比值，可以使滚动区域根据百分比自适应其父元素的高度。
-
-:::
-
-:::demo nativescroll/horizontal
+:::demo native-scroll/horizontal
 
 ### 横向滚动
 
@@ -62,11 +60,13 @@
 
 :::
 
-:::demo nativescroll/track
+:::demo native-scroll/extra
 
-### 滚动轨道
+### 额外内容
 
-添加 `use-bar-track` 属性可以开启滚动条的轨道交互。
+通过 `extra` 插槽可以添加一些游离在滚动之外的内容。
+
+这个例子演示了如何快速添加一个返回顶部的按钮。
 
 :::
 

@@ -8,7 +8,7 @@ If you want global configuration, see [Global Config](/zh-CN/guides/global).
 
 ## Demos
 
-:::demo configprovider/basis
+:::demo config-provider/basis
 
 ### Basis Usage
 
@@ -16,19 +16,19 @@ Provides config for all child components.
 
 :::
 
-:::demo configprovider/function
-
-### Function Default
-
-Some props are object type, you should use a function to return a new value to prevent accidental modification of the object.
-
-:::
-
-:::demo configprovider/nesting
+:::demo config-provider/nesting
 
 ### Nesting Usage
 
 It will auto dynamically merge the config provided by the upstream durning injection, and then provided to the lower.
+
+:::
+
+:::demo config-provider/function
+
+### Function Default
+
+Some props are object type, you should use a function to return a new value to prevent accidental modification of the object.
 
 :::
 

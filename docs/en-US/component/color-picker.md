@@ -4,7 +4,7 @@ Provides a picker that can be used to give the user quick and flexible selection
 
 ## Demos
 
-:::demo colorpicker/basis
+:::demo color-picker/basis
 
 ### Basis Usage
 
@@ -12,7 +12,7 @@ Simplest usage.
 
 :::
 
-:::demo colorpicker/alpha
+:::demo color-picker/alpha
 
 ### Alpha
 
@@ -20,17 +20,17 @@ Add the `alpha` prop to enable transparency selection.
 
 :::
 
-:::demo colorpicker/loading
+:::demo color-picker/shortcut
 
-### Loading
+### Shortcuts
 
-The loading state of the color picker can be controlled through the `loading` prop.
+Add the `shortcut` prop to use shortcuts.
 
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+The list of shortcuts can be customized via passing a string array.
 
 :::
 
-:::demo colorpicker/prefix
+:::demo color-picker/prefix
 
 ### Prefix Icon
 
@@ -38,13 +38,13 @@ Prefix icon can be added to color picker by setting the `prefix` prop or using t
 
 :::
 
-:::demo colorpicker/shortcut
+:::demo color-picker/loading
 
-### Shortcuts
+### Loading
 
-Add the `shortcut` prop to use shortcuts.
+The loading state of the color picker can be controlled through the `loading` prop.
 
-The list of shortcuts can be customized via passing a string array.
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
 
 :::
 

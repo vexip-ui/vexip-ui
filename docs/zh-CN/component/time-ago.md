@@ -2,7 +2,7 @@
 
 ## 代码示例
 
-:::demo timeago/basis
+:::demo time-ago/basis
 
 ### 基础用法
 
@@ -10,7 +10,7 @@
 
 :::
 
-:::demo timeago/interval
+:::demo time-ago/interval
 
 ### 自动刷新
 

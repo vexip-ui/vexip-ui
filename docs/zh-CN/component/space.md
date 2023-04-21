@@ -12,11 +12,11 @@
 
 :::
 
-:::demo space/layout
+:::demo space/vertical
 
-### 各种布局
+### 纵向排列
 
-通过 `justify` 可以设置横向的对齐方式，还可以通过 `align` 设置纵向的。
+添加 `vertical` 属性可以实现纵向排列。
 
 :::
 
@@ -28,11 +28,11 @@
 
 :::
 
-:::demo space/vertical
+:::demo space/layout
 
-### 纵向排列
+### 各种布局
 
-添加 `vertical` 属性可以实现纵向排列。
+通过 `justify` 可以设置横向的对齐方式，还可以通过 `align` 设置纵向的。
 
 :::
 

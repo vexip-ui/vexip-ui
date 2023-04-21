@@ -2,7 +2,7 @@
 
 ## 代码示例
 
-:::demo resizeobserver/basis
+:::demo resize-observer/basis
 
 ### 简单例子
 

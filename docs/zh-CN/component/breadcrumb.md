@@ -12,6 +12,14 @@
 
 :::
 
+:::demo breadcrumb/options
+
+### 使用选项
+
+通过 `options` 属性可以快速创建面包屑。
+
+:::
+
 :::demo breadcrumb/border
 
 ### 边框模式
@@ -25,14 +33,6 @@
 ### 文件导航
 
 一个类似于 Windows 10 文件管理器顶部面包屑导航的用例。
-
-:::
-
-:::demo breadcrumb/options
-
-### 使用选项
-
-通过 `options` 属性可以快速创建面包屑。
 
 :::
 

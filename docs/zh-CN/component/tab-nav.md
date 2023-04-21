@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo tabnav/basis
+:::demo tab-nav/basis
 
 ### 基础用法
 
@@ -12,15 +12,7 @@
 
 :::
 
-:::demo tabnav/align
-
-### 对齐
-
-通过 `align` 属性可以设置导航标签的对齐位置。
-
-:::
-
-:::demo tabnav/card
+:::demo tab-nav/card
 
 ### 卡片模式
 
@@ -28,17 +20,7 @@
 
 :::
 
-:::demo tabnav/closable
-
-### 关闭按钮
-
-添加 `closable` 属性可以显示关闭按钮，并在点击后触发 `close` 事件。
-
-注意，标签的移除逻辑仍需要自行处理。
-
-:::
-
-:::demo tabnav/disabled
+:::demo tab-nav/disabled
 
 ### 禁用状态
 
@@ -46,23 +28,7 @@
 
 :::
 
-:::demo tabnav/dynamic
-
-### 动态标签
-
-这个例子演示了如何动态创建和删除标签导航。
-
-:::
-
-:::demo tabnav/extra
-
-### 附加内容
-
-通过 `prefix` 和 `suffix` 插槽可以分别在前后两端添加附加内容。
-
-:::
-
-:::demo tabnav/icon
+:::demo tab-nav/icon
 
 ### 内嵌图标
 
@@ -72,15 +38,25 @@
 
 :::
 
-:::demo tabnav/options
+:::demo tab-nav/closable
 
-### 使用选项
+### 关闭按钮
 
-可以通过 `options` 属性快速创建标签导航。
+添加 `closable` 属性可以显示关闭按钮，并在点击后触发 `close` 事件。
+
+注意，标签的移除逻辑仍需要自行处理。
 
 :::
 
-:::demo tabnav/placement
+:::demo tab-nav/align
+
+### 对齐
+
+通过 `align` 属性可以设置导航标签的对齐位置。
+
+:::
+
+:::demo tab-nav/placement
 
 ### 放置位置
 
@@ -88,7 +64,31 @@
 
 :::
 
-:::demo tabnav/scroll
+:::demo tab-nav/extra
+
+### 附加内容
+
+通过 `prefix` 和 `suffix` 插槽可以分别在前后两端添加附加内容。
+
+:::
+
+:::demo tab-nav/dynamic
+
+### 动态标签
+
+这个例子演示了如何动态创建和删除标签导航。
+
+:::
+
+:::demo tab-nav/options
+
+### 使用选项
+
+可以通过 `options` 属性快速创建标签导航。
+
+:::
+
+:::demo tab-nav/scroll
 
 ### 可滚动
 

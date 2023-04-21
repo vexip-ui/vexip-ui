@@ -14,22 +14,6 @@ The `label` prop of each radio must be a valid string or number.
 
 :::
 
-:::demo radio/border
-
-### Border Type
-
-Add the `border` prop to set the radios with border style in group.
-
-:::
-
-:::demo radio/button
-
-### Button Type
-
-Add the `button` prop to set the radios with button style in group.
-
-:::
-
 :::demo radio/disabled
 
 ### Disabled
@@ -46,13 +30,27 @@ Using a radio group can easily generate a series of radios through a list, which
 
 :::
 
-:::demo radio/loading
+:::demo radio/vertical
 
-### Loading
+### Vertical Arrangement
 
-The loading state of the radio can be controlled through the `loading` prop.
+Add the `vertical` prop to set the radio group to vertical layout.
 
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+:::
+
+:::demo radio/border
+
+### Border Type
+
+Add the `border` prop to set the radios with border style in group.
+
+:::
+
+:::demo radio/button
+
+### Button Type
+
+Add the `button` prop to set the radios with button style in group.
 
 :::
 
@@ -64,19 +62,21 @@ There are three built-in sizes, which can be set via `size` prop.
 
 :::
 
+:::demo radio/loading
+
+### Loading
+
+The loading state of the radio can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
+
+:::
+
 :::demo radio/state
 
 ### Different States
 
 Different states can be set via `state`.
-
-:::
-
-:::demo radio/vertical
-
-### Vertical Arrangement
-
-Add the `vertical` prop to set the radio group to vertical layout.
 
 :::
 

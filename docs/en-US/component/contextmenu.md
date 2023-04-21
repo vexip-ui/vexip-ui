@@ -14,14 +14,6 @@ Note that the `contextmenu` event needs to disable the default behavior to preve
 
 :::
 
-:::demo contextmenu/example
-
-### Comprehensive Example
-
-This use case shows how to set custom colors, how to set custom icons, how to disable options, how to set menu shortcuts, and how to add dividers for grouping.
-
-:::
-
 :::demo contextmenu/nesting
 
 ### Nesting Usage
@@ -29,6 +21,14 @@ This use case shows how to set custom colors, how to set custom icons, how to di
 Nested menus can be configured via the `children` option.
 
 The Contextmenu component is encapsulated by the Dropdown component, so the key value structure returned after selecting the menu is consistent with the Dropdown component.
+
+:::
+
+:::demo contextmenu/example
+
+### Comprehensive Example
+
+This use case shows how to set custom colors, how to set custom icons, how to disable options, how to set menu shortcuts, and how to add dividers for grouping.
 
 :::
 

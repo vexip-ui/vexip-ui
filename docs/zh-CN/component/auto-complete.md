@@ -6,7 +6,7 @@
 
 ## 代码示例
 
-:::demo autocomplete/basis
+:::demo auto-complete/basis
 
 ### 基础用法
 
@@ -14,7 +14,7 @@
 
 :::
 
-:::demo autocomplete/clearable
+:::demo auto-complete/clearable
 
 ### 可清空
 
@@ -22,15 +22,7 @@
 
 :::
 
-:::demo autocomplete/custom-key
-
-### 自定义键
-
-通过 `key-config` 可以指定解析选项的各项键值，毕竟有时候处理选项也挺麻烦的。
-
-:::
-
-:::demo autocomplete/filter
+:::demo auto-complete/filter
 
 ### 过滤选项
 
@@ -42,7 +34,23 @@
 
 :::
 
-:::demo autocomplete/group
+:::demo auto-complete/option
+
+### 自定义选项
+
+使用 Option 组件作为插槽可以实现自定义选项。
+
+:::
+
+:::demo auto-complete/custom-key
+
+### 自定义键
+
+通过 `key-config` 可以指定解析选项的各项键值，毕竟有时候处理选项也挺麻烦的。
+
+:::
+
+:::demo auto-complete/group
 
 ### 选项分组
 
@@ -52,21 +60,13 @@
 
 :::
 
-:::demo autocomplete/loading
+:::demo auto-complete/loading
 
 ### 加载状态
 
 通过 `loading` 属性可以控制自动完成组件的加载状态。
 
 如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
-
-:::
-
-:::demo autocomplete/option
-
-### 自定义选项
-
-使用 Option 组件作为插槽可以实现自定义选项。
 
 :::
 

@@ -4,7 +4,7 @@ Used to select or input a date.
 
 ## Demos
 
-:::demo datepicker/basis
+:::demo date-picker/basis
 
 ### Basis Usage
 
@@ -14,27 +14,17 @@ By default, the date picker will appear unselected despite the initial value.
 
 :::
 
-:::demo datepicker/bound
+:::demo date-picker/type
 
-### Limit Range
+### Control Type
 
-With the `min` and `max` props, you can quickly set the selectable range of dates.
+Setting the value of the `type` prop toggles the selection type of the date picker.
 
-Normally, these two props will limit to form a single-sided or double-sided, if you want an intermediate limit, you can make the value of `min` larger than `max`.
-
-If they do not meet your needs, you should use the `disabled-date` prop.
+When the selection type is `'year'`, the return value of the date picker will become the year of type number.
 
 :::
 
-:::demo datepicker/filler
-
-### Custom Filler
-
-Setting the value of the `filler` prop, you can specify the filler in the input control when selecting.
-
-:::
-
-:::demo datepicker/labels
+:::demo date-picker/labels
 
 ### Date Labels
 
@@ -42,29 +32,25 @@ Set the value of the `labels` prop to add labels to each date unit, often used t
 
 :::
 
-:::demo datepicker/loading
+:::demo date-picker/filler
 
-### Loading
+### Custom Filler
 
-The loading state of the date picker can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+Setting the value of the `filler` prop, you can specify the filler in the input control when selecting.
 
 :::
 
-:::demo datepicker/no-action
+:::demo date-picker/unit-readonly
 
-### Directly Select
+### Input Readonly
 
-If you want to be able to complete the select after a date is clicked, you can add the `no-action` prop to change the selection mode.
+Add `unit-readonly` prop to make the input control read-only, and the user can only select date via the panel.
 
-Note that the `outside-cancel` prop will always take effect after adding this prop.
-
-When the `type` prop is `'datetime'`, it only disables the bottom action bar of the panel, and does not change the selection mode.
+Note that this will make impossible to type date, and the component lose some accessibility.
 
 :::
 
-:::demo datepicker/range
+:::demo date-picker/range
 
 ### Range Select
 
@@ -76,7 +62,19 @@ When the selection type is `'datetime'`, it is recommended that the minimum widt
 
 :::
 
-:::demo datepicker/shortcuts
+:::demo date-picker/bound
+
+### Limit Range
+
+With the `min` and `max` props, you can quickly set the selectable range of dates.
+
+Normally, these two props will limit to form a single-sided or double-sided, if you want an intermediate limit, you can make the value of `min` larger than `max`.
+
+If they do not meet your needs, you should use the `disabled-date` prop.
+
+:::
+
+:::demo date-picker/shortcuts
 
 ### Shortcuts
 
@@ -84,23 +82,25 @@ Date shortcuts can be added via the `shortcuts` prop.
 
 :::
 
-:::demo datepicker/type
+:::demo date-picker/no-action
 
-### Control Type
+### Directly Select
 
-Setting the value of the `type` prop toggles the selection type of the date picker.
+If you want to be able to complete the select after a date is clicked, you can add the `no-action` prop to change the selection mode.
 
-When the selection type is `'year'`, the return value of the date picker will become the year of type number.
+Note that the `outside-cancel` prop will always take effect after adding this prop.
+
+When the `type` prop is `'datetime'`, it only disables the bottom action bar of the panel, and does not change the selection mode.
 
 :::
 
-:::demo datepicker/unit-readonly
+:::demo date-picker/loading
 
-### Input Readonly
+### Loading
 
-Add `unit-readonly` prop to make the input control read-only, and the user can only select date via the panel.
+The loading state of the date picker can be controlled through the `loading` prop.
 
-Note that this will make impossible to type date, and the component lose some accessibility.
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
 
 :::
 

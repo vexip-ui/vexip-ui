@@ -8,7 +8,7 @@
 
 ## 代码示例
 
-:::demo configprovider/basis
+:::demo config-provider/basis
 
 ### 基础用法
 
@@ -16,19 +16,19 @@
 
 :::
 
-:::demo configprovider/function
-
-### 函数默认值
-
-某些属性为对象类型时，应该使用函数的方式返回一个全新的值，以防止发生对象被意外的修改。
-
-:::
-
-:::demo configprovider/nesting
+:::demo config-provider/nesting
 
 ### 嵌套使用
 
 配置注入时会动态合并上层提供的配置，再注入到下层。
+
+:::
+
+:::demo config-provider/function
+
+### 函数默认值
+
+某些属性为对象类型时，应该使用函数的方式返回一个全新的值，以防止发生对象被意外的修改。
 
 :::
 

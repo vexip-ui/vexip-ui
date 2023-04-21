@@ -18,13 +18,11 @@ Add the `disabled` prop to set the disabled state.
 
 :::
 
-:::demo textarea/loading
+:::demo textarea/sync
 
-### Loading
+### Sync Input
 
-The loading state of the textarea can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+By default two-way binding is based on the `change` event, adding the `sync` prop will make it based on the `input` event.
 
 :::
 
@@ -44,19 +42,21 @@ Add the `no-resize` prop to disable resizing.
 
 :::
 
+:::demo textarea/loading
+
+### Loading
+
+The loading state of the textarea can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
+
+:::
+
 :::demo textarea/state
 
 ### Different States
 
 Different states can be set via `state`.
-
-:::
-
-:::demo textarea/sync
-
-### Sync Input
-
-By default two-way binding is based on the `change` event, adding the `sync` prop will make it based on the `input` event.
 
 :::
 

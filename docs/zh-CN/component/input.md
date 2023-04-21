@@ -12,13 +12,11 @@
 
 :::
 
-:::demo input/before
+:::demo input/disabled
 
-### 前后置插槽
+### 禁用状态
 
-使用 `before` 和 `after` 插槽可以将一些内容与输入框组合。
-
-如果你想要放一个按钮、选择器或是其他控件，应该使用 `before-action` 和 `after-action` 插槽。
+添加 `disabled` 属性可以设置禁用状态。
 
 :::
 
@@ -30,19 +28,47 @@
 
 :::
 
-:::demo input/disabled
-
-### 禁用状态
-
-添加 `disabled` 属性可以设置禁用状态。
-
-:::
-
 :::demo input/icon
 
 ### 内嵌图标
 
 设置 `prefix` 和 `suffix` 的值或使用同名插槽，可以为输入框添加前置和后置图标。
+
+:::
+
+:::demo input/size
+
+### 改变尺寸
+
+设置 `size` 属性的值可以改变输入框的尺寸，目前一共提供了三种尺寸供选择。
+
+:::
+
+:::demo input/sync
+
+### 同步输入
+
+默认情况下双向绑定是基于 `change` 事件，添加了 `sync` 属性后将变为基于 `input` 事件。
+
+:::
+
+:::demo input/before
+
+### 前后置插槽
+
+使用 `before` 和 `after` 插槽可以将一些内容与输入框组合。
+
+如果你想要放一个按钮、选择器或是其他控件，应该使用 `before-action` 和 `after-action` 插槽。
+
+:::
+
+:::demo input/password
+
+### 密码
+
+将 `type` 属性设置为 `'password'` 可以开启密码输入。
+
+在密码输入模式下添加 `plain-password` 属性可以打开切换密文明文的后缀按钮。
 
 :::
 
@@ -64,37 +90,11 @@
 
 :::
 
-:::demo input/password
-
-### 密码
-
-将 `type` 属性设置为 `'password'` 可以开启密码输入。
-
-在密码输入模式下添加 `plain-password` 属性可以打开切换密文明文的后缀按钮。
-
-:::
-
-:::demo input/size
-
-### 改变尺寸
-
-设置 `size` 属性的值可以改变输入框的尺寸，目前一共提供了三种尺寸供选择。
-
-:::
-
 :::demo input/state
 
 ### 不同状态
 
 通过 `state` 可以设置不同的状态。
-
-:::
-
-:::demo input/sync
-
-### 同步输入
-
-默认情况下双向绑定是基于 `change` 事件，添加了 `sync` 属性后将变为基于 `input` 事件。
 
 :::
 

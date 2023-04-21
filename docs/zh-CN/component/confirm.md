@@ -12,6 +12,22 @@
 
 :::
 
+:::demo confirm/type
+
+### 确认类型
+
+设置 `confirmType` 选项可以改变确认按钮的类型。
+
+:::
+
+:::demo confirm/text
+
+### 按钮文字
+
+设置 `confirmType` 和 `cancelText` 选项自定义确认按钮和取消按钮的内容。
+
+:::
+
 :::demo confirm/icon
 
 ### 自定义图标
@@ -24,27 +40,11 @@
 
 :::
 
-:::demo confirm/text
-
-### 按钮文字
-
-设置 `confirmType` 和 `cancelText` 选项自定义确认按钮和取消按钮的内容。
-
-:::
-
 :::demo confirm/title
 
 ### 添加标题
 
 设置 `title` 选项可以添加标题，于是我们可以换种布局风格。
-
-:::
-
-:::demo confirm/type
-
-### 确认类型
-
-设置 `confirmType` 选项可以改变确认按钮的类型。
 
 :::
 

@@ -18,6 +18,14 @@
 
 :::
 
+:::demo transfer/paged
+
+### 选项分页
+
+最简单的用法。
+
+:::
+
 :::demo transfer/filter
 
 ### 过滤选项
@@ -33,14 +41,6 @@
 通过 `loading` 属性可以控制穿梭框的加载状态。
 
 如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
-
-:::
-
-:::demo transfer/paged
-
-### 选项分页
-
-最简单的用法。
 
 :::
 

@@ -12,11 +12,11 @@
 
 :::
 
-:::demo tooltip/no-arrow
+:::demo tooltip/trigger
 
-### 无箭头
+### 触发方式
 
-添加 `no-arrow` 属性可以禁用箭头。
+设置 `trigger` 属性的值可以改变提示的触发方式。
 
 :::
 
@@ -28,13 +28,11 @@
 
 :::
 
-:::demo tooltip/position
+:::demo tooltip/no-arrow
 
-### 手动定位
+### 无箭头
 
-通过 `virtual` 属性，传入一个 `{ x: number, y: number }` 的对象可以手动控制气泡提示的位置。
-
-这种方式你需要手动控制气泡提示的显隐。
+添加 `no-arrow` 属性可以禁用箭头。
 
 :::
 
@@ -46,27 +44,27 @@
 
 :::
 
-:::demo tooltip/reverse
-
-### 反色主题
-
-添加 `reverse` 属性可以启用反色主题。
-
-:::
-
-:::demo tooltip/trigger
-
-### 触发方式
-
-设置 `trigger` 属性的值可以改变提示的触发方式。
-
-:::
-
 :::demo tooltip/trigger-width
 
 ### 使用触发器宽度
 
 最简单的用法。
+
+:::
+
+:::demo tooltip/wrapper
+
+### 包围元素
+
+添加 `wrapper` 属性可以创建一层包围元素，传入字符串你还可以自定义渲染的标签。
+
+:::
+
+:::demo tooltip/reverse
+
+### 反色主题
+
+添加 `reverse` 属性可以启用反色主题。
 
 :::
 
@@ -78,11 +76,13 @@
 
 :::
 
-:::demo tooltip/wrapper
+:::demo tooltip/position
 
-### 包围元素
+### 手动定位
 
-添加 `wrapper` 属性可以创建一层包围元素，传入字符串你还可以自定义渲染的标签。
+通过 `virtual` 属性，传入一个 `{ x: number, y: number }` 的对象可以手动控制气泡提示的位置。
+
+这种方式你需要手动控制气泡提示的显隐。
 
 :::
 

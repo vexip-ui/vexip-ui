@@ -18,13 +18,11 @@
 
 :::
 
-:::demo textarea/loading
+:::demo textarea/sync
 
-### 加载状态
+### 同步输入
 
-通过 `loading` 属性可以控制多行输入框的加载状态。
-
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+默认情况下双向绑定是基于 `change` 事件，添加了 `sync` 属性后将变为基于 `input` 事件。
 
 :::
 
@@ -44,19 +42,21 @@
 
 :::
 
+:::demo textarea/loading
+
+### 加载状态
+
+通过 `loading` 属性可以控制多行输入框的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+
+:::
+
 :::demo textarea/state
 
 ### 不同状态
 
 通过 `state` 可以设置不同的状态。
-
-:::
-
-:::demo textarea/sync
-
-### 同步输入
-
-默认情况下双向绑定是基于 `change` 事件，添加了 `sync` 属性后将变为基于 `input` 事件。
 
 :::
 

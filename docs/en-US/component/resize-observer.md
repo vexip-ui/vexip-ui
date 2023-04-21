@@ -2,7 +2,7 @@
 
 ## Demos
 
-:::demo resizeobserver/basis
+:::demo resize-observer/basis
 
 ### Simple Example
 

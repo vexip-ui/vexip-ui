@@ -12,37 +12,11 @@ Simple usage, control the `active` prop through two-way binding to control the d
 
 :::
 
-:::demo drawer/footer
-
-### Add Footer
-
-Add the `footer` prop to quickly add feet, or you can directly use the slot of the same name.
-
-:::
-
-:::demo drawer/hide-mask
-
-### Hide Mask
-
-Add `hide-mask` prop to turn off the drawer's masking effect.
-
-After turning off the mask effect, don't forget to provide other ways to turn it off.
-
-:::
-
 :::demo drawer/inner
 
 ### Inner Drawer
 
 Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a built-in drawer.
-
-:::
-
-:::demo drawer/long-content
-
-### Long Content
-
-Can be used in combination with scroll component when the content is too long.
 
 :::
 
@@ -59,6 +33,32 @@ In the content slot of the drawer, a new drawer can be opened, which can solve t
 ### Custom Placement
 
 Set the `placement` prop to `top`, `right`, `bottom`, `left` to customize the position of the drawer.
+
+:::
+
+:::demo drawer/long-content
+
+### Long Content
+
+Can be used in combination with scroll component when the content is too long.
+
+:::
+
+:::demo drawer/hide-mask
+
+### Hide Mask
+
+Add `hide-mask` prop to turn off the drawer's masking effect.
+
+After turning off the mask effect, don't forget to provide other ways to turn it off.
+
+:::
+
+:::demo drawer/footer
+
+### Add Footer
+
+Add the `footer` prop to quickly add feet, or you can directly use the slot of the same name.
 
 :::
 

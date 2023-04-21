@@ -12,11 +12,11 @@ Simplest usage.
 
 :::
 
-:::demo tooltip/no-arrow
+:::demo tooltip/trigger
 
-### No Arrow
+### Trigger Method
 
-Its arrow can be disbaled via adding `no-arrow` prop.
+Change the trigger method via the `trigger` prop.
 
 :::
 
@@ -28,13 +28,11 @@ You can set the tip appear placement via the `placement` prop.
 
 :::
 
-:::demo tooltip/position
+:::demo tooltip/no-arrow
 
-### Manual Location
+### No Arrow
 
-Passing an `{ x: number, y: number }` object via the `virtual` prop can manually control the position of tooltip.
-
-In this way, you need to manually control the visible of tooltip.
+Its arrow can be disbaled via adding `no-arrow` prop.
 
 :::
 
@@ -46,27 +44,27 @@ Render tip content directly without internal styles via adding `raw` prop.
 
 :::
 
-:::demo tooltip/reverse
-
-### Reverse Theme
-
-The reverse color theme will be enabled through adding `reverse` prop.
-
-:::
-
-:::demo tooltip/trigger
-
-### Trigger Method
-
-Change the trigger method via the `trigger` prop.
-
-:::
-
 :::demo tooltip/trigger-width
 
 ### Use Trigger Width
 
 Simplest usage.
+
+:::
+
+:::demo tooltip/wrapper
+
+### Use Wrapper
+
+Add the `wrapper` prop to create a wrapping element, you also can passing a string to customize the rendered tag.
+
+:::
+
+:::demo tooltip/reverse
+
+### Reverse Theme
+
+The reverse color theme will be enabled through adding `reverse` prop.
 
 :::
 
@@ -78,11 +76,13 @@ You can pass an external element to trigger the tooltip via the `virtual` prop.
 
 :::
 
-:::demo tooltip/wrapper
+:::demo tooltip/position
 
-### Use Wrapper
+### Manual Location
 
-Add the `wrapper` prop to create a wrapping element, you also can passing a string to customize the rendered tag.
+Passing an `{ x: number, y: number }` object via the `virtual` prop can manually control the position of tooltip.
+
+In this way, you need to manually control the visible of tooltip.
 
 :::
 

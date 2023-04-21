@@ -12,14 +12,6 @@
 
 :::
 
-:::demo tabs/align
-
-### 标签对齐
-
-通过 `align` 属性可以设置导航标签的对齐位置。
-
-:::
-
 :::demo tabs/card
 
 ### 卡片模式
@@ -33,22 +25,6 @@
 ### 禁用状态
 
 为 TabPanel 添加 `disabled` 属性禁用某一个标签页导航。
-
-:::
-
-:::demo tabs/dynamic
-
-### 动态标签
-
-这个例子演示了如何动态创建和删除标签导航。
-
-:::
-
-:::demo tabs/extra
-
-### 附加内容
-
-通过 `prefix` 和 `suffix` 插槽可以分别在导航的前后两端添加附加内容。
 
 :::
 
@@ -68,11 +44,35 @@
 
 :::
 
+:::demo tabs/align
+
+### 标签对齐
+
+通过 `align` 属性可以设置导航标签的对齐位置。
+
+:::
+
 :::demo tabs/placement
 
 ### 标签位置
 
 通过 `placement` 属性可以设置导航标签的放置位置。
+
+:::
+
+:::demo tabs/extra
+
+### 附加内容
+
+通过 `prefix` 和 `suffix` 插槽可以分别在导航的前后两端添加附加内容。
+
+:::
+
+:::demo tabs/dynamic
+
+### 动态标签
+
+这个例子演示了如何动态创建和删除标签导航。
 
 :::
 

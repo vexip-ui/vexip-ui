@@ -20,22 +20,6 @@
 
 :::
 
-:::demo menu/horizontal
-
-### 横向菜单
-
-添加 `horizontal` 属性可以使菜单变为横向显示。
-
-:::
-
-:::demo menu/meta
-
-### 元数据
-
-通过 MenuItem 的 `meta` 属性可以为每个菜单配置元数据。
-
-:::
-
 :::demo menu/options
 
 ### 菜单选项
@@ -49,6 +33,22 @@
 ### 收缩菜单
 
 通过设置 `reduced` 属性可以使菜单收缩或展开。
+
+:::
+
+:::demo menu/horizontal
+
+### 横向菜单
+
+添加 `horizontal` 属性可以使菜单变为横向显示。
+
+:::
+
+:::demo menu/meta
+
+### 元数据
+
+通过 MenuItem 的 `meta` 属性可以为每个菜单配置元数据。
 
 :::
 

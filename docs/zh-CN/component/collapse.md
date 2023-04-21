@@ -10,22 +10,6 @@
 
 :::
 
-:::demo collapse/accordion
-
-### 手风琴
-
-添加 `accordion` 属性可以开启手风琴模式，该模式下每次只能展开一个面板。
-
-:::
-
-:::demo collapse/arrow
-
-### 调整箭头
-
-添加 `arrow-type` 属性的值可以改变面板箭头的位置或者隐藏箭头。
-
-:::
-
 :::demo collapse/card
 
 ### 卡片模式
@@ -39,6 +23,22 @@
 ### 无边框模式
 
 添加 `ghost` 属性可以开启无边框模式，该属性在卡片模式下无效。
+
+:::
+
+:::demo collapse/accordion
+
+### 手风琴
+
+添加 `accordion` 属性可以开启手风琴模式，该模式下每次只能展开一个面板。
+
+:::
+
+:::demo collapse/arrow
+
+### 调整箭头
+
+添加 `arrow-type` 属性的值可以改变面板箭头的位置或者隐藏箭头。
 
 :::
 

@@ -4,7 +4,7 @@ The tab navigation component, the basic component of the tab page component, can
 
 ## Demos
 
-:::demo tabnav/basis
+:::demo tab-nav/basis
 
 ### Basis Usage
 
@@ -12,15 +12,7 @@ Two-way binding is possible using `v-model:active`.
 
 :::
 
-:::demo tabnav/align
-
-### Alignment
-
-The alignment of tab items can be set via the `align` prop.
-
-:::
-
-:::demo tabnav/card
+:::demo tab-nav/card
 
 ### Card Mode
 
@@ -28,17 +20,7 @@ Add the `card` prop to enable card mode.
 
 :::
 
-:::demo tabnav/closable
-
-### Close Button
-
-Add the `closable` prop to display the close button and will trigger the `close` event when clicked.
-
-Note that the tab removal logic still needs to be handled by yourself.
-
-:::
-
-:::demo tabnav/disabled
+:::demo tab-nav/disabled
 
 ### Disabled
 
@@ -46,23 +28,7 @@ Add a `disabled` property to Item to disable a tab navigation.
 
 :::
 
-:::demo tabnav/dynamic
-
-### Dynamic Tabs
-
-This demo demonstrates how to dynamically add and remove tabs navigation.
-
-:::
-
-:::demo tabnav/extra
-
-### Extra Content
-
-You can add extra content to the front and rear respectively via `prefix` and `suffix` slots.
-
-:::
-
-:::demo tabnav/icon
+:::demo tab-nav/icon
 
 ### Inline Icon
 
@@ -72,15 +38,25 @@ For the suffix icon, use the slot to add it.
 
 :::
 
-:::demo tabnav/options
+:::demo tab-nav/closable
 
-### Use Options
+### Close Button
 
-Tab items can be quickly created via `options` prop.
+Add the `closable` prop to display the close button and will trigger the `close` event when clicked.
+
+Note that the tab removal logic still needs to be handled by yourself.
 
 :::
 
-:::demo tabnav/placement
+:::demo tab-nav/align
+
+### Alignment
+
+The alignment of tab items can be set via the `align` prop.
+
+:::
+
+:::demo tab-nav/placement
 
 ### Placement
 
@@ -88,7 +64,31 @@ The placement of tab items can be set via the `placement` prop.
 
 :::
 
-:::demo tabnav/scroll
+:::demo tab-nav/extra
+
+### Extra Content
+
+You can add extra content to the front and rear respectively via `prefix` and `suffix` slots.
+
+:::
+
+:::demo tab-nav/dynamic
+
+### Dynamic Tabs
+
+This demo demonstrates how to dynamically add and remove tabs navigation.
+
+:::
+
+:::demo tab-nav/options
+
+### Use Options
+
+Tab items can be quickly created via `options` prop.
+
+:::
+
+:::demo tab-nav/scroll
 
 ### Scrollable
 

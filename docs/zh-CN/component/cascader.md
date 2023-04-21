@@ -12,23 +12,13 @@
 
 :::
 
-:::demo cascader/async-load
+:::demo cascader/hover
 
-### 异步加载
+### 悬停触发
 
-通过 `on-async-load` 属性可以开启异步加载模式。
+添加 `hover-trigger` 属性可以开启鼠标悬停触发展开下层面板。
 
-在多选模式下添加 `merge-tags` 属性可以使得父选项在子级未完全加载完的情况下可被选择。
-
-注意，在异步加载下开启 `merge-tags` 会使得控件的 `value` 也合并为父选项的值，这与非异步加载时的表现是不一样的。
-
-:::
-
-:::demo cascader/brief-label
-
-### 简短标签
-
-添加 `brief-label` 属性可以使得显示的标签只保留最后一节。
+该特性在开启了异步加载后无效。
 
 :::
 
@@ -40,23 +30,19 @@
 
 :::
 
-:::demo cascader/hover
+:::demo cascader/multiple
 
-### 悬停触发
+### 多选模式
 
-添加 `hover-trigger` 属性可以开启鼠标悬停触发展开下层面板。
-
-该特性在开启了异步加载后无效。
+添加 `multiple` 属性可以开启多选模式。
 
 :::
 
-:::demo cascader/loading
+:::demo cascader/size
 
-### 加载状态
+### 改变尺寸
 
-通过 `loading` 属性可以控制联级选择器的加载状态。
-
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+设置 `size` 属性的值可以改变尺寸。
 
 :::
 
@@ -72,24 +58,6 @@
 
 :::
 
-:::demo cascader/merged
-
-### 合并标签
-
-在多选模式下添加 `merge-tags` 属性可以开启合并标签功能。
-
-开启后，当某个选项的所有子级都被选择时，会合并显示为父选项的标签。
-
-:::
-
-:::demo cascader/multiple
-
-### 多选模式
-
-添加 `multiple` 属性可以开启多选模式。
-
-:::
-
 :::demo cascader/no-cascaded
 
 ### 非关联选项
@@ -100,11 +68,43 @@
 
 :::
 
-:::demo cascader/size
+:::demo cascader/brief-label
 
-### 改变尺寸
+### 简短标签
 
-设置 `size` 属性的值可以改变尺寸。
+添加 `brief-label` 属性可以使得显示的标签只保留最后一节。
+
+:::
+
+:::demo cascader/merged
+
+### 合并标签
+
+在多选模式下添加 `merge-tags` 属性可以开启合并标签功能。
+
+开启后，当某个选项的所有子级都被选择时，会合并显示为父选项的标签。
+
+:::
+
+:::demo cascader/async-load
+
+### 异步加载
+
+通过 `on-async-load` 属性可以开启异步加载模式。
+
+在多选模式下添加 `merge-tags` 属性可以使得父选项在子级未完全加载完的情况下可被选择。
+
+注意，在异步加载下开启 `merge-tags` 会使得控件的 `value` 也合并为父选项的值，这与非异步加载时的表现是不一样的。
+
+:::
+
+:::demo cascader/loading
+
+### 加载状态
+
+通过 `loading` 属性可以控制联级选择器的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
 
 :::
 

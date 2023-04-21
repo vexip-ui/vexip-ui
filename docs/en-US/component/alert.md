@@ -12,11 +12,11 @@ Create different types of alerts by setting the `type` prop to info, success, wa
 
 :::
 
-:::demo alert/carousel
+:::demo alert/title
 
-### Carousel Content
+### With Title
 
-This example shows how to make a carousel content in Alert with the Carousel component.
+When you need to add a brief summary to the alert, you can set the `title` prop or slot with the same name to add a title.
 
 :::
 
@@ -36,19 +36,19 @@ Use the `close` slot to customize the content of the close button.
 
 :::
 
-:::demo alert/colorful-text
-
-### Colorful Text
-
-Add the `colorful-text` prop to make the alert text colored accordingly.
-
-:::
-
 :::demo alert/icon
 
 ### Show Icon
 
 Add the `icon` prop to display the icon. If you specify an icon component, the specified icon will be used.
+
+:::
+
+:::demo alert/colorful-text
+
+### Colorful Text
+
+Add the `colorful-text` prop to make the alert text colored accordingly.
 
 :::
 
@@ -68,11 +68,11 @@ Adding the `scroll` prop makes the content scroll automatically, and the scroll 
 
 :::
 
-:::demo alert/title
+:::demo alert/carousel
 
-### With Title
+### Carousel Content
 
-When you need to add a brief summary to the alert, you can set the `title` prop or slot with the same name to add a title.
+This example shows how to make a carousel content in Alert with the Carousel component.
 
 :::
 

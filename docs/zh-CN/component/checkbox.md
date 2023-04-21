@@ -20,6 +20,14 @@
 
 :::
 
+:::demo checkbox/size
+
+### 三种尺寸
+
+三种尺寸却有四个，正常的。
+
+:::
+
 :::demo checkbox/group
 
 ### 复选框组
@@ -28,11 +36,35 @@
 
 :::
 
+:::demo checkbox/vertical
+
+### 纵向布局
+
+为 CheckboxGroup 添加 `vertical` 属性可以实现纵向排列。
+
+:::
+
+:::demo checkbox/total
+
+### 全选控件
+
+在需要实现全选时，只需要在复选框组内添加一个具有 `control` 属性的复选框即可。
+
+:::
+
 :::demo checkbox/layout
 
 ### 灵活布局
 
 结合布局组件可以灵活地对复选框组进行自定义布局。
+
+:::
+
+:::demo checkbox/options
+
+### 选项
+
+通过 `options` 属性可以快速生成复选框组。
 
 :::
 
@@ -46,43 +78,11 @@
 
 :::
 
-:::demo checkbox/options
-
-### 选项
-
-通过 `options` 属性可以快速生成复选框组。
-
-:::
-
-:::demo checkbox/size
-
-### 三种尺寸
-
-三种尺寸却有四个，正常的。
-
-:::
-
 :::demo checkbox/state
 
 ### 不同状态
 
 通过 `state` 可以设置不同的状态。
-
-:::
-
-:::demo checkbox/total
-
-### 全选控件
-
-在需要实现全选时，只需要在复选框组内添加一个具有 `control` 属性的复选框即可。
-
-:::
-
-:::demo checkbox/vertical
-
-### 纵向布局
-
-为 CheckboxGroup 添加 `vertical` 属性可以实现纵向排列。
 
 :::
 

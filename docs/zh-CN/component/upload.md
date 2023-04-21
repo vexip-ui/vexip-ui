@@ -12,26 +12,6 @@
 
 :::
 
-:::demo upload/default-files
-
-### 默认文件
-
-通过 `default-files` 属性可以设置静态的默认文件，这些文件在上传时不会进行处理。
-
-:::
-
-:::demo upload/directory
-
-### 文件夹上传
-
-添加 `directory` 属性可以开启文件夹上传模式。
-
-当使用点击上传的交互时，由于浏览器的限制，只能仅上传文件夹。
-
-注意，该特性只有在支持 `webkitdirectory` 的浏览器才能正常使用。
-
-:::
-
 :::demo upload/drag
 
 ### 拖拽上传
@@ -40,11 +20,11 @@
 
 :::
 
-:::demo upload/image
+:::demo upload/default-files
 
-### 图片模式
+### 默认文件
 
-添加 `image` 属性可以开启图片上传模式，开启该模式之后 `accept` 和 `list-type` 属性将会失效。
+通过 `default-files` 属性可以设置静态的默认文件，这些文件在上传时不会进行处理。
 
 :::
 
@@ -66,11 +46,11 @@
 
 :::
 
-:::demo upload/multiple
+:::demo upload/image
 
-### 多文件上传
+### 图片模式
 
-添加 `multiple` 属性可以开启多文件上传。
+添加 `image` 属性可以开启图片上传模式，开启该模式之后 `accept` 和 `list-type` 属性将会失效。
 
 :::
 
@@ -91,6 +71,26 @@
 添加 `hidden-files` 属性可以禁用内部的文件列表显示。
 
 同时配合 UploadList 组件可以达到单独文件列表的效果，当然你可以自己写。
+
+:::
+
+:::demo upload/multiple
+
+### 多文件上传
+
+添加 `multiple` 属性可以开启多文件上传。
+
+:::
+
+:::demo upload/directory
+
+### 文件夹上传
+
+添加 `directory` 属性可以开启文件夹上传模式。
+
+当使用点击上传的交互时，由于浏览器的限制，只能仅上传文件夹。
+
+注意，该特性只有在支持 `webkitdirectory` 的浏览器才能正常使用。
 
 :::
 

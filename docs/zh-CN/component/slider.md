@@ -12,61 +12,11 @@
 
 :::
 
-:::demo slider/loading
-
-### 加载状态
-
-通过 `loading` 属性可以控制滑动输入条的加载状态。
-
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
-
-:::
-
-:::demo slider/marker-only
-
-### 仅标记点
-
-当设置的标记点后，可以添加 `marker-only` 属性使的只有标记点对应的值可以被选择，添加后 `step` 属性将失效。
-
-:::
-
-:::demo slider/markers
-
-### 标记点
-
-通过 `markers` 属性可以为滑动条设置标记点。
-
-:::
-
 :::demo slider/maxmin
 
 ### 设置边界
 
 通过 `min` 和 `max` 属性可以设置滑动输入条的边界值。
-
-:::
-
-:::demo slider/range
-
-### 范围选择
-
-添加 `range` 属性可以开启范围选择模式。
-
-:::
-
-:::demo slider/reverse
-
-### 反向操作
-
-添加 `reverse` 属性可以使得滑动输入条的操作变位反向。
-
-:::
-
-:::demo slider/state
-
-### 不同状态
-
-通过 `state` 可以设置不同的状态。
 
 :::
 
@@ -78,11 +28,61 @@
 
 :::
 
+:::demo slider/range
+
+### 范围选择
+
+添加 `range` 属性可以开启范围选择模式。
+
+:::
+
 :::demo slider/vertical
 
 ### 纵向滑动
 
 添加 `vertical` 属性可以使滑动输入条变为纵向滑动。
+
+:::
+
+:::demo slider/reverse
+
+### 反向操作
+
+添加 `reverse` 属性可以使得滑动输入条的操作变位反向。
+
+:::
+
+:::demo slider/markers
+
+### 标记点
+
+通过 `markers` 属性可以为滑动条设置标记点。
+
+:::
+
+:::demo slider/marker-only
+
+### 仅标记点
+
+当设置的标记点后，可以添加 `marker-only` 属性使的只有标记点对应的值可以被选择，添加后 `step` 属性将失效。
+
+:::
+
+:::demo slider/loading
+
+### 加载状态
+
+通过 `loading` 属性可以控制滑动输入条的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+
+:::
+
+:::demo slider/state
+
+### 不同状态
+
+通过 `state` 可以设置不同的状态。
 
 :::
 

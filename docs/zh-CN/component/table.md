@@ -12,24 +12,6 @@
 
 :::
 
-:::demo table/add-row
-
-:::
-
-:::demo table/attrs
-
-### 自定义属性
-
-通过列选项的 `class-name`、`style` 和 `attrs` 属性可以自定义列的属性。
-
-通过 `row-class`、`row-style` 和 `row-attrs` 属性可以自定义行的属性。
-
-通过 `head-class`、`head-style` 和 `head-attrs` 属性可以自定义表头单元格的属性。
-
-通过 `cell-class`、`cell-style` 和 `cell-attrs` 属性可以自定义单元格的属性。
-
-:::
-
 :::demo table/column
 
 ### 模版列
@@ -37,104 +19,6 @@
 使用 TableColumn 组件可以以模版的形式配置表格列。
 
 模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，是推荐的使用方式。
-
-:::
-
-:::demo table/draggable
-
-### 行拖拽
-
-添加 `row-draggable` 属性可以开启行拖拽功能。
-
-不过这种方式会使得整个行只能进行拖拽交互，可以改为添加一个 `type` 属性为 `'drag'` 的列，创建一个单独的拖拽把手。
-
-:::
-
-:::demo table/empty
-
-### 空表格
-
-没有数据时的样子，可以用 `empty` 插槽定制化。
-
-:::
-
-:::demo table/expand
-
-### 拓展内容
-
-在列选项添加 `type` 属性并设置其值为 `'expand'` 可以使该列作为拓展列，该列的默认插槽内容将作为拓展模版内容渲染。
-
-:::
-
-:::demo table/filter
-
-### 数据过滤
-
-在列选项添加 `filter` 属性并设置，可以启用过滤功能。
-
-:::
-
-:::demo table/fixed
-
-### 固定行列
-
-设置 `width` 和 `height` 属性可以为表格限制宽度和高度。
-
-为 Column 设置 `width` 属性可以指定该列宽，设置 `fixed` 属性可以指定固定的列。
-
-:::
-
-:::demo table/mouse-events
-
-### 鼠标事件
-
-表格提供了各种鼠标事件以快速实现自定义交互。
-
-:::
-
-:::demo table/order
-
-### 序号列
-
-在列选项添加 `type` 属性并设置其值为 `'order'` 可以使该列作为序号列。
-
-:::
-
-:::demo table/pagination
-
-### 表格分页
-
-结合 Pagination 组件可以实现表格分页，一般用于数据较多，不便于一页展示的情况。
-
-通过 `current-page` 和 `page-size` 属性可以轻松做到 Pagination 和 Table 组件数据联动。
-
-:::
-
-:::demo table/refresh
-
-### 刷新表格
-
-当 Table 放置一些初始隐藏的元素中，并延迟显示时，通常无法正确计算宽度。
-
-这时需要在该元素显示后调用 Table 实例的 `refresh` 方法重新计算布局。
-
-:::
-
-:::demo table/selection
-
-### 复选框列
-
-为列选项添加 `type` 属性并设置其值为 `'selection'` 可以使该列作为复选框。
-
-获取组件实例后，可以调用 `getSelected` 方法回去被勾选的行数据，或者通过 `clearSelected` 清空勾选。
-
-:::
-
-:::demo table/sorter
-
-### 表格排序
-
-在列选项添加 `sorter` 属性并设置，可以启用排序功能。
 
 :::
 
@@ -152,11 +36,95 @@
 
 :::
 
-:::demo table/toggle-data
+:::demo table/attrs
 
-### 切换数据
+### 自定义属性
 
-在数据发生变化的时候，表格内的一些指标会自动地重新计算。
+通过列选项的 `class-name`、`style` 和 `attrs` 属性可以自定义列的属性。
+
+通过 `row-class`、`row-style` 和 `row-attrs` 属性可以自定义行的属性。
+
+通过 `head-class`、`head-style` 和 `head-attrs` 属性可以自定义表头单元格的属性。
+
+通过 `cell-class`、`cell-style` 和 `cell-attrs` 属性可以自定义单元格的属性。
+
+:::
+
+:::demo table/empty
+
+### 空表格
+
+没有数据时的样子，可以用 `empty` 插槽定制化。
+
+:::
+
+:::demo table/mouse-events
+
+### 鼠标事件
+
+表格提供了各种鼠标事件以快速实现自定义交互。
+
+:::
+
+:::demo table/fixed
+
+### 固定行列
+
+设置 `width` 和 `height` 属性可以为表格限制宽度和高度。
+
+为 Column 设置 `width` 属性可以指定该列宽，设置 `fixed` 属性可以指定固定的列。
+
+:::
+
+:::demo table/sorter
+
+### 表格排序
+
+在列选项添加 `sorter` 属性并设置，可以启用排序功能。
+
+:::
+
+:::demo table/filter
+
+### 数据过滤
+
+在列选项添加 `filter` 属性并设置，可以启用过滤功能。
+
+:::
+
+:::demo table/selection
+
+### 复选框列
+
+为列选项添加 `type` 属性并设置其值为 `'selection'` 可以使该列作为复选框。
+
+获取组件实例后，可以调用 `getSelected` 方法回去被勾选的行数据，或者通过 `clearSelected` 清空勾选。
+
+:::
+
+:::demo table/order
+
+### 序号列
+
+在列选项添加 `type` 属性并设置其值为 `'order'` 可以使该列作为序号列。
+
+:::
+
+:::demo table/expand
+
+### 拓展内容
+
+在列选项添加 `type` 属性并设置其值为 `'expand'` 可以使该列作为拓展列，该列的默认插槽内容将作为拓展模版内容渲染。
+
+:::
+
+:::demo table/pagination
+
+### 表格分页
+
+结合 Pagination 组件可以实现表格分页，一般用于数据较多，不便于一页展示的情况。
+
+通过 `current-page` 和 `page-size` 属性可以轻松做到 Pagination 和 Table 组件数据联动。
 
 :::
 
@@ -172,11 +140,39 @@
 
 :::
 
+:::demo table/draggable
+
+### 行拖拽
+
+添加 `row-draggable` 属性可以开启行拖拽功能。
+
+不过这种方式会使得整个行只能进行拖拽交互，可以改为添加一个 `type` 属性为 `'drag'` 的列，创建一个单独的拖拽把手。
+
+:::
+
 :::demo table/virtual
 
 ### 虚拟滚动
 
 数据太多的时候，你应该会需要它。
+
+:::
+
+:::demo table/toggle-data
+
+### 切换数据
+
+在数据发生变化的时候，表格内的一些指标会自动地重新计算。
+
+:::
+
+:::demo table/refresh
+
+### 刷新表格
+
+当 Table 放置一些初始隐藏的元素中，并延迟显示时，通常无法正确计算宽度。
+
+这时需要在该元素显示后调用 Table 实例的 `refresh` 方法重新计算布局。
 
 :::
 

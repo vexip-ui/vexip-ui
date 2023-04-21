@@ -12,19 +12,11 @@ Two-way binding is possible via `v-model:value`.
 
 :::
 
-:::demo switch/color
+:::demo switch/size
 
-### Background Colors
+### Different Sizes
 
-With `open-color` and `close-color` you can specify the background color of the switch.
-
-:::
-
-:::demo switch/icon
-
-### Custom Icons
-
-The icons on the handler can be customized via `open-icon` and `close-icon`.
+Built-in three sizes, or customize.
 
 :::
 
@@ -36,19 +28,11 @@ Adding `loading` prop allows the switch to be loading, and can be used with `on-
 
 :::
 
-:::demo switch/size
+:::demo switch/color
 
-### Different Sizes
+### Background Colors
 
-Built-in three sizes, or customize.
-
-:::
-
-:::demo switch/state
-
-### Different States
-
-Different states can be set via `state`.
+With `open-color` and `close-color` you can specify the background color of the switch.
 
 :::
 
@@ -57,6 +41,22 @@ Different states can be set via `state`.
 ### Embedded Texts
 
 Embedded text for switch can be set via `open-text` and `close-text`.
+
+:::
+
+:::demo switch/icon
+
+### Custom Icons
+
+The icons on the handler can be customized via `open-icon` and `close-icon`.
+
+:::
+
+:::demo switch/state
+
+### Different States
+
+Different states can be set via `state`.
 
 :::
 

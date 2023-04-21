@@ -12,24 +12,6 @@ Simple data table.
 
 :::
 
-:::demo table/add-row
-
-:::
-
-:::demo table/attrs
-
-### Custon Column Class
-
-Column attributes can be customized via the `class-name`, `style` and `attrs` fields of the column options.
-
-Row attributes can be customized via the `row-class`, `row-style` and `row-attrs` props.
-
-Head cell attributes can be customized via the `head-class`, `head-style` and `head-attrs` props.
-
-Cell attributes can be customized via the `cell-class`, `cell-style` and `cell-attrs` props.
-
-:::
-
 :::demo table/column
 
 ### Template Column
@@ -37,104 +19,6 @@ Cell attributes can be customized via the `cell-class`, `cell-style` and `cell-a
 Use the TableColumn component to configure table columns.
 
 The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations, which is the recommended way to use them.
-
-:::
-
-:::demo table/draggable
-
-### Row Draggable
-
-Adding the `row-draggable` prop enables row dragging.
-
-However, this way will disable other interactions of rows. You can instead add a column which `type` prop is `'drag'` to create a separate drag handler.
-
-:::
-
-:::demo table/empty
-
-### Empty Table
-
-The appearance without data, can be customized with the `empty` slot.
-
-:::
-
-:::demo table/expand
-
-### Expand Content
-
-Adding a `type` prop to the column options and setting its value to `'expand'` can make the column as an expansion column, the default slot content of the column will be rendered as the expansion template content.
-
-:::
-
-:::demo table/filter
-
-### Filter Data
-
-Adding the `filter` prop to the column options and setting it enables filtering.
-
-:::
-
-:::demo table/fixed
-
-### Fixed Width And Height
-
-Set the `width` and `height` props to constrain the width and height of the table.
-
-Set the `width` prop for a Column to specify the width of the column, and set the `fixed` prop to specify a fixed column.
-
-:::
-
-:::demo table/mouse-events
-
-### Mouse Events
-
-Table provide various mouse events to quickly implement custom interactions.
-
-:::
-
-:::demo table/order
-
-### Order Column
-
-Add a `type` prop to the column options and set its value to `'order'` to make the column as an order column.
-
-:::
-
-:::demo table/pagination
-
-### Page Table
-
-Combined with the Pagination component, table pagination can be implemented, which is generally used when there is a lot of data and it is not convenient to display on one page.
-
-Link the data between Pagination and Table components can be easily done via the `current-page` and `page-size` prop.
-
-:::
-
-:::demo table/refresh
-
-### Refresh Table
-
-When Table component is placed inside some initially hidden element, and will display lazily, the width may not be calculated correctly.
-
-At this time, you need to call the `refresh` method of the Table instance to recalculate the layout after the element is displayed.
-
-:::
-
-:::demo table/selection
-
-### Checkbox Column
-
-Add a `type` prop to a column option and set its value to `'selection'` to make the column act as a checkbox.
-
-After getting the component instance, you can call the `getSelected` method to get back the selected row data, or use `clearSelected` to clear the check.
-
-:::
-
-:::demo table/sorter
-
-### Sort Data
-
-Adding the `sorter` prop to the column options and setting it enables sorting.
 
 :::
 
@@ -152,11 +36,95 @@ If you want a clean table via adding the `transparent` prop.
 
 :::
 
-:::demo table/toggle-data
+:::demo table/attrs
 
-### Toggle Data
+### Custon Column Class
 
-Some properties inside table will be recalculated automatically when the data changed.
+Column attributes can be customized via the `class-name`, `style` and `attrs` fields of the column options.
+
+Row attributes can be customized via the `row-class`, `row-style` and `row-attrs` props.
+
+Head cell attributes can be customized via the `head-class`, `head-style` and `head-attrs` props.
+
+Cell attributes can be customized via the `cell-class`, `cell-style` and `cell-attrs` props.
+
+:::
+
+:::demo table/empty
+
+### Empty Table
+
+The appearance without data, can be customized with the `empty` slot.
+
+:::
+
+:::demo table/mouse-events
+
+### Mouse Events
+
+Table provide various mouse events to quickly implement custom interactions.
+
+:::
+
+:::demo table/fixed
+
+### Fixed Width And Height
+
+Set the `width` and `height` props to constrain the width and height of the table.
+
+Set the `width` prop for a Column to specify the width of the column, and set the `fixed` prop to specify a fixed column.
+
+:::
+
+:::demo table/sorter
+
+### Sort Data
+
+Adding the `sorter` prop to the column options and setting it enables sorting.
+
+:::
+
+:::demo table/filter
+
+### Filter Data
+
+Adding the `filter` prop to the column options and setting it enables filtering.
+
+:::
+
+:::demo table/selection
+
+### Checkbox Column
+
+Add a `type` prop to a column option and set its value to `'selection'` to make the column act as a checkbox.
+
+After getting the component instance, you can call the `getSelected` method to get back the selected row data, or use `clearSelected` to clear the check.
+
+:::
+
+:::demo table/order
+
+### Order Column
+
+Add a `type` prop to the column options and set its value to `'order'` to make the column as an order column.
+
+:::
+
+:::demo table/expand
+
+### Expand Content
+
+Adding a `type` prop to the column options and setting its value to `'expand'` can make the column as an expansion column, the default slot content of the column will be rendered as the expansion template content.
+
+:::
+
+:::demo table/pagination
+
+### Page Table
+
+Combined with the Pagination component, table pagination can be implemented, which is generally used when there is a lot of data and it is not convenient to display on one page.
+
+Link the data between Pagination and Table components can be easily done via the `current-page` and `page-size` prop.
 
 :::
 
@@ -172,11 +140,39 @@ You can also configure the indent distance for each level by setting `row-indent
 
 :::
 
+:::demo table/draggable
+
+### Row Draggable
+
+Adding the `row-draggable` prop enables row dragging.
+
+However, this way will disable other interactions of rows. You can instead add a column which `type` prop is `'drag'` to create a separate drag handler.
+
+:::
+
 :::demo table/virtual
 
 ### Virtual Scroll
 
 You should need it when there is too much data.
+
+:::
+
+:::demo table/toggle-data
+
+### Toggle Data
+
+Some properties inside table will be recalculated automatically when the data changed.
+
+:::
+
+:::demo table/refresh
+
+### Refresh Table
+
+When Table component is placed inside some initially hidden element, and will display lazily, the width may not be calculated correctly.
+
+At this time, you need to call the `refresh` method of the Table instance to recalculate the layout after the element is displayed.
 
 :::
 

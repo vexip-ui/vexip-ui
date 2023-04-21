@@ -12,6 +12,24 @@
 
 :::
 
+:::demo image/object-fit
+
+### 填充方式
+
+通过 `fit` 属性可以设置图片的填充方式，同 CSS 的 [object-fit](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit)。
+
+:::
+
+:::demo image/style
+
+### 图片样式
+
+通过 `radius` 属性可以快速设置图片的圆角半径。
+
+通过 `border` 属性可以快速为图片添加一个边框，还可以传入一个有效颜色值指定边框颜色。
+
+:::
+
 :::demo image/fallback
 
 ### 失败处理
@@ -21,16 +39,6 @@
 你还可以通过 `error-tip` 属性或 `error` 插槽自定义错误内容。
 
 当设置了回退源时，需要在回退源也加载失败时才会显示错误内容。
-
-:::
-
-:::demo image/group
-
-### 图片组
-
-多张图片放在一起，可以用于多张预览。
-
-默认情况只会显示第一张，添加 `show-all` 属性可以显示全部图片。
 
 :::
 
@@ -56,14 +64,6 @@
 
 :::
 
-:::demo image/object-fit
-
-### 填充方式
-
-通过 `fit` 属性可以设置图片的填充方式，同 CSS 的 [object-fit](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit)。
-
-:::
-
 :::demo image/preview
 
 ### 预览
@@ -74,13 +74,13 @@
 
 :::
 
-:::demo image/style
+:::demo image/group
 
-### 图片样式
+### 图片组
 
-通过 `radius` 属性可以快速设置图片的圆角半径。
+多张图片放在一起，可以用于多张预览。
 
-通过 `border` 属性可以快速为图片添加一个边框，还可以传入一个有效颜色值指定边框颜色。
+默认情况只会显示第一张，添加 `show-all` 属性可以显示全部图片。
 
 :::
 

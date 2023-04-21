@@ -4,7 +4,7 @@ Usually used in occasions where a more friendly interaction is required for nume
 
 ## Demos
 
-:::demo numberinput/basis
+:::demo number-input/basis
 
 ### Basis Usage
 
@@ -12,23 +12,7 @@ Enter numbers directly, or use the controls on the right to add or subtract.
 
 :::
 
-:::demo numberinput/clearable
-
-### Clearable
-
-Add the `clearable` prop to make the control value clearable.
-
-:::
-
-:::demo numberinput/control-type
-
-### Basis Usage
-
-The position and display of the control can be changed via the `action-type` prop.
-
-:::
-
-:::demo numberinput/disabled
+:::demo number-input/disabled
 
 ### Disabled
 
@@ -36,15 +20,23 @@ Add the `disabled` prop to set the disabled state.
 
 :::
 
-:::demo numberinput/formatter
+:::demo number-input/size
 
-### Basis Usage
+### Change Size
 
-A format method can be provided via the `formatter` prop, which will display the formatted value in the non-input state.
+Setting the value of the `size` attribute can change the size of the input. Currently, there are three sizes to choose from.
 
 :::
 
-:::demo numberinput/icon
+:::demo number-input/clearable
+
+### Clearable
+
+Add the `clearable` prop to make the control value clearable.
+
+:::
+
+:::demo number-input/icon
 
 ### Inline Icon
 
@@ -52,7 +44,39 @@ Prefix and suffix icons can be added to input fields by setting the values of `p
 
 :::
 
-:::demo numberinput/loading
+:::demo number-input/range
+
+### Number Range
+
+The `min` and `max` props allow you to set the maximum and minimum values, respectively.
+
+:::
+
+:::demo number-input/precision
+
+### Number Precision
+
+The precision with which value is preserved can be set via the `precision` prop.
+
+:::
+
+:::demo number-input/formatter
+
+### Basis Usage
+
+A format method can be provided via the `formatter` prop, which will display the formatted value in the non-input state.
+
+:::
+
+:::demo number-input/step
+
+### Change Step
+
+Set the `step` prop to change the magnitude of each increment or decrement.
+
+:::
+
+:::demo number-input/loading
 
 ### Loading
 
@@ -62,51 +86,27 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 :::
 
-:::demo numberinput/precision
-
-### Number Precision
-
-The precision with which value is preserved can be set via the `precision` prop.
-
-:::
-
-:::demo numberinput/range
-
-### Number Range
-
-The `min` and `max` props allow you to set the maximum and minimum values, respectively.
-
-:::
-
-:::demo numberinput/size
-
-### Change Size
-
-Setting the value of the `size` attribute can change the size of the input. Currently, there are three sizes to choose from.
-
-:::
-
-:::demo numberinput/state
-
-### Different States
-
-Different states can be set via `state`.
-
-:::
-
-:::demo numberinput/step
-
-### Change Step
-
-Set the `step` prop to change the magnitude of each increment or decrement.
-
-:::
-
-:::demo numberinput/sync
+:::demo number-input/sync
 
 ### Sync Input
 
 By default two-way binding is based on the `change` event, adding the `sync` prop will make it based on the `input` event.
+
+:::
+
+:::demo number-input/control-type
+
+### Basis Usage
+
+The position and display of the control can be changed via the `action-type` prop.
+
+:::
+
+:::demo number-input/state
+
+### Different States
+
+Different states can be set via `state`.
 
 :::
 

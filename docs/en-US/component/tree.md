@@ -12,16 +12,6 @@ Use the `data` prop to pass in a list of data to generate the corresponding tree
 
 :::
 
-:::demo tree/async-load
-
-### Async Load
-
-Nodes can async load via `on-async-load` prop. Since `data` is a fully controlled prop, you need to update the `data` prop directly.
-
-You need to return `false` to inform the component when the node failed to load, otherwise the node is considered to be successfully loaded and the node will be marked as loaded.
-
-:::
-
 :::demo tree/checkbox
 
 ### Checkbox
@@ -30,11 +20,19 @@ Add the `checkbox` prop to enable checkbox mode.
 
 :::
 
-:::demo tree/control
+:::demo tree/suffix-checkbox
 
-### Control Methods
+### Suffix Checkbox
 
-There are a number of methods that can be used to control the node state of the tree through the Tree instance.
+Adding the `checkbox` and `suffix-checkbox` props at the same time enables the suffix checkbox.
+
+:::
+
+:::demo tree/no-cascaded
+
+### No Cascaded Nodes
+
+Adding the `no-cascaded` prop enables parent and child nodes to be checked independently.
 
 :::
 
@@ -52,6 +50,16 @@ The other options can respectively control the interaction disabled state of the
 
 :::
 
+:::demo tree/filter
+
+### Filter Nodes
+
+Filter nodes can be enabled through the `filter` prop.
+
+A string comparison algorithm is used inside the component to filter according to the `label` of nodes when passing in a string, or you can also pass in a custom filter function.
+
+:::
+
 :::demo tree/drag
 
 ### Drag Node
@@ -60,13 +68,39 @@ Adding the `draggable` prop enables tree node dragging.
 
 :::
 
-:::demo tree/filter
+:::demo tree/props
 
-### Filter Nodes
+### Node Props
 
-Filter nodes can be enabled through the `filter` prop.
+Use the `node-props` prop to set the html attributes of the root element for all nodes.
 
-A string comparison algorithm is used inside the component to filter according to the `label` of nodes when passing in a string, or you can also pass in a custom filter function.
+:::
+
+:::demo tree/async-load
+
+### Async Load
+
+Nodes can async load via `on-async-load` prop. Since `data` is a fully controlled prop, you need to update the `data` prop directly.
+
+You need to return `false` to inform the component when the node failed to load, otherwise the node is considered to be successfully loaded and the node will be marked as loaded.
+
+:::
+
+:::demo tree/slot
+
+### Custom Node
+
+Normally, the content of a node label can be customized using the `label` slot.
+
+If you want to completely customize the content of the node, you can use the `node` slot, but I don't really recommend it.
+
+:::
+
+:::demo tree/control
+
+### Control Methods
+
+There are a number of methods that can be used to control the node state of the tree through the Tree instance.
 
 :::
 
@@ -88,14 +122,6 @@ Add the `link-line` prop to create link lines for the tree nodes, and you can al
 
 :::
 
-:::demo tree/no-cascaded
-
-### No Cascaded Nodes
-
-Adding the `no-cascaded` prop enables parent and child nodes to be checked independently.
-
-:::
-
 :::demo tree/post-create
 
 ### Post Create
@@ -105,32 +131,6 @@ Each node can be post processed when created via passing a funtion to `post-crea
 Except `id`, `parent`, `children` options, other options can be modified.
 
 This can be useful, for example, when init info for nodes is not stored directly in the tree data, but is recorded separately.
-
-:::
-
-:::demo tree/props
-
-### Node Props
-
-Use the `node-props` prop to set the html attributes of the root element for all nodes.
-
-:::
-
-:::demo tree/slot
-
-### Custom Node
-
-Normally, the content of a node label can be customized using the `label` slot.
-
-If you want to completely customize the content of the node, you can use the `node` slot, but I don't really recommend it.
-
-:::
-
-:::demo tree/suffix-checkbox
-
-### Suffix Checkbox
-
-Adding the `checkbox` and `suffix-checkbox` props at the same time enables the suffix checkbox.
 
 :::
 

@@ -12,19 +12,19 @@ Set the result type via `type` prop, and different types have different built-in
 
 :::
 
-:::demo result/custom
-
-### Custom Content
-
-Set customize result content via slots.
-
-:::
-
 :::demo result/size
 
 ### Different Sizes
 
 Set the value of the `size` prop to adjust the size of result, it will adjust the font size of the icon, title and description.
+
+:::
+
+:::demo result/custom
+
+### Custom Content
+
+Set customize result content via slots.
 
 :::
 

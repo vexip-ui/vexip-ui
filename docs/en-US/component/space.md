@@ -12,11 +12,11 @@ Simplest usage.
 
 :::
 
-:::demo space/layout
+:::demo space/vertical
 
-### Various Layout
+### Vertical
 
-The horizontal alignment can be set with `justify`, and the vertical alignment can also be set with `align`.
+Add the `vertical` prop to achieve vertical layout.
 
 :::
 
@@ -28,11 +28,11 @@ There are three built-in sizes, which can be set via `size` prop, or you can pas
 
 :::
 
-:::demo space/vertical
+:::demo space/layout
 
-### Vertical
+### Various Layout
 
-Add the `vertical` prop to achieve vertical layout.
+The horizontal alignment can be set with `justify`, and the vertical alignment can also be set with `align`.
 
 :::
 

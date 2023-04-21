@@ -10,19 +10,19 @@ Simplest usage.
 
 :::
 
-:::demo overflow/max-count
-
-### Max Count
-
-The maximum number items displayed can be manually controlled via the `max-count` prop.
-
-:::
-
 :::demo overflow/no-items
 
 ### Not Pass Items
 
 Child elements can be rendered directly through the default slot when the `items` prop is not used.
+
+:::
+
+:::demo overflow/max-count
+
+### Max Count
+
+The maximum number items displayed can be manually controlled via the `max-count` prop.
 
 :::
 

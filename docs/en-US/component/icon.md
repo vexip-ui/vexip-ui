@@ -26,32 +26,6 @@ You can drop the svg component to the `icon` prop, or you can put it directly un
 
 :::
 
-:::demo icon/custom
-
-### Custom Icon
-
-You can put any svg content under the icon default slot.
-
-:::
-
-:::demo icon/package
-
-### Different Types
-
-By default, the icons under `solid` are used directly.
-
-If you want to use other icon sets, please refer to the description of the naming conversion rules at the top.
-
-:::
-
-:::demo icon/pulse
-
-### Pulse Effect
-
-Set the `effect` prop to `pulse-in` or `pulse-out` to make the icon have a pulse effect.
-
-:::
-
 :::demo icon/scale
 
 ### Scale Icon
@@ -65,6 +39,32 @@ Set the `scale` prop to scale Icon.
 ### Spin Effect
 
 Set `effect` prop to `spin-in` or `spin-out` to spin the icon.
+
+:::
+
+:::demo icon/pulse
+
+### Pulse Effect
+
+Set the `effect` prop to `pulse-in` or `pulse-out` to make the icon have a pulse effect.
+
+:::
+
+:::demo icon/package
+
+### Different Types
+
+By default, the icons under `solid` are used directly.
+
+If you want to use other icon sets, please refer to the description of the naming conversion rules at the top.
+
+:::
+
+:::demo icon/custom
+
+### Custom Icon
+
+You can put any svg content under the icon default slot.
 
 :::
 

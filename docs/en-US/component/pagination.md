@@ -20,13 +20,13 @@ The ellipsis is used when there are too many pages.
 
 :::
 
-:::demo pagination/plugin
+:::demo pagination/style
 
-### Internal Plugins
+### Different Styles
 
-Plugins can be added via the `plugins` prop, including: adjusting the number of pages per page, displaying the total number of items, and quickly jumping to pages.
+Adding the `background` prop makes pagination items to have background color.
 
-The order within the array determines where the plugin renders, with a null value indicating where the pager is located.
+Add the `no-border` prop to disable borders on pagination items.
 
 :::
 
@@ -38,13 +38,13 @@ Three built-in sizes, set via `size` prop, can be set by yourself if they are no
 
 :::
 
-:::demo pagination/style
+:::demo pagination/plugin
 
-### Different Styles
+### Internal Plugins
 
-Adding the `background` prop makes pagination items to have background color.
+Plugins can be added via the `plugins` prop, including: adjusting the number of pages per page, displaying the total number of items, and quickly jumping to pages.
 
-Add the `no-border` prop to disable borders on pagination items.
+The order within the array determines where the plugin renders, with a null value indicating where the pager is located.
 
 :::
 

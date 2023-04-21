@@ -6,7 +6,7 @@ You may be wondering how it is different from Select with filter options feature
 
 ## Demos
 
-:::demo autocomplete/basis
+:::demo auto-complete/basis
 
 ### Basis Usage
 
@@ -14,7 +14,7 @@ The autocomplete data source is set via the `options` prop.
 
 :::
 
-:::demo autocomplete/clearable
+:::demo auto-complete/clearable
 
 ### Clearable
 
@@ -22,15 +22,7 @@ Add the `clearable` prop to enable clearable functionality.
 
 :::
 
-:::demo autocomplete/custom-key
-
-### Custom Key
-
-You can specify the key values of the parsing options via `key-config` prop.
-
-:::
-
-:::demo autocomplete/filter
+:::demo auto-complete/filter
 
 ### Filter Options
 
@@ -42,7 +34,23 @@ Add the `ignore-case` prop to make the filter to ignore case when compare.
 
 :::
 
-:::demo autocomplete/group
+:::demo auto-complete/option
+
+### Custom Option
+
+Custom option rendering can be implemented by using the Option component as a slot.
+
+:::
+
+:::demo auto-complete/custom-key
+
+### Custom Key
+
+You can specify the key values of the parsing options via `key-config` prop.
+
+:::
+
+:::demo auto-complete/group
 
 ### Group Options
 
@@ -52,21 +60,13 @@ The content of the group label can be customized via the `group` slot.
 
 :::
 
-:::demo autocomplete/loading
+:::demo auto-complete/loading
 
 ### Loading
 
 The loading state of the auto-complete can be controlled through the `loading` prop.
 
 If you want to be read-only when loading, you need to add the `loading-lock` prop.
-
-:::
-
-:::demo autocomplete/option
-
-### Custom Option
-
-Custom option rendering can be implemented by using the Option component as a slot.
 
 :::
 

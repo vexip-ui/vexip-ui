@@ -12,11 +12,11 @@
 
 :::
 
-:::demo alert/carousel
+:::demo alert/title
 
-### 轮播通知
+### 带标题警告
 
-这个示例展示了如何结合 Carousel 组件开发一个内容轮播的警告。
+当需要为警告添加一个简要的概括时，可以设置 `title` 属性或同名插槽添加一个标题。
 
 :::
 
@@ -36,19 +36,19 @@
 
 :::
 
-:::demo alert/colorful-text
-
-### 有色的字体
-
-添加 `colorful-text` 属性可以使警告的字体带有相应的颜色。
-
-:::
-
 :::demo alert/icon
 
 ### 显示图标
 
 添加 `icon` 属性可以显示图标，若指定一个图标组件，则会使用指定的图标。
+
+:::
+
+:::demo alert/colorful-text
+
+### 有色的字体
+
+添加 `colorful-text` 属性可以使警告的字体带有相应的颜色。
 
 :::
 
@@ -68,11 +68,11 @@
 
 :::
 
-:::demo alert/title
+:::demo alert/carousel
 
-### 带标题警告
+### 轮播通知
 
-当需要为警告添加一个简要的概括时，可以设置 `title` 属性或同名插槽添加一个标题。
+这个示例展示了如何结合 Carousel 组件开发一个内容轮播的警告。
 
 :::
 

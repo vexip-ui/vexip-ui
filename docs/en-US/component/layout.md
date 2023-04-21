@@ -20,27 +20,11 @@ Custom user actions can be quickly configured via the `actions` prop.
 
 :::
 
-:::demo layout/adjust
+:::demo layout/footer
 
-### Adjust Size
+### Add Footer
 
-The header height and aside width can be easily adjusted via CSS variables.
-
-:::
-
-:::demo layout/custom-aside
-
-### Custom Aside
-
-Maybe you want to customize the content of the aside, you can do that easily with slots.
-
-:::
-
-:::demo layout/custom-header
-
-### Custom Header
-
-Maybe you want to customize the content of the header, you can do that easily with slots.
+Add the `footer` prop to add a footer, and combine the `copyright` and `links` props to quickly configure the footer content.
 
 :::
 
@@ -52,11 +36,19 @@ In some cases, you can add the `fixed-main` prop if you want the main is fixed, 
 
 :::
 
-:::demo layout/footer
+:::demo layout/no-aside
 
-### Add Footer
+### No Aside
 
-Add the `footer` prop to add a footer, and combine the `copyright` and `links` props to quickly configure the footer content.
+Add the `no-aside` prop to remove the sidebar, in this case the menu will inside the header.
+
+:::
+
+:::demo layout/adjust
+
+### Adjust Size
+
+The header height and aside width can be easily adjusted via CSS variables.
 
 :::
 
@@ -74,11 +66,19 @@ When passing a string, there are two special values `max` and `min`, which are e
 
 :::
 
-:::demo layout/no-aside
+:::demo layout/custom-header
 
-### No Aside
+### Custom Header
 
-Add the `no-aside` prop to remove the sidebar, in this case the menu will inside the header.
+Maybe you want to customize the content of the header, you can do that easily with slots.
+
+:::
+
+:::demo layout/custom-aside
+
+### Custom Aside
+
+Maybe you want to customize the content of the aside, you can do that easily with slots.
 
 :::
 

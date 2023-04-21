@@ -12,13 +12,11 @@ For basic usage, you can use `v-model:value` for two-way binding.
 
 :::
 
-:::demo input/before
+:::demo input/disabled
 
-### Before or After Slots
+### Disabled
 
-Use the `before` and `after` slots to combine some content with the input.
-
-If you want to place a button, select or other control, you should use the `before-action` and `after-action` slots.
+Add the `disabled` prop to set the disabled state.
 
 :::
 
@@ -30,19 +28,47 @@ Add the `clearable` prop to make the control value clearable.
 
 :::
 
-:::demo input/disabled
-
-### Disabled
-
-Add the `disabled` prop to set the disabled state.
-
-:::
-
 :::demo input/icon
 
 ### Inline Icon
 
 Prefix and suffix icons can be added to input fields by setting the values of `prefix` and `suffix` or using the slots of the same name.
+
+:::
+
+:::demo input/size
+
+### Change Size
+
+Setting the value of the `size` attribute can change the size of the input. Currently, there are three sizes to choose from.
+
+:::
+
+:::demo input/sync
+
+### Sync Input
+
+By default two-way binding is based on the `change` event, adding the `sync` prop will make it based on the `input` event.
+
+:::
+
+:::demo input/before
+
+### Before or After Slots
+
+Use the `before` and `after` slots to combine some content with the input.
+
+If you want to place a button, select or other control, you should use the `before-action` and `after-action` slots.
+
+:::
+
+:::demo input/password
+
+### Password
+
+Set the `type` prop to `'password'` to enable password input.
+
+Adding the `plain-password` prop in password mode can turn on the suffix button to toggle the cipher text.
 
 :::
 
@@ -64,37 +90,11 @@ The max length of the content can be set via the `max-length` prop.
 
 :::
 
-:::demo input/password
-
-### Password
-
-Set the `type` prop to `'password'` to enable password input.
-
-Adding the `plain-password` prop in password mode can turn on the suffix button to toggle the cipher text.
-
-:::
-
-:::demo input/size
-
-### Change Size
-
-Setting the value of the `size` attribute can change the size of the input. Currently, there are three sizes to choose from.
-
-:::
-
 :::demo input/state
 
 ### Different States
 
 Different states can be set via `state`.
-
-:::
-
-:::demo input/sync
-
-### Sync Input
-
-By default two-way binding is based on the `change` event, adding the `sync` prop will make it based on the `input` event.
 
 :::
 

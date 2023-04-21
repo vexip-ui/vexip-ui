@@ -12,6 +12,24 @@ An unremarkable image.
 
 :::
 
+:::demo image/object-fit
+
+### Image Fit
+
+The fit method of the image can be set through the `fit` prop, which is the same as CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit).
+
+:::
+
+:::demo image/style
+
+### Image Style
+
+Use the `radius` prop to quickly set the border radius of the image.
+
+You can quickly add a border to the image via the `border` prop, and you can also pass in a valid color value to specify the border color.
+
+:::
+
 :::demo image/fallback
 
 ### Error Process
@@ -21,16 +39,6 @@ The fallback source can be set through the `fallback-src` prop, which will be tr
 You can also customize error content via `error-tip` prop or `error` slot.
 
 When the fallback source is set, the error content will not be displayed until the fallback source also fails to load.
-
-:::
-
-:::demo image/group
-
-### Image Group
-
-Put multiple image together, can be used to multiple preview.
-
-By default, only the first image will be displayed, adding the `show-all` prop can display all images.
 
 :::
 
@@ -56,14 +64,6 @@ Or you can customize what is displayed on loading via the `placeholder` slot.
 
 :::
 
-:::demo image/object-fit
-
-### Image Fit
-
-The fit method of the image can be set through the `fit` prop, which is the same as CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit).
-
-:::
-
 :::demo image/preview
 
 ### Preview
@@ -74,13 +74,13 @@ The preview source can also be specified via the `preview-src` prop.
 
 :::
 
-:::demo image/style
+:::demo image/group
 
-### Image Style
+### Image Group
 
-Use the `radius` prop to quickly set the border radius of the image.
+Put multiple image together, can be used to multiple preview.
 
-You can quickly add a border to the image via the `border` prop, and you can also pass in a valid color value to specify the border color.
+By default, only the first image will be displayed, adding the `show-all` prop can display all images.
 
 :::
 

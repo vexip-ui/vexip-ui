@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo datepicker/basis
+:::demo date-picker/basis
 
 ### 基础用法
 
@@ -14,27 +14,17 @@
 
 :::
 
-:::demo datepicker/bound
+:::demo date-picker/type
 
-### 限制范围
+### 控件类型
 
-通过 `min` 和 `max` 属性，可以快速的设置日期的可选范围。
+设置 `type` 属性的值可以切换日期选择框的选择类型。
 
-常规情况下，这两个属性会限制形成单边或双边限制，如果你想要一个中间限制，你可以使 `min` 的值大于 `max`。
-
-上述情况仍不满足需求的话，你应该使用 `disabled-date` 属性。
+当选择类型为 `year` 时，日期选择框的返回值将变为数字类型的年份。
 
 :::
 
-:::demo datepicker/filler
-
-### 自定义填充
-
-设置 `filler` 属性的值可以修改选择输入框中的填充符。
-
-:::
-
-:::demo datepicker/labels
+:::demo date-picker/labels
 
 ### 日期标签
 
@@ -42,29 +32,25 @@
 
 :::
 
-:::demo datepicker/loading
+:::demo date-picker/filler
 
-### 加载状态
+### 自定义填充
 
-通过 `loading` 属性可以日期选择器器的加载状态。
-
-如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+设置 `filler` 属性的值可以修改选择输入框中的填充符。
 
 :::
 
-:::demo datepicker/no-action
+:::demo date-picker/unit-readonly
 
-### 直接选择
+### 输入框只读
 
-有时候你希望可以选择了日期后即完成选择，那么可以添加 `no-action` 属性改变选择方式。
+添加 `unit-readonly` 属性可以使输入框内的控件只读，用户只能通过面板选择日期。
 
-注意，添加了该属性后 `outside-cancel` 属性将始终生效。
-
-在 `type` 属性为 `'datetime'` 时，仅会禁用面板的底部操作栏，并不会改变选择方式。
+注意，这将无法键入日期，使组件失去部分可访问性。
 
 :::
 
-:::demo datepicker/range
+:::demo date-picker/range
 
 ### 范围选择
 
@@ -76,7 +62,19 @@
 
 :::
 
-:::demo datepicker/shortcuts
+:::demo date-picker/bound
+
+### 限制范围
+
+通过 `min` 和 `max` 属性，可以快速的设置日期的可选范围。
+
+常规情况下，这两个属性会限制形成单边或双边限制，如果你想要一个中间限制，你可以使 `min` 的值大于 `max`。
+
+上述情况仍不满足需求的话，你应该使用 `disabled-date` 属性。
+
+:::
+
+:::demo date-picker/shortcuts
 
 ### 快捷日期
 
@@ -84,23 +82,25 @@
 
 :::
 
-:::demo datepicker/type
+:::demo date-picker/no-action
 
-### 控件类型
+### 直接选择
 
-设置 `type` 属性的值可以切换日期选择框的选择类型。
+有时候你希望可以选择了日期后即完成选择，那么可以添加 `no-action` 属性改变选择方式。
 
-当选择类型为 `year` 时，日期选择框的返回值将变为数字类型的年份。
+注意，添加了该属性后 `outside-cancel` 属性将始终生效。
+
+在 `type` 属性为 `'datetime'` 时，仅会禁用面板的底部操作栏，并不会改变选择方式。
 
 :::
 
-:::demo datepicker/unit-readonly
+:::demo date-picker/loading
 
-### 输入框只读
+### 加载状态
 
-添加 `unit-readonly` 属性可以使输入框内的控件只读，用户只能通过面板选择日期。
+通过 `loading` 属性可以日期选择器器的加载状态。
 
-注意，这将无法键入日期，使组件失去部分可访问性。
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
 
 :::
 

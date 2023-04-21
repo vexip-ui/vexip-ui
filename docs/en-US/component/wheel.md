@@ -12,6 +12,16 @@ Simple usage, select value with scrolling.
 
 :::
 
+:::demo wheel/empty
+
+### Insert Empty
+
+Add the `insert-empty` prop to insert an empty value at the beginning.
+
+You can also specify the label of this empty value by passing in a string.
+
+:::
+
 :::demo wheel/arrow
 
 ### Arrow Actions
@@ -25,16 +35,6 @@ Add the `arrow` prop to add arrow actions on both sides.
 ### Disable Options
 
 The passed options are disabled via the `disabled` option.
-
-:::
-
-:::demo wheel/empty
-
-### Insert Empty
-
-Add the `insert-empty` prop to insert an empty value at the beginning.
-
-You can also specify the label of this empty value by passing in a string.
 
 :::
 

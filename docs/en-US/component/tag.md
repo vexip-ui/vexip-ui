@@ -26,22 +26,6 @@ Adding the `closable` prop can make the label display the close button, and the 
 
 :::
 
-:::demo tag/custom
-
-### Custom Color
-
-You can custom the major color throught the `color` prop.
-
-:::
-
-:::demo tag/extra
-
-### Extra Content
-
-The `prefix` and `suffix` props can be used to insert extra content before and after respectively.
-
-:::
-
 :::demo tag/simple
 
 ### Simple Mode
@@ -63,6 +47,22 @@ The size of the label can be adjusted by setting the value of the `size` prop, w
 ### Preset Colors
 
 In addition to the basic state types, there are also built-in color types for quickly generating labels of various colors.
+
+:::
+
+:::demo tag/custom
+
+### Custom Color
+
+You can custom the major color throught the `color` prop.
+
+:::
+
+:::demo tag/extra
+
+### Extra Content
+
+The `prefix` and `suffix` props can be used to insert extra content before and after respectively.
 
 :::
 

@@ -10,14 +10,6 @@
 
 :::
 
-:::demo progress/activated
-
-### 激活状态
-
-添加 `activated` 属性可以使进度条处于激活状态。
-
-:::
-
 :::demo progress/bubble
 
 ### 气泡提示
@@ -41,6 +33,14 @@
 ### 进度内容
 
 通过默认插槽可以自定义进度提示的内容。
+
+:::
+
+:::demo progress/activated
+
+### 激活状态
+
+添加 `activated` 属性可以使进度条处于激活状态。
 
 :::
 

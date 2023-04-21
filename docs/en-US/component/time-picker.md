@@ -4,7 +4,7 @@ It is used when you need to select a time or a time range.
 
 ## Demos
 
-:::demo timepicker/basis
+:::demo time-picker/basis
 
 ### Basis Usage
 
@@ -14,25 +14,7 @@ By default, the time picker will appear unselected despite the initial value.
 
 :::
 
-:::demo timepicker/bound
-
-### Limit Range
-
-With the `min` and `max` props, you can quickly set the selectable range of dates.
-
-Normally, these two props will limit to form a single-sided or double-sided, if you want an intermediate limit, you can make the value of `min` larger than `max`.
-
-:::
-
-:::demo timepicker/filler
-
-### Custom Filler
-
-Setting the value of the `filler` prop, you can specify the filler in the input control when selecting.
-
-:::
-
-:::demo timepicker/labels
+:::demo time-picker/labels
 
 ### Time Labels
 
@@ -40,35 +22,15 @@ Set the `labels` prop to add labels to each time unit, often used to add units.
 
 :::
 
-:::demo timepicker/loading
+:::demo time-picker/filler
 
-### Loading
+### Custom Filler
 
-The loading state of the time picker can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+Setting the value of the `filler` prop, you can specify the filler in the input control when selecting.
 
 :::
 
-:::demo timepicker/range
-
-### Range Select
-
-Add the `range` prop to enable range selection mode.
-
-In range selection mode, the return value of the time picker will become an array containing the start and end times.
-
-:::
-
-:::demo timepicker/shortcuts
-
-### Shortcuts
-
-Time shortcuts can be added via the `shortcuts` prop.
-
-:::
-
-:::demo timepicker/step
+:::demo time-picker/step
 
 ### Adjust Steps
 
@@ -78,13 +40,41 @@ It should be noted that the value of the hour column needs to be divisible by `2
 
 :::
 
-:::demo timepicker/unit-readonly
+:::demo time-picker/range
 
-### Input Readonly
+### Range Select
 
-Add `unit-readonly` prop to make the input control read-only, and the user can only select time via the panel.
+Add the `range` prop to enable range selection mode.
 
-Note that this will make impossible to type time, and the component lose some accessibility.
+In range selection mode, the return value of the time picker will become an array containing the start and end times.
+
+:::
+
+:::demo time-picker/bound
+
+### Limit Range
+
+With the `min` and `max` props, you can quickly set the selectable range of dates.
+
+Normally, these two props will limit to form a single-sided or double-sided, if you want an intermediate limit, you can make the value of `min` larger than `max`.
+
+:::
+
+:::demo time-picker/shortcuts
+
+### Shortcuts
+
+Time shortcuts can be added via the `shortcuts` prop.
+
+:::
+
+:::demo time-picker/loading
+
+### Loading
+
+The loading state of the time picker can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
 
 :::
 

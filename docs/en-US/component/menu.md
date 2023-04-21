@@ -20,22 +20,6 @@ Use the MenuGroup component to group some menus into groups.
 
 :::
 
-:::demo menu/horizontal
-
-### Horizontal Menu
-
-Adding the `horizontal` prop makes the menu horizontal.
-
-:::
-
-:::demo menu/meta
-
-### Meta Data
-
-Metadata can be configured for each menu via the `meta` prop of MenuItem.
-
-:::
-
 :::demo menu/options
 
 ### Menu Options
@@ -49,6 +33,22 @@ Use the `options` prop to create a menu via a configuration.
 ### Reduced Menu
 
 The menu can be reduced or expanded by setting the `reduced` property.
+
+:::
+
+:::demo menu/horizontal
+
+### Horizontal Menu
+
+Adding the `horizontal` prop makes the menu horizontal.
+
+:::
+
+:::demo menu/meta
+
+### Meta Data
+
+Metadata can be configured for each menu via the `meta` prop of MenuItem.
 
 :::
 

@@ -12,6 +12,14 @@ For basic usage, sublinks can be added using the `group` slot.
 
 :::
 
+:::demo anchor/marker
+
+### Marker
+
+Adding `marker` prop will mark the currently active anchor link with a marker point.
+
+:::
+
 :::demo anchor/example
 
 ### Example
@@ -19,14 +27,6 @@ For basic usage, sublinks can be added using the `group` slot.
 This is a standalone complete use case.
 
 It can be combined with Scroll or NativeScrolling components, of course native scrolling is also possible.
-
-:::
-
-:::demo anchor/marker
-
-### Marker
-
-Adding `marker` prop will mark the currently active anchor link with a marker point.
 
 :::
 

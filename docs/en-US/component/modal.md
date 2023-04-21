@@ -22,11 +22,11 @@ Also set the `top` prop to `'auto'` to center the modal up and down.
 
 :::
 
-:::demo modal/drag
+:::demo modal/long-content
 
-### Draggable
+### Long Content
 
-Add the `draggable` prop to enable dragging of modals.
+Can be used in combination with scroll component when the content is too long.
 
 :::
 
@@ -38,29 +38,19 @@ Add `hide-mask` prop to turn off the modal's masking effect.
 
 :::
 
+:::demo modal/drag
+
+### Draggable
+
+Add the `draggable` prop to enable dragging of modals.
+
+:::
+
 :::demo modal/loading
 
 ### Loading State
 
 Add the `loading` prop to make the confirm button appear loading, usually used with `on-before-close`.
-
-:::
-
-:::demo modal/long-content
-
-### Long Content
-
-Can be used in combination with scroll component when the content is too long.
-
-:::
-
-:::demo modal/position
-
-### Custom Position
-
-Modal component has three properties in the vertical and horizontal directions: `top`, `bottom`, `height` and `left`, `right`, `width`.
-
-Both directions can customize the spatial relationship of the modal by setting two properties.
 
 :::
 
@@ -79,6 +69,16 @@ Add the `resizable` prop to enable resizing of the modal box.
 The modal header can be hidden by not setting the `title` prop and the slot with the same name.
 
 Add the `no-footer` prop to disable the modal's default bottom action bar.
+
+:::
+
+:::demo modal/position
+
+### Custom Position
+
+Modal component has three properties in the vertical and horizontal directions: `top`, `bottom`, `height` and `left`, `right`, `width`.
+
+Both directions can customize the spatial relationship of the modal by setting two properties.
 
 :::
 

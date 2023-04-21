@@ -12,11 +12,11 @@
 
 :::
 
-:::demo split/full
+:::demo split/vertical
 
-### 面板全屏
+### 纵向分割
 
-添加 `can-full` 属性可以开启面板全屏功能，点击手柄中间的按钮即可切换全屏。
+添加 `vertical` 开启上下分割，此时 `left` 插槽即上侧内容，`right` 插槽即下侧内容。
 
 :::
 
@@ -32,19 +32,19 @@
 
 :::
 
+:::demo split/full
+
+### 面板全屏
+
+添加 `can-full` 属性可以开启面板全屏功能，点击手柄中间的按钮即可切换全屏。
+
+:::
+
 :::demo split/nesting
 
 ### 嵌套用法
 
 我套我自己。
-
-:::
-
-:::demo split/vertical
-
-### 纵向分割
-
-添加 `vertical` 开启上下分割，此时 `left` 插槽即上侧内容，`right` 插槽即下侧内容。
 
 :::
 

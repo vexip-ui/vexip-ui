@@ -12,37 +12,11 @@ The default viewable area is 3 elements, which can be adjusted by setting the `v
 
 :::
 
-:::demo carousel/active
-
-### Active Element
-
-The default slot of the Item component can obtain whether the current element handles the active state through the `active` prop.
-
-Use this prop to easily add custom styles to active and inactive elements.
-
-:::
-
-:::demo carousel/album
-
-### Album Example
-
-Using the carousel component combined with some simple elements can achieve effects similar to photo albums and picture viewers (two-dimensional concentration detection).
-
-:::
-
 :::demo carousel/autoplay
 
 ### Autoplay
 
 Add the `autoplay` prop to enable autoplay, returning to the first element when the last element is reached.
-
-:::
-
-:::demo carousel/lantern
-
-### Lantern
-
-After setting the `view-size` prop to 1, a lantern effect can be formed.
 
 :::
 
@@ -54,11 +28,37 @@ Adding the `loop` prop turns on a looping carousel, where the last element joins
 
 :::
 
+:::demo carousel/active
+
+### Active Element
+
+The default slot of the Item component can obtain whether the current element handles the active state through the `active` prop.
+
+Use this prop to easily add custom styles to active and inactive elements.
+
+:::
+
+:::demo carousel/lantern
+
+### Lantern
+
+After setting the `view-size` prop to 1, a lantern effect can be formed.
+
+:::
+
 :::demo carousel/vertical
 
 ### Vertical Carousel
 
 The carousel can be vertical by adding the `vertical` prop.
+
+:::
+
+:::demo carousel/album
+
+### Album Example
+
+Using the carousel component combined with some simple elements can achieve effects similar to photo albums and picture viewers (two-dimensional concentration detection).
 
 :::
 

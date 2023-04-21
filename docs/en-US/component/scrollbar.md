@@ -10,19 +10,19 @@ It's a bit cumbersome to use alone, requiring manual synchronization of scroll p
 
 :::
 
-:::demo scrollbar/style
-
-### Change Styles
-
-The width, bar color and track color of the scrollbar can be adjusted by `width`, `bar-color` and `track-color` props respectively.
-
-:::
-
 :::demo scrollbar/track
 
 ### Scrollbar Track
 
 As with the basic usage, add a `use-track` prop and you will have an interactive track.
+
+:::
+
+:::demo scrollbar/style
+
+### Change Styles
+
+The width, bar color and track color of the scrollbar can be adjusted by `width`, `bar-color` and `track-color` props respectively.
 
 :::
 

@@ -12,61 +12,11 @@ The simplest usage, you can use `v-model:value` two-way binding.
 
 :::
 
-:::demo slider/loading
-
-### Loading
-
-The loading state of the slider can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
-
-:::
-
-:::demo slider/marker-only
-
-### Marker Only
-
-After setting markers, you can add `marker-only` prop to limit only the marked value can be selected. After adding, the `step` prop will not effective.
-
-:::
-
-:::demo slider/markers
-
-### Markers
-
-Some markers can be set for slider via the `markers` prop.
-
-:::
-
 :::demo slider/maxmin
 
 ### Value Bounds
 
 The `min` and `max` props can be used to set the bounds of the slidier.
-
-:::
-
-:::demo slider/range
-
-### Range Select
-
-Add the `range` prop to enable range select mode.
-
-:::
-
-:::demo slider/reverse
-
-### Reverse
-
-Add the `reverse` prop to reverse the operation of the slider.
-
-:::
-
-:::demo slider/state
-
-### Different States
-
-Different states can be set via `state`.
 
 :::
 
@@ -78,11 +28,61 @@ Set the value of the `step` prop to adjust the step of each slide.
 
 :::
 
+:::demo slider/range
+
+### Range Select
+
+Add the `range` prop to enable range select mode.
+
+:::
+
 :::demo slider/vertical
 
 ### Vertical
 
 Add the `vertical` prop to make the slider vertically.
+
+:::
+
+:::demo slider/reverse
+
+### Reverse
+
+Add the `reverse` prop to reverse the operation of the slider.
+
+:::
+
+:::demo slider/markers
+
+### Markers
+
+Some markers can be set for slider via the `markers` prop.
+
+:::
+
+:::demo slider/marker-only
+
+### Marker Only
+
+After setting markers, you can add `marker-only` prop to limit only the marked value can be selected. After adding, the `step` prop will not effective.
+
+:::
+
+:::demo slider/loading
+
+### Loading
+
+The loading state of the slider can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
+
+:::
+
+:::demo slider/state
+
+### Different States
+
+Different states can be set via `state`.
 
 :::
 

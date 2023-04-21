@@ -12,42 +12,6 @@ Set `options` prop to provide options directly.
 
 :::
 
-:::demo select/async-options
-
-### Async Options
-
-Options may come slowly than value when data is loaded from a remote location, so the value will be reparsed each time when options changes to ensure consistency.
-
-:::
-
-:::demo select/creatable
-
-### Create Options
-
-Add the `filter` prop to enable option filter.
-
-By default, the built-in filter method is used. If you want to customize the filter method, you can pass a function.
-
-Add the `ignore-case` prop to ignore case when using built-in filter methods.
-
-:::
-
-:::demo select/custom
-
-### Custom Option
-
-In some cases, the display of options, the display of the selector label, and the value of options need to be different, which can be implemented by combining the `label` prop and default slot.
-
-:::
-
-:::demo select/custom-key
-
-### Custom Key
-
-You can specify the keys of the parsing options via `key-config` prop. After all, sometimes processing options is quite troublesome.
-
-:::
-
 :::demo select/disabled
 
 ### Disabled
@@ -56,29 +20,11 @@ Add the `disabled` prop to set the disabled state.
 
 :::
 
-:::demo select/filter
+:::demo select/size
 
-### Filter Options
+### Different Sizes
 
-Add the `filter` prop to enable option filter.
-
-By default, the built-in filter method is used. If you want to customize the filter method, you can pass a function.
-
-Add the `ignore-case` prop to ignore case when using built-in filter methods.
-
-:::
-
-:::demo select/form-item
-
-:::
-
-:::demo select/group
-
-### Group Options
-
-When passing the options, set the `group` option to `true`, and place the child options under the `children` option to achieve grouping.
-
-The content of the group label can be customized via the `group` slot.
+Three built-in sizes, set via `size` prop, can be set by yourself if they are not enough.
 
 :::
 
@@ -102,13 +48,11 @@ Of course you can use `v-model:label` as in the example, but the component will 
 
 :::
 
-:::demo select/loading
+:::demo select/custom
 
-### Loading
+### Custom Option
 
-The loading state of the select can be controlled through the `loading` prop.
-
-If you want to be read-only when loading, you need to add the `loading-lock` prop.
+In some cases, the display of options, the display of the selector label, and the value of options need to be different, which can be implemented by combining the `label` prop and default slot.
 
 :::
 
@@ -130,11 +74,15 @@ The `options` prop can directly pass a string, which will be automatically proce
 
 :::
 
-:::demo select/prefix
+:::demo select/filter
 
-### Prefix Icon
+### Filter Options
 
-Prefix icon can be added to select by setting the `prefix` prop or using the slot of the same name.
+Add the `filter` prop to enable option filter.
+
+By default, the built-in filter method is used. If you want to customize the filter method, you can pass a function.
+
+Add the `ignore-case` prop to ignore case when using built-in filter methods.
 
 :::
 
@@ -148,19 +96,51 @@ Add the `remote` props to enable remote mode, in which values will be cached and
 
 :::
 
-:::demo select/size
+:::demo select/creatable
 
-### Different Sizes
+### Create Options
 
-Three built-in sizes, set via `size` prop, can be set by yourself if they are not enough.
+Add the `filter` prop to enable option filter.
+
+By default, the built-in filter method is used. If you want to customize the filter method, you can pass a function.
+
+Add the `ignore-case` prop to ignore case when using built-in filter methods.
 
 :::
 
-:::demo select/transparent
+:::demo select/prefix
 
-### Tranparent
+### Prefix Icon
 
-Add the `transparent` prop to remove the original style, and then you can wrap the style you like.
+Prefix icon can be added to select by setting the `prefix` prop or using the slot of the same name.
+
+:::
+
+:::demo select/custom-key
+
+### Custom Key
+
+You can specify the keys of the parsing options via `key-config` prop. After all, sometimes processing options is quite troublesome.
+
+:::
+
+:::demo select/group
+
+### Group Options
+
+When passing the options, set the `group` option to `true`, and place the child options under the `children` option to achieve grouping.
+
+The content of the group label can be customized via the `group` slot.
+
+:::
+
+:::demo select/loading
+
+### Loading
+
+The loading state of the select can be controlled through the `loading` prop.
+
+If you want to be read-only when loading, you need to add the `loading-lock` prop.
 
 :::
 
@@ -169,6 +149,14 @@ Add the `transparent` prop to remove the original style, and then you can wrap t
 ### Virtual Scroll
 
 It should not be stuck if the options are `100` times more.
+
+:::
+
+:::demo select/transparent
+
+### Tranparent
+
+Add the `transparent` prop to remove the original style, and then you can wrap the style you like.
 
 :::
 

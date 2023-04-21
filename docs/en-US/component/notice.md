@@ -14,6 +14,30 @@ Depending on the presence or absence of the `title` and `content` options, the c
 
 :::
 
+:::demo notice/type
+
+### Notice Types
+
+The notice with preset type can be opened by calling different methods.
+
+There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
+
+:::
+
+:::demo notice/style
+
+### Preset Style
+
+Set the `color` option to `true` to make the preset types notice has a colorful text.
+
+Set the `background` option to `true` to make the preset type notice havs a background color.
+
+When the preset color does not meet the requirements, you can pass in a valid color value to realize color customization.
+
+To set the color of the title independently, set the `titleColor` option to a valid color value.
+
+:::
+
 :::demo notice/close
 
 ### Closable
@@ -46,16 +70,6 @@ When more fine-grained control over the icon is required, the `icon` option can 
 
 :::
 
-:::demo notice/position
-
-### Custom Placement
-
-The `placement` option can be configured via the `config` method to change where the notice appears.
-
-There are four optional positions, top-left, top-right, bottom-left and bottom-right.
-
-:::
-
 :::demo notice/render
 
 ### Render Method
@@ -64,27 +78,13 @@ A custom rendering method for notice can be set via the `renderer` option.
 
 :::
 
-:::demo notice/style
+:::demo notice/position
 
-### Preset Style
+### Custom Placement
 
-Set the `color` option to `true` to make the preset types notice has a colorful text.
+The `placement` option can be configured via the `config` method to change where the notice appears.
 
-Set the `background` option to `true` to make the preset type notice havs a background color.
-
-When the preset color does not meet the requirements, you can pass in a valid color value to realize color customization.
-
-To set the color of the title independently, set the `titleColor` option to a valid color value.
-
-:::
-
-:::demo notice/type
-
-### Notice Types
-
-The notice with preset type can be opened by calling different methods.
-
-There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
+There are four optional positions, top-left, top-right, bottom-left and bottom-right.
 
 :::
 

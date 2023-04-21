@@ -18,6 +18,14 @@ Add the `disabled` prop to set the disabled state.
 
 :::
 
+:::demo transfer/paged
+
+### Page Options
+
+Add the `paged` prop to make options paged.
+
+:::
+
 :::demo transfer/filter
 
 ### Filter Options
@@ -33,14 +41,6 @@ Add the `filter` prop to enable filter options, and you can customize the filter
 The loading state of the transfer can be controlled through the `loading` prop.
 
 If you want to be read-only when loading, you need to add the `loading-lock` prop.
-
-:::
-
-:::demo transfer/paged
-
-### Page Options
-
-Add the `paged` prop to make options paged.
 
 :::
 

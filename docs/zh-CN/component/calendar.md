@@ -12,6 +12,14 @@
 
 :::
 
+:::demo calendar/week-start
+
+### 每周开始
+
+设置 `week-start` 属性的值可以修改每周开始的第一天。
+
+:::
+
 :::demo calendar/schedule
 
 ### 日程表
@@ -19,14 +27,6 @@
 通过 `content` 插槽可以自定义渲染日历单元格的内容。
 
 如果你觉得原生的滚动条不够酷，你可以自行添加一个滚动组件进去。
-
-:::
-
-:::demo calendar/week-start
-
-### 每周开始
-
-设置 `week-start` 属性的值可以修改每周开始的第一天。
 
 :::
 
