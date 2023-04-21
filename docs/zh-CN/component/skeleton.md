@@ -1,8 +1,8 @@
 # 骨架屏 Skeleton
 
-## 代码示例
-
 一个占位符，常用于需要等待加载的地方。
+
+## 代码示例
 
 :::demo skeleton/basis
 

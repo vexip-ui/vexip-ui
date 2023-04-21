@@ -1,8 +1,8 @@
 # 滑动输入条 Slider
 
-## 代码示例
-
 通过滑动来选定值。
+
+## 代码示例
 
 :::demo slider/basis
 

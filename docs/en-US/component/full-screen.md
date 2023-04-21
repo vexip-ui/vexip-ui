@@ -1,8 +1,8 @@
 # FullScreen
 
-## Demos
-
 This component will help you quickly display some content in full screen.
+
+## Demos
 
 :::demo fullscreen/basis
 

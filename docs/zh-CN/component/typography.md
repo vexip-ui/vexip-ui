@@ -1,8 +1,8 @@
 # 排版 Typography
 
-## 代码示例
-
 Vexip UI 提供了一些带有基本格式的文本组件。
+
+## 代码示例
 
 :::demo typography/basis
 

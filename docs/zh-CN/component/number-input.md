@@ -1,8 +1,8 @@
 # 数字输入框 NumberInput
 
-## 代码示例
-
 通常用在需要以更友好的交互进行数字的输入的场合。
+
+## 代码示例
 
 :::demo numberinput/basis
 

@@ -1,8 +1,8 @@
 # 日期选择器 DatePicker
 
-## 代码示例
-
 用于选择或输入一个日期。
+
+## 代码示例
 
 :::demo datepicker/basis
 

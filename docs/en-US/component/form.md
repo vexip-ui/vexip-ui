@@ -1,7 +1,5 @@
 # Form
 
-## Demos
-
 It is used to quickly create form fields when you need to collect and verify some information.
 
 :::warning
@@ -25,6 +23,8 @@ interface Model {
 const model = reactive({} as Model)
 </script>
 ```
+
+## Demos
 
 :::demo form/basis
 

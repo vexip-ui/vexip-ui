@@ -1,8 +1,8 @@
 # 分页器 Pagination
 
-## 代码示例
-
 采用分页的形式分隔长列表，每次只加载一个页面。
+
+## 代码示例
 
 :::demo pagination/basis
 

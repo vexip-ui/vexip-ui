@@ -1,7 +1,5 @@
 # 表单 Form
 
-## 代码示例
-
 用于需要收集、验证一些信息的时候，快速创建表单域。
 
 :::warning
@@ -25,6 +23,8 @@ interface Model {
 const model = reactive({} as Model)
 </script>
 ```
+
+## 代码示例
 
 :::demo form/basis
 

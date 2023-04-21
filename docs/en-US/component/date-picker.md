@@ -1,8 +1,8 @@
 # DatePicker
 
-## Demos
-
 Used to select or input a date.
+
+## Demos
 
 :::demo datepicker/basis
 

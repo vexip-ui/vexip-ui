@@ -1,8 +1,8 @@
 # 全屏 FullScreen
 
-## 代码示例
-
 这个组件将帮助你快速实现全屏展示一些内容。
+
+## 代码示例
 
 :::demo fullscreen/basis
 

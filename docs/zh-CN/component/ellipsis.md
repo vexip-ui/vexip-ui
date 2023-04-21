@@ -1,8 +1,8 @@
 # 省略 Ellipsis
 
-## 代码示例
-
 当有一段长到放不下的文本时，可以派上用场。
+
+## 代码示例
 
 :::demo ellipsis/basis
 

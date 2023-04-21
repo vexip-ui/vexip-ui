@@ -1,8 +1,8 @@
 # Typography
 
-## Demos
-
 Vexip UI provides some text components with basic style.
+
+## Demos
 
 :::demo typography/basis
 

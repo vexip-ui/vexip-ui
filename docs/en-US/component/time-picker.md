@@ -1,8 +1,8 @@
 # TimePicker
 
-## Demos
-
 It is used when you need to select a time or a time range.
+
+## Demos
 
 :::demo timepicker/basis
 

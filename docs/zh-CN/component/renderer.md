@@ -1,8 +1,8 @@
 # 渲染器 Renderer
 
-## 代码示例
-
 当你想要在 `<template>` 里使用渲染函数，你可能需要它。
+
+## 代码示例
 
 :::demo renderer/basis
 

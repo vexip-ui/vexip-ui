@@ -1,8 +1,8 @@
 # 颜色选择器 ColorPicker
 
-## 代码示例
-
 提供一个选择器可用于让用户快速灵活地选择颜色值。
+
+## 代码示例
 
 :::demo colorpicker/basis
 

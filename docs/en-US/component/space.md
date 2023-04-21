@@ -1,8 +1,8 @@
 # Space
 
-## Demos
-
 Quickly provide uniform spacing for a range of elements.
+
+## Demos
 
 :::demo space/basis
 

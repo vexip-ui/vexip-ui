@@ -1,8 +1,8 @@
 # 开关 Switch
 
-## 代码示例
-
 用于切换两面状态。
+
+## 代码示例
 
 :::demo switch/basis
 

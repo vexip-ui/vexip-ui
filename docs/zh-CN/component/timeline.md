@@ -1,8 +1,8 @@
 # 时间线 Timeline
 
-## 代码示例
-
 常用于循序渐进的展示一些内容。
+
+## 代码示例
 
 :::demo timeline/basis
 

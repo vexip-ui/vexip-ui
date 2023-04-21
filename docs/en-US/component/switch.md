@@ -1,8 +1,8 @@
 # Switch
 
-## Demos
-
 Used to toggle the two-sided state.
+
+## Demos
 
 :::demo switch/basis
 

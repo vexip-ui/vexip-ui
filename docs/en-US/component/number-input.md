@@ -1,8 +1,8 @@
 # NumberInput
 
-## Demos
-
 Usually used in occasions where a more friendly interaction is required for numeric input.
+
+## Demos
 
 :::demo numberinput/basis
 

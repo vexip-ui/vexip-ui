@@ -1,8 +1,8 @@
 # 滚轮 Wheel
 
-## 代码示例
-
 我将它用在了 TimePicker 上，不知道还有没有其他用途。
+
+## 代码示例
 
 :::demo wheel/basis
 

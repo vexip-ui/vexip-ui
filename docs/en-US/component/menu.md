@@ -1,8 +1,8 @@
 # Menu
 
-## Demos
-
 A menu list that provides navigation for pages and functions.
+
+## Demos
 
 :::demo menu/basis
 

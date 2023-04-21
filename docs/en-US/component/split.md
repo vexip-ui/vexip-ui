@@ -1,8 +1,8 @@
 # Split
 
-## Demos
-
 Quickly implement left and right or up and down split screen.
+
+## Demos
 
 :::demo split/basis
 

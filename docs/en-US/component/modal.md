@@ -1,8 +1,8 @@
 # Modal
 
-## Demos
-
 Modal, palce what you want.
+
+## Demos
 
 :::demo modal/basis
 

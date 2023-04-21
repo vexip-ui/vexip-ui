@@ -1,8 +1,8 @@
 # Slider
 
-## Demos
-
 Select value by sliding.
+
+## Demos
 
 :::demo slider/basis
 

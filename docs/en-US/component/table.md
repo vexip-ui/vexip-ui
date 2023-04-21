@@ -1,8 +1,8 @@
 # Table
 
-## Demos
-
 Used to display structured 2D data.
+
+## Demos
 
 :::demo table/basis
 

@@ -1,8 +1,8 @@
 # 时间选择器 TimePicker
 
-## 代码示例
-
 当你需要选择时间或时间范围时会用到它。
+
+## 代码示例
 
 :::demo timepicker/basis
 
