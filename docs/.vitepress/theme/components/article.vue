@@ -135,5 +135,12 @@ function handleContentResize(entry: ResizeObserverEntry) {
       display: block;
     }
   }
+
+  .md-table {
+    th:nth-child(1),
+    td:nth-child(1) {
+      white-space: nowrap;
+    }
+  }
 }
 </style>
