@@ -14,6 +14,8 @@ const route = useRoute()
 
 const { t, locale } = useI18n({ useScope: 'global' })
 
+const majorVersion = __VERSION__.split('.')[0]
+
 const currentMenu = ref('')
 
 const menus = computed<AsideMenuItem[]>(() => {
@@ -64,6 +66,10 @@ function selectMenu(_: string, meta: AsideMenuItem) {
     router.go(`/${locale.value}${meta.link}`)
   }
 }
+
+function showSince(since?: string) {
+  return !!(since && since.startsWith(`${majorVersion}.`))
+}
 </script>
 
 <template>
@@ -91,7 +97,7 @@ function selectMenu(_: string, meta: AsideMenuItem) {
             {{ child.origin }}
           </span>
           <Tag
-            v-if="child.since"
+            v-if="showSince(child.since)"
             class="aside-menu__tag"
             simple
             type="error"
@@ -112,7 +118,7 @@ function selectMenu(_: string, meta: AsideMenuItem) {
           {{ menu.origin }}
         </span>
         <Tag
-          v-if="menu.since"
+          v-if="showSince(menu.since)"
           class="aside-menu__tag"
           simple
           type="error"
