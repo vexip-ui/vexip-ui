@@ -1,4 +1,4 @@
-# 相对时间 TimeAgo
+# 相对时间 TimeAgo ^[Since v1.1.0](!s)
 
 ## 代码示例
 

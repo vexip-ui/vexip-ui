@@ -1,4 +1,4 @@
-# 虚拟列表 VirtualList
+# 虚拟列表 VirtualList ^[Since v2.0.0](!s)
 
 ## 代码示例
 

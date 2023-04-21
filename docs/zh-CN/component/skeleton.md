@@ -1,4 +1,4 @@
-# 骨架屏 Skeleton
+# 骨架屏 Skeleton ^[Since v2.0.0](!s)
 
 一个占位符，常用于需要等待加载的地方。
 
