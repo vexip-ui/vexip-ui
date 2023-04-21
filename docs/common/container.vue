@@ -68,7 +68,7 @@ function handleScroll({ clientY }: { clientY: number }) {
 provide('refreshScroll', refreshScroll)
 provide('scrollToElement', scrollToElement)
 
-function refreshScroll(animate = true) {
+function refreshScroll(animate = false) {
   requestAnimationFrame(() => {
     if (!scroll.value) return
 
@@ -81,7 +81,7 @@ function refreshScroll(animate = true) {
   })
 }
 
-function setScrollY(animate = true) {
+function setScrollY(animate = false) {
   if (scroll.value) {
     scroll.value.scrollTo(0, store.affixed ? 65 : 0, animate ? undefined : 0)
     store.scrollY = store.affixed ? 65 : 0

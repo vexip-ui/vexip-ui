@@ -36,7 +36,7 @@ watch(descLoaded, value => value && refresh())
 
 function refresh() {
   requestAnimationFrame(() => {
-    refreshScroll?.(false)
+    refreshScroll?.()
     article.value?.refreshAnchor()
   })
 }
