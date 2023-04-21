@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
-import { MagnifyingGlass } from '@vexip-ui/icons'
-import { toKebabCase } from '@vexip-ui/utils'
-import { useData, useRoute, useRouter } from 'vitepress'
+import { ref, computed, watch } from 'vue'
+import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 
-import Article from './components/article.vue'
 import Homepage from './components/homepage.vue'
+import NotFound from './components/not-found.vue'
+import Article from './components/article.vue'
+import DocSearch from './components/doc-search.vue'
 import HeaderSign from './components/header-sign.vue'
 import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
-import NotFound from './components/not-found.vue'
+
+import type { LayoutExposed } from 'vexip-ui'
 
 const { theme, page } = useData()
 
-const router = useRouter()
 const route = useRoute()
 
-const i18n = useI18n({ useScope: 'global' })
+const { locale } = useI18n({ useScope: 'global' })
 
-const language = computed(() => i18n.locale.value as string)
+const layout = ref<LayoutExposed>()
+const scroll = computed(() => layout.value?.scroll)
 
 const outline = computed(() => {
   if (page.value.frontmatter.aside === false) {
@@ -32,7 +33,7 @@ const outline = computed(() => {
   path = /^\//.test(path) ? path : `/${path}`
 
   for (const key of Object.keys(config)) {
-    if (path.startsWith(`/${language.value}${key}`)) {
+    if (path.startsWith(`/${locale.value}${key}`)) {
       return config[key]
     }
   }
@@ -40,23 +41,19 @@ const outline = computed(() => {
   return undefined
 })
 
-const searchOptions = ref<string[]>([])
-const placeholder = ref('')
-const currentSearch = ref('')
+watch(
+  () => route.path,
+  () => {
+    if (!scroll.value) return
 
-function toComponentDoc(fullName: string) {
-  if (!route.path.startsWith(`/${language.value}/component/${fullName}`)) {
-    router.go(`/${language.value}/component/${toKebabCase(fullName.split(' ').at(-1)!)}`)
+    scroll.value.scrollTo(0, 0, 0)
   }
-
-  nextTick(() => {
-    currentSearch.value = ''
-  })
-}
+)
 </script>
 
 <template>
   <Layout
+    ref="layout"
     sign-type="header"
     :no-aside="page.frontmatter.homepage || page.isNotFound"
     :style="{
@@ -69,19 +66,7 @@ function toComponentDoc(fullName: string) {
       <HeaderSign></HeaderSign>
     </template>
     <template #header-main>
-      <div class="search">
-        <AutoComplete
-          v-model:value="currentSearch"
-          filter
-          ignore-case
-          transfer
-          class="search-input"
-          :prefix="MagnifyingGlass"
-          :placeholder="placeholder"
-          :options="searchOptions"
-          @change="toComponentDoc"
-        ></AutoComplete>
-      </div>
+      <DocSearch></DocSearch>
     </template>
     <template #header-right>
       <HeaderNav></HeaderNav>
@@ -113,28 +98,6 @@ function toComponentDoc(fullName: string) {
 
   &--reduced {
     transform: translateY(-100%);
-  }
-
-  .search {
-    flex: auto;
-    padding-left: 14px;
-    margin-left: -1px;
-    border-left: var(--vxp-border-light-2);
-    transition: var(--vxp-transition-border);
-  }
-
-  .search-input {
-    max-width: 300px;
-
-    .vxp-select__selector {
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
-    }
-
-    .vxp-icon {
-      color: var(--vxp-content-color-placeholder);
-    }
   }
 }
 
