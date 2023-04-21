@@ -193,7 +193,16 @@ export default defineComponent({
             const name = _container.type?.name
 
             if (name === 'Scroll' || name === 'NativeScroll') {
-              scroller = (_container.exposeProxy || _container.proxy) as any as ScrollType
+              const { exposeProxy, exposed, proxy } = _container
+
+              scroller = new Proxy({} as any, {
+                get(_, key) {
+                  return (
+                    (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
+                  )
+                }
+              })
+
               break
             }
 
