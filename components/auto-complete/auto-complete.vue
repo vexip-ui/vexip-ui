@@ -25,6 +25,7 @@
     :loading-lock="props.loadingLock"
     :loading-effect="props.loadingEffect"
     :transparent="transparent"
+    :filter="props.filter"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -60,7 +61,7 @@
           aria-autocomplete="list"
           @submit.prevent
           @input="handleInput"
-          @keydown.enter="handleEnter"
+          @keydown.enter.stop="handleEnter"
           @keydown="handleKeyDown"
         />
       </slot>
@@ -80,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
@@ -173,11 +174,9 @@ export default defineComponent({
     let lastInput = String(lastValue)
 
     const optionStates = computed(() => select.value?.optionStates || [])
-    const normalOptions = computed(() => select.value?.normalOptions || [])
     const filteredOptions = computed(() => select.value?.visibleOptions || [])
     const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
     const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
-    const optionParentMap = computed(() => select.value?.optionParentMap || new Map())
 
     watch(
       () => props.value,
@@ -200,57 +199,9 @@ export default defineComponent({
         control.value?.focus()
       }
     })
-    watchEffect(() => {
-      if (props.filter) {
-        const value = currentValue.value
-
-        if (isNull(value)) {
-          optionStates.value.forEach(state => {
-            state.hidden = false
-          })
-        } else {
-          optionStates.value.forEach(state => {
-            state.hidden = true
-          })
-
-          if (typeof props.filter === 'function') {
-            const filter = props.filter
-
-            normalOptions.value.forEach(state => {
-              state.hidden = !filter(value, state)
-            })
-          } else {
-            if (props.ignoreCase) {
-              const ignoreCaseValue = value?.toString().toLocaleLowerCase()
-
-              normalOptions.value.forEach(state => {
-                state.hidden = !state.value
-                  ?.toString()
-                  .toLocaleLowerCase()
-                  .includes(ignoreCaseValue)
-              })
-            } else {
-              normalOptions.value.forEach(state => {
-                state.hidden = !state.value?.toString().includes(value?.toString())
-              })
-            }
-          }
-
-          const parentMap = optionParentMap.value
-
-          normalOptions.value.forEach(option => {
-            if (!option.hidden && option.parent) {
-              let parent = parentMap.get(option.value) || null
-
-              while (parent && parent.hidden) {
-                parent.hidden = false
-                parent = parent.parent
-              }
-            }
-          })
-        }
-
-        computeHitting()
+    watch(currentValue, value => {
+      if (props.filter && select.value) {
+        select.value.currentFilter = `${value}`
       }
     })
 
