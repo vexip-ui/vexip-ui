@@ -141,7 +141,8 @@ function useTableWrapper(md: MarkdownIt) {
 function useTag(md: MarkdownIt) {
   const tagRE = /^\^\[([^\]]*)\](?:\(([^)]*)\))?/
   const typeShortcuts: Record<string, string> = {
-    '!d': 'error'
+    '!d': 'error', // deprecated
+    '!s': 'warning' // since
   }
 
   md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
