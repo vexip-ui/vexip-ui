@@ -15,7 +15,7 @@
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "tsx scripts/serve.ts --theme",
     "build": "tsx scripts/build.ts",
-    "build:common": "pnpm  run build:utils && pnpm run build:hooks && pnpm run build:icons",
+    "build:common": "pnpm run build:utils && pnpm run build:hooks && pnpm run build:icons",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:docs": "pnpm -C docs build",
     "build:full": "tsx scripts/build-full.ts",
