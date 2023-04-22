@@ -26,6 +26,7 @@
     :loading-effect="props.loadingEffect"
     :transparent="transparent"
     :filter="props.filter"
+    :ignore-case="props.ignoreCase"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
