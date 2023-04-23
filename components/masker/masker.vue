@@ -80,7 +80,8 @@ export default defineComponent({
     const getIndex = useZIndex()
 
     const currentActive = ref(props.active)
-    const zIndex = ref(0)
+    // If initial active, we should set a vaild index as initial value
+    const zIndex = ref(props.active ? getIndex() : 0)
     const wrapShow = ref(props.active)
 
     const wrapper = ref<HTMLElement>()
