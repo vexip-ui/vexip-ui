@@ -1,0 +1,39 @@
+{
+  "name": "@vexip-ui/meta",
+  "version": "0.0.1",
+  "description": "Metadata For Vexip UI",
+  "license": "MIT",
+  "author": "qmhc",
+  "scripts": {
+    "build": "run-p build:contributor build:components",
+    "build:contributor": "tsx src/contributor.ts",
+    "build:components": "tsx src/components.ts"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "private": false,
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/meta#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/meta"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "tsx": "^3.12.3"
+  }
+}
