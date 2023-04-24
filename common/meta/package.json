@@ -9,20 +9,7 @@
     "build:contributor": "tsx src/contributor.ts",
     "build:components": "tsx src/components.ts"
   },
-  "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    }
-  },
   "private": false,
-  "engines": {
-    "node": ">=14"
-  },
   "files": [
     "dist"
   ],
