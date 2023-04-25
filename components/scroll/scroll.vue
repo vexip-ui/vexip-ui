@@ -337,6 +337,7 @@ export default defineComponent({
     watch(isReady, value => {
       if (value) {
         transitionDuration.value = -1
+        emitEvent(props.onReady)
       } else {
         transitionDuration.value = 0
       }
