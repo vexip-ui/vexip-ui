@@ -61,7 +61,7 @@ $card: map.merge(
   }
 
   &__content {
-    flex: 1 0 auto;
+    flex: 1 0 0;
     min-height: 0;
     padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding');
   }

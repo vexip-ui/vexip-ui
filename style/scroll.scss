@@ -24,7 +24,6 @@ $scroll: map.merge(
 
   &__wrapper {
     position: relative;
-    display: flex;
     flex-direction: column;
     vertical-align: top;
     will-change: transform;
