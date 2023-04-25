@@ -80,6 +80,7 @@ describe('AutoComplete', () => {
     const selectPopperEl = wrapper.find('.vxp-select__popper')
     expect(selectPopperEl.exists()).toBe(true)
     expect(selectPopperEl.find('.vxp-select__label').text()).toEqual(value)
+    expect(selectPopperEl.findAll('.vxp-select__label').length).toEqual(1)
   })
 
   it('transfer', async () => {
