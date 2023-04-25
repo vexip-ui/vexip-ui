@@ -24,6 +24,7 @@ meta-data.json
 .yarn/install-state.gz
 
 # local env files
+.env
 .env.local
 .env.*.local
 

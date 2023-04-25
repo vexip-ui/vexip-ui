@@ -2,8 +2,10 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import glob from 'fast-glob'
+import { config } from 'dotenv'
 import { logger } from '../../../scripts/utils'
 
+config()
 const __dirname = path.resolve(fileURLToPath(import.meta.url), '..')
 const pathOutput = path.resolve(__dirname, '../dist')
 const root = path.resolve(__dirname, '../../..')
