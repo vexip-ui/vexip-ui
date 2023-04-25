@@ -132,7 +132,7 @@ export default defineComponent({
     const nh = useNameHelper('scroll')
     const usingBar = ref(false)
     const scrolling = ref(false)
-    const transitionDuration = ref<number>(-1)
+    const transitionDuration = ref<number>(0)
     const mode = computed(() => (props.mode === 'horizontal-exact' ? 'horizontal' : props.mode))
 
     const xBar = ref<InstanceType<typeof Scrollbar>>()
@@ -335,7 +335,11 @@ export default defineComponent({
       emitEvent(props.onYEnabledChange, value)
     })
     watch(isReady, value => {
-      if (value) emitEvent(props.onReady)
+      if (value) {
+        transitionDuration.value = -1
+      } else {
+        transitionDuration.value = 0
+      }
     })
 
     function syncBarScroll() {
@@ -761,6 +765,7 @@ export default defineComponent({
       percentY,
       transitionDuration,
       currentScroll,
+      isReady,
 
       className,
       style,
