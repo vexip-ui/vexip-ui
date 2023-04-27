@@ -54,6 +54,7 @@ async function main() {
     await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
     logger.successText(`Successfully published v${currentVersion}'`)
     if (metaPkgDir) {
+      await run('npm', ['version', currentVersion], { stdio: 'pipe', cwd: metaPkgDir })
       await run('pnpm', publishArgs, { stdio: 'pipe', cwd: metaPkgDir })
       logger.successText(`Successfully published metadata v${currentVersion}'`)
     }
