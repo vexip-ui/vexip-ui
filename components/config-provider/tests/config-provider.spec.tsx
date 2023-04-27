@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Input } from '@/components/input'
+import { Masker } from '@/components/masker'
+import { User } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { ConfigProvider } from '..'
 
@@ -38,5 +40,29 @@ describe('ConfigProvider', () => {
     ))
 
     expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual('test')
+  })
+
+  it('provide icons', () => {
+    const icons = {
+      loading: User
+    }
+    const wrapper = mount(() => (
+      <ConfigProvider icons={icons}>
+        <Input loading></Input>
+      </ConfigProvider>
+    ))
+
+    expect(wrapper.find('.vxp-input').findComponent(User).exists()).toBe(true)
+  })
+
+  it('provide z-index', () => {
+    const zIndex = 666
+    const wrapper = mount(() => (
+      <ConfigProvider z-index={zIndex}>
+        <Masker active></Masker>
+      </ConfigProvider>
+    ))
+
+    expect(wrapper.find('.vxp-masker').attributes('style')).toContain('z-index: 666;')
   })
 })
