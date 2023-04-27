@@ -25,6 +25,7 @@
     "build:plugins": "pnpm -C common/plugins build && pnpm i",
     "build:style": "gulp --require sucrase/register/ts",
     "build:utils": "pnpm -C common/utils build && pnpm i",
+    "build:meta": "pnpm -C common/meta build && pnpm i",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "create": "tsx scripts/create.ts",

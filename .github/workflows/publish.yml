@@ -38,6 +38,9 @@ jobs:
       - name: Build plugins
         run: pnpm run build:plugins
 
+      - name: Build metadata
+        run: pnpm run build:meta
+
       - name: Build
         run: pnpm run build
 

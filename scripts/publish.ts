@@ -14,9 +14,13 @@ const releaseTag = args.tag || args.t
 
 async function main() {
   let inputPkg = ''
+  let metaPkgDir = ''
 
   if (target?.startsWith('v')) {
     inputPkg = 'vexip-ui'
+
+    const { pkgDir } = await getPackageInfo('common/meta')
+    metaPkgDir = pkgDir
   } else if (target?.includes('@')) {
     [inputPkg] = target.split('@')
 
@@ -49,6 +53,10 @@ async function main() {
   try {
     await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
     logger.successText(`Successfully published v${currentVersion}'`)
+    if (metaPkgDir) {
+      await run('pnpm', publishArgs, { stdio: 'pipe', cwd: metaPkgDir })
+      logger.successText(`Successfully published metadata v${currentVersion}'`)
+    }
   } catch (error) {
     if (error.stderr?.match(/previously published/)) {
       logger.errorText(`Skipping already published v'${currentVersion}'`)
