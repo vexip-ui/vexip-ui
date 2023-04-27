@@ -33,15 +33,19 @@ jobs:
         run: pnpm install
 
       - name: Build common packages
+        if: startsWith(github.ref_name, 'icons') || startsWith(github.ref_name, 'hooks') || startsWith(github.ref_name, 'utils')
         run: pnpm run build:common
 
       - name: Build plugins
+        if: startsWith(github.ref_name, 'plugins')
         run: pnpm run build:plugins
 
       - name: Build metadata
+        if: startsWith(github.ref_name, 'v')
         run: pnpm run build:meta
 
       - name: Build
+        if: startsWith(github.ref_name, 'v')
         run: pnpm run build
 
       - name: Publish package
