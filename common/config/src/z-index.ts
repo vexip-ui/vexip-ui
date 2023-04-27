@@ -24,6 +24,12 @@ function getOrDefault(num: number, def: number) {
   return isDefined(num) && !Number.isNaN(num) ? num : def
 }
 
+/**
+ * Provide a z-index config for under components.
+ *
+ * @param icons z-index config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configZIndex(sourceZIndex: MaybeRef<number>, app?: App) {
   if (app) {
     const zIndex = computed(() => {

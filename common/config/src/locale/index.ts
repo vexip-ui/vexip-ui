@@ -28,6 +28,12 @@ export function registerLocale(locale: LocaleConfig) {
   locale.locale && cached.set(locale.locale, locale)
 }
 
+/**
+ * Provide a locale config for under components.
+ *
+ * @param sourceLocale locale config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
   if (app) {
     const locale = computed(() => {

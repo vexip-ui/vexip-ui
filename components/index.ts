@@ -114,8 +114,10 @@ import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } fr
 import { buildInstall } from './create'
 import { install as installDirectives } from '@/directives'
 
-export type { PropsOptions } from './props'
 export { version } from './version'
+export * from './create'
+
+export type { PropsOptions } from './props'
 
 const components = [
   Alert,
@@ -247,7 +249,6 @@ const components = [
   installDirectives
 ]
 
-export { buildInstall }
 export const install = buildInstall(components)
 
 export * from './alert'
