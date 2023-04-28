@@ -24,44 +24,49 @@ $scroll: map.merge(
 
   &__wrapper {
     position: relative;
-    flex-direction: column;
     vertical-align: top;
     will-change: transform;
     transition-timing-function: get-css-var('scroll-move-timing');
     transition-duration: get-css-var('scroll-move-duration');
     transition-property: transform;
 
-    &--scrolling,
-    &--using-bar,
-    &--no-ready,
-    &--no-transition {
+    @include clear-both;
+  }
+
+  $wrap: #{&}__wrapper;
+
+  &--scrolling,
+  &--using-bar,
+  &--no-ready,
+  &--no-transition {
+    & > #{$wrap} {
       transition-duration: 0ms;
     }
+  }
 
-    &--no-ready {
+  &--no-ready {
+    & > #{$wrap} {
       display: inline-block;
     }
+  }
 
-    & > * {
-      flex-shrink: 0;
-    }
-
-    // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
-    &--scrolling > *,
-    &--using-bar > * {
+  // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
+  &--scrolling,
+  &--using-bar {
+    & > #{$wrap} > * {
       pointer-events: none;
     }
-
-    @include clear-both;
   }
 
   // &--vertical > &__wrapper {
   //   display: flex;
   // }
 
-  &--horizontal > &__wrapper,
-  &--both > &__wrapper {
-    display: inline-flex;
+  &--horizontal,
+  &--both {
+    & > #{$wrap} {
+      display: inline-block;
+    }
   }
 
   &__extra {

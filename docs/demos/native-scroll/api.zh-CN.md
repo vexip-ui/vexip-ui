@@ -1,14 +1,17 @@
 ### 预设类型
 
 ```ts
-interface NativeScrollSlotParams {
+interface NativeScrollState {
   scrollX: number,
   scrollY: number,
   percentX: number,
   percentY: number,
   enableXScroll: Readonly<boolean>,
-  enableYScroll: Readonly<boolean>,
-  content?: HTMLElement,
+  enableYScroll: Readonly<boolean>
+}
+
+interface NativeScrollSlotParams {
+  getState: () => NativeScrollState,
   refresh: () => void,
   scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,

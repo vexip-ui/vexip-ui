@@ -4,4 +4,4 @@ export { Scroll }
 export type ScrollExposed = InstanceType<typeof Scroll>
 
 export type { ScrollProps, ScrollCProps } from './props'
-export type { ScrollMode, ScrollSlotParams } from './symbol'
+export type { ScrollMode, ScrollState, ScrollSlotParams } from './symbol'

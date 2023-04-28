@@ -4,10 +4,10 @@
       <p v-for="n in 9" :key="n">
         {{ n }}. Scroll mouse wheel here
       </p>
-      <template #extra="{ scrollY, scrollTo }">
+      <template #extra="{ getState, scrollTo }">
         <transition name="vxp-fade">
           <Button
-            v-if="scrollY > 60"
+            v-if="getState().scrollY > 60"
             style="position: absolute; right: 12px; bottom: 12px"
             @click="scrollTo(0, 0)"
           >
