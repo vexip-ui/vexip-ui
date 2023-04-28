@@ -64,6 +64,7 @@ import {
   computed,
   shallowReadonly,
   watch,
+  watchEffect,
   toRef,
   onBeforeUnmount,
   nextTick
@@ -332,11 +333,6 @@ export default defineComponent({
       return [props.scrollAttrs?.style, props.scrollStyle]
     })
 
-    watch([x, y], () => {
-      if (!contentElement.value) return
-
-      contentElement.value.style.transform = `translate3d(${x.value}px, ${y.value}px, 0)`
-    })
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
     })
@@ -351,11 +347,16 @@ export default defineComponent({
         transitionDuration.value = 0
       }
     })
-    watch(transitionDuration, value => {
+    watchEffect(() => {
+      if (!contentElement.value) return
+
+      contentElement.value.style.transform = `translate3d(${x.value}px, ${y.value}px, 0)`
+    })
+    watchEffect(() => {
       if (!contentElement.value) return
 
       contentElement.value.style.transitionDuration =
-        value < 0 ? '' : `${transitionDuration.value}ms`
+        transitionDuration.value < 0 ? '' : `${transitionDuration.value}ms`
     })
 
     function syncBarScroll() {

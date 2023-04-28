@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { noop } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
 import { Scrollbar } from '..'
@@ -18,23 +19,27 @@ describe('Scrollbar', () => {
     expect(wrapper.find('.vxp-scrollbar__bar').exists()).toBe(true)
   })
 
-  it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
-      const wrapper = mount(() => <Scrollbar placement={placement}></Scrollbar>)
+  it('placement', async () => {
+    await Promise.all(
+      (['top', 'right', 'bottom', 'left'] as const).map(async placement => {
+        const wrapper = mount(() => <Scrollbar placement={placement}></Scrollbar>)
 
-      expect(wrapper.find('.vxp-scrollbar').classes()).toContain(`vxp-scrollbar--${placement}`)
+        await nextTick()
+        expect(wrapper.find('.vxp-scrollbar').classes()).toContain(`vxp-scrollbar--${placement}`)
 
-      if (placement === 'right' || placement === 'left') {
-        expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 35%;')
-      } else {
-        expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('width: 35%;')
-      }
-    })
+        if (placement === 'right' || placement === 'left') {
+          expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 35%;')
+        } else {
+          expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('width: 35%;')
+        }
+      })
+    )
   })
 
-  it('bar length', () => {
+  it('bar length', async () => {
     const wrapper = mount(() => <Scrollbar bar-length={20}></Scrollbar>)
 
+    await nextTick()
     expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 20%;')
   })
 
@@ -44,7 +49,7 @@ describe('Scrollbar', () => {
     expect(wrapper.find('.vxp-scrollbar').classes()).toContain('vxp-scrollbar--disabled')
   })
 
-  it('init value', () => {
+  it('init value', async () => {
     const wrapper = mount(Scrollbar, {
       props: {
         barLength: 20,
@@ -52,6 +57,7 @@ describe('Scrollbar', () => {
       }
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain(
       'transform: translate3d(0, 80%, 0);'
     )

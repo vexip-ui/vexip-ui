@@ -26,6 +26,7 @@ import {
   ref,
   computed,
   watch,
+  watchEffect,
   toRef,
   onMounted,
   onBeforeUnmount,
@@ -141,26 +142,6 @@ export default defineComponent({
         [nh.cv('width')]: props.width ? `${props.width}px` : null!
       }
     })
-    // const barStyle = computed(() => {
-    //   const style: Record<string, string> = {}
-    //   const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
-    //   const length = `${props.barLength}%`
-
-    //   if (type.value === ScrollbarType.VERTICAL) {
-    //     style.height = length
-    //     style.transform = `translate3d(0, ${position}, 0)`
-    //   } else {
-    //     // style.left = position
-    //     style.width = length
-    //     style.transform = `translate3d(${position}, 0, 0)`
-    //   }
-
-    //   if (isDefined(props.duration) && props.duration >= 0) {
-    //     style.transitionDuration = `${props.duration}ms`
-    //   }
-
-    //   return style
-    // })
 
     watch(
       () => props.scroll,
@@ -169,7 +150,7 @@ export default defineComponent({
         triggerUpdate()
       }
     )
-    watch([() => props.barLength, currentScroll, type], () => {
+    watchEffect(() => {
       if (!bar.value) return
 
       const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
@@ -183,14 +164,12 @@ export default defineComponent({
         bar.value.style.transform = `translate3d(${position}, 0, 0)`
       }
     })
-    watch(
-      () => props.duration,
-      value => {
-        if (!bar.value) return
+    watchEffect(() => {
+      if (!bar.value) return
 
-        bar.value.style.transitionDuration = isDefined(value) && value >= 0 ? `${value}ms` : ''
-      }
-    )
+      bar.value.style.transitionDuration =
+        isDefined(props.duration) && props.duration >= 0 ? `${props.duration}ms` : ''
+    })
 
     if (props.appear) {
       watch(currentScroll, () => {
