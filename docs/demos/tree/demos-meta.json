@@ -11,5 +11,6 @@
   "slot",
   "control",
   "floor-select",
-  "link-line"
+  "link-line",
+  "post-create"
 ]

@@ -1,39 +1,45 @@
 import { computed, provide, inject, unref } from 'vue'
 import { mergeObjects } from '@vexip-ui/utils'
 import { zhCNLocale } from './zh-CN'
-import { enUSLocale } from './en-US'
 
-import type { App, ComputedRef, Ref } from 'vue'
+import type { App, ComputedRef } from 'vue'
 import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
+import type { MaybeRef } from '../types'
 
 export * from './helper'
 export * from './zh-CN'
 export * from './en-US'
-
-type MaybeRef<T> = T | Ref<T>
+export * from './ta-IN'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())
+
+const cached = new Map<string, LocaleConfig>()
 
 export function getDefaultLocaleConfig(locale?: string) {
   if (!locale) {
     return globalLocal.value
   }
 
-  switch (locale) {
-    case 'en-US':
-      return enUSLocale()
-    default:
-      return zhCNLocale()
-  }
+  return cached.get(locale) || globalLocal.value
 }
 
+export function registerLocale(locale: LocaleConfig) {
+  locale.locale && cached.set(locale.locale, locale)
+}
+
+/**
+ * Provide a locale config for under components.
+ *
+ * @param sourceLocale locale config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
   if (app) {
     const locale = computed(() => {
       const locale = unref(sourceLocale)
 
-      return mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false)
+      return mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
     })
 
     app.provide(PROVIDED_LOCALE, locale)
@@ -41,13 +47,13 @@ export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
     const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
     const locale = computed(() => {
       const locale = unref(sourceLocale)
-      const providedLocale = mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
+      // const providedLocale = mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
 
       if (!upstreamLocale?.value) {
-        return providedLocale
+        return mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
       }
 
-      return mergeObjects(upstreamLocale.value as any, providedLocale)
+      return mergeObjects(upstreamLocale.value as any, locale)
     })
 
     provide(PROVIDED_LOCALE, locale)

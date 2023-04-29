@@ -7,7 +7,7 @@
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  Highly customizable property values, Full TypeScript, Performance pretty good
+  Highly customizability, full TypeScript, performance pretty good
 </p>
 
 <p align="center">
@@ -72,6 +72,8 @@ If you take maybe some bugs, please use the [Vexip UI Playground](https://playgr
 ## Contributing
 
 Welcome to join us! You can check out the [Contributing Guide](./CONTRIBUTING.md) to learn how to get started.
+
+Or you can sponsor me to help the project grow better!
 
 ## Contributors
 

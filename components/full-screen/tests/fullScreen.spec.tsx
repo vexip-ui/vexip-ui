@@ -19,8 +19,8 @@ describe('FullScreen', () => {
           default: ({ enter, exit }: any) => {
             return (
               <>
-                <button class={'enter'} onClick={() => enter()}></button>
-                <button class={'exit'} onClick={() => exit()}></button>
+                <button type={'button'} class={'enter'} onClick={() => enter()}></button>
+                <button type={'button'} class={'exit'} onClick={() => exit()}></button>
               </>
             )
           }

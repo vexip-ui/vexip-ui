@@ -1,7 +1,6 @@
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, createSizeProp, emitEvent } from '@vexip-ui/config'
-import { Xmark } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, createSizeProp, emitEvent } from '@vexip-ui/config'
 import { isClient, parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { tagProps } from './props'
 
@@ -28,8 +27,7 @@ const tagTypes = Object.freeze<TagType[]>([
 export default defineComponent({
   name: 'Tag',
   components: {
-    Icon,
-    Xmark
+    Icon
   },
   props: tagProps,
   emits: [],
@@ -53,6 +51,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('tag')
+    const icons = useIcons()
 
     const className = computed(() => {
       return {
@@ -110,10 +109,8 @@ export default defineComponent({
       if (!props.closable) return null
 
       return (
-        <button class={nh.be('close')} onClick={handleClose}>
-          <Icon label="close">
-            <Xmark></Xmark>
-          </Icon>
+        <button type={'button'} class={nh.be('close')} onClick={handleClose}>
+          <Icon {...icons.value.close} label="close"></Icon>
         </button>
       )
     }

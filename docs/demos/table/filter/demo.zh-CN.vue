@@ -7,7 +7,7 @@
     :row-height="40"
     @row-filter="handleRowFilter"
   ></Table>
-  <Button style="margin-top: 10px;" @click="clearFilter">
+  <Button style="margin-top: 10px" @click="clearFilter">
     清除过滤
   </Button>
 </template>
@@ -16,7 +16,7 @@
 import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
 
-import type { Table, FilterProfile } from 'vexip-ui'
+import type { Table, TableFilterProfile } from 'vexip-ui'
 
 interface RowData {
   id: string,
@@ -118,7 +118,7 @@ const data = ref([
   }
 ])
 
-function handleRowFilter(profiles: FilterProfile[]) {
+function handleRowFilter(profiles: TableFilterProfile[]) {
   console.info(profiles)
 }
 

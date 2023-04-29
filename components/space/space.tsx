@@ -1,4 +1,4 @@
-import { defineComponent, computed, h, renderSlot } from 'vue'
+import { defineComponent, computed, renderSlot } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { spaceProps } from './props'
@@ -95,9 +95,12 @@ export default defineComponent({
     })
 
     return () => {
+      const CustomTag = props.tag || ('div' as any)
       const children = renderSlot(slots, 'default').children
 
-      if (!children?.length) return null
+      if (!children?.length) {
+        return <CustomTag class={className.value} style={style.value}></CustomTag>
+      }
 
       const vnodes = flatVNodes(children)
       const lastIndex = vnodes.length - 1
@@ -105,45 +108,42 @@ export default defineComponent({
       const justifySpace = justify.startsWith('space')
       const notBetween = justify !== 'space-between'
 
-      return h(
-        props.tag || 'div',
-        {
-          class: className.value,
-          style: style.value
-        },
-        vnodes.map((vnode, index) => (
-          <div
-            class={nh.be('item')}
-            role="none"
-            style={[
-              props.itemStyle,
-              !props.gapDisabled
-                ? ''
-                : props.vertical
-                  ? {
-                      marginBottom: index !== lastIndex ? varMap.v : undefined
-                    }
-                  : {
-                      paddingTop: varMap.hv,
-                      paddingBottom: varMap.hv,
-                      marginRight: justifySpace
-                        ? notBetween || index !== lastIndex
-                          ? varMap.hh
+      return (
+        <CustomTag class={className.value} style={style.value}>
+          {vnodes.map((vnode, index) => (
+            <div
+              class={nh.be('item')}
+              role="none"
+              style={[
+                props.itemStyle,
+                !props.gapDisabled
+                  ? ''
+                  : props.vertical
+                    ? {
+                        marginBottom: index !== lastIndex ? varMap.v : undefined
+                      }
+                    : {
+                        paddingTop: varMap.hv,
+                        paddingBottom: varMap.hv,
+                        marginRight: justifySpace
+                          ? notBetween || index !== lastIndex
+                            ? varMap.hh
+                            : undefined
+                          : index !== lastIndex
+                            ? varMap.h
+                            : undefined,
+                        marginLeft: justifySpace
+                          ? notBetween || index !== 0
+                            ? varMap.hh
+                            : undefined
                           : undefined
-                        : index !== lastIndex
-                          ? varMap.h
-                          : undefined,
-                      marginLeft: justifySpace
-                        ? notBetween || index !== 0
-                          ? varMap.hh
-                          : undefined
-                        : undefined
-                    }
-            ]}
-          >
-            {vnode}
-          </div>
-        ))
+                      }
+              ]}
+            >
+              {vnode}
+            </div>
+          ))}
+        </CustomTag>
       )
     }
   }

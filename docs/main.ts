@@ -9,6 +9,7 @@ import { createRouter } from './router'
 import { i18n, vexipuiLocale } from './i18n'
 import Markdown from './common/markdown.vue'
 import AudioButton from './common/audio-button.vue'
+import { IconDemo } from './common/icon-demo'
 import { computeSeriesColors } from './common/series-color'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
@@ -34,6 +35,7 @@ export async function createApp() {
   const app = (__SSR__ ? createSSRApp : _createApp)(App)
     .component('Markdown', Markdown)
     .component('AudioButton', AudioButton)
+    .component('IconDemo', IconDemo)
     .use(i18n)
     .use(install, {
       locale: vexipuiLocale,

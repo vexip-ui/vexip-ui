@@ -2,9 +2,9 @@ import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
-import { ChevronRight } from '@vexip-ui/icons'
-import type { NameHelper } from '@vexip-ui/config'
+import { useIcons } from '@vexip-ui/config'
 
+import type { NameHelper } from '@vexip-ui/config'
 import type { ContextmenuConfig } from './symbol'
 
 function renderItemIcon(item: ContextmenuConfig, nh: NameHelper) {
@@ -33,6 +33,8 @@ function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
 }
 
 function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
+  const icons = useIcons()
+
   return (
     <Dropdown
       inherit
@@ -58,7 +60,10 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
             </span>
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
-              <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
+              <Icon
+                {...icons.value.arrowRight}
+                style={{ color: item.iconColor || item.color }}
+              ></Icon>
             </div>
           </DropdownItem>
         ),

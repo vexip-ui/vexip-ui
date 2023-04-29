@@ -1,8 +1,8 @@
 @use 'sass:color';
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
 
 // $types: primary info success error warning;
 

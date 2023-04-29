@@ -5,6 +5,7 @@ import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/hooks'
 import { virtualListProps } from './props'
 
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type { ScrollPayload } from './symbol'
 
 export default defineComponent({
@@ -35,10 +36,10 @@ export default defineComponent({
     const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, bufferSize } = toRefs(props)
-    const scroll = ref<InstanceType<typeof NativeScroll>>()
+    const scroll = ref<NativeScrollExposed>()
     const list = ref<HTMLElement>()
 
-    const wrapper = computed(() => scroll.value?.content ?? null)
+    const wrapper = computed(() => scroll.value?.content)
 
     const {
       indexMap,

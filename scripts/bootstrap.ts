@@ -1,14 +1,17 @@
 import { resolve } from 'node:path'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { statSync, existsSync } from 'node:fs'
+import { cpus } from 'node:os'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import {
   rootDir,
   prettierConfig,
   logger,
+  componentsDir,
   components as allComponents,
-  toCapitalCase
+  toCapitalCase,
+  runParallel
 } from './utils'
 
 async function main() {
@@ -42,20 +45,13 @@ async function main() {
       ${typography.join(',\n')}
     } from './typography'
 
+    import { buildInstall } from './create'
     import { install as installDirectives } from '@/directives'
 
-    import { buildInstall } from './create'
-
-    export type {
-      ComponentSize,
-      ComponentState,
-      LocaleConfig,
-      LocaleNames,
-      LocaleOptions
-    } from '@vexip-ui/config'
-    export type { PropsOptions } from './props'
-
     export { version } from './version'
+    export * from './create'
+
+    export type { PropsOptions } from './props'
 
     const components = [
       ${components.map(toCapitalCase).join(',\n')},
@@ -67,7 +63,6 @@ async function main() {
       installDirectives
     ]
 
-    export { buildInstall }
     export const install = buildInstall(components)
 
     ${allComponents.map(component => `export * from './${component}'`).join('\n')}
@@ -176,15 +171,18 @@ async function main() {
   await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
   await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
 
-  await Promise.all(
-    allComponents
-      .filter(component => !existsSync(`style/${component}.scss`))
-      .map(component => writeFile(`style/${component}.scss`, '', 'utf-8'))
-  )
+  await runParallel(cpus().length, allComponents, async component => {
+    const scssPath = resolve(rootDir, `style/${component}.scss`)
+
+    if (!existsSync(scssPath)) {
+      await writeFile(scssPath, '', 'utf-8')
+    }
+  })
 
   const styleIndex =
     "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +
-    allComponents.map(component => `@use './${component}.scss';`).join('\n') +
+    // allComponents.map(component => `@use './${component}.scss';`).join('\n') +
+    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') +
     '\n'
   const stylePath = resolve(rootDir, 'style/index.scss')
 
@@ -224,6 +222,62 @@ async function readDirectives() {
   )
 
   return directives
+}
+
+async function topologicalStyle() {
+  const importRE = /import '@\/components\/(.+)\/style'/
+  const depsMap = new Map<string, string[]>()
+
+  await runParallel(cpus().length, allComponents, async component => {
+    const deps: string[] = []
+    const path = resolve(componentsDir, component, 'style.ts')
+
+    depsMap.set(component, deps)
+
+    if (!existsSync(path)) {
+      return
+    }
+
+    let match: RegExpMatchArray | null
+
+    for (const line of (await readFile(path, 'utf-8')).split('\n')) {
+      if ((match = line.match(importRE)) && match[1] !== 'preset' && match[1] !== 'icon') {
+        deps.push(match[1])
+      }
+    }
+  })
+
+  const list: string[] = ['icon']
+  const walkedSet = new Set<string>()
+
+  const push = (deps: string[]) => {
+    for (const dep of deps) {
+      if (walkedSet.has(dep)) {
+        continue
+      }
+
+      walkedSet.add(dep)
+
+      if (depsMap.has(dep)) {
+        push(depsMap.get(dep)!)
+      }
+
+      list.push(dep)
+    }
+  }
+
+  walkedSet.add('icon')
+
+  for (const [component, deps] of depsMap) {
+    push(deps)
+
+    if (!walkedSet.has(component)) {
+      walkedSet.add(component)
+      list.push(component)
+    }
+  }
+
+  return list
 }
 
 main().catch(error => {

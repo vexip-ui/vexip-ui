@@ -1,14 +1,8 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
-@use './native-scroll.scss';
 @use './input.scss' as input;
-@use './option.scss';
-@use './overflow.scss';
-@use './tag.scss';
-@use './tooltip.scss';
-@use './virtual-list.scss';
 
 $select: () !default;
 $select: map.merge(
@@ -113,6 +107,7 @@ $select: map.merge(
     height: 100%;
     padding: 0;
     color: inherit;
+    pointer-events: none;
     user-select: auto;
     background-color: transparent;
     border: 0;
@@ -120,6 +115,10 @@ $select: map.merge(
 
     &--multiple {
       min-width: 1px;
+    }
+
+    &--visible {
+      pointer-events: auto;
     }
 
     &::placeholder {
@@ -148,12 +147,7 @@ $select: map.merge(
   }
 
   &__popper {
-    @include basis;
-
-    z-index: get-css-var('z-index-popper');
-    display: flex;
     min-width: 98px;
-    padding: 5px 0;
 
     .#{$namespace}-scroll__wrapper {
       width: 100%;

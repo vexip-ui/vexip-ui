@@ -33,6 +33,7 @@
             </div>
             <button
               v-if="props.closable"
+              type="button"
               :class="nh.be('close')"
               @pointerdown.stop
               @mousedown.stop
@@ -40,9 +41,7 @@
               @click="handleClose(false)"
             >
               <slot name="close">
-                <Icon :scale="1.2" label="close">
-                  <Xmark></Xmark>
-                </Icon>
+                <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
               </slot>
             </button>
           </slot>
@@ -88,10 +87,9 @@ import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } fro
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isNull, isPromise, toNumber } from '@vexip-ui/utils'
-import { Xmark } from '@vexip-ui/icons'
 import { modalProps } from './props'
 
 const positionValidator = (value: string | number) => {
@@ -109,8 +107,7 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    Masker,
-    Xmark
+    Masker
   },
   props: modalProps,
   emits: ['update:active'],
@@ -470,6 +467,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('modal', toRef(props, 'locale')),
+      icons: useIcons(),
       currentActive,
       dragging,
       resizing,

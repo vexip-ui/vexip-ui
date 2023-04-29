@@ -1,1 +1,3 @@
-import '@/style/breadcrumb.scss'
+import '@/components/preset/style'
+import '@/components/breadcrumb/style'
+import '@/style/anchor-link.scss'

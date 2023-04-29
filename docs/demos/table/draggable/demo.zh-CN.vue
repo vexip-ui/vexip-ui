@@ -5,6 +5,10 @@
     :data="data"
     :width="1000"
   ></Table>
+  <br />
+  <Table :columns="columns" :data="data" :width="1000">
+    <TableColumn type="drag"></TableColumn>
+  </Table>
 </template>
 
 <script setup lang="ts">

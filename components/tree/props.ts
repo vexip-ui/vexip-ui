@@ -5,10 +5,11 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
   Data,
   TreeLinkLine,
-  NodeDropType,
-  NodeKeyConfig,
+  TreeNodeDropType,
+  TreeNodeKeyConfig,
   TreeNodeProps,
-  RenderFn,
+  TreeNodePostCreate,
+  TreeNodeRenderFn,
   AsyncLoadFn,
   FilterFn,
   NodePropsFn
@@ -27,7 +28,7 @@ export const treeProps = buildProps({
   readonly: booleanProp,
   checkbox: booleanProp,
   suffixCheckbox: booleanProp,
-  renderer: Function as PropType<RenderFn>,
+  renderer: Function as PropType<TreeNodeRenderFn>,
   multiple: booleanProp,
   indent: [String, Number],
   accordion: booleanProp,
@@ -37,7 +38,7 @@ export const treeProps = buildProps({
   onAsyncLoad: Function as PropType<AsyncLoadFn>,
   cacheNode: booleanProp,
   rootId: [String, Number],
-  keyConfig: Object as PropType<NodeKeyConfig>,
+  keyConfig: Object as PropType<TreeNodeKeyConfig>,
   noCascaded: booleanProp,
   filter: [String, Function] as PropType<string | FilterFn>,
   ignoreCase: booleanProp,
@@ -46,6 +47,7 @@ export const treeProps = buildProps({
     type: [Boolean, String] as PropType<boolean | TreeLinkLine>,
     default: null
   },
+  postCreate: Function as PropType<TreeNodePostCreate>,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
@@ -54,7 +56,7 @@ export const treeProps = buildProps({
   onNodeReduce: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
-  onDrop: eventProp<(data: Data, node: TreeNodeProps, type: NodeDropType) => void>(),
+  onDrop: eventProp<(data: Data, node: TreeNodeProps, type: TreeNodeDropType) => void>(),
   onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onLabelClick: eventProp<(data: Data, node: TreeNodeProps) => void>()
 })

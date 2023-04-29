@@ -92,7 +92,17 @@ async function create(name: string) {
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'style.ts'),
-      source: `import '@/style/${kebabCaseName}.scss'\n`
+      source: `
+        import '@/components/preset/style'
+        import '@/style/${kebabCaseName}.scss'
+      `
+    },
+    {
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'css.ts'),
+      source: `
+        import '@/components/preset/css'
+        import '@/css/${kebabCaseName}.css'
+      `
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'props.ts'),
@@ -207,6 +217,7 @@ async function create(name: string) {
       source: `
         @use 'sass:map';
 
+        @use './shared' as *;
         @use './design' as *;
 
         $${kebabCaseName}: () !default;
@@ -327,7 +338,7 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(filePath, source)
+        await fs.writeFile(filePath, prettier.format(source, { ...prettierConfig, parser: 'scss' }))
         await stylelint.lint({
           cwd: rootDir,
           fix: true,

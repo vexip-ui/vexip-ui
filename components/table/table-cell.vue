@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isTypeColumn(column)"
+    v-if="isTableTypeColumn(column)"
     :class="className"
     role="cell"
     :style="style"
@@ -12,7 +12,7 @@
     @contextmenu="handleContextmenu"
   >
     <Checkbox
-      v-if="isSelection(column)"
+      v-if="isSelectionColumn(column)"
       inherit
       :class="nh.be('selection')"
       :checked="row.checked"
@@ -22,19 +22,30 @@
       :control="!!row.children?.length"
       @click.prevent.stop="handleCheckRow(row, $event)"
     ></Checkbox>
-    <span v-else-if="isOrder(column)" :class="nh.be('order')">
+    <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
-    <template v-else-if="isExpand(column)">
+    <template v-else-if="isExpandColumn(column)">
       <button
         v-if="!disableExpandRows.has(row.key)"
+        type="button"
         :class="{
           [nh.be('expand')]: true,
           [nh.bem('expand', 'active')]: row.expanded
         }"
         @click.stop="handleExpandRow(row, $event)"
       >
-        <Icon><AngleRight></AngleRight></Icon>
+        <Icon v-bind="icons.angleRight"></Icon>
+      </button>
+    </template>
+    <template v-else-if="isDragColumn(column)">
+      <button
+        v-if="!disableDragRows.has(row.key)"
+        type="button"
+        :class="nh.be('dragger')"
+        @mousedown="handleDragRow(row)"
+      >
+        <Icon v-bind="icons.dragger"></Icon>
       </button>
     </template>
   </div>
@@ -58,13 +69,12 @@
         }"
       ></span>
       <button
+        type="button"
         :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
         @click="handleExpandTree(row)"
       >
-        <Icon>
-          <Minus v-if="row.treeExpanded"></Minus>
-          <Plus v-else></Plus>
-        </Icon>
+        <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
+        <Icon v-else v-bind="icons.plus"></Icon>
       </button>
     </template>
     <Ellipsis
@@ -107,23 +117,20 @@ import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { AngleRight, Plus, Minus } from '@vexip-ui/icons'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTIONS, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  RowState,
-  OrderColumn,
-  SelectionColumn,
-  ExpandColumn,
-  TypeColumn,
-  ColumnWithKey,
-  TableAction
+  TableRowState,
+  TableOrderColumn,
+  TableSelectionColumn,
+  TableExpandColumn,
+  TableDragColumn,
+  TableTypeColumn,
+  ColumnWithKey
 } from './symbol'
-
-const columnTypes = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableCell',
@@ -131,14 +138,11 @@ export default defineComponent({
     Checkbox,
     Ellipsis,
     Icon,
-    Renderer,
-    AngleRight,
-    Plus,
-    Minus
+    Renderer
   },
   props: {
     row: {
-      type: Object as PropType<RowState>,
+      type: Object as PropType<TableRowState>,
       default: () => ({})
     },
     rowIndex: {
@@ -156,11 +160,12 @@ export default defineComponent({
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject<TableAction>(TABLE_ACTION)!
+    const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const disableCheckRows = toRef(getters, 'disableCheckRows')
     const disableExpandRows = toRef(getters, 'disableExpandRows')
+    const disableDragRows = toRef(getters, 'disableDragRows')
 
     const className = computed(() => {
       let customClass = null
@@ -179,7 +184,7 @@ export default defineComponent({
       return [
         nh.be('cell'),
         {
-          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type),
+          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TableTypeColumn).type),
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
         props.column.className || null,
@@ -229,20 +234,29 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
 
-    function isSelection(column: unknown): column is SelectionColumn {
-      return (column as TypeColumn).type === 'selection'
+    function isSelectionColumn(column: unknown): column is TableSelectionColumn {
+      return (column as TableTypeColumn).type === 'selection'
     }
 
-    function isOrder(column: unknown): column is OrderColumn {
-      return (column as TypeColumn).type === 'order'
+    function isOrderColumn(column: unknown): column is TableOrderColumn {
+      return (column as TableTypeColumn).type === 'order'
     }
 
-    function isExpand(column: unknown): column is ExpandColumn {
-      return (column as TypeColumn).type === 'expand'
+    function isExpandColumn(column: unknown): column is TableExpandColumn {
+      return (column as TableTypeColumn).type === 'expand'
     }
 
-    function isTypeColumn(column: unknown): column is TypeColumn {
-      return isSelection(column) || isOrder(column) || isExpand(column)
+    function isDragColumn(column: unknown): column is TableDragColumn {
+      return (column as TableTypeColumn).type === 'drag'
+    }
+
+    function isTableTypeColumn(column: unknown): column is TableTypeColumn {
+      return (
+        isSelectionColumn(column) ||
+        isOrderColumn(column) ||
+        isExpandColumn(column) ||
+        isDragColumn(column)
+      )
     }
 
     function buildEventPayload(event: Event) {
@@ -257,56 +271,62 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellEnter(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellEnter(buildEventPayload(event))
       }
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellLeave(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellLeave(buildEventPayload(event))
       }
     }
 
     function handleClick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellClick(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellClick(buildEventPayload(event))
       }
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellDblclick(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellDblclick(buildEventPayload(event))
       }
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitCellContextmenu(buildEventPayload(event))
+      if (tableActions) {
+        tableActions.emitCellContextmenu(buildEventPayload(event))
       }
     }
 
-    function handleCheckRow(row: RowState, event: MouseEvent) {
+    function handleCheckRow(row: TableRowState, event: MouseEvent) {
       if (!disableCheckRows.value.has(row.key)) {
         const checked = !row.checked
         const { data, key, index } = row
 
         mutations.handleCheck(key, checked)
-        tableAction.emitRowCheck({ row: data, key, index, event, checked })
+        tableActions.emitRowCheck({ row: data, key, index, event, checked })
       }
     }
 
-    function handleExpandRow(row: RowState, event: MouseEvent) {
+    function handleExpandRow(row: TableRowState, event: MouseEvent) {
       if (!disableExpandRows.value.has(row.key)) {
         const expanded = !row.expanded
         const { data, key, index } = row
 
         mutations.handleExpand(key, expanded)
-        tableAction.emitRowExpand({ row: data, key, index, event, expanded })
+        tableActions.emitRowExpand({ row: data, key, index, event, expanded })
       }
     }
 
-    function handleExpandTree(row: RowState) {
+    function handleDragRow(row: TableRowState) {
+      if (!disableDragRows.value.has(row.key)) {
+        mutations.handleDrag(row.key, true)
+      }
+    }
+
+    function handleExpandTree(row: TableRowState) {
       if (!row.children?.length) return
 
       const expanded = !row.treeExpanded
@@ -316,6 +336,7 @@ export default defineComponent({
 
     return {
       nh,
+      icons: useIcons(),
 
       className,
       style,
@@ -324,13 +345,15 @@ export default defineComponent({
       tooltipWidth: toRef(state, 'tooltipWidth'),
       disableCheckRows,
       disableExpandRows,
+      disableDragRows,
       usingTree: toRef(getters, 'usingTree'),
 
       isFunction,
-      isSelection,
-      isOrder,
-      isExpand,
-      isTypeColumn,
+      isSelectionColumn,
+      isOrderColumn,
+      isExpandColumn,
+      isDragColumn,
+      isTableTypeColumn,
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
@@ -338,6 +361,7 @@ export default defineComponent({
       handleContextmenu,
       handleCheckRow,
       handleExpandRow,
+      handleDragRow,
       handleExpandTree
     }
   }

@@ -6,8 +6,7 @@ import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { Switch } from '@/components/switch'
-import { User, ArrowRightFromBracket, Check, Sun, Moon } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import { layoutHeaderProps } from './props'
@@ -21,7 +20,7 @@ export default defineComponent({
   props: layoutHeaderProps,
   emits: ['update:sign-type', 'update:color', 'update:user-dropped', 'update:dark-mode'],
   setup(_props, { slots, emit, expose }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutHeader', _props, {
       locale: null,
       tag: 'header',
       logo: '',
@@ -46,12 +45,13 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const icons = useIcons()
     const locale = useLocale('layout', toRef(props, 'locale'))
     const layoutState = useLayoutState()
     const currentSignType = ref<LayoutSignType>(props.signType)
     const currentUserDropped = ref(props.userDropped)
 
-    const menu = ref<MenuExposed | null>(null)
+    const menu = ref<MenuExposed>()
 
     const { isMounted } = useMounted()
 
@@ -69,6 +69,7 @@ export default defineComponent({
         {
           [nh.bs('vars')]: !layoutState.isLayout,
           [nh.bem('header', 'inherit')]: layoutState.isLayout || props.inherit,
+          [nh.bem('header', 'away')]: !layoutState.affixMatched,
           [nh.bem('header', 'affixed')]: layoutState.affixed
         }
       ]
@@ -79,7 +80,8 @@ export default defineComponent({
           {
             label: 'signOut',
             name: locale.value.signOut,
-            icon: ArrowRightFromBracket
+            icon: icons.value.signOut.icon,
+            iconProps: icons.value.signOut
           }
         ] as LayoutHeaderAction[]
       }
@@ -224,11 +226,7 @@ export default defineComponent({
     }
 
     function renderCheck() {
-      return (
-        <Icon>
-          <Check></Check>
-        </Icon>
-      )
+      return <Icon {...icons.value.check}></Icon>
     }
 
     function renderLayoutConfig() {
@@ -253,11 +251,20 @@ export default defineComponent({
           <Switch
             value={isDark.value}
             class={[nh.be('theme-mode'), isDark.value && nh.bem('theme-mode', 'dark')]}
-            open-icon={Moon}
-            close-icon={Sun}
             aria-label={'theme'}
             onChange={toggleTheme}
-          ></Switch>
+          >
+            {{
+              icon: () =>
+                isDark.value
+                  ? (
+                  <Icon {...icons.value.dark}></Icon>
+                    )
+                  : (
+                  <Icon {...icons.value.light}></Icon>
+                    )
+            }}
+          </Switch>
         </div>
       )
     }
@@ -351,19 +358,27 @@ export default defineComponent({
                     return (
                       <Avatar
                         src={props.user.avatar}
-                        icon={User}
                         circle={props.avatarCircle}
                         onClick={() => toggleUserDrop()}
-                      ></Avatar>
+                      >
+                        {{
+                          icon: () => <Icon {...icons.value.user}></Icon>
+                        }}
+                      </Avatar>
                     )
                   }
 
                   return (
-                    <Avatar
-                      icon={props.user.avatar || User}
-                      circle={props.avatarCircle}
-                      onClick={() => toggleUserDrop()}
-                    ></Avatar>
+                    <Avatar circle={props.avatarCircle} onClick={() => toggleUserDrop()}>
+                      {{
+                        icon: () => (
+                          <Icon
+                            {...icons.value.user}
+                            icon={props.user.avatar || icons.value.user.icon}
+                          ></Icon>
+                        )
+                      }}
+                    </Avatar>
                   )
                 },
                 drop: () => (
@@ -404,7 +419,11 @@ export default defineComponent({
                         onSelect={() => handleUserActionSelect(action.label, action.meta || {})}
                       >
                         {action.icon && (
-                          <Icon icon={action.icon} style={{ marginRight: '6px' }}></Icon>
+                          <Icon
+                            {...action.iconProps}
+                            icon={action.icon}
+                            style={{ marginRight: '6px' }}
+                          ></Icon>
                         )}
                         {action.name || action.label}
                       </DropdownItem>

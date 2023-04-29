@@ -14,6 +14,15 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { AutoCompleteKeyConfig, AutoCompleteRawOption, AutoCompleteFilter } from './symbol'
 
+type ChangeListener =
+  | ((value: string | number, data: AutoCompleteRawOption) => void)
+  | ((value: string, data: AutoCompleteRawOption) => void)
+  | ((value: number, data: AutoCompleteRawOption) => void)
+type EnterListener =
+  | ((value: string | number) => void)
+  | ((value: string) => void)
+  | ((value: number) => void)
+
 export const autoCompleteProps = buildProps({
   size: sizeProp,
   state: stateProp,
@@ -44,11 +53,11 @@ export const autoCompleteProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
-  onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+  onSelect: eventProp<ChangeListener>(),
   onInput: eventProp<(value: string) => void>(),
-  onChange: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+  onChange: eventProp<ChangeListener>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onEnter: eventProp<(value: string | number) => void>(),
+  onEnter: eventProp<EnterListener>(),
   onClear: eventProp()
 })
 

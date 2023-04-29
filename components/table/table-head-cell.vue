@@ -41,7 +41,7 @@
         }"
         @click="handleSortAsc()"
       >
-        <Icon><CaretUp></CaretUp></Icon>
+        <Icon v-bind="icons.caretUp"></Icon>
       </span>
       <span
         :class="{
@@ -50,7 +50,7 @@
         }"
         @click="handleSortDesc()"
       >
-        <Icon><CaretDown></CaretDown></Icon>
+        <Icon v-bind="icons.caretDown"></Icon>
       </span>
     </div>
     <Tooltip
@@ -72,7 +72,7 @@
     >
       <template #trigger>
         <div :class="nh.be('filter-trigger')">
-          <Icon><Filter></Filter></Icon>
+          <Icon v-bind="icons.filter"></Icon>
         </div>
       </template>
       <template v-if="filter.multiple" #default>
@@ -140,17 +140,16 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  SelectionColumn,
-  TypeColumn,
+  TableSelectionColumn,
+  TableTypeColumn,
   ColumnWithKey,
-  ParsedSorterOptions,
+  ParsedTableSorterOptions,
   ParsedFilterOptions
 } from './symbol'
 
@@ -163,10 +162,7 @@ export default defineComponent({
     Checkbox,
     Icon,
     Renderer,
-    Tooltip,
-    CaretUp,
-    CaretDown,
-    Filter
+    Tooltip
   },
   props: {
     column: {
@@ -180,7 +176,7 @@ export default defineComponent({
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject(TABLE_ACTION)!
+    const tableAction = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
@@ -199,7 +195,9 @@ export default defineComponent({
       return [
         nh.be('head-cell'),
         {
-          [nh.bem('head-cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type)
+          [nh.bem('head-cell', 'center')]: columnTypes.includes(
+            (props.column as TableTypeColumn).type
+          )
         },
         props.column.className || null,
         customClass
@@ -238,7 +236,7 @@ export default defineComponent({
       return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
     const sorter = computed(() => {
-      return state.sorters.get(props.column.key) || ({} as ParsedSorterOptions)
+      return state.sorters.get(props.column.key) || ({} as ParsedTableSorterOptions)
     })
     const filter = computed(() => {
       return state.filters.get(props.column.key) || ({} as ParsedFilterOptions)
@@ -275,8 +273,8 @@ export default defineComponent({
       }, 0)
     })
 
-    function isSelection(column: unknown): column is SelectionColumn {
-      return (column as TypeColumn).type === 'selection'
+    function isSelection(column: unknown): column is TableSelectionColumn {
+      return (column as TableTypeColumn).type === 'selection'
     }
 
     function buildEventPayload(event: Event) {
@@ -389,6 +387,7 @@ export default defineComponent({
     return {
       nh,
       locale: toRef(state, 'locale'),
+      icons: useIcons(),
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),

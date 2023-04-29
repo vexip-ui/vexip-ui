@@ -1,3 +1,37 @@
+## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.3.1...plugins@1.3.2) (2023-03-30)
+
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.1...plugins@1.3.1) (2023-03-29)
+
+### Bug Fixes
+
+- **plugins:** support vexip-ui version lower than 2.1.10 ([7e747d2](https://github.com/vexip-ui/vexip-ui/commit/7e747d2882e22aa1acc9b36e082a256675911259))
+
+### Code Refactoring
+
+- switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+### BREAKING CHANGES
+
+- The scss and css style files no longer contains dependent
+  styles for its component. Currently the relationship of styles are included in ts
+  (js) files which are use to import the styles. Change the import way of style like:
+  `vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import
+  preset style manually.
+
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.1...plugins@1.3.0) (2023-03-29)
+
+### Code Refactoring
+
+- switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+### BREAKING CHANGES
+
+- The scss and css style files no longer contains dependent
+  styles for its component. Currently the relationship of styles are included in ts
+  (js) files which are use to import the styles. Change the import way of style like:
+  `vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import
+  preset style manually.
+
 ## [1.2.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.0...plugins@1.2.1) (2023-02-08)
 
 ### Bug Fixes

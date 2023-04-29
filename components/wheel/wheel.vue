@@ -15,7 +15,7 @@
       ]"
       @click="handlePrev"
     >
-      <Icon :icon="prevIcon"></Icon>
+      <Icon v-bind="prevIcon"></Icon>
     </div>
     <div :class="nh.be('scroll')">
       <Scroll
@@ -73,7 +73,7 @@
       ]"
       @click="handleNext"
     >
-      <Icon :icon="nextIcon"></Icon>
+      <Icon v-bind="nextIcon"></Icon>
     </div>
   </div>
 </template>
@@ -84,10 +84,9 @@ import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
+import { useNameHelper, useProps, useIcons, createStateProp, emitEvent } from '@vexip-ui/config'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
-import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, toFalse, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
-import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
@@ -134,6 +133,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('wheel')
+    const icons = useIcons()
+
     const items = ref(new Set<ItemState>())
     const currentActive = ref(0)
     const wrapperWidth = ref(0)
@@ -257,8 +258,12 @@ export default defineComponent({
           .some(item => !isItemDisbaled(item))
       )
     })
-    const prevIcon = computed(() => (props.horizontal ? AngleLeft : AngleUp))
-    const nextIcon = computed(() => (props.horizontal ? AngleRight : AngleDown))
+    const prevIcon = computed(() =>
+      props.horizontal ? icons.value.angleLeft : icons.value.angleUp
+    )
+    const nextIcon = computed(() =>
+      props.horizontal ? icons.value.angleRight : icons.value.angleDown
+    )
 
     provide(WHEEL_STATE, { increaseItem, decreaseItem })
 

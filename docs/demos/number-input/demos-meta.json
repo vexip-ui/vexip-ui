@@ -6,6 +6,7 @@
   "icon",
   "range",
   "precision",
+  "formatter",
   "step",
   "loading",
   "sync",

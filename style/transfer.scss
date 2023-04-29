@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $transfer: () !default;
@@ -69,9 +70,7 @@ $transfer: map.merge(
     border: get-css-var('border-shape') get-css-var('transfer-panel-b-color');
     border-radius: $radius;
     outline: 0;
-    transition:
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
+    transition: get-css-var('transition-background'), get-css-var('transition-border'),
       get-css-var('transition-shadow');
 
     &:hover {

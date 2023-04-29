@@ -1,12 +1,12 @@
-import type { Data, FilterOptions, SorterOptions, TableColumnOptions } from './symbol'
+import type { Data, TableFilterOptions, TableSorterOptions, TableColumnOptions } from './symbol'
 
 export function defineFilter<D = Data, Val extends string | number = string | number>(
-  filter: FilterOptions<D, Val>
+  filter: TableFilterOptions<D, Val>
 ) {
   return filter
 }
 
-export function defineSorter<D = Data>(sorter: SorterOptions<D>) {
+export function defineSorter<D = Data>(sorter: TableSorterOptions<D>) {
   return sorter
 }
 

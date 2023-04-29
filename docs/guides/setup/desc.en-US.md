@@ -63,6 +63,8 @@ If you take maybe some bugs, please use the [Vexip UI Playground](https://playgr
 
 Welcome to join us! You can check out the [Contributing Guide](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) to learn how to get started.
 
+Or you can sponsor me to help the project grow better!
+
 ## Contributors
 
 Thanks for all their contributions!

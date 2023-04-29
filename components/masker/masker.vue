@@ -2,13 +2,14 @@
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
       ref="wrapper"
+      v-bind="$attrs"
       :class="className"
       tabindex="-1"
       :style="{
+        zIndex,
         pointerEvents: wrapShow ? undefined : 'none',
         visibility: wrapShow ? undefined : 'hidden'
       }"
-      v-bind="$attrs"
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
     >
@@ -27,7 +28,7 @@
         ref="topTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
       <transition :appear="props.autoRemove" :name="props.transitionName">
         <slot :show="currentActive"></slot>
@@ -36,7 +37,7 @@
         ref="bottomTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
     </div>
   </Portal>
@@ -45,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useZIndex, emitEvent } from '@vexip-ui/config'
 import { isPromise, queryTabables } from '@vexip-ui/utils'
 import { maskerProps } from './props'
 
@@ -76,7 +77,11 @@ export default defineComponent({
       autoRemove: false
     })
 
+    const getIndex = useZIndex()
+
     const currentActive = ref(props.active)
+    // If initial active, we should set a vaild index as initial value
+    const zIndex = ref(props.active ? getIndex() : 0)
     const wrapShow = ref(props.active)
 
     const wrapper = ref<HTMLElement>()
@@ -127,6 +132,7 @@ export default defineComponent({
         }
       } else {
         prevFocusdEl = document.activeElement as HTMLElement
+        zIndex.value = getIndex()
       }
 
       emitEvent(props.onToggle, value)
@@ -202,6 +208,7 @@ export default defineComponent({
       props,
       nh,
       currentActive,
+      zIndex,
       wrapShow,
 
       className,

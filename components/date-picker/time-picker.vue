@@ -55,9 +55,7 @@
             @click="handleExchangeClick"
           >
             <slot name="exchange">
-              <Icon style="padding-top: 1px;">
-                <ArrowRightArrowLeft></ArrowRightArrowLeft>
-              </Icon>
+              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
             </slot>
           </div>
           <TimeControl
@@ -98,7 +96,7 @@
         }"
       >
         <slot name="suffix">
-          <Icon :icon="props.suffix || ClockR"></Icon>
+          <Icon v-bind="icons.clock" :icon="props.suffix || icons.clock.icon"></Icon>
         </slot>
       </div>
       <div
@@ -107,89 +105,87 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop="handleFocused"
-        >
-          <div :class="nh.be('panel')">
-            <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
-              <div
-                v-for="(item, index) in props.shortcuts"
-                :key="index"
-                :class="nh.be('shortcut')"
-                :title="item.name"
-                @click="handleShortcut(index)"
-              >
-                {{ item.name }}
-              </div>
-            </div>
-            <div :class="nh.be('list')">
-              <div :class="nh.be('wheels')">
-                <TimeWheel
-                  v-model:hour="startState.timeValue.hour"
-                  v-model:minute="startState.timeValue.minute"
-                  v-model:second="startState.timeValue.second"
-                  :no-arrow="props.noArrow"
-                  :candidate="props.candidate"
-                  :steps="props.steps"
-                  :pointer="props.pointer"
-                  :disabled-time="isTimeDisabled"
-                  @change="handleWheelChange"
-                  @toggle-col="toggleCurrentState('start')"
-                ></TimeWheel>
-                <TimeWheel
-                  v-if="usingRange"
-                  v-model:hour="endState.timeValue.hour"
-                  v-model:minute="endState.timeValue.minute"
-                  v-model:second="endState.timeValue.second"
-                  :no-arrow="props.noArrow"
-                  :candidate="props.candidate"
-                  :steps="props.steps"
-                  :pointer="props.pointer"
-                  :disabled-time="isTimeDisabled"
-                  @change="handleWheelChange"
-                  @toggle-col="toggleCurrentState('end')"
-                ></TimeWheel>
-              </div>
-              <div v-if="!props.noAction" :class="nh.be('action')">
-                <Button
-                  inherit
-                  text
-                  size="small"
-                  @click.stop="handleCancel"
-                >
-                  {{ props.cancelText || locale.cancel }}
-                </Button>
-                <Button
-                  inherit
-                  type="primary"
-                  size="small"
-                  :disabled="startError || endError"
-                  @click.stop="handleEnter"
-                >
-                  {{ props.confirmText || locale.confirm }}
-                </Button>
-              </div>
-            </div>
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop="handleFocused"
+    >
+      <div :class="nh.be('panel')">
+        <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
+          <div
+            v-for="(item, index) in props.shortcuts"
+            :key="index"
+            :class="nh.be('shortcut')"
+            :title="item.name"
+            @click="handleShortcut(index)"
+          >
+            {{ item.name }}
           </div>
         </div>
-      </transition>
-    </Portal>
+        <div :class="nh.be('list')">
+          <div :class="nh.be('wheels')">
+            <TimeWheel
+              v-model:hour="startState.timeValue.hour"
+              v-model:minute="startState.timeValue.minute"
+              v-model:second="startState.timeValue.second"
+              :no-arrow="props.noArrow"
+              :candidate="props.candidate"
+              :steps="props.steps"
+              :pointer="props.pointer"
+              :disabled-time="isTimeDisabled"
+              @change="handleWheelChange"
+              @toggle-col="toggleCurrentState('start')"
+            ></TimeWheel>
+            <TimeWheel
+              v-if="usingRange"
+              v-model:hour="endState.timeValue.hour"
+              v-model:minute="endState.timeValue.minute"
+              v-model:second="endState.timeValue.second"
+              :no-arrow="props.noArrow"
+              :candidate="props.candidate"
+              :steps="props.steps"
+              :pointer="props.pointer"
+              :disabled-time="isTimeDisabled"
+              @change="handleWheelChange"
+              @toggle-col="toggleCurrentState('end')"
+            ></TimeWheel>
+          </div>
+          <div v-if="!props.noAction" :class="nh.be('action')">
+            <Button
+              inherit
+              text
+              size="small"
+              @click.stop="handleCancel"
+            >
+              {{ props.cancelText || locale.cancel }}
+            </Button>
+            <Button
+              inherit
+              type="primary"
+              size="small"
+              :disabled="startError || endError"
+              @click.stop="handleEnter"
+            >
+              {{ props.confirmText || locale.confirm }}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Popper>
   </div>
 </template>
 
@@ -199,7 +195,7 @@ import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
 import {
   useHover,
@@ -212,6 +208,7 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -219,10 +216,10 @@ import {
   makeSentence
 } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
-import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 
+import type { PopperExposed } from '@/components/popper'
 import type { TimeType } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
@@ -233,11 +230,9 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    Portal,
+    Popper,
     TimeControl,
-    TimeWheel,
-    CircleXmark,
-    ArrowRightArrowLeft
+    TimeWheel
   },
   props: timePickerProps,
   emits: ['update:value', 'update:visible'],
@@ -301,9 +296,9 @@ export default defineComponent({
       noSuffix: false,
       exchange: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       min: null,
       max: null,
       outsideClose: true,
@@ -334,10 +329,12 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
@@ -885,10 +882,9 @@ export default defineComponent({
     }
 
     return {
-      ClockR,
-
       props,
       nh,
+      icons: useIcons(),
       locale,
       idFor,
       isHover,

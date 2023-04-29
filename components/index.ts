@@ -50,6 +50,7 @@ import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
+import { LayoutMain } from './layout-main'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -65,6 +66,7 @@ import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
 import { Pagination } from './pagination'
+import { Popper } from './popper'
 import { Popup } from './popup'
 import { Portal } from './portal'
 import { Progress } from './progress'
@@ -112,16 +114,10 @@ import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } fr
 import { buildInstall } from './create'
 import { install as installDirectives } from '@/directives'
 
-export type {
-  ComponentSize,
-  ComponentState,
-  LocaleConfig,
-  LocaleNames,
-  LocaleOptions
-} from '@vexip-ui/config'
-export type { PropsOptions } from './props'
-
 export { version } from './version'
+export * from './create'
+
+export type { PropsOptions } from './props'
 
 const components = [
   Alert,
@@ -174,6 +170,7 @@ const components = [
   LayoutAside,
   LayoutFooter,
   LayoutHeader,
+  LayoutMain,
   Linker,
   Masker,
   Menu,
@@ -186,6 +183,7 @@ const components = [
   OptionGroup,
   Overflow,
   Pagination,
+  Popper,
   Popup,
   Portal,
   Progress,
@@ -251,7 +249,6 @@ const components = [
   installDirectives
 ]
 
-export { buildInstall }
 export const install = buildInstall(components)
 
 export * from './alert'
@@ -306,6 +303,7 @@ export * from './layout'
 export * from './layout-aside'
 export * from './layout-footer'
 export * from './layout-header'
+export * from './layout-main'
 export * from './linker'
 export * from './loading'
 export * from './masker'
@@ -321,6 +319,7 @@ export * from './option'
 export * from './option-group'
 export * from './overflow'
 export * from './pagination'
+export * from './popper'
 export * from './popup'
 export * from './portal'
 export * from './progress'

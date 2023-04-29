@@ -11,6 +11,7 @@
       :checked="currentChecked"
       :disabled="isDisabled"
       :tabindex="props.tabIndex"
+      @submit.prevent
       @change="handleChange(!currentChecked)"
     />
   </label>

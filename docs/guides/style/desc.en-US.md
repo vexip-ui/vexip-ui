@@ -4,16 +4,16 @@ Vexip UI use `sass` to write styles and it generates a series of preset `css` va
 
 ## Import Styles
 
-Normally, import styles via the `css` files：
+Normally, import `css` style:
 
 ```ts
 import 'vexip-ui/css/index.css'
 import 'vexip-ui/themes/dark/index.css' // Not needed when not use dark theme
 ```
 
-If you like, you can also import via the `sass` files:
+If you like, you can import `sass` style:
 
-在 `sass` 中引入：
+Import in `sass`：
 
 ```scss
 // style/index.scss
@@ -30,10 +30,14 @@ import in `ts` (Not recommended):
 
 ```ts
 import 'vexip-ui/style/index.scss'
-import 'vexip-ui/style/dark/preset.scss' // Not needed when not use dark theme
+import 'vexip-ui/style/dark/index.scss' // Not needed when not use dark theme
 ```
 
-With reference to the built-in dark theme preset styles, you can define your own theme. Maybe will make a theme generator in the future.
+With reference to the built-in dark theme preset styles, you can define your own theme (Maybe will make a theme generator in the future).
+
+:::info
+The above content is to import all styles, see [Getting Start](./started) chapter for on-demand import.
+:::
 
 ## Preset Variables
 
@@ -63,7 +67,11 @@ The regular names of preset variables in components mostly follow rule `--[prefi
 
 There are also some variables that use on layout, which are inconsistent with this rule. Some of the remaining variables will also difference from this rule due to semantics.
 
+You can change these css variables by any way you like.
+
 ## Edit Via Sass
+
+### Import Directly
 
 You can edit the `sass` variables via using `@use...with`:
 
@@ -78,7 +86,7 @@ You can edit the `sass` variables via using `@use...with`:
 );
 ```
 
-Then import styles in entry file:
+Then import style in entry file:
 
 ```ts
 import './style/index.scss'
@@ -90,6 +98,52 @@ createApp(App).use(install).mount('#app')
 ```
 
 The full `sass` variables can be found in [here](https://github.com/vexip-ui/vexip-ui/blob/main/style/design/variables.scss).
+
+### Import On Demand
+
+If you are using on demand import, some extra configuration is required. Here we take vite as an example, and the same applies to Webpack.
+
+First, you need to prepare a separate file, and use `@forward...with` to modify variables:
+
+```scss
+// style/variables.scss
+@forward 'vexip-ui/style/design' with (
+  $color-map: (
+    primary: (
+      base: #845ef7
+    )
+  )
+);
+```
+
+Then add following in `vite.config.ts`:
+
+```ts
+import { resolve } from 'node:path'
+import { defineConfig } from 'vite'
+
+const vxpStylePresetRE = /vexip-ui\/style(?:\/dark)?\/preset/
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src')
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: (code: string, path: string) => {
+          // tampering references to variables file in base style
+          return vxpStylePresetRE.test(path)
+            ? code.replace('@use \'./design/variables.scss\' as *;', '@use \'@/style/variables.scss\' as *;')
+            : code
+        }
+      }
+    }
+  }
+})
+```
 
 ## Transition Effects
 

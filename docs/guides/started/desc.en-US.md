@@ -48,8 +48,7 @@ Vexip UI already has the ability of tree-shaking. You can directly import compon
 </template>
 
 <script setup lang="ts">
-import 'vexip-ui/css/preset.css'
-import 'vexip-ui/css/button.css'
+import 'vexip-ui/es/css/button'
 
 import { Button } from 'vexip-ui'
 </script>
@@ -105,8 +104,9 @@ export default defineConfig({
         {
           libraryName: 'vexip-ui',
           esModule: true,
-          base: 'vexip-ui/css/preset.css',
-          resolveStyle: name => `vexip-ui/css/${name}.css`
+          // import base style for dark mode
+          // base: 'vexip-ui/es/css/dark',
+          resolveStyle: name => `vexip-ui/es/css/${name}`
         }
       ]
     })
@@ -114,7 +114,7 @@ export default defineConfig({
 })
 ```
 
-If you think this alos too complicated to import components, you can try to use [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) and [unplugin-auto-import](https://github.com/antfu/unplugin-vue-components) to complete the automatic import.
+If you think this also too complicated to import components, you can try to use [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) and [unplugin-auto-import](https://github.com/antfu/unplugin-vue-components) for automatic import.
 
 Install plugins:
 
@@ -125,11 +125,11 @@ pnpm i -D unplugin-vue-components unplugin-auto-import @vexip-ui/plugins
 Add following in `vite.config.ts`:
 
 ```ts
-import { VexipUIResolver } from '@vexip-ui/plugins'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import { VexipUIResolver } from '@vexip-ui/plugins'
 
 export default defineConfig({
   plugins: [
@@ -175,11 +175,11 @@ function handleClick() {
 
 :::warning
 The icon components need to be prefixed with `I` when auto import, such as `User` -> `IUser`.
+
+You can change the icon prefix via `iconPrefix` option of the resolver.
 :::
 
-However, when only Resolver is used, the icon components can only be used via tag type. If you want to use it via prop, you still need to import them by yourself.
-
-The configuration can be extended to support the auto import including using icon components via prop:
+However, when only resolver is used, the icon components can only be used via tag type. If you want to use it via variable, you need a little extra configuration:
 
 ```ts
 export default defineConfig(async () => ({
@@ -198,8 +198,7 @@ export default defineConfig(async () => ({
       imports: [
         {
           '@vexip-ui/icons': Object.keys(await import('@vexip-ui/icons'))
-            // The following processing is to make the name of icon components
-            // also starts with 'I' when using via prop
+            // to make the name prefix of icon components also starts with 'I' when using via variable
             .map(name => name.match(/^I[0-9]/) ? name : [name, `I${name}`])
         }
       ]
@@ -208,9 +207,30 @@ export default defineConfig(async () => ({
 }))
 ```
 
-So far, all components including icon components can be imported automatically.
+The options of Resolver can be viewed via editor's prompt or [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts#L7).
+
+If you also use plugin components link `Message`, you need to call `App.use` to install them before using them to ensure that they can get the configuration from context of the app:
+
+```ts
+import { createApp } from 'vue'
+import App from './app.vue'
+
+createApp(App)
+  .use(Confirm)
+  .use(Contextmenu)
+  .use(Loading)
+  .use(Message)
+  .use(Notice)
+  .use(Toast)
+```
+
+Now, all components including icons can be imported automatically.
 
 ### Webpack
+
+:::info
+The content of using the unplugin above is also applicable to Webpack, you just need to switch the path to import.
+:::
 
 On demand import can more concise with the help of the Webpack plugin [babel-plugin-import](https://github.com/ant-design/babel-plugin-import).
 
@@ -240,7 +260,7 @@ module.exports = {
 }
 ```
 
-Due to plugin limitations, you still need to manually import `vexip-ui/css/preset.css`.
+Due to plugin limitations, you still need to manually import `vexip-ui/es/css/dark` when using dark mode.
 
 ## Global Types Infer
 

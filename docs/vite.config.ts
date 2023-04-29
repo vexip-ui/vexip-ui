@@ -4,6 +4,7 @@ import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
+import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-vue-markdown'
 import { cyan, green, red } from 'kolorist'
@@ -33,7 +34,7 @@ export default defineConfig(({ command }) => {
                 find: /^@vexip-ui\/((?!icons).+)/,
                 replacement: resolve(__dirname, '../common/$1/src')
               },
-              { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+              { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
             ]
           : [])
       ],
@@ -59,7 +60,7 @@ export default defineConfig(({ command }) => {
     },
     css: {
       postcss: {
-        plugins: useServer ? [] : [discardCss as any]
+        plugins: [autoprefixer, ...(useServer ? [] : [discardCss])]
       }
     },
     plugins: [

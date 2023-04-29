@@ -78,8 +78,7 @@ describe('NativeScroll', () => {
       get: () => left,
       set: v => (left = v)
     })
-
-    scroll.vm.refresh()
+    ;(scroll.vm as any).refresh()
     vi.runAllTimers()
     await nextTick()
 
@@ -227,7 +226,8 @@ describe('NativeScroll', () => {
       autoplay: true
     })
 
-    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
+    vi.runAllTimers()
+    expect(wrapper.vm.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {

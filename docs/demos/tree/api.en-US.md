@@ -1,12 +1,13 @@
 ### Preset Types
 
 ```ts
+type Key = string | number
 type Data = Record<string, any>
 
-type NodeDropType = 'before' | 'inner' | 'after'
+type TreeNodeDropType = 'before' | 'inner' | 'after'
 type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 
-interface NodeKeyConfig {
+interface TreeNodeKeyConfig {
   id?: string,
   parent?: string,
   label?: string,
@@ -20,10 +21,13 @@ interface NodeKeyConfig {
   loaded?: string,
   readonly?: string,
   arrow?: string,
-  checkbox?: string
+  checkbox?: string,
+  selectDisabled?: string,
+  expandDisabled?: string,
+  checkDisabled?: string
 }
 
-type TreeNodeProps = {
+type TreeNodeProps<D = Data> = {
   id: Key,
   parent: Key,
   children: TreeNodeProps[],
@@ -37,9 +41,14 @@ type TreeNodeProps = {
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
-  data: Data,
-  partial: boolean
+  selectDisabled: boolean,
+  expandDisabled: boolean,
+  checkDisabled: boolean,
+  data: Data
 }
+
+type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
+type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
 ```
 
 ### Tree Props
@@ -70,6 +79,7 @@ type TreeNodeProps = {
 | node-props    | `Data \| ((data: Data, node: TreeNodeProps) => Data)`                  | Set the html attributes of the root element of all child nodes                                                                                                                                                                                   | `null`         | `2.0.0` |
 | locale        | `LocaleConfig['tree']`                                                 | Set the locale config                                                                                                                                                                                                                            | `null`         | `2.1.0` |
 | link-line     | `boolean \| TreeLinkLine`                                              | Set whether to add link line                                                                                                                                                                                                                     | `false`        | `2.1.6` |
+| post-create   | `TreeNodePostCreate`                                                   | The post process when node is created                                                                                                                                                                                                            | `null`         | `2.1.7` |
 
 ### Tree Events
 

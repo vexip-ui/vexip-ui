@@ -24,7 +24,11 @@
     <div :class="nh.be('extra')">
       <transition :name="nh.ns('fade')" appear>
         <div v-if="props.loading" :class="nh.be('loading')">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
       <div v-if="props.maxLength > 0" :class="nh.be('count')">
@@ -40,8 +44,14 @@
 import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { Spinner } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  useIcons,
+  createStateProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { throttle, debounce } from '@vexip-ui/utils'
 import { textareaProps } from './props'
 
@@ -74,9 +84,9 @@ export default defineComponent({
       debounce: false,
       maxLength: 0,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       sync: false
     })
 
@@ -199,6 +209,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input', toRef(props, 'locale')),
+      icons: useIcons(),
       idFor,
       currentValue,
       currentLength,

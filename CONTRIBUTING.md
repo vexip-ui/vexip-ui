@@ -10,7 +10,7 @@ Before starting, you should ensure your mechine is having:
 
 Node >= 16
 
-pnpm >= 7
+pnpm >= 8
 
 ### Setup
 

@@ -1,8 +1,8 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, ComponentPublicInstance } from 'vue'
 import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuMarkerType, MenuGroupType, MenuExposed } from '@/components/menu'
-import type { NativeScroll } from '@/components/native-scroll'
+import type { NativeScrollExposed } from '@/components/native-scroll'
 
 export type LayoutSignType = 'aside' | 'header'
 export type LayoutConfig = 'nav' | 'color' | 'theme'
@@ -51,24 +51,28 @@ export interface LayoutState {
   affixed: boolean,
   scrollY: number,
   affixMatched: boolean,
-  expanded: boolean,
+  expandMatched: boolean,
+  useExpand: boolean,
   reduced: boolean,
   navConfig: boolean
 }
 
-export interface LayoutExposed {
-  scroll: InstanceType<typeof NativeScroll> | null,
-  menu: MenuExposed | null,
+export interface LayoutExposed extends ComponentPublicInstance {
+  scroll?: NativeScrollExposed,
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
-export interface LayoutHeaderExposed {
-  menu: MenuExposed | null,
+export interface LayoutHeaderExposed extends ComponentPublicInstance {
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 
-export interface LayoutAsideExposed {
-  menu: MenuExposed | null,
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface LayoutMainExposed extends ComponentPublicInstance {}
+
+export interface LayoutAsideExposed extends ComponentPublicInstance {
+  menu?: MenuExposed,
   expandMenuByLabel: (label: string) => void
 }
 

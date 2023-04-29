@@ -20,17 +20,20 @@
           <slot v-else></slot>
         </div>
       </div>
-      <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
+      <button
+        v-if="props.closable"
+        type="button"
+        :class="nh.be('close')"
+        @click="handleClose"
+      >
         <slot name="close">
-          <Icon label="close">
-            <Xmark></Xmark>
-          </Icon>
+          <Icon v-bind="icons.close" label="close"></Icon>
         </slot>
       </button>
       <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
           <Icon
-            :icon="iconComp"
+            v-bind="iconComp"
             :scale="hasTitle ? 2 : 1"
             :style="{ color: props.iconColor }"
           ></Icon>
@@ -44,27 +47,11 @@
 import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import {
-  Flag,
-  CircleInfo,
-  CircleCheck,
-  CircleExclamation,
-  Xmark,
-  CircleXmark
-} from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { alertProps } from './props'
 
 import type { AlertType } from './symbol'
-
-const predefinedIcons = {
-  default: Flag,
-  info: CircleInfo,
-  success: CircleCheck,
-  warning: CircleExclamation,
-  error: CircleXmark
-}
 
 const alertTypes = Object.freeze<AlertType[]>(['default', 'info', 'success', 'warning', 'error'])
 
@@ -72,16 +59,15 @@ export default defineComponent({
   name: 'Alert',
   components: {
     CollapseTransition,
-    Icon,
-    Xmark
+    Icon
   },
   props: alertProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('alert', _props, {
       type: {
-        default: 'info' as AlertType,
-        validator: (value: AlertType) => alertTypes.includes(value)
+        default: 'info',
+        validator: value => alertTypes.includes(value)
       },
       title: '',
       colorfulText: false,
@@ -96,6 +82,15 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('alert')
+    const icons = useIcons()
+
+    const predefinedIcons = computed(() => ({
+      default: icons.value.alert,
+      info: icons.value.info,
+      success: icons.value.success,
+      warning: icons.value.warning,
+      error: icons.value.error
+    }))
 
     const closed = ref(false)
     const hidden = ref(false)
@@ -128,10 +123,10 @@ export default defineComponent({
     })
     const iconComp = computed(() => {
       if (typeof props.icon === 'boolean') {
-        return predefinedIcons[props.type] ?? null
+        return predefinedIcons.value[props.type] ?? {}
       }
 
-      return props.icon
+      return { icon: props.icon }
     })
     const scrollStyle = computed(() => {
       return {
@@ -193,6 +188,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
 
       closed,
       hidden,

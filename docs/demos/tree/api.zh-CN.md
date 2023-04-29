@@ -1,12 +1,13 @@
 ### 预设类型
 
 ```ts
+type Key = string | number
 type Data = Record<string, any>
 
-type NodeDropType = 'before' | 'inner' | 'after'
+type TreeNodeDropType = 'before' | 'inner' | 'after'
 type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 
-interface NodeKeyConfig {
+interface TreeNodeKeyConfig {
   id?: string,
   parent?: string,
   label?: string,
@@ -20,10 +21,13 @@ interface NodeKeyConfig {
   loaded?: string,
   readonly?: string,
   arrow?: string,
-  checkbox?: string
+  checkbox?: string,
+  selectDisabled?: string,
+  expandDisabled?: string,
+  checkDisabled?: string
 }
 
-type TreeNodeProps = {
+type TreeNodeProps<D = Data> = {
   id: Key,
   parent: Key,
   children: TreeNodeProps[],
@@ -37,9 +41,14 @@ type TreeNodeProps = {
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
-  data: Data,
-  partial: boolean
+  selectDisabled: boolean,
+  expandDisabled: boolean,
+  checkDisabled: boolean,
+  data: Data
 }
+
+type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
+type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
 ```
 
 ### Tree 属性
@@ -54,7 +63,7 @@ type TreeNodeProps = {
 | readonly      | `boolean`                                                              | 设置树是否为只读状态，若设置后，所有的树节点将为只读                                                                                                                    | `false`        | -       |
 | checkbox      | `boolean`                                                              | 设置是否开启节点的复选框                                                                                                                                                | `false`        | -       |
 | draggable     | `boolean`                                                              | 设置节点是否可拖拽                                                                                                                                                      | `false`        | -       |
-| renderer      | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any`    | 使用 render 函数进行节点渲染数                                                                                                                                          | `null`         | -       |
+| renderer      | `TreeNodeRenderFn`                                                     | 使用 render 函数进行节点渲染数                                                                                                                                          | `null`         | -       |
 | multiple      | `boolean`                                                              | 设置是否开启多选模式                                                                                                                                                    | `false`        | -       |
 | indent        | `string \| number`                                                     | 设置每层树节点的缩进距离                                                                                                                                                | `'16px'`       | -       |
 | accordion     | `boolean`                                                              | 设置是否开启手风琴模式                                                                                                                                                  | `false`        | -       |
@@ -70,6 +79,7 @@ type TreeNodeProps = {
 | node-props    | `Data \| ((data: Data, node: TreeNodeProps) => Data)`                  | 设置所有子节点根元素的 html 属性                                                                                                                                        | `null`         | `2.0.0` |
 | locale        | `LocaleConfig['tree']`                                                 | 设置多语言配置                                                                                                                                                          | `null`         | `2.1.0` |
 | link-line     | `boolean \| TreeLinkLine`                                              | 设置是否添加连接线                                                                                                                                                      | `false`        | `2.1.6` |
+| post-create   | `TreeNodePostCreate`                                                   | 节点创建时的后处理方法                                                                                                                                                  | `null`         | `2.1.7` |
 
 ### Tree 事件
 

@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import comp from 'unplugin-vue-components/vite'
+import autoprefixer from 'autoprefixer'
 
 if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
@@ -54,7 +55,7 @@ export default defineConfig(() => {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
-        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
       ]
     },
     server: {
@@ -65,6 +66,11 @@ export default defineConfig(() => {
     },
     optimizeDeps: {
       include: ['../components', '@vexip-ui/icons']
+    },
+    css: {
+      postcss: {
+        plugins: [autoprefixer]
+      }
     },
     plugins: [
       vue(),

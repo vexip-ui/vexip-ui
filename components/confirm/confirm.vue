@@ -21,14 +21,13 @@
         </div>
         <button
           v-if="closableR"
+          type="button"
           :class="nh.be('close')"
           @mousedown.stop
           @click="handleCancel"
         >
           <slot name="close">
-            <Icon :scale="1.2" label="close">
-              <Xmark></Xmark>
-            </Icon>
+            <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
           </slot>
         </button>
       </div>
@@ -43,7 +42,8 @@
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
             v-else
-            :icon="iconR || CircleQuestion"
+            v-bind="icons.question"
+            :icon="iconR || icons.question.icon"
             :scale="2.2"
             :style="{ color: iconColorR }"
           ></Icon>
@@ -75,14 +75,13 @@
       </div>
       <button
         v-if="closableR && !title"
+        type="button"
         :class="nh.be('close')"
         @mousedown.stop
         @click="handleCancel"
       >
         <slot name="close">
-          <Icon :scale="1.2" label="close">
-            <Xmark></Xmark>
-          </Icon>
+          <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
         </slot>
       </button>
     </template>
@@ -95,9 +94,8 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
-import { Xmark, CircleQuestion } from '@vexip-ui/icons'
 import { confirmProps } from './props'
 
 import type { ConfirmType, ConfirmRenderFn, ConfirmOptions } from './symbol'
@@ -121,8 +119,7 @@ export default defineComponent({
     Button,
     Icon,
     Modal,
-    Renderer,
-    Xmark
+    Renderer
   },
   props: confirmProps,
   setup(_props) {
@@ -283,10 +280,9 @@ export default defineComponent({
     }
 
     return {
-      CircleQuestion,
-
       props,
       nh: useNameHelper('confirm'),
+      icons: useIcons(),
       locale: useLocale('confirm', toRef(props, 'locale')),
       visible,
       loading,

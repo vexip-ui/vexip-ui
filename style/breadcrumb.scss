@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $breadcrumb: () !default;
@@ -14,7 +15,7 @@ $breadcrumb: map.merge(
     v-padding-border: 4px,
     h-padding-border: 8px,
     padding-border: get-css-var('breadcrumb-v-padding-border')
-    get-css-var('breadcrumb-h-padding-border'),
+      get-css-var('breadcrumb-h-padding-border'),
     item-bg-color: transparent,
     item-bg-color-hover: get-css-var('color-primary-opacity-9'),
     item-b-color: transparent,

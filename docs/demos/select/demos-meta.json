@@ -8,12 +8,12 @@
   "multiple",
   "options",
   "filter",
+  "remote",
   "creatable",
   "prefix",
   "custom-key",
   "group",
   "loading",
   "virtual",
-  "async-options",
   "transparent"
 ]

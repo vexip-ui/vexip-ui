@@ -3,7 +3,10 @@ es
 lib
 node_modules
 public
+cache
 .husky
 
 *.svg
 *.sh
+
+CHANGELOG.md

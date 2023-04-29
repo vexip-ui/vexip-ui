@@ -1,3 +1,25 @@
+### 预设类型
+
+```ts
+interface ScrollState {
+  scrollX: number,
+  scrollY: number,
+  percentX: number,
+  percentY: number,
+  enableXScroll: number,
+  enableYScroll: number
+}
+
+interface ScrollSlotParams {
+  getState: () => ScrollState,
+  refresh: () => void,
+  scrollTo: (clientX: number, clientY: number, duration?: number) => void,
+  scrollBy: (deltaX: number, deltaY: number, duration?: number) => void,
+  scrollToElement: (el: string | Element, duration?: number, offset?: number) => void,
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+}
+```
+
 ### Scroll 属性
 
 | 名称             | 类型                                                         | 说明                                                                          | 默认值       | 始于     |
@@ -41,9 +63,10 @@
 
 ### Scroll 插槽
 
-| 名称    | 说明           | 参数 | 始于 |
-| ------- | -------------- | ---- | ---- |
-| defalut | 滚动内容的插槽 | -    | -    |
+| 名称    | 说明           | 参数               | 始于    |
+| ------- | -------------- | ------------------ | ------- |
+| defalut | 滚动内容的插槽 | `ScrollSlotParams` | -       |
+| extra   | 额外内容的插槽 | `ScrollSlotParams` | `2.1.7` |
 
 ### Scroll 方法
 

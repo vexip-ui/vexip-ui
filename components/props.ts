@@ -41,6 +41,7 @@ import type { LayoutCProps } from './layout'
 import type { LayoutAsideCProps } from './layout-aside'
 import type { LayoutFooterCProps } from './layout-footer'
 import type { LayoutHeaderCProps } from './layout-header'
+import type { LayoutMainCProps } from './layout-main'
 import type { LinkerCProps } from './linker'
 import type { MaskerCProps } from './masker'
 import type { MenuCProps } from './menu'
@@ -50,6 +51,7 @@ import type { NativeScrollCProps } from './native-scroll'
 import type { NumberInputCProps } from './number-input'
 import type { OverflowCProps } from './overflow'
 import type { PaginationCProps } from './pagination'
+import type { PopperCProps } from './popper'
 import type { ProgressCProps } from './progress'
 import type { RadioCProps } from './radio'
 import type { RadioGroupCProps } from './radio-group'
@@ -147,6 +149,7 @@ export interface PropsOptions {
   layoutAside?: LayoutAsideCProps,
   layoutFooter?: LayoutFooterCProps,
   layoutHeader?: LayoutHeaderCProps,
+  layoutMain?: LayoutMainCProps,
   linker?: LinkerCProps,
   masker?: MaskerCProps,
   menu?: MenuCProps,
@@ -156,6 +159,7 @@ export interface PropsOptions {
   numberInput?: NumberInputCProps,
   overflow?: OverflowCProps,
   pagination?: PaginationCProps,
+  popper?: PopperCProps,
   progress?: ProgressCProps,
   radio?: RadioCProps,
   radioGroup?: RadioGroupCProps,

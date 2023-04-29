@@ -16,6 +16,20 @@ import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
 import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectFilter } from './symbol'
 
+type SelectEvent =
+  | ((value: string | number, data: any) => void)
+  | ((value: string, data: any) => void)
+  | ((value: number, data: any) => void)
+
+type ChangeEvent =
+  | ((value: SelectValue, data: any | any[]) => void)
+  | ((value: string | number, data: any) => void)
+  | ((value: string, data: any) => void)
+  | ((value: number, data: any) => void)
+  | ((values: (string | number)[], data: any[]) => void)
+  | ((values: string[], data: any[]) => void)
+  | ((values: number[], data: any[]) => void)
+
 export const selectProps = buildProps({
   size: sizeProp,
   state: stateProp,
@@ -56,12 +70,14 @@ export const selectProps = buildProps({
   maxTagCount: Number,
   noRestTip: booleanProp,
   tagType: String as PropType<TagType>,
+  noPreview: booleanProp,
+  remote: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onSelect: eventProp<(value: string | number, data: SelectRawOption) => void>(),
-  onCancel: eventProp<(value: string | number, data: SelectRawOption) => void>(),
-  onChange: eventProp<(value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void>(),
+  onSelect: eventProp<SelectEvent>(),
+  onCancel: eventProp<SelectEvent>(),
+  onChange: eventProp<ChangeEvent>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp(),

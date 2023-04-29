@@ -19,7 +19,8 @@ describe('Space', () => {
   it('render empty', () => {
     const wrapper = mount(Space)
 
-    expect(wrapper.find('.vxp-space').exists()).toBe(false)
+    expect(wrapper.find('.vxp-space').exists()).toBe(true)
+    expect(wrapper.find('.vxp-space__item').exists()).toBe(false)
   })
 
   it('vertical', () => {

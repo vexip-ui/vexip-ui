@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import fs from 'fs-extra'
-import { dest, src, parallel } from 'gulp'
+import { dest, src, series, parallel } from 'gulp'
 import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
@@ -23,6 +23,18 @@ function buildStyle() {
     .pipe(dest(cssDir))
 }
 
+function buildDark() {
+  ensureEmptyDir(resolve(cssDir, 'dark'))
+
+  const sass = gulpSass(dartSass)
+
+  return src(resolve(__dirname, 'style/dark/*.scss'))
+    .pipe(sass.sync())
+    .pipe(autoprefixer({ cascade: false }))
+    .pipe(cleanCSS())
+    .pipe(dest(resolve(cssDir, 'dark')))
+}
+
 function buildThemes() {
   ensureEmptyDir(themesDir)
   ensureEmptyDir(resolve(themesDir, 'dark'))
@@ -36,7 +48,7 @@ function buildThemes() {
     .pipe(dest(resolve(themesDir, 'dark')))
 }
 
-export default parallel(buildStyle, buildThemes)
+export default parallel(series(buildStyle, buildDark), buildThemes)
 
 function ensureEmptyDir(dir: string) {
   existsSync(dir) ? emptyDir(dir) : mkdirSync(dir)

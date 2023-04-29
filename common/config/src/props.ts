@@ -1,20 +1,18 @@
 import { reactive, computed, watch, provide, inject, unref } from 'vue'
 import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
 
-import type {
-  App,
-  ComputedRef,
-  PropType,
-  Ref,
-  CSSProperties,
-  ComponentObjectPropsOptions
-} from 'vue'
+import type { App, ComputedRef, PropType, CSSProperties, ComponentObjectPropsOptions } from 'vue'
 import type { LocaleNames, LocaleConfig } from './locale'
+import type {
+  EnsureValue,
+  MaybeRef,
+  Expand,
+  AnyFunction,
+  VoidFunction,
+  MaybeFunction
+} from './types'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
-
-type EnsureValue<T> = Exclude<T, undefined | null>
-type MaybeRef<T> = T | Ref<T>
 
 interface PropsConfig<T = any> {
   default: T | (() => T) | null,
@@ -34,6 +32,12 @@ type PropsConfigOptions<T> = {
 export const PROVIDED_PROPS = '__vxp-provided-props'
 const eventPropRE = /^on[A-Z]/
 
+/**
+ * Provide a props config for under components.
+ *
+ * @param props props config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configProps<T>(props: MaybeRef<T>, app?: App) {
   if (app) {
     app.provide(
@@ -142,14 +146,6 @@ export const booleanNumberProp = {
   type: [Boolean, Number],
   default: null
 }
-
-type AnyFunction = (...args: any[]) => any
-type VoidFunction = () => void
-/**
- * Use to deconstruct advanced types
- */
-type Expand<T> = T extends unknown ? { [K in keyof T]: T[K] } : never
-type MaybeFunction<T> = AnyFunction extends T ? T : T | (() => T)
 
 type CommonExcludedProps =
   | 'inherit'
@@ -276,7 +272,8 @@ export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => 
   if (Array.isArray(handlers)) {
     for (let i = 0, len = handlers.length; i < len; ++i) {
       const handler = handlers[i]
-      typeof handler === 'function' && handlers[i](...args)
+
+      typeof handler === 'function' && handler(...args)
     }
   } else {
     typeof handlers === 'function' && handlers(...args)

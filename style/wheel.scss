@@ -1,8 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
-@use './scroll.scss';
 
 $wheel: () !default;
 $wheel: map.merge(
@@ -183,6 +182,7 @@ $wheel: map.merge(
     position: absolute;
     pointer-events: none;
     border: get-css-var('border-shape') get-css-var('wheel-b-color');
+    transition: get-css-var('transition-border');
 
     &--vertical {
       @include v-moving-border(get-css-var('wheel-b-color'));

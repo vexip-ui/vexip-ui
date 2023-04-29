@@ -16,8 +16,7 @@
     <div style="margin: 10px 10px 0; text-align: right">
       <Pagination
         v-model:active="currentPage"
-        page-jump
-        page-total
+        :plugins="['total', , 'jump']"
         :total="data.length"
         :page-size="pageSize"
       ></Pagination>
@@ -27,6 +26,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+import type { TableRowPayload } from 'vexip-ui'
 
 interface RowData {
   id: number,
@@ -74,7 +75,7 @@ function formatDate(date: Date) {
   return `${year}-${month}-${day}`
 }
 
-function toggleChecked(row: RowData, checked: boolean) {
+function toggleChecked({ row, checked }: TableRowPayload) {
   console.info(row, checked)
 }
 

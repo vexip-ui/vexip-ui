@@ -1,3 +1,16 @@
+# [1.9.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.8.2...hooks@1.9.0) (2023-04-13)
+
+
+
+## [1.8.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.8.1...hooks@1.8.2) (2023-04-03)
+
+## [1.8.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.8.0...hooks@1.8.1) (2023-03-23)
+
+### Bug Fixes
+
+- **hooks:** improve intersection count record ([2d2f360](https://github.com/vexip-ui/vexip-ui/commit/2d2f360ba3401d82b81f1952edce5faf7c22ca3d))
+- **hooks:** improve useHover using useListener ([007dba8](https://github.com/vexip-ui/vexip-ui/commit/007dba8308e3199d08f9e65c4a3d96297031d6e5))
+
 # [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.2...hooks@1.8.0) (2022-10-28)
 
 ### Features

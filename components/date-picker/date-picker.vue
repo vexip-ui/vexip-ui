@@ -52,9 +52,7 @@
         <template v-if="usingRange">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
-              <Icon style="padding-top: 1px">
-                <ArrowRightArrowLeft></ArrowRightArrowLeft>
-              </Icon>
+              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
             </slot>
           </div>
           <DateControl
@@ -95,7 +93,7 @@
         }"
       >
         <slot name="suffix">
-          <Icon :icon="props.suffix || CalendarR"></Icon>
+          <Icon v-bind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
         </slot>
       </div>
       <div
@@ -104,59 +102,56 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.ns('calendar-vars'),
-            nh.ns('time-picker-vars'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop="handleFocused"
-        >
-          <DatePanel
-            ref="panel"
-            :type="props.type"
-            :start-value="startState.dateValue"
-            :end-value="endState.dateValue"
-            :start-activated="startState.activated"
-            :end-activated="endState.activated"
-            :value-type="currentState"
-            :shortcuts="props.shortcuts"
-            :confirm-text="props.confirmText"
-            :cancel-text="props.cancelText"
-            :today="props.today"
-            :no-action="props.noAction"
-            :steps="props.steps"
-            :range="usingRange"
-            :min="props.min"
-            :max="props.max"
-            :disabled-date="isDateDisabled"
-            :disabled-time="isTimeDisabled"
-            :has-error="startError || endError"
-            :selecting-type="hoveredLarge ? 'end' : 'start'"
-            :locale="mergedLocale"
-            @shortcut="handleShortcut"
-            @change="handlePanelChange"
-            @confirm="handleEnter"
-            @cancel="handleCancel"
-            @hover="handleDateHover"
-            @time-change="handleTimeChange"
-          ></DatePanel>
-        </div>
-      </transition>
-    </Portal>
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.ns('time-picker-vars'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop="handleFocused"
+    >
+      <DatePanel
+        ref="panel"
+        :type="props.type"
+        :start-value="startState.dateValue"
+        :end-value="endState.dateValue"
+        :start-activated="startState.activated"
+        :end-activated="endState.activated"
+        :value-type="currentState"
+        :shortcuts="props.shortcuts"
+        :confirm-text="props.confirmText"
+        :cancel-text="props.cancelText"
+        :today="props.today"
+        :no-action="props.noAction"
+        :steps="props.steps"
+        :range="usingRange"
+        :min="props.min"
+        :max="props.max"
+        :disabled-date="isDateDisabled"
+        :disabled-time="isTimeDisabled"
+        :has-error="startError || endError"
+        :selecting-type="hoveredLarge ? 'end' : 'start'"
+        :locale="mergedLocale"
+        :week-start="props.weekStart"
+        @shortcut="handleShortcut"
+        @change="handlePanelChange"
+        @confirm="handleEnter"
+        @cancel="handleCancel"
+        @hover="handleDateHover"
+        @time-change="handleTimeChange"
+      ></DatePanel>
+    </Popper>
   </div>
 </template>
 
@@ -165,7 +160,7 @@ import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import { Icon } from '@/components/icon'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
 import {
   useHover,
@@ -177,6 +172,7 @@ import {
 import {
   useNameHelper,
   useProps,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -196,11 +192,11 @@ import {
   startOfMonth,
   warnOnce
 } from '@vexip-ui/utils'
-import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 import { datePickerTypes } from './symbol'
 
+import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType } from './symbol'
 
@@ -212,9 +208,7 @@ export default defineComponent({
     DateControl,
     DatePanel,
     Icon,
-    Portal,
-    CircleXmark,
-    ArrowRightArrowLeft
+    Popper
   },
   props: datePickerProps,
   emits: ['update:value', 'update:visible'],
@@ -284,15 +278,16 @@ export default defineComponent({
       isRange: null,
       range: null,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       min: null,
       max: null,
       outsideClose: true,
       outsideCancel: false,
       placeholder: null,
-      unitReadonly: false
+      unitReadonly: false,
+      weekStart: null
     })
 
     if (isDefined(props.noFiller)) {
@@ -320,10 +315,12 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
@@ -1354,10 +1351,9 @@ export default defineComponent({
     }
 
     return {
-      CalendarR,
-
       props,
       nh,
+      icons: useIcons(),
       idFor,
       currentVisible,
       focused,

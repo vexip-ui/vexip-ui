@@ -91,7 +91,7 @@ export default defineComponent({
         },
         { immediate: true }
       )
-      watch(currentLabel, (value, prevValue) => {
+      watch(currentLabel, () => {
         active.value = currentLabel.value === tabsState.currentActive
       })
       watch(

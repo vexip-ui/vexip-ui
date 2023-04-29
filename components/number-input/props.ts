@@ -11,7 +11,7 @@ import {
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { NumberInputControlType } from './symbol'
+import type { NumberInputControlType, NumberInputEmptyType } from './symbol'
 
 export const numberInputProps = buildProps({
   size: sizeProp,
@@ -48,6 +48,7 @@ export const numberInputProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
   controlType: String as PropType<NumberInputControlType>,
+  emptyType: String as PropType<NumberInputEmptyType>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<(value: number) => void>(),

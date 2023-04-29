@@ -10,8 +10,8 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus="handleFocus"
-      @blur="handleBlur"
+      @focus="!props.filter && handleFocus($event)"
+      @blur="!props.filter && handleBlur($event)"
     >
       <div
         v-if="hasPrefix"
@@ -98,14 +98,21 @@
             >
               <input
                 ref="input"
-                :class="[nh.be('input'), nh.bem('input', 'multiple')]"
+                :class="[
+                  nh.be('input'),
+                  nh.bem('input', 'multiple'),
+                  currentVisible && nh.bem('input', 'visible')
+                ]"
                 :disabled="props.disabled"
                 autocomplete="off"
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -116,14 +123,19 @@
             <template v-if="props.filter">
               <input
                 ref="input"
-                :class="nh.be('input')"
+                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
-                :placeholder="currentLabels[0] || (props.placeholder ?? locale.placeholder)"
+                :placeholder="
+                  hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
+                "
                 autocomplete="off"
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                @submit.prevent
                 @input="handleFilterInput"
+                @focus="handleFocus($event)"
+                @blur="handleBlur($event)"
               />
             </template>
             <template v-else>
@@ -139,7 +151,7 @@
             "
             :class="nh.be('placeholder')"
           >
-            {{ props.placeholder ?? locale.placeholder }}
+            {{ hittingLabel ?? props.placeholder ?? locale.placeholder }}
           </span>
         </slot>
       </div>
@@ -159,9 +171,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else :class="nh.be('arrow')">
-            <ChevronDown></ChevronDown>
-          </Icon>
+          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -170,95 +180,92 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-leave="currentFilter = ''">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop
-        >
-          <VirtualList
-            ref="virtualList"
-            inherit
-            :class="[nh.be('list'), props.listClass]"
-            :style="{
-              height: listHeight,
-              maxHeight: `${props.maxListHeight}px`
-            }"
-            :items="totalOptions"
-            :item-size="32"
-            use-y-bar
-            :height="'100%'"
-            id-key="value"
-            :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-              role: 'listbox',
-              ariaLabel: 'options'
-            }"
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop
+      @after-leave="currentFilter = ''"
+    >
+      <VirtualList
+        ref="virtualList"
+        inherit
+        :class="[nh.be('list'), props.listClass]"
+        :style="{
+          height: listHeight,
+          maxHeight: `${props.maxListHeight}px`
+        }"
+        :items="totalOptions"
+        :item-size="32"
+        use-y-bar
+        :height="'100%'"
+        id-key="value"
+        :items-attrs="{
+          class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+          role: 'listbox',
+          ariaLabel: 'options'
+        }"
+      >
+        <template #default="{ item: option, index }">
+          <li
+            v-if="option.group"
+            :class="[nh.ns('option-vars'), nh.be('group')]"
+            :title="option.label"
           >
-            <template #default="{ item: option, index }">
-              <li
-                v-if="option.group"
-                :class="[nh.ns('option-vars'), nh.be('group')]"
-                :title="option.label"
+            <slot name="group" :option="option" :index="index">
+              <div
+                :class="[nh.be('label'), nh.bem('label', 'group')]"
+                :style="{ paddingLeft: `${option.depth * 6}px` }"
               >
-                <slot name="group" :option="option" :index="index">
-                  <div
-                    :class="[nh.be('label'), nh.bem('label', 'group')]"
-                    :style="{ paddingLeft: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </div>
-                </slot>
-              </li>
-              <Option
-                v-else
-                :label="option.label"
-                :value="option.value"
-                :disabled="option.disabled"
-                :divided="option.divided"
-                :no-title="option.noTitle"
-                :hitting="option.hitting"
-                :selected="isSelected(option)"
-                no-hover
-                @select="handleSelect(option)"
-                @mousemove="updateHitting(index, false)"
-              >
-                <slot :option="option" :index="index" :selected="isSelected(option)">
-                  <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
-                    {{ option.label }}
-                  </span>
-                  <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                    <Icon v-if="isSelected(option)" :class="nh.be('check')">
-                      <Check></Check>
-                    </Icon>
-                  </transition>
-                </slot>
-              </Option>
-            </template>
-            <template #empty>
-              <div :class="nh.be('empty')">
-                <slot name="empty">
-                  {{ props.emptyText ?? locale.empty }}
-                </slot>
+                {{ option.label }}
               </div>
-            </template>
-          </VirtualList>
-        </div>
-      </transition>
-    </Portal>
+            </slot>
+          </li>
+          <Option
+            v-else
+            :label="option.label"
+            :value="option.value"
+            :disabled="option.disabled"
+            :divided="option.divided"
+            :no-title="option.noTitle"
+            :hitting="option.hitting"
+            :selected="isSelected(option)"
+            no-hover
+            @select="handleSelect(option)"
+            @mousemove="updateHitting(index, false)"
+          >
+            <slot :option="option" :index="index" :selected="isSelected(option)">
+              <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
+                {{ option.label }}
+              </span>
+              <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                <Icon v-if="isSelected(option)" v-bind="icons.check" :class="nh.be('check')"></Icon>
+              </transition>
+            </slot>
+          </Option>
+        </template>
+        <template #empty>
+          <div :class="nh.be('empty')">
+            <slot name="empty">
+              {{ props.emptyText ?? locale.empty }}
+            </slot>
+          </div>
+        </template>
+      </VirtualList>
+    </Popper>
   </div>
 </template>
 
@@ -268,7 +275,7 @@ import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
@@ -285,16 +292,20 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
-import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { selectProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectValue, SelectOptionState } from './symbol'
+import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
+
+type SelectListener = (value: string | number, data: SelectRawOption) => void
+type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -334,13 +345,10 @@ export default defineComponent({
     NativeScroll,
     Option,
     Overflow,
-    Portal,
+    Popper,
     Tag,
     Tooltip,
-    VirtualList,
-    Check,
-    CircleXmark,
-    ChevronDown
+    VirtualList
   },
   props: selectProps,
   emits: ['update:value', 'update:visible', 'update:label'],
@@ -396,9 +404,9 @@ export default defineComponent({
       emptyText: null,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       keyConfig: () => ({}),
       filter: false,
       ignoreCase: false,
@@ -406,7 +414,9 @@ export default defineComponent({
       transparent: false,
       maxTagCount: 0,
       noRestTip: false,
-      tagType: null
+      tagType: null,
+      noPreview: false,
+      remote: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -441,10 +451,13 @@ export default defineComponent({
     })
 
     const optionValues = reactive(new Set<string | number>())
+    const hittingOption = ref<SelectOptionState>()
     const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+
+    const cachedSelected = new Map<string | number, SelectOptionState>()
 
     let optionValueMap = new Map<string | number, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
@@ -496,7 +509,7 @@ export default defineComponent({
         const group = !!rawOption[groupKey]
         const value = rawOption[valueKey]
 
-        if (!group && isNull(value)) return
+        if (!group && isNull(value)) continue
 
         const label = rawOption[labelKey] || String(value)
         const {
@@ -547,12 +560,14 @@ export default defineComponent({
     const wrapper = useClickOutside(handleClickOutside)
     const input = ref<HTMLInputElement>()
     const device = ref<HTMLElement>()
-    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed>()
+    const virtualList = ref<VirtualListExposed>()
+    const popper = ref<PopperExposed>()
 
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
@@ -670,6 +685,15 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
+    const hittingLabel = computed(() => {
+      return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
+    })
+
+    function getOptionFromMap(value?: string | number | null) {
+      if (isNull(value)) return null
+
+      return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
+    }
 
     watch(
       () => props.visible,
@@ -685,8 +709,8 @@ export default defineComponent({
         requestAnimationFrame(() => {
           updatePopper()
 
-          if (wrapper.value && popper.value) {
-            popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
+          if (wrapper.value && popper.value?.wrapper) {
+            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
           }
         })
 
@@ -759,13 +783,41 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
-        const option = optionValueMap.get(value)
+        let option = getOptionFromMap(value)
 
         if (option) {
           selectedValues.push(option.value)
           selectedLabels.push(option.label)
+
+          if (!cachedSelected.has(option.value)) {
+            cachedSelected.set(option.value, option)
+          }
+        } else if (props.remote) {
+          option = reactive({
+            value,
+            disabled: false,
+            divided: false,
+            noTitle: false,
+            label: String(value),
+            group: false,
+            depth: -1,
+            parent: null,
+            hidden: true,
+            hitting: false,
+            data: value
+          }) as SelectOptionState
+
+          cachedSelected.set(value, option)
+          selectedValues.push(value)
+          selectedLabels.push(option.label)
         }
       })
+
+      for (const cachedValue of Array.from(cachedSelected.keys())) {
+        if (!valueSet.has(cachedValue)) {
+          cachedSelected.delete(cachedValue)
+        }
+      }
 
       currentValues.value = selectedValues
       currentLabels.value = selectedLabels
@@ -788,14 +840,20 @@ export default defineComponent({
 
     function updateHitting(hitting: number, ensureInView = true) {
       currentIndex.value = hitting
+      hittingOption.value = undefined
+
       let index = -1
 
       optionStates.value.forEach(option => {
         if (!option.hidden) {
           index += 1
           option.hitting = hitting === index
+
+          if (option.hitting) {
+            hittingOption.value = option
+          }
         } else {
-          option.hitting = hitting === index
+          option.hitting = false
         }
       })
 
@@ -815,7 +873,7 @@ export default defineComponent({
     function filterOptions(inputValue: string) {
       const filter = props.filter
 
-      if (!filter) return
+      if (!filter || props.remote) return
 
       if (!inputValue) {
         optionStates.value.forEach(state => {
@@ -862,7 +920,7 @@ export default defineComponent({
     }
 
     function handleTagClose(value?: string | number | null) {
-      !isNull(value) && handleSelect(optionValueMap.get(value))
+      !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
     function handleSelect(option?: SelectOptionState | null) {
@@ -876,6 +934,8 @@ export default defineComponent({
           removeArrayItem(userOptions.value, item => item.value === value)
           optionValueMap.delete(value)
         }
+
+        cachedSelected.delete(value)
       } else {
         if (!props.multiple) {
           userOptions.value.length = 0
@@ -887,9 +947,15 @@ export default defineComponent({
           userOptions.value.push(newOption)
           optionValueMap.set(value, newOption)
         }
+
+        cachedSelected.set(option.value, option)
       }
 
-      emitEvent(props[props.multiple && selected ? 'onCancel' : 'onSelect'], value, option.data)
+      emitEvent(
+        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectListener,
+        value,
+        option.data
+      )
       handleChange(option)
 
       if (props.multiple) {
@@ -922,9 +988,9 @@ export default defineComponent({
 
         setFieldValue(emittedValue)
         emitEvent(
-          props.onChange,
+          props.onChange as ChangeListener,
           emittedValue,
-          emittedValue.map(value => optionValueMap.get(value)?.data ?? '')
+          emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
         emit('update:value', emittedValue)
         emit('update:label', currentLabels.value)
@@ -941,7 +1007,7 @@ export default defineComponent({
           emittedValue = option.value
 
           setFieldValue(emittedValue)
-          emitEvent(props.onChange, emittedValue, option.data)
+          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
           emit('update:value', emittedValue)
           emit('update:label', currentLabels.value[0])
           validateField()
@@ -971,6 +1037,8 @@ export default defineComponent({
           optionValueMap.delete(option.value)
         }
 
+        cachedSelected.clear()
+
         userOptions.value.length = 0
         currentValues.value.length = 0
         currentLabels.value.length = 0
@@ -979,7 +1047,7 @@ export default defineComponent({
         emittedValue = props.multiple ? [] : ''
 
         syncInputValue()
-        emitEvent(props.onChange, emittedValue, props.multiple ? [] : '')
+        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
         emit('update:value', emittedValue)
         emitEvent(props.onClear)
         clearField(emittedValue!)
@@ -1069,6 +1137,7 @@ export default defineComponent({
       props,
       nh,
       locale,
+      icons: useIcons(),
       idFor,
       currentVisible,
       currentValues,
@@ -1091,6 +1160,7 @@ export default defineComponent({
       showClear,
       normalOptions,
       optionParentMap,
+      hittingLabel,
 
       wrapper,
       reference,

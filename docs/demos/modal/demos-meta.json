@@ -1,6 +1,8 @@
 [
   "basis",
   "center",
+  "long-content",
+  "hide-mask",
   "drag",
   "loading",
   "resize",

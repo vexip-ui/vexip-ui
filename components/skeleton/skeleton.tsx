@@ -1,7 +1,6 @@
 import { defineComponent, computed, inject, h, renderSlot } from 'vue'
 import { Icon } from '@/components/icon'
-import { ImageR } from '@vexip-ui/icons'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons } from '@vexip-ui/config'
 import { skeletonProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -33,6 +32,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, {} as any)
 
     const nh = useNameHelper('skeleton')
+    const icons = useIcons()
 
     const activated = computed(() => {
       return props.activated ?? groupState.activated ?? false
@@ -109,7 +109,15 @@ export default defineComponent({
           class: [className.value, attrs.class],
           style: [style.value, attrs.style]
         },
-        props.image ? [<Icon icon={props.imageIcon || ImageR} scale={props.iconScale}></Icon>] : []
+        props.image
+          ? [
+              <Icon
+                {...icons.value.image}
+                icon={props.imageIcon || icons.value.image.icon}
+                scale={props.iconScale}
+              ></Icon>
+            ]
+          : []
       )
     }
 

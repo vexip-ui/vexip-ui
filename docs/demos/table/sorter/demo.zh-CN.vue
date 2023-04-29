@@ -8,12 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { defineColumns } from 'vexip-ui'
 
-import type { SorterProfile } from 'vexip-ui'
+import type { TableSorterProfile } from 'vexip-ui'
 
-const columns = ref(
+const columns = reactive(
   defineColumns([
     {
       name: 'First Name',
@@ -36,7 +36,7 @@ const columns = ref(
     }
   ])
 )
-const data = ref([
+const data = reactive([
   {
     id: '1',
     job: 'Cashier',
@@ -79,7 +79,7 @@ const data = ref([
   }
 ])
 
-function handleRowSort(profiles: SorterProfile[]) {
+function handleRowSort(profiles: TableSorterProfile[]) {
   console.info(profiles)
 }
 </script>

@@ -1,3 +1,25 @@
+### Preset Types
+
+```ts
+interface NativeScrollState {
+  scrollX: number,
+  scrollY: number,
+  percentX: number,
+  percentY: number,
+  enableXScroll: Readonly<boolean>,
+  enableYScroll: Readonly<boolean>
+}
+
+interface NativeScrollSlotParams {
+  getState: () => NativeScrollState,
+  refresh: () => void,
+  scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
+  scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,
+  scrollToElement: (el: string | Element, duration?: number, offset?: number) => Promise<void>,
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+}
+```
+
 ### NativeScroll Props
 
 | Name             | Type                                                     | Description                                                                                                                                        | Default      | Since   |
@@ -37,9 +59,10 @@
 
 ### NativeScroll Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| defalut | Slot for scrolling content | -          | -     |
+| Name    | Description                | Parameters               | Since   |
+| ------- | -------------------------- | ------------------------ | ------- |
+| defalut | Slot for scrolling content | `NativeScrollSlotParams` | -       |
+| extra   | Slot for extra content     | `NativeScrollSlotParams` | `2.1.7` |
 
 ### NativeScroll Methods
 

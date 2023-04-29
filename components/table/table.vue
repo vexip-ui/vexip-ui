@@ -9,7 +9,7 @@
     <div v-show="false" role="none">
       <slot></slot>
     </div>
-    <Scroll
+    <NativeScroll
       ref="xScroll"
       inherit
       use-x-bar
@@ -22,7 +22,7 @@
       @x-enabled-change="xScrollEnabled = $event"
     >
       <TableHead ref="thead"></TableHead>
-      <Scroll
+      <NativeScroll
         ref="mainScroll"
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
@@ -37,8 +37,8 @@
             <slot name="empty" :is-fixed="isFixed"></slot>
           </template>
         </TableBody>
-      </Scroll>
-    </Scroll>
+      </NativeScroll>
+    </NativeScroll>
     <div
       v-if="leftFixedColumns.length"
       :class="{
@@ -47,7 +47,7 @@
       }"
     >
       <TableHead fixed="left"></TableHead>
-      <Scroll
+      <NativeScroll
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
@@ -60,7 +60,7 @@
             <slot name="empty" :is-fixed="isFixed"></slot>
           </template>
         </TableBody>
-      </Scroll>
+      </NativeScroll>
     </div>
     <div
       v-if="rightFixedColumns.length"
@@ -70,7 +70,7 @@
       }"
     >
       <TableHead fixed="right"></TableHead>
-      <Scroll
+      <NativeScroll
         inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
@@ -81,7 +81,7 @@
         <TableBody fixed="right">
           <slot></slot>
         </TableBody>
-      </Scroll>
+      </NativeScroll>
     </div>
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
@@ -96,7 +96,7 @@
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
-      v-if="props.rowDraggable"
+      v-if="props.rowDraggable || hasDragColumn"
       v-show="indicatorShow"
       ref="indicator"
       :class="[
@@ -122,7 +122,7 @@ import {
 } from 'vue'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import { Scroll } from '@/components/scroll'
+import { NativeScroll } from '@/components/native-scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
@@ -137,14 +137,15 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DropType, TABLE_STORE, TABLE_ACTION } from './symbol'
+import { DropType, TABLE_STORE, TABLE_ACTIONS } from './symbol'
 
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   Key,
   TableKeyConfig,
   TableColumnOptions,
-  RowState,
-  RowInstance,
+  TableRowState,
+  TableRowInstance,
   TableRowPayload,
   TableCellPayload,
   TableHeadPayload
@@ -162,7 +163,7 @@ const defaultKeyConfig: Required<TableKeyConfig> = {
 export default defineComponent({
   name: 'Table',
   components: {
-    Scroll,
+    NativeScroll,
     Scrollbar,
     TableHead,
     TableBody
@@ -248,13 +249,16 @@ export default defineComponent({
     const templateColumns = ref(new Set<TableColumnOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
+    const hasDragColumn = ref(false)
 
     const wrapper = ref<HTMLElement>()
-    const xScroll = ref<InstanceType<typeof Scroll>>()
+    const xScroll = ref<NativeScrollExposed>()
     const thead = ref<InstanceType<typeof TableHead>>()
-    const mainScroll = ref<InstanceType<typeof Scroll>>()
+    const mainScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
+
+    let isMounted = false
 
     const userLocale = computed(() => {
       if (isDefined(props.emptyText)) {
@@ -318,7 +322,7 @@ export default defineComponent({
     })
 
     provide(TABLE_STORE, store)
-    provide(TABLE_ACTION, {
+    provide(TABLE_ACTIONS, {
       increaseColumn,
       decreaseColumn,
       emitRowEnter,
@@ -442,6 +446,10 @@ export default defineComponent({
       allColumns,
       value => {
         setColumns(value)
+        isMounted && computeTableWidth()
+        nextTick(() => {
+          hasDragColumn.value = getters.hasDragColumn
+        })
       },
       { immediate: true, deep: true }
     )
@@ -499,13 +507,16 @@ export default defineComponent({
     const handlerResize = debounce(refresh)
 
     onMounted(() => {
-      watch(bodyScrollHeight, refreshPercentScroll)
+      isMounted = true
 
+      watch(bodyScrollHeight, refreshPercentScroll)
       refresh()
       window.addEventListener('resize', handlerResize)
     })
 
     onBeforeUnmount(() => {
+      isMounted = false
+
       window.removeEventListener('resize', handlerResize)
     })
 
@@ -661,13 +672,13 @@ export default defineComponent({
     }
 
     let dragState: {
-      draggingRow: RowState,
+      draggingRow: TableRowState,
       tableRect: DOMRect,
-      willDropRow: RowState | null,
+      willDropRow: TableRowState | null,
       dropType: DropType
     } | null
 
-    function handleRowDragStart(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
       dragState = {
         draggingRow: rowInstance.row,
         tableRect: wrapper.value!.getBoundingClientRect(),
@@ -679,7 +690,7 @@ export default defineComponent({
       emitEvent(props.onRowDragStart, rowInstance.row.data, event)
     }
 
-    function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent) {
       if (!dragState || !rowInstance.el) return
 
       const dropRowRect = rowInstance.el.getBoundingClientRect()
@@ -717,7 +728,7 @@ export default defineComponent({
       emitEvent(props.onRowDragOver, rowInstance.row.data, event)
     }
 
-    function isLeftInsideRight(left: RowState, right: RowState) {
+    function isLeftInsideRight(left: TableRowState, right: TableRowState) {
       if (!left || !right) return true
 
       while (left) {
@@ -731,25 +742,25 @@ export default defineComponent({
       return false
     }
 
-    function handleRowDrop(rowInstance: RowInstance, event: DragEvent) {
+    function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow, willDropRow, dropType } = dragState
       const { rowData } = state
 
-      if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
+      if (!willDropRow || isLeftInsideRight(draggingRow, willDropRow)) return
 
       let currentKey: Key
-      let parent: RowState | null
+      let parent: TableRowState | null
 
       if (draggingRow) {
         parent = getParentRow(draggingRow.key)
+        currentKey = draggingRow.key
 
         if (parent) {
           removeArrayItem(parent.children, row => row.key === currentKey)
         }
 
-        currentKey = draggingRow.key
         removeArrayItem(rowData, row => row.key === currentKey)
       }
 
@@ -944,6 +955,7 @@ export default defineComponent({
       leftFixedColumns: toRef(state, 'leftFixedColumns'),
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),
+      hasDragColumn,
 
       className,
       style,

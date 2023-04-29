@@ -2,9 +2,9 @@ import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { useProps, createSizeProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
-import { TABLE_ACTION } from './symbol'
+import { TABLE_ACTIONS, columnTypes } from './symbol'
 
-import type { Data, TableColumnType, RowState, ColumnWithKey } from './symbol'
+import type { Data, TableRowState, ColumnWithKey } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 
@@ -13,7 +13,6 @@ const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
 const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
-const columnTypes: TableColumnType[] = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableColumn',
@@ -80,7 +79,7 @@ export default defineComponent({
       }
     })
 
-    const tableAction = inject(TABLE_ACTION, null)
+    const tableAction = inject(TABLE_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
 
     for (const key of propKeys) {
@@ -99,7 +98,8 @@ export default defineComponent({
             } else {
               (options[aliasKey] as any) = value
             }
-          }
+          },
+          { immediate: true }
         )
       } else {
         watch(
@@ -145,7 +145,7 @@ export default defineComponent({
           return isNull(result) ? '' : String(result)
         }
 
-        const result = (row as RowState)[options.key as unknown as keyof RowState]
+        const result = (row as TableRowState)[options.key as unknown as keyof TableRowState]
 
         return isNull(result) ? '' : String(result)
       }

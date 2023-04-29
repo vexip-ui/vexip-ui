@@ -1,6 +1,4 @@
-type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends Record<any, any> ? DeepPartial<T[K]> : T[K]
-}
+import type { DeepPartial } from '../types'
 
 export interface LocaleConfig {
   locale: string,
@@ -91,6 +89,11 @@ export interface LocaleConfig {
   modal: {
     confirm: string,
     cancel: string
+  },
+
+  numberInput: {
+    placeholder: string,
+    outOfRange: string
   },
 
   pagination: {

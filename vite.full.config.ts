@@ -16,10 +16,8 @@ interface Manifest {
 }
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
-const componentsDir = resolve(__dirname, 'components')
 
 const logLevel = process.env.LOG_LEVEL
-const sourceMap = process.env.SOURCE_MAP === 'true'
 
 const outDir = 'dist'
 
@@ -42,9 +40,9 @@ export default defineConfig(async () => {
     },
     build: {
       outDir,
-      sourcemap: sourceMap,
+      sourcemap: true,
       lib: {
-        entry: resolve(componentsDir, 'full-lib.ts'),
+        entry: resolve(__dirname, 'full-lib.ts'),
         formats: ['es', 'cjs', 'iife'],
         name: 'VexipUI',
         fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : format === 'cjs' ? 'cjs' : 'js'}`

@@ -16,14 +16,14 @@
         <div :class="nh.be('date-panel')">
           <div :class="nh.be('header')">
             <div :class="[nh.be('arrow'), nh.be('prev-year')]" @click="handleDoublePrevClick">
-              <Icon><AnglesLeft></AnglesLeft></Icon>
+              <Icon v-bind="icons.anglesLeft"></Icon>
             </div>
             <div
               v-show="currentPane === 'date'"
               :class="[nh.be('arrow'), nh.be('prev-month')]"
               @click="adjustCalendar('month', -1)"
             >
-              <Icon><AngleLeft></AngleLeft></Icon>
+              <Icon v-bind="icons.angleLeft"></Icon>
             </div>
             <div :class="nh.be('year-month')">
               <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
@@ -47,10 +47,10 @@
               :class="[nh.be('arrow'), nh.be('next-month')]"
               @click="adjustCalendar('month', 1)"
             >
-              <Icon><AngleRight></AngleRight></Icon>
+              <Icon v-bind="icons.angleRight"></Icon>
             </div>
             <div :class="[nh.be('arrow'), nh.be('next-year')]" @click="handleDoubleNextClick">
-              <Icon><AnglesRight></AnglesRight></Icon>
+              <Icon v-bind="icons.anglesRight"></Icon>
             </div>
           </div>
           <div :class="nh.be('calendar')">
@@ -114,6 +114,7 @@
               :range="range"
               :min="min"
               :max="max"
+              :week-start="weekStart"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>
@@ -173,9 +174,8 @@ import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
-import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
 import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -196,11 +196,7 @@ export default defineComponent({
     Button,
     CalendarPanel,
     Icon,
-    TimeWheel,
-    AngleRight,
-    AngleLeft,
-    AnglesRight,
-    AnglesLeft
+    TimeWheel
   },
   props: {
     type: {
@@ -282,6 +278,10 @@ export default defineComponent({
     selectingType: {
       type: String as PropType<'start' | 'end'>,
       default: 'start'
+    },
+    weekStart: {
+      type: Number,
+      default: null
     }
   },
   emits: [
@@ -630,6 +630,7 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('date-picker'),
+      icons: useIcons(),
       currentPane,
       calendarYear,
       calendarMonth,

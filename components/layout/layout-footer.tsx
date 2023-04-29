@@ -9,7 +9,7 @@ export default defineComponent({
   name: 'LayoutFooter',
   props: layoutFooterProps,
   setup(_props, { slots }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutFooter', _props, {
       tag: 'footer',
       copyright: '',
       links: () => [],

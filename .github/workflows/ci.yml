@@ -26,20 +26,17 @@ jobs:
           node-version: 16.x
           cache: pnpm
 
-      - name: Setup
-        run: npm i -g @antfu/ni
-
-      - name: Install
-        run: nci
-
-      - name: build
-        run: nr build:common
+      - name: Install deps
+        run: pnpm install
 
       - name: Lint
-        run: nr lint
+        run: pnpm run lint
 
-      - name: Style lint
-        run: nr lint:style
+      - name: Lint scripts
+        run: pnpm run lint:scripts
+
+      - name: Lint style
+        run: pnpm run lint:style
 
   test:
     runs-on: ${{ matrix.os }}
@@ -64,14 +61,11 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
-      - name: Setup
-        run: npm i -g @antfu/ni
+      - name: Install deps
+        run: pnpm install
 
-      - name: Install
-        run: nci
-
-      - name: build
-        run: nr build:common
+      - name: Build common packages
+        run: pnpm run build:common
 
       - name: Test
-        run: nr test
+        run: pnpm run test

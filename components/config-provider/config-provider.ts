@@ -1,8 +1,8 @@
-import { defineComponent, toRef, renderSlot } from 'vue'
-import { configProps, configLocale } from '@vexip-ui/config'
+import { defineComponent, toRefs, renderSlot } from 'vue'
+import { configProps, configLocale, configIcons, configZIndex } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { LocaleOptions } from '@vexip-ui/config'
+import type { LocaleOptions, IconsOptions } from '@vexip-ui/config'
 import type { PropsOptions } from '@/components/props'
 
 export default defineComponent({
@@ -15,11 +15,23 @@ export default defineComponent({
     locale: {
       type: Object as PropType<LocaleOptions>,
       default: () => ({})
+    },
+    icons: {
+      type: Object as PropType<IconsOptions>,
+      default: () => ({})
+    },
+    zIndex: {
+      type: Number,
+      default: null
     }
   },
-  setup(props, { slots }) {
-    configProps(toRef(props, 'props'))
-    configLocale(toRef(props, 'locale'))
+  setup(_props, { slots }) {
+    const { props, locale, icons, zIndex } = toRefs(_props)
+
+    configProps(props)
+    configLocale(locale)
+    configIcons(icons)
+    configZIndex(zIndex)
 
     return () => renderSlot(slots, 'default')
   }

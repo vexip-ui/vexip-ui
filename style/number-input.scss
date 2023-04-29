@@ -1,29 +1,34 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
 @use './input.scss' as input;
 
+$number-input: () !default;
+$number-input: map.merge(
+  (
+    control-color-out: get-css-var('color-error-base')
+  ),
+  $number-input
+);
+
 .#{$namespace}-number-input {
+  &-vars {
+    @include define-preset-values('number-input', $number-input);
+  }
+
   @include basis;
   @include input.handler;
 
-  padding-right: calc(get-css-var('input-h-padding') + 20px);
+  @at-root {
+    & {
+      padding-right: calc(get-css-var('input-h-padding') + 20px);
+    }
+  }
 
-  // @at-root {
-  //   & {
-  //     padding-right: calc(get-css-var('input-h-padding') + 20px);
-
-  //     &--action-left {
-  //       padding: get-css-var('input-h-padding');
-  //       padding-left: calc(get-css-var('input-h-padding') + 20px);
-  //     }
-
-  //     &--action-none {
-  //       padding: get-css-var('input-h-padding');
-  //     }
-  //   }
-  // }
+  &--out-of-range &__control {
+    color: get-css-var('number-input-control-color-out');
+  }
 
   &__clear,
   &__loading {
@@ -77,11 +82,8 @@
 
   &--control-fade {
     padding: $padding;
-    transition:
-      padding get-css-var('transition-base'),
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+    transition: padding get-css-var('transition-base'), get-css-var('transition-background'),
+      get-css-var('transition-border'), get-css-var('transition-shadow');
 
     #{$plus},
     #{$minus} {

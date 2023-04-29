@@ -1,17 +1,20 @@
 @use 'sass:map';
 
+@use '../shared/variables.scss' as *;
 @use '../design/variables.scss' as c;
 @use './variables.scss' as *;
 
 :root.dark {
-  @include c.define-preset-values('content-color', $content-color-map);
-  @include c.define-preset-values('bg-color', $bg-color-map);
-  @include c.define-preset-values('border-color', $border-color-map);
-  @include c.define-preset-values('fill-color', $fill-color-map);
-  @include c.define-preset-values('shadow-color', $shadow-color-map);
+  color-scheme: dark;
+
+  @include define-preset-values('content-color', $content-color-map);
+  @include define-preset-values('bg-color', $bg-color-map);
+  @include define-preset-values('border-color', $border-color-map);
+  @include define-preset-values('fill-color', $fill-color-map);
+  @include define-preset-values('shadow-color', $shadow-color-map);
 
   .#{c.$namespace}-button-vars {
-    @include c.define-preset-values(
+    @include define-preset-values(
       'button',
       (
         pulse-size: 8px,
@@ -21,28 +24,28 @@
   }
 
   .#{c.$namespace}-checkbox-vars {
-    @include c.define-preset-values(
+    @include define-preset-values(
       'checkbox',
       (
-        signal-bg-color-disabled: c.get-css-var('fill-color-hover')
+        signal-bg-color-disabled: get-css-var('fill-color-hover')
       )
     );
   }
 
   .#{c.$namespace}-menu-vars {
-    @include c.define-preset-values(
+    @include define-preset-values(
       'menu',
       (
         label-color-dark: #495057,
-        label-color-hover-dark: c.get-css-var('color-primary-base'),
-        label-color-visible-dark: c.get-css-var('color-white'),
+        label-color-hover-dark: get-css-var('color-primary-base'),
+        label-color-visible-dark: get-css-var('color-white'),
         label-color-disabled-dark: #adb5bd
       )
     );
   }
 
   .#{c.$namespace}-slider {
-    @include c.define-preset-values(
+    @include define-preset-values(
       'slider',
       (
         handler-b-color-disabled: rgba(0, 0, 0, 0.4)

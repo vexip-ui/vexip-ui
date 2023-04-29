@@ -67,18 +67,13 @@
               </slot>
             </span>
             <div :class="nh.be('icon')">
-              <Icon v-if="item.loading" effect="pulse-in">
-                <Spinner></Spinner>
-              </Icon>
-              <Icon v-else-if="item.error">
-                <ArrowsRotate></ArrowsRotate>
-              </Icon>
-              <Icon v-else-if="hasChildren(item)">
-                <ChevronRight></ChevronRight>
-              </Icon>
+              <Icon v-if="item.loading" v-bind="icons.loading"></Icon>
+              <Icon v-else-if="item.error" v-bind="icons.refresh"></Icon>
+              <Icon v-else-if="hasChildren(item)" v-bind="icons.arrowRight"></Icon>
               <Icon
                 v-else-if="!multiple && !noCascaded && checkIcon && values.includes(item.fullValue)"
-                :icon="checkIcon"
+                v-bind="icons.check"
+                :icon="checkIcon || icons.check.icon"
               ></Icon>
             </div>
           </slot>
@@ -94,8 +89,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
-import { ChevronRight, Check, Spinner, ArrowsRotate } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
@@ -109,10 +103,7 @@ export default defineComponent({
     Checkbox,
     Icon,
     Option,
-    VirtualList,
-    ChevronRight,
-    Spinner,
-    ArrowsRotate
+    VirtualList
   },
   props: {
     options: {
@@ -137,7 +128,7 @@ export default defineComponent({
     },
     checkIcon: {
       type: Object,
-      default: Check
+      default: null
     },
     isAsync: {
       type: Boolean,
@@ -159,6 +150,7 @@ export default defineComponent({
   emits: ['select', 'check', 'hover', 'open', 'back', 'close'],
   setup(props, { emit }) {
     const nh = useNameHelper('cascader')
+    const icons = useIcons()
     const currentHitting = ref(-1)
 
     const list = ref<VirtualListExposed>()
@@ -353,6 +345,7 @@ export default defineComponent({
 
     return {
       nh,
+      icons,
       currentHitting,
 
       wrapper,

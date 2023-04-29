@@ -12,6 +12,9 @@ function lowBit(num: number) {
 export function createBITree(length: number, min = 0): BITree {
   const tree = new Array(length + 1).fill(0)
 
+  /**
+   * 为第 index 个元素增/减值
+   */
   function add(index: number, delta: number) {
     if (!delta || index >= length) return
 
@@ -23,6 +26,9 @@ export function createBITree(length: number, min = 0): BITree {
     }
   }
 
+  /**
+   * 求前 index 个元素的和
+   */
   function sum(index = length) {
     if (index <= 0) return 0
     if (index > length) index = length
@@ -37,10 +43,16 @@ export function createBITree(length: number, min = 0): BITree {
     return sum
   }
 
+  /**
+   * 获取第 index 个元素的值
+   */
   function get(index: number) {
     return sum(index + 1) - sum(index)
   }
 
+  /**
+   * 根据 limit 提供的值寻找一个命中的元素的 index
+   */
   function boundIndex(limit: number) {
     let left = 0
     let right = length

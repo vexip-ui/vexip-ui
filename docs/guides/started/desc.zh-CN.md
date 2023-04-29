@@ -48,8 +48,7 @@ Vexip UI 本身已具备 tree-shaking 的能力，你可以在需要使用组件
 </template>
 
 <script setup lang="ts">
-import 'vexip-ui/css/preset.css'
-import 'vexip-ui/css/button.css'
+import 'vexip-ui/es/css/button'
 
 import { Button } from 'vexip-ui'
 </script>
@@ -105,8 +104,9 @@ export default defineConfig({
         {
           libraryName: 'vexip-ui',
           esModule: true,
-          base: 'vexip-ui/css/preset.css',
-          resolveStyle: name => `vexip-ui/css/${name}.css`
+          // 引入暗黑模式基础样式
+          // base: 'vexip-ui/es/css/dark',
+          resolveStyle: name => `vexip-ui/es/css/${name}`
         }
       ]
     })
@@ -125,11 +125,11 @@ pnpm i -D unplugin-vue-components unplugin-auto-import @vexip-ui/plugins
 在 `vite.config.ts` 中拓展以下内容：
 
 ```ts
-import { VexipUIResolver } from '@vexip-ui/plugins'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import { VexipUIResolver } from '@vexip-ui/plugins'
 
 export default defineConfig({
   plugins: [
@@ -175,11 +175,11 @@ function handleClick() {
 
 :::warning
 在使用自动引入的时候，图标类组件需要全部加上 `I` 前缀，例如 `User` -> `IUser`。
+
+你可以通过 Resolver 选项的 `iconPrefix` 来修改图标的前缀。
 :::
 
-不过在仅使用 Resolver 的时候，图标类组件的使用只能通过标签的形式使用，如果你想要通过 prop 来使用仍需要自己引入。
-
-可以通过拓展配置以支持包括通过 prop 使用图标类组件的自动引入：
+不过在仅使用 Resolver 的时候，图标类组件的使用只能通过标签的形式使用，如果你想要通过变量来使用则需要一些额外的配置：
 
 ```ts
 export default defineConfig(async () => ({
@@ -198,7 +198,7 @@ export default defineConfig(async () => ({
       imports: [
         {
           '@vexip-ui/icons': Object.keys(await import('@vexip-ui/icons'))
-            // 下面的处理是为了使通过 prop 使用图标类组件时名称也由 'I' 开头
+            // 使通过变量使用的图标类组件的名称也具有 'I' 前缀
             .map(name => name.match(/^I[0-9]/) ? name : [name, `I${name}`])
         }
       ]
@@ -207,9 +207,30 @@ export default defineConfig(async () => ({
 }))
 ```
 
+Resolver 的选项可以通过编辑器的提示或者在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts#L7) 查看。
+
+如果你还用到了 `Message` 这样的插件类组件，需要在使用前调用 `App.use` 方法进行安装，以确保可以获取应用上下文的配置：
+
+```ts
+import { createApp } from 'vue'
+import App from './app.vue'
+
+createApp(App)
+  .use(Confirm)
+  .use(Contextmenu)
+  .use(Loading)
+  .use(Message)
+  .use(Notice)
+  .use(Toast)
+```
+
 至此，包括图标类组件在内的所有组件都可以自动引入了。
 
 ### Webpack
+
+:::info
+上述使用 unplugin 插件的内容同样适用于 Webpack，你只需要切换插件引入的路径即可。
+:::
 
 借助 Babel 插件 [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) 可以更简洁地进行按需引入。
 
@@ -231,15 +252,15 @@ module.exports = {
         libraryName: 'vexip-ui',
         transformToDefaultImport: false,
         customName: () => 'vexip-ui',
-        styleLibraryDirectory: 'css',
-        style: name => `${name}.css`
+        styleLibraryDirectory: 'es/css',
+        style: name => name
       }
     ]
   ]
 }
 ```
 
-由于插件的局限性，你仍需要手动引入 `vexip-ui/css/preset.css`。
+由于插件的局限性，在使用暗黑模式时你需要手动引入 `vexip-ui/es/css/dark`。
 
 ## 全局类型支持
 

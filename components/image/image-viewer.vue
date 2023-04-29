@@ -18,36 +18,32 @@
       </Viewer>
       <template v-if="srcList.length > 1">
         <button
+          type="button"
           :class="[nh.be('prev'), prevDisabled && nh.bem('prev', 'disabled')]"
           @click.stop="handlePrev"
         >
           <slot name="prev" :disabled="prevDisabled">
             <div :class="nh.be('prev-handler')">
-              <Icon :scale="1.4" label="prev">
-                <ChevronLeft></ChevronLeft>
-              </Icon>
+              <Icon v-bind="icons.arrowLeft" :scale="1.4" label="prev"></Icon>
             </div>
           </slot>
         </button>
         <button
+          type="button"
           :class="[nh.be('next'), nextDisabled && nh.bem('next', 'disabled')]"
           @click.stop="handleNext"
         >
           <slot name="next" :disabled="prevDisabled">
             <div :class="nh.be('next-handler')">
-              <Icon :scale="1.4" label="next">
-                <ChevronRight></ChevronRight>
-              </Icon>
+              <Icon v-bind="icons.arrowRight" :scale="1.4" label="next"></Icon>
             </div>
           </slot>
         </button>
       </template>
-      <button :class="nh.be('close')" @click.stop="handleClose">
+      <button type="button" :class="nh.be('close')" @click.stop="handleClose">
         <slot name="close">
           <div :class="nh.be('close-handler')">
-            <Icon :scale="1.4" label="close">
-              <Xmark></Xmark>
-            </Icon>
+            <Icon v-bind="icons.close" :scale="1.4" label="close"></Icon>
           </div>
         </slot>
       </button>
@@ -60,8 +56,7 @@ import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { Viewer } from '@/components/viewer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { Xmark, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { boundRange } from '@vexip-ui/utils'
 import { imageViewerProps } from './props'
 
@@ -70,10 +65,7 @@ export default defineComponent({
   components: {
     Icon,
     Masker,
-    Viewer,
-    Xmark,
-    ChevronRight,
-    ChevronLeft
+    Viewer
   },
   props: imageViewerProps,
   emits: ['update:active', 'update:index'],
@@ -158,8 +150,9 @@ export default defineComponent({
     }
 
     return {
-      nh,
       props,
+      nh,
+      icons: useIcons(),
 
       currentActive,
       currentIndex,

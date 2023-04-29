@@ -9,7 +9,7 @@
         fade-effect
       >
         <div v-if="isLoading" :class="nh.be('loading')">
-          <Icon :effect="loadingEffect" :icon="computedLoadingIcon"></Icon>
+          <Icon :effect="loadingEffect" :icon="loadingIcon"></Icon>
         </div>
       </CollapseTransition>
       <slot>{{ props.label }}</slot>
@@ -21,6 +21,7 @@
       :checked="currentValue === props.label"
       :disabled="isDisabled || (isLoading && isLoadingLock)"
       :tabindex="props.tabIndex"
+      @submit.prevent
       @change="handleChange"
     />
   </label>
@@ -33,6 +34,7 @@ import { Icon } from '@/components/icon'
 import {
   useNameHelper,
   useProps,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
@@ -73,6 +75,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, null)
 
     const nh = useNameHelper('radio')
+    const icons = useIcons()
     const currentValue = ref(props.value)
 
     const input = ref<HTMLElement>()
@@ -83,7 +86,7 @@ export default defineComponent({
     const isButton = computed(() => groupState?.button)
     const isBorder = computed(() => groupState?.border || props.border)
     const isLoading = computed(() => groupState?.loading || props.loading)
-    const LoadingIcon = computed(() => groupState?.loadingIcon || null!)
+    const loadingIcon = computed(() => groupState?.loadingIcon || icons.value.loading)
     const isLoadingLock = computed(() => groupState?.loadingLock || false)
     const loadingEffect = computed(() => groupState?.loadingEffect || '')
     const className = computed(() => {
@@ -153,7 +156,7 @@ export default defineComponent({
       isButton,
       isLoading,
       isLoadingLock,
-      computedLoadingIcon: LoadingIcon,
+      loadingIcon,
       loadingEffect,
 
       input,

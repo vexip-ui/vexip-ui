@@ -24,7 +24,7 @@
         "./*"
       ],
       "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["components"],
+      "vexip-ui": ["."],
       "vue-router": ["node_modules/vue-router"]
     },
     "lib": [
@@ -38,6 +38,8 @@
     "dev-server",
     "directives",
     "playground",
+    "index.ts",
+    "full-lib.ts",
     "types.d.ts"
   ],
   "exclude": [

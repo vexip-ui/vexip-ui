@@ -3,6 +3,7 @@ es
 lib
 css
 public
+cache
 node_modules
 .husky
 

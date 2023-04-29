@@ -41,46 +41,36 @@ interface LayoutFooterLink {
   target?: string,
   children?: Array<Omit<LayoutFooterLink, 'children'>>
 }
-
-interface LayoutState {
-  isLayout: boolean,
-  locked: boolean,
-  affixed: boolean,
-  scrollY: number,
-  affixMatched: boolean,
-  expanded: boolean,
-  reduced: boolean,
-  navConfig: boolean
-}
 ```
 
 ### Layout Props
 
-| Name             | Type                     | Description                                                                                                                                             | Default                                                              | Since   |
-| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------- |
-| no-aside         | `boolean`                | Set whether to disable the sidebar                                                                                                                      | `false`                                                              | -       |
-| footer           | `boolean`                | Set whether to use footer                                                                                                                               | `false`                                                              | -       |
-| tag              | `string`                 | Set rendering tag                                                                                                                                       | `'section'`                                                          | -       |
-| menus            | `MenuOptions[]`          | Set menu options                                                                                                                                        | `[]`                                                                 | -       |
-| menu-props       | `AsideMenuProps`         | Set menu properties                                                                                                                                     | `null`                                                               | -       |
-| logo             | `string`                 | Set Logo image address                                                                                                                                  | `''`                                                                 | -       |
-| sign-name        | `string`                 | Set the sign                                                                                                                                            | `''`                                                                 | -       |
-| config           | `LayoutConfig[]`         | Set configuration options for user drop-down panels                                                                                                     | `['nav', 'theme', 'color']`                                          | -       |
-| user             | `HeaderUser`             | Set user information                                                                                                                                    | `null`                                                               | -       |
-| actions          | `HeaderAction[]`         | Set the action options of the user drop-down panel                                                                                                      | `[]`                                                                 | -       |
-| reduced          | `boolean`                | Set whether the aside is reduced or not, can use `v-model` two-way binding                                                                              | `false`                                                              | -       |
-| avatar-circle    | `boolean`                | Set whether the user avatar is circular                                                                                                                 | `false`                                                              | -       |
-| sign-type        | `'aside' \| 'header'`    | Set the block where the sign is located, can use `v-model` two-way binding                                                                              | `'aside'`                                                            | -       |
-| header-fixed     | `boolean \| string`      | Set whether the header is fixed, can pass a breakpoint or media query string, and it will be fixed when the query is matched                            | `'lg'`                                                               | -       |
-| aside-fixed      | `boolean \| string`      | Set whether the aside is fixed, can pass a breakpoint or media query string, and it will be fixed when the query is matched                             | `'lg'`                                                               | -       |
-| copyright        | `string`                 | Set the copyright information of the footer                                                                                                             | `''`                                                                 | -       |
-| links            | `FooterLink[]`           | Set footer link options                                                                                                                                 | `[]`                                                                 | -       |
-| colors           | `string[]`               | Set candidates for theme color                                                                                                                          | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']` | -       |
-| color            | `string`                 | Set the currently selected theme color, can use `v-model` two-way binding                                                                               | `''`                                                                 | -       |
-| mini-header-sign | `boolean \| string`      | Set whether to simplify the sign in header, can pass in a breakpoint or a media query string, and it will be simplified when the query is matched       | `lg`                                                                 | -       |
-| vertical-links   | `boolean \| string`      | Set whether the link of the footer is vertical, you can pass in a breakpoint or a media query string, and it will be vertical when the query is matched | `md`                                                                 | -       |
-| locale           | `LocaleConfig['layout']` | Set the locale config                                                                                                                                   | `null`                                                               | `2.1.0` |
-| dark-mode        | `boolean`                | Manually set current theme mode, except init, it will dynamically modify the class name on `<html>` when changed, can use `v-model` two-way binding     | `null`                                                               | `2.1.1` |
+| Name             | Type                     | Description                                                                                                                                             | Default                                                              | Since    |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------- |
+| no-aside         | `boolean`                | Set whether to disable the sidebar                                                                                                                      | `false`                                                              | -        |
+| footer           | `boolean`                | Set whether to use footer                                                                                                                               | `false`                                                              | -        |
+| tag              | `string`                 | Set rendering tag                                                                                                                                       | `'section'`                                                          | -        |
+| menus            | `MenuOptions[]`          | Set menu options                                                                                                                                        | `[]`                                                                 | -        |
+| menu-props       | `AsideMenuProps`         | Set menu properties                                                                                                                                     | `null`                                                               | -        |
+| logo             | `string`                 | Set Logo image address                                                                                                                                  | `''`                                                                 | -        |
+| sign-name        | `string`                 | Set the sign                                                                                                                                            | `''`                                                                 | -        |
+| config           | `LayoutConfig[]`         | Set configuration options for user drop-down panels                                                                                                     | `['nav', 'theme', 'color']`                                          | -        |
+| user             | `HeaderUser`             | Set user information                                                                                                                                    | `null`                                                               | -        |
+| actions          | `HeaderAction[]`         | Set the action options of the user drop-down panel                                                                                                      | `[]`                                                                 | -        |
+| reduced          | `boolean`                | Set whether the aside is reduced or not, can use `v-model` two-way binding                                                                              | `false`                                                              | -        |
+| avatar-circle    | `boolean`                | Set whether the user avatar is circular                                                                                                                 | `false`                                                              | -        |
+| sign-type        | `'aside' \| 'header'`    | Set the block where the sign is located, can use `v-model` two-way binding                                                                              | `'aside'`                                                            | -        |
+| header-fixed     | `boolean \| string`      | Set whether the header is fixed, can pass a breakpoint or media query string, and it will be fixed when the query is matched                            | `'lg'`                                                               | -        |
+| aside-fixed      | `boolean \| string`      | Set whether the aside is fixed, can pass a breakpoint or media query string, and it will be fixed when the query is matched                             | `'lg'`                                                               | -        |
+| copyright        | `string`                 | Set the copyright information of the footer                                                                                                             | `''`                                                                 | -        |
+| links            | `FooterLink[]`           | Set footer link options                                                                                                                                 | `[]`                                                                 | -        |
+| colors           | `string[]`               | Set candidates for theme color                                                                                                                          | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']` | -        |
+| color            | `string`                 | Set the currently selected theme color, can use `v-model` two-way binding                                                                               | `''`                                                                 | -        |
+| mini-header-sign | `boolean \| string`      | Set whether to simplify the sign in header, can pass in a breakpoint or a media query string, and it will be simplified when the query is matched       | `lg`                                                                 | -        |
+| vertical-links   | `boolean \| string`      | Set whether the link of the footer is vertical, you can pass in a breakpoint or a media query string, and it will be vertical when the query is matched | `md`                                                                 | -        |
+| locale           | `LocaleConfig['layout']` | Set the locale config                                                                                                                                   | `null`                                                               | `2.1.0`  |
+| dark-mode        | `boolean`                | Manually set current theme mode, except init, it will dynamically modify the class name on `<html>` when changed, can use `v-model` two-way binding     | `null`                                                               | `2.1.1`  |
+| fixed-main       | `boolean`                | Set whether the main is fixed                                                                                                                           | `false`                                                              | `2.1.14` |
 
 ### Layout Events
 
@@ -192,6 +182,13 @@ interface LayoutState {
 | default | Slot for the center of aside                | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
 | bottom  | Slot for the bottom of aside                | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
 | expand  | Slot of handler that trigger aside expanded | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
+
+### LayoutMain Props
+
+| Name  | Type      | Description                   | Default | Since    |
+| ----- | --------- | ----------------------------- | ------- | -------- |
+| tag   | `string`  | Set the rendered tag          | `aside` | -        |
+| fixed | `boolean` | Set whether the main is fixed | `false` | `2.1.14` |
 
 ### LayoutFooter Props
 

@@ -4,6 +4,7 @@ dist
 temp
 .dev
 coverage
+cache
 /icons
 /es
 /lib

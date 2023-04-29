@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use 'sass:math';
 
+@use './shared' as *;
 @use './design' as *;
 
 $column: () !default;

@@ -16,10 +16,9 @@ interface Manifest {
 }
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
-const componentsDir = resolve(__dirname, 'components')
+// const componentsDir = resolve(__dirname, 'components')
 
 const logLevel = process.env.LOG_LEVEL
-const sourceMap = process.env.SOURCE_MAP === 'true'
 
 const prePlugins = (plugins: Plugin[]): Plugin[] => {
   return plugins.map(plugin => ({ ...plugin, enforce: 'pre', apply: 'build' }))
@@ -56,6 +55,8 @@ export default defineConfig(async () => {
     onlyFiles: true
   })
 
+  input.push(resolve(__dirname, 'index.ts'))
+
   emptyDir(resolve(__dirname, 'lib'))
 
   return {
@@ -77,9 +78,9 @@ export default defineConfig(async () => {
     },
     build: {
       outDir: 'es',
-      sourcemap: sourceMap,
+      sourcemap: true,
       lib: {
-        entry: resolve(componentsDir, 'index.ts'),
+        entry: resolve(__dirname, 'index.ts'),
         name: 'VexipUI'
       },
       rollupOptions: {
@@ -115,7 +116,14 @@ export default defineConfig(async () => {
           resolveId(id) {
             if (id.startsWith('@/style')) {
               return {
-                id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/css/$1.css'),
+                id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/style/$1.scss'),
+                external: 'absolute'
+              }
+            }
+
+            if (id.startsWith('@/css')) {
+              return {
+                id: id.replace(/@\/css\/(.+).css$/, 'vexip-ui/css/$1.css'),
                 external: 'absolute'
               }
             }

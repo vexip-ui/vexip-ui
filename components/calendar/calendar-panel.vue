@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {

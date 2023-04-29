@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $avatar: () !default;
@@ -49,8 +50,7 @@ $avatar: map.merge(
   }
 
   &--border {
-    border:
-      get-css-var('avatar-b-width') get-css-var('avatar-b-style')
+    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
       get-css-var('avatar-b-color');
   }
 
@@ -108,8 +108,7 @@ $avatar: map.merge(
         }
 
         & > #{$self} {
-          border:
-            get-css-var('avatar-b-width') get-css-var('avatar-b-style')
+          border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
             get-css-var('avatar-b-color');
         }
       }

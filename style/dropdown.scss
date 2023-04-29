@@ -1,11 +1,11 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $dropdown: () !default;
 $dropdown: map.merge(
   (
-    popper-z-index: get-css-var('z-index-popper'),
     color-selected: get-css-var('color-primary-base'),
     color-disabled: get-css-var('content-color-disabled'),
     bg-color: get-css-var('bg-color-base'),
@@ -36,16 +36,8 @@ $dropdown: map.merge(
     height: 100%;
   }
 
-  &__popper {
-    @include basis;
-
-    z-index: get-css-var('dropdown-popper-z-index');
-    display: flex;
-    padding: 5px 0;
-
-    &--nested {
-      padding: 0;
-    }
+  &__popper--nested {
+    padding: 0;
   }
 
   & &,

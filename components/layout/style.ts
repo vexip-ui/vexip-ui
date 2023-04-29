@@ -1,1 +1,8 @@
+import '@/components/preset/style'
+import '@/components/avatar/style'
+import '@/components/dropdown/style'
+import '@/components/linker/style'
+import '@/components/menu/style'
+import '@/components/native-scroll/style'
+import '@/components/switch/style'
 import '@/style/layout.scss'

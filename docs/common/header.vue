@@ -42,7 +42,7 @@
       </Menu>
     </div>
     <Dropdown class="language" trigger="click">
-      <button class="language-trigger">
+      <button type="button" class="language-trigger">
         <Icon label="language" :scale="2">
           <Language></Language>
         </Icon>
@@ -339,6 +339,7 @@ function formatComponentName(name: string) {
       display: flex;
       padding: 0;
       color: var(--vxp-content-color-base);
+      cursor: pointer;
       background-color: transparent;
       border: 0;
     }

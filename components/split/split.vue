@@ -16,13 +16,15 @@
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
           <button
+            type="button"
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
+            <Icon v-bind="fullIcons[0]" :scale="0.6"></Icon>
           </button>
           <button
+            type="button"
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
@@ -30,7 +32,7 @@
             @pointerdown.stop
             @click.left="handleFull(1)"
           >
-            <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
+            <Icon v-bind="fullIcons[1]" :scale="0.6"></Icon>
           </button>
         </template>
         <template v-else>
@@ -47,9 +49,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 import { splitProps } from './props'
 
 export default defineComponent({
@@ -75,6 +76,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('split')
+    const icons = useIcons()
     const currentValue = ref(props.value)
     const currentFull = ref<0 | 1 | -1>(0)
     const transition = ref(false)
@@ -207,7 +209,9 @@ export default defineComponent({
       }
     })
     const fullIcons = computed(() => {
-      return props.vertical ? [ChevronDown, ChevronUp] : [ChevronRight, ChevronLeft]
+      return props.vertical
+        ? [icons.value.arrowDown, icons.value.arrowUp]
+        : [icons.value.arrowRight, icons.value.arrowLeft]
     })
 
     watch(

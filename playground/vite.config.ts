@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import autoprefixer from 'autoprefixer'
 
 const upstreamPkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
@@ -48,6 +49,11 @@ export default defineConfig(({ command }) => {
     },
     preview: {
       port: 6012
+    },
+    css: {
+      postcss: {
+        plugins: [autoprefixer]
+      }
     },
     plugins: [
       vue(),

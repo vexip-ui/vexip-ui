@@ -2,8 +2,7 @@ import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
 import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
@@ -14,7 +13,7 @@ export default defineComponent({
   props: layoutAsideProps,
   emits: ['update:reduced', 'update:expanded'],
   setup(_props, { slots, emit, expose }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutAside', _props, {
       tag: 'aside',
       reduced: false,
       menus: {
@@ -28,6 +27,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const icons = useIcons()
     const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
     const currentExpanded = ref(props.expanded)
@@ -38,7 +38,7 @@ export default defineComponent({
 
     const top = ref<HTMLElement>()
     const bottom = ref<HTMLElement>()
-    const menu = ref<MenuExposed | null>(null)
+    const menu = ref<MenuExposed>()
 
     const className = computed(() => {
       return [
@@ -76,7 +76,8 @@ export default defineComponent({
     watch(
       matched,
       value => {
-        layoutState.expanded = !value
+        layoutState.useExpand = !value
+        currentExpanded.value = false
       },
       { immediate: true }
     )
@@ -158,7 +159,7 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} height={scrollHeight.value}>
+          <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
             {slots.default
               ? (
                   slots.default(getSlotParams())
@@ -183,7 +184,13 @@ export default defineComponent({
                 )
               : (
               <div class={nh.be('reduce-handler')} onClick={() => toggleReduce()}>
-                <Icon icon={currentReduced.value ? Indent : Outdent}></Icon>
+                {currentReduced.value
+                  ? (
+                  <Icon {...icons.value.indent}></Icon>
+                    )
+                  : (
+                  <Icon {...icons.value.outdent}></Icon>
+                    )}
               </div>
                 )}
           </div>
@@ -193,9 +200,7 @@ export default defineComponent({
                   slots.expand(getSlotParams())
                 )
               : (
-              <Icon>
-                <CaretRight></CaretRight>
-              </Icon>
+              <Icon {...icons.value.caretRight}></Icon>
                 )}
           </div>
         </CustomTag>

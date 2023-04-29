@@ -1,5 +1,5 @@
+@use './shared' as *;
 @use './design' as *;
-@use './tab-nav.scss';
 
 .#{$namespace}-tabs {
   @include basis;
@@ -11,6 +11,7 @@
 
   &__header {
     display: flex;
+    flex-shrink: 0;
     min-width: 0;
     min-height: 0;
 

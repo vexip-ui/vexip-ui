@@ -59,6 +59,7 @@ module.exports = {
     {
       files: ['components/**/*.vue'],
       rules: {
+        '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/consistent-type-imports': [
           'error',
           {
@@ -101,6 +102,12 @@ module.exports = {
       rules: {
         'no-sequences': 'off',
         '@typescript-eslint/no-var-requires': 'off'
+      }
+    },
+    {
+      files: ['**/*.md/*.*'],
+      rules: {
+        'import/order': 'off'
       }
     }
   ],

@@ -1,8 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './checkbox.scss';
-@use './icon.scss';
 
 $tree: () !default;
 $tree: map.merge(

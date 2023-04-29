@@ -1,7 +1,7 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './button.scss';
 @use './input.scss' as input;
 
 $color-picker: () !default;
@@ -12,9 +12,8 @@ $color-picker: map.merge(
     marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
     marker-radius: get-css-var('radius-small'),
     marker-bg-image:
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
+      url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
     arrow-color: get-css-var('content-color-secondary'),
-    popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
     pane-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
@@ -91,14 +90,6 @@ $color-picker: map.merge(
     transform: rotate(180deg);
   }
 
-  &__popper {
-    @include basis;
-
-    z-index: get-css-var('color-picker-popper-z-index');
-    display: flex;
-    padding: 5px 0;
-  }
-
   &__panel {
     width: 270px;
     background-color: get-css-var('color-picker-pane-bg-color');
@@ -160,17 +151,16 @@ $color-picker: map.merge(
   }
 
   &__hue {
-    background:
-      linear-gradient(
-        90deg,
-        red 0,
-        #ff0 17%,
-        #0f0 33%,
-        #0ff 50%,
-        #00f 67%,
-        #f0f 83%,
-        red
-      );
+    background: linear-gradient(
+      90deg,
+      red 0,
+      #ff0 17%,
+      #0f0 33%,
+      #0ff 50%,
+      #00f 67%,
+      #f0f 83%,
+      red
+    );
   }
 
   &__alpha {

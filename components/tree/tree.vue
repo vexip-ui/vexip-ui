@@ -94,9 +94,16 @@ import {
 import { treeProps } from './props'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
-import type { Key, Data, NodeKeyConfig, TreeNodeProps, FilterFn, TreeNodeInstance } from './symbol'
+import type {
+  Key,
+  Data,
+  TreeNodeKeyConfig,
+  TreeNodeProps,
+  FilterFn,
+  TreeNodeInstance
+} from './symbol'
 
-const defaultKeyConfig: Required<NodeKeyConfig> = {
+const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   id: 'id',
   parent: 'parent',
   label: 'label',
@@ -160,11 +167,15 @@ export default defineComponent({
       filter: '',
       ignoreCase: false,
       nodeProps: null,
-      linkLine: false
+      linkLine: false,
+      postCreate: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('tree')
-    const nodeMaps = new Map<Key, TreeNodeProps>()
+    const nodeMap = new Map<Key, TreeNodeProps>()
     const treeData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
@@ -261,7 +272,7 @@ export default defineComponent({
 
         for (let i = 0, len = nodes.length; i < len; ++i) {
           const node = nodes[i]
-          const parent = nodeMaps.get(node.parent)
+          const parent = nodeMap.get(node.parent)
 
           node.matched = filter(node.data, node)
           node.childMatched = false
@@ -273,7 +284,7 @@ export default defineComponent({
 
             while (upper && !upper.childMatched) {
               upper.childMatched = true
-              upper = nodeMaps.get(upper.parent)
+              upper = nodeMap.get(upper.parent)
             }
           }
         }
@@ -324,23 +335,6 @@ export default defineComponent({
     parseAndTransformData()
     onMounted(updateVisibleNodeEls)
 
-    const checkedNodes = flattedData.value.filter(item => item.checked)
-
-    for (let i = 0, len = checkedNodes.length; i < len; ++i) {
-      const item = checkedNodes[i]
-      const parentKey = item.parent
-
-      updateCheckedDown(item)
-
-      if (parentKey && nodeMaps.has(parentKey)) {
-        const parent = nodeMaps.get(parentKey)!
-
-        if (!parent.checked) {
-          updateCheckedUpward(item)
-        }
-      }
-    }
-
     function updateVisibleNodeEls() {
       requestAnimationFrame(() => {
         if (wrapper.value) {
@@ -355,12 +349,12 @@ export default defineComponent({
       const oldDataMap = new Map<Data, TreeNodeProps>()
       const oldIpMap = new Map<any, TreeNodeProps>()
 
-      for (const node of nodeMaps.values()) {
+      for (const node of nodeMap.values()) {
         oldDataMap.set(node.data, node)
         oldIpMap.set(node.data[idKey], node)
       }
 
-      nodeMaps.clear()
+      nodeMap.clear()
 
       const nodes: TreeNodeProps[] = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
@@ -375,7 +369,7 @@ export default defineComponent({
         node.parent = item[parentKey]
         node.data = item
 
-        nodeMaps.set(node.id, node)
+        nodeMap.set(node.id, node)
         nodes.push(node)
       }
 
@@ -385,6 +379,25 @@ export default defineComponent({
         childField: 'children',
         rootId: props.rootId
       })
+
+      if (!props.noCascaded) {
+        const checkedNodes = flattedData.value.filter(item => item.checked)
+
+        for (let i = 0, len = checkedNodes.length; i < len; ++i) {
+          const item = checkedNodes[i]
+          const parentKey = item.parent
+
+          updateCheckedDown(item)
+
+          if (parentKey && nodeMap.has(parentKey)) {
+            const parent = nodeMap.get(parentKey)!
+
+            if (!parent.checked) {
+              updateCheckedUpward(item)
+            }
+          }
+        }
+      }
 
       isMounted.value && updateVisibleNodeEls()
     }
@@ -416,8 +429,8 @@ export default defineComponent({
 
         let node: TreeNodeProps
 
-        if (nodeMaps.has(id)) {
-          node = nodeMaps.get(id)!
+        if (nodeMap.has(id)) {
+          node = nodeMap.get(id)!
 
           const {
             [visibleKey]: visible = node.visible,
@@ -450,7 +463,7 @@ export default defineComponent({
           node.checkDisabled = checkDisabled
         } else {
           node = createNodeItem(item)
-          nodeMaps.set(id, node)
+          nodeMap.set(id, node)
         }
 
         nodes.push(node)
@@ -521,10 +534,9 @@ export default defineComponent({
       const id = data[idKey]
       const parent = data[parentKey]
 
-      return reactive({
+      const node = {
         id,
         parent,
-        children: [],
         data,
         visible,
         selected,
@@ -538,7 +550,18 @@ export default defineComponent({
         checkbox,
         selectDisabled,
         expandDisabled,
-        checkDisabled,
+        checkDisabled
+      } as TreeNodeProps
+
+      if (typeof props.postCreate === 'function') {
+        props.postCreate(node)
+      }
+
+      return reactive({
+        ...node,
+        id,
+        parent,
+        children: [],
         partial: false,
         matched: false,
         childMatched: false,
@@ -556,9 +579,9 @@ export default defineComponent({
       while (!isNull(node.parent)) {
         const parentId = node.parent
 
-        if (!nodeMaps.has(parentId)) break
+        if (!nodeMap.has(parentId)) break
 
-        const parent = nodeMaps.get(parentId)!
+        const parent = nodeMap.get(parentId)!
 
         if (node.checked === parent.checked && node.partial === parent.partial) {
           break
@@ -873,7 +896,7 @@ export default defineComponent({
 
     function getParentNode(node: TreeNodeProps): TreeNodeProps | null {
       if (node.parent) {
-        return nodeMaps.get(node.parent) ?? null
+        return nodeMap.get(node.parent) ?? null
       }
 
       return null

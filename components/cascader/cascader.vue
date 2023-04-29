@@ -112,9 +112,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else :class="nh.be('arrow')">
-            <ChevronDown></ChevronDown>
-          </Icon>
+          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -123,68 +121,67 @@
       ></div>
       <transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-          <Icon><CircleXmark></CircleXmark></Icon>
+          <Icon v-bind="icons.clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </transition>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName" @enter="handlePanelsEnter">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @click.stop
-        >
-          <div
-            :class="{
-              [nh.be('panels')]: true,
-              [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
-            }"
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop
+      @enter="handlePanelsEnter"
+    >
+      <div
+        :class="{
+          [nh.be('panels')]: true,
+          [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
+        }"
+      >
+        <template v-if="optionsList[0] && optionsList[0].length">
+          <CascaderPanel
+            v-for="(items, index) in optionsList"
+            :key="index"
+            :ref="(panel: any) => panel && panelElList.push(panel)"
+            :options="items"
+            :opened-id="openedIds[index]"
+            :values="currentValues"
+            :ready="isPopperShow"
+            :multiple="props.multiple"
+            :is-async="isAsyncLoad"
+            :merged="usingMerged"
+            :no-cascaded="props.noCascaded"
+            @select="handleOptionSelect($event, index)"
+            @hover="usingHover && handlePanelOpen($event, index)"
+            @check="handleOptionCheck($event)"
+            @open="handlePanelKeyOpen($event, index)"
+            @back="handlePanelBack"
+            @close="currentVisible = false"
           >
-            <template v-if="optionsList[0] && optionsList[0].length">
-              <CascaderPanel
-                v-for="(items, index) in optionsList"
-                :key="index"
-                :ref="(panel: any) => panel && panelElList.push(panel)"
-                :options="items"
-                :opened-id="openedIds[index]"
-                :values="currentValues"
-                :ready="isPopperShow"
-                :multiple="props.multiple"
-                :is-async="isAsyncLoad"
-                :merged="usingMerged"
-                :no-cascaded="props.noCascaded"
-                @select="handleOptionSelect($event, index)"
-                @hover="usingHover && handlePanelOpen($event, index)"
-                @check="handleOptionCheck($event)"
-                @open="handlePanelKeyOpen($event, index)"
-                @back="handlePanelBack"
-                @close="currentVisible = false"
-              >
-                <template #default="payload">
-                  <slot v-bind="payload"></slot>
-                </template>
-                <template #label="payload">
-                  <slot name="label" v-bind="payload"></slot>
-                </template>
-              </CascaderPanel>
+            <template #default="payload">
+              <slot v-bind="payload"></slot>
             </template>
-            <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
-              <slot name="empty">
-                {{ props.emptyText ?? locale.empty }}
-              </slot>
-            </div>
-          </div>
+            <template #label="payload">
+              <slot name="label" v-bind="payload"></slot>
+            </template>
+          </CascaderPanel>
+        </template>
+        <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
+          <slot name="empty">
+            {{ props.emptyText ?? locale.empty }}
+          </slot>
         </div>
-      </transition>
-    </Portal>
+      </div>
+    </Popper>
   </div>
 </template>
 
@@ -204,7 +201,7 @@ import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Overflow } from '@/components/overflow'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
@@ -212,16 +209,19 @@ import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
-import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { cascaderProps } from './props'
 
-import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
+import type { PopperExposed } from '@/components/popper'
+import type { Data, CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
+
+type ChangeListener = (value: CascaderValue, data: Data[] | Data[][]) => void
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
@@ -241,11 +241,9 @@ export default defineComponent({
     Icon,
     NativeScroll,
     Overflow,
-    Portal,
+    Popper,
     Tag,
-    Tooltip,
-    ChevronDown,
-    CircleXmark
+    Tooltip
   },
   props: cascaderProps,
   emits: ['update:value', 'update:visible'],
@@ -314,11 +312,14 @@ export default defineComponent({
       tagType: null,
       emptyText: null,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in',
+      loadingEffect: null,
       transparent: false
     })
+
+    const icons = useIcons()
+    const locale = useLocale('select', toRef(props, 'locale'))
 
     const currentVisible = ref(props.visible)
     const currentValues = ref<string[]>([])
@@ -398,14 +399,16 @@ export default defineComponent({
     })
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select', toRef(props, 'locale'))
+
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
@@ -973,7 +976,7 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       const values: (string | number)[][] = []
-      const dataList: Array<Record<string, any>> = []
+      const dataList: Data[][] = []
       const briefLabel = props.briefLabel
 
       selectedOptions.forEach(option => {
@@ -1040,17 +1043,14 @@ export default defineComponent({
       currentVisible.value = false
     }
 
-    function emitChangeEvent(
-      value: CascaderValue,
-      data: Record<string, any> | Array<Record<string, any>>
-    ) {
+    function emitChangeEvent(value: CascaderValue, data: Data[] | Data[][]) {
       emittedValue.value = value
 
       nextTick(() => {
         outsideChanged = false
 
         setFieldValue(value)
-        emitEvent(props.onChange, value, data)
+        emitEvent(props.onChange as ChangeListener, value, data)
         emit('update:value', value)
         validateField()
       })
@@ -1112,7 +1112,7 @@ export default defineComponent({
           option.partial = false
         }
 
-        emitEvent(props.onChange, emittedValue.value, [])
+        emitEvent(props.onChange as ChangeListener, emittedValue.value, [])
         emit('update:value', emittedValue.value)
         emitEvent(props.onClear)
         clearField(emittedValue.value)
@@ -1164,6 +1164,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       locale,
       idFor,
       currentVisible,

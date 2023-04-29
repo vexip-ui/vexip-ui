@@ -26,6 +26,7 @@
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
           <button
+            type="button"
             :class="{
               [nh.be('action')]: true,
               [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
@@ -56,22 +57,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="tsx">
 import { defineComponent, ref, reactive, toRef, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import {
-  ArrowRotateLeft,
-  ArrowRotateRight,
-  Repeat,
-  Plus,
-  Minus,
-  Expand,
-  Compress,
-  ArrowsRotate
-} from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { viewerProps } from './props'
@@ -110,6 +101,7 @@ export default defineComponent({
 
     const nh = useNameHelper('viewer')
     const locale = useLocale('viewer', toRef(props, 'locale'))
+    const icons = useIcons()
 
     const { timer } = useSetTimeout()
     const toolbarActive = ref(false)
@@ -200,14 +192,14 @@ export default defineComponent({
     const internalActions: ToolbarAction[] = [
       {
         name: InternalActionName.RotateRight,
-        icon: ArrowRotateRight,
+        icon: () => <Icon {...icons.value.rotateRight}></Icon>,
         process: () => handleRotate(props.rotateDelta),
         title: () => locale.value.rotateRight,
         hidden: () => props.rotateDisabled
       },
       {
         name: InternalActionName.RotateLeft,
-        icon: ArrowRotateLeft,
+        icon: () => <Icon {...icons.value.rotateLeft}></Icon>,
         process: () => handleRotate(-1 * props.rotateDelta),
         title: () => locale.value.rotateLeft,
         hidden: () => props.rotateDisabled,
@@ -215,30 +207,29 @@ export default defineComponent({
       },
       {
         name: InternalActionName.FlipHorizontal,
-        icon: Repeat,
+        icon: () => <Icon {...icons.value.flipX}></Icon>,
         process: () => toggleFlipHorizontal(),
         title: () => locale.value.flipHorizontal,
         hidden: () => props.flipDisabled
       },
       {
         name: InternalActionName.FlipVertical,
-        icon: Repeat,
+        icon: () => <Icon {...icons.value.flipY}></Icon>,
         process: () => toggleFlipVertical(),
         title: () => locale.value.flipVertical,
         hidden: () => props.flipDisabled,
-        iconStyle: 'transform: rotate(90deg)',
         divided: true
       },
       {
         name: InternalActionName.ZoomIn,
-        icon: Plus,
+        icon: () => <Icon {...icons.value.zoomIn}></Icon>,
         process: () => handleZoom(props.zoomDelta),
         title: () => locale.value.zoomIn,
         hidden: () => props.zoomDisabled
       },
       {
         name: InternalActionName.ZoomOut,
-        icon: Minus,
+        icon: () => <Icon {...icons.value.zoonOut}></Icon>,
         process: () => handleZoom(-1 * props.zoomDelta),
         title: () => locale.value.zoomOut,
         hidden: () => props.zoomDisabled,
@@ -246,7 +237,7 @@ export default defineComponent({
       },
       {
         name: InternalActionName.FullScreen,
-        icon: Expand,
+        icon: () => <Icon {...icons.value.fullScreen}></Icon>,
         process: () => toggleFull(true),
         title: () => locale.value.fullScreen,
         hidden: () => props.fullDisabled || full.value,
@@ -254,7 +245,7 @@ export default defineComponent({
       },
       {
         name: InternalActionName.FullScreenExit,
-        icon: Compress,
+        icon: () => <Icon {...icons.value.resetScreen}></Icon>,
         process: () => toggleFull(false),
         title: () => locale.value.fullScreenExit,
         hidden: () => props.fullDisabled || !full.value,
@@ -262,7 +253,7 @@ export default defineComponent({
       },
       {
         name: InternalActionName.Reset,
-        icon: ArrowsRotate,
+        icon: () => <Icon {...icons.value.refresh}></Icon>,
         process: handleReset,
         title: () => locale.value.reset,
         divided: true
@@ -292,10 +283,17 @@ export default defineComponent({
 
       return layout === 'left' || layout === 'right'
     })
+    const toolbarFade = computed(() => {
+      return typeof props.toolbarFade === 'number'
+        ? props.toolbarFade
+        : props.toolbarFade
+          ? 1500
+          : 0
+    })
     const toolbarClass = computed(() => {
       return {
         [nh.be('toolbar')]: true,
-        [nh.bem('toolbar', 'active')]: props.toolbarFade < 300 || toolbarActive.value,
+        [nh.bem('toolbar', 'active')]: toolbarFade.value < 300 || toolbarActive.value,
         [nh.bem('toolbar', props.toolbarPlacement)]: true,
         [nh.bem('toolbar', 'vertical')]: toolbarVertical.value
       }
@@ -454,13 +452,10 @@ export default defineComponent({
     function handleLeaveToolbar() {
       clearTimeout(timer.toolbarFade)
 
-      const fade =
-        typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
-
-      if (fade > 0) {
+      if (toolbarFade.value >= 300) {
         timer.toolbarFade = setTimeout(() => {
           toolbarActive.value = false
-        }, fade)
+        }, toolbarFade.value)
       }
     }
 

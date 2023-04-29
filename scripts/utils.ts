@@ -9,6 +9,7 @@ import {
   readFileSync
 } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { createServer } from 'node:net'
 import { execa } from 'execa'
 import { bgYellow, bgCyan, bgGreen, bgRed, yellow, cyan, green, red, lightBlue } from 'kolorist'
 import prompts from 'prompts'
@@ -317,4 +318,34 @@ export async function getPackageInfo(inputPkg: string) {
     isRoot,
     currentVersion: pkg.version
   }
+}
+
+export function queryIdlePort(startPort: number, host = 'localhost', maxTry = 20) {
+  const server = createServer()
+
+  return new Promise<number>((resolve, reject) => {
+    const close = () => {
+      server.off('error', onError)
+      server.close()
+    }
+
+    const onError = (error: Error & { code?: string }) => {
+      if (error.code === 'EADDRINUSE') {
+        if (maxTry-- <= 0) {
+          close()
+        }
+
+        server.listen(++startPort, host)
+      } else {
+        close()
+        reject(error)
+      }
+    }
+
+    server.on('error', onError)
+    server.listen(startPort, host, () => {
+      close()
+      resolve(startPort)
+    })
+  })
 }

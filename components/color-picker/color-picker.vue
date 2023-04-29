@@ -30,9 +30,7 @@
         </div>
         <div :class="nh.be('control')">
           <div :class="nh.be('marker')">
-            <Icon v-if="!currentVisible && isEmpty">
-              <Xmark></Xmark>
-            </Icon>
+            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.cross"></Icon>
             <div
               v-else
               :style="{
@@ -61,9 +59,7 @@
                 [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else :class="nh.be('arrow')">
-              <ChevronDown></ChevronDown>
-            </Icon>
+            <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
           </slot>
         </div>
         <div
@@ -72,112 +68,110 @@
         ></div>
         <transition :name="nh.ns('fade')" appear>
           <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-            <Icon><CircleXmark></CircleXmark></Icon>
+            <Icon v-bind="icons.clear"></Icon>
           </div>
           <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-            <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
+            <Icon
+              v-bind="icons.loading"
+              :effect="props.loadingEffect || icons.loading.effect"
+              :icon="props.loadingIcon || icons.loading.icon"
+            ></Icon>
           </div>
         </transition>
       </slot>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="props.transitionName">
-        <div
-          v-if="currentVisible"
-          ref="popper"
-          :class="[
-            nh.be('popper'),
-            nh.bs('vars'),
-            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
-          ]"
-          @keydown.tab.stop="handleTabDown"
-          @keydown.space="handleSpaceDown"
-          @keydown.escape="handleEscDown"
-        >
-          <div :class="nh.be('panel')">
-            <div :class="nh.be('section')">
-              <ColorPalette
-                ref="palette"
-                :hue="currentValue.h"
-                :saturation="currentValue.s"
-                :value="currentValue.v"
-                @edit-start="toggleEditing(true)"
-                @edit-end="toggleEditing(false)"
-                @change="handlePaletteChange"
-              ></ColorPalette>
-              <ColorHue
-                ref="hue"
-                :hue="currentValue.h"
-                @edit-start="toggleEditing(true)"
-                @edit-end="toggleEditing(false)"
-                @change="handleHueChange"
-              ></ColorHue>
-              <ColorAlpha
-                v-if="props.alpha"
-                ref="alphaUnit"
-                :rgb="rgb"
-                :alpha="currentAlpha"
-                @edit-start="toggleEditing(true)"
-                @edit-end="toggleEditing(false)"
-                @change="handleAlphaChange"
-              ></ColorAlpha>
-              <div
-                v-if="props.shortcut"
-                ref="shortcutUnit"
-                :class="nh.be('shortcuts')"
-                tabindex="-1"
-                @focus="handleShrtcutsFocus"
-                @blur="shortcutsFocused = false"
-                @keydown="handleShortcutsKeydown"
-              >
-                <div
-                  v-for="(item, index) in shortcutList"
-                  :key="index"
-                  :class="{
-                    [nh.be('shortcut-item')]: true,
-                    [nh.bem('shortcut-item', 'hitting')]:
-                      shortcutsFocused && shortcutHitting === index
-                  }"
-                  :style="{ backgroundColor: item }"
-                  @click="handleShortcutClick(item)"
-                ></div>
-              </div>
-            </div>
-            <div :class="nh.be('action')">
-              <Input
-                v-if="!props.noInput"
-                ref="input"
-                inherit
-                :class="nh.be('input')"
-                size="small"
-                :value="hex.toUpperCase()"
-                :respond="false"
-                @change="handleInputColor"
-              ></Input>
-              <Button
-                v-if="props.clearable"
-                ref="cancel"
-                inherit
-                text
-                size="small"
-                @click="handleClear"
-              >
-                {{ props.cancelText || locale.cancel }}
-              </Button>
-              <Button
-                ref="confirm"
-                inherit
-                type="primary"
-                size="small"
-                @click="handleOk"
-              >
-                {{ props.confirmText || locale.confirm }}
-              </Button>
-            </div>
+    <Popper
+      ref="popper"
+      :class="[nh.be('popper'), nh.bs('vars')]"
+      :visible="currentVisible"
+      :to="transferTo"
+      :transition="props.transitionName"
+      @click.stop
+      @keydown.tab.stop="handleTabDown"
+      @keydown.space="handleSpaceDown"
+      @keydown.escape="handleEscDown"
+    >
+      <div :class="nh.be('panel')">
+        <div :class="nh.be('section')">
+          <ColorPalette
+            ref="palette"
+            :hue="currentValue.h"
+            :saturation="currentValue.s"
+            :value="currentValue.v"
+            @edit-start="toggleEditing(true)"
+            @edit-end="toggleEditing(false)"
+            @change="handlePaletteChange"
+          ></ColorPalette>
+          <ColorHue
+            ref="hue"
+            :hue="currentValue.h"
+            @edit-start="toggleEditing(true)"
+            @edit-end="toggleEditing(false)"
+            @change="handleHueChange"
+          ></ColorHue>
+          <ColorAlpha
+            v-if="props.alpha"
+            ref="alphaUnit"
+            :rgb="rgb"
+            :alpha="currentAlpha"
+            @edit-start="toggleEditing(true)"
+            @edit-end="toggleEditing(false)"
+            @change="handleAlphaChange"
+          ></ColorAlpha>
+          <div
+            v-if="props.shortcut"
+            ref="shortcutUnit"
+            :class="nh.be('shortcuts')"
+            tabindex="-1"
+            @focus="handleShrtcutsFocus"
+            @blur="shortcutsFocused = false"
+            @keydown="handleShortcutsKeydown"
+          >
+            <div
+              v-for="(item, index) in shortcutList"
+              :key="index"
+              :class="{
+                [nh.be('shortcut-item')]: true,
+                [nh.bem('shortcut-item', 'hitting')]: shortcutsFocused && shortcutHitting === index
+              }"
+              :style="{ backgroundColor: item }"
+              @click="handleShortcutClick(item)"
+            ></div>
           </div>
         </div>
-      </transition>
-    </Portal>
+        <div :class="nh.be('action')">
+          <Input
+            v-if="!props.noInput"
+            ref="input"
+            inherit
+            :class="nh.be('input')"
+            size="small"
+            :value="hex.toUpperCase()"
+            :respond="false"
+            @change="handleInputColor"
+          ></Input>
+          <Button
+            v-if="props.clearable"
+            ref="cancel"
+            inherit
+            text
+            size="small"
+            @click="handleClear"
+          >
+            {{ props.cancelText || locale.cancel }}
+          </Button>
+          <Button
+            ref="confirm"
+            inherit
+            type="primary"
+            size="small"
+            @click="handleOk"
+          >
+            {{ props.confirmText || locale.confirm }}
+          </Button>
+        </div>
+      </div>
+    </Popper>
   </div>
 </template>
 
@@ -189,13 +183,14 @@ import ColorPalette from './color-palette.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
-import { Portal } from '@/components/portal'
+import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
 import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
   useLocale,
+  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent
@@ -211,9 +206,9 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 import { colorPickerProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
@@ -254,10 +249,7 @@ export default defineComponent({
     ColorPalette,
     Icon,
     Input,
-    Portal,
-    Xmark,
-    ChevronDown,
-    CircleXmark
+    Popper
   },
   props: colorPickerProps,
   emits: ['update:value', 'update:visible'],
@@ -275,6 +267,7 @@ export default defineComponent({
     } = useFieldStore<Color | null>(() => reference.value?.focus())
 
     const nh = useNameHelper('color-picker')
+    const icons = useIcons()
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
@@ -309,9 +302,9 @@ export default defineComponent({
       noSuffix: false,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: null,
       loadingLock: false,
-      loadingEffect: 'pulse-in'
+      loadingEffect: null
     })
 
     const isEmpty = ref(true)
@@ -335,10 +328,12 @@ export default defineComponent({
     const confirm = ref(null)
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
+      popper: computed(() => popper.value?.wrapper),
       isDrop: true
     })
     const { isHover } = useHover(reference)
@@ -681,6 +676,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       locale: useLocale('colorPicker', toRef(props, 'locale')),
       idFor,
       isEmpty,

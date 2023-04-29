@@ -6,7 +6,7 @@ import { Table } from '..'
 import TableBody from '../table-body.vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
-import type { RowState } from '../symbol'
+import type { TableRowState } from '../symbol'
 
 vi.useFakeTimers()
 
@@ -349,7 +349,7 @@ describe('Table', () => {
       expect(cell.find('.vxp-table__sorter--desc').exists()).toBe(true)
     })
 
-    let renderRows = body.vm.renderData as RowState[]
+    let renderRows = body.vm.renderData as TableRowState[]
 
     const clickSorter = async (cell: DOMWrapper<Element>, type: 'asc' | 'desc') => {
       await cell.find(`.vxp-table__sorter--${type}`).trigger('click')

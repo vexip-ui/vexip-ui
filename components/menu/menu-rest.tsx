@@ -12,8 +12,7 @@ import {
 import { Icon } from '@/components/icon'
 import { MenuItem } from '@/components/menu-item'
 import { Portal } from '@/components/portal'
-import { Ellipsis } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useIcons } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
@@ -33,6 +32,7 @@ export default defineComponent({
     const menuState = inject(MENU_STATE, null)
 
     const nh = useNameHelper('menu')
+    const icons = useIcons()
     const groupExpanded = ref(false)
     const sonSelected = ref(false)
     const popperShow = ref(false)
@@ -152,9 +152,7 @@ export default defineComponent({
             class={[nh.be('rest-handler'), sonSelected.value && nh.bem('rest-handler', 'selected')]}
             onClick={handleClick}
           >
-            <Icon>
-              <Ellipsis></Ellipsis>
-            </Icon>
+            <Icon {...icons.value.ellipsis}></Icon>
           </div>
           <Portal to={transferTo.value}>
             <Transition name={nh.ns('drop')} appear onAfterLeave={handlePopperHide}>
