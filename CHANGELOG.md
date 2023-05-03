@@ -1,3 +1,33 @@
+## [2.1.17](https://github.com/vexip-ui/vexip-ui/compare/v2.1.16...v2.1.17) (2023-05-03)
+
+
+### Bug Fixes
+
+* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
+* **scroll:** content shaking when init or resized ([1c8b818](https://github.com/vexip-ui/vexip-ui/commit/1c8b81821e9c3f80bb77dddacfb1912793952555))
+
+
+### Features
+
+* **config-provider:** support config z-index ([8772bc2](https://github.com/vexip-ui/vexip-ui/commit/8772bc2d9d964ef5c0b864a69bead5493cd76a23))
+* **config:** support provide config via hook functions ([8222299](https://github.com/vexip-ui/vexip-ui/commit/8222299e99769d416d6e04af5c6fab23c109e87a))
+* **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
+
+
+### Performance Improvements
+
+* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
+
+
+### BREAKING CHANGES
+
+* **scroll:** Slot parameters of Scroll (also NativeScroll) is changed
+to methods only, and now using the getState method to get scroll state.
+And the modifier class names of Scroll's wrapper are transfered to the
+Scroll root element.
+
+
+
 ## [2.1.16](https://github.com/vexip-ui/vexip-ui/compare/v2.1.15...v2.1.16) (2023-04-23)
 
 
