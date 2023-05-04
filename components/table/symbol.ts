@@ -82,7 +82,8 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   accessor?: Accessor<D, Val>,
   renderer?: RenderFn,
-  headRenderer?: RenderFn
+  headRenderer?: RenderFn,
+  filterRenderer?: RenderFn
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
