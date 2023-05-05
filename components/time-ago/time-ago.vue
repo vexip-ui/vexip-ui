@@ -25,7 +25,7 @@ export default defineComponent({
       },
       interval: {
         default: false,
-        validator: value => value && value >= 5
+        validator: value => typeof value === 'boolean' || value >= 1
       },
       title: false,
       titleFormat: 'yyyy-MM-dd HH:mm:ss'
