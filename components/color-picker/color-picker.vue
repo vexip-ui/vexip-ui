@@ -165,7 +165,7 @@
             inherit
             type="primary"
             size="small"
-            @click="handleOk"
+            @click="handleConfirm"
           >
             {{ props.confirmText || locale.confirm }}
           </Button>
@@ -485,7 +485,7 @@ export default defineComponent({
       }
     }
 
-    function handleOk() {
+    function handleConfirm() {
       lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
       isEmpty.value = false
       currentVisible.value = false
@@ -660,7 +660,7 @@ export default defineComponent({
         event.preventDefault()
 
         if (currentVisible.value) {
-          handleOk()
+          handleConfirm()
           reference.value?.focus()
         } else {
           currentVisible.value = true
@@ -709,7 +709,7 @@ export default defineComponent({
 
       toggleVisible,
       handleClear,
-      handleOk,
+      handleConfirm,
       handlePaletteChange,
       handleHueChange,
       handleAlphaChange,
