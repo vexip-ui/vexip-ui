@@ -144,10 +144,7 @@ $menu: map.merge(
 
     #{$self}--horizontal & {
       &::after {
-        top: auto;
-        right: 0;
-        bottom: auto;
-        left: 0;
+        inset: auto 0;
         width: auto;
         height: 2px;
       }

@@ -128,7 +128,7 @@
     "@vexip-ui/commitlint-config": "^0.1.0",
     "@vexip-ui/eslint-config": "^0.5.2",
     "@vexip-ui/prettier-config": "^0.1.0",
-    "@vexip-ui/stylelint-config": "^0.3.0",
+    "@vexip-ui/stylelint-config": "^0.4.0",
     "@vitejs/plugin-vue": "^4.2.1",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vitest/coverage-c8": "^0.31.0",

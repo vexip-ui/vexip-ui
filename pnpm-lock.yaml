@@ -68,8 +68,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(prettier@2.8.8)
       '@vexip-ui/stylelint-config':
-        specifier: ^0.3.0
-        version: 0.3.0(stylelint@15.6.1)
+        specifier: ^0.4.0
+        version: 0.4.0(stylelint@15.6.1)
       '@vitejs/plugin-vue':
         specifier: ^4.2.1
         version: 4.2.1(vite@4.3.4)(vue@3.2.47)
@@ -2757,8 +2757,8 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@vexip-ui/stylelint-config@0.3.0(stylelint@15.6.1):
-    resolution: {integrity: sha512-K6Yhq2138QFoPH3pxV5uTCqoakMERUyzQhqV0/LZ/H4x8Hz/U7BySWdplrnQeJltlN/+QU0MyQeteIdNDT4PZg==}
+  /@vexip-ui/stylelint-config@0.4.0(stylelint@15.6.1):
+    resolution: {integrity: sha512-HnUvVKsRSeSE+HIHLNRiz7J2d5I+hhuDLw1/EYmuEysI6HOwbFx0kykarCvcznNr6JQv9ADoM0TSDl/K9ybguA==}
     peerDependencies:
       stylelint: '*'
     dependencies:

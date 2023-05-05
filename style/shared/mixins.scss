@@ -33,18 +33,12 @@
 
 @mixin fixed {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 }
 
 @mixin inner-fixed {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 }
 
 @mixin clear-both {
@@ -109,10 +103,7 @@
 
   &::before {
     position: absolute;
-    top: -4px;
-    right: 0;
-    bottom: auto;
-    left: 0;
+    inset: -4px 0 auto;
     width: auto;
     height: 0;
     content: '';
@@ -123,10 +114,7 @@
 
   &::after {
     position: absolute;
-    top: auto;
-    right: 0;
-    bottom: -4px;
-    left: 0;
+    inset: auto 0 -4px;
     width: auto;
     height: 0;
     content: '';
@@ -142,10 +130,7 @@
 
   &::before {
     position: absolute;
-    top: 0;
-    right: auto;
-    bottom: 0;
-    left: -4px;
+    inset: 0 auto 0 -4px;
     width: 0;
     height: auto;
     content: '';
@@ -156,10 +141,7 @@
 
   &::after {
     position: absolute;
-    top: 0;
-    right: -4px;
-    bottom: 0;
-    left: auto;
+    inset: 0 -4px 0 auto;
     width: 0;
     height: auto;
     content: '';
