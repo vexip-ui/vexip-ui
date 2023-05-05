@@ -6,7 +6,8 @@ import {
   watch,
   createTextVNode,
   mergeProps,
-  Fragment
+  Fragment,
+  shallowReadonly
 } from 'vue'
 import { Popper } from '@/components/popper'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
@@ -117,6 +118,8 @@ export default defineComponent({
 
       return [{ width: `${props.width}px` }, props.tipStyle]
     })
+
+    const slotParams = shallowReadonly({ toggleVisible, updatePopper })
 
     useListener(trigger, 'mouseenter', handleTriggerEnter)
     useListener(trigger, 'mouseleave', handleTriggerLeave)
@@ -252,7 +255,7 @@ export default defineComponent({
       const CustomTag = props.wrapper
         ? ((props.wrapper === true ? 'span' : props.wrapper) as any)
         : null
-      const triggers = slots.trigger?.()
+      const triggers = slots.trigger?.(slotParams)
       const triggerVNode = triggers ? triggers[0] : null
 
       const renderTrigger = () => {
@@ -307,7 +310,7 @@ export default defineComponent({
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
               {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
-              {slots.default?.()}
+              {slots.default?.(slotParams)}
             </div>
           </Popper>
         )
