@@ -1,4 +1,4 @@
-import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
+import { defineComponent, reactive, watch, inject, onBeforeUnmount, onBeforeUpdate } from 'vue'
 import { useProps, createSizeProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
@@ -13,6 +13,12 @@ const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
 const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+
+const rendererProp = {
+  default: null,
+  isFunc: true,
+  static: true
+}
 
 export default defineComponent({
   name: 'TableColumn',
@@ -48,16 +54,9 @@ export default defineComponent({
       width: null,
       filter: null,
       sorter: false,
-      renderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      },
-      headRenderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      },
+      renderer: rendererProp,
+      headRenderer: rendererProp,
+      filterRenderer: rendererProp,
       order: {
         default: 0,
         static: true
@@ -112,15 +111,21 @@ export default defineComponent({
       }
     }
 
-    watch(() => slots.default, setRenderer)
     watch(() => props.renderer, setRenderer)
-    watch(() => slots.head, setHeadRenderer)
     watch(() => props.headRenderer, setHeadRenderer)
+    watch(() => props.filterRenderer, setFilterRenderer)
 
     setRenderer()
     setHeadRenderer()
+    setFilterRenderer()
 
     tableAction?.increaseColumn(options)
+
+    onBeforeUpdate(() => {
+      setRenderer()
+      setHeadRenderer()
+      setFilterRenderer()
+    })
 
     onBeforeUnmount(() => {
       tableAction?.decreaseColumn(options)
@@ -162,6 +167,20 @@ export default defineComponent({
         }
 
         return props.name
+      }
+    }
+
+    function setFilterRenderer() {
+      if (typeof slots.filter === 'function' || typeof props.filterRenderer === 'function') {
+        options.filterRenderer = (data: any) => {
+          if (typeof slots.filter === 'function') {
+            return slots.filter(data)
+          }
+
+          return props.filterRenderer(data)
+        }
+      } else {
+        options.filterRenderer = undefined
       }
     }
 

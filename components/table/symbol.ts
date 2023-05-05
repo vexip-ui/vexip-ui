@@ -41,17 +41,30 @@ export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
     active?: null | Val,
-    method?: null | ((active: Val, data: D) => boolean)
+    method?: null | ((active: Val, data: D) => boolean),
+    meta?: any
   }
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
     active?: null | Val[],
-    method?: null | ((active: Val[], data: D) => boolean)
+    method?: null | ((active: Val[], data: D) => boolean),
+    meta?: any
+  }
+  | {
+    able?: boolean,
+    custom: true,
+    options?: never,
+    multiple?: false,
+    active?: null | Val | Val[],
+    method?: null | ((active: any, data: D) => boolean),
+    meta?: any
   }
 
 export interface ParsedFilterOptions extends Omit<Required<TableFilterOptions>, 'options'> {
@@ -136,6 +149,12 @@ export type ColumnRenderFn = (data: {
   columnIndex: number
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+export type FilterRenderFn = (data: {
+  column: TableColumnOptions,
+  index: number,
+  filter: Required<TableFilterOptions>,
+  handleFilter: (active: any) => void
+}) => any
 
 export type TableCellPropFn<P = any> = (
   data: Data,

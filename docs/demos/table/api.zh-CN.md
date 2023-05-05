@@ -30,23 +30,36 @@ type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
     active?: null | Val,
-    method?: null | ((active: Val, data: D) => boolean)
+    method?: null | ((active: Val, data: D) => boolean),
+    meta?: any
   }
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
     active?: null | Val[],
-    method?: null | ((active: Val[], data: D) => boolean)
+    method?: null | ((active: Val[], data: D) => boolean),
+    meta?: any
+  }
+  | {
+    able?: boolean,
+    custom: true,
+    options?: never,
+    multiple?: false,
+    active?: null | Val | Val[],
+    method?: null | ((active: any, data: D) => boolean),
+    meta?: any
   }
 
 interface TableSorterOptions<D = Data> {
   able?: boolean,
   type?: null | 'asc' | 'desc',
-  order?: number, // 优先级
+  order?: number,
   method?: null | ((prev: D, next: D) => number)
 }
 
@@ -105,6 +118,20 @@ type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
+
+type ColumnRenderFn = (data: {
+  row: any,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number
+}) => any
+type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+type FilterRenderFn = (data: {
+  column: TableColumnOptions,
+  index: number,
+  filter: Required<TableFilterOptions>,
+  handleFilter: (active: any) => void
+}) => any
 
 type TableCellPropFn<P = any> = (
   data: Data,
@@ -249,35 +276,37 @@ interface TableHeadPayload {
 
 ### TableColumn 属性
 
-| 名称          | 类型                                   | 说明                                                                         | 默认值      | 始于    |
-| ------------- | -------------------------------------- | ---------------------------------------------------------------------------- | ----------- | ------- |
-| name          | `string`                               | 列的名称                                                                     | `''`        | -       |
-| key \| id-key | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`        | -       |
-| accessor      | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -       |
-| fixed         | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -       |
-| class-name    | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -       |
-| style         | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1` |
-| attrs         | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1` |
-| type          | `TableColumnType`                      | 设置内置特定类型列                                                           | `null`      | -       |
-| width         | `number`                               | 设置列宽                                                                     | `null`      | -       |
-| filter        | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                               | `null`      | -       |
-| sorter        | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                               | `null`      | -       |
-| order         | `number`                               | 列的渲染顺序                                                                 | `0`         | -       |
-| renderer      | `ColumnRenderFn`                       | 自定义渲染函数                                                               | `null`      | -       |
-| head-renderer | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`      | -       |
-| no-ellipsis   | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -       |
-| checkbox-size | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                                  | `'default'` | -       |
-| disable-row   | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -       |
-| truth-index   | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -       |
-| order-label   | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -       |
-| meta-data     | `Data`                                 | 设置列的元数据                                                               | `{}`        | -       |
+| 名称            | 类型                                   | 说明                                                                         | 默认值      | 始于     |
+| --------------- | -------------------------------------- | ---------------------------------------------------------------------------- | ----------- | -------- |
+| name            | `string`                               | 列的名称                                                                     | `''`        | -        |
+| key \| id-key   | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`        | -        |
+| accessor        | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -        |
+| fixed           | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -        |
+| class-name      | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
+| style           | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1`  |
+| attrs           | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1`  |
+| type            | `TableColumnType`                      | 设置内置特定类型列                                                           | `null`      | -        |
+| width           | `number`                               | 设置列宽                                                                     | `null`      | -        |
+| filter          | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                               | `null`      | -        |
+| sorter          | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                               | `null`      | -        |
+| order           | `number`                               | 列的渲染顺序                                                                 | `0`         | -        |
+| renderer        | `ColumnRenderFn`                       | 自定义渲染函数                                                               | `null`      | -        |
+| head-renderer   | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`      | -        |
+| filter-renderer | `FilterRenderFn`                       | 自定义过滤器渲染函数                                                         | `null`      | `2.1.18` |
+| no-ellipsis     | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -        |
+| checkbox-size   | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                                  | `'default'` | -        |
+| disable-row     | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -        |
+| truth-index     | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
+| order-label     | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -        |
+| meta-data       | `Data`                                 | 设置列的元数据                                                               | `{}`        | -        |
 
 ### TableColumn 插槽
 
-| 名称    | 说明           | 参数                                                                                                            | 始于 |
-| ------- | -------------- | --------------------------------------------------------------------------------------------------------------- | ---- |
-| default | 列内容的插槽   | `{ row: Record<string, unknown>, rowIndex: number, column: TableColumnOptions<any, any>, columnIndex: number }` | -    |
-| head    | 列头内容的插槽 | `{ column: TableColumnOptions<any, any>, columnIndex: number }`                                                 | -    |
+| 名称    | 说明           | 参数                                                                                                                             | 始于     |
+| ------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| default | 列内容的插槽   | `{ row: Record<string, unknown>, rowIndex: number, column: TableColumnOptions, columnIndex: number }`                            | -        |
+| head    | 列头内容的插槽 | `{ column: TableColumnOptions, columnIndex: number }`                                                                            | -        |
+| filter  | 列过滤器的插槽 | `{ column: TableColumnOptions, columnIndex: number, filter: Required<TableFilterOptions>, handleFilter: (active: any) => void }` | `2.1.18` |
 
 ### TableSorter 属性
 
@@ -290,10 +319,12 @@ interface TableHeadPayload {
 
 ### TableFilter 属性
 
-| 名称     | 类型                                                             | 说明                                         | 默认值  | 始于 |
-| -------- | ---------------------------------------------------------------- | -------------------------------------------- | ------- | ---- |
-| able     | `boolean`                                                        | 设置是否可以过滤                             | `false` | -    |
-| options  | `(string \| { value: any, label?: string, active?: boolean })[]` | 过滤的选项，元素为 `{ label, value }` 的对象 | `[]`    | -    |
-| multiple | `boolean`                                                        | 是否开启多条件过滤                           | `false` | -    |
-| active   | `any`                                                            | 当前过滤的依赖值，会传入过滤方法             | `null`  | -    |
-| method   | `(active: any \| any[], data: any) => boolean`                   | 过滤的方法，接收过滤的依赖值和行数据         | `null`  | -    |
+| 名称     | 类型                                                             | 说明                                                    | 默认值      | 始于     |
+| -------- | ---------------------------------------------------------------- | ------------------------------------------------------- | ----------- | -------- |
+| able     | `boolean`                                                        | 设置是否可以过滤                                        | `false`     | -        |
+| options  | `(string \| { value: any, label?: string, active?: boolean })[]` | 过滤的选项，元素为 `{ label, value }` 的对象            | `[]`        | -        |
+| multiple | `boolean`                                                        | 是否开启多条件过滤                                      | `false`     | -        |
+| active   | `any`                                                            | 当前过滤的依赖值，会传入过滤方法                        | `null`      | -        |
+| method   | `(active: any \| any[], data: any) => boolean`                   | 过滤的方法，接收过滤的依赖值和行数据                    | `null`      | -        |
+| custom   | `boolean`                                                        | 是否为自定义过滤，配合 TableColumn 的 `filter` 插槽使用 | `false`     | `2.1.18` |
+| meta     | `any`                                                            | 自定义元数据                                            | `undefined` | `2.1.18` |
