@@ -53,7 +53,7 @@ const nodeFlag: Record<string, string[]> = {}
 const url = 'https://api.github.com/graphql'
 const OWENER = 'vexip-ui'
 const REPO = 'vexip-ui'
-const token = process.env.GITHUB_TOKEN
+let token: string
 
 async function fetchContributors(fetchOptions: FetchOptions): Promise<ContributorInfo[]> {
   const { component, paths } = fetchOptions
@@ -153,6 +153,7 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
 async function main() {
   if (process.env.DEV) {
     (await import('dotenv')).config()
+    token = process.env.GITHUB_TOKEN!
   }
 
   if (!token) {
