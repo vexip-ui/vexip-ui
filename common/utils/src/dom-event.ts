@@ -10,6 +10,9 @@ export interface EventPayload extends EventInit {
   [prop: string]: any
 }
 
+/**
+ * Whether current interaction is using touch.
+ */
 export const USE_TOUCH = isClient && ('ontouchstart' in window || getMaxTouchPoints() > 0)
 export const CLICK_TYPE = USE_TOUCH ? 'pointerdown' : 'click'
 

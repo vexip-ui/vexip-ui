@@ -10,7 +10,7 @@
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
     <div v-if="$slots.extra" :class="nh.be('extra')">
-      <slot name="extra" v-bind="getSlotParams()"></slot>
+      <slot name="extra" v-bind="slotParams"></slot>
     </div>
     <ResizeObserver throttle :on-resize="handleResize">
       <component
@@ -21,7 +21,7 @@
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"
       >
-        <slot v-bind="getSlotParams()"></slot>
+        <slot v-bind="slotParams"></slot>
       </component>
     </ResizeObserver>
     <Scrollbar
@@ -58,7 +58,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  shallowReadonly,
+  watch,
+  watchEffect,
+  toRef,
+  onBeforeUnmount,
+  nextTick
+} from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
@@ -132,7 +142,7 @@ export default defineComponent({
     const nh = useNameHelper('scroll')
     const usingBar = ref(false)
     const scrolling = ref(false)
-    const transitionDuration = ref<number>(-1)
+    const transitionDuration = ref<number>(0)
     const mode = computed(() => (props.mode === 'horizontal-exact' ? 'horizontal' : props.mode))
 
     const xBar = ref<InstanceType<typeof Scrollbar>>()
@@ -144,7 +154,9 @@ export default defineComponent({
 
       wrapper,
       isReady,
-      currentScroll,
+      // currentScroll,
+      x,
+      y,
       percentX,
       percentY,
       xScrollLimit,
@@ -157,7 +169,8 @@ export default defineComponent({
       handleResize,
       verifyScroll,
       computePercent,
-      refresh
+      refresh,
+      triggerUpdate
     } = useScrollWrapper({
       mode,
       disabled: toRef(props, 'disabled'),
@@ -173,6 +186,15 @@ export default defineComponent({
         syncBarScroll()
         startAutoplay()
       }
+    })
+
+    const slotParams = shallowReadonly({
+      getState,
+      refresh,
+      scrollTo,
+      scrollBy,
+      scrollToElement,
+      ensureInView
     })
 
     /* autoplay */
@@ -215,7 +237,8 @@ export default defineComponent({
 
       const distance = mode.value === 'horizontal' ? 'width' : 'height'
       const limit = mode.value === 'horizontal' ? xScrollLimit : yScrollLimit
-      const prop = mode.value === 'horizontal' ? 'x' : 'y'
+      // const prop = mode.value === 'horizontal' ? 'x' : 'y'
+      const prop = mode.value === 'horizontal' ? x : y
       const waiting = props.playWaiting < 20 ? 20 : props.playWaiting
 
       let playSpeed = 0.5
@@ -225,13 +248,14 @@ export default defineComponent({
       }
 
       const scroll = () => {
-        currentScroll[prop] -= playSpeed
+        prop.value -= playSpeed
 
-        if (currentScroll[prop] <= limit.value) {
-          currentScroll[prop] = limit.value
+        if (prop.value <= limit.value) {
+          prop.value = limit.value
           canPlay.value = false
 
           computePercent()
+          triggerUpdate()
           syncBarScroll()
 
           endTimer = setTimeout(() => {
@@ -244,6 +268,7 @@ export default defineComponent({
           }, waiting)
         } else {
           computePercent()
+          triggerUpdate()
           syncBarScroll()
 
           if (canPlay.value) {
@@ -273,7 +298,11 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(mode.value),
         {
-          [nh.bm('inherit')]: props.inherit
+          [nh.bm('inherit')]: props.inherit,
+          [nh.bm('using-bar')]: usingBar.value,
+          [nh.bm('scrolling')]: scrolling.value,
+          [nh.bm('no-ready')]: !isReady.value,
+          [nh.bm('no-transition')]: props.noTransition
         }
       ]
     })
@@ -298,35 +327,11 @@ export default defineComponent({
       }
     })
     const wrapperClass = computed(() => {
-      return [
-        props.scrollAttrs?.class,
-        props.scrollClass,
-        nh.be('wrapper'),
-        {
-          [nh.bem('wrapper', 'scrolling')]: scrolling.value,
-          [nh.bem('wrapper', 'no-ready')]: !isReady.value,
-          [nh.bem('wrapper', 'using-bar')]: usingBar.value,
-          [nh.bem('wrapper', 'no-transition')]: props.noTransition
-        }
-      ]
+      return [props.scrollAttrs?.class, props.scrollClass, nh.be('wrapper')]
     })
     const wrapperStyle = computed(() => {
-      return [
-        props.scrollAttrs?.style,
-        props.scrollStyle,
-        {
-          transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
-          transitionDuration:
-            transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
-        }
-      ]
+      return [props.scrollAttrs?.style, props.scrollStyle]
     })
-    // const extraStyle = computed(() => {
-    //   return {
-    //     width: mode.value !== 'vertical' ? `${wrapper.width}px` : undefined,
-    //     height: mode.value !== 'horizontal' ? `${wrapper.height}px` : undefined
-    //   }
-    // })
 
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
@@ -335,7 +340,23 @@ export default defineComponent({
       emitEvent(props.onYEnabledChange, value)
     })
     watch(isReady, value => {
-      if (value) emitEvent(props.onReady)
+      if (value) {
+        transitionDuration.value = -1
+        emitEvent(props.onReady)
+      } else {
+        transitionDuration.value = 0
+      }
+    })
+    watchEffect(() => {
+      if (!contentElement.value) return
+
+      contentElement.value.style.transform = `translate3d(${x.value}px, ${y.value}px, 0)`
+    })
+    watchEffect(() => {
+      if (!contentElement.value) return
+
+      contentElement.value.style.transitionDuration =
+        transitionDuration.value < 0 ? '' : `${transitionDuration.value}ms`
     })
 
     function syncBarScroll() {
@@ -386,8 +407,8 @@ export default defineComponent({
 
       const pointer = 'touches' in event ? event.touches[0] : event
 
-      xScrollStartAt = currentScroll.x
-      yScrollStartAt = currentScroll.y
+      xScrollStartAt = x.value
+      yScrollStartAt = y.value
       cursorXPosition = pointer.clientX
       cursorYPosition = pointer.clientY
 
@@ -399,8 +420,8 @@ export default defineComponent({
       document.addEventListener(UP_EVENT, handlePointerUp)
 
       emitEvent(props.onScrollStart, {
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -424,12 +445,12 @@ export default defineComponent({
       scrolling.value = true
 
       if (enableXScroll.value) {
-        currentScroll.x = xScrollStartAt + pointer.clientX - cursorXPosition
+        x.value = xScrollStartAt + pointer.clientX - cursorXPosition
         moved = true
       }
 
       if (enableYScroll.value) {
-        currentScroll.y = yScrollStartAt + pointer.clientY - cursorYPosition
+        y.value = yScrollStartAt + pointer.clientY - cursorYPosition
         moved = true
       }
 
@@ -437,6 +458,7 @@ export default defineComponent({
         verifyScroll()
       } else {
         computePercent()
+        triggerUpdate()
       }
 
       syncBarScroll()
@@ -458,8 +480,8 @@ export default defineComponent({
       verifyScroll()
       syncBarScroll()
       emitEvent(props.onScrollEnd, {
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -492,9 +514,9 @@ export default defineComponent({
       const computedDelta = sign * (type === 'horizontal' ? props.deltaX : props.deltaY)
 
       if (isVerticalScroll) {
-        currentScroll.y += computedDelta
+        y.value += computedDelta
       } else if (isHorizontalScroll) {
-        currentScroll.x += computedDelta
+        x.value += computedDelta
       }
 
       verifyScroll()
@@ -504,8 +526,8 @@ export default defineComponent({
       emitEvent(props.onWheel, {
         type,
         sign: -sign as 1 | -1,
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -534,8 +556,8 @@ export default defineComponent({
       usingBar.value = true
       emitEvent(props.onBarScrollStart, {
         type,
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -545,8 +567,8 @@ export default defineComponent({
       usingBar.value = false
       emitEvent(props.onBarScrollEnd, {
         type,
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -554,12 +576,13 @@ export default defineComponent({
 
     function handleXBarScroll(percent: number) {
       percentX.value = percent
-      currentScroll.x = (percent * xScrollLimit.value) / 100
+      x.value = (percent * xScrollLimit.value) / 100
+      triggerUpdate()
 
       emitEvent(props.onBarScroll, {
         type: 'horizontal',
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -568,12 +591,13 @@ export default defineComponent({
 
     function handleYBarScroll(percent: number) {
       percentY.value = percent
-      currentScroll.y = (percent * yScrollLimit.value) / 100
+      y.value = (percent * yScrollLimit.value) / 100
+      triggerUpdate()
 
       emitEvent(props.onBarScroll, {
         type: 'vertical',
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -583,15 +607,15 @@ export default defineComponent({
     function emitScrollEvent(type: ScrollMode) {
       emitEvent(props.onScroll, {
         type,
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
       emitter.emit('scroll', {
         type,
-        clientX: -currentScroll.x,
-        clientY: -currentScroll.y,
+        clientX: -x.value,
+        clientY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value
       })
@@ -604,19 +628,14 @@ export default defineComponent({
       }
     }
 
-    function getSlotParams() {
+    function getState() {
       return {
-        scrollX: -currentScroll.x,
-        scrollY: -currentScroll.y,
+        scrollX: -x.value,
+        scrollY: -y.value,
         percentX: percentX.value,
         percentY: percentY.value,
         enableXScroll: enableXScroll.value,
-        enableYScroll: enableYScroll.value,
-        refresh,
-        scrollTo,
-        scrollBy,
-        scrollToElement,
-        ensureInView
+        enableYScroll: enableYScroll.value
       }
     }
 
@@ -626,13 +645,13 @@ export default defineComponent({
       nextTick(() => {
         let changed = false
 
-        if (enableXScroll.value && Math.abs(currentScroll.x + clientX) > 0.01) {
-          currentScroll.x = -clientX
+        if (enableXScroll.value && Math.abs(x.value + clientX) > 0.01) {
+          x.value = -clientX
           changed = true
         }
 
-        if (enableYScroll.value && Math.abs(currentScroll.y + clientY) > 0.01) {
-          currentScroll.y = -clientY
+        if (enableYScroll.value && Math.abs(y.value + clientY) > 0.01) {
+          y.value = -clientY
           changed = true
         }
 
@@ -650,12 +669,12 @@ export default defineComponent({
         let changed = false
 
         if (deltaX && enableXScroll) {
-          currentScroll.x -= deltaX
+          x.value -= deltaX
           changed = true
         }
 
         if (deltaY && enableYScroll) {
-          currentScroll.y -= deltaY
+          y.value -= deltaY
           changed = true
         }
 
@@ -760,7 +779,11 @@ export default defineComponent({
       percentX,
       percentY,
       transitionDuration,
-      currentScroll,
+      // currentScroll,
+      x,
+      y,
+      isReady,
+      slotParams,
 
       className,
       style,
@@ -786,7 +809,6 @@ export default defineComponent({
       handleXBarScroll,
       handleYBarScroll,
       ensureScrollOffset,
-      getSlotParams,
 
       refresh,
       scrollTo,

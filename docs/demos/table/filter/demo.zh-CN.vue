@@ -6,7 +6,51 @@
     :width="1000"
     :row-height="40"
     @row-filter="handleRowFilter"
-  ></Table>
+  >
+    <TableColumn
+      name="Age"
+      id-key="age"
+      :order="1"
+      :filter="ageFilter"
+    >
+      <template #filter="{ filter, handleFilter }">
+        <Tooltip transfer placement="bottom" trigger="click">
+          <template #trigger>
+            <div class="column-filter">
+              <Icon :icon="Filter"></Icon>
+            </div>
+          </template>
+          <template #default="{ toggleVisible }">
+            <Space vertical>
+              最小值：
+              <NumberInput v-model:value="filter.meta.values[0]" sync></NumberInput>
+              最大值：
+              <NumberInput v-model:value="filter.meta.values[1]" sync></NumberInput>
+              <div style="margin: 3px 0">
+                <Button
+                  text
+                  size="small"
+                  :disabled="
+                    Number.isNaN(filter.meta.values[0]) || Number.isNaN(filter.meta.values[1])
+                  "
+                  @click="handleFilter(filter.meta.values), toggleVisible(false)"
+                >
+                  筛选
+                </Button>
+                <Button
+                  text
+                  size="small"
+                  @click="resetAgeFilter(), handleFilter(null), toggleVisible(false)"
+                >
+                  重置
+                </Button>
+              </div>
+            </Space>
+          </template>
+        </Tooltip>
+      </template>
+    </TableColumn>
+  </Table>
   <Button style="margin-top: 10px" @click="clearFilter">
     清除过滤
   </Button>
@@ -15,6 +59,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
+import { Filter } from '@vexip-ui/icons'
 
 import type { Table, TableFilterProfile } from 'vexip-ui'
 
@@ -38,7 +83,7 @@ const columns = ref([
         { label: 'Starts with A', value: 'A' },
         { label: 'Starts with E', value: 'E' }
       ],
-      method(value, row: RowData) {
+      method: (value, row: RowData) => {
         return row.firstName.startsWith(value)
       }
     })
@@ -54,7 +99,7 @@ const columns = ref([
         { label: 'Starts with T', value: 'T' }
       ],
       multiple: true,
-      method(values, row: RowData) {
+      method: (values, row: RowData) => {
         for (const value of values) {
           if (row.lastName.startsWith(value)) {
             return true
@@ -68,12 +113,19 @@ const columns = ref([
   {
     name: 'Job',
     key: 'job'
-  },
-  {
-    name: 'Age',
-    key: 'age'
   }
 ])
+
+const ageFilter = defineFilter({
+  custom: true,
+  meta: {
+    values: [NaN, NaN]
+  },
+  method: (value: number[], row: RowData) => {
+    const age = parseFloat(row.age)
+    return age >= value[0] && age <= value[1]
+  }
+})
 
 const data = ref([
   {
@@ -125,4 +177,26 @@ function handleRowFilter(profiles: TableFilterProfile[]) {
 function clearFilter() {
   table.value?.clearFilter()
 }
+
+function resetAgeFilter() {
+  ageFilter.meta.values[0] = NaN
+  ageFilter.meta.values[1] = NaN
+}
 </script>
+
+<style scoped>
+.column-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15px;
+  margin-left: 3px;
+  color: var(--vxp-table-filter-color);
+  cursor: pointer;
+  transition: var(--vxp-transition-color);
+}
+
+.column-filter:hover {
+  color: var(--vxp-table-filter-color-hover);
+}
+</style>

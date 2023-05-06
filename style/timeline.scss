@@ -197,10 +197,7 @@ $timeline: map.merge(
   }
 
   &--horizontal &__line {
-    top: calc($line-width * -0.5);
-    right: 0;
-    bottom: auto;
-    left: 0;
+    inset: calc($line-width * -0.5) 0 auto;
     width: auto;
     height: 0;
     padding: 0;
@@ -308,10 +305,7 @@ $timeline: map.merge(
 
   &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__content {
     padding: {
-      top: $content-pad;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: $content-pad 0 0;
     }
   }
 

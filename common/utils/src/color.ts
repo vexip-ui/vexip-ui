@@ -491,8 +491,8 @@ export function parseColorToRgba(originColor: Color) {
       rgb = hsvToRgb(color.h, color.s, color.v)
     }
 
-    if (color.a) {
-      a = normalizeAlpha(color.a)
+    if ('a' in color) {
+      a = normalizeAlpha(color.a ?? 1)
 
       if (Number.isNaN(a)) {
         a = 1
@@ -851,7 +851,7 @@ function hueToRgb(p: number, q: number, t: number): number {
 }
 
 function isPercentage(percent: number | string): boolean {
-  return percent.toString().trim().includes('%')
+  return String(percent).trim().includes('%')
 }
 
 function parsePercentage(percent: number | string): number {

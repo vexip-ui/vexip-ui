@@ -32,6 +32,12 @@ type PropsConfigOptions<T> = {
 export const PROVIDED_PROPS = '__vxp-provided-props'
 const eventPropRE = /^on[A-Z]/
 
+/**
+ * Provide a props config for under components.
+ *
+ * @param props props config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configProps<T>(props: MaybeRef<T>, app?: App) {
   if (app) {
     app.provide(

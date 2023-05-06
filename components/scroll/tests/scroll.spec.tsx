@@ -199,7 +199,15 @@ describe('Scroll', () => {
     downEvent.clientY = 100
     wrapperEl.dispatchEvent(downEvent)
     expect(onScrollStart).toHaveBeenCalled()
-    expect(onScrollStart).toHaveBeenCalledWith(expect.objectContaining({ clientX: 0, clientY: 0 }))
+    try {
+      expect(onScrollStart).toHaveBeenCalledWith(
+        expect.objectContaining({ clientX: 0, clientY: 0 })
+      )
+    } catch (e) {
+      expect(onScrollStart).toHaveBeenCalledWith(
+        expect.objectContaining({ clientX: -0, clientY: -0 })
+      )
+    }
 
     const moveEvent = new CustomEvent('mousemove') as any
     moveEvent.clientX = 60
@@ -222,7 +230,7 @@ describe('Scroll', () => {
     })
 
     await runScrollTimers()
-    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
+    expect(wrapper.vm.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {

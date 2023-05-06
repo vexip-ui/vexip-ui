@@ -6,7 +6,7 @@ import {
   configZIndex,
   configIcons
 } from '@vexip-ui/config'
-import { toCapitalCase } from '@vexip-ui/utils'
+import { toCapitalCase, isEmpty } from '@vexip-ui/utils'
 
 import type { Ref, App } from 'vue'
 import type { LocaleConfig, LocaleOptions, IconsOptions } from '@vexip-ui/config'
@@ -43,8 +43,8 @@ export function buildInstall(components: any[] = [], defaultLocale?: LocaleConfi
     configLocale(withDefaultLocale, app)
     configIcons(icons, app)
 
-    if (typeof zIndex === 'number') {
-      configZIndex(zIndex, app)
+    if (typeof unref(zIndex) === 'number') {
+      configZIndex(zIndex!, app)
     }
 
     const normalizedPrefix = toCapitalCase(prefix || '')
@@ -58,3 +58,36 @@ export function buildInstall(components: any[] = [], defaultLocale?: LocaleConfi
     })
   }
 }
+
+/**
+ * Provide a props config for under components.
+ *
+ * @param props props config
+ * @param app the app of Vue, will use app.provide if specify
+ */
+function proxyConfigProps(props: MaybeRef<PropsOptions>, app?: App) {
+  !isEmpty(props) && configProps(props, app)
+}
+
+/**
+ * Provide supported config for under components.
+ *
+ * @param config supported config
+ * @param app the app of Vue, will use app.provide if specify
+ */
+export function provideConfig(
+  config: Omit<InstallOptions, 'prefix' | 'namespace'> = {},
+  app?: App
+) {
+  const { props = {}, locale = {}, zIndex, icons = {} } = config
+
+  proxyConfigProps(props, app)
+  !isEmpty(locale) && configLocale(locale, app)
+  !isEmpty(icons) && configIcons(icons, app)
+
+  if (typeof unref(zIndex) === 'number') {
+    configZIndex(zIndex!, app)
+  }
+}
+
+export { proxyConfigProps as configProps, configLocale, configZIndex, configIcons }

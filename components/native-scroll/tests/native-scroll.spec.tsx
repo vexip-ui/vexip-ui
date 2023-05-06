@@ -227,7 +227,7 @@ describe('NativeScroll', () => {
     })
 
     vi.runAllTimers()
-    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
+    expect(wrapper.vm.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {

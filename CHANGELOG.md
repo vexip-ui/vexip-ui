@@ -1,3 +1,56 @@
+## [2.1.17](https://github.com/vexip-ui/vexip-ui/compare/v2.1.16...v2.1.17) (2023-05-03)
+
+
+### Bug Fixes
+
+* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
+* **scroll:** content shaking when init or resized ([1c8b818](https://github.com/vexip-ui/vexip-ui/commit/1c8b81821e9c3f80bb77dddacfb1912793952555))
+
+
+### Features
+
+* **config-provider:** support config z-index ([8772bc2](https://github.com/vexip-ui/vexip-ui/commit/8772bc2d9d964ef5c0b864a69bead5493cd76a23))
+* **config:** support provide config via hook functions ([8222299](https://github.com/vexip-ui/vexip-ui/commit/8222299e99769d416d6e04af5c6fab23c109e87a))
+* **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
+
+
+### Performance Improvements
+
+* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
+
+
+### BREAKING CHANGES
+
+* **scroll:** Slot parameters of Scroll (also NativeScroll) is changed
+to methods only, and now using the getState method to get scroll state.
+And the modifier class names of Scroll's wrapper are transfered to the
+Scroll root element.
+
+
+
+## [2.1.16](https://github.com/vexip-ui/vexip-ui/compare/v2.1.15...v2.1.16) (2023-04-23)
+
+
+### 🐞 Bug Fixes
+
+* **anchor:** ensure get scroll methods and element ([8b9b180](https://github.com/vexip-ui/vexip-ui/commit/8b9b1807274c12e386f8f70aa66ad606eb1526b4))
+* **auto-complate:** ensure effect ignore-case prop ([#312](https://github.com/vexip-ui/vexip-ui/issues/312)) ([398c681](https://github.com/vexip-ui/vexip-ui/commit/398c681796c5adf655782bd83d152e1cfb3b49a5))
+* **auto-complete:** no hover effect when using filter ([20d4f73](https://github.com/vexip-ui/vexip-ui/commit/20d4f73bd76d0ee9a77eb385d3a519c0659ef2f3))
+* **card:** flexible height for content ([dba86b6](https://github.com/vexip-ui/vexip-ui/commit/dba86b6eb297cbe488e43dc9ed7dd111dcc3c237))
+* **form-submit:** missing button style dependency ([02f3f04](https://github.com/vexip-ui/vexip-ui/commit/02f3f048d24311451aa06a83e257af45b22665c9))
+* **layout:** ensure aside-main using y scrollbar ([131573c](https://github.com/vexip-ui/vexip-ui/commit/131573c88df3aa8e4a7d79de98bf168e43d5979c))
+* **layout:** incorrect main section min-height ([a3c325f](https://github.com/vexip-ui/vexip-ui/commit/a3c325fb861d37e3c09a62672493e83e2da17293))
+* **masker:** set valid z-index if default active ([2d4f613](https://github.com/vexip-ui/vexip-ui/commit/2d4f6131a174c76bdaf0ef5b377be50526c0e799))
+* **utils:** flatTree don't set parent if parentField is empty ([a1d51a5](https://github.com/vexip-ui/vexip-ui/commit/a1d51a52de5d82b251e63e829499d6f35aa4db0b))
+
+
+### 👓 Types
+
+* **menu:** make meta type to any for compatibility ([be948c8](https://github.com/vexip-ui/vexip-ui/commit/be948c88df785c36e4e4c2836173d311ca1e9896))
+* **select:** make raw option type to any for compatibility ([b9c27a7](https://github.com/vexip-ui/vexip-ui/commit/b9c27a7d4aa123555778c10e5c8f248bb8dbda1f))
+
+
+
 ## [2.1.15](https://github.com/vexip-ui/vexip-ui/compare/v2.1.14...v2.1.15) (2023-04-17)
 
 
