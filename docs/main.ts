@@ -41,7 +41,8 @@ export async function createApp() {
       locale: vexipuiLocale,
       props: {
         default: {
-          transfer: true
+          transfer: true,
+          autoRemove: true
         }
       }
     })

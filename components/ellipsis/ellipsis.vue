@@ -9,7 +9,7 @@
   >
     <slot></slot>
   </div>
-  <Portal v-if="visible" :to="transferTo">
+  <Portal v-if="!props.tipDisabled && visible" :to="transferTo">
     <transition :name="props.transitionName" appear @after-leave="visible = false">
       <div
         v-show="active"
@@ -64,7 +64,8 @@ export default defineComponent({
       },
       tipClass: null,
       maxLines: null,
-      tipMaxWidth: 500
+      tipMaxWidth: 500,
+      tipDisabled: false
     })
 
     const tooltipNh = useNameHelper('tooltip')
@@ -107,11 +108,22 @@ export default defineComponent({
         updatePopper()
       }
     })
+    watch(
+      () => props.tipDisabled,
+      value => {
+        if (value) {
+          visible.value = false
+          active.value = false
+        }
+      }
+    )
 
     const { timer } = useSetTimeout()
 
     function handleTriggerEnter() {
       clearTimeout(timer.hover)
+
+      if (props.tipDisabled) return
 
       timer.hover = setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
@@ -119,7 +131,8 @@ export default defineComponent({
           return
         }
 
-        // In the case of multiple lines, use visual height and real content height to control whether to display
+        // In the case of multiple lines, use visual height and
+        // real content height to control whether to display
         if (props.maxLines > 0) {
           const scrollHeight = wrapper.value.scrollHeight
           const clientHeight = wrapper.value.clientHeight
@@ -139,6 +152,8 @@ export default defineComponent({
 
     function handleTriggerLeave() {
       clearTimeout(timer.hover)
+
+      if (props.tipDisabled) return
 
       timer.hover = setTimeout(() => {
         active.value = false

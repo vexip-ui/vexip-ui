@@ -339,10 +339,10 @@ importers:
         version: 1.15.1
       '@vitejs/plugin-vue':
         specifier: ^4.0.0
-        version: 4.0.0(vite@4.2.1)(vue@3.2.47)
+        version: 4.0.0(vite@4.3.4)(vue@3.2.47)
       '@vitejs/plugin-vue-jsx':
         specifier: ^3.0.0
-        version: 3.0.0(vite@4.2.1)(vue@3.2.47)
+        version: 3.0.0(vite@4.3.4)(vue@3.2.47)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.21)
@@ -383,11 +383,11 @@ importers:
         specifier: ^1.58.3
         version: 1.58.3
       vite:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@18.14.2)(sass@1.58.3)
+        specifier: ^4.3.4
+        version: 4.3.4(@types/node@18.14.2)(sass@1.58.3)
       vite-plugin-vue-markdown:
         specifier: ^0.22.4
-        version: 0.22.4(vite@4.2.1)
+        version: 0.22.4(vite@4.3.4)
 
   playground:
     dependencies:
@@ -421,10 +421,10 @@ importers:
         version: 2.7.2
       '@vitejs/plugin-vue':
         specifier: ^4.0.0
-        version: 4.0.0(vite@4.2.1)(vue@3.2.47)
+        version: 4.0.0(vite@4.3.4)(vue@3.2.47)
       '@vitejs/plugin-vue-jsx':
         specifier: ^3.0.0
-        version: 3.0.0(vite@4.2.1)(vue@3.2.47)
+        version: 3.0.0(vite@4.3.4)(vue@3.2.47)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.21)
@@ -432,8 +432,8 @@ importers:
         specifier: ^8.4.21
         version: 8.4.21
       vite:
-        specifier: ^4.2.1
-        version: 4.2.1(@types/node@18.16.3)(sass@1.62.1)
+        specifier: ^4.3.4
+        version: 4.3.4(@types/node@18.16.3)(sass@1.62.1)
       vue-router:
         specifier: ^4.1.6
         version: 4.1.6(vue@3.2.47)
@@ -2775,7 +2775,7 @@ packages:
       stylelint-order: 6.0.3(stylelint@15.6.1)
     dev: true
 
-  /@vitejs/plugin-vue-jsx@3.0.0(vite@4.2.1)(vue@3.2.47):
+  /@vitejs/plugin-vue-jsx@3.0.0(vite@4.3.4)(vue@3.2.47):
     resolution: {integrity: sha512-vurkuzgac5SYuxd2HUZqAFAWGTF10diKBwJNbCvnWijNZfXd+7jMtqjPFbGt7idOJUn584fP1Ar9j/GN2jQ3Ew==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -2788,7 +2788,7 @@ packages:
       '@babel/core': 7.21.0
       '@babel/plugin-transform-typescript': 7.20.2(@babel/core@7.21.0)
       '@vue/babel-plugin-jsx': 1.1.1(@babel/core@7.21.0)
-      vite: 4.2.1(@types/node@18.14.2)(sass@1.58.3)
+      vite: 4.3.4(@types/node@18.14.2)(sass@1.58.3)
       vue: 3.2.47
     transitivePeerDependencies:
       - supports-color
@@ -2813,7 +2813,7 @@ packages:
       - supports-color
     dev: true
 
-  /@vitejs/plugin-vue@4.0.0(vite@4.2.1)(vue@3.2.47):
+  /@vitejs/plugin-vue@4.0.0(vite@4.3.4)(vue@3.2.47):
     resolution: {integrity: sha512-e0X4jErIxAB5oLtDqbHvHpJe/uWNkdpYV83AOG2xo2tEVSzCzewgJMtREZM30wXnM5ls90hxiOtAuVU6H5JgbA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -2823,7 +2823,7 @@ packages:
       vue:
         optional: true
     dependencies:
-      vite: 4.2.1(@types/node@18.14.2)(sass@1.58.3)
+      vite: 4.3.4(@types/node@18.14.2)(sass@1.58.3)
       vue: 3.2.47
     dev: true
 
@@ -8986,14 +8986,6 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rollup@3.20.2:
-    resolution: {integrity: sha512-3zwkBQl7Ai7MFYQE0y1MeQ15+9jsi7XxfrqwTb/9EK8D9C9+//EBR4M+CuA1KODRaNbFez/lWxA5vhEGZp4MUg==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /rollup@3.21.4:
     resolution: {integrity: sha512-N5LxpvDolOm9ueiCp4NfB80omMDqb45ShtsQw2+OT3f11uJ197dv703NZvznYHP6RWR85wfxanXurXKG3ux2GQ==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -10329,7 +10321,7 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-vue-markdown@0.22.4(vite@4.2.1):
+  /vite-plugin-vue-markdown@0.22.4(vite@4.3.4):
     resolution: {integrity: sha512-+kDzqGI5Lq0Wa6M4EJtV7cqOIHgGp6g4jcazXljQKLl9Og4fRs6FuGAPa2HiJ44Z9es85LAPiPbTjwrZEGEUKA==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0
@@ -10341,13 +10333,13 @@ packages:
       '@rollup/pluginutils': 5.0.2
       '@types/markdown-it': 12.2.3
       markdown-it: 13.0.1
-      vite: 4.2.1(@types/node@18.14.2)(sass@1.58.3)
+      vite: 4.3.4(@types/node@18.14.2)(sass@1.58.3)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@4.2.1(@types/node@18.14.2)(sass@1.58.3):
-    resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
+  /vite@4.3.4(@types/node@18.14.2)(sass@1.58.3):
+    resolution: {integrity: sha512-f90aqGBoxSFxWph2b39ae2uHAxm5jFBBdnfueNxZAT1FTpM13ccFQExCaKbR2xFW5atowjleRniQ7onjJ22QEg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -10373,45 +10365,9 @@ packages:
     dependencies:
       '@types/node': 18.14.2
       esbuild: 0.17.14
-      postcss: 8.4.21
-      resolve: 1.22.1
-      rollup: 3.20.2
+      postcss: 8.4.23
+      rollup: 3.21.4
       sass: 1.58.3
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
-  /vite@4.2.1(@types/node@18.16.3)(sass@1.62.1):
-    resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 18.16.3
-      esbuild: 0.17.14
-      postcss: 8.4.21
-      resolve: 1.22.1
-      rollup: 3.20.2
-      sass: 1.62.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
