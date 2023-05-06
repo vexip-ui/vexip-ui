@@ -1,3 +1,27 @@
+## [1.11.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.0...utils@1.11.1) (2023-05-06)
+
+
+### ⚡ Performance Improvements
+
+* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
+
+
+### 🐞 Bug Fixes
+
+* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
+* **color-picker:** alpha cannot be confirmed to 0 ([9921700](https://github.com/vexip-ui/vexip-ui/commit/9921700cf2a09490259159a03900ba8ea53be1fe))
+* **utils:** flatTree don't set parent if parentField is empty ([a1d51a5](https://github.com/vexip-ui/vexip-ui/commit/a1d51a52de5d82b251e63e829499d6f35aa4db0b))
+
+
+### ❌ Breaking Changes
+
+* **scroll:** Slot parameters of Scroll (also NativeScroll) is changed
+to methods only, and now using the getState method to get scroll state.
+And the modifier class names of Scroll's wrapper are transfered to the
+Scroll root element.
+
+
+
 # [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.10.2...utils@1.11.0) (2023-04-13)
 
 
