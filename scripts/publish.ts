@@ -18,9 +18,7 @@ async function main() {
 
   if (target?.startsWith('v')) {
     inputPkg = 'vexip-ui'
-
-    const { pkgDir } = await getPackageInfo('common/meta')
-    metaPkgDir = pkgDir
+    metaPkgDir = (await getPackageInfo('common/meta')).pkgDir
   } else if (target?.includes('@')) {
     [inputPkg] = target.split('@')
 
@@ -53,8 +51,9 @@ async function main() {
   try {
     await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
     logger.successText(`Successfully published v${currentVersion}'`)
+
     if (metaPkgDir) {
-      await run('npm', ['version', currentVersion], { stdio: 'pipe', cwd: metaPkgDir })
+      // await run('pnpm', ['version', currentVersion], { stdio: 'pipe', cwd: metaPkgDir })
       await run('pnpm', publishArgs, { stdio: 'pipe', cwd: metaPkgDir })
       logger.successText(`Successfully published metadata v${currentVersion}'`)
     }

@@ -93,6 +93,13 @@ async function main() {
   pkg.version = version
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
+  if (isRoot) {
+    const { pkg: metaPkg, pkgPath: metaPkgPath } = await getPackageInfo('common/meta')
+
+    metaPkg.version = version
+    fs.writeFileSync(metaPkgPath, JSON.stringify(metaPkg, null, 2) + '\n')
+  }
+
   // 构建库
   logStep('Building package...')
 

@@ -96,4 +96,7 @@ async function readDirectives() {
   return directives
 }
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

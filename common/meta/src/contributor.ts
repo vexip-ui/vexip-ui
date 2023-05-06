@@ -1,14 +1,10 @@
+import { resolve } from 'node:path'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import path from 'node:path'
-import glob from 'fast-glob'
-import { config } from 'dotenv'
-import { logger } from '../../../scripts/utils'
+import { logger, components as allComponents } from '../../../scripts/utils'
 
-config()
-const __dirname = path.resolve(fileURLToPath(import.meta.url), '..')
-const pathOutput = path.resolve(__dirname, '../dist')
-const root = path.resolve(__dirname, '../../..')
+const __dirname = resolve(fileURLToPath(import.meta.url), '..')
+const pathOutput = resolve(__dirname, '../dist')
 
 interface ContributorInfo {
   login: string,
@@ -18,10 +14,9 @@ interface ContributorInfo {
   avatarUrl: string
 }
 
-interface FetchItemType {
-  compName: string,
-  path: string,
-  cursor?: string
+interface FetchOptions {
+  component: string,
+  paths: { path: string, cursor?: string }[]
 }
 
 interface PageInfo {
@@ -54,20 +49,16 @@ interface Node {
 
 type EdgesList = Node[]
 
-type FetchContributorsOptions = FetchItemType[]
-
 const nodeFlag: Record<string, string[]> = {}
 const url = 'https://api.github.com/graphql'
 const OWENER = 'vexip-ui'
 const REPO = 'vexip-ui'
 const token = process.env.GITHUB_TOKEN
 
-async function fetchContributors(
-  fetchOptions: FetchContributorsOptions
-): Promise<ContributorInfo[]> {
+async function fetchContributors(fetchOptions: FetchOptions): Promise<ContributorInfo[]> {
+  const { component, paths } = fetchOptions
   const contributors: ContributorInfo[] = []
-  const endCursorList: FetchItemType[] = []
-  const compName = fetchOptions[0].compName
+  const endCursorList: FetchOptions['paths'] = []
 
   // 构建 GraphQL 查询，以获取 main 分支下 components 文件夹内各组件贡献者信息
   const query = `
@@ -76,7 +67,7 @@ async function fetchContributors(
         defaultBranchRef {
           target {
             ... on Commit {
-              ${fetchOptions
+              ${paths
                 .map(({ path, cursor }, index) => {
                   return `path${index}: history(first: 100, path: "${path}"${
                     cursor ? ', after: ' + cursor : ''
@@ -124,15 +115,15 @@ async function fetchContributors(
 
   const target = data?.repository?.defaultBranchRef?.target || {}
 
-  for (const fetchIndex in fetchOptions) {
-    const pageInfo: PageInfo = target?.[`path${fetchIndex}`]?.pageInfo || {}
-    const edgesList: EdgesList = target?.[`path${fetchIndex}`]?.edges || []
+  for (let i = 0, len = paths.length; i < len; ++i) {
+    const pageInfo: PageInfo = target?.[`path${i}`]?.pageInfo || {}
+    const edgesList: EdgesList = target?.[`path${i}`]?.edges || []
 
     for (const { node } of edgesList) {
       const author: ContributorInfo = node?.author?.user || {}
 
       if (author.url) {
-        if (!nodeFlag[compName].includes(author.url)) {
+        if (!nodeFlag[component].includes(author.url)) {
           contributors.push({
             login: author.login,
             name: author.name,
@@ -140,18 +131,18 @@ async function fetchContributors(
             url: author.url,
             avatarUrl: author.avatarUrl
           })
-          nodeFlag[compName].push(author.url)
+          nodeFlag[component].push(author.url)
         }
       }
     }
 
     if (pageInfo.hasNextPage) {
-      endCursorList.push({ ...fetchOptions[fetchIndex], cursor: pageInfo.endCursor })
+      endCursorList.push({ ...paths[i], cursor: pageInfo.endCursor })
     }
   }
 
   if (endCursorList.length) {
-    const nextContributors = await fetchContributors(endCursorList)
+    const nextContributors = await fetchContributors({ component, paths: endCursorList })
     contributors.concat(nextContributors)
     return contributors
   }
@@ -159,39 +150,42 @@ async function fetchContributors(
   return contributors
 }
 
-async function getComponents() {
-  return glob('*', {
-    cwd: path.resolve(root, 'components'),
-    onlyDirectories: true
-  })
-}
-
 async function main() {
+  if (process.env.DEV) {
+    (await import('dotenv')).config()
+  }
+
   if (!token) {
     logger.error('Need GITHUB_TOKEN To Generate Contributors')
     logger.ln()
     process.exit(1)
   }
 
-  const components = await getComponents()
   const contributors: Record<string, ContributorInfo[]> = {}
 
   if (!existsSync(pathOutput)) {
     mkdirSync(pathOutput)
   }
 
-  for (const comp of components) {
-    const fetchList = [
-      { compName: comp, path: `components/${comp}` },
-      { compName: comp, path: `style/${comp}.scss` }
-    ] as FetchContributorsOptions
+  for (const component of allComponents) {
+    const fetchList: FetchOptions = {
+      component,
+      paths: [
+        { path: `components/${component}` },
+        { path: `style/${component}.scss` },
+        { path: `docs/demos/${component}` }
+      ]
+    }
 
-    nodeFlag[comp] = [] as string[]
-    contributors[comp] = await fetchContributors(fetchList)
+    nodeFlag[component] = []
+    contributors[component] = await fetchContributors(fetchList)
   }
 
-  writeFileSync(path.resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
+  writeFileSync(resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
   logger.success('Generated Contributors Metadata')
 }
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

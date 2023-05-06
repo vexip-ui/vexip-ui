@@ -239,15 +239,15 @@ importers:
 
   common/meta:
     devDependencies:
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       dotenv:
         specifier: ^16.0.3
         version: 16.0.3
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
-      tsx:
-        specifier: ^3.12.3
-        version: 3.12.7
 
   common/plugins:
     dependencies:
