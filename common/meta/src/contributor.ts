@@ -7,6 +7,7 @@ const __dirname = resolve(fileURLToPath(import.meta.url), '..')
 const pathOutput = resolve(__dirname, '../dist')
 
 interface ContributorInfo {
+  component: string,
   login: string,
   name: string,
   email: string,
@@ -15,8 +16,7 @@ interface ContributorInfo {
 }
 
 interface FetchOptions {
-  component: string,
-  paths: { path: string, cursor?: string }[]
+  paths: { component: string, path: string, cursor?: string }[]
 }
 
 interface PageInfo {
@@ -56,7 +56,7 @@ const REPO = 'vexip-ui'
 let token: string
 
 async function fetchContributors(fetchOptions: FetchOptions): Promise<ContributorInfo[]> {
-  const { component, paths } = fetchOptions
+  const { paths } = fetchOptions
   const contributors: ContributorInfo[] = []
   const endCursorList: FetchOptions['paths'] = []
 
@@ -118,6 +118,7 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
   for (let i = 0, len = paths.length; i < len; ++i) {
     const pageInfo: PageInfo = target?.[`path${i}`]?.pageInfo || {}
     const edgesList: EdgesList = target?.[`path${i}`]?.edges || []
+    const component = paths[i].component
 
     for (const { node } of edgesList) {
       const author: ContributorInfo = node?.author?.user || {}
@@ -125,6 +126,7 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
       if (author.url) {
         if (!nodeFlag[component].includes(author.url)) {
           contributors.push({
+            component,
             login: author.login,
             name: author.name,
             email: author.email,
@@ -142,12 +144,28 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
   }
 
   if (endCursorList.length) {
-    const nextContributors = await fetchContributors({ component, paths: endCursorList })
+    const nextContributors = await fetchContributors({ paths: endCursorList })
     contributors.concat(nextContributors)
     return contributors
   }
 
   return contributors
+}
+
+function chunk(array: any[], size = 1) {
+  size = Math.max(Math.floor(size), 0)
+  const length = array == null ? 0 : array.length
+  if (!length || size < 1) {
+    return []
+  }
+  let index = 0
+  let resIndex = 0
+  const result = new Array(Math.ceil(length / size))
+
+  while (index < length) {
+    result[resIndex++] = array.slice(index, (index += size))
+  }
+  return result
 }
 
 async function main() {
@@ -162,28 +180,61 @@ async function main() {
     process.exit(1)
   }
 
-  const contributors: Record<string, ContributorInfo[]> = {}
-
   if (!existsSync(pathOutput)) {
     mkdirSync(pathOutput)
   }
 
+  const contributors: Record<string, Omit<ContributorInfo, 'component'>[]> = {}
+  const fetchData: FetchOptions = {
+    paths: []
+  }
+
   for (const component of allComponents) {
-    const fetchList: FetchOptions = {
-      component,
-      paths: [
-        { path: `components/${component}` },
-        { path: `style/${component}.scss` },
-        { path: `docs/demos/${component}` }
+    nodeFlag[component] = []
+    fetchData.paths.push(
+      ...[
+        { path: `components/${component}`, component },
+        { path: `style/${component}.scss`, component },
+        { path: `docs/demos/${component}`, component }
       ]
+    )
+  }
+
+  const chunkPathsList = chunk(fetchData.paths, 200)
+
+  for (const chunkPath of chunkPathsList) {
+    const fetchData = {
+      paths: chunkPath
     }
 
-    nodeFlag[component] = []
-    contributors[component] = await fetchContributors(fetchList)
+    await fetchFn(fetchData)
   }
 
   writeFileSync(resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
   logger.success('Generated Contributors Metadata')
+
+  async function fetchFn(fetchData: FetchOptions) {
+    const resultData = await fetchContributors(fetchData)
+
+    for (let i = 0; i < resultData.length; i++) {
+      const resData: Omit<ContributorInfo, 'component'> = {} as Omit<ContributorInfo, 'component'>
+
+      for (const key in resultData[i]) {
+        if (!key.includes('component')) {
+          (resData as any)[key] = (resultData[i] as any)[key]
+        }
+      }
+
+      const component = resultData[i].component
+      const contributorInfo = contributors[component]
+
+      if (contributorInfo) {
+        contributorInfo.push(...[resData])
+        continue
+      }
+      contributors[component] = [resData]
+    }
+  }
 }
 
 main().catch(error => {
