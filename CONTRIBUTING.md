@@ -8,7 +8,7 @@ First, thanks for being interested in contributing on this project!
 
 Before starting, you should ensure your mechine is having:
 
-Node >= 16
+Node >= 18
 
 pnpm >= 8
 

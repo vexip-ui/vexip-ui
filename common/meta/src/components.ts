@@ -15,6 +15,8 @@ const __dirname = resolve(fileURLToPath(import.meta.url), '..')
 const pathOutput = resolve(__dirname, '../dist')
 
 async function main() {
+  const startTime = Date.now()
+
   if (!existsSync(pathOutput)) {
     mkdirSync(pathOutput)
   }
@@ -62,7 +64,7 @@ async function main() {
     prettier.format(metaData, { ...prettierConfig, parser: 'json' }),
     'utf-8'
   )
-  logger.success('Generated Components Metadata')
+  logger.success(`Generated components meta data ${Date.now() - startTime}ms`)
 }
 
 async function readDirectives() {

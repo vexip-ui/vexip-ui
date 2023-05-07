@@ -24,22 +24,7 @@ interface PageInfo {
   endCursor: string
 }
 
-interface FetchResponse {
-  data: {
-    repository: {
-      defaultBranchRef: {
-        target: {
-          [key in string]: {
-            pageInfo: PageInfo,
-            edges: EdgesList
-          }
-        }
-      }
-    }
-  }
-}
-
-interface Node {
+interface EdgeNode {
   node: {
     author: {
       user: ContributorInfo
@@ -47,20 +32,51 @@ interface Node {
   }
 }
 
-type EdgesList = Node[]
+interface FetchResponse {
+  repository: {
+    defaultBranchRef: {
+      target: {
+        [key in string]: {
+          pageInfo: PageInfo,
+          edges: EdgeNode[]
+        }
+      }
+    }
+  }
+}
+
+const GRAPHQL_URL = 'https://api.github.com/graphql'
+
+async function graphql<Result>(query: string) {
+  const response = await fetch(GRAPHQL_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+    },
+    body: JSON.stringify({ query })
+  })
+
+  const { data } = await response.json().catch((error: string) => {
+    logger.error(error as unknown as string)
+    process.exit(1)
+  })
+
+  return data as Result
+}
 
 const nodeFlag: Record<string, string[]> = {}
-const url = 'https://api.github.com/graphql'
+
 const OWENER = 'vexip-ui'
 const REPO = 'vexip-ui'
-let token: string
 
-async function fetchContributors(fetchOptions: FetchOptions): Promise<ContributorInfo[]> {
+async function fetchContributors(fetchOptions: FetchOptions) {
   const { paths } = fetchOptions
   const contributors: ContributorInfo[] = []
   const endCursorList: FetchOptions['paths'] = []
 
-  // 构建 GraphQL 查询，以获取 main 分支下 components 文件夹内各组件贡献者信息
+  // build GraphQL query to get contributors info of related
+  // files of each component under default branch
   const query = `
     query {
       repository(owner: "${OWENER}", name: "${REPO}") {
@@ -99,25 +115,13 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
     }
   `
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({ query })
-  })
+  const response = await graphql<FetchResponse>(query)
 
-  const { data } = (await response.json().catch((error: string) => {
-    logger.error(error as unknown as string)
-    process.exit(1)
-  })) as FetchResponse
-
-  const target = data?.repository?.defaultBranchRef?.target || {}
+  const target = response?.repository?.defaultBranchRef?.target || {}
 
   for (let i = 0, len = paths.length; i < len; ++i) {
     const pageInfo: PageInfo = target?.[`path${i}`]?.pageInfo || {}
-    const edgesList: EdgesList = target?.[`path${i}`]?.edges || []
+    const edgesList: EdgeNode[] = target?.[`path${i}`]?.edges || []
     const component = paths[i].component
 
     for (const { node } of edgesList) {
@@ -152,29 +156,33 @@ async function fetchContributors(fetchOptions: FetchOptions): Promise<Contributo
   return contributors
 }
 
-function chunk(array: any[], size = 1) {
+function chunk<T>(array: T[], size = 1) {
   size = Math.max(Math.floor(size), 0)
   const length = array == null ? 0 : array.length
+
   if (!length || size < 1) {
     return []
   }
+
   let index = 0
   let resIndex = 0
-  const result = new Array(Math.ceil(length / size))
+  const result: T[][] = new Array(Math.ceil(length / size))
 
   while (index < length) {
     result[resIndex++] = array.slice(index, (index += size))
   }
+
   return result
 }
 
 async function main() {
+  const startTime = Date.now()
+
   if (process.env.DEV) {
     (await import('dotenv')).config()
-    token = process.env.GITHUB_TOKEN!
   }
 
-  if (!token) {
+  if (!process.env.GITHUB_TOKEN) {
     logger.error('Need GITHUB_TOKEN To Generate Contributors')
     logger.ln()
     process.exit(1)
@@ -202,16 +210,13 @@ async function main() {
 
   const chunkPathsList = chunk(fetchData.paths, 200)
 
-  for (const chunkPath of chunkPathsList) {
+  for (const chunkPaths of chunkPathsList) {
     const fetchData = {
-      paths: chunkPath
+      paths: chunkPaths
     }
 
     await fetchFn(fetchData)
   }
-
-  writeFileSync(resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
-  logger.success('Generated Contributors Metadata')
 
   async function fetchFn(fetchData: FetchOptions) {
     const resultData = await fetchContributors(fetchData)
@@ -235,6 +240,9 @@ async function main() {
       contributors[component] = [resData]
     }
   }
+
+  writeFileSync(resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
+  logger.success(`Generated contributors meta data in ${Date.now() - startTime}ms`)
 }
 
 main().catch(error => {

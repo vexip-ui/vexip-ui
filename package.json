@@ -105,7 +105,7 @@
   },
   "homepage": "https://www.vexipui.com",
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "dependencies": {
     "@vexip-ui/hooks": "workspace:^",
