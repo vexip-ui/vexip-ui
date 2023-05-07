@@ -1,10 +1,6 @@
 import { resolve } from 'node:path'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { logger, components as allComponents } from '../../../scripts/utils'
-
-const __dirname = resolve(fileURLToPath(import.meta.url), '..')
-const pathOutput = resolve(__dirname, '../dist')
+import { logger, components as allComponents, outputDir } from './utils'
 
 interface ContributorInfo {
   component: string,
@@ -188,8 +184,8 @@ async function main() {
     process.exit(1)
   }
 
-  if (!existsSync(pathOutput)) {
-    mkdirSync(pathOutput)
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true })
   }
 
   const contributors: Record<string, Omit<ContributorInfo, 'component'>[]> = {}
@@ -241,7 +237,7 @@ async function main() {
     }
   }
 
-  writeFileSync(resolve(pathOutput, 'contributors.json'), JSON.stringify(contributors))
+  writeFileSync(resolve(outputDir, 'contributors.json'), JSON.stringify(contributors))
   logger.success(`Generated contributors meta data in ${Date.now() - startTime}ms`)
 }
 

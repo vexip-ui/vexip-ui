@@ -1,25 +1,14 @@
 {
   "name": "@vexip-ui/meta",
-  "version": "0.0.1",
-  "description": "Metadata For Vexip UI",
-  "license": "MIT",
-  "author": "qmhc",
+  "author": "winchesHe",
   "scripts": {
-    "build": "run-p build:contributor build:components",
-    "build:contributor": "tsx src/contributor.ts",
-    "build:components": "tsx src/components.ts",
+    "build": "run-p build:contributors build:components",
+    "build:contributors": "tsx scripts/contributors.ts",
+    "build:components": "tsx scripts/components.ts",
+    "copy-dist": "tsx scripts/copy-dist.ts",
     "dev": "cross-env DEV=\"1\" pnpm run build"
   },
-  "private": false,
-  "files": [
-    "dist"
-  ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/meta#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
-    "directory": "common/meta"
-  },
+  "private": true,
   "devDependencies": {
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",

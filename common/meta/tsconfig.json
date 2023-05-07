@@ -13,11 +13,8 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": true,
-    "baseUrl": ".",
-    "paths": {
-      "@vexip-ui/*": ["../common/*/src"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src"],
+  "include": ["scripts"],
   "exclude": ["node_modules"]
 }

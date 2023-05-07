@@ -16,7 +16,7 @@ package-lock.json
 
 __unconfig_vite.config*
 
-meta-data.json
+meta-data*
 
 .yarn/cache
 .yarn/unplugged

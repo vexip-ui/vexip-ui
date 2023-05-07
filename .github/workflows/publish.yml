@@ -39,7 +39,7 @@ jobs:
         if: startsWith(github.ref_name, 'plugins')
         run: pnpm run build:plugins
 
-      - name: Build metadata
+      - name: Build meta
         if: startsWith(github.ref_name, 'v')
         run: pnpm run build:meta
 

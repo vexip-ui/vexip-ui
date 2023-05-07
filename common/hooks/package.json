@@ -17,9 +17,6 @@
     }
   },
   "private": false,
-  "engines": {
-    "node": ">=14"
-  },
   "files": [
     "dist"
   ],

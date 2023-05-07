@@ -1,24 +1,13 @@
-import { readdir, readFile } from 'node:fs/promises'
-import { statSync, existsSync, writeFileSync, mkdirSync } from 'node:fs'
-import { fileURLToPath } from 'url'
 import { resolve } from 'node:path'
-import prettier from 'prettier'
-import {
-  logger,
-  rootDir,
-  components as allComponents,
-  toCapitalCase,
-  prettierConfig
-} from '../../../scripts/utils'
-
-const __dirname = resolve(fileURLToPath(import.meta.url), '..')
-const pathOutput = resolve(__dirname, '../dist')
+import { readdir, readFile, writeFile } from 'node:fs/promises'
+import { statSync, existsSync, mkdirSync } from 'node:fs'
+import { logger, rootDir, outputDir, components as allComponents, toCapitalCase } from './utils'
 
 async function main() {
   const startTime = Date.now()
 
-  if (!existsSync(pathOutput)) {
-    mkdirSync(pathOutput)
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true })
   }
 
   const ignores = ['typography']
@@ -59,17 +48,17 @@ async function main() {
 }
 `
 
-  writeFileSync(
-    resolve(pathOutput, 'components.json'),
-    prettier.format(metaData, { ...prettierConfig, parser: 'json' }),
+  await writeFile(
+    resolve(outputDir, 'components.json'),
+    JSON.stringify(JSON.parse(metaData)),
     'utf-8'
   )
-  logger.success(`Generated components meta data ${Date.now() - startTime}ms`)
+  logger.success(`Generated components meta data in ${Date.now() - startTime}ms`)
 }
 
 async function readDirectives() {
   const componentRE = /import \{ (.+) \} from '@\/components\/.+'/
-  const directivesDir = resolve(rootDir, 'directives')
+  const directivesDir = resolve(rootDir, '../../directives')
   const directives = await Promise.all(
     (
       await readdir(directivesDir, 'utf-8')
