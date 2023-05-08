@@ -42,6 +42,8 @@ jobs:
       - name: Build meta
         if: startsWith(github.ref_name, 'v')
         run: pnpm run build:meta
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         if: startsWith(github.ref_name, 'v')
