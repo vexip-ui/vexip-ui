@@ -30,23 +30,36 @@ type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
     active?: null | Val,
-    method?: null | ((active: Val, data: D) => boolean)
+    method?: null | ((active: Val, data: D) => boolean),
+    meta?: any
   }
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
     active?: null | Val[],
-    method?: null | ((active: Val[], data: D) => boolean)
+    method?: null | ((active: Val[], data: D) => boolean),
+    meta?: any
+  }
+  | {
+    able?: boolean,
+    custom: true,
+    options?: never,
+    multiple?: false,
+    active?: null | Val | Val[],
+    method?: null | ((active: any, data: D) => boolean),
+    meta?: any
   }
 
 interface TableSorterOptions<D = Data> {
   able?: boolean,
   type?: null | 'asc' | 'desc',
-  order?: number, // 优先级
+  order?: number,
   method?: null | ((prev: D, next: D) => number)
 }
 
@@ -105,6 +118,20 @@ type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
+
+type ColumnRenderFn = (data: {
+  row: any,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number
+}) => any
+type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+type FilterRenderFn = (data: {
+  column: TableColumnOptions,
+  index: number,
+  filter: Required<TableFilterOptions>,
+  handleFilter: (active: any) => void
+}) => any
 
 type TableCellPropFn<P = any> = (
   data: Data,
@@ -249,35 +276,37 @@ interface TableHeadPayload {
 
 ### TableColumn Props
 
-| Name          | Type                                   | Description                                                                                                                                  | Default     | Since   |
-| ------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
-| name          | `string`                               | The name of the column                                                                                                                       | `''`        | -       |
-| key \| id-key | `string \| number`                     | Unique index of the column, use `id-key` instead of                                                                                          | `''`        | -       |
-| accessor      | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -       |
-| fixed         | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -       |
-| class-name    | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | -       |
-| style         | `StyleType`                            | Custom style for the column                                                                                                                  | `null`      | `2.0.1` |
-| attrs         | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1` |
-| type          | `TableColumnType`                      | Set built-in type of the column                                                                                                              | `null`      | -       |
-| width         | `number`                               | Set column width                                                                                                                             | `null`      | -       |
-| filter        | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                                              | `null`      | -       |
-| sorter        | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                                                          | `null`      | -       |
-| order         | `number`                               | The rendering order of the column                                                                                                            | `0`         | -       |
-| renderer      | `ColumnRenderFn`                       | Custom render function                                                                                                                       | `null`      | -       |
-| head-renderer | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -       |
-| no-ellipsis   | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -       |
-| checkbox-size | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                                           | `'default'` | -       |
-| disable-row   | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -       |
-| truth-index   | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -       |
-| order-label   | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -       |
-| meta-data     | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -       |
+| Name            | Type                                   | Description                                                                                                                                  | Default     | Since    |
+| --------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| name            | `string`                               | The name of the column                                                                                                                       | `''`        | -        |
+| key \| id-key   | `string \| number`                     | Unique index of the column, use `id-key` instead of                                                                                          | `''`        | -        |
+| accessor        | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -        |
+| fixed           | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -        |
+| class-name      | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | -        |
+| style           | `StyleType`                            | Custom style for the column                                                                                                                  | `null`      | `2.0.1`  |
+| attrs           | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1`  |
+| type            | `TableColumnType`                      | Set built-in type of the column                                                                                                              | `null`      | -        |
+| width           | `number`                               | Set column width                                                                                                                             | `null`      | -        |
+| filter          | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                                              | `null`      | -        |
+| sorter          | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                                                          | `null`      | -        |
+| order           | `number`                               | The rendering order of the column                                                                                                            | `0`         | -        |
+| renderer        | `ColumnRenderFn`                       | Custom render function                                                                                                                       | `null`      | -        |
+| head-renderer   | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -        |
+| filter-renderer | `FilterRenderFn`                       | Custom filter render function                                                                                                                | `null`      | `2.1.18` |
+| no-ellipsis     | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -        |
+| checkbox-size   | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                                           | `'default'` | -        |
+| disable-row     | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -        |
+| truth-index     | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
+| order-label     | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
+| meta-data       | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -        |
 
 ### TableColumn Slots
 
-| Name    | Description                    | Parameters                                                                                                      | Since |
-| ------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----- |
-| default | Slot for column content        | `{ row: Record<string, unknown>, rowIndex: number, column: TableColumnOptions<any, any>, columnIndex: number }` | -     |
-| head    | Slot for column header content | `{ column: TableColumnOptions<any, any>, columnIndex: number }`                                                 | -     |
+| Name    | Description                  | Parameters                                                                                                                       | Since    |
+| ------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| default | Slot for column content      | `{ row: Record<string, unknown>, rowIndex: number, column: TableColumnOptions<any, any>, columnIndex: number }`                  | -        |
+| head    | Slot for column head content | `{ column: TableColumnOptions<any, any>, columnIndex: number }`                                                                  | -        |
+| filter  | Slot for column filter       | `{ column: TableColumnOptions, columnIndex: number, filter: Required<TableFilterOptions>, handleFilter: (active: any) => void }` | `2.1.18` |
 
 ### TableSorter Props
 
@@ -290,10 +319,12 @@ interface TableHeadPayload {
 
 ### TableFilter Props
 
-| Name     | Type                                                             | Description                                                                        | Default | Since |
-| -------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------- | ----- |
-| able     | `boolean`                                                        | Set whether is able to filter                                                      | `false` | -     |
-| options  | `(string \| { value: any, label?: string, active?: boolean })[]` | Filter options, an object of `{ label, value }`                                    | `[]`    | -     |
-| multiple | `boolean`                                                        | Whether to enable multi-condition filtering                                        | `false` | -     |
-| active   | `any`                                                            | The currently filtered dependency value, which will be passed to the filter method | `null`  | -     |
-| method   | `(active: any \| any[], data: any) => boolean`                   | Filter method, receiving filtered dependent values and row data                    | `null`  | -     |
+| Name     | Type                                                             | Description                                                                        | Default     | Since    |
+| -------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----------- | -------- |
+| able     | `boolean`                                                        | Set whether is able to filter                                                      | `false`     | -        |
+| options  | `(string \| { value: any, label?: string, active?: boolean })[]` | Filter options, an object of `{ label, value }`                                    | `[]`        | -        |
+| multiple | `boolean`                                                        | Whether to enable multi-condition filtering                                        | `false`     | -        |
+| active   | `any`                                                            | The currently filtered dependency value, which will be passed to the filter method | `null`      | -        |
+| method   | `(active: any \| any[], data: any) => boolean`                   | Filter method, receiving filtered dependent values and row data                    | `null`      | -        |
+| custom   | `boolean`                                                        | Whether it is a custom filter, used with the `filter` slot of TableColumn          | `false`     | `2.1.18` |
+| meta     | `any`                                                            | Custom meta data                                                                   | `undefined` | `2.1.18` |

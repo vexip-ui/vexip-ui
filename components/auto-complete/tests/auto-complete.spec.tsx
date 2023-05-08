@@ -65,6 +65,24 @@ describe('AutoComplete', () => {
     expect(getValue(wrapper.find('.vxp-auto-complete__input'))).toEqual('')
   })
 
+  it('filter', async () => {
+    const wrapper = mount(AutoComplete, {
+      props: {
+        options: OPTIONS,
+        filter: true,
+        ignoreCase: true
+      }
+    })
+    const inputEl = wrapper.find('input')
+    const value = OPTIONS[0]
+
+    await inputEl.setValue(value.toLocaleUpperCase())
+    const selectPopperEl = wrapper.find('.vxp-select__popper')
+    expect(selectPopperEl.exists()).toBe(true)
+    expect(selectPopperEl.find('.vxp-select__label').text()).toEqual(value)
+    expect(selectPopperEl.findAll('.vxp-select__label').length).toEqual(1)
+  })
+
   it('transfer', async () => {
     const wrapper = mount(AutoComplete)
 

@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/utils",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -18,9 +18,6 @@
     }
   },
   "private": false,
-  "engines": {
-    "node": ">=14"
-  },
   "files": [
     "dist"
   ],

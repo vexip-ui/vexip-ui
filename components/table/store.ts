@@ -737,7 +737,7 @@ export function useStore(options: StoreOptions) {
         clearFilter()
       }
 
-      state.filters.get(key)!.active = active
+      state.filters.get(key)!.active = Array.isArray(active) ? Array.from(active) : active
     }
   }
 
@@ -1047,7 +1047,14 @@ export function useStore(options: StoreOptions) {
   function parseFilter(filter?: TableFilterOptions | null): ParsedFilterOptions {
     filter = filter || { able: false, options: [] }
 
-    const { able = true, multiple = false, active = null, method = null } = filter
+    const {
+      able = true,
+      custom = false,
+      multiple = false,
+      active = null,
+      method = null,
+      meta
+    } = filter
     // 防止内部变化触发 deep watch
     const options = deepClone(filter.options ?? [])
     const formattedOptions = []
@@ -1071,7 +1078,7 @@ export function useStore(options: StoreOptions) {
       formattedOptions.push(option as { value: string | number, label: string, active: boolean })
     }
 
-    return { able, options: formattedOptions, multiple, active, method }
+    return { able, custom, meta, options: formattedOptions, multiple, active, method }
   }
 
   function filterData(

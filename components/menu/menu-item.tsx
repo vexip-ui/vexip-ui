@@ -1,90 +1,3 @@
-<template>
-  <li ref="wrapper" :class="className" role="none">
-    <Tooltip
-      placement="right"
-      :reverse="tooltipReverse"
-      :transfer="true"
-      :disabled="tooltipDisabled"
-    >
-      <template #trigger>
-        <div
-          ref="reference"
-          :class="{
-            [nh.be('label')]: true,
-            [nh.bem('label', `marker-${markerType}`)]: true,
-            [nh.bem('label', 'in-popper')]: isUsePopper
-          }"
-          role="menuitem"
-          tabindex="0"
-          :aria-disabled="props.disabled ? 'true' : undefined"
-          :style="labelStyle"
-          @click="handleSelect"
-          @keydown.enter.stop="handleSelect"
-          @keydown.space.stop.prevent="handleSelect"
-          @mouseenter="handleMouseEnter"
-          @mouseleave="handleMouseLeave"
-        >
-          <div v-if="$slots.icon || props.icon" :class="nh.be('icon')">
-            <slot name="icon">
-              <Renderer v-if="typeof props.icon === 'function'" :renderer="props.icon"></Renderer>
-              <Icon v-else v-bind="props.iconProps" :icon="props.icon"></Icon>
-            </slot>
-          </div>
-          <span
-            :class="{
-              [nh.be('title')]: true,
-              [nh.bem('title', 'in-group')]: !isHorizontal && isGroup
-            }"
-          >
-            <slot>
-              {{ props.label }}
-            </slot>
-          </span>
-          <Icon
-            v-if="isGroup"
-            v-bind="icons.arrowDown"
-            :class="{
-              [nh.be('arrow')]: true,
-              [nh.bem('arrow', 'visible')]: groupExpanded
-            }"
-          ></Icon>
-        </div>
-      </template>
-      <span :class="nh.be('tooltip-title')">
-        <slot>
-          {{ props.label }}
-        </slot>
-      </span>
-    </Tooltip>
-    <CollapseTransition appear>
-      <ul v-if="isGroup && !isUsePopper" v-show="showGroup" :class="nh.be('list')">
-        <slot name="group">
-          <Renderer :renderer="renderChildren"></Renderer>
-        </slot>
-      </ul>
-    </CollapseTransition>
-    <Popper
-      v-if="isGroup && isUsePopper"
-      ref="popper"
-      :class="[nh.be('popper'), nh.bs('vars'), isHorizontal && nh.bem('popper', 'drop')]"
-      :visible="popperShow && showGroup"
-      :alive="!transferTo || popperShow"
-      :to="transferTo"
-      :transition="transition"
-      @after-leave="popperShow = false"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
-    >
-      <ul :class="nh.be('list')">
-        <slot name="group">
-          <Renderer :renderer="renderChildren"></Renderer>
-        </slot>
-      </ul>
-    </Popper>
-  </li>
-</template>
-
-<script lang="tsx">
 import {
   defineComponent,
   defineAsyncComponent,
@@ -110,6 +23,9 @@ import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
 import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
+// For types build
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { RouteLocationRaw } from 'vue-router'
 import type { PopperExposed } from '@/components/popper'
 import type { Placement } from '@vexip-ui/hooks'
 import type { MenuOptions } from './symbol'
@@ -127,7 +43,7 @@ const MenuItem = defineComponent({
   },
   props: menuItemProps,
   emits: [],
-  setup(_props, { slots }) {
+  setup(_props, { slots, expose }) {
     const props = useProps('menuItem', _props, {
       label: {
         default: null,
@@ -155,6 +71,7 @@ const MenuItem = defineComponent({
     const groupState = inject(MENU_GROUP_STATE, null)
 
     const nh = useNameHelper('menu')
+    const icons = useIcons()
     const baseClass = nh.be('item')
     const placement = ref<Placement>('right-start')
     const groupExpanded = ref(false)
@@ -297,6 +214,16 @@ const MenuItem = defineComponent({
       }
     })
 
+    expose({
+      groupExpanded,
+      isGroup,
+      showGroup,
+      isUsePopper,
+      handleSelect,
+      handleMouseEnter,
+      handleMouseLeave
+    })
+
     function updateSonSelected(selected: boolean, upstream = true) {
       sonSelected.value = selected
       upstream && parentItemState?.updateSonSelected(selected)
@@ -386,6 +313,19 @@ const MenuItem = defineComponent({
       }
     }
 
+    function handleKeySelect(event: KeyboardEvent) {
+      const key = event.code || event.key
+
+      if (key === 'Enter' || key === 'NumpadEnter') {
+        event.stopPropagation()
+        handleSelect()
+      } else if (key === 'Space') {
+        event.stopPropagation()
+        event.preventDefault()
+        handleSelect()
+      }
+    }
+
     function renderChildren() {
       if (!props.children?.length) {
         return null
@@ -417,41 +357,110 @@ const MenuItem = defineComponent({
       })
     }
 
-    return {
-      props,
-      nh,
-      icons: useIcons(),
-      groupExpanded,
-      transferTo,
+    function renderLabel() {
+      return (
+        <Tooltip
+          placement={'right'}
+          reverse={tooltipReverse.value}
+          transfer
+          disabled={tooltipDisabled.value}
+        >
+          {{
+            trigger: () => (
+              <div
+                ref={reference}
+                class={{
+                  [nh.be('label')]: true,
+                  [nh.bem('label', `marker-${markerType.value}`)]: true,
+                  [nh.bem('label', 'in-popper')]: isUsePopper.value
+                }}
+                role={'menuitem'}
+                tabindex={0}
+                aria-disabled={props.disabled ? 'true' : undefined}
+                style={labelStyle.value}
+                onClick={handleSelect}
+                onKeydown={handleKeySelect}
+                onMouseenter={handleMouseEnter}
+                onMouseleave={handleMouseLeave}
+              >
+                {(slots.icon || props.icon) && (
+                  <div class={nh.be('icon')}>
+                    {slots.icon
+                      ? (
+                          slots.icon()
+                        )
+                      : typeof props.icon === 'function'
+                        ? (
+                            props.icon()
+                          )
+                        : (
+                      <Icon {...props.iconProps} icon={props.icon}></Icon>
+                          )}
+                  </div>
+                )}
+                <span
+                  class={{
+                    [nh.be('title')]: true,
+                    [nh.bem('title', 'in-group')]: !isHorizontal.value && isGroup.value
+                  }}
+                >
+                  {slots.default ? slots.default() : props.label}
+                </span>
+                {isGroup.value && (
+                  <Icon
+                    {...icons.value.arrowDown}
+                    class={{
+                      [nh.be('arrow')]: true,
+                      [nh.bem('arrow', 'visible')]: groupExpanded.value
+                    }}
+                  ></Icon>
+                )}
+              </div>
+            ),
+            default: () => (
+              <span class={nh.be('tooltip-title')}>
+                {slots.default ? slots.default() : props.label}
+              </span>
+            )
+          }}
+        </Tooltip>
+      )
+    }
 
-      popperShow,
-      className,
-      labelStyle,
-      isGroup,
-      showGroup,
-      isUsePopper,
-      tooltipDisabled,
-      markerType,
-      tooltipReverse,
-      isHorizontal,
-      transition,
-      dropTrigger,
-
-      wrapper,
-      reference,
-      popper,
-
-      handleSelect,
-      handleMouseEnter,
-      handleMouseLeave,
-      renderChildren,
-
-      propTransfer,
-      inTransfer
+    return () => {
+      return (
+        <li ref={wrapper} class={className.value} role={'none'}>
+          {renderLabel()}
+          <CollapseTransition appear>
+            {isGroup.value && !isUsePopper.value && (
+              <ul v-show={showGroup.value} class={nh.be('list')}>
+                {slots.group ? slots.group() : renderChildren()}
+              </ul>
+            )}
+          </CollapseTransition>
+          {isGroup.value && isUsePopper.value && (
+            <Popper
+              ref={popper}
+              class={[
+                nh.be('popper'),
+                nh.bs('vars'),
+                isHorizontal.value && nh.bem('popper', 'drop')
+              ]}
+              visible={popperShow.value && showGroup.value}
+              alive={!transferTo.value || popperShow.value}
+              to={transferTo.value}
+              transition={transition.value}
+              onAfterLeave={() => (popperShow.value = false)}
+              onMouseenter={handleMouseEnter}
+              onMouseleave={handleMouseLeave}
+            >
+              <ul class={nh.be('list')}>{slots.group ? slots.group() : renderChildren()}</ul>
+            </Popper>
+          )}
+        </li>
+      )
     }
   }
 })
 
-// eslint-disable-next-line vue/require-direct-export
 export default MenuItem
-</script>

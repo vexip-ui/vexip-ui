@@ -142,10 +142,7 @@ $button: map.merge(
 
   &::after {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     display: block;
     pointer-events: none;
     content: '';
@@ -363,10 +360,7 @@ $button: map.merge(
 
     &::before {
       position: absolute;
-      top: -1px;
-      right: -1px;
-      bottom: -1px;
-      left: -1px;
+      inset: -1px;
       z-index: 1;
       pointer-events: none;
       content: '';

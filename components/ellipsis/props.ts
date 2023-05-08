@@ -16,7 +16,8 @@ export const ellipsisProps = buildProps({
   tooltipTheme: String as PropType<TooltipTheme>,
   tipClass: classProp,
   maxLines: Number,
-  tipMaxWidth: [Number, String]
+  tipMaxWidth: [Number, String],
+  tipDisabled: booleanProp
 })
 
 export type EllipsisProps = ExtractPropTypes<typeof ellipsisProps>

@@ -6,5 +6,6 @@ export type {
   ComponentState,
   LocaleConfig,
   LocaleNames,
-  LocaleOptions
+  LocaleOptions,
+  IconsOptions
 } from '@vexip-ui/config'

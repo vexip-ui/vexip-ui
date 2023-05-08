@@ -235,6 +235,12 @@ export const globalIcons = computed(() => {
   return icons
 })
 
+/**
+ * Provide a icons config for under components.
+ *
+ * @param icons icons config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configIcons(icons: MaybeRef<IconsOptions>, app?: App) {
   const upstreamIcons =
     app || !getCurrentScope()
