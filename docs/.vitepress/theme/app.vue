@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
+import { Bars } from '@vexip-ui/icons'
 
 import Homepage from './components/homepage.vue'
 import NotFound from './components/not-found.vue'
@@ -19,6 +20,8 @@ const { theme, page } = useData()
 const route = useRoute()
 
 const { locale } = useI18n({ useScope: 'global' })
+
+const fixedSub = ref(false)
 
 const layout = ref<LayoutExposed>()
 const scroll = computed(() => layout.value?.scroll)
@@ -49,11 +52,18 @@ watch(
     scroll.value.scrollTo(0, 0, 0)
   }
 )
+watch(
+  () => scroll.value?.y,
+  value => {
+    fixedSub.value = !!value && value >= 65
+  }
+)
 </script>
 
 <template>
   <Layout
     ref="layout"
+    class="docs-layout"
     sign-type="header"
     :no-aside="page.frontmatter.homepage || page.isNotFound"
     :style="{
@@ -73,7 +83,19 @@ watch(
       <HeaderSuffix></HeaderSuffix>
     </template>
     <template #header-user>
-      <span></span>
+      <header
+        v-if="!page.frontmatter.homepage && !page.isNotFound"
+        class="sub-header"
+        :style="fixedSub ? { position: 'fixed', top: '0' } : undefined"
+      >
+        <Button class="sub-header__reduce" text>
+          <Icon :scale="1.4">
+            <Bars></Bars>
+          </Icon>
+        </Button>
+        <div style="flex: auto"></div>
+        <HeaderNav></HeaderNav>
+      </header>
     </template>
     <template #aside-main>
       <AsideMenu></AsideMenu>
@@ -92,33 +114,44 @@ watch(
 <style lang="scss">
 @use '../style/mixins.scss' as *;
 
-.vxp-layout__header {
-  z-index: var(--header-z-index);
-  padding: 0;
+.docs-layout {
+  .vxp-layout {
+    &__header {
+      z-index: var(--header-z-index);
+      padding: 0;
 
-  &--reduced {
-    transform: translateY(-100%);
+      &--reduced {
+        transform: translateY(-100%);
+      }
+    }
+
+    &__scrollbar {
+      top: calc(var(--sub-header-height) + var(--vxp-layout-header-height));
+
+      @include query-media('lg') {
+        top: var(--vxp-layout-header-height);
+      }
+    }
   }
 }
 
-.sub-menu {
-  position: fixed;
-  top: var(--header-height);
-  z-index: 90;
+.sub-header {
+  position: absolute;
+  top: calc(100% + 1px);
+  right: 0;
+  left: 0;
   display: flex;
   align-items: center;
-  width: 100%;
-  height: var(--sub-menu-height);
+  height: var(--sub-header-height);
   background-color: var(--bg-color);
   border-bottom: var(--vxp-border-light-2);
-  transition: var(--vxp-transition-transform);
-
-  &--affix {
-    transform: translateY(calc(var(--header-height) * -1));
-  }
 
   @include query-media('lg') {
     display: none;
+  }
+
+  .navigation {
+    display: block;
   }
 
   &__reduce {
@@ -132,14 +165,6 @@ watch(
     &:focus {
       color: var(--vxp-color-primary-base);
     }
-  }
-
-  .vxp-menu {
-    border: 0;
-  }
-
-  .vxp-menu__item {
-    height: var(--sub-menu-height);
   }
 }
 </style>

@@ -64,6 +64,7 @@ function openOutsidePage(url?: string) {
 
 .navigation {
   display: none;
+  height: 100%;
 
   @include query-media('lg') {
     display: block;
@@ -75,7 +76,7 @@ function openOutsidePage(url?: string) {
   }
 
   .vxp-menu__item {
-    height: var(--header-height);
+    height: 100% !important;
   }
 }
 </style>

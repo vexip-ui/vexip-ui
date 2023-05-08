@@ -132,6 +132,8 @@ function showSince(since?: string) {
 
 <style lang="scss">
 .aside-menu {
+  padding-bottom: 16px;
+
   &__tag {
     margin-left: 4px;
     font-size: 10px;

@@ -98,7 +98,11 @@ function handleContentResize(entry: ResizeObserverEntry) {
 .article {
   position: relative;
   flex-wrap: nowrap;
-  padding: 16px 30px 30px;
+  padding: calc(var(--sub-header-height) + 16px) 30px 30px;
+
+  @include query-media('lg') {
+    padding: 16px 30px 30px;
+  }
 
   @include query-media('xl') {
     padding: 16px 60px 60px;
