@@ -80,6 +80,7 @@
     "dist",
     "es",
     "lib",
+    "meta-data",
     "style",
     "themes",
     "CHANGELOG.md",
