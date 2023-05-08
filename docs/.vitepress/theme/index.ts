@@ -1,7 +1,7 @@
 import './style/index.scss'
 
 import { withBase } from 'vitepress'
-import { install as VexipUi, Loading } from 'vexip-ui'
+import { install as VexipUI, Loading } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
 import prismjs from 'prismjs'
 import { langOptions, i18n, vexipuiLocale } from './i18n'
@@ -50,11 +50,12 @@ function enhanceApp(app: App) {
     .component('AudioButton', AudioButton)
     .component('IconDemo', IconDemo)
     .use(i18n)
-    .use(VexipUi, {
+    .use(VexipUI, {
       locale: vexipuiLocale,
       props: {
         default: {
-          transfer: true
+          transfer: true,
+          autoRemove: true
         }
       }
     })
@@ -64,16 +65,18 @@ function enhanceRouter(router: Router) {
   const loadedMap = new Map<string, boolean>()
 
   router.onBeforeRouteChange = to => {
-    const url = new URL(to, 'http://a.com').pathname
+    const url = getPath(to)
 
     syncLocale(url)
     startLoading(url)
   }
 
   router.onAfterRouteChanged = to => {
-    const url = new URL(to, 'http://a.com').pathname
+    clearLoading(getPath(to))
+  }
 
-    clearLoading(url)
+  function getPath(to: string) {
+    return new URL(to, 'http://a.com').pathname
   }
 
   function syncLocale(to: string) {
@@ -103,7 +106,7 @@ function enhanceRouter(router: Router) {
     loadedMap.set(to, true)
 
     requestAnimationFrame(() => {
-      Loading.open(100)
+      Loading.close()
     })
   }
 }

@@ -25,7 +25,7 @@ function getStarted() {
 }
 
 function getComponents() {
-  router.go(`/${locale.value}/component`)
+  router.go(`/${locale.value}/component/button`)
 }
 
 function refreshWave() {
