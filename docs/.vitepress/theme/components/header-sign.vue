@@ -13,10 +13,10 @@ function toHomepage() {
 </script>
 
 <template>
-  <a class="sign" @click="toHomepage">
-    <img class="sign__logo" src="/vexip-ui.svg" alt="vexip-ui" />
-    <span class="sign__title"> Vexip UI </span>
-    <Tag class="sign__version">
+  <a class="header-sign" @click="toHomepage">
+    <img class="header-sign__logo" src="/vexip-ui.svg" alt="vexip-ui" />
+    <span class="header-sign__title"> Vexip UI </span>
+    <Tag class="header-sign__version">
       {{ `v${version}` }}
     </Tag>
   </a>
@@ -25,7 +25,7 @@ function toHomepage() {
 <style lang="scss">
 @use '../style/mixins.scss' as *;
 
-.sign {
+.header-sign {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -37,6 +37,7 @@ function toHomepage() {
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
+  transition: width var(--vxp-transition-base);
 
   @include query-media('lg') {
     justify-content: center;
@@ -45,7 +46,7 @@ function toHomepage() {
   }
 
   @include query-media('xl') {
-    width: var(--aside-width-large);
+    width: var(--aside-width);
   }
 
   &,

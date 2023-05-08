@@ -67,7 +67,7 @@ createApp(App)
 
 Once set, the default value of the `size` prop of these components will be changed to `'large'`。
 
-You can also change the default value of partial components with the `props` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+You can also change the default value of partial components with the `props` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/component/config-provider).
 
 ## Namespace
 
@@ -148,7 +148,7 @@ app.use(install, {
 })
 ```
 
-You can also change i18n of partial components with the `locale` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+You can also change i18n of partial components with the `locale` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/component/config-provider).
 
 If you want to configure a other language, you need do it yourself by following the full i18n options.
 
@@ -183,7 +183,7 @@ app.use(install, {
 })
 ```
 
-You can also change internal icons of partial components with the `icons` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/components/config-provider).
+You can also change internal icons of partial components with the `icons` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/component/config-provider).
 
 > The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88).
 

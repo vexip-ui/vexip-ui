@@ -67,7 +67,7 @@ createApp(App)
 
 设置完毕后，这些组件的 `size` 属性的默认值将修改为 `'large'`。
 
-结合 ConfigProvider 组件的 `props` 属性，你还可以为局部的区域改变对应组件的默认值，详情请查阅 [ConfigProvider 文档](/zh-CN/components/config-provider)。
+结合 ConfigProvider 组件的 `props` 属性，你还可以为局部的区域改变对应组件的默认值，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
 ## 命名空间
 
@@ -148,7 +148,7 @@ app.use(install, {
 })
 ```
 
-结合 ConfigProvider 组件的 `locale` 属性，你还可以为局部的区域配置国际化，详情请查阅 [ConfigProvider 文档](/zh-CN/components/config-provider)。
+结合 ConfigProvider 组件的 `locale` 属性，你还可以为局部的区域配置国际化，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
 如果你想配置其他的语言，你需要根据完整的配置项自行完成。
 
@@ -183,7 +183,7 @@ app.use(install, {
 })
 ```
 
-结合 ConfigProvider 组件的 `icons` 属性，你还可以为局部的区域自定义图标，详情请查阅 [ConfigProvider 文档](/zh-CN/components/config-provider)。
+结合 ConfigProvider 组件的 `icons` 属性，你还可以为局部的区域自定义图标，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
 > 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)。
 

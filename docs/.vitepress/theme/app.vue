@@ -22,6 +22,7 @@ const route = useRoute()
 const { locale } = useI18n({ useScope: 'global' })
 
 const fixedSub = ref(false)
+const expanded = ref(false)
 
 const layout = ref<LayoutExposed>()
 const scroll = computed(() => layout.value?.scroll)
@@ -63,12 +64,13 @@ watch(
 <template>
   <Layout
     ref="layout"
+    v-model:expanded="expanded"
     class="docs-layout"
     sign-type="header"
     :no-aside="page.frontmatter.homepage || page.isNotFound"
     :style="{
       height: '100vh',
-      '--vxp-layout-aside-width': 'var(--aside-width-large)',
+      '--vxp-layout-aside-width': 'var(--aside-width)',
       '--vxp-layout-header-height': 'var(--header-height)'
     }"
   >
@@ -86,9 +88,13 @@ watch(
       <header
         v-if="!page.frontmatter.homepage && !page.isNotFound"
         class="sub-header"
-        :style="fixedSub ? { position: 'fixed', top: '0' } : undefined"
+        :style="
+          fixedSub
+            ? { position: 'fixed', top: '0', boxShadow: 'var(--vxp-shadow-light-2)' }
+            : undefined
+        "
       >
-        <Button class="sub-header__reduce" text>
+        <Button class="sub-header__reduce" text @click="expanded = !expanded">
           <Icon :scale="1.4">
             <Bars></Bars>
           </Icon>
@@ -98,7 +104,7 @@ watch(
       </header>
     </template>
     <template #aside-main>
-      <AsideMenu></AsideMenu>
+      <AsideMenu @menu-select="expanded = false"></AsideMenu>
     </template>
     <template #aside-bottom>
       <span></span>
@@ -108,6 +114,7 @@ watch(
     <Article v-else :anchor-level="outline">
       <Content class="markdown"></Content>
     </Article>
+    <Masker v-model:active="expanded" class="global-masker" closable></Masker>
   </Layout>
 </template>
 
@@ -132,6 +139,14 @@ watch(
         top: var(--vxp-layout-header-height);
       }
     }
+
+    &__expand-handler {
+      display: none;
+    }
+
+    &__sider--away {
+      z-index: calc(var(--header-z-index) + 2);
+    }
   }
 }
 
@@ -145,6 +160,7 @@ watch(
   height: var(--sub-header-height);
   background-color: var(--bg-color);
   border-bottom: var(--vxp-border-light-2);
+  transition: var(--vxp-transition-shadow);
 
   @include query-media('lg') {
     display: none;
@@ -166,5 +182,9 @@ watch(
       color: var(--vxp-color-primary-base);
     }
   }
+}
+
+.global-masker {
+  z-index: calc(var(--header-z-index) + 1) !important;
 }
 </style>

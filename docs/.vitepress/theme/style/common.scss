@@ -1,3 +1,5 @@
+@use './mixins.scss' as *;
+
 ::selection {
   color: #fff;
   background-color: var(--vxp-color-primary-opacity-2);
@@ -11,10 +13,9 @@
 
 html {
   --header-height: 65px;
-  --header-z-index: 3000;
+  --header-z-index: 30000; // give a large number to avoid popper z-index large than it
   --sub-header-height: 44px;
-  --aside-width: 240px;
-  --aside-width-large: 300px;
+  --aside-width: 260px;
   --anchor-width: 200px;
 
   --bg-color: #fff;
@@ -27,6 +28,10 @@ html {
     --body-bg-color: #1b1b1b;
     --ghost-bg-color: transparent;
     --ghost-padding: 0;
+  }
+
+  @include query-media('xl') {
+    --aside-width: 300px;
   }
 }
 
@@ -48,14 +53,6 @@ body {
 ul {
   padding: 0;
 }
-
-// pre {
-//   padding: 12px 20px;
-//   margin: 0;
-//   overflow-x: auto;
-//   line-height: 2;
-//   background-color: var(--vxp-fill-color-background) !important;
-// }
 
 code {
   font-family: var(--vxp-font-family-mono);

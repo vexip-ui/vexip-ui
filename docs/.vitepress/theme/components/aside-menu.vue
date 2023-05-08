@@ -7,6 +7,8 @@ import { ensureStartingSlash } from '../common/utils'
 
 import type { AsideMenuItem } from '../types'
 
+const emit = defineEmits(['menu-select'])
+
 const { theme, page } = useData()
 
 const router = useRouter()
@@ -53,18 +55,16 @@ watch(
     if (activeMenu) {
       currentMenu.value = activeMenu.key
     }
-
-    // if (!currentMenu.value) {
-    //   currentMenu.value = toKebabCase(componentGroups[0].components[0].name)
-    // }
   },
   { immediate: true }
 )
 
-function selectMenu(_: string, meta: AsideMenuItem) {
+function selectMenu(label: string, meta: AsideMenuItem) {
   if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
     router.go(`/${locale.value}${meta.link}`)
   }
+
+  emit('menu-select', label, meta)
 }
 
 function showSince(since?: string) {
