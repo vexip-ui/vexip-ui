@@ -31,7 +31,7 @@ export default defineConfig(({ command }) => {
           ? [
               { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
               {
-                find: /^@vexip-ui\/((?!icons).+)/,
+                find: /^@vexip-ui\/(utils|hooks|config)/,
                 replacement: resolve(__dirname, '../common/$1/src')
               },
               { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }

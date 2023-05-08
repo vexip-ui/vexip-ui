@@ -6,9 +6,6 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "private": true,
-  "engines": {
-    "node": ">=14"
-  },
   "dependencies": {
     "@vexip-ui/utils": "workspace:^"
   },
