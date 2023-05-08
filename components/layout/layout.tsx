@@ -310,6 +310,7 @@ export default defineComponent({
           menu-props={props.noAside ? props.menuProps : null}
           colors={props.colors}
           onUserAction={handleUserAction}
+          onExpandedChange={toggleExpanded}
           onReducedChange={toggleReduced}
           onMenuSelect={handleMenuSelect}
           onToggleTheme={handleToggleTheme}
@@ -355,6 +356,7 @@ export default defineComponent({
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}
+              onExpandedChange={toggleExpanded}
               onReducedChange={toggleReduced}
               onMenuSelect={handleMenuSelect}
             >

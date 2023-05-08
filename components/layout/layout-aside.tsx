@@ -87,7 +87,7 @@ export default defineComponent({
       matched,
       value => {
         layoutState.useExpand = !value
-        currentExpanded.value = false
+        value && toggleExpanded(false)
       },
       { immediate: true }
     )
