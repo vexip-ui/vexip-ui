@@ -7,5 +7,7 @@ export type {
   LayoutHeaderAction,
   LayoutUser,
   LayoutFooterLink,
-  LayoutExposed
+  LayoutExposed,
+  LayoutSlotParams,
+  LayoutHeaderSlotParams
 } from './symbol'

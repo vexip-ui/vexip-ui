@@ -24,6 +24,7 @@ export const layoutProps = buildProps({
   config: Array as PropType<LayoutConfig[]>,
   user: Object as PropType<LayoutUser>,
   actions: Array as PropType<LayoutHeaderAction[]>,
+  expanded: booleanProp,
   reduced: booleanProp,
   avatarCircle: booleanProp,
   signType: String as PropType<LayoutSignType>,
@@ -37,7 +38,8 @@ export const layoutProps = buildProps({
   verticalLinks: booleanStringProp,
   darkMode: booleanProp,
   fixedMain: booleanProp,
-  onReducedChange: eventProp<(target: boolean) => void>(),
+  onExpandedChange: eventProp<(expanded: boolean) => void>(),
+  onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
   onMenuSelect: eventProp<(label: string, meta: any) => void>(),
   onUserAction: eventProp<(label: string, meta: any) => void>(),
@@ -58,8 +60,8 @@ export const layoutAsideProps = buildProps({
   logo: String,
   signName: String,
   fixed: booleanStringProp,
-  onReducedChange: eventProp<(reduced: boolean) => void>(),
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
+  onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
   onMenuSelect: eventProp<(label: string, meta: any) => void>()
 })
@@ -87,7 +89,8 @@ export const layoutHeaderProps = buildProps({
   onColorChange: eventProp<(color: string) => void>(),
   onUserAction: eventProp<(label: string, meta: any) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
-  onDropChange: eventProp<(target: boolean) => void>(),
+  onDroppedChange: eventProp<(target: boolean) => void>(),
+  onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onMenuSelect: eventProp<(label: string, meta: any) => void>(),
   onToggleTheme: eventProp<(isDark: boolean) => void>()

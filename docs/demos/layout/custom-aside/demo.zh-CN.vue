@@ -3,13 +3,13 @@
     <template #aside-main="{ reduced }">
       <Menu transfer :options="menus" :reduced="reduced"></Menu>
     </template>
-    <template #aside-bottom="{ reduced, toggleReduce }">
-      <div style="padding: 16px; cursor: pointer;" @click="toggleReduce()">
+    <template #aside-bottom="{ reduced, toggleReduced }">
+      <div style="padding: 16px; cursor: pointer" @click="toggleReduced()">
         {{ reduced ? '展开菜单' : '收起菜单' }}
       </div>
     </template>
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; height: 1200px"></div>
     </template>
   </Layout>
 </template>
