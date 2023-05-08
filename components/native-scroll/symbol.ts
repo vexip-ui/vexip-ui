@@ -39,12 +39,12 @@ export interface NativeScrollSlotParams {
 }
 
 export interface NativeScrollExposed extends ComponentPublicInstance {
+  x: number,
+  y: number,
   percentX: number,
   percentY: number,
-  currentScroll: {
-    x: number,
-    y: number
-  },
+  xScrollLimit: number,
+  yScrollLimit: number,
   enableXScroll: Readonly<boolean>,
   enableYScroll: Readonly<boolean>,
   content?: HTMLElement,

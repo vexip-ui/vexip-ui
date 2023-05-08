@@ -1,4 +1,4 @@
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, reactive, shallowReadonly, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
@@ -15,6 +15,7 @@ export default defineComponent({
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layoutAside', _props, {
       tag: 'aside',
+      expanded: false,
       reduced: false,
       menus: {
         default: () => [],
@@ -59,7 +60,16 @@ export default defineComponent({
       return !!(props.menus?.length || props.menuProps?.router)
     })
 
-    expose({ menu, expandMenuByLabel })
+    const slotParams = shallowReadonly(
+      reactive({
+        expanded: currentExpanded,
+        reduced: currentReduced,
+        toggleExpanded,
+        toggleReduced
+      })
+    )
+
+    expose({ menu, toggleExpanded, toggleReduced, expandMenuByLabel })
 
     watch(
       () => props.reduced,
@@ -102,18 +112,18 @@ export default defineComponent({
       }
     }
 
-    function toggleReduce(target = !currentReduced.value) {
-      currentReduced.value = target
+    function toggleExpanded(expanded = !currentExpanded.value) {
+      currentExpanded.value = expanded
 
-      emitEvent(props.onReducedChange, target)
-      emit('update:reduced', target)
+      emitEvent(props.onExpandedChange, expanded)
+      emit('update:expanded', expanded)
     }
 
-    function toggleExpand(target = !currentExpanded.value) {
-      currentExpanded.value = target
+    function toggleReduced(reduced = !currentReduced.value) {
+      currentReduced.value = reduced
 
-      emitEvent(props.onExpandedChange, target)
-      emit('update:expanded', target)
+      emitEvent(props.onReducedChange, reduced)
+      emit('update:reduced', reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -128,14 +138,6 @@ export default defineComponent({
       menu.value?.expandItemByLabel(label)
     }
 
-    function getSlotParams() {
-      return {
-        reduced: currentReduced.value,
-        toggleReduce,
-        toggleExpand
-      }
-    }
-
     return () => {
       const CustomTag = (props.tag || 'aside') as any
 
@@ -145,7 +147,7 @@ export default defineComponent({
             <div ref={top} class={nh.be('aside-top')}>
               {slots.top
                 ? (
-                    slots.top(getSlotParams())
+                    slots.top(slotParams)
                   )
                 : (
                 <div class={nh.be('sign')} onClick={handleSignClick}>
@@ -162,7 +164,7 @@ export default defineComponent({
           <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
             {slots.default
               ? (
-                  slots.default(getSlotParams())
+                  slots.default(slotParams)
                 )
               : hasMenu.value
                 ? (
@@ -180,10 +182,10 @@ export default defineComponent({
           <div ref={bottom} class={nh.be('aside-bottom')}>
             {slots.bottom
               ? (
-                  slots.bottom(getSlotParams())
+                  slots.bottom(slotParams)
                 )
               : (
-              <div class={nh.be('reduce-handler')} onClick={() => toggleReduce()}>
+              <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
                 {currentReduced.value
                   ? (
                   <Icon {...icons.value.indent}></Icon>
@@ -194,14 +196,8 @@ export default defineComponent({
               </div>
                 )}
           </div>
-          <div class={nh.be('expand-handler')} onClick={() => toggleExpand()}>
-            {slots.expand
-              ? (
-                  slots.expand(getSlotParams())
-                )
-              : (
-              <Icon {...icons.value.caretRight}></Icon>
-                )}
+          <div class={nh.be('expand-handler')} onClick={() => toggleExpanded()}>
+            {slots.expand ? slots.expand(slotParams) : <Icon {...icons.value.caretRight}></Icon>}
           </div>
         </CustomTag>
       )
