@@ -79,8 +79,8 @@ describe('transform', () => {
       expect(item).not.toHaveProperty('parent')
     }
 
-    const filtered = flatTree(getData(), { filter: item => item.name !== '5' })
+    const filtered = flatTree(getData(), { filter: item => item.name !== '4' })
     expect(filtered.length).toBe(7)
-    expect(filtered.find(item => item.name === '5')).toBeUndefined()
+    expect(filtered.find(item => item.name === '4')).toBeUndefined()
   })
 })

@@ -204,8 +204,6 @@ export function flatTree<T = any>(
   while (loop.length) {
     const item = loop.shift()!
 
-    if (!filter(item)) continue
-
     const childrenValue = item[childField]
     const children: T[] = Array.isArray(childrenValue) && childrenValue.length ? childrenValue : []
 
@@ -237,7 +235,7 @@ export function flatTree<T = any>(
       loop.unshift(...children)
     }
 
-    list.push(item)
+    if (filter(item)) list.push(item)
   }
 
   return list
