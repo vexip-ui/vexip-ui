@@ -1,3 +1,12 @@
+# [1.10.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.9.0...hooks@1.10.0) (2023-05-03)
+
+
+### Features
+
+* **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
+
+
+
 # [1.9.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.8.2...hooks@1.9.0) (2023-04-13)
 
 

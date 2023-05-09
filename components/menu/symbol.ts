@@ -58,6 +58,16 @@ export interface MenuExposed extends ComponentPublicInstance {
   expandItemByLabel: (label: string) => void
 }
 
+export interface MenuItemExposed extends ComponentPublicInstance {
+  groupExpanded: boolean,
+  isGroup: boolean,
+  showGroup: boolean,
+  isUsePopper: boolean,
+  handleSelect: () => void,
+  handleMouseEnter: () => void,
+  handleMouseLeave: () => void
+}
+
 export const MENU_ITEM_STATE: InjectionKey<MenuItemState> = Symbol('MENU_ITEM_STATE')
 export const MENU_GROUP_STATE: InjectionKey<MenuGroupState> = Symbol('MENU_GROUP_STATE')
 export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')

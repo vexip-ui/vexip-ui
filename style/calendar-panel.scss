@@ -127,10 +127,7 @@ $calendar-panel: map.merge(
 
     &::before {
       position: absolute;
-      top: 2px;
-      right: -2px;
-      bottom: 2px;
-      left: -2px;
+      inset: 2px -2px;
       display: none;
       pointer-events: none;
       content: '';

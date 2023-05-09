@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/hooks",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -17,9 +17,6 @@
     }
   },
   "private": false,
-  "engines": {
-    "node": ">=14"
-  },
   "files": [
     "dist"
   ],

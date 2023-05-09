@@ -442,7 +442,7 @@ export default defineComponent({
 
         date.setHours(0, 0, 0, 0)
 
-        return date
+        return date.getTime()
       }
 
       return -Infinity
@@ -466,7 +466,7 @@ export default defineComponent({
           }
         }
 
-        return +date
+        return date.getTime()
       }
 
       return Infinity

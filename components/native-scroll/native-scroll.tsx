@@ -311,11 +311,10 @@ export default defineComponent({
     })
 
     expose({
-      percentX,
-      percentY,
-      // currentScroll,
       x,
       y,
+      percentX,
+      percentY,
       xScrollLimit,
       yScrollLimit,
 

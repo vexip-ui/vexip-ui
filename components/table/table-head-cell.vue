@@ -53,83 +53,90 @@
         <Icon v-bind="icons.caretDown"></Icon>
       </span>
     </div>
-    <Tooltip
-      v-if="filter.able"
-      v-model:visible="filterVisible"
-      transfer
-      placement="bottom"
-      trigger="click"
-      :class="{
-        [nh.be('filter')]: true,
-        [nh.bem('filter', 'visible')]: filterVisible,
-        [nh.bem('filter', 'active')]: filter.active
-      }"
-      :tip-class="{
-        [nh.be('filter-wrapper')]: true,
-        [nh.bs('vars')]: true,
-        [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
-      }"
-    >
-      <template #trigger>
-        <div :class="nh.be('filter-trigger')">
-          <Icon v-bind="icons.filter"></Icon>
-        </div>
-      </template>
-      <template v-if="filter.multiple" #default>
-        <div vertical :class="nh.be('filter-group')">
-          <Checkbox
-            v-for="item in filter.options"
-            :key="item.value"
-            inherit
-            :checked="item.active"
-            :label="item.label"
-            :value="item.value"
-            @change="handleFilterCheck(item.value, $event)"
-          ></Checkbox>
-        </div>
-        <div :class="nh.be('filter-actions')">
-          <Button
-            inherit
-            text
-            size="small"
-            :disabled="!hasFilterActive"
-            @click="handleFilterMutiple()"
-          >
-            {{ locale.filterConfirm }}
-          </Button>
-          <Button
-            inherit
-            text
-            size="small"
+    <template v-if="filter.able">
+      <Renderer
+        v-if="isFunction(column.filterRenderer)"
+        :renderer="column.filterRenderer"
+        :data="{ column, index, filter, handleFilter }"
+      ></Renderer>
+      <Tooltip
+        v-else
+        v-model:visible="filterVisible"
+        transfer
+        placement="bottom"
+        trigger="click"
+        :class="{
+          [nh.be('filter')]: true,
+          [nh.bem('filter', 'visible')]: filterVisible,
+          [nh.bem('filter', 'active')]: filter.active
+        }"
+        :tip-class="{
+          [nh.be('filter-wrapper')]: true,
+          [nh.bs('vars')]: true,
+          [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
+        }"
+      >
+        <template #trigger>
+          <div :class="nh.be('filter-trigger')">
+            <Icon v-bind="icons.filter"></Icon>
+          </div>
+        </template>
+        <template v-if="filter.multiple" #default>
+          <div vertical :class="nh.be('filter-group')">
+            <Checkbox
+              v-for="item in filter.options"
+              :key="item.value"
+              inherit
+              :checked="item.active"
+              :label="item.label"
+              :value="item.value"
+              @change="handleFilterCheck(item.value, $event)"
+            ></Checkbox>
+          </div>
+          <div :class="nh.be('filter-actions')">
+            <Button
+              inherit
+              text
+              size="small"
+              :disabled="!hasFilterActive"
+              @click="handleFilterMutiple()"
+            >
+              {{ locale.filterConfirm }}
+            </Button>
+            <Button
+              inherit
+              text
+              size="small"
+              @click="handleResetFilter"
+            >
+              {{ locale.filterReset }}
+            </Button>
+          </div>
+        </template>
+        <template v-else #default>
+          <div
+            :class="{
+              [nh.be('filter-item')]: true,
+              [nh.bem('filter-item', 'active')]: !filter.active
+            }"
             @click="handleResetFilter"
           >
-            {{ locale.filterReset }}
-          </Button>
-        </div>
-      </template>
-      <template v-else #default>
-        <div
-          :class="{
-            [nh.be('filter-item')]: true,
-            [nh.bem('filter-item', 'active')]: !filter.active
-          }"
-          @click="handleResetFilter"
-        >
-          {{ locale.filterAll }}
-        </div>
-        <div
-          v-for="item in filter.options"
-          :key="item.value"
-          :class="{
-            [nh.be('filter-item')]: true,
-            [nh.bem('filter-item', 'active')]: item.active
-          }"
-          @click="handleFilterItemSelect(item.value, !item.active)"
-        >
-          {{ item.label }}
-        </div>
-      </template>
-    </Tooltip>
+            {{ locale.filterAll }}
+          </div>
+          <div
+            v-for="item in filter.options"
+            :key="item.value"
+            :class="{
+              [nh.be('filter-item')]: true,
+              [nh.bem('filter-item', 'active')]: item.active
+            }"
+            @click="handleFilterItemSelect(item.value, !item.active)"
+          >
+            {{ item.label }}
+          </div>
+        </template>
+      </Tooltip>
+    </template>
   </div>
 </template>
 
@@ -331,6 +338,10 @@ export default defineComponent({
       tableAction.emitRowSort()
     }
 
+    function handleFilter(value: ParsedFilterOptions['active']) {
+      mutations.handleFilter(props.column.key, value)
+    }
+
     function handleFilterItemSelect(value: string | number, active: boolean) {
       mutations.toggleFilterItemActive({
         key: props.column.key,
@@ -338,7 +349,7 @@ export default defineComponent({
         active,
         disableOthers: true
       })
-      mutations.handleFilter(props.column.key, value)
+      handleFilter(value)
       filterVisible.value = false
       tableAction.emitRowFilter()
     }
@@ -363,14 +374,14 @@ export default defineComponent({
         }
       }
 
-      mutations.handleFilter(props.column.key, activeValues)
+      handleFilter(activeValues)
       filterVisible.value = false
       tableAction.emitRowFilter()
     }
 
     function handleResetFilter() {
       filterVisible.value = false
-      mutations.handleFilter(props.column.key, null)
+      handleFilter(null)
       mutations.toggleFilterItemActive({
         key: props.column.key,
         value: null,
@@ -411,6 +422,7 @@ export default defineComponent({
       handleContextmenu,
       handleSortAsc,
       handleSortDesc,
+      handleFilter,
       handleFilterItemSelect,
       handleFilterCheck,
       handleFilterMutiple,
