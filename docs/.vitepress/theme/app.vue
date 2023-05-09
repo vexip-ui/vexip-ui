@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { Bars } from '@vexip-ui/icons'
+import { ensureStartingSlash } from './common/utils'
 
 import Homepage from './components/homepage.vue'
 import NotFound from './components/not-found.vue'
@@ -33,8 +34,7 @@ const outline = computed(() => {
   }
 
   const config = theme.value.outline
-  let path = route.data.relativePath
-  path = /^\//.test(path) ? path : `/${path}`
+  const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
     if (path.startsWith(`/${locale.value}${key}`)) {

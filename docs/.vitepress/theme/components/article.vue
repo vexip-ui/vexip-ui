@@ -2,6 +2,8 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from '../common/toc-anchor'
 
+import PageLinks from './page-links.vue'
+
 import type { PropType } from 'vue'
 import type { RowExposed } from 'vexip-ui'
 
@@ -74,6 +76,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
     <ResizeObserver @resize="handleContentResize">
       <Column flex="auto" style="min-width: 0">
         <slot></slot>
+        <PageLinks></PageLinks>
       </Column>
     </ResizeObserver>
     <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">

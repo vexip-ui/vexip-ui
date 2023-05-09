@@ -26,7 +26,7 @@ const menus = computed<AsideMenuItem[]>(() => {
   }
 
   const config = theme.value.asideMenus
-  const path = ensureStartingSlash(route.data.relativePath)
+  const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
     if (path.startsWith(`/${locale.value}${key}`)) {
