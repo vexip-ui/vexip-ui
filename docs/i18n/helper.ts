@@ -20,8 +20,8 @@ export interface I18nConfig {
     copyFail: string,
     showCode: string,
     hideCode: string,
-    editInGithub: string,
-    editInPlayground: string,
+    editOnGithub: string,
+    editOnPlayground: string,
     pageNotFound: string,
     backHomepage: string
   },

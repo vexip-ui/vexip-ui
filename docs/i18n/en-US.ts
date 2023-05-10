@@ -22,8 +22,8 @@ export const enUS = defineI18n({
     copyFail: 'Copy fail',
     showCode: 'Show code',
     hideCode: 'Hide code',
-    editInGithub: 'Edit in Github',
-    editInPlayground: 'Edit in Playground',
+    editOnGithub: 'Edit in Github',
+    editOnPlayground: 'Edit in Playground',
     pageNotFound: 'Page Not Found',
     backHomepage: 'Back to homepage'
   },

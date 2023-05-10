@@ -70,7 +70,6 @@ const next = computed(() => {
           candidates.value[index.value + 1]?.origin
       }
 })
-console.log(prev, next)
 </script>
 
 <template>
@@ -79,6 +78,8 @@ console.log(prev, next)
       v-if="prev?.link"
       class="page-links__prev"
       type="primary"
+      :to="`/${locale}${prev.link}`"
+      target="_self"
       :icon="ChevronLeft"
     >
       <span>{{ t(prev.i18n) }}</span>
@@ -87,7 +88,13 @@ console.log(prev, next)
       </span>
     </Linker>
     <span role="none" style="flex: auto"></span>
-    <Linker v-if="next?.link" class="page-links__next" type="primary">
+    <Linker
+      v-if="next?.link"
+      class="page-links__next"
+      type="primary"
+      :to="`/${locale}${next.link}`"
+      target="_self"
+    >
       <span>{{ t(next.i18n) }}</span>
       <span v-if="next.origin && locale !== 'en-US'" style="margin-left: 6px">
         {{ next.origin }}
@@ -102,13 +109,10 @@ console.log(prev, next)
   display: flex;
   align-items: center;
   height: 72px;
-  padding: 10px 0;
-  margin-top: 50px;
-  border-top: var(--vxp-border-light-2);
+  padding: 16px 0;
 
   .vxp-linker {
     height: 100%;
-    font-size: 15px;
   }
 }
 </style>

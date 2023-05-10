@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from '../common/toc-anchor'
 
+import EditLink from './edit-link.vue'
 import PageLinks from './page-links.vue'
 
 import type { PropType } from 'vue'
@@ -76,7 +77,11 @@ function handleContentResize(entry: ResizeObserverEntry) {
     <ResizeObserver @resize="handleContentResize">
       <Column flex="auto" style="min-width: 0">
         <slot></slot>
-        <PageLinks></PageLinks>
+        <div class="article__footer">
+          <EditLink></EditLink>
+          <Divider style="--vxp-divider-v-margin: 6px"></Divider>
+          <PageLinks></PageLinks>
+        </div>
       </Column>
     </ResizeObserver>
     <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
@@ -117,6 +122,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
     @include query-media('xl') {
       display: var(--vxp-column-display);
     }
+  }
+
+  &__footer {
+    margin-top: 30px;
   }
 
   .toc-anchor {

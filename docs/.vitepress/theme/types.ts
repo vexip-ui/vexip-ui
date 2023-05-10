@@ -16,8 +16,14 @@ export interface AsideMenuItem {
   items?: AsideMenuItem[]
 }
 
+export interface EditLink {
+  i18n?: string,
+  pattern?: string | ((path: string) => string)
+}
+
 export interface ThemeConfig {
   nav: NavMenuItem[],
   asideMenus: Record<string, AsideMenuItem[]>,
-  outline?: Record<string, number>
+  outline?: Record<string, number>,
+  editLink?: EditLink
 }

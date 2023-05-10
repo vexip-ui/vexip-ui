@@ -12,7 +12,7 @@
           }"
         >
           <!-- <slot></slot> -->
-          <component :is="demo"></component>
+          <component :is="demo" v-if="demo"></component>
         </NativeScroll>
       </div>
       <div :class="`${prefix}__description`">
@@ -33,22 +33,22 @@
       <Tooltip reverse transfer>
         <template #trigger>
           <button type="button" :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="t('common.editInGithub')" @click="editInGithub">
+            <Icon :scale="1.1" :label="t('common.editOnGithub')" @click="editOnGithub">
               <PenToSquareR></PenToSquareR>
             </Icon>
           </button>
         </template>
-        {{ t('common.editInGithub') }}
+        {{ t('common.editOnGithub') }}
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
           <button type="button" :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="t('common.editInPlayground')" @click="editOnPlayground">
+            <Icon :scale="1.1" :label="t('common.editOnPlayground')" @click="editOnPlayground">
               <PaperPlaneR></PaperPlaneR>
             </Icon>
           </button>
         </template>
-        {{ t('common.editInPlayground') }}
+        {{ t('common.editOnPlayground') }}
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
@@ -193,7 +193,7 @@ function getCodeLang(extension: string) {
 
 const githubBaseUrl = 'https://github.com/vexip-ui/vexip-ui/blob/main/docs/'
 
-function editInGithub() {
+function editOnGithub() {
   if (props.src) {
     window.open(`${githubBaseUrl}/demos/${props.src}/demo.${locale.value}.vue`)
   }

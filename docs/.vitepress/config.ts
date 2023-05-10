@@ -40,6 +40,9 @@ export default <UserConfig<ThemeConfig>>{
     outline: {
       '/guide/': 2,
       '/component/': 3
+    },
+    editLink: {
+      pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path'
     }
   },
   locales: {

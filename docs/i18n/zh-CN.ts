@@ -22,8 +22,8 @@ export const zhCN = defineI18n({
     copyFail: '复制失败',
     showCode: '展开代码',
     hideCode: '收起代码',
-    editInGithub: '在 Github 中编辑',
-    editInPlayground: '在 Playground 中编辑',
+    editOnGithub: '在 Github 中编辑',
+    editOnPlayground: '在 Playground 中编辑',
     pageNotFound: '页面不见了',
     backHomepage: '返回首页'
   },
