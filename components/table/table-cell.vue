@@ -184,7 +184,10 @@ export default defineComponent({
       return [
         nh.be('cell'),
         {
-          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TableTypeColumn).type),
+          [nh.bem('cell', 'center')]:
+            columnTypes.includes((props.column as TableTypeColumn).type) ||
+            props.column.textAlign === 'center',
+          [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
         props.column.className || null,

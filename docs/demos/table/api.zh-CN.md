@@ -5,6 +5,7 @@ type Key = string | number | symbol
 type Data = any
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
+type TableTextAlign = 'left' | 'center' | 'right'
 
 interface TableKeyConfig {
   id?: string,
@@ -299,6 +300,7 @@ interface TableHeadPayload {
 | truth-index     | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
 | order-label     | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -        |
 | meta-data       | `Data`                                 | 设置列的元数据                                                               | `{}`        | -        |
+| text-align      | `TableTextAlign`                       | 设置列的横向对其方式                                                         | `'left'`    | `2.1.19` |
 
 ### TableColumn 插槽
 

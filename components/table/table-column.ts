@@ -4,7 +4,7 @@ import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
-import type { Data, TableRowState, ColumnWithKey } from './symbol'
+import type { Data, TableTextAlign, TableRowState, ColumnWithKey } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 
@@ -13,6 +13,7 @@ const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
 const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
 const rendererProp = {
   default: null,
@@ -27,7 +28,7 @@ export default defineComponent({
     const props = useProps('tableColumn', _props, {
       idKey: {
         default: null,
-        validator: (value: number | string) => !isNull(value),
+        validator: value => !isNull(value),
         static: true
       },
       name: {
@@ -75,7 +76,11 @@ export default defineComponent({
       },
       metaData: {
         default: () => ({}),
-        validator: (value: Data) => !isNull(value)
+        validator: value => !isNull(value)
+      },
+      textAlign: {
+        default: 'left',
+        validator: value => aligns.includes(value)
       }
     })
 

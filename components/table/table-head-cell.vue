@@ -202,9 +202,10 @@ export default defineComponent({
       return [
         nh.be('head-cell'),
         {
-          [nh.bem('head-cell', 'center')]: columnTypes.includes(
-            (props.column as TableTypeColumn).type
-          )
+          [nh.bem('head-cell', 'center')]:
+            columnTypes.includes((props.column as TableTypeColumn).type) ||
+            props.column.textAlign === 'center',
+          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right'
         },
         props.column.className || null,
         props.column.class || null,
