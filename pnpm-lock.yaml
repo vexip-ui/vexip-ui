@@ -133,6 +133,9 @@ importers:
       lint-staged:
         specifier: ^13.2.2
         version: 13.2.2
+      magic-string:
+        specifier: ^0.30.0
+        version: 0.30.0
       minimist:
         specifier: ^1.2.8
         version: 1.2.8

@@ -152,6 +152,7 @@
     "jszip": "^3.10.1",
     "kolorist": "^1.8.0",
     "lint-staged": "^13.2.2",
+    "magic-string": "^0.30.0",
     "minimist": "^1.2.8",
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
