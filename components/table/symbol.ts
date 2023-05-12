@@ -85,7 +85,11 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  /**
+   * @deprecated Use 'class' prop to replace it
+   **/
   className?: ClassType,
+  class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,

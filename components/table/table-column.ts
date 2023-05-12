@@ -1,6 +1,6 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount, onBeforeUpdate } from 'vue'
 import { useProps, createSizeProp } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
@@ -12,7 +12,7 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
 
 const rendererProp = {
   default: null,
@@ -44,6 +44,7 @@ export default defineComponent({
         static: true
       },
       className: null,
+      class: null,
       style: null,
       attrs: null,
       type: {
@@ -80,6 +81,13 @@ export default defineComponent({
 
     const tableAction = inject(TABLE_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
+
+    if (!isNull(props.className)) {
+      warnOnce(
+        "[vexip-ui:TableColumn] 'class-name' prop has been deprecated, please " +
+          "use 'class' prop to replace it"
+      )
+    }
 
     for (const key of propKeys) {
       if (key === 'renderer' || key === 'headRenderer') continue

@@ -126,6 +126,7 @@ export const tableColumnProps = buildProps({
     default: null
   },
   className: classProp,
+  class: classProp,
   style: styleProp,
   attrs: Object,
   type: String as PropType<TableColumnType>,

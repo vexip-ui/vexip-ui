@@ -207,6 +207,7 @@ export default defineComponent({
           )
         },
         props.column.className || null,
+        props.column.class || null,
         customClass
       ]
     })

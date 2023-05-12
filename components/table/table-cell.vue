@@ -188,6 +188,7 @@ export default defineComponent({
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
         props.column.className || null,
+        props.column.class || null,
         customClass
       ]
     })
