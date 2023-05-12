@@ -202,7 +202,6 @@ import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Overflow } from '@/components/overflow'
 import { Popper } from '@/components/popper'
-// import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
@@ -220,7 +219,9 @@ import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
-import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
+import type { Data, CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
+
+type ChangeListener = (value: CascaderValue, data: Data[] | Data[][]) => void
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
@@ -975,7 +976,7 @@ export default defineComponent({
       const selectedLabels: string[] = []
 
       const values: (string | number)[][] = []
-      const dataList: Array<Record<string, any>> = []
+      const dataList: Data[][] = []
       const briefLabel = props.briefLabel
 
       selectedOptions.forEach(option => {
@@ -1042,17 +1043,14 @@ export default defineComponent({
       currentVisible.value = false
     }
 
-    function emitChangeEvent(
-      value: CascaderValue,
-      data: Record<string, any> | Array<Record<string, any>>
-    ) {
+    function emitChangeEvent(value: CascaderValue, data: Data[] | Data[][]) {
       emittedValue.value = value
 
       nextTick(() => {
         outsideChanged = false
 
         setFieldValue(value)
-        emitEvent(props.onChange, value, data)
+        emitEvent(props.onChange as ChangeListener, value, data)
         emit('update:value', value)
         validateField()
       })
@@ -1114,7 +1112,7 @@ export default defineComponent({
           option.partial = false
         }
 
-        emitEvent(props.onChange, emittedValue.value, [])
+        emitEvent(props.onChange as ChangeListener, emittedValue.value, [])
         emit('update:value', emittedValue.value)
         emitEvent(props.onClear)
         clearField(emittedValue.value)

@@ -25,6 +25,8 @@
     :loading-lock="props.loadingLock"
     :loading-effect="props.loadingEffect"
     :transparent="transparent"
+    :filter="props.filter"
+    :ignore-case="props.ignoreCase"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -60,7 +62,7 @@
           aria-autocomplete="list"
           @submit.prevent
           @input="handleInput"
-          @keydown.enter="handleEnter"
+          @keydown.enter.stop="handleEnter"
           @keydown="handleKeyDown"
         />
       </slot>
@@ -80,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
@@ -97,6 +99,9 @@ import { isNull } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
 import type { AutoCompleteRawOption } from './symbol'
+
+type ChangeListener = (value: string | number, data: AutoCompleteRawOption) => void
+type EnterListener = (value: string | number) => void
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -170,11 +175,9 @@ export default defineComponent({
     let lastInput = String(lastValue)
 
     const optionStates = computed(() => select.value?.optionStates || [])
-    const normalOptions = computed(() => select.value?.normalOptions || [])
     const filteredOptions = computed(() => select.value?.visibleOptions || [])
     const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
     const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
-    const optionParentMap = computed(() => select.value?.optionParentMap || new Map())
 
     watch(
       () => props.value,
@@ -197,57 +200,9 @@ export default defineComponent({
         control.value?.focus()
       }
     })
-    watchEffect(() => {
-      if (props.filter) {
-        const value = currentValue.value
-
-        if (isNull(value)) {
-          optionStates.value.forEach(state => {
-            state.hidden = false
-          })
-        } else {
-          optionStates.value.forEach(state => {
-            state.hidden = true
-          })
-
-          if (typeof props.filter === 'function') {
-            const filter = props.filter
-
-            normalOptions.value.forEach(state => {
-              state.hidden = !filter(value, state)
-            })
-          } else {
-            if (props.ignoreCase) {
-              const ignoreCaseValue = value?.toString().toLocaleLowerCase()
-
-              normalOptions.value.forEach(state => {
-                state.hidden = !state.value
-                  ?.toString()
-                  .toLocaleLowerCase()
-                  .includes(ignoreCaseValue)
-              })
-            } else {
-              normalOptions.value.forEach(state => {
-                state.hidden = !state.value?.toString().includes(value?.toString())
-              })
-            }
-          }
-
-          const parentMap = optionParentMap.value
-
-          normalOptions.value.forEach(option => {
-            if (!option.hidden && option.parent) {
-              let parent = parentMap.get(option.value) || null
-
-              while (parent && parent.hidden) {
-                parent.hidden = false
-                parent = parent.parent
-              }
-            }
-          })
-        }
-
-        computeHitting()
+    watch(currentValue, value => {
+      if (props.filter && select.value) {
+        select.value.currentFilter = `${value}`
       }
     })
 
@@ -291,7 +246,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emitEvent(props.onSelect, value, data)
+      emitEvent(props.onSelect as ChangeListener, value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -326,7 +281,7 @@ export default defineComponent({
       const option = optionStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
-      emitEvent(props.onChange, currentValue.value, option?.data || null!)
+      emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
       validateField()
 
@@ -398,7 +353,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emitEvent(props.onEnter, currentValue.value)
+      emitEvent(props.onEnter as EnterListener, currentValue.value)
       control.value?.blur()
       visible.value = false
     }

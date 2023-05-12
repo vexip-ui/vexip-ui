@@ -124,7 +124,7 @@ $layout: map.merge(
   &__section {
     position: relative;
     width: 100%;
-    min-height: get-css-var('layout-view-height');
+    min-height: calc(#{get-css-var('layout-view-height')} - #{get-css-var('layout-header-height')});
     transition: padding-left get-css-var('transition-base');
 
     &--away {

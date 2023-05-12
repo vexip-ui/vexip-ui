@@ -20,14 +20,17 @@ export interface BarScrollPayload {
   percentY: number
 }
 
-export interface NativeScrollSlotParams {
+export interface NativeScrollState {
   scrollX: number,
   scrollY: number,
   percentX: number,
   percentY: number,
   enableXScroll: Readonly<boolean>,
-  enableYScroll: Readonly<boolean>,
-  content?: HTMLElement,
+  enableYScroll: Readonly<boolean>
+}
+
+export interface NativeScrollSlotParams {
+  getState: () => NativeScrollState,
   refresh: () => void,
   scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,
@@ -36,12 +39,12 @@ export interface NativeScrollSlotParams {
 }
 
 export interface NativeScrollExposed extends ComponentPublicInstance {
+  x: number,
+  y: number,
   percentX: number,
   percentY: number,
-  currentScroll: {
-    x: number,
-    y: number
-  },
+  xScrollLimit: number,
+  yScrollLimit: number,
   enableXScroll: Readonly<boolean>,
   enableYScroll: Readonly<boolean>,
   content?: HTMLElement,

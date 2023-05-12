@@ -1,5 +1,5 @@
 import { computed, provide, inject, unref, getCurrentInstance } from 'vue'
-import { isClient } from '@vexip-ui/utils'
+import { isClient, isDefined } from '@vexip-ui/utils'
 
 import type { App, ComputedRef } from 'vue'
 import type { MaybeRef } from './types'
@@ -21,9 +21,15 @@ if (isClient) {
 const globalZIndex = computed(() => initZIndex)
 
 function getOrDefault(num: number, def: number) {
-  return !Number.isNaN(num) ? num : def
+  return isDefined(num) && !Number.isNaN(num) ? num : def
 }
 
+/**
+ * Provide a z-index config for under components.
+ *
+ * @param icons z-index config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configZIndex(sourceZIndex: MaybeRef<number>, app?: App) {
   if (app) {
     const zIndex = computed(() => {

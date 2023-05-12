@@ -53,19 +53,37 @@ export interface LayoutState {
   affixMatched: boolean,
   expandMatched: boolean,
   useExpand: boolean,
+  expanded: boolean,
   reduced: boolean,
   navConfig: boolean
+}
+
+export interface LayoutSlotParams {
+  expanded: boolean,
+  reduced: boolean,
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced: boolean) => void
+}
+
+export interface LayoutHeaderSlotParams extends LayoutSlotParams {
+  handleColorChange: (color: string) => void,
+  toggleUserDropped: (dropped?: boolean) => void
 }
 
 export interface LayoutExposed extends ComponentPublicInstance {
   scroll?: NativeScrollExposed,
   menu?: MenuExposed,
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced?: boolean) => void,
   expandMenuByLabel: (label: string) => void
 }
 
 export interface LayoutHeaderExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
-  expandMenuByLabel: (label: string) => void
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced?: boolean) => void,
+  expandMenuByLabel: (label: string) => void,
+  toggleUserDropped: (dropped: boolean) => void
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -73,6 +91,8 @@ export interface LayoutMainExposed extends ComponentPublicInstance {}
 
 export interface LayoutAsideExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced?: boolean) => void,
   expandMenuByLabel: (label: string) => void
 }
 

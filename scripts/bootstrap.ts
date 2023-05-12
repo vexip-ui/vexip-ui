@@ -45,11 +45,13 @@ async function main() {
       ${typography.join(',\n')}
     } from './typography'
 
-    import { install as installDirectives } from '@/directives'
     import { buildInstall } from './create'
+    import { install as installDirectives } from '@/directives'
+
+    export { version } from './version'
+    export * from './create'
 
     export type { PropsOptions } from './props'
-    export { version } from './version'
 
     const components = [
       ${components.map(toCapitalCase).join(',\n')},
@@ -61,7 +63,6 @@ async function main() {
       installDirectives
     ]
 
-    export { buildInstall }
     export const install = buildInstall(components)
 
     ${allComponents.map(component => `export * from './${component}'`).join('\n')}

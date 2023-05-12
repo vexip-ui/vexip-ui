@@ -5,9 +5,10 @@ import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
-export type Data = Record<string, any>
+export type Data = any
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
+export type TableTextAlign = 'left' | 'center' | 'right'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -41,17 +42,30 @@ export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
     active?: null | Val,
-    method?: null | ((active: Val, data: D) => boolean)
+    method?: null | ((active: Val, data: D) => boolean),
+    meta?: any
   }
   | {
     able?: boolean,
-    options: (string | { value: Val, label?: string, active?: boolean })[],
+    custom?: false,
+    options?: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
     active?: null | Val[],
-    method?: null | ((active: Val[], data: D) => boolean)
+    method?: null | ((active: Val[], data: D) => boolean),
+    meta?: any
+  }
+  | {
+    able?: boolean,
+    custom: true,
+    options?: never,
+    multiple?: false,
+    active?: null | Val | Val[],
+    method?: null | ((active: any, data: D) => boolean),
+    meta?: any
   }
 
 export interface ParsedFilterOptions extends Omit<Required<TableFilterOptions>, 'options'> {
@@ -72,7 +86,11 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  /**
+   * @deprecated Use 'class' prop to replace it
+   **/
   className?: ClassType,
+  class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
@@ -80,9 +98,11 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
+  textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
   renderer?: RenderFn,
-  headRenderer?: RenderFn
+  headRenderer?: RenderFn,
+  filterRenderer?: RenderFn
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
@@ -135,6 +155,12 @@ export type ColumnRenderFn = (data: {
   columnIndex: number
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+export type FilterRenderFn = (data: {
+  column: TableColumnOptions,
+  index: number,
+  filter: Required<TableFilterOptions>,
+  handleFilter: (active: any) => void
+}) => any
 
 export type TableCellPropFn<P = any> = (
   data: Data,

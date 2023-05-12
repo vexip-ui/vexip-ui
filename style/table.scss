@@ -181,6 +181,11 @@ $table: map.merge(
       text-align: center;
     }
 
+    &--right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
     &--wrap {
       word-break: break-all;
       white-space: pre-wrap;
@@ -328,29 +333,24 @@ $table: map.merge(
   }
 
   &__filter {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    height: 15px;
     margin-left: 3px;
+    color: get-css-var('table-filter-color');
+    cursor: pointer;
+    transition: get-css-var('transition-color');
 
-    &-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 15px;
-      color: get-css-var('table-filter-color');
-      cursor: pointer;
-      transition: get-css-var('transition-color');
-
-      &:hover {
-        color: get-css-var('table-filter-color-hover');
-      }
+    &:hover {
+      color: get-css-var('table-filter-color-hover');
     }
 
-    &--visible &-trigger {
+    &--visible {
       color: get-css-var('table-filter-color-visible');
     }
 
-    &--active &-trigger {
+    &--active {
       color: get-css-var('table-filter-color-active');
     }
 

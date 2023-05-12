@@ -4,9 +4,11 @@ import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
-const dirs = readdirSync(__dirname).filter(f => statSync(resolve(f)).isDirectory())
+const rootDir = __dirname
+const dirs = readdirSync(__dirname).filter(f => statSync(resolve(rootDir, f)).isDirectory())
 
 export default defineConfig({
+  root: rootDir,
   resolve: {
     alias: [
       { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },

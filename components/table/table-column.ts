@@ -1,10 +1,10 @@
-import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
+import { defineComponent, reactive, watch, inject, onBeforeUnmount, onBeforeUpdate } from 'vue'
 import { useProps, createSizeProp } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
-import type { Data, TableRowState, ColumnWithKey } from './symbol'
+import type { Data, TableTextAlign, TableRowState, ColumnWithKey } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 
@@ -12,7 +12,14 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const aligns: TableTextAlign[] = ['left', 'center', 'right']
+
+const rendererProp = {
+  default: null,
+  isFunc: true,
+  static: true
+}
 
 export default defineComponent({
   name: 'TableColumn',
@@ -21,7 +28,7 @@ export default defineComponent({
     const props = useProps('tableColumn', _props, {
       idKey: {
         default: null,
-        validator: (value: number | string) => !isNull(value),
+        validator: value => !isNull(value),
         static: true
       },
       name: {
@@ -38,6 +45,7 @@ export default defineComponent({
         static: true
       },
       className: null,
+      class: null,
       style: null,
       attrs: null,
       type: {
@@ -48,16 +56,9 @@ export default defineComponent({
       width: null,
       filter: null,
       sorter: false,
-      renderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      },
-      headRenderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      },
+      renderer: rendererProp,
+      headRenderer: rendererProp,
+      filterRenderer: rendererProp,
       order: {
         default: 0,
         static: true
@@ -75,12 +76,23 @@ export default defineComponent({
       },
       metaData: {
         default: () => ({}),
-        validator: (value: Data) => !isNull(value)
+        validator: value => !isNull(value)
+      },
+      textAlign: {
+        default: 'left',
+        validator: value => aligns.includes(value)
       }
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
+
+    if (!isNull(props.className)) {
+      warnOnce(
+        "[vexip-ui:TableColumn] 'class-name' prop has been deprecated, please " +
+          "use 'class' prop to replace it"
+      )
+    }
 
     for (const key of propKeys) {
       if (key === 'renderer' || key === 'headRenderer') continue
@@ -112,15 +124,21 @@ export default defineComponent({
       }
     }
 
-    watch(() => slots.default, setRenderer)
     watch(() => props.renderer, setRenderer)
-    watch(() => slots.head, setHeadRenderer)
     watch(() => props.headRenderer, setHeadRenderer)
+    watch(() => props.filterRenderer, setFilterRenderer)
 
     setRenderer()
     setHeadRenderer()
+    setFilterRenderer()
 
     tableAction?.increaseColumn(options)
+
+    onBeforeUpdate(() => {
+      setRenderer()
+      setHeadRenderer()
+      setFilterRenderer()
+    })
 
     onBeforeUnmount(() => {
       tableAction?.decreaseColumn(options)
@@ -162,6 +180,20 @@ export default defineComponent({
         }
 
         return props.name
+      }
+    }
+
+    function setFilterRenderer() {
+      if (typeof slots.filter === 'function' || typeof props.filterRenderer === 'function') {
+        options.filterRenderer = (data: any) => {
+          if (typeof slots.filter === 'function') {
+            return slots.filter(data)
+          }
+
+          return props.filterRenderer(data)
+        }
+      } else {
+        options.filterRenderer = undefined
       }
     }
 

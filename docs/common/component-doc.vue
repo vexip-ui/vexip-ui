@@ -10,7 +10,7 @@
         tag="h1"
         :width="220"
         :height="42"
-        style="--vxp-skeleton-spread: 1em; font-size: 2em;"
+        style="--vxp-skeleton-spread: 1em; font-size: 2em"
       ></Skeleton>
       <Skeleton tag="p" :height="21" :repeat="3"></Skeleton>
       <Skeleton tag="p" :height="21" width="67%"></Skeleton>
@@ -26,7 +26,7 @@
             v-if="route.meta.since"
             type="warning"
             simple
-            style="margin-left: 8px;"
+            style="margin-left: 8px"
           >
             {{ `Since v${route.meta.since}` }}
           </Tag>
@@ -120,7 +120,7 @@ watch(allLoaded, value => value && refresh())
 
 function refresh() {
   requestAnimationFrame(() => {
-    refreshScroll?.(false)
+    refreshScroll?.()
     article.value?.refreshAnchor()
 
     try {

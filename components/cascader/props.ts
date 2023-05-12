@@ -13,9 +13,16 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
-import type { CascaderValue, CascaderKeyConfig } from './symbol'
+import type { Data, CascaderValue, CascaderKeyConfig } from './symbol'
 
-type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
+type ChangeEvent =
+  | ((value: CascaderValue, data: Data[] | Data[][]) => void)
+  | ((value: (string | number)[], data: Data[]) => void)
+  | ((value: string[], data: Data[]) => void)
+  | ((value: number[], data: Data[]) => void)
+  | ((value: (string | number)[][], data: Data[][]) => void)
+  | ((value: string[][], data: Data[][]) => void)
+  | ((value: number[][], data: Data[][]) => void)
 
 export const cascaderProps = buildProps({
   size: sizeProp,
@@ -23,7 +30,7 @@ export const cascaderProps = buildProps({
   locale: localeProp('select'),
   value: Array as PropType<CascaderValue>,
   visible: booleanProp,
-  options: Array as PropType<Array<Record<string, any>>>,
+  options: Array as PropType<Data[]>,
   placeholder: String,
   prefix: Object,
   prefixColor: String,
@@ -45,7 +52,7 @@ export const cascaderProps = buildProps({
   maxTagCount: Number,
   briefLabel: booleanProp,
   noRestTip: booleanProp,
-  onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
+  onAsyncLoad: Function as PropType<(data: Data) => any[] | Promise<any[]>>,
   mergeTags: booleanProp,
   tagType: String as PropType<TagType>,
   emptyText: String,
@@ -55,9 +62,9 @@ export const cascaderProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
-  onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-  onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-  onChange: eventProp<(value: CascaderValue, data: MaybeArrayData) => void>(),
+  onSelect: eventProp<(fullValue: string, data: Data) => void>(),
+  onCancel: eventProp<(fullValue: string, data: Data) => void>(),
+  onChange: eventProp<ChangeEvent>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp()

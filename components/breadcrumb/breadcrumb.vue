@@ -18,6 +18,8 @@ import { BREADCRUMB_STATE } from './symbol'
 
 import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
 
+type SelectListener = (label: string | number) => void
+
 export default defineComponent({
   name: 'Breadcrumb',
   components: {
@@ -95,11 +97,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      emitEvent(props.onSelect, label)
+      emitEvent(props.onSelect as SelectListener, label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emitEvent(props.onSeparatorClick, label)
+      emitEvent(props.onSeparatorClick as SelectListener, label)
     }
 
     return {

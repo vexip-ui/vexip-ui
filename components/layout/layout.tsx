@@ -1,4 +1,13 @@
-import { defineComponent, ref, toRef, reactive, computed, watch, provide } from 'vue'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  reactive,
+  shallowReadonly,
+  computed,
+  watch,
+  provide
+} from 'vue'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
@@ -31,7 +40,13 @@ export default defineComponent({
     NativeScroll
   },
   props: layoutProps,
-  emits: ['update:reduced', 'update:sign-type', 'update:color', 'update:dark-mode'],
+  emits: [
+    'update:expanded',
+    'update:reduced',
+    'update:sign-type',
+    'update:color',
+    'update:dark-mode'
+  ],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       locale: null,
@@ -48,6 +63,7 @@ export default defineComponent({
       config: () => ['nav', 'theme', 'color'] as LayoutConfig[],
       user: null,
       actions: () => [],
+      expanded: false,
       reduced: false,
       avatarCircle: false,
       signType: 'aside',
@@ -64,6 +80,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const asideExpanded = ref(props.expanded)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
@@ -88,6 +105,7 @@ export default defineComponent({
       affixMatched,
       expandMatched,
       useExpand: false,
+      expanded: asideExpanded,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside)
     })
@@ -121,13 +139,28 @@ export default defineComponent({
       }
     })
 
+    const slotParams = shallowReadonly(
+      reactive({
+        expanded: asideExpanded,
+        reduced: asideReduced,
+        toggleExpanded,
+        toggleReduced
+      })
+    )
+
     provide(LAYOUT_STATE, state)
 
-    expose({ scroll, menu, expandMenuByLabel })
+    expose({ scroll, menu, toggleExpanded, toggleReduced, expandMenuByLabel })
 
     watch(affixMatched, value => {
       state.affixed = !value && state.scrollY >= 50
     })
+    watch(
+      () => props.expanded,
+      value => {
+        asideExpanded.value = value
+      }
+    )
     watch(
       () => props.reduced,
       value => {
@@ -177,11 +210,18 @@ export default defineComponent({
       return '#339af0'
     }
 
-    function toggleReduce(target = !asideReduced.value) {
-      asideReduced.value = target
+    function toggleExpanded(expanded = !asideReduced.value) {
+      asideExpanded.value = expanded
 
-      emitEvent(props.onReducedChange, target)
-      emit('update:reduced', target)
+      emitEvent(props.onExpandedChange, expanded)
+      emit('update:expanded', expanded)
+    }
+
+    function toggleReduced(reduced = !asideReduced.value) {
+      asideReduced.value = reduced
+
+      emitEvent(props.onReducedChange, reduced)
+      emit('update:reduced', reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -221,17 +261,13 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    function getSlotParams() {
-      return { reduced: asideReduced.value, toggleReduce }
-    }
-
     function renderSign() {
       if (!props.logo && !props.signName && !slots.sign) {
         return null
       }
 
       if (slots.sign) {
-        return slots.sign(getSlotParams())
+        return slots.sign(slotParams)
       }
 
       const showSignName = props.signName && !(signInHeader.value && !signNameMatched.value)
@@ -255,7 +291,7 @@ export default defineComponent({
 
     function renderHeader() {
       if (slots.header) {
-        return slots.header(getSlotParams())
+        return slots.header(slotParams)
       }
 
       return (
@@ -274,7 +310,8 @@ export default defineComponent({
           menu-props={props.noAside ? props.menuProps : null}
           colors={props.colors}
           onUserAction={handleUserAction}
-          onReducedChange={toggleReduce}
+          onExpandedChange={toggleExpanded}
+          onReducedChange={toggleReduced}
           onMenuSelect={handleMenuSelect}
           onToggleTheme={handleToggleTheme}
           {...{
@@ -309,16 +346,18 @@ export default defineComponent({
         >
           {slots.aside
             ? (
-                slots.aside(getSlotParams())
+                slots.aside(slotParams)
               )
             : (
             <LayoutAside
               ref={aside}
+              v-model:expanded={asideExpanded.value}
               v-model:reduced={asideReduced.value}
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}
-              onReducedChange={toggleReduce}
+              onExpandedChange={toggleExpanded}
+              onReducedChange={toggleReduced}
               onMenuSelect={handleMenuSelect}
             >
               {{
@@ -338,7 +377,7 @@ export default defineComponent({
 
     function renderMain() {
       if (slots.default) {
-        return slots.default(getSlotParams())
+        return slots.default(slotParams)
       }
 
       return (
@@ -352,7 +391,7 @@ export default defineComponent({
 
     function renderFooter() {
       if (slots.footer) {
-        return slots.footer(getSlotParams())
+        return slots.footer(slotParams)
       }
 
       return (
@@ -391,7 +430,8 @@ export default defineComponent({
                 {
                   [nh.bem('section', 'away')]: expandMatched.value,
                   [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: state.locked
+                  [nh.bem('section', 'locked')]: state.locked,
+                  [nh.bem('section', 'fixed')]: props.fixedMain
                 }
               ]}
             >

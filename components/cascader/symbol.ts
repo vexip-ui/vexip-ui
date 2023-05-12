@@ -1,3 +1,4 @@
+export type Data = Record<string, any>
 export type CascaderValue = (string | number)[] | (string | number)[][]
 
 export interface CascaderKeyConfig {
@@ -24,5 +25,5 @@ export interface CascaderOptionState {
   loaded: boolean,
   error: boolean,
   childrenLoaded: boolean,
-  data: Record<string, any>
+  data: Data
 }

@@ -1,4 +1,5 @@
 import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
+import { useManualRef } from '@vexip-ui/hooks'
 import { toNumber, multipleFixed } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -25,6 +26,8 @@ export function useScrollWrapper({
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {
+  const { manualRef, triggerUpdate } = useManualRef()
+
   const wrapperElement = ref<HTMLElement>()
   const contentElement = ref<HTMLElement>()
 
@@ -41,6 +44,20 @@ export function useScrollWrapper({
     width: 0,
     height: 0
   })
+
+  const x = manualRef(0)
+  const y = manualRef(0)
+
+  const isReady = ref(false)
+
+  // 当前滚动位置
+  // const currentScroll = reactive({
+  //   x: -scrollX.value,
+  //   y: -scrollY.value
+  // })
+
+  const percentX = manualRef(0)
+  const percentY = manualRef(0)
 
   const xScrollLimit = computed(() => {
     return wrapper.width ? wrapper.width - content.width : 0
@@ -86,11 +103,13 @@ export function useScrollWrapper({
     computeContentSize()
   })
   watch(scrollX, value => {
-    currentScroll.x = -value
+    // x.value = -value
+    x.value = -value
     verifyScroll()
   })
   watch(scrollY, value => {
-    currentScroll.y = -value
+    // y.value = -value
+    y.value = -value
     verifyScroll()
   })
   watch(width, () => {
@@ -133,17 +152,6 @@ export function useScrollWrapper({
     }
   }
 
-  const isReady = ref(false)
-
-  // 当前滚动位置
-  const currentScroll = reactive({
-    x: -scrollX.value,
-    y: -scrollY.value
-  })
-
-  const percentX = ref(0)
-  const percentY = ref(0)
-
   let timer: ReturnType<typeof setTimeout>
 
   function computeContentSize() {
@@ -156,10 +164,10 @@ export function useScrollWrapper({
         content.width = content.el.offsetWidth
 
         if (wrapper.width >= content.width) {
-          currentScroll.x = 0
+          x.value = 0
         } else {
-          if (currentScroll.x === 0) {
-            currentScroll.x = -scrollX.value
+          if (x.value === 0) {
+            x.value = -scrollX.value
           }
         }
       }
@@ -168,10 +176,10 @@ export function useScrollWrapper({
         content.height = content.el.offsetHeight
 
         if (wrapper.height >= content.height) {
-          currentScroll.y = 0
+          y.value = 0
         } else {
-          if (currentScroll.y === 0) {
-            currentScroll.y = -scrollY.value
+          if (y.value === 0) {
+            y.value = -scrollY.value
           }
         }
       }
@@ -194,27 +202,28 @@ export function useScrollWrapper({
     }
 
     if (mode.value !== 'vertical') {
-      currentScroll.x = Math.min(0, Math.max(currentScroll.x, xScrollLimit.value))
+      x.value = Math.min(0, Math.max(x.value, xScrollLimit.value))
 
       if (mode.value !== 'both') {
-        currentScroll.y = 0
+        y.value = 0
       }
     }
 
     if (mode.value !== 'horizontal') {
-      currentScroll.y = Math.min(0, Math.max(currentScroll.y, yScrollLimit.value))
+      y.value = Math.min(0, Math.max(y.value, yScrollLimit.value))
 
       if (mode.value !== 'both') {
-        currentScroll.x = 0
+        x.value = 0
       }
     }
 
     computePercent()
+    triggerUpdate()
   }
 
   function computePercent() {
-    percentX.value = multipleFixed(currentScroll.x / (xScrollLimit.value || -1), 100, 2)
-    percentY.value = multipleFixed(currentScroll.y / (yScrollLimit.value || -1), 100, 2)
+    percentX.value = multipleFixed(x.value / (xScrollLimit.value || -1), 100, 2)
+    percentY.value = multipleFixed(y.value / (yScrollLimit.value || -1), 100, 2)
 
     percentX.value = Math.max(0, Math.min(percentX.value, 100))
     percentY.value = Math.max(0, Math.min(percentY.value, 100))
@@ -259,7 +268,9 @@ export function useScrollWrapper({
     wrapper,
     content,
     isReady,
-    currentScroll,
+    x,
+    y,
+    // currentScroll,
     percentX,
     percentY,
     xScrollLimit,
@@ -272,6 +283,7 @@ export function useScrollWrapper({
     handleResize,
     verifyScroll,
     computePercent,
-    refresh
+    refresh,
+    triggerUpdate
   }
 }

@@ -905,7 +905,7 @@ export default defineComponent({
 
     function syncVerticalScroll() {
       if (mainScroll.value) {
-        setBodyScroll(-mainScroll.value.currentScroll.y)
+        setBodyScroll(-mainScroll.value.y)
       }
     }
 

@@ -14,7 +14,6 @@
     <div
       ref="bar"
       :class="nh.be('bar')"
-      :style="barStyle"
       @touchstart="disableEvent"
       @pointerdown="handleMouseDown"
     ></div>
@@ -27,6 +26,7 @@ import {
   ref,
   computed,
   watch,
+  watchEffect,
   toRef,
   onMounted,
   onBeforeUnmount,
@@ -34,6 +34,7 @@ import {
   getCurrentInstance
 } from 'vue'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useManualRef } from '@vexip-ui/hooks'
 import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
@@ -79,8 +80,11 @@ export default defineComponent({
 
     const nh = useNameHelper('scrollbar')
     const active = ref(false)
-    const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
+
+    const { manualRef, triggerUpdate } = useManualRef()
+
+    const currentScroll = manualRef(props.scroll)
 
     const contaniner = ref<HTMLElement>()
     const bar = ref<HTMLElement>()
@@ -138,33 +142,34 @@ export default defineComponent({
         [nh.cv('width')]: props.width ? `${props.width}px` : null!
       }
     })
-    const barStyle = computed(() => {
-      const style: Record<string, string> = {}
-      const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
-      const length = `${props.barLength}%`
-
-      if (type.value === ScrollbarType.VERTICAL) {
-        style.height = length
-        style.transform = `translate3d(0, ${position}, 0)`
-      } else {
-        // style.left = position
-        style.width = length
-        style.transform = `translate3d(${position}, 0, 0)`
-      }
-
-      if (isDefined(props.duration) && props.duration >= 0) {
-        style.transitionDuration = `${props.duration}ms`
-      }
-
-      return style
-    })
 
     watch(
       () => props.scroll,
       value => {
         currentScroll.value = value
+        triggerUpdate()
       }
     )
+    watchEffect(() => {
+      if (!bar.value) return
+
+      const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
+      const length = `${props.barLength}%`
+
+      if (type.value === ScrollbarType.VERTICAL) {
+        bar.value.style.height = length
+        bar.value.style.transform = `translate3d(0, ${position}, 0)`
+      } else {
+        bar.value.style.width = length
+        bar.value.style.transform = `translate3d(${position}, 0, 0)`
+      }
+    })
+    watchEffect(() => {
+      if (!bar.value) return
+
+      bar.value.style.transitionDuration =
+        isDefined(props.duration) && props.duration >= 0 ? `${props.duration}ms` : ''
+    })
 
     if (props.appear) {
       watch(currentScroll, () => {
@@ -289,6 +294,7 @@ export default defineComponent({
       currentScroll.value = (position / length / (100 - props.barLength)) * 1e4
 
       verifyScroll()
+      triggerUpdate()
       emitEvent(props.onScroll, currentScroll.value)
     })
 
@@ -330,6 +336,7 @@ export default defineComponent({
 
     function handleScroll(scroll: number) {
       currentScroll.value = boundRange(scroll, 0, 100)
+      triggerUpdate()
     }
 
     function disableEvent<E extends Event>(event: E) {
@@ -346,7 +353,7 @@ export default defineComponent({
 
       className,
       style,
-      barStyle,
+      // barStyle,
 
       contaniner,
       bar,

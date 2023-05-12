@@ -1,4 +1,13 @@
-import { defineComponent, ref, toRef, computed, watch, onBeforeMount } from 'vue'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  reactive,
+  shallowReadonly,
+  computed,
+  watch,
+  onBeforeMount
+} from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
@@ -95,7 +104,18 @@ export default defineComponent({
       return !!(props.menus?.length || props.menuProps?.router)
     })
 
-    expose({ menu, expandMenuByLabel })
+    const slotParams = shallowReadonly(
+      reactive({
+        expanded: toRef(layoutState, 'expanded'),
+        reduced: toRef(layoutState, 'reduced'),
+        toggleExpanded,
+        toggleReduced,
+        handleColorChange,
+        toggleUserDropped
+      })
+    )
+
+    expose({ menu, toggleExpanded, toggleReduced, expandMenuByLabel, toggleUserDropped })
 
     watch(
       () => props.signType,
@@ -164,10 +184,16 @@ export default defineComponent({
       run()
     }
 
-    function toggleReduce(target = !layoutState.reduced) {
-      layoutState.reduced = target
+    function toggleExpanded(expanded = !layoutState.expanded) {
+      layoutState.expanded = expanded
 
-      emitEvent(props.onReducedChange, target)
+      emitEvent(props.onExpandedChange, expanded)
+    }
+
+    function toggleReduced(reduced = !layoutState.reduced) {
+      layoutState.reduced = reduced
+
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleColorChange(color: string) {
@@ -181,15 +207,15 @@ export default defineComponent({
       emitEvent(props.onSignClick, event)
     }
 
-    function toggleUserDrop(target = !currentUserDropped.value) {
-      currentUserDropped.value = target
+    function toggleUserDropped(dropped = !currentUserDropped.value) {
+      currentUserDropped.value = dropped
 
-      emitEvent(props.onDropChange, target)
-      emit('update:user-dropped', target)
+      emitEvent(props.onDroppedChange, dropped)
+      emit('update:user-dropped', dropped)
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
-      toggleUserDrop(false)
+      toggleUserDropped(false)
       emitEvent(props.onMenuSelect, label, meta)
     }
 
@@ -214,15 +240,6 @@ export default defineComponent({
           }
         }
       })
-    }
-
-    function getSlotParams() {
-      return {
-        reduced: layoutState.reduced,
-        toggleReduce,
-        handleColorChange,
-        toggleUserDrop
-      }
     }
 
     function renderCheck() {
@@ -300,7 +317,7 @@ export default defineComponent({
             <div class={nh.be('header-left')}>
               {slots.left
                 ? (
-                    slots.left(getSlotParams())
+                    slots.left(slotParams)
                   )
                 : props.signType === 'header'
                   ? (
@@ -319,7 +336,7 @@ export default defineComponent({
           <div class={nh.be('header-main')}>
             {slots.default
               ? (
-                  slots.default(getSlotParams())
+                  slots.default(slotParams)
                 )
               : hasMenu.value
                 ? (
@@ -334,10 +351,10 @@ export default defineComponent({
                   )
                 : null}
           </div>
-          {slots.right && <div class={nh.be('header-right')}>{slots.right(getSlotParams())}</div>}
+          {slots.right && <div class={nh.be('header-right')}>{slots.right(slotParams)}</div>}
           {slots.user
             ? (
-                slots.user(getSlotParams())
+                slots.user(slotParams)
               )
             : (
             <Dropdown
@@ -346,12 +363,12 @@ export default defineComponent({
               placement={'bottom-end'}
               visible={currentUserDropped.value}
               trigger={'custom'}
-              onClickOutside={() => toggleUserDrop(false)}
+              onClickOutside={() => toggleUserDropped(false)}
             >
               {{
                 default: () => {
                   if (slots.avatar) {
-                    return slots.avatar(getSlotParams())
+                    return slots.avatar(slotParams)
                   }
 
                   if (typeof props.user?.avatar === 'string') {
@@ -359,7 +376,7 @@ export default defineComponent({
                       <Avatar
                         src={props.user.avatar}
                         circle={props.avatarCircle}
-                        onClick={() => toggleUserDrop()}
+                        onClick={() => toggleUserDropped()}
                       >
                         {{
                           icon: () => <Icon {...icons.value.user}></Icon>
@@ -369,7 +386,7 @@ export default defineComponent({
                   }
 
                   return (
-                    <Avatar circle={props.avatarCircle} onClick={() => toggleUserDrop()}>
+                    <Avatar circle={props.avatarCircle} onClick={() => toggleUserDropped()}>
                       {{
                         icon: () => (
                           <Icon
