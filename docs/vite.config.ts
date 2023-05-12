@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import type { ConfigEnv, UserConfigExport } from 'vite'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
@@ -8,10 +9,10 @@ import discardCss from 'postcss-discard-duplicates'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command }: ConfigEnv): any => {
   const isServe = command === 'serve'
 
-  return {
+  return <UserConfigExport>{
     define: {
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
       __VERSION__: JSON.stringify(pkg.version || '')
