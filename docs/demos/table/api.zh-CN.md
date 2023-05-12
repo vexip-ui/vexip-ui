@@ -2,7 +2,7 @@
 
 ```ts
 type Key = string | number | symbol
-type Data = Record<string, any>
+type Data = any
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 
