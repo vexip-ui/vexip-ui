@@ -24,7 +24,8 @@ export interface I18nConfig {
     editOnPlayground: string,
     editPage: string,
     pageNotFound: string,
-    backHomepage: string
+    backHomepage: string,
+    lastTime: string
   },
   alert: {
     info: string,

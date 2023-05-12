@@ -26,7 +26,8 @@ export const enUS = defineI18n({
     editOnPlayground: 'Edit on Playground',
     editPage: 'Edit this page on GitHub',
     pageNotFound: 'Page Not Found',
-    backHomepage: 'Back to homepage'
+    backHomepage: 'Back to homepage',
+    lastTime: 'Last updated'
   },
   alert: {
     info: 'Tip',

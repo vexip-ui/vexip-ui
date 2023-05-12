@@ -26,7 +26,8 @@ export const zhCN = defineI18n({
     editOnPlayground: '在 Playground 上编辑',
     editPage: '在 GitHub 上编辑此页',
     pageNotFound: '页面不见了',
-    backHomepage: '返回首页'
+    backHomepage: '返回首页',
+    lastTime: '上次更新'
   },
   alert: {
     info: '提示',

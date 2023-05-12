@@ -9,6 +9,7 @@ import type { ThemeConfig } from './theme/types'
 
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
+  lastUpdated: true,
   head: [
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
