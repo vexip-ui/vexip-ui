@@ -6,6 +6,6 @@
 
 <style scoped>
 .vxp-captcha {
-  max-width: 240px;
+  max-width: 300px;
 }
 </style>

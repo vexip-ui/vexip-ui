@@ -1,9 +1,9 @@
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
-import { ResizeObserver } from '@/components/resize-observer'
+// import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isNull, toFixed, boundRange, random, debounce } from '@vexip-ui/utils'
+import { isClient, isNull, toFixed, boundRange, random, ensureArray } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 export default defineComponent({
@@ -16,7 +16,15 @@ export default defineComponent({
       loading: false,
       slideTarget: {
         default: null,
-        validator: value => isNull(value) || value >= 0 || value <= 100
+        validator: value => {
+          if (isNull(value)) return true
+
+          if (Array.isArray(value)) {
+            return value[0] >= 0 && value[0] <= 100 && value[1] >= 0 && value[1] <= 100
+          } else {
+            return value >= 0 && value <= 100
+          }
+        }
       },
       tip: null,
       successTip: null,
@@ -24,7 +32,8 @@ export default defineComponent({
       tolerance: {
         default: null,
         validator: value => isNull(value) || value >= 0
-      }
+      },
+      canvasSize: () => [1000, 600]
     })
 
     const nh = useNameHelper('captcha')
@@ -32,21 +41,26 @@ export default defineComponent({
     const icons = useIcons()
 
     const currentLeft = ref(0)
-    const currentTarget = ref(props.slideTarget ?? random(80, 20))
+    const currentTarget = ref(parseTarget(props.slideTarget))
     const resetting = ref(false)
     const isSuccess = ref(false)
 
     const track = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
+    const subImage = ref<HTMLImageElement>()
+    const subCanvas = ref<HTMLCanvasElement>()
 
-    const usedTarget = computed(() => (props.type === 'slide' ? 100 : currentTarget.value))
+    const usedTarget = computed(() => (props.type === 'slide' ? 100 : currentTarget.value[0]))
     const tolerance = computed(() => (props.type === 'slide' ? 0 : props.tolerance ?? 2))
 
+    // let rendering = false
+    let imageLoaded = false
+    let image: HTMLImageElement | false
     let widthLimit: number
-    let leftStartAt: number
+    // let leftStartAt: number
 
     const { target: trigger, moving: dragging } = useMoving({
-      onStart: (state, event) => {
+      onStart: (_, event) => {
         if (
           !track.value ||
           !trigger.value ||
@@ -57,11 +71,8 @@ export default defineComponent({
           return false
         }
 
-        const { left, width } = track.value.getBoundingClientRect()
-
-        widthLimit = width
-        currentLeft.value = ((leftStartAt = state.clientX - left) / width) * 100
-
+        widthLimit = track.value.getBoundingClientRect().width
+        currentLeft.value = 0
         verifyPosition()
       },
       onMove: state => {
@@ -69,8 +80,7 @@ export default defineComponent({
           return false
         }
 
-        currentLeft.value = ((leftStartAt + state.deltaX) / widthLimit) * 100
-
+        currentLeft.value = (state.deltaX / widthLimit) * 100
         verifyPosition()
       },
       onEnd: () => {
@@ -82,7 +92,7 @@ export default defineComponent({
 
           emitEvent(props.onFail)
         } else if (matched) {
-          currentLeft.value = usedTarget.value
+          // currentLeft.value = usedTarget.value
           isSuccess.value = true
 
           emitEvent(props.onSuccess)
@@ -94,6 +104,7 @@ export default defineComponent({
       return [
         nh.b(),
         nh.bs('vars'),
+        nh.bm(props.type),
         {
           [nh.bm('dragging')]: dragging.value
         }
@@ -117,6 +128,12 @@ export default defineComponent({
         [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
       }
     })
+    const subCanvasStyle = computed(() => {
+      return {
+        left: `${currentLeft.value}%`,
+        [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
+      }
+    })
     const normalTip = computed(() => {
       switch (props.type) {
         case 'slide-image':
@@ -126,29 +143,31 @@ export default defineComponent({
       }
     })
     const hasImage = computed(() => {
-      return (props.type === 'slide-image' || props.type === 'rotate-image') && props.image
+      return props.type === 'slide-image' && props.image
+    })
+    const canvasSize = computed(() => {
+      return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
 
+    watch(() => props.slideTarget, parseTarget)
     watch(
-      () => props.slideTarget,
-      value => {
-        currentTarget.value = value ?? currentTarget.value ?? random(80, 20)
+      () => props.image,
+      async () => {
+        await loadImage()
+        drawImage()
       }
+    )
+    watch(
+      [() => props.type, currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]],
+      drawImage
     )
 
     expose({ refresh })
 
-    const handleImageResize = debounce((entry: ResizeObserverEntry) => {
-      if (!canvas.value) return
-
-      const width = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width
-      const height = Math.round((width / 16) * 9)
-
-      canvas.value.width = width
-      canvas.value.height = height
-
+    onMounted(async () => {
+      await loadImage()
       drawImage()
-    }, 16)
+    })
 
     function verifyPosition() {
       currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
@@ -158,25 +177,81 @@ export default defineComponent({
       resetting.value = false
     }
 
+    function loadImage() {
+      return new Promise<void>(resolve => {
+        image = isClient && new Image()
+
+        if (!image) {
+          resolve()
+          return
+        }
+
+        imageLoaded = false
+        image.src = props.image
+        image.onload = () => {
+          imageLoaded = true
+          resolve()
+        }
+      })
+    }
+
     function drawImage() {
       const canvasEl = canvas.value
       const ctx = canvasEl?.getContext('2d')
+      const subCanvasEl = subCanvas.value
+      const subCtx = subCanvasEl?.getContext('2d')
 
-      if (!canvasEl || !ctx || !props.image) return
+      if (!image || !imageLoaded || !canvasEl || !ctx || !subCanvasEl || !subCtx || !props.image) { return }
 
-      const image = new Image()
+      const canvasRect = canvasEl.getBoundingClientRect()
+      const subImageRect = track.value!.getBoundingClientRect()
+      const widthFix = ((canvasRect.width - subImageRect.width) / canvasRect.width) * canvasEl.width
 
-      image.src = props.image
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
-      }
+      const targetX = widthFix / 2 + currentTarget.value[0] * (canvasEl.width - widthFix) * 0.01
+      const targetY = currentTarget.value[1] * canvasEl.height * 0.01
+      const sideLength = Math.min(canvasEl.width, canvasEl.height) * 0.25
+      const halfSideLength = sideLength * 0.5
+
+      subCanvasEl.width = sideLength
+
+      ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
+
+      subCtx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+      subCtx.shadowBlur = 4
+      subCtx.drawImage(
+        canvas.value!,
+        targetX - halfSideLength,
+        targetY - halfSideLength,
+        sideLength,
+        sideLength,
+        0,
+        targetY - halfSideLength,
+        sideLength,
+        sideLength
+      )
+
+      ctx.clearRect(targetX - halfSideLength, targetY - halfSideLength, sideLength, sideLength)
     }
 
-    function refresh() {
-      currentTarget.value = props.slideTarget ?? random(80, 20)
+    function refresh(target = props.slideTarget) {
+      currentTarget.value = parseTarget(target)
+      isSuccess.value = false
+    }
+
+    function parseTarget(target = props.slideTarget) {
+      if (isNull(target)) return [random(80, 30), random(80, 20)]
+
+      const [targetX = random(80, 30), targetY = random(80, 20)] = ensureArray(target)
+
+      return [targetX, targetY]
     }
 
     function matchTarget(value: number) {
+      console.log({
+        target: usedTarget.value,
+        current: value,
+        tolerance: tolerance.value
+      })
       return Math.abs(usedTarget.value - value) <= tolerance.value
     }
 
@@ -185,10 +260,23 @@ export default defineComponent({
         <div class={className.value} tabindex={-1}>
           {hasImage.value && (
             <div class={nh.be('image')}>
-              <ResizeObserver onResize={handleImageResize}>
-                <div class={nh.be('width-detector')}></div>
-              </ResizeObserver>
-              <canvas ref={canvas}></canvas>
+              <canvas
+                ref={canvas}
+                class={nh.be('canvas')}
+                width={canvasSize.value[0]}
+                height={canvasSize.value[1]}
+              ></canvas>
+              <div ref={subImage} class={nh.be('sub-image')}>
+                <canvas
+                  ref={subCanvas}
+                  class={nh.be('sub-canvas')}
+                  height={canvasSize.value[1]}
+                  style={subCanvasStyle.value}
+                ></canvas>
+              </div>
+              {props.type === 'slide-image' && isSuccess.value && (
+                <div class={nh.be('image-tip')}>{props.successTip ?? locale.value.success}</div>
+              )}
             </div>
           )}
           <div class={nh.be('slider')}>
@@ -199,7 +287,6 @@ export default defineComponent({
                 [nh.bem('filler', 'success')]: isSuccess.value
               }}
               style={fillerStyle.value}
-              onTransitionend={afterReset}
             ></div>
             <div
               class={{
@@ -212,7 +299,7 @@ export default defineComponent({
             >
               {slots.tip
                 ? slots.tip({ success: isSuccess.value })
-                : isSuccess.value
+                : props.type === 'slide' && isSuccess.value
                   ? props.successTip ?? locale.value.success
                   : props.tip ?? normalTip.value}
             </div>
@@ -227,6 +314,7 @@ export default defineComponent({
                 }}
                 tabindex={0}
                 style={triggerStyle.value}
+                onTransitionend={afterReset}
               >
                 {slots.trigger
                   ? (

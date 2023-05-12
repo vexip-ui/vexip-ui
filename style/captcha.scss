@@ -6,6 +6,11 @@
 $captcha: () !default;
 $captcha: map.merge(
   (
+    bg-color: get-css-var('bg-color-base'),
+    b-color: get-css-var('border-color-light-2'),
+    radius: get-css-var('radius-base'),
+    shadow: get-css-var('shadow-base'),
+    image-radius: get-css-var('radius-base'),
     slider-height: 32px,
     slider-radius: get-css-var('radius-base'),
     slider-bg-color: get-css-var('fill-color-background'),
@@ -16,10 +21,12 @@ $captcha: map.merge(
     tip-color-fill: get-css-var('color-white'),
     tip-transition: 'background-position 0ms ease',
     trigger-width: 32px,
+    trigger-height: 32px,
     trigger-color: get-css-var('content-color-third'),
     trigger-color-hover: get-css-var('color-primary-base'),
     trigger-color-success: get-css-var('color-success-base'),
-    trigger-bg-color: get-css-var('fill-color-base'),
+    trigger-bg-color: get-css-var('color-white'),
+    trigger-radius: get-css-var('radius-small'),
     trigger-transition: 'left 0ms ease'
   ),
   $captcha
@@ -32,11 +39,64 @@ $captcha: map.merge(
 
   @include basis;
 
+  &--slide-image {
+    @include define-preset-values(
+      'captcha',
+      (
+        slider-height: 24px,
+        slider-radius: 12px
+      )
+    );
+
+    padding: 12px 16px;
+    background-color: get-css-var('captcha-bg-color');
+    border: get-css-var('border-shape') get-css-var('captcha-b-color');
+    border-radius: get-css-var('captcha-radius');
+    box-shadow: get-css-var('captcha-shadow');
+  }
+
   &__image {
     position: relative;
     display: flex;
     width: 100%;
-    min-height: 1px;
+    height: 0;
+    padding-top: 60%;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: get-css-var('border-light-2');
+    border-radius: get-css-var('captcha-image-radius');
+  }
+
+  &__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__sub-image {
+    position: absolute;
+    inset: 0 calc(#{get-css-var('captcha-trigger-width')} * 0.5);
+  }
+
+  &__sub-canvas {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    will-change: left;
+    pointer-events: none;
+    transition: get-css-var('captcha-trigger-transition');
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  &__image-tip {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   &__width-detector {
@@ -64,12 +124,9 @@ $captcha: map.merge(
 
   &__filler {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     background-color: get-css-var('captcha-filler-bg-color');
-    border-radius: get-css-var('captcha-slider-radius');
+    border-radius: get-css-var('captcha-trigger-radius');
     will-change: transform;
     transition: get-css-var('transition-background'), get-css-var('captcha-filler-transition');
     transform: scaleX(0);
@@ -80,12 +137,13 @@ $captcha: map.merge(
     }
   }
 
+  &--slide-image &__filler {
+    display: none;
+  }
+
   &__tip {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,25 +161,33 @@ $captcha: map.merge(
     transition: get-css-var('captcha-tip-transition');
   }
 
+  &--slide-image &__tip {
+    line-height: 1;
+    color: get-css-var('content-color-third');
+    background-image: none;
+  }
+
   &__track {
     position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
     height: 100%;
   }
 
   &__trigger {
     position: absolute;
-    top: 0;
-    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     width: get-css-var('captcha-trigger-width');
+    height: get-css-var('captcha-trigger-height');
     color: get-css-var('captcha-trigger-color');
     cursor: move;
     background-color: get-css-var('captcha-trigger-bg-color');
-    border-radius: get-css-var('captcha-slider-radius');
+    border-radius: get-css-var('captcha-trigger-radius');
     will-change: left;
+    box-shadow: get-css-var('shadow-base');
     transition: get-css-var('transition-color'), get-css-var('captcha-trigger-transition');
     transform: translate3d(-50%, 0, 0);
 
@@ -138,5 +204,9 @@ $captcha: map.merge(
         color: get-css-var('captcha-trigger-color-success');
       }
     }
+  }
+
+  &--slide-image &__trigger {
+    border-radius: 50%;
   }
 }

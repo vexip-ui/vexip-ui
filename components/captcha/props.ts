@@ -7,11 +7,12 @@ import type { CaptchaType } from './symbol'
 export const captchaProps = buildProps({
   type: String as PropType<CaptchaType>,
   loading: booleanProp,
-  slideTarget: Number,
+  slideTarget: [Number, Array] as PropType<number | number[]>,
   tip: String,
   successTip: String,
   image: String,
   tolerance: Number,
+  canvasSize: Array as PropType<number[]>,
   onBeforeTest: Function as PropType<(checked: boolean) => unknown>,
   onSuccess: eventProp(),
   onFail: eventProp()
