@@ -16,6 +16,7 @@ import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
 import type { App } from 'vue'
 import type { Router } from 'vitepress'
+import { Global } from './components/global'
 
 export default {
   Layout,
@@ -45,20 +46,19 @@ function syncThemeColors() {
 }
 
 function enhanceApp(app: App) {
-  app
-    .component('Demo', Demo)
-    .component('AudioButton', AudioButton)
-    .component('IconDemo', IconDemo)
-    .use(i18n)
-    .use(VexipUI, {
-      locale: vexipuiLocale,
-      props: {
-        default: {
-          transfer: true,
-          autoRemove: true
-        }
+  Global.forEach(([compName, comp]) => {
+    app.component(compName, comp)
+  })
+
+  app.use(i18n).use(VexipUI, {
+    locale: vexipuiLocale,
+    props: {
+      default: {
+        transfer: true,
+        autoRemove: true
       }
-    })
+    }
+  })
 }
 
 function enhanceRouter(router: Router) {

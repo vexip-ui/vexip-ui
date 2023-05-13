@@ -373,6 +373,9 @@ importers:
       kolorist:
         specifier: ^1.7.0
         version: 1.7.0
+      local-pkg:
+        specifier: ^0.4.2
+        version: 0.4.3
       markdown-it:
         specifier: ^13.0.1
         version: 13.0.1
@@ -7093,6 +7096,7 @@ packages:
   /local-pkg@0.4.2:
     resolution: {integrity: sha512-mlERgSPrbxU3BP4qBqAvvwlgW4MTg78iwJdGGnv7kibKjWcJksrG3t6LB5lXI93wXRDvG4NpUgJFmTG4T6rdrg==}
     engines: {node: '>=14'}
+    dev: false
 
   /local-pkg@0.4.3:
     resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
@@ -10431,7 +10435,7 @@ packages:
       chokidar: 3.5.3
       debug: 4.3.4
       fast-glob: 3.2.12
-      local-pkg: 0.4.2
+      local-pkg: 0.4.3
       magic-string: 0.26.7
       minimatch: 5.1.0
       resolve: 1.22.1
