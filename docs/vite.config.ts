@@ -6,7 +6,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
-import { MarkdownTransform } from './.vitepress/plugins/md-transform'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 
@@ -60,8 +59,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       i18n({
         compositionOnly: false,
         include: resolve(__dirname, 'i18n')
-      }),
-      MarkdownTransform()
+      })
     ]
   }
 })

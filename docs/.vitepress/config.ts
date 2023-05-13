@@ -1,8 +1,8 @@
-import { toKebabCase } from '@vexip-ui/utils'
-import { highlight } from './build/highlight'
-import { markdownItSetup } from './build/markdown'
 import { getGuideConfig } from './config/guide'
 import { getComponentConfig } from './config/component'
+import { highlight } from '../build/highlight'
+import { markdownItSetup } from '../build/markdown'
+import { toKebabCase } from '@vexip-ui/utils'
 
 import type { UserConfig } from 'vitepress'
 import type { ThemeConfig } from './theme/types'

@@ -27,7 +27,9 @@ export const enUS = defineI18n({
     editPage: 'Edit this page on GitHub',
     pageNotFound: 'Page Not Found',
     backHomepage: 'Back to homepage',
-    lastTime: 'Last updated'
+    lastUpdated: 'Last updated',
+    contributors: 'Contributions',
+    thanksContribute: 'Thanks for all their contributions!'
   },
   alert: {
     info: 'Tip',

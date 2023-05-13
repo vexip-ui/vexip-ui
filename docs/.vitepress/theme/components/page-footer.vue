@@ -5,6 +5,9 @@ import { useI18n } from 'vue-i18n'
 import { PenToSquareR } from '@vexip-ui/icons'
 import { format } from '@vexip-ui/utils'
 
+import Contributors from './contributors.vue'
+import PageLinks from './page-links.vue'
+
 import type { ThemeConfig } from '../types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
@@ -31,32 +34,40 @@ const lastUpdated = computed(() => {
 </script>
 
 <template>
-  <div v-if="hasEditLink" class="edit-link">
-    <Linker type="primary" :to="editLink.link" :icon="PenToSquareR">
-      {{ t(editLink.i18n) }}
-    </Linker>
-
-    <div v-if="lastUpdated" class="edit-last-time">
-      {{ t('common.lastUpdated') }}：{{ lastUpdated }}
+  <div class="page-footer">
+    <Contributors></Contributors>
+    <div class="page-footer__edit-info">
+      <Linker
+        v-if="hasEditLink"
+        class="edit-link"
+        type="primary"
+        :to="editLink.link"
+        :icon="PenToSquareR"
+      >
+        {{ t(editLink.i18n) }}
+      </Linker>
+      <span role="none" style="flex: auto"></span>
+      <div v-if="lastUpdated" class="last-updated">
+        {{ t('common.lastUpdated') }}: {{ lastUpdated }}
+      </div>
     </div>
+    <Divider style="--vxp-divider-v-margin: 6px"></Divider>
+    <PageLinks></PageLinks>
   </div>
 </template>
 
 <style lang="scss">
-.edit-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 72px;
-  padding: 16px 0;
+.page-footer {
+  &__edit-info {
+    display: flex;
+    align-items: center;
+    height: 72px;
+    padding: 16px 0;
+    margin-top: 20px;
+  }
 
   .vxp-linker {
     height: 100%;
-  }
-
-  .edit-last-time {
-    font-weight: 500;
-    color: var(--vp-text-color-2);
   }
 }
 </style>

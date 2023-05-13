@@ -23,15 +23,11 @@ html {
   --ghost-bg-color: #234;
   --ghost-padding: 10px;
 
-  --vp-text-color-2: rgba(60, 60, 67, 75%);
-
   &.dark {
     --bg-color: #131719;
     --body-bg-color: #1b1b1b;
     --ghost-bg-color: transparent;
     --ghost-padding: 0;
-
-    --vp-text-color-2: rgba(235, 235, 245, 60%);
   }
 
   @include query-media('xl') {
@@ -66,6 +62,7 @@ code {
 article {
   h1 {
     margin: 0.6em 0 1em;
+    font-size: 30px;
     font-weight: 400;
   }
 
@@ -76,6 +73,10 @@ article {
   h6 {
     margin: 1.6em 0 0.6em;
     font-weight: 400;
+  }
+
+  h2 {
+    font-size: 24px;
   }
 }
 

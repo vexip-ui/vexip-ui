@@ -8,8 +8,8 @@ import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-vue-markdown'
 import { cyan, green, red } from 'kolorist'
-import { highlight } from './.vitepress/build/highlight'
-import { markdownItSetup } from './.vitepress/build/markdown'
+import { highlight } from './build/highlight'
+import { markdownItSetup } from './build/markdown'
 
 import type { Plugin, Logger } from 'vite'
 

@@ -25,7 +25,9 @@ export interface I18nConfig {
     editPage: string,
     pageNotFound: string,
     backHomepage: string,
-    lastTime: string
+    lastUpdated: string,
+    contributors: string,
+    thanksContribute: string
   },
   alert: {
     info: string,

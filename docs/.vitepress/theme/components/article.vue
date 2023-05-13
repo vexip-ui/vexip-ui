@@ -2,8 +2,9 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from '../common/toc-anchor'
 
-import EditLink from './edit-link.vue'
-import PageLinks from './page-links.vue'
+// import EditLink from './edit-link.vue'
+// import PageLinks from './page-links.vue'
+import PageFooter from './page-footer.vue'
 
 import type { PropType } from 'vue'
 import type { RowExposed } from 'vexip-ui'
@@ -77,11 +78,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
     <ResizeObserver @resize="handleContentResize">
       <Column flex="auto" style="min-width: 0">
         <slot></slot>
-        <div class="article__footer">
-          <EditLink></EditLink>
-          <Divider style="--vxp-divider-v-margin: 6px"></Divider>
-          <PageLinks></PageLinks>
-        </div>
+        <PageFooter class="article__footer"></PageFooter>
       </Column>
     </ResizeObserver>
     <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">

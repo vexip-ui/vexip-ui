@@ -5,18 +5,15 @@ import { install as VexipUI, Loading } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
 import prismjs from 'prismjs'
 import { langOptions, i18n, vexipuiLocale } from './i18n'
+import { installGlobals } from './globals'
 import { computeSeriesColors } from './common/series-color'
 
 import Layout from './app.vue'
-import Demo from './components/demo.vue'
-import AudioButton from './components/audio-button.vue'
-import IconDemo from './components/icon-demo.vue'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
 import type { App } from 'vue'
 import type { Router } from 'vitepress'
-import { Global } from './components/global'
 
 export default {
   Layout,
@@ -46,9 +43,7 @@ function syncThemeColors() {
 }
 
 function enhanceApp(app: App) {
-  Global.forEach(([compName, comp]) => {
-    app.component(compName, comp)
-  })
+  installGlobals(app)
 
   app.use(i18n).use(VexipUI, {
     locale: vexipuiLocale,

@@ -27,7 +27,9 @@ export const zhCN = defineI18n({
     editPage: '在 GitHub 上编辑此页',
     pageNotFound: '页面不见了',
     backHomepage: '返回首页',
-    lastTime: '上次更新'
+    lastUpdated: '上次更新',
+    contributors: '贡献者',
+    thanksContribute: '感谢他们的所做的一切贡献！'
   },
   alert: {
     info: '提示',
