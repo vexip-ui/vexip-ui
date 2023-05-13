@@ -68,6 +68,7 @@ watch(
     class="docs-layout"
     sign-type="header"
     :no-aside="page.frontmatter.homepage || page.isNotFound"
+    :footer="!(page.frontmatter.homepage || page.isNotFound)"
     :style="{
       height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width)',
@@ -77,13 +78,16 @@ watch(
     <template #sign>
       <HeaderSign></HeaderSign>
     </template>
+
     <template #header-main>
       <DocSearch></DocSearch>
     </template>
+
     <template #header-right>
       <HeaderNav></HeaderNav>
       <HeaderSuffix></HeaderSuffix>
     </template>
+
     <template #header-user>
       <header
         v-if="!page.frontmatter.homepage && !page.isNotFound"
@@ -103,18 +107,30 @@ watch(
         <HeaderNav></HeaderNav>
       </header>
     </template>
+
     <template #aside-main>
       <AsideMenu @menu-select="expanded = false"></AsideMenu>
     </template>
+
     <template #aside-bottom>
       <span></span>
     </template>
+
+    <!-- Main content -->
     <Homepage v-if="page.frontmatter.homepage"></Homepage>
     <NotFound v-else-if="page.isNotFound"></NotFound>
     <Article v-else :anchor-level="outline">
       <Content class="markdown"></Content>
     </Article>
     <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+
+    <template #footer-copyright>
+      Made with ❤️ by
+      <Linker type="primary" to="https://github.com/vexip-ui">
+        Vexip UI
+      </Linker>
+      and contributors
+    </template>
   </Layout>
 </template>
 
@@ -146,6 +162,10 @@ watch(
 
     &__sider--away {
       z-index: calc(var(--header-z-index) + 2);
+    }
+
+    &__copyright {
+      padding: 24px 16px;
     }
   }
 }

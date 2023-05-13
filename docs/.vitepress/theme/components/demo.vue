@@ -1,93 +1,7 @@
-<template>
-  <Row ref="wrapper" tag="section" :class="prefix">
-    <Column>
-      <div :class="`${prefix}__example`">
-        <NativeScroll
-          mode="horizontal"
-          width="100%"
-          use-x-bar
-          :scroll-style="{
-            display: 'inline-block',
-            padding: '20px 12px 8px'
-          }"
-        >
-          <!-- <slot></slot> -->
-          <component :is="demo" v-if="demo"></component>
-        </NativeScroll>
-      </div>
-      <div :class="`${prefix}__description`">
-        <slot></slot>
-      </div>
-    </Column>
-    <Column :class="`${prefix}__actions`">
-      <Tooltip reverse transfer>
-        <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
-            <Icon :scale="1.1" @click="copyCodes">
-              <CopyR></CopyR>
-            </Icon>
-          </button>
-        </template>
-        {{ t('common.copyCode') }}
-      </Tooltip>
-      <Tooltip reverse transfer>
-        <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="t('common.editOnGithub')" @click="editOnGithub">
-              <PenToSquareR></PenToSquareR>
-            </Icon>
-          </button>
-        </template>
-        {{ t('common.editOnGithub') }}
-      </Tooltip>
-      <Tooltip reverse transfer>
-        <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="t('common.editOnPlayground')" @click="editOnPlayground">
-              <PaperPlaneR></PaperPlaneR>
-            </Icon>
-          </button>
-        </template>
-        {{ t('common.editOnPlayground') }}
-      </Tooltip>
-      <Tooltip reverse transfer>
-        <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
-            <Icon
-              :scale="1.1"
-              :label="codeExpanded ? t('common.hideCode') : t('common.showCode')"
-              @click="expandCodes"
-            >
-              <Code></Code>
-            </Icon>
-          </button>
-        </template>
-        {{ codeExpanded ? t('common.hideCode') : t('common.showCode') }}
-      </Tooltip>
-    </Column>
-    <CollapseTransition>
-      <Column v-show="codeExpanded" :class="`${prefix}__code`">
-        <div :class="`language-vue`">
-          <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
-          <span v-if="codeLines > 0" class="code-line-numbers">
-            <span v-for="n in codeLines" :key="n"></span>
-          </span>
-        </div>
-        <button type="button" :class="`${prefix}__reduce`" @click="expandCodes">
-          <Icon><ChevronUp></ChevronUp></Icon>
-          <span :class="`${prefix}__tip`">
-            {{ t('common.hideCode') }}
-          </span>
-        </button>
-      </Column>
-    </CollapseTransition>
-  </Row>
-</template>
-
 <script setup lang="ts">
 import { defineAsyncComponent, markRaw, ref, watchEffect } from 'vue'
 import { Message } from 'vexip-ui'
-import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
+import { PasteR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
 import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
@@ -208,6 +122,92 @@ function editOnPlayground() {
   }
 }
 </script>
+
+<template>
+  <Row ref="wrapper" tag="section" :class="prefix">
+    <Column>
+      <div :class="`${prefix}__example`">
+        <NativeScroll
+          mode="horizontal"
+          width="100%"
+          use-x-bar
+          :scroll-style="{
+            display: 'inline-block',
+            padding: '20px 12px 8px'
+          }"
+        >
+          <!-- <slot></slot> -->
+          <component :is="demo" v-if="demo"></component>
+        </NativeScroll>
+      </div>
+      <div :class="`${prefix}__description`">
+        <slot></slot>
+      </div>
+    </Column>
+    <Column :class="`${prefix}__actions`">
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button type="button" :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="copyCodes">
+              <PasteR></PasteR>
+            </Icon>
+          </button>
+        </template>
+        {{ t('common.copyCode') }}
+      </Tooltip>
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button type="button" :class="`${prefix}__action`">
+            <Icon :scale="1.1" :label="t('common.editOnGithub')" @click="editOnGithub">
+              <PenToSquareR></PenToSquareR>
+            </Icon>
+          </button>
+        </template>
+        {{ t('common.editOnGithub') }}
+      </Tooltip>
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button type="button" :class="`${prefix}__action`">
+            <Icon :scale="1.1" :label="t('common.editOnPlayground')" @click="editOnPlayground">
+              <PaperPlaneR></PaperPlaneR>
+            </Icon>
+          </button>
+        </template>
+        {{ t('common.editOnPlayground') }}
+      </Tooltip>
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button type="button" :class="`${prefix}__action`">
+            <Icon
+              :scale="1.1"
+              :label="codeExpanded ? t('common.hideCode') : t('common.showCode')"
+              @click="expandCodes"
+            >
+              <Code></Code>
+            </Icon>
+          </button>
+        </template>
+        {{ codeExpanded ? t('common.hideCode') : t('common.showCode') }}
+      </Tooltip>
+    </Column>
+    <CollapseTransition>
+      <Column v-show="codeExpanded" :class="`${prefix}__code`">
+        <div :class="`language-vue`">
+          <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
+          <span v-if="codeLines > 0" class="code-line-numbers">
+            <span v-for="n in codeLines" :key="n"></span>
+          </span>
+        </div>
+        <button type="button" :class="`${prefix}__reduce`" @click="expandCodes">
+          <Icon><ChevronUp></ChevronUp></Icon>
+          <span :class="`${prefix}__tip`">
+            {{ t('common.hideCode') }}
+          </span>
+        </button>
+      </Column>
+    </CollapseTransition>
+  </Row>
+</template>
 
 <style lang="scss">
 @use '../style/mixins.scss' as *;

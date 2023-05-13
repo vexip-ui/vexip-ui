@@ -2,8 +2,6 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { ussTocAnchor } from '../common/toc-anchor'
 
-// import EditLink from './edit-link.vue'
-// import PageLinks from './page-links.vue'
 import PageFooter from './page-footer.vue'
 
 import type { PropType } from 'vue'
