@@ -3,13 +3,17 @@ import { getComponentConfig } from './config/component'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { toKebabCase } from '@vexip-ui/utils'
+import * as compiler from '@vue/compiler-sfc'
 
 import type { UserConfig } from 'vitepress'
 import type { ThemeConfig } from './theme/types'
 
+compiler.parseCache.max = 10000
+
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
+  ignoreDeadLinks: true,
   head: [
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
@@ -20,6 +24,12 @@ export default <UserConfig<ThemeConfig>>{
   markdown: {
     highlight,
     config: markdownItSetup
+  },
+  vue: {
+    template: {
+      ssr: true
+    },
+    compiler: compiler as any
   },
   themeConfig: {
     /**

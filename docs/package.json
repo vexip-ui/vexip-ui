@@ -2,26 +2,26 @@
   "name": "@vexip-ui/docs",
   "author": "qmhc",
   "scripts": {
-    "build": "vite build",
-    "preview": "vite preview",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
     "serve": "cross-env NODE_ENV=development vitepress dev",
     "serve:ssr": "cross-env SSR=true tsx server.ts"
   },
   "type": "module",
   "private": true,
   "dependencies": {
-    "@vexip-ui/hooks": "workspace:*",
-    "@vexip-ui/icons": "workspace:*",
-    "@vexip-ui/utils": "workspace:*",
+    "@vexip-ui/hooks": "workspace:^",
+    "@vexip-ui/icons": "workspace:^",
+    "@vexip-ui/utils": "workspace:^",
     "fflate": "^0.7.4",
     "prismjs": "^1.29.0",
-    "vexip-ui": "workspace:*",
+    "vexip-ui": "workspace:^",
     "vue": "^3.2.47",
-    "vue-i18n": "^9.2.2",
+    "vue-i18n": "^9.3.0-beta.17",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@intlify/unplugin-vue-i18n": "^0.8.2",
+    "@intlify/unplugin-vue-i18n": "^0.10.0",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.17",
     "@types/markdown-it": "^12.2.3",
@@ -31,6 +31,7 @@
     "@types/serve-static": "^1.15.1",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
+    "@vue/compiler-sfc": "^3.3.2",
     "autoprefixer": "^10.4.14",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
@@ -47,6 +48,6 @@
     "sass": "^1.58.3",
     "vite": "^4.3.4",
     "vite-plugin-vue-markdown": "^0.22.4",
-    "vitepress": "1.0.0-alpha.72"
+    "vitepress": "1.0.0-alpha.75"
   }
 }

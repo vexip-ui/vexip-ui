@@ -1,11 +1,11 @@
 import './style/index.scss'
 
-import { withBase } from 'vitepress'
 import { install as VexipUI, Loading } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
 import { langOptions, i18n, vexipuiLocale } from './i18n'
 import { installGlobals } from './globals'
 import { computeSeriesColors } from './common/series-color'
+// import { withBase } from './common/utils'
 
 import Layout from './app.vue'
 import prismjs from 'prismjs'
@@ -76,7 +76,7 @@ function enhanceRouter(router: Router) {
 
   function syncLocale(to: string) {
     for (const lang of langOptions) {
-      const path = withBase(`/${lang}`)
+      const path = `/${lang}`
 
       if (to.startsWith(path)) {
         i18n.global.locale.value = lang

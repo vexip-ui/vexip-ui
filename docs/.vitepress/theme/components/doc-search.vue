@@ -3,7 +3,7 @@ import { ref, watchEffect, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { MagnifyingGlass } from '@vexip-ui/icons'
-import { toKebabCase } from '@vexip-ui/utils'
+import { isClient, toKebabCase } from '@vexip-ui/utils'
 import { getComponentConfig } from '../../config/component'
 
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -12,7 +12,7 @@ const router = useRouter()
 const route = useRoute()
 
 const rawOptions: string[] = []
-const isMacPlatform = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const isMacPlatform = isClient && navigator.platform.toUpperCase().indexOf('MAC') >= 0
 
 for (const group of getComponentConfig()) {
   rawOptions.push(
