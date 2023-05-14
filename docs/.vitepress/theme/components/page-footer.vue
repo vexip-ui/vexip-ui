@@ -46,7 +46,7 @@ const lastUpdated = computed(() => {
       >
         {{ t(editLink.i18n) }}
       </Linker>
-      <span role="none" style="flex: auto"></span>
+      <span role="none" style="flex: auto; flex-basis: 6em"></span>
       <div v-if="lastUpdated" class="last-updated">
         {{ t('common.lastUpdated') }}: {{ lastUpdated }}
       </div>
