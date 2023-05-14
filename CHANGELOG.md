@@ -1,3 +1,12 @@
+## [2.1.20](https://github.com/vexip-ui/vexip-ui/compare/v2.1.19...v2.1.20) (2023-05-14)
+
+
+### Bug Fixes
+
+* **scrollbar:** incorrect style import path ([5e2a8c9](https://github.com/vexip-ui/vexip-ui/commit/5e2a8c9cf4e556144445de13386b63b8273012c4))
+
+
+
 ## [2.1.19](https://github.com/vexip-ui/vexip-ui/compare/v2.1.17...v2.1.19) (2023-05-14)
 
 
