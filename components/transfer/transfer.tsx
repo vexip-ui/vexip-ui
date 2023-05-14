@@ -1,5 +1,4 @@
 import { defineComponent, ref, reactive, toRef, computed, watchEffect, watch } from 'vue'
-import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
@@ -12,6 +11,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import TransferPanel from './transfer-panel'
 import { transferProps } from './props'
 
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
