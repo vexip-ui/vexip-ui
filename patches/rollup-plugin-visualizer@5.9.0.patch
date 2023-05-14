@@ -1,0 +1,13 @@
+diff --git a/dist/plugin/index.js b/dist/plugin/index.js
+index 41adf3fc731b296e70eedae45b132651ac9e4e68..82ac2ff4b5907eef30048de1d6588cf74ab99f8c 100644
+--- a/dist/plugin/index.js
++++ b/dist/plugin/index.js
+@@ -39,7 +39,7 @@ const visualizer = (opts = {}) => {
+                 if (opts.json)
+                     opts.template = "raw-data";
+             }
+-            const filename = (_a = opts.filename) !== null && _a !== void 0 ? _a : chooseDefaultFileName(opts);
++            const filename = ((_a = opts.filename) !== null && _a !== void 0 ? _a : chooseDefaultFileName(opts)).replace('[format]', outputOptions.format);
+             const title = (_b = opts.title) !== null && _b !== void 0 ? _b : "Rollup Visualizer";
+             const open = !!opts.open;
+             const openOptions = (_c = opts.openOptions) !== null && _c !== void 0 ? _c : {};

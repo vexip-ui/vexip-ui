@@ -2,9 +2,10 @@
 
 ```ts
 type Key = string | number | symbol
-type Data = Record<string, any>
+type Data = any
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
+type TableTextAlign = 'left' | 'center' | 'right'
 
 interface TableKeyConfig {
   id?: string,
@@ -299,6 +300,7 @@ interface TableHeadPayload {
 | truth-index     | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
 | order-label     | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
 | meta-data       | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -        |
+| text-align      | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
 
 ### TableColumn Slots
 

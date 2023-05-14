@@ -181,6 +181,11 @@ $table: map.merge(
       text-align: center;
     }
 
+    &--right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
     &--wrap {
       word-break: break-all;
       white-space: pre-wrap;

@@ -1,150 +1,10 @@
-<template>
-  <div
-    ref="wrapper"
-    :class="className"
-    tabindex="0"
-    @blur="handleBlur"
-  >
-    <div ref="header" :class="nh.be('header')">
-      <slot name="header" v-bind="getSlotPayload()">
-        <Checkbox
-          inherit
-          control
-          :class="nh.be('checkbox')"
-          :state="deepState ? state : undefined"
-          :checked="allSelected"
-          :partial="partial"
-          :disabled="disabled"
-          :tab-index="-1"
-          @click.prevent="toggleSelectAll"
-        ></Checkbox>
-        <div
-          :class="[nh.be('reverse'), disabled && nh.bem('reverse', 'disabled')]"
-          :title="locale.reverse"
-          @click="handleReverse"
-        >
-          <Icon v-bind="icons.retweet" :scale="1.2"></Icon>
-        </div>
-        <div :class="nh.be('counter')">
-          {{ `${currentSelected.size}/${visibleOptions.length}` }}
-        </div>
-        <span v-if="title || $slots.title" :class="nh.be('title')">
-          <slot name="title" v-bind="getSlotPayload()">
-            {{ title }}
-          </slot>
-        </span>
-        <CollapseTransition appear horizontal fade-effect>
-          <div v-if="loading" :class="nh.be('loading')">
-            <Icon
-              v-bind="icons.loading"
-              :effect="loadingEffect || icons.loading.effect"
-              :icon="loadingIcon || icons.loading.icon"
-            ></Icon>
-          </div>
-        </CollapseTransition>
-      </slot>
-    </div>
-    <div v-if="typeof filter === 'function'" ref="search" :class="nh.be('filter')">
-      <Input
-        ref="input"
-        v-model:value="currentFilter"
-        inherit
-        clearable
-        :disabled="disabled"
-        :placeholder="searching ? undefined : locale.search"
-        @keydown.stop
-        @input="currentFilter = $event"
-        @focus="searching = true"
-        @blur="searching = false"
-      >
-        <template #suffix>
-          <Icon v-bind="icons.search"></Icon>
-        </template>
-      </Input>
-    </div>
-    <ResizeObserver v-if="paged || $slots.body" throttle @resize="computePageSize">
-      <ul ref="body" :class="nh.be('body')" role="listbox">
-        <slot name="body" v-bind="getSlotPayload()">
-          <template v-if="pagedOptions.length">
-            <Renderer
-              v-for="(option, index) in pagedOptions"
-              :key="index"
-              :renderer="renderOption"
-              :data="{ option, index }"
-            >
-            </Renderer>
-          </template>
-          <div v-else :class="nh.be('empty')">
-            {{ emptyText || locale.empty }}
-          </div>
-        </slot>
-      </ul>
-    </ResizeObserver>
-    <VirtualList
-      v-else
-      ref="list"
-      inherit
-      :class="nh.be('body')"
-      :items="visibleOptions"
-      :item-size="optionHeight"
-      item-fixed
-      use-y-bar
-      id-key="value"
-      :items-attrs="{ role: 'listbox', ariaLabel: type }"
-      @resize="computePageSize"
-    >
-      <template #default="{ item: option, index }">
-        <Renderer :renderer="renderOption" :data="{ option, index }"></Renderer>
-      </template>
-      <template #empty>
-        <div :class="nh.be('empty')">
-          {{ emptyText || locale.empty }}
-        </div>
-      </template>
-    </VirtualList>
-    <div v-if="paged || $slots.footer" ref="footer" :class="nh.be('footer')">
-      <slot name="footer" v-bind="getSlotPayload()">
-        <div :class="nh.be('pagination')">
-          <Icon
-            v-bind="icons.arrowLeft"
-            :class="[nh.be('page-plus'), currentPage <= 1 && nh.bem('page-plus', 'disabled')]"
-            @click="handlePageChange(currentPage - 1)"
-          ></Icon>
-          <NumberInput
-            inherit
-            :value="currentPage"
-            :class="nh.be('page-input')"
-            size="small"
-            :min="1"
-            :max="totalPages"
-            @change="handlePageChange"
-          ></NumberInput>
-          <span style="margin: 0 4px">/</span>
-          <span>
-            {{ totalPages }}
-          </span>
-          <Icon
-            v-bind="icons.arrowRight"
-            :class="[
-              nh.be('page-minus'),
-              currentPage >= totalPages && nh.bem('page-minus', 'disabled')
-            ]"
-            @click="handlePageChange(currentPage + 1)"
-          ></Icon>
-        </div>
-      </slot>
-    </div>
-  </div>
-</template>
-
-<script lang="tsx">
-import { defineComponent, ref, computed, watch, watchEffect } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, watch, watchEffect } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { NumberInput } from '@/components/number-input'
-import { Renderer } from '@/components/renderer'
+// import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 import { useNameHelper, useIcons, stateProp } from '@vexip-ui/config'
@@ -158,16 +18,16 @@ import type { TransferOptionState } from './symbol'
 
 export default defineComponent({
   name: 'TransferPanel',
-  components: {
-    Checkbox,
-    CollapseTransition,
-    Icon,
-    Input,
-    NumberInput,
-    Renderer,
-    ResizeObserver,
-    VirtualList
-  },
+  // components: {
+  //   Checkbox,
+  //   CollapseTransition,
+  //   Icon,
+  //   Input,
+  //   NumberInput,
+  //   Renderer,
+  //   ResizeObserver,
+  //   VirtualList
+  // },
   props: {
     type: {
       type: String as PropType<'source' | 'target'>,
@@ -237,6 +97,7 @@ export default defineComponent({
   emits: ['update:selected', 'select', 'enter', 'switch'],
   setup(props, { slots, emit }) {
     const nh = useNameHelper('transfer')
+    const icons = useIcons()
 
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
@@ -464,7 +325,9 @@ export default defineComponent({
       emitSelectedChange()
     }
 
-    function toggleSelectAll() {
+    function toggleSelectAll(event?: Event) {
+      event?.preventDefault()
+
       if (props.disabled) return
 
       if (allSelected.value) {
@@ -568,20 +431,33 @@ export default defineComponent({
       }
     }
 
-    function getSlotPayload() {
-      return {
-        type: props.type,
-        currentPage: currentPage.value,
-        pageSize: pageSize.value,
-        totalPages: totalPages.value,
-        allSelected: allSelected.value,
-        partial: partial.value,
-        selected: Array.from(currentSelected.value),
-        options: visibleOptions.value,
-        toggleSelectAll,
-        handleReverse
-      }
-    }
+    const slotParams = reactive({
+      type: toRef(props, 'type'),
+      currentPage,
+      pageSize,
+      totalPages,
+      allSelected,
+      partial,
+      selected: computed(() => Array.from(currentSelected.value)),
+      options: computed(() => visibleOptions.value),
+      toggleSelectAll,
+      handleReverse
+    })
+
+    // function slotParams {
+    //   return {
+    //     type: props.type,
+    //     currentPage: currentPage.value,
+    //     pageSize: pageSize.value,
+    //     totalPages: totalPages.value,
+    //     allSelected: allSelected.value,
+    //     partial: partial.value,
+    //     selected: Array.from(currentSelected.value),
+    //     options: visibleOptions.value,
+    //     toggleSelectAll,
+    //     handleReverse
+    //   }
+    // }
 
     function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
       const disabled = props.disabled || option.disabled
@@ -621,41 +497,180 @@ export default defineComponent({
       )
     }
 
-    return {
-      nh,
-      icons: useIcons(),
-      currentSelected,
-      pageSize,
-      currentPage,
-      currentMark,
-      currentFilter,
-      searching,
-
-      className,
-      visibleOptions,
-      partial,
-      allSelected,
-      pagedOptions,
-      totalPages,
-
-      wrapper,
-      header,
-      body,
-      footer,
-      search,
-      input,
-      list,
-
-      // computeBodyHeight,
-      computePageSize,
-      toggleSelect,
-      toggleSelectAll,
-      handleReverse,
-      handlePageChange,
-      handleBlur,
-      getSlotPayload,
-      renderOption
+    function renderHeader() {
+      return (
+        <div ref={header} class={nh.be('header')}>
+          {slots.header
+            ? (
+                slots.header(slotParams)
+              )
+            : (
+            <>
+              <Checkbox
+                inherit
+                control
+                class={nh.be('checkbox')}
+                state={props.deepState ? props.state : undefined}
+                checked={allSelected.value}
+                partial={partial.value}
+                disabled={props.disabled}
+                tab-index={-1}
+                onClick={toggleSelectAll}
+              ></Checkbox>
+              <div
+                class={[nh.be('reverse'), props.disabled && nh.bem('reverse', 'disabled')]}
+                title={props.locale.reverse}
+                onClick={handleReverse}
+              >
+                <Icon {...icons.value.retweet} scale={1.2}></Icon>
+              </div>
+              <div class={nh.be('counter')}>
+                {`${currentSelected.value.size}/${visibleOptions.value.length}`}
+              </div>
+              {(props.title || slots.title) && (
+                <span class={nh.be('title')}>
+                  {slots.title ? slots.title(slotParams) : props.title}
+                </span>
+              )}
+              <CollapseTransition appear horizontal fade-effect>
+                {props.loading && (
+                  <div class={nh.be('loading')}>
+                    <Icon
+                      {...icons.value.loading}
+                      effect={props.loadingEffect || icons.value.loading.effect}
+                      icon={props.loadingIcon || icons.value.loading.icon}
+                    ></Icon>
+                  </div>
+                )}
+              </CollapseTransition>
+            </>
+              )}
+        </div>
+      )
     }
+
+    function renderFilter() {
+      if (typeof props.filter !== 'function') return null
+
+      const stop = (e: Event) => e.stopPropagation()
+      const setFilter = (value: string) => (currentFilter.value = value)
+
+      return (
+        <div ref={search} class={nh.be('filter')}>
+          <Input
+            ref={input}
+            v-model:value={currentFilter.value}
+            inherit
+            clearable
+            disabled={props.disabled}
+            placeholder={searching.value ? undefined : props.locale.search}
+            onKeydown={stop}
+            onInput={setFilter}
+            onFocus={() => (searching.value = true)}
+            onBlur={() => (searching.value = false)}
+          >
+            {{
+              suffix: () => <Icon {...icons.value.search}></Icon>
+            }}
+          </Input>
+        </div>
+      )
+    }
+
+    function renderBody() {
+      if (props.paged || slots.body) {
+        return (
+          <ResizeObserver throttle onResize={computePageSize}>
+            <ul ref={body} class={nh.be('body')} role={'listbox'}>
+              {slots.body
+                ? (
+                    slots.body(slotParams)
+                  )
+                : pagedOptions.value.length
+                  ? (
+                      pagedOptions.value.map((option, index) => renderOption({ option, index }))
+                    )
+                  : (
+                <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+                    )}
+            </ul>
+          </ResizeObserver>
+        )
+      }
+
+      return (
+        <VirtualList
+          ref={list}
+          inherit
+          class={nh.be('body')}
+          items={visibleOptions.value}
+          item-size={props.optionHeight}
+          item-fixed
+          use-y-bar
+          id-key={'value'}
+          items-attrs={{ role: 'listbox', ariaLabel: props.type }}
+          onResize={computePageSize}
+        >
+          {{
+            default: ({ item, index }: { item: TransferOptionState, index: number }) =>
+              renderOption({ option: item, index }),
+            empty: () => <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+          }}
+        </VirtualList>
+      )
+    }
+
+    function renderFooter() {
+      if (!props.paged && !slots.footer) return null
+
+      return (
+        <div ref={footer} class={nh.be('footer')}>
+          {slots.footer
+            ? (
+                slots.footer(slotParams)
+              )
+            : (
+            <div class={nh.be('pagination')}>
+              <Icon
+                {...icons.value.arrowLeft}
+                class={[
+                  nh.be('page-plus'),
+                  currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
+                ]}
+                onClick={() => handlePageChange(currentPage.value - 1)}
+              ></Icon>
+              <NumberInput
+                inherit
+                value={currentPage.value}
+                class={nh.be('page-input')}
+                size={'small'}
+                min={1}
+                max={totalPages.value}
+                onChange={handlePageChange}
+              ></NumberInput>
+              <span style={'margin: 0 4px'}>/</span>
+              <span>{totalPages.value}</span>
+              <Icon
+                {...icons.value.arrowRight}
+                class={[
+                  nh.be('page-minus'),
+                  currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
+                ]}
+                onClick={() => handlePageChange(currentPage.value + 1)}
+              ></Icon>
+            </div>
+              )}
+        </div>
+      )
+    }
+
+    return () => (
+      <div ref={wrapper} class={className.value} tabindex={0} onBlur={handleBlur}>
+        {renderHeader()}
+        {renderFilter()}
+        {renderBody()}
+        {renderFooter()}
+      </div>
+    )
   }
 })
-</script>

@@ -5,6 +5,7 @@ temp
 .dev
 coverage
 cache
+temp
 /icons
 /es
 /lib

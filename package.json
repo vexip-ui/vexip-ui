@@ -152,11 +152,13 @@
     "jszip": "^3.10.1",
     "kolorist": "^1.8.0",
     "lint-staged": "^13.2.2",
+    "magic-string": "^0.30.0",
     "minimist": "^1.2.8",
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
     "prompts": "^2.4.2",
     "rimraf": "^4.1.2",
+    "rollup-plugin-visualizer": "^5.9.0",
     "sass": "^1.62.1",
     "semver": "^7.5.0",
     "stylelint": "^15.6.1",
@@ -184,7 +186,8 @@
       ]
     },
     "patchedDependencies": {
-      "conventional-changelog-angular@5.0.13": "patches/conventional-changelog-angular@5.0.13.patch"
+      "conventional-changelog-angular@5.0.13": "patches/conventional-changelog-angular@5.0.13.patch",
+      "rollup-plugin-visualizer@5.9.0": "patches/rollup-plugin-visualizer@5.9.0.patch"
     }
   }
 }

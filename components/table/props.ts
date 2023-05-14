@@ -14,6 +14,7 @@ import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Data,
   DropType,
+  TableTextAlign,
   TableKeyConfig,
   ExpandRenderFn,
   ColumnRenderFn,
@@ -126,6 +127,7 @@ export const tableColumnProps = buildProps({
     default: null
   },
   className: classProp,
+  class: classProp,
   style: styleProp,
   attrs: Object,
   type: String as PropType<TableColumnType>,
@@ -144,7 +146,8 @@ export const tableColumnProps = buildProps({
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>
+  metaData: Object as PropType<Data>,
+  textAlign: String as PropType<TableTextAlign>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
