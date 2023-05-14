@@ -25,7 +25,6 @@ export function markdownTransform(): Plugin {
       }
 
       const componentId = basename(id, '.md')
-      // const lang = getLang(id)
 
       if (components.includes(toCapitalCase(componentId))) {
         code = convertContributors(componentId, code)

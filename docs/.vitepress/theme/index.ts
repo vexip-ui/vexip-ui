@@ -3,12 +3,12 @@ import './style/index.scss'
 import { withBase } from 'vitepress'
 import { install as VexipUI, Loading } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
-import prismjs from 'prismjs'
 import { langOptions, i18n, vexipuiLocale } from './i18n'
 import { installGlobals } from './globals'
 import { computeSeriesColors } from './common/series-color'
 
 import Layout from './app.vue'
+import prismjs from 'prismjs'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
