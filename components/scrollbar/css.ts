@@ -1,2 +1,2 @@
 import '@/components/preset/css'
-import '@/css/anchor-link.css'
+import '@/css/scrollbar.css'
