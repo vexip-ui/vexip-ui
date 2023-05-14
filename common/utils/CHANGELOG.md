@@ -1,3 +1,17 @@
+# [1.12.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.1...utils@1.12.0) (2023-05-14)
+
+
+### Bug Fixes
+
+* **utils:** correct flatTree filter method ([94dacad](https://github.com/vexip-ui/vexip-ui/commit/94dacad0625fbd2e520d646a4afaad2692909c47))
+
+
+### Features
+
+* **utils:** enhance flatTree to support depth first and filter ([c5a5728](https://github.com/vexip-ui/vexip-ui/commit/c5a57284863de973dc0480243af114cc02217b44))
+
+
+
 ## [1.11.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.0...utils@1.11.1) (2023-05-06)
 
 
