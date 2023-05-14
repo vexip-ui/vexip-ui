@@ -1,14 +1,4 @@
-import {
-  ref,
-  reactive,
-  computed,
-  watch,
-  onBeforeMount,
-  onMounted,
-  onUpdated,
-  onBeforeUnmount,
-  inject
-} from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUpdated, onBeforeUnmount, inject } from 'vue'
 import { isClient, parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
 import { LAYOUT_STATE } from './symbol'
 
@@ -81,20 +71,20 @@ const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 export function useMediaQuery(query: Ref<string | boolean>) {
   const matched = ref(false)
 
-  if (!isClient) return matched
-
-  const computedStyle = getComputedStyle(document.documentElement)
+  const computedStyle = isClient && getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
     if (breakPoints.includes(query.value as any)) {
       const usedQuery = query.value === 'xs' ? 'sm' : query.value
-      const media = computedStyle.getPropertyValue(`--vxp-break-point-${usedQuery}`).trim()
+      const media =
+        computedStyle && computedStyle.getPropertyValue(`--vxp-break-point-${usedQuery}`).trim()
 
-      return `only screen and ${media}`
+      return media && `only screen and ${media}`
     }
 
     return query.value
   })
 
+  let isMounted = false
   let mediaQuery: MediaQueryList | undefined
 
   const update = () => {
@@ -113,25 +103,27 @@ export function useMediaQuery(query: Ref<string | boolean>) {
       return
     }
 
-    if (!mediaQuery) {
+    if (isMounted) {
       mediaQuery = matchMedia(computedQuery.value)
+      mediaQuery?.addEventListener('change', update)
     }
 
-    matched.value = mediaQuery.matches
+    matched.value = mediaQuery!.matches
   }
 
   watch(computedQuery, () => {
-    mediaQuery = undefined
     update()
   })
 
-  onBeforeMount(() => {
+  onMounted(() => {
+    isMounted = true
     update()
-    mediaQuery?.addEventListener('change', update)
   })
 
   onBeforeUnmount(() => {
+    isMounted = false
     mediaQuery?.removeEventListener('change', update)
+    mediaQuery = undefined
   })
 
   return matched
