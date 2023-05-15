@@ -248,9 +248,6 @@ importers:
 
   common/meta:
     devDependencies:
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
       dotenv:
         specifier: ^16.0.3
         version: 16.0.3
@@ -370,9 +367,6 @@ importers:
       compression:
         specifier: ^1.7.4
         version: 1.7.4
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -4176,14 +4170,6 @@ packages:
 
   /create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
-    dev: true
-
-  /cross-env@7.0.3:
-    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
-    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
     dev: true
 
   /cross-spawn@6.0.5:
