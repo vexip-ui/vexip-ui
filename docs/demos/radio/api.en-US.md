@@ -2,7 +2,7 @@
 
 | Name         | Type                                             | Description                                                                                                                                    | Default     | Since   |
 | ------------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
-| value        | `string \| number`                               | The value of the radio box, usually used with the group component                                                                              | `null`      | -       |
+| value        | `string \| number`                               | The value of the radio box, usually used with the group component (**label** tag value is bound to the group **value**)                        | `null`      | -       |
 | label        | `string \| number`                               | The label value of the radio box, when the value is equal to the label, the radio box will be selected, the label value **required to be set** | `null`      | -       |
 | label-class  | `ClassType`                                      | Custom class name of the label content of the radio button                                                                                     | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | The size of the radio box                                                                                                                      | `'default'` | -       |
