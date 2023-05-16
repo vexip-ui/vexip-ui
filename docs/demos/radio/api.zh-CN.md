@@ -3,7 +3,7 @@
 | 名称         | 类型                                             | 说明                                                                                  | 默认值      | 始于    |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------- | ----------- | ------- |
 | value        | `string \| number`                               | 单选框的值，与 label 全等时单选框被选中，与 RadioGroup 一同使用时无效（或者无需设置） | `null`      | -       |
-| label        | `string \| number`                               | 单选框的标签值，当值与标签全等时，单选框将被选中，标签值**必需设置**                  | `null`      | -       |
+| label        | `string \| number`                               | 单选框的标签，必须设置，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中                  | `null`      | -       |
 | label-class  | `ClassType`                                      | 单选框的标签内容的自定义类名                                                          | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                                          | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                                          | `'default'` | -       |
