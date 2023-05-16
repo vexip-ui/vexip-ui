@@ -244,6 +244,7 @@ function editOnPlayground() {
     box-shadow: var(--vxp-shadow-base);
   }
 
+  &--active,
   &:target {
     border-color: var(--vxp-color-primary-opacity-2);
   }

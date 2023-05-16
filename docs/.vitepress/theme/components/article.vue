@@ -1,33 +1,38 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useData } from 'vitepress'
 import { ussTocAnchor } from '../common/toc-anchor'
 
 import PageFooter from './page-footer.vue'
 
-import type { PropType } from 'vue'
 import type { RowExposed } from 'vexip-ui'
 
 const props = defineProps({
+  anchorLevel: {
+    type: Number,
+    default: null
+  },
   active: {
     type: String,
     default: ''
-  },
-  anchorLevel: {
-    type: Number as PropType<2 | 3>,
-    default: 2
   },
   loading: {
     type: Boolean,
     default: false
   }
 })
-const emit = defineEmits(['update:active'])
+const emit = defineEmits(['update:active', 'resize'])
+
+const { frontmatter } = useData()
 
 const wrapper = ref<RowExposed>()
 const wrapperEl = computed(() => wrapper.value?.$el)
 
 const currentActive = ref(props.active)
-const { anchors, refreshAnchor } = ussTocAnchor(props.anchorLevel || 3, wrapperEl)
+const { anchors, refreshAnchor } = ussTocAnchor(
+  frontmatter.value.anchor || props.anchorLevel || 3,
+  wrapperEl
+)
 
 const contentHeight = ref(1000)
 
@@ -45,7 +50,7 @@ watch(
   }
 )
 watch(
-  () => props.anchorLevel,
+  () => frontmatter.value.anchor,
   value => {
     refreshAnchor(value)
   }
@@ -53,6 +58,12 @@ watch(
 watch(currentActive, value => {
   emit('update:active', value)
 })
+watch(
+  () => props.anchorLevel,
+  value => {
+    refreshAnchor(value as 2)
+  }
+)
 
 defineExpose({ refreshAnchor })
 

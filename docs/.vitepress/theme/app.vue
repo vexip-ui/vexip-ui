@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { Bars } from '@vexip-ui/icons'
+import { isClient } from '@vexip-ui/utils'
+import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from './common/utils'
 
 import Homepage from './components/homepage.vue'
@@ -15,25 +17,29 @@ import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
 import type { LayoutExposed } from 'vexip-ui'
+import type { ThemeConfig } from './types'
 
-const { theme, page } = useData()
+const { theme, page, frontmatter } = useData<ThemeConfig>()
+const { locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
 
-const { locale } = useI18n({ useScope: 'global' })
-
 const fixedSub = ref(false)
 const expanded = ref(false)
+const mounted = ref(false)
 
 const layout = ref<LayoutExposed>()
 const scroll = computed(() => layout.value?.scroll)
 
 const outline = computed(() => {
-  if (page.value.frontmatter.aside === false) {
-    return []
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  mounted.value
+
+  if (frontmatter.value.aside === false) {
+    return undefined
   }
 
-  const config = theme.value.outline
+  const config = theme.value.outline || {}
   const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
@@ -48,9 +54,7 @@ const outline = computed(() => {
 watch(
   () => route.path,
   () => {
-    if (!scroll.value) return
-
-    scroll.value.scrollTo(0, 0, 0)
+    requestAnimationFrame(refreshScroll)
   }
 )
 watch(
@@ -59,16 +63,54 @@ watch(
     fixedSub.value = !!value && value >= 65
   }
 )
+
+onMounted(() => {
+  requestAnimationFrame(() => {
+    mounted.value = true
+    refreshScroll()
+  })
+})
+
+function refreshScroll() {
+  if (!scroll.value) return
+
+  if (isClient && hashTarget.value) {
+    const content = scroll.value.content!
+    const target = document.querySelector(`#${hashTarget.value}`)
+
+    if (target) {
+      const wrapperRect = content.getBoundingClientRect()
+      const elRect = target.getBoundingClientRect()
+      const scrollTop = elRect.top - wrapperRect.top - 15
+
+      content.scrollTop = scrollTop
+      setTimeout(() => {
+        content.scrollTop = scrollTop
+      }, 0)
+
+      return
+    }
+  }
+
+  const content = scroll.value.content
+
+  if (content) {
+    content.scrollTop = 0
+    setTimeout(() => {
+      content.scrollTop = 0
+    }, 0)
+  }
+}
 </script>
 
 <template>
   <Layout
     ref="layout"
     v-model:expanded="expanded"
-    class="docs-layout"
+    :class="['docs-layout', !mounted && 'docs-layout--rendering']"
     sign-type="header"
-    :no-aside="page.frontmatter.homepage || page.isNotFound"
-    :footer="!(page.frontmatter.homepage || page.isNotFound)"
+    :no-aside="frontmatter.homepage || page.isNotFound"
+    :footer="!(frontmatter.homepage || page.isNotFound)"
     :style="{
       height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width)',
@@ -90,7 +132,7 @@ watch(
 
     <template #header-user>
       <header
-        v-if="!page.frontmatter.homepage && !page.isNotFound"
+        v-if="!frontmatter.homepage && !page.isNotFound"
         class="sub-header"
         :style="
           fixedSub
@@ -117,7 +159,7 @@ watch(
     </template>
 
     <!-- Main content -->
-    <Homepage v-if="page.frontmatter.homepage"></Homepage>
+    <Homepage v-if="frontmatter.homepage"></Homepage>
     <NotFound v-else-if="page.isNotFound"></NotFound>
     <Article v-else :anchor-level="outline">
       <Content class="markdown"></Content>
@@ -148,6 +190,10 @@ watch(
       }
     }
 
+    &__section {
+      transition-duration: 0ms;
+    }
+
     &__scrollbar {
       top: calc(var(--sub-header-height) + var(--vxp-layout-header-height));
 
@@ -166,6 +212,12 @@ watch(
 
     &__copyright {
       padding: 24px 16px;
+    }
+  }
+
+  &--rendering .vxp-layout {
+    &__aside {
+      transition-duration: 0ms;
     }
   }
 }

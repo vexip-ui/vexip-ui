@@ -5,6 +5,7 @@ const currentTarget = ref<string>()
 
 if (isClient) {
   window.addEventListener('hashchange', updateTarget)
+  window.addEventListener('popstate', updateTarget)
   updateTarget()
 }
 
