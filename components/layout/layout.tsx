@@ -1,16 +1,18 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  shallowReadonly,
-  computed,
-  watch,
-  provide
-} from 'vue'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  provide,
+  reactive,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
@@ -23,10 +25,10 @@ import { LAYOUT_STATE } from './symbol'
 
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
+  LayoutAsideExposed,
   LayoutConfig,
-  LayoutSignType,
   LayoutHeaderExposed,
-  LayoutAsideExposed
+  LayoutSignType
 } from './symbol'
 
 export default defineComponent({

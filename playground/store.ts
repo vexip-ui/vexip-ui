@@ -1,10 +1,10 @@
-import { shallowRef, reactive, computed, watch, watchEffect } from 'vue'
-import { Confirm } from 'vexip-ui'
-import { zlibSync, unzlibSync, strToU8, strFromU8 } from 'fflate'
+import { computed, reactive, shallowRef, watch, watchEffect } from 'vue'
 import { File, compileFile } from '@vue/repl'
+
+import { Confirm } from 'vexip-ui'
+import { strFromU8, strToU8, unzlibSync, zlibSync } from 'fflate'
 import { getCdnUrl } from './cdn'
 import { locale } from './locale'
-
 import mainCode from './templates/main.js?raw'
 import appCode from './templates/app.vue?raw'
 import themeCode from './templates/theme.vue?raw'

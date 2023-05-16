@@ -30,19 +30,20 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  reactive,
   computed,
-  watch,
-  provide,
+  defineComponent,
   inject,
-  onMounted,
   onBeforeUnmount,
-  toRef
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
 } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
-import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
+import { ANCHOR_STATE, LINK_STATE, baseIndentWidth } from './symbol'
 
 import type { PropType } from 'vue'
 import type { AnchorLinkOptions } from './symbol'

@@ -1,17 +1,19 @@
 import { resolve } from 'node:path'
-import { readFile, writeFile } from 'node:fs/promises'
+
 import { existsSync } from 'node:fs'
 import { cpus } from 'node:os'
+
+import { readFile, writeFile } from 'node:fs/promises'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import {
-  prettierConfig,
-  logger,
-  componentsDir,
   components,
+  componentsDir,
+  logger,
+  prettierConfig,
   runParallel,
-  toCapitalCase,
-  toCamelCase
+  toCamelCase,
+  toCapitalCase
 } from './utils'
 
 async function main() {

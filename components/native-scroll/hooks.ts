@@ -1,6 +1,7 @@
-import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useMounted, isHiddenElement, useManualRef } from '@vexip-ui/hooks'
-import { isElement, multipleFixed, boundRange, debounceMinor } from '@vexip-ui/utils'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+
+import { isHiddenElement, useManualRef, useMounted } from '@vexip-ui/hooks'
+import { boundRange, debounceMinor, isElement, multipleFixed } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'

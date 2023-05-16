@@ -22,7 +22,7 @@
           </Button>
         </div>
       </div>
-      <P style="margin: 0 0 16px; font-size: 15px;">
+      <P style="margin: 0 0 16px; font-size: 15px">
         {{ t('common.changePrefix') }}
       </P>
       <Input v-model:value="demoPrefix" :class="`${prefix}__prefix`" placeholder="e.g. Vxp">
@@ -45,10 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
-import { Message } from 'vexip-ui'
+import { computed, inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+
+import { Message } from 'vexip-ui'
 import MajorColor from '../common/major-color.vue'
 import Wave from '../common/wave.vue'
 import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'

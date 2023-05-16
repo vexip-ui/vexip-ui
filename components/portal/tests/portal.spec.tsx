@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Portal } from '..'
 
 const TEXT = 'Text'

@@ -1,15 +1,16 @@
 import { computed, unref } from 'vue'
+
 import {
+  configIcons,
+  configLocale,
   configNamespace,
   configProps,
-  configLocale,
-  configZIndex,
-  configIcons
+  configZIndex
 } from '@vexip-ui/config'
-import { toCapitalCase, isEmpty } from '@vexip-ui/utils'
+import { isEmpty, toCapitalCase } from '@vexip-ui/utils'
 
-import type { Ref, App } from 'vue'
-import type { LocaleConfig, LocaleOptions, IconsOptions } from '@vexip-ui/config'
+import type { App, Ref } from 'vue'
+import type { IconsOptions, LocaleConfig, LocaleOptions } from '@vexip-ui/config'
 import type { PropsOptions } from './props'
 
 type MaybeRef<T> = T | Ref<T>

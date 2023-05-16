@@ -1,13 +1,3 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  shallowReadonly,
-  computed,
-  watch,
-  onBeforeMount
-} from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
@@ -15,7 +5,19 @@ import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { Switch } from '@/components/switch'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import { layoutHeaderProps } from './props'

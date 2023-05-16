@@ -1,9 +1,9 @@
 <template>
-  <Menu :router="router" style="max-width: 240px;" @select="handleSelect"></Menu>
+  <Menu :router="router" style="max-width: 240px" @select="handleSelect"></Menu>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 // import { createRouter, createWebHistory } from 'vue-router'
 
 // import type { RouteLocationRaw } from 'vue-router'

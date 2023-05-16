@@ -1,4 +1,5 @@
-import { defineComponent, computed, h, inject, provide } from 'vue'
+import { computed, defineComponent, h, inject, provide } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'

@@ -1,5 +1,6 @@
-import { ref, reactive, computed, watch, onMounted, onUpdated, onBeforeUnmount, inject } from 'vue'
-import { isClient, parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
+import { computed, inject, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from 'vue'
+
+import { adjustAlpha, isClient, mixColor, parseColorToRgba, toFixed } from '@vexip-ui/utils'
 import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'

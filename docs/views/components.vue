@@ -55,10 +55,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, inject } from 'vue'
-import { toKebabCase } from '@vexip-ui/utils'
+import { computed, inject, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
+import { toKebabCase } from '@vexip-ui/utils'
 import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'

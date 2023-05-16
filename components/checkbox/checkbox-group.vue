@@ -22,18 +22,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, toRef, computed, watch, provide } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, provide, reactive, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import { debounceMinor, isDefined, isObject } from '@vexip-ui/utils'
 import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 

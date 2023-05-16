@@ -33,9 +33,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef, computed, inject } from 'vue'
 import { Button } from '@/components/button'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, toRef } from 'vue'
+
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { formResetProps } from './props'
 import { FORM_ACTIONS } from './symbol'

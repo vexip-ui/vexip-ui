@@ -25,9 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRef, watch, onMounted, provide, inject } from 'vue'
-import { nextFrameOnce } from '@vexip-ui/utils'
+import { inject, onMounted, provide, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+
+import { nextFrameOnce } from '@vexip-ui/utils'
 
 import type { NativeScroll } from 'vexip-ui'
 import type { Store } from '../symbol'

@@ -28,9 +28,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useIcons, eventProp, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
+
+import { emitEvent, eventProp, useIcons, useNameHelper } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 

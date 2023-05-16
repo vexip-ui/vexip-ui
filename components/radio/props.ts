@@ -1,13 +1,13 @@
 import {
-  buildProps,
   booleanProp,
-  sizeProp,
-  stateProp,
+  buildProps,
   classProp,
-  eventProp
+  eventProp,
+  sizeProp,
+  stateProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 

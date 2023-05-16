@@ -8,7 +8,7 @@
     aside-fixed="min"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px;">
+      <div style="width: 100%; height: 1200px; padding: 20px">
         <p>Click the bottom left caret</p>
         <p>And scroll back and forth</p>
       </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

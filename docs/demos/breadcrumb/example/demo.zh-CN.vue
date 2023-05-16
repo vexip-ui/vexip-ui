@@ -1,5 +1,5 @@
 <template>
-  <Breadcrumb border style="max-width: 500px;">
+  <Breadcrumb border style="max-width: 500px">
     <BreadcrumbItem v-for="[name, record] in recordMap" :key="name">
       {{ name }}
       <template #separator>
@@ -26,7 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
+
 import { CaretRight } from '@vexip-ui/icons'
 
 interface Record {

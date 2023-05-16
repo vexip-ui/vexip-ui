@@ -1,21 +1,23 @@
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  inject,
-  provide,
-  nextTick,
-  Transition
-} from 'vue'
 import { Icon } from '@/components/icon'
 import { MenuItem } from '@/components/menu-item'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+
+import {
+  Transition,
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  provide,
+  reactive,
+  ref,
+  watch
+} from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
-import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
+import { MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from './symbol'

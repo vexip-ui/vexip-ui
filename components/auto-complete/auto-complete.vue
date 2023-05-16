@@ -82,18 +82,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue'
+
 import { placementWhileList } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'

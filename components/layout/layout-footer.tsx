@@ -1,6 +1,8 @@
-import { defineComponent, toRef, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
+
+import { computed, defineComponent, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutFooterProps } from './props'
 import { useLayoutState, useMediaQuery } from './helper'

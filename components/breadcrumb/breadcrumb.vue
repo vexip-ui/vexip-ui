@@ -9,10 +9,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { isNull, debounceMinor, callIfFunc } from '@vexip-ui/utils'
+
+import { computed, defineComponent, provide, reactive, toRef, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { callIfFunc, debounceMinor, isNull } from '@vexip-ui/utils'
 import { breadcrumbProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 

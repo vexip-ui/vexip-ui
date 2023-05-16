@@ -60,14 +60,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, toRef, computed, watch, onMounted, provide } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 import { Scroll } from '@/components/scroll'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, onMounted, provide, reactive, ref, toRef, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
-import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { debounceMinor, isNull } from '@vexip-ui/utils'
 import { tabNavProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
 

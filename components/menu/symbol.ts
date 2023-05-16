@@ -1,4 +1,4 @@
-import type { InjectionKey, ComponentPublicInstance } from 'vue'
+import type { ComponentPublicInstance, InjectionKey } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 

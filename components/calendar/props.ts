@@ -1,6 +1,6 @@
-import { buildProps, booleanProp, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Dateable } from '@vexip-ui/utils'
 

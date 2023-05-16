@@ -64,9 +64,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watchEffect, provide } from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Tooltip } from '@/components/tooltip'
+
+import { computed, defineComponent, provide, ref, watchEffect } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { avatarGroupProps } from './props'
 import { GROUP_STATE } from './symbol'

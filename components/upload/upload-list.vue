@@ -39,9 +39,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
 import { UploadFile } from '@/components/upload-file'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { uploadListProps } from './props'
 import { uploadListTypes } from './symbol'
 

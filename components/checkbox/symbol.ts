@@ -1,4 +1,4 @@
-import type { Ref, InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 export interface ControlState {

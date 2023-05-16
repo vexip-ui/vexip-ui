@@ -11,7 +11,7 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px;">
+      <div style="width: 100%; height: 1200px; padding: 20px">
         <p>Adise width:</p>
         <NumberInput v-model:value="width"></NumberInput>
         <p>Header height:</p>
@@ -23,7 +23,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

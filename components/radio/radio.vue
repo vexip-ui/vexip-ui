@@ -32,16 +32,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+
+import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'

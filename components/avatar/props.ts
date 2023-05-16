@@ -1,7 +1,7 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps, ComponentSize } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ComponentSize, ConfigurableProps } from '@vexip-ui/config'
 import type { AvatarObjectFit, AvatarOption } from './symbol'
 
 export const avatarProps = buildProps({

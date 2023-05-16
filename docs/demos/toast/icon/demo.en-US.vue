@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon, Toast } from 'vexip-ui'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
 

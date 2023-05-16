@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
 import { Bubble } from '@/components/bubble'
+
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Progress } from '..'
 
 describe('Progress', () => {

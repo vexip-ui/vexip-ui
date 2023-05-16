@@ -1,8 +1,9 @@
-import { ref, watch, watchEffect, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
+
 import { createPopper as createInternalPopper } from '@popperjs/core'
 
 import type { Ref, WatchStopHandle } from 'vue'
-import type { Placement, Modifier, Instance, Rect, VirtualElement } from '@popperjs/core'
+import type { Instance, Modifier, Placement, Rect, VirtualElement } from '@popperjs/core'
 import type { TransferNode } from '@vexip-ui/utils'
 
 type OffsetsFunction = (options: {

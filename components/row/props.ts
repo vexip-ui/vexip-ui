@@ -1,8 +1,8 @@
 import { buildProps } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { RowGridJustify, RowGridAlign, ColumnFlex, ColumnOptions } from './symbol'
+import type { ColumnFlex, ColumnOptions, RowGridAlign, RowGridJustify } from './symbol'
 
 export const rowProps = buildProps({
   tag: String,

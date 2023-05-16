@@ -1,6 +1,7 @@
 import { ref } from 'vue'
-import { registerLocale, enUSLocale } from 'vexip-ui'
 import { createI18n } from 'vue-i18n'
+
+import { enUSLocale, registerLocale } from 'vexip-ui'
 import { zhCN } from './zh-CN'
 import { enUS } from './en-US'
 

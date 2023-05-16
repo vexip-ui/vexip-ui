@@ -126,7 +126,7 @@ app.use(install, {
 Vexip UI 的默认语言为 `'zh-CN'`，你可以通过 `registerLocale` 方法注册一个国际化配置，随后通过修改 `locale.locale` 属性快速切换。
 
 ```ts
-import { registerLocale, enUSLocale } from 'vexip-ui'
+import { enUSLocale, registerLocale } from 'vexip-ui'
 
 registerLocale(enUSLocale())
 
@@ -165,7 +165,7 @@ app.use(install, {
 在调用 `app.use` 时通过在第二个参数传入 `icons` 选项即可自定义所有的组件内置图标。
 
 ```ts
-import { Xmark, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { CircleXmark, Spinner, Xmark } from '@vexip-ui/icons'
 
 app.use(install, {
   icons: {

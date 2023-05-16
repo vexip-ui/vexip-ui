@@ -84,11 +84,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'

@@ -1,23 +1,25 @@
-import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, onBeforeUnmount, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
+import { isClient, isDefined, isFalse, isPromise, noop, randomString } from '@vexip-ui/utils'
 import { uploadProps } from './props'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
-import type { HttpError, SourceFile, FileState, FileOptions, DirectoryEntity } from './symbol'
+import type { DirectoryEntity, FileOptions, FileState, HttpError, SourceFile } from './symbol'
 
 function getDefaultFileState(): FileState {
   return {

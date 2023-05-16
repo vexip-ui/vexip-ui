@@ -14,8 +14,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import IconLoading from './icon-loading.vue'
 import { useI18n } from 'vue-i18n'
+
+import IconLoading from './icon-loading.vue'
 
 const i18n = useI18n({ useScope: 'global' })
 const language = computed(() => i18n.locale.value as string)

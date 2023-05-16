@@ -58,12 +58,14 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref, reactive, toRef, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
+
+import { computed, defineComponent, onMounted, reactive, ref, toRef } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { useFullScreen, useModifier, useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { viewerProps } from './props'
 import { InternalActionName } from './symbol'

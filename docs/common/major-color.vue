@@ -40,9 +40,10 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 import { ArrowRotateLeft, Dice } from '@vexip-ui/icons'
 import { isClient, randomColor } from '@vexip-ui/utils'
-import { useI18n } from 'vue-i18n'
 import { computeSeriesColors } from './series-color'
 
 defineProps({

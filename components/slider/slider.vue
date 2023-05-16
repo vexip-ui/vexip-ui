@@ -100,10 +100,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
-import SliderTrigger from './slider-trigger.vue'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
+import SliderTrigger from './slider-trigger.vue'
+import { createStateProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 import { sliderProps } from './props'

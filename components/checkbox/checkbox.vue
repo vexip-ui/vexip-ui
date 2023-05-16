@@ -18,23 +18,25 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  inject,
-  computed,
-  watch,
-  onMounted,
-  onBeforeUnmount
-} from 'vue'
 import { useFieldStore } from '@/components/form'
+
 import {
-  useNameHelper,
-  useProps,
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch
+} from 'vue'
+
+import {
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isDefined, isFunction } from '@vexip-ui/utils'
 import { checkboxProps } from './props'

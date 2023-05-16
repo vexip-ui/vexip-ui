@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
 import { ButtonGroup } from '@/components/button-group'
+
+import { describe, expect, it, vi } from 'vitest'
+import { mount } from '@vue/test-utils'
+
 import { User } from '@vexip-ui/icons'
 import { parseColorToRgba } from '@vexip-ui/utils'
-import { mount } from '@vue/test-utils'
 import { Button } from '..'
 import { buttonTypes } from '../symbol'
 

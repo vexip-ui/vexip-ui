@@ -1,7 +1,9 @@
-import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, useIcons, createSizeProp, emitEvent } from '@vexip-ui/config'
-import { isClient, parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
+
+import { computed, defineComponent } from 'vue'
+
+import { createSizeProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { adjustAlpha, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { tagProps } from './props'
 
 import type { TagType } from './symbol'

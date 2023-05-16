@@ -48,16 +48,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { switchProps } from './props'

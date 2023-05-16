@@ -44,10 +44,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { alertProps } from './props'
 

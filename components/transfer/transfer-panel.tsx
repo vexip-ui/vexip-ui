@@ -1,4 +1,3 @@
-import { defineComponent, ref, reactive, toRef, computed, watch, watchEffect } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
@@ -7,7 +6,10 @@ import { NumberInput } from '@/components/number-input'
 // import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
-import { useNameHelper, useIcons, stateProp } from '@vexip-ui/config'
+
+import { computed, defineComponent, reactive, ref, toRef, watch, watchEffect } from 'vue'
+
+import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 

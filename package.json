@@ -128,7 +128,7 @@
     "@types/prompts": "^2.4.4",
     "@types/semver": "^7.3.13",
     "@vexip-ui/commitlint-config": "^0.1.0",
-    "@vexip-ui/eslint-config": "^0.5.2",
+    "@vexip-ui/eslint-config": "^0.6.1",
     "@vexip-ui/prettier-config": "^0.1.0",
     "@vexip-ui/stylelint-config": "^0.4.0",
     "@vitejs/plugin-vue": "^4.2.1",

@@ -1,6 +1,6 @@
-import { buildProps, booleanStringProp, classProp } from '@vexip-ui/config'
+import { booleanStringProp, buildProps, classProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 

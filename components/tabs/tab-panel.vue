@@ -6,16 +6,17 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  reactive,
   computed,
+  defineComponent,
   inject,
-  watch,
   onBeforeUnmount,
-  toRef
+  reactive,
+  ref,
+  toRef,
+  watch
 } from 'vue'
-import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'

@@ -1,7 +1,9 @@
-import { defineComponent, toRefs, ref, computed, watch, nextTick } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, ref, toRefs, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/hooks'
 import { virtualListProps } from './props'
 

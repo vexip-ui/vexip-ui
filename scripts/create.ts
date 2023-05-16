@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { cpus } from 'node:os'
+
 import fs from 'fs-extra'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
@@ -7,14 +8,14 @@ import stylelint from 'stylelint'
 import minimist from 'minimist'
 import prompts from 'prompts'
 import {
-  rootDir,
-  prettierConfig,
-  logger,
   components as allComponents,
+  logger,
+  prettierConfig,
+  rootDir,
   runParallel,
-  toKebabCase,
+  toCamelCase,
   toCapitalCase,
-  toCamelCase
+  toKebabCase
 } from './utils'
 
 const args = minimist(process.argv.slice(2))

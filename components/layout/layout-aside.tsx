@@ -1,8 +1,10 @@
-import { defineComponent, ref, toRef, reactive, shallowReadonly, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 

@@ -33,18 +33,18 @@
     </Input>
     <Input size="small" placeholder="vexip-ui">
       <template #before-action>
-        <Input style="max-width: 72px;"></Input>
+        <Input style="max-width: 72px"></Input>
       </template>
       <template #after-action>
-        <Input style="max-width: 72px;"></Input>
+        <Input style="max-width: 72px"></Input>
       </template>
     </Input>
     <Input size="large" placeholder="vexip-ui">
       <template #before-action>
-        <NumberInput style="max-width: 100px;"></NumberInput>
+        <NumberInput style="max-width: 100px"></NumberInput>
       </template>
       <template #after-action>
-        <NumberInput style="max-width: 100px;"></NumberInput>
+        <NumberInput style="max-width: 100px"></NumberInput>
       </template>
     </Input>
   </Space>
@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { MagnifyingGlass } from '@vexip-ui/icons'
 
 const protocol = ref('http://')

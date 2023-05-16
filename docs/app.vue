@@ -3,8 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, provide } from 'vue'
-import { isClient, createEventEmitter } from '@vexip-ui/utils'
+import { provide, reactive, watch } from 'vue'
+
+import { createEventEmitter, isClient } from '@vexip-ui/utils'
 
 import type { Store } from './symbol'
 

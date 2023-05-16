@@ -1,6 +1,6 @@
 <template>
   <div
-    style="max-width: 400px; height: 100px; border: var(--vxp-border-base);"
+    style="max-width: 400px; height: 100px; border: var(--vxp-border-base)"
     @contextmenu.prevent="contextmenu"
   >
     Right click here
@@ -9,7 +9,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { User, Hammer, Fire } from '@vexip-ui/icons'
+
+import { Fire, Hammer, User } from '@vexip-ui/icons'
 
 export default defineComponent({
   methods: {

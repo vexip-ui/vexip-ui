@@ -1,36 +1,37 @@
-import { reactive, computed, watchEffect, markRaw } from 'vue'
+import { computed, markRaw, reactive, watchEffect } from 'vue'
+
 import {
-  isNull,
-  toFalse,
+  createBITree,
   debounceMinor,
-  toNumber,
-  sortByProps,
   deepClone,
-  createBITree
+  isNull,
+  sortByProps,
+  toFalse,
+  toNumber
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 
-import type { ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
+import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  Key,
+  ColumnWithKey,
   Data,
+  Key,
+  ParsedFilterOptions,
+  ParsedTableSorterOptions,
+  StoreOptions,
+  StoreState,
+  TableCellPropFn,
+  TableColumnOptions,
+  TableDragColumn,
+  TableExpandColumn,
+  TableFilterOptions,
+  TableHeadPropFn,
   TableKeyConfig,
   TableRowPropFn,
-  TableCellPropFn,
-  TableHeadPropFn,
-  TableFilterOptions,
-  ParsedFilterOptions,
-  TableSorterOptions,
-  ParsedTableSorterOptions,
-  TableSelectionColumn,
-  TableExpandColumn,
-  TableDragColumn,
-  TableColumnOptions,
-  ColumnWithKey,
   TableRowState,
-  StoreOptions,
-  StoreState
+  TableSelectionColumn,
+  TableSorterOptions
 } from './symbol'
 
 let indexId = 1

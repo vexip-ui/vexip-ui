@@ -11,10 +11,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { useModifier, useMoving } from '@vexip-ui/hooks'
-import { toFixed, boundRange } from '@vexip-ui/utils'
+import { boundRange, toFixed } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { RGBColor } from '@vexip-ui/utils'

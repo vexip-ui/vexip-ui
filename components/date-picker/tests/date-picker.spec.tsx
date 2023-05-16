@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB, CalendarR, Spinner } from '@vexip-ui/icons'
-import { format } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
+
+import { CalendarR, GithubB, Spinner } from '@vexip-ui/icons'
+import { format } from '@vexip-ui/utils'
 import { DatePicker } from '..'
 
 vi.useFakeTimers()

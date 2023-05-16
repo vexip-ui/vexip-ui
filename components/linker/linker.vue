@@ -14,9 +14,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { linkerProps } from './props'
 
 import type { LinkerType } from './symbol'

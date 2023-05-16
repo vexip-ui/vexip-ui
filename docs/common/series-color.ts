@@ -1,4 +1,4 @@
-import { parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
+import { adjustAlpha, mixColor, parseColorToRgba, toFixed } from '@vexip-ui/utils'
 
 import type { Color } from '@vexip-ui/utils'
 

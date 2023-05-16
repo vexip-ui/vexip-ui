@@ -1,7 +1,7 @@
-import type { InjectionKey, ComponentPublicInstance } from 'vue'
+import type { ComponentPublicInstance, InjectionKey } from 'vue'
 import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
-import type { MenuMarkerType, MenuGroupType, MenuExposed } from '@/components/menu'
+import type { MenuExposed, MenuGroupType, MenuMarkerType } from '@/components/menu'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 
 export type LayoutSignType = 'aside' | 'header'

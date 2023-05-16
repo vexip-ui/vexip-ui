@@ -23,9 +23,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useZIndex, classProp } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, nextTick, onMounted, ref } from 'vue'
+
+import { classProp, useNameHelper, useZIndex } from '@vexip-ui/config'
 import { noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 

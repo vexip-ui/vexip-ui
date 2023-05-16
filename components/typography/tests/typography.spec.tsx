@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { Text, Title, Blockquote, OL, UL } from '..'
+
+import { Blockquote, OL, Text, Title, UL } from '..'
 
 const TEXT = 'Text'
 const TYPES = ['primary', 'info', 'success', 'warning', 'error'] as const

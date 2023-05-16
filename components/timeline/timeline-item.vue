@@ -14,21 +14,22 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  reactive,
   computed,
-  watch,
+  defineComponent,
   inject,
+  onBeforeUnmount,
   onMounted,
   onUpdated,
-  onBeforeUnmount
+  reactive,
+  ref,
+  watch
 } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { timelineItemProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
-import type { TimelinkItemType, ItemState } from './symbol'
+import type { ItemState, TimelinkItemType } from './symbol'
 
 const timelineItemTypes = Object.freeze<TimelinkItemType[]>([
   'default',

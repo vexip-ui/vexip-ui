@@ -89,19 +89,19 @@ import type { ViewerCProps } from './viewer'
 import type { VirtualListCProps } from './virtual-list'
 import type { WheelCProps } from './wheel'
 import type {
-  TitleCProps,
-  TextCProps,
   BlockquoteCProps,
-  OLCProps,
-  ULCProps,
   H1CProps,
   H2CProps,
   H3CProps,
   H4CProps,
   H5CProps,
   H6CProps,
+  OLCProps,
   PCProps,
-  StrongCProps
+  StrongCProps,
+  TextCProps,
+  TitleCProps,
+  ULCProps
 } from './typography'
 
 export interface PropsOptions {

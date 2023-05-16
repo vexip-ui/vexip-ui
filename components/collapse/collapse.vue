@@ -6,17 +6,18 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
   computed,
-  watchEffect,
-  provide,
+  defineComponent,
+  nextTick,
   onMounted,
-  nextTick
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watchEffect
 } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
 import { collapseProps } from './props'
 import { COLLAPSE_STATE } from './symbol'

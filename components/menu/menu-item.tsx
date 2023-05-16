@@ -1,27 +1,29 @@
-import {
-  defineComponent,
-  defineAsyncComponent,
-  ref,
-  reactive,
-  computed,
-  inject,
-  provide,
-  toRef,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  nextTick
-} from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+
+import {
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
-import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
+import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 // For types build
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

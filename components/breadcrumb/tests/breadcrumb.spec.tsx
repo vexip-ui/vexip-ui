@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Breadcrumb } from '..'
 
 describe('Breadcrumb', () => {

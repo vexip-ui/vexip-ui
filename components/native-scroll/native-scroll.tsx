@@ -1,24 +1,26 @@
-import {
-  defineComponent,
-  ref,
-  shallowReadonly,
-  computed,
-  watch,
-  toRef,
-  onBeforeUnmount,
-  nextTick,
-  renderSlot
-} from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   USE_TOUCH,
+  createEventEmitter,
+  flatVNodes,
   isClient,
   isElement,
-  isTrue,
-  createEventEmitter,
-  flatVNodes
+  isTrue
 } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'

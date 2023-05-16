@@ -17,8 +17,10 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed, watch } from 'vue'
 import { Portal } from '@/components/portal'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
 

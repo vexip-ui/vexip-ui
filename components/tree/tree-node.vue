@@ -145,18 +145,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide, inject, nextTick } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { isNull, noop } from '@vexip-ui/utils'
-import { TREE_STATE, TREE_NODE_STATE } from './symbol'
+import { TREE_NODE_STATE, TREE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TreeNodeProps, NodePropsFn } from './symbol'
+import type { NodePropsFn, TreeNodeProps } from './symbol'
 
 export default defineComponent({
   name: 'TreeNode',

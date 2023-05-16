@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
-import { readFileSync, readdirSync, statSync, existsSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -11,7 +12,7 @@ import { cyan, green, red } from 'kolorist'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
 
-import type { Plugin, Logger } from 'vite'
+import type { Logger, Plugin } from 'vite'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 

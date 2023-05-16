@@ -63,18 +63,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
+import { computed, defineComponent, ref, toRef, watch } from 'vue'
+
 import { useHover } from '@vexip-ui/hooks'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
-  isDefined,
-  toFalse,
-  startOfDay,
-  endOfDay,
-  startOfWeek,
-  rangeDate,
-  differenceDays,
   debounceMinor,
+  differenceDays,
+  endOfDay,
+  isDefined,
+  rangeDate,
+  startOfDay,
+  startOfWeek,
+  toFalse,
   warnOnce
 } from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'

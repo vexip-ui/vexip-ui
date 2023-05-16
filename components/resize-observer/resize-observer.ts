@@ -1,5 +1,6 @@
-import { defineComponent, onMounted, onBeforeUnmount, getCurrentInstance, renderSlot } from 'vue'
-import { useProps, emitEvent } from '@vexip-ui/config'
+import { defineComponent, getCurrentInstance, onBeforeUnmount, onMounted, renderSlot } from 'vue'
+
+import { emitEvent, useProps } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 import { resizeObserverProps } from './props'

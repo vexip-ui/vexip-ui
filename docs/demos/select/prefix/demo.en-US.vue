@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { User } from '@vexip-ui/icons'
 
 const value = ref('')
