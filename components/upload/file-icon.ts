@@ -1,25 +1,25 @@
 import {
-  FileWordR,
-  FileVideoR,
-  FilePowerpointR,
-  FilePdfR,
-  FileImageR,
-  FileExcelR,
-  FileCodeR,
-  JsB,
   Css3AltB,
-  SassB,
-  LessB,
-  JavaB,
-  VuejsB,
-  Html5B,
-  PythonB,
   FileAudio,
-  FileZipperR,
-  FileLinesR,
+  FileCodeR,
   FileCsv,
+  FileExcelR,
+  FileImageR,
+  FileLinesR,
+  FilePdfR,
+  FilePowerpointR,
   FilePrescription,
-  FileR
+  FileR,
+  FileVideoR,
+  FileWordR,
+  FileZipperR,
+  Html5B,
+  JavaB,
+  JsB,
+  LessB,
+  PythonB,
+  SassB,
+  VuejsB
 } from '@vexip-ui/icons'
 
 type Icon = Record<string, any>
@@ -128,7 +128,18 @@ iconConfig.set(FileZipperR, [
 ])
 iconConfig.set(FileLinesR, ['txt'])
 iconConfig.set(FileCsv, ['csv'])
-iconConfig.set(FilePrescription, ['rvt', 'rfa', 'rte', 'rtf', 'dgn', 'dwf', 'dwg', 'ifc', 'sat', 'skp'])
+iconConfig.set(FilePrescription, [
+  'rvt',
+  'rfa',
+  'rte',
+  'rtf',
+  'dgn',
+  'dwf',
+  'dwg',
+  'ifc',
+  'sat',
+  'skp'
+])
 iconConfig.set(FileR, ['default'])
 
 const iconMaps: Record<string, Icon> = {}

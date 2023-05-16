@@ -34,10 +34,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { avatarProps } from './props'
 import { GROUP_STATE } from './symbol'
 

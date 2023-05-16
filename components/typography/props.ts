@@ -1,8 +1,8 @@
-import { buildProps, omitProps, booleanProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, omitProps } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TypographyType, TitleLevel } from './symbol'
+import type { TitleLevel, TypographyType } from './symbol'
 
 export const textProps = buildProps({
   type: String as PropType<TypographyType>,

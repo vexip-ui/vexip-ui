@@ -1,9 +1,10 @@
-import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
+import { computed, defineComponent, h, provide, reactive, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { rowProps } from './props'
 import { ROW_STATE } from './symbol'
 
-import type { RowGridJustify, RowGridAlign } from './symbol'
+import type { RowGridAlign, RowGridJustify } from './symbol'
 
 const justifyList = Object.freeze<RowGridJustify[]>([
   'start',

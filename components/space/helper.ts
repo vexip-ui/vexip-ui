@@ -1,4 +1,4 @@
-import { isVNode, createTextVNode, Fragment, Comment } from 'vue'
+import { Comment, Fragment, createTextVNode, isVNode } from 'vue'
 
 import type { VNode, VNodeNormalizedChildren } from 'vue'
 

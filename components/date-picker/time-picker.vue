@@ -190,32 +190,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
-import TimeControl from './time-control.vue'
-import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from 'vue'
+
+import TimeWheel from './time-wheel.vue'
+import TimeControl from './time-control.vue'
 import {
-  useHover,
-  usePopper,
   placementWhileList,
   useClickOutside,
+  useHover,
+  usePopper,
   useSetTimeout
 } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
-  useWordSpace,
-  makeSentence
+  makeSentence,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps,
+  useWordSpace
 } from '@vexip-ui/config'
-import { USE_TOUCH, isDefined, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, doubleDigits, isDefined, warnOnce } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 

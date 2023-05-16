@@ -140,18 +140,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+
 import { Confirm, Message } from 'vexip-ui'
 import {
-  Gear,
-  Moon,
-  Sun,
-  ShareNodes,
-  Download,
-  Rocket,
-  CheckDouble,
   ArrowRotateLeft,
-  GithubB
+  CheckDouble,
+  Download,
+  Gear,
+  GithubB,
+  Moon,
+  Rocket,
+  ShareNodes,
+  Sun
 } from '@vexip-ui/icons'
 import { cdnTemplates, getCdn, setCdn } from '../cdn'
 import { locale } from '../locale'

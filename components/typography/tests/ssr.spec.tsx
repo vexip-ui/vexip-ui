@@ -2,10 +2,11 @@
  * @vitest-environment node
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { createSSRApp } from 'vue'
+
 import { renderToString } from 'vue/server-renderer'
-import { Text, Title, Blockquote, OL, UL } from '..'
+import { Blockquote, OL, Text, Title, UL } from '..'
 
 describe('SSR for Typography', () => {
   it('render Text', async () => {

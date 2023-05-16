@@ -84,12 +84,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 

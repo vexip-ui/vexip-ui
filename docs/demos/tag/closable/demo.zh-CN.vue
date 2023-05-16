@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex;">
+  <div style="display: flex">
     <Tag
       v-for="tag in tags"
       :key="tag.key"
@@ -12,7 +12,7 @@
     <Button
       dashed
       szie="small"
-      style="height: auto; margin-left: 10px; line-height: 1.5;"
+      style="height: auto; margin-left: 10px; line-height: 1.5"
       :icon="Plus"
       @click="addTag"
     >
@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { Plus } from '@vexip-ui/icons'
 
 const types = ['default', 'primary', 'info', 'success', 'error', 'warning'] as const

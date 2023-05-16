@@ -22,8 +22,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { computed, defineComponent } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { badgeProps } from './props'
 
 import type { BadgeType } from './symbol'

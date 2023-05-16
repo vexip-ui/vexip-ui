@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

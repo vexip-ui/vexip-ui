@@ -70,37 +70,38 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
+  onMounted,
+  provide,
+  reactive,
   ref,
   toRef,
-  reactive,
-  computed,
   watch,
-  watchEffect,
-  provide,
-  onMounted
+  watchEffect
 } from 'vue'
+
 import TreeNode from './tree-node.vue'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import {
+  flatTree,
   isNull,
   isPromise,
-  transformTree,
-  flatTree,
+  queryAll,
   removeArrayItem,
-  queryAll
+  transformTree
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
-import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
+import { DropType, TREE_NODE_STATE, TREE_STATE } from './symbol'
 
 import type {
-  Key,
   Data,
-  TreeNodeKeyConfig,
-  TreeNodeProps,
   FilterFn,
-  TreeNodeInstance
+  Key,
+  TreeNodeInstance,
+  TreeNodeKeyConfig,
+  TreeNodeProps
 } from './symbol'
 
 const defaultKeyConfig: Required<TreeNodeKeyConfig> = {

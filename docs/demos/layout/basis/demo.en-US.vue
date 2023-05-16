@@ -7,13 +7,13 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; height: 1200px"></div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

@@ -1,10 +1,11 @@
-import { defineComponent, reactive, watch, inject, onBeforeUnmount, onBeforeUpdate } from 'vue'
-import { useProps, createSizeProp } from '@vexip-ui/config'
+import { defineComponent, inject, onBeforeUnmount, onBeforeUpdate, reactive, watch } from 'vue'
+
+import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
-import type { Data, TableTextAlign, TableRowState, ColumnWithKey } from './symbol'
+import type { ColumnWithKey, Data, TableRowState, TableTextAlign } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 

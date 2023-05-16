@@ -1,18 +1,18 @@
-import { buildProps, booleanProp, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
+  AsyncLoadFn,
   Data,
+  FilterFn,
+  NodePropsFn,
   TreeLinkLine,
   TreeNodeDropType,
   TreeNodeKeyConfig,
-  TreeNodeProps,
   TreeNodePostCreate,
-  TreeNodeRenderFn,
-  AsyncLoadFn,
-  FilterFn,
-  NodePropsFn
+  TreeNodeProps,
+  TreeNodeRenderFn
 } from './symbol'
 
 export const treeProps = buildProps({

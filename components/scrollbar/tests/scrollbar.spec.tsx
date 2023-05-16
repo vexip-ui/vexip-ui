@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { noop } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
+
+import { noop } from '@vexip-ui/utils'
 import { Scrollbar } from '..'
 
 vi.useFakeTimers()

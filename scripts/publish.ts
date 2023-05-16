@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-import { logger, run, getPackageInfo } from './utils'
+import { getPackageInfo, logger, run } from './utils'
 
 const args = minimist<{
   d?: boolean,

@@ -1,5 +1,6 @@
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { isDefined, createBITree, nextFrameOnce } from '@vexip-ui/utils'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+
+import { createBITree, isDefined, nextFrameOnce } from '@vexip-ui/utils'
 import { isHiddenElement } from './display'
 import { observeResize, unobserveResize } from './resize'
 

@@ -105,11 +105,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, ref } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 
 import type { Key, NoticePlacement } from './symbol'
 

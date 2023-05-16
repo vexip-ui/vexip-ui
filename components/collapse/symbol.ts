@@ -1,4 +1,4 @@
-import type { Ref, InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 
 export type CollapseArrowType = 'right' | 'left' | 'none'
 

@@ -1,5 +1,5 @@
 import { getCountWord, makeSentence } from '@vexip-ui/config'
-import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@vexip-ui/utils'
+import { DAY_ON_MILLIS, HOUR_ON_MILLS, MINUTE_ON_MILLS, SECOND_ON_MILLS } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 

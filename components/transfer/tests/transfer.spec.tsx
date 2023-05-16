@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
-import { GithubB, Spinner } from '@vexip-ui/icons'
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { GithubB, Spinner } from '@vexip-ui/icons'
 import { Transfer } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'

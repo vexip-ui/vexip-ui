@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { HeadphonesSimple } from '@vexip-ui/icons'
 
 const props = defineProps({

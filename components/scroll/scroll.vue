@@ -58,21 +58,23 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  shallowReadonly,
-  watch,
-  watchEffect,
-  toRef,
-  onBeforeUnmount,
-  nextTick
-} from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
+
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { USE_TOUCH, createEventEmitter, isElement, isTrue } from '@vexip-ui/utils'
 import { scrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 

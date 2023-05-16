@@ -1,4 +1,4 @@
-import type { Ref, ComputedRef, InjectionKey } from 'vue'
+import type { ComputedRef, InjectionKey, Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'

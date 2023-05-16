@@ -18,14 +18,14 @@
 
 <script setup lang="ts">
 import {
-  EnvelopesBulk,
-  City,
-  ChartPie,
-  User,
-  GithubB,
-  ClockRotateLeft,
   Bug,
-  Chalkboard
+  Chalkboard,
+  ChartPie,
+  City,
+  ClockRotateLeft,
+  EnvelopesBulk,
+  GithubB,
+  User
 } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'

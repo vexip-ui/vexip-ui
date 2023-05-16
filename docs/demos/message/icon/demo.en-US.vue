@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon, Message } from 'vexip-ui'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
 

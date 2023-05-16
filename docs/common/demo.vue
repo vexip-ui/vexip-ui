@@ -84,10 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, onMounted } from 'vue'
-import { Message } from 'vexip-ui'
-import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
+import { onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import { Message } from 'vexip-ui'
+import { ChevronUp, Code, CopyR, PaperPlaneR, PenToSquareR } from '@vexip-ui/icons'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from './demo-prefix'
 import { usePlayground } from './playground'

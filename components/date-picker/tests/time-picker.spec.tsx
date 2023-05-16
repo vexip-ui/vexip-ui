@@ -1,9 +1,11 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { TimePicker } from '@/components/time-picker'
-import { GithubB, ClockR, Spinner } from '@vexip-ui/icons'
-import { format } from '@vexip-ui/utils'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { ClockR, GithubB, Spinner } from '@vexip-ui/icons'
+import { format } from '@vexip-ui/utils'
 
 vi.useFakeTimers()
 

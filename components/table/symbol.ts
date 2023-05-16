@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
+import type { ClassType, ComponentSize, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'

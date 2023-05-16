@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest'
-import { nextTick } from 'vue'
 import { Cell } from '@/components/cell'
+
+import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Grid } from '..'
 
 describe('Grid', () => {

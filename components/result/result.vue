@@ -23,9 +23,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, useIcons, createSizeProp } from '@vexip-ui/config'
+
+import { computed, defineComponent } from 'vue'
+
+import { createSizeProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { resultProps } from './props'
 
 import type { ResultType } from './symbol'

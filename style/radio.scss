@@ -43,12 +43,16 @@ $radio: map.merge(
   display: inline-flex;
   align-items: center;
   margin-right: 10px;
-  line-height: 1;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
   transition: get-css-var('transition-background'), get-css-var('transition-border'),
     get-css-var('transition-shadow');
+
+  &,
+  &--inherit {
+    line-height: 1;
+  }
 
   &--border {
     padding: 8px 10px;

@@ -14,15 +14,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, provide, reactive, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { debounceMinor, isObject } from '@vexip-ui/utils'
 import { radioGroupProps } from './props'

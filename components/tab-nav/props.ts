@@ -1,8 +1,8 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TabNavAlign, TabNavPlacement, TabNavOptions } from './symbol'
+import type { TabNavAlign, TabNavOptions, TabNavPlacement } from './symbol'
 
 type ChangeListener =
   | ((label: string | number) => void)

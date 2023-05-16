@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Indent, Outdent, GithubB } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, GithubB, Indent, Outdent, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

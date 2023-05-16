@@ -4,8 +4,7 @@
   "scripts": {
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "serve": "cross-env NODE_ENV=development vitepress dev",
-    "serve:ssr": "cross-env SSR=true tsx server.ts"
+    "serve": "NODE_ENV=development vitepress dev"
   },
   "type": "module",
   "private": true,
@@ -34,7 +33,6 @@
     "@vue/compiler-sfc": "^3.3.2",
     "autoprefixer": "^10.4.14",
     "compression": "^1.7.4",
-    "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "jszip": "^3.10.1",
     "kolorist": "^1.7.0",

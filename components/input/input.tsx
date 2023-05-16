@@ -1,17 +1,19 @@
-import { defineComponent, ref, toRef, computed, watch, nextTick, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
+import { Transition, computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+
 import { useHover } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'

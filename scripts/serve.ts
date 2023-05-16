@@ -1,8 +1,9 @@
 import { resolve } from 'node:path'
+
 import fs from 'fs-extra'
 import minimist from 'minimist'
 import { format } from 'prettier'
-import { rootDir, prettierConfig, logger, run, specifyComponent, queryIdlePort } from './utils'
+import { logger, prettierConfig, queryIdlePort, rootDir, run, specifyComponent } from './utils'
 
 const { readdirSync, statSync, existsSync, writeFileSync } = fs
 

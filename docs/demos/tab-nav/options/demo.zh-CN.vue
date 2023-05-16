@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { City } from '@vexip-ui/icons'
 
 import type { TabNavOptions } from 'vexip-ui'

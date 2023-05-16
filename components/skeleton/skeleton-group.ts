@@ -1,4 +1,5 @@
-import { defineComponent, provide, h, renderSlot } from 'vue'
+import { defineComponent, h, provide, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonGroupProps } from './props'
 import { GROUP_STATE } from './symbol'

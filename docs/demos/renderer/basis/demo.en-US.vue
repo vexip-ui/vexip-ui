@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, h } from 'vue'
+import { h, ref } from 'vue'
 
 const msg = ref('some content')
 

@@ -36,20 +36,22 @@
 </template>
 
 <script lang="ts">
+import { AnchorLink } from '@/components/anchor-link'
+
 import {
   defineComponent,
-  ref,
-  reactive,
-  watch,
-  provide,
-  onMounted,
-  onBeforeUnmount,
-  nextTick,
   getCurrentInstance,
-  isVNode
+  isVNode,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  watch
 } from 'vue'
-import { AnchorLink } from '@/components/anchor-link'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { isClient, isElement } from '@vexip-ui/utils'
 import { anchorProps } from './props'
 import { animateScrollTo } from './helper'

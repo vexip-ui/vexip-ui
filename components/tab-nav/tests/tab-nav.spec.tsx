@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { GithubB } from '@vexip-ui/icons'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { GithubB } from '@vexip-ui/icons'
 import { TabNav } from '..'
 
 describe('TabNav', () => {

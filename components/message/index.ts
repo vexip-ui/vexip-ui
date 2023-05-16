@@ -1,9 +1,10 @@
-import { createApp, markRaw, createVNode, render } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './message.vue'
-import { isClient, isNull, noop, toNumber, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient, isNull, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
+import type { Key, MessageInstance, MessageOptions, MessagePlacement, MessageType } from './symbol'
 
 export type { MessageType, MessagePlacement, MessageOptions }
 

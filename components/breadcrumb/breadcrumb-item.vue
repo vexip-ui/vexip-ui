@@ -24,13 +24,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
+
+import { defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
+
+import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { SeparatorRenderFn, BreadcrumbItemState } from './symbol'
+import type { BreadcrumbItemState, SeparatorRenderFn } from './symbol'
 
 export default defineComponent({
   name: 'BreadcrumbItem',

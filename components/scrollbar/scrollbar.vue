@@ -22,20 +22,21 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
   computed,
-  watch,
-  watchEffect,
-  toRef,
-  onMounted,
-  onBeforeUnmount,
+  defineComponent,
+  getCurrentInstance,
   nextTick,
-  getCurrentInstance
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toRef,
+  watch,
+  watchEffect
 } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useManualRef } from '@vexip-ui/hooks'
-import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, isDefined, throttle } from '@vexip-ui/utils'
 import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
 import { ScrollbarType } from './symbol'

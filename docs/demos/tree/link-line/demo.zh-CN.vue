@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import type { TreeLinkLine } from 'vexip-ui'
 
 const linkLine = ref<TreeLinkLine>('dashed')

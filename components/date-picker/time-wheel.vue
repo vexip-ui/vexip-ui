@@ -67,13 +67,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
+
+import { defineComponent, ref, watch } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
-import { USE_TOUCH, range, doubleDigits } from '@vexip-ui/utils'
+import { USE_TOUCH, doubleDigits, range } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-import type { TimeType, DisabledTime } from './symbol'
+import type { DisabledTime, TimeType } from './symbol'
 
 export default defineComponent({
   name: 'TimeWheel',

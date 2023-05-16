@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { GithubB } from '@vexip-ui/icons'
 import Message from '../message.vue'
 import { MessageManager } from '..'
 

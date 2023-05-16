@@ -1,37 +1,37 @@
 import {
-  buildProps,
   booleanProp,
-  sizeProp,
+  buildProps,
   classProp,
-  styleProp,
   eventProp,
-  localeProp
+  localeProp,
+  sizeProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ClassType, StyleType, ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ClassType, ConfigurableProps, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  ColumnRenderFn,
   Data,
   DropType,
-  TableTextAlign,
-  TableKeyConfig,
   ExpandRenderFn,
-  ColumnRenderFn,
-  HeadRenderFn,
   FilterRenderFn,
-  TableColumnType,
-  TableColumnOptions,
-  TableSorterOptions,
-  TableFilterOptions,
-  TableSorterProfile,
-  TableFilterProfile,
-  TableRowPropFn,
-  TableCellPropFn,
-  TableHeadPropFn,
-  TableRowPayload,
+  HeadRenderFn,
   TableCellPayload,
-  TableHeadPayload
+  TableCellPropFn,
+  TableColumnOptions,
+  TableColumnType,
+  TableFilterOptions,
+  TableFilterProfile,
+  TableHeadPayload,
+  TableHeadPropFn,
+  TableKeyConfig,
+  TableRowPayload,
+  TableRowPropFn,
+  TableSorterOptions,
+  TableSorterProfile,
+  TableTextAlign
 } from './symbol'
 
 export const tableProps = buildProps({

@@ -2,9 +2,11 @@
  * @vitest-environment node
  */
 
-import { describe, it, expect } from 'vitest'
-import { createSSRApp } from 'vue'
 import { CollapsePanel } from '@/components/collapse-panel'
+
+import { describe, expect, it } from 'vitest'
+import { createSSRApp } from 'vue'
+
 import { renderToString } from 'vue/server-renderer'
 import { Collapse } from '..'
 

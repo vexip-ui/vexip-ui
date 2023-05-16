@@ -1,6 +1,7 @@
-import { defineComponent, reactive, computed, watch, h, inject, provide } from 'vue'
+import { computed, defineComponent, h, inject, provide, reactive, watch } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { isDefined, has } from '@vexip-ui/utils'
+import { has, isDefined } from '@vexip-ui/utils'
 import { cellProps } from './props'
 import { breakPoints, currentBreakPoint } from './helpler'
 import { GRID_STATE } from './symbol'

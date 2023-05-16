@@ -1,6 +1,7 @@
 import './style/index.scss'
 
 import { createApp as _createApp, createSSRApp } from 'vue'
+
 import App from './app.vue'
 import { install } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'

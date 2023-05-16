@@ -1,8 +1,9 @@
 import fs from 'node:fs'
+
 import minimist from 'minimist'
 import semver from 'semver'
 import prompts from 'prompts'
-import { logger, run, dryRun, getPackageInfo } from './utils'
+import { dryRun, getPackageInfo, logger, run } from './utils'
 
 import type { ReleaseType } from 'semver'
 

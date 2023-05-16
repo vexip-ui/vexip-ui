@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { addMinutes, addHours, addDays } from '@vexip-ui/utils'
+import { addDays, addHours, addMinutes } from '@vexip-ui/utils'
 
 const datetimes = [
   Date.now(),

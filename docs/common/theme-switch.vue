@@ -11,7 +11,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Sun, Moon } from '@vexip-ui/icons'
+
+import { Moon, Sun } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
 const rootCls = isClient ? document.documentElement.classList : undefined

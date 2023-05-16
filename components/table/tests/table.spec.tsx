@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { TableColumn } from '@/components/table-column'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Table } from '..'
 import TableBody from '../table-body.vue'
 

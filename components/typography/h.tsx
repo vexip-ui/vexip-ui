@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+
 import { useProps } from '@vexip-ui/config'
 import Title from './title'
 import { hProps } from './props'

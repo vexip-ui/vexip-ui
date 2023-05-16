@@ -1,44 +1,79 @@
-## [2.1.18](https://github.com/vexip-ui/vexip-ui/compare/v2.1.17...v2.1.18) (2023-05-08)
+## [2.1.20](https://github.com/vexip-ui/vexip-ui/compare/v2.1.19...v2.1.20) (2023-05-14)
+
+
+### 🐞 Bug Fixes
+
+* **scrollbar:** incorrect style import path ([5e2a8c9](https://github.com/vexip-ui/vexip-ui/commit/5e2a8c9cf4e556144445de13386b63b8273012c4))
+
+
+
+## [2.1.19](https://github.com/vexip-ui/vexip-ui/compare/v2.1.17...v2.1.19) (2023-05-14)
 
 
 ### ✨ Features
 
 * **ellipsis:** add tip-disabled prop ([e24cd7d](https://github.com/vexip-ui/vexip-ui/commit/e24cd7d87c6cb34535bd4beba81ca4e4e0af741d))
+* **table:** add text-align prop for TableColumn ([479abaa](https://github.com/vexip-ui/vexip-ui/commit/479abaaba9b165d1947faf174f3af4d927f8a8b1))
 * **table:** support custom filter renderer ([241d8aa](https://github.com/vexip-ui/vexip-ui/commit/241d8aa9f1bccae97ae2a50534ae6157f2c3b827))
+* **table:** use class prop replace class-name ([10b32ec](https://github.com/vexip-ui/vexip-ui/commit/10b32ec7496d6928e350150676261e758b342896))
 * **tooltip:** provide api methods from slots ([879cc0a](https://github.com/vexip-ui/vexip-ui/commit/879cc0ad477830ad72955bf41129fbf33a1861a2))
+* **utils:** enhance flatTree to support depth first and filter ([c5a5728](https://github.com/vexip-ui/vexip-ui/commit/c5a57284863de973dc0480243af114cc02217b44))
 
 
 ### 🐞 Bug Fixes
 
 * **card:** unexpected content collapse ([e063a40](https://github.com/vexip-ui/vexip-ui/commit/e063a408632639d4c19fcb4e2343a8accb9d67d2))
 * **color-picker:** alpha cannot be confirmed to 0 ([9921700](https://github.com/vexip-ui/vexip-ui/commit/9921700cf2a09490259159a03900ba8ea53be1fe))
+* **layout:** correct timing of mediaQuery call in ssr ([62b5443](https://github.com/vexip-ui/vexip-ui/commit/62b5443e97d5e0bcaa59ac4dc74ff703040c17bd))
+* **layout:** emit expanded change event when breakpoint changed ([94f2716](https://github.com/vexip-ui/vexip-ui/commit/94f2716c167db3a21eaffe8967d1ea47923270cd))
+* **scrollbar:** remove incorrect style dependency ([7213a5c](https://github.com/vexip-ui/vexip-ui/commit/7213a5c71bb15c0e7ae94600431712a6b39bfe26))
 * **table:** correct filter trigger style ([c9fc151](https://github.com/vexip-ui/vexip-ui/commit/c9fc1510be5e223b01d42ab407cb306f598fed49))
+* **table:** correct using native scroll exposed ([ef58f8a](https://github.com/vexip-ui/vexip-ui/commit/ef58f8a85a1580230a6b4faa9456416c0f63df8d))
 * **table:** effect re-render when column slots' content changed ([ca79311](https://github.com/vexip-ui/vexip-ui/commit/ca79311d31a234736c182f7afe576ecaf79c92fd))
+* **utils:** correct flatTree filter method ([94dacad](https://github.com/vexip-ui/vexip-ui/commit/94dacad0625fbd2e520d646a4afaad2692909c47))
+
+
+### 👓 Types
+
+* **native-scroll:** correct instance exposed types ([b59e019](https://github.com/vexip-ui/vexip-ui/commit/b59e01994961f2f164a2739bab08f88ce6ff2d22))
+* **table:** change default data type to any to improve infer ([695b2c1](https://github.com/vexip-ui/vexip-ui/commit/695b2c1306ff6c427f04c0c4d521b4a555562d62))
+
+
+### 🔨 Code Refactoring
+
+* **layout:** normalize slot params and exposed ([5abb6a3](https://github.com/vexip-ui/vexip-ui/commit/5abb6a36636162c9c1affa3a86e33f9c98408651))
+* **transfer:** imporve slot params and change to tsx ([68f81f0](https://github.com/vexip-ui/vexip-ui/commit/68f81f0db7b3345504fc033e46a71bc906144130))
+
+
+### ❌ Breaking Changes
+
+* **layout:** Api methods renamed:  `toggleReduce` -> `toggleReduced`,
+`toggleUserDrop` -> `toggleUserDropped`
 
 
 
 ## [2.1.17](https://github.com/vexip-ui/vexip-ui/compare/v2.1.16...v2.1.17) (2023-05-03)
 
 
-### Bug Fixes
+### ⚡ Performance Improvements
 
-* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
-* **scroll:** content shaking when init or resized ([1c8b818](https://github.com/vexip-ui/vexip-ui/commit/1c8b81821e9c3f80bb77dddacfb1912793952555))
+* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
 
 
-### Features
+### ✨ Features
 
 * **config-provider:** support config z-index ([8772bc2](https://github.com/vexip-ui/vexip-ui/commit/8772bc2d9d964ef5c0b864a69bead5493cd76a23))
 * **config:** support provide config via hook functions ([8222299](https://github.com/vexip-ui/vexip-ui/commit/8222299e99769d416d6e04af5c6fab23c109e87a))
 * **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
 
 
-### Performance Improvements
+### 🐞 Bug Fixes
 
-* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
+* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
+* **scroll:** content shaking when init or resized ([1c8b818](https://github.com/vexip-ui/vexip-ui/commit/1c8b81821e9c3f80bb77dddacfb1912793952555))
 
 
-### BREAKING CHANGES
+### ❌ Breaking Changes
 
 * **scroll:** Slot parameters of Scroll (also NativeScroll) is changed
 to methods only, and now using the getState method to get scroll state.

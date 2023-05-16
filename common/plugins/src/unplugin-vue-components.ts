@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { toKebabCase, isNull } from '@vexip-ui/utils'
+
+import { isNull, toKebabCase } from '@vexip-ui/utils'
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { compare } from 'compare-versions'
 

@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest'
 import { Input } from '@/components/input'
 import { Masker } from '@/components/masker'
-import { User } from '@vexip-ui/icons'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { User } from '@vexip-ui/icons'
 import { ConfigProvider } from '..'
 
 describe('ConfigProvider', () => {

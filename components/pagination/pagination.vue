@@ -214,31 +214,33 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  toRef,
-  computed,
-  watch,
-  onMounted,
-  onBeforeUpdate,
-  nextTick
-} from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUpdate,
+  onMounted,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import {
+  createSizeProp,
+  emitEvent,
   getCountWord,
   getCountWordOnly,
-  createSizeProp,
-  emitEvent
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
-import { isClient, isNull, isFunction, range, boundRange, warnOnce } from '@vexip-ui/utils'
+import { boundRange, isClient, isFunction, isNull, range, warnOnce } from '@vexip-ui/utils'
 import { paginationProps } from './props'
 
 import type { PaginationPlugin } from './symbol'

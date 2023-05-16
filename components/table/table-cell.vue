@@ -112,24 +112,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject, toRef } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, toRef } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTIONS, columnTypes } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  TableRowState,
-  TableOrderColumn,
-  TableSelectionColumn,
-  TableExpandColumn,
+  ColumnWithKey,
   TableDragColumn,
-  TableTypeColumn,
-  ColumnWithKey
+  TableExpandColumn,
+  TableOrderColumn,
+  TableRowState,
+  TableSelectionColumn,
+  TableTypeColumn
 } from './symbol'
 
 export default defineComponent({

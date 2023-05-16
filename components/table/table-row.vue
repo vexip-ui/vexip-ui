@@ -52,26 +52,28 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
-  computed,
-  inject,
-  watch,
-  onMounted,
-  onUpdated,
-  nextTick
-} from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
+
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onMounted,
+  onUpdated,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTIONS, TABLE_HEAD_KEY } from './symbol'
+import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { TableRowState, TableExpandColumn, ColumnWithKey } from './symbol'
+import type { CSSProperties, PropType } from 'vue'
+import type { ColumnWithKey, TableExpandColumn, TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',

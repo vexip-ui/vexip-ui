@@ -5,10 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
-import { useNameHelper, useProps, useLocale, useWordSpace } from '@vexip-ui/config'
-import { toDate, format } from '@vexip-ui/utils'
-import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
+import { computed, defineComponent, onBeforeUnmount, ref, toRef, watch } from 'vue'
+
+import { useLocale, useNameHelper, useProps, useWordSpace } from '@vexip-ui/config'
+import { format, toDate } from '@vexip-ui/utils'
+import { computeTimeAgo, getId, subscribe, unsubscribe } from './helper'
 import { timeAgoProps } from './props'
 
 import type { Dateable } from '@vexip-ui/utils'

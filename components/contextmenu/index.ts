@@ -1,9 +1,10 @@
 import { createApp, createVNode, render } from 'vue'
+
 import Component from './contextmenu.vue'
-import { isClient, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, ContextmenuConfig, ContextmenuOptions, ContextmenuInstance } from './symbol'
+import type { ContextmenuConfig, ContextmenuInstance, ContextmenuOptions, Key } from './symbol'
 
 export type { ContextmenuConfig, ContextmenuOptions }
 

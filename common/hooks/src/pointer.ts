@@ -1,4 +1,5 @@
-import { ref, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
+
 import { throttle } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'

@@ -1,4 +1,4 @@
-import { computed, provide, inject, unref } from 'vue'
+import { computed, inject, provide, unref } from 'vue'
 
 import type { App, ComputedRef } from 'vue'
 import type { MaybeRef } from './types'

@@ -1,8 +1,9 @@
-import { defineComponent, toRefs, renderSlot } from 'vue'
-import { configProps, configLocale, configIcons, configZIndex } from '@vexip-ui/config'
+import { defineComponent, renderSlot, toRefs } from 'vue'
+
+import { configIcons, configLocale, configProps, configZIndex } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { LocaleOptions, IconsOptions } from '@vexip-ui/config'
+import type { IconsOptions, LocaleOptions } from '@vexip-ui/config'
 import type { PropsOptions } from '@/components/props'
 
 export default defineComponent({

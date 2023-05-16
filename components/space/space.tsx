@@ -1,4 +1,5 @@
-import { defineComponent, computed, renderSlot } from 'vue'
+import { computed, defineComponent, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { spaceProps } from './props'

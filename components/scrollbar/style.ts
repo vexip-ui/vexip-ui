@@ -1,2 +1,2 @@
 import '@/components/preset/style'
-import '@/style/anchor-link.scss'
+import '@/style/scrollbar.scss'

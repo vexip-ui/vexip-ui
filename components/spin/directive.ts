@@ -1,8 +1,10 @@
-import { createVNode, render, nextTick } from 'vue'
 import { Spin } from '@/components/spin'
+
+import { createVNode, nextTick, render } from 'vue'
+
 import { isObject } from '@vexip-ui/utils'
 
-import type { VNode, ObjectDirective } from 'vue'
+import type { ObjectDirective, VNode } from 'vue'
 
 interface LoadingRecord {
   spin: VNode,

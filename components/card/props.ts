@@ -1,6 +1,6 @@
 import { buildProps, styleProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { CardShadowType } from './symbol'
 

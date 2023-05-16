@@ -1,4 +1,4 @@
-import { isDefined, isObject, isFunction, toTrue } from './common'
+import { isDefined, isFunction, isObject, toTrue } from './common'
 import { deepClone } from './deep-clone'
 
 export function ensureArray<T>(value: T | T[]) {

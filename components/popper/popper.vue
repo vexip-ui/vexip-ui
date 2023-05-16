@@ -27,9 +27,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, useZIndex, emitEvent } from '@vexip-ui/config'
+
+import { defineComponent, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { popperProps } from './props'
 
 export default defineComponent({

@@ -186,18 +186,6 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
-  computed,
-  watch,
-  watchEffect,
-  onBeforeUpdate,
-  nextTick
-} from 'vue'
-import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Overflow } from '@/components/overflow'
@@ -205,21 +193,35 @@ import { Popper } from '@/components/popper'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUpdate,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
+
+import CascaderPanel from './cascader-panel.vue'
+import {
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
-import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
+import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
+import { flatTree, isNull, isPromise, transformTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
-import type { Data, CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
+import type { CascaderKeyConfig, CascaderOptionState, CascaderValue, Data } from './symbol'
 
 type ChangeListener = (value: CascaderValue, data: Data[] | Data[][]) => void
 

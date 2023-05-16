@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB, Spinner, EyeSlashR, EyeR } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { EyeR, EyeSlashR, GithubB, Spinner } from '@vexip-ui/icons'
 import { Input } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
