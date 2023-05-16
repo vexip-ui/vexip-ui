@@ -1,9 +1,9 @@
 import './style/index.scss'
 
 import { withBase } from 'vitepress'
-import { install as VexipUI, Loading } from 'vexip-ui'
+import { Loading, install as VexipUI } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
-import { langOptions, i18n, vexipuiLocale } from './i18n'
+import { i18n, langOptions, vexipuiLocale } from './i18n'
 import { installGlobals } from './globals'
 import { computeSeriesColors } from './common/series-color'
 
@@ -58,6 +58,8 @@ function enhanceApp(app: App) {
 
 function enhanceRouter(router: Router) {
   const loadedMap = new Map<string, boolean>()
+
+  syncLocale(router.route.path)
 
   router.onBeforeRouteChange = to => {
     const url = getPath(to)

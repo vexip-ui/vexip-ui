@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { isExternal } from '../common/utils'

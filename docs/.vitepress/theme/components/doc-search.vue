@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect, nextTick, onMounted } from 'vue'
+import { nextTick, onMounted, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { MagnifyingGlass } from '@vexip-ui/icons'

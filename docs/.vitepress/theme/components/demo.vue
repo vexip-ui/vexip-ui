@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { defineAsyncComponent, markRaw, ref, watchEffect } from 'vue'
+import { defineAsyncComponent, markRaw, onMounted, ref, watch, watchEffect } from 'vue'
 import { Message } from 'vexip-ui'
-import { PasteR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
+import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
 import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
+import { hashTarget } from '../common/hash-target'
 import { usePlayground } from '../common/playground'
 
-import type { Row } from 'vexip-ui'
+import type { RowExposed } from 'vexip-ui'
 
 const demos = import.meta.glob('@docs/demos/**/*.vue')
 const codes = import.meta.glob('@docs/demos/**/*.vue', { as: 'raw' })
@@ -36,6 +37,7 @@ const props = defineProps({
 const { t, locale } = useI18n({ useScope: 'global' })
 
 const prefix = 'demo'
+const activeClass = `${prefix}--active`
 
 const demo = ref<Record<string, any>>()
 const code = ref('')
@@ -43,7 +45,7 @@ const code = ref('')
 const codeExpanded = ref(false)
 const codeLines = ref(0)
 
-const wrapper = ref<InstanceType<typeof Row>>()
+const wrapper = ref<RowExposed>()
 const codeRef = ref<HTMLElement>()
 
 watchEffect(async () => {
@@ -60,6 +62,14 @@ watchEffect(async () => {
   }
 })
 
+watch(hashTarget, toggleActive)
+
+onMounted(() => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(toggleActive)
+  })
+})
+
 async function internalInit() {
   const basePath = `/demos/${props.src}/demo.${locale.value}.vue`
   const path = Object.keys(demos).find(path => path.endsWith(basePath))
@@ -67,6 +77,18 @@ async function internalInit() {
   if (path) {
     demo.value = markRaw(defineAsyncComponent(demos[path] as any))
     code.value = await codes[path]()
+  }
+}
+
+function toggleActive() {
+  if (wrapper.value?.$el) {
+    const el = wrapper.value.$el as HTMLElement
+
+    if (!hashTarget.value || el.id !== hashTarget.value) {
+      el.classList.remove(activeClass)
+    } else {
+      el.classList.add(activeClass)
+    }
   }
 }
 
@@ -124,7 +146,7 @@ function editOnPlayground() {
 </script>
 
 <template>
-  <Row ref="wrapper" tag="section" :class="prefix">
+  <Row ref="wrapper" tag="section" :class="[prefix]">
     <Column>
       <div :class="`${prefix}__example`">
         <NativeScroll

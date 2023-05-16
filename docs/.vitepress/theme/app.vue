@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { Bars } from '@vexip-ui/icons'

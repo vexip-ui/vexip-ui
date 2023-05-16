@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
-import { toKebabCase, flatTree } from '@vexip-ui/utils'
+import { flatTree, toKebabCase } from '@vexip-ui/utils'
 import { ensureStartingSlash } from '../common/utils'
 
 import type { AsideMenuItem } from '../types'

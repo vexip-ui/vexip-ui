@@ -96,7 +96,7 @@ There are various slots within the component that provide to custom content. Som
 
 ```ts
 import type { Router } from 'vue-router'
-import type { IconMinorProps, MenuMarkerType, MenuGroupType } from 'vexip-ui'
+import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'

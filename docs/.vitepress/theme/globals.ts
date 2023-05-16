@@ -3,7 +3,7 @@ import AudioButton from './components/audio-button.vue'
 import IconDemo from './components/icon-demo.vue'
 import Contributors from './components/contributors.vue'
 
-import type { Component, App } from 'vue'
+import type { App, Component } from 'vue'
 
 export const components: Record<string, Component> = {
   Demo,

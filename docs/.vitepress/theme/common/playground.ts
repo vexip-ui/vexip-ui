@@ -1,4 +1,4 @@
-import { zlibSync, strToU8, strFromU8 } from 'fflate'
+import { strFromU8, strToU8, zlibSync } from 'fflate'
 
 const playgroundUrl = import.meta.env.DEV
   ? 'http://localhost:6012/'

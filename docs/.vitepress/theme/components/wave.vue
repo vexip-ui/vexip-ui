@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { isClient } from '@vexip-ui/utils'
 
 const props = defineProps({
