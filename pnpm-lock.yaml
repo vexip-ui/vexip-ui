@@ -65,8 +65,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@vexip-ui/eslint-config':
-        specifier: ^0.6.1
-        version: 0.6.1(eslint@8.39.0)(typescript@4.9.5)
+        specifier: ^0.6.3
+        version: 0.6.3(eslint@8.39.0)(typescript@4.9.5)
       '@vexip-ui/prettier-config':
         specifier: ^0.1.0
         version: 0.1.0(prettier@2.8.8)
@@ -2735,8 +2735,8 @@ packages:
       '@commitlint/config-conventional': 17.2.0
     dev: true
 
-  /@vexip-ui/eslint-config@0.6.1(eslint@8.39.0)(typescript@4.9.5):
-    resolution: {integrity: sha512-wIOwqocCcmedakJpnaPeW3k3caF9U1iaeqHzmHiv3jub+pOPT01vmQL2WgSp12ackNzmcWQ+OIhm8BHETN0D3A==}
+  /@vexip-ui/eslint-config@0.6.3(eslint@8.39.0)(typescript@4.9.5):
+    resolution: {integrity: sha512-RLKWLN1YN0TPKQ3h4GBWaT+wWC20s/8k5FSey3tENdcRCUD1q4TmdZdt+LfQfKSoqfRV+SJBT4o2ImGT+1XB1Q==}
     peerDependencies:
       eslint: '>=8.0.0'
     dependencies:

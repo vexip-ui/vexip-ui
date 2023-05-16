@@ -1,9 +1,8 @@
 import { resolve } from 'node:path'
-
+import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { existsSync, statSync } from 'node:fs'
 import { cpus } from 'node:os'
 
-import { readFile, readdir, writeFile } from 'node:fs/promises'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import {
