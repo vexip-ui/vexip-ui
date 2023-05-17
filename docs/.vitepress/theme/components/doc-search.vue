@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watchEffect } from 'vue'
+import { nextTick, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { MagnifyingGlass } from '@vexip-ui/icons'
-import { isClient, toKebabCase } from '@vexip-ui/utils'
 import { getComponentConfig } from '../../config/component'
+import { useListener } from '@vexip-ui/hooks'
+import { isClient, toKebabCase } from '@vexip-ui/utils'
+
+import type { AutoCompleteExposed } from 'vexip-ui'
 
 const { t, locale } = useI18n({ useScope: 'global' })
 
@@ -13,6 +16,7 @@ const route = useRoute()
 
 const rawOptions: string[] = []
 const isMacPlatform = isClient && navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const suffix = isMacPlatform ? '⌘ K' : 'Ctrl K'
 
 for (const group of getComponentConfig()) {
   rawOptions.push(
@@ -23,38 +27,25 @@ for (const group of getComponentConfig()) {
 }
 
 const searchOptions = ref(rawOptions)
+const searchValue = ref('')
+const visible = ref(false)
 const placeholder = ref('')
-const currentSearch = ref('')
+
+const search = ref<AutoCompleteExposed>()
 
 watchEffect(() => {
-  placeholder.value =
-    (route.path.startsWith(`/${locale.value}/component/`)
-      ? route.data.title
-      : t('common.searchComponent')) + (isMacPlatform ? '  ⌘ + K' : '  Ctrl + K')
+  placeholder.value = route.path.startsWith(`/${locale.value}/component/`)
+    ? route.data.title
+    : t('common.searchComponent')
 })
 
-onMounted(() => {
-  window.addEventListener('keydown', function (event) {
-    if (isMacPlatform) {
-      if (event.metaKey && event.key === 'k') {
-        focusAutoComplete(event)
-      }
-    } else {
-      if (event.ctrlKey && event.key === 'k') {
-        focusAutoComplete(event)
-      }
-    }
-  })
+useListener(window, 'keydown', (event: KeyboardEvent) => {
+  if ((isMacPlatform ? event.metaKey : event.ctrlKey) && event.code === 'KeyK') {
+    event.preventDefault()
+    visible.value = true
+    search.value?.focus()
+  }
 })
-
-function focusAutoComplete(event: KeyboardEvent) {
-  const autoCompleteInputEl = document.querySelector(
-    '.vxp-auto-complete__input'
-  ) as HTMLInputElement
-
-  event.preventDefault()
-  autoCompleteInputEl.focus()
-}
 
 function toComponentDoc(fullName: string) {
   if (!route.path.startsWith(`/${locale.value}/component/${fullName}`)) {
@@ -62,7 +53,8 @@ function toComponentDoc(fullName: string) {
   }
 
   nextTick(() => {
-    currentSearch.value = ''
+    searchValue.value = ''
+    visible.value = false
   })
 }
 </script>
@@ -70,7 +62,9 @@ function toComponentDoc(fullName: string) {
 <template>
   <div class="doc-search">
     <AutoComplete
-      v-model:value="currentSearch"
+      ref="search"
+      v-model:value="searchValue"
+      v-model:visible="visible"
       filter
       ignore-case
       :transfer="false"
@@ -79,7 +73,13 @@ function toComponentDoc(fullName: string) {
       :placeholder="placeholder"
       :options="searchOptions"
       @change="toComponentDoc"
-    ></AutoComplete>
+    >
+      <template #suffix>
+        <span class="search-input__shortcut">
+          {{ suffix }}
+        </span>
+      </template>
+    </AutoComplete>
   </div>
 </template>
 
@@ -93,6 +93,17 @@ function toComponentDoc(fullName: string) {
 
   .search-input {
     max-width: 300px;
+
+    &__shortcut {
+      padding: 3px 5px 4px;
+      font-family: var(--vxp-font-family-base);
+      font-size: 10px;
+      line-height: 1;
+      color: var(--vxp-content-color-disabled);
+      background-color: var(--vxp-fill-color-background);
+      border: var(--vxp-border-light-1);
+      border-radius: var(--vxp-radius-base);
+    }
 
     .vxp-select__selector {
       background-color: transparent;

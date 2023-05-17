@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 import { ussTocAnchor } from '../common/toc-anchor'
 
 import PageFooter from './page-footer.vue'
@@ -24,6 +24,7 @@ const props = defineProps({
 const emit = defineEmits(['update:active', 'resize'])
 
 const { frontmatter } = useData()
+const route = useRoute()
 
 const wrapper = ref<RowExposed>()
 const wrapperEl = computed(() => wrapper.value?.$el)
@@ -49,21 +50,12 @@ watch(
     currentActive.value = value
   }
 )
-watch(
-  () => frontmatter.value.anchor,
-  value => {
-    refreshAnchor(value)
-  }
-)
 watch(currentActive, value => {
   emit('update:active', value)
 })
-watch(
-  () => props.anchorLevel,
-  value => {
-    refreshAnchor(value as 2)
-  }
-)
+watch([() => props.anchorLevel, () => frontmatter.value.anchor, () => route.path], () => {
+  refreshAnchor(frontmatter.value.anchor || props.anchorLevel || 3)
+})
 
 defineExpose({ refreshAnchor })
 
