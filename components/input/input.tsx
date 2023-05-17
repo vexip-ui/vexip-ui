@@ -191,6 +191,7 @@ export default defineComponent({
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
       input: inputControl,
+      copyValue,
       focus: (options?: FocusOptions) => {
         inputControl.value?.focus(options)
       },
@@ -331,6 +332,22 @@ export default defineComponent({
       }
 
       emitEvent(props.onKeyUp, event)
+    }
+
+    function copyValue() {
+      const input = document.createElement('input')
+
+      input.style.height = '0'
+      input.setAttribute('readonly', 'readonly')
+      input.value = currentValue.value
+      document.body.appendChild(input)
+      input.select()
+
+      const isSuccess = document.execCommand('copy')
+
+      document.body.removeChild(input)
+
+      return isSuccess
     }
 
     function preventDefault(event: Event) {

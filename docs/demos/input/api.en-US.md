@@ -62,3 +62,9 @@
 | after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -                    | `2.0.0`  |
 | count         | Word count content slot                                                                       | `{ value: string }`  | `2.0.12` |
 | password      | Slot for plain password button, usually a single icon                                         | `{ plain: boolean }` | `2.1.0`  |
+
+### Input Methods
+
+| Name      | Description                                        | Signature       | Since    |
+| --------- | -------------------------------------------------- | --------------- | -------- |
+| copyValue | Copy the current content of input to the clipboard | `() => boolean` | `2.1.21` |
