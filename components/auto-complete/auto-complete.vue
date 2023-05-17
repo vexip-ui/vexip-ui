@@ -410,7 +410,10 @@ export default defineComponent({
       handleToggle,
       handleKeyDown,
       handleEnter,
-      handleClear
+      handleClear,
+
+      focus: () => control.value?.focus(),
+      blur: () => control.value?.blur()
     }
   }
 })
