@@ -186,7 +186,17 @@ export default defineComponent({
       }
     )
 
-    expose({ handleToTarget, handleToSource, handlePanelFocus, handlePanelBlur })
+    expose({
+      handleToTarget,
+      handleToSource,
+      handlePanelFocus,
+      handlePanelBlur,
+      focus: (options?: FocusOptions) => source.value?.$el?.focus(options),
+      blur: () => {
+        source.value?.$el?.blur()
+        target.value?.$el?.blur()
+      }
+    })
 
     function getFilterMethod(type: 'source' | 'target') {
       const filter = props.filter

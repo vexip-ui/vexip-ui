@@ -139,6 +139,11 @@ function getEmptyActions<V = unknown>() {
   }
 }
 
+/**
+ * Create a field store, provide field states and control methods
+ *
+ * @param onFocus a focus method for focusing when label is clicked
+ */
 export function useFieldStore<V = unknown>(onFocus?: () => void) {
   const instance = getCurrentInstance()
 

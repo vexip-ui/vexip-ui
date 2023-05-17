@@ -48,6 +48,7 @@ $color-picker: map.merge(
 
   &__selector {
     width: auto;
+    cursor: pointer;
   }
 
   &__control {

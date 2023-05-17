@@ -25,5 +25,7 @@ export interface TransferExposed extends ComponentPublicInstance {
   handleToTarget: () => void,
   handleToSource: () => void,
   handlePanelFocus: (type: 'source' | 'target') => void,
-  handlePanelBlur: () => void
+  handlePanelBlur: () => void,
+  focus: (options?: FocusOptions) => void,
+  blur: () => void
 }

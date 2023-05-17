@@ -412,7 +412,7 @@ export default defineComponent({
       handleEnter,
       handleClear,
 
-      focus: () => control.value?.focus(),
+      focus: (options?: FocusOptions) => control.value?.focus(options),
       blur: () => control.value?.blur()
     }
   }

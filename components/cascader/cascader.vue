@@ -1206,7 +1206,10 @@ export default defineComponent({
       handleTipClose,
       handlePanelKeyOpen,
       handlePanelBack,
-      handlePanelsEnter
+      handlePanelsEnter,
+
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

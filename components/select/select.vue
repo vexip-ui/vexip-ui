@@ -1135,11 +1135,11 @@ export default defineComponent({
       }
     }
 
-    function focus() {
+    function focus(options?: FocusOptions) {
       if (currentVisible.value) {
-        (input.value || reference.value)?.focus()
+        (input.value || reference.value)?.focus(options)
       } else {
-        reference.value?.focus()
+        reference.value?.focus(options)
       }
     }
 

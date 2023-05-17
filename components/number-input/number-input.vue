@@ -285,8 +285,8 @@ export default defineComponent({
       }
     )
 
-    function focus() {
-      inputControl.value && inputControl.value.focus()
+    function focus(options?: FocusOptions) {
+      inputControl.value?.focus(options)
     }
 
     function handleFocus(event: FocusEvent) {
@@ -503,7 +503,10 @@ export default defineComponent({
       handleClear,
       handlePrefixClick,
       handleSuffixClick,
-      handleKeyPress
+      handleKeyPress,
+
+      focus,
+      blur: () => inputControl.value?.blur()
     }
   }
 })

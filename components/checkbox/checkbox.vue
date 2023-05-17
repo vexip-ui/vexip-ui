@@ -228,7 +228,10 @@ export default defineComponent({
       input,
 
       handleChange,
-      handleClick
+      handleClick,
+
+      focus: (options?: FocusOptions) => input.value?.focus(options),
+      blur: () => input.value?.blur()
     }
   }
 })

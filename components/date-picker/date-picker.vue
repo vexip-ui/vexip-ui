@@ -1409,9 +1409,9 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
 
-      focus: handleFocused,
-      blur: handleBlur,
-      updatePopper
+      updatePopper,
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

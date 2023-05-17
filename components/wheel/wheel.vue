@@ -491,7 +491,9 @@ export default defineComponent({
       handlePrev,
       handleNext,
 
-      refreshScroll
+      refreshScroll,
+      focus: (options?: FocusOptions) => wrapper.value?.focus(options),
+      blur: () => wrapper.value?.blur()
     }
   }
 })

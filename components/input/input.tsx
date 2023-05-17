@@ -191,8 +191,8 @@ export default defineComponent({
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
       input: inputControl,
-      focus: () => {
-        inputControl.value?.focus()
+      focus: (options?: FocusOptions) => {
+        inputControl.value?.focus(options)
       },
       blur: () => {
         inputControl.value?.blur()
@@ -517,7 +517,7 @@ export default defineComponent({
     }
   },
   methods: {
-    focus: noop as () => void,
+    focus: noop as (options?: FocusOptions) => void,
     blur: noop as () => void
   }
 })

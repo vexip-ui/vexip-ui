@@ -722,7 +722,10 @@ export default defineComponent({
       handleShrtcutsFocus,
       handleShortcutsKeydown,
       handleSpaceDown,
-      handleEscDown
+      handleEscDown,
+
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })
