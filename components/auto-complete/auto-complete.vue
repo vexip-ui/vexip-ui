@@ -30,8 +30,8 @@
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
-    @focus="control?.focus()"
-    @blur="control?.blur()"
+    @focus="handleFocus"
+    @blur="handleBlur"
     @outside-close="handleChange"
   >
     <template v-if="hasPrefix" #prefix>
@@ -240,6 +240,16 @@ export default defineComponent({
       }
     }
 
+    function handleFocus(event: FocusEvent) {
+      control.value?.focus()
+      emitEvent(props.onFocus, event)
+    }
+
+    function handleBlur(event: FocusEvent) {
+      control.value?.blur()
+      emitEvent(props.onBlur, event)
+    }
+
     function handleSelect(value: string | number, data: AutoCompleteRawOption) {
       if (isNull(value)) {
         return
@@ -392,6 +402,8 @@ export default defineComponent({
       select,
       control,
 
+      handleFocus,
+      handleBlur,
       handleSelect,
       handleInput,
       handleChange,

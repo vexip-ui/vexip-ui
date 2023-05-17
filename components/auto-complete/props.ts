@@ -53,6 +53,8 @@ export const autoCompleteProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
+  onFocus: eventProp<(event: FocusEvent) => void>(),
+  onBlur: eventProp<(event: FocusEvent) => void>(),
   onSelect: eventProp<ChangeListener>(),
   onInput: eventProp<(value: string) => void>(),
   onChange: eventProp<ChangeListener>(),
