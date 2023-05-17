@@ -161,10 +161,6 @@ export default defineComponent({
       }
     }
 
-    function focus() {
-      handler.value?.focus()
-    }
-
     return {
       nh: useNameHelper('slider'),
       isTipShow,
@@ -177,7 +173,9 @@ export default defineComponent({
       hideTooltip,
       disableEvent,
       updateTooltip,
-      focus
+
+      focus: (options?: FocusOptions) => handler.value?.focus(options),
+      blur: () => handler.value?.blur()
     }
   }
 })

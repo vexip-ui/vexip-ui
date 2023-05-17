@@ -935,9 +935,9 @@ export default defineComponent({
       handleExchangeClick,
       // handlePanelClosed,
 
-      focus: handleFocused,
-      blur: handleBlur,
-      updatePopper
+      updatePopper,
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

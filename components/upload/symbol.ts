@@ -81,7 +81,9 @@ export interface DirectoryReader {
 
 export interface UploadExposed extends ComponentPublicInstance {
   execute: () => Promise<false | any[]>,
-  handleDelete: (file: FileState) => void
+  handleDelete: (file: FileState) => void,
+  focus: (options?: FocusOptions) => void,
+  blur: () => void
 }
 
 export const uploadListTypes = Object.freeze<UploadListType[]>([

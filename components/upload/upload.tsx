@@ -50,13 +50,7 @@ export default defineComponent({
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<FileOptions[]>(() => {
-        if (button.value?.$el) {
-          button.value.$el.focus()
-        } else {
-          panel.value?.focus()
-        }
-      })
+      useFieldStore<FileOptions[]>(focus)
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
@@ -204,7 +198,23 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    expose({ execute, handleDelete })
+    expose({
+      execute,
+      handleDelete,
+      focus,
+      blur: () => {
+        button.value?.$el.blur()
+        panel.value?.blur()
+      }
+    })
+
+    function focus(options?: FocusOptions) {
+      if (button.value?.$el) {
+        button.value.$el.focus(options)
+      } else {
+        panel.value?.focus(options)
+      }
+    }
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -798,6 +808,8 @@ export default defineComponent({
   },
   methods: {
     execute: noop as () => Promise<false | any[]>,
-    handleDelete: noop as (file: FileState) => void
+    handleDelete: noop as (file: FileState) => void,
+    focus: noop as (options?: FocusOptions) => void,
+    blur: noop as () => void
   }
 })

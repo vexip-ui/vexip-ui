@@ -2,12 +2,12 @@
 
 | Name           | Type                                                     | Description                                                                                            | Default     | Since   |
 | -------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------- | ------- |
-| type           | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | The type of the input, where the time-related type is the native type                                  | `'text'`    | -       |
-| size           | `'small' \| 'default' \| 'large'`                        | the size of input                                                                                      | `'default'` | -       |
-| state          | `'default' \| 'success' \| 'error' \| 'warning'`         | the state of input                                                                                     | `'default'` | -       |
-| prefix         | `Record<string, any>`                                    | prefix icon, invalid when using prefix slot                                                            | `null`      | -       |
+| type           | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | The type of input, where the time-related type is the native type                                      | `'text'`    | -       |
+| size           | `'small' \| 'default' \| 'large'`                        | The size of input                                                                                      | `'default'` | -       |
+| state          | `'default' \| 'success' \| 'error' \| 'warning'`         | The state of input                                                                                     | `'default'` | -       |
+| prefix         | `Record<string, any>`                                    | Prefix icon, invalid when using prefix slot                                                            | `null`      | -       |
 | prefix-color   | `string`                                                 | The color of the prefix content, affects the prefix slot                                               | `''`        | -       |
-| suffix         | `Record<string, any>`                                    | suffix icon, invalid when using suffix slot                                                            | `null`      | -       |
+| suffix         | `Record<string, any>`                                    | Suffix icon, invalid when using suffix slot                                                            | `null`      | -       |
 | suffix-color   | `string`                                                 | The color of the suffix content, which affects the suffix slot                                         | `''`        | -       |
 | formatter      | `(value: string \| number) => string \| number`          | Set the method to format the value of the input after each value change                                | `null`      | -       |
 | accessor       | `(value: string) => any`                                 | Set the method for reading the input value when the event is called back                               | `null`      | -       |
@@ -31,7 +31,7 @@
 | loading-lock   | `boolean`                                                | Set whether to be read-only when loading                                                               | `false`     | `2.0.0` |
 | loading-effect | `string`                                                 | Set the effect animation for the loading icon                                                          | `false`     | `2.1.0` |
 | transparent    | `boolean`                                                | Set whether to be transparent                                                                          | `false`     | `2.0.2` |
-| sync           | `boolean`                                                | Set whether sync input mode                                                                            | `false`     | `2.0.6` |
+| sync           | `boolean`                                                | Set whether enable sync input mode                                                                     | `false`     | `2.0.6` |
 | locale         | `LocaleConfig['input']`                                  | Set the locale config                                                                                  | `null`      | `2.1.0` |
 
 ### Input Events
@@ -62,3 +62,9 @@
 | after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -                    | `2.0.0`  |
 | count         | Word count content slot                                                                       | `{ value: string }`  | `2.0.12` |
 | password      | Slot for plain password button, usually a single icon                                         | `{ plain: boolean }` | `2.1.0`  |
+
+### Input Methods
+
+| Name      | Description                                        | Signature       | Since    |
+| --------- | -------------------------------------------------- | --------------- | -------- |
+| copyValue | Copy the current content of input to the clipboard | `() => boolean` | `2.1.21` |

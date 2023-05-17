@@ -55,7 +55,7 @@ describe('DatePicker', () => {
       props: { visible: true, type: 'datetime' }
     })
 
-    wrapper.vm.focus()
+    wrapper.vm.handleFocused()
     await nextTick()
 
     expect(wrapper.classes()).toContain('vxp-date-picker--datetime')

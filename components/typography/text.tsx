@@ -16,6 +16,10 @@ export default defineComponent({
       italic: false,
       underline: false,
       code: false,
+      mark: false,
+      disabled: false,
+      keyboard: false,
+      thin: false,
       reversed: false
     })
 

@@ -193,11 +193,8 @@ export default defineComponent({
 
       textarea.style.height = '0'
       textarea.setAttribute('readonly', 'readonly')
-
       textarea.value = currentValue.value
-
       document.body.appendChild(textarea)
-
       textarea.select()
 
       const isSuccess = document.execCommand('copy')
@@ -231,7 +228,9 @@ export default defineComponent({
       handleKeyUp,
 
       // api
-      copyValue
+      copyValue,
+      focus: (options?: FocusOptions) => textarea.value?.focus(options),
+      blur: () => textarea.value?.blur()
     }
   }
 })
