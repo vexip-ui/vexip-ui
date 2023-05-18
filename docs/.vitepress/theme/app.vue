@@ -2,7 +2,15 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
-import { Bars } from '@vexip-ui/icons'
+import {
+  Bars,
+  CircleQuestionR,
+  ClockRotateLeft,
+  FileSignature,
+  GithubB,
+  MugHot,
+  QqB
+} from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from './common/utils'
@@ -16,12 +24,12 @@ import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
-import type { LayoutExposed } from 'vexip-ui'
+import type { LayoutExposed, LayoutFooterLink } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
-const { t, locale } = useI18n({ useScope: 'global' })
-console.log(t('guide.introduction'), t('guide.gettingS'))
+const { locale } = useI18n({ useScope: 'global' })
+
 const route = useRoute()
 
 const fixedSub = ref(false)
@@ -50,6 +58,82 @@ const outline = computed(() => {
 
   return undefined
 })
+
+const footerLinks: LayoutFooterLink[] = [
+  {
+    name: '资源',
+    children: [
+      {
+        name: 'Vexip Nuxt Module',
+        to: 'https://github.com/vexip-ui/nuxt'
+      },
+      {
+        name: 'Vexip Lint Config',
+        subname: 'Lint 配置集',
+        to: 'https://github.com/vexip-ui/lint-config'
+      },
+      {
+        name: 'Create Vexip',
+        subname: '快速创建 Vexip 项目',
+        to: 'https://github.com/vexip-ui/create-vexip'
+      },
+      {
+        name: 'Grid Layout Plus',
+        subname: 'Vue3 栅格布局',
+        to: 'https://github.com/qmhc/grid-layout-plus'
+      },
+      {
+        name: 'vite-plugin-dts',
+        to: 'https://github.com/qmhc/vite-plugin-dts'
+      },
+      {
+        name: 'vue-hooks-plus',
+        subname: 'Vue3 Hooks 库',
+        to: 'https://github.com/InhiblabCore/vue-hooks-plus'
+      },
+      {
+        name: 'Vexip SFC Playground',
+        to: 'https://playground.vexipui.com/'
+      }
+    ]
+  },
+  {
+    name: '帮助',
+    children: [
+      {
+        name: 'GitHub',
+        icon: GithubB,
+        to: 'https://github.com/vexip-ui/vexip-ui'
+      },
+      {
+        name: '更新日志',
+        icon: ClockRotateLeft,
+        to: 'https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md'
+      },
+      {
+        name: '技术支持 Q 群',
+        icon: QqB,
+        to: 'https://jq.qq.com/?_wv=1027&k=5KlA84xG'
+      },
+      {
+        name: '议题',
+        icon: CircleQuestionR,
+        to: 'https://github.com/vexip-ui/vexip-ui/issues'
+      },
+      {
+        name: '参与贡献',
+        icon: FileSignature,
+        to: 'https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md'
+      },
+      {
+        name: '赞助一杯喜茶',
+        icon: MugHot,
+        to: 'http://localhost:9000/zh-CN/guide/vexip-ui.html#%E8%B4%A1%E7%8C%AE',
+        target: '_self'
+      }
+    ]
+  }
+]
 
 watch(
   () => route.path,
@@ -111,6 +195,7 @@ function refreshScroll() {
     sign-type="header"
     :no-aside="frontmatter.homepage || page.isNotFound"
     :footer="!(frontmatter.homepage || page.isNotFound)"
+    :links="footerLinks"
     :style="{
       height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width)',
