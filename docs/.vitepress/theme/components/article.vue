@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
+import { debounceFrame } from '@vexip-ui/utils'
 import { ussTocAnchor } from '../common/toc-anchor'
 
 import PageFooter from './page-footer.vue'
@@ -35,6 +36,10 @@ const { anchors, refreshAnchor } = ussTocAnchor(
   wrapperEl
 )
 
+const refresh = debounceFrame(() => {
+  refreshAnchor(frontmatter.value.anchor || props.anchorLevel || 3)
+})
+
 const contentHeight = ref(1000)
 
 const contentStyle = computed(() => ({
@@ -53,13 +58,9 @@ watch(
 watch(currentActive, value => {
   emit('update:active', value)
 })
-watch([() => props.anchorLevel, () => frontmatter.value.anchor, () => route.path], () => {
-  refreshAnchor(frontmatter.value.anchor || props.anchorLevel || 3)
-})
+watch([() => props.anchorLevel, () => frontmatter.value.anchor, () => route.path], refresh)
 
-defineExpose({ refreshAnchor })
-
-onMounted(() => requestAnimationFrame(() => refreshAnchor()))
+onMounted(refresh)
 
 function handleContentResize(entry: ResizeObserverEntry) {
   const box = entry.borderBoxSize?.[0]
@@ -70,7 +71,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
     contentHeight.value = entry.contentRect.height
   }
 
-  refreshAnchor()
+  refresh()
 }
 </script>
 

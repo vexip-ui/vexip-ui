@@ -48,11 +48,11 @@ function openOutsidePage(url?: string) {
             @keydown.enter.stop="openOutsidePage(menu.link)"
             @keydown.space.stop.prevent="openOutsidePage(menu.link)"
           >
-            <span class="vxp-menu__title">{{ t(menu.i18n || menu.key) }}</span>
+            <span class="vxp-menu__title">{{ menu.text || t(menu.i18n || menu.key) }}</span>
           </div>
         </li>
         <MenuItem v-else :label="menu.key" :meta="menu">
-          {{ t(menu.i18n || menu.key) }}
+          {{ menu.text || t(menu.i18n || menu.key) }}
         </MenuItem>
       </template>
     </Menu>

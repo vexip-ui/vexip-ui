@@ -83,7 +83,9 @@ function showSince(since?: string) {
     <template v-for="menu in menus" :key="menu.key">
       <MenuGroup
         v-if="menu.items?.length"
-        :label="`${t(menu.i18n || menu.key)}${menu.count ? ` (${menu.items.length})` : ''}`"
+        :label="`${menu.text || t(menu.i18n || menu.key)}${
+          menu.count ? ` (${menu.items.length})` : ''
+        }`"
       >
         <MenuItem
           v-for="child in menu.items"
@@ -92,7 +94,7 @@ function showSince(since?: string) {
           :data-name="toKebabCase(child.key)"
           :meta="child"
         >
-          {{ t(child.i18n || child.key) }}
+          {{ child.text || t(child.i18n || child.key) }}
           <span v-if="child.origin && locale !== 'en-US'" class="aside-menu__sub-name">
             {{ child.origin }}
           </span>
@@ -113,7 +115,7 @@ function showSince(since?: string) {
         :data-name="toKebabCase(menu.key)"
         :meta="menu"
       >
-        {{ t(menu.i18n || menu.key) }}
+        {{ menu.text || t(menu.i18n || menu.key) }}
         <span v-if="menu.origin && locale !== 'en-US'" class="aside-menu__sub-name">
           {{ menu.origin }}
         </span>

@@ -1,5 +1,5 @@
-import { resolve } from 'node:path'
-import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 
 import { defineConfig } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -13,6 +13,12 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-
 
 export default defineConfig(({ command }: ConfigEnv): any => {
   const isServe = command === 'serve'
+  const metaPath = resolve(__dirname, '../meta-data/contributors.json')
+
+  if (isServe && !existsSync(metaPath)) {
+    mkdirSync(dirname(metaPath))
+    writeFileSync(metaPath, '{}\n', 'utf-8')
+  }
 
   return <UserConfigExport>{
     define: {

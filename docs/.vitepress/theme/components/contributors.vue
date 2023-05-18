@@ -5,6 +5,13 @@ import { useI18n } from 'vue-i18n'
 
 import metaData from 'vexip-ui/meta-data/contributors.json'
 
+interface Contributor {
+  name?: string,
+  login: string,
+  avatarUrl: string,
+  url: string
+}
+
 const { page } = useData()
 const { t } = useI18n()
 
@@ -19,7 +26,7 @@ const contributors = computed(() => {
 
   const component = page.value.relativePath.match(componentRE)![1]
 
-  return metaData[component as 'button'].map(item => ({
+  return ((metaData as Record<string, Contributor[]>)[component] || []).map(item => ({
     avatar: item.avatarUrl,
     name: item.name || item.login,
     homepage: item.url

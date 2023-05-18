@@ -54,6 +54,18 @@ export const enUS = defineI18n({
     effect: 'Effect',
     else: 'Else'
   },
+  footer: {
+    resources: 'Resources',
+    lintConfigSet: 'Lint Config Set',
+    createProject: 'Create Vexip Project',
+    gridLayout: 'Vue3 Grid Layout',
+    hooksLib: 'Vue3 Hooks Lib',
+    help: 'Help',
+    changelog: 'Changelog',
+    issue: 'Issue',
+    contribute: 'Contribute',
+    sponsor: 'Sponsor Us'
+  },
   component: {
     Button: 'Button',
     Icon: 'Icon',

@@ -54,6 +54,19 @@ export const zhCN = defineI18n({
     effect: '反应',
     else: '其他'
   },
+  footer: {
+    resources: '资源',
+    lintConfigSet: 'Lint 配置集',
+    createProject: '创建 Vexip 项目',
+    gridLayout: 'Vue3 栅格布局',
+    hooksLib: 'Vue3 Hooks 库',
+    help: '帮助',
+    changelog: '更新日志',
+    issue: '议题',
+    contribute: '参与贡献',
+    qqGroup: '技术支持 Q 群',
+    sponsor: '赞助一杯喜茶'
+  },
   component: {
     Button: '按钮',
     Icon: '图标',

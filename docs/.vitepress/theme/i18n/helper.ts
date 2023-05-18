@@ -52,6 +52,19 @@ export interface I18nConfig {
     effect: string,
     else: string
   },
+  footer: {
+    resources: string,
+    lintConfigSet: string,
+    createProject: string,
+    gridLayout: string,
+    hooksLib: string,
+    help: string,
+    changelog: string,
+    issue: string,
+    contribute: string,
+    qqGroup?: string,
+    sponsor: string
+  },
   component: {
     Button: string,
     Icon: string,
