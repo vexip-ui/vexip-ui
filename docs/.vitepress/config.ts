@@ -40,7 +40,7 @@ export default <UserConfig<ThemeConfig>>{
     asideMenus: getAsideMenus(),
 
     nav: [
-      { key: 'guides', i18n: 'common.guides', link: '/guide/setup', activeMatch: '/guide/' },
+      { key: 'guides', i18n: 'common.guides', link: '/guide/vexip-ui', activeMatch: '/guide/' },
       {
         key: 'components',
         i18n: 'common.components',
@@ -71,11 +71,24 @@ export default <UserConfig<ThemeConfig>>{
 
 function getAsideMenus() {
   return {
-    '/guide/': getGuideConfig().map(guide => {
+    // '/guide/': getGuideConfig().map(guide => {
+    //   return {
+    //     key: guide.name,
+    //     link: `/guide/${guide.name}`,
+    //     i18n: `guide.${guide.i18n}`
+    //   }
+    // }),
+    '/guide/': getGuideConfig().map(group => {
       return {
-        key: guide.name,
-        link: `/guide/${guide.name}`,
-        i18n: `guide.${guide.i18n}`
+        key: group.name,
+        i18n: `guide.${group.name}`,
+        items: group.guides.map(guide => {
+          return {
+            key: guide.name,
+            link: `/guide/${guide.name}`,
+            i18n: `guide.${guide.i18n}`
+          }
+        })
       }
     }),
     '/component/': getComponentConfig().map(group => {

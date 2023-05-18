@@ -38,7 +38,8 @@ export const enUS = defineI18n({
   },
   guide: {
     introduction: 'Introduction',
-    gettingStart: 'Getting Start',
+    vexipui: 'Welcome to Vexip UI',
+    gettingStarted: 'Getting Start',
     globalConfig: 'Global Config',
     styleConfig: 'Style Config',
     nameOrigin: 'Why Call Vexip?',

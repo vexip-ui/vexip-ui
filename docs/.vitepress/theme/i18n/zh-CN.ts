@@ -38,7 +38,8 @@ export const zhCN = defineI18n({
   },
   guide: {
     introduction: '介绍',
-    gettingStart: '快速上手',
+    vexipui: '欢迎来到 Vexip UI',
+    gettingStarted: '快速上手',
     globalConfig: '全局配置',
     styleConfig: '样式配置',
     nameOrigin: '为什么叫 Vexip？',

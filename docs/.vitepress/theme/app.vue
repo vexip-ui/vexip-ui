@@ -20,8 +20,8 @@ import type { LayoutExposed } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
-const { locale } = useI18n({ useScope: 'global' })
-
+const { t, locale } = useI18n({ useScope: 'global' })
+console.log(t('guide.introduction'), t('guide.gettingS'))
 const route = useRoute()
 
 const fixedSub = ref(false)

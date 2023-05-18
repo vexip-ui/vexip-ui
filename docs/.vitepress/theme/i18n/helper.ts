@@ -36,7 +36,8 @@ export interface I18nConfig {
   },
   guide: {
     introduction: string,
-    gettingStart: string,
+    vexipui: string,
+    gettingStarted: string,
     globalConfig: string,
     styleConfig: string,
     nameOrigin: string,
