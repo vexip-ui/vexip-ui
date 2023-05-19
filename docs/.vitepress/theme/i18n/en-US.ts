@@ -60,11 +60,13 @@ export const enUS = defineI18n({
     createProject: 'Create Vexip Project',
     gridLayout: 'Vue3 Grid Layout',
     hooksLib: 'Vue3 Hooks Lib',
+    logoDesign: 'Login Design',
     help: 'Help',
     changelog: 'Changelog',
     issue: 'Issue',
     contribute: 'Contribute',
-    sponsor: 'Sponsor Us'
+    qqGroup: 'Support QQ Group',
+    sponsor: 'Buy Us Coffees'
   },
   component: {
     Button: 'Button',

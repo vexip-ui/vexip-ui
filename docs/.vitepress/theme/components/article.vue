@@ -105,6 +105,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
 .article {
   position: relative;
   flex-wrap: nowrap;
+  min-height: calc(var(--vxp-layout-view-height) - var(--vxp-layout-header-height));
   padding: calc(var(--sub-header-height) + 16px) 30px 30px;
 
   @include query-media('lg') {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vitepress'
+import { useData, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { GithubB, Language } from '@vexip-ui/icons'
 
@@ -9,24 +9,31 @@ import ThemeSwitch from './theme-switch.vue'
 import type { I18nConfig } from '../i18n'
 
 const router = useRouter()
-const route = useRoute()
 
-const { locale, availableLocales, getLocaleMessage } = useI18n({ useScope: 'global' })
+const { site, page } = useData()
+const { locale, getLocaleMessage } = useI18n({ useScope: 'global' })
 
 const langOptions = computed(() => {
-  return availableLocales.map(lang => {
-    const config = getLocaleMessage(lang as string) as I18nConfig
+  return Object.entries(site.value.locales).map(([key, value]) => {
+    const lang = value.lang || key
+    const config = getLocaleMessage(lang) as I18nConfig
 
     return {
-      lang: lang as string,
-      name: config.common.language || lang
+      lang,
+      name: config.common.language || value.label,
+      link: value.link
     }
   })
 })
 
-function changeLanguage(lang: string) {
+function changeLanguage(lang: string, link?: string) {
   if (lang !== locale.value) {
-    router.go(route.path.replace(locale.value as string, lang))
+    const path = page.value.relativePath.substring(
+      locale.value === 'root' ? 0 : locale.value.length
+    )
+    link = link || (lang === 'root' ? '/' : `/${lang}`)
+
+    router.go(`${link}${path}`.replace(/(^|\/)?index.md$/, '$1').replace(/\.md$/, '.html'))
   }
 }
 </script>
@@ -45,7 +52,7 @@ function changeLanguage(lang: string) {
           :key="option.lang"
           :name="option.name"
           :selected="option.lang === locale"
-          @select="changeLanguage(option.lang)"
+          @select="changeLanguage(option.lang, option.link)"
         >
           {{ option.name }}
         </DropdownItem>

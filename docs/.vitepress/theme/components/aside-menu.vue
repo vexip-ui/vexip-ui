@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { flatTree, toKebabCase } from '@vexip-ui/utils'
-import { ensureStartingSlash } from '../common/utils'
+import { ensureStartingSlash } from '../../shared'
 
 import type { AsideMenuItem } from '../types'
 

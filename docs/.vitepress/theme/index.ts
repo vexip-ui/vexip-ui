@@ -72,6 +72,11 @@ function enhanceRouter(router: Router) {
     clearLoading(getPath(to))
   }
 
+  isClient &&
+    window.addEventListener('popstate', () => {
+      syncLocale(location.pathname)
+    })
+
   function getPath(to: string) {
     return new URL(to, 'http://a.com').pathname
   }

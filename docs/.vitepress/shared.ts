@@ -14,9 +14,3 @@ export function ensureStartingSlash(path: string) {
 export function removeExt(path: string, exts: string | string[] = ['md', 'html']) {
   return path.replace(new RegExp(`\\.(${ensureArray(exts).join('|')})`), '')
 }
-
-// export function withBase(path: string) {
-//   return EXTERNAL_URL_RE.test(path) || path.startsWith('.')
-//     ? path
-//     : joinPath(siteDataRef.value.base, path)
-// }

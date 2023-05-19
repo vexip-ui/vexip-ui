@@ -60,6 +60,7 @@ export const zhCN = defineI18n({
     createProject: '创建 Vexip 项目',
     gridLayout: 'Vue3 栅格布局',
     hooksLib: 'Vue3 Hooks 库',
+    logoDesign: 'Logo 设计',
     help: '帮助',
     changelog: '更新日志',
     issue: '议题',

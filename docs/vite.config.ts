@@ -61,12 +61,6 @@ export default defineConfig(({ command }: ConfigEnv): any => {
         plugins: [autoprefixer, ...(isServe ? [] : [discardCss])]
       }
     },
-    plugins: [
-      vueJsx(),
-      i18n({
-        compositionOnly: false,
-        include: resolve(__dirname, 'i18n')
-      })
-    ]
+    plugins: [vueJsx(), i18n({ include: resolve(__dirname, './vitepress/i18n') })]
   }
 })

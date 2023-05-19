@@ -4,7 +4,7 @@ import { useData } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { ChevronLeft, ChevronRight } from '@vexip-ui/icons'
 import { flatTree } from '@vexip-ui/utils'
-import { ensureStartingSlash, removeExt } from '../common/utils'
+import { ensureStartingSlash, removeExt } from '../../shared'
 
 import type { ThemeConfig } from '../types'
 
@@ -13,7 +13,7 @@ const { t, locale } = useI18n({ useScope: 'global' })
 
 const path = computed(() => ensureStartingSlash(removeExt(page.value.relativePath)))
 const candidates = computed(() => {
-  const config = theme.value.asideMenus
+  const config = theme.value.asideMenus || {}
 
   let menus
 

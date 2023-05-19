@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { Bars } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
-import { ensureStartingSlash } from './common/utils'
+import { ensureStartingSlash, isExternal } from '../shared'
 
 import Homepage from './components/homepage.vue'
 import NotFound from './components/not-found.vue'

@@ -2,6 +2,7 @@ import Demo from './components/demo.vue'
 import AudioButton from './components/audio-button.vue'
 import IconDemo from './components/icon-demo.vue'
 import Contributors from './components/contributors.vue'
+import TipContainer from './components/tip-container.vue'
 
 import type { App, Component } from 'vue'
 
@@ -9,7 +10,8 @@ export const components: Record<string, Component> = {
   Demo,
   AudioButton,
   IconDemo,
-  Contributors
+  Contributors,
+  TipContainer
 }
 
 export function installGlobals(app: App) {

@@ -7,8 +7,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vitepress'
 import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
 
-// const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
-
 const prefix = 'homepage'
 const router = useRouter()
 const { t, locale } = useI18n({ useScope: 'global' })

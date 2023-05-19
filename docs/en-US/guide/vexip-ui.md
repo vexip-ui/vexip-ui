@@ -65,6 +65,11 @@ Welcome to join us! You can check out the [Contributing Guide](https://github.co
 
 Or you can sponsor me to help the project grow better!
 
+<img
+  src="/wechat-sponsor.png"
+  style="width: 240px;"
+/>
+
 ## Contributors
 
 Thanks for all their contributions!

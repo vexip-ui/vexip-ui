@@ -58,6 +58,7 @@ export interface I18nConfig {
     createProject: string,
     gridLayout: string,
     hooksLib: string,
+    logoDesign: string,
     help: string,
     changelog: string,
     issue: string,

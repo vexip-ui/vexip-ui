@@ -61,14 +61,14 @@ export default <UserConfig<ThemeConfig>>{
   },
   locales: {
     'en-US': {
-      label: 'en-US',
+      label: 'English',
       lang: 'en-US',
       themeConfig: {
         footerLinks: getFooterLinks('en-US')
       }
     },
     'zh-CN': {
-      label: 'zh-CN',
+      label: '中文',
       lang: 'zh-CN',
       themeConfig: {
         footerLinks: getFooterLinks('zh-CN')
@@ -133,7 +133,7 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         {
           text: 'Grid Layout Plus',
           subi18n: t('gridLayout'),
-          link: 'https://github.com/qmhc/grid-layout-plus'
+          link: `https://grid-layout-plus.netlify.app/${lang === 'zh-CN' ? 'zh/' : ''}`
         },
         {
           text: 'vite-plugin-dts',
@@ -142,11 +142,16 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         {
           text: 'vue-hooks-plus',
           subi18n: t('hooksLib'),
-          link: 'https://github.com/InhiblabCore/vue-hooks-plus'
+          link: `https://inhiblabcore.github.io/docs/hooks/${lang !== 'zh-CN' ? 'en/' : ''}`
         },
         {
           text: 'Vexip SFC Playground',
           link: 'https://playground.vexipui.com/'
+        },
+        {
+          text: 'RedBlues-1980',
+          subi18n: t('logoDesign'),
+          link: 'https://richuangangban1980.lofter.com/'
         }
       ]
     },
@@ -169,18 +174,17 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
           i18n: t('contribute'),
           link: 'https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md'
         },
-        ...(lang === 'zh-CN'
-          ? [
-              {
-                i18n: t('qqGroup'),
-                link: 'https://jq.qq.com/?_wv=1027&k=5KlA84xG'
-              },
-              {
-                i18n: t('sponsor'),
-                link: '/zh-CN/guide/vexip-ui.html#%E8%B4%A1%E7%8C%AE'
-              }
-            ]
-          : [])
+        {
+          i18n: t('qqGroup'),
+          link: 'https://jq.qq.com/?_wv=1027&k=5KlA84xG'
+        },
+        {
+          i18n: t('sponsor'),
+          link:
+            lang === 'zh-CN'
+              ? '/zh-CN/guide/vexip-ui.html#%E8%B4%A1%E7%8C%AE'
+              : '/en-US/guide/vexip-ui.html#contributing'
+        }
       ]
     }
   ]

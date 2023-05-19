@@ -5,6 +5,7 @@ import { zhCN } from './zh-CN'
 import { enUS } from './en-US'
 
 import type { LocaleOptions } from 'vexip-ui'
+import type { I18nConfig } from './helper'
 
 export * from './helper'
 
@@ -14,9 +15,8 @@ export const defaultLanguage =
     ? langOptions.find(l => l === navigator.language) || __ROLLBACK_LANG__
     : __ROLLBACK_LANG__
 
-export const i18n = createI18n({
+export const i18n = createI18n<[I18nConfig], 'en-US' | 'zh-CN'>({
   legacy: false,
-  globalInjection: true,
   locale: defaultLanguage,
   fallbackLocale: __ROLLBACK_LANG__,
   messages: {
