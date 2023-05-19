@@ -163,27 +163,12 @@ export default defineComponent({
     }
 
     function handleSignTypeChange(type: LayoutSignType) {
-      const queue: Array<() => void> = [
-        () => {
-          layoutState.locked = true
-        },
-        () => {
-          currentSignType.value = type
+      layoutState.changeInLock(() => {
+        currentSignType.value = type
 
-          emitEvent(props.onNavChange, type)
-          emit('update:sign-type', type)
-        },
-        () => {
-          layoutState.locked = false
-        }
-      ]
-
-      const run = () => {
-        queue.shift()?.()
-        queue.length && requestAnimationFrame(run)
-      }
-
-      run()
+        emitEvent(props.onNavChange, type)
+        emit('update:sign-type', type)
+      })
     }
 
     function toggleExpanded(expanded = !layoutState.expanded) {

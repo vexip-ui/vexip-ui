@@ -55,7 +55,8 @@ export interface LayoutState {
   useExpand: boolean,
   expanded: boolean,
   reduced: boolean,
-  navConfig: boolean
+  navConfig: boolean,
+  changeInLock: () => void
 }
 
 export interface LayoutSlotParams {

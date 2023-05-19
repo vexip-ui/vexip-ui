@@ -14,7 +14,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
-import { isClient } from '@vexip-ui/utils'
+import { isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
 import LayoutFooter from './layout-footer'
@@ -82,13 +82,15 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const locked = ref(false)
+    const asideActive = ref(!props.noAside)
     const asideExpanded = ref(props.expanded)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
     const currentColor = ref(props.color)
 
-    const { isMounted } = useMounted()
+    const { isMounted } = useMounted('frame')
 
     const section = ref<HTMLElement>()
     const scroll = ref<NativeScrollExposed>()
@@ -101,7 +103,7 @@ export default defineComponent({
 
     const state = reactive({
       isLayout: true,
-      locked: false,
+      locked: computed(() => locked.value),
       affixed: false,
       scrollY: 0,
       affixMatched,
@@ -109,7 +111,8 @@ export default defineComponent({
       useExpand: false,
       expanded: asideExpanded,
       reduced: asideReduced,
-      navConfig: computed(() => !props.noAside)
+      navConfig: computed(() => !props.noAside),
+      changeInLock
     })
 
     const className = computed(() => {
@@ -119,14 +122,13 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
-          [nh.bm('header-main')]: currentSignType.value === 'header'
+          [nh.bm('header-main')]: currentSignType.value === 'header',
+          [nh.bm('locked')]: !isMounted.value || locked.value
         }
       ]
     })
     const rootEl = computed(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      isMounted.value
-      return isClient ? document.documentElement : null
+      return isClient && isMounted.value ? document.documentElement : null
     })
     const signInHeader = computed(() => {
       return props.noAside || currentSignType.value === 'header' || state.useExpand
@@ -170,17 +172,9 @@ export default defineComponent({
       }
     )
     watch(
-      () => state!.locked,
+      () => props.noAside,
       value => {
-        if (!section.value || !scroll.value?.content) return
-
-        if (value) {
-          section.value.style.transitionDuration = '0ms'
-          scroll.value.content.style.transitionDuration = '0ms'
-        } else {
-          section.value.style.transitionDuration = ''
-          scroll.value.content.style.transitionDuration = ''
-        }
+        changeInLock(() => (asideActive.value = value))
       }
     )
     watch(currentSignType, value => {
@@ -239,11 +233,6 @@ export default defineComponent({
       emit('update:dark-mode', isDark)
     }
 
-    // function handleScroll({ clientY }: { clientY: number }) {
-    //   // state.scrollY = clientY
-    //   // state.affixed = !state.affixMatched && clientY >= 50
-    // }
-
     function handleUserAction(label: string, meta: Record<string, any>) {
       emitEvent(props.onUserAction, label, meta)
     }
@@ -256,6 +245,17 @@ export default defineComponent({
       if (scroll.value?.$el) {
         viewHeight.value = scroll.value.$el.offsetHeight
       }
+    }
+
+    let cancelChange: (() => void) | undefined
+
+    function changeInLock(doChange: () => void) {
+      cancelChange?.()
+      cancelChange = runQueueFrame([
+        () => (locked.value = true),
+        doChange,
+        () => (locked.value = false)
+      ])
     }
 
     function stopAndPrevent(event: Event) {
@@ -432,7 +432,7 @@ export default defineComponent({
                 {
                   [nh.bem('section', 'away')]: expandMatched.value,
                   [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: state.locked,
+                  [nh.bem('section', 'locked')]: locked.value,
                   [nh.bem('section', 'fixed')]: props.fixedMain
                 }
               ]}

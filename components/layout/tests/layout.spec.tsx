@@ -5,6 +5,10 @@ import { mount } from '@vue/test-utils'
 import { City, GithubB } from '@vexip-ui/icons'
 import { Layout } from '..'
 
+function watiMounted() {
+  return new Promise(resolve => requestAnimationFrame(resolve))
+}
+
 describe('Layout', () => {
   it('render', async () => {
     const menus = [
@@ -40,6 +44,8 @@ describe('Layout', () => {
         }}
       </Layout>
     ))
+
+    await watiMounted()
 
     expect(wrapper.find('.vxp-layout').classes()).toContain('vxp-layout-vars')
     expect(wrapper.find('.vxp-layout__sign').exists()).toBe(true)
@@ -88,6 +94,8 @@ describe('Layout', () => {
       </Layout>
     ))
 
+    await watiMounted()
+
     const user = wrapper.find('.vxp-layout__header .vxp-layout__user')
     const avatar = user.find('.vxp-avatar')
 
@@ -114,7 +122,7 @@ describe('Layout', () => {
     expect(onUserAction).toHaveBeenCalledWith(actions[0].label, {})
   })
 
-  it('footer', () => {
+  it('footer', async () => {
     const links = [
       {
         name: 'Group',
@@ -146,6 +154,8 @@ describe('Layout', () => {
       </Layout>
     ))
 
+    await watiMounted()
+
     expect(wrapper.find('.vxp-layout__footer').exists()).toBe(true)
 
     const groups = wrapper.findAll('.vxp-layout__link-group')
@@ -163,7 +173,7 @@ describe('Layout', () => {
     expect(wrapper.find('.vxp-layout__copyright').text()).toEqual('copyright')
   })
 
-  it('no aside', () => {
+  it('no aside', async () => {
     const menus = [
       {
         label: '1',
@@ -199,12 +209,14 @@ describe('Layout', () => {
       </Layout>
     ))
 
+    await watiMounted()
+
     expect(wrapper.find('.vxp-layout__aside').exists()).toBe(false)
     expect(wrapper.find('.vxp-layout__header').exists()).toBe(true)
     expect(wrapper.find('.vxp-layout__header .vxp-menu').exists()).toBe(true)
   })
 
-  it('slots', () => {
+  it('slots', async () => {
     const wrapper = mount(() => (
       <Layout footer>
         {{
@@ -220,6 +232,8 @@ describe('Layout', () => {
         }}
       </Layout>
     ))
+
+    await watiMounted()
 
     expect(wrapper.find('.header-left').exists()).toBe(true)
     expect(wrapper.find('.header-main').exists()).toBe(true)
