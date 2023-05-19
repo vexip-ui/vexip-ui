@@ -66,7 +66,7 @@ export const enUS = defineI18n({
     issue: 'Issue',
     contribute: 'Contribute',
     qqGroup: 'Support QQ Group',
-    sponsor: 'Buy Us Coffees'
+    sponsor: 'Buy a Cup of Coffee'
   },
   component: {
     Button: 'Button',

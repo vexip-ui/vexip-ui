@@ -194,7 +194,7 @@ function refreshScroll() {
 <style lang="scss">
 @use '../style/mixins.scss' as *;
 
-.docs-layout {
+:not(.vxp-layout) .docs-layout {
   .vxp-layout {
     &__header {
       z-index: var(--header-z-index);
@@ -223,6 +223,14 @@ function refreshScroll() {
 
     &__sider--away {
       z-index: calc(var(--header-z-index) + 2);
+    }
+
+    &__links-row {
+      justify-content: flex-start;
+    }
+
+    &__link-group {
+      max-width: 400px;
     }
 
     &__copyright {

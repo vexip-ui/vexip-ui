@@ -2,6 +2,7 @@
 
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -94,7 +95,7 @@ export default defineConfig(async () => {
         filename: 'temp/stats-[format].html',
         gzipSize: true,
         brotliSize: true
-      }) as Plugin
+      }) as any
     ]
   }
 })
