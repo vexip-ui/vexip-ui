@@ -13,11 +13,14 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
-      { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
+      {
+        find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
+        replacement: resolve(__dirname, 'common/$1/src')
+      }
     ]
   },
   optimizeDeps: {
-    include: ['@vexip-ui/utils', '@vexip-ui/hooks', '@vexip-ui/icons']
+    include: ['@vexip-ui/bem-helper', '@vexip-ui/hooks', '@vexip-ui/icons', '@vexip-ui/utils']
   },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],

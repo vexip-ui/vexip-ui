@@ -67,6 +67,9 @@ jobs:
       - name: Build common packages
         run: pnpm run build:common
 
+      - name: Build BEM
+        run: pnpm run build:bem
+
       - name: Test BEM
         run: pnpm -C common/bem-helper test
 
