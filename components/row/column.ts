@@ -5,6 +5,7 @@ import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { CSSProperties } from 'vue'
+import type { ClassType } from '@vexip-ui/config'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
@@ -45,7 +46,7 @@ export default defineComponent({
             : props.useFlex
           : {})
       }
-      const className = [
+      const className: ClassType = [
         nh.b(),
         nh.bs('vars'),
         {
@@ -61,7 +62,9 @@ export default defineComponent({
 
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
-          className.push(prop === 'span' ? nh.bm(props[prop]) : nh.bm(`${prop}-${props[prop]}`))
+          className.push(
+            prop === 'span' ? nh.bm(`${props[prop]}`) : nh.bm(`${prop}-${props[prop]}`)
+          )
         }
       })
 
@@ -78,7 +81,7 @@ export default defineComponent({
 
             if (!value && value !== 0) return
 
-            className.push(prop === 'span' ? nh.bm(value) : nh.bm(`${prop}-${value}`))
+            className.push(prop === 'span' ? nh.bm(`${value}`) : nh.bm(`${prop}-${value}`))
           })
         }
       })
@@ -93,9 +96,6 @@ export default defineComponent({
         if (typeof rowState.gap === 'number') {
           style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
         } else if (Array.isArray(rowState.gap)) {
-          // const [horizontal] = rowState.gap
-
-          // style.padding = `${vertical / 2}px ${horizontal / 2}px`
           style.paddingRight = style.paddingLeft = `${rowState.gap[0] / 2}px`
         }
       }
