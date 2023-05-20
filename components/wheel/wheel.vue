@@ -42,6 +42,7 @@
               :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
+              @click="handleItemClick(option.value, option.meta)"
             >
               <slot :option="option" :index="index">
                 {{ option.label }}
@@ -92,7 +93,7 @@ import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState } from './symbol'
+import type { ItemState, WheelRawOption } from './symbol'
 
 export default defineComponent({
   name: 'Wheel',
@@ -459,6 +460,10 @@ export default defineComponent({
       }
     }
 
+    function handleItemClick(value: string | number, data: WheelRawOption) {
+      emitEvent(props.onItemClick, value, data)
+    }
+
     return {
       props,
       nh,
@@ -490,6 +495,7 @@ export default defineComponent({
       handleScrollEnd,
       handlePrev,
       handleNext,
+      handleItemClick,
 
       refreshScroll,
       focus: (options?: FocusOptions) => wrapper.value?.focus(options),
