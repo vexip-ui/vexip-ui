@@ -181,6 +181,10 @@ $time-picker: map.merge(
 
   &__wheel {
     display: flex;
+
+    .#{$wheel}__item:hover {
+      color: get-css-var('wheel-item-color-active-hover');
+    }
   }
 
   &--no-hour {
