@@ -36,10 +36,6 @@ jobs:
       - name: Build common packages
         run: pnpm run build:common
 
-      - name: Build BEM
-        if: startsWith(github.ref_name, 'bem-helper')
-        run: pnpm run build:bem
-
       - name: Build plugins
         if: startsWith(github.ref_name, 'plugins')
         run: pnpm run build:plugins
