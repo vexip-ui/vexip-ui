@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@vexip-ui/bem-helper':
+        specifier: workspace:^
+        version: link:common/bem-helper
       '@vexip-ui/hooks':
         specifier: workspace:^
         version: link:common/hooks
@@ -194,10 +197,13 @@ importers:
         specifier: ^4.1.6
         version: 4.1.6(vue@3.2.47)
 
-  common/bem: {}
+  common/bem-helper: {}
 
   common/config:
     dependencies:
+      '@vexip-ui/bem-helper':
+        specifier: workspace:^
+        version: link:../bem-helper
       '@vexip-ui/utils':
         specifier: workspace:^
         version: link:../utils
