@@ -41,7 +41,7 @@
     "index.ts",
     "full-lib.ts",
     "types.d.ts"
-  ],
+, "common/css-helper/src/index.ts"  ],
   "exclude": [
     "node_modules"
   ]
