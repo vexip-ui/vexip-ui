@@ -101,7 +101,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
-  renderer?: ColumnRenderFn<D> | ColumnRenderFn<D>[],
+  renderer?: ColumnRenderFn<D>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn
 }
@@ -132,12 +132,14 @@ export interface TableDragColumn<D = Data, Val extends string | number = string 
   disableRow?: (data: Data) => boolean
 }
 
-export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
-  | TableBaseColumn<D, Val>
+export type TableTypeColumn<D = Data, Val extends string | number = string | number> =
   | TableOrderColumn<D, Val>
   | TableSelectionColumn<D, Val>
   | TableExpandColumn<D, Val>
   | TableDragColumn<D, Val>
+export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
+  | TableBaseColumn<D, Val>
+  | TableTypeColumn<D, Val>
 
 export type ColumnWithKey<
   D = Data,
