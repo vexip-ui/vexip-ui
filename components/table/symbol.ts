@@ -83,9 +83,10 @@ export type ParsedTableSorterOptions = Required<TableSorterOptions>
 
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: keyof D,
+  key: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  type?: TableColumnType,
   /**
    * @deprecated Use 'class' prop to replace it
    **/
@@ -100,9 +101,9 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
-  renderer?: RenderFn,
-  headRenderer?: RenderFn,
-  filterRenderer?: RenderFn
+  renderer?: ColumnRenderFn<D>,
+  headRenderer?: HeadRenderFn,
+  filterRenderer?: FilterRenderFn
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
@@ -139,6 +140,7 @@ export type TableTypeColumn<D = Data, Val extends string | number = string | num
 export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
   | TableBaseColumn<D, Val>
   | TableTypeColumn<D, Val>
+
 export type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
@@ -148,8 +150,8 @@ export type ColumnWithKey<
   first?: boolean
 }
 
-export type ColumnRenderFn = (data: {
-  row: any,
+export type ColumnRenderFn<D = any> = (data: {
+  row: D,
   rowIndex: number,
   column: TableColumnOptions,
   columnIndex: number

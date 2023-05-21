@@ -18,7 +18,6 @@ type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
 ) => Val
-type RenderFn = (data: Data) => any
 type ExpandRenderFn = (data: {
   leftFixed: number,
   rightFixed: number,
@@ -78,8 +77,9 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   order?: number,
   noEllipsis?: boolean,
   accessor?: Accessor<D, Val>,
-  renderer?: RenderFn,
-  headRenderer?: RenderFn
+  renderer?: ColumnRenderFn<D>,
+  headRenderer?: HeadRenderFn,
+  filterRenderer?: FilterRenderFn
 }
 
 interface TableOrderColumn<D = Data, Val extends string | number = string | number>
