@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { placementWhileList } from '@vexip-ui/hooks'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { placementWhileList } from '@vexip-ui/hooks'
 import { Bubble } from '..'
 
 describe('Bubble', () => {

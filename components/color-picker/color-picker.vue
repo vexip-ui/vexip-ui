@@ -176,40 +176,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
-import ColorAlpha from './color-alpha.vue'
-import ColorHue from './color-hue.vue'
-import ColorPalette from './color-palette.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
-import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
+
+import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+
+import ColorPalette from './color-palette.vue'
+import ColorHue from './color-hue.vue'
+import ColorAlpha from './color-alpha.vue'
+import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import {
+  hsvToHsl,
+  hsvToRgb,
   isClient,
   isElement,
-  toFixed,
   parseColorToRgba,
-  rgbToHsv,
-  hsvToRgb,
   rgbToHex,
-  hsvToHsl,
-  rgbaToHex
+  rgbToHsv,
+  rgbaToHex,
+  toFixed
 } from '@vexip-ui/utils'
 import { colorPickerProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
-import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
+import type { Color, HSLAColor, HSVAColor, HSVColor, RGBAColor } from '@vexip-ui/utils'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
@@ -720,7 +722,10 @@ export default defineComponent({
       handleShrtcutsFocus,
       handleShortcutsKeydown,
       handleSpaceDown,
-      handleEscDown
+      handleEscDown,
+
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

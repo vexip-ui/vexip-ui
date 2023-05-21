@@ -59,14 +59,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useZIndex, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, onMounted, reactive } from 'vue'
+
+import { useIcons, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { toastProps } from './props'
 
-import type { ToastType, ToastOptions } from './symbol'
+import type { ToastOptions, ToastType } from './symbol'
 
 const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])
 

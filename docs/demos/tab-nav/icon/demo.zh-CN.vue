@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { ChartArea } from '@vexip-ui/icons'
 
 const active = ref('标签页1')

@@ -1,14 +1,14 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
   classProp,
-  styleProp,
   eventProp,
-  localeProp
+  localeProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 const positionType = [Number, String]

@@ -7,6 +7,7 @@
   "types": "dist/index.d.ts",
   "private": true,
   "dependencies": {
+    "@vexip-ui/bem-helper": "workspace:^",
     "@vexip-ui/utils": "workspace:^"
   },
   "peerDependencies": {

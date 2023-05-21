@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -26,7 +27,10 @@ export default defineConfig(({ command }) => {
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') },
         { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '../$1') },
-        { find: '@vexip-ui/config', replacement: resolve(__dirname, '../common/config/src') }
+        {
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
+          replacement: resolve(__dirname, '../common/$1/src')
+        }
       ],
       dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui']
     },
@@ -45,6 +49,13 @@ export default defineConfig(({ command }) => {
     },
     optimizeDeps: {
       force: true,
+      include: [
+        '../components',
+        '@vexip-ui/bem-helper',
+        '@vexip-ui/hooks',
+        '@vexip-ui/icons',
+        '@vexip-ui/utils'
+      ],
       exclude: ['@vue/repl', 'vue/server-renderer']
     },
     preview: {

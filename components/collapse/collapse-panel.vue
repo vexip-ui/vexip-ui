@@ -22,10 +22,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE } from './symbol'

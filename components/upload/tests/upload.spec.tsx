@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Upload } from '..'
-import { getXhr, triggerUploadFiles, FormData, FileReader } from './mock'
+import { FileReader, FormData, getXhr, triggerUploadFiles } from './mock'
 
 vi.useFakeTimers()
 

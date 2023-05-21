@@ -5,7 +5,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "serve": "vite",
-    "serve:ssr": "cross-env SSR=true tsx server.ts"
+    "serve:ssr": "SSR=true tsx server.ts"
   },
   "type": "module",
   "private": true,
@@ -33,7 +33,6 @@
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "autoprefixer": "^10.4.14",
     "compression": "^1.7.4",
-    "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "jszip": "^3.10.1",
     "kolorist": "^1.7.0",
@@ -41,8 +40,8 @@
     "markdown-it-anchor": "^8.6.7",
     "markdown-it-container": "^3.0.0",
     "postcss": "^8.4.21",
-    "postcss-preset-env": "^8.3.0",
     "postcss-discard-duplicates": "^6.0.0",
+    "postcss-preset-env": "^8.3.0",
     "sass": "^1.58.3",
     "vite": "^4.3.4",
     "vite-plugin-vue-markdown": "^0.22.4"

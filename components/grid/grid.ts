@@ -1,10 +1,11 @@
-import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
+import { computed, defineComponent, h, provide, reactive, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { gridProps } from './props'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
-import type { LayoutProp, GridJustify, GridAlign } from './symbol'
+import type { GridAlign, GridJustify, LayoutProp } from './symbol'
 
 const numberRE = /^\d+$/
 

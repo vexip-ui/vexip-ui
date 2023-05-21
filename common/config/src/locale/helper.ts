@@ -55,7 +55,9 @@ export interface LocaleConfig {
       start: string,
       end: string,
       select: string
-    }
+    },
+    startTime: string,
+    endTime: string
   },
 
   drawer: {

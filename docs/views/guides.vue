@@ -26,9 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, inject } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
 import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
 import { getGuideConfig } from '../router/guides'

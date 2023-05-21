@@ -1,6 +1,6 @@
-import { buildProps, booleanProp, styleProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, styleProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ComponentSize, ConfigurableProps } from '@vexip-ui/config'
 import type { SpaceAlign, SpaceJustify } from './symbol'
 

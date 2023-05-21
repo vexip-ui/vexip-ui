@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 
 export default defineComponent({

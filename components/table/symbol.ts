@@ -1,13 +1,14 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
+import type { ClassType, ComponentSize, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
-export type Data = Record<string, any>
+export type Data = any
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
+export type TableTextAlign = 'left' | 'center' | 'right'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -85,7 +86,11 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  /**
+   * @deprecated Use 'class' prop to replace it
+   **/
   className?: ClassType,
+  class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
@@ -93,6 +98,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
+  textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
   renderer?: RenderFn,
   headRenderer?: RenderFn,

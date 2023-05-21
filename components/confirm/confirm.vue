@@ -89,16 +89,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, useIcons } from '@vexip-ui/config'
-import { isPromise, isFunction } from '@vexip-ui/utils'
+
+import { defineComponent, nextTick, onMounted, ref, toRef } from 'vue'
+
+import { useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { isFunction, isPromise } from '@vexip-ui/utils'
 import { confirmProps } from './props'
 
-import type { ConfirmType, ConfirmRenderFn, ConfirmOptions } from './symbol'
+import type { ConfirmOptions, ConfirmRenderFn, ConfirmType } from './symbol'
 
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))

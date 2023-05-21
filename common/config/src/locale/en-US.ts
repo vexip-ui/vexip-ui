@@ -54,7 +54,9 @@ export function enUSLocale() {
         start: 'Start',
         end: 'End',
         select: 'Please select'
-      }
+      },
+      startTime: 'Start Time',
+      endTime: 'End Time'
     },
 
     drawer: {

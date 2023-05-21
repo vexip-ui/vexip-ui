@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { CarouselItem } from '@/components/carousel-item'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Carousel } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'

@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRef, computed, provide } from 'vue'
+import { computed, defineComponent, provide, reactive, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { debounceMinor } from '@vexip-ui/utils'
 import { buttonGroupProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
 
-import type { ButtonType, ButtonState } from './symbol'
+import type { ButtonState, ButtonType } from './symbol'
 
 export default defineComponent({
   name: 'ButtonGroup',

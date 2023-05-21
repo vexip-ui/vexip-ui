@@ -1,13 +1,3 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  shallowReadonly,
-  computed,
-  watch,
-  onBeforeMount
-} from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
@@ -15,7 +5,19 @@ import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { Switch } from '@/components/switch'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import { layoutHeaderProps } from './props'
@@ -161,27 +163,12 @@ export default defineComponent({
     }
 
     function handleSignTypeChange(type: LayoutSignType) {
-      const queue: Array<() => void> = [
-        () => {
-          layoutState.locked = true
-        },
-        () => {
-          currentSignType.value = type
+      layoutState.changeInLock(() => {
+        currentSignType.value = type
 
-          emitEvent(props.onNavChange, type)
-          emit('update:sign-type', type)
-        },
-        () => {
-          layoutState.locked = false
-        }
-      ]
-
-      const run = () => {
-        queue.shift()?.()
-        queue.length && requestAnimationFrame(run)
-      }
-
-      run()
+        emitEvent(props.onNavChange, type)
+        emit('update:sign-type', type)
+      })
     }
 
     function toggleExpanded(expanded = !layoutState.expanded) {

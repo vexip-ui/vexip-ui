@@ -141,23 +141,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, onMounted, toRef } from 'vue'
 import { Button } from '@/components/button'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, onMounted, ref, toRef } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTIONS } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  TableSelectionColumn,
-  TableTypeColumn,
   ColumnWithKey,
+  ParsedFilterOptions,
   ParsedTableSorterOptions,
-  ParsedFilterOptions
+  TableSelectionColumn,
+  TableTypeColumn
 } from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
@@ -202,11 +204,13 @@ export default defineComponent({
       return [
         nh.be('head-cell'),
         {
-          [nh.bem('head-cell', 'center')]: columnTypes.includes(
-            (props.column as TableTypeColumn).type
-          )
+          [nh.bem('head-cell', 'center')]:
+            columnTypes.includes((props.column as TableTypeColumn).type) ||
+            props.column.textAlign === 'center',
+          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right'
         },
         props.column.className || null,
+        props.column.class || null,
         customClass
       ]
     })

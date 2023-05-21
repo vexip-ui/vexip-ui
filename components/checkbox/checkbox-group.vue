@@ -22,18 +22,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, toRef, computed, watch, provide } from 'vue'
-import { Checkbox } from '@/components/checkbox'
 import { useFieldStore } from '@/components/form'
+import { Checkbox } from '@/components/checkbox'
+
+import { computed, defineComponent, provide, reactive, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import { debounceMinor, isClient, isDefined, isObject } from '@vexip-ui/utils'
 import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -49,7 +51,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>(() => Array.from(inputSet)[0]?.value?.focus())
+      useFieldStore<(string | number)[]>(focus)
 
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(size),
@@ -222,6 +224,14 @@ export default defineComponent({
       }
     }
 
+    function focus(options?: FocusOptions) {
+      const input = Array.from(inputSet)[0]?.value
+
+      if (isClient && input && document.activeElement !== input) {
+        input.focus(options)
+      }
+    }
+
     return {
       props,
       idFor,
@@ -230,7 +240,14 @@ export default defineComponent({
 
       isObject,
       increaseControl,
-      decreaseControl
+      decreaseControl,
+
+      focus,
+      blur: () => {
+        for (const input of inputSet) {
+          input.value?.blur()
+        }
+      }
     }
   }
 })

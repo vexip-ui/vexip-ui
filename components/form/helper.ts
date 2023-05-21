@@ -1,4 +1,5 @@
-import { computed, inject, provide, getCurrentInstance, onBeforeUnmount } from 'vue'
+import { computed, getCurrentInstance, inject, onBeforeUnmount, provide } from 'vue'
+
 import { isNull, noop } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
@@ -138,6 +139,11 @@ function getEmptyActions<V = unknown>() {
   }
 }
 
+/**
+ * Create a field store, provide field states and control methods
+ *
+ * @param onFocus a focus method for focusing when label is clicked
+ */
 export function useFieldStore<V = unknown>(onFocus?: () => void) {
   const instance = getCurrentInstance()
 

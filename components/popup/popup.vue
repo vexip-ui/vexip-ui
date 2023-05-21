@@ -17,14 +17,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
+import { computed, defineComponent, provide, reactive, ref, watch } from 'vue'
+
 import PopupItem from './popup-item.vue'
-import { useNameHelper, classProp } from '@vexip-ui/config'
+import { classProp, useNameHelper } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
 import type { CSSProperties } from 'vue'
-import type { Key, PopupPlacement, PopupItemState } from './symbol'
+import type { Key, PopupItemState, PopupPlacement } from './symbol'
 
 const popupPlacements = Object.freeze<PopupPlacement[]>([
   'top-right',

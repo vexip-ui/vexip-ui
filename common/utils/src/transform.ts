@@ -1,4 +1,4 @@
-import { isDefined, isObject, isFunction } from './common'
+import { isDefined, isFunction, isObject, toTrue } from './common'
 import { deepClone } from './deep-clone'
 
 export function ensureArray<T>(value: T | T[]) {
@@ -177,12 +177,22 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
  * @param tree 需要转换的树形数据
  * @param options 转化配置项
  */
-export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {}) {
+export function flatTree<T = any>(
+  tree: T[],
+  options: TreeOptions<keyof T> & {
+    depthFirst?: boolean,
+    injectId?: boolean,
+    filter?: (item: T) => boolean
+  } = {}
+) {
   const {
     keyField = 'id' as keyof T,
     childField = 'children' as keyof T,
     parentField = 'parent' as keyof T,
-    rootId = null
+    rootId = null,
+    depthFirst = false,
+    injectId = true,
+    filter = toTrue
   } = options
 
   const hasRootId = isDefined(rootId) && rootId !== ''
@@ -194,35 +204,38 @@ export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {})
   while (loop.length) {
     const item = loop.shift()!
 
-    let children: any[] = []
-
     const childrenValue = item[childField]
+    const children: T[] = Array.isArray(childrenValue) && childrenValue.length ? childrenValue : []
 
-    if (Array.isArray(childrenValue) && childrenValue.length) {
-      children = childrenValue
-    }
-
-    if (!item[keyField]) {
+    if (injectId && !item[keyField]) {
       item[keyField] = idCount++ as any
     }
 
     const id = item[keyField]
 
-    if (parentField && (hasRootId ? item[parentField] === rootId : !item[parentField])) {
+    if (
+      injectId &&
+      parentField &&
+      (hasRootId ? item[parentField] === rootId : !item[parentField])
+    ) {
       (item as any)[parentField] = rootId
     }
 
     for (let i = 0, len = children.length; i < len; ++i) {
       const child = children[i]
 
-      if (parentField) {
+      if (injectId && parentField) {
         child[parentField] = id
       }
 
-      loop.push(child)
+      !depthFirst && loop.push(child)
     }
 
-    list.push(item)
+    if (depthFirst) {
+      loop.unshift(...children)
+    }
+
+    if (filter(item)) list.push(item)
   }
 
   return list
@@ -365,4 +378,21 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
   }
 
   return sourceObj as T & U
+}
+
+export function runQueueFrame(queue: Array<() => void>) {
+  queue = Array.from(queue)
+
+  let cancelled = false
+
+  const run = () => {
+    if (cancelled) return
+
+    queue.shift()?.()
+    queue.length && requestAnimationFrame(run)
+  }
+
+  run()
+
+  return () => (cancelled = true)
 }

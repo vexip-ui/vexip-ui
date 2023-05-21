@@ -64,9 +64,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watchEffect, provide } from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Tooltip } from '@/components/tooltip'
+
+import { computed, defineComponent, provide, ref, watchEffect } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { avatarGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
@@ -83,7 +85,7 @@ export default defineComponent({
   props: avatarGroupProps,
   setup(_props) {
     const props = useProps('avatarGroup', _props, {
-      size: 'default' as ComponentSize,
+      size: 'default',
       options: {
         default: () => [],
         static: true
@@ -122,7 +124,8 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('avatar-vars')]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
+        [nh.bm(props.size as ComponentSize)]:
+          typeof props.size !== 'number' && props.size !== 'default',
         [nh.bm('circle')]: props.circle,
         [nh.bm('vertical')]: props.vertical
       }

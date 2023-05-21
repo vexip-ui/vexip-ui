@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { FullScreenType, FullScreen } from 'vexip-ui'
+import type { FullScreen, FullScreenType } from 'vexip-ui'
 
 const fullScreen = ref<InstanceType<typeof FullScreen>>()
 

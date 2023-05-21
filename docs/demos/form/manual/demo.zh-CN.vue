@@ -1,6 +1,6 @@
 <template>
   <ConfigProvider :props="providedProps">
-    <Form ref="form" :model="formModel" style="max-width: 500px;">
+    <Form ref="form" :model="formModel" style="max-width: 500px">
       <FormItem label="Input" prop="input">
         <Input></Input>
       </FormItem>
@@ -20,7 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
+
 import { Message } from 'vexip-ui'
 
 import type { Form } from 'vexip-ui'

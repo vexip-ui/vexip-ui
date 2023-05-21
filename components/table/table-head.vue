@@ -12,11 +12,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
+
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { TABLE_STORE, TABLE_HEAD_KEY } from './symbol'
+import { TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TableRowState } from './symbol'

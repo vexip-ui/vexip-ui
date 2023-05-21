@@ -68,12 +68,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
+import { computed, defineAsyncComponent, inject, markRaw, ref, watch, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
 import Article from './article.vue'
 import Demo from './demo.vue'
 import { noop } from '@vexip-ui/utils'
-import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { getMetaName } from './meta-name'
 
 interface Example {

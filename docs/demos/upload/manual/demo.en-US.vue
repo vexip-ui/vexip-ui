@@ -13,7 +13,7 @@
       <Button
         type="success"
         :icon="Check"
-        style="margin-left: 6px;"
+        style="margin-left: 6px"
         @click.stop="doUpload"
       >
         Manual upload
@@ -24,7 +24,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Upload as IUpload, Check } from '@vexip-ui/icons'
+
+import { Check, Upload as IUpload } from '@vexip-ui/icons'
 
 import type { UploadExposed } from 'vexip-ui'
 

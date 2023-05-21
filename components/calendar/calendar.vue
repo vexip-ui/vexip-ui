@@ -87,12 +87,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, watch } from 'vue'
-import CalendarPanel from './calendar-panel.vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+
+import { defineComponent, ref, toRef, watch } from 'vue'
+
+import CalendarPanel from './calendar-panel.vue'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { calendarProps } from './props'
 
 export default defineComponent({

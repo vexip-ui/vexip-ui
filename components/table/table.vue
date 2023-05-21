@@ -109,46 +109,49 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  watch,
-  provide,
-  nextTick,
-  onMounted,
-  onBeforeUnmount,
-  toRef
-} from 'vue'
-import TableHead from './table-head.vue'
-import TableBody from './table-body.vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { Scrollbar } from '@/components/scrollbar'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+
 import {
-  isDefined,
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import TableHead from './table-head.vue'
+import TableBody from './table-body.vue'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
   debounce,
-  transformListToMap,
+  isDefined,
+  nextFrameOnce,
   removeArrayItem,
   toNumber,
-  nextFrameOnce,
+  transformListToMap,
   warnOnce
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DropType, TABLE_STORE, TABLE_ACTIONS } from './symbol'
+import { DropType, TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
+import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   Key,
-  TableKeyConfig,
+  TableCellPayload,
   TableColumnOptions,
-  TableRowState,
+  TableHeadPayload,
+  TableKeyConfig,
   TableRowInstance,
   TableRowPayload,
-  TableCellPayload,
-  TableHeadPayload
+  TableRowState
 } from './symbol'
 
 const defaultKeyConfig: Required<TableKeyConfig> = {
@@ -367,7 +370,7 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      const style = {
+      const style: StyleType = {
         [nh.cv('row-indent-width')]:
           typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
       }

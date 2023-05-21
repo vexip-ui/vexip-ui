@@ -8,7 +8,7 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px;">
+      <div style="width: 100%; height: 1200px; padding: 20px">
         Click the top right avatar
       </div>
     </template>
@@ -17,13 +17,13 @@
 
 <script setup lang="ts">
 import {
+  ArrowRightFromBracket,
+  ChartPie,
+  City,
+  CommentDotsR,
+  EnvelopesBulk,
   Gear,
   IdBadgeR,
-  CommentDotsR,
-  ArrowRightFromBracket,
-  EnvelopesBulk,
-  City,
-  ChartPie,
   User
 } from '@vexip-ui/icons'
 

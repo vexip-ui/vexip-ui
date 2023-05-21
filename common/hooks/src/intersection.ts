@@ -1,5 +1,6 @@
-import { ref, unref, watch, getCurrentScope, onScopeDispose } from 'vue'
-import { isClient, noop, ensureArray } from '@vexip-ui/utils'
+import { getCurrentScope, onScopeDispose, ref, unref, watch } from 'vue'
+
+import { ensureArray, isClient, noop } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 

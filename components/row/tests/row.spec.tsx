@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest'
 import { Column } from '@/components/column'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Row } from '..'
 
 describe('Row', () => {

@@ -1,4 +1,4 @@
-import { buildProps, booleanNumberProp, eventProp } from '@vexip-ui/config'
+import { booleanNumberProp, buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'

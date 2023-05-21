@@ -9,7 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref, markRaw, watch, watchEffect, inject } from 'vue'
+import { defineAsyncComponent, inject, markRaw, ref, watch, watchEffect } from 'vue'
+
 import Article from './article.vue'
 import { noop } from '@vexip-ui/utils'
 

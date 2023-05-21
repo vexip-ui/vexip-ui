@@ -15,7 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
 import { boundRange, multipleFixed } from '@vexip-ui/utils'
 
 import type { Scrollbar } from 'vexip-ui'

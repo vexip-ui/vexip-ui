@@ -47,9 +47,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { splitProps } from './props'
 

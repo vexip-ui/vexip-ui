@@ -14,10 +14,10 @@ $text: map.merge(
     color-marked: get-css-var('content-color-base'),
     color-reversed: get-css-var('bg-color-base'),
     mark-color: get-css-var('fill-color-hover'),
-    code-bg-color: get-css-var('fill-color-hover'),
+    code-bg-color: get-css-var('fill-color-humble'),
     code-radius: get-css-var('radius-small'),
-    keyboard-bg-color: get-css-var('fill-color-humble'),
-    keyboard-b-color: get-css-var('border-color-base'),
+    keyboard-bg-color: get-css-var('fill-color-background'),
+    keyboard-b-color: get-css-var('border-color-light-1'),
     keyboard-radius: get-css-var('radius-base')
   ),
   $text
@@ -75,7 +75,7 @@ $text: map.merge(
   }
 
   &--thin {
-    font-weight: get-css-var('text-font-weight-strong');
+    font-weight: get-css-var('text-font-weight-thin');
   }
 
   &--code {

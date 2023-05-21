@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { ImageViewer } from '@/components/image-viewer'
 import { ImageGroup } from '@/components/image-group'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Image } from '..'
 
 const IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='

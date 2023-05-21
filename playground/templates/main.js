@@ -1,7 +1,8 @@
 import { createApp, h } from 'vue'
+
+import { install } from 'vexip-ui'
 import App from './App.vue'
 import ThemeSwitch from './ThemeSwitch.vue'
-import { install } from 'vexip-ui'
 
 const Repl = {
   name: 'Repl',

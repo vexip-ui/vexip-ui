@@ -14,17 +14,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, provide, reactive, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { debounceMinor, isObject } from '@vexip-ui/utils'
+import { debounceMinor, isClient, isObject } from '@vexip-ui/utils'
 import { radioGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -39,7 +41,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<string | number>(() => Array.from(inputSet)[0]?.value?.focus())
+      useFieldStore<string | number>(focus)
 
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(size),
@@ -126,12 +128,27 @@ export default defineComponent({
       inputSet.delete(input)
     }
 
+    function focus(options?: FocusOptions) {
+      const input = Array.from(inputSet)[0]?.value
+
+      if (isClient && input && document.activeElement !== input) {
+        input.focus(options)
+      }
+    }
+
     return {
       props,
       idFor,
       className,
 
-      isObject
+      isObject,
+
+      focus,
+      blur: () => {
+        for (const input of inputSet) {
+          input.value?.blur()
+        }
+      }
     }
   }
 })

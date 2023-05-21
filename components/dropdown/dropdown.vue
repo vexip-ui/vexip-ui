@@ -40,25 +40,27 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  inject,
-  provide
-} from 'vue'
 import { Popper } from '@/components/popper'
-import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import { placementWhileList, useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
 import { dropdownProps } from './props'
 import { useLabel } from './hooks'
-import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
+import { DROPDOWN_STATE, SELECT_HANDLER } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Placement } from '@vexip-ui/hooks'

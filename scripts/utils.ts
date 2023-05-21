@@ -1,17 +1,18 @@
 import { resolve } from 'node:path'
 import {
-  readdirSync,
-  statSync,
   existsSync,
   lstatSync,
+  readFileSync,
+  readdirSync,
   rmdirSync,
-  unlinkSync,
-  readFileSync
+  statSync,
+  unlinkSync
 } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:net'
+
 import { execa } from 'execa'
-import { bgYellow, bgCyan, bgGreen, bgRed, yellow, cyan, green, red, lightBlue } from 'kolorist'
+import { bgCyan, bgGreen, bgRed, bgYellow, cyan, green, lightBlue, red, yellow } from 'kolorist'
 import prompts from 'prompts'
 
 import type { Options } from 'execa'
@@ -260,8 +261,7 @@ export function emptyDir(dir: string) {
 
 const packages = [
   'vexip-ui',
-  // 'plaground',
-  // 'common/config',
+  'common/bem-helper',
   'common/hooks',
   'common/icons',
   'common/plugins',

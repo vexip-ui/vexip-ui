@@ -126,7 +126,7 @@ app.use(install, {
 The default language of Vexip UI is `'zh-CN'`. You can register a locale via `registerLocale` method, and then change the locale config via `locale.locale` property.
 
 ```ts
-import { registerLocale, enUSLocale } from 'vexip-ui'
+import { enUSLocale, registerLocale } from 'vexip-ui'
 
 registerLocale(enUSLocale())
 
@@ -165,7 +165,7 @@ So Vexip UI provides a way to globally config internal icons of components.
 Internal icons can be configured by passing the `icons` option in the second parameter when calling `app.use`.
 
 ```ts
-import { Xmark, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { CircleXmark, Spinner, Xmark } from '@vexip-ui/icons'
 
 app.use(install, {
   icons: {

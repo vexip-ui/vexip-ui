@@ -16,9 +16,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, toRef, computed, provide } from 'vue'
 import { ImageViewer } from '@/components/image-viewer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, provide, reactive, ref, toRef } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { debounceMinor } from '@vexip-ui/utils'
 import { imageGroupProps } from './props'
 import { GROUP_STATE } from './symbol'

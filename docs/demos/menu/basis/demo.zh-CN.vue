@@ -1,5 +1,5 @@
 <template>
-  <Menu style="max-width: 240px;">
+  <Menu style="max-width: 240px">
     <MenuItem label="1" :icon="EnvelopesBulk">
       菜单一
       <template #group>
@@ -27,5 +27,5 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 </script>

@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { CircleCheck, CircleExclamation, CircleInfo, CircleXmark } from '@vexip-ui/icons'
 import { Result } from '..'
 
 const typeIconMap = {

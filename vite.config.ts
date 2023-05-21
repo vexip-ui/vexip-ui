@@ -1,11 +1,15 @@
 // This config is for building library, do not use to create serve.
 
 import { resolve } from 'node:path'
-import { readFileSync, existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import glob from 'fast-glob'
+import MagicString from 'magic-string'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { components } from './scripts/utils'
 
 import type { LogLevel, Plugin } from 'vite'
 
@@ -16,37 +20,13 @@ interface Manifest {
 }
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
-// const componentsDir = resolve(__dirname, 'components')
-
 const logLevel = process.env.LOG_LEVEL
-
-const prePlugins = (plugins: Plugin[]): Plugin[] => {
-  return plugins.map(plugin => ({ ...plugin, enforce: 'pre', apply: 'build' }))
-}
 
 const externalPkgs = ['@vue'].concat(
   Object.keys(pkg.dependencies || {}),
   Object.keys(pkg.peerDependencies || {})
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
-
-function emptyDir(dir: string): void {
-  if (!existsSync(dir)) {
-    return
-  }
-
-  for (const file of readdirSync(dir)) {
-    const abs = resolve(dir, file)
-
-    // baseline is Node 12 so can't use rmSync
-    if (lstatSync(abs).isDirectory()) {
-      emptyDir(abs)
-      rmdirSync(abs)
-    } else {
-      unlinkSync(abs)
-    }
-  }
-}
 
 export default defineConfig(async () => {
   const input = await glob('components/**/*.{ts,vue}', {
@@ -56,8 +36,6 @@ export default defineConfig(async () => {
   })
 
   input.push(resolve(__dirname, 'index.ts'))
-
-  emptyDir(resolve(__dirname, 'lib'))
 
   return {
     logLevel: (logLevel || 'info') as LogLevel,
@@ -110,28 +88,70 @@ export default defineConfig(async () => {
       chunkSizeWarningLimit: 10000
     },
     plugins: [
-      ...prePlugins([
-        {
-          name: 'vexip-ui:resolve',
-          resolveId(id) {
-            if (id.startsWith('@/style')) {
-              return {
-                id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/style/$1.scss'),
-                external: 'absolute'
-              }
-            }
-
-            if (id.startsWith('@/css')) {
-              return {
-                id: id.replace(/@\/css\/(.+).css$/, 'vexip-ui/css/$1.css'),
-                external: 'absolute'
-              }
-            }
-          }
-        }
-      ]),
+      createResolvePlugin(),
       vue(),
-      vueJsx()
+      vueJsx(),
+      visualizer({
+        filename: 'temp/stats-[format].html',
+        gzipSize: true,
+        brotliSize: true
+      }) as Plugin
     ]
   }
 })
+
+function createResolvePlugin(): Plugin {
+  const files = new Set([...components, 'preset', 'dark'])
+  const rootRE = /vexip-ui\//g
+
+  return {
+    name: 'vexip-ui:resolve',
+
+    enforce: 'pre',
+
+    resolveId(id) {
+      if (id.startsWith('@/style')) {
+        return {
+          id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/style/$1.scss'),
+          external: 'absolute'
+        }
+      }
+
+      if (id.startsWith('@/css')) {
+        return {
+          id: id.replace(/@\/css\/(.+).css$/, 'vexip-ui/css/$1.css'),
+          external: 'absolute'
+        }
+      }
+    },
+
+    buildStart() {
+      for (const name of files) {
+        this.emitFile({
+          type: 'chunk',
+          id: resolve('components', name, 'style.ts'),
+          name: `style/${name}`
+        })
+        this.emitFile({
+          type: 'chunk',
+          id: resolve('components', name, 'css.ts'),
+          name: `css/${name}`
+        })
+      }
+    },
+
+    renderChunk(code, chunk) {
+      if (
+        files.has(chunk.name.substring('style/'.length)) ||
+        files.has(chunk.name.substring('css/'.length))
+      ) {
+        code = code.replace(rootRE, '../../')
+
+        return {
+          code,
+          map: new MagicString(code).generateMap()
+        }
+      }
+    }
+  }
+}

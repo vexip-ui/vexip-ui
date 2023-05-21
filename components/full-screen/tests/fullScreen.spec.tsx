@@ -1,5 +1,6 @@
-import { describe, it, expect, test } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { FullScreen } from '..'
 
 describe('FullScreen', () => {

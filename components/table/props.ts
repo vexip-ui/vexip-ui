@@ -1,36 +1,37 @@
 import {
-  buildProps,
   booleanProp,
-  sizeProp,
+  buildProps,
   classProp,
-  styleProp,
   eventProp,
-  localeProp
+  localeProp,
+  sizeProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ClassType, StyleType, ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ClassType, ConfigurableProps, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  ColumnRenderFn,
   Data,
   DropType,
-  TableKeyConfig,
   ExpandRenderFn,
-  ColumnRenderFn,
-  HeadRenderFn,
   FilterRenderFn,
-  TableColumnType,
-  TableColumnOptions,
-  TableSorterOptions,
-  TableFilterOptions,
-  TableSorterProfile,
-  TableFilterProfile,
-  TableRowPropFn,
-  TableCellPropFn,
-  TableHeadPropFn,
-  TableRowPayload,
+  HeadRenderFn,
   TableCellPayload,
-  TableHeadPayload
+  TableCellPropFn,
+  TableColumnOptions,
+  TableColumnType,
+  TableFilterOptions,
+  TableFilterProfile,
+  TableHeadPayload,
+  TableHeadPropFn,
+  TableKeyConfig,
+  TableRowPayload,
+  TableRowPropFn,
+  TableSorterOptions,
+  TableSorterProfile,
+  TableTextAlign
 } from './symbol'
 
 export const tableProps = buildProps({
@@ -126,6 +127,7 @@ export const tableColumnProps = buildProps({
     default: null
   },
   className: classProp,
+  class: classProp,
   style: styleProp,
   attrs: Object,
   type: String as PropType<TableColumnType>,
@@ -144,7 +146,8 @@ export const tableColumnProps = buildProps({
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>
+  metaData: Object as PropType<Data>,
+  textAlign: String as PropType<TableTextAlign>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>

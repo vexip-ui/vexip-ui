@@ -1,9 +1,10 @@
-import { createApp, markRaw, createVNode, render } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './notice.vue'
-import { isClient, isNull, isObject, noop, toNumber, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient, isNull, isObject, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
+import type { Key, NoticeInstance, NoticeOptions, NoticePlacement, NoticeType } from './symbol'
 
 export type { NoticeType, NoticePlacement, NoticeOptions }
 

@@ -29,7 +29,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject, toRef } from 'vue'
+import { computed, defineComponent, inject, toRef } from 'vue'
+
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'

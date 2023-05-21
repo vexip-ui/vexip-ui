@@ -18,6 +18,7 @@ $transfer: map.merge(
     panel-width: 200px,
     panel-height: 280px,
     header-bg-color: get-css-var('fill-color-background'),
+    reverse-color: get-css-var('content-color-secondary'),
     reverse-color-hover: get-css-var('color-primary-base'),
     reverse-color-disabled: get-css-var('content-color-disabled'),
     option-color-hitting: get-css-var('color-primary-base'),
@@ -131,6 +132,7 @@ $transfer: map.merge(
     justify-content: center;
     width: 18px;
     margin-right: 6px;
+    color: get-css-var('transfer-reverse-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
 

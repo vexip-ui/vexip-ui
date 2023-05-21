@@ -1,4 +1,5 @@
-import { defineComponent, computed } from 'vue'
+import { computed, defineComponent } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { textProps } from './props'
 
@@ -15,6 +16,10 @@ export default defineComponent({
       italic: false,
       underline: false,
       code: false,
+      mark: false,
+      disabled: false,
+      keyboard: false,
+      thin: false,
       reversed: false
     })
 

@@ -1,14 +1,14 @@
-# Welcome To Vexip UI
+# Welcome to Vexip UI
 
 Vexip (pronounced `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>) UI provides a series of out-of-box components.
 
-This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript**.
+This library is written using **composition API**, and the components are designed and written in a traditional Vue way possible, with full **TypeScript** support.
 
-Almost all the **default value of props** for each component can be quickly modified by configuration, for easy customization.
+Almost all **default property values** of each component can be easily customized through injected configurations, making it easy to achieve customization.
 
-And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
+Meanwhile, the component code pays great attention to reducing the threshold of **source code reading**, and the code layout is as close as possible to the habits of daily business code, avoiding fancy and showy code.
 
-There are currently **70+** components, many you see everywhere are here and are better, and a few may bright your eyes.
+Currently, there are **70+** components, some of which may be familiar to you, and even better, while others may bright your eyes.
 
 ## Features
 
@@ -23,7 +23,7 @@ There are currently **70+** components, many you see everywhere are here and are
 - 🛫 Provide resolver, support unplugin
 - 🚤 Support SSR
 - 🩹 Good a11n
-- 👀 Close to business code arrangement, low threshold for source code reading
+- 👀 Close to business code arrangement, low source code reading threshold
 
 ## Environment
 

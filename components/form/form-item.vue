@@ -72,33 +72,35 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  toRef,
-  watch,
-  provide,
-  inject,
-  onMounted,
-  onBeforeUnmount
-} from 'vue'
 import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
+
 import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import {
+  makeSentence,
+  useIcons,
+  useLocale,
   useNameHelper,
   useProps,
-  useLocale,
-  useIcons,
-  useWordSpace,
-  makeSentence
+  useWordSpace
 } from '@vexip-ui/config'
-import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
+import { createEventEmitter, getRangeWidth, isFunction, isNull } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS } from './symbol'
 
 import type { ComponentState } from '@vexip-ui/config'
 import type { Rule } from './validator'

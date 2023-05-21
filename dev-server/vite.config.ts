@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
-import { readdirSync, statSync, existsSync } from 'node:fs'
+import { existsSync, readdirSync, statSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -55,7 +56,7 @@ export default defineConfig(() => {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
-          find: /^@vexip-ui\/(utils|hooks|config)/,
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, '../common/$1/src')
         },
         { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
@@ -68,7 +69,13 @@ export default defineConfig(() => {
       }
     },
     optimizeDeps: {
-      include: ['../components', '@vexip-ui/icons']
+      include: [
+        '../components',
+        '@vexip-ui/bem-helper',
+        '@vexip-ui/hooks',
+        '@vexip-ui/icons',
+        '@vexip-ui/utils'
+      ]
     },
     css: {
       postcss: {

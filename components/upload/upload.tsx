@@ -1,23 +1,25 @@
-import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, onBeforeUnmount, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
+import { isClient, isDefined, isFalse, isPromise, noop, randomString } from '@vexip-ui/utils'
 import { uploadProps } from './props'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
-import type { HttpError, SourceFile, FileState, FileOptions, DirectoryEntity } from './symbol'
+import type { DirectoryEntity, FileOptions, FileState, HttpError, SourceFile } from './symbol'
 
 function getDefaultFileState(): FileState {
   return {
@@ -48,13 +50,7 @@ export default defineComponent({
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<FileOptions[]>(() => {
-        if (button.value?.$el) {
-          button.value.$el.focus()
-        } else {
-          panel.value?.focus()
-        }
-      })
+      useFieldStore<FileOptions[]>(focus)
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
@@ -202,7 +198,23 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    expose({ execute, handleDelete })
+    expose({
+      execute,
+      handleDelete,
+      focus,
+      blur: () => {
+        button.value?.$el.blur()
+        panel.value?.blur()
+      }
+    })
+
+    function focus(options?: FocusOptions) {
+      if (button.value?.$el) {
+        button.value.$el.focus(options)
+      } else {
+        panel.value?.focus(options)
+      }
+    }
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -796,6 +808,8 @@ export default defineComponent({
   },
   methods: {
     execute: noop as () => Promise<false | any[]>,
-    handleDelete: noop as (file: FileState) => void
+    handleDelete: noop as (file: FileState) => void,
+    focus: noop as (options?: FocusOptions) => void,
+    blur: noop as () => void
   }
 })

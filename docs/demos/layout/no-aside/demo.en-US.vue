@@ -7,20 +7,21 @@
     :no-aside="!showAside"
   >
     <template #header-right>
-      <div style="margin-right: 24px;">
+      <div style="margin-right: 24px">
         <Switch v-model:value="showAside" open-text="Show aside" close-text="Hide aside"></Switch>
       </div>
     </template>
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; height: 1200px"></div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 import { createRouter, createWebHistory } from 'vue-router'
+
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { RouteLocationRaw } from 'vue-router'
 

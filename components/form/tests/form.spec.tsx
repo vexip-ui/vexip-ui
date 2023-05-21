@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { FormItem } from '@/components/form-item'
 import { Input } from '@/components/input'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Form } from '..'
 
 vi.useFakeTimers()

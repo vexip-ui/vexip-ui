@@ -37,8 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { Minus, Plus, Check } from '@vexip-ui/icons'
+import { reactive, ref } from 'vue'
+
+import { Check, Minus, Plus } from '@vexip-ui/icons'
 
 import type { Form } from 'vexip-ui'
 

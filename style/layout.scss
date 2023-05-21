@@ -121,6 +121,10 @@ $layout: map.merge(
     }
   }
 
+  &--locked &__aside {
+    transition-duration: 0ms;
+  }
+
   &__section {
     position: relative;
     width: 100%;
@@ -142,6 +146,10 @@ $layout: map.merge(
 
   &--no-aside &__section {
     padding-left: 0;
+  }
+
+  &--locked &__section {
+    transition-duration: 0ms;
   }
 
   &__header {

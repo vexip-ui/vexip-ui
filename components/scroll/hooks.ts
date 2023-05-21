@@ -1,6 +1,7 @@
-import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
 import { useManualRef } from '@vexip-ui/hooks'
-import { toNumber, multipleFixed } from '@vexip-ui/utils'
+import { multipleFixed, toNumber } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type { ScrollMode } from './symbol'

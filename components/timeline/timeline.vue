@@ -8,9 +8,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, provide, toRef } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { computed, defineComponent, provide, reactive, toRef } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { debounceMinor, isNull } from '@vexip-ui/utils'
 import { timelineProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 

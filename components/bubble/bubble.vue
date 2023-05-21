@@ -8,7 +8,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { computed, defineComponent } from 'vue'
+
 import { placementWhileList } from '@vexip-ui/hooks'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { bubbleProps } from './props'

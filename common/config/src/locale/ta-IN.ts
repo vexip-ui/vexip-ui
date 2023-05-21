@@ -54,7 +54,9 @@ export function taINLocale() {
         start: 'தொடக்கம்',
         end: 'முடிவு',
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
-      }
+      },
+      startTime: 'தொடக்கம் நேரம்',
+      endTime: 'முடிவு நேரம்'
     },
 
     drawer: {

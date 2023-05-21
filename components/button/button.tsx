@@ -1,10 +1,12 @@
-import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
 import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
-import { useNameHelper, useProps, useIcons, createSizeProp, emitEvent } from '@vexip-ui/config'
-import { isClient, parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
+
+import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref } from 'vue'
+
+import { createSizeProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { adjustAlpha, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { buttonProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
 

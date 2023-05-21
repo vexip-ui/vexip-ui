@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+
 import { isClient } from '@vexip-ui/utils'
 
 export type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'

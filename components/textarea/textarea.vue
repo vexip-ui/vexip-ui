@@ -41,18 +41,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, ref, toRef, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { throttle, debounce } from '@vexip-ui/utils'
+import { debounce, throttle } from '@vexip-ui/utils'
 import { textareaProps } from './props'
 
 export default defineComponent({
@@ -191,11 +193,8 @@ export default defineComponent({
 
       textarea.style.height = '0'
       textarea.setAttribute('readonly', 'readonly')
-
       textarea.value = currentValue.value
-
       document.body.appendChild(textarea)
-
       textarea.select()
 
       const isSuccess = document.execCommand('copy')
@@ -229,7 +228,9 @@ export default defineComponent({
       handleKeyUp,
 
       // api
-      copyValue
+      copyValue,
+      focus: (options?: FocusOptions) => textarea.value?.focus(options),
+      blur: () => textarea.value?.blur()
     }
   }
 })

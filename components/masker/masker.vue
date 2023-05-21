@@ -44,9 +44,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, useZIndex, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { isPromise, queryTabables } from '@vexip-ui/utils'
 import { maskerProps } from './props'
 

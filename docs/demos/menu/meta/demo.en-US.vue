@@ -1,5 +1,5 @@
 <template>
-  <Menu style="max-width: 240px;" @select="handleSelect">
+  <Menu style="max-width: 240px" @select="handleSelect">
     <MenuItem label="1" :icon="EnvelopesBulk">
       Menu 1
       <template #group>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 function handleSelect(label: string, meta: { path: string }) {
   console.info(label, meta)

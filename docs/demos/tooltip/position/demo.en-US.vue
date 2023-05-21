@@ -1,6 +1,6 @@
 <template>
   <div
-    style="max-width: 200px; height: 200px; padding: 20px; background-color: orange;"
+    style="max-width: 200px; height: 200px; padding: 20px; background-color: orange"
     @click="handleClick"
   >
     Click on the orange area
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const visible = ref(false)
 const position = reactive({

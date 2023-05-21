@@ -42,6 +42,7 @@
               :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
+              @click="handleItemClick(option.value, option.meta)"
             >
               <slot :option="option" :index="index">
                 {{ option.label }}
@@ -79,18 +80,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, provide, nextTick } from 'vue'
-import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, useIcons, createStateProp, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, provide, ref, watch } from 'vue'
+
+import WheelItem from './wheel-item.vue'
+import { createStateProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
-import { USE_TOUCH, toFalse, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-ui/utils'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState } from './symbol'
+import type { ItemState, WheelRawOption } from './symbol'
 
 export default defineComponent({
   name: 'Wheel',
@@ -457,6 +460,10 @@ export default defineComponent({
       }
     }
 
+    function handleItemClick(value: string | number, data: WheelRawOption) {
+      emitEvent(props.onItemClick, value, data)
+    }
+
     return {
       props,
       nh,
@@ -488,8 +495,11 @@ export default defineComponent({
       handleScrollEnd,
       handlePrev,
       handleNext,
+      handleItemClick,
 
-      refreshScroll
+      refreshScroll,
+      focus: (options?: FocusOptions) => wrapper.value?.focus(options),
+      blur: () => wrapper.value?.blur()
     }
   }
 })

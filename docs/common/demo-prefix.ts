@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+
 import { isClient, toCapitalCase } from '@vexip-ui/utils'
 
 const components = [

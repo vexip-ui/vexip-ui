@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, inject, onBeforeUnmount } from 'vue'
+import { computed, defineComponent, inject, onBeforeUnmount, reactive } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { CAROUSEL_STATE } from './symbol'
 

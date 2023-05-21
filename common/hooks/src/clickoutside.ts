@@ -1,13 +1,14 @@
-import { ref, unref, watch, getCurrentScope, onScopeDispose } from 'vue'
+import { getCurrentScope, onScopeDispose, ref, unref, watch } from 'vue'
+
 import {
   CLICK_TYPE,
+  createEvent,
+  disconnect,
+  dispatchEvent,
+  getObservers,
   isClient,
   noop,
-  createEvent,
-  getObservers,
-  observe,
-  disconnect,
-  dispatchEvent
+  observe
 } from '@vexip-ui/utils'
 import { useListener } from './listener'
 

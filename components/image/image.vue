@@ -52,19 +52,21 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  watchEffect,
-  inject,
-  onBeforeUnmount
-} from 'vue'
 import { ImageViewer } from '@/components/image-viewer'
 import { Skeleton } from '@/components/skeleton'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  watch,
+  watchEffect
+} from 'vue'
+
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useIntersection } from '@vexip-ui/hooks'
 import { isClient, supportImgLoading } from '@vexip-ui/utils'
 import { imageProps } from './props'

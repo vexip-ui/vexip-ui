@@ -79,28 +79,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, ref, toRef, watch } from 'vue'
+
 import { useHover, useModifier } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import {
-  isNull,
-  toFixed,
-  toNumber,
   boundRange,
-  throttle,
   debounce,
+  isNull,
+  minus,
   plus,
-  minus
+  throttle,
+  toFixed,
+  toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -283,8 +285,8 @@ export default defineComponent({
       }
     )
 
-    function focus() {
-      inputControl.value && inputControl.value.focus()
+    function focus(options?: FocusOptions) {
+      inputControl.value?.focus(options)
     }
 
     function handleFocus(event: FocusEvent) {
@@ -501,7 +503,10 @@ export default defineComponent({
       handleClear,
       handlePrefixClick,
       handleSuffixClick,
-      handleKeyPress
+      handleKeyPress,
+
+      focus,
+      blur: () => inputControl.value?.blur()
     }
   }
 })
