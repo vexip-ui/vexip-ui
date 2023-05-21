@@ -40,10 +40,13 @@ export const enUS = defineI18n({
     introduction: 'Introduction',
     vexipui: 'Welcome to Vexip UI',
     gettingStarted: 'Getting Start',
+    nameOrigin: 'Why Call Vexip?',
+    logoOrigin: 'Origin Of Logo',
+    further: 'Further',
     globalConfig: 'Global Config',
     styleConfig: 'Style Config',
-    nameOrigin: 'Why Call Vexip?',
-    logoOrigin: 'Origin Of Logo'
+    i18n: 'Internationalization',
+    ssr: 'Server-Side Rendering'
   },
   group: {
     basis: 'Basis',

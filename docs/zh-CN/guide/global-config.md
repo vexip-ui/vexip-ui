@@ -1,4 +1,4 @@
-# 配置项
+# 全局配置
 
 Vexip UI 在初始化时可以提供一个配置项以改变一些组件行为，包括组件**属性默认值**、**组件命名空间**、**国际化**以及**组件内置图标**。
 
@@ -113,26 +113,34 @@ createApp(App).use(install, { prefix: 'V' })
 
 ## 国际化
 
-在调用 `app.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。
+Vexip UI 的默认语言为 `'zh-CN'`，在调用 `app.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。
 
 ```ts
-import { enUSLocale } from 'vexip-ui'
+import { enUSLocale, install } from 'vexip-ui'
 
 app.use(install, {
   locale: enUSLocale()
 })
 ```
 
-Vexip UI 的默认语言为 `'zh-CN'`，你可以通过 `registerLocale` 方法注册一个国际化配置，随后通过修改 `locale.locale` 属性快速切换。
+动态切换语言时，你可以通过 `registerLocale` 方法注册并缓存一个语言包，随后通过修改 `locale.locale` 属性快速切换。
 
 ```ts
-import { enUSLocale, registerLocale } from 'vexip-ui'
+import { ref } from 'vue'
+import { enUSLocale, install, registerLocale } from 'vexip-ui'
 
 registerLocale(enUSLocale())
 
-app.use(install, {
-  locale: { locale: 'en-US' }
+const vexipuiLocale = ref({
+  locale: 'zh-CN'
 })
+
+app.use(install, {
+  locale: vexipuiLocale
+})
+
+// 切换时
+vexipuiLocale.value.locale = 'en-US'
 ```
 
 同时你还可以定制化一些组件的国际化：
@@ -150,7 +158,7 @@ app.use(install, {
 
 结合 ConfigProvider 组件的 `locale` 属性，你还可以为局部的区域配置国际化，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
-如果你想配置其他的语言，你需要根据完整的配置项自行完成。
+如果你想配置其他的语言，你需要根据完整的配置项自行完成，详见 [国际化](/zh-CN/guide/)。
 
 > 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5)。
 

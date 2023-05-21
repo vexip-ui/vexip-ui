@@ -38,10 +38,13 @@ export interface I18nConfig {
     introduction: string,
     vexipui: string,
     gettingStarted: string,
+    nameOrigin: string,
+    logoOrigin: string,
+    further: string,
     globalConfig: string,
     styleConfig: string,
-    nameOrigin: string,
-    logoOrigin: string
+    i18n: string,
+    ssr: string
   },
   group: {
     basis: string,

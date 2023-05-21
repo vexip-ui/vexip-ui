@@ -156,9 +156,19 @@ function showSince(since?: string) {
     }
   }
 
-  .vxp-menu__title {
-    display: flex;
-    align-items: center;
+  .vxp-menu {
+    &-group {
+      margin-top: 6px;
+    }
+
+    &__item {
+      margin-top: 4px;
+    }
+
+    &__title {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 </style>

@@ -113,26 +113,33 @@ After set, all components name will be prefixed with `V`.
 
 ## Internationalization
 
-I18n can be configured by passing the `locale` option in the second parameter when calling `app.use`.
+The default language of Vexip UI is `'zh-CN'`. I18n can be configured by passing the `locale` option in the second parameter when calling `app.use`.
 
 ```ts
-import { enUSLocale } from 'vexip-ui'
+import { enUSLocale, install } from 'vexip-ui'
 
 app.use(install, {
   locale: enUSLocale()
 })
 ```
 
-The default language of Vexip UI is `'zh-CN'`. You can register a locale via `registerLocale` method, and then change the locale config via `locale.locale` property.
+When changing dynamically, you can register and cache a locale via `registerLocale` method, and then change language quickly via `locale.locale` property.
 
 ```ts
-import { enUSLocale, registerLocale } from 'vexip-ui'
+import { enUSLocale, install, registerLocale } from 'vexip-ui'
 
 registerLocale(enUSLocale())
+
+const vexipuiLocale = ref({
+  locale: 'zh-CN'
+})
 
 app.use(install, {
   locale: { locale: 'en-US' }
 })
+
+// Change
+vexipuiLocale.value.locale = 'en-US'
 ```
 
 Also you can customize the i18n for each components:
@@ -150,7 +157,7 @@ app.use(install, {
 
 You can also change i18n of partial components with the `locale` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/component/config-provider).
 
-If you want to configure a other language, you need do it yourself by following the full i18n options.
+If you want to configure a other language, you need do it yourself by following the full i18n options, see [Internationalization Documentation](/en-US/guide/i18n).
 
 > The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5).
 

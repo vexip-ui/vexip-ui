@@ -40,10 +40,13 @@ export const zhCN = defineI18n({
     introduction: '介绍',
     vexipui: '欢迎来到 Vexip UI',
     gettingStarted: '快速上手',
+    nameOrigin: '为什么叫 Vexip？',
+    logoOrigin: 'Logo 的由来',
+    further: '更进一步',
     globalConfig: '全局配置',
     styleConfig: '样式配置',
-    nameOrigin: '为什么叫 Vexip？',
-    logoOrigin: 'Logo 的由来'
+    i18n: '国际化',
+    ssr: '服务端渲染'
   },
   group: {
     basis: '基础',
