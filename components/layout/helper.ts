@@ -1,6 +1,6 @@
 import { computed, inject, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from 'vue'
 
-import { adjustAlpha, isClient, mixColor, parseColorToRgba, toFixed } from '@vexip-ui/utils'
+import { adjustAlpha, isClient, mixColor, noop, parseColorToRgba, toFixed } from '@vexip-ui/utils'
 import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'
@@ -62,7 +62,8 @@ export function useLayoutState() {
       useExpand: false,
       expanded: false,
       reduced: false,
-      navConfig: false
+      navConfig: false,
+      changeInLock: noop
     })
   )
 }

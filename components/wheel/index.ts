@@ -4,3 +4,4 @@ export { Wheel }
 export type WheelExposed = InstanceType<typeof Wheel>
 
 export type { WheelProps, WheelCProps } from './props'
+export type { WheelRawOption } from './symbol'

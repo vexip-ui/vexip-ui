@@ -195,6 +195,16 @@ $date-picker: map.merge(
     height: get-css-var('date-picker-header-height');
     padding: 0 16px;
     border-bottom: get-css-var('border-shape') get-css-var('date-picker-d-color');
+
+    &--time {
+      padding: 0;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex: 1;
+    justify-content: center;
   }
 
   &__year-month {

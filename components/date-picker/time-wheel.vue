@@ -12,6 +12,7 @@
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
       @keydown.stop
+      @item-click="currentHour = $event"
     >
       <template #default="{ option }">
         <span
@@ -33,6 +34,7 @@
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
       @keydown.stop
+      @item-click="currentMinute = $event"
     >
       <template #default="{ option }">
         <span
@@ -54,6 +56,7 @@
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
       @keydown.stop
+      @item-click="currentSecond = $event"
     >
       <template #default="{ option }">
         <span

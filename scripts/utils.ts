@@ -261,8 +261,7 @@ export function emptyDir(dir: string) {
 
 const packages = [
   'vexip-ui',
-  // 'plaground',
-  // 'common/config',
+  'common/bem-helper',
   'common/hooks',
   'common/icons',
   'common/plugins',

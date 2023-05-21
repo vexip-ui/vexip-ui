@@ -43,6 +43,7 @@ import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { avatarProps } from './props'
 import { GROUP_STATE } from './symbol'
 
+import type { ComponentSize, StyleType } from '@vexip-ui/config'
 import type { AvatarObjectFit } from './symbol'
 
 const objectFitValues = Object.freeze<AvatarObjectFit[]>([
@@ -101,12 +102,13 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm(size.value)]: typeof size.value !== 'number' && size.value !== 'default',
+        [nh.bm(size.value as ComponentSize)]:
+          typeof size.value !== 'number' && size.value !== 'default',
         [nh.bm('circle')]: props.circle
       }
     })
     const style = computed(() => {
-      const style: Record<string, string> = {
+      const style: StyleType = {
         [nh.cv('color')]: props.color,
         [nh.cv('bg-color')]: props.background,
         [nh.cv('image-fit')]: props.fit

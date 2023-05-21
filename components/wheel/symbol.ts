@@ -1,5 +1,14 @@
 import type { InjectionKey } from 'vue'
 
+export type WheelRawOption =
+  | string
+  | number
+  | {
+    value: string | number,
+    label?: string,
+    disabled?: boolean
+  }
+
 export interface ItemState {
   width: number,
   height: number,

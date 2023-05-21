@@ -1,3 +1,13 @@
+# [1.13.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.12.0...utils@1.13.0) (2023-05-20)
+
+
+### Features
+
+* **bem-helper:** create bem-helper package ([f91208e](https://github.com/vexip-ui/vexip-ui/commit/f91208e661ac1ecb0d14289dc57286683392f212))
+* **utils:** add runQueueFrame method ([a376a15](https://github.com/vexip-ui/vexip-ui/commit/a376a15bbcb29ab93224d1fe1f13e0b8442ddb4e))
+
+
+
 # [1.12.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.1...utils@1.12.0) (2023-05-14)
 
 

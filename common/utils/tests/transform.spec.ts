@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { sortByProps, flatTree } from '../src/transform'
+import { describe, expect, it } from 'vitest'
+
+import { flatTree, sortByProps } from '../src/transform'
 
 describe('transform', () => {
   it('sortByProps', () => {

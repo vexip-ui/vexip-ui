@@ -56,7 +56,7 @@ export default defineConfig(() => {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
-          find: /^@vexip-ui\/(utils|hooks|config)/,
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, '../common/$1/src')
         },
         { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
@@ -69,7 +69,13 @@ export default defineConfig(() => {
       }
     },
     optimizeDeps: {
-      include: ['../components', '@vexip-ui/icons']
+      include: [
+        '../components',
+        '@vexip-ui/bem-helper',
+        '@vexip-ui/hooks',
+        '@vexip-ui/icons',
+        '@vexip-ui/utils'
+      ]
     },
     css: {
       postcss: {

@@ -1,3 +1,34 @@
+## [2.1.21](https://github.com/vexip-ui/vexip-ui/compare/v2.1.20...v2.1.21) (2023-05-21)
+
+
+### ✨ Features
+
+* **auto-complete:** add focus and blur events ([a5873a1](https://github.com/vexip-ui/vexip-ui/commit/a5873a1b13c2d93d0e4e381b0de4885086561ea6))
+* **bem-helper:** create bem-helper package ([f91208e](https://github.com/vexip-ui/vexip-ui/commit/f91208e661ac1ecb0d14289dc57286683392f212))
+* **hooks:** useMounted support wait a tick or frame ([ccd77f6](https://github.com/vexip-ui/vexip-ui/commit/ccd77f696db86502b83f8071a1db99436ebb4c41))
+* **input:** add copyValue api method ([29fda06](https://github.com/vexip-ui/vexip-ui/commit/29fda06748aaa22e916ab5e37c75287c3d6ec089))
+* normalize focus and blur methods for form components ([718090c](https://github.com/vexip-ui/vexip-ui/commit/718090c4cadee00496717f04e4a73cc599393332))
+* **select:** add api focus and blur methods ([638fc3c](https://github.com/vexip-ui/vexip-ui/commit/638fc3c45c1d72f1ce862110aee8c4167ab48a51))
+* **time-picker:** support click item to select ([6f58387](https://github.com/vexip-ui/vexip-ui/commit/6f583871b635a77a41ba5b1bf6f229156da50823))
+* **utils:** add runQueueFrame method ([a376a15](https://github.com/vexip-ui/vexip-ui/commit/a376a15bbcb29ab93224d1fe1f13e0b8442ddb4e))
+* **wheel:** emit item-click event ([9c84084](https://github.com/vexip-ui/vexip-ui/commit/9c84084c0214e7abd816d2b817feadb100de0158))
+
+
+### 🐞 Bug Fixes
+
+* **date-picker:** add header titles for range select datetime ([dfc2401](https://github.com/vexip-ui/vexip-ui/commit/dfc2401b111fee7915976c40030ca365cfe74103))
+* **layout:** disable transition when not mounted ([5fe7030](https://github.com/vexip-ui/vexip-ui/commit/5fe703004b64aae4fef07fd7ee6c45ef2e9f4b50))
+* **radio:** ensure effective loading icon in button mode ([a59eb8e](https://github.com/vexip-ui/vexip-ui/commit/a59eb8eb4f93703409b135eb457a0c6e563d5f38))
+* **radio:** normailze line-height in button mode ([7835c93](https://github.com/vexip-ui/vexip-ui/commit/7835c9382558c54f00a3ae3c012b8d349dbed3eb))
+* **text:** incorrect style of thin mode ([dc1ccce](https://github.com/vexip-ui/vexip-ui/commit/dc1ccce0e5315cb7a55cd045015d369761fe3aad))
+
+
+### 👓 Types
+
+* **config:** use bem helper to improve namespace types ([d7ca7aa](https://github.com/vexip-ui/vexip-ui/commit/d7ca7aacbda74d580408c71be8aed07a1eb110b7))
+
+
+
 ## [2.1.20](https://github.com/vexip-ui/vexip-ui/compare/v2.1.19...v2.1.20) (2023-05-14)
 
 

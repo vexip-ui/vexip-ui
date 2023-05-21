@@ -84,6 +84,8 @@ async function main() {
   if (!isDryRun) {
     if (isRoot) {
       await run('pnpm', ['test'])
+    } else if (target === 'bem-helper' || target === 'utils') {
+      await run('pnpm', ['test'], { cwd: pkgDir })
     }
   } else {
     logSkipped()

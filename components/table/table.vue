@@ -141,6 +141,7 @@ import { tableProps } from './props'
 import { useStore } from './store'
 import { DropType, TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
+import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   Key,
@@ -369,7 +370,7 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      const style = {
+      const style: StyleType = {
         [nh.cv('row-indent-width')]:
           typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
       }

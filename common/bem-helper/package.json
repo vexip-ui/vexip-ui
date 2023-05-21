@@ -1,6 +1,6 @@
 {
-  "name": "@vexip-ui/utils",
-  "version": "1.13.0",
+  "name": "@vexip-ui/bem-helper",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -23,10 +23,16 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/utils#readme",
+  "keywords": [
+    "css",
+    "bem",
+    "helper",
+    "utils"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/bem#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
-    "directory": "common/utils"
+    "directory": "common/bem"
   }
 }

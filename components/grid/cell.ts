@@ -7,6 +7,7 @@ import { breakPoints, currentBreakPoint } from './helpler'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
+import type { ClassType } from '@vexip-ui/config'
 import type { BreakPoint } from './helpler'
 
 export default defineComponent({
@@ -100,7 +101,7 @@ export default defineComponent({
             : props.useFlex
           : {})
       }
-      const className = {
+      const className: ClassType = {
         [nh.b()]: true,
         [nh.bm('inherit')]: gridState || props.inherit,
         [nh.bm('flex')]: cellFelx

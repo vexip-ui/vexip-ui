@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
+
 import fs from 'fs-extra'
-import { dest, src, series, parallel } from 'gulp'
+import { dest, parallel, series, src } from 'gulp'
 import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
