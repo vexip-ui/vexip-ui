@@ -12,6 +12,8 @@ $menu: map.merge(
     b-color: get-css-var('border-color-light-2'),
     d-color: get-css-var('border-color-light-1'),
     o-color: get-css-var('color-primary-opacity-6'),
+    item-x-span: 8px,
+    item-y-span: 4px,
     icon-color: get-css-var('content-color-secondary'),
     arrow-color: get-css-var('menu-icon-color'),
     label-color: get-css-var('content-color-base'),
@@ -25,6 +27,7 @@ $menu: map.merge(
     popper-radius: get-css-var('radius-base'),
     popper-s-color: get-css-var('shadow-color-base'),
     group-color: get-css-var('content-color-secondary'),
+    group-span: 6px,
     indent-width: 20px
   ),
   $menu
@@ -88,8 +91,13 @@ $menu: map.merge(
 
   &__item {
     padding: 0;
+    margin-top: get-css-var('menu-item-y-span');
     list-style: none;
     background-color: transparent !important;
+
+    #{$self} > &:first-child {
+      margin-top: 0;
+    }
 
     & > .#{$namespace}-tooltip {
       height: 100%;
@@ -101,7 +109,8 @@ $menu: map.merge(
     }
 
     #{$self}--horizontal & {
-      padding: 0 4px;
+      padding: 0 calc(#{get-css-var('menu-item-x-span')} * 0.5);
+      margin-top: 0;
     }
   }
 
@@ -164,6 +173,10 @@ $menu: map.merge(
 
     &:hover {
       color: get-css-var('menu-label-color-hover');
+    }
+
+    &:hover,
+    #{$popper} #{$item}--group-visible > & {
       background-color: get-css-var('menu-bg-color-hover');
 
       #{$self}--horizontal & {
@@ -367,9 +380,14 @@ $menu: map.merge(
 
   @at-root {
     &-group {
+      margin-top: get-css-var('menu-group-span');
       white-space: nowrap;
       list-style: none;
       user-select: none;
+
+      #{$self} > &:first-child {
+        margin-top: 0;
+      }
 
       &__label {
         position: relative;
