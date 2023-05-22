@@ -146,6 +146,8 @@ export default defineComponent({
     })
 
     function setRenderer() {
+      if (options.type && options.type !== 'expand') return
+
       options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
           return slots.default(data)
@@ -171,6 +173,8 @@ export default defineComponent({
     }
 
     function setHeadRenderer() {
+      if (options.type === 'selection') return
+
       options.headRenderer = (data: any) => {
         if (typeof slots.head === 'function') {
           return slots.head(data)
