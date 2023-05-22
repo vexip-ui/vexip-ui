@@ -12,6 +12,7 @@ import {
   onBeforeMount,
   reactive,
   ref,
+  renderSlot,
   shallowReadonly,
   toRef,
   watch
@@ -304,7 +305,7 @@ export default defineComponent({
             <div class={nh.be('header-left')}>
               {slots.left
                 ? (
-                    slots.left(slotParams)
+                    renderSlot(slots, 'left', slotParams)
                   )
                 : props.signType === 'header'
                   ? (
@@ -323,7 +324,7 @@ export default defineComponent({
           <div class={nh.be('header-main')}>
             {slots.default
               ? (
-                  slots.default(slotParams)
+                  renderSlot(slots, 'default', slotParams)
                 )
               : hasMenu.value
                 ? (
@@ -338,10 +339,12 @@ export default defineComponent({
                   )
                 : null}
           </div>
-          {slots.right && <div class={nh.be('header-right')}>{slots.right(slotParams)}</div>}
+          {slots.right && (
+            <div class={nh.be('header-right')}>{renderSlot(slots, 'right', slotParams)}</div>
+          )}
           {slots.user
             ? (
-                slots.user(slotParams)
+                renderSlot(slots, 'user', slotParams)
               )
             : (
             <Dropdown
@@ -355,7 +358,7 @@ export default defineComponent({
               {{
                 default: () => {
                   if (slots.avatar) {
-                    return slots.avatar(slotParams)
+                    return renderSlot(slots, 'avatar', slotParams)
                   }
 
                   if (typeof props.user?.avatar === 'string') {

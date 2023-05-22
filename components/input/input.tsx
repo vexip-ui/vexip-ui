@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 
-import { Transition, computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef, watch } from 'vue'
 
 import { useHover } from '@vexip-ui/hooks'
 import {
@@ -433,7 +433,7 @@ export default defineComponent({
       return (
         <div class={nh.be('count')}>
           {slots.count
-            ? slots.count({ value: currentValue.value })
+            ? renderSlot(slots, 'count', { value: currentValue.value })
             : `${currentLength.value}/${props.maxLength}`}
         </div>
       )
@@ -452,7 +452,7 @@ export default defineComponent({
           >
             {slots.password
               ? (
-                  slots.password({ plain: showPassword.value })
+                  renderSlot(slots, 'password', { plain: showPassword.value })
                 )
               : (
               <Icon {...passwordIcon.value}></Icon>

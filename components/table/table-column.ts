@@ -1,4 +1,12 @@
-import { defineComponent, inject, onBeforeUnmount, onBeforeUpdate, reactive, watch } from 'vue'
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  reactive,
+  renderSlot,
+  watch
+} from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
@@ -148,7 +156,7 @@ export default defineComponent({
     function setRenderer() {
       options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
-          return slots.default(data)
+          return renderSlot(slots, 'default', data)
         }
 
         if (typeof props.renderer === 'function') {
@@ -173,7 +181,7 @@ export default defineComponent({
     function setHeadRenderer() {
       options.headRenderer = (data: any) => {
         if (typeof slots.head === 'function') {
-          return slots.head(data)
+          return renderSlot(slots, 'head', data)
         }
 
         if (typeof props.headRenderer === 'function') {
@@ -188,7 +196,7 @@ export default defineComponent({
       if (typeof slots.filter === 'function' || typeof props.filterRenderer === 'function') {
         options.filterRenderer = (data: any) => {
           if (typeof slots.filter === 'function') {
-            return slots.filter(data)
+            return renderSlot(slots, 'filter', data)
           }
 
           return props.filterRenderer(data)

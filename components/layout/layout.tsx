@@ -7,6 +7,7 @@ import {
   provide,
   reactive,
   ref,
+  renderSlot,
   shallowReadonly,
   toRef,
   watch
@@ -263,13 +264,23 @@ export default defineComponent({
       event.preventDefault()
     }
 
+    function createSlotRender(names: string[], fallback?: (params: any) => any) {
+      for (const name of names) {
+        if (slots[name]) {
+          return (params: any) => renderSlot(slots, name, params)
+        }
+      }
+
+      return fallback || null
+    }
+
     function renderSign() {
       if (!props.logo && !props.signName && !slots.sign) {
         return null
       }
 
       if (slots.sign) {
-        return slots.sign(slotParams)
+        return renderSlot(slots, 'sign', slotParams)
       }
 
       const showSignName = props.signName && !(signInHeader.value && !signNameMatched.value)
@@ -293,7 +304,7 @@ export default defineComponent({
 
     function renderHeader() {
       if (slots.header) {
-        return slots.header(slotParams)
+        return renderSlot(slots, 'header', slotParams)
       }
 
       return (
@@ -322,14 +333,13 @@ export default defineComponent({
           }}
         >
           {{
-            left:
-              slots['header-left'] ||
-              slots.headerLeft ||
-              (() => (signInHeader.value ? renderSign() : null)),
-            default: slots['header-main'] || slots.headerMain || null,
-            right: slots['header-right'] || slots.headerRight || null,
-            user: slots['header-user'] || slots.headerUser || null,
-            avatar: slots['header-avatar'] || slots.headerAvatar || null
+            left: createSlotRender(['header-left', 'headerLeft'], () =>
+              signInHeader.value ? renderSign() : null
+            ),
+            default: createSlotRender(['header-main', 'headerMain']),
+            right: createSlotRender(['header-right', 'headerRight']),
+            user: createSlotRender(['header-user', 'headerUser']),
+            avatar: createSlotRender(['header-avatar', 'headerAvatar'])
           }}
         </LayoutHeader>
       )
@@ -348,7 +358,7 @@ export default defineComponent({
         >
           {slots.aside
             ? (
-                slots.aside(slotParams)
+                renderSlot(slots, 'aside', slotParams)
               )
             : (
             <LayoutAside
@@ -363,13 +373,12 @@ export default defineComponent({
               onMenuSelect={handleMenuSelect}
             >
               {{
-                top:
-                  slots['aside-top'] ||
-                  slots.asideTop ||
-                  (() => (!signInHeader.value ? renderSign() : null)),
-                default: slots['aside-main'] || slots.asideMain || null,
-                bottom: slots['aside-bottom'] || slots.asideBottom || null,
-                expand: slots['aside-expand'] || slots.asideExpand || null
+                top: createSlotRender(['aside-top', 'asideTop'], () =>
+                  !signInHeader.value ? renderSign() : null
+                ),
+                default: createSlotRender(['aside-main', 'asideMain']),
+                bottom: createSlotRender(['aside-bottom', 'asideBottom']),
+                expand: createSlotRender(['aside-expand', 'asideExpand'])
               }}
             </LayoutAside>
               )}
@@ -379,13 +388,13 @@ export default defineComponent({
 
     function renderMain() {
       if (slots.default) {
-        return slots.default(slotParams)
+        return renderSlot(slots, 'default', slotParams)
       }
 
       return (
         <LayoutMain fixed={props.fixedMain}>
           {{
-            default: slots.main
+            default: createSlotRender(['main'])
           }}
         </LayoutMain>
       )
@@ -393,7 +402,7 @@ export default defineComponent({
 
     function renderFooter() {
       if (slots.footer) {
-        return slots.footer(slotParams)
+        return renderSlot(slots, 'footer', slotParams)
       }
 
       return (
@@ -403,8 +412,8 @@ export default defineComponent({
           vertical-links={props.verticalLinks}
         >
           {{
-            links: slots['footer-links'] || slots.footerLinks || null,
-            copyright: slots['footer-copyright'] || slots.footerCopyright || null
+            links: createSlotRender(['footer-links', 'footerLinks']),
+            copyright: createSlotRender(['footer-copyright', 'footerCopyright'])
           }}
         </LayoutFooter>
       )

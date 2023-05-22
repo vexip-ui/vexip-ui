@@ -15,6 +15,7 @@ import {
   provide,
   reactive,
   ref,
+  renderSlot,
   toRef,
   watch
 } from 'vue'
@@ -389,7 +390,7 @@ const MenuItem = defineComponent({
                   <div class={nh.be('icon')}>
                     {slots.icon
                       ? (
-                          slots.icon()
+                          renderSlot(slots, 'icon')
                         )
                       : typeof props.icon === 'function'
                         ? (
@@ -406,7 +407,7 @@ const MenuItem = defineComponent({
                     [nh.bem('title', 'in-group')]: !isHorizontal.value && isGroup.value
                   }}
                 >
-                  {slots.default ? slots.default() : props.label}
+                  {slots.default ? renderSlot(slots, 'default') : props.label}
                 </span>
                 {isGroup.value && (
                   <Icon
@@ -421,7 +422,7 @@ const MenuItem = defineComponent({
             ),
             default: () => (
               <span class={nh.be('tooltip-title')}>
-                {slots.default ? slots.default() : props.label}
+                {slots.default ? renderSlot(slots, 'default') : props.label}
               </span>
             )
           }}
@@ -436,7 +437,7 @@ const MenuItem = defineComponent({
           <CollapseTransition appear>
             {isGroup.value && !isUsePopper.value && (
               <ul v-show={showGroup.value} class={nh.be('list')}>
-                {slots.group ? slots.group() : renderChildren()}
+                {slots.group ? renderSlot(slots, 'group') : renderChildren()}
               </ul>
             )}
           </CollapseTransition>
@@ -456,7 +457,9 @@ const MenuItem = defineComponent({
               onMouseenter={handleMouseEnter}
               onMouseleave={handleMouseLeave}
             >
-              <ul class={nh.be('list')}>{slots.group ? slots.group() : renderChildren()}</ul>
+              <ul class={nh.be('list')}>
+                {slots.group ? renderSlot(slots, 'group') : renderChildren()}
+              </ul>
             </Popper>
           )}
         </li>

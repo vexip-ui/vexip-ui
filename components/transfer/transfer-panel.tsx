@@ -7,7 +7,16 @@ import { NumberInput } from '@/components/number-input'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 
-import { computed, defineComponent, reactive, ref, toRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  renderSlot,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
@@ -446,21 +455,6 @@ export default defineComponent({
       handleReverse
     })
 
-    // function slotParams {
-    //   return {
-    //     type: props.type,
-    //     currentPage: currentPage.value,
-    //     pageSize: pageSize.value,
-    //     totalPages: totalPages.value,
-    //     allSelected: allSelected.value,
-    //     partial: partial.value,
-    //     selected: Array.from(currentSelected.value),
-    //     options: visibleOptions.value,
-    //     toggleSelectAll,
-    //     handleReverse
-    //   }
-    // }
-
     function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
       const disabled = props.disabled || option.disabled
       const handleCheck = (event: MouseEvent) => {
@@ -481,7 +475,7 @@ export default defineComponent({
           onClick={() => toggleSelect(option)}
         >
           {slots.option
-            ? slots.option({ type: props.type, option, index })
+            ? renderSlot(slots, 'option', { type: props.type, option, index })
             : [
                 <Checkbox
                   class={nh.be('checkbox')}
@@ -492,7 +486,7 @@ export default defineComponent({
                   onClick={handleCheck}
                 ></Checkbox>,
                 <span class={nh.be('label')}>
-                  {slots.label ? slots.label({ option, index }) : option.label}
+                  {slots.label ? renderSlot(slots, 'label', { option, index }) : option.label}
                 </span>
               ]}
         </li>
@@ -504,7 +498,7 @@ export default defineComponent({
         <div ref={header} class={nh.be('header')}>
           {slots.header
             ? (
-                slots.header(slotParams)
+                renderSlot(slots, 'header', slotParams)
               )
             : (
             <>
@@ -531,7 +525,7 @@ export default defineComponent({
               </div>
               {(props.title || slots.title) && (
                 <span class={nh.be('title')}>
-                  {slots.title ? slots.title(slotParams) : props.title}
+                  {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
                 </span>
               )}
               <CollapseTransition appear horizontal fade-effect>
@@ -586,7 +580,7 @@ export default defineComponent({
             <ul ref={body} class={nh.be('body')} role={'listbox'}>
               {slots.body
                 ? (
-                    slots.body(slotParams)
+                    renderSlot(slots, 'body', slotParams)
                   )
                 : pagedOptions.value.length
                   ? (
@@ -629,7 +623,7 @@ export default defineComponent({
         <div ref={footer} class={nh.be('footer')}>
           {slots.footer
             ? (
-                slots.footer(slotParams)
+                renderSlot(slots, 'footer', slotParams)
               )
             : (
             <div class={nh.be('pagination')}>
