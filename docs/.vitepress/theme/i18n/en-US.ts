@@ -46,7 +46,8 @@ export const enUS = defineI18n({
     globalConfig: 'Global Config',
     styleConfig: 'Style Config',
     i18n: 'Internationalization',
-    ssr: 'Server-Side Rendering'
+    ssr: 'Server-Side Rendering',
+    customFormControl: 'Custom Form Control'
   },
   group: {
     basis: 'Basis',

@@ -46,7 +46,8 @@ export const zhCN = defineI18n({
     globalConfig: '全局配置',
     styleConfig: '样式配置',
     i18n: '国际化',
-    ssr: '服务端渲染'
+    ssr: '服务端渲染',
+    customFormControl: '自定义表单控件'
   },
   group: {
     basis: '基础',

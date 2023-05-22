@@ -30,7 +30,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
         { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
-          find: /^@vexip-ui\/(utils|hooks|config)/,
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, '../common/$1/src')
         },
         { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }

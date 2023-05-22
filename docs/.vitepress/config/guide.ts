@@ -25,7 +25,8 @@ export function getGuideConfig(): GuideGroup[] {
         { name: 'global-config', i18n: 'globalConfig' },
         { name: 'style-config', i18n: 'styleConfig' },
         { name: 'i18n', i18n: 'i18n' },
-        { name: 'ssr', i18n: 'ssr' }
+        { name: 'ssr', i18n: 'ssr' },
+        { name: 'custom-form-control', i18n: 'customFormControl' }
       ]
     }
   ]

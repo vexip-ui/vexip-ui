@@ -44,7 +44,8 @@ export interface I18nConfig {
     globalConfig: string,
     styleConfig: string,
     i18n: string,
-    ssr: string
+    ssr: string,
+    customFormControl: string
   },
   group: {
     basis: string,

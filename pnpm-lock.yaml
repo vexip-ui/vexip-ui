@@ -311,6 +311,9 @@ importers:
 
   docs:
     dependencies:
+      '@vexip-ui/bem-helper':
+        specifier: workspace:^
+        version: link:../common/bem-helper
       '@vexip-ui/hooks':
         specifier: workspace:^
         version: link:../common/hooks
