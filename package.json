@@ -34,7 +34,7 @@
     "lint:scripts": "eslint --ext .js,.ts \"scripts/**\"",
     "lint:style": "stylelint \"**/*.{vue,scss}\"",
     "postpublish": "pinst --enable",
-    "precommit": "lint-staged -c ./.husky/.lintstagedrc -q",
+    "precommit": "lint-staged -c ./.husky/.lintstagedrc -q --allow-empty",
     "preinstall": "npx only-allow pnpm",
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pinst --disable",

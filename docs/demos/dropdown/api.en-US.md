@@ -1,14 +1,16 @@
 ### Dropdown Props
 
-| Name          | Type                             | Description                                                                                                         | Default    | Since   |
-| ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- | ------- |
-| visible       | `boolean`                        | The expanded state of the drop-down menu, you can use `v-model` two-way binding                                     | `false`    | -       |
-| label         | `string \| number`               | Index of item when nested                                                                                           | `null`     | -       |
-| outside-close | `boolean`                        | Set whether to close by clicking outside                                                                            | `true`     | -       |
-| trigger       | `'hover' \| 'click' \| 'csutom'` | The trigger method of the drop-down menu, when it is `custom`, all scenarios need to be manually controlled visible | `'hover'`  | -       |
-| placement     | `Placement`                      | The position of the menu list, the optional value is the same as Popper.js                                          | `'bottom'` | -       |
-| transfer      | `boolean \| string`              | Set the rendering position of the menu list. When set to `true`, it will render to `<body>` by default              | `false`    | -       |
-| meta          | `Record<string, any>`            | The meta data for dropdown, used when nesting                                                                       | `null`     | `2.0.0` |
+| Name          | Type                             | Description                                                                                                        | Default    | Since    |
+| ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------- | -------- |
+| visible       | `boolean`                        | The expanded state of the dropdown menu, you can use `v-model` two-way binding                                     | `false`    | -        |
+| label         | `string \| number`               | Index of item when nested                                                                                          | `null`     | -        |
+| outside-close | `boolean`                        | Set whether to close by clicking outside                                                                           | `true`     | -        |
+| trigger       | `'hover' \| 'click' \| 'csutom'` | The trigger method of the dropdown menu, when it is `custom`, all scenarios need to be manually controlled visible | `'hover'`  | -        |
+| placement     | `Placement`                      | The position of the menu list, the optional value is the same as Popper.js                                         | `'bottom'` | -        |
+| transfer      | `boolean \| string`              | Set the rendering position of the menu list. When set to `true`, it will render to `<body>` by default             | `false`    | -        |
+| meta          | `Record<string, any>`            | The meta data for dropdown, used when nesting                                                                      | `null`     | `2.0.0`  |
+| alive         | `boolean`                        | When enabled, the dropdown menu will only be hidden when is closed                                                 | `false`    | `2.1.13` |
+| custom        | `boolean`                        | Whether custom dropdown content, it will disable nested process after it is enabled                                | `false`    | `2.1.22` |
 
 ### Dropdown Events
 

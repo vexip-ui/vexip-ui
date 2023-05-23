@@ -14,8 +14,6 @@ $menu: map.merge(
     o-color: get-css-var('color-primary-opacity-6'),
     item-x-span: 8px,
     item-y-span: 4px,
-    icon-color: get-css-var('content-color-secondary'),
-    arrow-color: get-css-var('menu-icon-color'),
     label-color: get-css-var('content-color-base'),
     label-color-hover: get-css-var('menu-label-color'),
     label-color-visible: get-css-var('color-primary-base'),
@@ -307,7 +305,6 @@ $menu: map.merge(
   &__arrow {
     position: absolute;
     right: 22px;
-    color: get-css-var('menu-arrow-color');
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 

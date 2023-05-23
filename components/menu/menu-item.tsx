@@ -2,7 +2,6 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
-import { Renderer } from '@/components/renderer'
 
 import {
   computed,
@@ -37,13 +36,6 @@ const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
 
 const MenuItem = defineComponent({
   name: 'MenuItem',
-  components: {
-    CollapseTransition,
-    Icon,
-    Tooltip,
-    Popper,
-    Renderer
-  },
   props: menuItemProps,
   emits: [],
   setup(_props, { slots, expose }) {
@@ -276,10 +268,18 @@ const MenuItem = defineComponent({
       }
     }
 
+    let mouseInList = false
+    let reproduce = false
+
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (mouseInList || !isUsePopper.value || dropTrigger.value !== 'hover') return
+
+      if (!groupExpanded.value && popperShow.value) {
+        reproduce = true
+        return
+      }
 
       if (typeof parentItemState?.handleMouseEnter === 'function') {
         parentItemState.handleMouseEnter()
@@ -295,7 +295,7 @@ const MenuItem = defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (mouseInList || !popperShow.value || !isUsePopper.value || dropTrigger.value !== 'hover') { return }
 
       if (typeof parentItemState?.handleMouseLeave === 'function') {
         parentItemState.handleMouseLeave()
@@ -309,10 +309,27 @@ const MenuItem = defineComponent({
     }
 
     function handleClickOutside() {
-      if (dropTrigger.value === 'click') {
+      if (isUsePopper.value && dropTrigger.value === 'click') {
         nextTick(() => {
           groupExpanded.value = false
         })
+      }
+    }
+
+    function handlePopperHide() {
+      popperShow.value = false
+      groupExpanded.value = false
+
+      if (reproduce) {
+        reproduce = false
+
+        if (typeof parentItemState?.handleMouseEnter === 'function') {
+          parentItemState.handleMouseEnter()
+        }
+
+        if (props.disabled || !isGroup.value) return
+
+        groupExpanded.value = true
       }
     }
 
@@ -375,7 +392,7 @@ const MenuItem = defineComponent({
                 class={{
                   [nh.be('label')]: true,
                   [nh.bem('label', `marker-${markerType.value}`)]: true,
-                  [nh.bem('label', 'in-popper')]: isUsePopper.value
+                  [nh.bem('label', 'in-popper')]: parentItemState?.isUsePopper
                 }}
                 role={'menuitem'}
                 tabindex={0}
@@ -414,7 +431,8 @@ const MenuItem = defineComponent({
                     {...icons.value.arrowDown}
                     class={{
                       [nh.be('arrow')]: true,
-                      [nh.bem('arrow', 'visible')]: groupExpanded.value
+                      [nh.bem('arrow', 'visible')]: groupExpanded.value,
+                      [nh.bem('arrow', '')]: sonSelected.value
                     }}
                   ></Icon>
                 )}
@@ -453,9 +471,9 @@ const MenuItem = defineComponent({
               alive={!transferTo.value || popperShow.value}
               to={transferTo.value}
               transition={transition.value}
-              onAfterLeave={() => (popperShow.value = false)}
-              onMouseenter={handleMouseEnter}
-              onMouseleave={handleMouseLeave}
+              onAfterLeave={handlePopperHide}
+              onMouseenter={() => ((mouseInList = true), handleMouseEnter())}
+              onMouseleave={() => ((mouseInList = false), handleMouseLeave())}
             >
               <ul class={nh.be('list')}>
                 {slots.group ? renderSlot(slots, 'group') : renderChildren()}

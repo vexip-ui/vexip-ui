@@ -98,7 +98,8 @@ export default defineComponent({
       dropClass: null,
       appear: false,
       meta: null,
-      alive: false
+      alive: false,
+      custom: false
     })
 
     const parentState = inject(DROPDOWN_STATE, null)
@@ -107,8 +108,9 @@ export default defineComponent({
     const label = toRef(props, 'label')
     const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
-    const transfer = toRef(props, 'transfer')
     const popperAlive = ref(false)
+
+    const transfer = isNested ? ref(false) : toRef(props, 'transfer')
 
     const wrapper = useClickOutside(handleClickOutside)
     const popper = ref<PopperExposed>()
@@ -133,15 +135,16 @@ export default defineComponent({
     const isAlive = computed(() => parentState?.alive || props.alive)
 
     provide(SELECT_HANDLER, null)
-    provide(
-      DROPDOWN_STATE,
-      reactive({
-        alive: isAlive,
-        handleSelect,
-        handleTriggerEnter,
-        handleTriggerLeave
-      })
-    )
+    !props.custom &&
+      provide(
+        DROPDOWN_STATE,
+        reactive({
+          alive: isAlive,
+          handleSelect,
+          handleTriggerEnter,
+          handleTriggerLeave
+        })
+      )
 
     watch(
       () => props.visible,
