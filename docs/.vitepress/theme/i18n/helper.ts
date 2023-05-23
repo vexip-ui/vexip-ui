@@ -45,7 +45,8 @@ export interface I18nConfig {
     styleConfig: string,
     i18n: string,
     ssr: string,
-    customFormControl: string
+    customFormControl: string,
+    developmentGuide: string
   },
   group: {
     basis: string,

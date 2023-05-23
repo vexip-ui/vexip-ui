@@ -1,14 +1,9 @@
-# Contributing
-
-First, thanks for being interested in contributing on this project!
-
-## Pre-request
+# Development Guide
 
 Before starting, ensure your mechine is having:
 
-Node >= 18
-
-pnpm >= 8
+- Node >= 18
+- pnpm >= 8
 
 ## Setup
 
