@@ -294,9 +294,7 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
 
-      if ('type' in column && columnTypes.includes(column.type)) {
-        // key = isNull(column.key) ? getIndexId() : column.key
-
+      if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
           case 'order': {
             column.truthIndex = !!column.truthIndex

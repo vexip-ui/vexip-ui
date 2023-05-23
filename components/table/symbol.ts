@@ -30,10 +30,10 @@ export type Accessor<D = Data, Val extends string | number = string | number> = 
   index: number
 ) => Val
 export type RenderFn = (data: Data) => any
-export type ExpandRenderFn = (data: {
+export type ExpandRenderFn<D = Data> = (data: {
   leftFixed: number,
   rightFixed: number,
-  row: Data,
+  row: D,
   rowIndex: number
 }) => any
 
@@ -83,9 +83,11 @@ export type ParsedTableSorterOptions = Required<TableSorterOptions>
 
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: keyof D,
+  key: keyof D,
+  type?: never,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  // type?: TableColumnType,
   /**
    * @deprecated Use 'class' prop to replace it
    **/
@@ -100,33 +102,34 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
-  renderer?: RenderFn,
-  headRenderer?: RenderFn,
-  filterRenderer?: RenderFn
+  renderer?: ColumnRenderFn<D, Val>,
+  headRenderer?: HeadRenderFn,
+  filterRenderer?: FilterRenderFn
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
 export interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer' | 'headRenderer'> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
 export interface TableExpandColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'expand',
-  disableRow?: (data: Data) => boolean
+  disableRow?: (data: Data) => boolean,
+  renderer?: ExpandRenderFn<D>
 }
 
 export interface TableDragColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'drag',
   disableRow?: (data: Data) => boolean
 }
@@ -139,6 +142,7 @@ export type TableTypeColumn<D = Data, Val extends string | number = string | num
 export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
   | TableBaseColumn<D, Val>
   | TableTypeColumn<D, Val>
+
 export type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
@@ -148,10 +152,10 @@ export type ColumnWithKey<
   first?: boolean
 }
 
-export type ColumnRenderFn = (data: {
-  row: any,
+export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
   rowIndex: number,
-  column: TableColumnOptions,
+  column: TableBaseColumn<D, Val>,
   columnIndex: number
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
