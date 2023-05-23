@@ -77,10 +77,18 @@ export default defineComponent({
 
     const { timer } = useSetTimeout()
 
+    let mouseInList = false
+    let reproduce = false
+
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || dropTrigger.value !== 'hover') return
+
+      if (!groupExpanded.value && popperShow.value) {
+        reproduce = true
+        return
+      }
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
@@ -90,7 +98,7 @@ export default defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || !popperShow.value || dropTrigger.value !== 'hover') return
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
@@ -113,6 +121,12 @@ export default defineComponent({
 
     function handlePopperHide() {
       popperShow.value = false
+      groupExpanded.value = false
+
+      if (reproduce) {
+        reproduce = false
+        groupExpanded.value = true
+      }
     }
 
     function renderMenuItems() {
@@ -157,6 +171,8 @@ export default defineComponent({
             to={transferTo.value}
             transition={nh.ns('drop')}
             onAfterLeave={handlePopperHide}
+            onMouseenter={() => ((mouseInList = true), handleMouseEnter())}
+            onMouseleave={() => ((mouseInList = false), handleMouseLeave())}
           >
             <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
           </Popper>

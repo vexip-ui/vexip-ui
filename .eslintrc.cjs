@@ -34,6 +34,12 @@ module.exports = {
       }
     },
     {
+      files: ['components/**/*.tsx'],
+      rules: {
+        'no-sequences': 'off'
+      }
+    },
+    {
       files: ['docs/**'],
       globals: {
         __ROLLBACK_LANG__: 'readonly'
