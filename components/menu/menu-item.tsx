@@ -2,7 +2,6 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
-import { Renderer } from '@/components/renderer'
 
 import {
   computed,
@@ -37,13 +36,6 @@ const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
 
 const MenuItem = defineComponent({
   name: 'MenuItem',
-  components: {
-    CollapseTransition,
-    Icon,
-    Tooltip,
-    Popper,
-    Renderer
-  },
   props: menuItemProps,
   emits: [],
   setup(_props, { slots, expose }) {
@@ -309,7 +301,7 @@ const MenuItem = defineComponent({
     }
 
     function handleClickOutside() {
-      if (dropTrigger.value === 'click') {
+      if (isUsePopper.value && dropTrigger.value === 'click') {
         nextTick(() => {
           groupExpanded.value = false
         })
@@ -414,7 +406,8 @@ const MenuItem = defineComponent({
                     {...icons.value.arrowDown}
                     class={{
                       [nh.be('arrow')]: true,
-                      [nh.bem('arrow', 'visible')]: groupExpanded.value
+                      [nh.bem('arrow', 'visible')]: groupExpanded.value,
+                      [nh.bem('arrow', '')]: sonSelected.value
                     }}
                   ></Icon>
                 )}
@@ -454,8 +447,6 @@ const MenuItem = defineComponent({
               to={transferTo.value}
               transition={transition.value}
               onAfterLeave={() => (popperShow.value = false)}
-              onMouseenter={handleMouseEnter}
-              onMouseleave={handleMouseLeave}
             >
               <ul class={nh.be('list')}>
                 {slots.group ? renderSlot(slots, 'group') : renderChildren()}
