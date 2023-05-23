@@ -7,6 +7,7 @@ import {
   defineComponent,
   mergeProps,
   ref,
+  renderSlot,
   shallowReadonly,
   toRef,
   watch
@@ -312,7 +313,7 @@ export default defineComponent({
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
               {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
-              {slots.default?.(slotParams)}
+              {renderSlot(slots, 'default', slotParams)}
             </div>
           </Popper>
         )

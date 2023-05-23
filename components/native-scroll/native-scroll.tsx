@@ -636,7 +636,7 @@ export default defineComponent({
                   height: `${content.offsetHeight}px`
                 }}
               >
-                {slots.extra?.(slotParams)}
+                {renderSlot(slots, 'extra', slotParams)}
               </div>
             </div>
           )}

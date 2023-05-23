@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, onBeforeUnmount, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, ref, renderSlot, toRef, watch } from 'vue'
 
 import {
   createStateProp,
@@ -668,7 +668,9 @@ export default defineComponent({
               )
             }}
           </Button>
-          {slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+          {slots.tip
+            ? renderSlot(slots, 'tip')
+            : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
         </>
           )
         : (
@@ -684,7 +686,7 @@ export default defineComponent({
           ></Icon>
           {slots.tip
             ? (
-                slots.tip()
+                renderSlot(slots, 'tip')
               )
             : (
             <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
@@ -705,7 +707,7 @@ export default defineComponent({
         <div class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}>
           {slots.default
             ? (
-                slots.default({
+                renderSlot(slots, 'default', {
                   isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
                 })
               )
@@ -765,7 +767,7 @@ export default defineComponent({
           {props.image
             ? renderImageAction()
             : slots.default
-              ? slots.default({
+              ? renderSlot(slots, 'default', {
                 isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
               })
               : renderNormalAction()}
@@ -788,8 +790,8 @@ export default defineComponent({
           onPreview={handlePreview}
         >
           {{
-            item: slots.item,
-            icon: slots.icon,
+            item: (params: any) => renderSlot(slots, 'item', params),
+            icon: (params: any) => renderSlot(slots, 'icon', params),
             suffix: () =>
               props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)
                 ? renderControl()

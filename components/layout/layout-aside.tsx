@@ -2,7 +2,16 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 
-import { computed, defineComponent, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutAsideProps } from './props'
@@ -149,7 +158,7 @@ export default defineComponent({
             <div ref={top} class={nh.be('aside-top')}>
               {slots.top
                 ? (
-                    slots.top(slotParams)
+                    renderSlot(slots, 'top', slotParams)
                   )
                 : (
                 <div class={nh.be('sign')} onClick={handleSignClick}>
@@ -166,7 +175,7 @@ export default defineComponent({
           <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
             {slots.default
               ? (
-                  slots.default(slotParams)
+                  renderSlot(slots, 'default', slotParams)
                 )
               : hasMenu.value
                 ? (
@@ -184,7 +193,7 @@ export default defineComponent({
           <div ref={bottom} class={nh.be('aside-bottom')}>
             {slots.bottom
               ? (
-                  slots.bottom(slotParams)
+                  renderSlot(slots, 'bottom', slotParams)
                 )
               : (
               <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
@@ -199,7 +208,13 @@ export default defineComponent({
                 )}
           </div>
           <div class={nh.be('expand-handler')} onClick={() => toggleExpanded()}>
-            {slots.expand ? slots.expand(slotParams) : <Icon {...icons.value.caretRight}></Icon>}
+            {slots.expand
+              ? (
+                  renderSlot(slots, 'expand', slotParams)
+                )
+              : (
+              <Icon {...icons.value.caretRight}></Icon>
+                )}
           </div>
         </CustomTag>
       )
