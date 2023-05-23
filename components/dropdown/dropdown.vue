@@ -108,8 +108,9 @@ export default defineComponent({
     const label = toRef(props, 'label')
     const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
-    const transfer = toRef(props, 'transfer')
     const popperAlive = ref(false)
+
+    const transfer = isNested ? ref(false) : toRef(props, 'transfer')
 
     const wrapper = useClickOutside(handleClickOutside)
     const popper = ref<PopperExposed>()
