@@ -98,7 +98,8 @@ export default defineComponent({
       dropClass: null,
       appear: false,
       meta: null,
-      alive: false
+      alive: false,
+      custom: false
     })
 
     const parentState = inject(DROPDOWN_STATE, null)
@@ -133,15 +134,16 @@ export default defineComponent({
     const isAlive = computed(() => parentState?.alive || props.alive)
 
     provide(SELECT_HANDLER, null)
-    provide(
-      DROPDOWN_STATE,
-      reactive({
-        alive: isAlive,
-        handleSelect,
-        handleTriggerEnter,
-        handleTriggerLeave
-      })
-    )
+    !props.custom &&
+      provide(
+        DROPDOWN_STATE,
+        reactive({
+          alive: isAlive,
+          handleSelect,
+          handleTriggerEnter,
+          handleTriggerLeave
+        })
+      )
 
     watch(
       () => props.visible,
