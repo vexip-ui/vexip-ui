@@ -81,8 +81,8 @@ function queryMetaData() {
   try {
     const root = resolveModule('vexip-ui') || process.cwd()
     const path =
-      resolveModule('vexip-ui/meta-data.json') ||
-      resolveModule('vexip-ui/meta-data.json', { paths: [root] })
+      resolveModule('vexip-ui/meta-data/components.json') ||
+      resolveModule('vexip-ui/meta-data/components.json', { paths: [root] })
     const metaData = JSON.parse(readFileSync(path!, 'utf-8'))
 
     components = metaData.components
