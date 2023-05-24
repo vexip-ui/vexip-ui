@@ -43,13 +43,14 @@ watchEffect(() => {
     : t('common.searchComponent')
 })
 
-useListener(window, 'keydown', (event: KeyboardEvent) => {
-  if ((isMacPlatform ? event.metaKey : event.ctrlKey) && event.code === 'KeyK') {
-    event.preventDefault()
-    visible.value = true
-    search.value?.focus()
-  }
-})
+isClient &&
+  useListener(window, 'keydown', (event: KeyboardEvent) => {
+    if ((isMacPlatform ? event.metaKey : event.ctrlKey) && event.code === 'KeyK') {
+      event.preventDefault()
+      visible.value = true
+      search.value?.focus()
+    }
+  })
 
 function toComponentDoc(fullName: string) {
   if (!route.path.startsWith(`/${locale.value}/component/${fullName}`)) {

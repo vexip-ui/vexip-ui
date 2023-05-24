@@ -50,9 +50,9 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       host: '0.0.0.0'
     },
     build: {
+      // sourcemap: false,
       reportCompressedSize: false,
-      chunkSizeWarningLimit: 10 * 1024,
-      sourcemap: true
+      chunkSizeWarningLimit: 10 * 1024
     },
     ssr: {
       noExternal: ['vue-i18n', 'prismjs']
