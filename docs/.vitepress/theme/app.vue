@@ -192,7 +192,7 @@ function refreshScroll() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use './style/mixins.scss' as *;
 
 :not(.vxp-layout) .docs-layout {
   .vxp-layout {
