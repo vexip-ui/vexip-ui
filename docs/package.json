@@ -47,6 +47,6 @@
     "sass": "^1.58.3",
     "vite": "^4.3.4",
     "vite-plugin-vue-markdown": "^0.22.4",
-    "vitepress": "1.0.0-alpha.75"
+    "vitepress": "1.0.0-beta.1"
   }
 }
