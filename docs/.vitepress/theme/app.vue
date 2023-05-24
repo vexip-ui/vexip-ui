@@ -225,6 +225,10 @@ function refreshScroll() {
       z-index: calc(var(--header-z-index) + 2);
     }
 
+    &__links {
+      padding-top: 36px;
+    }
+
     &__links-row {
       justify-content: flex-start;
     }
@@ -235,6 +239,10 @@ function refreshScroll() {
 
     &__copyright {
       padding: 24px 16px;
+    }
+
+    &__link-name--group {
+      font-weight: bold;
     }
   }
 

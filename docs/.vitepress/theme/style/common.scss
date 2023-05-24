@@ -131,14 +131,18 @@ p .vxp-linker {
     text-decoration: none;
   }
 
-  ul:not([class*='vxp-']) {
+  ul:not([class*='vxp-']),
+  ol:not([class*='vxp-']) {
     padding-left: 4px;
 
     & > li {
       padding: 2px 4px;
       margin-left: 20px;
-      list-style-type: circle;
     }
+  }
+
+  ul:not([class*='vxp-']) > li {
+    list-style-type: circle;
   }
 
   & > div > :last-child {
@@ -197,8 +201,4 @@ div[class*='language-'] {
   & > span.lang {
     display: none;
   }
-}
-
-.vxp-layout__link-name--group {
-  font-weight: bold;
 }

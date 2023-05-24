@@ -12,7 +12,7 @@ import prismjs from 'prismjs'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
-import type { App } from 'vue'
+import type { App, Ref } from 'vue'
 import type { Router } from 'vitepress'
 
 export default {
@@ -58,6 +58,7 @@ function enhanceApp(app: App) {
 
 function enhanceRouter(router: Router) {
   const loadedMap = new Map<string, boolean>()
+  const locale = i18n.global.locale as unknown as Ref<string>
 
   syncLocale(router.route.path)
 
@@ -86,7 +87,7 @@ function enhanceRouter(router: Router) {
       const path = withBase(`/${lang}`)
 
       if (to.startsWith(path)) {
-        i18n.global.locale.value = lang
+        locale.value = lang
         vexipuiLocale.value.locale = lang
       }
     }

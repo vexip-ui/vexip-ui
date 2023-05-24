@@ -29,7 +29,7 @@ const langOptions = computed(() => {
 function changeLanguage(lang: string, link?: string) {
   if (lang !== locale.value) {
     const path = page.value.relativePath.substring(
-      locale.value === 'root' ? 0 : locale.value.length
+      locale.value === 'root' ? 0 : (locale.value as string).length
     )
     link = link || (lang === 'root' ? '/' : `/${lang}`)
 
@@ -39,7 +39,7 @@ function changeLanguage(lang: string, link?: string) {
 </script>
 
 <template>
-  <Dropdown class="language" trigger="click" :transfer="false">
+  <Dropdown class="language" :transfer="false">
     <button type="button" class="language__trigger">
       <Icon label="language" :scale="2">
         <Language></Language>

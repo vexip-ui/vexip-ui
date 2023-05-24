@@ -1,3 +1,4 @@
+import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { getGuideConfig } from './config/guide'
 import { getComponentConfig } from './config/component'
 import { highlight } from '../build/highlight'
@@ -77,7 +78,30 @@ export default <UserConfig<ThemeConfig>>{
   }
 }
 
+let version: string | undefined
+
+function queryLibVersion() {
+  if (version) return version
+
+  try {
+    version =
+      getPackageInfoSync('vexip-ui')?.version ??
+      getPackageInfoSync('vexip-ui', { paths: [resolveModule('vexip-ui') || process.cwd()] })
+        ?.version
+  } catch (e) {
+    console.error(e)
+  }
+
+  if (!version) {
+    throw new Error('[vexip-ui:docs] failed to load vexip-ui version, please check')
+  }
+
+  return version
+}
+
 function getAsideMenus(): ThemeConfig['asideMenus'] {
+  const versionPrefix = queryLibVersion().split('.').slice(0, 2).join('.') + '.'
+
   return {
     '/guide/': getGuideConfig().map(group => {
       return {
@@ -101,7 +125,7 @@ function getAsideMenus(): ThemeConfig['asideMenus'] {
           key: component.name,
           link: `/component/${toKebabCase(component.name)}`,
           i18n: `component.${component.name}`,
-          since: component.since,
+          tag: component.since?.startsWith(versionPrefix) ? 'New' : '',
           origin: component.name
         }))
       }

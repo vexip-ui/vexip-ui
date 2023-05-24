@@ -12,7 +12,7 @@ export interface AsideMenuItem {
   link?: string,
   text?: string,
   i18n?: string,
-  since?: string,
+  tag?: string,
   origin?: string,
   count?: boolean,
   items?: Omit<AsideMenuItem, 'items'>[]
