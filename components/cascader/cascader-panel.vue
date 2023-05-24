@@ -213,19 +213,16 @@ export default defineComponent({
     let listHeight = 0
     let hoverTimer: ReturnType<typeof setTimeout>
 
-    watch(
-      () => props.ready,
-      value => {
-        requestAnimationFrame(computeListHeight)
+    watch([() => props.ready, () => props.options], () => {
+      requestAnimationFrame(computeListHeight)
 
-        if (value) {
-          list.value?.refresh()
-          currentHitting.value = props.options.findIndex(isSelected)
-        } else {
-          currentHitting.value = -1
-        }
+      if (props.ready) {
+        list.value?.refresh()
+        currentHitting.value = props.options.findIndex(isSelected)
+      } else {
+        currentHitting.value = -1
       }
-    )
+    })
 
     onMounted(() => {
       requestAnimationFrame(computeListHeight)

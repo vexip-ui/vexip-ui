@@ -106,9 +106,7 @@ export function useProps<T extends Record<string, any>>(
             )
           }
         },
-        {
-          immediate: true
-        }
+        { immediate: true }
       )
 
     if (propOptions.static) {
