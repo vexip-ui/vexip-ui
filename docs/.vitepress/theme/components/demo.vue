@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, markRaw, onMounted, ref, watch, watchEffect } from 'vue'
+import { markRaw, onMounted, ref, watch, watchEffect } from 'vue'
 import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
 import { useI18n } from 'vue-i18n'
@@ -10,8 +10,8 @@ import { usePlayground } from '../common/playground'
 
 import type { RowExposed } from 'vexip-ui'
 
-const demos = import.meta.glob('@docs/demos/**/*.vue')
-const codes = import.meta.glob('@docs/demos/**/*.vue', { as: 'raw' })
+const demos = import.meta.glob('@docs/demos/**/*.vue', { eager: true, import: 'default' })
+const codes = import.meta.glob('@docs/demos/**/*.vue', { eager: true, as: 'raw' })
 
 const extensionMap: Record<string, string> = {
   vue: 'markup',
@@ -75,8 +75,8 @@ async function internalInit() {
   const path = Object.keys(demos).find(path => path.endsWith(basePath))
 
   if (path) {
-    demo.value = markRaw(defineAsyncComponent(demos[path] as any))
-    code.value = await codes[path]()
+    demo.value = markRaw(demos[path] as any)
+    code.value = codes[path]
   }
 }
 

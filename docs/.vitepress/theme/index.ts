@@ -62,8 +62,8 @@ function enhanceRouter(router: Router) {
 
   let currentPath = router.route.path
 
-  if (currentPath === '/') {
-    currentPath = `/${locale.value}/`
+  if (isClient && location.pathname === '/') {
+    currentPath = currentPath === '/' ? `/${locale.value}/` : currentPath
     isClient && history.replaceState(null, document.title, `/${locale.value}/`)
   }
 

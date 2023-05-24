@@ -39,7 +39,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       dedupe: isServe ? ['../components', 'vue'] : ['vue']
     },
     optimizeDeps: {
-      include: ['@vexip-ui/icons']
+      include: Object.keys(pkg.dependencies).filter((dep: string) => !dep.includes('vexip-ui'))
     },
     esbuild: {
       drop: isServe ? undefined : ['debugger'],
