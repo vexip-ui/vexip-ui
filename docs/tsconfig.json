@@ -16,13 +16,20 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "types": ["vite/client"],
+    "types": [
+      "vite/client"
+    ],
     "paths": {
       "@/*": ["../*"],
       "@docs/*": ["./*"],
-      "vexip-ui": [".."]
+      "@vexip-ui/*": ["../common/*/src"],
+      "vexip-ui": ["../index"]
     },
     "lib": ["esnext", "dom"]
   },
-  "include": [".", "../types.d.ts"]
+  "include": [
+    "**/*",
+    ".vitepress/**/*",
+    "../types.d.ts"
+  ]
 }

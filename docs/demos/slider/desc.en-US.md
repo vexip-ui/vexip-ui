@@ -1,1 +1,0 @@
-Select value by sliding.

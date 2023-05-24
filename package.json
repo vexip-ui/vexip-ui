@@ -180,6 +180,7 @@
   "pnpm": {
     "peerDependencyRules": {
       "ignoreMissing": [
+        "@algolia/client-search",
         "vue"
       ],
       "allowAny": [

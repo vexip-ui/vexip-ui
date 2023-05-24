@@ -1,3 +1,0 @@
-### Basis Usage
-
-Simplest usage.

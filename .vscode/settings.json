@@ -26,6 +26,7 @@
     "xsl"
   ],
   "volar.inlayHints.eventArgumentInInlineHandlers": false,
+  "vue.inlayHints.inlineHandlerLeading": false,
   "[vue]": {
     "editor.defaultFormatter": "Vue.volar"
   },

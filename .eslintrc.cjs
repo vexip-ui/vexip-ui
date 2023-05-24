@@ -43,6 +43,9 @@ module.exports = {
       files: ['docs/**'],
       globals: {
         __ROLLBACK_LANG__: 'readonly'
+      },
+      rules: {
+        'import/order': 'off'
       }
     },
     {

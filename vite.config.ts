@@ -95,7 +95,7 @@ export default defineConfig(async () => {
         filename: 'temp/stats-[format].html',
         gzipSize: true,
         brotliSize: true
-      }) as Plugin
+      }) as any
     ]
   }
 })
