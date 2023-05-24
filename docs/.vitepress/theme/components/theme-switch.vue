@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Moon, Sun } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
 const rootCls = isClient ? document.documentElement.classList : undefined
-const isDark = ref(rootCls && rootCls.contains('dark'))
+const isDark = ref<boolean | undefined>(false)
 
 function toggleDark(value: boolean) {
   if (!isClient) return
@@ -21,6 +21,10 @@ function toggleDark(value: boolean) {
     localStorage.setItem('vexip-docs-theme-prefer-dark', String(value))
   })
 }
+
+onMounted(() => {
+  isDark.value = rootCls && rootCls.contains('dark')
+})
 </script>
 
 <template>
