@@ -22,20 +22,14 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^0.10.0",
-    "@types/compression": "^1.7.2",
-    "@types/express": "^4.17.17",
     "@types/markdown-it": "^12.2.3",
     "@types/markdown-it-container": "^2.0.5",
     "@types/node": "^18.14.2",
     "@types/prismjs": "^1.26.0",
-    "@types/serve-static": "^1.15.1",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vue/compiler-sfc": "^3.3.2",
     "autoprefixer": "^10.4.14",
-    "compression": "^1.7.4",
-    "express": "^4.18.2",
-    "jszip": "^3.10.1",
     "kolorist": "^1.7.0",
     "local-pkg": "^0.4.2",
     "markdown-it": "^13.0.1",
@@ -43,10 +37,8 @@
     "markdown-it-container": "^3.0.0",
     "postcss": "^8.4.21",
     "postcss-discard-duplicates": "^6.0.0",
-    "postcss-preset-env": "^8.3.0",
     "sass": "^1.58.3",
     "vite": "^4.3.4",
-    "vite-plugin-vue-markdown": "^0.22.4",
     "vitepress": "1.0.0-beta.1"
   }
 }

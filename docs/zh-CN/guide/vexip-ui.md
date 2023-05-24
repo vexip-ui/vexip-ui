@@ -90,7 +90,7 @@ yarn add vexip-ui
 </a>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '@vp/theme/style/mixins.scss' as *;
 
 .contrib__img--lg,
 .contrib__img--xl {

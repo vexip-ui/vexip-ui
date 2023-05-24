@@ -13,7 +13,7 @@
 
 html {
   --header-height: 65px;
-  --header-z-index: 30000; // give a large number to avoid popper z-index large than it
+  --header-z-index: 10;
   --sub-header-height: 44px;
   --aside-width: 260px;
   --anchor-width: 200px;

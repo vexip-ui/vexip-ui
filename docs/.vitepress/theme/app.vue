@@ -176,9 +176,14 @@ function refreshScroll() {
     <!-- Main content -->
     <Homepage v-if="frontmatter.homepage"></Homepage>
     <NotFound v-else-if="page.isNotFound"></NotFound>
-    <Article v-else :anchor-level="outline">
-      <Content class="markdown"></Content>
-    </Article>
+    <div v-else>
+      <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
+        <Article :anchor-level="outline">
+          <Content class="markdown"></Content>
+        </Article>
+      </ConfigProvider>
+      <div id="transfer-place"></div>
+    </div>
     <Masker v-model:active="expanded" class="global-masker" closable></Masker>
 
     <template #footer-copyright>
@@ -206,6 +211,7 @@ function refreshScroll() {
     }
 
     &__section {
+      z-index: calc(var(--header-z-index) - 1);
       transition-duration: 0ms;
     }
 
