@@ -194,13 +194,19 @@ export async function specifyComponent(
   if (matchedComponents.length > 1 || !matchedComponents[0]) {
     component = (
       await prompts({
-        type: 'select',
+        type: 'autocomplete',
         name: 'component',
         message: 'Select a component:',
         choices: (matchedComponents.length > 1 ? matchedComponents : allComponents).map(name => ({
           title: name,
           value: name
-        }))
+        })),
+        onState(this: any) {
+          this.fallback = { title: this.input, value: this.input }
+          if (this.suggestions.length === 0) {
+            this.value = this.fallback.value
+          }
+        }
       })
     ).component
   } else {
