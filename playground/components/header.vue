@@ -244,7 +244,17 @@ onMounted(() => {
 async function initRepoVersions(meta: RepoMeta) {
   if (!meta.loaded) {
     meta.loading = true
-    meta.versions = await fetchVersions(meta.owner, meta.repo)
+    if (meta.name === 'Vue') {
+      let fetchCount = 15
+      meta.versions = await fetchVersions(meta.owner, meta.repo, fetchCount)
+
+      while (!meta.versions.includes(__VUE_VERSION__)) {
+        fetchCount += 15
+        meta.versions = await fetchVersions(meta.owner, meta.repo, fetchCount)
+      }
+    } else {
+      meta.versions = await fetchVersions(meta.owner, meta.repo)
+    }
     meta.loaded = true
     meta.loading = false
   }
