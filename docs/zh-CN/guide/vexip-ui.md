@@ -84,5 +84,38 @@ yarn add vexip-ui
 感谢他们的所做的一切贡献！
 
 <a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+  <img class="contrib__img" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui&columns=6" />
+  <img class="contrib__img--lg" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui&columns=9" />
+  <img class="contrib__img--xl" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
 </a>
+
+<style lang="scss">
+@use '../style/mixins.scss' as *;
+
+.contrib__img--lg,
+.contrib__img--xl {
+  display: none;
+}
+
+@include query-media('lg') {
+  .contrib__img,
+  .contrib__img--xl {
+    display: none;
+  }
+
+  .contrib__img--lg {
+    display: block;
+  }
+}
+
+@include query-media('xl') {
+  .contrib__img,
+  .contrib__img--lg {
+    display: none;
+  }
+
+  .contrib__img--xl {
+    display: block;
+  }
+}
+</style>

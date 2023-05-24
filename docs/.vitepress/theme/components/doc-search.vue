@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, watchEffect } from 'vue'
+import { computed, nextTick, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { MagnifyingGlass } from '@vexip-ui/icons'
@@ -14,24 +14,28 @@ const { t, locale } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
 
-const rawOptions: string[] = []
-const isMacPlatform = isClient && navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const isMacPlatform = isClient && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
 const suffix = isMacPlatform ? '⌘ K' : 'Ctrl K'
 
-for (const group of getComponentConfig()) {
-  rawOptions.push(
-    ...group.components.map(
-      ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : '')
-    )
-  )
-}
-
-const searchOptions = ref(rawOptions)
 const searchValue = ref('')
 const visible = ref(false)
 const placeholder = ref('')
 
 const search = ref<AutoCompleteExposed>()
+
+const searchOptions = computed(() => {
+  const rawOptions: string[] = []
+
+  for (const group of getComponentConfig()) {
+    rawOptions.push(
+      ...group.components.map(
+        ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : '')
+      )
+    )
+  }
+
+  return rawOptions
+})
 
 watchEffect(() => {
   placeholder.value = route.path.startsWith(`/${locale.value}/component/`)
@@ -75,9 +79,9 @@ function toComponentDoc(fullName: string) {
       @change="toComponentDoc"
     >
       <template #suffix>
-        <span class="search-input__shortcut">
+        <kbd class="search-input__shortcut">
           {{ suffix }}
-        </span>
+        </kbd>
       </template>
     </AutoComplete>
   </div>
