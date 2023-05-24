@@ -144,7 +144,7 @@ async function main() {
   const indexPath = resolve(rootDir, 'components/index.ts')
   const typesPath = resolve(rootDir, 'types.d.ts')
   const metaDataPath = resolve(rootDir, 'meta-data.json')
-  const demoPrefixPath = resolve(rootDir, 'docs/common/demo-prefix.ts')
+  const demoPrefixPath = resolve(rootDir, 'docs/.vitepress/theme/common/demo-prefix.ts')
 
   await writeFile(
     indexPath,
