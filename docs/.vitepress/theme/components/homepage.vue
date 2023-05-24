@@ -19,7 +19,7 @@ const waveTop = ref(494)
 const demoPrefix = ref(getDemoPrefix())
 
 function getStarted() {
-  router.go(`/${locale.value}/guide/setup`)
+  router.go(`/${locale.value}/guide/vexip-ui`)
 }
 
 function getComponents() {
