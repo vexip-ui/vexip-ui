@@ -14,16 +14,17 @@
 
 ### Masker 属性
 
-| 名称            | 类型                        | 说明                                                                        | 默认值       | 始于 |
-| --------------- | --------------------------- | --------------------------------------------------------------------------- | ------------ | ---- |
-| active          | `boolean`                   | 设置遮罩是否显示，可以使用 `v-model` 双向绑定                               | `false`      | -    |
-| closable        | `boolean`                   | 设置是否可以点击遮罩层关闭                                                  | `false`      | -    |
-| inner           | `boolean`                   | 设置是否为一个内联的抽屉，开启后定位从 fixed 变位 absolute                  | `false`      | -    |
-| mask-transition | `string`                    | 遮罩层的过渡动画                                                            | `'vxp-fade'` | -    |
-| transition-name | `string`                    | 显示层的过渡动画                                                            | `'vxp-fade'` | -    |
-| disabled        | `boolean`                   | 设置是否禁用遮罩层，该属性仅影响遮罩层，显示层不受影响                      | `false`      | -    |
-| on-before-close | `() => any \| Promise<any>` | 设置遮罩关闭前的回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭 | `null`       | -    |
-| transfer        | `boolean \| string`         | 设置遮罩的渲染位置，设置为 `true` 时默认渲染至 `<body>`                     | `false`      | -    |
+| 名称            | 类型                        | 说明                                                                        | 默认值       | 始于     |
+| --------------- | --------------------------- | --------------------------------------------------------------------------- | ------------ | -------- |
+| active          | `boolean`                   | 设置遮罩是否显示，可以使用 `v-model` 双向绑定                               | `false`      | -        |
+| closable        | `boolean`                   | 设置是否可以点击遮罩层关闭                                                  | `false`      | -        |
+| inner           | `boolean`                   | 设置是否为一个内联的抽屉，开启后定位从 fixed 变位 absolute                  | `false`      | -        |
+| mask-transition | `string`                    | 遮罩层的过渡动画                                                            | `'vxp-fade'` | -        |
+| transition-name | `string`                    | 显示层的过渡动画                                                            | `'vxp-fade'` | -        |
+| disabled        | `boolean`                   | 设置是否禁用遮罩层，该属性仅影响遮罩层，显示层不受影响                      | `false`      | -        |
+| on-before-close | `() => any \| Promise<any>` | 设置遮罩关闭前的回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭 | `null`       | -        |
+| transfer        | `boolean \| string`         | 设置遮罩的渲染位置，设置为 `true` 时默认渲染至 `<body>`                     | `false`      | -        |
+| auto-remove     | `boolean`                   | 设置不显示时是否自动移除                                                    | `false`      | `2.0.13` |
 
 ### Masker 事件
 

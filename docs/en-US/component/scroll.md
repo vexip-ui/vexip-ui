@@ -73,13 +73,17 @@ This demo shows how to create a back to top button quickly.
 ### Preset Types
 
 ```ts
-interface ScrollSlotParams {
+interface ScrollState {
   scrollX: number,
   scrollY: number,
   percentX: number,
   percentY: number,
   enableXScroll: number,
-  enableYScroll: number,
+  enableYScroll: number
+}
+
+interface ScrollSlotParams {
+  getState: () => ScrollState,
   refresh: () => void,
   scrollTo: (clientX: number, clientY: number, duration?: number) => void,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => void,

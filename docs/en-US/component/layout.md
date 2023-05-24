@@ -135,6 +135,18 @@ interface LayoutFooterLink {
   target?: string,
   children?: Array<Omit<LayoutFooterLink, 'children'>>
 }
+
+interface LayoutSlotParams {
+  expanded: boolean,
+  reduced: boolean,
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced: boolean) => void
+}
+
+interface LayoutHeaderSlotParams extends LayoutSlotParams {
+  handleColorChange: (color: string) => void,
+  toggleUserDropped: (dropped?: boolean) => void
+}
 ```
 
 ### Layout Props
@@ -151,6 +163,7 @@ interface LayoutFooterLink {
 | config           | `LayoutConfig[]`         | Set configuration options for user drop-down panels                                                                                                     | `['nav', 'theme', 'color']`                                          | -        |
 | user             | `HeaderUser`             | Set user information                                                                                                                                    | `null`                                                               | -        |
 | actions          | `HeaderAction[]`         | Set the action options of the user drop-down panel                                                                                                      | `[]`                                                                 | -        |
+| expanded         | `boolean`                | When the aside is not fixed, set whether the aside is expanded, can use `v-model` two-way binding                                                       | `false`                                                              | `2.1.19` |
 | reduced          | `boolean`                | Set whether the aside is reduced or not, can use `v-model` two-way binding                                                                              | `false`                                                              | -        |
 | avatar-circle    | `boolean`                | Set whether the user avatar is circular                                                                                                                 | `false`                                                              | -        |
 | sign-type        | `'aside' \| 'header'`    | Set the block where the sign is located, can use `v-model` two-way binding                                                                              | `'aside'`                                                            | -        |
@@ -168,35 +181,36 @@ interface LayoutFooterLink {
 
 ### Layout Events
 
-| Name           | Description                                                                     | Parameters                                   | Since   |
-| -------------- | ------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
-| reduced-change | Emitted when the aside reduced state changed, returns the current reduced state | `(target: boolean)`                          | -       |
-| sign-click     | Emitted when the sign is clicked                                                | `(event: MouseEvent)`                        | -       |
-| menu-select    | Emitted when the menu is selected                                               | `(label: string, meta: Record<string, any>)` | -       |
-| user-action    | Emitted when the user dropdown panel action is clicked                          | `(label: string, meta: Record<string, any>)` | -       |
-| nav-change     | Emitted when the navigation type is changed via the config panel                | `(type: LayoutSignType)`                     | -       |
-| color-change   | Emitted when the theme color is changed via the configuration panel             | `(color: string)`                            | -       |
-| toggle-theme   | Emitted when changing theme mode via config panel                               | `(isDark: boolean)`                          | `2.1.0` |
+| Name            | Description                                                         | Parameters                                   | Since    |
+| --------------- | ------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| expanded-change | Emitted when the expanded of the aside changed                      | `(expanded: boolean)`                        | `2.1.19` |
+| reduced-change  | Emitted when the aside reduced state changed                        | `(target: boolean)`                          | -        |
+| sign-click      | Emitted when the sign is clicked                                    | `(event: MouseEvent)`                        | -        |
+| menu-select     | Emitted when the menu is selected                                   | `(label: string, meta: Record<string, any>)` | -        |
+| user-action     | Emitted when the user dropdown panel action is clicked              | `(label: string, meta: Record<string, any>)` | -        |
+| nav-change      | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -        |
+| color-change    | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -        |
+| toggle-theme    | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0`  |
 
 ### Layout Slots
 
 | Name             | Description                                                                                     | Parameters                                                                                                                                              | Since   |
 | ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| sign             | Slot for the sign, by default on the `header-left` or `aside-top` slot depending on `sign-type` | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                         | -       |
-| header           | Slot of the header, use it to cover the entire header                                           | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                         | -       |
+| sign             | Slot for the sign, by default on the `header-left` or `aside-top` slot depending on `sign-type` | `LayoutSlotParams`                                                                                                                                      | -       |
+| header           | Slot of the header, use it to cover the entire header                                           | `LayoutSlotParams`                                                                                                                                      | -       |
 | header-left      | Slot for the left of header                                                                     | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -       |
-| header-main      | Slot for the center of header                                                                   | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }`  | -       |
+| header-main      | Slot for the center of header                                                                   | `LayoutHeaderSlotParams`                                                                                                                                | -       |
 | header-right     | Slot for the right of header                                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -       |
-| header-user      | Slot for the user dropdown of header                                                            | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }`  | -       |
-| header-avatar    | Slot for the user avatar of header                                                              | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }`  | `2.0.7` |
-| aside            | Slot for aside, using it will cover the entire aside                                            | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                         | -       |
-| aside-top        | Slot for the top of aside                                                                       | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                                | -       |
-| aside-main       | Slot for the center of aside                                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                                | -       |
-| aside-bottom     | Slot for the bottom of aside                                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                                | -       |
-| aside-expand     | Slot of handler that trigger aside expanded                                                     | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                                | -       |
-| default          | Slot for the main page, use it to cover the entire main page                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                         | -       |
+| header-user      | Slot for the user dropdown of header                                                            | `LayoutHeaderSlotParams`                                                                                                                                | -       |
+| header-avatar    | Slot for the user avatar of header                                                              | `LayoutHeaderSlotParams`                                                                                                                                | `2.0.7` |
+| aside            | Slot for aside, using it will cover the entire aside                                            | `LayoutSlotParams`                                                                                                                                      | -       |
+| aside-top        | Slot for the top of aside                                                                       | `LayoutSlotParams`                                                                                                                                      | -       |
+| aside-main       | Slot for the center of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -       |
+| aside-bottom     | Slot for the bottom of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -       |
+| aside-expand     | Slot of handler that trigger aside expanded                                                     | `LayoutSlotParams`                                                                                                                                      | -       |
+| default          | Slot for the main page, use it to cover the entire main page                                    | `LayoutSlotParams`                                                                                                                                      | -       |
 | main             | Slot for the main page                                                                          | -                                                                                                                                                       | -       |
-| footer           | Slot for footer , use it to cover the entire footer                                             | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                         | -       |
+| footer           | Slot for footer , use it to cover the entire footer                                             | `LayoutSlotParams`                                                                                                                                      | -       |
 | footer-links     | Slot for footer links                                                                           | -                                                                                                                                                       | -       |
 | footer-copyright | Slot for footer copyright information                                                           | -                                                                                                                                                       | -       |
 
@@ -227,24 +241,26 @@ interface LayoutFooterLink {
 
 ### LayoutHeader Events
 
-| Name         | Description                                                         | Parameters                                   | Since   |
-| ------------ | ------------------------------------------------------------------- | -------------------------------------------- | ------- |
-| nav-change   | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -       |
-| color-change | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -       |
-| user-action  | Emitted when the user dropdown panel action is clicked              | `(label: string, meta: Record<string, any>)` | -       |
-| sign-click   | Emitted when the sign is clicked                                    | `(event: MouseEvent)`                        | -       |
-| drop-change  | Emitted when the user drop-down panel is opened or closed           | `(target: boolean)`                          | -       |
-| menu-select  | Emitted when the menu is selected                                   | `(label: string, meta: Record<string, any>)` | -       |
-| toggle-theme | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0` |
+| Name            | Description                                                         | Parameters                                   | Since    |
+| --------------- | ------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| nav-change      | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -        |
+| color-change    | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -        |
+| user-action     | Emitted when the user dropdown panel action is clicked              | `(label: string, meta: Record<string, any>)` | -        |
+| sign-click      | Emitted when the sign is clicked                                    | `(event: MouseEvent)`                        | -        |
+| dropped-change  | Emitted when the user drop-down panel is opened or closed           | `(target: boolean)`                          | -        |
+| expanded-change | Emitted when the expanded of the aside changed                      | `(expanded: boolean)`                        | `2.1.19` |
+| reduced-change  | Emitted when the aside reduced changed                              | `(reduced: boolean)`                         | -        |
+| menu-select     | Emitted when the menu is selected                                   | `(label: string, meta: Record<string, any>)` | -        |
+| toggle-theme    | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0`  |
 
 ### LayoutHeader Slots
 
-| Name    | Description                          | Parameters                                                                                                                                             | Since |
-| ------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| left    | Slot for the left of header          | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -     |
-| default | Slot for the center of header        | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -     |
-| right   | Slot for the right of header         | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -     |
-| user    | Slot for the user dropdown of header | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -     |
+| Name    | Description                          | Parameters               | Since |
+| ------- | ------------------------------------ | ------------------------ | ----- |
+| left    | Slot for the left of header          | `LayoutHeaderSlotParams` | -     |
+| default | Slot for the center of header        | `LayoutHeaderSlotParams` | -     |
+| right   | Slot for the right of header         | `LayoutHeaderSlotParams` | -     |
+| user    | Slot for the user dropdown of header | `LayoutHeaderSlotParams` | -     |
 
 ### LayoutAside Props
 
@@ -263,19 +279,19 @@ interface LayoutFooterLink {
 
 | Name            | Description                                    | Parameters                                   | Since |
 | --------------- | ---------------------------------------------- | -------------------------------------------- | ----- |
-| reduced-change  | Emitted when the aside reduced changed         | `(reduced: boolean)`                         | -     |
 | expanded-change | Emitted when the expanded of the aside changed | `(expanded: boolean)`                        | -     |
+| reduced-change  | Emitted when the aside reduced changed         | `(reduced: boolean)`                         | -     |
 | sign-click      | Emitted when the sign is clicked               | `(event: MouseEvent)`                        | -     |
 | menu-select     | Emitted when the menu is selected              | `(label: string, meta: Record<string, any>)` | -     |
 
 ### LayoutAside Slots
 
-| Name    | Description                                 | Parameters                                                                                                 | Since |
-| ------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| top     | Slot for the top of aside                   | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
-| default | Slot for the center of aside                | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
-| bottom  | Slot for the bottom of aside                | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
-| expand  | Slot of handler that trigger aside expanded | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -     |
+| Name    | Description                                 | Parameters           | Since |
+| ------- | ------------------------------------------- | -------------------- | ----- |
+| top     | Slot for the top of aside                   | `LayoutSlotParams }` | -     |
+| default | Slot for the center of aside                | `LayoutSlotParams }` | -     |
+| bottom  | Slot for the bottom of aside                | `LayoutSlotParams }` | -     |
+| expand  | Slot of handler that trigger aside expanded | `LayoutSlotParams }` | -     |
 
 ### LayoutMain Props
 

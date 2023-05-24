@@ -135,6 +135,18 @@ interface LayoutFooterLink {
   target?: string,
   children?: Array<Omit<LayoutFooterLink, 'children'>>
 }
+
+interface LayoutSlotParams {
+  expanded: boolean,
+  reduced: boolean,
+  toggleExpanded: (expanded?: boolean) => void,
+  toggleReduced: (reduced: boolean) => void
+}
+
+interface LayoutHeaderSlotParams extends LayoutSlotParams {
+  handleColorChange: (color: string) => void,
+  toggleUserDropped: (dropped?: boolean) => void
+}
 ```
 
 ### Layout 属性
@@ -151,6 +163,7 @@ interface LayoutFooterLink {
 | config           | `LayoutConfig[]`         | 设置用户下拉面板具备的配置选项                                                                              | `['nav', 'theme', 'color']`                                          | -        |
 | user             | `LayoutUser`             | 设置用户信息                                                                                                | `null`                                                               | -        |
 | actions          | `LayoutHeaderAction[]`   | 设置用户下拉面板的操作选项                                                                                  | `[]`                                                                 | -        |
+| expanded         | `boolean`                | 当边栏不固定时，设置边栏是否为展开状态，可以使用 `v-model` 双向绑定                                         | `false`                                                              | `2.1.19` |
 | reduced          | `boolean`                | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                                                         | `false`                                                              | -        |
 | avatar-circle    | `boolean`                | 设置用户头像是否为圆形                                                                                      | `false`                                                              | -        |
 | sign-type        | `'aside' \| 'header'`    | 设置标语所在的块，可以使用 `v-model` 双向绑定                                                               | `'aside'`                                                            | -        |
@@ -168,37 +181,38 @@ interface LayoutFooterLink {
 
 ### Layout 事件
 
-| 名称           | 说明                                       | 参数                                         | 始于    |
-| -------------- | ------------------------------------------ | -------------------------------------------- | ------- |
-| reduced-change | 当边栏缩小状态改变时触发，返回当前缩小状态 | `(reduced: boolean)`                         | -       |
-| sign-click     | 当标语被点击时触发                         | `(event: MouseEvent)`                        | -       |
-| menu-select    | 当菜单被选择时触发                         | `(label: string, meta: Record<string, any>)` | -       |
-| user-action    | 当用户下拉面板操作被点击时触发             | `(label: string, meta: Record<string, any>)` | -       |
-| nav-change     | 当通过配置面板改变导航类型时触发           | `(type: LayoutSignType)`                     | -       |
-| color-change   | 当通过配置面板改变主题色时触发             | `(color: string)`                            | -       |
-| toggle-theme   | 当通过配置面板改变主题模式时触发           | `(isDark: boolean)`                          | `2.1.0` |
+| 名称            | 说明                             | 参数                                         | 始于     |
+| --------------- | -------------------------------- | -------------------------------------------- | -------- |
+| expanded-change | 当边栏展开状态改变时触发         | `(expanded: boolean)`                        | `2.1.19` |
+| reduced-change  | 当边栏缩小状态改变时触发         | `(reduced: boolean)`                         | -        |
+| sign-click      | 当标语被点击时触发               | `(event: MouseEvent)`                        | -        |
+| menu-select     | 当菜单被选择时触发               | `(label: string, meta: Record<string, any>)` | -        |
+| user-action     | 当用户下拉面板操作被点击时触发   | `(label: string, meta: Record<string, any>)` | -        |
+| nav-change      | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -        |
+| color-change    | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -        |
+| toggle-theme    | 当通过配置面板改变主题模式时触发 | `(isDark: boolean)`                          | `2.1.0`  |
 
 ### Layout 插槽
 
-| 名称             | 说明                                                                                    | 参数                                                                                                                                                   | 始于    |
-| ---------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| sign             | 标语的内容插槽，默认情况下会根据 `sign-type` 作用在 `header-left` 或 `aside-top` 插槽上 | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                        | -       |
-| header           | 头部的内容插槽，使用它将覆盖整个头部                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                        | -       |
-| header-left      | 头部左侧的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -       |
-| header-main      | 头部中央的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -       |
-| header-right     | 头部右侧的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -       |
-| header-user      | 头部用户的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -       |
-| header-avatar    | 头部用户头像的内容插槽                                                                  | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | `2.0.7` |
-| aside            | 标语的内容插槽，使用他将覆盖整个边栏                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                        | -       |
-| aside-top        | 边栏上部的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                               | -       |
-| aside-main       | 边栏中央的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                               | -       |
-| aside-bottom     | 边栏下部的内容插槽                                                                      | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                               | -       |
-| aside-expand     | 边栏触发收起弹出的手柄的插槽                                                            | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void }`                                               | -       |
-| default          | 主页面的内容插槽，使用它将覆盖整个主页面                                                | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                        | -       |
-| main             | 主页面的内容插槽                                                                        | -                                                                                                                                                      | -       |
-| footer           | 页脚的内容插槽，使用它将覆盖整个页脚                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void }`                                                                                        | -       |
-| footer-links     | 页脚链接的内容插槽                                                                      | -                                                                                                                                                      | -       |
-| footer-copyright | 页脚版权信息的内容插槽                                                                  | -                                                                                                                                                      | -       |
+| 名称             | 说明                                                                                    | 参数                     | 始于    |
+| ---------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------- |
+| sign             | 标语的内容插槽，默认情况下会根据 `sign-type` 作用在 `header-left` 或 `aside-top` 插槽上 | `LayoutSlotParams`       | -       |
+| header           | 头部的内容插槽，使用它将覆盖整个头部                                                    | `LayoutSlotParams`       | -       |
+| header-left      | 头部左侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
+| header-main      | 头部中央的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
+| header-right     | 头部右侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
+| header-user      | 头部用户的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
+| header-avatar    | 头部用户头像的内容插槽                                                                  | `LayoutHeaderSlotParams` | `2.0.7` |
+| aside            | 标语的内容插槽，使用他将覆盖整个边栏                                                    | `LayoutSlotParams`       | -       |
+| aside-top        | 边栏上部的内容插槽                                                                      | `LayoutSlotParams`       | -       |
+| aside-main       | 边栏中央的内容插槽                                                                      | `LayoutSlotParams`       | -       |
+| aside-bottom     | 边栏下部的内容插槽                                                                      | `LayoutSlotParams`       | -       |
+| aside-expand     | 边栏触发收起弹出的手柄的插槽                                                            | `LayoutSlotParams`       | -       |
+| default          | 主页面的内容插槽，使用它将覆盖整个主页面                                                | `LayoutSlotParams`       | -       |
+| main             | 主页面的内容插槽                                                                        | -                        | -       |
+| footer           | 页脚的内容插槽，使用它将覆盖整个页脚                                                    | `LayoutSlotParams`       | -       |
+| footer-links     | 页脚链接的内容插槽                                                                      | -                        | -       |
+| footer-copyright | 页脚版权信息的内容插槽                                                                  | -                        | -       |
 
 ### Layout 方法
 
@@ -227,24 +241,26 @@ interface LayoutFooterLink {
 
 ### LayoutHeader 事件
 
-| 名称         | 说明                             | 参数                                         | 始于    |
-| ------------ | -------------------------------- | -------------------------------------------- | ------- |
-| nav-change   | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -       |
-| color-change | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -       |
-| user-action  | 当用户下拉面板操作被点击时触发   | `(label: string, meta: Record<string, any>)` | -       |
-| sign-click   | 当标语被点击时触发               | `(event: MouseEvent)`                        | -       |
-| drop-change  | 当用户下拉面板打开或关闭时触发   | `(target: boolean)`                          | -       |
-| menu-select  | 当菜单被选择时触发               | `(label: string, meta: Record<string, any>)` | -       |
-| toggle-theme | 当通过配置面板改变主题模式时触发 | `(isDark: boolean)`                          | `2.1.0` |
+| 名称            | 说明                             | 参数                                         | 始于     |
+| --------------- | -------------------------------- | -------------------------------------------- | -------- |
+| nav-change      | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -        |
+| color-change    | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -        |
+| user-action     | 当用户下拉面板操作被点击时触发   | `(label: string, meta: Record<string, any>)` | -        |
+| sign-click      | 当标语被点击时触发               | `(event: MouseEvent)`                        | -        |
+| dropped-change  | 当用户下拉面板打开或关闭时触发   | `(dropped: boolean)`                         | -        |
+| expanded-change | 当边栏展开状态改变时触发         | `(expanded: boolean)`                        | `2.1.19` |
+| reduced-change  | 当边栏缩小状态改变时触发         | `(reduced: boolean)`                         | -        |
+| menu-select     | 当菜单被选择时触发               | `(label: string, meta: Record<string, any>)` | -        |
+| toggle-theme    | 当通过配置面板改变主题模式时触发 | `(isDark: boolean)`                          | `2.1.0`  |
 
 ### LayoutHeader 插槽
 
-| 名称    | 说明               | 参数                                                                                                                                                   | 始于 |
-| ------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- |
-| left    | 头部左侧的内容插槽 | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -    |
-| default | 头部中央的内容插槽 | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -    |
-| right   | 头部右侧的内容插槽 | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -    |
-| user    | 头部用户的内容插槽 | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) => void }` | -    |
+| 名称    | 说明               | 参数                     | 始于 |
+| ------- | ------------------ | ------------------------ | ---- |
+| left    | 头部左侧的内容插槽 | `LayoutHeaderSlotParams` | -    |
+| default | 头部中央的内容插槽 | `LayoutHeaderSlotParams` | -    |
+| right   | 头部右侧的内容插槽 | `LayoutHeaderSlotParams` | -    |
+| user    | 头部用户的内容插槽 | `LayoutHeaderSlotParams` | -    |
 
 ### LayoutAside 属性
 
@@ -263,19 +279,19 @@ interface LayoutFooterLink {
 
 | 名称            | 说明                     | 参数                                         | 始于 |
 | --------------- | ------------------------ | -------------------------------------------- | ---- |
-| reduced-change  | 当边栏缩小状态改变时触发 | `(reduced: boolean)`                         | -    |
 | expanded-change | 当边栏展开状态改变时触发 | `(expanded: boolean)`                        | -    |
+| reduced-change  | 当边栏缩小状态改变时触发 | `(reduced: boolean)`                         | -    |
 | sign-click      | 当标语被点击时触发       | `(event: MouseEvent)`                        | -    |
 | menu-select     | 当菜单被选择时触发       | `(label: string, meta: Record<string, any>)` | -    |
 
 ### LayoutAside 插槽
 
-| 名称    | 说明                         | 参数                                                                                                       | 始于 |
-| ------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------- | ---- |
-| top     | 边栏上部的内容插槽           | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -    |
-| default | 边栏中央的内容插槽           | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -    |
-| bottom  | 边栏下部的内容插槽           | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -    |
-| expand  | 边栏触发收起弹出的手柄的插槽 | `{ reduced: boolean, toggleReduce: (target: boolean) => void, toggleExpand: (target: boolean) => void } }` | -    |
+| 名称    | 说明                         | 参数               | 始于 |
+| ------- | ---------------------------- | ------------------ | ---- |
+| top     | 边栏上部的内容插槽           | `LayoutSlotParams` | -    |
+| default | 边栏中央的内容插槽           | `LayoutSlotParams` | -    |
+| bottom  | 边栏下部的内容插槽           | `LayoutSlotParams` | -    |
+| expand  | 边栏触发收起弹出的手柄的插槽 | `LayoutSlotParams` | -    |
 
 ### LayoutMain 属性
 
