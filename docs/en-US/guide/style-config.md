@@ -36,7 +36,7 @@ import 'vexip-ui/style/dark/index.scss' // Not needed when not use dark theme
 With reference to the built-in dark theme preset styles, you can define your own theme (Maybe will make a theme generator in the future).
 
 :::info
-The above content is to import all styles, see [Getting Start](./started) chapter for on-demand import.
+The above content is to import all styles, see [Getting Started](./getting-started) chapter for on-demand import.
 :::
 
 ## Preset Variables

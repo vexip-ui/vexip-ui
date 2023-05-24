@@ -28,9 +28,12 @@ const langOptions = computed(() => {
 
 function changeLanguage(lang: string, link?: string) {
   if (lang !== locale.value) {
-    const path = page.value.relativePath.substring(
-      locale.value === 'root' ? 0 : (locale.value as string).length
-    )
+    const path =
+      page.value.relativePath === 'index.md'
+        ? '/'
+        : page.value.relativePath.substring(
+          locale.value === 'root' ? 0 : (locale.value as string).length
+        )
     link = link || (lang === 'root' ? '/' : `/${lang}`)
 
     router.go(`${link}${path}`.replace(/(^|\/)?index.md$/, '$1').replace(/\.md$/, '.html'))

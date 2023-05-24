@@ -60,7 +60,14 @@ function enhanceRouter(router: Router) {
   const loadedMap = new Map<string, boolean>()
   const locale = i18n.global.locale as unknown as Ref<string>
 
-  syncLocale(router.route.path)
+  let currentPath = router.route.path
+
+  if (currentPath === '/') {
+    currentPath = `/${locale.value}/`
+    isClient && history.replaceState(null, document.title, `/${locale.value}/`)
+  }
+
+  syncLocale(currentPath)
 
   router.onBeforeRouteChange = to => {
     const url = getPath(to)

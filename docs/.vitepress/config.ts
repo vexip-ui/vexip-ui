@@ -12,8 +12,6 @@ import type { ThemeConfig } from './theme/types'
 compiler.parseCache.max = 10000
 
 export default <UserConfig<ThemeConfig>>{
-  srcExclude: ['demos', 'guides', 'README.md'],
-  ignoreDeadLinks: true,
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
   head: [

@@ -45,10 +45,12 @@ function handleSvaePrefix() {
 <template>
   <section :class="prefix" :style="{ '--wave-top': `${waveTop}px` }">
     <NativeScroll use-y-bar @resize="handleResize">
-      <div :class="`${prefix}__wave`">
-        <div :class="`${prefix}__wave-block`"></div>
-        <Wave ref="wave" style="position: relative"></Wave>
-      </div>
+      <ClientOnly>
+        <div :class="`${prefix}__wave`">
+          <div :class="`${prefix}__wave-block`"></div>
+          <Wave ref="wave" style="position: relative"></Wave>
+        </div>
+      </ClientOnly>
       <div ref="sign" :class="`${prefix}__sign`">
         <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
         <h1 :class="`${prefix}__title`">
@@ -113,9 +115,7 @@ function handleSvaePrefix() {
   }
 
   &__logo {
-    width: 30%;
-    min-width: 90px;
-    max-width: 210px;
+    height: 210px;
     margin-top: 50px;
   }
 
@@ -126,6 +126,7 @@ function handleSvaePrefix() {
   }
 
   &__description {
+    padding: 0 1rem;
     margin-bottom: 1rem;
     font-size: 1.4rem;
     font-weight: 300;
