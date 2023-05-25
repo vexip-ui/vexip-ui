@@ -71,7 +71,7 @@ function openOutsidePage(url?: string) {
   }
 
   .vxp-menu {
-    margin-right: 20px;
+    margin-inline-end: 20px;
     border: 0;
   }
 

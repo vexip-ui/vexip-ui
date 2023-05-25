@@ -91,9 +91,9 @@ function toComponentDoc(fullName: string) {
 <style lang="scss">
 .doc-search {
   flex: auto;
-  padding-left: 14px;
-  margin-left: -1px;
-  border-left: var(--vxp-border-light-2);
+  padding-inline-start: 14px;
+  margin-inline-start: -1px;
+  border-inline-start: var(--vxp-border-light-2);
   transition: var(--vxp-transition-border);
 
   .search-input {

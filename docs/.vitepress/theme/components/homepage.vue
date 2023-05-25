@@ -144,17 +144,6 @@ function handleSvaePrefix() {
     }
   }
 
-  &__record {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    font-size: var(--vxp-font-size-secondary);
-    font-weight: 300;
-    color: var(--vxp-content-color-placeholder);
-    text-decoration: none;
-    user-select: none;
-  }
-
   &__prefix {
     max-width: 200px;
     margin-bottom: 20px;

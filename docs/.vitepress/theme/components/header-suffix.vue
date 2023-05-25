@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { GithubB, Language } from '@vexip-ui/icons'
 
 import ThemeSwitch from './theme-switch.vue'
+import DirectionSwitch from './direction-switch.vue'
 
 import type { I18nConfig } from '../i18n'
 
@@ -42,65 +43,76 @@ function changeLanguage(lang: string, link?: string) {
 </script>
 
 <template>
-  <Dropdown class="language" :transfer="false">
-    <button type="button" class="language__trigger">
-      <Icon label="language" :scale="2">
-        <Language></Language>
+  <div class="header-suffix">
+    <Dropdown class="language" :transfer="false">
+      <button type="button" class="language__trigger">
+        <Icon label="language" :scale="2">
+          <Language></Language>
+        </Icon>
+      </button>
+      <template #drop>
+        <DropdownList>
+          <DropdownItem
+            v-for="option in langOptions"
+            :key="option.lang"
+            :name="option.name"
+            :selected="option.lang === locale"
+            @select="changeLanguage(option.lang, option.link)"
+          >
+            {{ option.name }}
+          </DropdownItem>
+        </DropdownList>
+      </template>
+    </Dropdown>
+    <div class="rtl">
+      <DirectionSwitch></DirectionSwitch>
+    </div>
+    <div class="theme">
+      <ThemeSwitch></ThemeSwitch>
+    </div>
+    <Linker class="github-link" to="//github.com/vexip-ui/vexip-ui/">
+      <Icon label="github" :scale="1.7">
+        <GithubB></GithubB>
       </Icon>
-    </button>
-    <template #drop>
-      <DropdownList>
-        <DropdownItem
-          v-for="option in langOptions"
-          :key="option.lang"
-          :name="option.name"
-          :selected="option.lang === locale"
-          @select="changeLanguage(option.lang, option.link)"
-        >
-          {{ option.name }}
-        </DropdownItem>
-      </DropdownList>
-    </template>
-  </Dropdown>
-  <div class="theme">
-    <ThemeSwitch></ThemeSwitch>
+    </Linker>
   </div>
-  <Linker class="github-link" to="//github.com/vexip-ui/vexip-ui/">
-    <Icon label="github" :scale="1.6">
-      <GithubB></GithubB>
-    </Icon>
-  </Linker>
 </template>
 
 <style lang="scss">
 @use '../style/mixins.scss' as *;
 
-.language {
-  display: inline-flex;
-  margin-right: 24px;
-  cursor: pointer;
-
-  &__trigger {
-    display: flex;
-    padding: 0;
-    color: var(--vxp-content-color-base);
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-  }
-}
-
-.theme {
+.header-suffix {
   display: flex;
   align-items: center;
-  margin-right: 24px;
-}
 
-.github-link {
-  margin-right: 24px;
+  .language {
+    display: inline-flex;
+    margin-inline-end: 24px;
+    cursor: pointer;
 
-  @include query-media('lg') {
-    margin-right: 40px;
+    &__trigger {
+      display: flex;
+      padding: 0;
+      color: var(--vxp-content-color-base);
+      cursor: pointer;
+      background-color: transparent;
+      border: 0;
+    }
+  }
+
+  .rtl,
+  .theme {
+    display: flex;
+    align-items: center;
+    margin-inline-end: 24px;
+  }
+
+  .github-link {
+    margin-inline-end: 24px;
+
+    @include query-media('lg') {
+      margin-inline-end: 40px;
+    }
   }
 }
 </style>

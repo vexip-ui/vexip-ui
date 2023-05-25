@@ -33,6 +33,10 @@ html {
   @include query-media('xl') {
     --aside-width: 300px;
   }
+
+  &.rtl {
+    direction: rtl;
+  }
 }
 
 html,

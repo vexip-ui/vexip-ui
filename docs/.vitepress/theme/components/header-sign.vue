@@ -30,7 +30,7 @@ function toHomepage() {
   flex-shrink: 0;
   align-items: center;
   height: 100%;
-  padding: 0 16px 0 20px;
+  padding-inline: 20px 16px;
   font-family: Avenir, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
@@ -58,7 +58,7 @@ function toHomepage() {
     height: 32px;
 
     @include query-media('lg') {
-      margin-right: 14px;
+      margin-inline-end: 14px;
     }
   }
 
@@ -76,7 +76,8 @@ function toHomepage() {
 
     @include query-media('lg') {
       display: block;
-      margin: 2px 0 0 6px;
+      margin-inline-start: 6px;
+      margin-top: 2px;
       transform: scale(0.8);
     }
   }

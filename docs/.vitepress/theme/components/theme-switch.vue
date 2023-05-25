@@ -4,17 +4,17 @@ import { Moon, Sun } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
 const rootCls = isClient ? document.documentElement.classList : undefined
-const isDark = ref<boolean>(false)
+const dark = ref<boolean>(false)
 
 onMounted(() => {
-  isDark.value = !!rootCls && rootCls.contains('dark')
+  dark.value = !!rootCls && rootCls.contains('dark')
 })
 
 function toggleDark(value: boolean) {
   if (!isClient || !rootCls) return
 
   requestAnimationFrame(() => {
-    isDark.value = value
+    dark.value = value
 
     if (value) {
       rootCls.add('dark')
@@ -29,7 +29,7 @@ function toggleDark(value: boolean) {
 
 <template>
   <Switch
-    :value="isDark"
+    :value="dark"
     class="theme-switch"
     :open-icon="Moon"
     :close-icon="Sun"
