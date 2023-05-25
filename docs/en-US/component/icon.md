@@ -4,7 +4,7 @@ Vexip UI uses `@vexip-ui/icons` as the icon library, which is based on the free 
 
 You can look up the icons directly on this [page](https://fontawesome.com/search?m=free) (they have always named the icons weird).
 
-Of course you can place any svg content directly under the Icon component slot.
+Of course you can place any svg content directly under the Icon component slot. If you want to change internal icons of components, please refer to [Global Config](/en-US/guide/global-config#internal-icons).
 
 :::warning
 All built-in icons of Font Awesome are scaled by 0.85x by default in this library, the original icons are a bit large.

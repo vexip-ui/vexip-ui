@@ -64,6 +64,10 @@ const lastUpdated = computed(() => {
     height: 72px;
     padding: 16px 0;
     margin-top: 20px;
+
+    .vxp-linker__icon {
+      padding-top: 1px;
+    }
   }
 
   .vxp-linker {

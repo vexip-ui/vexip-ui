@@ -198,4 +198,4 @@ Finally, let's take a look at an actual effect after configuration:
 
 <IconDemo></IconDemo>
 
-> The details code can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/docs/common/icon-demo).
+> The details code can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/docs/.vitepress/theme/components/icon-demo.vue).

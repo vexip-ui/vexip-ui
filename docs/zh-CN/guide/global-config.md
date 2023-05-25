@@ -199,4 +199,4 @@ app.use(install, {
 
 <IconDemo></IconDemo>
 
-> 具体的代码可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/docs/common/icon-demo)。
+> 具体的代码可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/docs/.vitepress/theme/components/icon-demo.vue)。

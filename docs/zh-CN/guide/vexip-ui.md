@@ -36,7 +36,7 @@ Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>
 ## 最新版本
 
 <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
-  <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+  <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="NPM 版本"/>
 </a>
 
 > 左上方的版本为文档构建时依赖的组件库版本，可能与最新的不一致，因为文档的更新往往会落后一些。
@@ -62,22 +62,22 @@ yarn add vexip-ui
 你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
 
 <a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
-  <img
-    src="/vexip-ui-group-qrcode.png"
-    style="width: 240px;"
-  />
+  <img src="/vexip-ui-qq-group-qrcode.webp" alt="Vexip UI QQ 群" style="width: 240px;" />
 </a>
 
 ## 贡献
 
 欢迎你的加入！你可以查阅 [贡献指南](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。
 
-或者你可以赞助我以帮助项目更好的发展！
+或者你可以赞助我们以帮助项目更好的发展！
 
-<img
-  src="/wechat-sponsor.png"
-  style="width: 240px;"
-/>
+微信：
+
+<img src="/sponsor-wechat.webp" alt="微信收款" style="width: 240px;" />
+
+支付宝：
+
+<img src="/sponsor-alipay.webp" alt="支付宝收款" style="width: 240px;" />
 
 ## 贡献者
 

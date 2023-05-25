@@ -99,7 +99,7 @@ const next = computed(() => {
       <span v-if="next.origin && locale !== 'en-US'" style="margin-left: 6px">
         {{ next.origin }}
       </span>
-      <Icon :icon="ChevronRight" style="margin-left: 3px"></Icon>
+      <Icon :icon="ChevronRight" style="padding-top: 1px; margin-left: 3px"></Icon>
     </Linker>
   </div>
 </template>
@@ -113,6 +113,10 @@ const next = computed(() => {
 
   .vxp-linker {
     height: 100%;
+
+    &__icon {
+      padding-top: 1px;
+    }
   }
 }
 </style>

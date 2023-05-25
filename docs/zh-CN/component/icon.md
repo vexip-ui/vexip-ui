@@ -4,7 +4,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 你可以直接在这个 [页面](https://fontawesome.com/search?m=free) 查询图标（他们给图标起名一直很奇怪）。
 
-当然你完全可以直接在 Icon 组件下放置任何 svg 内容。
+当然你完全可以直接在 Icon 组件下放置任何 svg 内容。如果你想要更换组件内置的图标，请参考 [全局配置](/zh-CN/guide/global-config.html#内置图标)。
 
 :::warning
 图标库内置的所有 Font Awesome 的图标默认都是 0.85x 倍缩放的，原始的图标着实有点大。
