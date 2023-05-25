@@ -250,16 +250,25 @@ async function initRepoVersions(meta: RepoMeta) {
   }
 }
 
-async function fetchVersions(owner: string, repo: string, maxCount = 15) {
+async function fetchVersions(owner: string, repo: string, maxCount = 30) {
   const response = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/releases?per_page=${maxCount}`
+    `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100`
   )
   const releases = (await response.json()) as any[]
-  const versions = releases
+  const filteredVersions: string[] = []
+  const versions: string[] = releases
     .map(r => (/^v/.test(r.tag_name) ? r.tag_name.slice(1) : r.tag_name))
     .filter(r => !r.includes('-'))
 
-  return versions as string[]
+  for (const version of versions) {
+    filteredVersions.push(version)
+
+    if (filteredVersions.length > maxCount) {
+      break
+    }
+  }
+
+  return filteredVersions
 }
 
 function handleWindowBlur() {
