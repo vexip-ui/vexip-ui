@@ -211,7 +211,8 @@ describe('Menu', () => {
     expect(wrapper.find('.vxp-menu').classes()).toContain('vxp-menu--horizontal')
   })
 
-  it('use options', () => {
+  it('use options', async () => {
+    const onSelect = vi.fn()
     const options = [
       {
         label: 'g1',
@@ -221,7 +222,10 @@ describe('Menu', () => {
             label: '1',
             name: 'l1',
             icon: City,
-            children: [{ label: '1-1' }, { label: '1-2' }]
+            children: [
+              { label: '1-1', meta: { foo: '1-1' } },
+              { label: '1-2', meta: { foo: '1-2' } }
+            ]
           }
         ]
       },
@@ -231,7 +235,7 @@ describe('Menu', () => {
         disabled: true
       }
     ]
-    const wrapper = mount(() => <Menu options={options}></Menu>)
+    const wrapper = mount(() => <Menu options={options} onSelect={onSelect}></Menu>)
     const group = wrapper.find('.vxp-menu-group')
 
     expect(group.exists()).toBe(true)
@@ -242,6 +246,10 @@ describe('Menu', () => {
     expect(parent.find('.vxp-menu__label').text()).toEqual('l1')
     expect(parent.findComponent(City).exists()).toBe(true)
     expect(parent.findAll('.vxp-menu__item').length).toEqual(2)
+
+    await parent.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
+    expect(onSelect).toHaveBeenCalled()
+    expect(onSelect).toHaveBeenLastCalledWith('1-1', { foo: '1-1' })
 
     expect(wrapper.findAll('.vxp-menu__item')[3].exists()).toBe(true)
     expect(wrapper.findAll('.vxp-menu__item')[3].classes()).toContain('vxp-menu__item--disabled')

@@ -295,7 +295,9 @@ const MenuItem = defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (mouseInList || !popperShow.value || !isUsePopper.value || dropTrigger.value !== 'hover') { return }
+      if (mouseInList || !popperShow.value || !isUsePopper.value || dropTrigger.value !== 'hover') {
+        return
+      }
 
       if (typeof parentItemState?.handleMouseLeave === 'function') {
         parentItemState.handleMouseLeave()
@@ -359,6 +361,7 @@ const MenuItem = defineComponent({
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
