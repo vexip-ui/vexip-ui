@@ -88,6 +88,7 @@ export const tableProps = buildProps({
   disabledTree: booleanProp,
   rowIndent: [String, Number],
   noCascaded: booleanProp,
+  columnResizable: booleanProp,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),

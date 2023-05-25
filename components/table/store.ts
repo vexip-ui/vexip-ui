@@ -95,7 +95,9 @@ export function useStore(options: StoreOptions) {
     dragging: false,
     heightBITree: null!,
     virtualData: [],
-    totalHeight: options.rowMinHeight * options.data.length
+    totalHeight: options.rowMinHeight * options.data.length,
+    columnResizing: false,
+    resizeLeft: 0
   }) as StoreState
 
   setColumns(options.columns)
@@ -255,11 +257,13 @@ export function useStore(options: StoreOptions) {
     setSingleSorter,
     setSingleFilter,
     setDragging,
-    setCustomSorter,
-    setCustomFilter,
     setKeyConfig,
     setDisabledTree,
     setNoCascaded,
+    setCustomSorter,
+    setCustomFilter,
+    setColumnResizing,
+    setResizeLeft,
 
     handleSort,
     clearSort,
@@ -710,6 +714,14 @@ export function useStore(options: StoreOptions) {
 
   function setCustomFilter(able: boolean) {
     state.customFilter = !!able
+  }
+
+  function setColumnResizing(resizing: boolean) {
+    state.columnResizing = !!resizing
+  }
+
+  function setResizeLeft(left: number) {
+    state.resizeLeft = left
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

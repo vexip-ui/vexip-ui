@@ -264,7 +264,9 @@ export interface StoreState extends StoreOptions {
   dragging: boolean,
   heightBITree: BITree,
   virtualData: TableRowState[],
-  totalHeight: number
+  totalHeight: number,
+  columnResizing: boolean,
+  resizeLeft: number
 }
 
 export interface TableRowInstance {

@@ -105,6 +105,12 @@
         indicatorType === 'after' && nh.bem('indicator', 'after')
       ]"
     ></div>
+    <div
+      v-if="props.columnResizable"
+      v-show="columnResizing"
+      :class="nh.be('resize-indicator')"
+      :style="{ left: `${resizeLeft}px` }"
+    ></div>
   </div>
 </template>
 
@@ -238,7 +244,8 @@ export default defineComponent({
       keyConfig: () => ({}),
       disabledTree: false,
       rowIndent: '16px',
-      noCascaded: false
+      noCascaded: false,
+      columnResizable: false
     })
 
     const nh = useNameHelper('table')
@@ -959,6 +966,8 @@ export default defineComponent({
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),
       hasDragColumn,
+      columnResizing: toRef(state, 'columnResizing'),
+      resizeLeft: toRef(state, 'resizeLeft'),
 
       className,
       style,

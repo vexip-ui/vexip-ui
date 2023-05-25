@@ -6,6 +6,7 @@
         :key="index"
         :column="item"
         :index="index"
+        :fixed="fixed"
       ></TableHeadCell>
     </TableRow>
   </div>
@@ -31,10 +32,7 @@ export default defineComponent({
   props: {
     fixed: {
       type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator: (value: string) => {
-        return value === 'left' || value === 'right'
-      }
+      default: null
     }
   },
   setup(props) {

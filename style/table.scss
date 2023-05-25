@@ -493,6 +493,16 @@ $table: map.merge(
     }
   }
 
+  &__resize-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    will-change: left;
+    pointer-events: none;
+    border-left: get-css-var('border-shape') get-css-var('table-indicator-color');
+  }
+
   &__empty {
     display: inline-flex;
     flex-direction: column;

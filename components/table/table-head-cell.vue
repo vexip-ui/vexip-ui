@@ -181,6 +181,10 @@ export default defineComponent({
     index: {
       type: Number,
       default: -1
+    },
+    fixed: {
+      type: String as PropType<'left' | 'right'>,
+      default: null
     }
   },
   setup(props) {
