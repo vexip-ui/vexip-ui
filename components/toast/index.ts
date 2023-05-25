@@ -6,6 +6,8 @@ import { destroyObject, isClient, noop, toNumber } from '@vexip-ui/utils'
 import type { App } from 'vue'
 import type { ToastInstance, ToastOptions, ToastType } from './symbol'
 
+export { toastProps } from './props'
+
 export type { ToastProps, ToastCProps } from './props'
 export type { ToastType, ToastOptions }
 

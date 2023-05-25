@@ -1,6 +1,8 @@
 import Table from './table.vue'
 
 export { Table }
+export { tableProps } from './props'
+
 export type TableExposed = InstanceType<typeof Table>
 
 export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'

@@ -1,6 +1,8 @@
 import Card from './card.vue'
 
 export { Card }
+export { cardProps } from './props'
+
 export type CardExposed = InstanceType<typeof Card>
 
 export type { CardProps, CardCProps } from './props'

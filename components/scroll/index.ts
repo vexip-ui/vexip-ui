@@ -1,6 +1,8 @@
 import Scroll from './scroll.vue'
 
 export { Scroll }
+export { scrollProps } from './props'
+
 export type ScrollExposed = InstanceType<typeof Scroll>
 
 export type { ScrollProps, ScrollCProps } from './props'

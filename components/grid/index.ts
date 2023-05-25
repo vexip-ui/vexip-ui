@@ -1,6 +1,8 @@
 import Grid from './grid'
 
 export { Grid }
+export { gridProps } from './props'
+
 export type GridExposed = InstanceType<typeof Grid>
 
 export { currentBreakPoint } from './helpler'

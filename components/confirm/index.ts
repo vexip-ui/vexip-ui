@@ -6,6 +6,8 @@ import { destroyObject, isClient } from '@vexip-ui/utils'
 import type { App } from 'vue'
 import type { ConfirmInstance, ConfirmOptions, ConfirmType } from './symbol'
 
+export { confirmProps } from './props'
+
 export type { ConfirmProps, ConfirmCProps } from './props'
 export type { ConfirmType, ConfirmOptions }
 

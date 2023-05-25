@@ -4,6 +4,8 @@ import type { ClassType, StyleType } from '@vexip-ui/config'
 import type { IconProps } from './props'
 
 export { Icon }
+export { iconProps } from './props'
+
 export type IconExposed = InstanceType<typeof Icon>
 
 export type { IconProps, IconCProps } from './props'
