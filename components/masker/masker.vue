@@ -82,7 +82,7 @@ export default defineComponent({
     const getIndex = useZIndex()
 
     const currentActive = ref(props.active)
-    // If initial active, we should set a vaild index as initial value
+    // If initial active, we should set a valid index as initial value
     const zIndex = ref(props.active ? getIndex() : 0)
     const wrapShow = ref(props.active)
 
