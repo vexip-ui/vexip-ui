@@ -24,6 +24,9 @@ meta-data*
 .yarn/build-state.yml
 .yarn/install-state.gz
 
+.eslintcache
+.stylelintcache
+
 # local env files
 .env
 .env.local

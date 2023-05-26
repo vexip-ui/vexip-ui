@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.1.21",
+  "version": "2.1.22",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
@@ -29,9 +29,9 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "create": "tsx scripts/create.ts",
-    "lint": "eslint --ext .js,.ts,.tsx,.vue \"{common/*/src,components,directives,playground,dev-server,docs}/**\"",
-    "lint:scripts": "eslint --ext .js,.ts \"scripts/**\"",
-    "lint:style": "stylelint \"**/*.{vue,scss}\"",
+    "lint": "eslint --cache --ext .js,.ts,.tsx,.vue \"{common/*/src,components,directives,playground,dev-server,docs}/**\"",
+    "lint:scripts": "eslint --cache --ext .js,.ts \"scripts/**\"",
+    "lint:style": "stylelint --cache \"**/*.{vue,scss}\"",
     "postpublish": "pinst --enable",
     "precommit": "lint-staged -c ./.husky/.lintstagedrc -q --allow-empty",
     "preinstall": "npx only-allow pnpm",
@@ -52,7 +52,7 @@
     ".": {
       "import": "./es/index.mjs",
       "require": "./lib/index.cjs",
-      "types": "./dist/components/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./es": "./es/index.mjs",
     "./lib": "./lib/index.cjs",

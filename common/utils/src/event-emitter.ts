@@ -43,12 +43,12 @@ export function createEventEmitter() {
     clearAll() {
       handlerMap.clear()
     },
-    emit(type, ...playload) {
+    emit(type, ...payload) {
       const handlers = handlerMap.get(type)
 
       if (handlers) {
         handlers.forEach(handler => {
-          handler(...playload)
+          handler(...payload)
         })
       }
     }

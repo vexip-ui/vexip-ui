@@ -1,7 +1,8 @@
 import { resolve } from 'node:path'
-import { readdir, readFile, writeFile } from 'node:fs/promises'
-import { statSync, existsSync, mkdirSync } from 'node:fs'
-import { logger, rootDir, outputDir, components as allComponents, toCapitalCase } from './utils'
+import { readFile, readdir, writeFile } from 'node:fs/promises'
+import { existsSync, mkdirSync, statSync } from 'node:fs'
+
+import { components as allComponents, logger, outputDir, rootDir, toCapitalCase } from './utils'
 
 async function main() {
   const startTime = Date.now()

@@ -350,12 +350,12 @@ export default defineComponent({
       tableAction.handleRowDragStart(instance, event)
     }
 
-    function shoudProcessDrag() {
+    function shouldProcessDrag() {
       return (draggable.value || cellDraggable.value) && dragging.value
     }
 
     function handleDragOver(event: DragEvent) {
-      if (!shoudProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
+      if (!shouldProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
 
       event.stopPropagation()
       event.preventDefault()
@@ -363,7 +363,7 @@ export default defineComponent({
     }
 
     function handleDrop(event: DragEvent) {
-      if (!shoudProcessDrag()) return
+      if (!shouldProcessDrag()) return
 
       event.stopPropagation()
       event.preventDefault()
@@ -372,7 +372,7 @@ export default defineComponent({
     }
 
     function handleDragEnd(event: DragEvent) {
-      if (!shoudProcessDrag()) return
+      if (!shouldProcessDrag()) return
 
       event.stopPropagation()
       tableAction.handleRowDragEnd(event)

@@ -10,7 +10,7 @@ import { TriangleExclamation } from '@vexip-ui/icons'
 
 async function confirm() {
   const isConfirm = await Confirm.open({
-    content: 'Confrim to delete?',
+    content: 'Confirm to delete?',
     confirmType: 'error',
     icon: TriangleExclamation,
     iconColor: '#f03e3e'

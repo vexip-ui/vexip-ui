@@ -8,6 +8,7 @@ export interface I18nConfig {
     changePrefix: string,
     apply: string,
     prefixChanged: string,
+    invalidPrefix: string,
     changeColor: string,
     rollColor: string,
     resetColor: string,

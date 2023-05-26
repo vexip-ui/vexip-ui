@@ -99,7 +99,7 @@
               text
               size="small"
               :disabled="!hasFilterActive"
-              @click="handleFilterMutiple()"
+              @click="handleFilterMultiple()"
             >
               {{ locale.filterConfirm }}
             </Button>
@@ -370,7 +370,7 @@ export default defineComponent({
       })
     }
 
-    function handleFilterMutiple() {
+    function handleFilterMultiple() {
       const options = filter.value.options ?? []
       const activeValues = []
 
@@ -433,7 +433,7 @@ export default defineComponent({
       handleFilter,
       handleFilterItemSelect,
       handleFilterCheck,
-      handleFilterMutiple,
+      handleFilterMultiple,
       handleResetFilter,
       handleCheckAllRow
     }

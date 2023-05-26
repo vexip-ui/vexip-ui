@@ -1,3 +1,32 @@
+## [2.1.22](https://github.com/vexip-ui/vexip-ui/compare/v2.1.21...v2.1.22) (2023-05-25)
+
+
+### ✨ Features
+
+* **dropdown:** add custom prop to mark to disable nested process ([f29ba14](https://github.com/vexip-ui/vexip-ui/commit/f29ba145aaa1a556c5aa262e81f35f7ece659388))
+* exports all props definitions to support extends ([0186871](https://github.com/vexip-ui/vexip-ui/commit/018687198aae791c63eb897305d96aa6354eb52e))
+* **style:** use new font-family for mono ([9f88146](https://github.com/vexip-ui/vexip-ui/commit/9f881468ddc48dc63d84b316b1f9bacc8a87f889))
+
+
+### 🐞 Bug Fixes
+
+* **cascader:** should reset hitting when panel options changed ([d4180f2](https://github.com/vexip-ui/vexip-ui/commit/d4180f2921af9d49564c28366aae68c99507ae1d))
+* **config:** ensure props exec validator at once ([#328](https://github.com/vexip-ui/vexip-ui/issues/328)) ([bcdf759](https://github.com/vexip-ui/vexip-ui/commit/bcdf759083903b0aa85cef6d963f20dcfb8a4c76))
+* **dropdown:** disable transfer for nested dropdown ([1c65cfd](https://github.com/vexip-ui/vexip-ui/commit/1c65cfd8000afe58b2f0e8f513c333f21a50f1d9))
+* **menu:** improve and fix menu item style ([9a780f4](https://github.com/vexip-ui/vexip-ui/commit/9a780f4117474c8460e8a5235a6b521038fd9274))
+* **menu:** incorrect menu item style in rest ([afa3e56](https://github.com/vexip-ui/vexip-ui/commit/afa3e560926b8abd86bd6f4fd2378d1e5e6964f3))
+* **menu:** missing meta payload when using options ([f8bcc0d](https://github.com/vexip-ui/vexip-ui/commit/f8bcc0daf486f11bd97c7702e5f260d20b366e7d))
+* **menu:** popper cannot disappear after quickly hover twice ([d644b54](https://github.com/vexip-ui/vexip-ui/commit/d644b54a4aa777645961054afd72caeaaffd77ec))
+* **tooltip:** radius variable typo ([cb978ee](https://github.com/vexip-ui/vexip-ui/commit/cb978ee3743112c3eb13860963f14149c64b2bd4))
+* **typography:** exactly using kbd tag for keyboard text ([f288ef6](https://github.com/vexip-ui/vexip-ui/commit/f288ef69796ef88d84b115f3d8f9468d8352b631))
+
+
+### 👓 Types
+
+* **table:** improve column type inferring for definitions ([#325](https://github.com/vexip-ui/vexip-ui/issues/325)) ([07b138d](https://github.com/vexip-ui/vexip-ui/commit/07b138d1232e56e27bc9f7478efdb9705c95d537))
+
+
+
 ## [2.1.21](https://github.com/vexip-ui/vexip-ui/compare/v2.1.20...v2.1.21) (2023-05-21)
 
 

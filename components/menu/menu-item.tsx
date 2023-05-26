@@ -253,7 +253,7 @@ const MenuItem = defineComponent({
       }
     }
 
-    function toggleGroupExpanded(expanded: boolean, upwrad = false) {
+    function toggleGroupExpanded(expanded: boolean, upward = false) {
       clearTimeout(timer.hover)
 
       menuState?.doForEachItem(item => {
@@ -263,8 +263,8 @@ const MenuItem = defineComponent({
       })
       groupExpanded.value = expanded
 
-      if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {
-        parentItemState.toggleGroupExpanded(expanded, upwrad)
+      if (upward && typeof parentItemState?.toggleGroupExpanded === 'function') {
+        parentItemState.toggleGroupExpanded(expanded, upward)
       }
     }
 

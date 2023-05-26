@@ -386,11 +386,11 @@ export default defineComponent({
       const containerRect = container.value.getBoundingClientRect()
       const { x, y } = zoomOrigin
       const { offsetWidth, offsetHeight } = container.value
-      const prveZoom = zoom.value
+      const prevZoom = zoom.value
 
       zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 5)
 
-      const delta = zoom.value / prveZoom - 1
+      const delta = zoom.value / prevZoom - 1
       const originX = delta * offsetWidth * 0.5
       const originY = delta * offsetHeight * 0.5
 
