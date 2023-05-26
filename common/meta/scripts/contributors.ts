@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { logger, components as allComponents, outputDir } from './utils'
+
+import { components as allComponents, logger, outputDir } from './utils'
 
 interface ContributorInfo {
   component: string,
