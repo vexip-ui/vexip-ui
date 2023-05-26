@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import MajorColor from './major-color.vue'
 import Wave from './wave.vue'
 import { Message } from 'vexip-ui'
@@ -17,6 +17,14 @@ const sign = ref<HTMLElement>()
 const waveTop = ref(494)
 
 const demoPrefix = ref(getDemoPrefix())
+const invalid = ref(false)
+const showError = computed(() => !!demoPrefix.value && invalid.value)
+
+const validRE = /^[a-zA-Z]([0-9a-zA-Z]+)?$/
+
+watch(demoPrefix, value => {
+  invalid.value = !validRE.test((value || '').trim())
+})
 
 function getStarted() {
   router.go(`/${locale.value}/guide/vexip-ui`)
@@ -37,6 +45,8 @@ function handleResize() {
 }
 
 function handleSvaePrefix() {
+  if (showError.value) return
+
   setDemoPrefix(demoPrefix.value)
   Message.success(t('common.prefixChanged'))
 }
@@ -68,12 +78,17 @@ function handleSvaePrefix() {
           </Button>
         </div>
       </div>
-      <P style="margin: 0 0 16px; font-size: 15px">
-        {{ t('common.changePrefix') }}
+      <P :type="showError ? 'error' : 'default'" style="margin: 0 0 16px; font-size: 15px">
+        {{ showError ? t('common.invalidPrefix') : t('common.changePrefix') }}
       </P>
-      <Input v-model:value="demoPrefix" :class="`${prefix}__prefix`" placeholder="e.g. Vxp">
+      <Input
+        v-model:value="demoPrefix"
+        sync
+        :class="`${prefix}__prefix`"
+        placeholder="e.g. Vxp"
+      >
         <template #after-action>
-          <Button type="primary" @click="handleSvaePrefix">
+          <Button type="primary" :disabled="showError" @click="handleSvaePrefix">
             {{ t('common.apply') }}
           </Button>
         </template>

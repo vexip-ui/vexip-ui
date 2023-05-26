@@ -18,7 +18,7 @@ $tooltip: map.merge(
     h-padding: 14px,
     content-color: get-css-var('content-color-base'),
     content-color-dark: get-css-var('bg-color-base'),
-    raduis: get-css-var('radius-base'),
+    radius: get-css-var('radius-base'),
     arrow-size: 7px,
     arrow-v-offset: 16px,
     arrow-h-offset: 28px
@@ -46,7 +46,7 @@ $tooltip: map.merge(
     min-height: get-css-var('tooltip-min-height');
     padding: get-css-var('tooltip-v-padding') get-css-var('tooltip-h-padding');
     background-color: get-css-var('tooltip-bg-color');
-    border-radius: get-css-var('tooltip-raduis');
+    border-radius: get-css-var('tooltip-radius');
     box-shadow: get-css-var('tooltip-shadow');
 
     #{$popper}--dark & {

@@ -36,7 +36,7 @@ const popupPlacements = Object.freeze<PopupPlacement[]>([
   'bottom-left'
 ])
 
-type QueneState =
+type QueueState =
   | {
     type: 'add',
     param: Record<string, unknown>
@@ -82,7 +82,7 @@ export default defineComponent({
   setup(props) {
     const nh = useNameHelper('popup')
     const items = ref<PopupItemState[]>([])
-    const queue: QueneState[] = []
+    const queue: QueueState[] = []
 
     const wrapper = ref<HTMLElement>()
 
@@ -153,9 +153,9 @@ export default defineComponent({
 
         const onClose = isFunction(item.onClose) ? item.onClose : noop
 
-        item.onClose = (reslut: boolean) => {
-          resolve(reslut)
-          onClose(reslut)
+        item.onClose = (result: boolean) => {
+          resolve(result)
+          onClose(result)
         }
 
         queue.push({

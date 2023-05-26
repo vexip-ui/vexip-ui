@@ -10,6 +10,7 @@ export const zhCN = defineI18n({
     changePrefix: '换个组件名前缀',
     apply: '应用',
     prefixChanged: '组件名前缀修改成功',
+    invalidPrefix: '前缀必须以字母开头，只包含字母和数字',
     changeColor: '换个主题色',
     rollColor: '随机一个颜色，可能很奇怪',
     resetColor: '重置主题色',
