@@ -8,6 +8,7 @@ export const enUS = defineI18n({
     getStarted: 'Get started',
     getComponents: 'Components',
     changePrefix: 'Change Component Name Prefix',
+    invalidPrefix: 'Prefix must starts with letter and only includes number and letter',
     apply: 'Apply',
     prefixChanged: 'Change the component name prefix successfully',
     changeColor: 'Change Major Color',
