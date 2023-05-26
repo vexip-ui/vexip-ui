@@ -96,18 +96,15 @@ export function useMoving(options: UseMovingOptions) {
     lazy: false
   }
 
+  let current = 0
+  let record = 0
+
   const throttleMove = throttle((event: PointerEvent) => {
-    const { clientX, clientY } = event
-    const { xStart, yStart, clientX: clientXStart, clientY: clientYStart, lazy } = internalState
-    const deltaX = clientX - clientXStart
-    const deltaY = clientY - clientYStart
+    if (record < current) return
 
-    internalState.deltaX = deltaX
-    internalState.deltaY = deltaY
-    internalState.xEnd = xStart + deltaX
-    internalState.yEnd = yStart + deltaY
+    updateState(event)
 
-    if (!lazy) {
+    if (!internalState.lazy) {
       x.value = internalState.xEnd
       y.value = internalState.yEnd
     }
@@ -133,6 +130,7 @@ export function useMoving(options: UseMovingOptions) {
     document.addEventListener('pointermove', move, { capture })
     document.addEventListener('pointerup', end, { capture })
 
+    record = current
     moving.value = true
   }
 
@@ -145,14 +143,29 @@ export function useMoving(options: UseMovingOptions) {
     document.removeEventListener('pointermove', move, { capture })
     document.removeEventListener('pointerup', end, { capture })
 
+    updateState(event)
+
     if (internalState.lazy) {
       x.value = internalState.xEnd
       y.value = internalState.yEnd
     }
 
     moving.value = false
+    ++current
 
     options.onEnd?.(internalState, event)
+  }
+
+  function updateState(event: PointerEvent) {
+    const { clientX, clientY } = event
+    const { xStart, yStart, clientX: clientXStart, clientY: clientYStart } = internalState
+    const deltaX = clientX - clientXStart
+    const deltaY = clientY - clientYStart
+
+    internalState.deltaX = deltaX
+    internalState.deltaY = deltaY
+    internalState.xEnd = xStart + deltaX
+    internalState.yEnd = yStart + deltaY
   }
 
   useListener(target, 'pointerdown', start, { capture })
