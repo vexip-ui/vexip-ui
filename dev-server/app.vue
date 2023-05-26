@@ -1,6 +1,6 @@
 <template>
-  <Grid tag="nav" class="dev-nav">
-    <Cell :width="18" :use-flex="{ align: 'middle' }">
+  <nav class="dev-nav">
+    <div class="dev-nav__left">
       <router-link
         v-for="route in router.options.routes"
         :key="route.path"
@@ -9,11 +9,13 @@
       >
         {{ route.name }}
       </router-link>
-    </Cell>
-    <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px">
+    </div>
+    <span role="none" style="flex: auto"></span>
+    <div class="dev-nav__right">
+      <DirectionSwitch style="margin-inline-end: 20px"></DirectionSwitch>
       <ThemeSwitch></ThemeSwitch>
-    </Cell>
-  </Grid>
+    </div>
+  </nav>
   <main class="dev-main">
     <router-view v-slot="{ Component }">
       <component :is="Component"></component>
@@ -24,6 +26,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
+import DirectionSwitch from '../docs/.vitepress/theme/components/direction-switch.vue'
 import ThemeSwitch from '../docs/.vitepress/theme/components/theme-switch.vue'
 
 const router = useRouter()
@@ -50,12 +53,18 @@ html {
     --ghost-bg-color: transparent;
     --ghost-padding: 0;
   }
+
+  &.rtl {
+    direction: rtl;
+  }
 }
 
 body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  font-family: var(--vxp-font-family-base);
+  font-size: var(--vxp-font-size-base);
   color: var(--vxp-content-color-base);
   background-color: var(--body-bg-color);
   transition: var(--vxp-transition-background);
@@ -67,8 +76,20 @@ body {
 }
 
 .dev-nav {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 50px;
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    padding: 0 10px;
+  }
 }
 
 .dev-main {
