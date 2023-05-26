@@ -52,7 +52,7 @@
     ".": {
       "import": "./es/index.mjs",
       "require": "./lib/index.cjs",
-      "types": "./dist/components/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./es": "./es/index.mjs",
     "./lib": "./lib/index.cjs",
