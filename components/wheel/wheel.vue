@@ -249,7 +249,7 @@ export default defineComponent({
     const prevDisabled = computed(() => {
       return (
         props.disabled ||
-        !itemList.value.slice(0, currentActive.value).some(item => !isItemDisbaled(item))
+        !itemList.value.slice(0, currentActive.value).some(item => !isItemDisabled(item))
       )
     })
     const nextDisabled = computed(() => {
@@ -258,7 +258,7 @@ export default defineComponent({
         currentActive.value >= itemList.value.length - 1 ||
         !itemList.value
           .slice(currentActive.value + 1, itemList.value.length)
-          .some(item => !isItemDisbaled(item))
+          .some(item => !isItemDisabled(item))
       )
     })
     const prevIcon = computed(() =>
@@ -352,7 +352,7 @@ export default defineComponent({
     })
     watch(() => props.candidate, computeSize)
 
-    function isItemDisbaled(item: ItemState) {
+    function isItemDisabled(item: ItemState) {
       return item.disabled || props.disabledItem(item.value, item.meta)
     }
 
@@ -369,7 +369,7 @@ export default defineComponent({
     }
 
     function findEnabledActive(active: number, sign = 1) {
-      if (itemList.value[active] && isItemDisbaled(itemList.value[active])) {
+      if (itemList.value[active] && isItemDisabled(itemList.value[active])) {
         active = queryEnabledActive(active, 1 * sign)
 
         if (sign > 0 ? active >= itemList.value.length : active < 0) {
@@ -489,7 +489,7 @@ export default defineComponent({
       wrapper,
       scroll,
 
-      isItemDisbaled,
+      isItemDisabled,
       beforeScroll,
       handleWheel,
       handleScrollEnd,

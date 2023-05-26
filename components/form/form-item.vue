@@ -31,7 +31,7 @@
       v-if="hasLabel"
       ref="labelEl"
       :class="nh.be('label')"
-      :style="{ width: `${computedlabelWidth}px` }"
+      :style="{ width: `${computedLabelWidth}px` }"
       :for="props.htmlFor || props.prop"
       @click="handleLabelClick"
     >
@@ -219,7 +219,7 @@ export default defineComponent({
       () => props.action || props.hideLabel === true || formProps.hideLabel
     )
     const hasLabel = computed(() => !(hideLabel.value || !(props.label || slots.label)))
-    const computedlabelWidth = computed(() => {
+    const computedLabelWidth = computed(() => {
       if (formProps.labelAlign) {
         return getLabelWidth(
           formProps.labelAlign === 'top'
@@ -247,11 +247,11 @@ export default defineComponent({
     const controlStyle = computed(() => {
       return {
         width:
-          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedlabelWidth.value}px)`,
+          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedLabelWidth.value}px)`,
         marginLeft:
           hasLabel.value || formProps.labelAlign === 'top'
             ? undefined
-            : `${computedlabelWidth.value}px`
+            : `${computedLabelWidth.value}px`
       }
     })
     const inputValue = computed(() => {
@@ -450,7 +450,7 @@ export default defineComponent({
       inputValue,
       useAsterisk,
       hasLabel,
-      computedlabelWidth,
+      computedLabelWidth,
       controlStyle,
       columnFlex,
 
