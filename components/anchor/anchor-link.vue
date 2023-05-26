@@ -89,7 +89,7 @@ export default defineComponent({
     })
     const linkStyle = computed(() => {
       return {
-        paddingLeft: `${baseIndentWidth * indent.value}px`
+        paddingInlineStart: `${baseIndentWidth * indent.value}px`
       }
     })
 

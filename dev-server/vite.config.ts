@@ -69,13 +69,7 @@ export default defineConfig(() => {
       }
     },
     optimizeDeps: {
-      include: [
-        '../components',
-        '@vexip-ui/bem-helper',
-        '@vexip-ui/hooks',
-        '@vexip-ui/icons',
-        '@vexip-ui/utils'
-      ]
+      include: ['../components', '@vexip-ui/icons']
     },
     css: {
       postcss: {

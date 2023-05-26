@@ -6,48 +6,48 @@
         :style="{
           height: '400px',
           padding: '15px',
-          marginRight: '15px',
+          marginInlineEnd: '15px',
           overflow: 'auto',
           boxShadow: '0 0 1px'
         }"
       >
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h2 id="anchor-1">
           锚点 1
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h2 id="anchor-2">
           锚点 2
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h2 id="anchor-3">
           锚点 3
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h3 id="anchor-3-1">
           锚点 3-1
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h3 id="anchor-3-2">
           锚点 3-2
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
         <h3 id="anchor-3-3">
           锚点 3-3
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           一些用来填充的内容
         </p>
       </div>

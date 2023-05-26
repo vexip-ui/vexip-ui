@@ -4,9 +4,14 @@ import '../style/dark/preset.scss'
 import { createApp } from 'vue'
 
 const isDark = localStorage.getItem('vexip-docs-theme-prefer-dark')
+const isRtl = localStorage.getItem('vexip-docs-direction-prefer-rtl')
 
 if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.classList.add('dark')
+}
+
+if (isRtl === 'true') {
+  document.documentElement.classList.add('rtl')
 }
 
 if (__THEME__) {

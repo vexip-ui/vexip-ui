@@ -59,6 +59,19 @@
   }
 }
 
+@mixin rtl {
+  $self: #{&};
+
+  @at-root {
+    html.rtl,
+    html[dir='rtl'] {
+      #{$self} {
+        @content;
+      }
+    }
+  }
+}
+
 @mixin around-border($border-color, $border-radius, $duration: 2000ms) {
   position: relative;
 

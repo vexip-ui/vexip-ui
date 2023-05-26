@@ -103,7 +103,7 @@ $alert: map.merge(
     display: inline-flex;
     align-items: center;
     padding: 3px 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('alert-close-color');
     cursor: pointer;
     background-color: transparent;
