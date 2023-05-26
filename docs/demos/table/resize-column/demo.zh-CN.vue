@@ -1,5 +1,10 @@
 <template>
-  <Table use-y-bar :data="data" :width="1000">
+  <Table
+    use-y-bar
+    :data="data"
+    :width="1000"
+    column-resizable
+  >
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>
     <TableColumn name="Job" id-key="job"></TableColumn>

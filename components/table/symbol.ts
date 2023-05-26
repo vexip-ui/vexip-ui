@@ -149,7 +149,9 @@ export type ColumnWithKey<
 > = TableColumnOptions<D, Val> & {
   key: Key,
   /** @internal */
-  first?: boolean
+  first?: boolean,
+  /** @internal */
+  last?: boolean
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -241,6 +243,7 @@ export interface StoreOptions {
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
   noCascaded: boolean,
+  columnResizable: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 
@@ -257,6 +260,7 @@ export interface StoreState extends StoreOptions {
   widths: Map<Key, number>,
   sorters: Map<Key, ParsedTableSorterOptions>,
   filters: Map<Key, ParsedFilterOptions>,
+  resized: Set<Key>,
   bodyScroll: number,
   padTop: number,
   startRow: number,
@@ -301,6 +305,8 @@ export interface TableHeadPayload {
 export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
+  getTableElement(): HTMLElement | undefined,
+  refreshXScroll(): void,
   emitRowEnter(payload: TableRowPayload): void,
   emitRowLeave(payload: TableRowPayload): void,
   emitRowClick(payload: TableRowPayload): void,

@@ -28,6 +28,7 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
+        :style="{ minWidth: `${totalWidth}px` }"
         @scroll="handleBodyScroll"
         @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
@@ -288,7 +289,7 @@ export default defineComponent({
     const dataKey = computed(() => {
       if (isDefined(props.dataKey)) {
         warnOnce(
-          "[vexip-ui:Table] 'data-key' prop has been deprecated, plesae " +
+          "[vexip-ui:Table] 'data-key' prop has been deprecated, please " +
             "using 'id' option of 'key-config' prop to instead it"
         )
 
@@ -328,6 +329,7 @@ export default defineComponent({
       keyConfig: keyConfig.value,
       disabledTree: props.disabledTree,
       noCascaded: props.noCascaded,
+      columnResizable: props.columnResizable,
       expandRenderer: props.expandRenderer
     })
 
@@ -335,6 +337,8 @@ export default defineComponent({
     provide(TABLE_ACTIONS, {
       increaseColumn,
       decreaseColumn,
+      getTableElement,
+      refreshXScroll,
       emitRowEnter,
       emitRowLeave,
       emitRowClick,
@@ -373,7 +377,9 @@ export default defineComponent({
         [nh.bm('highlight')]: props.highlight,
         [nh.bm('use-y-bar')]: props.useYBar,
         [nh.bm('transparent')]: props.transparent,
-        [nh.bm('virtual')]: props.virtual
+        [nh.bm('virtual')]: props.virtual,
+        [nh.bm('column-resizable')]: props.columnResizable,
+        [nh.bm('column-resizing')]: state.columnResizing
       }
     })
     const style = computed(() => {
@@ -445,6 +451,7 @@ export default defineComponent({
       setKeyConfig,
       setDisabledTree,
       setNoCascaded,
+      setColumnResizable,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -509,6 +516,7 @@ export default defineComponent({
       }
     )
     watch(() => props.noCascaded, setNoCascaded)
+    watch(() => props.columnResizable, setColumnResizable)
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)
@@ -599,6 +607,14 @@ export default defineComponent({
 
     function decreaseColumn(column: TableColumnOptions) {
       templateColumns.value.delete(column)
+    }
+
+    function getTableElement() {
+      return wrapper.value
+    }
+
+    function refreshXScroll() {
+      xScroll.value?.refresh()
     }
 
     function emitRowEnter(payload: TableRowPayload) {
@@ -974,6 +990,9 @@ export default defineComponent({
       useXScroll,
       barLength,
       bodyScrollHeight,
+      totalWidth: toRef(getters, 'totalWidth'),
+      leftFixedWidth: toRef(getters, 'leftFixedWidth'),
+      rightFixedWidth: toRef(getters, 'rightFixedWidth'),
       totalHeight: toRef(state, 'totalHeight'),
 
       store,

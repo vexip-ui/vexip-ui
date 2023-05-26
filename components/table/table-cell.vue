@@ -199,6 +199,9 @@ export default defineComponent({
     })
     const style = computed(() => {
       const width = state.widths.get(props.column.key) || 0
+      const maxWidth = state.resized.has(props.column.key)
+        ? `${width}px`
+        : `${props.column.width}px`
 
       let customStyle
 
@@ -215,9 +218,9 @@ export default defineComponent({
 
       return [
         {
+          maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`,
-          maxWidth: `${props.column.width}px`
+          width: `${props.column.width ?? width}px`
         },
         props.column.style || '',
         customStyle

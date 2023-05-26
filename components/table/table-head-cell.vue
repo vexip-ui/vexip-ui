@@ -11,6 +11,7 @@
     @click="handleClick"
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
+    @transitionend="refreshXScroll"
   >
     <Checkbox
       v-if="isSelection(column)"
@@ -137,6 +138,7 @@
         </template>
       </Tooltip>
     </template>
+    <div v-if="!column.last" ref="resizer" :class="nh.be('resizer')"></div>
   </div>
 </template>
 
@@ -150,7 +152,8 @@ import { Tooltip } from '@/components/tooltip'
 import { computed, defineComponent, inject, onMounted, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { isFunction } from '@vexip-ui/utils'
+import { useMoving } from '@vexip-ui/hooks'
+import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -196,6 +199,35 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement>()
 
+    const resizing = computed(() => state.columnResizing)
+
+    const { target: resizer } = useMoving({
+      capture: false,
+      onStart: state => {
+        const table = tableAction.getTableElement()
+
+        if (resizing.value || !table || !wrapper.value) return false
+
+        state.xStart = state.clientX - table.getBoundingClientRect().left
+
+        mutations.setColumnResizing(true)
+        mutations.setResizeLeft(state.xStart)
+      },
+      onMove: state => {
+        mutations.setResizeLeft(state.xEnd)
+      },
+      onEnd: ({ deltaX }) => {
+        mutations.setColumnResizing(false)
+
+        if (!wrapper.value) return
+
+        mutations.handleColumnResize(
+          props.column.key,
+          wrapper.value.getBoundingClientRect().width + deltaX
+        )
+      }
+    })
+
     const className = computed(() => {
       let customClass = null
 
@@ -220,6 +252,9 @@ export default defineComponent({
     })
     const style = computed(() => {
       const width = state.widths.get(props.column.key) || 0
+      const maxWidth = state.resized.has(props.column.key)
+        ? `${width}px`
+        : `${props.column.width}px`
 
       let customStyle
 
@@ -231,9 +266,9 @@ export default defineComponent({
 
       return [
         {
+          maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`,
-          maxWidth: `${props.column.width}px`
+          width: `${props.column.width ?? width}px`
         },
         props.column.style || '',
         customStyle
@@ -283,7 +318,11 @@ export default defineComponent({
     onMounted(() => {
       setTimeout(() => {
         if (wrapper.value) {
-          mutations.setColumnWidth(props.column.key, wrapper.value.getBoundingClientRect().width)
+          const width = wrapper.value.getBoundingClientRect().width
+
+          state.columnResizable
+            ? mutations.handleColumnResize(props.column.key, width)
+            : mutations.setColumnWidth(props.column.key, width)
         }
       }, 0)
     })
@@ -420,6 +459,7 @@ export default defineComponent({
       checkboxDisabled,
 
       wrapper,
+      resizer,
 
       isFunction,
       isSelection,
@@ -435,7 +475,8 @@ export default defineComponent({
       handleFilterCheck,
       handleFilterMultiple,
       handleResetFilter,
-      handleCheckAllRow
+      handleCheckAllRow,
+      refreshXScroll: () => nextFrameOnce(tableAction.refreshXScroll)
     }
   }
 })

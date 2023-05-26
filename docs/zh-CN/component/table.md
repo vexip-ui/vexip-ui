@@ -182,6 +182,14 @@
 
 :::
 
+:::demo table/resize-column
+
+### 调整列宽
+
+添加 `column-resizable` 属性可以开启列宽缩放功能。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -373,46 +381,47 @@ interface TableHeadPayload {
 
 ### Table 属性
 
-| 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于    |
-| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -       |
-| data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -       |
-| data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -       |
-| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -       |
-| height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -       |
-| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -       |
-| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                               | `null`         | `2.0.1` |
-| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                               | `null`         | `2.0.1` |
-| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                           | `null`         | `2.0.1` |
-| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                           | `null`         | `2.0.1` |
-| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                           | `null`         | `2.0.1` |
-| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                       | `null`         | `2.0.1` |
-| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                       | `null`         | `2.0.1` |
-| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                       | `null`         | `2.0.1` |
-| stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -       |
-| border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -       |
-| highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -       |
-| use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -       |
-| bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -       |
-| scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -       |
-| row-draggable   | `boolean`                                                     | 设置表格行是否可以拖拽排序                                   | `false`        | -       |
-| row-height      | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                 | `null`         | -       |
-| render-count    | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高 | `null`         | -       |
-| scroll-class    | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                               | `{}`           | -       |
-| expand-renderer | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                     | `null`         | -       |
-| current-page    | `number`                                                      | 设置表格当前显示的数据页                                     | `1`            | -       |
-| page-size       | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                  | `0`            | -       |
-| transparent     | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性         | `false`        | -       |
-| empty-text      | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -       |
-| single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -       |
-| single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -       |
-| locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0` |
-| custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4` |
-| custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4` |
-| key-config      | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6` |
-| disabled-tree   | `boolean`                                                     | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6` |
-| row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6` |
-| no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6` |
+| 名称             | 类型                                                          | 说明                                                         | 默认值         | 始于     |
+| ---------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | -------- |
+| columns          | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
+| data             | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
+| data-key         | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -        |
+| width            | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -        |
+| height           | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -        |
+| row-class        | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -        |
+| row-style        | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                               | `null`         | `2.0.1`  |
+| row-attrs        | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                               | `null`         | `2.0.1`  |
+| cell-class       | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                           | `null`         | `2.0.1`  |
+| cell-style       | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                           | `null`         | `2.0.1`  |
+| cell-attrs       | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                           | `null`         | `2.0.1`  |
+| head-class       | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                       | `null`         | `2.0.1`  |
+| head-style       | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                       | `null`         | `2.0.1`  |
+| head-attrs       | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                       | `null`         | `2.0.1`  |
+| stripe           | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -        |
+| border           | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -        |
+| highlight        | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -        |
+| use-y-bar        | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -        |
+| bar-fade         | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -        |
+| scroll-delta-y   | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -        |
+| row-draggable    | `boolean`                                                     | 设置表格行是否可以拖拽排序                                   | `false`        | -        |
+| row-height       | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                 | `null`         | -        |
+| render-count     | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高 | `null`         | -        |
+| scroll-class     | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                               | `{}`           | -        |
+| expand-renderer  | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                     | `null`         | -        |
+| current-page     | `number`                                                      | 设置表格当前显示的数据页                                     | `1`            | -        |
+| page-size        | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                  | `0`            | -        |
+| transparent      | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性         | `false`        | -        |
+| empty-text       | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -        |
+| single-sorter    | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -        |
+| single-filter    | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -        |
+| locale           | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0`  |
+| custom-sorter    | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4`  |
+| custom-filter    | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4`  |
+| key-config       | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6`  |
+| disabled-tree    | `boolean`                                                     | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6`  |
+| row-indent       | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6`  |
+| no-cascaded      | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6`  |
+| column-resizable | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
 
 ### Table 事件
 
