@@ -123,7 +123,7 @@
             ref="shortcutUnit"
             :class="nh.be('shortcuts')"
             tabindex="-1"
-            @focus="handleShrtcutsFocus"
+            @focus="handleShortcutsFocus"
             @blur="shortcutsFocused = false"
             @keydown="handleShortcutsKeydown"
           >
@@ -215,7 +215,7 @@ import type { Color, HSLAColor, HSVAColor, HSVColor, RGBAColor } from '@vexip-ui
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
-const defaultShotcuts = Object.freeze([
+const defaultShortcuts = Object.freeze([
   '#2d8cf0',
   '#19be6b',
   '#ff9900',
@@ -408,7 +408,7 @@ export default defineComponent({
         return props.shortcut
       }
 
-      return defaultShotcuts
+      return defaultShortcuts
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -622,7 +622,7 @@ export default defineComponent({
       }
     }
 
-    function handleShrtcutsFocus() {
+    function handleShortcutsFocus() {
       shortcutHitting.value = 0
       shortcutsFocused.value = true
     }
@@ -719,7 +719,7 @@ export default defineComponent({
       handleShortcutClick,
       toggleEditing,
       handleTabDown,
-      handleShrtcutsFocus,
+      handleShortcutsFocus,
       handleShortcutsKeydown,
       handleSpaceDown,
       handleEscDown,

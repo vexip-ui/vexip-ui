@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="contaniner"
+    ref="container"
     :class="className"
     role="scrollbar"
     :style="style"
@@ -87,7 +87,7 @@ export default defineComponent({
 
     const currentScroll = manualRef(props.scroll)
 
-    const contaniner = ref<HTMLElement>()
+    const container = ref<HTMLElement>()
     const bar = ref<HTMLElement>()
     const track = ref<HTMLElement>()
 
@@ -214,10 +214,10 @@ export default defineComponent({
             wrapperElement = instance.parent.proxy?.$el
 
             if (!wrapperElement) {
-              wrapperElement = contaniner.value?.parentElement ?? null
+              wrapperElement = container.value?.parentElement ?? null
             }
           } else {
-            wrapperElement = contaniner.value?.parentElement ?? null
+            wrapperElement = container.value?.parentElement ?? null
           }
         }
 
@@ -356,7 +356,7 @@ export default defineComponent({
       style,
       // barStyle,
 
-      contaniner,
+      container,
       bar,
       track,
 

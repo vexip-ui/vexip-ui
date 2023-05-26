@@ -50,7 +50,7 @@
               inherit
               text
               size="small"
-              @click="handleCancle"
+              @click="handleCancel"
             >
               {{ props.cancelText || locale.cancel }}
             </Button>
@@ -326,7 +326,7 @@ export default defineComponent({
       emitEvent(props.onConfirm)
     }
 
-    function handleCancle() {
+    function handleCancel() {
       handleClose(false)
       emitEvent(props.onCancel)
     }
@@ -355,7 +355,7 @@ export default defineComponent({
       handleShow,
       handleHide,
       handleConfirm,
-      handleCancle
+      handleCancel
     }
   }
 })
