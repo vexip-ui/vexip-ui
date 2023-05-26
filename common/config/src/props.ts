@@ -102,7 +102,7 @@ export function useProps<T extends Record<string, any>>(
 
           if (result === false) {
             console.warn(
-              `${toWarnPrefix(name)}: an invaild value is set to '${key as string}' prop`
+              `${toWarnPrefix(name)}: an invalid value is set to '${key as string}' prop`
             )
           }
         },
