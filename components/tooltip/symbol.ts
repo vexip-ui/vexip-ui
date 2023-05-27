@@ -1,7 +1,7 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export type TooltipTheme = 'light' | 'dark'
-export type ToopTipTrigger = 'hover' | 'click' | 'focus' | 'custom'
+export type TooltipTrigger = 'hover' | 'click' | 'focus' | 'custom'
 
 export type TooltipVirtual =
   | {
