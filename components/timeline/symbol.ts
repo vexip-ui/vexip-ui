@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 
-export type TimelinkItemType = 'default' | 'success' | 'error' | 'warning' | 'disabled'
+export type TimelineItemType = 'default' | 'success' | 'error' | 'warning' | 'disabled'
 
 export interface ItemState {
   label: string | number,

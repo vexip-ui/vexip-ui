@@ -6,4 +6,4 @@ export { timelineProps } from './props'
 export type TimelineExposed = InstanceType<typeof Timeline>
 
 export type { TimelineProps, TimelineCProps } from './props'
-export type { TimelinkItemType } from './symbol'
+export type { TimelineItemType } from './symbol'

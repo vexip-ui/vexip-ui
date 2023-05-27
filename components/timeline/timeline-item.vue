@@ -29,9 +29,9 @@ import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { timelineItemProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
-import type { ItemState, TimelinkItemType } from './symbol'
+import type { ItemState, TimelineItemType } from './symbol'
 
-const timelineItemTypes = Object.freeze<TimelinkItemType[]>([
+const timelineItemTypes = Object.freeze<TimelineItemType[]>([
   'default',
   'success',
   'error',
