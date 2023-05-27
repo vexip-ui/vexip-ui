@@ -130,7 +130,7 @@ async function main() {
   await run('npx', changelogArgs, { cwd: pkgDir })
 
   // 提交改动
-  logStep('Comitting changes...')
+  logStep('Committing changes...')
 
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' })
 

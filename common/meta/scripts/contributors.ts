@@ -64,7 +64,7 @@ async function graphql<Result>(query: string) {
 
 const nodeFlag: Record<string, string[]> = {}
 
-const OWENER = 'vexip-ui'
+const OWNER = 'vexip-ui'
 const REPO = 'vexip-ui'
 
 async function fetchContributors(fetchOptions: FetchOptions) {
@@ -76,7 +76,7 @@ async function fetchContributors(fetchOptions: FetchOptions) {
   // files of each component under default branch
   const query = `
     query {
-      repository(owner: "${OWENER}", name: "${REPO}") {
+      repository(owner: "${OWNER}", name: "${REPO}") {
         defaultBranchRef {
           target {
             ... on Commit {

@@ -1,13 +1,13 @@
 # Development Guide
 
-Before starting, ensure your mechine is having:
+Before starting, ensure your machine is having:
 
 - Node >= 18
 - pnpm >= 8
 
 ## Setup
 
-Fork [Vexip UI](https://github.com/vexip-ui/vexip-ui) and clone to your local mechine and install dependencies:
+Fork [Vexip UI](https://github.com/vexip-ui/vexip-ui) and clone to your local machine and install dependencies:
 
 ```sh
 pnpm install # pnpm i
@@ -34,7 +34,7 @@ After the server is successfully started, the demos of the components specified 
 The development server uses `8008` port and Chinese demos by default, you can add `-p` and `-l` parameters to the command to specify the port and language respectively:
 
 ```sh
-pnpm run serve [component] -p [port] -l [languagt]
+pnpm run serve [component] -p [port] -l [language]
 ```
 
 ## Documentation Development
