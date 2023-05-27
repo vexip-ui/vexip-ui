@@ -34,7 +34,7 @@ pnpm run serve [component]
 开发服务默认使用 `8008` 端口和中文示例，你可以在命令中添加 `-p` 和 `-l` 参数分别指定端口和语言：
 
 ```sh
-pnpm run serve [component] -p [port] -l [languagt]
+pnpm run serve [component] -p [port] -l [language]
 ```
 
 ## 文档开发
