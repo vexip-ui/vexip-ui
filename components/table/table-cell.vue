@@ -280,33 +280,23 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellEnter(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Enter', buildEventPayload(event))
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellLeave(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Leave', buildEventPayload(event))
     }
 
     function handleClick(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellClick(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Click', buildEventPayload(event))
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellDblclick(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Dblclick', buildEventPayload(event))
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellContextmenu(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Contextmenu', buildEventPayload(event))
     }
 
     function handleCheckRow(row: TableRowState, event: MouseEvent) {

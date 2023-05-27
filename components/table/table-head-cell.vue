@@ -199,11 +199,11 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement>()
 
-    const resizing = computed(() => state.columnResizing)
+    const resizing = computed(() => state.colResizing)
 
     const { target: resizer } = useMoving({
       capture: false,
-      onStart: state => {
+      onStart: (state, event) => {
         const table = tableAction.getTableElement()
 
         if (resizing.value || !table || !wrapper.value) return false
@@ -212,19 +212,22 @@ export default defineComponent({
 
         mutations.setColumnResizing(true)
         mutations.setResizeLeft(state.xStart)
+        tableAction.emitColResize('Start', buildEventPayload(event))
       },
-      onMove: state => {
+      onMove: (state, event) => {
         mutations.setResizeLeft(state.xEnd)
+        tableAction.emitColResize('Move', buildEventPayload(event))
       },
-      onEnd: ({ deltaX }) => {
+      onEnd: (state, event) => {
         mutations.setColumnResizing(false)
 
         if (!wrapper.value) return
 
         mutations.handleColumnResize(
           props.column.key,
-          wrapper.value.getBoundingClientRect().width + deltaX
+          wrapper.value.getBoundingClientRect().width + state.deltaX
         )
+        tableAction.emitColResize('End', buildEventPayload(event))
       }
     })
 
@@ -320,7 +323,7 @@ export default defineComponent({
         if (wrapper.value) {
           const width = wrapper.value.getBoundingClientRect().width
 
-          state.columnResizable
+          state.colResizable
             ? mutations.handleColumnResize(props.column.key, width)
             : mutations.setColumnWidth(props.column.key, width)
         }
@@ -340,33 +343,23 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitHeadEnter(buildEventPayload(event))
-      }
+      tableAction?.emitHeadEvent('Enter', buildEventPayload(event))
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitHeadLeave(buildEventPayload(event))
-      }
+      tableAction?.emitHeadEvent('Leave', buildEventPayload(event))
     }
 
     function handleClick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitHeadClick(buildEventPayload(event))
-      }
+      tableAction?.emitHeadEvent('Click', buildEventPayload(event))
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitHeadDblclick(buildEventPayload(event))
-      }
+      tableAction?.emitHeadEvent('Dblclick', buildEventPayload(event))
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (tableAction) {
-        tableAction.emitHeadContextmenu(buildEventPayload(event))
-      }
+      tableAction?.emitHeadEvent('Contextmenu', buildEventPayload(event))
     }
 
     function handleSortAsc() {

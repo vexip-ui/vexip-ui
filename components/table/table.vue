@@ -107,8 +107,8 @@
       ]"
     ></div>
     <div
-      v-if="props.columnResizable"
-      v-show="columnResizing"
+      v-if="props.colResizable"
+      v-show="colResizing"
       :class="nh.be('resize-indicator')"
       :style="{ left: `${resizeLeft}px` }"
     ></div>
@@ -152,6 +152,8 @@ import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
   Key,
+  MouseEventType,
+  MoveEventType,
   TableCellPayload,
   TableColumnOptions,
   TableHeadPayload,
@@ -246,7 +248,7 @@ export default defineComponent({
       disabledTree: false,
       rowIndent: '16px',
       noCascaded: false,
-      columnResizable: false
+      colResizable: false
     })
 
     const nh = useNameHelper('table')
@@ -329,7 +331,7 @@ export default defineComponent({
       keyConfig: keyConfig.value,
       disabledTree: props.disabledTree,
       noCascaded: props.noCascaded,
-      columnResizable: props.columnResizable,
+      colResizable: props.colResizable,
       expandRenderer: props.expandRenderer
     })
 
@@ -339,11 +341,6 @@ export default defineComponent({
       decreaseColumn,
       getTableElement,
       refreshXScroll,
-      emitRowEnter,
-      emitRowLeave,
-      emitRowClick,
-      emitRowDblclick,
-      emitRowContextmenu,
       emitRowCheck,
       emitAllRowCheck,
       emitRowExpand,
@@ -353,16 +350,10 @@ export default defineComponent({
       handleRowDragOver,
       handleRowDrop,
       handleRowDragEnd,
-      emitCellEnter,
-      emitCellLeave,
-      emitCellClick,
-      emitCellDblclick,
-      emitCellContextmenu,
-      emitHeadEnter,
-      emitHeadLeave,
-      emitHeadClick,
-      emitHeadDblclick,
-      emitHeadContextmenu
+      emitRowEvent,
+      emitCellEvent,
+      emitHeadEvent,
+      emitColResize
     })
 
     const { state, getters, mutations } = store
@@ -378,8 +369,8 @@ export default defineComponent({
         [nh.bm('use-y-bar')]: props.useYBar,
         [nh.bm('transparent')]: props.transparent,
         [nh.bm('virtual')]: props.virtual,
-        [nh.bm('column-resizable')]: props.columnResizable,
-        [nh.bm('column-resizing')]: state.columnResizing
+        [nh.bm('column-resizable')]: props.colResizable,
+        [nh.bm('column-resizing')]: state.colResizing
       }
     })
     const style = computed(() => {
@@ -516,7 +507,7 @@ export default defineComponent({
       }
     )
     watch(() => props.noCascaded, setNoCascaded)
-    watch(() => props.columnResizable, setColumnResizable)
+    watch(() => props.colResizable, setColumnResizable)
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)
@@ -615,26 +606,6 @@ export default defineComponent({
 
     function refreshXScroll() {
       xScroll.value?.refresh()
-    }
-
-    function emitRowEnter(payload: TableRowPayload) {
-      emitEvent(props.onRowEnter, payload)
-    }
-
-    function emitRowLeave(payload: TableRowPayload) {
-      emitEvent(props.onRowLeave, payload)
-    }
-
-    function emitRowClick(payload: TableRowPayload) {
-      emitEvent(props.onRowClick, payload)
-    }
-
-    function emitRowDblclick(payload: TableRowPayload) {
-      emitEvent(props.onRowDblclick, payload)
-    }
-
-    function emitRowContextmenu(payload: TableRowPayload) {
-      emitEvent(props.onRowContextmenu, payload)
     }
 
     function emitRowCheck(payload: TableRowPayload & { checked: boolean }) {
@@ -847,44 +818,20 @@ export default defineComponent({
       )
     }
 
-    function emitCellEnter(payload: TableCellPayload) {
-      emitEvent(props.onCellEnter, payload)
+    function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {
+      emitEvent(props[`onRow${type}`], payload)
     }
 
-    function emitCellLeave(payload: TableCellPayload) {
-      emitEvent(props.onCellLeave, payload)
+    function emitCellEvent(type: MouseEventType, payload: TableCellPayload) {
+      emitEvent(props[`onCell${type}`], payload)
     }
 
-    function emitCellClick(payload: TableCellPayload) {
-      emitEvent(props.onCellClick, payload)
+    function emitHeadEvent(type: MouseEventType, payload: TableHeadPayload) {
+      emitEvent(props[`onHead${type}`], payload)
     }
 
-    function emitCellDblclick(payload: TableCellPayload) {
-      emitEvent(props.onCellDblclick, payload)
-    }
-
-    function emitCellContextmenu(payload: TableCellPayload) {
-      emitEvent(props.onCellContextmenu, payload)
-    }
-
-    function emitHeadEnter(payload: TableHeadPayload) {
-      emitEvent(props.onHeadEnter, payload)
-    }
-
-    function emitHeadLeave(payload: TableHeadPayload) {
-      emitEvent(props.onHeadLeave, payload)
-    }
-
-    function emitHeadClick(payload: TableHeadPayload) {
-      emitEvent(props.onHeadClick, payload)
-    }
-
-    function emitHeadDblclick(payload: TableHeadPayload) {
-      emitEvent(props.onHeadDblclick, payload)
-    }
-
-    function emitHeadContextmenu(payload: TableHeadPayload) {
-      emitEvent(props.onHeadContextmenu, payload)
+    function emitColResize(type: MoveEventType, payload: TableHeadPayload) {
+      emitEvent(props[`onColResize${type}`], payload)
     }
 
     function computeRenderRows() {
@@ -982,7 +929,7 @@ export default defineComponent({
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),
       hasDragColumn,
-      columnResizing: toRef(state, 'columnResizing'),
+      colResizing: toRef(state, 'colResizing'),
       resizeLeft: toRef(state, 'resizeLeft'),
 
       className,

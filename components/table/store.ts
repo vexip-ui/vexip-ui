@@ -76,7 +76,7 @@ export function useStore(options: StoreOptions) {
     keyConfig: options.keyConfig,
     disabledTree: options.disabledTree,
     noCascaded: options.noCascaded,
-    columnResizable: options.columnResizable,
+    colResizable: options.colResizable,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -98,7 +98,7 @@ export function useStore(options: StoreOptions) {
     heightBITree: null!,
     virtualData: [],
     totalHeight: options.rowMinHeight * options.data.length,
-    columnResizing: false,
+    colResizing: false,
     resizeLeft: 0
   }) as StoreState
 
@@ -736,7 +736,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumnResizable(resizable: boolean) {
-    state.columnResizable = !!resizable
+    state.colResizable = !!resizable
   }
 
   function setCustomSorter(able: boolean) {
@@ -748,7 +748,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumnResizing(resizing: boolean) {
-    state.columnResizing = !!resizing
+    state.colResizing = !!resizing
   }
 
   function setResizeLeft(left: number) {

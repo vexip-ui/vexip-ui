@@ -3,7 +3,7 @@
     use-y-bar
     :data="data"
     :width="1000"
-    column-resizable
+    col-resizable
   >
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>

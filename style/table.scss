@@ -240,7 +240,7 @@ $table: map.merge(
     }
   }
 
-  &--column-resizable {
+  &--col-resizable {
     #{$cell},
     #{$head-cell} {
       will-change: width, max-width;
@@ -248,7 +248,7 @@ $table: map.merge(
     }
   }
 
-  &--column-resizing {
+  &--col-resizing {
     cursor: col-resize;
   }
 
@@ -442,7 +442,7 @@ $table: map.merge(
     opacity: 0%;
   }
 
-  &--column-resizing &__resizer {
+  &--col-resizing &__resizer {
     opacity: 0%;
   }
 

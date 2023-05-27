@@ -9,6 +9,8 @@ export type Data = any
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
+export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
+export type MoveEventType = 'Start' | 'Move' | 'End'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -243,7 +245,7 @@ export interface StoreOptions {
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
   noCascaded: boolean,
-  columnResizable: boolean,
+  colResizable: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 
@@ -269,7 +271,7 @@ export interface StoreState extends StoreOptions {
   heightBITree: BITree,
   virtualData: TableRowState[],
   totalHeight: number,
-  columnResizing: boolean,
+  colResizing: boolean,
   resizeLeft: number
 }
 
@@ -307,11 +309,6 @@ export interface TableActions {
   decreaseColumn(column: TableColumnOptions): void,
   getTableElement(): HTMLElement | undefined,
   refreshXScroll(): void,
-  emitRowEnter(payload: TableRowPayload): void,
-  emitRowLeave(payload: TableRowPayload): void,
-  emitRowClick(payload: TableRowPayload): void,
-  emitRowDblclick(payload: TableRowPayload): void,
-  emitRowContextmenu(payload: TableRowPayload): void,
   emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
@@ -321,16 +318,10 @@ export interface TableActions {
   handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDrop(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDragEnd(event: DragEvent): void,
-  emitCellEnter(payload: TableCellPayload): void,
-  emitCellLeave(payload: TableCellPayload): void,
-  emitCellClick(payload: TableCellPayload): void,
-  emitCellDblclick(payload: TableCellPayload): void,
-  emitCellContextmenu(payload: TableCellPayload): void,
-  emitHeadEnter(payload: TableHeadPayload): void,
-  emitHeadLeave(payload: TableHeadPayload): void,
-  emitHeadClick(payload: TableHeadPayload): void,
-  emitHeadDblclick(payload: TableHeadPayload): void,
-  emitHeadContextmenu(payload: TableHeadPayload): void
+  emitRowEvent(type: MouseEventType, payload: TableRowPayload): void,
+  emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
+  emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
+  emitColResize(type: MoveEventType, payload: TableHeadPayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

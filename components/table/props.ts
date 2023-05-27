@@ -88,7 +88,7 @@ export const tableProps = buildProps({
   disabledTree: booleanProp,
   rowIndent: [String, Number],
   noCascaded: booleanProp,
-  columnResizable: booleanProp,
+  colResizable: booleanProp,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
@@ -113,7 +113,10 @@ export const tableProps = buildProps({
   onHeadLeave: eventProp<(payload: TableHeadPayload) => void>(),
   onHeadClick: eventProp<(payload: TableHeadPayload) => void>(),
   onHeadDblclick: eventProp<(payload: TableHeadPayload) => void>(),
-  onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>()
+  onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeStart: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeMove: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>()
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>
