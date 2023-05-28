@@ -418,7 +418,8 @@ export default defineComponent({
       noRestTip: false,
       tagType: null,
       noPreview: false,
-      remote: false
+      remote: false,
+      popperFitSelectWidth: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -697,14 +698,8 @@ export default defineComponent({
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
     }
 
-    watch(
-      () => props.visible,
-      value => {
-        currentVisible.value = value
-      }
-    )
-    watch(currentVisible, value => {
-      if (value) {
+    function updatePopperVisible(visibleValue: boolean) {
+      if (visibleValue) {
         restTipShow.value = false
         initHittingIndex()
 
@@ -712,7 +707,13 @@ export default defineComponent({
           updatePopper()
 
           if (wrapper.value && popper.value?.wrapper) {
-            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
+            if (typeof props.popperFitSelectWidth === 'number') {
+              popper.value.wrapper.style.width = `${props.popperFitSelectWidth}px`
+            } else if (props.popperFitSelectWidth) {
+              popper.value.wrapper.style.width = `${wrapper.value.offsetWidth}px`
+            } else {
+              popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
+            }
           }
         })
 
@@ -722,6 +723,16 @@ export default defineComponent({
           }
         }, 32)
       }
+    }
+
+    watch(
+      () => props.visible,
+      value => {
+        currentVisible.value = value
+      }
+    )
+    watch(currentVisible, value => {
+      updatePopperVisible(value)
 
       syncInputValue()
       emitEvent(props.onToggle, value)
@@ -769,7 +780,14 @@ export default defineComponent({
       filterOptions(value)
     })
 
-    onMounted(syncInputValue)
+    onMounted(() => {
+      syncInputValue()
+
+      if (props.visible) {
+        updatePopperVisible(props.visible)
+        syncInputValue()
+      }
+    })
 
     function initValueAndLabel(value: SelectValue | null) {
       if (isNull(value)) {
