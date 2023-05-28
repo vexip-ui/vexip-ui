@@ -44,7 +44,7 @@ describe('Contextmenu', () => {
     await expect(promise).resolves.toEqual(['2'])
   })
 
-  it('cacel menu', async () => {
+  it('cancel menu', async () => {
     const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
     const wrapper = mount(Contextmenu)
 
