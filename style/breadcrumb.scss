@@ -96,10 +96,6 @@ $breadcrumb: map.merge(
     &:hover {
       color: get-css-var('breadcrumb-separator-color-hover');
     }
-
-    @include rtl {
-      transform: scaleX(-1);
-    }
   }
 
   &__item:last-child &__separator {

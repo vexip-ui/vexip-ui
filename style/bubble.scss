@@ -90,13 +90,13 @@ $bubble: map.merge(
   }
 
   @mixin top-arrow {
-    inset-block-end: 0;
+    bottom: 0;
     border-width: $size $size 0;
     border-block-start-color: $border-color;
     transform: translate(-50%, 100%);
 
     &::after {
-      inset-block-end: 1px;
+      bottom: 1px;
       border-width: $size $size 0;
       border-block-start-color: $bg-color;
       transform: translateX(-50%);
@@ -128,15 +128,15 @@ $bubble: map.merge(
   }
 
   @mixin bottom-arrow {
-    inset-block-start: 0;
+    top: 0;
     border-width: 0 $size $size;
-    border-block-end-color: $border-color;
+    border-bottom-color: $border-color;
     transform: translate(-50%, -100%);
 
     &::after {
       top: 1px;
       border-width: 0 $size $size;
-      border-block-end-color: $bg-color;
+      border-bottom-color: $bg-color;
       transform: translateX(-50%);
     }
   }
@@ -182,19 +182,19 @@ $bubble: map.merge(
   &--left &__arrow {
     @include left-arrow;
 
-    inset-block-start: 50%;
+    top: 50%;
   }
 
   &--left-start &__arrow {
     @include left-arrow;
 
-    inset-block-start: $v-offset;
+    top: $v-offset;
   }
 
   &--left-end &__arrow {
     @include left-arrow;
 
-    inset-block-start: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset});
   }
 
   &--right,
@@ -228,18 +228,18 @@ $bubble: map.merge(
   &--right &__arrow {
     @include right-arrow;
 
-    inset-block-start: 50%;
+    top: 50%;
   }
 
   &--right-start &__arrow {
     @include right-arrow;
 
-    inset-block-start: $v-offset;
+    top: $v-offset;
   }
 
   &--right-end &__arrow {
     @include right-arrow;
 
-    inset-block-start: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset});
   }
 }
