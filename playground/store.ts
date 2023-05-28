@@ -45,7 +45,7 @@ const pkgPathMap: Record<string, string | PathMeta> = {
   '@vexip-ui/utils': 'dist/index.mjs'
 }
 
-const inertnalFiles: Record<string, string> = {
+const internalFiles: Record<string, string> = {
   [themeFile]: themeCode
 }
 
@@ -97,8 +97,8 @@ export function useReplStore(options: ReplOptions = {}) {
     files[appFile] = new File(appFile, appCode)
   }
 
-  for (const filename of Object.keys(inertnalFiles)) {
-    files[filename] = new File(filename, inertnalFiles[filename], true)
+  for (const filename of Object.keys(internalFiles)) {
+    files[filename] = new File(filename, internalFiles[filename], true)
   }
 
   if (!files[importsFile]) {
@@ -222,7 +222,7 @@ export function useReplStore(options: ReplOptions = {}) {
   }
 
   function setActive(filename: string) {
-    if (!inertnalFiles[filename]) {
+    if (!internalFiles[filename]) {
       state.activeFile = state.files[filename]
     }
   }
@@ -261,7 +261,7 @@ export function useReplStore(options: ReplOptions = {}) {
     const exported: Record<string, string> = {}
 
     for (const filename of Object.keys(state.files)) {
-      if (!inertnalFiles[filename]) {
+      if (!internalFiles[filename]) {
         exported[filename] = state.files[filename].code
       }
     }

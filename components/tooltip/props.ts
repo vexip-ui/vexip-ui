@@ -10,10 +10,10 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { TooltipVirtual, ToopTipTrigger } from './symbol'
+import type { TooltipTrigger, TooltipVirtual } from './symbol'
 
 export const tooltipProps = buildProps({
-  trigger: String as PropType<ToopTipTrigger>,
+  trigger: String as PropType<TooltipTrigger>,
   wrapper: booleanStringProp,
   noArrow: booleanProp,
   transitionName: String,

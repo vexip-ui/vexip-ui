@@ -40,7 +40,7 @@ export const inputProps = buildProps({
   maxLength: Number,
   before: String,
   after: String,
-  // 是否显示切换 passwrod 为明文的按钮
+  // 是否显示切换 password 为明文的按钮
   plainPassword: booleanProp,
   clearable: booleanProp,
   loading: booleanProp,

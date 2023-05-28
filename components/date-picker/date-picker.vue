@@ -188,7 +188,7 @@ import {
   doubleDigits,
   getTime,
   isDefined,
-  isLeepYear,
+  isLeapYear,
   startOfMonth,
   toDate,
   toFalse,
@@ -948,7 +948,7 @@ export default defineComponent({
             if (month !== 2) {
               lastDay = 30 + (month % 2)
             } else {
-              if (isLeepYear(dateValue.year)) {
+              if (isLeapYear(dateValue.year)) {
                 lastDay = 29
               } else {
                 lastDay = 28

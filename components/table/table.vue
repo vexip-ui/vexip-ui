@@ -277,7 +277,7 @@ export default defineComponent({
     const userLocale = computed(() => {
       if (isDefined(props.emptyText)) {
         warnOnce(
-          "[vexip-ui:Table] 'empty-text' prop has been deprecated, plesae " +
+          "[vexip-ui:Table] 'empty-text' prop has been deprecated, please " +
             "using 'empty' option of 'locale' prop to instead it"
         )
 

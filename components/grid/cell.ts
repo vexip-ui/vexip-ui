@@ -3,12 +3,12 @@ import { computed, defineComponent, h, inject, provide, reactive, watch } from '
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { has, isDefined } from '@vexip-ui/utils'
 import { cellProps } from './props'
-import { breakPoints, currentBreakPoint } from './helpler'
+import { breakPoints, currentBreakPoint } from './helper'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
 import type { ClassType } from '@vexip-ui/config'
-import type { BreakPoint } from './helpler'
+import type { BreakPoint } from './helper'
 
 export default defineComponent({
   name: 'Cell',
