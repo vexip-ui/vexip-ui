@@ -13,8 +13,8 @@
       id-key="firstName"
       :attrs="{ 'data-label': 'First Name' }"
     ></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName" class-name="demo-column-class"></TableColumn>
-    <TableColumn name="Job" id-key="job" style="font-weight: bold;"></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName" class="demo-column-class"></TableColumn>
+    <TableColumn name="Job" id-key="job" style="font-weight: bold"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>

@@ -312,9 +312,7 @@ export default defineComponent({
       mutations.setRowHover(rowKey.value, true)
 
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowEnter({ row: data, key, index, event })
+        tableAction.emitRowEvent('Enter', buildEventPayload(event))
       }
     }
 
@@ -322,25 +320,25 @@ export default defineComponent({
       mutations.setRowHover(rowKey.value, false)
 
       if (!props.isHead && tableAction) {
-        tableAction.emitRowLeave(buildEventPayload(event))
+        tableAction.emitRowEvent('Leave', buildEventPayload(event))
       }
     }
 
     function handleClick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowClick(buildEventPayload(event))
+        tableAction.emitRowEvent('Click', buildEventPayload(event))
       }
     }
 
     function handleDblclick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowDblclick(buildEventPayload(event))
+        tableAction.emitRowEvent('Dblclick', buildEventPayload(event))
       }
     }
 
     function handleContextmenu(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowContextmenu(buildEventPayload(event))
+        tableAction.emitRowEvent('Contextmenu', buildEventPayload(event))
       }
     }
 

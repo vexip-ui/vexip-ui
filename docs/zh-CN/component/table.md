@@ -182,6 +182,14 @@
 
 :::
 
+:::demo table/resize-column
+
+### 调整列宽
+
+添加 `col-resizable` 属性可以开启列宽缩放功能。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -369,80 +377,88 @@ interface TableHeadPayload {
   index: number,
   event: Event
 }
+
+interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
 ```
 
 ### Table 属性
 
-| 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于    |
-| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -       |
-| data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -       |
-| data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -       |
-| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -       |
-| height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -       |
-| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -       |
-| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                               | `null`         | `2.0.1` |
-| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                               | `null`         | `2.0.1` |
-| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                           | `null`         | `2.0.1` |
-| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                           | `null`         | `2.0.1` |
-| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                           | `null`         | `2.0.1` |
-| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                       | `null`         | `2.0.1` |
-| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                       | `null`         | `2.0.1` |
-| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                       | `null`         | `2.0.1` |
-| stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -       |
-| border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -       |
-| highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -       |
-| use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -       |
-| bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -       |
-| scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -       |
-| row-draggable   | `boolean`                                                     | 设置表格行是否可以拖拽排序                                   | `false`        | -       |
-| row-height      | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                 | `null`         | -       |
-| render-count    | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高 | `null`         | -       |
-| scroll-class    | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                               | `{}`           | -       |
-| expand-renderer | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                     | `null`         | -       |
-| current-page    | `number`                                                      | 设置表格当前显示的数据页                                     | `1`            | -       |
-| page-size       | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                  | `0`            | -       |
-| transparent     | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性         | `false`        | -       |
-| empty-text      | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -       |
-| single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -       |
-| single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -       |
-| locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0` |
-| custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4` |
-| custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4` |
-| key-config      | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6` |
-| disabled-tree   | `boolean`                                                     | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6` |
-| row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6` |
-| no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6` |
+| 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于     |
+| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | -------- |
+| columns         | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
+| data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
+| data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -        |
+| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -        |
+| height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -        |
+| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -        |
+| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                               | `null`         | `2.0.1`  |
+| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                               | `null`         | `2.0.1`  |
+| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                           | `null`         | `2.0.1`  |
+| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                           | `null`         | `2.0.1`  |
+| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                           | `null`         | `2.0.1`  |
+| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                       | `null`         | `2.0.1`  |
+| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                       | `null`         | `2.0.1`  |
+| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                       | `null`         | `2.0.1`  |
+| stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -        |
+| border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -        |
+| highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -        |
+| use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -        |
+| bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -        |
+| scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -        |
+| row-draggable   | `boolean`                                                     | 设置表格行是否可以拖拽排序                                   | `false`        | -        |
+| row-height      | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                 | `null`         | -        |
+| render-count    | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高 | `null`         | -        |
+| scroll-class    | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                               | `{}`           | -        |
+| expand-renderer | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                     | `null`         | -        |
+| current-page    | `number`                                                      | 设置表格当前显示的数据页                                     | `1`            | -        |
+| page-size       | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                  | `0`            | -        |
+| transparent     | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性         | `false`        | -        |
+| empty-text      | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -        |
+| single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -        |
+| single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -        |
+| locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0`  |
+| custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4`  |
+| custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4`  |
+| key-config      | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6`  |
+| disabled-tree   | `boolean`                                                     | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6`  |
+| row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6`  |
+| no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6`  |
+| col-resizable   | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
 
 ### Table 事件
 
-| 名称             | 说明                                                                         | 参数                                                                                    | 始于    |
-| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------- |
-| body-scroll      | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | `(scroll: { client: number, percent: number })`                                         | -       |
-| row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -       |
-| row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -       |
-| row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -       |
-| row-dblclick     | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
-| row-contextmenu  | 当右击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
-| row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: TableRowPayload)`                                                            | -       |
-| row-check-all    | 当进行了全选时触发，返回当前是否为全选状态以及是否处于部分全选状态           | `(checked: boolean, partial: boolean)`                                                  | -       |
-| row-expand       | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | `(payload: TableRowPayload)`                                                            | -       |
-| row-drag-start   | 当行将要开始拖拽时触发，返回当前行的数据                                     | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
-| row-drag-over    | 当行正在拖拽时触发，返回前行的数据                                           | `(data: Record<string, unknown>, event: DragEvent)`                                     | -       |
-| row-drop         | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | `(data: Record<string, unknown>, dropType?: 'before' \| 'after', event: DragEvent)`     | -       |
-| row-drag-end     | 当行结束拖拽时触发，返回前行的数据和所有行的数据                             | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -       |
-| row-filter       | 当发生表格数据过滤时触发，返回参与了过滤的列信息与过滤后的数据               | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -       |
-| row-sort         | 当发生表格数据排序时触发，返回参与了排序的列信息与排序后的数据               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -       |
-| cell-enter       | 当鼠标移入了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| cell-leave       | 当鼠标移出了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| cell-click       | 当点击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| cell-dblclick    | 当双击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| cell-contextmenu | 当右击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| head-enter       | 当鼠标移入了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
-| head-leave       | 当鼠标移出了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
-| head-click       | 当点击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
-| head-dblclick    | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
-| head-contextmenu | 当右击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
+| 名称             | 说明                                                                         | 参数                                                                                    | 始于     |
+| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
+| body-scroll      | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | `(scroll: { client: number, percent: number })`                                         | -        |
+| row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
+| row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
+| row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -        |
+| row-dblclick     | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-contextmenu  | 当右击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: TableRowPayload)`                                                            | -        |
+| row-check-all    | 当进行了全选时触发，返回当前是否为全选状态以及是否处于部分全选状态           | `(checked: boolean, partial: boolean)`                                                  | -        |
+| row-expand       | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | `(payload: TableRowPayload)`                                                            | -        |
+| row-drag-start   | 当行将要开始拖拽时触发，返回当前行的数据                                     | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drag-over    | 当行正在拖拽时触发，返回前行的数据                                           | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drop         | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | `(data: Record<string, unknown>, dropType?: 'before' \| 'after', event: DragEvent)`     | -        |
+| row-drag-end     | 当行结束拖拽时触发，返回前行的数据和所有行的数据                             | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -        |
+| row-filter       | 当发生表格数据过滤时触发，返回参与了过滤的列信息与过滤后的数据               | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -        |
+| row-sort         | 当发生表格数据排序时触发，返回参与了排序的列信息与排序后的数据               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -        |
+| cell-enter       | 当鼠标移入了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-leave       | 当鼠标移出了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-click       | 当点击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-dblclick    | 当双击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-contextmenu | 当右击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| head-enter       | 当鼠标移入了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-leave       | 当鼠标移出了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-click       | 当点击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-dblclick    | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-contextmenu | 当右击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| col-resize-start | 当列要开始调整宽度时触发，返回列数据和列索引                                 | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-move  | 当列正在调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-end   | 当列结束调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
 
 ### Table 插槽
 
@@ -469,7 +485,8 @@ interface TableHeadPayload {
 | key \| id-key   | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`        | -        |
 | accessor        | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -        |
 | fixed           | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -        |
-| class-name      | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
+| ~~class-name~~  | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
+| class           | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | `2.1.19` |
 | style           | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1`  |
 | attrs           | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1`  |
 | type            | `TableColumnType`                      | 设置内置特定类型列                                                           | `null`      | -        |
