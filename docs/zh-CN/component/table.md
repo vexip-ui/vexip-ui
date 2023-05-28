@@ -485,7 +485,8 @@ interface TableColResizePayload extends TableHeadPayload {
 | key \| id-key   | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`        | -        |
 | accessor        | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -        |
 | fixed           | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -        |
-| class-name      | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
+| ~~class-name~~  | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
+| class           | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | `2.1.19` |
 | style           | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1`  |
 | attrs           | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1`  |
 | type            | `TableColumnType`                      | 设置内置特定类型列                                                           | `null`      | -        |
