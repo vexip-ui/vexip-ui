@@ -417,7 +417,7 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false,
+      preview: false,
       remote: false
     })
 
@@ -688,7 +688,7 @@ export default defineComponent({
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
     const hittingLabel = computed(() => {
-      return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
+      return !props.preview && currentVisible.value ? hittingOption.value?.label : undefined
     })
 
     function getOptionFromMap(value?: string | number | null) {

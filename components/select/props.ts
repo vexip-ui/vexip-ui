@@ -70,7 +70,7 @@ export const selectProps = buildProps({
   maxTagCount: Number,
   noRestTip: booleanProp,
   tagType: String as PropType<TagType>,
-  noPreview: booleanProp,
+  preview: booleanProp,
   remote: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
