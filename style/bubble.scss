@@ -60,11 +60,8 @@ $bubble: map.merge(
       position: absolute;
       width: 0;
       height: 0;
-      border: {
-        width: 0;
-        color: transparent;
-        style: solid;
-      }
+      border-block: solid 0 transparent;
+      border-inline: solid 0 transparent;
     }
 
     &::after {
@@ -90,15 +87,15 @@ $bubble: map.merge(
   }
 
   @mixin top-arrow {
-    bottom: 0;
+    inset-block-end: 0;
     border-width: $size $size 0;
-    border-top-color: $border-color;
+    border-block-start-color: $border-color;
     transform: translate(-50%, 100%);
 
     &::after {
-      bottom: 1px;
+      inset-block-end: 1px;
       border-width: $size $size 0;
-      border-top-color: $bg-color;
+      border-block-start-color: $bg-color;
       transform: translateX(-50%);
     }
   }
@@ -106,19 +103,19 @@ $bubble: map.merge(
   &--top &__arrow {
     @include top-arrow;
 
-    left: 50%;
+    inset-inline-start: 50%;
   }
 
   &--top-start &__arrow {
     @include top-arrow;
 
-    left: $h-offset;
+    inset-inline-start: $h-offset;
   }
 
   &--top-end &__arrow {
     @include top-arrow;
 
-    left: calc(100% - #{$h-offset});
+    inset-inline-start: calc(100% - #{$h-offset});
   }
 
   &--bottom,
@@ -128,15 +125,15 @@ $bubble: map.merge(
   }
 
   @mixin bottom-arrow {
-    top: 0;
+    inset-block-start: 0;
     border-width: 0 $size $size;
-    border-bottom-color: $border-color;
+    border-block-end-color: $border-color;
     transform: translate(-50%, -100%);
 
     &::after {
       top: 1px;
       border-width: 0 $size $size;
-      border-bottom-color: $bg-color;
+      border-block-end-color: $bg-color;
       transform: translateX(-50%);
     }
   }
@@ -144,19 +141,19 @@ $bubble: map.merge(
   &--bottom &__arrow {
     @include bottom-arrow;
 
-    left: 50%;
+    inset-inline-start: 50%;
   }
 
   &--bottom-start &__arrow {
     @include bottom-arrow;
 
-    left: $h-offset;
+    inset-inline-start: $h-offset;
   }
 
   &--bottom-end &__arrow {
     @include bottom-arrow;
 
-    left: calc(100% - #{$h-offset});
+    inset-inline-start: calc(100% - #{$h-offset});
   }
 
   &--left,
@@ -166,15 +163,15 @@ $bubble: map.merge(
   }
 
   @mixin left-arrow {
-    right: 0;
+    inset-inline-end: 0;
     border-width: $size 0 $size $size;
-    border-left-color: $border-color;
+    border-inline-start-color: $border-color;
     transform: translate(100%, -50%);
 
     &::after {
-      right: 1px;
+      inset-inline-end: 1px;
       border-width: $size 0 $size $size;
-      border-left-color: $bg-color;
+      border-inline-start-color: $bg-color;
       transform: translateY(-50%);
     }
   }
@@ -182,19 +179,19 @@ $bubble: map.merge(
   &--left &__arrow {
     @include left-arrow;
 
-    top: 50%;
+    inset-block-start: 50%;
   }
 
   &--left-start &__arrow {
     @include left-arrow;
 
-    top: $v-offset;
+    inset-block-start: $v-offset;
   }
 
   &--left-end &__arrow {
     @include left-arrow;
 
-    top: calc(100% - #{$v-offset});
+    inset-block-start: calc(100% - #{$v-offset});
   }
 
   &--right,
@@ -204,34 +201,42 @@ $bubble: map.merge(
   }
 
   @mixin right-arrow {
-    left: 0;
+    inset-inline-start: 0;
     border-width: $size $size $size 0;
-    border-right-color: $border-color;
+    border-inline-end-color: $border-color;
     transform: translate(-100%, -50%);
 
+    @include rtl {
+      transform: translate(100%, -50%);
+    }
+
     &::after {
-      left: 1px;
+      inset-inline-start: 1px;
       border-width: $size $size $size 0;
-      border-right-color: $bg-color;
+      border-inline-end-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        transform: translateY(-100%);
+      }
     }
   }
 
   &--right &__arrow {
     @include right-arrow;
 
-    top: 50%;
+    inset-block-start: 50%;
   }
 
   &--right-start &__arrow {
     @include right-arrow;
 
-    top: $v-offset;
+    inset-block-start: $v-offset;
   }
 
   &--right-end &__arrow {
     @include right-arrow;
 
-    top: calc(100% - #{$v-offset});
+    inset-block-start: calc(100% - #{$v-offset});
   }
 }

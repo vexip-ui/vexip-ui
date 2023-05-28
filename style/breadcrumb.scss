@@ -90,12 +90,16 @@ $breadcrumb: map.merge(
     color: get-css-var('breadcrumb-separator-color');
     cursor: pointer;
     user-select: none;
-    border-right: $border-a transparent;
-    border-left: $border-a transparent;
+    border-inline-start: $border-a transparent;
+    border-inline-end: $border-a transparent;
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
       color: get-css-var('breadcrumb-separator-color-hover');
+    }
+
+    @include rtl {
+      transform: scaleX(-1);
     }
   }
 
