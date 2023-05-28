@@ -494,7 +494,7 @@ export default defineComponent({
       handleChange()
     }
 
-    function getForamttedColor() {
+    function getFormattedColor() {
       let color: Color
 
       if (props.format === 'hex') {
@@ -540,7 +540,7 @@ export default defineComponent({
     }
 
     function handleChange() {
-      const formattedColor = getForamttedColor()
+      const formattedColor = getFormattedColor()
 
       setFieldValue(formattedColor)
       emitEvent(props.onChange, formattedColor)
@@ -574,7 +574,7 @@ export default defineComponent({
       currentValue.value = rgbToHsv(r, g, b)
       currentAlpha.value = a
 
-      emitEvent(props.onShortcut, getForamttedColor())
+      emitEvent(props.onShortcut, getFormattedColor())
     }
 
     function toggleEditing(able: boolean) {
