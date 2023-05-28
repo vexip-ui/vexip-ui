@@ -28,9 +28,9 @@
 
 :::
 
-:::demo timeline/sides
+:::demo timeline/alternate
 
-### 双边模式
+### 交替模式
 
 有一个需求用到这样子的设计，于是它就诞生了。
 
@@ -50,15 +50,16 @@
 
 ### Timeline 属性
 
-| 名称       | 类型               | 说明                                                          | 默认值  | 始于     |
-| ---------- | ------------------ | ------------------------------------------------------------- | ------- | -------- |
-| pending    | `boolean`          | 设置时间线是否为未完成状态                                    | `false` | -        |
-| both-sides | `boolean`          | 设置是否开启两侧模式                                          | `false` | -        |
-| dashed     | `boolean`          | 设置时间线是否为虚线                                          | `false` | -        |
-| lineColor  | `string`           | 设置时间线的颜色                                              | `null`  | -        |
-| spacing    | `number \| string` | 设置时间节点间的间隔距离，可以传入一个数字或合法的 css 长度值 | `null`  | -        |
-| flip       | `boolean`          | 设置是否翻转内容                                              | `false` | `2.0.18` |
-| horizontal | `boolean`          | 设置时间线是否为横向                                          | `false` | `2.0.18` |
+| 名称           | 类型               | 说明                                                          | 默认值  | 始于     |
+| -------------- | ------------------ | ------------------------------------------------------------- | ------- | -------- |
+| pending        | `boolean`          | 设置时间线是否为未完成状态                                    | `false` | -        |
+| ~~both-sides~~ | `boolean`          | 设置是否开启两侧模式                                          | `false` | -        |
+| dashed         | `boolean`          | 设置时间线是否为虚线                                          | `false` | -        |
+| lineColor      | `string`           | 设置时间线的颜色                                              | `null`  | -        |
+| spacing        | `number \| string` | 设置时间节点间的间隔距离，可以传入一个数字或合法的 css 长度值 | `null`  | -        |
+| flip           | `boolean`          | 设置是否翻转内容                                              | `false` | `2.0.18` |
+| horizontal     | `boolean`          | 设置时间线是否为横向                                          | `false` | `2.0.18` |
+| alternate      | `boolean`          | 设置是否开启交替模式                                          | `false` | `2.1.23` |
 
 ### Timeline 事件
 
