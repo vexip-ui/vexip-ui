@@ -60,8 +60,11 @@ $bubble: map.merge(
       position: absolute;
       width: 0;
       height: 0;
-      border-block: solid 0 transparent;
-      border-inline: solid 0 transparent;
+      border: {
+        width: 0;
+        color: transparent;
+        style: solid;
+      }
     }
 
     &::after {

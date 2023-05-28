@@ -70,7 +70,7 @@ $badge: map.merge(
 
     &--fixed {
       position: absolute;
-      inset-block-start: 0;
+      top: 0;
       inset-inline-end: 0;
       transform: translate(50%, -50%);
 
