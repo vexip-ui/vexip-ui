@@ -28,7 +28,7 @@ export interface MenuItemState {
   transfer: Readonly<boolean | string>,
   cachedExpanded: boolean,
   updateSonSelected(selected: boolean, upstream?: boolean): void,
-  toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
+  toggleGroupExpanded(expanded: boolean, upward?: boolean): void,
   handleMouseEnter(): void,
   handleMouseLeave(): void
 }
