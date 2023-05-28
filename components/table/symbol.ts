@@ -304,6 +304,10 @@ export interface TableHeadPayload {
   event: Event
 }
 
+export interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
+
 export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
@@ -321,7 +325,7 @@ export interface TableActions {
   emitRowEvent(type: MouseEventType, payload: TableRowPayload): void,
   emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
   emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
-  emitColResize(type: MoveEventType, payload: TableHeadPayload): void
+  emitColResize(type: MoveEventType, payload: TableColResizePayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

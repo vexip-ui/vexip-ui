@@ -377,6 +377,10 @@ interface TableHeadPayload {
   index: number,
   event: Event
 }
+
+interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
 ```
 
 ### Table Props
@@ -452,9 +456,9 @@ interface TableHeadPayload {
 | head-click       | Emitted when a head cell is clicked, returns column data and column index                                                            | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
 | head-dblclick    | Emitted when a head cell is double-clicked, returns column data and column index                                                     | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
 | head-contextmenu | Emitted when a head cell is right-clicked, returns column data and column index                                                      | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| col-resize-start | Emitted when a column starts to resize, returns column data and column index                                                         | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
-| col-resize-move  | Emitted when a column is being resized, returns column data and column index                                                         | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
-| col-resize-end   | Emitted when a column ends to resize, returns column data and column index                                                           | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
+| col-resize-start | Emitted when a column starts to resize, returns column data and column index                                                         | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-move  | Emitted when a column is being resized, returns column data and column index                                                         | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-end   | Emitted when a column ends to resize, returns column data and column index                                                           | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
 
 ### Table Slots
 

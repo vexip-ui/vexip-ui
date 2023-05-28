@@ -377,6 +377,10 @@ interface TableHeadPayload {
   index: number,
   event: Event
 }
+
+interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
 ```
 
 ### Table 属性
@@ -452,9 +456,9 @@ interface TableHeadPayload {
 | head-click       | 当点击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
 | head-dblclick    | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
 | head-contextmenu | 当右击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| col-resize-start | 当列要开始调整宽度时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
-| col-resize-move  | 当列正在调整宽度时触发，返回列数据和列索引                                   | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
-| col-resize-end   | 当列结束调整宽度时触发，返回列数据和列索引                                   | `(payload: TableHeadPayload)`                                                           | `2.1.23` |
+| col-resize-start | 当列要开始调整宽度时触发，返回列数据和列索引                                 | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-move  | 当列正在调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-end   | 当列结束调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
 
 ### Table 插槽
 

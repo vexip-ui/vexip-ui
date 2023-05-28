@@ -196,10 +196,11 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
+    const resizing = computed(() => state.colResizing)
 
     const wrapper = ref<HTMLElement>()
 
-    const resizing = computed(() => state.colResizing)
+    let currentWidth = 0
 
     const { target: resizer } = useMoving({
       capture: false,
@@ -209,25 +210,29 @@ export default defineComponent({
         if (resizing.value || !table || !wrapper.value) return false
 
         state.xStart = state.clientX - table.getBoundingClientRect().left
+        currentWidth = wrapper.value.getBoundingClientRect().width
 
         mutations.setColumnResizing(true)
         mutations.setResizeLeft(state.xStart)
-        tableAction.emitColResize('Start', buildEventPayload(event))
+        tableAction.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
       },
       onMove: (state, event) => {
         mutations.setResizeLeft(state.xEnd)
-        tableAction.emitColResize('Move', buildEventPayload(event))
+        tableAction.emitColResize('Move', {
+          ...buildEventPayload(event),
+          width: currentWidth + state.deltaX
+        })
       },
       onEnd: (state, event) => {
         mutations.setColumnResizing(false)
 
         if (!wrapper.value) return
 
-        mutations.handleColumnResize(
-          props.column.key,
-          wrapper.value.getBoundingClientRect().width + state.deltaX
-        )
-        tableAction.emitColResize('End', buildEventPayload(event))
+        const width = wrapper.value.getBoundingClientRect().width + state.deltaX
+        console.log(state.deltaX, width)
+
+        mutations.handleColumnResize(props.column.key, width)
+        tableAction.emitColResize('End', { ...buildEventPayload(event), width })
       }
     })
 

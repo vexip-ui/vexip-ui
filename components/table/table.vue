@@ -155,6 +155,7 @@ import type {
   MouseEventType,
   MoveEventType,
   TableCellPayload,
+  TableColResizePayload,
   TableColumnOptions,
   TableHeadPayload,
   TableKeyConfig,
@@ -369,8 +370,8 @@ export default defineComponent({
         [nh.bm('use-y-bar')]: props.useYBar,
         [nh.bm('transparent')]: props.transparent,
         [nh.bm('virtual')]: props.virtual,
-        [nh.bm('column-resizable')]: props.colResizable,
-        [nh.bm('column-resizing')]: state.colResizing
+        [nh.bm('col-resizable')]: props.colResizable,
+        [nh.bm('col-resizing')]: state.colResizing
       }
     })
     const style = computed(() => {
@@ -830,7 +831,7 @@ export default defineComponent({
       emitEvent(props[`onHead${type}`], payload)
     }
 
-    function emitColResize(type: MoveEventType, payload: TableHeadPayload) {
+    function emitColResize(type: MoveEventType, payload: TableColResizePayload) {
       emitEvent(props[`onColResize${type}`], payload)
     }
 
