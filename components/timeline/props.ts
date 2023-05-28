@@ -12,6 +12,7 @@ export const timelineProps = buildProps({
   spacing: [Number, String],
   flip: booleanProp,
   horizontal: booleanProp,
+  alternate: booleanProp,
   onSignalClick: eventProp<(label: string | number) => void>()
 })
 
