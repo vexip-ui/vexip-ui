@@ -266,7 +266,7 @@ export default defineComponent({
     const userLocale = computed(() => {
       if (isDefined(props.emptyText)) {
         warnOnce(
-          "[vexip-ui:Table] 'empty-text' prop has been deprecated, plesae " +
+          "[vexip-ui:Table] 'empty-text' prop has been deprecated, please " +
             "using 'empty' option of 'locale' prop to instead it"
         )
 
@@ -281,7 +281,7 @@ export default defineComponent({
     const dataKey = computed(() => {
       if (isDefined(props.dataKey)) {
         warnOnce(
-          "[vexip-ui:Table] 'data-key' prop has been deprecated, plesae " +
+          "[vexip-ui:Table] 'data-key' prop has been deprecated, please " +
             "using 'id' option of 'key-config' prop to instead it"
         )
 
