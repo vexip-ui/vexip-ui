@@ -92,14 +92,18 @@ $bubble: map.merge(
   @mixin top-arrow {
     bottom: 0;
     border-width: $size $size 0;
-    border-block-start-color: $border-color;
+    border-top-color: $border-color;
     transform: translate(-50%, 100%);
 
     &::after {
       bottom: 1px;
       border-width: $size $size 0;
-      border-block-start-color: $bg-color;
+      border-top-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
@@ -138,6 +142,10 @@ $bubble: map.merge(
       border-width: 0 $size $size;
       border-bottom-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
@@ -163,6 +171,10 @@ $bubble: map.merge(
   &--left-start,
   &--left-end {
     padding: 0 $padding 0 $size;
+
+    @include rtl {
+      padding: 0 $size 0 $padding;
+    }
   }
 
   @mixin left-arrow {
@@ -171,11 +183,20 @@ $bubble: map.merge(
     border-inline-start-color: $border-color;
     transform: translate(100%, -50%);
 
+    @include rtl {
+      border-width: $size $size $size 0;
+      transform: translate(-100%, -50%);
+    }
+
     &::after {
       inset-inline-end: 1px;
       border-width: $size 0 $size $size;
       border-inline-start-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        border-width: $size $size $size 0;
+      }
     }
   }
 
@@ -201,6 +222,10 @@ $bubble: map.merge(
   &--right-start,
   &--right-end {
     padding: 0 $size 0 $padding;
+
+    @include rtl {
+      padding: 0 $padding 0 $size;
+    }
   }
 
   @mixin right-arrow {
@@ -210,6 +235,7 @@ $bubble: map.merge(
     transform: translate(-100%, -50%);
 
     @include rtl {
+      border-width: $size 0 $size $size;
       transform: translate(100%, -50%);
     }
 
@@ -220,7 +246,7 @@ $bubble: map.merge(
       transform: translateY(-50%);
 
       @include rtl {
-        transform: translateY(-100%);
+        border-width: $size 0 $size $size;
       }
     }
   }
