@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:list';
 
 @use './variables.scss' as *;
 
@@ -162,4 +163,11 @@
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
     animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
+}
+
+@mixin logical-radius($values) {
+  border-start-start-radius: list.nth($values, 1);
+  border-start-end-radius: list.nth($values, 2);
+  border-end-start-radius: list.nth($values, 4);
+  border-end-end-radius: list.nth($values, 3);
 }

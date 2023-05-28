@@ -324,16 +324,15 @@ $button: map.merge(
 
       &-group &--#{$type} {
         &:first-child {
-          border-right-color: $d-color;
+          border-inline-end-color: $d-color;
         }
 
         &:last-child {
-          border-left-color: $d-color;
+          border-inline-start: $d-color;
         }
 
         &:not(:first-child, :last-child) {
-          border-right-color: $d-color;
-          border-left-color: $d-color;
+          border-inline-color: $d-color;
         }
       }
     }
@@ -374,7 +373,7 @@ $button: map.merge(
   &__icon {
     display: flex;
     align-items: center;
-    margin-right: get-css-var('button-icon-span');
+    margin-inline-end: get-css-var('button-icon-span');
   }
 
   &--icon-only {
@@ -395,7 +394,7 @@ $button: map.merge(
   }
 
   &__badge {
-    margin-left: 8px;
+    margin-inline-start: 8px;
     pointer-events: none;
 
     .#{$namespace}-badge__content {
@@ -454,7 +453,7 @@ $button: map.merge(
       align-items: center;
 
       #{$self} + #{$self} {
-        margin-left: 0;
+        margin-inline-start: 0;
       }
 
       #{$self} {
@@ -471,28 +470,30 @@ $button: map.merge(
         }
 
         &--first {
-          margin-right: 0;
-          border-radius: get-css-var('button-radius') 0 0 get-css-var('button-radius');
+          margin-inline-end: 0;
+
+          @include logical-radius(0 get-css-var('button-radius') get-css-var('button-radius') 0);
         }
 
         &--last {
-          margin-right: 0;
-          border-radius: 0 get-css-var('button-radius') get-css-var('button-radius') 0;
+          margin-inline-end: 0;
+
+          @include logical-radius(0 get-css-var('button-radius') get-css-var('button-radius') 0);
         }
 
         &:not(#{$self}--last) {
-          margin-right: -1px;
+          margin-inline-end: -1px;
         }
       }
 
       &--circle {
         #{$self} {
           &--first {
-            border-radius: get-css-var('button-height') 0 0 get-css-var('button-height');
+            @include logical-radius(get-css-var('button-height') 0 0 get-css-var('button-height'));
           }
 
           &--last {
-            border-radius: 0 get-css-var('button-height') get-css-var('button-height') 0;
+            @include logical-radius(0 get-css-var('button-height') get-css-var('button-height') 0);
           }
         }
       }

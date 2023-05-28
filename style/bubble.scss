@@ -170,33 +170,27 @@ $bubble: map.merge(
   &--left,
   &--left-start,
   &--left-end {
-    padding: 0 $padding 0 $size;
-
-    @include rtl {
-      padding: 0 $size 0 $padding;
-    }
+    padding: 0;
+    padding-inline: $size $padding;
   }
 
   @mixin left-arrow {
     inset-inline-end: 0;
-    border-width: $size 0 $size $size;
+    border-width: $size 0;
     border-inline-start-color: $border-color;
+    border-inline-width: $size;
     transform: translate(100%, -50%);
 
     @include rtl {
-      border-width: $size $size $size 0;
       transform: translate(-100%, -50%);
     }
 
     &::after {
       inset-inline-end: 1px;
-      border-width: $size 0 $size $size;
+      border-width: $size 0;
+      border-inline-width: $size 0;
       border-inline-start-color: $bg-color;
       transform: translateY(-50%);
-
-      @include rtl {
-        border-width: $size $size $size 0;
-      }
     }
   }
 
@@ -221,33 +215,27 @@ $bubble: map.merge(
   &--right,
   &--right-start,
   &--right-end {
-    padding: 0 $size 0 $padding;
-
-    @include rtl {
-      padding: 0 $padding 0 $size;
-    }
+    padding: 0;
+    padding-inline: $padding $size;
   }
 
   @mixin right-arrow {
     inset-inline-start: 0;
-    border-width: $size $size $size 0;
+    border-width: $size 0;
+    border-inline-width: 0 $size;
     border-inline-end-color: $border-color;
     transform: translate(-100%, -50%);
 
     @include rtl {
-      border-width: $size 0 $size $size;
       transform: translate(100%, -50%);
     }
 
     &::after {
       inset-inline-start: 1px;
-      border-width: $size $size $size 0;
+      border-width: $size 0;
+      border-inline-width: 0 $size;
       border-inline-end-color: $bg-color;
       transform: translateY(-50%);
-
-      @include rtl {
-        border-width: $size 0 $size $size;
-      }
     }
   }
 
