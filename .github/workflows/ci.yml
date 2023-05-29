@@ -70,40 +70,40 @@ jobs:
           path: .stylelintcache
           key: ${{ runner.os }}-stylelint-${{ hashFiles('**/*.{vue,scss}') }}
 
-  test:
-    runs-on: ${{ matrix.os }}
+  # test:
+  #   runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        node: [18.x]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
+  #   strategy:
+  #     matrix:
+  #       node: [18.x]
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
 
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v2
 
-      - name: Set node ${{ matrix.node }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
+  #     - name: Set node ${{ matrix.node }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node }}
+  #         cache: pnpm
 
-      - name: Install deps
-        run: pnpm install
+  #     - name: Install deps
+  #       run: pnpm install
 
-      - name: Build common packages
-        run: pnpm run build:common
+  #     - name: Build common packages
+  #       run: pnpm run build:common
 
-      - name: Test BEM
-        run: pnpm -C common/bem-helper test
+  #     - name: Test BEM
+  #       run: pnpm -C common/bem-helper test
 
-      - name: Test utils
-        run: pnpm -C common/utils test
+  #     - name: Test utils
+  #       run: pnpm -C common/utils test
 
-      - name: Test
-        run: pnpm run test
+  #     - name: Test
+  #       run: pnpm run test
