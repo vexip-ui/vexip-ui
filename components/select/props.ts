@@ -73,7 +73,7 @@ export const selectProps = buildProps({
   tagType: String as PropType<TagType>,
   noPreview: booleanProp,
   remote: booleanProp,
-  popperFitSelectWidth: booleanNumberProp,
+  fitPopper: booleanNumberProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

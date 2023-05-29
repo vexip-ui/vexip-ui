@@ -419,7 +419,7 @@ export default defineComponent({
       tagType: null,
       noPreview: false,
       remote: false,
-      popperFitSelectWidth: false
+      fitPopper: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -698,31 +698,26 @@ export default defineComponent({
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
     }
 
-    function updatePopperVisible(visibleValue: boolean) {
-      if (visibleValue) {
-        restTipShow.value = false
-        initHittingIndex()
+    function fitPopperWidth() {
+      requestAnimationFrame(() => {
+        updatePopper()
 
-        requestAnimationFrame(() => {
-          updatePopper()
-
-          if (wrapper.value && popper.value?.wrapper) {
-            if (typeof props.popperFitSelectWidth === 'number') {
-              popper.value.wrapper.style.width = `${props.popperFitSelectWidth}px`
-            } else if (props.popperFitSelectWidth) {
-              popper.value.wrapper.style.width = `${wrapper.value.offsetWidth}px`
-            } else {
-              popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
-            }
+        if (wrapper.value && popper.value?.wrapper) {
+          if (typeof props.fitPopper === 'number') {
+            popper.value.wrapper.style.width = `${props.fitPopper}px`
+          } else if (props.fitPopper) {
+            popper.value.wrapper.style.width = `${wrapper.value.offsetWidth}px`
+          } else {
+            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
           }
-        })
+        }
+      })
 
-        setTimeout(() => {
-          if (virtualList.value && !isNull(currentValues.value[0])) {
-            virtualList.value.ensureKeyInView(currentValues.value[0])
-          }
-        }, 32)
-      }
+      setTimeout(() => {
+        if (virtualList.value && !isNull(currentValues.value[0])) {
+          virtualList.value.ensureKeyInView(currentValues.value[0])
+        }
+      }, 32)
     }
 
     watch(
@@ -732,7 +727,11 @@ export default defineComponent({
       }
     )
     watch(currentVisible, value => {
-      updatePopperVisible(value)
+      if (value) {
+        restTipShow.value = false
+        initHittingIndex()
+        fitPopperWidth()
+      }
 
       syncInputValue()
       emitEvent(props.onToggle, value)
@@ -784,7 +783,7 @@ export default defineComponent({
       syncInputValue()
 
       if (props.visible) {
-        updatePopperVisible(props.visible)
+        fitPopperWidth()
         syncInputValue()
       }
     })
