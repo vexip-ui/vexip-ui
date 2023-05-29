@@ -204,20 +204,20 @@ $input: map.merge(
   }
 
   &__prefix {
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__suffix {
-    margin-left: 4px;
+    margin-inline-start: 4px;
     transition: get-css-var('transition-opacity');
   }
 
   &__clear,
   &__loading {
     position: absolute;
-    right: get-css-var('input-h-padding');
+    inset-inline-end: get-css-var('input-h-padding');
     min-width: 14px;
-    margin-left: 4px;
+    margin-inline-start: 4px;
     cursor: pointer;
   }
 
@@ -256,21 +256,21 @@ $input: map.merge(
   }
 
   &-wrapper--before-only & {
-    border-radius: 0 $radius $radius 0;
+    @include logical-radius(0 $radius $radius 0);
   }
 
   &-wrapper--after-only & {
-    border-radius: $radius 0 0 $radius;
+    @include logical-radius($radius 0 0 $radius);
   }
 
   &--before {
     z-index: 1;
-    border-left-color: transparent;
+    border-inline-start-color: transparent;
   }
 
   &--after {
     z-index: 1;
-    border-right-color: transparent;
+    border-inline-end-color: transparent;
   }
 
   &__suffix-wrapper {
@@ -281,16 +281,16 @@ $input: map.merge(
 
   &__clear,
   &__loading {
-    right: 0;
+    inset-inline-end: 0;
   }
 
   &__password {
-    margin-left: 4px;
+    margin-inline-start: 4px;
     cursor: pointer;
   }
 
   &__count {
-    margin-left: 4px;
+    margin-inline-end: 4px;
     font-size: get-css-var('input-count-font-size');
     line-height: get-css-var('input-count-line-height');
     color: get-css-var('input-count-color');
@@ -323,7 +323,8 @@ $input: map.merge(
     .#{$namespace}-number-input {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
       height: 100%;
-      border-radius: $inner-radius;
+
+      @include logical-radius($inner-radius);
     }
   }
 
@@ -340,7 +341,9 @@ $input: map.merge(
         min-width: 60px;
         height: 100%;
         background-color: transparent;
-        border-radius: $inner-radius;
+
+        @include logical-radius($inner-radius);
+
         box-shadow: unset;
       }
     }
@@ -350,7 +353,8 @@ $input: map.merge(
     .#{$namespace}-button {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
       height: 100%;
-      border-radius: $inner-radius;
+
+      @include logical-radius($inner-radius);
 
       &--icon-only {
         width: calc(get-css-var('button-height') + 2 * get-css-var('input-h-padding'));
@@ -365,11 +369,12 @@ $input: map.merge(
     $bg-color: get-css-var('input-before-bg-color');
 
     background-color: $bg-color;
-    border-right: 0;
-    border-radius: $radius 0 0 $radius;
+    border-inline-end: 0;
+
+    @include logical-radius($radius 0 0 $radius);
 
     &--action {
-      margin-right: -1px;
+      margin-inline-end: -1px;
       background-color: transparent;
 
       @include inner-button($before-radius);
@@ -382,11 +387,12 @@ $input: map.merge(
     $bg-color: get-css-var('input-after-bg-color');
 
     background-color: $bg-color;
-    border-left: 0;
-    border-radius: 0 $radius $radius 0;
+    border-inline-start: 0;
+
+    @include logical-radius(0 $radius $radius 0);
 
     &--action {
-      margin-left: -1px;
+      margin-inline-start: -1px;
       background-color: transparent;
 
       @include inner-button($after-radius);
