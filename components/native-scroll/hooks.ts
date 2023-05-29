@@ -1,11 +1,11 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 import { isHiddenElement, useManualRef, useMounted } from '@vexip-ui/hooks'
-import { boundRange, debounceMinor, isElement, multipleFixed } from '@vexip-ui/utils'
+import { boundRange, debounce, debounceMinor, isElement, multipleFixed } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
-import type { ScrollMode } from '@/components/scroll'
+import type { NativeScrollMode } from './symbol'
 
 export function useScrollWrapper({
   mode,
@@ -17,7 +17,7 @@ export function useScrollWrapper({
   onBeforeRefresh,
   onAfterRefresh
 }: {
-  mode: Ref<Exclude<ScrollMode, 'horizontal-exact'>>,
+  mode: Ref<NativeScrollMode>,
   disabled: Ref<boolean>,
   appear: Ref<boolean>,
   width: Ref<number | string>,
@@ -115,6 +115,12 @@ export function useScrollWrapper({
   function computeContentSize() {
     if (!content.el || isHiddenElement(content.el)) return
 
+    console.log({
+      osh: content.scrollHeight,
+      ooh: content.offsetHeight,
+      sh: content.el.scrollHeight,
+      oh: content.el.offsetHeight
+    })
     content.scrollWidth = content.el.scrollWidth
     content.offsetWidth = content.el.offsetWidth
     content.scrollHeight = content.el.scrollHeight
@@ -223,7 +229,6 @@ export function useScrollWrapper({
     contentElement,
 
     content,
-    // currentScroll,
     x,
     y,
     percentX,
@@ -235,7 +240,7 @@ export function useScrollWrapper({
     xBarLength,
     yBarLength,
 
-    handleResize,
+    handleResize: debounce(handleResize),
     setScrollX,
     setScrollY,
     computePercent,

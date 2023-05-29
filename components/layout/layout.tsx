@@ -430,6 +430,7 @@ export default defineComponent({
           class={className.value}
           style={style.value}
           use-y-bar
+          observe-deep
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >
