@@ -246,6 +246,8 @@ export default defineComponent({
       if (scroll.value?.$el) {
         viewHeight.value = scroll.value.$el.offsetHeight
       }
+
+      emitEvent(props.onContentResize)
     }
 
     let cancelChange: (() => void) | undefined

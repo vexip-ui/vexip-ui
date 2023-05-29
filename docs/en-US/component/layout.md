@@ -191,6 +191,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | nav-change      | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -        |
 | color-change    | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -        |
 | toggle-theme    | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0`  |
+| content-resize  | Emitted when content resized                                        | -                                            | `2.1.23` |
 
 ### Layout Slots
 
