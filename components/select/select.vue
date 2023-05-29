@@ -777,8 +777,9 @@ export default defineComponent({
       syncInputValue()
 
       if (props.visible) {
+        restTipShow.value = false
+        initHittingIndex()
         fitPopperWidth()
-        syncInputValue()
       }
     })
 
