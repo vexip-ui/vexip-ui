@@ -712,12 +712,6 @@ export default defineComponent({
           }
         }
       })
-
-      setTimeout(() => {
-        if (virtualList.value && !isNull(currentValues.value[0])) {
-          virtualList.value.ensureKeyInView(currentValues.value[0])
-        }
-      }, 32)
     }
 
     watch(
