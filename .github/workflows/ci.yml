@@ -58,6 +58,22 @@ jobs:
       - name: Lint style
         run: pnpm run lint:style
 
+      - name: Cache eslint
+        uses: actions/cache@v3
+        with:
+          path: .eslintcache
+          key: ${{ runner.os }}-eslint-${{ hashFiles('{common/*/src,components,directives,playground,dev-server,docs}/**.{js,ts,tsx,vue}') }}-${{ hashFiles('scripts/**.{js,ts}') }}
+          restore-keys: |
+            ${{ runner.os }}-eslint-
+
+      - name: Cache stylelint
+        uses: actions/cache@v3
+        with:
+          path: .stylelintcache
+          key: ${{ runner.os }}-stylelint-${{ hashFiles('**/*.{vue,scss}') }}
+          restore-keys: |
+            ${{ runner.os }}-stylelint-
+
   test:
     runs-on: ${{ matrix.os }}
 
