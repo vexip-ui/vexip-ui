@@ -70,14 +70,12 @@ function handleContentResize(entry: ResizeObserverEntry) {
   } else {
     contentHeight.value = entry.contentRect.height
   }
-
-  refresh()
 }
 </script>
 
 <template>
   <Row ref="wrapper" tag="article" class="article">
-    <ResizeObserver @resize="handleContentResize">
+    <ResizeObserver throttle @resize="handleContentResize">
       <Column flex="auto" style="min-width: 0">
         <slot></slot>
         <PageFooter class="article__footer"></PageFooter>

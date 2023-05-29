@@ -158,8 +158,9 @@ function editOnPlayground() {
             padding: '20px 12px 8px'
           }"
         >
-          <!-- <slot></slot> -->
-          <component :is="demo" v-if="demo"></component>
+          <ClientOnly>
+            <component :is="demo" v-if="demo"></component>
+          </ClientOnly>
         </NativeScroll>
       </div>
       <div :class="`${prefix}__description`">
