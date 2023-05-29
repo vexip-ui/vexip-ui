@@ -54,7 +54,7 @@ In addition to the basic state types, there are also built-in color types for qu
 
 ### Custom Color
 
-You can custom the major color throught the `color` prop.
+You can custom the major color through the `color` prop.
 
 :::
 

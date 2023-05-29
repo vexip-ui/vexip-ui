@@ -116,7 +116,7 @@ const model = reactive({} as Model)
 
 由于约定了一个 FormItem 下最多只有一个控件组件，因为在多控件组合时你可能希望 FormItem 不要渲染额外的样式。
 
-在添加 `prue` 属性后 FormItem 便会直接渲染默认插槽的内容。
+在添加 `pure` 属性后 FormItem 便会直接渲染默认插槽的内容。
 
 :::
 

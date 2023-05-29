@@ -123,9 +123,9 @@ interface NativeScrollSlotParams {
 
 | Name             | Description                                                                                                                                      | Parameters                                                                                                              | Since |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----- |
-| scroll           | Emitted when scrolling in any interactive form                                                                                                   | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percnetY: number })` | -     |
-| scroll-start     | Emitted when scrolling with pointer starts                                                                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                    | -     |
-| scroll-end       | Emitted when scrolling with pointer ends                                                                                                         | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                    | -     |
+| scroll           | Emitted when scrolling in any interactive form                                                                                                   | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percentY: number })` | -     |
+| scroll-start     | Emitted when scrolling with pointer starts                                                                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                    | -     |
+| scroll-end       | Emitted when scrolling with pointer ends                                                                                                         | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                    | -     |
 | x-enable-change  | Emitted when the active state of horizontal scrolling changes, returns the current scroll state                                                  | `(enabled: boolean)`                                                                                                    | -     |
 | y-enable-change  | Emitted when the active state of vertical scrolling changes, returns the current scroll state                                                    | `(enabled: boolean)`                                                                                                    | -     |
 | bar-scroll-start | Emitted when a scrollbar is used to trigger scrolling start, returns the currently triggered scrollbar type `vertical` or `horizontal`           | `(type: 'vertical' \| 'horizontal')`                                                                                    | -     |
@@ -135,7 +135,7 @@ interface NativeScrollSlotParams {
 
 | Name    | Description                | Parameters               | Since   |
 | ------- | -------------------------- | ------------------------ | ------- |
-| defalut | Slot for scrolling content | `NativeScrollSlotParams` | -       |
+| default | Slot for scrolling content | `NativeScrollSlotParams` | -       |
 | extra   | Slot for extra content     | `NativeScrollSlotParams` | `2.1.7` |
 
 ### NativeScroll Methods

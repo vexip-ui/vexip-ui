@@ -464,7 +464,7 @@ interface TableColResizePayload extends TableHeadPayload {
 
 | 名称    | 说明                                        | 参数                 | 始于 |
 | ------- | ------------------------------------------- | -------------------- | ---- |
-| default | 表格列的插槽，应使用 TabelColumn 组件定义列 | -                    | -    |
+| default | 表格列的插槽，应使用 TableColumn 组件定义列 | -                    | -    |
 | empty   | 空数据提示内容的插槽                        | `(isFixed: boolean)` | -    |
 
 ### Table 方法

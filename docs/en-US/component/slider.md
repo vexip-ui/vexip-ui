@@ -16,7 +16,7 @@ The simplest usage, you can use `v-model:value` two-way binding.
 
 ### Value Bounds
 
-The `min` and `max` props can be used to set the bounds of the slidier.
+The `min` and `max` props can be used to set the bounds of the slider.
 
 :::
 

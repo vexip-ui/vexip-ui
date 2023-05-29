@@ -116,7 +116,7 @@ This example demonstrates how to create and delete form items.
 
 Since we promised that there is at most one control component under a FormItem, you may want the FormItem not to render additional styles when combining multiple controls.
 
-After adding the `prue` prop, the FormItem will directly render the contents of the default slot.
+After adding the `pure` prop, the FormItem will directly render the contents of the default slot.
 
 :::
 
@@ -177,7 +177,7 @@ interface Rule<T = any> {
 | model         | `Record<string, any>`                  | The form data source                                                                                                                          | `{}`        | -       |
 | rules         | `Record<string, any>`                  | The form validation rules                                                                                                                     | `{}`        | -       |
 | label-width   | `number \| 'auto'`                     | The width of the form label                                                                                                                   | `'auto'`    | -       |
-| labell-align  | `'right' \| 'top' \| 'left'`           | The alignment of form labels                                                                                                                  | `'right'`   | -       |
+| label-align   | `'right' \| 'top' \| 'left'`           | The alignment of form labels                                                                                                                  | `'right'`   | -       |
 | all-required  | `boolean`                              | Set whether all form content is required                                                                                                      | `false`     | -       |
 | label-suffix  | `string`                               | The suffix of the form label, such as `:`                                                                                                     | `''`        | -       |
 | hide-asterisk | `boolean`                              | Set whether to hide required asterisks                                                                                                        | `false`     | -       |
