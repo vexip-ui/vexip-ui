@@ -119,6 +119,7 @@ interface NativeScrollSlotParams {
 | bar-duration     | `number`                                                 | 设置滚动条过渡效果的持续时间                                                  | `null`       | -        |
 | use-bar-track    | `boolean`                                                | 设置滚动条是否启用轨道交互                                                    | `false`      | -        |
 | scroll-tag       | `string`                                                 | 滚动内容包围元素渲染的标签                                                    | `'div'`      | `2.0.13` |
+| observe-deep     | `Boolean`                                                | 设置是否观察子元素的大小变化                                                  | `false`      | `2.1.23` |
 
 ### NativeScroll 事件
 

@@ -75,7 +75,8 @@ export default defineComponent({
       appear: false,
       barDuration: null,
       useBarTrack: false,
-      scrollTag: 'div'
+      scrollTag: 'div',
+      observeDeep: false
     })
 
     const emitter = createEventEmitter()
@@ -92,7 +93,6 @@ export default defineComponent({
       contentElement,
 
       content,
-      // currentScroll,
       x,
       y,
       percentX,
@@ -611,7 +611,8 @@ export default defineComponent({
 
     function renderContent() {
       const Content = (props.scrollTag || 'div') as 'div'
-      const children = slots.default && renderSlot(slots, 'default', slotParams).children
+      const children =
+        props.observeDeep && slots.default ? renderSlot(slots, 'default', slotParams).children : []
 
       return (
         <Content
@@ -641,9 +642,11 @@ export default defineComponent({
             </div>
           )}
           {slots.default &&
-            flatVNodes(children!).map(vnode => {
-              return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
-            })}
+            (props.observeDeep
+              ? flatVNodes(children).map(vnode => {
+                return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
+              })
+              : renderSlot(slots, 'default', slotParams))}
         </Content>
       )
     }

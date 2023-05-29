@@ -41,10 +41,6 @@ export function useScrollWrapper({
   })
 
   // 当前滚动位置
-  // const currentScroll = reactive({
-  //   x: 0,
-  //   y: 0
-  // })
   const x = manualRef(0)
   const y = manualRef(0)
 
@@ -100,7 +96,6 @@ export function useScrollWrapper({
 
   function setScrollX(value: number) {
     x.value = boundRange(value, 0, xScrollLimit.value)
-    // triggerUpdate()
 
     if (content.el) {
       content.el.scrollLeft = x.value
@@ -109,7 +104,6 @@ export function useScrollWrapper({
 
   function setScrollY(value: number) {
     y.value = boundRange(value, 0, yScrollLimit.value)
-    // triggerUpdate()
 
     if (content.el) {
       content.el.scrollTop = y.value
