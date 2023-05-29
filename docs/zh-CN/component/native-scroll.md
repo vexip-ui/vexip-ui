@@ -124,9 +124,9 @@ interface NativeScrollSlotParams {
 
 | 名称             | 说明                                                                                | 参数                                                                                                                    | 始于 |
 | ---------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---- |
-| scroll           | 当以任意交互形式进行了滚动后触发                                                    | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percnetY: number })` | -    |
-| scroll-start     | 当使用 pointer 滚动开始时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                    | -    |
-| scroll-end       | 当使用 pointer 滚动结束时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                    | -    |
+| scroll           | 当以任意交互形式进行了滚动后触发                                                    | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percentY: number })` | -    |
+| scroll-start     | 当使用 pointer 滚动开始时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                    | -    |
+| scroll-end       | 当使用 pointer 滚动结束时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                    | -    |
 | x-enable-change  | 当横向滚动的激活状态改变时触发，返回当前滚动状态                                    | `(enabled: boolean)`                                                                                                    | -    |
 | y-enable-change  | 当纵向滚动的激活状态改变时触发，返回当前滚动状态                                    | `(enabled: boolean)`                                                                                                    | -    |
 | bar-scroll-start | 当使用滚动条触发滚动开始时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal` | `(type: 'vertical' \| 'horizontal')`                                                                                    | -    |
@@ -136,7 +136,7 @@ interface NativeScrollSlotParams {
 
 | 名称    | 说明           | 参数                     | 始于    |
 | ------- | -------------- | ------------------------ | ------- |
-| defalut | 滚动内容的插槽 | `NativeScrollSlotParams` | -       |
+| default | 滚动内容的插槽 | `NativeScrollSlotParams` | -       |
 | extra   | 额外内容的插槽 | `NativeScrollSlotParams` | `2.1.7` |
 
 ### NativeScroll 方法

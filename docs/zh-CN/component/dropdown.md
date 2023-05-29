@@ -37,7 +37,7 @@
 | visible       | `boolean`                        | 下拉菜单的展开状态，可以使用 `v-model` 双向绑定                      | `false`    | -        |
 | label         | `string \| number`               | 在嵌套使用的时候，作为 item 的索引                                   | `null`     | -        |
 | outside-close | `boolean`                        | 设置是否可以通过点击外部关闭                                         | `true`     | -        |
-| trigger       | `'hover' \| 'click' \| 'csutom'` | 下拉菜单的触发方式，当为 `custom` 时，所有情景都需要手动控制 visible | `'hover'`  | -        |
+| trigger       | `'hover' \| 'click' \| 'custom'` | 下拉菜单的触发方式，当为 `custom` 时，所有情景都需要手动控制 visible | `'hover'`  | -        |
 | placement     | `Placement`                      | 菜单列表的出现位置，可选值同 Popper.js                               | `'bottom'` | -        |
 | transfer      | `boolean \| string`              | 设置菜单列表的渲染位置，设置为 `true` 时默认渲染至 `<body>`          | `false`    | -        |
 | meta          | `Record<string, any>`            | 设置下拉菜单的元数据，用于嵌套的时候                                 | `null`     | `2.0.0`  |

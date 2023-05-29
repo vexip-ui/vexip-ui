@@ -102,7 +102,7 @@ interface ScrollSlotParams {
 | scroll-attrs     | `Record<string, any>`                                        | 滚动内容包围元素的自定义属性                                                  | `null`       | `2.1.0`  |
 | width            | `number \| string`                                           | 滚动视窗的宽度，内容的宽度大于视窗的宽度时才可滚动                            | `''`         | -        |
 | height           | `number \| string`                                           | 滚动视窗的高度，内容的高度大于视窗的高度时才可滚动                            | `''`         | -        |
-| delat-x          | `number`                                                     | 每次横向滚动的距离                                                            | `20`         | -        |
+| delta-x          | `number`                                                     | 每次横向滚动的距离                                                            | `20`         | -        |
 | delta-y          | `number`                                                     | 每次纵向滚动的距离                                                            | `20`         | -        |
 | disabled         | `boolean`                                                    | 设置是否禁用滚动                                                              | `false`      | -        |
 | pointer          | `boolean`                                                    | 设置是否开启鼠标拖动滚动                                                      | `false`      | -        |
@@ -123,13 +123,13 @@ interface ScrollSlotParams {
 
 | 名称             | 说明                                                                                | 参数                                                                                                                                   | 始于 |
 | ---------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| scroll           | 当以任意交互形式进行了滚动后触发                                                    | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percnetY: number })`                | -    |
-| wheel            | 当用滚轮进行了滚动后触发，其中 `sign` 标记滚动的方向                                | `(scroll: { type?: 'vertical' \| 'horizontal', sign: -1 \| 1, clientX: number, clientY: number, percentX: number, percnetY: number })` | -    |
+| scroll           | 当以任意交互形式进行了滚动后触发                                                    | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percentY: number })`                | -    |
+| wheel            | 当用滚轮进行了滚动后触发，其中 `sign` 标记滚动的方向                                | `(scroll: { type?: 'vertical' \| 'horizontal', sign: -1 \| 1, clientX: number, clientY: number, percentX: number, percentY: number })` | -    |
 | x-enable-change  | 当横向滚动的激活状态改变时触发，返回当前滚动状态                                    | `(enabled: boolean)`                                                                                                                   | -    |
 | y-enable-change  | 当纵向滚动的激活状态改变时触发，返回当前滚动状态                                    | `(enabled: boolean)`                                                                                                                   | -    |
 | ready            | 当滚动触发刷新，并在刷新成功即将进入正常可用状态时触发，无返回值                    | -                                                                                                                                      | -    |
-| scroll-start     | 当使用 pointer 滚动开始时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                                   | -    |
-| scroll-end       | 当使用 pointer 滚动结束时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })`                                                   | -    |
+| scroll-start     | 当使用 pointer 滚动开始时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                                   | -    |
+| scroll-end       | 当使用 pointer 滚动结束时触发                                                       | `(scroll: { clientX: number, clientY: number, percentX: number, percentY: number })`                                                   | -    |
 | bar-scroll-start | 当使用滚动条触发滚动开始时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal` | `(type: 'vertical' \| 'horizontal')`                                                                                                   | -    |
 | bar-scroll-end   | 当使用滚动条触发滚动结束时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal` | `(type: 'vertical' \| 'horizontal')`                                                                                                   | -    |
 
@@ -137,7 +137,7 @@ interface ScrollSlotParams {
 
 | 名称    | 说明           | 参数               | 始于    |
 | ------- | -------------- | ------------------ | ------- |
-| defalut | 滚动内容的插槽 | `ScrollSlotParams` | -       |
+| default | 滚动内容的插槽 | `ScrollSlotParams` | -       |
 | extra   | 额外内容的插槽 | `ScrollSlotParams` | `2.1.7` |
 
 ### Scroll 方法

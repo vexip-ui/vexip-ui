@@ -75,7 +75,7 @@
 | locale         | `LocaleConfig['colorPicker']`      | 设置多语言配置                                           | `null`      | `2.1.0` |
 
 ```js
-const defaultShotcuts = [
+const defaultShortcuts = [
   '#2d8cf0',
   '#19be6b',
   '#ff9900',

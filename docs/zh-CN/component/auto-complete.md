@@ -108,7 +108,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | -------------- | ------------------------------------------------ | ------------------------------------------------------- | ----------- | ------- |
 | value          | `string \| number`                               | Input 控件的值                                          | `''`        | -       |
 | options        | `AutoCompleteRawOption[]`                        | 可选项列表，可以是字符串或者符合 `ObjectOption` 的对象  | `[]`        | -       |
-| filter         | `boolean \| AutoCompleteFilter`                  | 过滤 `options` 的方法，传入 `ture` 时会使用内置比较方法 | `false`     | -       |
+| filter         | `boolean \| AutoCompleteFilter`                  | 过滤 `options` 的方法，传入 `true` 时会使用内置比较方法 | `false`     | -       |
 | prefix         | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                            | `null`      | -       |
 | prefix-color   | `string`                                         | 前缀内容的颜色，会影响前缀插槽                          | `''`        | -       |
 | suffix         | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                            | `null`      | -       |

@@ -13,7 +13,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 图标组件命名是遵循一定的规则从原图标名转换过来的：
 
 - 一般情况下，就是把短横线小写命名换成首字母大写的驼峰命名（如：`angle-down` -> `AngleDown`）
-- 如果是 `regular` 或者 `brands` 包下的图标，在名字的最后加上 `R` 或者 `B` 的后缀即可（如：`rugular/bell` -> `BellR`、`brands/github` -> `GithubB`）
+- 如果是 `regular` 或者 `brands` 包下的图标，在名字的最后加上 `R` 或者 `B` 的后缀即可（如：`regular/bell` -> `BellR`、`brands/github` -> `GithubB`）
 - 有少数图标是数字开头的，需要在名字前面加上 `I` 前缀（如：`7` -> `I7`、`brands/500px` -> `I500pxB`）
 
 ## 代码示例

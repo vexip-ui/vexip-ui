@@ -154,7 +154,7 @@ It should not be stuck if the options are `100` times more.
 
 :::demo select/transparent
 
-### Tranparent
+### Transparent
 
 Add the `transparent` prop to remove the original style, and then you can wrap the style you like.
 
@@ -205,7 +205,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | state           | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the selector                                                                                                                                     | `'default'`    | -        |
 | disabled        | `boolean`                                        | Set whether to disable the selector                                                                                                                           | `false`        | -        |
 | outside-close   | `boolean`                                        | Set whether to close the component by clicking outside                                                                                                        | `false`        | -        |
-| placeholder     | `string`                                         | Same as native palceholder                                                                                                                                    | `''`           | -        |
+| placeholder     | `string`                                         | Same as native placeholder                                                                                                                                    | `''`           | -        |
 | prefix          | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                                                                               | `null`         | -        |
 | prefix-color    | `string`                                         | The color of the prefix content, affects the prefix slot                                                                                                      | `''`           | -        |
 | suffix          | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                                                                                                               | `null`         | -        |

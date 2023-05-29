@@ -38,7 +38,7 @@ If you want a clean table via adding the `transparent` prop.
 
 :::demo table/attrs
 
-### Custon Column Class
+### Custom Column Class
 
 Column attributes can be customized via the `class-name`, `style` and `attrs` fields of the column options.
 

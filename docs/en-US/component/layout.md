@@ -268,7 +268,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
 | tag        | `string`          | Set the rendered tag                                                                                                            | `aside` | -     |
 | expanded   | `boolean`         | When the aside is not fixed, set whether the aside is expanded, can use `v-model` two-way binding                               | `false` | -     |
-| reduced    | `boolean`         | Set whether the aside is reduceded, can use `v-model` two-way binding                                                           | `false` | -     |
+| reduced    | `boolean`         | Set whether the aside is reduced, can use `v-model` two-way binding                                                             | `false` | -     |
 | menus      | `MenuOptions[]`   | Set menu options                                                                                                                | `[]`    | -     |
 | menu-props | `LayoutMenuProps` | Set menu properties                                                                                                             | `null`  | -     |
 | logo       | `string`          | Set Logo image address                                                                                                          | `''`    | -     |

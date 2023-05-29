@@ -75,7 +75,7 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 | locale         | `LocaleConfig['colorPicker']`      | Set the locale config                                                                         | `null`      | `2.1.0` |
 
 ```js
-const defaultShotcuts = [
+const defaultShortcuts = [
   '#2d8cf0',
   '#19be6b',
   '#ff9900',

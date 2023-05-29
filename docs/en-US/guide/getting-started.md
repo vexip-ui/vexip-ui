@@ -274,6 +274,6 @@ If the components are imported globally, add the `compilerOptions.types` option 
 }
 ```
 
-## Full Compoennts List
+## Full Components List
 
 You can check full components list [here](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L120).
