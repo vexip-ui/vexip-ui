@@ -1,9 +1,10 @@
-import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
-// import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { Transition, computed, defineComponent, onMounted, ref, renderSlot, watch } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isClient, isNull, toFixed, boundRange, random, ensureArray } from '@vexip-ui/utils'
+import { boundRange, ensureArray, isClient, isNull, random, toFixed } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 export default defineComponent({
@@ -33,7 +34,8 @@ export default defineComponent({
         default: null,
         validator: value => isNull(value) || value >= 0
       },
-      canvasSize: () => [1000, 600]
+      canvasSize: () => [1000, 600],
+      refreshIcon: null
     })
 
     const nh = useNameHelper('captcha')
@@ -212,25 +214,32 @@ export default defineComponent({
       const sideLength = Math.min(canvasEl.width, canvasEl.height) * 0.25
       const halfSideLength = sideLength * 0.5
 
-      subCanvasEl.width = sideLength
+      subCanvasEl.width = sideLength + 4
 
       ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
 
-      subCtx.shadowColor = 'rgba(0, 0, 0, 0.5)'
-      subCtx.shadowBlur = 4
       subCtx.drawImage(
         canvas.value!,
         targetX - halfSideLength,
         targetY - halfSideLength,
         sideLength,
         sideLength,
-        0,
+        2,
         targetY - halfSideLength,
         sideLength,
         sideLength
       )
+      subCtx.lineWidth = 2
+      subCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      subCtx.strokeRect(1, targetY - halfSideLength, sideLength + 2, sideLength)
 
-      ctx.clearRect(targetX - halfSideLength, targetY - halfSideLength, sideLength, sideLength)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)'
+      ctx.fillRect(
+        targetX - halfSideLength - 1,
+        targetY - halfSideLength - 1,
+        sideLength + 2,
+        sideLength + 2
+      )
     }
 
     function refresh(target = props.slideTarget) {
@@ -239,25 +248,38 @@ export default defineComponent({
     }
 
     function parseTarget(target = props.slideTarget) {
-      if (isNull(target)) return [random(80, 30), random(80, 20)]
+      if (isNull(target)) return [random(75, 25), random(75, 25)]
 
-      const [targetX = random(80, 30), targetY = random(80, 20)] = ensureArray(target)
+      const [targetX = random(75, 25), targetY = random(75, 25)] = ensureArray(target)
 
       return [targetX, targetY]
     }
 
     function matchTarget(value: number) {
-      console.log({
-        target: usedTarget.value,
-        current: value,
-        tolerance: tolerance.value
-      })
       return Math.abs(usedTarget.value - value) <= tolerance.value
     }
 
     return () => {
       return (
         <div class={className.value} tabindex={-1}>
+          <div class={nh.be('actions')}>
+            <button
+              class={[nh.be('action'), nh.be('refresh')]}
+              onClick={() => emitEvent(props.onRefresh)}
+            >
+              {slots.refresh
+                ? (
+                    renderSlot(slots, 'refresh')
+                  )
+                : (
+                <Icon
+                  {...icons.value.refresh}
+                  scale={1.2}
+                  icon={props.refreshIcon || icons.value.refresh.icon}
+                ></Icon>
+                  )}
+            </button>
+          </div>
           {hasImage.value && (
             <div class={nh.be('image')}>
               <canvas
@@ -274,9 +296,13 @@ export default defineComponent({
                   style={subCanvasStyle.value}
                 ></canvas>
               </div>
-              {props.type === 'slide-image' && isSuccess.value && (
-                <div class={nh.be('image-tip')}>{props.successTip ?? locale.value.success}</div>
-              )}
+              <Transition name={nh.ns('fade')}>
+                {props.type === 'slide-image' && isSuccess.value && (
+                  <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
+                    {props.successTip ?? locale.value.success}
+                  </div>
+                )}
+              </Transition>
             </div>
           )}
           <div class={nh.be('slider')}>
@@ -298,7 +324,7 @@ export default defineComponent({
               style={tipStyle.value}
             >
               {slots.tip
-                ? slots.tip({ success: isSuccess.value })
+                ? renderSlot(slots, 'tip', { success: isSuccess.value })
                 : props.type === 'slide' && isSuccess.value
                   ? props.successTip ?? locale.value.success
                   : props.tip ?? normalTip.value}
@@ -318,7 +344,7 @@ export default defineComponent({
               >
                 {slots.trigger
                   ? (
-                      slots.trigger({ success: isSuccess.value })
+                      renderSlot(slots, 'trigger', { success: isSuccess.value })
                     )
                   : isSuccess.value
                     ? (

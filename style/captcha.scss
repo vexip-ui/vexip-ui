@@ -20,6 +20,8 @@ $captcha: map.merge(
     tip-color: get-css-var('content-color-base'),
     tip-color-fill: get-css-var('color-white'),
     tip-transition: 'background-position 0ms ease',
+    tip-bg-color-success: get-css-var('color-success-opacity-3'),
+    tip-bg-color-error: get-css-var('color-error-opacity-3'),
     trigger-width: 32px,
     trigger-height: 32px,
     trigger-color: get-css-var('content-color-third'),
@@ -27,7 +29,9 @@ $captcha: map.merge(
     trigger-color-success: get-css-var('color-success-base'),
     trigger-bg-color: get-css-var('color-white'),
     trigger-radius: get-css-var('radius-small'),
-    trigger-transition: 'left 0ms ease'
+    trigger-transition: 'left 0ms ease',
+    action-color: get-css-var('content-color-secondary'),
+    action-color-hover: get-css-var('color-primary-base')
   ),
   $captcha
 );
@@ -43,8 +47,10 @@ $captcha: map.merge(
     @include define-preset-values(
       'captcha',
       (
-        slider-height: 24px,
-        slider-radius: 12px
+        slider-height: 26px,
+        slider-radius: 12px,
+        trigger-width: 36px,
+        trigger-height: 36px
       )
     );
 
@@ -61,7 +67,7 @@ $captcha: map.merge(
     width: 100%;
     height: 0;
     padding-top: 60%;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     overflow: hidden;
     border: get-css-var('border-light-2');
     border-radius: get-css-var('captcha-image-radius');
@@ -96,17 +102,39 @@ $captcha: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 24px;
+    color: get-css-var('captcha-tip-color-fill');
     white-space: nowrap;
+
+    &--success {
+      background-color: get-css-var('captcha-tip-bg-color-success');
+    }
+
+    &--error {
+      background-color: get-css-var('captcha-tip-bg-color-error');
+    }
   }
 
-  &__width-detector {
-    position: absolute;
-    right: 0;
-    left: 0;
-    height: 1px;
-    pointer-events: none;
-    visibility: hidden;
-    opacity: 0%;
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 4px;
+  }
+
+  &__action {
+    padding: 0;
+    color: get-css-var('captcha-action-color');
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('captcha-action-color-hover');
+    }
   }
 
   &__slider {
@@ -120,6 +148,10 @@ $captcha: map.merge(
     background-color: get-css-var('captcha-slider-bg-color');
     border: get-css-var('border-light-2');
     border-radius: get-css-var('captcha-slider-radius');
+  }
+
+  &--slide-image &__slider {
+    margin-bottom: 6px;
   }
 
   &__filler {
