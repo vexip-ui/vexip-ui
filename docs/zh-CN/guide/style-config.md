@@ -56,7 +56,7 @@ import 'vexip-ui/style/dark/index.scss' // 不需要暗黑主题时无需引入
 
 组件内的预设常规变量的命名大部分遵循 `--vxp-[component]-[?element]-[color|bg-color|b-color|s-color]-[?state]` 的规则：
 
-- `compoennt` 为组件的短横线命名
+- `component` 为组件的短横线命名
 - `element` 是可选部分，为变量作用的要素
 - `color` 为用于颜色属性的变量
 - `bg-color` 为用于背景颜色的变量

@@ -172,7 +172,7 @@ interface CascaderOptionState {
 | merge-tags      | `boolean`                                        | 在多选模式下，设置是否在所有子级选项均被选择时显示为父级选项，在异步加载下开启会使传值方式会发生改变 | `false`          | -       |
 | tag-type        | `TagType`                                        | 设置多选模式下标签的类型                                                                             | `null`           | -       |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                                                                 | `false`          | -       |
-| placeholder     | `string`                                         | 同原生的 `palceholder`                                                                               | `''`             | -       |
+| placeholder     | `string`                                         | 同原生的 `placeholder`                                                                               | `''`             | -       |
 | clearable       | `boolean`                                        | 设置是否可以清空值                                                                                   | `false`          | -       |
 | transition-name | `string`                                         | 选项列表的过渡动画                                                                                   | `'vxp-drop'`     | -       |
 | placement       | `Placement`                                      | 选项列表的出现位置，可选值同 Popper.js                                                               | `'bottom-start'` | -       |

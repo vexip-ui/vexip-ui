@@ -11,11 +11,11 @@ vi.useFakeTimers()
 function getValue() {
   return Array.from({ length: 20 }, (_, index) => index)
 }
-function createOptions(includeDisbaled = false) {
+function createOptions(includeDisabled = false) {
   return Array.from({ length: 40 }, (_, index) => ({
     value: index,
     label: `选项${index + 1}`,
-    disabled: includeDisbaled && index % 6 === 0
+    disabled: includeDisabled && index % 6 === 0
   }))
 }
 

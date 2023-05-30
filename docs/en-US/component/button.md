@@ -8,7 +8,7 @@ The basic general component is used to mark a set of operation commands, which a
 
 ### Button Type
 
-By seting the `type` prop to: `primary`, `info`, `success`, `warning` and `error` to create button with different types.
+By setting the `type` prop to: `primary`, `info`, `success`, `warning` and `error` to create button with different types.
 
 :::
 
@@ -92,7 +92,7 @@ Adding the `loading` prop to make the button in loading.
 
 ### Custom Color
 
-You can custom the major color throught the `color` prop.
+You can custom the major color through the `color` prop.
 
 :::
 

@@ -14,7 +14,7 @@ Setting the `type` prop can generate different types of links.
 
 ### Disabled
 
-Add the `disbaled` prop to disable the link.
+Add the `disabled` prop to disable the link.
 
 :::
 

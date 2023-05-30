@@ -106,7 +106,7 @@ Different states can be set via `state`.
 
 | Name    | Description                  | Parameters | Since |
 | ------- | ---------------------------- | ---------- | ----- |
-| defalut | Slot for radio label content | -          | -     |
+| default | Slot for radio label content | -          | -     |
 
 ### RadioGroup Props
 
@@ -124,7 +124,7 @@ Different states can be set via `state`.
 | loading-lock   | `boolean`                                                               | Set whether to be read-only when loading                                                                                          | `false`     | `2.0.0` |
 | loading-effect | `string`                                                                | Set the effect animation for the loading icon, only effective in button mode                                                      | `false`     | `2.0.0` |
 
-### RadioGruop Events
+### RadioGroup Events
 
 | Name   | Description                                                                         | Parameters                  | Since |
 | ------ | ----------------------------------------------------------------------------------- | --------------------------- | ----- |

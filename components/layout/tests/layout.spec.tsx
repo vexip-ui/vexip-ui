@@ -5,7 +5,7 @@ import { mount } from '@vue/test-utils'
 import { City, GithubB } from '@vexip-ui/icons'
 import { Layout } from '..'
 
-function watiMounted() {
+function waitMounted() {
   return new Promise(resolve => requestAnimationFrame(resolve))
 }
 
@@ -45,7 +45,7 @@ describe('Layout', () => {
       </Layout>
     ))
 
-    await watiMounted()
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout').classes()).toContain('vxp-layout-vars')
     expect(wrapper.find('.vxp-layout__sign').exists()).toBe(true)
@@ -94,7 +94,7 @@ describe('Layout', () => {
       </Layout>
     ))
 
-    await watiMounted()
+    await waitMounted()
 
     const user = wrapper.find('.vxp-layout__header .vxp-layout__user')
     const avatar = user.find('.vxp-avatar')
@@ -154,7 +154,7 @@ describe('Layout', () => {
       </Layout>
     ))
 
-    await watiMounted()
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout__footer').exists()).toBe(true)
 
@@ -209,7 +209,7 @@ describe('Layout', () => {
       </Layout>
     ))
 
-    await watiMounted()
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout__aside').exists()).toBe(false)
     expect(wrapper.find('.vxp-layout__header').exists()).toBe(true)
@@ -233,7 +233,7 @@ describe('Layout', () => {
       </Layout>
     ))
 
-    await watiMounted()
+    await waitMounted()
 
     expect(wrapper.find('.header-left').exists()).toBe(true)
     expect(wrapper.find('.header-main').exists()).toBe(true)

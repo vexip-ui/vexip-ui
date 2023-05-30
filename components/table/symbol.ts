@@ -9,6 +9,8 @@ export type Data = any
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
+export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
+export type MoveEventType = 'Start' | 'Move' | 'End'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -149,7 +151,9 @@ export type ColumnWithKey<
 > = TableColumnOptions<D, Val> & {
   key: Key,
   /** @internal */
-  first?: boolean
+  first?: boolean,
+  /** @internal */
+  last?: boolean
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -241,6 +245,7 @@ export interface StoreOptions {
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
   noCascaded: boolean,
+  colResizable: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 
@@ -257,6 +262,7 @@ export interface StoreState extends StoreOptions {
   widths: Map<Key, number>,
   sorters: Map<Key, ParsedTableSorterOptions>,
   filters: Map<Key, ParsedFilterOptions>,
+  resized: Set<Key>,
   bodyScroll: number,
   padTop: number,
   startRow: number,
@@ -264,7 +270,9 @@ export interface StoreState extends StoreOptions {
   dragging: boolean,
   heightBITree: BITree,
   virtualData: TableRowState[],
-  totalHeight: number
+  totalHeight: number,
+  colResizing: boolean,
+  resizeLeft: number
 }
 
 export interface TableRowInstance {
@@ -296,14 +304,15 @@ export interface TableHeadPayload {
   event: Event
 }
 
+export interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
+
 export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
-  emitRowEnter(payload: TableRowPayload): void,
-  emitRowLeave(payload: TableRowPayload): void,
-  emitRowClick(payload: TableRowPayload): void,
-  emitRowDblclick(payload: TableRowPayload): void,
-  emitRowContextmenu(payload: TableRowPayload): void,
+  getTableElement(): HTMLElement | undefined,
+  refreshXScroll(): void,
   emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
@@ -313,16 +322,10 @@ export interface TableActions {
   handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDrop(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDragEnd(event: DragEvent): void,
-  emitCellEnter(payload: TableCellPayload): void,
-  emitCellLeave(payload: TableCellPayload): void,
-  emitCellClick(payload: TableCellPayload): void,
-  emitCellDblclick(payload: TableCellPayload): void,
-  emitCellContextmenu(payload: TableCellPayload): void,
-  emitHeadEnter(payload: TableHeadPayload): void,
-  emitHeadLeave(payload: TableHeadPayload): void,
-  emitHeadClick(payload: TableHeadPayload): void,
-  emitHeadDblclick(payload: TableHeadPayload): void,
-  emitHeadContextmenu(payload: TableHeadPayload): void
+  emitRowEvent(type: MouseEventType, payload: TableRowPayload): void,
+  emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
+  emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
+  emitColResize(type: MoveEventType, payload: TableColResizePayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'
