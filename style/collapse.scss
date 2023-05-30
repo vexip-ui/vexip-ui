@@ -189,7 +189,7 @@ $collapse: map.merge(
       border-bottom: 0;
 
       #{$header} {
-        border-radius: 0 0 $radius $radius;
+        border-radius: 0;
       }
     }
   }
