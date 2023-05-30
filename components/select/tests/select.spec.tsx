@@ -76,7 +76,7 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__control').text()).toEqual(OPTIONS[0])
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
 
-    await wrapper.setProps({ value: null })
+    await wrapper.setProps({ value: null, visible: false })
     expect(wrapper.find('.vxp-select__control').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(false)
   })
