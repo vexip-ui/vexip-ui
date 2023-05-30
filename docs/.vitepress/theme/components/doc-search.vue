@@ -89,6 +89,8 @@ function toComponentDoc(fullName: string) {
 </template>
 
 <style lang="scss">
+@use '../style/mixins.scss' as *;
+
 .doc-search {
   flex: auto;
   padding-left: 14px;
@@ -108,6 +110,10 @@ function toComponentDoc(fullName: string) {
       background-color: var(--vxp-fill-color-background);
       border: var(--vxp-border-light-1);
       border-radius: var(--vxp-radius-base);
+
+      @include query-media('xs') {
+        display: none;
+      }
     }
 
     .vxp-select__selector {
