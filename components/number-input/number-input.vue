@@ -411,7 +411,7 @@ export default defineComponent({
       type = type === 'input' ? 'input' : 'change'
 
       if (type === 'change') {
-        const boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
+        let boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
         const boundChange = boundValue !== value
 
         if (!empty) {
@@ -425,6 +425,9 @@ export default defineComponent({
         emitEvent(props.onChange, boundValue)
 
         if (!props.sync || boundChange) {
+          if (props.precision > 0) {
+            boundValue = toFixed(boundValue, props.precision)
+          }
           emit('update:value', boundValue)
           validateField()
         }
