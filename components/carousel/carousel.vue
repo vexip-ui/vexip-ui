@@ -208,7 +208,7 @@ export default defineComponent({
         height: trackRect.height ? `${trackRect.height}px` : undefined,
         transform: trackRect.offset
           ? `translate${props.vertical ? 'Y' : 'X'}(${
-              isRtl.value ? `${-trackRect.offset}` : trackRect.offset
+              isRtl.value && !props.vertical ? `${-trackRect.offset}` : trackRect.offset
             }px) translateZ(0)`
           : undefined,
         transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`
@@ -325,8 +325,6 @@ export default defineComponent({
     })
 
     function increaseItem(item: ItemState) {
-      console.log(item)
-
       itemStates.value.add(item)
       refreshLabels()
       updateItemRect()
@@ -415,7 +413,9 @@ export default defineComponent({
         } else {
           for (let i = 0; i < itemCount; ++i) {
             itemList[i].offset =
-              i < targetIndex ? 0 : (isRtl.value ? itemCount : -itemCount) * itemLength
+              i < targetIndex
+                ? 0
+                : (isRtl.value && !props.vertical ? itemCount : -itemCount) * itemLength
           }
 
           trackRect.offset = itemLength * (itemCount - targetIndex)
@@ -449,7 +449,9 @@ export default defineComponent({
 
           for (let i = 0, len = itemList.length; i < len; ++i) {
             itemList[i].offset =
-              i < anchorIndex ? (isRtl.value ? -itemCount : itemCount) * itemLength : 0
+              i < anchorIndex
+                ? (isRtl.value && !props.vertical ? -itemCount : itemCount) * itemLength
+                : 0
           }
 
           trackRect.offset = -targetIndex * itemLength

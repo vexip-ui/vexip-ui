@@ -35,24 +35,24 @@ $contextmenu: map.merge(
   }
 
   &__list--icons &__item {
-    padding-left: 28px;
+    padding-inline-start: 28px;
   }
 
   &__list--no-icon &__item {
-    padding-left: 10px;
+    padding-inline-start: 10px;
   }
 
   &__list--arrows &__item {
-    padding-right: 28px;
+    padding-inline-end: 28px;
   }
 
   &__list--no-arrow &__item {
-    padding-right: 10px;
+    padding-inline-end: 10px;
   }
 
   &__icon {
     position: absolute;
-    left: 8px;
+    inset-inline-start: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,12 +61,12 @@ $contextmenu: map.merge(
   }
 
   &__shortcut {
-    margin-left: get-css-var('contextmenu-shortcut-offset');
+    margin-inline-start: get-css-var('contextmenu-shortcut-offset');
     color: get-css-var('contextmenu-shortcut-color');
   }
 
   &__arrow {
-    right: 6px;
-    left: auto;
+    inset-inline-end: 6px;
+    inset-inline-start: auto;
   }
 }
