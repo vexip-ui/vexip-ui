@@ -115,12 +115,6 @@ export function useScrollWrapper({
   function computeContentSize() {
     if (!content.el || isHiddenElement(content.el)) return
 
-    console.log({
-      osh: content.scrollHeight,
-      ooh: content.offsetHeight,
-      sh: content.el.scrollHeight,
-      oh: content.el.offsetHeight
-    })
     content.scrollWidth = content.el.scrollWidth
     content.offsetWidth = content.el.offsetWidth
     content.scrollHeight = content.el.scrollHeight
