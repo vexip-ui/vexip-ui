@@ -1,3 +1,5 @@
+import { writeFile } from 'node:fs/promises'
+
 import minimist from 'minimist'
 import { getPackageInfo, logger, run } from './utils'
 
@@ -25,7 +27,10 @@ async function main() {
     }
   }
 
-  const { pkgDir, currentVersion } = await getPackageInfo(inputPkg)
+  const { pkg, pkgPath, pkgDir, currentVersion } = await getPackageInfo(inputPkg)
+  const { engine, ...copiedPkg } = pkg
+
+  await writeFile(pkgPath, copiedPkg, 'utf-8')
 
   logger.withStartLn(() => logger.infoText('Publishing package...'))
 
@@ -55,6 +60,8 @@ async function main() {
     } else {
       throw error
     }
+  } finally {
+    await writeFile(pkgPath, pkg, 'utf-8')
   }
 }
 
