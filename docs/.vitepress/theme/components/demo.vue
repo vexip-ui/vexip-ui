@@ -10,9 +10,6 @@ import { usePlayground } from '../common/playground'
 
 import type { RowExposed } from 'vexip-ui'
 
-const demos = import.meta.glob('@docs/demos/**/*.vue', { eager: true, import: 'default' })
-const codes = import.meta.glob('@docs/demos/**/*.vue', { eager: true, as: 'raw' })
-
 const extensionMap: Record<string, string> = {
   vue: 'markup',
   html: 'markup',
@@ -31,6 +28,18 @@ const props = defineProps({
   src: {
     type: String,
     default: ''
+  },
+  demos: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  codes: {
+    type: Object,
+    default() {
+      return {}
+    }
   }
 })
 
@@ -72,11 +81,11 @@ onMounted(() => {
 
 async function internalInit() {
   const basePath = `/demos/${props.src}/demo.${locale.value}.vue`
-  const path = Object.keys(demos).find(path => path.endsWith(basePath))
+  const path = Object.keys(props.demos).find(path => path.endsWith(basePath))
 
   if (path) {
-    demo.value = markRaw(demos[path] as any)
-    code.value = codes[path]
+    demo.value = markRaw(props.demos[path] as any)
+    code.value = props.codes[path]
   }
 }
 
