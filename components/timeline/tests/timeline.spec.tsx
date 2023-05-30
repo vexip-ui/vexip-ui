@@ -35,10 +35,10 @@ describe('Timeline', () => {
     expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--pending')
   })
 
-  it('both sides', () => {
+  it('alternate', () => {
     const wrapper = mount(() => <Timeline both-sides></Timeline>)
 
-    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--both-sides')
+    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--alternate')
   })
 
   it('flip', () => {

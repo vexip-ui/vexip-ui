@@ -191,6 +191,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | nav-change      | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -        |
 | color-change    | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -        |
 | toggle-theme    | 当通过配置面板改变主题模式时触发 | `(isDark: boolean)`                          | `2.1.0`  |
+| content-resize  | 当内容缩放时触发                 | -                                            | `2.1.23` |
 
 ### Layout 插槽
 

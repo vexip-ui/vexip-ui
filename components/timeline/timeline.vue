@@ -11,7 +11,7 @@
 import { computed, defineComponent, provide, reactive, toRef } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { debounceMinor, isNull } from '@vexip-ui/utils'
+import { debounceMinor, isNull, warnOnce } from '@vexip-ui/utils'
 import { timelineProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
@@ -24,13 +24,21 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('timeline', _props, {
       pending: false,
-      bothSides: false,
+      bothSides: null,
       dashed: false,
       lineColor: null,
       spacing: null,
       flip: false,
-      horizontal: false
+      horizontal: false,
+      alternate: false
     })
+
+    if (!isNull(props.bothSides)) {
+      warnOnce(
+        "[vexip-ui:Timeline] 'both-sides' prop has been deprecated, please " +
+          "use 'alternate' prop to replace it"
+      )
+    }
 
     const nh = useNameHelper('timeline')
     const itemStates = reactive(new Set<ItemState>())
@@ -41,7 +49,7 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('pending')]: props.pending,
-        [nh.bm('both-sides')]: props.bothSides,
+        [nh.bm('alternate')]: props.bothSides || props.alternate,
         [nh.bm('flip')]: props.flip,
         [nh.bm('horizontal')]: props.horizontal
       }

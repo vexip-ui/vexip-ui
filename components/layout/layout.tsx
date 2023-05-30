@@ -246,6 +246,8 @@ export default defineComponent({
       if (scroll.value?.$el) {
         viewHeight.value = scroll.value.$el.offsetHeight
       }
+
+      emitEvent(props.onContentResize)
     }
 
     let cancelChange: (() => void) | undefined
@@ -428,6 +430,7 @@ export default defineComponent({
           class={className.value}
           style={style.value}
           use-y-bar
+          observe-deep
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >

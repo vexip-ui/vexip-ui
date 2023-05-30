@@ -191,6 +191,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | nav-change      | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -        |
 | color-change    | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -        |
 | toggle-theme    | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0`  |
+| content-resize  | Emitted when content resized                                        | -                                            | `2.1.23` |
 
 ### Layout Slots
 
@@ -268,7 +269,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
 | tag        | `string`          | Set the rendered tag                                                                                                            | `aside` | -     |
 | expanded   | `boolean`         | When the aside is not fixed, set whether the aside is expanded, can use `v-model` two-way binding                               | `false` | -     |
-| reduced    | `boolean`         | Set whether the aside is reduceded, can use `v-model` two-way binding                                                           | `false` | -     |
+| reduced    | `boolean`         | Set whether the aside is reduced, can use `v-model` two-way binding                                                             | `false` | -     |
 | menus      | `MenuOptions[]`   | Set menu options                                                                                                                | `[]`    | -     |
 | menu-props | `LayoutMenuProps` | Set menu properties                                                                                                             | `null`  | -     |
 | logo       | `string`          | Set Logo image address                                                                                                          | `''`    | -     |

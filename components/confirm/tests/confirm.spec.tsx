@@ -98,7 +98,7 @@ describe('Confirm', () => {
     expect(wrapper.find('.vxp-confirm__close').exists()).toBe(true)
   })
 
-  it('content align and anctions align', async () => {
+  it('content align and actions align', async () => {
     const wrapper = mount(Confirm)
 
     await nextTick()

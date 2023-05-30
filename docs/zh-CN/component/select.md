@@ -201,7 +201,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | state           | `'default' \| 'success' \| 'error' \| 'warning'` | 选择器的状态                                                              | `'default'`    | -        |
 | disabled        | `boolean`                                        | 设置是否禁用选择器                                                        | `false`        | -        |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                                      | `false`        | -        |
-| placeholder     | `string`                                         | 同原生的 palceholder                                                      | `''`           | -        |
+| placeholder     | `string`                                         | 同原生的 placeholder                                                      | `''`           | -        |
 | prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                              | `null`         | -        |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                            | `''`           | -        |
 | suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                              | `null`         | -        |

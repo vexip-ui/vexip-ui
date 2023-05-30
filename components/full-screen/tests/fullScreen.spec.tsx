@@ -83,7 +83,7 @@ describe('FullScreen', () => {
     expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
   })
 
-  test('should switch to another enterted state when current state is enterted.', async () => {
+  test('should switch to another entered state when current state is entered.', async () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
     const { toggle } = wrapper.findComponent(FullScreen).vm

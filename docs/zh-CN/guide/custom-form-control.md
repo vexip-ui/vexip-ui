@@ -40,7 +40,7 @@ const model = reactive({} as Model)
 
 <<< @/.vitepress/theme/components/control-demo.vue
 
-可以看到组件具有支持双向绑定的 `value` 属性，并通过 `disbaled`、`loading`、`state` 和 `size` 属性分别控制其他要素。
+可以看到组件具有支持双向绑定的 `value` 属性，并通过 `disabled`、`loading`、`state` 和 `size` 属性分别控制其他要素。
 
 ## 注入字段 Store
 

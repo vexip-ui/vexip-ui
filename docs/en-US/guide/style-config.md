@@ -57,7 +57,7 @@ Preset variables for each component are defined on the `.vxp-[component]-vars` c
 The regular names of preset variables in components mostly follow rule `--[prefix]-[component]-[?element]-[color|bg-color|b-color|s-color]-[?state]`:
 
 - `prefix` is the prefix, the default is `vxp`
-- `compoennt` is the kebab case name of component
+- `component` is the kebab case name of component
 - `element` optional, is the element that the variable acts on
 - `color` is a variable for the color
 - `bg-color` is a variable for background color

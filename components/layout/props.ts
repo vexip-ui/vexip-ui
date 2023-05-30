@@ -45,7 +45,8 @@ export const layoutProps = buildProps({
   onUserAction: eventProp<(label: string, meta: any) => void>(),
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
   onColorChange: eventProp<(color: string) => void>(),
-  onToggleTheme: eventProp<(isDark: boolean) => void>()
+  onToggleTheme: eventProp<(isDark: boolean) => void>(),
+  onContentResize: eventProp<() => void>()
 })
 
 export type LayoutProps = ExtractPropTypes<typeof layoutProps>
