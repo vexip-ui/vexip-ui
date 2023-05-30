@@ -3,6 +3,7 @@ export const isIOS =
   /* #__PURE__ */ isClient &&
   window?.navigator?.userAgent &&
   /iP(ad|hone|od)/.test(window.navigator.userAgent)
+export const isMobile = document && 'ontouchstart' in document.documentElement
 
 const toString = Object.prototype.toString
 const hasOwnProperty = Object.prototype.hasOwnProperty
