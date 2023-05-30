@@ -42,8 +42,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
 import { Bubble } from '@/components/bubble'
+
+import { computed, defineComponent } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
 import { progressProps } from './props'

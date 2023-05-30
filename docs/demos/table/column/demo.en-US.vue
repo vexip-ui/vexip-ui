@@ -24,7 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, h } from 'vue'
+import { h, ref } from 'vue'
+
 import { User } from '@vexip-ui/icons'
 
 const columns = ref([

@@ -1,5 +1,6 @@
 import { defineComponent, inject, provide } from 'vue'
-import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
+
+import { DROPDOWN_STATE, SELECT_HANDLER } from './symbol'
 
 export default defineComponent({
   setup(_, { slots }) {

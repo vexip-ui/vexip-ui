@@ -1,4 +1,4 @@
-import { isDefined, isObject, isFunction, toTrue } from './common'
+import { isDefined, isFunction, isObject, toTrue } from './common'
 import { deepClone } from './deep-clone'
 
 export function ensureArray<T>(value: T | T[]) {
@@ -378,4 +378,21 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
   }
 
   return sourceObj as T & U
+}
+
+export function runQueueFrame(queue: Array<() => void>) {
+  queue = Array.from(queue)
+
+  let cancelled = false
+
+  const run = () => {
+    if (cancelled) return
+
+    queue.shift()?.()
+    queue.length && requestAnimationFrame(run)
+  }
+
+  run()
+
+  return () => (cancelled = true)
 }

@@ -1,22 +1,25 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  computed,
-  watch,
-  createTextVNode,
-  mergeProps,
-  Fragment,
-  shallowReadonly
-} from 'vue'
 import { Popper } from '@/components/popper'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
 import {
-  useClickOutside,
+  Fragment,
+  computed,
+  createTextVNode,
+  defineComponent,
+  mergeProps,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import {
   placementWhileList,
+  useClickOutside,
+  useListener,
   usePopper,
-  useSetTimeout,
-  useListener
+  useSetTimeout
 } from '@vexip-ui/hooks'
 import { isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
@@ -310,7 +313,7 @@ export default defineComponent({
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
               {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
-              {slots.default?.(slotParams)}
+              {renderSlot(slots, 'default', slotParams)}
             </div>
           </Popper>
         )

@@ -1,5 +1,6 @@
 import anchor from 'markdown-it-anchor'
 import container from 'markdown-it-container'
+// import { isExternal } from '../.vitepress/shared'
 
 import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token'
@@ -7,15 +8,16 @@ import type StateCore from 'markdown-it/lib/rules_core/state_core'
 
 export function markdownItSetup(md: MarkdownIt) {
   md.use(anchor, { permalink: true, renderPermalink })
-    .use(useLinkTarget)
+    // .use(useLinkTarget)
     .use(useContainer)
     .use(useCodeWrapper)
     .use(useTableWrapper)
+    .use(useTag)
 }
 
 function renderPermalink(
   slug: string,
-  opts: anchor.AnchorOptions,
+  _opts: anchor.AnchorOptions,
   state: StateCore,
   index: number
 ) {
@@ -47,34 +49,36 @@ function renderPermalink(
   ]
 }
 
-// 为非锚点的链接添加 target 属性
-function useLinkTarget(md: MarkdownIt, target = '_blank') {
-  const renderer = md.renderer.rules.link_open
+// 为外部链接添加 target 属性
+// function useLinkTarget(md: MarkdownIt) {
+//   const renderer = md.renderer.rules.link_open
 
-  md.renderer.rules.link_open = (tokens, index, options, env, self) => {
-    const token = tokens[index]
-    const className = token.attrGet('class')
+//   md.renderer.rules.link_open = (tokens, index, options, env, self) => {
+//     const token = tokens[index]
+//     const href = token.attrGet('href')
 
-    if (!className || !className.includes('anchor__link')) {
-      token.attrSet('target', target)
-    }
+//     if (href && isExternal(href)) {
+//       token.attrSet('target', '_blank')
+//       token.attrSet('ref', 'noreferrer')
+//     }
 
-    return (renderer || self.renderToken.bind(self))(tokens, index, options, env, self)
-  }
-}
+//     return (renderer || self.renderToken.bind(self))(tokens, index, options, env, self)
+//   }
+// }
 
 function useContainer(md: MarkdownIt) {
-  md.use(...createContainer('info'))
-    .use(...createContainer('warning'))
-    .use(...createContainer('error'))
+  md.use(...createAlertContainer('info'))
+    .use(...createAlertContainer('warning'))
+    .use(...createAlertContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1 ? '<div v-pre>\n' : '</div>\n'
       }
     })
+    .use(...createDemoContainer())
 }
 
-function createContainer(type: string) {
+function createAlertContainer(type: string) {
   return [
     container,
     type,
@@ -84,12 +88,33 @@ function createContainer(type: string) {
 
         if (token.nesting === 1) {
           const title = token.info.replace(type, '').trim()
-          const titleProp = title ? `title="${title}"` : `:title="$t('alert.${type}')"`
+          const titleProp = title ? `title="${title}"` : `i18n title="alert.${type}"`
 
-          return `<Alert type="${type}" icon ${titleProp}>\n`
+          return `<TipContainer type="${type}" icon ${titleProp}>\n`
         }
 
-        return '</Alert>\n'
+        return '</TipContainer>\n'
+      }
+    }
+  ] as const
+}
+
+function createDemoContainer() {
+  return [
+    container,
+    'demo',
+    {
+      render(tokens: Token[], index: number) {
+        const token = tokens[index]
+        const demoReg = /^demo\s*(.*)$/
+
+        if (token.nesting === 1) {
+          const src = token.info.trim().match(demoReg)?.[1].trim()
+
+          return `<Demo src="${src}">\n`
+        } else {
+          return '</Demo>\n'
+        }
       }
     }
   ] as const
@@ -113,5 +138,40 @@ function useTableWrapper(md: MarkdownIt) {
   }
   md.renderer.rules.table_close = () => {
     return '</table></div>'
+  }
+}
+
+function useTag(md: MarkdownIt) {
+  const tagRE = /^\^\[([^\]]*)\](?:\(([^)]*)\))?/
+  const typeShortcuts: Record<string, string> = {
+    '!d': 'error', // deprecated
+    '!s': 'warning' // since
+  }
+
+  md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
+    const raw = state.src.slice(state.pos, state.posMax)
+    const matched = raw.match(tagRE)
+
+    if (!matched) return false
+    if (silent) return true
+
+    const token = state.push('tag', 'tag', 0)
+
+    token.content = matched[1].trim()
+    token.info = (matched[2] || '').trim()
+    token.level = state.level
+
+    state.pos += matched[0].length
+
+    return true
+  })
+
+  md.renderer.rules.tag = (tokens, index) => {
+    const token = tokens[index]
+    const { content, info } = token
+
+    const type = typeShortcuts[info] || info
+
+    return `<Tag type="${type}" simple>${content}</Tag>`
   }
 }

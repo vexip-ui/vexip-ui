@@ -1,27 +1,29 @@
-import {
-  defineComponent,
-  defineAsyncComponent,
-  ref,
-  reactive,
-  computed,
-  inject,
-  provide,
-  toRef,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  nextTick
-} from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
-import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useIcons, emitEvent } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+
+import {
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  renderSlot,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
-import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
+import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 // For types build
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,13 +36,6 @@ const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
 
 const MenuItem = defineComponent({
   name: 'MenuItem',
-  components: {
-    CollapseTransition,
-    Icon,
-    Tooltip,
-    Popper,
-    Renderer
-  },
   props: menuItemProps,
   emits: [],
   setup(_props, { slots, expose }) {
@@ -258,7 +253,7 @@ const MenuItem = defineComponent({
       }
     }
 
-    function toggleGroupExpanded(expanded: boolean, upwrad = false) {
+    function toggleGroupExpanded(expanded: boolean, upward = false) {
       clearTimeout(timer.hover)
 
       menuState?.doForEachItem(item => {
@@ -268,15 +263,23 @@ const MenuItem = defineComponent({
       })
       groupExpanded.value = expanded
 
-      if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {
-        parentItemState.toggleGroupExpanded(expanded, upwrad)
+      if (upward && typeof parentItemState?.toggleGroupExpanded === 'function') {
+        parentItemState.toggleGroupExpanded(expanded, upward)
       }
     }
+
+    let mouseInList = false
+    let reproduce = false
 
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (mouseInList || !isUsePopper.value || dropTrigger.value !== 'hover') return
+
+      if (!groupExpanded.value && popperShow.value) {
+        reproduce = true
+        return
+      }
 
       if (typeof parentItemState?.handleMouseEnter === 'function') {
         parentItemState.handleMouseEnter()
@@ -292,7 +295,9 @@ const MenuItem = defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (mouseInList || !popperShow.value || !isUsePopper.value || dropTrigger.value !== 'hover') {
+        return
+      }
 
       if (typeof parentItemState?.handleMouseLeave === 'function') {
         parentItemState.handleMouseLeave()
@@ -306,10 +311,27 @@ const MenuItem = defineComponent({
     }
 
     function handleClickOutside() {
-      if (dropTrigger.value === 'click') {
+      if (isUsePopper.value && dropTrigger.value === 'click') {
         nextTick(() => {
           groupExpanded.value = false
         })
+      }
+    }
+
+    function handlePopperHide() {
+      popperShow.value = false
+      groupExpanded.value = false
+
+      if (reproduce) {
+        reproduce = false
+
+        if (typeof parentItemState?.handleMouseEnter === 'function') {
+          parentItemState.handleMouseEnter()
+        }
+
+        if (props.disabled || !isGroup.value) return
+
+        groupExpanded.value = true
       }
     }
 
@@ -339,6 +361,7 @@ const MenuItem = defineComponent({
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
@@ -372,7 +395,7 @@ const MenuItem = defineComponent({
                 class={{
                   [nh.be('label')]: true,
                   [nh.bem('label', `marker-${markerType.value}`)]: true,
-                  [nh.bem('label', 'in-popper')]: isUsePopper.value
+                  [nh.bem('label', 'in-popper')]: parentItemState?.isUsePopper
                 }}
                 role={'menuitem'}
                 tabindex={0}
@@ -387,7 +410,7 @@ const MenuItem = defineComponent({
                   <div class={nh.be('icon')}>
                     {slots.icon
                       ? (
-                          slots.icon()
+                          renderSlot(slots, 'icon')
                         )
                       : typeof props.icon === 'function'
                         ? (
@@ -404,14 +427,15 @@ const MenuItem = defineComponent({
                     [nh.bem('title', 'in-group')]: !isHorizontal.value && isGroup.value
                   }}
                 >
-                  {slots.default ? slots.default() : props.label}
+                  {slots.default ? renderSlot(slots, 'default') : props.label}
                 </span>
                 {isGroup.value && (
                   <Icon
                     {...icons.value.arrowDown}
                     class={{
                       [nh.be('arrow')]: true,
-                      [nh.bem('arrow', 'visible')]: groupExpanded.value
+                      [nh.bem('arrow', 'visible')]: groupExpanded.value,
+                      [nh.bem('arrow', '')]: sonSelected.value
                     }}
                   ></Icon>
                 )}
@@ -419,7 +443,7 @@ const MenuItem = defineComponent({
             ),
             default: () => (
               <span class={nh.be('tooltip-title')}>
-                {slots.default ? slots.default() : props.label}
+                {slots.default ? renderSlot(slots, 'default') : props.label}
               </span>
             )
           }}
@@ -434,7 +458,7 @@ const MenuItem = defineComponent({
           <CollapseTransition appear>
             {isGroup.value && !isUsePopper.value && (
               <ul v-show={showGroup.value} class={nh.be('list')}>
-                {slots.group ? slots.group() : renderChildren()}
+                {slots.group ? renderSlot(slots, 'group') : renderChildren()}
               </ul>
             )}
           </CollapseTransition>
@@ -450,11 +474,13 @@ const MenuItem = defineComponent({
               alive={!transferTo.value || popperShow.value}
               to={transferTo.value}
               transition={transition.value}
-              onAfterLeave={() => (popperShow.value = false)}
-              onMouseenter={handleMouseEnter}
-              onMouseleave={handleMouseLeave}
+              onAfterLeave={handlePopperHide}
+              onMouseenter={() => ((mouseInList = true), handleMouseEnter())}
+              onMouseleave={() => ((mouseInList = false), handleMouseLeave())}
             >
-              <ul class={nh.be('list')}>{slots.group ? slots.group() : renderChildren()}</ul>
+              <ul class={nh.be('list')}>
+                {slots.group ? renderSlot(slots, 'group') : renderChildren()}
+              </ul>
             </Popper>
           )}
         </li>

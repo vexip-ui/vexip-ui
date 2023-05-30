@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { toKebabCase, isNull } from '@vexip-ui/utils'
+
+import { isNull, toKebabCase } from '@vexip-ui/utils'
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { compare } from 'compare-versions'
 
@@ -79,9 +80,10 @@ let directives: Record<string, string[]> | undefined
 function queryMetaData() {
   try {
     const root = resolveModule('vexip-ui') || process.cwd()
-    const path =
-      resolveModule('vexip-ui/meta-data.json') ||
-      resolveModule('vexip-ui/meta-data.json', { paths: [root] })
+    const metaPath = compare(version!, '2.1.18', '<')
+      ? 'vexip-ui/meta-data.json'
+      : 'vexip-ui/meta-data/components.json'
+    const path = resolveModule(metaPath) || resolveModule(metaPath, { paths: [root] })
     const metaData = JSON.parse(readFileSync(path!, 'utf-8'))
 
     components = metaData.components

@@ -1,9 +1,9 @@
-import { buildProps, booleanProp, stateProp, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, localeProp, stateProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TransferKeyConfig, TransferFilter } from './symbol'
+import type { TransferFilter, TransferKeyConfig } from './symbol'
 
 export type RawOption = string | Record<string, any>
 export type Values = (string | number)[]

@@ -1,15 +1,15 @@
 import {
-  buildProps,
-  booleanProp,
   booleanNumberProp,
+  booleanProp,
+  buildProps,
   classProp,
-  styleProp,
-  eventProp
+  eventProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { NativeScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
+import type { BarScrollPayload, NativeScrollMode, ScrollPayload } from './symbol'
 
 export const nativeScrollProps = buildProps({
   scrollClass: classProp,
@@ -33,6 +33,7 @@ export const nativeScrollProps = buildProps({
   barDuration: Number,
   useBarTrack: booleanProp,
   scrollTag: String,
+  observeDeep: booleanProp,
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),

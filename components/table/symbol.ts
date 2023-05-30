@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
+import type { ClassType, ComponentSize, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
@@ -9,6 +9,8 @@ export type Data = any
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
+export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
+export type MoveEventType = 'Start' | 'Move' | 'End'
 
 export const enum DropType {
   BEFORE = 'before',
@@ -30,10 +32,10 @@ export type Accessor<D = Data, Val extends string | number = string | number> = 
   index: number
 ) => Val
 export type RenderFn = (data: Data) => any
-export type ExpandRenderFn = (data: {
+export type ExpandRenderFn<D = Data> = (data: {
   leftFixed: number,
   rightFixed: number,
-  row: Data,
+  row: D,
   rowIndex: number
 }) => any
 
@@ -83,9 +85,11 @@ export type ParsedTableSorterOptions = Required<TableSorterOptions>
 
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: keyof D,
+  key: keyof D,
+  type?: never,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
+  // type?: TableColumnType,
   /**
    * @deprecated Use 'class' prop to replace it
    **/
@@ -100,33 +104,34 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
-  renderer?: RenderFn,
-  headRenderer?: RenderFn,
-  filterRenderer?: RenderFn
+  renderer?: ColumnRenderFn<D, Val>,
+  headRenderer?: HeadRenderFn,
+  filterRenderer?: FilterRenderFn
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
 export interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer' | 'headRenderer'> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
 export interface TableExpandColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'expand',
-  disableRow?: (data: Data) => boolean
+  disableRow?: (data: Data) => boolean,
+  renderer?: ExpandRenderFn<D>
 }
 
 export interface TableDragColumn<D = Data, Val extends string | number = string | number>
-  extends TableBaseColumn<D, Val> {
+  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
   type: 'drag',
   disableRow?: (data: Data) => boolean
 }
@@ -139,19 +144,22 @@ export type TableTypeColumn<D = Data, Val extends string | number = string | num
 export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
   | TableBaseColumn<D, Val>
   | TableTypeColumn<D, Val>
+
 export type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & {
   key: Key,
   /** @internal */
-  first?: boolean
+  first?: boolean,
+  /** @internal */
+  last?: boolean
 }
 
-export type ColumnRenderFn = (data: {
-  row: any,
+export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
   rowIndex: number,
-  column: TableColumnOptions,
+  column: TableBaseColumn<D, Val>,
   columnIndex: number
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
@@ -237,6 +245,7 @@ export interface StoreOptions {
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
   noCascaded: boolean,
+  colResizable: boolean,
   expandRenderer: ExpandRenderFn | null
 }
 
@@ -253,6 +262,7 @@ export interface StoreState extends StoreOptions {
   widths: Map<Key, number>,
   sorters: Map<Key, ParsedTableSorterOptions>,
   filters: Map<Key, ParsedFilterOptions>,
+  resized: Set<Key>,
   bodyScroll: number,
   padTop: number,
   startRow: number,
@@ -260,7 +270,9 @@ export interface StoreState extends StoreOptions {
   dragging: boolean,
   heightBITree: BITree,
   virtualData: TableRowState[],
-  totalHeight: number
+  totalHeight: number,
+  colResizing: boolean,
+  resizeLeft: number
 }
 
 export interface TableRowInstance {
@@ -292,14 +304,15 @@ export interface TableHeadPayload {
   event: Event
 }
 
+export interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
+
 export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
-  emitRowEnter(payload: TableRowPayload): void,
-  emitRowLeave(payload: TableRowPayload): void,
-  emitRowClick(payload: TableRowPayload): void,
-  emitRowDblclick(payload: TableRowPayload): void,
-  emitRowContextmenu(payload: TableRowPayload): void,
+  getTableElement(): HTMLElement | undefined,
+  refreshXScroll(): void,
   emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
@@ -309,16 +322,10 @@ export interface TableActions {
   handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDrop(rowInstance: TableRowInstance, event: DragEvent): void,
   handleRowDragEnd(event: DragEvent): void,
-  emitCellEnter(payload: TableCellPayload): void,
-  emitCellLeave(payload: TableCellPayload): void,
-  emitCellClick(payload: TableCellPayload): void,
-  emitCellDblclick(payload: TableCellPayload): void,
-  emitCellContextmenu(payload: TableCellPayload): void,
-  emitHeadEnter(payload: TableHeadPayload): void,
-  emitHeadLeave(payload: TableHeadPayload): void,
-  emitHeadClick(payload: TableHeadPayload): void,
-  emitHeadDblclick(payload: TableHeadPayload): void,
-  emitHeadContextmenu(payload: TableHeadPayload): void
+  emitRowEvent(type: MouseEventType, payload: TableRowPayload): void,
+  emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
+  emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
+  emitColResize(type: MoveEventType, payload: TableColResizePayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

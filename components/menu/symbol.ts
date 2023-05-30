@@ -1,4 +1,4 @@
-import type { InjectionKey, ComponentPublicInstance } from 'vue'
+import type { ComponentPublicInstance, InjectionKey } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 
@@ -28,7 +28,7 @@ export interface MenuItemState {
   transfer: Readonly<boolean | string>,
   cachedExpanded: boolean,
   updateSonSelected(selected: boolean, upstream?: boolean): void,
-  toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
+  toggleGroupExpanded(expanded: boolean, upward?: boolean): void,
   handleMouseEnter(): void,
   handleMouseLeave(): void
 }

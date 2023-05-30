@@ -1,4 +1,5 @@
-import { defineComponent, h, computed } from 'vue'
+import { computed, defineComponent, h } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { warnOnce } from '@vexip-ui/utils'
 import { iconProps } from './props'

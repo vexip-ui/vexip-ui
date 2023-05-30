@@ -37,15 +37,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { Renderer } from '@/components/renderer'
+
+import { defineComponent, reactive, ref } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { renderItem } from './render'
 
-import type { Key, ContextmenuOptions, ContextmenuConfig } from './symbol'
+import type { ContextmenuConfig, ContextmenuOptions, Key } from './symbol'
 
 export default defineComponent({
   name: 'Contextmenu',

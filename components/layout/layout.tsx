@@ -1,18 +1,21 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  shallowReadonly,
-  computed,
-  watch,
-  provide
-} from 'vue'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  provide,
+  reactive,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
-import { isClient } from '@vexip-ui/utils'
+import { getXBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
 import LayoutFooter from './layout-footer'
@@ -23,10 +26,10 @@ import { LAYOUT_STATE } from './symbol'
 
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type {
+  LayoutAsideExposed,
   LayoutConfig,
-  LayoutSignType,
   LayoutHeaderExposed,
-  LayoutAsideExposed
+  LayoutSignType
 } from './symbol'
 
 export default defineComponent({
@@ -80,13 +83,15 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const locked = ref(false)
+    const asideActive = ref(!props.noAside)
     const asideExpanded = ref(props.expanded)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
     const currentColor = ref(props.color)
 
-    const { isMounted } = useMounted()
+    const { isMounted } = useMounted('frame')
 
     const section = ref<HTMLElement>()
     const scroll = ref<NativeScrollExposed>()
@@ -99,7 +104,7 @@ export default defineComponent({
 
     const state = reactive({
       isLayout: true,
-      locked: false,
+      locked: computed(() => locked.value),
       affixed: false,
       scrollY: 0,
       affixMatched,
@@ -107,7 +112,8 @@ export default defineComponent({
       useExpand: false,
       expanded: asideExpanded,
       reduced: asideReduced,
-      navConfig: computed(() => !props.noAside)
+      navConfig: computed(() => !props.noAside),
+      changeInLock
     })
 
     const className = computed(() => {
@@ -117,14 +123,13 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
-          [nh.bm('header-main')]: currentSignType.value === 'header'
+          [nh.bm('header-main')]: currentSignType.value === 'header',
+          [nh.bm('locked')]: !isMounted.value || locked.value
         }
       ]
     })
     const rootEl = computed(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      isMounted.value
-      return isClient ? document.documentElement : null
+      return isClient && isMounted.value ? document.documentElement : null
     })
     const signInHeader = computed(() => {
       return props.noAside || currentSignType.value === 'header' || state.useExpand
@@ -168,17 +173,9 @@ export default defineComponent({
       }
     )
     watch(
-      () => state!.locked,
+      () => props.noAside,
       value => {
-        if (!section.value || !scroll.value?.content) return
-
-        if (value) {
-          section.value.style.transitionDuration = '0ms'
-          scroll.value.content.style.transitionDuration = '0ms'
-        } else {
-          section.value.style.transitionDuration = ''
-          scroll.value.content.style.transitionDuration = ''
-        }
+        changeInLock(() => (asideActive.value = value))
       }
     )
     watch(currentSignType, value => {
@@ -237,11 +234,6 @@ export default defineComponent({
       emit('update:dark-mode', isDark)
     }
 
-    // function handleScroll({ clientY }: { clientY: number }) {
-    //   // state.scrollY = clientY
-    //   // state.affixed = !state.affixMatched && clientY >= 50
-    // }
-
     function handleUserAction(label: string, meta: Record<string, any>) {
       emitEvent(props.onUserAction, label, meta)
     }
@@ -252,13 +244,36 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = scroll.value.$el.offsetHeight
+        viewHeight.value = scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)
       }
+
+      emitEvent(props.onContentResize)
+    }
+
+    let cancelChange: (() => void) | undefined
+
+    function changeInLock(doChange: () => void) {
+      cancelChange?.()
+      cancelChange = runQueueFrame([
+        () => (locked.value = true),
+        doChange,
+        () => (locked.value = false)
+      ])
     }
 
     function stopAndPrevent(event: Event) {
       event.stopPropagation()
       event.preventDefault()
+    }
+
+    function createSlotRender(names: string[], fallback?: (params: any) => any) {
+      for (const name of names) {
+        if (slots[name]) {
+          return (params: any) => renderSlot(slots, name, params)
+        }
+      }
+
+      return fallback || null
     }
 
     function renderSign() {
@@ -267,7 +282,7 @@ export default defineComponent({
       }
 
       if (slots.sign) {
-        return slots.sign(slotParams)
+        return renderSlot(slots, 'sign', slotParams)
       }
 
       const showSignName = props.signName && !(signInHeader.value && !signNameMatched.value)
@@ -291,7 +306,7 @@ export default defineComponent({
 
     function renderHeader() {
       if (slots.header) {
-        return slots.header(slotParams)
+        return renderSlot(slots, 'header', slotParams)
       }
 
       return (
@@ -320,14 +335,13 @@ export default defineComponent({
           }}
         >
           {{
-            left:
-              slots['header-left'] ||
-              slots.headerLeft ||
-              (() => (signInHeader.value ? renderSign() : null)),
-            default: slots['header-main'] || slots.headerMain || null,
-            right: slots['header-right'] || slots.headerRight || null,
-            user: slots['header-user'] || slots.headerUser || null,
-            avatar: slots['header-avatar'] || slots.headerAvatar || null
+            left: createSlotRender(['header-left', 'headerLeft'], () =>
+              signInHeader.value ? renderSign() : null
+            ),
+            default: createSlotRender(['header-main', 'headerMain']),
+            right: createSlotRender(['header-right', 'headerRight']),
+            user: createSlotRender(['header-user', 'headerUser']),
+            avatar: createSlotRender(['header-avatar', 'headerAvatar'])
           }}
         </LayoutHeader>
       )
@@ -346,7 +360,7 @@ export default defineComponent({
         >
           {slots.aside
             ? (
-                slots.aside(slotParams)
+                renderSlot(slots, 'aside', slotParams)
               )
             : (
             <LayoutAside
@@ -361,13 +375,12 @@ export default defineComponent({
               onMenuSelect={handleMenuSelect}
             >
               {{
-                top:
-                  slots['aside-top'] ||
-                  slots.asideTop ||
-                  (() => (!signInHeader.value ? renderSign() : null)),
-                default: slots['aside-main'] || slots.asideMain || null,
-                bottom: slots['aside-bottom'] || slots.asideBottom || null,
-                expand: slots['aside-expand'] || slots.asideExpand || null
+                top: createSlotRender(['aside-top', 'asideTop'], () =>
+                  !signInHeader.value ? renderSign() : null
+                ),
+                default: createSlotRender(['aside-main', 'asideMain']),
+                bottom: createSlotRender(['aside-bottom', 'asideBottom']),
+                expand: createSlotRender(['aside-expand', 'asideExpand'])
               }}
             </LayoutAside>
               )}
@@ -377,13 +390,13 @@ export default defineComponent({
 
     function renderMain() {
       if (slots.default) {
-        return slots.default(slotParams)
+        return renderSlot(slots, 'default', slotParams)
       }
 
       return (
         <LayoutMain fixed={props.fixedMain}>
           {{
-            default: slots.main
+            default: createSlotRender(['main'])
           }}
         </LayoutMain>
       )
@@ -391,7 +404,7 @@ export default defineComponent({
 
     function renderFooter() {
       if (slots.footer) {
-        return slots.footer(slotParams)
+        return renderSlot(slots, 'footer', slotParams)
       }
 
       return (
@@ -401,8 +414,8 @@ export default defineComponent({
           vertical-links={props.verticalLinks}
         >
           {{
-            links: slots['footer-links'] || slots.footerLinks || null,
-            copyright: slots['footer-copyright'] || slots.footerCopyright || null
+            links: createSlotRender(['footer-links', 'footerLinks']),
+            copyright: createSlotRender(['footer-copyright', 'footerCopyright'])
           }}
         </LayoutFooter>
       )
@@ -417,6 +430,7 @@ export default defineComponent({
           class={className.value}
           style={style.value}
           use-y-bar
+          observe-deep
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >
@@ -430,7 +444,7 @@ export default defineComponent({
                 {
                   [nh.bem('section', 'away')]: expandMatched.value,
                   [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: state.locked,
+                  [nh.bem('section', 'locked')]: locked.value,
                   [nh.bem('section', 'fixed')]: props.fixedMain
                 }
               ]}

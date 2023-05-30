@@ -2,49 +2,49 @@
 
 First, thanks for being interested in contributing on this project!
 
-## Development
+## Pre-request
 
-### Pre-request
-
-Before starting, you should ensure your mechine is having:
+Before starting, ensure your machine is having:
 
 Node >= 18
 
 pnpm >= 8
 
-### Setup
+## Setup
 
-Fork this repo, the clone it to your local mechine and intsall the dependencies:
+Fork [Vexip UI](https://github.com/vexip-ui/vexip-ui) and clone to your local machine and install dependencies:
 
 ```sh
 pnpm install # pnpm i
 ```
 
-Then you need to build all packages under `common`:
+Then you need to build once the packages under `common` (**IMPORTANT**):
 
 ```sh
 pnpm run build:common
 ```
 
-### Developing for Component
+## Component Development
 
-We use a vite project in `dev-server` for development.
+We use a Vite project in `dev-server` a development server.
 
-Using the following command you can start development server for specify component:
+You can use the following command to start development server for specify component:
 
 ```sh
 pnpm run serve [component]
 ```
 
-You can also specify the port and language via additional command:
+After the server is successfully started, the demos of the components specified under `docs/demos` will be used as development cases.
+
+The development server uses `8008` port and Chinese demos by default, you can add `-p` and `-l` parameters to the command to specify the port and language respectively:
 
 ```sh
-pnpm run serve [component] -p [port] -l [languagt]
+pnpm run serve [component] -p [port] -l [language]
 ```
 
-### Developing for Document
+## Documentation Development
 
-We alse use a vite project for documenting, you can start it locally:
+We use [VitePress](https://vitepress.dev/) as the documentation framework. You can start it locally with the following command:
 
 ```sh
 pnpm run serve:docs
@@ -52,13 +52,28 @@ pnpm run serve:docs
 
 ## Create New Component
 
-you can create some templete files by:
+You can quickly create a new component using template files:
 
 ```sh
-pnpm run create [component-name]
+pnpm run create [component]
 ```
 
-Then you need to update exports files by:
+Wait patiently for the files to be created, then you can check the files in the following locations:
+
+- `components/[component]/index.ts`
+- `components/[component]/props.ts`
+- `components/[component]/css.ts`
+- `components/[component]/style.ts`
+- `components/[component]/[component].vue`
+- `components/[component]/tests/ssr.spec.tsx`
+- `components/[component]/tests/[component].spec.tsx`
+- `docs/demos/[component]/basis/demo.en-US.vue`
+- `docs/demos/[component]/basis/demo.zh-CN.vue`
+- `docs/en-US/component/[component].md`
+- `docs/zh-CN/component/[component].md`
+- `style/[component].scss`
+
+After confirming, you can execute the bootstrap command and start developing the component and its documentation.
 
 ```sh
 pnpm run bootstrap

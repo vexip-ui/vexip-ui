@@ -1,23 +1,23 @@
 import {
-  buildProps,
   booleanProp,
-  stateProp,
-  styleProp,
+  buildProps,
   eventProp,
-  localeProp
+  localeProp,
+  stateProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
-  UploadListType,
-  BeforeUpload,
   BeforeSelect,
-  RenderFn,
-  HttpError,
+  BeforeUpload,
+  FileOptions,
   FileState,
-  FileOptions
+  HttpError,
+  RenderFn,
+  UploadListType
 } from './symbol'
 
 export const uploadProps = buildProps({

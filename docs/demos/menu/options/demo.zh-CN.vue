@@ -1,11 +1,12 @@
 <template>
-  <Menu :options="options" style="max-width: 240px;" @select="handleSelect"></Menu>
+  <Menu :options="options" style="max-width: 240px" @select="handleSelect"></Menu>
 </template>
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon } from 'vexip-ui'
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

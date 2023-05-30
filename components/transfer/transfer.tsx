@@ -1,17 +1,28 @@
-import { defineComponent, ref, reactive, toRef, computed, watchEffect, watch } from 'vue'
-import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  renderSlot,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
+
+import {
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import TransferPanel from './transfer-panel'
 import { transferProps } from './props'
 
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
@@ -184,7 +195,17 @@ export default defineComponent({
       }
     )
 
-    expose({ handleToTarget, handleToSource, handlePanelFocus, handlePanelBlur })
+    expose({
+      handleToTarget,
+      handleToSource,
+      handlePanelFocus,
+      handlePanelBlur,
+      focus: (options?: FocusOptions) => source.value?.$el?.focus(options),
+      blur: () => {
+        source.value?.$el?.blur()
+        target.value?.$el?.blur()
+      }
+    })
 
     function getFilterMethod(type: 'source' | 'target') {
       const filter = props.filter
@@ -251,6 +272,16 @@ export default defineComponent({
       target.value?.$el.blur()
     }
 
+    function createSlotRender(names: string[]) {
+      for (const name of names) {
+        if (slots[name]) {
+          return (params: any) => renderSlot(slots, name, params)
+        }
+      }
+
+      return null
+    }
+
     return () => {
       return (
         <div id={idFor.value} class={className.value}>
@@ -279,16 +310,16 @@ export default defineComponent({
             onSwitch={() => handlePanelFocus('target')}
           >
             {{
-              header: slots['source-header'] || slots.sourceHeader || slots.header,
-              title: slots['source-title'] || slots.sourceTitle || slots.title,
-              body: slots['source-body'] || slots.sourceBody || slots.body,
-              footer: slots['source-footer'] || slots.sourceFooter || slots.footer,
-              option: slots['source-option'] || slots.sourceOption || slots.option
+              header: createSlotRender(['source-header', 'sourceHeader', 'header']),
+              title: createSlotRender(['source-title', 'sourceTitle', 'title']),
+              body: createSlotRender(['source-body', 'sourceBody', 'body']),
+              footer: createSlotRender(['source-footer', 'sourceFooter', 'footer']),
+              option: createSlotRender(['source-option', 'sourceOption', 'option'])
             }}
           </TransferPanel>
           <div class={nh.be('actions')}>
             {slots.actions
-              ? slots.actions({ handleToTarget, handleToSource })
+              ? renderSlot(slots, 'actions', { handleToTarget, handleToSource })
               : [
                   <Button
                     inherit
@@ -349,11 +380,11 @@ export default defineComponent({
             onSwitch={() => handlePanelFocus('source')}
           >
             {{
-              header: slots['target-header'] || slots.targetHeader || slots.header,
-              title: slots['target-title'] || slots.targetTitle || slots.title,
-              body: slots['target-body'] || slots.targetBody || slots.body,
-              footer: slots['target-footer'] || slots.targetFooter || slots.footer,
-              option: slots['target-option'] || slots.targetOption || slots.option
+              header: createSlotRender(['target-header', 'targetHeader', 'header']),
+              title: createSlotRender(['target-title', 'targetTitle', 'title']),
+              body: createSlotRender(['target-body', 'targetBody', 'body']),
+              footer: createSlotRender(['target-footer', 'targetFooter', 'footer']),
+              option: createSlotRender(['target-option', 'targetOption', 'option'])
             }}
           </TransferPanel>
         </div>

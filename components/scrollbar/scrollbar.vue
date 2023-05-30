@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="contaniner"
+    ref="container"
     :class="className"
     role="scrollbar"
     :style="style"
@@ -22,20 +22,21 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
   computed,
-  watch,
-  watchEffect,
-  toRef,
-  onMounted,
-  onBeforeUnmount,
+  defineComponent,
+  getCurrentInstance,
   nextTick,
-  getCurrentInstance
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toRef,
+  watch,
+  watchEffect
 } from 'vue'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useManualRef } from '@vexip-ui/hooks'
-import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, isDefined, throttle } from '@vexip-ui/utils'
 import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
 import { ScrollbarType } from './symbol'
@@ -86,7 +87,7 @@ export default defineComponent({
 
     const currentScroll = manualRef(props.scroll)
 
-    const contaniner = ref<HTMLElement>()
+    const container = ref<HTMLElement>()
     const bar = ref<HTMLElement>()
     const track = ref<HTMLElement>()
 
@@ -213,10 +214,10 @@ export default defineComponent({
             wrapperElement = instance.parent.proxy?.$el
 
             if (!wrapperElement) {
-              wrapperElement = contaniner.value?.parentElement ?? null
+              wrapperElement = container.value?.parentElement ?? null
             }
           } else {
-            wrapperElement = contaniner.value?.parentElement ?? null
+            wrapperElement = container.value?.parentElement ?? null
           }
         }
 
@@ -355,7 +356,7 @@ export default defineComponent({
       style,
       // barStyle,
 
-      contaniner,
+      container,
       bar,
       track,
 

@@ -40,25 +40,27 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  inject,
-  provide
-} from 'vue'
 import { Popper } from '@/components/popper'
-import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import { placementWhileList, useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
 import { dropdownProps } from './props'
 import { useLabel } from './hooks'
-import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
+import { DROPDOWN_STATE, SELECT_HANDLER } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Placement } from '@vexip-ui/hooks'
@@ -96,7 +98,8 @@ export default defineComponent({
       dropClass: null,
       appear: false,
       meta: null,
-      alive: false
+      alive: false,
+      custom: false
     })
 
     const parentState = inject(DROPDOWN_STATE, null)
@@ -105,8 +108,9 @@ export default defineComponent({
     const label = toRef(props, 'label')
     const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
-    const transfer = toRef(props, 'transfer')
     const popperAlive = ref(false)
+
+    const transfer = isNested ? ref(false) : toRef(props, 'transfer')
 
     const wrapper = useClickOutside(handleClickOutside)
     const popper = ref<PopperExposed>()
@@ -131,15 +135,16 @@ export default defineComponent({
     const isAlive = computed(() => parentState?.alive || props.alive)
 
     provide(SELECT_HANDLER, null)
-    provide(
-      DROPDOWN_STATE,
-      reactive({
-        alive: isAlive,
-        handleSelect,
-        handleTriggerEnter,
-        handleTriggerLeave
-      })
-    )
+    !props.custom &&
+      provide(
+        DROPDOWN_STATE,
+        reactive({
+          alive: isAlive,
+          handleSelect,
+          handleTriggerEnter,
+          handleTriggerLeave
+        })
+      )
 
     watch(
       () => props.visible,

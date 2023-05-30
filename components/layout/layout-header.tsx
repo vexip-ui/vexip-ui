@@ -1,13 +1,3 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  shallowReadonly,
-  computed,
-  watch,
-  onBeforeMount
-} from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
@@ -15,7 +5,20 @@ import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { Switch } from '@/components/switch'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import { layoutHeaderProps } from './props'
@@ -161,27 +164,12 @@ export default defineComponent({
     }
 
     function handleSignTypeChange(type: LayoutSignType) {
-      const queue: Array<() => void> = [
-        () => {
-          layoutState.locked = true
-        },
-        () => {
-          currentSignType.value = type
+      layoutState.changeInLock(() => {
+        currentSignType.value = type
 
-          emitEvent(props.onNavChange, type)
-          emit('update:sign-type', type)
-        },
-        () => {
-          layoutState.locked = false
-        }
-      ]
-
-      const run = () => {
-        queue.shift()?.()
-        queue.length && requestAnimationFrame(run)
-      }
-
-      run()
+        emitEvent(props.onNavChange, type)
+        emit('update:sign-type', type)
+      })
     }
 
     function toggleExpanded(expanded = !layoutState.expanded) {
@@ -317,7 +305,7 @@ export default defineComponent({
             <div class={nh.be('header-left')}>
               {slots.left
                 ? (
-                    slots.left(slotParams)
+                    renderSlot(slots, 'left', slotParams)
                   )
                 : props.signType === 'header'
                   ? (
@@ -336,7 +324,7 @@ export default defineComponent({
           <div class={nh.be('header-main')}>
             {slots.default
               ? (
-                  slots.default(slotParams)
+                  renderSlot(slots, 'default', slotParams)
                 )
               : hasMenu.value
                 ? (
@@ -351,10 +339,12 @@ export default defineComponent({
                   )
                 : null}
           </div>
-          {slots.right && <div class={nh.be('header-right')}>{slots.right(slotParams)}</div>}
+          {slots.right && (
+            <div class={nh.be('header-right')}>{renderSlot(slots, 'right', slotParams)}</div>
+          )}
           {slots.user
             ? (
-                slots.user(slotParams)
+                renderSlot(slots, 'user', slotParams)
               )
             : (
             <Dropdown
@@ -368,7 +358,7 @@ export default defineComponent({
               {{
                 default: () => {
                   if (slots.avatar) {
-                    return slots.avatar(slotParams)
+                    return renderSlot(slots, 'avatar', slotParams)
                   }
 
                   if (typeof props.user?.avatar === 'string') {

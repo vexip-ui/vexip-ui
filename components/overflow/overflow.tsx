@@ -1,15 +1,17 @@
-import {
-  defineComponent,
-  ref,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  createTextVNode,
-  Fragment
-} from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  Fragment,
+  computed,
+  createTextVNode,
+  defineComponent,
+  nextTick,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { overflowProps } from './props'
 

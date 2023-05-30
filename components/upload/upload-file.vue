@@ -153,12 +153,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, toRef } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
 import { uploadFileProps } from './props'
 import { iconMaps } from './file-icon'

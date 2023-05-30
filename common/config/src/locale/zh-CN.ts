@@ -60,7 +60,9 @@ export function zhCNLocale() {
         start: '开始',
         end: '结束',
         select: '请选择'
-      }
+      },
+      startTime: '开始时间',
+      endTime: '结束时间'
     },
 
     drawer: {

@@ -1,25 +1,27 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  provide
-} from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { isDefined, callIfFunc } from '@vexip-ui/utils'
+
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { callIfFunc, isDefined } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
-import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
-import type { MenuOptions, MenuMarkerType, MenuItemState, MenuState } from './symbol'
+import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
+import type { MenuItemState, MenuMarkerType, MenuOptions, MenuState } from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType[]>(['top', 'right', 'bottom', 'left', 'none'])
 
@@ -323,6 +325,7 @@ export default defineComponent({
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>

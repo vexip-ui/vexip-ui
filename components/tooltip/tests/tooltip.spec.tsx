@@ -1,6 +1,7 @@
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Tooltip } from '..'
 
 vi.useFakeTimers()

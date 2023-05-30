@@ -9,7 +9,11 @@
         fade-effect
       >
         <div v-if="isLoading" :class="nh.be('loading')">
-          <Icon :effect="loadingEffect" :icon="loadingIcon"></Icon>
+          <Icon
+            v-bind="icons.loading"
+            :effect="loadingEffect || icons.loading.effect"
+            :icon="loadingIcon || icons.loading.icon"
+          ></Icon>
         </div>
       </CollapseTransition>
       <slot>{{ props.label }}</slot>
@@ -28,16 +32,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+
+import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
 import {
-  useNameHelper,
-  useProps,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
@@ -86,7 +92,7 @@ export default defineComponent({
     const isButton = computed(() => groupState?.button)
     const isBorder = computed(() => groupState?.border || props.border)
     const isLoading = computed(() => groupState?.loading || props.loading)
-    const loadingIcon = computed(() => groupState?.loadingIcon || icons.value.loading)
+    const loadingIcon = computed(() => groupState?.loadingIcon)
     const isLoadingLock = computed(() => groupState?.loadingLock || false)
     const loadingEffect = computed(() => groupState?.loadingEffect || '')
     const className = computed(() => {
@@ -149,6 +155,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      icons,
       currentValue,
 
       className,

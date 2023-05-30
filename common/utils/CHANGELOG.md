@@ -1,3 +1,27 @@
+# [1.13.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.12.0...utils@1.13.0) (2023-05-20)
+
+
+### Features
+
+* **bem-helper:** create bem-helper package ([f91208e](https://github.com/vexip-ui/vexip-ui/commit/f91208e661ac1ecb0d14289dc57286683392f212))
+* **utils:** add runQueueFrame method ([a376a15](https://github.com/vexip-ui/vexip-ui/commit/a376a15bbcb29ab93224d1fe1f13e0b8442ddb4e))
+
+
+
+# [1.12.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.1...utils@1.12.0) (2023-05-14)
+
+
+### Bug Fixes
+
+* **utils:** correct flatTree filter method ([94dacad](https://github.com/vexip-ui/vexip-ui/commit/94dacad0625fbd2e520d646a4afaad2692909c47))
+
+
+### Features
+
+* **utils:** enhance flatTree to support depth first and filter ([c5a5728](https://github.com/vexip-ui/vexip-ui/commit/c5a57284863de973dc0480243af114cc02217b44))
+
+
+
 ## [1.11.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.11.0...utils@1.11.1) (2023-05-06)
 
 

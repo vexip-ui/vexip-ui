@@ -15,11 +15,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { boundRange } from '@vexip-ui/utils'
 
-import type { LoadingState, LoadingPosition, LoadingOptions } from './symbol'
+import type { LoadingOptions, LoadingPosition, LoadingState } from './symbol'
 
 export default defineComponent({
   name: 'Loading',

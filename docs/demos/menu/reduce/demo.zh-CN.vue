@@ -9,7 +9,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 

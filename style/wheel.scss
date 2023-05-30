@@ -14,6 +14,7 @@ $wheel: map.merge(
     item-h-padding: 8px,
     item-opacity: 50%,
     item-opacity-active: 100%,
+    item-color-active-hover: get-css-var('color-primary-opacity-1'),
     item-color-disabled: get-css-var('content-color-disabled'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
@@ -82,10 +83,20 @@ $wheel: map.merge(
     padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding');
     list-style: none;
     opacity: get-css-var('wheel-item-opacity');
-    transition: get-css-var('transition-opacity');
+    transition: get-css-var('transition-color'), get-css-var('transition-opacity');
 
     &--active {
       opacity: get-css-var('wheel-item-opacity-active');
+    }
+
+    &--disabled {
+      color: get-css-var('wheel-item-color-disabled');
+    }
+  }
+
+  &:hover &__item {
+    &--active {
+      color: get-css-var('wheel-item-color-active-hover');
     }
 
     &--disabled {

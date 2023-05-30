@@ -1,37 +1,37 @@
 import {
-  buildProps,
   booleanProp,
-  sizeProp,
+  buildProps,
   classProp,
-  styleProp,
   eventProp,
-  localeProp
+  localeProp,
+  sizeProp,
+  styleProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ClassType, StyleType, ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ClassType, ConfigurableProps, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  ColumnRenderFn,
   Data,
   DropType,
-  TableTextAlign,
-  TableKeyConfig,
   ExpandRenderFn,
-  ColumnRenderFn,
-  HeadRenderFn,
   FilterRenderFn,
-  TableColumnType,
-  TableColumnOptions,
-  TableSorterOptions,
-  TableFilterOptions,
-  TableSorterProfile,
-  TableFilterProfile,
-  TableRowPropFn,
-  TableCellPropFn,
-  TableHeadPropFn,
-  TableRowPayload,
+  HeadRenderFn,
   TableCellPayload,
-  TableHeadPayload
+  TableCellPropFn,
+  TableColumnOptions,
+  TableColumnType,
+  TableFilterOptions,
+  TableFilterProfile,
+  TableHeadPayload,
+  TableHeadPropFn,
+  TableKeyConfig,
+  TableRowPayload,
+  TableRowPropFn,
+  TableSorterOptions,
+  TableSorterProfile,
+  TableTextAlign
 } from './symbol'
 
 export const tableProps = buildProps({
@@ -88,6 +88,7 @@ export const tableProps = buildProps({
   disabledTree: booleanProp,
   rowIndent: [String, Number],
   noCascaded: booleanProp,
+  colResizable: booleanProp,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
@@ -112,7 +113,10 @@ export const tableProps = buildProps({
   onHeadLeave: eventProp<(payload: TableHeadPayload) => void>(),
   onHeadClick: eventProp<(payload: TableHeadPayload) => void>(),
   onHeadDblclick: eventProp<(payload: TableHeadPayload) => void>(),
-  onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>()
+  onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeStart: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeMove: eventProp<(payload: TableHeadPayload) => void>(),
+  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>()
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>

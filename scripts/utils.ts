@@ -1,17 +1,18 @@
 import { resolve } from 'node:path'
 import {
-  readdirSync,
-  statSync,
   existsSync,
   lstatSync,
+  readFileSync,
+  readdirSync,
   rmdirSync,
-  unlinkSync,
-  readFileSync
+  statSync,
+  unlinkSync
 } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:net'
+
 import { execa } from 'execa'
-import { bgYellow, bgCyan, bgGreen, bgRed, yellow, cyan, green, red, lightBlue } from 'kolorist'
+import { bgCyan, bgGreen, bgRed, bgYellow, cyan, green, lightBlue, red, yellow } from 'kolorist'
 import prompts from 'prompts'
 
 import type { Options } from 'execa'
@@ -193,13 +194,19 @@ export async function specifyComponent(
   if (matchedComponents.length > 1 || !matchedComponents[0]) {
     component = (
       await prompts({
-        type: 'select',
+        type: 'autocomplete',
         name: 'component',
         message: 'Select a component:',
         choices: (matchedComponents.length > 1 ? matchedComponents : allComponents).map(name => ({
           title: name,
           value: name
-        }))
+        })),
+        onState(this: any) {
+          this.fallback = { title: this.input, value: this.input }
+          if (this.suggestions.length === 0) {
+            this.value = this.fallback.value
+          }
+        }
       })
     ).component
   } else {
@@ -260,8 +267,7 @@ export function emptyDir(dir: string) {
 
 const packages = [
   'vexip-ui',
-  // 'plaground',
-  // 'common/config',
+  'common/bem-helper',
   'common/hooks',
   'common/icons',
   'common/plugins',

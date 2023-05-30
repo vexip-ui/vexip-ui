@@ -1,6 +1,8 @@
-import { defineComponent, toRef, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
+
+import { computed, defineComponent, renderSlot, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutFooterProps } from './props'
 import { useLayoutState, useMediaQuery } from './helper'
@@ -79,7 +81,7 @@ export default defineComponent({
 
       return (
         <CustomTag class={className.value}>
-          {slots.links ? slots.links() : renderLinks()}
+          {slots.links ? renderSlot(slots, 'links') : renderLinks()}
           <div class={nh.be('copyright')}>
             {slots.copyright ? slots.copyright() : props.copyright}
           </div>

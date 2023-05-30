@@ -1,6 +1,8 @@
 import Form from './form.vue'
 
 export { Form }
+export { formProps } from './props'
+
 export type FormExposed = InstanceType<typeof Form>
 
 export * from './helper'

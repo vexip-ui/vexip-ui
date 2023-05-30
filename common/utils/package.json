@@ -1,11 +1,13 @@
 {
   "name": "@vexip-ui/utils",
-  "version": "1.11.1",
+  "version": "1.13.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
   "type": "module",
   "main": "dist/index.cjs",

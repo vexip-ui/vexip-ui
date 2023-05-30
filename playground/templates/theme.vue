@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 20px 0;">
-    <span style="margin-right: 10px;"> Toggle Theme: </span>
+  <div style="padding: 20px 0">
+    <span style="margin-right: 10px"> Toggle Theme: </span>
     <Switch
       v-model:value="isDark"
       class="theme-switch"
@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Sun, Moon } from '@vexip-ui/icons'
+
+import { Moon, Sun } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
 const className = 'dark'

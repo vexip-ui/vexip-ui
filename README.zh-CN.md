@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" width="180" alt="Vexip UI" style="width: 180px;" />
   </a>
 </p>
 
@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
-    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm 版本"/>
   </a>
 </p>
 
@@ -72,29 +72,29 @@ yarn add vexip-ui
 你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
 
 <a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
-  <img
-    src="./docs/public/vexip-ui-group-qrcode.png"
-    style="width: 240px;"
-  />
+  <img src="./docs/public/vexip-ui-qq-group-qrcode.webp" alt="Vexip UI QQ 群" style="width: 240px;" />
 </a>
 
 ## 贡献
 
 欢迎你的加入！你可以查阅 [贡献指南](./CONTRIBUTING.md) 了解如何开始。
 
-或者你可以赞助我以帮助项目更好的发展！
+或者你可以赞助我们以帮助项目更好的发展！
 
-<img
-  src="./docs/public/wechat-sponsor.png"
-  style="width: 240px;"
-/>
+微信：
+
+<img src="./docs/public/sponsor-wechat.webp" alt="微信收款" style="width: 240px;" />
+
+支付宝：
+
+<img src="./docs/public/sponsor-alipay.webp" alt="支付宝收款" style="width: 240px;" />
 
 ## 贡献者
 
 感谢他们的所做的一切贡献！
 
 <a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" alt="贡献者" />
 </a>
 
 ## 兼容环境

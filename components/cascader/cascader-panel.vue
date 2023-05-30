@@ -84,12 +84,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
@@ -211,19 +213,16 @@ export default defineComponent({
     let listHeight = 0
     let hoverTimer: ReturnType<typeof setTimeout>
 
-    watch(
-      () => props.ready,
-      value => {
-        requestAnimationFrame(computeListHeight)
+    watch([() => props.ready, () => props.options], () => {
+      requestAnimationFrame(computeListHeight)
 
-        if (value) {
-          list.value?.refresh()
-          currentHitting.value = props.options.findIndex(isSelected)
-        } else {
-          currentHitting.value = -1
-        }
+      if (props.ready) {
+        list.value?.refresh()
+        currentHitting.value = props.options.findIndex(isSelected)
+      } else {
+        currentHitting.value = -1
       }
-    )
+    })
 
     onMounted(() => {
       requestAnimationFrame(computeListHeight)

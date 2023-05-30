@@ -4,10 +4,11 @@ on:
   push:
     tags:
       - v*
+      - bem-helper*
       - icons*
       - hooks*
-      - utils*
       - plugins*
+      - utils*
 
 jobs:
   publish:

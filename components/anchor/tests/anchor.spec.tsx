@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { AnchorLink } from '@/components/anchor-link'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Anchor } from '..'
 
 describe('Anchor', () => {

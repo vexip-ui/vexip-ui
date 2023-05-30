@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
-import { Check, Exclamation, Xmark, Spinner, GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Check, Exclamation, GithubB, Spinner, Xmark } from '@vexip-ui/icons'
 import Toast from '../toast.vue'
 import { ToastManager } from '..'
 

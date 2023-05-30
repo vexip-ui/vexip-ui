@@ -19,7 +19,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { computed, defineComponent } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { cardProps } from './props'
 

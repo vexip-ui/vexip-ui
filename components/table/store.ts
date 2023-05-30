@@ -1,36 +1,37 @@
-import { reactive, computed, watchEffect, markRaw } from 'vue'
+import { computed, markRaw, reactive, watchEffect } from 'vue'
+
 import {
-  isNull,
-  toFalse,
+  createBITree,
   debounceMinor,
-  toNumber,
-  sortByProps,
   deepClone,
-  createBITree
+  isNull,
+  sortByProps,
+  toFalse,
+  toNumber
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 
-import type { ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
+import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  Key,
+  ColumnWithKey,
   Data,
+  Key,
+  ParsedFilterOptions,
+  ParsedTableSorterOptions,
+  StoreOptions,
+  StoreState,
+  TableCellPropFn,
+  TableColumnOptions,
+  TableDragColumn,
+  TableExpandColumn,
+  TableFilterOptions,
+  TableHeadPropFn,
   TableKeyConfig,
   TableRowPropFn,
-  TableCellPropFn,
-  TableHeadPropFn,
-  TableFilterOptions,
-  ParsedFilterOptions,
-  TableSorterOptions,
-  ParsedTableSorterOptions,
-  TableSelectionColumn,
-  TableExpandColumn,
-  TableDragColumn,
-  TableColumnOptions,
-  ColumnWithKey,
   TableRowState,
-  StoreOptions,
-  StoreState
+  TableSelectionColumn,
+  TableSorterOptions
 } from './symbol'
 
 let indexId = 1
@@ -75,6 +76,7 @@ export function useStore(options: StoreOptions) {
     keyConfig: options.keyConfig,
     disabledTree: options.disabledTree,
     noCascaded: options.noCascaded,
+    colResizable: options.colResizable,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -87,6 +89,7 @@ export function useStore(options: StoreOptions) {
     widths: new Map(),
     sorters: new Map(),
     filters: new Map(),
+    resized: new Set(),
     bodyScroll: 0,
     padTop: 0,
     startRow: 0,
@@ -94,7 +97,9 @@ export function useStore(options: StoreOptions) {
     dragging: false,
     heightBITree: null!,
     virtualData: [],
-    totalHeight: options.rowMinHeight * options.data.length
+    totalHeight: options.rowMinHeight * options.data.length,
+    colResizing: false,
+    resizeLeft: 0
   }) as StoreState
 
   setColumns(options.columns)
@@ -198,6 +203,9 @@ export function useStore(options: StoreOptions) {
     return !!state.columns.find(column => 'type' in column && column.type === 'drag')
   })
   const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
+  const totalWidth = computed(() => getColumnsWidth())
+  const leftFixedWidth = computed(() => getColumnsWidth(state.leftFixedColumns))
+  const rightFixedWidth = computed(() => getColumnsWidth(state.rightFixedColumns))
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -215,7 +223,10 @@ export function useStore(options: StoreOptions) {
     disableDragRows,
     usingTree,
     hasDragColumn,
-    rowDragging
+    rowDragging,
+    totalWidth,
+    leftFixedWidth,
+    rightFixedWidth
   })
 
   const mutations = {
@@ -254,11 +265,14 @@ export function useStore(options: StoreOptions) {
     setSingleSorter,
     setSingleFilter,
     setDragging,
-    setCustomSorter,
-    setCustomFilter,
     setKeyConfig,
     setDisabledTree,
     setNoCascaded,
+    setColumnResizable,
+    setCustomSorter,
+    setCustomFilter,
+    setColumnResizing,
+    setResizeLeft,
 
     handleSort,
     clearSort,
@@ -274,7 +288,24 @@ export function useStore(options: StoreOptions) {
     handleExpand,
     handleDrag,
     handleTreeExpand,
-    getParentRow
+    getParentRow,
+    handleColumnResize
+  }
+
+  function getColumnsWidth(columns = state.columns) {
+    const widths = state.widths
+
+    let width = 0
+
+    for (let i = 0, len = columns.length; i < len; ++i) {
+      const column = columns[i]
+      const key = column.key
+      const columnWidth = widths.get(key) || 0
+
+      width += columnWidth
+    }
+
+    return width
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -293,9 +324,7 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
 
-      if ('type' in column && columnTypes.includes(column.type)) {
-        // key = isNull(column.key) ? getIndexId() : column.key
-
+      if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
           case 'order': {
             column.truthIndex = !!column.truthIndex
@@ -359,6 +388,7 @@ export function useStore(options: StoreOptions) {
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
+      column.last = i === len - 1
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -575,7 +605,7 @@ export function useStore(options: StoreOptions) {
   function setTableWidth(width: number) {
     width = toNumber(width)
 
-    const { columns, widths } = state
+    const { columns, widths, resized } = state
 
     const hasWidthColumns = []
     const flexColumns = []
@@ -585,8 +615,8 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
 
-      if (column.width) {
-        flexWidth -= column.width
+      if (column.width || resized.has(column.key)) {
+        flexWidth -= column.width ?? widths.get(column.key)!
         hasWidthColumns.push(column)
       } else {
         flexColumns.push(column)
@@ -705,12 +735,24 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
+  function setColumnResizable(resizable: boolean) {
+    state.colResizable = !!resizable
+  }
+
   function setCustomSorter(able: boolean) {
     state.customSorter = !!able
   }
 
   function setCustomFilter(able: boolean) {
     state.customFilter = !!able
+  }
+
+  function setColumnResizing(resizing: boolean) {
+    state.colResizing = !!resizing
+  }
+
+  function setResizeLeft(left: number) {
+    state.resizeLeft = left
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {
@@ -1178,6 +1220,11 @@ export function useStore(options: StoreOptions) {
     }
 
     return null
+  }
+
+  function handleColumnResize(key: Key, newWidth: number) {
+    state.resized.add(key)
+    setColumnWidth(key, newWidth)
   }
 
   type Store = Readonly<{

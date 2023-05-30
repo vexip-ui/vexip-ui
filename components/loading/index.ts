@@ -1,9 +1,10 @@
 import { createApp, createVNode, render } from 'vue'
+
 import Component from './loading.vue'
-import { isClient, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { LoadingState, LoadingOptions, LoadingInstance } from './symbol'
+import type { LoadingInstance, LoadingOptions, LoadingState } from './symbol'
 
 export type { LoadingState, LoadingOptions }
 

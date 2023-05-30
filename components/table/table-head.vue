@@ -6,17 +6,19 @@
         :key="index"
         :column="item"
         :index="index"
+        :fixed="fixed"
       ></TableHeadCell>
     </TableRow>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
+
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { TABLE_STORE, TABLE_HEAD_KEY } from './symbol'
+import { TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TableRowState } from './symbol'
@@ -30,42 +32,28 @@ export default defineComponent({
   props: {
     fixed: {
       type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator: (value: string) => {
-        return value === 'left' || value === 'right'
-      }
+      default: null
     }
   },
   setup(props) {
-    const { state } = inject(TABLE_STORE)!
+    const { state, getters } = inject(TABLE_STORE)!
 
     const currentColumns = computed(() => {
-      if (props.fixed === 'left') {
-        return state.leftFixedColumns
-      }
-
-      if (props.fixed === 'right') {
-        return state.rightFixedColumns
-      }
-
-      return state.columns
+      return props.fixed === 'left'
+        ? state.leftFixedColumns
+        : props.fixed === 'right'
+          ? state.rightFixedColumns
+          : state.columns
     })
     const style = computed(() => {
-      const widths = state.widths
-      const columns = currentColumns.value
-
-      let width = 0
-
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths.get(key) || 0
-
-        width += columnWidth
-      }
-
       return {
-        minWidth: `${width}px`
+        minWidth: `${
+          props.fixed === 'left'
+            ? getters.leftFixedWidth
+            : props.fixed === 'right'
+            ? getters.rightFixedWidth
+            : getters.totalWidth
+        }px`
       }
     })
     const headRow = computed(

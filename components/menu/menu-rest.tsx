@@ -1,23 +1,16 @@
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  inject,
-  provide,
-  nextTick,
-  Transition
-} from 'vue'
 import { Icon } from '@/components/icon'
 import { MenuItem } from '@/components/menu-item'
-import { Portal } from '@/components/portal'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+import { Popper } from '@/components/popper'
+
+import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
-import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
+import { MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
+import type { PopperExposed } from '@/components/popper'
 import type { MenuOptions } from './symbol'
 
 export default defineComponent({
@@ -41,10 +34,12 @@ export default defineComponent({
     const dropTrigger = computed(() => menuState?.trigger || 'hover')
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement: ref('bottom'),
       transfer,
-      wrapper
+      wrapper,
+      popper: computed(() => popper.value?.wrapper)
     })
 
     const itemState = reactive({
@@ -82,10 +77,18 @@ export default defineComponent({
 
     const { timer } = useSetTimeout()
 
+    let mouseInList = false
+    let reproduce = false
+
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || dropTrigger.value !== 'hover') return
+
+      if (!groupExpanded.value && popperShow.value) {
+        reproduce = true
+        return
+      }
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
@@ -95,7 +98,7 @@ export default defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || !popperShow.value || dropTrigger.value !== 'hover') return
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
@@ -118,6 +121,12 @@ export default defineComponent({
 
     function handlePopperHide() {
       popperShow.value = false
+      groupExpanded.value = false
+
+      if (reproduce) {
+        reproduce = false
+        groupExpanded.value = true
+      }
     }
 
     function renderMenuItems() {
@@ -133,6 +142,7 @@ export default defineComponent({
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
@@ -154,19 +164,19 @@ export default defineComponent({
           >
             <Icon {...icons.value.ellipsis}></Icon>
           </div>
-          <Portal to={transferTo.value}>
-            <Transition name={nh.ns('drop')} appear onAfterLeave={handlePopperHide}>
-              {popperShow.value && (
-                <div
-                  v-show={groupExpanded.value}
-                  ref={popper}
-                  class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
-                >
-                  <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
-                </div>
-              )}
-            </Transition>
-          </Portal>
+          <Popper
+            ref={popper}
+            class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
+            visible={popperShow.value && groupExpanded.value}
+            alive={!transferTo.value || popperShow.value}
+            to={transferTo.value}
+            transition={nh.ns('drop')}
+            onAfterLeave={handlePopperHide}
+            onMouseenter={() => ((mouseInList = true), handleMouseEnter())}
+            onMouseleave={() => ((mouseInList = false), handleMouseLeave())}
+          >
+            <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
+          </Popper>
         </div>
       )
     }

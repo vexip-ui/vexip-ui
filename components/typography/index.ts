@@ -9,6 +9,22 @@ import Strong from './strong'
 
 export { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong }
 
+export {
+  titleProps,
+  textProps,
+  blockquoteProps,
+  olProps,
+  ulProps,
+  h1Props,
+  h2Props,
+  h3Props,
+  h4Props,
+  h5Props,
+  h6Props,
+  pProps,
+  strongProps
+} from './props'
+
 export type TitleExposed = InstanceType<typeof Title>
 export type TextExposed = InstanceType<typeof Text>
 export type BlockquoteExposed = InstanceType<typeof Blockquote>

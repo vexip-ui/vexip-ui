@@ -1,12 +1,14 @@
-import { defineComponent, reactive, computed, watch, h, inject, provide } from 'vue'
+import { computed, defineComponent, h, inject, provide, reactive, watch } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { isDefined, has } from '@vexip-ui/utils'
+import { has, isDefined } from '@vexip-ui/utils'
 import { cellProps } from './props'
-import { breakPoints, currentBreakPoint } from './helpler'
+import { breakPoints, currentBreakPoint } from './helper'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
-import type { BreakPoint } from './helpler'
+import type { ClassType } from '@vexip-ui/config'
+import type { BreakPoint } from './helper'
 
 export default defineComponent({
   name: 'Cell',
@@ -99,7 +101,7 @@ export default defineComponent({
             : props.useFlex
           : {})
       }
-      const className = {
+      const className: ClassType = {
         [nh.b()]: true,
         [nh.bm('inherit')]: gridState || props.inherit,
         [nh.bm('flex')]: cellFelx

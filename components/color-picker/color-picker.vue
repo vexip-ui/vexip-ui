@@ -123,7 +123,7 @@
             ref="shortcutUnit"
             :class="nh.be('shortcuts')"
             tabindex="-1"
-            @focus="handleShrtcutsFocus"
+            @focus="handleShortcutsFocus"
             @blur="shortcutsFocused = false"
             @keydown="handleShortcutsKeydown"
           >
@@ -176,44 +176,46 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
-import ColorAlpha from './color-alpha.vue'
-import ColorHue from './color-hue.vue'
-import ColorPalette from './color-palette.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
-import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
+
+import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+
+import ColorPalette from './color-palette.vue'
+import ColorHue from './color-hue.vue'
+import ColorAlpha from './color-alpha.vue'
+import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import {
+  hsvToHsl,
+  hsvToRgb,
   isClient,
   isElement,
-  toFixed,
   parseColorToRgba,
-  rgbToHsv,
-  hsvToRgb,
   rgbToHex,
-  hsvToHsl,
-  rgbaToHex
+  rgbToHsv,
+  rgbaToHex,
+  toFixed
 } from '@vexip-ui/utils'
 import { colorPickerProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
-import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
+import type { Color, HSLAColor, HSVAColor, HSVColor, RGBAColor } from '@vexip-ui/utils'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
-const defaultShotcuts = Object.freeze([
+const defaultShortcuts = Object.freeze([
   '#2d8cf0',
   '#19be6b',
   '#ff9900',
@@ -406,7 +408,7 @@ export default defineComponent({
         return props.shortcut
       }
 
-      return defaultShotcuts
+      return defaultShortcuts
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -492,7 +494,7 @@ export default defineComponent({
       handleChange()
     }
 
-    function getForamttedColor() {
+    function getFormattedColor() {
       let color: Color
 
       if (props.format === 'hex') {
@@ -538,7 +540,7 @@ export default defineComponent({
     }
 
     function handleChange() {
-      const formattedColor = getForamttedColor()
+      const formattedColor = getFormattedColor()
 
       setFieldValue(formattedColor)
       emitEvent(props.onChange, formattedColor)
@@ -572,7 +574,7 @@ export default defineComponent({
       currentValue.value = rgbToHsv(r, g, b)
       currentAlpha.value = a
 
-      emitEvent(props.onShortcut, getForamttedColor())
+      emitEvent(props.onShortcut, getFormattedColor())
     }
 
     function toggleEditing(able: boolean) {
@@ -620,7 +622,7 @@ export default defineComponent({
       }
     }
 
-    function handleShrtcutsFocus() {
+    function handleShortcutsFocus() {
       shortcutHitting.value = 0
       shortcutsFocused.value = true
     }
@@ -717,10 +719,13 @@ export default defineComponent({
       handleShortcutClick,
       toggleEditing,
       handleTabDown,
-      handleShrtcutsFocus,
+      handleShortcutsFocus,
       handleShortcutsKeydown,
       handleSpaceDown,
-      handleEscDown
+      handleEscDown,
+
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { TableRowPayload, TableCellPayload } from 'vexip-ui'
+import type { TableCellPayload, TableRowPayload } from 'vexip-ui'
 
 const currentRow = ref(-1)
 const menuRow = ref(-1)

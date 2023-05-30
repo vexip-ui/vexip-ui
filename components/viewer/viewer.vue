@@ -58,12 +58,14 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref, reactive, toRef, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, useIcons, emitEvent } from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
+
+import { computed, defineComponent, onMounted, reactive, ref, toRef } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { useFullScreen, useModifier, useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { viewerProps } from './props'
 import { InternalActionName } from './symbol'
@@ -384,11 +386,11 @@ export default defineComponent({
       const containerRect = container.value.getBoundingClientRect()
       const { x, y } = zoomOrigin
       const { offsetWidth, offsetHeight } = container.value
-      const prveZoom = zoom.value
+      const prevZoom = zoom.value
 
       zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 5)
 
-      const delta = zoom.value / prveZoom - 1
+      const delta = zoom.value / prevZoom - 1
       const originX = delta * offsetWidth * 0.5
       const originY = delta * offsetHeight * 0.5
 

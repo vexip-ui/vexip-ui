@@ -33,20 +33,22 @@
       v-if="isNative"
       ref="submit"
       type="submit"
-      style="display: none;"
+      style="display: none"
       @click.stop
     ></button>
   </Button>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
+
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
-import { FORM_PROPS, FORM_ACTIONS } from './symbol'
+import { FORM_ACTIONS, FORM_PROPS } from './symbol'
 
 export default defineComponent({
   name: 'FormSubmit',

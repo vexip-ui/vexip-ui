@@ -6,7 +6,7 @@
   <ConfigProvider :props="{ default: { clearable: true } }">
     <Form
       ref="form"
-      style="max-width: 500px;"
+      style="max-width: 500px"
       :model="formModel"
       :disabled="disabled"
     >
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const disabled = ref(true)
 const formModel = reactive({})

@@ -70,37 +70,38 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
+  onMounted,
+  provide,
+  reactive,
   ref,
   toRef,
-  reactive,
-  computed,
   watch,
-  watchEffect,
-  provide,
-  onMounted
+  watchEffect
 } from 'vue'
+
 import TreeNode from './tree-node.vue'
-import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import {
+  flatTree,
   isNull,
   isPromise,
-  transformTree,
-  flatTree,
+  queryAll,
   removeArrayItem,
-  queryAll
+  transformTree
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
-import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
+import { DropType, TREE_NODE_STATE, TREE_STATE } from './symbol'
 
 import type {
-  Key,
   Data,
-  TreeNodeKeyConfig,
-  TreeNodeProps,
   FilterFn,
-  TreeNodeInstance
+  Key,
+  TreeNodeInstance,
+  TreeNodeKeyConfig,
+  TreeNodeProps
 } from './symbol'
 
 const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
@@ -134,7 +135,7 @@ export default defineComponent({
     const props = useProps('tree', _props, {
       arrow: {
         default: 'auto',
-        validator: (value: boolean | 'auto') => typeof value === 'boolean' || value === 'auto'
+        validator: value => typeof value === 'boolean' || value === 'auto'
       },
       data: {
         default: () => [],
@@ -177,9 +178,11 @@ export default defineComponent({
     const nh = useNameHelper('tree')
     const nodeMap = new Map<Key, TreeNodeProps>()
     const treeData = ref<TreeNodeProps[]>([])
+    const flattedData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
     const anyMatched = ref(false)
+    const keyConfig = reactive({ ...defaultKeyConfig })
 
     const { isMounted } = useMounted()
 
@@ -206,27 +209,10 @@ export default defineComponent({
       checkDisabled: false
     }
 
-    const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
-    const parsedOptions = computed(() => {
-      return {
-        keyField: keyConfig.value.id,
-        childField: keyConfig.value.children,
-        parentField: keyConfig.value.parent,
-        rootId: props.rootId
-      }
-    })
     const boundAsyncLoad = computed(() => {
       return typeof props.onAsyncLoad === 'function'
     })
-    const flattedData = computed<TreeNodeProps[]>(() => {
-      return flatTree(treeData.value, {
-        keyField: 'id',
-        parentField: 'parent',
-        childField: 'children',
-        rootId: props.rootId
-      })
-    })
-    const labelKey = computed(() => keyConfig.value.label)
+    const labelKey = computed(() => keyConfig.label)
     const linkLine = computed(() => {
       return props.linkLine === true ? 'dashed' : props.linkLine === 'none' ? false : props.linkLine
     })
@@ -250,6 +236,43 @@ export default defineComponent({
 
       return defaultFilter
     }
+
+    provide(
+      TREE_STATE,
+      reactive({
+        arrow: toRef(props, 'arrow'),
+        checkbox: toRef(props, 'checkbox'),
+        suffixCheckbox: toRef(props, 'suffixCheckbox'),
+        noCascaded: toRef(props, 'noCascaded'),
+        linkLine,
+        renderer: toRef(props, 'renderer'),
+        dragging,
+        boundAsyncLoad,
+        updateVisibleNodeEls,
+        computeCheckedState,
+        handleNodeClick,
+        handleNodeSelect,
+        handleNodeCancel,
+        handleNodeExpand,
+        handleNodeReduce,
+        handleAsyncLoad,
+        handleNodeDragStart,
+        handleNodeDragOver,
+        handleNodeDrop,
+        handleNodeDragEnd,
+        handleHittingChange,
+        handleNodeHitting,
+        handleLabelClick
+      })
+    )
+    provide(
+      TREE_NODE_STATE,
+      reactive({
+        depth: -1,
+        disabled: toRef(props, 'disabled'),
+        readonly: toRef(props, 'readonly')
+      })
+    )
 
     watchEffect(() => {
       const nodes = flattedData.value
@@ -290,50 +313,38 @@ export default defineComponent({
         }
       }
     })
-
-    provide(
-      TREE_STATE,
-      reactive({
-        arrow: toRef(props, 'arrow'),
-        checkbox: toRef(props, 'checkbox'),
-        suffixCheckbox: toRef(props, 'suffixCheckbox'),
-        noCascaded: toRef(props, 'noCascaded'),
-        linkLine,
-        renderer: toRef(props, 'renderer'),
-        dragging,
-        boundAsyncLoad,
-        updateVisibleNodeEls,
-        computeCheckedState,
-        handleNodeClick,
-        handleNodeSelect,
-        handleNodeCancel,
-        handleNodeExpand,
-        handleNodeReduce,
-        handleAsyncLoad,
-        handleNodeDragStart,
-        handleNodeDragOver,
-        handleNodeDrop,
-        handleNodeDragEnd,
-        handleHittingChange,
-        handleNodeHitting,
-        handleLabelClick
-      })
+    watchEffect(() => {
+      Object.assign(keyConfig, props.keyConfig)
+    })
+    watch(
+      [treeData, () => props.rootId],
+      () => {
+        flattedData.value = flatTree(treeData.value, {
+          keyField: 'id',
+          parentField: 'parent',
+          childField: 'children',
+          rootId: props.rootId
+        })
+      },
+      { immediate: true }
     )
-    provide(
-      TREE_NODE_STATE,
-      reactive({
-        depth: -1,
-        disabled: toRef(props, 'disabled'),
-        readonly: toRef(props, 'readonly')
-      })
+    watch(
+      [() => keyConfig.id, () => keyConfig.children, () => keyConfig.parent, () => props.rootId],
+      parseAndTransformData
     )
-
     watch([() => props.data, () => props.data.length], parseAndTransformData)
-    watch(parsedOptions, parseAndTransformData)
 
-    // created
     parseAndTransformData()
     onMounted(updateVisibleNodeEls)
+
+    function getTreeOptions() {
+      return {
+        keyField: keyConfig.id,
+        childField: keyConfig.children,
+        parentField: keyConfig.parent,
+        rootId: props.rootId
+      }
+    }
 
     function updateVisibleNodeEls() {
       requestAnimationFrame(() => {
@@ -344,8 +355,8 @@ export default defineComponent({
     }
 
     function parseAndTransformData() {
-      const idKey = keyConfig.value.id
-      const parentKey = keyConfig.value.parent
+      const idKey = keyConfig.id
+      const parentKey = keyConfig.parent
       const oldDataMap = new Map<Data, TreeNodeProps>()
       const oldIpMap = new Map<any, TreeNodeProps>()
 
@@ -357,7 +368,7 @@ export default defineComponent({
       nodeMap.clear()
 
       const nodes: TreeNodeProps[] = []
-      const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
+      const data = props.noBuildTree ? flatTree(props.data, getTreeOptions()) : props.data
 
       for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
@@ -404,7 +415,7 @@ export default defineComponent({
 
     function forceUpdateData() {
       const nodes = []
-      const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
+      const data = props.noBuildTree ? flatTree(props.data, getTreeOptions()) : props.data
 
       const {
         id: idKey,
@@ -421,7 +432,7 @@ export default defineComponent({
         selectDisabled: selectDisabledKey,
         expandDisabled: expandDisabledKey,
         checkDisabled: checkDisabledKey
-      } = keyConfig.value
+      } = keyConfig
 
       for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
@@ -514,7 +525,7 @@ export default defineComponent({
         selectDisabled: selectDisabledKey,
         expandDisabled: expandDisabledKey,
         checkDisabled: checkDisabledKey
-      } = keyConfig.value
+      } = keyConfig
 
       const {
         [visibleKey]: visible = defaults.visible,
@@ -960,7 +971,7 @@ export default defineComponent({
     }
 
     function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
-      const idKey = keyConfig.value.id
+      const idKey = keyConfig.id
 
       return flattedData.value.find(item => item.data[idKey] === data[idKey]) ?? null
     }
@@ -1028,7 +1039,7 @@ export default defineComponent({
       anyMatched,
       labelKey,
       style,
-      childrenKey: computed(() => keyConfig.value.children),
+      childrenKey: computed(() => keyConfig.children),
       getNodeProps: computed(() => {
         return typeof props.nodeProps === 'function' ? props.nodeProps : () => props.nodeProps
       }),

@@ -2,7 +2,7 @@ import { Message } from 'vexip-ui'
 import { getCdnUrl } from './cdn'
 import { locale } from './locale'
 
-import type { Plugin, BuiltInParserName } from 'prettier'
+import type { BuiltInParserName, Plugin } from 'prettier'
 
 function load(path: string) {
   return import(/* @vite-ignore */ getCdnUrl('prettier', `esm/${path}`))

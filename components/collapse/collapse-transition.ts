@@ -1,5 +1,6 @@
-import { defineComponent, h, Transition } from 'vue'
-import { useProps, emitEvent } from '@vexip-ui/config'
+import { Transition, defineComponent, h } from 'vue'
+
+import { emitEvent, useProps } from '@vexip-ui/config'
 import { collapseTransitionProps } from './props'
 
 export default defineComponent({

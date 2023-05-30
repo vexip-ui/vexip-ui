@@ -1,24 +1,26 @@
-import {
-  defineComponent,
-  ref,
-  shallowReadonly,
-  computed,
-  watch,
-  toRef,
-  onBeforeUnmount,
-  nextTick,
-  renderSlot
-} from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   USE_TOUCH,
+  createEventEmitter,
+  flatVNodes,
   isClient,
   isElement,
-  isTrue,
-  createEventEmitter,
-  flatVNodes
+  isTrue
 } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
@@ -73,7 +75,8 @@ export default defineComponent({
       appear: false,
       barDuration: null,
       useBarTrack: false,
-      scrollTag: 'div'
+      scrollTag: 'div',
+      observeDeep: false
     })
 
     const emitter = createEventEmitter()
@@ -90,7 +93,6 @@ export default defineComponent({
       contentElement,
 
       content,
-      // currentScroll,
       x,
       y,
       percentX,
@@ -609,7 +611,8 @@ export default defineComponent({
 
     function renderContent() {
       const Content = (props.scrollTag || 'div') as 'div'
-      const children = slots.default && renderSlot(slots, 'default', slotParams).children
+      const children =
+        props.observeDeep && slots.default ? renderSlot(slots, 'default', slotParams).children : []
 
       return (
         <Content
@@ -634,14 +637,16 @@ export default defineComponent({
                   height: `${content.offsetHeight}px`
                 }}
               >
-                {slots.extra?.(slotParams)}
+                {renderSlot(slots, 'extra', slotParams)}
               </div>
             </div>
           )}
           {slots.default &&
-            flatVNodes(children!).map(vnode => {
-              return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
-            })}
+            (props.observeDeep
+              ? flatVNodes(children).map(vnode => {
+                return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
+              })
+              : renderSlot(slots, 'default', slotParams))}
         </Content>
       )
     }

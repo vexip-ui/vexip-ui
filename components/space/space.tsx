@@ -1,9 +1,11 @@
-import { defineComponent, computed, renderSlot } from 'vue'
+import { computed, defineComponent, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { spaceProps } from './props'
 import { flatVNodes } from './helper'
 
+import type { ClassType } from '@vexip-ui/config'
 import type { SpaceAlign, SpaceJustify } from './symbol'
 
 const justifyList = Object.freeze<SpaceJustify[]>([
@@ -55,7 +57,7 @@ export default defineComponent({
     }
 
     const className = computed(() => {
-      const className = {
+      const className: ClassType = {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,

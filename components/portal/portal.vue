@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { defineComponent, nextTick, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'Portal',

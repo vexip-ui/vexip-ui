@@ -1,0 +1,38 @@
+{
+  "name": "@vexip-ui/bem-helper",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "css",
+    "bem",
+    "helper",
+    "utils"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/bem#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/bem"
+  }
+}

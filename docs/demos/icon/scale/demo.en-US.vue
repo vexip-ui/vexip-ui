@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import { Flag, Cat } from '@vexip-ui/icons'
+import { Cat, Flag } from '@vexip-ui/icons'
 </script>

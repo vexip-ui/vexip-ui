@@ -52,26 +52,28 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  toRef,
-  computed,
-  inject,
-  watch,
-  onMounted,
-  onUpdated,
-  nextTick
-} from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
+
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onMounted,
+  onUpdated,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTIONS, TABLE_HEAD_KEY } from './symbol'
+import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { TableRowState, TableExpandColumn, ColumnWithKey } from './symbol'
+import type { CSSProperties, PropType } from 'vue'
+import type { ColumnWithKey, TableExpandColumn, TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',
@@ -310,9 +312,7 @@ export default defineComponent({
       mutations.setRowHover(rowKey.value, true)
 
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowEnter({ row: data, key, index, event })
+        tableAction.emitRowEvent('Enter', buildEventPayload(event))
       }
     }
 
@@ -320,25 +320,25 @@ export default defineComponent({
       mutations.setRowHover(rowKey.value, false)
 
       if (!props.isHead && tableAction) {
-        tableAction.emitRowLeave(buildEventPayload(event))
+        tableAction.emitRowEvent('Leave', buildEventPayload(event))
       }
     }
 
     function handleClick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowClick(buildEventPayload(event))
+        tableAction.emitRowEvent('Click', buildEventPayload(event))
       }
     }
 
     function handleDblclick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowDblclick(buildEventPayload(event))
+        tableAction.emitRowEvent('Dblclick', buildEventPayload(event))
       }
     }
 
     function handleContextmenu(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowContextmenu(buildEventPayload(event))
+        tableAction.emitRowEvent('Contextmenu', buildEventPayload(event))
       }
     }
 
@@ -348,12 +348,12 @@ export default defineComponent({
       tableAction.handleRowDragStart(instance, event)
     }
 
-    function shoudProcessDrag() {
+    function shouldProcessDrag() {
       return (draggable.value || cellDraggable.value) && dragging.value
     }
 
     function handleDragOver(event: DragEvent) {
-      if (!shoudProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
+      if (!shouldProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
 
       event.stopPropagation()
       event.preventDefault()
@@ -361,7 +361,7 @@ export default defineComponent({
     }
 
     function handleDrop(event: DragEvent) {
-      if (!shoudProcessDrag()) return
+      if (!shouldProcessDrag()) return
 
       event.stopPropagation()
       event.preventDefault()
@@ -370,7 +370,7 @@ export default defineComponent({
     }
 
     function handleDragEnd(event: DragEvent) {
-      if (!shoudProcessDrag()) return
+      if (!shouldProcessDrag()) return
 
       event.stopPropagation()
       tableAction.handleRowDragEnd(event)

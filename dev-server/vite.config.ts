@@ -1,10 +1,13 @@
 import { resolve } from 'node:path'
-import { readdirSync, statSync, existsSync } from 'node:fs'
+import { existsSync, readdirSync, statSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import comp from 'unplugin-vue-components/vite'
 import autoprefixer from 'autoprefixer'
+
+import type { UserConfig } from 'vite'
 
 if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
@@ -42,7 +45,7 @@ const typography = [
 ]
 
 export default defineConfig(() => {
-  return {
+  return <UserConfig>{
     publicDir: '../docs/public',
     define: {
       __TARGET__: JSON.stringify(target),
@@ -55,7 +58,7 @@ export default defineConfig(() => {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
-          find: /^@vexip-ui\/(utils|hooks|config)/,
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, '../common/$1/src')
         },
         { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }

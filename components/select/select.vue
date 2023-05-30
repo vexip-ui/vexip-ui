@@ -10,8 +10,8 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus="!props.filter && handleFocus($event)"
-      @blur="!props.filter && handleBlur($event)"
+      @focus=";(!props.filter || !currentVisible) && handleFocus($event)"
+      @blur=";(!props.filter || !currentVisible) && handleBlur($event)"
     >
       <div
         v-if="hasPrefix"
@@ -197,7 +197,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
-      @click.stop
+      @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
       <VirtualList
@@ -270,7 +270,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
@@ -280,29 +279,32 @@ import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, onMounted, reactive, ref, toRef, watch, watchEffect } from 'vue'
+
 import {
-  useHover,
-  usePopper,
   placementWhileList,
   useClickOutside,
+  useHover,
   useModifier,
-  useMounted
+  useMounted,
+  usePopper
 } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
+import { getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
+import type { SelectKeyConfig, SelectOptionState, SelectRawOption, SelectValue } from './symbol'
 
 type SelectListener = (value: string | number, data: SelectRawOption) => void
 type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
@@ -363,7 +365,7 @@ export default defineComponent({
       clearField,
       getFieldValue,
       setFieldValue
-    } = useFieldStore<SelectValue>(() => reference.value?.focus())
+    } = useFieldStore<SelectValue>(focus)
 
     const nh = useNameHelper('select')
     const props = useProps('select', _props, {
@@ -1133,6 +1135,14 @@ export default defineComponent({
       }
     }
 
+    function focus(options?: FocusOptions) {
+      if (currentVisible.value) {
+        (input.value || reference.value)?.focus(options)
+      } else {
+        reference.value?.focus(options)
+      }
+    }
+
     return {
       props,
       nh,
@@ -1180,7 +1190,13 @@ export default defineComponent({
       handleBlur,
       handleFilterInput,
       handleFilterKeyDown,
-      toggleShowRestTip
+      toggleShowRestTip,
+
+      focus,
+      blur: () => {
+        input.value?.blur()
+        reference.value?.blur()
+      }
     }
   }
 })

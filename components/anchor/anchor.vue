@@ -36,20 +36,22 @@
 </template>
 
 <script lang="ts">
+import { AnchorLink } from '@/components/anchor-link'
+
 import {
   defineComponent,
-  ref,
-  reactive,
-  watch,
-  provide,
-  onMounted,
-  onBeforeUnmount,
-  nextTick,
   getCurrentInstance,
-  isVNode
+  isVNode,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  watch
 } from 'vue'
-import { AnchorLink } from '@/components/anchor-link'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { isClient, isElement } from '@vexip-ui/utils'
 import { anchorProps } from './props'
 import { animateScrollTo } from './helper'
@@ -133,7 +135,7 @@ export default defineComponent({
 
     onMounted(() => {
       updateContainer()
-      computeMarkerPoisiton()
+      computeMarkerPosition()
     })
 
     onBeforeUnmount(() => {
@@ -297,7 +299,7 @@ export default defineComponent({
         : (event as MouseEvent).clientY
 
       computeCurrentLink(scrollTop)
-      computeMarkerPoisiton()
+      computeMarkerPosition()
     }
 
     function removeListener() {
@@ -344,7 +346,7 @@ export default defineComponent({
           }, 10)
         })
         computeCurrentLink(to)
-        computeMarkerPoisiton()
+        computeMarkerPosition()
       } else if (scroller) {
         const [min, max] = scroller.getYScrollLimit()
         const clientY = Math.max(Math.min(elementTop - props.offset, max), min)
@@ -356,7 +358,7 @@ export default defineComponent({
         }, duration + 10)
 
         computeCurrentLink(clientY)
-        computeMarkerPoisiton()
+        computeMarkerPosition()
       } else {
         animating.value = false
       }
@@ -366,7 +368,7 @@ export default defineComponent({
       }
     }
 
-    function computeMarkerPoisiton() {
+    function computeMarkerPosition() {
       const currentLink = Array.from(linkStates).find(
         state => state.to && state.to === currentActive.value
       )

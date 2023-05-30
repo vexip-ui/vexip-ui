@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { GithubB } from '@vexip-ui/icons'
 import Confirm from '../confirm.vue'
 
 describe('Confirm', () => {
@@ -97,7 +98,7 @@ describe('Confirm', () => {
     expect(wrapper.find('.vxp-confirm__close').exists()).toBe(true)
   })
 
-  it('content align and anctions align', async () => {
+  it('content align and actions align', async () => {
     const wrapper = mount(Confirm)
 
     await nextTick()

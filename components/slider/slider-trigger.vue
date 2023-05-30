@@ -43,10 +43,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
 import { Tooltip } from '@/components/tooltip'
+
+import { defineComponent, ref } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
-import { useSetTimeout, useModifier } from '@vexip-ui/hooks'
+import { useModifier, useSetTimeout } from '@vexip-ui/hooks'
 
 import type { TooltipExposed } from '@/components/tooltip'
 
@@ -159,10 +161,6 @@ export default defineComponent({
       }
     }
 
-    function focus() {
-      handler.value?.focus()
-    }
-
     return {
       nh: useNameHelper('slider'),
       isTipShow,
@@ -175,7 +173,9 @@ export default defineComponent({
       hideTooltip,
       disableEvent,
       updateTooltip,
-      focus
+
+      focus: (options?: FocusOptions) => handler.value?.focus(options),
+      blur: () => handler.value?.blur()
     }
   }
 })

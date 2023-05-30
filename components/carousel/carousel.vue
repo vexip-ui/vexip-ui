@@ -85,26 +85,28 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  provide,
-  onMounted,
-  onBeforeUnmount,
-  toRef
-} from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
-import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from '@vexip-ui/icons'
 import { carouselProps } from './props'
 import { CAROUSEL_STATE } from './symbol'
 
-import type { ItemState, CarouselState } from './symbol'
+import type { CarouselState, ItemState } from './symbol'
 
 export default defineComponent({
   name: 'Carousel',

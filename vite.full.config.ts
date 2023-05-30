@@ -2,6 +2,7 @@
 
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -31,7 +32,10 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
-        { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
+        {
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
+          replacement: resolve(__dirname, 'common/$1/src')
+        }
       ]
     },
     esbuild: {
@@ -64,13 +68,13 @@ export default defineConfig(async () => {
       vue(),
       vueJsx(),
       dts({
-        exclude: [
-          'node_modules',
-          'playground',
-          'dev-server',
-          'common/hooks',
-          'common/icons',
-          'common/utils'
+        include: [
+          'common/config/src',
+          'components',
+          'directives',
+          'index.ts',
+          'full-lib.ts',
+          'types.d.ts'
         ],
         outputDir: outDir,
         compilerOptions: {

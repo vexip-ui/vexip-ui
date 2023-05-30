@@ -1,4 +1,4 @@
-import type { OptionKeyConfig, RawOption, OptionState } from '@/components/option'
+import type { OptionKeyConfig, OptionState, RawOption } from '@/components/option'
 
 export interface SelectKeyConfig extends OptionKeyConfig {
   group?: string,

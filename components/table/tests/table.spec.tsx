@@ -1,7 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { TableColumn } from '@/components/table-column'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { noop } from '@vexip-ui/utils'
 import { Table } from '..'
 import TableBody from '../table-body.vue'
 
@@ -213,6 +216,7 @@ describe('Table', () => {
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}` }))
     const wrapper = mount(() => <Table highlight columns={columns} data={data}></Table>)
+    expect(wrapper.classes()).toContain('vxp-table--highlight')
 
     await runScrollTimers()
 
@@ -705,5 +709,78 @@ describe('Table', () => {
     await rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(3)
+  })
+
+  it('col-resize', async () => {
+    let currentWidth = -1
+    const onStart = vi.fn(({ width }) => (currentWidth = width))
+    const onMove = vi.fn(({ width }) => (currentWidth = width))
+    const onEnd = vi.fn(({ width }) => (currentWidth = width))
+    const columns = [
+      { name: 'Label', key: 'label' },
+      { name: 'Name', key: 'name' }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({
+      name: `n${i}`,
+      label: `l${i}`
+    }))
+    const wrapper = mount(() => (
+      <Table
+        columns={columns}
+        data={data}
+        col-resizable
+        onColResizeStart={onStart}
+        onColResizeMove={onMove}
+        onColResizeEnd={onEnd}
+      ></Table>
+    ))
+    await nextTick()
+
+    const heads = wrapper.findAll('.vxp-table__head-cell')
+    const resizer = wrapper.findAll('.vxp-table__resizer')
+
+    expect(wrapper.classes()).toContain('vxp-table--col-resizable')
+    expect(resizer.length).toEqual(1)
+    expect(heads[0].attributes('style')).toContain('width: 100px;')
+
+    const elRectMock = vi.spyOn(heads[0].element, 'getBoundingClientRect').mockReturnValue({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 0,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    })
+
+    const downEvent = new CustomEvent('pointerdown') as any
+    downEvent.button = 0
+    downEvent.clientX = 0
+    resizer[0].element.dispatchEvent(downEvent)
+    expect(onStart).toHaveBeenCalled()
+    expect(currentWidth).toEqual(100)
+
+    await nextTick()
+    expect(wrapper.classes()).toContain('vxp-table--col-resizing')
+
+    const moveEvent = new CustomEvent('pointermove') as any
+    moveEvent.clientX = 40
+    document.dispatchEvent(moveEvent)
+    vi.runAllTimers()
+    expect(onMove).toHaveBeenCalled()
+    expect(currentWidth).toEqual(140)
+
+    const upEvent = new CustomEvent('pointerup') as any
+    upEvent.clientX = 50
+    document.dispatchEvent(upEvent)
+    expect(onEnd).toHaveBeenCalled()
+    expect(currentWidth).toEqual(150)
+
+    await nextTick()
+    expect(wrapper.classes()).not.toContain('vxp-table--col-resizing')
+
+    elRectMock.mockRestore()
   })
 })

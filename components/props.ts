@@ -19,6 +19,7 @@ import type { CheckboxGroupCProps } from './checkbox-group'
 import type { CollapseCProps } from './collapse'
 import type { CollapsePanelCProps } from './collapse-panel'
 import type { CollapseTransitionCProps } from './collapse-transition'
+import type { ColorPickerCProps } from './color-picker'
 import type { ColumnCProps } from './column'
 import type { ConfirmCProps } from './confirm'
 import type { DatePickerCProps } from './date-picker'
@@ -89,19 +90,19 @@ import type { ViewerCProps } from './viewer'
 import type { VirtualListCProps } from './virtual-list'
 import type { WheelCProps } from './wheel'
 import type {
-  TitleCProps,
-  TextCProps,
   BlockquoteCProps,
-  OLCProps,
-  ULCProps,
   H1CProps,
   H2CProps,
   H3CProps,
   H4CProps,
   H5CProps,
   H6CProps,
+  OLCProps,
   PCProps,
-  StrongCProps
+  StrongCProps,
+  TextCProps,
+  TitleCProps,
+  ULCProps
 } from './typography'
 
 export interface PropsOptions {
@@ -127,6 +128,7 @@ export interface PropsOptions {
   collapse?: CollapseCProps,
   collapsePanel?: CollapsePanelCProps,
   collapseTransition?: CollapseTransitionCProps,
+  colorPicker?: ColorPickerCProps,
   column?: ColumnCProps,
   confirm?: ConfirmCProps,
   datePicker?: DatePickerCProps,

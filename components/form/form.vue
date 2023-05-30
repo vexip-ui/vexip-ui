@@ -15,13 +15,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, provide } from 'vue'
 import { Row } from '@/components/row'
-import { useNameHelper, useProps, createSizeProp } from '@vexip-ui/config'
-import { formProps } from './props'
-import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
-import type { FormLabelAlign, SubmitMethod, FieldOptions } from './symbol'
+import { computed, defineComponent, provide, reactive } from 'vue'
+
+import { createSizeProp, useNameHelper, useProps } from '@vexip-ui/config'
+import { formProps } from './props'
+import { FORM_ACTIONS, FORM_FIELDS, FORM_PROPS } from './symbol'
+
+import type { FieldOptions, FormLabelAlign, SubmitMethod } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
 const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])

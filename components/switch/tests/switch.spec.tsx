@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { Spinner, GithubB, Vault } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { GithubB, Spinner, Vault } from '@vexip-ui/icons'
 import { Switch } from '..'
 
 describe('Switch', () => {

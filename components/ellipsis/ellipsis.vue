@@ -35,8 +35,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
+
+import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'

@@ -1,4 +1,4 @@
 # These are supported funding model platforms
 
 open_collective: vexip-ui
-custom: https://vexipui.com/wechat-sponsor.png
+custom: ['https://vexipui.com/sponsor-wechat.webp', 'https://vexipui.com/sponsor-alipay.webp']

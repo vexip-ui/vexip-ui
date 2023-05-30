@@ -1,6 +1,6 @@
-import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, classProp, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { DropdownTrigger } from './symbol'
@@ -17,6 +17,7 @@ export const dropdownProps = buildProps({
   appear: booleanProp,
   meta: Object as PropType<Record<string, any>>,
   alive: booleanProp,
+  custom: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
   onClickOutside: eventProp(),

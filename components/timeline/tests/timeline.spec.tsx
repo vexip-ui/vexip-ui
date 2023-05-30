@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest'
 import { TimelineItem } from '@/components/timeline-item'
-import { GithubB } from '@vexip-ui/icons'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { GithubB } from '@vexip-ui/icons'
 import { Timeline } from '..'
 
 describe('Timeline', () => {
@@ -33,10 +35,10 @@ describe('Timeline', () => {
     expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--pending')
   })
 
-  it('both sides', () => {
+  it('alternate', () => {
     const wrapper = mount(() => <Timeline both-sides></Timeline>)
 
-    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--both-sides')
+    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--alternate')
   })
 
   it('flip', () => {

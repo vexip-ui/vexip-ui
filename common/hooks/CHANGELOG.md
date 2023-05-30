@@ -1,3 +1,12 @@
+# [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.10.0...hooks@1.11.0) (2023-05-20)
+
+
+### Features
+
+* **hooks:** useMounted support wait a tick or frame ([ccd77f6](https://github.com/vexip-ui/vexip-ui/commit/ccd77f696db86502b83f8071a1db99436ebb4c41))
+
+
+
 # [1.10.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.9.0...hooks@1.10.0) (2023-05-03)
 
 

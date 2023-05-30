@@ -5,6 +5,7 @@ temp
 .dev
 coverage
 cache
+temp
 /icons
 /es
 /lib
@@ -22,6 +23,9 @@ meta-data*
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
+
+.eslintcache
+.stylelintcache
 
 # local env files
 .env

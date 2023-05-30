@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { cpus } from 'node:os'
+
 import fs from 'fs-extra'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
@@ -7,14 +8,14 @@ import stylelint from 'stylelint'
 import minimist from 'minimist'
 import prompts from 'prompts'
 import {
-  rootDir,
-  prettierConfig,
-  logger,
   components as allComponents,
+  logger,
+  prettierConfig,
+  rootDir,
   runParallel,
-  toKebabCase,
+  toCamelCase,
   toCapitalCase,
-  toCamelCase
+  toKebabCase
 } from './utils'
 
 const args = minimist(process.argv.slice(2))
@@ -114,7 +115,7 @@ async function create(name: string) {
 
         export const ${camelCaseName}Props = buildProps({
           bool: booleanProp,
-          onEvent: eventProp<(bool: boolean) => void>()
+          onClick: eventProp<(bool: boolean) => void>()
         })
         
         export type ${capitalCaseName}Props = ExtractPropTypes<typeof ${camelCaseName}Props>
@@ -125,7 +126,7 @@ async function create(name: string) {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
       source: `
         <template>
-          <div :class="className"></div>
+          <div :class="className" @click="handleClick"></div>
         </template>
 
         <script lang="ts">
@@ -148,8 +149,8 @@ async function create(name: string) {
               return [nh.b(), nh.bs('vars')]
             })
 
-            function handleEvent() {
-              emitEvent(props.onEvent, props.bool)
+            function handleClick() {
+              emitEvent(props.onClick, props.bool)
             }
         
             return {
@@ -158,7 +159,7 @@ async function create(name: string) {
 
               className,
 
-              handleEvent
+              handleClick
             }
           }
         })
@@ -188,7 +189,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests', 'ssr.spec.tsx'),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests/ssr.spec.tsx'),
       source: `
         /**
          * @vitest-environment node
@@ -234,15 +235,24 @@ async function create(name: string) {
           @include basis;
         }
       `
-    }
-  ]
-
-  const demosDir = path.resolve(rootDir, 'docs/demos', kebabCaseName)
-
-  generatedFiles.push(
+    },
     {
-      filePath: path.resolve(demosDir, 'api.zh-CN.md'),
+      filePath: path.resolve(rootDir, 'docs/zh-CN/component', `${kebabCaseName}.md`),
       source: `
+        # ${capitalCaseName}
+
+        <!-- 请删除该注释，并描述组件的使用场景 -->
+
+        ## Demos
+
+        :::demo ${kebabCaseName}/basis
+
+        ### 基础用法
+
+        最简单的用法。
+
+        :::
+
         ### ${capitalCaseName} 属性
 
         | 名称 | 类型 | 说明 | 默认值 | 始于 |
@@ -260,8 +270,22 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(demosDir, 'api.en-US.md'),
+      filePath: path.resolve(rootDir, 'docs/en-US/component', `${kebabCaseName}.md`),
       source: `
+        # ${capitalCaseName}
+
+        <!-- Please remove this comment and descript what scenes to be used of the component -->
+
+        ## Demos
+
+        :::demo ${kebabCaseName}/basis
+
+        ### Basis Usage
+
+        Simplest usage.
+
+        :::
+
         ### ${capitalCaseName} Props
 
         | Name | Type | Description | Default | Since |
@@ -279,35 +303,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(demosDir, 'desc.zh-CN.md'),
-      source: '\n'
-    },
-    {
-      filePath: path.resolve(demosDir, 'desc.en-US.md'),
-      source: '\n'
-    },
-    {
-      filePath: path.resolve(demosDir, 'demos-meta.json'),
-      source: '["basis"]\n'
-    },
-    {
-      filePath: path.resolve(demosDir, 'basis/desc.zh-CN.md'),
-      source: `
-        ### 基础用法
-
-        最简单的用法。
-      `
-    },
-    {
-      filePath: path.resolve(demosDir, 'basis/desc.en-US.md'),
-      source: `
-        ### Basis Usage
-
-        Simplest usage.
-      `
-    },
-    {
-      filePath: path.resolve(demosDir, 'basis/demo.zh-CN.vue'),
+      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.zh-CN.vue'),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
@@ -317,7 +313,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(demosDir, 'basis/demo.en-US.vue'),
+      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.en-US.vue'),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
@@ -326,7 +322,7 @@ async function create(name: string) {
         <script setup lang="ts"></script>
       `
     }
-  )
+  ]
 
   await Promise.all(
     generatedFiles.map(async ({ filePath, source }) => {

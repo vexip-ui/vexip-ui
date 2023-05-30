@@ -19,15 +19,16 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  ref,
-  reactive,
   computed,
+  defineComponent,
   inject,
-  onMounted,
   onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
   toRef
 } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { WHEEL_STATE } from './symbol'
 

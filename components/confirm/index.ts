@@ -1,9 +1,12 @@
-import { createApp, createVNode, render, markRaw } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './confirm.vue'
-import { isClient, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
+import type { ConfirmInstance, ConfirmOptions, ConfirmType } from './symbol'
+
+export { confirmProps } from './props'
 
 export type { ConfirmProps, ConfirmCProps } from './props'
 export type { ConfirmType, ConfirmOptions }

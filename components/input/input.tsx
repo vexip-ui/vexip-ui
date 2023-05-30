@@ -1,17 +1,19 @@
-import { defineComponent, ref, toRef, computed, watch, nextTick, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+
+import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef, watch } from 'vue'
+
 import { useHover } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  useIcons,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
-import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'
@@ -189,8 +191,9 @@ export default defineComponent({
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
       input: inputControl,
-      focus: () => {
-        inputControl.value?.focus()
+      copyValue,
+      focus: (options?: FocusOptions) => {
+        inputControl.value?.focus(options)
       },
       blur: () => {
         inputControl.value?.blur()
@@ -331,6 +334,22 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
+    function copyValue() {
+      const input = document.createElement('input')
+
+      input.style.height = '0'
+      input.setAttribute('readonly', 'readonly')
+      input.value = currentValue.value
+      document.body.appendChild(input)
+      input.select()
+
+      const isSuccess = document.execCommand('copy')
+
+      document.body.removeChild(input)
+
+      return isSuccess
+    }
+
     function preventDefault(event: Event) {
       event.preventDefault()
     }
@@ -414,7 +433,7 @@ export default defineComponent({
       return (
         <div class={nh.be('count')}>
           {slots.count
-            ? slots.count({ value: currentValue.value })
+            ? renderSlot(slots, 'count', { value: currentValue.value })
             : `${currentLength.value}/${props.maxLength}`}
         </div>
       )
@@ -433,7 +452,7 @@ export default defineComponent({
           >
             {slots.password
               ? (
-                  slots.password({ plain: showPassword.value })
+                  renderSlot(slots, 'password', { plain: showPassword.value })
                 )
               : (
               <Icon {...passwordIcon.value}></Icon>
@@ -515,7 +534,7 @@ export default defineComponent({
     }
   },
   methods: {
-    focus: noop as () => void,
+    focus: noop as (options?: FocusOptions) => void,
     blur: noop as () => void
   }
 })

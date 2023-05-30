@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { GithubB } from '@vexip-ui/icons'
 import Contextmenu from '../contextmenu.vue'
 
 describe('Contextmenu', () => {
@@ -43,7 +44,7 @@ describe('Contextmenu', () => {
     await expect(promise).resolves.toEqual(['2'])
   })
 
-  it('cacel menu', async () => {
+  it('cancel menu', async () => {
     const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
     const wrapper = mount(Contextmenu)
 

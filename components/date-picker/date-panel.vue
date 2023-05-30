@@ -121,7 +121,16 @@
           </div>
         </div>
         <div v-if="isDatetime" :class="nh.be('time-panel')">
-          <div :class="nh.be('header')"></div>
+          <div :class="[nh.be('header'), nh.bem('header', 'time')]">
+            <template v-if="range">
+              <div :class="nh.be('title')">
+                {{ locale.startTime }}
+              </div>
+              <div :class="nh.be('title')">
+                {{ locale.endTime }}
+              </div>
+            </template>
+          </div>
           <div :class="nh.be('wheel')">
             <TimeWheel
               :hour="startValue.hour"
@@ -169,25 +178,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted } from 'vue'
-import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+
+import TimeWheel from './time-wheel.vue'
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
+import type { LocaleConfig } from '@vexip-ui/config'
 import type { Dateable } from '@vexip-ui/utils'
 import type {
-  DateType,
-  TimeType,
-  DateTimeType,
   DatePickerType,
   DateShortcut,
-  DisabledTime
+  DateTimeType,
+  DateType,
+  DisabledTime,
+  TimeType
 } from './symbol'
 
 export default defineComponent({
@@ -272,7 +284,7 @@ export default defineComponent({
       default: false
     },
     locale: {
-      type: Object,
+      type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
       default: null
     },
     selectingType: {

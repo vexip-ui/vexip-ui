@@ -156,40 +156,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
-import DateControl from './date-control.vue'
-import DatePanel from './date-panel.vue'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from 'vue'
+
+import DateControl from './date-control.vue'
+import DatePanel from './date-panel.vue'
 import {
-  useHover,
-  usePopper,
   placementWhileList,
   useClickOutside,
+  useHover,
+  usePopper,
   useSetTimeout
 } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useIcons,
   createSizeProp,
   createStateProp,
   emitEvent,
+  makeSentence,
+  useIcons,
   useLocale,
-  useWordSpace,
-  makeSentence
+  useNameHelper,
+  useProps,
+  useWordSpace
 } from '@vexip-ui/config'
 import {
-  isDefined,
-  toFalse,
-  toDate,
-  getTime,
-  isLeepYear,
-  doubleDigits,
   boundRange,
   differenceDays,
+  doubleDigits,
+  getTime,
+  isDefined,
+  isLeapYear,
   startOfMonth,
+  toDate,
+  toFalse,
   warnOnce
 } from '@vexip-ui/utils'
 import { datePickerProps } from './props'
@@ -198,7 +200,7 @@ import { datePickerTypes } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { TimeType, DateTimeType } from './symbol'
+import type { DateTimeType, TimeType } from './symbol'
 
 const invalidDate = new Date('')
 
@@ -946,7 +948,7 @@ export default defineComponent({
             if (month !== 2) {
               lastDay = 30 + (month % 2)
             } else {
-              if (isLeepYear(dateValue.year)) {
+              if (isLeapYear(dateValue.year)) {
                 lastDay = 29
               } else {
                 lastDay = 28
@@ -1407,9 +1409,9 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
 
-      focus: handleFocused,
-      blur: handleBlur,
-      updatePopper
+      updatePopper,
+      focus: (options?: FocusOptions) => reference.value?.focus(options),
+      blur: () => reference.value?.blur()
     }
   }
 })

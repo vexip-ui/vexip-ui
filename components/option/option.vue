@@ -13,8 +13,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
+import { computed, defineComponent } from 'vue'
+
+import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'Option',

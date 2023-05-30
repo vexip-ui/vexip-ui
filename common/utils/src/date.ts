@@ -435,7 +435,7 @@ export function startOfWeek(date: Dateable, startOn = 0) {
  *
  * @param year 原始年份
  */
-export function isLeepYear(year: number) {
+export function isLeapYear(year: number) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 }
 
@@ -451,7 +451,6 @@ export function startOfMonth(date: Dateable, startOn = 1) {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
-  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 
   let lastDay
 
@@ -459,7 +458,7 @@ export function startOfMonth(date: Dateable, startOn = 1) {
     if (month !== 2) {
       lastDay = 30 + (month % 2)
     } else {
-      if (isLeapYear) {
+      if (isLeapYear(year)) {
         lastDay = 29
       } else {
         lastDay = 28

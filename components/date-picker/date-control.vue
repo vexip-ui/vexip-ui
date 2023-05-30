@@ -92,7 +92,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'

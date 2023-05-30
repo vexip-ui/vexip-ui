@@ -58,10 +58,6 @@ $scroll: map.merge(
     }
   }
 
-  // &--vertical > &__wrapper {
-  //   display: flex;
-  // }
-
   &--horizontal,
   &--both {
     & > #{$wrap} {

@@ -55,12 +55,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide, onMounted } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
+
+import { computed, defineComponent, onMounted, provide, reactive, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { debounceMinor, isFunction, isNull } from '@vexip-ui/utils'
 import { tabsProps } from './props'
 import { TABS_STATE } from './symbol'
 

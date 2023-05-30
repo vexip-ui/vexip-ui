@@ -23,7 +23,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import ThemeSwitch from '../docs/common/theme-switch.vue'
+
+import ThemeSwitch from '../docs/.vitepress/theme/components/theme-switch.vue'
 
 const router = useRouter()
 </script>

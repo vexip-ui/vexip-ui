@@ -1,3 +1,5 @@
+import { install as installDirectives } from '@/directives'
+
 import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'
@@ -110,10 +112,9 @@ import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
 
-import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } from './typography'
+import { Blockquote, H1, H2, H3, H4, H5, H6, OL, P, Strong, Text, Title, UL } from './typography'
 
 import { buildInstall } from './create'
-import { install as installDirectives } from '@/directives'
 
 export { version } from './version'
 export * from './create'

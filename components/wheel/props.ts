@@ -1,16 +1,8 @@
-import { buildProps, booleanProp, booleanStringProp, stateProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp, stateProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-
-export type RawOption =
-  | string
-  | number
-  | {
-    value: string | number,
-    label?: string,
-    disabled?: boolean
-  }
+import type { WheelRawOption } from './symbol'
 
 export const wheelProps = buildProps({
   state: stateProp,
@@ -22,15 +14,16 @@ export const wheelProps = buildProps({
   candidate: Number as PropType<0 | 1 | 2 | 3>,
   arrow: booleanProp,
   pointer: booleanProp,
-  options: Array as PropType<RawOption[]>,
+  options: Array as PropType<WheelRawOption[]>,
   insertEmpty: booleanStringProp,
   disabled: booleanProp,
   loading: booleanProp,
   loadingLock: booleanProp,
-  disabledItem: Function as PropType<(value: string | number, data: RawOption) => boolean>,
-  onChange: eventProp<(value: string | number, data: RawOption) => void>(),
-  onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
-  onNext: eventProp<(value: string | number, data: RawOption) => void>()
+  disabledItem: Function as PropType<(value: string | number, data: WheelRawOption) => boolean>,
+  onChange: eventProp<(value: string | number, data: WheelRawOption) => void>(),
+  onPrev: eventProp<(value: string | number, data: WheelRawOption) => void>(),
+  onNext: eventProp<(value: string | number, data: WheelRawOption) => void>(),
+  onItemClick: eventProp<(value: string | number, data: WheelRawOption) => void>()
 })
 
 export type WheelProps = ExtractPropTypes<typeof wheelProps>

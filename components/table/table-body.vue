@@ -29,7 +29,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject, toRef } from 'vue'
+import { computed, defineComponent, inject, toRef } from 'vue'
+
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
@@ -56,34 +57,23 @@ export default defineComponent({
     const { state, getters } = inject(TABLE_STORE)!
 
     const currentColumns = computed(() => {
-      if (props.fixed === 'left') {
-        return state.leftFixedColumns
-      }
-
-      if (props.fixed === 'right') {
-        return state.rightFixedColumns
-      }
-
-      return state.columns
+      return props.fixed === 'left'
+        ? state.leftFixedColumns
+        : props.fixed === 'right'
+          ? state.rightFixedColumns
+          : state.columns
     })
     const renderData = computed(() => (state.virtual ? state.virtualData : getters.processedData))
     const style = computed(() => {
-      const { widths, totalHeight } = state
-      const columns = currentColumns.value
-
-      let width = 0
-
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths.get(key) || 0
-
-        width += columnWidth
-      }
-
       return {
-        minWidth: `${width}px`,
-        minHeight: `${totalHeight}px`
+        minWidth: `${
+          props.fixed === 'left'
+            ? getters.leftFixedWidth
+            : props.fixed === 'right'
+            ? getters.rightFixedWidth
+            : getters.totalWidth
+        }px`,
+        minHeight: `${state.totalHeight}px`
       }
     })
     const listStyle = computed(() => {

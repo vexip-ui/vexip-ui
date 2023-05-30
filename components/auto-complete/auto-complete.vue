@@ -30,8 +30,8 @@
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
-    @focus="control?.focus()"
-    @blur="control?.blur()"
+    @focus="handleFocus"
+    @blur="handleBlur"
     @outside-close="handleChange"
   >
     <template v-if="hasPrefix" #prefix>
@@ -82,18 +82,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
+
+import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue'
+
 import { placementWhileList } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useLocale,
+  useNameHelper,
+  useProps
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
@@ -236,6 +238,16 @@ export default defineComponent({
       if (control.value && hitting < 0) {
         control.value.value = lastInput
       }
+    }
+
+    function handleFocus(event: FocusEvent) {
+      control.value?.focus()
+      emitEvent(props.onFocus, event)
+    }
+
+    function handleBlur(event: FocusEvent) {
+      control.value?.blur()
+      emitEvent(props.onBlur, event)
     }
 
     function handleSelect(value: string | number, data: AutoCompleteRawOption) {
@@ -390,13 +402,18 @@ export default defineComponent({
       select,
       control,
 
+      handleFocus,
+      handleBlur,
       handleSelect,
       handleInput,
       handleChange,
       handleToggle,
       handleKeyDown,
       handleEnter,
-      handleClear
+      handleClear,
+
+      focus: (options?: FocusOptions) => control.value?.focus(options),
+      blur: () => control.value?.blur()
     }
   }
 })

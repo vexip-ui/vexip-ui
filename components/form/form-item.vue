@@ -31,7 +31,7 @@
       v-if="hasLabel"
       ref="labelEl"
       :class="nh.be('label')"
-      :style="{ width: `${computedlabelWidth}px` }"
+      :style="{ width: `${computedLabelWidth}px` }"
       :for="props.htmlFor || props.prop"
       @click="handleLabelClick"
     >
@@ -72,33 +72,35 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  toRef,
-  watch,
-  provide,
-  inject,
-  onMounted,
-  onBeforeUnmount
-} from 'vue'
 import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
+
 import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  toRef,
+  watch
+} from 'vue'
+
+import {
+  makeSentence,
+  useIcons,
+  useLocale,
   useNameHelper,
   useProps,
-  useLocale,
-  useIcons,
-  useWordSpace,
-  makeSentence
+  useWordSpace
 } from '@vexip-ui/config'
-import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
+import { createEventEmitter, getRangeWidth, isFunction, isNull } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS } from './symbol'
 
 import type { ComponentState } from '@vexip-ui/config'
 import type { Rule } from './validator'
@@ -217,7 +219,7 @@ export default defineComponent({
       () => props.action || props.hideLabel === true || formProps.hideLabel
     )
     const hasLabel = computed(() => !(hideLabel.value || !(props.label || slots.label)))
-    const computedlabelWidth = computed(() => {
+    const computedLabelWidth = computed(() => {
       if (formProps.labelAlign) {
         return getLabelWidth(
           formProps.labelAlign === 'top'
@@ -245,11 +247,11 @@ export default defineComponent({
     const controlStyle = computed(() => {
       return {
         width:
-          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedlabelWidth.value}px)`,
+          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedLabelWidth.value}px)`,
         marginLeft:
           hasLabel.value || formProps.labelAlign === 'top'
             ? undefined
-            : `${computedlabelWidth.value}px`
+            : `${computedLabelWidth.value}px`
       }
     })
     const inputValue = computed(() => {
@@ -448,7 +450,7 @@ export default defineComponent({
       inputValue,
       useAsterisk,
       hasLabel,
-      computedlabelWidth,
+      computedLabelWidth,
       controlStyle,
       columnFlex,
 

@@ -1,4 +1,4 @@
-import type { Data, TableFilterOptions, TableSorterOptions, TableColumnOptions } from './symbol'
+import type { Data, TableColumnOptions, TableFilterOptions, TableSorterOptions } from './symbol'
 
 export function defineFilter<D = Data, Val extends string | number = string | number>(
   filter: TableFilterOptions<D, Val>

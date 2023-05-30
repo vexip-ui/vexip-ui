@@ -112,24 +112,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject, toRef } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useIcons } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, toRef } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTIONS, columnTypes } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  TableRowState,
-  TableOrderColumn,
-  TableSelectionColumn,
-  TableExpandColumn,
+  ColumnWithKey,
   TableDragColumn,
-  TableTypeColumn,
-  ColumnWithKey
+  TableExpandColumn,
+  TableOrderColumn,
+  TableRowState,
+  TableSelectionColumn,
+  TableTypeColumn
 } from './symbol'
 
 export default defineComponent({
@@ -197,6 +199,9 @@ export default defineComponent({
     })
     const style = computed(() => {
       const width = state.widths.get(props.column.key) || 0
+      const maxWidth = state.resized.has(props.column.key)
+        ? `${width}px`
+        : `${props.column.width}px`
 
       let customStyle
 
@@ -213,9 +218,9 @@ export default defineComponent({
 
       return [
         {
+          maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`,
-          maxWidth: `${props.column.width}px`
+          width: `${props.column.width ?? width}px`
         },
         props.column.style || '',
         customStyle
@@ -275,33 +280,23 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellEnter(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Enter', buildEventPayload(event))
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellLeave(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Leave', buildEventPayload(event))
     }
 
     function handleClick(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellClick(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Click', buildEventPayload(event))
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellDblclick(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Dblclick', buildEventPayload(event))
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (tableActions) {
-        tableActions.emitCellContextmenu(buildEventPayload(event))
-      }
+      tableActions?.emitCellEvent('Contextmenu', buildEventPayload(event))
     }
 
     function handleCheckRow(row: TableRowState, event: MouseEvent) {

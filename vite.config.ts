@@ -2,11 +2,13 @@
 
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import glob from 'fast-glob'
 import MagicString from 'magic-string'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { components } from './scripts/utils'
 
 import type { LogLevel, Plugin } from 'vite'
@@ -85,7 +87,16 @@ export default defineConfig(async () => {
       },
       chunkSizeWarningLimit: 10000
     },
-    plugins: [createResolvePlugin(), vue(), vueJsx()]
+    plugins: [
+      createResolvePlugin(),
+      vue(),
+      vueJsx(),
+      visualizer({
+        filename: 'temp/stats-[format].html',
+        gzipSize: true,
+        brotliSize: true
+      }) as any
+    ]
   }
 })
 
@@ -95,7 +106,9 @@ function createResolvePlugin(): Plugin {
 
   return {
     name: 'vexip-ui:resolve',
+
     enforce: 'pre',
+
     resolveId(id) {
       if (id.startsWith('@/style')) {
         return {
@@ -111,6 +124,7 @@ function createResolvePlugin(): Plugin {
         }
       }
     },
+
     buildStart() {
       for (const name of files) {
         this.emitFile({
@@ -125,6 +139,7 @@ function createResolvePlugin(): Plugin {
         })
       }
     },
+
     renderChunk(code, chunk) {
       if (
         files.has(chunk.name.substring('style/'.length)) ||

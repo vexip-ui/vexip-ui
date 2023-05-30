@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { logger, components as allComponents, outputDir } from './utils'
+
+import { components as allComponents, logger, outputDir } from './utils'
 
 interface ContributorInfo {
   component: string,
@@ -63,7 +64,7 @@ async function graphql<Result>(query: string) {
 
 const nodeFlag: Record<string, string[]> = {}
 
-const OWENER = 'vexip-ui'
+const OWNER = 'vexip-ui'
 const REPO = 'vexip-ui'
 
 async function fetchContributors(fetchOptions: FetchOptions) {
@@ -75,7 +76,7 @@ async function fetchContributors(fetchOptions: FetchOptions) {
   // files of each component under default branch
   const query = `
     query {
-      repository(owner: "${OWENER}", name: "${REPO}") {
+      repository(owner: "${OWNER}", name: "${REPO}") {
         defaultBranchRef {
           target {
             ... on Commit {

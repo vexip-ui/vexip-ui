@@ -40,17 +40,17 @@ export function enUSLocale() {
     },
 
     colorPicker: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel'
     },
 
     confirm: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel'
     },
 
     datePicker: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel',
       placeholder: {
         year: 'year',
@@ -60,11 +60,13 @@ export function enUSLocale() {
         start: 'Start',
         end: 'End',
         select: 'Please select'
-      }
+      },
+      startTime: 'Start Time',
+      endTime: 'End Time'
     },
 
     drawer: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel'
     },
 
@@ -92,7 +94,7 @@ export function enUSLocale() {
     },
 
     modal: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel'
     },
 
@@ -141,7 +143,7 @@ export function enUSLocale() {
     },
 
     timePicker: {
-      confirm: 'Confrim',
+      confirm: 'Confirm',
       cancel: 'Cancel',
       placeholder: {
         time: 'time',

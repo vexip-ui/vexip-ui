@@ -1,15 +1,16 @@
-import { reactive, computed, watch, provide, inject, unref } from 'vue'
-import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
+import { computed, inject, provide, reactive, unref, watch } from 'vue'
 
-import type { App, ComputedRef, PropType, CSSProperties, ComponentObjectPropsOptions } from 'vue'
-import type { LocaleNames, LocaleConfig } from './locale'
+import { has, isFunction, isNull, isObject, mergeObjects } from '@vexip-ui/utils'
+
+import type { App, CSSProperties, ComponentObjectPropsOptions, ComputedRef, PropType } from 'vue'
+import type { LocaleConfig, LocaleNames } from './locale'
 import type {
-  EnsureValue,
-  MaybeRef,
-  Expand,
   AnyFunction,
-  VoidFunction,
-  MaybeFunction
+  EnsureValue,
+  Expand,
+  MaybeFunction,
+  MaybeRef,
+  VoidFunction
 } from './types'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
@@ -95,14 +96,17 @@ export function useProps<T extends Record<string, any>>(
       watch(
         () => sourceProps[key],
         value => {
+          if (isNull(value)) return
+
           const result = validator(value)
 
           if (result === false) {
             console.warn(
-              `${toWarnPrefix(name)}: an invaild value is set to '${key as string}' prop`
+              `${toWarnPrefix(name)}: an invalid value is set to '${key as string}' prop`
             )
           }
-        }
+        },
+        { immediate: true }
       )
 
     if (propOptions.static) {

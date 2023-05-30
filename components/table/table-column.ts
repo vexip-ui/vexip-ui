@@ -1,10 +1,19 @@
-import { defineComponent, reactive, watch, inject, onBeforeUnmount, onBeforeUpdate } from 'vue'
-import { useProps, createSizeProp } from '@vexip-ui/config'
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  reactive,
+  renderSlot,
+  watch
+} from 'vue'
+
+import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
-import type { Data, TableTextAlign, TableRowState, ColumnWithKey } from './symbol'
+import type { ColumnWithKey, Data, TableRowState, TableTextAlign } from './symbol'
 
 type ColumnPropKey = keyof typeof tableColumnProps
 
@@ -145,9 +154,11 @@ export default defineComponent({
     })
 
     function setRenderer() {
+      if (options.type && options.type !== 'expand') return
+
       options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
-          return slots.default(data)
+          return renderSlot(slots, 'default', data)
         }
 
         if (typeof props.renderer === 'function') {
@@ -170,9 +181,11 @@ export default defineComponent({
     }
 
     function setHeadRenderer() {
+      if (options.type === 'selection') return
+
       options.headRenderer = (data: any) => {
         if (typeof slots.head === 'function') {
-          return slots.head(data)
+          return renderSlot(slots, 'head', data)
         }
 
         if (typeof props.headRenderer === 'function') {
@@ -187,7 +200,7 @@ export default defineComponent({
       if (typeof slots.filter === 'function' || typeof props.filterRenderer === 'function') {
         options.filterRenderer = (data: any) => {
           if (typeof slots.filter === 'function') {
-            return slots.filter(data)
+            return renderSlot(slots, 'filter', data)
           }
 
           return props.filterRenderer(data)

@@ -1,15 +1,15 @@
-import { buildProps, booleanProp, booleanStringProp, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { MenuOptions } from '@/components/menu'
 import type {
   LayoutConfig,
+  LayoutFooterLink,
+  LayoutHeaderAction,
   LayoutMenuProps,
   LayoutSignType,
-  LayoutHeaderAction,
-  LayoutUser,
-  LayoutFooterLink
+  LayoutUser
 } from './symbol'
 
 export const layoutProps = buildProps({
@@ -45,7 +45,8 @@ export const layoutProps = buildProps({
   onUserAction: eventProp<(label: string, meta: any) => void>(),
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
   onColorChange: eventProp<(color: string) => void>(),
-  onToggleTheme: eventProp<(isDark: boolean) => void>()
+  onToggleTheme: eventProp<(isDark: boolean) => void>(),
+  onContentResize: eventProp<() => void>()
 })
 
 export type LayoutProps = ExtractPropTypes<typeof layoutProps>

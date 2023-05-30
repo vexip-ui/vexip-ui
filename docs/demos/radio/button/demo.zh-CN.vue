@@ -1,9 +1,5 @@
 <template>
-  <RadioGroup button>
-    <Radio v-for="item in items" :key="item" :label="item">
-      {{ item }}
-    </Radio>
-  </RadioGroup>
+  <RadioGroup button :options="items"></RadioGroup>
   <br />
   <br />
   <RadioGroup button>

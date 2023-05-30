@@ -1,4 +1,4 @@
-import { isDefined, isPromise, isObject, toDate, isColor, toNumber } from '@vexip-ui/utils'
+import { isColor, isDefined, isObject, isPromise, toDate, toNumber } from '@vexip-ui/utils'
 
 // export type Trigger = 'blur' | 'change'
 
@@ -15,7 +15,7 @@ export type Types =
   | 'color'
   | 'email'
 type Range = [number, number]
-type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+type ValidatorResult = boolean | string | Error | Promise<boolean | string | Error>
 
 export interface Rule<T = any> {
   // trigger?: Trigger,
@@ -26,7 +26,7 @@ export interface Rule<T = any> {
   strict?: boolean,
   enums?: T[],
   message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorReslut
+  validator?(value: T, model: Record<string, any>): ValidatorResult
 }
 
 type TypeOptions = Pick<Rule, 'length' | 'range' | 'strict'>

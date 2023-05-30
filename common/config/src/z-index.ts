@@ -1,4 +1,5 @@
-import { computed, provide, inject, unref, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, inject, provide, unref } from 'vue'
+
 import { isClient, isDefined } from '@vexip-ui/utils'
 
 import type { App, ComputedRef } from 'vue'

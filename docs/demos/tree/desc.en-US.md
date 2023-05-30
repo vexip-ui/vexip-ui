@@ -1,1 +1,0 @@
-It is used to quickly generate a multi-level structure list. It is usually used in scenarios that need to display folders, organizational structures, classifications, etc., and can clearly show the relationship of each level.

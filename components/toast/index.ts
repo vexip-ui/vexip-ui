@@ -1,9 +1,12 @@
-import { createApp, createVNode, render, markRaw } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './toast.vue'
-import { isClient, noop, toNumber, destroyObject } from '@vexip-ui/utils'
+import { destroyObject, isClient, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { ToastType, ToastOptions, ToastInstance } from './symbol'
+import type { ToastInstance, ToastOptions, ToastType } from './symbol'
+
+export { toastProps } from './props'
 
 export type { ToastProps, ToastCProps } from './props'
 export type { ToastType, ToastOptions }

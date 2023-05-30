@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" alt="Vexip UI" width="180" style="width: 180px;" />
   </a>
 </p>
 
@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
-    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="NPM version"/>
   </a>
 </p>
 
@@ -73,14 +73,22 @@ If you take maybe some bugs, please use the [Vexip UI Playground](https://playgr
 
 Welcome to join us! You can check out the [Contributing Guide](./CONTRIBUTING.md) to learn how to get started.
 
-Or you can sponsor me to help the project grow better!
+Or you can sponsor us to help the project grow better!
+
+WeChat:
+
+<img src="./docs/public/sponsor-wechat.webp" alt="WeChat payment" style="width: 240px;" />
+
+Alipay:
+
+<img src="./docs/public/sponsor-alipay.webp" alt="Alipay payment" style="width: 240px;" />
 
 ## Contributors
 
 Thanks for all their contributions!
 
 <a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" alt="contributors" />
 </a>
 
 ## Environment

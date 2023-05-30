@@ -100,10 +100,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
-import SliderTrigger from './slider-trigger.vue'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
+import SliderTrigger from './slider-trigger.vue'
+import { createStateProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 import { sliderProps } from './props'
@@ -122,7 +124,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<number | number[]>(() => (startTrigger.value || endTrigger.value)?.focus())
+      useFieldStore<number | number[]>(focus)
 
     const props = useProps('slider', _props, {
       state: createStateProp(state),
@@ -439,6 +441,10 @@ export default defineComponent({
       }
     }
 
+    function focus(options?: FocusOptions) {
+      (startTrigger.value || endTrigger.value)?.focus(options)
+    }
+
     return {
       props,
       nh,
@@ -460,7 +466,10 @@ export default defineComponent({
       disableEvent,
       getPointStyle,
       getMarkerStyle,
-      isPercentInRange
+      isPercentInRange,
+
+      focus,
+      blur: () => (startTrigger.value || endTrigger.value)?.blur()
     }
   }
 })

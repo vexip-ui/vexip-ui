@@ -42,6 +42,7 @@
               :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
+              @click="handleItemClick(option.value, option.meta)"
             >
               <slot :option="option" :index="index">
                 {{ option.label }}
@@ -79,18 +80,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, provide, nextTick } from 'vue'
-import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, useIcons, createStateProp, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, provide, ref, watch } from 'vue'
+
+import WheelItem from './wheel-item.vue'
+import { createStateProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
-import { USE_TOUCH, toFalse, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-ui/utils'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState } from './symbol'
+import type { ItemState, WheelRawOption } from './symbol'
 
 export default defineComponent({
   name: 'Wheel',
@@ -246,7 +249,7 @@ export default defineComponent({
     const prevDisabled = computed(() => {
       return (
         props.disabled ||
-        !itemList.value.slice(0, currentActive.value).some(item => !isItemDisbaled(item))
+        !itemList.value.slice(0, currentActive.value).some(item => !isItemDisabled(item))
       )
     })
     const nextDisabled = computed(() => {
@@ -255,7 +258,7 @@ export default defineComponent({
         currentActive.value >= itemList.value.length - 1 ||
         !itemList.value
           .slice(currentActive.value + 1, itemList.value.length)
-          .some(item => !isItemDisbaled(item))
+          .some(item => !isItemDisabled(item))
       )
     })
     const prevIcon = computed(() =>
@@ -349,7 +352,7 @@ export default defineComponent({
     })
     watch(() => props.candidate, computeSize)
 
-    function isItemDisbaled(item: ItemState) {
+    function isItemDisabled(item: ItemState) {
       return item.disabled || props.disabledItem(item.value, item.meta)
     }
 
@@ -366,7 +369,7 @@ export default defineComponent({
     }
 
     function findEnabledActive(active: number, sign = 1) {
-      if (itemList.value[active] && isItemDisbaled(itemList.value[active])) {
+      if (itemList.value[active] && isItemDisabled(itemList.value[active])) {
         active = queryEnabledActive(active, 1 * sign)
 
         if (sign > 0 ? active >= itemList.value.length : active < 0) {
@@ -457,6 +460,10 @@ export default defineComponent({
       }
     }
 
+    function handleItemClick(value: string | number, data: WheelRawOption) {
+      emitEvent(props.onItemClick, value, data)
+    }
+
     return {
       props,
       nh,
@@ -482,14 +489,17 @@ export default defineComponent({
       wrapper,
       scroll,
 
-      isItemDisbaled,
+      isItemDisabled,
       beforeScroll,
       handleWheel,
       handleScrollEnd,
       handlePrev,
       handleNext,
+      handleItemClick,
 
-      refreshScroll
+      refreshScroll,
+      focus: (options?: FocusOptions) => wrapper.value?.focus(options),
+      blur: () => wrapper.value?.blur()
     }
   }
 })

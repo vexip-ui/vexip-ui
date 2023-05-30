@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { Select } from '@/components/select'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { AutoComplete } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'

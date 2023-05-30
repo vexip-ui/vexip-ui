@@ -1,4 +1,5 @@
-import { unref, watch, getCurrentScope, onScopeDispose } from 'vue'
+import { getCurrentScope, onScopeDispose, unref, watch } from 'vue'
+
 import { noop } from '@vexip-ui/utils'
 
 import type { MaybeRef } from './shared/types'

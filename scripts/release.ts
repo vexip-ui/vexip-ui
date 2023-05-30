@@ -1,8 +1,9 @@
 import fs from 'node:fs'
+
 import minimist from 'minimist'
 import semver from 'semver'
 import prompts from 'prompts'
-import { logger, run, dryRun, getPackageInfo } from './utils'
+import { dryRun, getPackageInfo, logger, run } from './utils'
 
 import type { ReleaseType } from 'semver'
 
@@ -83,6 +84,8 @@ async function main() {
   if (!isDryRun) {
     if (isRoot) {
       await run('pnpm', ['test'])
+    } else if (target === 'bem-helper' || target === 'utils') {
+      await run('pnpm', ['test'], { cwd: pkgDir })
     }
   } else {
     logSkipped()
@@ -127,7 +130,7 @@ async function main() {
   await run('npx', changelogArgs, { cwd: pkgDir })
 
   // 提交改动
-  logStep('Comitting changes...')
+  logStep('Committing changes...')
 
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' })
 
