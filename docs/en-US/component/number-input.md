@@ -136,7 +136,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | autofocus      | `boolean`                                        | Set the autofocus of the input field                                        | `false`     | -        |
 | spellcheck     | `boolean`                                        | Set spellcheck for input fields                                             | `false`     | -        |
 | autocomplete   | `boolean`                                        | Set autocomplete for input fields                                           | `false`     | -        |
-| precision      | `number`                                         | Set the precision of the value                                              | `0`         | -        |
+| precision      | `number`                                         | Set the precision of the value                                              | `-1`        | -        |
 | readonly       | `boolean`                                        | Set the read-only property of the input                                     | `false`     | -        |
 | step           | `number`                                         | Set the amplitude of the single change of the increase and decrease buttons | `1`         | -        |
 | min            | `number`                                         | Set min limit                                                               | `-Infinity` | -        |

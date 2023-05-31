@@ -155,7 +155,7 @@ export default defineComponent({
       autofocus: false,
       spellcheck: false,
       autocomplete: false,
-      precision: 0,
+      precision: -1,
       readonly: false,
       step: 1,
       ctrlStep: 100,
@@ -227,7 +227,7 @@ export default defineComponent({
         nh.ns('input-vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm('focused')]: focused.value,
+          [nh.bm('focused')]: inputting.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
@@ -251,7 +251,7 @@ export default defineComponent({
       }
     })
     const preciseNumber = computed(() => {
-      return !inputting.value && typeof currentValue.value === 'number' && props.precision > 0
+      return !inputting.value && typeof currentValue.value === 'number' && props.precision >= 0
         ? toFixed(currentValue.value, props.precision)
         : currentValue.value
     })
@@ -271,18 +271,30 @@ export default defineComponent({
         return ''
       }
 
-      return focused.value ? preciseNumber.value : formattedValue.value
+      return inputting.value ? preciseNumber.value : formattedValue.value
     })
     const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const controlFade = computed(() => props.controlType?.endsWith('fade'))
 
+    function parseValue() {
+      let value = props.value
+      const isLegal = numberRE.test(String(value))
+      value = isLegal ? toNumber(value) : getEmptyValue()
+      if (props.precision >= 0 && !isNullOrNaN(value)) {
+        value = toFixed(value, props.precision)
+      }
+      currentValue.value = value
+      lastValue = value
+    }
+
     watch(
       () => props.value,
-      value => {
-        if (!focused.value || !numberRE.test(String(currentValue.value))) {
-          currentValue.value = isNull(value) ? NaN : value
+      () => {
+        if (!focused.value) {
+          parseValue()
         }
-      }
+      },
+      { immediate: true }
     )
 
     function focus(options?: FocusOptions) {
@@ -412,22 +424,23 @@ export default defineComponent({
 
       if (type === 'change') {
         let boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
-        const boundChange = boundValue !== value
+        if (props.precision >= 0) {
+          boundValue = toFixed(boundValue, props.precision)
+        }
+        const boundChange = !Object.is(boundValue, value)
+        const propsValueChange = !Object.is(props.value, value)
 
         if (!empty) {
           currentValue.value = boundValue
         }
 
-        if (!props.sync && lastValue === boundValue) return
+        if (!props.sync && Object.is(lastValue, boundValue)) return
 
         lastValue = boundValue
-        ;(!props.sync || boundChange) && setFieldValue(boundValue)
+        ;(!props.sync || boundChange || propsValueChange) && setFieldValue(boundValue)
         emitEvent(props.onChange, boundValue)
 
-        if (!props.sync || boundChange) {
-          if (props.precision > 0) {
-            boundValue = toFixed(boundValue, props.precision)
-          }
+        if (!props.sync || boundChange || propsValueChange) {
           emit('update:value', boundValue)
           validateField()
         }
