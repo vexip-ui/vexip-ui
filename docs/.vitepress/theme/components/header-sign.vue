@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useRouter } from 'vitepress'
 import { useI18n } from 'vue-i18n'
+
+import { useRouter } from 'vitepress'
 
 const router = useRouter()
 const i18n = useI18n({ useScope: 'global' })

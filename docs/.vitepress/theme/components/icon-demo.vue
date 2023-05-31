@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import IconLoading from './icon-loading.vue'
 import { useI18n } from 'vue-i18n'
+
+import IconLoading from './icon-loading.vue'
 
 const { locale } = useI18n({ useScope: 'global' })
 

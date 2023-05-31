@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+
 import { useData, useRoute } from 'vitepress'
 import { debounceFrame } from '@vexip-ui/utils'
 import { ussTocAnchor } from '../common/toc-anchor'

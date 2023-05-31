@@ -33,15 +33,11 @@ const props = defineProps({
   },
   demos: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   codes: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   }
 })
 
