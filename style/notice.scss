@@ -63,7 +63,7 @@ $notice: map.merge(
     display: flex;
     align-items: flex-start;
     padding-top: 4px;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     color: get-css-var('notice-icon-color');
   }
 
@@ -72,7 +72,7 @@ $notice: map.merge(
     align-items: flex-start;
     align-self: flex-start;
     padding: 0 0 3px;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     color: get-css-var('notice-close-color');
     cursor: pointer;
     background-color: transparent;
@@ -107,7 +107,7 @@ $notice: map.merge(
       #{$icon} {
         align-items: center;
         padding-top: 0;
-        margin-right: 8px;
+        margin-inline-end: 8px;
       }
 
       #{$close} {

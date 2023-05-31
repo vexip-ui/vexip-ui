@@ -38,7 +38,7 @@
   &__extra {
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -47,7 +47,7 @@
   &__extra-inner {
     position: sticky;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100%;
     height: 100%;
 

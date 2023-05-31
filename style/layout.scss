@@ -50,7 +50,7 @@ $layout: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     z-index: calc(get-css-var('z-index-popper') + 100);
     display: flex;
     pointer-events: none;
@@ -70,7 +70,7 @@ $layout: map.merge(
     max-height: get-css-var('layout-view-height');
     pointer-events: all;
     background-color: get-css-var('layout-aside-bg-color');
-    border-right: get-css-var('layout-aside-border');
+    border-inline-end: get-css-var('layout-aside-border');
     transition: width get-css-var('transition-base'), get-css-var('transition-border'),
       get-css-var('transition-transform');
     transform: translateX(-100%);
@@ -132,11 +132,11 @@ $layout: map.merge(
     transition: padding-left get-css-var('transition-base');
 
     &--away {
-      padding-left: get-css-var('layout-aside-width');
+      padding-inline-start: get-css-var('layout-aside-width');
     }
 
     &--away#{&}--reduced {
-      padding-left: 64px;
+      padding-inline-start: 64px;
     }
   }
 
@@ -145,7 +145,7 @@ $layout: map.merge(
   }
 
   &--no-aside &__section {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   &--locked &__section {
@@ -256,11 +256,11 @@ $layout: map.merge(
   }
 
   &__header &__sign {
-    padding-right: 16px;
-    margin-left: -16px;
+    padding-inline-end: 16px;
+    margin-inline-start: -16px;
 
     &--logo-only {
-      padding-right: 0;
+      padding-inline-end: 0;
     }
   }
 
@@ -310,7 +310,7 @@ $layout: map.merge(
     color: get-css-var('content-color-third');
     cursor: pointer;
     border: get-css-var('layout-aside-border');
-    border-left-color: transparent;
+    border-inline-start-color: transparent;
     border-radius: 0 get-css-var('radius-base') get-css-var('radius-base') 0;
   }
 
@@ -326,8 +326,8 @@ $layout: map.merge(
 
   &__user {
     .#{$namespace}-dropdown__trigger {
-      padding-right: 4px;
-      margin-right: -4px;
+      padding-inline-end: 4px;
+      margin-inline-end: -4px;
       cursor: pointer;
     }
 
@@ -408,7 +408,7 @@ $layout: map.merge(
     position: relative;
     width: 44px;
     height: 32px;
-    margin-right: 16px;
+    margin-inline-end: 16px;
     overflow: hidden;
     cursor: pointer;
     background-color: get-css-var('fill-color-humble');
@@ -416,14 +416,14 @@ $layout: map.merge(
     box-shadow: get-css-var('shadow-base');
 
     &:last-child {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
 
     &::before {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 0;
+      inset-block-start: 0;
       width: 30%;
       content: '';
       background-color: get-css-var('content-color-reverse');
@@ -431,9 +431,8 @@ $layout: map.merge(
 
     &::after {
       position: absolute;
+      inset-inline: 0;
       top: 0;
-      right: 0;
-      left: 0;
       height: 25%;
       content: '';
       background-color: get-css-var('content-color-base');
@@ -452,7 +451,7 @@ $layout: map.merge(
 
     .#{$namespace}-icon {
       position: absolute;
-      right: 3px;
+      inset-inline-end: 3px;
       bottom: 3px;
       color: get-css-var('color-primary-base');
     }
@@ -479,7 +478,7 @@ $layout: map.merge(
     justify-content: center;
     width: 30px;
     height: 20px;
-    margin-right: 8px;
+    margin-inline-end: 8px;
     margin-bottom: 6px;
     color: get-css-var('color-white');
     cursor: pointer;
@@ -530,12 +529,12 @@ $layout: map.merge(
       display: inline-flex;
       flex: 1 0 0;
       flex-direction: column;
-      padding-right: 24px;
+      padding-inline-end: 24px;
       padding-bottom: 32px;
 
       &--vertical {
         align-items: center;
-        padding-right: 0;
+        padding-inline-end: 0;
       }
     }
 
@@ -547,7 +546,7 @@ $layout: map.merge(
     }
 
     &-subname {
-      margin-left: 6px;
+      margin-inline-start: 6px;
       color: get-css-var('content-color-disabled');
     }
   }

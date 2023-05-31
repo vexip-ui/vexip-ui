@@ -50,7 +50,7 @@ $message: map.merge(
   &__icon {
     display: flex;
     align-items: center;
-    margin-right: 8px;
+    margin-inline-end: 8px;
     color: get-css-var('message-icon-color');
   }
 
@@ -58,7 +58,7 @@ $message: map.merge(
     display: flex;
     align-items: center;
     padding: 0;
-    margin-left: 14px;
+    margin-inline-start: 14px;
     color: get-css-var('message-close-color');
     cursor: pointer;
     background-color: transparent;

@@ -44,7 +44,7 @@ $form: map.merge(
     }
 
     &--padding::before {
-      padding-right: 8px;
+      padding-inline-end: 8px;
       margin-bottom: 4px;
       pointer-events: none;
       visibility: hidden;
@@ -66,7 +66,7 @@ $form: map.merge(
   &__label {
     display: inline-flex;
     align-items: center;
-    padding-right: 8px;
+    padding-inline-end: 8px;
     white-space: nowrap;
   }
 
@@ -117,15 +117,15 @@ $form: map.merge(
   }
 
   &__help {
-    margin-right: 3px;
+    margin-inline-end: 3px;
     cursor: help;
   }
 
   &--label-top &__help,
   &--label-left &__help {
     order: 1;
-    margin-right: 0;
-    margin-left: 3px;
+    margin-inline-start: 3px;
+    margin-inline-end: 0;
   }
 
   @mixin asterisk {
@@ -139,7 +139,7 @@ $form: map.merge(
   &__item--required &__label::before {
     @include asterisk;
 
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &--label-top &__item--required &__label {
@@ -150,7 +150,7 @@ $form: map.merge(
     &::after {
       @include asterisk;
 
-      margin-left: 4px;
+      margin-inline-start: 4px;
     }
   }
 
