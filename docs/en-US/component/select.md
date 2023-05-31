@@ -237,7 +237,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | locale          | `LocaleConfig['select']`                         | Set the locale config                                                                                                                                         | `null`         | `2.1.0`  |
 | no-preview      | `boolean`                                        | Set whether to disable the option label dynamic preview                                                                                                       | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | Whether to enable remote mode                                                                                                                                 | `false`        | `2.1.12` |
-| fit-popper      | `boolean \| number`                              | Set whether the dropdown menu and the selector are the same width. The default will be set to `false`, passing `number` will set the specific width.          | `false`        | `2.1.23` |
+| fit-popper      | `boolean \| number`                              | Set whether the option list and the selector are forced to be of equal width, or you can pass in a value to specify the width of the option list              | `false`        | `2.1.23` |
 
 ### Select Events
 
