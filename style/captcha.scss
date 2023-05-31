@@ -6,10 +6,16 @@
 $captcha: () !default;
 $captcha: map.merge(
   (
-    bg-color: get-css-var('bg-color-base'),
-    b-color: get-css-var('border-color-light-2'),
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-light-1'),
+    b-color-focus: get-css-var('input-b-color-hover'),
+    s-color-focus: get-css-var('color-primary-opacity-6'),
+    height: 32px,
     radius: get-css-var('radius-base'),
-    shadow: get-css-var('shadow-base'),
+    // shadow: get-css-var('shadow-base'),
+    panel-bg-color: get-css-var('bg-color-base'),
+    panel-border-radius: get-css-var('radius-base'),
+    panel-shadow: get-css-var('shadow-base'),
     image-radius: get-css-var('radius-base'),
     slider-height: 32px,
     slider-radius: get-css-var('radius-base'),
@@ -43,7 +49,29 @@ $captcha: map.merge(
 
   @include basis;
 
-  &--slide-image {
+  // &--slide-image {
+  //   padding: 12px 16px;
+  //   background-color: get-css-var('captcha-bg-color');
+  //   border: get-css-var('border-shape') get-css-var('captcha-b-color');
+  //   border-radius: get-css-var('captcha-radius');
+  //   box-shadow: get-css-var('captcha-shadow');
+  // }
+
+  &__selector {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    height: get-css-var('captcha-height');
+    cursor: pointer;
+    border: get-css-var('border-shape') get-css-var('captcha-b-color');
+    border-radius: get-css-var('captcha-radius');
+    outline: 0;
+    transition: get-css-var('transition-background'), get-css-var('transition-border'),
+      get-css-var('transition-shadow');
+  }
+
+  &__popper--slide-image {
     @include define-preset-values(
       'captcha',
       (
@@ -53,18 +81,21 @@ $captcha: map.merge(
         trigger-height: 36px
       )
     );
+  }
 
+  &__panel {
+    display: flex;
+    flex-direction: column;
     padding: 12px 16px;
-    background-color: get-css-var('captcha-bg-color');
-    border: get-css-var('border-shape') get-css-var('captcha-b-color');
-    border-radius: get-css-var('captcha-radius');
-    box-shadow: get-css-var('captcha-shadow');
+    background-color: get-css-var('captcha-panel-bg-color');
+    border-radius: get-css-var('captcha-panel-border-radius');
+    box-shadow: get-css-var('captcha-panel-shadow');
   }
 
   &__image {
     position: relative;
     display: flex;
-    width: 100%;
+    width: 300px;
     height: 0;
     padding-top: 60%;
     margin-bottom: 16px;
