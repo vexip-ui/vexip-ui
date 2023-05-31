@@ -418,7 +418,8 @@ export default defineComponent({
       noRestTip: false,
       tagType: null,
       noPreview: false,
-      remote: false
+      remote: false,
+      fitPopper: false
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -697,6 +698,22 @@ export default defineComponent({
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
     }
 
+    function fitPopperWidth() {
+      requestAnimationFrame(() => {
+        updatePopper()
+
+        if (wrapper.value && popper.value?.wrapper) {
+          if (typeof props.fitPopper === 'number') {
+            popper.value.wrapper.style.width = `${props.fitPopper}px`
+          } else if (props.fitPopper) {
+            popper.value.wrapper.style.width = `${wrapper.value.offsetWidth}px`
+          } else {
+            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
+          }
+        }
+      })
+    }
+
     watch(
       () => props.visible,
       value => {
@@ -707,20 +724,7 @@ export default defineComponent({
       if (value) {
         restTipShow.value = false
         initHittingIndex()
-
-        requestAnimationFrame(() => {
-          updatePopper()
-
-          if (wrapper.value && popper.value?.wrapper) {
-            popper.value.wrapper.style.minWidth = `${wrapper.value.offsetWidth}px`
-          }
-        })
-
-        setTimeout(() => {
-          if (virtualList.value && !isNull(currentValues.value[0])) {
-            virtualList.value.ensureKeyInView(currentValues.value[0])
-          }
-        }, 32)
+        fitPopperWidth()
       }
 
       syncInputValue()
@@ -769,7 +773,15 @@ export default defineComponent({
       filterOptions(value)
     })
 
-    onMounted(syncInputValue)
+    onMounted(() => {
+      syncInputValue()
+
+      if (props.visible) {
+        restTipShow.value = false
+        initHittingIndex()
+        fitPopperWidth()
+      }
+    })
 
     function initValueAndLabel(value: SelectValue | null) {
       if (isNull(value)) {

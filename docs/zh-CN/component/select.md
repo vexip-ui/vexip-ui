@@ -201,7 +201,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | state           | `'default' \| 'success' \| 'error' \| 'warning'` | 选择器的状态                                                              | `'default'`    | -        |
 | disabled        | `boolean`                                        | 设置是否禁用选择器                                                        | `false`        | -        |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                                      | `false`        | -        |
-| placeholder     | `string`                                         | 同原生的 placeholder                                                      | `''`           | -        |
+| placeholder     | `string`                                         | 同原生的 palceholder                                                      | `''`           | -        |
 | prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                              | `null`         | -        |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                            | `''`           | -        |
 | suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                              | `null`         | -        |
@@ -233,6 +233,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | locale          | `LocaleConfig['select']`                         | 设置多语言配置                                                            | `null`         | `2.1.0`  |
 | no-preview      | `boolean`                                        | 设置是否禁用选项标签动态预览功能                                          | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | 是否开启远程模式                                                          | `false`        | `2.1.12` |
+| fit-popper      | `boolean \| number`                              | 设置选项列表与选择器是否强制等宽，也可以传入一个数值指定选项列表的宽度    | `false`        | `2.1.23` |
 
 ### Select 事件
 
