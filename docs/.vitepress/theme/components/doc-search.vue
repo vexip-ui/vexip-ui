@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useRoute, useRouter } from 'vitepress'
 import { MagnifyingGlass } from '@vexip-ui/icons'
 import { getComponentConfig } from '../../config/component'
 import { useListener } from '@vexip-ui/hooks'
@@ -89,6 +91,8 @@ function toComponentDoc(fullName: string) {
 </template>
 
 <style lang="scss">
+@use '../style/mixins.scss' as *;
+
 .doc-search {
   flex: auto;
   padding-inline-start: 14px;
@@ -108,6 +112,10 @@ function toComponentDoc(fullName: string) {
       background-color: var(--vxp-fill-color-background);
       border: var(--vxp-border-light-1);
       border-radius: var(--vxp-radius-base);
+
+      @include query-media('xs') {
+        display: none;
+      }
     }
 
     .vxp-select__selector {

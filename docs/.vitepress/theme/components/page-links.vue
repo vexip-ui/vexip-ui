@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData } from 'vitepress'
 import { ChevronLeft, ChevronRight } from '@vexip-ui/icons'
 import { flatTree } from '@vexip-ui/utils'
 import { ensureStartingSlash, removeExt } from '../../shared'

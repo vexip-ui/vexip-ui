@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData, useRoute } from 'vitepress'
 import { Bars } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'

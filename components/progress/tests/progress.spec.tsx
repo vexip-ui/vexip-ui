@@ -72,10 +72,7 @@ describe('Progress', () => {
     await wrapper.setProps({
       strokeColor: ['red', 'yellow']
     })
-    // console.log(wrapper.vm.fillerStyle)
-    // expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-    //   'background-image: linear-gradient(to right, red 0%, yellow 100%);'
-    // )
+
     expect(wrapper.vm.fillerStyle).toMatchObject({
       backgroundImage: 'linear-gradient(to right, red 0%, yellow 100%)'
     })

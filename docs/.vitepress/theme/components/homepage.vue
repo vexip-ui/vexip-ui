@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+
+import { useI18n } from 'vue-i18n'
+
 import MajorColor from './major-color.vue'
 import Wave from './wave.vue'
 import { Message } from 'vexip-ui'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vitepress'
 import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
 

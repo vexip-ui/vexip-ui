@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue'
-import { useData, useRoute, useRouter } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData, useRoute, useRouter } from 'vitepress'
 import { isExternal } from '../../shared'
 
 import type { NavMenuItem } from '../types'
