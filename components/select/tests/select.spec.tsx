@@ -5,7 +5,6 @@ import { mount } from '@vue/test-utils'
 import { ChevronDown, GithubB, Spinner } from '@vexip-ui/icons'
 import { Select } from '..'
 
-import type { SpyInstance } from 'vitest'
 import type { DOMWrapper } from '@vue/test-utils'
 
 const TEXT = 'Text'
