@@ -233,7 +233,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | locale          | `LocaleConfig['select']`                         | 设置多语言配置                                                                         | `null`         | `2.1.0`  |
 | no-preview      | `boolean`                                        | 设置是否禁用选项标签动态预览功能                                                       | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | 是否开启远程模式                                                                       | `false`        | `2.1.12` |
-| fit-popper      | `boolean \| number`                              | 设置下拉菜单和选择器是否同宽。默认将设置为 `false`，传入 `number` 将会设置具体的宽度。 | `false`        | `2.1.22` |
+| fit-popper      | `boolean \| number`                              | 设置下拉菜单和选择器是否同宽。默认将设置为 `false`，传入 `number` 将会设置具体的宽度。 | `false`        | `2.1.23` |
 
 ### Select 事件
 

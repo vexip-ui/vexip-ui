@@ -654,7 +654,7 @@ describe('Select', () => {
         fitPopper: true
       }
     })
-    let widthMock: SpyInstance<[], number> = vi
+    let widthMock = vi
       .spyOn(wrapper.element as HTMLElement, 'offsetWidth', 'get')
       .mockReturnValue(100)
 
