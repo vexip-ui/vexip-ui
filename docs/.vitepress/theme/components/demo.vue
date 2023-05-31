@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { markRaw, onMounted, ref, watch, watchEffect } from 'vue'
+
+import { useI18n } from 'vue-i18n'
+
 import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
-import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
 import { hashTarget } from '../common/hash-target'

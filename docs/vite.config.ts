@@ -6,8 +6,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
-import Inspect from 'vite-plugin-inspect'
-import { MarkdownTransform } from './build/plugins/markdown-transform'
+import inspect from 'vite-plugin-inspect'
+import { demoImports } from './build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
 
@@ -70,8 +70,8 @@ export default defineConfig(({ command }: ConfigEnv): any => {
     plugins: [
       vueJsx(),
       i18n({ include: resolve(__dirname, './vitepress/i18n') }),
-      Inspect(),
-      MarkdownTransform()
+      inspect(),
+      demoImports()
     ]
   }
 })
