@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData, useRouter } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData, useRouter } from 'vitepress'
 import { GithubB, Language } from '@vexip-ui/icons'
 
 import ThemeSwitch from './theme-switch.vue'

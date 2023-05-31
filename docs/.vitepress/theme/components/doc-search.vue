@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useRoute, useRouter } from 'vitepress'
 import { MagnifyingGlass } from '@vexip-ui/icons'
 import { getComponentConfig } from '../../config/component'
 import { useListener } from '@vexip-ui/hooks'

@@ -111,7 +111,7 @@ function createDemoContainer() {
         if (token.nesting === 1) {
           const src = token.info.trim().match(demoReg)?.[1].trim()
 
-          return `<Demo src="${src}">\n`
+          return `<Demo :demos="demos" :codes="codes" src="${src}">\n`
         } else {
           return '</Demo>\n'
         }
