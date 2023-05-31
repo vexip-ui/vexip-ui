@@ -229,7 +229,6 @@ export default defineComponent({
         if (!wrapper.value) return
 
         const width = wrapper.value.getBoundingClientRect().width + state.deltaX
-        console.log(state.deltaX, width)
 
         mutations.handleColumnResize(props.column.key, width)
         tableAction.emitColResize('End', { ...buildEventPayload(event), width })
