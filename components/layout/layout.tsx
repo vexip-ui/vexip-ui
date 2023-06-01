@@ -367,6 +367,7 @@ export default defineComponent({
               ref={aside}
               v-model:expanded={asideExpanded.value}
               v-model:reduced={asideReduced.value}
+              sign-type={currentSignType.value}
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}

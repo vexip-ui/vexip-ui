@@ -265,16 +265,17 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### LayoutAside 属性
 
-| 名称       | 类型              | 说明                                                                     | 默认值  | 始于 |
-| ---------- | ----------------- | ------------------------------------------------------------------------ | ------- | ---- |
-| tag        | `string`          | 设置渲染的标签                                                           | `aside` | -    |
-| expanded   | `boolean`         | 当边栏不固定时，设置边栏是否为展开状态，可以使用 `v-model` 双向绑定      | `false` | -    |
-| reduced    | `boolean`         | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                      | `false` | -    |
-| menus      | `MenuOptions[]`   | 设置菜单选项                                                             | `[]`    | -    |
-| menu-props | `LayoutMenuProps` | 设置菜单属性                                                             | `null`  | -    |
-| logo       | `string`          | 设置 Logo 图片地址                                                       | `''`    | -    |
-| sign-name  | `string`          | 设置标语                                                                 | `''`    | -    |
-| fixed      | `string`          | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定 | `'lg'`  | -    |
+| 名称       | 类型                  | 说明                                                                     | 默认值    | 始于     |
+| ---------- | --------------------- | ------------------------------------------------------------------------ | --------- | -------- |
+| tag        | `string`              | 设置渲染的标签                                                           | `aside`   | -        |
+| expanded   | `boolean`             | 当边栏不固定时，设置边栏是否为展开状态，可以使用 `v-model` 双向绑定      | `false`   | -        |
+| reduced    | `boolean`             | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                      | `false`   | -        |
+| menus      | `MenuOptions[]`       | 设置菜单选项                                                             | `[]`      | -        |
+| menu-props | `LayoutMenuProps`     | 设置菜单属性                                                             | `null`    | -        |
+| logo       | `string`              | 设置 Logo 图片地址                                                       | `''`      | -        |
+| sign-name  | `string`              | 设置标语                                                                 | `''`      | -        |
+| fixed      | `string`              | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定 | `'lg'`    | -        |
+| sign-type  | `'aside' \| 'header'` | 设置标语所在的块，非 `'aside'` 时边栏的上定位会调整                      | `'aside'` | `2.1.23` |
 
 ### LayoutAside 事件
 

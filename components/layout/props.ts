@@ -61,6 +61,7 @@ export const layoutAsideProps = buildProps({
   logo: String,
   signName: String,
   fixed: booleanStringProp,
+  signType: String as PropType<LayoutSignType>,
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),

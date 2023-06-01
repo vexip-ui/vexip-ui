@@ -88,6 +88,13 @@ $layout: map.merge(
       width: 64px;
     }
 
+    &--no-sign#{&}--fixed {
+      top: get-css-var('layout-header-height');
+      max-height: calc(
+        #{get-css-var('layout-view-height')} - #{get-css-var('layout-header-height')}
+      );
+    }
+
     &-top {
       display: flex;
       flex-shrink: 0;
@@ -109,15 +116,6 @@ $layout: map.merge(
     .#{$namespace}-menu {
       margin-top: 10px;
       border-right: 0;
-    }
-  }
-
-  &--header-main &__aside {
-    &--fixed {
-      top: get-css-var('layout-header-height');
-      max-height: calc(
-        #{get-css-var('layout-view-height')} - #{get-css-var('layout-header-height')}
-      );
     }
   }
 
