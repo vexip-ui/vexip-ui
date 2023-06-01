@@ -2,7 +2,7 @@ import prismjs from 'prismjs'
 import loadLanguages from 'prismjs/components/index.js'
 import { escapeHtml } from './escape-html'
 
-loadLanguages(['markup', 'css', 'javascript'])
+loadLanguages(['markup', 'css', 'scss', 'javascript', 'typescript'])
 
 export function highlight(str: string, lang?: string) {
   if (lang) {
