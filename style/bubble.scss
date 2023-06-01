@@ -110,19 +110,19 @@ $bubble: map.merge(
   &--top &__arrow {
     @include top-arrow;
 
-    inset-inline-start: 50%;
+    left: 50%;
   }
 
   &--top-start &__arrow {
     @include top-arrow;
 
-    inset-inline-start: $h-offset;
+    left: $h-offset;
   }
 
   &--top-end &__arrow {
     @include top-arrow;
 
-    inset-inline-start: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset});
   }
 
   &--bottom,
@@ -152,19 +152,19 @@ $bubble: map.merge(
   &--bottom &__arrow {
     @include bottom-arrow;
 
-    inset-inline-start: 50%;
+    left: 50%;
   }
 
   &--bottom-start &__arrow {
     @include bottom-arrow;
 
-    inset-inline-start: $h-offset;
+    left: $h-offset;
   }
 
   &--bottom-end &__arrow {
     @include bottom-arrow;
 
-    inset-inline-start: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset});
   }
 
   &--left,

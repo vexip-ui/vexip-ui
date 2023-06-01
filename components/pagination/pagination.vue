@@ -24,7 +24,7 @@
         @keydown.space="handlePrev"
       >
         <slot name="prev">
-          <Icon v-bind="icons.arrowLeft" :scale="0.8"></Icon>
+          <Icon v-bind="isRtl ? icons.arrowRight : icons.arrowLeft" :scale="0.8"></Icon>
         </slot>
       </li>
       <li
@@ -67,7 +67,11 @@
         @mouseleave="handleLeavePrevEllipsis"
       >
         <transition :name="nh.ns('fade')">
-          <Icon v-if="inPrevEllipsis" v-bind="icons.anglesLeft" :scale="0.8"></Icon>
+          <Icon
+            v-if="inPrevEllipsis"
+            v-bind="isRtl ? icons.anglesRight : icons.anglesLeft"
+            :scale="0.8"
+          ></Icon>
           <Icon
             v-else
             v-bind="icons.ellipsis"
@@ -119,7 +123,11 @@
         @mouseleave="handleLeaveNextEllipsis"
       >
         <transition :name="nh.ns('fade')">
-          <Icon v-if="inNextEllipsis" v-bind="icons.anglesRight" :scale="0.8"></Icon>
+          <Icon
+            v-if="inNextEllipsis"
+            v-bind="isRtl ? icons.anglesLeft : icons.anglesRight"
+            :scale="0.8"
+          ></Icon>
           <Icon
             v-else
             v-bind="icons.ellipsis"
@@ -167,7 +175,7 @@
         @keydown.space="handleNext"
       >
         <slot name="next">
-          <Icon v-bind="icons.arrowRight" :scale="0.8"></Icon>
+          <Icon v-bind="isRtl ? icons.arrowLeft : icons.arrowRight" :scale="0.8"></Icon>
         </slot>
       </li>
     </ul>
@@ -239,7 +247,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
 import { boundRange, isClient, isFunction, isNull, range, warnOnce } from '@vexip-ui/utils'
 import { paginationProps } from './props'
 
@@ -299,6 +307,7 @@ export default defineComponent({
       noTitle: false
     })
 
+    const { isRtl } = useRtl()
     const nh = useNameHelper('pagination')
     const currentPagers = ref<number[]>([])
     const currentActive = ref(props.active)
@@ -684,6 +693,7 @@ export default defineComponent({
       jumpInputWidth,
 
       wrapper,
+      isRtl,
 
       isFunction,
       getCountWord,

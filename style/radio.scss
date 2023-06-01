@@ -42,7 +42,7 @@ $radio: map.merge(
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
@@ -79,7 +79,7 @@ $radio: map.merge(
     display: inline-block;
     width: get-css-var('radio-signal-size');
     height: get-css-var('radio-signal-size');
-    margin-right: 6px;
+    margin-inline-end: 6px;
     background-color: get-css-var('radio-signal-bg-color');
     border: get-css-var('radio-signal-border');
     border-radius: 50%;
@@ -175,7 +175,7 @@ $radio: map.merge(
     display: flex;
     align-items: center;
     height: 100%;
-    margin-right: 4px;
+    margin-inline-end: 4px;
     pointer-events: none;
     user-select: none;
   }
@@ -246,7 +246,7 @@ $radio: map.merge(
     }
 
     &-group--vertical & {
-      margin-right: 0;
+      margin-inline-end: 0;
       margin-bottom: 6px;
 
       &:last-child {
@@ -302,13 +302,13 @@ $radio: map.merge(
       padding: 8px 10px;
       margin: 0;
       border: get-css-var('radio-border');
-      border-left-width: 0;
+      border-inline-start-width: 0;
       border-radius: 0;
 
       &::after {
         position: absolute;
         top: 0;
-        left: -1px;
+        inset-inline-start: -1px;
         display: block;
         width: 1px;
         height: 100%;
@@ -319,11 +319,17 @@ $radio: map.merge(
       &:hover {
         border-color: get-css-var('radio-b-color-hover');
         box-shadow: -1px 0 0 0 get-css-var('radio-b-color-hover');
+
+        @include rtl {
+          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked');
+        }
       }
 
       &:first-child {
-        border-left-width: 1px;
-        border-radius: get-css-var('radius-base') 0 0 get-css-var('radius-base');
+        border-inline-start-width: 1px;
+
+        @include logical-radius(get-css-var('radius-base') 0 0 get-css-var('radius-base'));
+
         box-shadow: none;
 
         &::before,
@@ -333,22 +339,30 @@ $radio: map.merge(
       }
 
       &:last-child {
-        border-radius: 0 get-css-var('radius-base') get-css-var('radius-base') 0;
+        @include logical-radius(0 get-css-var('radius-base') get-css-var('radius-base') 0);
       }
 
       &--checked {
         z-index: 1;
         border-color: get-css-var('radio-b-color-checked');
         box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked');
+
+        @include rtl {
+          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked');
+        }
       }
 
       &:focus-within {
         box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked'),
           get-css-var('radio-shadow-focus');
 
+        @include rtl {
+          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked');
+        }
+
         &::after {
           top: -3px;
-          left: -3px;
+          inset-inline-start: -3px;
           height: calc(100% + 6px);
           background-color: get-css-var('radio-s-color-focus');
           transition: top get-css-var('transition-base'), left get-css-var('transition-base'),

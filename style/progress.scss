@@ -84,7 +84,7 @@ $progress: map.merge(
   &__info {
     display: flex;
     align-items: center;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     color: get-css-var('progress-info-color');
     pointer-events: none;
     transition: get-css-var('transition-transform');
@@ -94,10 +94,10 @@ $progress: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     justify-content: flex-end;
     width: 100%;
-    padding-right: 8px;
+    padding-inline-end: 8px;
     margin: 0;
     color: get-css-var('progress-info-color-inside');
   }
@@ -125,7 +125,7 @@ $progress: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100%;
     pointer-events: none;
     transition: get-css-var('transition-transform');
