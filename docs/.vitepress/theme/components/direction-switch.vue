@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+
 import { AlignLeft, AlignRight } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
