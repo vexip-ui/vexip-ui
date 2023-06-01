@@ -15,45 +15,12 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 
-import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper } from '@vexip-ui/config'
+import { optionProps } from './props'
 
 export default defineComponent({
   name: 'Option',
-  props: {
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    divided: {
-      type: Boolean,
-      default: false
-    },
-    noTitle: {
-      type: Boolean,
-      default: false
-    },
-    hitting: {
-      type: Boolean,
-      default: false
-    },
-    noHover: {
-      type: Boolean,
-      default: false
-    },
-    selected: {
-      type: Boolean,
-      default: false
-    },
-    onSelect: eventProp()
-  },
+  props: optionProps,
   emits: [],
   setup(props) {
     const nh = useNameHelper('option')

@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, wrapProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -19,3 +19,14 @@ export const breadcrumbProps = buildProps({
 
 export type BreadcrumbProps = ExtractPropTypes<typeof breadcrumbProps>
 export type BreadcrumbCProps = ConfigurableProps<BreadcrumbProps>
+
+export const breadcrumbItemProps = wrapProps({
+  label: {
+    type: [String, Number],
+    default: null
+  },
+  onSelect: eventProp<(label: string | number) => void>(),
+  onSeparatorClick: eventProp<(label: string | number) => void>()
+})
+
+export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>

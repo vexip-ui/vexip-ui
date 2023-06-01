@@ -43,27 +43,12 @@ import {
 } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { anchorLinkProps } from './props'
 import { ANCHOR_STATE, LINK_STATE, baseIndentWidth } from './symbol'
-
-import type { PropType } from 'vue'
-import type { AnchorLinkOptions } from './symbol'
 
 export default defineComponent({
   name: 'AnchorLink',
-  props: {
-    to: {
-      type: String,
-      default: ''
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    children: {
-      type: Array as PropType<AnchorLinkOptions[]>,
-      default: () => []
-    }
-  },
+  props: anchorLinkProps,
   setup(props) {
     const anchorState = inject(ANCHOR_STATE, null)
     const parentLinkState = inject(LINK_STATE, null)
