@@ -101,6 +101,8 @@ export default defineComponent({
       if (anchorState) {
         anchorState.handleActive(props.to)
       }
+
+      return false
     }
 
     return {
