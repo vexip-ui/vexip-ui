@@ -141,7 +141,7 @@ $drawer: map.merge(
 
   &__handler {
     @include define-css-var(
-      'drawer-hanlder-offset',
+      'drawer-handler-offset',
       calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px)
     );
 
@@ -169,19 +169,19 @@ $drawer: map.merge(
     }
 
     &--top {
-      bottom: get-css-var('drawer-hanlder-offset');
+      bottom: get-css-var('drawer-handler-offset');
     }
 
     &--right {
-      left: get-css-var('drawer-hanlder-offset');
+      left: get-css-var('drawer-handler-offset');
     }
 
     &--bottom {
-      top: get-css-var('drawer-hanlder-offset');
+      top: get-css-var('drawer-handler-offset');
     }
 
     &--left {
-      right: get-css-var('drawer-hanlder-offset');
+      right: get-css-var('drawer-handler-offset');
     }
 
     &:hover,
