@@ -12,7 +12,7 @@ import prismjs from 'prismjs'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
-import type { App, Ref } from 'vue'
+import type { App, MetaHTMLAttributes, Ref } from 'vue'
 import type { Router } from 'vitepress'
 
 export default {
@@ -78,6 +78,8 @@ function enhanceRouter(router: Router) {
 
   router.onAfterRouteChanged = to => {
     clearLoading(getPath(to))
+
+    isClient && syncMetaTitle()
   }
 
   isClient &&
@@ -119,4 +121,15 @@ function enhanceRouter(router: Router) {
       Loading.close()
     })
   }
+}
+
+function syncMetaTitle() {
+  const titleMetaEl = document.querySelector('meta[property="og:title"]') as MetaHTMLAttributes
+  if (!titleMetaEl) return
+
+  const titleEl = document.getElementsByTagName('title')[0]
+  const title = titleEl?.innerText.replace(/\s\|.*/, '') || 'Vexip UI'
+  const newTitle = `${title} | ${titleMetaEl?.content?.replace(/.*\s\|\s/, '')}`
+
+  titleMetaEl.content = newTitle
 }
