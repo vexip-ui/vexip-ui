@@ -1,3 +1,7 @@
+## [1.14.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.0...utils@1.14.1) (2023-06-02)
+
+
+
 # [1.14.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.13.0...utils@1.14.0) (2023-06-02)
 
 
