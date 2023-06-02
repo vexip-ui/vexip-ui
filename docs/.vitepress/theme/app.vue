@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData, useRoute } from 'vitepress'
 import { Bars } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
@@ -174,17 +176,19 @@ function refreshScroll() {
     </template>
 
     <!-- Main content -->
-    <Homepage v-if="frontmatter.homepage"></Homepage>
-    <NotFound v-else-if="page.isNotFound"></NotFound>
-    <div v-else>
-      <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
-        <Article :anchor-level="outline">
-          <Content class="markdown"></Content>
-        </Article>
-      </ConfigProvider>
-      <div id="transfer-place"></div>
-    </div>
-    <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+    <template #main>
+      <Homepage v-if="frontmatter.homepage"></Homepage>
+      <NotFound v-else-if="page.isNotFound"></NotFound>
+      <template v-else>
+        <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
+          <Article :anchor-level="outline">
+            <Content class="markdown"></Content>
+          </Article>
+        </ConfigProvider>
+        <div id="transfer-place"></div>
+      </template>
+      <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+    </template>
 
     <template #footer-copyright>
       Made with ❤️ by
@@ -199,6 +203,11 @@ function refreshScroll() {
 <style lang="scss">
 @use './style/mixins.scss' as *;
 
+#transfer-place {
+  position: relative;
+  z-index: calc(var(--header-z-index) - 1);
+}
+
 :not(.vxp-layout) .docs-layout {
   .vxp-layout {
     &__header {
@@ -211,7 +220,6 @@ function refreshScroll() {
     }
 
     &__section {
-      z-index: calc(var(--header-z-index) - 1);
       transition-duration: 0ms;
     }
 
@@ -227,8 +235,12 @@ function refreshScroll() {
       display: none;
     }
 
-    &__sider--away {
-      z-index: calc(var(--header-z-index) + 2);
+    &__sider {
+      z-index: calc(var(--header-z-index) - 2);
+
+      &--away {
+        z-index: calc(var(--header-z-index) + 2);
+      }
     }
 
     &__links {

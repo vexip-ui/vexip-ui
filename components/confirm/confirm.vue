@@ -3,6 +3,7 @@
   <Modal
     no-footer
     :closable="false"
+    :auto-remove="false"
     :active="visible"
     :class="[nh.b(), nh.bs('vars')]"
     :modal-class="classR"

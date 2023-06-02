@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import metaData from 'vexip-ui/meta-data/contributors.json'
+
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
 
-import metaData from 'vexip-ui/meta-data/contributors.json'
+import { useData } from 'vitepress'
 
 interface Contributor {
   name?: string,

@@ -13,7 +13,7 @@ export interface TimelineState {
   dashed: boolean,
   lineColor: string,
   spacing: number | string,
-  bothSides: boolean,
+  alternate: boolean,
   horizontal: boolean,
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,

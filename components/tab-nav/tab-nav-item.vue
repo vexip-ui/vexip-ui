@@ -32,8 +32,9 @@ import { Icon } from '@/components/icon'
 
 import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-import { emitEvent, eventProp, useIcons, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useIcons, useNameHelper } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
+import { tabNavItemProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
@@ -43,25 +44,7 @@ export default defineComponent({
   components: {
     Icon
   },
-  props: {
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    icon: {
-      type: Object,
-      default: null
-    },
-    closable: {
-      type: Boolean,
-      default: null
-    },
-    onToggle: eventProp<(active: boolean) => void>()
-  },
+  props: tabNavItemProps,
   emits: [],
   setup(props) {
     const tabNavState = inject(TAB_NAV_STATE, null)

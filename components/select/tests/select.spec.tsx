@@ -9,6 +9,9 @@ import type { DOMWrapper } from '@vue/test-utils'
 
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
+const LONG_OPTIONS = [
+  'longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1'
+]
 
 function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
@@ -17,6 +20,10 @@ function getValue(wrapper: DOMWrapper<Element>) {
 function emitInput(input: HTMLInputElement, value: string) {
   input.value = value
   input.dispatchEvent(new Event('input'))
+}
+
+function nextFrame() {
+  return new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
 }
 
 describe('Select', () => {
@@ -68,7 +75,7 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__control').text()).toEqual(OPTIONS[0])
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
 
-    await wrapper.setProps({ value: null })
+    await wrapper.setProps({ value: null, visible: false })
     expect(wrapper.find('.vxp-select__control').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(false)
   })
@@ -636,5 +643,52 @@ describe('Select', () => {
     expect(tags.length).toEqual(2)
     expect(tags[0].text()).toEqual(OPTIONS[1])
     expect(tags[1].text()).toEqual(OPTIONS[2])
+  })
+
+  it('fit-popper the popper width fit select width', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        options: LONG_OPTIONS,
+        fitPopper: true
+      }
+    })
+    let widthMock = vi
+      .spyOn(wrapper.element as HTMLElement, 'offsetWidth', 'get')
+      .mockReturnValue(100)
+
+    await nextFrame()
+
+    expect(parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.width)).toBe(
+      100
+    )
+    widthMock.mockRestore()
+
+    await wrapper.setProps({
+      fitPopper: false
+    })
+    widthMock = vi.spyOn(wrapper.element as HTMLElement, 'offsetWidth', 'get').mockReturnValue(400)
+
+    await wrapper.trigger('click')
+    await wrapper.trigger('click')
+    await nextFrame()
+
+    expect(
+      parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.minWidth)
+    ).toBe(400)
+    widthMock.mockRestore()
+
+    await wrapper.setProps({
+      fitPopper: 200
+    })
+
+    await wrapper.trigger('click')
+    await wrapper.trigger('click')
+    await nextFrame()
+
+    expect(parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.width)).toBe(
+      200
+    )
+    widthMock.mockRestore()
   })
 })

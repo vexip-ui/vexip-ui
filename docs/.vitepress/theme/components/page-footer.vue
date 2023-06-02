@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData } from 'vitepress'
 import { PenToSquareR } from '@vexip-ui/icons'
 import { format } from '@vexip-ui/utils'
 

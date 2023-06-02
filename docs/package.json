@@ -39,6 +39,7 @@
     "postcss-discard-duplicates": "^6.0.0",
     "sass": "^1.58.3",
     "vite": "^4.3.4",
+    "vite-plugin-inspect": "^0.7.28",
     "vitepress": "1.0.0-beta.1"
   }
 }

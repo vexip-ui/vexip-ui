@@ -6,6 +6,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
+import inspect from 'vite-plugin-inspect'
+import { demoImports } from './build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
 
@@ -65,6 +67,11 @@ export default defineConfig(({ command }: ConfigEnv): any => {
         plugins: [autoprefixer, ...(isServe ? [] : [discardCss])]
       }
     },
-    plugins: [vueJsx(), i18n({ include: resolve(__dirname, './vitepress/i18n') })]
+    plugins: [
+      vueJsx(),
+      i18n({ include: resolve(__dirname, './vitepress/i18n') }),
+      inspect(),
+      demoImports()
+    ]
   }
 })

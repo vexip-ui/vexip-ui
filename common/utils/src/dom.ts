@@ -112,6 +112,26 @@ export function getYMargin(el: HTMLElement | null) {
   return margin || 0
 }
 
+export function getXBorder(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const width =
+    parseFloat(computedStyle.borderLeftWidth) + parseFloat(computedStyle.borderRightWidth)
+
+  return width || 0
+}
+
+export function getYBorder(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const width =
+    parseFloat(computedStyle.borderTopWidth) + parseFloat(computedStyle.borderBottomWidth)
+
+  return width || 0
+}
+
 export function getRangeWidth(el: HTMLElement | null) {
   if (!el) return 0
 

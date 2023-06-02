@@ -1,10 +1,11 @@
+import * as compiler from '@vue/compiler-sfc'
+
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { getGuideConfig } from './config/guide'
 import { getComponentConfig } from './config/component'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { toKebabCase } from '@vexip-ui/utils'
-import * as compiler from '@vue/compiler-sfc'
 
 import type { UserConfig } from 'vitepress'
 import type { ThemeConfig } from './theme/types'

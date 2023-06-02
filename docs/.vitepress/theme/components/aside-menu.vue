@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useData, useRoute, useRouter } from 'vitepress'
+
 import { useI18n } from 'vue-i18n'
+
+import { useData, useRoute, useRouter } from 'vitepress'
 import { flatTree, toKebabCase } from '@vexip-ui/utils'
 import { ensureStartingSlash } from '../../shared'
 

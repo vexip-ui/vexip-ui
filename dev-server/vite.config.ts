@@ -7,6 +7,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import comp from 'unplugin-vue-components/vite'
 import autoprefixer from 'autoprefixer'
 
+import type { UserConfig } from 'vite'
+
 if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
 }
@@ -43,7 +45,7 @@ const typography = [
 ]
 
 export default defineConfig(() => {
-  return {
+  return <UserConfig>{
     publicDir: '../docs/public',
     define: {
       __TARGET__: JSON.stringify(target),
@@ -69,13 +71,7 @@ export default defineConfig(() => {
       }
     },
     optimizeDeps: {
-      include: [
-        '../components',
-        '@vexip-ui/bem-helper',
-        '@vexip-ui/hooks',
-        '@vexip-ui/icons',
-        '@vexip-ui/utils'
-      ]
+      include: ['../components', '@vexip-ui/icons']
     },
     css: {
       postcss: {

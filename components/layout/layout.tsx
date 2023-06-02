@@ -15,7 +15,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
-import { isClient, runQueueFrame } from '@vexip-ui/utils'
+import { getXBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
 import LayoutFooter from './layout-footer'
@@ -244,7 +244,7 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = scroll.value.$el.offsetHeight
+        viewHeight.value = scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)
       }
 
       emitEvent(props.onContentResize)
@@ -367,6 +367,7 @@ export default defineComponent({
               ref={aside}
               v-model:expanded={asideExpanded.value}
               v-model:reduced={asideReduced.value}
+              sign-type={currentSignType.value}
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}

@@ -21,20 +21,12 @@
 import { defineComponent } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { optionGroupProps } from './props'
 
 export default defineComponent({
   name: 'OptionGroup',
-  props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    divided: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
+  props: optionGroupProps,
+  setup() {
     return {
       nh: useNameHelper('option-group')
     }
