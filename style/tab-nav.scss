@@ -244,7 +244,7 @@ $tab-nav: map.merge(
     height: get-css-var('tab-nav-item-pad-size');
   }
 
-  &__item:nth-child(2) &__pad {
+  &__item:nth-child(1) &__pad {
     display: none;
   }
 
