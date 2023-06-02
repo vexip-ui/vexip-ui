@@ -210,7 +210,7 @@ export default defineComponent({
       }
     })
 
-    let lastValue = props.value
+    let lastValue: number
 
     const outOfRange = computed(() => {
       return (
@@ -276,26 +276,35 @@ export default defineComponent({
     const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const controlFade = computed(() => props.controlType?.endsWith('fade'))
 
-    function parseValue() {
-      let value = props.value
-      const isLegal = numberRE.test(String(value))
-      value = isLegal ? toNumber(value) : getEmptyValue()
-      if (props.precision >= 0 && !isNullOrNaN(value)) {
-        value = toFixed(value, props.precision)
-      }
-      currentValue.value = value
-      lastValue = value
-    }
-
     watch(
       () => props.value,
-      () => {
-        if (!focused.value) {
+      value => {
+        if (value !== lastValue) {
           parseValue()
         }
       },
       { immediate: true }
     )
+
+    function boundValueRange(value: number) {
+      return boundRange(value, props.min, props.max)
+    }
+
+    function parseValue() {
+      let value = props.value
+      value = inputting.value
+        ? value
+        : numberRE.test(String(value))
+          ? toNumber(value)
+          : getEmptyValue()
+
+      if (props.precision >= 0 && !isNullOrNaN(value)) {
+        value = toFixed(boundValueRange(value), props.precision)
+      }
+
+      currentValue.value = value
+      lastValue = value
+    }
 
     function focus(options?: FocusOptions) {
       inputControl.value?.focus(options)
@@ -397,7 +406,7 @@ export default defineComponent({
 
     function setValue(value: string | number, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = isEmpty(value) ? NaN : toNumber(value)
+        currentValue.value = isEmpty(value) ? getEmptyValue() : toNumber(value)
       } else {
         currentValue.value = value
       }
@@ -423,24 +432,28 @@ export default defineComponent({
       type = type === 'input' ? 'input' : 'change'
 
       if (type === 'change') {
-        let boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
+        let boundValue = empty ? value : boundValueRange(toNumber(value))
+
         if (props.precision >= 0) {
           boundValue = toFixed(boundValue, props.precision)
         }
+
         const boundChange = !Object.is(boundValue, value)
-        const propsValueChange = !Object.is(props.value, value)
 
         if (!empty) {
           currentValue.value = boundValue
         }
 
-        if (!props.sync && Object.is(lastValue, boundValue)) return
+        if (!props.sync && Object.is(lastValue, boundValue)) {
+          !Object.is(props.value, value) && emit('update:value', boundValue)
+          return
+        }
 
         lastValue = boundValue
-        ;(!props.sync || boundChange || propsValueChange) && setFieldValue(boundValue)
+        ;(!props.sync || boundChange) && setFieldValue(boundValue)
         emitEvent(props.onChange, boundValue)
 
-        if (!props.sync || boundChange || propsValueChange) {
+        if (!props.sync || boundChange) {
           emit('update:value', boundValue)
           validateField()
         }
