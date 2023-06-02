@@ -310,7 +310,8 @@ export async function getPackageInfo(inputPkg: string) {
     throw new Error(`Release package ${pkgName} not found`)
   }
 
-  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
+  const rawPkg = readFileSync(pkgPath, 'utf-8')
+  const pkg = JSON.parse(rawPkg)
 
   if (pkg.private) {
     throw new Error(`Release package ${pkgName} is private`)
@@ -321,6 +322,7 @@ export async function getPackageInfo(inputPkg: string) {
     pkgDir,
     pkgPath,
     pkg,
+    rawPkg,
     isRoot,
     currentVersion: pkg.version
   }
