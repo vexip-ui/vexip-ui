@@ -174,7 +174,12 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
+          <NativeScroll
+            class={nh.be('aside-main')}
+            use-y-bar
+            observe-deep
+            height={scrollHeight.value}
+          >
             {slots.default
               ? (
                   renderSlot(slots, 'default', slotParams)
