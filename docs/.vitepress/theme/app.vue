@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute } from 'vitepress'
 import { Bars } from '@vexip-ui/icons'
-import { isClient } from '@vexip-ui/utils'
+import { boundRange, isClient, multipleFixed } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from '../shared'
 
@@ -18,7 +18,7 @@ import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
-import type { LayoutExposed } from 'vexip-ui'
+import type { LayoutExposed, ScrollbarExposed } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
@@ -31,7 +31,6 @@ const expanded = ref(false)
 const mounted = ref(false)
 
 const layout = ref<LayoutExposed>()
-const scroll = computed(() => layout.value?.scroll)
 
 const outline = computed(() => {
   if (frontmatter.value.aside === false) {
@@ -67,16 +66,13 @@ const footerLinks = computed(() => {
     }))
 })
 
+const bar = ref<ScrollbarExposed>()
+const barLength = ref(35)
+
 watch(
   () => route.path,
   () => {
     requestAnimationFrame(refreshScroll)
-  }
-)
-watch(
-  () => scroll.value?.y,
-  value => {
-    fixedSub.value = !!value && value >= 65
   }
 )
 
@@ -85,13 +81,48 @@ onMounted(() => {
     mounted.value = true
     refreshScroll()
   })
+
+  if (!isClient) return
+
+  barLength.value = boundRange(
+    (document.documentElement.clientHeight / (document.documentElement.scrollHeight || 1)) * 100,
+    5,
+    99
+  )
+
+  window.addEventListener('scroll', handleScroll)
 })
 
-function refreshScroll() {
-  if (!scroll.value) return
+function handleScroll() {
+  if (!isClient || !bar.value) return
 
-  if (isClient && hashTarget.value) {
-    const content = scroll.value.content!
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+
+  if (scrollHeight <= clientHeight) {
+    bar.value.handleScroll(0)
+    return
+  }
+
+  const percent = multipleFixed(scrollTop / (scrollHeight - clientHeight || 1), 100, 2)
+  bar.value.handleScroll(percent)
+}
+
+function handleBarScroll(percent: number) {
+  if (!isClient) return
+
+  const { scrollHeight, clientHeight } = document.documentElement
+
+  if (scrollHeight <= clientHeight) return
+
+  document.documentElement.scrollTop = (percent * (scrollHeight - clientHeight)) / 100
+}
+
+function refreshScroll() {
+  if (!isClient) return
+
+  const content = document.documentElement
+
+  if (hashTarget.value) {
     const target = document.querySelector(`#${hashTarget.value}`)
 
     if (target) {
@@ -103,19 +134,13 @@ function refreshScroll() {
       setTimeout(() => {
         content.scrollTop = scrollTop
       }, 0)
-
-      return
     }
   }
 
-  const content = scroll.value.content
-
-  if (content) {
+  content.scrollTop = 0
+  setTimeout(() => {
     content.scrollTop = 0
-    setTimeout(() => {
-      content.scrollTop = 0
-    }, 0)
-  }
+  }, 0)
 }
 </script>
 
@@ -125,11 +150,11 @@ function refreshScroll() {
     v-model:expanded="expanded"
     :class="['docs-layout', !mounted && 'docs-layout--rendering']"
     sign-type="header"
+    fit-window
     :no-aside="frontmatter.homepage || page.isNotFound"
     :footer="!(frontmatter.homepage || page.isNotFound || frontmatter.footer === false)"
     :links="footerLinks"
     :style="{
-      height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width)',
       '--vxp-layout-header-height': 'var(--header-height)'
     }"
@@ -198,6 +223,16 @@ function refreshScroll() {
       and contributors
     </template>
   </Layout>
+
+  <teleport to="body">
+    <Scrollbar
+      ref="bar"
+      class="docs-scrollbar"
+      :bar-length="barLength"
+      wrapper="body"
+      @scroll="handleBarScroll"
+    ></Scrollbar>
+  </teleport>
 </template>
 
 <style lang="scss">
@@ -214,8 +249,9 @@ function refreshScroll() {
       z-index: var(--header-z-index);
       padding: 0;
 
-      &--reduced {
-        transform: translateY(-100%);
+      &--away {
+        position: sticky;
+        top: calc(var(--vxp-layout-header-height) * -1);
       }
     }
 
@@ -268,6 +304,15 @@ function refreshScroll() {
     &__aside {
       transition-duration: 0ms;
     }
+  }
+}
+
+.docs-scrollbar {
+  position: fixed;
+  top: calc(var(--sub-header-height) + var(--header-height));
+
+  @include query-media('lg') {
+    top: var(--header-height);
   }
 }
 

@@ -33,17 +33,16 @@ html {
   @include query-media('xl') {
     --aside-width: 300px;
   }
-}
 
-html,
-body,
-#app {
-  height: 100%;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 body {
   margin: 0;
-  overflow: hidden;
   font-family: var(--vxp-font-family-base);
   color: var(--vxp-content-color-base);
   background-color: var(--bg-color);
