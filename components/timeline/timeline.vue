@@ -1,7 +1,7 @@
 <template>
   <div
     :class="className"
-    :style="{ height: props.horizontal && props.bothSides ? `${height}px` : undefined }"
+    :style="{ height: props.horizontal && isAlternate ? `${height}px` : undefined }"
   >
     <slot></slot>
   </div>
@@ -43,13 +43,14 @@ export default defineComponent({
     const nh = useNameHelper('timeline')
     const itemStates = reactive(new Set<ItemState>())
 
+    const isAlternate = computed(() => props.bothSides || props.alternate)
     const className = computed(() => {
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('pending')]: props.pending,
-        [nh.bm('alternate')]: props.bothSides || props.alternate,
+        [nh.bm('alternate')]: isAlternate.value,
         [nh.bm('flip')]: props.flip,
         [nh.bm('horizontal')]: props.horizontal
       }
@@ -75,7 +76,7 @@ export default defineComponent({
       dashed: toRef(props, 'dashed'),
       lineColor: toRef(props, 'lineColor'),
       spacing: toRef(props, 'spacing'),
-      bothSides: toRef(props, 'bothSides'),
+      alternate: isAlternate,
       horizontal: toRef(props, 'horizontal'),
       increaseItem,
       decreaseItem,
@@ -101,6 +102,8 @@ export default defineComponent({
     return {
       nh,
       props,
+
+      isAlternate,
       className,
       height,
       itemStates

@@ -104,7 +104,7 @@ export default defineComponent({
 
       timelineState.increaseItem(state)
 
-      watch(() => timelineState.bothSides, updateHeight)
+      watch(() => timelineState.alternate, updateHeight)
       watch(() => timelineState.horizontal, updateHeight)
 
       onMounted(updateHeight)
