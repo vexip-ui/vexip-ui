@@ -78,6 +78,8 @@ import { USE_TOUCH, createEventEmitter, isElement, isTrue } from '@vexip-ui/util
 import { scrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
+import { useRtl } from '@vexip-ui/hooks'
+
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from './symbol'
 
@@ -140,6 +142,8 @@ export default defineComponent({
     })
 
     const emitter = createEventEmitter()
+
+    const { isRtl } = useRtl()
 
     const nh = useNameHelper('scroll')
     const usingBar = ref(false)
@@ -352,7 +356,9 @@ export default defineComponent({
     watchEffect(() => {
       if (!contentElement.value) return
 
-      contentElement.value.style.transform = `translate3d(${x.value}px, ${y.value}px, 0)`
+      contentElement.value.style.transform = `translate3d(${isRtl.value ? -x.value : x.value}px, ${
+        y.value
+      }px, 0)`
     })
     watchEffect(() => {
       if (!contentElement.value) return

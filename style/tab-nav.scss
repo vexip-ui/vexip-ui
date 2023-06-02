@@ -106,12 +106,12 @@ $tab-nav: map.merge(
 
   &--top &__prefix,
   &--bottom &__prefix {
-    padding-left: 3px;
+    padding-inline-start: 3px;
   }
 
   &--top &__suffix,
   &--bottom &__suffix {
-    padding-right: 3px;
+    padding-inline-end: 3px;
   }
 
   &__item {
@@ -298,7 +298,7 @@ $tab-nav: map.merge(
     #{$content},
     #{$add},
     #{$pad} {
-      border-left-width: 1px;
+      border-inline-start-width: 1px;
     }
 
     #{$content} {
@@ -306,7 +306,7 @@ $tab-nav: map.merge(
         &,
         &:hover,
         &:focus {
-          border-left-color: transparent;
+          border-inline-start-color: transparent;
         }
       }
     }
@@ -360,7 +360,7 @@ $tab-nav: map.merge(
     #{$content},
     #{$add},
     #{$pad} {
-      border-right-width: 1px;
+      border-inline-end-width: 1px;
     }
 
     #{$content} {
@@ -399,19 +399,19 @@ $tab-nav: map.merge(
   }
 
   &__icon {
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__close {
     position: relative;
-    left: 8px;
+    inset-inline-start: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 18px;
     height: 18px;
     padding: 0;
-    margin-left: -2px;
+    margin-inline-start: -2px;
     color: inherit;
     cursor: pointer;
     background-color: transparent;

@@ -65,7 +65,7 @@ $switch: map.merge(
   }
 
   & + & {
-    margin-left: get-css-var('switch-series-span');
+    margin-inline-start: get-css-var('switch-series-span');
   }
 
   &:focus-within {
@@ -89,7 +89,7 @@ $switch: map.merge(
     flex-direction: column;
     min-width: calc(#{$height} * 2);
     height: $height;
-    padding-left: calc(#{$height} * 1.5 + 1px);
+    padding-inline-start: calc(#{$height} * 1.5 + 1px);
     overflow: hidden;
     white-space: nowrap;
     pointer-events: none;
@@ -102,8 +102,8 @@ $switch: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-right: calc(#{$height} * 0.5 - 1px);
-    padding-left: calc(#{$height} + 2px);
+    padding-inline-start: calc(#{$height} + 2px);
+    padding-inline-end: calc(#{$height} * 0.5 - 1px);
     line-height: 1;
     color: get-css-var('switch-label-color');
     border-radius: $height;
@@ -111,8 +111,8 @@ $switch: map.merge(
   }
 
   &--open &__label {
-    padding-right: calc(#{$height} + 2px);
-    padding-left: calc(#{$height} * 0.5 - 1px);
+    padding-inline-start: calc(#{$height} * 0.5 - 1px);
+    padding-inline-end: calc(#{$height} + 2px);
   }
 
   &__open-text,
