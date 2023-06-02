@@ -38,6 +38,7 @@ export const layoutProps = buildProps({
   verticalLinks: booleanStringProp,
   darkMode: booleanProp,
   fixedMain: booleanProp,
+  fitWindow: booleanProp,
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),

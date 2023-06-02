@@ -71,7 +71,7 @@ export function useLayoutState() {
 const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
 export function useMediaQuery(query: Ref<string | boolean>) {
-  const matched = ref(false)
+  const matched = ref(!isClient)
 
   const computedStyle = isClient && getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {

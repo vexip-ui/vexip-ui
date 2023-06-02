@@ -79,7 +79,8 @@ export default defineComponent({
       miniHeaderSign: 'lg',
       verticalLinks: 'md',
       darkMode: null,
-      fixedMain: false
+      fixedMain: false,
+      fitWindow: false
     })
 
     const nh = useNameHelper('layout')
@@ -124,7 +125,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
           [nh.bm('header-main')]: currentSignType.value === 'header',
-          [nh.bm('locked')]: !isMounted.value || locked.value
+          [nh.bm('locked')]: !isMounted.value || locked.value,
+          [nh.bm('fit-window')]: props.fitWindow
         }
       ]
     })
@@ -140,7 +142,7 @@ export default defineComponent({
 
     const style = computed(() => {
       return {
-        [nh.cv('view-height')]: `${viewHeight.value}px`
+        [nh.cv('view-height')]: props.fitWindow ? '100vh' : `${viewHeight.value}px`
       }
     })
 
@@ -422,8 +424,41 @@ export default defineComponent({
       )
     }
 
-    return () => {
+    function renderWrapper() {
       const CustomTag = (props.tag || 'section') as any
+
+      return (
+        <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
+          {currentSignType.value === 'header' && renderHeader()}
+          {renderAside()}
+          <section
+            ref={section}
+            class={[
+              nh.be('section'),
+              {
+                [nh.bem('section', 'away')]: expandMatched.value,
+                [nh.bem('section', 'reduced')]: asideReduced.value,
+                [nh.bem('section', 'locked')]: locked.value,
+                [nh.bem('section', 'fixed')]: props.fixedMain
+              }
+            ]}
+          >
+            {currentSignType.value === 'aside' && renderHeader()}
+            {renderMain()}
+            {props.footer && renderFooter()}
+          </section>
+        </CustomTag>
+      )
+    }
+
+    return () => {
+      if (props.fitWindow) {
+        return (
+          <section ref={scroll} class={className.value} style={style.value}>
+            {renderWrapper()}
+          </section>
+        )
+      }
 
       return (
         <NativeScroll
@@ -435,26 +470,7 @@ export default defineComponent({
           bar-class={nh.be('scrollbar')}
           onResize={handleResize}
         >
-          <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
-            {currentSignType.value === 'header' && renderHeader()}
-            {renderAside()}
-            <section
-              ref={section}
-              class={[
-                nh.be('section'),
-                {
-                  [nh.bem('section', 'away')]: expandMatched.value,
-                  [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: locked.value,
-                  [nh.bem('section', 'fixed')]: props.fixedMain
-                }
-              ]}
-            >
-              {currentSignType.value === 'aside' && renderHeader()}
-              {renderMain()}
-              {props.footer && renderFooter()}
-            </section>
-          </CustomTag>
+          {renderWrapper()}
         </NativeScroll>
       )
     }
