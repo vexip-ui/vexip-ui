@@ -6,20 +6,20 @@ import { getComponentConfig } from './config/component'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { toKebabCase } from '@vexip-ui/utils'
-import { useData } from 'vitepress'
 
 import type { UserConfig } from 'vitepress'
 import type { ThemeConfig } from './theme/types'
 
 compiler.parseCache.max = 10000
 
-const { title } = useData()
 const SITE_DESC = '一个Vue 3的UI库，高度可定制，全TypeScript，性能相当好。'
 const SITE_URL = 'https://www.vexipui.com/'
-const SITE_TITLE = `${title} | Vexip UI`
+const SITE_TITLE =
+  'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good. | Vexip UI'
 
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
+  description: '一个Vue 3的UI库，高度可定制，全TypeScript，性能相当好。',
   lastUpdated: true,
   head: [
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
