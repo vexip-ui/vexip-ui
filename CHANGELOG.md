@@ -1,3 +1,62 @@
+## [2.1.23](https://github.com/vexip-ui/vexip-ui/compare/v2.1.22...v2.1.23) (2023-06-02)
+
+
+### ⚡ Performance Improvements
+
+* **native-scroll:** debounce resize process ([ac8e61d](https://github.com/vexip-ui/vexip-ui/commit/ac8e61d66fa279f6f74773222e6e3e8af34bcc83))
+* **native-scroll:** disable observe children resize by default ([7ac1d74](https://github.com/vexip-ui/vexip-ui/commit/7ac1d74e93523912254cbf59d8e342274c410ac6))
+* **tree:** improve internal reactive variables ([92ba459](https://github.com/vexip-ui/vexip-ui/commit/92ba4591e0ab40c5784a5d49380c6223e67207d7))
+
+
+### ✨ Features
+
+* **layout:** add content-resize event ([0eda095](https://github.com/vexip-ui/vexip-ui/commit/0eda0954232047c1826d3626a870eb12dc57e314))
+* **select:** add fit-popper prop ([#357](https://github.com/vexip-ui/vexip-ui/issues/357)) ([5c2c0cd](https://github.com/vexip-ui/vexip-ui/commit/5c2c0cd0733e5c43518500f1e114f52c944144ea))
+* **table:** support resize table columns' width ([#343](https://github.com/vexip-ui/vexip-ui/issues/343)) ([1a9f493](https://github.com/vexip-ui/vexip-ui/commit/1a9f4931189c871ec750e34afbc303a1f35a993e))
+* **timeline:** using alternate to replace both-sides prop ([5f81887](https://github.com/vexip-ui/vexip-ui/commit/5f8188742197bd100dcf9833d1aeaa685b41b9d0))
+* **utils:** add getXBorder and getYBorder methods ([6f360d2](https://github.com/vexip-ui/vexip-ui/commit/6f360d2cc0a61280e13ff9d22f4103dc02ef6a43))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** adjust the border radius of the last panel of a card type ([#366](https://github.com/vexip-ui/vexip-ui/issues/366)) ([6e422fd](https://github.com/vexip-ui/vexip-ui/commit/6e422fd5a206ba7936b7d2ab7f22f7f3f10267cf))
+* **confirm:** explicitly specify auto-remove false ([c5565ea](https://github.com/vexip-ui/vexip-ui/commit/c5565eae95e8067d24c27494e13112d9efe6d7a2))
+* **hooks:** useMoving incorrect delay move process ([f58a173](https://github.com/vexip-ui/vexip-ui/commit/f58a1733e9f8f9736ac2d44f42e07c56ca0be3af))
+* **input:** incorrect count-color-disabled variable ([#373](https://github.com/vexip-ui/vexip-ui/issues/373)) ([3bf3204](https://github.com/vexip-ui/vexip-ui/commit/3bf32044e14473985114eb5f39feebf51e91efef))
+* **layout:** adjust aside class to be compatible with nested ([88fc9c0](https://github.com/vexip-ui/vexip-ui/commit/88fc9c07c7bbdce39bfbc0e1ef44a1491c711494))
+* **layout:** aside main scroll not refresh ([89e58e5](https://github.com/vexip-ui/vexip-ui/commit/89e58e5811c8a25de9f56d9e22f5626282c741f9))
+* **layout:** subtract border width when recording height ([31fb537](https://github.com/vexip-ui/vexip-ui/commit/31fb537f057859b1f8536924c2b2ab3763ee41ad)), closes [#364](https://github.com/vexip-ui/vexip-ui/issues/364)
+* **locale:** confirm typo in English ([#337](https://github.com/vexip-ui/vexip-ui/issues/337)) ([e256ca9](https://github.com/vexip-ui/vexip-ui/commit/e256ca9f6b8a6d3ad483880450f8d1370be14ab1))
+* normalize props export of all components ([558db00](https://github.com/vexip-ui/vexip-ui/commit/558db00d2b8a55a7d108a06cd95f52e4250ed89e))
+* **number-input:** props.value precision lose efficacy ([#365](https://github.com/vexip-ui/vexip-ui/issues/365)) ([64650e8](https://github.com/vexip-ui/vexip-ui/commit/64650e8e67bfc82e75af22699ef4a80ec38b4970))
+* **tab-nav:** add missing scroll style dependency ([3d396fa](https://github.com/vexip-ui/vexip-ui/commit/3d396fa4f3be2f92974e418fd8c3cf99d2fb255f))
+* **tab-nav:** incorrect pad display ([560790a](https://github.com/vexip-ui/vexip-ui/commit/560790a3d405a9db84e18faa64d4e2e030ec5e2c))
+* **textarea:** incorrect count-color-disabled variable ([#372](https://github.com/vexip-ui/vexip-ui/issues/372)) ([8b9ac41](https://github.com/vexip-ui/vexip-ui/commit/8b9ac416deff0347ad5b20a5fe5a6c9a0ea8ee06))
+* **timeline:** effect alternate work correctly ([ff77266](https://github.com/vexip-ui/vexip-ui/commit/ff77266e3841d524be9f25f9639fdaecb46ceced))
+* **utils:** incorrect leap year function name ([#345](https://github.com/vexip-ui/vexip-ui/issues/345)) ([1958a46](https://github.com/vexip-ui/vexip-ui/commit/1958a46a63ce5f26f6d16e46d328abe7f019fe92))
+
+
+### 👓 Types
+
+* **form:** incorrect ValidatorResult type ([#350](https://github.com/vexip-ui/vexip-ui/issues/350)) ([828bd61](https://github.com/vexip-ui/vexip-ui/commit/828bd61cc82eab006b552cbc4341538fe7061be1))
+* **timeline:** incorrect TimelineItem type ([#346](https://github.com/vexip-ui/vexip-ui/issues/346)) ([5853e99](https://github.com/vexip-ui/vexip-ui/commit/5853e99b2b0c3b52121b56b414e46df66bbe3e88))
+* **tooltip:** incorrect TooltipTrigger type ([#348](https://github.com/vexip-ui/vexip-ui/issues/348)) ([59864aa](https://github.com/vexip-ui/vexip-ui/commit/59864aa7724de98b948aef5c22b4e0e9a1eb2e07))
+
+
+### 🔨 Code Refactoring
+
+* **ellipsis:** switch to use Tooltip as base ([f522626](https://github.com/vexip-ui/vexip-ui/commit/f522626957012dec91e7aaed9c68294493b664b0))
+
+
+### ❌ Breaking Changes
+
+* **native-scroll:** NativeScroll no longer observes children resize by default,
+you can add `observe-deep` prop to enable it.
+* **timeline:** Timeline's `both-sides` prop has been deprecated,
+please using `alternate` prop to replace it.
+
+
+
 ## [2.1.22](https://github.com/vexip-ui/vexip-ui/compare/v2.1.21...v2.1.22) (2023-05-25)
 
 
