@@ -45,6 +45,7 @@ $drawer: map.merge(
     flex-direction: column;
     background-color: get-css-var('drawer-bg-color');
     border: 0;
+    transform: translateZ(0);
 
     &--top,
     &--bottom {
