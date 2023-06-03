@@ -166,8 +166,19 @@
 }
 
 @mixin logical-radius($values) {
-  border-start-start-radius: list.nth($values, 1);
-  border-start-end-radius: list.nth($values, 2);
-  border-end-start-radius: list.nth($values, 4);
-  border-end-end-radius: list.nth($values, 3);
+  @if list.nth($values, 1) {
+    border-start-start-radius: list.nth($values, 1);
+  }
+
+  @if list.nth($values, 2) {
+    border-start-end-radius: list.nth($values, 2);
+  }
+
+  @if list.nth($values, 3) {
+    border-end-end-radius: list.nth($values, 3);
+  }
+
+  @if list.nth($values, 4) {
+    border-end-start-radius: list.nth($values, 4);
+  }
 }
