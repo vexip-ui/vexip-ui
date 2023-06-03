@@ -130,7 +130,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
 
 <style lang="scss">
 .aside-menu {
-  padding-bottom: 16px;
+  padding-bottom: 126px;
 
   &__tag {
     margin-left: 4px;

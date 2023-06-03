@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute } from 'vitepress'
 import { Bars } from '@vexip-ui/icons'
+import { useBEM } from '@vexip-ui/bem-helper'
 import { boundRange, isClient, multipleFixed } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from '../shared'
@@ -18,13 +19,22 @@ import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
-import type { LayoutExposed, ScrollbarExposed } from 'vexip-ui'
+import type { LayoutExposed, LayoutInnerClass, ScrollbarExposed } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
 const { t, locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
+
+const nh = useBEM('docs-layout')
+const layoutClasses: LayoutInnerClass = {
+  section: nh.be('section'),
+  header: nh.be('header'),
+  sidebar: nh.be('sidebar'),
+  aside: nh.be('aside'),
+  footer: nh.be('footer')
+}
 
 const fixedSub = ref(false)
 const expanded = ref(false)
@@ -76,6 +86,26 @@ watch(
     requestAnimationFrame(refreshScroll)
   }
 )
+watch(expanded, value => {
+  if (!isClient) return
+
+  if (value) {
+    const bodyTop = document.body.getBoundingClientRect().top
+    document.body.style.top = `${bodyTop}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.position = 'fixed'
+  } else {
+    document.body.style.position = ''
+    window.scrollTo(0, Math.abs(+document.body.style.top.replace('px', '')))
+
+    nextTick(() => {
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+    })
+  }
+})
 
 onMounted(() => {
   requestAnimationFrame(() => {
@@ -161,6 +191,7 @@ function refreshScroll() {
     :no-aside="frontmatter.homepage || page.isNotFound"
     :footer="!(frontmatter.homepage || page.isNotFound || frontmatter.footer === false)"
     :links="footerLinks"
+    :inner-classes="layoutClasses"
     :style="{
       '--vxp-layout-aside-width': 'var(--aside-width)',
       '--vxp-layout-header-height': 'var(--header-height)'
@@ -219,7 +250,12 @@ function refreshScroll() {
         </ConfigProvider>
         <div id="transfer-place"></div>
       </template>
-      <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+      <Masker
+        v-model:active="expanded"
+        class="global-masker"
+        closable
+        :auto-remove="false"
+      ></Masker>
     </template>
 
     <template #footer-copyright>
@@ -233,6 +269,7 @@ function refreshScroll() {
 
   <teleport to="body">
     <Scrollbar
+      v-show="!expanded"
       ref="bar"
       class="docs-scrollbar"
       :disabled="barDisabled"
@@ -251,67 +288,63 @@ function refreshScroll() {
   z-index: calc(var(--header-z-index) - 1);
 }
 
-:not(.vxp-layout) .docs-layout {
-  .vxp-layout {
-    &__header {
-      z-index: var(--header-z-index);
-      padding: 0;
+.docs-layout {
+  &__section.vxp-layout__section {
+    transition-duration: 0ms;
+  }
 
-      &--away {
-        position: sticky;
-        top: calc(var(--vxp-layout-header-height) * -1);
-      }
-    }
+  &__header.vxp-layout__header {
+    z-index: var(--header-z-index);
+    padding: 0;
 
-    &__section {
-      transition-duration: 0ms;
-    }
-
-    &__scrollbar {
-      top: calc(var(--sub-header-height) + var(--vxp-layout-header-height));
-
-      @include query-media('lg') {
-        top: var(--vxp-layout-header-height);
-      }
-    }
-
-    &__expand-handler {
-      display: none;
-    }
-
-    &__sider {
-      z-index: calc(var(--header-z-index) - 2);
-
-      &--away {
-        z-index: calc(var(--header-z-index) + 2);
-      }
-    }
-
-    &__links {
-      padding-top: 36px;
-    }
-
-    &__links-row {
-      justify-content: flex-start;
-    }
-
-    &__link-group {
-      max-width: 400px;
-    }
-
-    &__copyright {
-      padding: 24px 16px;
-    }
-
-    &__link-name--group {
-      font-weight: bold;
+    &--away {
+      position: sticky;
+      top: calc(var(--vxp-layout-header-height) * -1);
     }
   }
 
-  &--rendering .vxp-layout {
-    &__aside {
-      transition-duration: 0ms;
+  &__sidebar.vxp-layout__sidebar {
+    z-index: calc(var(--header-z-index) - 2);
+
+    &--away {
+      z-index: calc(var(--header-z-index) + 2);
     }
+  }
+
+  &__aside.vxp-layout__aside {
+    z-index: calc(var(--header-z-index) - 2);
+
+    .vxp-layout__expand-handler {
+      display: none;
+    }
+  }
+
+  &__footer.vxp-layout__footer {
+    .vxp-layout {
+      &__links {
+        padding-top: 36px;
+      }
+
+      &__links-row {
+        justify-content: flex-start;
+      }
+
+      &__link-group {
+        max-width: 400px;
+      }
+
+      &__copyright {
+        padding: 24px 16px 30px;
+      }
+
+      &__link-name--group {
+        font-weight: bold;
+      }
+    }
+  }
+
+  &--rendering &__aside {
+    transition-duration: 0ms;
   }
 }
 
@@ -356,9 +389,5 @@ function refreshScroll() {
       color: var(--vxp-color-primary-base);
     }
   }
-}
-
-.global-masker {
-  z-index: calc(var(--header-z-index) + 1) !important;
 }
 </style>
