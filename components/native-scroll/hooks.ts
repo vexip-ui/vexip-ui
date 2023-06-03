@@ -1,6 +1,6 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 
-import { isHiddenElement, useManualRef, useMounted } from '@vexip-ui/hooks'
+import { isHiddenElement, useManualRef, useMounted, useRtl } from '@vexip-ui/hooks'
 import { boundRange, debounce, debounceMinor, isElement, multipleFixed } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
@@ -29,6 +29,8 @@ export function useScrollWrapper({
   onAfterRefresh?: () => void
 }) {
   const { manualRef, triggerUpdate } = useManualRef()
+
+  const { isRtl } = useRtl()
 
   const contentElement = ref<HTMLElement>()
 
@@ -98,7 +100,7 @@ export function useScrollWrapper({
     x.value = boundRange(value, 0, xScrollLimit.value)
 
     if (content.el) {
-      content.el.scrollLeft = x.value
+      content.el.scrollLeft = isRtl.value ? -x.value : x.value
     }
   }
 
@@ -134,7 +136,9 @@ export function useScrollWrapper({
 
   function computePercent() {
     if (content.el) {
-      percentX.value = multipleFixed(x.value / (xScrollLimit.value || 1), 100, 2)
+      percentX.value = isRtl.value
+        ? -multipleFixed(x.value / (xScrollLimit.value || 1), 100, 2)
+        : multipleFixed(x.value / (xScrollLimit.value || 1), 100, 2)
       percentY.value = multipleFixed(y.value / (yScrollLimit.value || 1), 100, 2)
     }
   }

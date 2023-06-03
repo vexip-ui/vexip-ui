@@ -38,22 +38,22 @@ $timeline: map.merge(
 
   display: inline-flex;
   flex-direction: column;
-  padding-left: 6px;
+  padding-inline-start: 6px;
 
   &--horizontal {
     flex-direction: row;
+    padding-inline-start: 0;
     padding-top: 6px;
-    padding-left: 0;
   }
 
   &--flip {
-    padding-right: 6px;
-    padding-left: 0;
+    padding-inline-start: 0;
+    padding-inline-end: 6px;
   }
 
   &--horizontal#{&}--flip {
+    padding-inline-end: 0;
     padding-top: 0;
-    padding-right: 0;
     padding-bottom: 6px;
   }
 
@@ -87,7 +87,7 @@ $timeline: map.merge(
   }
 
   &--horizontal &__item {
-    padding-right: get-css-var('timeline-item-span');
+    padding-inline-end: get-css-var('timeline-item-span');
     padding-bottom: 0;
   }
 
@@ -118,7 +118,7 @@ $timeline: map.merge(
   &__signal {
     position: absolute;
     top: 0;
-    left: calc($pointer-size * -0.5);
+    inset-inline-start: calc($pointer-size * -0.5);
     z-index: 1;
     display: inline-flex;
     align-items: center;
@@ -129,16 +129,16 @@ $timeline: map.merge(
 
   &--horizontal &__signal {
     top: calc($pointer-size * -0.5);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--flip &__signal {
-    left: calc($pointer-size * -0.5 + 100%);
+    inset-inline-start: calc($pointer-size * -0.5 + 100%);
   }
 
   &--horizontal#{&}--flip &__signal {
     top: calc($pointer-size * -0.5 + 100%);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
@@ -151,12 +151,12 @@ $timeline: map.merge(
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {
     top: calc($pointer-size * -0.5 + 100%);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__signal {
     top: calc($pointer-size * -0.5);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--signal-click &__signal {
@@ -182,7 +182,7 @@ $timeline: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: calc($line-width * -0.5);
+    inset-inline-start: calc($line-width * -0.5);
     display: flex;
     width: 0;
     padding-top: calc($pointer-size + get-css-var('timeline-line-inset'));
@@ -192,7 +192,7 @@ $timeline: map.merge(
       height: 100%;
       content: '';
       border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
-      border-left-width: $line-width;
+      border-inline-start-width: $line-width;
     }
   }
 
@@ -201,24 +201,24 @@ $timeline: map.merge(
     width: auto;
     height: 0;
     padding: 0;
-    padding-right: get-css-var('timeline-line-inset');
-    padding-left: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-inline-start: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-inline-end: get-css-var('timeline-line-inset');
 
     &::after {
       width: 100%;
       height: 0;
+      border-inline-start-width: 0;
       border-top-width: $line-width;
-      border-left-width: 0;
     }
   }
 
   &--flip &__line {
-    left: calc($line-width * -0.5 + 100%);
+    inset-inline-start: calc($line-width * -0.5 + 100%);
   }
 
   &--horizontal#{&}--flip &__line {
     top: calc($line-width * -0.5 + 100%);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__line {
@@ -231,12 +231,12 @@ $timeline: map.merge(
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
     top: calc($line-width * -0.5 + 100%);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
     top: calc($line-width * -0.5);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   $content-pad: calc($pointer-size * 0.5 + 8px);
@@ -246,28 +246,26 @@ $timeline: map.merge(
     top: -5px;
     display: flex;
     flex-direction: column;
-    padding-left: $content-pad;
+    padding-inline-start: $content-pad;
   }
 
   &--horizontal &__content {
     top: 0;
-    padding: {
-      top: $content-pad;
-      left: 0;
-    }
+    padding-inline-start: 0;
+    padding-top: $content-pad;
   }
 
   &--flip &__content {
     padding: {
-      right: $content-pad;
-      left: 0;
+      inline-end: $content-pad;
+      inline-start: 0;
     }
   }
 
   &--horizontal#{&}--flip &__content {
     padding: {
       top: 0;
-      right: 0;
+      inline-end: 0;
       bottom: $content-pad;
     }
   }
@@ -275,22 +273,22 @@ $timeline: map.merge(
   &--alternate:not(&--flip) &__item:nth-child(even) &__content {
     align-items: flex-end;
     padding: {
-      right: $content-pad;
-      left: 0;
+      inline-end: $content-pad;
+      inline-start: 0;
     }
   }
 
   &--alternate#{&}--flip &__item:nth-child(even) &__content {
     padding: {
-      right: 0;
-      left: $content-pad;
+      inline-end: 0;
+      inline-start: $content-pad;
     }
   }
 
   &--alternate#{&}--flip &__item:nth-child(odd) &__content {
     align-items: flex-end;
     padding: {
-      right: $content-pad;
+      inline-end: $content-pad;
     }
   }
 
@@ -298,7 +296,7 @@ $timeline: map.merge(
     align-self: flex-end;
     padding: {
       top: 0;
-      right: 0;
+      inline-end: 0;
       bottom: $content-pad;
     }
   }
@@ -328,7 +326,7 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--pending &__item:nth-last-child(2) {
-    padding-right: get-css-var('timeline-item-span-pending');
+    padding-inline-end: get-css-var('timeline-item-span-pending');
     padding-bottom: 0;
   }
 }

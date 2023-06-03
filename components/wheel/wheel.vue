@@ -88,7 +88,7 @@ import { computed, defineComponent, nextTick, provide, ref, watch } from 'vue'
 
 import WheelItem from './wheel-item.vue'
 import { createStateProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { useDisplay, useModifier } from '@vexip-ui/hooks'
+import { useDisplay, useModifier, useRtl } from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-ui/utils'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
@@ -147,6 +147,8 @@ export default defineComponent({
     const horizontalPadding = ref(0)
     const verticalPadding = ref(0)
     const isInit = ref(false)
+
+    const { isRtl } = useRtl()
 
     const wrapper = useDisplay(displayInit)
     const scroll = ref<InstanceType<typeof Scroll>>()
@@ -262,10 +264,18 @@ export default defineComponent({
       )
     })
     const prevIcon = computed(() =>
-      props.horizontal ? icons.value.angleLeft : icons.value.angleUp
+      props.horizontal
+        ? isRtl.value
+          ? icons.value.angleRight
+          : icons.value.angleLeft
+        : icons.value.angleUp
     )
     const nextIcon = computed(() =>
-      props.horizontal ? icons.value.angleRight : icons.value.angleDown
+      props.horizontal
+        ? isRtl.value
+          ? icons.value.angleLeft
+          : icons.value.angleRight
+        : icons.value.angleDown
     )
 
     provide(WHEEL_STATE, { increaseItem, decreaseItem })

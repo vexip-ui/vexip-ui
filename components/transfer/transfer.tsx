@@ -22,6 +22,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { useRtl } from '@vexip-ui/hooks'
 import TransferPanel from './transfer-panel'
 import { transferProps } from './props'
 
@@ -74,6 +75,8 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null
     })
+
+    const { isRtl } = useRtl()
 
     const nh = useNameHelper('transfer')
     const locale = useLocale('transfer', toRef(props, 'locale'))
@@ -334,7 +337,12 @@ export default defineComponent({
                     onClick={handleToTarget}
                   >
                     {{
-                      icon: () => <Icon {...icons.value.arrowRight} label="to right"></Icon>
+                      icon: () => (
+                        <Icon
+                          {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                          label={isRtl.value ? 'to left' : 'to right'}
+                        ></Icon>
+                      )
                     }}
                   </Button>,
                   <Button
@@ -350,7 +358,12 @@ export default defineComponent({
                     onClick={handleToSource}
                   >
                     {{
-                      icon: () => <Icon {...icons.value.arrowLeft} label="to left"></Icon>
+                      icon: () => (
+                        <Icon
+                          {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
+                          label={isRtl.value ? 'to right' : 'to left'}
+                        ></Icon>
+                      )
                     }}
                   </Button>
                 ]}

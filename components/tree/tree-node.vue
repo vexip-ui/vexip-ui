@@ -40,7 +40,7 @@
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="loading" v-bind="icons.loading"></Icon>
-          <Icon v-else v-bind="icons.arrowRight"></Icon>
+          <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
@@ -153,7 +153,7 @@ import { Renderer } from '@/components/renderer'
 import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
 import { isNull, noop } from '@vexip-ui/utils'
 import { TREE_NODE_STATE, TREE_STATE } from './symbol'
 
@@ -279,6 +279,8 @@ export default defineComponent({
   setup(props) {
     const treeState = inject(TREE_STATE)!
     const parentState = inject(TREE_NODE_STATE)!
+
+    const { isRtl } = useRtl()
 
     const nh = useNameHelper('tree')
 
@@ -527,6 +529,7 @@ export default defineComponent({
       dragging,
       focused,
 
+      isRtl,
       isDisabled,
       isReadonly,
       depth,

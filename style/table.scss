@@ -295,7 +295,7 @@ $table: map.merge(
   &__tree-expand {
     width: get-css-var('table-tree-expand-size');
     height: get-css-var('table-tree-expand-size');
-    margin-right: 6px;
+    margin-inline-end: 6px;
     color: get-css-var('table-tree-expand-color');
     transition: get-css-var('transition-color');
 
@@ -318,7 +318,7 @@ $table: map.merge(
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 3px;
+    margin-inline-start: 3px;
 
     &--asc,
     &--desc {
@@ -353,7 +353,7 @@ $table: map.merge(
     align-items: center;
     justify-content: center;
     height: 15px;
-    margin-left: 3px;
+    margin-inline-start: 3px;
     color: get-css-var('table-filter-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -434,7 +434,7 @@ $table: map.merge(
   &__resizer {
     position: absolute;
     top: 0;
-    right: -10px;
+    inset-inline-end: -10px;
     bottom: 0;
     z-index: 1;
     width: 20px;
@@ -455,8 +455,8 @@ $table: map.merge(
   }
 
   &__fixed--right {
-    right: 0;
-    border-left: 0 transparent;
+    inset-inline-end: 0;
+    border-inline-start: 0 transparent;
 
     &#{$fixed-active} {
       box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
@@ -464,11 +464,11 @@ $table: map.merge(
   }
 
   &--border &__fixed--right {
-    border-left-color: $border-a get-css-var('table-cell-b-color-right');
+    border-inline-start-color: $border-a get-css-var('table-cell-b-color-right');
   }
 
   &__fixed--left {
-    left: 0;
+    inset-inline-start: 0;
 
     &#{$fixed-active} {
       box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
@@ -476,12 +476,12 @@ $table: map.merge(
 
     #{$cell},
     #{$head-cell} {
-      border-right-width: get-css-var('table-border-width');
+      border-inline-end-width: get-css-var('table-border-width');
     }
   }
 
   &--use-y-bar &__bar--horizontal {
-    right: 6px;
+    inset-inline-end: 6px;
   }
 
   &__indicator {

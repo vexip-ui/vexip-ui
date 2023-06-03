@@ -58,10 +58,10 @@ $tree: map.merge(
         position: absolute;
         top: 0;
         bottom: 0;
-        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
+        inset-inline-start: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
         pointer-events: none;
         content: '';
-        border-left: $link-line;
+        border-inline-start: $link-line;
       }
     }
   }
@@ -79,7 +79,7 @@ $tree: map.merge(
       &::after {
         position: absolute;
         bottom: calc(50% - #{get-css-var('tree-node-span')});
-        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
+        inset-inline-start: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
         width: calc(#{$indent} * 0.5);
         pointer-events: none;
         content: '';
@@ -103,7 +103,7 @@ $tree: map.merge(
   &__content {
     display: flex;
     align-items: center;
-    padding-left: calc(#{$depth} * #{$indent});
+    padding-inline-start: calc(#{$depth} * #{$indent});
   }
 
   &__label {
@@ -163,7 +163,7 @@ $tree: map.merge(
     justify-content: center;
     width: get-css-var('tree-arrow-size');
     height: get-css-var('tree-arrow-size');
-    margin-right: 3px;
+    margin-inline-end: 3px;
     color: get-css-var('tree-arrow-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -185,11 +185,11 @@ $tree: map.merge(
 
   &__checkbox {
     display: inline-flex;
-    margin-right: 6px;
+    margin-inline-end: 6px;
 
     &--suffix {
-      margin-right: 0;
-      margin-left: 6px;
+      margin-inline-start: 6px;
+      margin-inline-end: 0;
     }
   }
 
