@@ -193,6 +193,10 @@ type VexipProps<T> = {
 }
 /* eslint-enable */
 
+export function wrapProps<T extends ComponentObjectPropsOptions>(props: T) {
+  return Object.freeze(props) as Expand<T>
+}
+
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   const common = {
     inherit: booleanProp

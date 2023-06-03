@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute } from 'vitepress'
 import { Bars } from '@vexip-ui/icons'
-import { isClient } from '@vexip-ui/utils'
+import { boundRange, isClient, multipleFixed } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from '../shared'
 
@@ -18,7 +18,7 @@ import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
-import type { LayoutExposed } from 'vexip-ui'
+import type { LayoutExposed, ScrollbarExposed } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
@@ -31,7 +31,6 @@ const expanded = ref(false)
 const mounted = ref(false)
 
 const layout = ref<LayoutExposed>()
-const scroll = computed(() => layout.value?.scroll)
 
 const outline = computed(() => {
   if (frontmatter.value.aside === false) {
@@ -67,16 +66,14 @@ const footerLinks = computed(() => {
     }))
 })
 
+const bar = ref<ScrollbarExposed>()
+const barLength = ref(35)
+const barDisabled = ref(false)
+
 watch(
   () => route.path,
   () => {
     requestAnimationFrame(refreshScroll)
-  }
-)
-watch(
-  () => scroll.value?.y,
-  value => {
-    fixedSub.value = !!value && value >= 65
   }
 )
 
@@ -85,13 +82,52 @@ onMounted(() => {
     mounted.value = true
     refreshScroll()
   })
+
+  if (!isClient) return
+
+  computeBarLength()
+  window.addEventListener('scroll', handleScroll)
 })
 
-function refreshScroll() {
-  if (!scroll.value) return
+function computeBarLength() {
+  barDisabled.value = document.documentElement.scrollHeight <= document.documentElement.clientHeight
+  barLength.value = boundRange(
+    (document.documentElement.clientHeight / (document.documentElement.scrollHeight || 1)) * 100,
+    5,
+    99
+  )
+}
 
-  if (isClient && hashTarget.value) {
-    const content = scroll.value.content!
+function handleScroll() {
+  if (!isClient || !bar.value) return
+
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+
+  if (scrollHeight <= clientHeight) {
+    bar.value.handleScroll(0)
+    return
+  }
+
+  const percent = multipleFixed(scrollTop / (scrollHeight - clientHeight || 1), 100, 2)
+  bar.value.handleScroll(percent)
+}
+
+function handleBarScroll(percent: number) {
+  if (!isClient) return
+
+  const { scrollHeight, clientHeight } = document.documentElement
+
+  if (scrollHeight <= clientHeight) return
+
+  document.documentElement.scrollTop = (percent * (scrollHeight - clientHeight)) / 100
+}
+
+function refreshScroll() {
+  if (!isClient) return
+
+  const content = document.documentElement
+
+  if (hashTarget.value) {
     const target = document.querySelector(`#${hashTarget.value}`)
 
     if (target) {
@@ -103,19 +139,15 @@ function refreshScroll() {
       setTimeout(() => {
         content.scrollTop = scrollTop
       }, 0)
-
-      return
     }
   }
 
-  const content = scroll.value.content
-
-  if (content) {
+  content.scrollTop = 0
+  setTimeout(() => {
     content.scrollTop = 0
-    setTimeout(() => {
-      content.scrollTop = 0
-    }, 0)
-  }
+  }, 0)
+
+  computeBarLength()
 }
 </script>
 
@@ -125,11 +157,11 @@ function refreshScroll() {
     v-model:expanded="expanded"
     :class="['docs-layout', !mounted && 'docs-layout--rendering']"
     sign-type="header"
+    fit-window
     :no-aside="frontmatter.homepage || page.isNotFound"
     :footer="!(frontmatter.homepage || page.isNotFound || frontmatter.footer === false)"
     :links="footerLinks"
     :style="{
-      height: '100vh',
       '--vxp-layout-aside-width': 'var(--aside-width)',
       '--vxp-layout-header-height': 'var(--header-height)'
     }"
@@ -176,17 +208,19 @@ function refreshScroll() {
     </template>
 
     <!-- Main content -->
-    <Homepage v-if="frontmatter.homepage"></Homepage>
-    <NotFound v-else-if="page.isNotFound"></NotFound>
-    <div v-else>
-      <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
-        <Article :anchor-level="outline">
-          <Content class="markdown"></Content>
-        </Article>
-      </ConfigProvider>
-      <div id="transfer-place"></div>
-    </div>
-    <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+    <template #main>
+      <Homepage v-if="frontmatter.homepage"></Homepage>
+      <NotFound v-else-if="page.isNotFound"></NotFound>
+      <template v-else>
+        <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
+          <Article :anchor-level="outline">
+            <Content class="markdown"></Content>
+          </Article>
+        </ConfigProvider>
+        <div id="transfer-place"></div>
+      </template>
+      <Masker v-model:active="expanded" class="global-masker" closable></Masker>
+    </template>
 
     <template #footer-copyright>
       Made with ❤️ by
@@ -196,10 +230,26 @@ function refreshScroll() {
       and contributors
     </template>
   </Layout>
+
+  <teleport to="body">
+    <Scrollbar
+      ref="bar"
+      class="docs-scrollbar"
+      :disabled="barDisabled"
+      :bar-length="barLength"
+      wrapper="body"
+      @scroll="handleBarScroll"
+    ></Scrollbar>
+  </teleport>
 </template>
 
 <style lang="scss">
 @use './style/mixins.scss' as *;
+
+#transfer-place {
+  position: relative;
+  z-index: calc(var(--header-z-index) - 1);
+}
 
 :not(.vxp-layout) .docs-layout {
   .vxp-layout {
@@ -207,13 +257,13 @@ function refreshScroll() {
       z-index: var(--header-z-index);
       padding: 0;
 
-      &--reduced {
-        transform: translateY(-100%);
+      &--away {
+        position: sticky;
+        top: calc(var(--vxp-layout-header-height) * -1);
       }
     }
 
     &__section {
-      z-index: calc(var(--header-z-index) - 1);
       transition-duration: 0ms;
     }
 
@@ -229,8 +279,12 @@ function refreshScroll() {
       display: none;
     }
 
-    &__sider--away {
-      z-index: calc(var(--header-z-index) + 2);
+    &__sider {
+      z-index: calc(var(--header-z-index) - 2);
+
+      &--away {
+        z-index: calc(var(--header-z-index) + 2);
+      }
     }
 
     &__links {
@@ -258,6 +312,15 @@ function refreshScroll() {
     &__aside {
       transition-duration: 0ms;
     }
+  }
+}
+
+.docs-scrollbar {
+  position: fixed;
+  top: calc(var(--sub-header-height) + var(--header-height));
+
+  @include query-media('lg') {
+    top: var(--header-height);
   }
 }
 

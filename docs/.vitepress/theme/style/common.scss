@@ -34,20 +34,19 @@ html {
     --aside-width: 300px;
   }
 
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   &.rtl {
     direction: rtl;
   }
 }
 
-html,
-body,
-#app {
-  height: 100%;
-}
-
 body {
   margin: 0;
-  overflow: hidden;
   font-family: var(--vxp-font-family-base);
   color: var(--vxp-content-color-base);
   background-color: var(--bg-color);

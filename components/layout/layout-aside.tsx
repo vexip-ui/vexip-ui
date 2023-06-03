@@ -35,7 +35,8 @@ export default defineComponent({
       menuProps: null,
       logo: '',
       signName: '',
-      fixed: 'lg'
+      fixed: 'lg',
+      signType: 'aside'
     })
 
     const nh = useNameHelper('layout')
@@ -60,7 +61,8 @@ export default defineComponent({
           [nh.bem('aside', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
-          [nh.bem('aside', 'reduced')]: currentReduced.value
+          [nh.bem('aside', 'reduced')]: currentReduced.value,
+          [nh.bem('aside', 'no-sign')]: props.signType !== 'aside'
         }
       ]
     })
@@ -172,7 +174,12 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
+          <NativeScroll
+            class={nh.be('aside-main')}
+            use-y-bar
+            observe-deep
+            height={scrollHeight.value}
+          >
             {slots.default
               ? (
                   renderSlot(slots, 'default', slotParams)

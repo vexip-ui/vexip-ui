@@ -40,11 +40,11 @@ function refreshWave() {
   wave.value?.refresh()
 }
 
-function handleResize() {
-  if (!sign.value) return
+// function handleResize() {
+//   if (!sign.value) return
 
-  waveTop.value = Math.round(sign.value.getBoundingClientRect().height * 0.93)
-}
+//   waveTop.value = Math.round(sign.value.getBoundingClientRect().height * 0.93)
+// }
 
 function handleSvaePrefix() {
   if (showError.value) return
@@ -56,47 +56,45 @@ function handleSvaePrefix() {
 
 <template>
   <section :class="prefix" :style="{ '--wave-top': `${waveTop}px` }">
-    <NativeScroll use-y-bar @resize="handleResize">
-      <ClientOnly>
-        <div :class="`${prefix}__wave`">
-          <div :class="`${prefix}__wave-block`"></div>
-          <Wave ref="wave" style="position: relative"></Wave>
-        </div>
-      </ClientOnly>
-      <div ref="sign" :class="`${prefix}__sign`">
-        <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
-        <h1 :class="`${prefix}__title`">
-          Vexip UI
-        </h1>
-        <p :class="`${prefix}__description`">
-          {{ t('common.slogan') }}
-        </p>
-        <div :class="`${prefix}__actions`">
-          <Button type="primary" size="large" @click="getStarted">
-            {{ t('common.getStarted') }}
-          </Button>
-          <Button size="large" @click="getComponents">
-            {{ t('common.getComponents') }}
-          </Button>
-        </div>
+    <ClientOnly>
+      <div :class="`${prefix}__wave`">
+        <div :class="`${prefix}__wave-block`"></div>
+        <Wave ref="wave" style="position: relative"></Wave>
       </div>
-      <P :type="showError ? 'error' : 'default'" style="margin: 0 0 16px; font-size: 15px">
-        {{ showError ? t('common.invalidPrefix') : t('common.changePrefix') }}
-      </P>
-      <Input
-        v-model:value="demoPrefix"
-        sync
-        :class="`${prefix}__prefix`"
-        placeholder="e.g. Vxp"
-      >
-        <template #after-action>
-          <Button type="primary" :disabled="showError" @click="handleSvaePrefix">
-            {{ t('common.apply') }}
-          </Button>
-        </template>
-      </Input>
-      <MajorColor :class="`${prefix}__colors`" @change="refreshWave"></MajorColor>
-    </NativeScroll>
+    </ClientOnly>
+    <div ref="sign" :class="`${prefix}__sign`">
+      <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
+      <h1 :class="`${prefix}__title`">
+        Vexip UI
+      </h1>
+      <p :class="`${prefix}__description`">
+        {{ t('common.slogan') }}
+      </p>
+      <div :class="`${prefix}__actions`">
+        <Button type="primary" size="large" @click="getStarted">
+          {{ t('common.getStarted') }}
+        </Button>
+        <Button size="large" @click="getComponents">
+          {{ t('common.getComponents') }}
+        </Button>
+      </div>
+    </div>
+    <P :type="showError ? 'error' : 'default'" style="margin: 0 0 16px; font-size: 15px">
+      {{ showError ? t('common.invalidPrefix') : t('common.changePrefix') }}
+    </P>
+    <Input
+      v-model:value="demoPrefix"
+      sync
+      :class="`${prefix}__prefix`"
+      placeholder="e.g. Vxp"
+    >
+      <template #after-action>
+        <Button type="primary" :disabled="showError" @click="handleSvaePrefix">
+          {{ t('common.apply') }}
+        </Button>
+      </template>
+    </Input>
+    <MajorColor :class="`${prefix}__colors`" @change="refreshWave"></MajorColor>
   </section>
 </template>
 
@@ -107,7 +105,7 @@ function handleSvaePrefix() {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--header-height));
+  align-items: center;
   text-align: center;
   user-select: none;
 

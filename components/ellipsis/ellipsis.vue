@@ -1,53 +1,46 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    :style="ellipsisStyle"
-    v-bind="$attrs"
-    @mouseenter="handleTriggerEnter"
-    @mouseleave="handleTriggerLeave"
+  <Tooltip
+    :visible="visible"
+    trigger="custom"
+    :disabled="props.tipDisabled"
+    :transfer="props.transfer"
+    :placement="props.placement"
+    :no-hover="props.noHover"
+    :transition-name="props.transitionName"
+    :tip-class="props.tipClass"
+    :tip-style="tipStyle"
+    :reverse="props.tooltipTheme === 'dark'"
+    @tip-enter="handleTriggerEnter"
+    @tip-leave="handleTriggerLeave"
   >
-    <slot></slot>
-  </div>
-  <Portal v-if="!props.tipDisabled && visible" :to="transferTo">
-    <transition :name="props.transitionName" appear @after-leave="visible = false">
+    <template #trigger>
       <div
-        v-show="active"
-        ref="popper"
-        :class="{
-          [tooltipNh.be('popper')]: true,
-          [tooltipNh.bs('vars')]: true,
-          [tooltipNh.bem('popper', 'inherit')]: transferTo !== 'body',
-          [tooltipNh.bem('popper', props.tooltipTheme)]: true,
-          [tooltipNh.bem('popper', 'no-hover')]: props.noHover
-        }"
-        @click.stop
-        @mouseenter="handleTriggerEnter"
-        @mouseleave="handleTriggerLeave"
+        ref="wrapper"
+        :class="className"
+        :style="ellipsisStyle"
+        v-bind="$attrs"
       >
-        <div :class="[nh.be('tip'), tooltipNh.be('tip'), props.tipClass]" :style="tipStyle">
-          <div :class="tooltipNh.be('arrow')"></div>
-          {{ content }}
-        </div>
+        <slot></slot>
       </div>
-    </transition>
-  </Portal>
+    </template>
+    {{ content }}
+  </Tooltip>
 </template>
 
 <script lang="ts">
-import { Portal } from '@/components/portal'
+import { Tooltip } from '@/components/tooltip'
 
-import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { ellipsisProps } from './props'
 
 export default defineComponent({
   name: 'Ellipsis',
   components: {
-    Portal
+    Tooltip
   },
   props: ellipsisProps,
   setup(_props) {
@@ -70,21 +63,10 @@ export default defineComponent({
       tipDisabled: false
     })
 
-    const tooltipNh = useNameHelper('tooltip')
     const visible = ref(false)
-    const active = ref(false)
-    const placement = toRef(props, 'placement')
-    const transfer = toRef(props, 'transfer')
     const content = ref('')
 
     const wrapper = ref<HTMLElement>()
-
-    const { popper, transferTo, updatePopper } = usePopper({
-      placement,
-      transfer,
-      wrapper,
-      reference: wrapper
-    })
 
     const className = computed(() => {
       return {
@@ -104,21 +86,6 @@ export default defineComponent({
             : `${props.tipMaxWidth}px`
       }
     })
-
-    watch(visible, value => {
-      if (value) {
-        updatePopper()
-      }
-    })
-    watch(
-      () => props.tipDisabled,
-      value => {
-        if (value) {
-          visible.value = false
-          active.value = false
-        }
-      }
-    )
 
     const { timer } = useSetTimeout()
 
@@ -145,10 +112,6 @@ export default defineComponent({
         }
 
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
-
-        nextTick(() => {
-          active.value = true
-        })
       }, 250)
     }
 
@@ -158,25 +121,21 @@ export default defineComponent({
       if (props.tipDisabled) return
 
       timer.hover = setTimeout(() => {
-        active.value = false
-      })
+        visible.value = false
+      }, 250)
     }
 
     return {
       props,
       nh,
-      tooltipNh,
       visible,
-      active,
       content,
-      transferTo,
 
       className,
       ellipsisStyle,
       tipStyle,
 
       wrapper,
-      popper,
 
       handleTriggerEnter,
       handleTriggerLeave

@@ -57,8 +57,8 @@ $timeline: map.merge(
     padding-bottom: 6px;
   }
 
-  &--both-sides,
-  &--both-sides#{&}--flip {
+  &--alternate,
+  &--alternate#{&}--flip {
     padding: 0;
   }
 
@@ -91,23 +91,23 @@ $timeline: map.merge(
     padding-bottom: 0;
   }
 
-  &--both-sides &__item {
+  &--alternate &__item {
     align-self: flex-end;
     width: 50%;
   }
 
-  &--horizontal#{&}--both-sides &__item {
+  &--horizontal#{&}--alternate &__item {
     width: 100%;
     height: 50%;
   }
 
-  &--both-sides:not(&--flip) &__item {
+  &--alternate:not(&--flip) &__item {
     &:nth-child(even) {
       align-self: flex-start;
     }
   }
 
-  &--both-sides#{&}--flip &__item {
+  &--alternate#{&}--flip &__item {
     &:nth-child(odd) {
       align-self: flex-start;
     }
@@ -141,20 +141,20 @@ $timeline: map.merge(
     left: 0;
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
+  &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
     left: calc($pointer-size * -0.5 + 100%);
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__signal {
+  &--alternate#{&}--flip &__item:nth-child(even) &__signal {
     left: calc($pointer-size * -0.5);
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {
     top: calc($pointer-size * -0.5 + 100%);
     left: 0;
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__signal {
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__signal {
     top: calc($pointer-size * -0.5);
     left: 0;
   }
@@ -221,20 +221,20 @@ $timeline: map.merge(
     left: 0;
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__line {
+  &--alternate:not(&--flip) &__item:nth-child(even) &__line {
     left: calc($line-width * -0.5 + 100%);
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__line {
+  &--alternate#{&}--flip &__item:nth-child(even) &__line {
     left: calc($line-width * -0.5);
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__line {
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
     top: calc($line-width * -0.5 + 100%);
     left: 0;
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__line {
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
     top: calc($line-width * -0.5);
     left: 0;
   }
@@ -272,7 +272,7 @@ $timeline: map.merge(
     }
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+  &--alternate:not(&--flip) &__item:nth-child(even) &__content {
     align-items: flex-end;
     padding: {
       right: $content-pad;
@@ -280,21 +280,21 @@ $timeline: map.merge(
     }
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__content {
+  &--alternate#{&}--flip &__item:nth-child(even) &__content {
     padding: {
       right: 0;
       left: $content-pad;
     }
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(odd) &__content {
+  &--alternate#{&}--flip &__item:nth-child(odd) &__content {
     align-items: flex-end;
     padding: {
       right: $content-pad;
     }
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__content {
     align-self: flex-end;
     padding: {
       top: 0;
@@ -303,13 +303,13 @@ $timeline: map.merge(
     }
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__content {
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__content {
     padding: {
       inset: $content-pad 0 0;
     }
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(odd) &__content {
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(odd) &__content {
     padding-right: 0;
   }
 

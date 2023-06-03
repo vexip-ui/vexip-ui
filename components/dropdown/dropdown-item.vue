@@ -13,39 +13,14 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
-import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper } from '@vexip-ui/config'
+import { dropdownItemProps } from './props'
 import { useLabel } from './hooks'
 import { SELECT_HANDLER } from './symbol'
 
 export default defineComponent({
   name: 'DropdownItem',
-  props: {
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    selected: {
-      type: Boolean,
-      default: false
-    },
-    divided: {
-      type: Boolean,
-      default: false
-    },
-    reference: {
-      type: Boolean,
-      default: false
-    },
-    meta: {
-      type: Object,
-      default: () => ({})
-    },
-    onSelect: eventProp<(label: string | number) => void>()
-  },
+  props: dropdownItemProps,
   emits: [],
   setup(props) {
     const parentSelectHandler = inject(SELECT_HANDLER, null)

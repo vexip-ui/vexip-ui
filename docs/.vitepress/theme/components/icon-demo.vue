@@ -11,15 +11,17 @@ const icons = {
 </script>
 
 <template>
-  <Icon :scale="2">
-    <IconLoading></IconLoading>
-  </Icon>
-  <ConfigProvider :icons="icons" :locale="{ locale: locale as string }">
-    <Space vertical>
-      <Button type="primary" loading>
-        Loading
-      </Button>
-      <Input loading style="max-width: 300px"></Input>
-    </Space>
-  </ConfigProvider>
+  <div class="icon-demo">
+    <Icon :scale="2">
+      <IconLoading></IconLoading>
+    </Icon>
+    <ConfigProvider :icons="icons" :locale="{ locale: locale as string }">
+      <Space vertical>
+        <Button type="primary" loading>
+          Loading
+        </Button>
+        <Input loading style="max-width: 300px"></Input>
+      </Space>
+    </ConfigProvider>
+  </div>
 </template>

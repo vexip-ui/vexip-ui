@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, wrapProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -19,3 +19,20 @@ export const anchorProps = buildProps({
 
 export type AnchorProps = ExtractPropTypes<typeof anchorProps>
 export type AnchorCProps = ConfigurableProps<AnchorProps, 'viewer'>
+
+export const anchorLinkProps = wrapProps({
+  to: {
+    type: String,
+    default: ''
+  },
+  title: {
+    type: String,
+    default: ''
+  },
+  children: {
+    type: Array as PropType<AnchorLinkOptions[]>,
+    default: () => []
+  }
+})
+
+export type AnchorLinkProps = ExtractPropTypes<typeof anchorLinkProps>

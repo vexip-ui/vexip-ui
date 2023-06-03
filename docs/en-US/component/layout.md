@@ -178,6 +178,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | locale           | `LocaleConfig['layout']` | Set the locale config                                                                                                                                   | `null`                                                               | `2.1.0`  |
 | dark-mode        | `boolean`                | Manually set current theme mode, except init, it will dynamically modify the class name on `<html>` when changed, can use `v-model` two-way binding     | `null`                                                               | `2.1.1`  |
 | fixed-main       | `boolean`                | Set whether the main is fixed                                                                                                                           | `false`                                                              | `2.1.14` |
+| fit-window       | `boolean`                | When enabled, layout will fit the browser window and remove built-in scroll                                                                             | `false`                                                              | `2.1.24` |
 
 ### Layout Events
 
@@ -265,16 +266,17 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### LayoutAside Props
 
-| Name       | Type              | Description                                                                                                                     | Default | Since |
-| ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| tag        | `string`          | Set the rendered tag                                                                                                            | `aside` | -     |
-| expanded   | `boolean`         | When the aside is not fixed, set whether the aside is expanded, can use `v-model` two-way binding                               | `false` | -     |
-| reduced    | `boolean`         | Set whether the aside is reduced, can use `v-model` two-way binding                                                             | `false` | -     |
-| menus      | `MenuOptions[]`   | Set menu options                                                                                                                | `[]`    | -     |
-| menu-props | `LayoutMenuProps` | Set menu properties                                                                                                             | `null`  | -     |
-| logo       | `string`          | Set Logo image address                                                                                                          | `''`    | -     |
-| sign-name  | `string`          | Set the sign                                                                                                                    | `''`    | -     |
-| fixed      | `string`          | Set whether the aside is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is matched | `'lg'`  | -     |
+| Name       | Type                  | Description                                                                                                                     | Default   | Since    |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- |
+| tag        | `string`              | Set the rendered tag                                                                                                            | `aside`   | -        |
+| expanded   | `boolean`             | When the aside is not fixed, set whether the aside is expanded, can use `v-model` two-way binding                               | `false`   | -        |
+| reduced    | `boolean`             | Set whether the aside is reduced, can use `v-model` two-way binding                                                             | `false`   | -        |
+| menus      | `MenuOptions[]`       | Set menu options                                                                                                                | `[]`      | -        |
+| menu-props | `LayoutMenuProps`     | Set menu properties                                                                                                             | `null`    | -        |
+| logo       | `string`              | Set Logo image address                                                                                                          | `''`      | -        |
+| sign-name  | `string`              | Set the sign                                                                                                                    | `''`      | -        |
+| fixed      | `string`              | Set whether the aside is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is matched | `'lg'`    | -        |
+| sign-type  | `'aside' \| 'header'` | Set the block where the sign is located, aside top will be adjusted if it's not equal to `'aside'`                              | `'aside'` | `2.1.23` |
 
 ### LayoutAside Events
 

@@ -24,7 +24,7 @@ $input: map.merge(
     border: get-css-var('border-shape') get-css-var('input-b-color'),
     radius: get-css-var('radius-base'),
     count-color: get-css-var('content-color-secondary'),
-    count-color-disbaled: get-css-var('input-control-color-disabled'),
+    count-color-disabled: get-css-var('input-control-color-disabled'),
     count-font-size: get-css-var('font-size-secondary'),
     count-line-height: get-css-var('line-height-secondary'),
     height: 32px,
@@ -300,7 +300,7 @@ $input: map.merge(
   }
 
   &--disabled &__count {
-    color: get-css-var('input-count-color-disbaled');
+    color: get-css-var('input-count-color-disabled');
   }
 
   &__before,
