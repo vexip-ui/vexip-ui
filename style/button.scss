@@ -472,7 +472,7 @@ $button: map.merge(
         &--first {
           margin-inline-end: 0;
 
-          @include logical-radius(0 get-css-var('button-radius') get-css-var('button-radius') 0);
+          @include logical-radius(get-css-var('button-radius') 0 0 get-css-var('button-radius'));
         }
 
         &--last {
