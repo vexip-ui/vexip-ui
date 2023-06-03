@@ -8,8 +8,11 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px">
-        点击右上角头像
+      <div style="width: 100%; padding: 0 20px">
+        <p>点击右上角头像</p>
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
       </div>
     </template>
   </Layout>

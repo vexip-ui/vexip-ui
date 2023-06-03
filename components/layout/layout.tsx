@@ -1,5 +1,6 @@
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import {
   computed,
@@ -454,8 +455,10 @@ export default defineComponent({
     return () => {
       if (props.fitWindow) {
         return (
-          <section ref={scroll} class={className.value} style={style.value}>
-            {renderWrapper()}
+          <section class={className.value} style={style.value}>
+            <ResizeObserver throttle onResize={handleResize}>
+              {renderWrapper()}
+            </ResizeObserver>
           </section>
         )
       }

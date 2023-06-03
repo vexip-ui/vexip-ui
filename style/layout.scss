@@ -221,6 +221,7 @@ $layout: map.merge(
 
     &--fixed {
       height: calc(100% - var(--vxp-layout-header-height));
+      overflow: hidden;
     }
   }
 
@@ -490,7 +491,7 @@ $layout: map.merge(
 
   &__copyright {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0 22px;
     color: get-css-var('content-color-secondary');
     text-align: center;
   }

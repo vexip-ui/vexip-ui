@@ -90,6 +90,16 @@ There are various slots within the component that provide to custom content. Som
 
 :::
 
+:::demo layout/fit-window
+
+### Fit Window
+
+Add the `fit-window` prop to fit the layout to the browser window.
+
+After adding, the internal scroll component will be disabled, the layout will follow the browser window scroll, and better scroll interaction can be obtained on the mobile.
+
+:::
+
 ## API
 
 ### Preset Types

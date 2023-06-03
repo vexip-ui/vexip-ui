@@ -9,8 +9,11 @@
     :links="links"
   >
     <template #main>
-      <div style="width: 100%; height: 800px; padding: 20px">
-        滚动到最下方
+      <div style="width: 100%; padding: 0 20px">
+        <p>滚动到最下方</p>
+        <p v-for="n in 20" :key="n">
+          ↓
+        </p>
       </div>
     </template>
   </Layout>
