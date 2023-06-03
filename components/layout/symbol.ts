@@ -3,9 +3,31 @@ import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuExposed, MenuGroupType, MenuMarkerType } from '@/components/menu'
 import type { NativeScrollExposed } from '@/components/native-scroll'
+import type { ClassType } from '@vexip-ui/config'
 
 export type LayoutSignType = 'aside' | 'header'
 export type LayoutConfig = 'nav' | 'color' | 'theme'
+export type LayoutSection =
+  | 'wrapper'
+  | 'section'
+  | 'header'
+  | 'headerLeft'
+  | 'headerMain'
+  | 'headerRight'
+  | 'headerUser'
+  | 'sidebar'
+  | 'aside'
+  | 'asideTop'
+  | 'asideMain'
+  | 'asideBottom'
+  | 'expandHandler'
+  | 'main'
+  | 'footer'
+  | 'footerLinks'
+  | 'copyright'
+  | 'scrollbar'
+
+export type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
 
 export interface LayoutMenuProps {
   active?: string,
@@ -56,7 +78,8 @@ export interface LayoutState {
   expanded: boolean,
   reduced: boolean,
   navConfig: boolean,
-  changeInLock: () => void
+  classes: LayoutInnerClass,
+  changeInLock: (doChange: () => void) => void
 }
 
 export interface LayoutSlotParams {

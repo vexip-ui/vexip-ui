@@ -83,7 +83,8 @@ export default defineComponent({
           [nh.bem('header', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('header', 'away')]: !layoutState.affixMatched,
           [nh.bem('header', 'affixed')]: layoutState.affixed
-        }
+        },
+        layoutState.classes.header
       ]
     })
     const userActions = computed(() => {
@@ -302,7 +303,7 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {hasLeft.value && (
-            <div class={nh.be('header-left')}>
+            <div class={[nh.be('header-left'), layoutState.classes.headerLeft]}>
               {slots.left
                 ? (
                     renderSlot(slots, 'left', slotParams)
@@ -321,7 +322,7 @@ export default defineComponent({
                   : null}
             </div>
           )}
-          <div class={nh.be('header-main')}>
+          <div class={[nh.be('header-main'), layoutState.classes.headerMain]}>
             {slots.default
               ? (
                   renderSlot(slots, 'default', slotParams)
@@ -340,7 +341,9 @@ export default defineComponent({
                 : null}
           </div>
           {slots.right && (
-            <div class={nh.be('header-right')}>{renderSlot(slots, 'right', slotParams)}</div>
+            <div class={[nh.be('header-right'), layoutState.classes.headerRight]}>
+              {renderSlot(slots, 'right', slotParams)}
+            </div>
           )}
           {slots.user
             ? (
@@ -348,7 +351,7 @@ export default defineComponent({
               )
             : (
             <Dropdown
-              class={nh.be('user')}
+              class={[nh.be('user'), layoutState.classes.headerUser]}
               transfer
               placement={'bottom-end'}
               visible={currentUserDropped.value}

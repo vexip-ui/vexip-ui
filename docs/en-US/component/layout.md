@@ -110,6 +110,27 @@ import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'
+type LayoutSection =
+  | 'wrapper'
+  | 'section'
+  | 'header'
+  | 'headerLeft'
+  | 'headerMain'
+  | 'headerRight'
+  | 'headerUser'
+  | 'sidebar'
+  | 'aside'
+  | 'asideTop'
+  | 'asideMain'
+  | 'asideBottom'
+  | 'expandHandler'
+  | 'main'
+  | 'footer'
+  | 'footerLinks'
+  | 'copyright'
+  | 'scrollbar'
+
+type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
 
 interface LayoutMenuProps {
   accordion?: boolean,
@@ -189,6 +210,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | dark-mode        | `boolean`                | Manually set current theme mode, except init, it will dynamically modify the class name on `<html>` when changed, can use `v-model` two-way binding     | `null`                                                               | `2.1.1`  |
 | fixed-main       | `boolean`                | Set whether the main is fixed                                                                                                                           | `false`                                                              | `2.1.14` |
 | fit-window       | `boolean`                | When enabled, layout will fit the browser window and remove built-in scroll                                                                             | `false`                                                              | `2.1.24` |
+| inner-classes    | `LayoutInnerClass`       | Set custom class names for inner elements                                                                                                               | `{}`                                                                 | `2.1.24` |
 
 ### Layout Events
 
