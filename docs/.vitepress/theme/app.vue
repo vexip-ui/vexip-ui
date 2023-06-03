@@ -68,6 +68,7 @@ const footerLinks = computed(() => {
 
 const bar = ref<ScrollbarExposed>()
 const barLength = ref(35)
+const barDisabled = ref(false)
 
 watch(
   () => route.path,
@@ -84,14 +85,18 @@ onMounted(() => {
 
   if (!isClient) return
 
+  computeBarLength()
+  window.addEventListener('scroll', handleScroll)
+})
+
+function computeBarLength() {
+  barDisabled.value = document.documentElement.scrollHeight <= document.documentElement.clientHeight
   barLength.value = boundRange(
     (document.documentElement.clientHeight / (document.documentElement.scrollHeight || 1)) * 100,
     5,
     99
   )
-
-  window.addEventListener('scroll', handleScroll)
-})
+}
 
 function handleScroll() {
   if (!isClient || !bar.value) return
@@ -141,6 +146,8 @@ function refreshScroll() {
   setTimeout(() => {
     content.scrollTop = 0
   }, 0)
+
+  computeBarLength()
 }
 </script>
 
@@ -228,6 +235,7 @@ function refreshScroll() {
     <Scrollbar
       ref="bar"
       class="docs-scrollbar"
+      :disabled="barDisabled"
       :bar-length="barLength"
       wrapper="body"
       @scroll="handleBarScroll"
