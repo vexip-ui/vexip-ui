@@ -407,7 +407,7 @@ $table: map.merge(
       padding: 0 14px;
 
       .#{$namespace}-checkbox {
-        margin-right: 0;
+        margin-inline-end: 0;
         margin-bottom: 6px;
 
         &:last-child {

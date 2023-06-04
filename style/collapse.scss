@@ -112,7 +112,7 @@ $collapse: map.merge(
   &--arrow-left,
   &__panel--arrow-left {
     #{$header} {
-      padding-left: 36px;
+      padding-inline-start: 36px;
     }
 
     #{$arrow} {
@@ -123,7 +123,7 @@ $collapse: map.merge(
   &--arrow-right,
   &__panel--arrow-right {
     #{$header} {
-      padding-right: 36px;
+      padding-inline-end: 36px;
     }
 
     #{$arrow} {
@@ -160,7 +160,7 @@ $collapse: map.merge(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__panel--disabled &__content {

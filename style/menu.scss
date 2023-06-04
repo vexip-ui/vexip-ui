@@ -126,7 +126,7 @@ $menu: map.merge(
     user-select: none;
     background-color: get-css-var('menu-bg-color');
     outline: 0;
-    transition: padding-left get-css-var('transition-base'), get-css-var('transition-color'),
+    transition: padding-inline-start get-css-var('transition-base'), get-css-var('transition-color'),
       get-css-var('transition-background'), get-css-var('transition-shadow');
 
     &::after {

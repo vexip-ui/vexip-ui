@@ -10,7 +10,7 @@
     :max="3"
     circle
     vertical
-    style="margin-left: 20px;"
+    style="margin-inline-start: 20px"
   ></AvatarGroup>
 </template>
 

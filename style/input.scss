@@ -195,7 +195,7 @@ $input: map.merge(
     &--placeholder {
       min-width: 14px;
       min-height: 1px;
-      margin-left: 4px;
+      margin-inline-start: 4px;
       visibility: hidden;
       opacity: 0%;
     }

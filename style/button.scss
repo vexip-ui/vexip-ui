@@ -117,7 +117,7 @@ $button: map.merge(
   }
 
   & + & {
-    margin-left: get-css-var('button-series-span');
+    margin-inline-start: get-css-var('button-series-span');
   }
 
   &--small {

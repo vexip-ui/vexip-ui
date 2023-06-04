@@ -190,7 +190,7 @@ $blockquote: () !default;
 $blockquote: map.merge(
   (
     color: get-css-var('content-color-base'),
-    padding-left: 10px,
+    padding-inline-start: 10px,
     marker-width: 4px,
     marker-color: get-css-var('border-color-base')
   ),
@@ -208,7 +208,7 @@ $blockquote: map.merge(
 
   @include basis;
 
-  padding-inline-start: get-css-var('blockquote-padding-left');
+  padding-inline-start: get-css-var('blockquote-padding-inline-start');
   margin: 1em 0;
   color: get-css-var('blockquote-color');
   border-inline-start: get-css-var('blockquote-marker-width') solid

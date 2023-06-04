@@ -80,7 +80,7 @@ $cascader: map.merge(
     position: relative;
     height: calc(get-css-var('input-height') - 8px);
     margin: 2px 4px;
-    margin-left: 0;
+    margin-inline-start: 0;
     font-size: 12px;
     pointer-events: auto;
     cursor: pointer;
@@ -98,7 +98,7 @@ $cascader: map.merge(
   // }
 
   &__selector &__tag + &__tag {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   &__rest-tip {
@@ -111,7 +111,7 @@ $cascader: map.merge(
   }
 
   &__rest-tip &__tag {
-    margin-right: 0;
+    margin-inline-end: 0;
   }
 
   &__placeholder {
@@ -174,7 +174,7 @@ $cascader: map.merge(
 
   &__checkbox {
     display: inline-flex;
-    margin-right: 10px;
+    margin-inline-end: 10px;
   }
 
   &__label {

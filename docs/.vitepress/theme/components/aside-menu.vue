@@ -133,13 +133,13 @@ function selectMenu(label: string, meta: AsideMenuItem) {
   padding-bottom: 16px;
 
   &__tag {
-    margin-left: 4px;
+    margin-inline-start: 4px;
     font-size: 10px;
     transform: scale(0.8);
   }
 
   &__sub-name {
-    margin-left: 8px;
+    margin-inline-start: 8px;
     color: var(--vxp-content-color-secondary);
     transition: var(--vxp-transition-color);
 

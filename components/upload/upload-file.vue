@@ -29,7 +29,7 @@
         <div :class="nh.be('actions')">
           <span
             v-if="props.file.status === 'uploading'"
-            style="margin-right: 0.5em"
+            style="margin-inline-end: 0.5em"
             :class="nh.be('percentage')"
           >
             {{ `${percentage}%` }}

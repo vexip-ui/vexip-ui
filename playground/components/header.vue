@@ -17,7 +17,7 @@
         v-show="transferTo"
         type="button"
         class="action"
-        style="margin-right: 0"
+        style="margin-inline-end: 0"
         @click="settingActive = true"
       >
         <Icon :scale="1.3">
@@ -89,7 +89,7 @@
               type="button"
               class="action"
               :title="locale.cdn"
-              style="margin-right: 0"
+              style="margin-inline-end: 0"
             >
               <Icon :scale="1.3">
                 <Rocket></Rocket>
@@ -383,7 +383,7 @@ async function formatCodes() {
 
     &__title {
       display: none;
-      margin-left: 12px;
+      margin-inline-start: 12px;
       color: var(--base);
       transition: var(--vxp-transition-background);
 
@@ -402,7 +402,7 @@ async function formatCodes() {
   }
 
   .ssr-switch {
-    margin-right: 20px;
+    margin-inline-end: 20px;
   }
 
   .action,
@@ -420,7 +420,7 @@ async function formatCodes() {
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     cursor: pointer;
     background-color: transparent;
     border: 0;
@@ -428,7 +428,7 @@ async function formatCodes() {
   }
 
   .repo-name {
-    margin-right: 6px;
+    margin-inline-end: 6px;
     color: var(--vxp-color-success-base);
     white-space: nowrap;
   }
@@ -461,7 +461,7 @@ async function formatCodes() {
   }
 
   .ssr-switch {
-    margin-right: 20px;
+    margin-inline-end: 20px;
   }
 
   .action,
@@ -479,19 +479,19 @@ async function formatCodes() {
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
 
     &:last-child {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
   }
 
   .repo-name {
-    margin-right: 6px;
+    margin-inline-end: 6px;
     color: var(--vxp-color-success-base);
     white-space: nowrap;
   }

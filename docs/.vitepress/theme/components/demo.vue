@@ -324,7 +324,7 @@ function editOnPlayground() {
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-left: 3px;
+    margin-inline-start: 3px;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
     background-color: transparent;

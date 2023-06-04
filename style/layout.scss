@@ -128,7 +128,7 @@ $layout: map.merge(
     position: relative;
     width: 100%;
     min-height: calc(#{get-css-var('layout-view-height')} - #{get-css-var('layout-header-height')});
-    transition: padding-left get-css-var('transition-base');
+    transition: padding-inline-start get-css-var('transition-base');
 
     &--away {
       padding-inline-start: get-css-var('layout-aside-width');
@@ -483,7 +483,7 @@ $layout: map.merge(
     border-radius: get-css-var('radius-small');
 
     &:last-child {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
   }
 

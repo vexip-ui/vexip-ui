@@ -1,7 +1,7 @@
 <template>
   <p style="margin-bottom: 28px">
     <span>Flip: </span>
-    <Switch v-model:value="flip" style="margin-right: 10px"></Switch>
+    <Switch v-model:value="flip" style="margin-inline-end: 10px"></Switch>
     <span>Alternate: </span>
     <Switch v-model:value="alternate"></Switch>
   </p>

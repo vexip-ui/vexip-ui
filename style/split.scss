@@ -145,7 +145,7 @@ $split: map.merge(
     }
 
     &--top-full {
-      margin-right: $button-margin;
+      margin-inline-end: $button-margin;
 
       &::before {
         left: $button-position;
@@ -174,7 +174,7 @@ $split: map.merge(
     }
 
     &--bottom-full {
-      margin-left: $button-margin;
+      margin-inline-start: $button-margin;
 
       &::before {
         left: $button-position;
@@ -257,11 +257,11 @@ $split: map.merge(
   &--left-full {
     #{$pane} {
       &--left {
-        padding-right: $handler-size !important;
+        padding-inline-end: $handler-size !important;
       }
 
       &--right {
-        padding-left: 0 !important;
+        padding-inline-start: 0 !important;
         overflow: hidden;
       }
     }
@@ -286,12 +286,12 @@ $split: map.merge(
   &--right-full {
     #{$pane} {
       &--left {
-        padding-right: 0 !important;
+        padding-inline-end: 0 !important;
         overflow: hidden;
       }
 
       &--right {
-        padding-left: $handler-size !important;
+        padding-inline-start: $handler-size !important;
       }
     }
 
@@ -331,7 +331,7 @@ $split: map.merge(
         }
 
         &--bottom-full {
-          margin-left: 0;
+          margin-inline-start: 0;
         }
       }
     }
@@ -352,7 +352,7 @@ $split: map.merge(
     & > #{$trigger} {
       #{$button} {
         &--top-full {
-          margin-right: 0;
+          margin-inline-end: 0;
         }
 
         &--bottom-full {
@@ -380,12 +380,12 @@ $split: map.merge(
 
       &--left {
         left: 0;
-        padding-right: $handler-size-h;
+        padding-inline-end: $handler-size-h;
       }
 
       &--right {
         right: 0;
-        padding-left: $handler-size-h;
+        padding-inline-start: $handler-size-h;
       }
     }
 

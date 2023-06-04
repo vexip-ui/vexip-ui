@@ -136,11 +136,11 @@ p .vxp-linker {
 
   ul:not([class*='vxp-']),
   ol:not([class*='vxp-']) {
-    padding-left: 4px;
+    padding-inline-start: 4px;
 
     & > li {
       padding: 2px 4px;
-      margin-left: 20px;
+      margin-inline-start: 20px;
     }
   }
 
@@ -185,7 +185,7 @@ p .vxp-linker {
   align-items: center;
 
   &__link {
-    margin-left: 6px;
+    margin-inline-start: 6px;
     font-size: 20px;
     color: var(--vxp-color-primary-light-1);
     text-decoration: none;

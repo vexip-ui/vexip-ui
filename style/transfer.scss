@@ -217,7 +217,7 @@ $transfer: map.merge(
   &__pagination {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   &__page-input {

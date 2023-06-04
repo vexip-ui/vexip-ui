@@ -85,7 +85,7 @@ const next = computed(() => {
       :icon="ChevronLeft"
     >
       <span>{{ t(prev.i18n) }}</span>
-      <span v-if="prev.origin && locale !== 'en-US'" style="margin-left: 6px">
+      <span v-if="prev.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
         {{ prev.origin }}
       </span>
     </Linker>
@@ -98,10 +98,10 @@ const next = computed(() => {
       target="_self"
     >
       <span>{{ t(next.i18n) }}</span>
-      <span v-if="next.origin && locale !== 'en-US'" style="margin-left: 6px">
+      <span v-if="next.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
         {{ next.origin }}
       </span>
-      <Icon :icon="ChevronRight" style="padding-top: 1px; margin-left: 3px"></Icon>
+      <Icon :icon="ChevronRight" style="padding-top: 1px; margin-inline-start: 3px"></Icon>
     </Linker>
   </div>
 </template>

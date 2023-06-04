@@ -83,7 +83,7 @@ $column: map.merge(
     }
 
     &--offset-#{$i} {
-      margin-left: $size;
+      margin-inline-start: $size;
     }
 
     &--pull-#{$i} {
@@ -115,7 +115,7 @@ $column: map.merge(
         }
 
         &--#{$point}-offset-#{$i} {
-          margin-left: $size;
+          margin-inline-start: $size;
         }
 
         &--#{$point}-pull-#{$i} {
