@@ -368,7 +368,7 @@ $tab-nav: map.merge(
         &,
         &:hover,
         &:focus {
-          border-right-color: transparent;
+          border-inline-end-color: transparent;
         }
       }
     }

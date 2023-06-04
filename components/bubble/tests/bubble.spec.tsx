@@ -34,10 +34,10 @@ describe('Bubble', () => {
     //   'background-color: cyan;'
     // )
     // expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
-    //   'border-right-color: cyan;'
+    //   'border-inline-end-color: cyan;'
     // )
     expect(wrapper.vm.contentStyle).toMatchObject({ backgroundColor: 'cyan' })
-    expect(wrapper.vm.arrowStyle).toMatchObject({ 'border-right-color': 'cyan' })
+    expect(wrapper.vm.arrowStyle).toMatchObject({ 'border-inline-end-color': 'cyan' })
   })
 
   it('shadow', () => {

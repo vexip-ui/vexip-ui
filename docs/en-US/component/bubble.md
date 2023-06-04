@@ -10,6 +10,14 @@ Just put a bubble.
 
 :::
 
+:::demo bubble/background
+
+### Background Color
+
+The color of bubble can be specified by setting the value of the `background` prop.
+
+:::
+
 :::demo bubble/example
 
 ### A Example

@@ -148,7 +148,7 @@ $cascader: map.merge(
     outline: 0;
 
     &:not(:first-child) {
-      border-left: get-css-var('cascader-pane-border');
+      border-inline-start: get-css-var('cascader-pane-border');
     }
   }
 

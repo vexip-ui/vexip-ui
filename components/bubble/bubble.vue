@@ -57,9 +57,11 @@ export default defineComponent({
     })
     const arrowStyle = computed(() => {
       const position = props.placement.split('-').shift()
+      const logical =
+        position === 'left' ? 'inline-start' : position === 'right' ? 'inline-end' : position
 
       return {
-        [`border-${position}-color`]: props.background
+        [`border-${logical}-color`]: props.background
       }
     })
 

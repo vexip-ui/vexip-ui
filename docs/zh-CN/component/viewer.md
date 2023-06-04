@@ -112,16 +112,16 @@ interface ToolbarAction {
 
 ### Viewer 事件
 
-| 名称       | 说明                                         | 参数                                    | 始于                    |
-| ---------- | -------------------------------------------- | --------------------------------------- | ----------------------- | --- |
-| move-start | 开始移动时触发，返回查看器的状态             | `(state: ViewerState)`                  | -                       |
-| move       | 移动时触发，返回查看器的状态                 | `(state: ViewerState)`                  | -                       |
-| move-end   | 移动结束时触发，返回查看器的状态             | `(state: ViewerState)`                  | -                       |
-| wheel      | 滚动时触发，返回方向标记和查看器状态         | `(sign: -1                              | 1, state: ViewerState)` | -   |
-| rotate     | 旋转时触发，返回变化量和查看器状态           | `(delta: number, state: ViewerState)`   | -                       |
-| zoom       | 缩放时触发，返回变化量和查看器状态           | `(delta: number, state: ViewerState)`   | -                       |
-| full       | 切换全屏时触发，返回当前全屏状态和查看器状态 | `(active: boolean, state: ViewerState)` | -                       |
-| reset      | 重置时触发，返回查看器状态                   | `(state: ViewerState)`                  | -                       |
+| 名称       | 说明                                         | 参数                                    | 始于 |
+| ---------- | -------------------------------------------- | --------------------------------------- | ---- |
+| move-start | 开始移动时触发，返回查看器的状态             | `(state: ViewerState)`                  | -    |
+| move       | 移动时触发，返回查看器的状态                 | `(state: ViewerState)`                  | -    |
+| move-end   | 移动结束时触发，返回查看器的状态             | `(state: ViewerState)`                  | -    |
+| wheel      | 滚动时触发，返回方向标记和查看器状态         | `(sign: -1 \| 1, state: ViewerState)`   | -    |
+| rotate     | 旋转时触发，返回变化量和查看器状态           | `(delta: number, state: ViewerState)`   | -    |
+| zoom       | 缩放时触发，返回变化量和查看器状态           | `(delta: number, state: ViewerState)`   | -    |
+| full       | 切换全屏时触发，返回当前全屏状态和查看器状态 | `(active: boolean, state: ViewerState)` | -    |
+| reset      | 重置时触发，返回查看器状态                   | `(state: ViewerState)`                  | -    |
 
 ### Viewer 插槽
 

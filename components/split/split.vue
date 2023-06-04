@@ -86,6 +86,13 @@ export default defineComponent({
     const wrapper = ref<HTMLElement>()
     const guide = ref<HTMLElement>()
 
+    const offset = computed(() => {
+      return props.vertical ? 'offsetHeight' : 'offsetWidth'
+    })
+    const position = computed<['top', 'bottom'] | ['left', 'right']>(() => {
+      return props.vertical ? ['top', 'bottom'] : ['left', 'right']
+    })
+
     const { target: handler, moving } = useMoving({
       lazy: true,
       capture: false,
@@ -173,12 +180,6 @@ export default defineComponent({
         [nh.bm(`${fullType}-full`)]: !!fullType,
         [nh.bm('transition')]: transition.value
       }
-    })
-    const offset = computed(() => {
-      return props.vertical ? 'offsetHeight' : 'offsetWidth'
-    })
-    const position = computed<['top', 'bottom'] | ['left', 'right']>(() => {
-      return props.vertical ? ['top', 'bottom'] : ['left', 'right']
     })
     const leftPaneStyle = computed(() => {
       return {

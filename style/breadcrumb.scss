@@ -103,6 +103,6 @@ $breadcrumb: map.merge(
   }
 
   &--border &__item:hover &__separator {
-    border-left-color: get-css-var('breadcrumb-item-b-color-hover');
+    border-inline-start-color: get-css-var('breadcrumb-item-b-color-hover');
   }
 }

@@ -173,10 +173,10 @@ $table: map.merge(
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: $border-a transparent;
+    border-inline-end: $border-a transparent;
 
     &:last-child {
-      border-right-width: 0;
+      border-inline-end-width: 0;
     }
 
     &--center {
@@ -236,7 +236,7 @@ $table: map.merge(
 
     #{$cell},
     #{$head-cell} {
-      border-right-color: get-css-var('table-cell-b-color-right');
+      border-inline-end-color: get-css-var('table-cell-b-color-right');
     }
   }
 
@@ -527,7 +527,7 @@ $table: map.merge(
     z-index: 10;
     will-change: left;
     pointer-events: none;
-    border-left: get-css-var('border-shape') get-css-var('table-indicator-color');
+    border-inline-start: get-css-var('border-shape') get-css-var('table-indicator-color');
   }
 
   &__empty {

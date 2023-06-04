@@ -148,7 +148,7 @@
     width: 0;
     height: auto;
     content: '';
-    border-left: get-css-var('border-shape') $border-color;
+    border-inline-start: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
     animation: vxp-v-moving-border $duration infinite;
   }
@@ -159,7 +159,7 @@
     width: 0;
     height: auto;
     content: '';
-    border-left: get-css-var('border-shape') $border-color;
+    border-inline-start: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
     animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }

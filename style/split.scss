@@ -257,11 +257,11 @@ $split: map.merge(
   &--left-full {
     #{$pane} {
       &--left {
-        padding-inline-end: $handler-size !important;
+        padding-right: $handler-size !important;
       }
 
       &--right {
-        padding-inline-start: 0 !important;
+        padding-left: 0 !important;
         overflow: hidden;
       }
     }
@@ -269,6 +269,10 @@ $split: map.merge(
     & > #{$trigger} {
       #{$handler} {
         transform: translateX(-100%);
+
+        @include rtl {
+          transform: translateX(0) !important;
+        }
       }
 
       #{$button} {
@@ -286,12 +290,12 @@ $split: map.merge(
   &--right-full {
     #{$pane} {
       &--left {
-        padding-inline-end: 0 !important;
+        padding-right: 0 !important;
         overflow: hidden;
       }
 
       &--right {
-        padding-inline-start: $handler-size !important;
+        padding-left: $handler-size !important;
       }
     }
 
@@ -331,7 +335,7 @@ $split: map.merge(
         }
 
         &--bottom-full {
-          margin-inline-start: 0;
+          margin-left: 0;
         }
       }
     }
@@ -352,7 +356,7 @@ $split: map.merge(
     & > #{$trigger} {
       #{$button} {
         &--top-full {
-          margin-inline-end: 0;
+          margin-right: 0;
         }
 
         &--bottom-full {
@@ -380,12 +384,12 @@ $split: map.merge(
 
       &--left {
         left: 0;
-        padding-inline-end: $handler-size-h;
+        padding-right: $handler-size-h;
       }
 
       &--right {
         right: 0;
-        padding-inline-start: $handler-size-h;
+        padding-left: $handler-size-h;
       }
     }
 
@@ -394,11 +398,19 @@ $split: map.merge(
       width: 0;
       height: 100%;
 
+      @include rtl {
+        transform: translate(50%, -50%);
+      }
+
       #{$handler} {
         flex-direction: column;
         width: $handler-size;
         height: 100%;
         cursor: col-resize;
+
+        @include rtl {
+          transform: translateX(100%);
+        }
       }
 
       #{$button} {

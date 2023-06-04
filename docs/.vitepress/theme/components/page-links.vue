@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useData } from 'vitepress'
 import { ChevronLeft, ChevronRight } from '@vexip-ui/icons'
+import { useRtl } from '@vexip-ui/hooks'
 import { flatTree } from '@vexip-ui/utils'
 import { ensureStartingSlash, removeExt } from '../../shared'
 
@@ -12,6 +13,7 @@ import type { ThemeConfig } from '../types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
 const { t, locale } = useI18n({ useScope: 'global' })
+const { isRtl } = useRtl()
 
 const path = computed(() => ensureStartingSlash(removeExt(page.value.relativePath)))
 const candidates = computed(() => {
@@ -82,7 +84,7 @@ const next = computed(() => {
       type="primary"
       :to="`/${locale}${prev.link}`"
       target="_self"
-      :icon="ChevronLeft"
+      :icon="isRtl ? ChevronRight : ChevronLeft"
     >
       <span>{{ t(prev.i18n) }}</span>
       <span v-if="prev.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
@@ -101,7 +103,10 @@ const next = computed(() => {
       <span v-if="next.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
         {{ next.origin }}
       </span>
-      <Icon :icon="ChevronRight" style="padding-top: 1px; margin-inline-start: 3px"></Icon>
+      <Icon
+        :icon="isRtl ? ChevronLeft : ChevronRight"
+        style="padding-top: 1px; margin-inline-start: 3px"
+      ></Icon>
     </Linker>
   </div>
 </template>
