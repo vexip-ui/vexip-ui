@@ -5,6 +5,8 @@ export type { LayoutProps, LayoutCProps } from './props'
 export type {
   LayoutSignType,
   LayoutConfig,
+  LayoutSection,
+  LayoutInnerClass,
   LayoutMenuProps,
   LayoutHeaderAction,
   LayoutUser,

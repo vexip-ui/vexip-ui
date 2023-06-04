@@ -69,7 +69,7 @@ $image: map.merge(
   }
 
   &-viewer {
-    @mixin hanlder {
+    @mixin handler {
       position: absolute;
       display: flex;
       padding: 0;
@@ -121,14 +121,14 @@ $image: map.merge(
     }
 
     &__close {
-      @include hanlder;
+      @include handler;
 
       top: get-css-var('image-action-offset');
       inset-inline-end: get-css-var('image-action-offset');
     }
 
     &__prev {
-      @include hanlder;
+      @include handler;
 
       top: 50%;
       inset-inline-start: get-css-var('image-action-offset');
@@ -136,7 +136,7 @@ $image: map.merge(
     }
 
     &__next {
-      @include hanlder;
+      @include handler;
 
       top: 50%;
       inset-inline-end: get-css-var('image-action-offset');

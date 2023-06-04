@@ -8,9 +8,12 @@
     aside-fixed="min"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px">
+      <div style="width: 100%; padding: 20px">
         <p>点击左下方的小箭头</p>
         <p>以及来回滚动</p>
+        <p v-for="n in 20" :key="n">
+          {{ n % 2 ? '↓' : '↑' }}
+        </p>
       </div>
     </template>
   </Layout>

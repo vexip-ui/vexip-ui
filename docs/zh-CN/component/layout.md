@@ -90,6 +90,16 @@
 
 :::
 
+:::demo layout/fit-window
+
+### 适应窗口
+
+添加 `fit-window` 属性可以使布局适应浏览器窗口。
+
+添加后，内部的滚动组件将被禁用，布局将会跟随浏览器窗口的滚动，在移动端可以获得更好的滚动交互。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -100,6 +110,27 @@ import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'
+type LayoutSection =
+  | 'wrapper'
+  | 'section'
+  | 'header'
+  | 'headerLeft'
+  | 'headerMain'
+  | 'headerRight'
+  | 'headerUser'
+  | 'sidebar'
+  | 'aside'
+  | 'asideTop'
+  | 'asideMain'
+  | 'asideBottom'
+  | 'expandHandler'
+  | 'main'
+  | 'footer'
+  | 'footerLinks'
+  | 'copyright'
+  | 'scrollbar'
+
+type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
 
 interface LayoutMenuProps {
   accordion?: boolean,
@@ -179,6 +210,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | dark-mode        | `boolean`                | 手动设置当前主题模式，除了初始化时，其他时候改变时会修改 `<html>` 上相应的类名，可以使用 `v-model` 双向绑定 | `null`                                                               | `2.1.1`  |
 | fixed-main       | `boolean`                | 设置主内容是否为固定的                                                                                      | `false`                                                              | `2.1.14` |
 | fit-window       | `boolean`                | 开启后将适应浏览器窗口并移除内置得滚动                                                                      | `false`                                                              | `2.1.24` |
+| inner-classes    | `LayoutInnerClass`       | 设置内部元素的自定义类名                                                                                    | `{}`                                                                 | `2.1.24` |
 
 ### Layout 事件
 

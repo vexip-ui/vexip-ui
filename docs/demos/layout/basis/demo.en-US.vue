@@ -7,7 +7,11 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px"></div>
+      <div style="width: 100%; padding: 0 20px">
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
+      </div>
     </template>
   </Layout>
 </template>

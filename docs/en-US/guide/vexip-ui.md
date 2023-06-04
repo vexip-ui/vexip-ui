@@ -78,7 +78,7 @@ Alipay:
 Thanks for all their contributions!
 
 <a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
-  <img class="contrib__img" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui&columns=6" />
+  <img class="contrib__img" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui&columns=5" />
   <img class="contrib__img--lg" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui&columns=9" />
   <img class="contrib__img--xl" src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
 </a>

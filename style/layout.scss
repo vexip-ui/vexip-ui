@@ -48,7 +48,7 @@ $layout: map.merge(
     flex-direction: column;
   }
 
-  &__sider {
+  &__sidebar {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -72,6 +72,7 @@ $layout: map.merge(
     pointer-events: all;
     background-color: get-css-var('layout-aside-bg-color');
     border-inline-end: get-css-var('layout-aside-border');
+    will-change: width transform;
     transition: width get-css-var('transition-base'), get-css-var('transition-border'),
       get-css-var('transition-transform');
     transform: translateX(-100%);
@@ -221,6 +222,7 @@ $layout: map.merge(
 
     &--fixed {
       height: calc(100% - var(--vxp-layout-header-height));
+      overflow: hidden;
     }
   }
 
@@ -489,7 +491,7 @@ $layout: map.merge(
 
   &__copyright {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0 22px;
     color: get-css-var('content-color-secondary');
     text-align: center;
   }

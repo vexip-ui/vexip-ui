@@ -1,5 +1,6 @@
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import {
   computed,
@@ -80,7 +81,8 @@ export default defineComponent({
       verticalLinks: 'md',
       darkMode: null,
       fixedMain: false,
-      fitWindow: false
+      fitWindow: false,
+      innerClasses: () => ({})
     })
 
     const nh = useNameHelper('layout')
@@ -114,6 +116,7 @@ export default defineComponent({
       expanded: asideExpanded,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside),
+      classes: toRef(props, 'innerClasses'),
       changeInLock
     })
 
@@ -356,7 +359,11 @@ export default defineComponent({
 
       return (
         <div
-          class={[nh.be('sider'), !expandMatched.value && nh.bem('sider', 'away')]}
+          class={[
+            nh.be('sidebar'),
+            !expandMatched.value && nh.bem('sidebar', 'away'),
+            props.innerClasses.sidebar
+          ]}
           onWheel={stopAndPrevent}
           onMousemove={stopAndPrevent}
         >
@@ -428,7 +435,13 @@ export default defineComponent({
       const CustomTag = (props.tag || 'section') as any
 
       return (
-        <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
+        <CustomTag
+          class={[
+            nh.be('wrapper'),
+            props.fixedMain && nh.bem('wrapper', 'fixed'),
+            props.innerClasses.wrapper
+          ]}
+        >
           {currentSignType.value === 'header' && renderHeader()}
           {renderAside()}
           <section
@@ -440,7 +453,8 @@ export default defineComponent({
                 [nh.bem('section', 'reduced')]: asideReduced.value,
                 [nh.bem('section', 'locked')]: locked.value,
                 [nh.bem('section', 'fixed')]: props.fixedMain
-              }
+              },
+              props.innerClasses.section
             ]}
           >
             {currentSignType.value === 'aside' && renderHeader()}
@@ -454,8 +468,10 @@ export default defineComponent({
     return () => {
       if (props.fitWindow) {
         return (
-          <section ref={scroll} class={className.value} style={style.value}>
-            {renderWrapper()}
+          <section class={className.value} style={style.value}>
+            <ResizeObserver throttle onResize={handleResize}>
+              {renderWrapper()}
+            </ResizeObserver>
           </section>
         )
       }
@@ -467,7 +483,7 @@ export default defineComponent({
           style={style.value}
           use-y-bar
           observe-deep
-          bar-class={nh.be('scrollbar')}
+          bar-class={[nh.be('scrollbar'), props.innerClasses.scrollbar]}
           onResize={handleResize}
         >
           {renderWrapper()}

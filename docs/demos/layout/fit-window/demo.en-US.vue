@@ -1,22 +1,26 @@
 <template>
-  <Layout
-    logo="https://www.vexipui.com/vexip-ui.svg"
-    sign-name="Vexip UI"
-    :user="user"
-    :menus="menus"
-    header-fixed="min"
-    aside-fixed="min"
-  >
-    <template #main>
-      <div style="width: 100%; padding: 20px">
-        <p>Click the bottom left caret</p>
-        <p>And scroll back and forth</p>
-        <p v-for="n in 20" :key="n">
-          {{ n % 2 ? '↓' : '↑' }}
-        </p>
-      </div>
-    </template>
-  </Layout>
+  <!-- Assuming this div is document -->
+  <div style="height: 500px; overflow-x: hidden; overflow-y: auto">
+    <!-- After add fit-window, --vxp-layout-view-height will be 100vh -->
+    <!-- Here it is forced to set to 500px for simulation -->
+    <Layout
+      logo="https://www.vexipui.com/vexip-ui.svg"
+      sign-name="Vexip UI"
+      :user="user"
+      :menus="menus"
+      fit-window
+      style="--vxp-layout-view-height: 500px"
+      @user-action="handleUserAction"
+    >
+      <template #main>
+        <div style="width: 100%; padding: 0 20px">
+          <p v-for="n in 40" :key="n">
+            {{ n }}
+          </p>
+        </div>
+      </template>
+    </Layout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -62,6 +66,10 @@ const menus: MenuOptions[] = [
     icon: Marker
   }
 ]
+
+function handleUserAction(label: string) {
+  console.info(label)
+}
 </script>
 
 <style scoped>

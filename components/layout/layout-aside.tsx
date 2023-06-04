@@ -63,7 +63,8 @@ export default defineComponent({
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value,
           [nh.bem('aside', 'no-sign')]: props.signType !== 'aside'
-        }
+        },
+        layoutState.classes.aside
       ]
     })
     const hasTop = computed(() => {
@@ -157,7 +158,7 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {hasTop.value && (
-            <div ref={top} class={nh.be('aside-top')}>
+            <div ref={top} class={[nh.be('aside-top'), layoutState.classes.asideTop]}>
               {slots.top
                 ? (
                     renderSlot(slots, 'top', slotParams)
@@ -175,7 +176,7 @@ export default defineComponent({
             </div>
           )}
           <NativeScroll
-            class={nh.be('aside-main')}
+            class={[nh.be('aside-main'), layoutState.classes.main]}
             use-y-bar
             observe-deep
             height={scrollHeight.value}
@@ -197,7 +198,7 @@ export default defineComponent({
                   )
                 : null}
           </NativeScroll>
-          <div ref={bottom} class={nh.be('aside-bottom')}>
+          <div ref={bottom} class={[nh.be('aside-bottom'), layoutState.classes.asideBottom]}>
             {slots.bottom
               ? (
                   renderSlot(slots, 'bottom', slotParams)
@@ -214,7 +215,10 @@ export default defineComponent({
               </div>
                 )}
           </div>
-          <div class={nh.be('expand-handler')} onClick={() => toggleExpanded()}>
+          <div
+            class={[nh.be('expand-handler'), layoutState.classes.expandHandler]}
+            onClick={() => toggleExpanded()}
+          >
             {slots.expand
               ? (
                   renderSlot(slots, 'expand', slotParams)

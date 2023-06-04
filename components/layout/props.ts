@@ -7,6 +7,7 @@ import type {
   LayoutConfig,
   LayoutFooterLink,
   LayoutHeaderAction,
+  LayoutInnerClass,
   LayoutMenuProps,
   LayoutSignType,
   LayoutUser
@@ -39,6 +40,7 @@ export const layoutProps = buildProps({
   darkMode: booleanProp,
   fixedMain: booleanProp,
   fitWindow: booleanProp,
+  innerClasses: Object as PropType<LayoutInnerClass>,
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),

@@ -1,18 +1,25 @@
 <template>
-  <Layout
-    logo="https://www.vexipui.com/vexip-ui.svg"
-    sign-name="Vexip UI"
-    :user="user"
-    :menus="menus"
-    fixed-main
-    @user-action="handleUserAction"
-  >
-    <template #main>
-      <div style="width: 100%; padding: 0 20px">
-        <p>在一个固定区域创建</p>
-      </div>
-    </template>
-  </Layout>
+  <!-- 假设这个 div 是 document -->
+  <div style="height: 500px; overflow-x: hidden; overflow-y: auto">
+    <!-- 开启 fit-window 后，--vxp-layout-view-height 将为 100vh，此处因需模拟将其强制设置为 500px -->
+    <Layout
+      logo="https://www.vexipui.com/vexip-ui.svg"
+      sign-name="Vexip UI"
+      :user="user"
+      :menus="menus"
+      fit-window
+      style="--vxp-layout-view-height: 500px"
+      @user-action="handleUserAction"
+    >
+      <template #main>
+        <div style="width: 100%; padding: 0 20px">
+          <p v-for="n in 40" :key="n">
+            {{ n }}
+          </p>
+        </div>
+      </template>
+    </Layout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -63,9 +70,3 @@ function handleUserAction(label: string) {
   console.info(label)
 }
 </script>
-
-<style scoped>
-.vxp-layout {
-  height: 500px;
-}
-</style>
