@@ -29,7 +29,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "@popperjs/core": "^2.11.6",
-    "@vexip-ui/utils": "workspace:^"
+    "@vexip-ui/utils": "workspace:~"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

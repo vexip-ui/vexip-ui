@@ -109,10 +109,10 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@vexip-ui/bem-helper": "workspace:^",
-    "@vexip-ui/hooks": "workspace:^",
-    "@vexip-ui/icons": "workspace:^",
-    "@vexip-ui/utils": "workspace:^"
+    "@vexip-ui/bem-helper": "workspace:~",
+    "@vexip-ui/hooks": "workspace:~",
+    "@vexip-ui/icons": "workspace:~",
+    "@vexip-ui/utils": "workspace:~"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",

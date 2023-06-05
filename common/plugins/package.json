@@ -27,7 +27,7 @@
     "directory": "common/plugins"
   },
   "dependencies": {
-    "@vexip-ui/utils": "workspace:^",
+    "@vexip-ui/utils": "workspace:~",
     "compare-versions": "6.0.0-rc.1",
     "local-pkg": "^0.4.2"
   },
