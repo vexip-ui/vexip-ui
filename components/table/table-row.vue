@@ -73,7 +73,7 @@ import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
 import type { CSSProperties, PropType } from 'vue'
-import type { ColumnWithKey, TableExpandColumn, TableRowState } from './symbol'
+import type { TableExpandColumn, TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',
@@ -94,9 +94,9 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    isFixed: {
-      type: Boolean,
-      default: false
+    fixed: {
+      type: String as PropType<'left' | 'right'>,
+      default: null
     }
   },
   setup(props) {
@@ -174,18 +174,17 @@ export default defineComponent({
     })
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
-      return props.isFixed
+      return props.fixed
         ? {
-            width: '1px',
-            // height: `${props.row.expandHeight}px`,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            visibility: 'hidden'
+            width: `${
+              props.fixed === 'right'
+                ? getters.rightFixedWidths.at(-1)
+                : getters.leftFixedWidths.at(-1)
+            }px`,
+            whiteSpace: 'nowrap'
           }
         : {}
     })
-    const leftFixed = computed(() => computeFixedWidth(state.leftFixedColumns))
-    const rightFixed = computed(() => computeFixedWidth(state.rightFixedColumns))
     const cellDraggable = computed(() => {
       return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
     })
@@ -196,33 +195,13 @@ export default defineComponent({
       return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
     }
 
-    function computeFixedWidth(columns: ColumnWithKey[]) {
-      if (!columns?.length) {
-        return 0
-      }
-
-      const widths = state.widths
-
-      let width = 0
-
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths.get(key) || 0
-
-        width += columnWidth
-      }
-
-      return width
-    }
-
     function computeRectHeight() {
       if (!Object.keys(props.row).length || props.row.hidden) return
 
       computeBorderHeight()
       computeRowHeight()
 
-      if (state.heightBITree && !props.isFixed) {
+      if (state.heightBITree && !props.fixed) {
         nextTick(() => {
           const height = getRowHeight(props.row)
           const tree = state.heightBITree
@@ -274,7 +253,7 @@ export default defineComponent({
         })
       } else {
         nextTick(() => {
-          if (!props.isFixed) {
+          if (!props.fixed) {
             if (rowElement.value) {
               mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
@@ -387,8 +366,8 @@ export default defineComponent({
       expandColumn,
       expandRenderer,
       expandStyle,
-      leftFixed,
-      rightFixed,
+      leftFixed: computed(() => getters.leftFixedWidths.at(-1)),
+      rightFixed: computed(() => getters.rightFixedWidths.at(-1)),
 
       wrapper,
       rowEl: rowElement,

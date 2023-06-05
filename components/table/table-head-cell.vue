@@ -149,7 +149,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, defineComponent, inject, onMounted, ref, toRef } from 'vue'
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
@@ -275,7 +275,8 @@ export default defineComponent({
         {
           maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`
+          width: `${props.column.width ?? width}px`,
+          transform: `translateX(${getters.totalWidths[props.index]}px)`
         },
         props.column.style || '',
         customStyle
@@ -320,18 +321,6 @@ export default defineComponent({
         getters.processedData.length === records.length &&
         !Object.values(getters.disableCheckRows).includes(false)
       )
-    })
-
-    onMounted(() => {
-      setTimeout(() => {
-        if (wrapper.value) {
-          const width = wrapper.value.getBoundingClientRect().width
-
-          state.colResizable
-            ? mutations.handleColumnResize(props.column.key, width)
-            : mutations.setColumnWidth(props.column.key, width)
-        }
-      }, 0)
     })
 
     function isSelection(column: unknown): column is TableSelectionColumn {

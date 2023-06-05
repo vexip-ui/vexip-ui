@@ -17,7 +17,6 @@
       :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
       :bar-class="nh.bem('bar', 'horizontal')"
       :bar-fade="props.barFade"
-      :delta-x="50"
       @scroll="handleXScroll"
       @x-enabled-change="xScrollEnabled = $event"
     >
@@ -28,7 +27,7 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :style="{ minWidth: `${totalWidth}px` }"
+        :style="{ minWidth: `${totalWidths.at(-1)}px` }"
         @scroll="handleBodyScroll"
         @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
@@ -869,8 +868,8 @@ export default defineComponent({
     }
 
     function refresh() {
+      nextTick(computeTableWidth)
       setTimeout(() => {
-        computeTableWidth()
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
@@ -938,9 +937,7 @@ export default defineComponent({
       useXScroll,
       barLength,
       bodyScrollHeight,
-      totalWidth: toRef(getters, 'totalWidth'),
-      leftFixedWidth: toRef(getters, 'leftFixedWidth'),
-      rightFixedWidth: toRef(getters, 'rightFixedWidth'),
+      totalWidths: toRef(getters, 'totalWidths'),
       totalHeight: toRef(state, 'totalHeight'),
 
       store,

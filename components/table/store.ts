@@ -203,9 +203,9 @@ export function useStore(options: StoreOptions) {
     return !!state.columns.find(column => 'type' in column && column.type === 'drag')
   })
   const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
-  const totalWidth = computed(() => getColumnsWidth())
-  const leftFixedWidth = computed(() => getColumnsWidth(state.leftFixedColumns))
-  const rightFixedWidth = computed(() => getColumnsWidth(state.rightFixedColumns))
+  const totalWidths = computed(() => getColumnsWidths())
+  const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
+  const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -224,9 +224,9 @@ export function useStore(options: StoreOptions) {
     usingTree,
     hasDragColumn,
     rowDragging,
-    totalWidth,
-    leftFixedWidth,
-    rightFixedWidth
+    totalWidths,
+    leftFixedWidths,
+    rightFixedWidths
   })
 
   const mutations = {
@@ -292,8 +292,9 @@ export function useStore(options: StoreOptions) {
     handleColumnResize
   }
 
-  function getColumnsWidth(columns = state.columns) {
+  function getColumnsWidths(columns = state.columns) {
     const widths = state.widths
+    const combinedWidths: number[] = [0]
 
     let width = 0
 
@@ -303,9 +304,10 @@ export function useStore(options: StoreOptions) {
       const columnWidth = widths.get(key) || 0
 
       width += columnWidth
+      combinedWidths.push(width)
     }
 
-    return width
+    return combinedWidths
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -318,8 +320,6 @@ export function useStore(options: StoreOptions) {
     const normalColumns = []
     const rightFixedColumns = []
     const leftFixedColumns = []
-
-    let firstMarked = false
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
@@ -367,9 +367,6 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
-      } else if (!firstMarked) {
-        column.first = true
-        firstMarked = true
       }
 
       let key = column.key
@@ -388,7 +385,8 @@ export function useStore(options: StoreOptions) {
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
-      column.last = i === len - 1
+      column.first = false
+      column.last = false
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -400,6 +398,11 @@ export function useStore(options: StoreOptions) {
     }
 
     state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
+
+    if (state.columns.length) {
+      state.columns[0].first = true
+      state.columns.at(-1)!.last = true
+    }
 
     if (leftFixedColumns.length) {
       state.leftFixedColumns = leftFixedColumns
@@ -630,7 +633,7 @@ export function useStore(options: StoreOptions) {
     // 剩余空间有多时, 均分到弹性列
     // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
     if (flexColumnCount) {
-      flexUnitWidth = flexWidth / flexColumnCount
+      flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
     }
 
     for (let i = 0; i < flexColumnCount; ++i) {
