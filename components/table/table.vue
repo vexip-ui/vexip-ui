@@ -17,7 +17,6 @@
       :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
       :bar-class="nh.bem('bar', 'horizontal')"
       :bar-fade="props.barFade"
-      :delta-x="50"
       @scroll="handleXScroll"
       @x-enabled-change="xScrollEnabled = $event"
     >
@@ -28,7 +27,7 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :style="{ minWidth: `${totalWidth}px` }"
+        :style="{ minWidth: `${totalWidths.at(-1)}px` }"
         @scroll="handleBodyScroll"
         @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
@@ -249,7 +248,11 @@ export default defineComponent({
       disabledTree: false,
       rowIndent: '16px',
       noCascaded: false,
-      colResizable: false
+      colResizable: false,
+      cellSpan: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('table')
@@ -333,7 +336,8 @@ export default defineComponent({
       disabledTree: props.disabledTree,
       noCascaded: props.noCascaded,
       colResizable: props.colResizable,
-      expandRenderer: props.expandRenderer
+      expandRenderer: props.expandRenderer,
+      cellSpan: props.cellSpan
     })
 
     provide(TABLE_STORE, store)
@@ -423,27 +427,14 @@ export default defineComponent({
       setColumns,
       setDataKey,
       setData,
-      setPageSize,
-      setRowClass,
-      setHighlight,
-      setCurrentPage,
       setTableWidth,
       setBodyScroll,
       setRenderRows,
-      setGlobalRowHeight,
-      setRowDraggable,
+      setVirtual,
       setLocale,
-      setTooltipTheme,
-      setTooltipWidth,
-      setSingleSorter,
-      setSingleFilter,
       setDragging,
-      setCustomSorter,
-      setCustomFilter,
       setKeyConfig,
       setDisabledTree,
-      setNoCascaded,
-      setColumnResizable,
       clearSort,
       clearFilter,
       refreshRowIndex,
@@ -467,7 +458,6 @@ export default defineComponent({
       () => props.data,
       value => {
         setData(value)
-
         refreshPercentScroll()
       },
       { deep: true }
@@ -479,19 +469,15 @@ export default defineComponent({
         nextTick(computeBodyHeight)
       }
     )
-    watch(() => props.rowClass, setRowClass)
-    watch(() => props.highlight, setHighlight)
-    watch(() => props.currentPage, setCurrentPage)
-    watch(() => props.pageSize, setPageSize)
-    watch(() => props.rowHeight, setGlobalRowHeight)
-    watch(() => props.rowDraggable, setRowDraggable)
     watch(locale, setLocale, { deep: true })
-    watch(() => props.tooltipTheme, setTooltipTheme)
-    watch(() => props.tooltipWidth, setTooltipWidth)
-    watch(() => props.singleSorter, setSingleSorter)
-    watch(() => props.singleFilter, setSingleFilter)
-    watch(() => props.customSorter, setCustomSorter)
-    watch(() => props.customFilter, setCustomFilter)
+    watch(
+      () => props.virtual,
+      value => {
+        setVirtual(value)
+        setData(props.data)
+        refreshPercentScroll()
+      }
+    )
     watch(
       keyConfig,
       config => {
@@ -507,8 +493,45 @@ export default defineComponent({
         setData(props.data)
       }
     )
-    watch(() => props.noCascaded, setNoCascaded)
-    watch(() => props.colResizable, setColumnResizable)
+
+    const normalProps = [
+      'rowClass',
+      'rowStyle',
+      'rowAttrs',
+      'cellClass',
+      'cellStyle',
+      'cellAttrs',
+      'headClass',
+      'headStyle',
+      'headAttrs',
+      'highlight',
+      'currentPage',
+      'pageSize',
+      'rowHeight',
+      'rowMinHeight',
+      'rowDraggable',
+      'tooltipTheme',
+      'tooltipWidth',
+      'singleSorter',
+      'singleFilter',
+      'customSorter',
+      'customFilter',
+      'noCascaded',
+      'colResizable',
+      'expandRenderer',
+      'cellSpan'
+    ] as const
+
+    for (const prop of normalProps) {
+      const watchCallback =
+        mutations[
+          `set${prop.charAt(0).toLocaleUpperCase()}${prop.slice(1)}` as `set${Capitalize<
+            typeof prop
+          >}`
+        ]
+
+      watch(() => props[prop], watchCallback as any)
+    }
 
     function syncBarScroll() {
       scrollbar.value?.handleScroll(yScrollPercent.value)
@@ -869,8 +892,8 @@ export default defineComponent({
     }
 
     function refresh() {
+      nextTick(computeTableWidth)
       setTimeout(() => {
-        computeTableWidth()
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
@@ -938,9 +961,7 @@ export default defineComponent({
       useXScroll,
       barLength,
       bodyScrollHeight,
-      totalWidth: toRef(getters, 'totalWidth'),
-      leftFixedWidth: toRef(getters, 'leftFixedWidth'),
-      rightFixedWidth: toRef(getters, 'rightFixedWidth'),
+      totalWidths: toRef(getters, 'totalWidths'),
       totalHeight: toRef(state, 'totalHeight'),
 
       store,

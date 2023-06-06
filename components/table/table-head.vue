@@ -1,6 +1,6 @@
 <template>
   <div :class="nh.be('head')" role="rowgroup" :style="style">
-    <TableRow is-head :row="headRow">
+    <TableRow is-head :fixed="fixed" :row="headRow">
       <TableHeadCell
         v-for="(item, index) in currentColumns"
         :key="index"
@@ -49,10 +49,10 @@ export default defineComponent({
       return {
         minWidth: `${
           props.fixed === 'left'
-            ? getters.leftFixedWidth
+            ? getters.leftFixedWidths.at(-1)
             : props.fixed === 'right'
-            ? getters.rightFixedWidth
-            : getters.totalWidth
+            ? getters.rightFixedWidths.at(-1)
+            : getters.totalWidths.at(-1)
         }px`
       }
     })

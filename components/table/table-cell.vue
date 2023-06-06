@@ -220,7 +220,8 @@ export default defineComponent({
         {
           maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`
+          width: `${props.column.width ?? width}px`,
+          transform: `translateX(${getters.totalWidths[props.columnIndex]}px)`
         },
         props.column.style || '',
         customStyle

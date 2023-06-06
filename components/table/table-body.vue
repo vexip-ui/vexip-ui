@@ -6,7 +6,7 @@
         :key="row.index"
         :row="row"
         :index="row.index"
-        :is-fixed="!!fixed"
+        :fixed="fixed"
       >
         <TableCell
           v-for="(column, columnIndex) in currentColumns"
@@ -47,10 +47,7 @@ export default defineComponent({
   props: {
     fixed: {
       type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator: (value: string) => {
-        return value === 'left' || value === 'right'
-      }
+      default: null
     }
   },
   setup(props) {
@@ -68,10 +65,10 @@ export default defineComponent({
       return {
         minWidth: `${
           props.fixed === 'left'
-            ? getters.leftFixedWidth
+            ? getters.leftFixedWidths.at(-1)
             : props.fixed === 'right'
-            ? getters.rightFixedWidth
-            : getters.totalWidth
+            ? getters.rightFixedWidths.at(-1)
+            : getters.totalWidths.at(-1)
         }px`,
         minHeight: `${state.totalHeight}px`
       }

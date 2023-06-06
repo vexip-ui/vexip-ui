@@ -12,6 +12,8 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import type { ClassType, ConfigurableProps, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  Accessor,
+  CellSpanFn,
   ColumnRenderFn,
   Data,
   DropType,
@@ -89,6 +91,7 @@ export const tableProps = buildProps({
   rowIndent: [String, Number],
   noCascaded: booleanProp,
   colResizable: booleanProp,
+  cellSpan: Function as PropType<CellSpanFn>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
@@ -125,7 +128,7 @@ export type TableCProps = ConfigurableProps<TableProps, 'columns' | 'data' | 'cu
 export const tableColumnProps = buildProps({
   idKey: [Number, String],
   name: String,
-  accessor: Function as PropType<(row: any, index: number) => any>,
+  accessor: Function as PropType<Accessor>,
   fixed: {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: null
@@ -151,7 +154,8 @@ export const tableColumnProps = buildProps({
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
   metaData: Object as PropType<Data>,
-  textAlign: String as PropType<TableTextAlign>
+  textAlign: String as PropType<TableTextAlign>,
+  cellSpan: Function as PropType<CellSpanFn>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>

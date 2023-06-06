@@ -138,7 +138,7 @@
         </template>
       </Tooltip>
     </template>
-    <div v-if="!column.last" ref="resizer" :class="nh.be('resizer')"></div>
+    <div v-if="resizable && !column.last" ref="resizer" :class="nh.be('resizer')"></div>
   </div>
 </template>
 
@@ -149,7 +149,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, defineComponent, inject, onMounted, ref, toRef } from 'vue'
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
@@ -196,6 +196,7 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
+    const resizable = toRef(state, 'colResizable')
     const resizing = computed(() => state.colResizing)
 
     const wrapper = ref<HTMLElement>()
@@ -205,9 +206,11 @@ export default defineComponent({
     const { target: resizer } = useMoving({
       capture: false,
       onStart: (state, event) => {
+        if (!resizable.value || resizing.value) return false
+
         const table = tableAction.getTableElement()
 
-        if (resizing.value || !table || !wrapper.value) return false
+        if (!table || !wrapper.value) return false
 
         state.xStart = state.clientX - table.getBoundingClientRect().left
         currentWidth = wrapper.value.getBoundingClientRect().width
@@ -275,7 +278,8 @@ export default defineComponent({
         {
           maxWidth,
           flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`
+          width: `${props.column.width ?? width}px`,
+          transform: `translateX(${getters.totalWidths[props.index]}px)`
         },
         props.column.style || '',
         customStyle
@@ -320,18 +324,6 @@ export default defineComponent({
         getters.processedData.length === records.length &&
         !Object.values(getters.disableCheckRows).includes(false)
       )
-    })
-
-    onMounted(() => {
-      setTimeout(() => {
-        if (wrapper.value) {
-          const width = wrapper.value.getBoundingClientRect().width
-
-          state.colResizable
-            ? mutations.handleColumnResize(props.column.key, width)
-            : mutations.setColumnWidth(props.column.key, width)
-        }
-      }, 0)
     })
 
     function isSelection(column: unknown): column is TableSelectionColumn {
@@ -446,6 +438,7 @@ export default defineComponent({
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),
+      resizable,
 
       className,
       style,

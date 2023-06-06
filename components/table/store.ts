@@ -14,8 +14,10 @@ import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  CellSpanFn,
   ColumnWithKey,
   Data,
+  ExpandRenderFn,
   Key,
   ParsedFilterOptions,
   ParsedTableSorterOptions,
@@ -46,39 +48,13 @@ function defaultIndexLabel(index: number) {
 
 export function useStore(options: StoreOptions) {
   const state = reactive({
+    ...options,
     columns: [],
     data: [],
-    rowClass: '',
-    rowStyle: '',
-    rowAttrs: null!,
-    cellClass: '',
-    cellStyle: '',
-    cellAttrs: null!,
-    headClass: '',
-    headStyle: '',
-    headAttrs: null!,
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
-    highlight: false,
-    currentPage: 1,
-    pageSize: 0,
-    rowHeight: options.rowHeight,
     rowMinHeight: options.rowMinHeight || 36,
-    virtual: options.virtual,
     rowDraggable: !!options.rowDraggable,
-    locale: options.locale,
-    tooltipTheme: options.tooltipTheme,
-    tooltipWidth: options.tooltipWidth,
-    singleSorter: options.singleSorter,
-    singleFilter: options.singleFilter,
-    customSorter: options.customSorter,
-    customFilter: options.customFilter,
-    keyConfig: options.keyConfig,
-    disabledTree: options.disabledTree,
-    noCascaded: options.noCascaded,
-    colResizable: options.colResizable,
-    expandRenderer: options.expandRenderer,
-
     rowData: [],
     rightFixedColumns: [],
     leftFixedColumns: [],
@@ -103,22 +79,7 @@ export function useStore(options: StoreOptions) {
   }) as StoreState
 
   setColumns(options.columns)
-
   setData(options.data)
-  setCurrentPage(options.currentPage)
-  setPageSize(options.pageSize)
-
-  setRowClass(options.rowClass)
-  setRowStyle(options.rowStyle)
-  setRowAttrs(options.rowAttrs)
-  setCellClass(options.cellClass)
-  setCellStyle(options.cellStyle)
-  setCellAttrs(options.cellAttrs)
-  setHeadClass(options.headClass)
-  setHeadStyle(options.headStyle)
-  setHeadAttrs(options.headAttrs)
-  setHighlight(options.highlight)
-  setVirtual(options.virtual)
 
   const filteredData = computed(() => {
     return state.customFilter
@@ -203,9 +164,9 @@ export function useStore(options: StoreOptions) {
     return !!state.columns.find(column => 'type' in column && column.type === 'drag')
   })
   const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
-  const totalWidth = computed(() => getColumnsWidth())
-  const leftFixedWidth = computed(() => getColumnsWidth(state.leftFixedColumns))
-  const rightFixedWidth = computed(() => getColumnsWidth(state.rightFixedColumns))
+  const totalWidths = computed(() => getColumnsWidths())
+  const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
+  const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -224,9 +185,9 @@ export function useStore(options: StoreOptions) {
     usingTree,
     hasDragColumn,
     rowDragging,
-    totalWidth,
-    leftFixedWidth,
-    rightFixedWidth
+    totalWidths,
+    leftFixedWidths,
+    rightFixedWidths
   })
 
   const mutations = {
@@ -249,10 +210,10 @@ export function useStore(options: StoreOptions) {
     setHeadAttrs,
     setTableWidth,
     setColumnWidth,
-    setRowHeight,
+    fixRowHeight,
     setBorderHeight,
-    setGlobalRowHeight,
-    setMinRowHeight,
+    setRowHeight,
+    setRowMinHeight,
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
@@ -268,11 +229,13 @@ export function useStore(options: StoreOptions) {
     setKeyConfig,
     setDisabledTree,
     setNoCascaded,
-    setColumnResizable,
+    setColResizable,
     setCustomSorter,
     setCustomFilter,
     setColumnResizing,
     setResizeLeft,
+    setExpandRenderer,
+    setCellSpan,
 
     handleSort,
     clearSort,
@@ -292,8 +255,9 @@ export function useStore(options: StoreOptions) {
     handleColumnResize
   }
 
-  function getColumnsWidth(columns = state.columns) {
+  function getColumnsWidths(columns = state.columns) {
     const widths = state.widths
+    const combinedWidths: number[] = [0]
 
     let width = 0
 
@@ -303,9 +267,10 @@ export function useStore(options: StoreOptions) {
       const columnWidth = widths.get(key) || 0
 
       width += columnWidth
+      combinedWidths.push(width)
     }
 
-    return width
+    return combinedWidths
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -318,8 +283,6 @@ export function useStore(options: StoreOptions) {
     const normalColumns = []
     const rightFixedColumns = []
     const leftFixedColumns = []
-
-    let firstMarked = false
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
@@ -367,9 +330,6 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
-      } else if (!firstMarked) {
-        column.first = true
-        firstMarked = true
       }
 
       let key = column.key
@@ -388,7 +348,8 @@ export function useStore(options: StoreOptions) {
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
-      column.last = i === len - 1
+      column.first = false
+      column.last = false
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -400,6 +361,11 @@ export function useStore(options: StoreOptions) {
     }
 
     state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
+
+    if (state.columns.length) {
+      state.columns[0].first = true
+      state.columns.at(-1)!.last = true
+    }
 
     if (leftFixedColumns.length) {
       state.leftFixedColumns = leftFixedColumns
@@ -630,7 +596,7 @@ export function useStore(options: StoreOptions) {
     // 剩余空间有多时, 均分到弹性列
     // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
     if (flexColumnCount) {
-      flexUnitWidth = flexWidth / flexColumnCount
+      flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
     }
 
     for (let i = 0; i < flexColumnCount; ++i) {
@@ -648,7 +614,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setRowHeight(key: Key, height: number) {
+  function fixRowHeight(key: Key, height: number) {
     const { rowMap } = state
     const row = rowMap.get(key)
 
@@ -663,11 +629,11 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setGlobalRowHeight(height: number) {
+  function setRowHeight(height: number) {
     state.rowHeight = height
   }
 
-  function setMinRowHeight(height: number) {
+  function setRowMinHeight(height: number) {
     state.rowMinHeight = height
   }
 
@@ -735,7 +701,7 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
-  function setColumnResizable(resizable: boolean) {
+  function setColResizable(resizable: boolean) {
     state.colResizable = !!resizable
   }
 
@@ -753,6 +719,14 @@ export function useStore(options: StoreOptions) {
 
   function setResizeLeft(left: number) {
     state.resizeLeft = left
+  }
+
+  function setExpandRenderer(renderer: ExpandRenderFn | null) {
+    state.expandRenderer = renderer
+  }
+
+  function setCellSpan(spanFn: CellSpanFn | null) {
+    state.cellSpan = spanFn
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

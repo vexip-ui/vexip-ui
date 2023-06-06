@@ -113,15 +113,16 @@ $table: map.merge(
     flex: 0 0 auto;
     flex-direction: column;
     align-items: stretch;
+    width: 100%;
 
-    &::after {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 0;
-      content: '';
-      border-bottom: $border-a get-css-var('table-row-b-color-bottom');
-    }
+    // &::after {
+    //   position: absolute;
+    //   bottom: 0;
+    //   width: 100%;
+    //   height: 0;
+    //   content: '';
+    //   border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+    // }
   }
 
   &__head &__group {
@@ -130,24 +131,17 @@ $table: map.merge(
     }
   }
 
-  &__body &__group {
-    &:last-child {
-      margin-bottom: -1px;
-
-      &::after {
-        border-bottom-color: transparent;
-      }
-    }
-  }
-
   &--virtual &__group {
     flex: 0 0 auto;
   }
 
   &__row {
+    position: relative;
     display: inline-flex;
     flex: 0 0 auto;
-    padding-bottom: 1px;
+    width: 100%;
+
+    // padding-bottom: 1px;
     background-color: get-css-var('table-row-bg-color');
     transition: all get-css-var('transition-base');
 
@@ -166,14 +160,17 @@ $table: map.merge(
 
   &__cell,
   &__head-cell {
-    position: relative;
+    position: absolute;
+    left: 0;
     display: flex;
     flex: 1 0 0;
     align-items: center;
+    height: 100%;
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
     border-right: $border-a transparent;
+    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
 
     &:last-child {
       border-right-width: 0;
@@ -195,13 +192,34 @@ $table: map.merge(
     }
   }
 
+  &__collapse {
+    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+  }
+
   $head: #{&}__head;
   $body: #{&}__body-wrapper;
   $row: #{&}__row;
   $group: #{&}__group;
   $cell: #{&}__cell;
   $head-cell: #{&}__head-cell;
+  $collapse: #{&}__collapse;
   $fixed-active: #{&}__fixed--active;
+
+  &__body &__group {
+    &:last-child {
+      margin-bottom: -1px;
+
+      // &::after {
+      //   border-bottom-color: transparent;
+      // }
+
+      #{$cell},
+      #{$head-cell},
+      #{$collapse} {
+        border-bottom-color: transparent;
+      }
+    }
+  }
 
   &--transparent {
     #{$head},
