@@ -14,8 +14,10 @@ import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  CellSpanFn,
   ColumnWithKey,
   Data,
+  ExpandRenderFn,
   Key,
   ParsedFilterOptions,
   ParsedTableSorterOptions,
@@ -46,39 +48,13 @@ function defaultIndexLabel(index: number) {
 
 export function useStore(options: StoreOptions) {
   const state = reactive({
+    ...options,
     columns: [],
     data: [],
-    rowClass: '',
-    rowStyle: '',
-    rowAttrs: null!,
-    cellClass: '',
-    cellStyle: '',
-    cellAttrs: null!,
-    headClass: '',
-    headStyle: '',
-    headAttrs: null!,
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
-    highlight: false,
-    currentPage: 1,
-    pageSize: 0,
-    rowHeight: options.rowHeight,
     rowMinHeight: options.rowMinHeight || 36,
-    virtual: options.virtual,
     rowDraggable: !!options.rowDraggable,
-    locale: options.locale,
-    tooltipTheme: options.tooltipTheme,
-    tooltipWidth: options.tooltipWidth,
-    singleSorter: options.singleSorter,
-    singleFilter: options.singleFilter,
-    customSorter: options.customSorter,
-    customFilter: options.customFilter,
-    keyConfig: options.keyConfig,
-    disabledTree: options.disabledTree,
-    noCascaded: options.noCascaded,
-    colResizable: options.colResizable,
-    expandRenderer: options.expandRenderer,
-
     rowData: [],
     rightFixedColumns: [],
     leftFixedColumns: [],
@@ -103,22 +79,7 @@ export function useStore(options: StoreOptions) {
   }) as StoreState
 
   setColumns(options.columns)
-
   setData(options.data)
-  setCurrentPage(options.currentPage)
-  setPageSize(options.pageSize)
-
-  setRowClass(options.rowClass)
-  setRowStyle(options.rowStyle)
-  setRowAttrs(options.rowAttrs)
-  setCellClass(options.cellClass)
-  setCellStyle(options.cellStyle)
-  setCellAttrs(options.cellAttrs)
-  setHeadClass(options.headClass)
-  setHeadStyle(options.headStyle)
-  setHeadAttrs(options.headAttrs)
-  setHighlight(options.highlight)
-  setVirtual(options.virtual)
 
   const filteredData = computed(() => {
     return state.customFilter
@@ -249,10 +210,10 @@ export function useStore(options: StoreOptions) {
     setHeadAttrs,
     setTableWidth,
     setColumnWidth,
-    setRowHeight,
+    fixRowHeight,
     setBorderHeight,
-    setGlobalRowHeight,
-    setMinRowHeight,
+    setRowHeight,
+    setRowMinHeight,
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
@@ -268,11 +229,13 @@ export function useStore(options: StoreOptions) {
     setKeyConfig,
     setDisabledTree,
     setNoCascaded,
-    setColumnResizable,
+    setColResizable,
     setCustomSorter,
     setCustomFilter,
     setColumnResizing,
     setResizeLeft,
+    setExpandRenderer,
+    setCellSpan,
 
     handleSort,
     clearSort,
@@ -651,7 +614,7 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setRowHeight(key: Key, height: number) {
+  function fixRowHeight(key: Key, height: number) {
     const { rowMap } = state
     const row = rowMap.get(key)
 
@@ -666,11 +629,11 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setGlobalRowHeight(height: number) {
+  function setRowHeight(height: number) {
     state.rowHeight = height
   }
 
-  function setMinRowHeight(height: number) {
+  function setRowMinHeight(height: number) {
     state.rowMinHeight = height
   }
 
@@ -738,7 +701,7 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
-  function setColumnResizable(resizable: boolean) {
+  function setColResizable(resizable: boolean) {
     state.colResizable = !!resizable
   }
 
@@ -756,6 +719,14 @@ export function useStore(options: StoreOptions) {
 
   function setResizeLeft(left: number) {
     state.resizeLeft = left
+  }
+
+  function setExpandRenderer(renderer: ExpandRenderFn | null) {
+    state.expandRenderer = renderer
+  }
+
+  function setCellSpan(spanFn: CellSpanFn | null) {
+    state.cellSpan = spanFn
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

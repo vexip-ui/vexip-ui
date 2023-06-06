@@ -138,7 +138,7 @@
         </template>
       </Tooltip>
     </template>
-    <div v-if="!column.last" ref="resizer" :class="nh.be('resizer')"></div>
+    <div v-if="resizable && !column.last" ref="resizer" :class="nh.be('resizer')"></div>
   </div>
 </template>
 
@@ -196,6 +196,7 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
+    const resizable = toRef(state, 'colResizable')
     const resizing = computed(() => state.colResizing)
 
     const wrapper = ref<HTMLElement>()
@@ -205,9 +206,11 @@ export default defineComponent({
     const { target: resizer } = useMoving({
       capture: false,
       onStart: (state, event) => {
+        if (!resizable.value || resizing.value) return false
+
         const table = tableAction.getTableElement()
 
-        if (resizing.value || !table || !wrapper.value) return false
+        if (!table || !wrapper.value) return false
 
         state.xStart = state.clientX - table.getBoundingClientRect().left
         currentWidth = wrapper.value.getBoundingClientRect().width
@@ -435,6 +438,7 @@ export default defineComponent({
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),
+      resizable,
 
       className,
       style,

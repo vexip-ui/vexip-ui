@@ -104,6 +104,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   accessor?: Accessor<D, Val>,
+  cellSpan?: CellSpanFn<D, Val>,
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn
@@ -163,6 +164,14 @@ export type ColumnRenderFn<D = Data, Val extends string | number = string | numb
   columnIndex: number
 }) => any
 export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+
+export type CellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
+  rowIndex: number,
+  column: TableBaseColumn<D, Val>,
+  columnIndex: number
+}) => { colSpan?: number, rowSpan?: number } | undefined | null
+
 export type FilterRenderFn = (data: {
   column: TableColumnOptions,
   index: number,
@@ -246,7 +255,8 @@ export interface StoreOptions {
   disabledTree: boolean,
   noCascaded: boolean,
   colResizable: boolean,
-  expandRenderer: ExpandRenderFn | null
+  expandRenderer: ExpandRenderFn | null,
+  cellSpan: CellSpanFn | null
 }
 
 export interface StoreState extends StoreOptions {

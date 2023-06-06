@@ -418,6 +418,7 @@ interface TableColResizePayload extends TableHeadPayload {
 | empty-text      | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -        |
 | single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -        |
 | single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -        |
+| virtual         | `boolean`                                                     | 是否开启虚拟滚动                                             | `false`        | -        |
 | locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0`  |
 | custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4`  |
 | custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4`  |

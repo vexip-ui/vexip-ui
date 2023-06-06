@@ -243,7 +243,7 @@ export default defineComponent({
 
     function computeRowHeight() {
       if (state.rowHeight) {
-        mutations.setRowHeight(rowKey.value, state.rowHeight)
+        mutations.fixRowHeight(rowKey.value, state.rowHeight)
 
         nextTick(() => {
           if (rowElement.value) {
@@ -255,7 +255,7 @@ export default defineComponent({
         nextTick(() => {
           if (!props.fixed) {
             if (rowElement.value) {
-              mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
+              mutations.fixRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
           } else {
             setTimeout(() => {
