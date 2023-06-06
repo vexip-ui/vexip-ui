@@ -12,6 +12,11 @@ export type TableTextAlign = 'left' | 'center' | 'right'
 export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
 export type MoveEventType = 'Start' | 'Move' | 'End'
 
+export interface CellSpanResult {
+  colSpan?: number,
+  rowSpan?: number
+}
+
 export const enum DropType {
   BEFORE = 'before',
   INNER = 'inner',
@@ -31,13 +36,16 @@ export type Accessor<D = Data, Val extends string | number = string | number> = 
   data: D,
   index: number
 ) => Val
-export type RenderFn = (data: Data) => any
 export type ExpandRenderFn<D = Data> = (data: {
   leftFixed: number,
   rightFixed: number,
   row: D,
   rowIndex: number
 }) => any
+export type ColumnCellSpanFn<D = Data> = (data: {
+  row: D,
+  index: number
+}) => CellSpanResult | undefined
 
 export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
@@ -103,8 +111,9 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   order?: number,
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
+  headSpan?: number,
   accessor?: Accessor<D, Val>,
-  cellSpan?: CellSpanFn<D, Val>,
+  cellSpan?: ColumnCellSpanFn<D>,
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn
@@ -154,7 +163,9 @@ export type ColumnWithKey<
   /** @internal */
   first?: boolean,
   /** @internal */
-  last?: boolean
+  last?: boolean,
+  /** @internal */
+  master?: TableColumnOptions<D, Val>
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -163,21 +174,23 @@ export type ColumnRenderFn<D = Data, Val extends string | number = string | numb
   column: TableBaseColumn<D, Val>,
   columnIndex: number
 }) => any
-export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
-
-export type CellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
-  row: D,
-  rowIndex: number,
-  column: TableBaseColumn<D, Val>,
-  columnIndex: number
-}) => { colSpan?: number, rowSpan?: number } | undefined | null
-
-export type FilterRenderFn = (data: {
-  column: TableColumnOptions,
+export type HeadRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number
+}) => any
+export type FilterRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
   index: number,
-  filter: Required<TableFilterOptions>,
+  filter: Required<TableFilterOptions<D, Val>>,
   handleFilter: (active: any) => void
 }) => any
+
+export type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
+  rowIndex: number,
+  column: TableColumnOptions<D, Val>,
+  columnIndex: number
+}) => CellSpanResult | undefined
 
 export type TableCellPropFn<P = any> = (
   data: Data,
@@ -256,7 +269,7 @@ export interface StoreOptions {
   noCascaded: boolean,
   colResizable: boolean,
   expandRenderer: ExpandRenderFn | null,
-  cellSpan: CellSpanFn | null
+  cellSpan: TableCellSpanFn | null
 }
 
 export interface StoreState extends StoreOptions {
@@ -282,7 +295,9 @@ export interface StoreState extends StoreOptions {
   virtualData: TableRowState[],
   totalHeight: number,
   colResizing: boolean,
-  resizeLeft: number
+  resizeLeft: number,
+  cellSpanMap: Map<string, Required<CellSpanResult>>,
+  collapseMap: Map<string, Set<string>>
 }
 
 export interface TableRowInstance {

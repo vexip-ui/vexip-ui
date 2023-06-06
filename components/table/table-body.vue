@@ -15,6 +15,7 @@
           :row-index="row.index"
           :column="column"
           :column-index="columnIndex"
+          :fixed="fixed"
         ></TableCell>
       </TableRow>
     </div>

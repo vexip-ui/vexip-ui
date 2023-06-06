@@ -148,10 +148,10 @@ export default defineComponent({
       }
 
       return [
+        customStyle,
         {
           minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
-        },
-        customStyle
+        }
       ]
     })
     const attrs = computed(() => {

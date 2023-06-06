@@ -261,8 +261,15 @@ $table: map.merge(
   &--col-resizable {
     #{$cell},
     #{$head-cell} {
-      will-change: width, max-width;
-      transition: width get-css-var('transition-base'), max-width get-css-var('transition-base');
+      will-change: width, transform;
+      transition: width get-css-var('transition-base'), get-css-var('transition-transform');
+    }
+  }
+
+  &--locked {
+    #{$cell},
+    #{$head-cell} {
+      transition-duration: 0ms;
     }
   }
 

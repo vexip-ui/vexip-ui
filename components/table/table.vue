@@ -267,6 +267,7 @@ export default defineComponent({
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
     const hasDragColumn = ref(false)
+    const noTransition = ref(true)
 
     const wrapper = ref<HTMLElement>()
     const xScroll = ref<NativeScrollExposed>()
@@ -375,7 +376,8 @@ export default defineComponent({
         [nh.bm('transparent')]: props.transparent,
         [nh.bm('virtual')]: props.virtual,
         [nh.bm('col-resizable')]: props.colResizable,
-        [nh.bm('col-resizing')]: state.colResizing
+        [nh.bm('col-resizing')]: state.colResizing,
+        [nh.bm('locked')]: noTransition.value
       }
     })
     const style = computed(() => {
@@ -892,11 +894,13 @@ export default defineComponent({
     }
 
     function refresh() {
+      noTransition.value = true
       nextTick(computeTableWidth)
       setTimeout(() => {
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
+        noTransition.value = false
       }, 0)
     }
 

@@ -1,8 +1,9 @@
 <template>
   <div
-    v-if="isTableTypeColumn(column)"
     :class="className"
     role="cell"
+    :colspan="cellSpan.colSpan !== 1 ? cellSpan.colSpan : undefined"
+    :rowspan="cellSpan.rowSpan !== 1 ? cellSpan.rowSpan : undefined"
     :style="style"
     v-bind="attrs"
     @mouseenter="handleMouseEnter"
@@ -11,101 +12,92 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
-    <Checkbox
-      v-if="isSelectionColumn(column)"
-      inherit
-      :class="nh.be('selection')"
-      :checked="row.checked"
-      :size="column.checkboxSize || 'default'"
-      :disabled="disableCheckRows.has(row.key)"
-      :partial="row.partial"
-      :control="!!row.children?.length"
-      @click.prevent.stop="handleCheckRow(row, $event)"
-    ></Checkbox>
-    <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
-      {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
-    </span>
-    <template v-else-if="isExpandColumn(column)">
-      <button
-        v-if="!disableExpandRows.has(row.key)"
-        type="button"
-        :class="{
-          [nh.be('expand')]: true,
-          [nh.bem('expand', 'active')]: row.expanded
-        }"
-        @click.stop="handleExpandRow(row, $event)"
-      >
-        <Icon v-bind="icons.angleRight"></Icon>
-      </button>
-    </template>
-    <template v-else-if="isDragColumn(column)">
-      <button
-        v-if="!disableDragRows.has(row.key)"
-        type="button"
-        :class="nh.be('dragger')"
-        @mousedown="handleDragRow(row)"
-      >
-        <Icon v-bind="icons.dragger"></Icon>
-      </button>
-    </template>
-  </div>
-  <div
-    v-else
-    :class="className"
-    role="cell"
-    :style="style"
-    v-bind="attrs"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-    @click="handleClick"
-    @dblclick="handleDblclick"
-    @contextmenu="handleContextmenu"
-  >
-    <template v-if="usingTree && column.first">
-      <span
-        :class="nh.be('pad')"
-        :style="{
-          [nh.cv('row-depth')]: row.depth
-        }"
-      ></span>
-      <button
-        type="button"
-        :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
-        @click="handleExpandTree(row)"
-      >
-        <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
-        <Icon v-else v-bind="icons.plus"></Icon>
-      </button>
-    </template>
-    <Ellipsis
-      v-if="!column.noEllipsis"
-      inherit
-      :tooltip-theme="tooltipTheme"
-      :tip-max-width="tooltipWidth"
-    >
-      <Renderer
-        v-if="isFunction(column.renderer)"
-        :renderer="column.renderer"
-        :data="{ row: row.data, rowIndex, column, columnIndex }"
-      ></Renderer>
-      <template v-else-if="isFunction(column.accessor)">
-        {{ column.accessor(row.data, rowIndex) }}
+    <template v-if="isTableTypeColumn(column)">
+      <Checkbox
+        v-if="isSelectionColumn(column)"
+        inherit
+        :class="nh.be('selection')"
+        :checked="row.checked"
+        :size="column.checkboxSize || 'default'"
+        :disabled="disableCheckRows.has(row.key)"
+        :partial="row.partial"
+        :control="!!row.children?.length"
+        @click.prevent.stop="handleCheckRow(row, $event)"
+      ></Checkbox>
+      <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
+        {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
+      </span>
+      <template v-else-if="isExpandColumn(column)">
+        <button
+          v-if="!disableExpandRows.has(row.key)"
+          type="button"
+          :class="{
+            [nh.be('expand')]: true,
+            [nh.bem('expand', 'active')]: row.expanded
+          }"
+          @click.stop="handleExpandRow(row, $event)"
+        >
+          <Icon v-bind="icons.angleRight"></Icon>
+        </button>
       </template>
-      <template v-else>
-        {{ row.data[column.key] }}
+      <template v-else-if="isDragColumn(column)">
+        <button
+          v-if="!disableDragRows.has(row.key)"
+          type="button"
+          :class="nh.be('dragger')"
+          @mousedown="handleDragRow(row)"
+        >
+          <Icon v-bind="icons.dragger"></Icon>
+        </button>
       </template>
-    </Ellipsis>
+    </template>
     <template v-else>
-      <Renderer
-        v-if="isFunction(column.renderer)"
-        :renderer="column.renderer"
-        :data="{ row: row.data, rowIndex, column, columnIndex }"
-      ></Renderer>
-      <template v-else-if="isFunction(column.accessor)">
-        {{ column.accessor(row.data, rowIndex) }}
+      <template v-if="usingTree && column.first">
+        <span
+          :class="nh.be('pad')"
+          :style="{
+            [nh.cv('row-depth')]: row.depth
+          }"
+        ></span>
+        <button
+          type="button"
+          :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
+          @click="handleExpandTree(row)"
+        >
+          <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
+          <Icon v-else v-bind="icons.plus"></Icon>
+        </button>
       </template>
+      <Ellipsis
+        v-if="!column.noEllipsis"
+        inherit
+        :tooltip-theme="tooltipTheme"
+        :tip-max-width="tooltipWidth"
+      >
+        <Renderer
+          v-if="isFunction(column.renderer)"
+          :renderer="column.renderer"
+          :data="{ row: row.data, rowIndex, column, columnIndex }"
+        ></Renderer>
+        <template v-else-if="isFunction(column.accessor)">
+          {{ column.accessor(row.data, rowIndex) }}
+        </template>
+        <template v-else>
+          {{ row.data[column.key] }}
+        </template>
+      </Ellipsis>
       <template v-else>
-        {{ row.data[column.key] }}
+        <Renderer
+          v-if="isFunction(column.renderer)"
+          :renderer="column.renderer"
+          :data="{ row: row.data, rowIndex, column, columnIndex }"
+        ></Renderer>
+        <template v-else-if="isFunction(column.accessor)">
+          {{ column.accessor(row.data, rowIndex) }}
+        </template>
+        <template v-else>
+          {{ row.data[column.key] }}
+        </template>
       </template>
     </template>
   </div>
@@ -125,6 +117,7 @@ import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
+  CellSpanResult,
   ColumnWithKey,
   TableDragColumn,
   TableExpandColumn,
@@ -158,6 +151,10 @@ export default defineComponent({
     columnIndex: {
       type: Number,
       default: -1
+    },
+    fixed: {
+      type: String as PropType<'left' | 'right'>,
+      default: null
     }
   },
   setup(props) {
@@ -197,11 +194,50 @@ export default defineComponent({
         customClass
       ]
     })
+    const cellSpan = computed(() => {
+      if (state.collapseMap.has(`${props.rowIndex},${props.columnIndex}`)) {
+        return { colSpan: 0, rowSpan: 0 }
+      }
+
+      let result: CellSpanResult | undefined
+
+      if (typeof props.column.cellSpan === 'function') {
+        result = props.column.cellSpan({ row: props.row, index: props.rowIndex })
+      } else if (typeof state.cellSpan === 'function') {
+        result = state.cellSpan({
+          row: props.row,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
+      }
+
+      const { colSpan, rowSpan } = result || { colSpan: 1, rowSpan: 1 }
+      const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
+
+      span.colSpan = Math.max(span.colSpan, 0)
+      span.rowSpan = Math.max(span.rowSpan, 0)
+
+      mutations.updateCellSpan(props.rowIndex, props.columnIndex, span)
+
+      return span
+    })
     const style = computed(() => {
-      const width = state.widths.get(props.column.key) || 0
-      const maxWidth = state.resized.has(props.column.key)
-        ? `${width}px`
-        : `${props.column.width}px`
+      const totalWidths =
+        props.fixed === 'left'
+          ? getters.leftFixedWidths
+          : props.fixed === 'right'
+            ? getters.rightFixedWidths
+            : getters.totalWidths
+      const { colSpan, rowSpan } = cellSpan.value
+      const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+
+      let height: number | undefined
+
+      if (rowSpan > 1 && state.heightBITree) {
+        height =
+          state.heightBITree.sum(props.rowIndex + rowSpan) - state.heightBITree.sum(props.rowIndex)
+      }
 
       let customStyle
 
@@ -217,14 +253,18 @@ export default defineComponent({
       }
 
       return [
-        {
-          maxWidth,
-          flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`,
-          transform: `translateX(${getters.totalWidths[props.columnIndex]}px)`
-        },
         props.column.style || '',
-        customStyle
+        customStyle,
+        {
+          display: !colSpan || !rowSpan ? 'none' : undefined,
+          width: `${width}px`,
+          height: height ? `${height}px` : undefined,
+          borderRightWidth:
+            colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1 ? 0 : undefined,
+          borderBottomWidth:
+            rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
+          transform: `translateX(${getters.totalWidths[props.columnIndex]}px)`
+        }
       ]
     })
     const attrs = computed(() => {
@@ -339,6 +379,7 @@ export default defineComponent({
       icons: useIcons(),
 
       className,
+      cellSpan,
       style,
       attrs,
       tooltipTheme: toRef(state, 'tooltipTheme'),

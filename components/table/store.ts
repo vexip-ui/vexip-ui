@@ -7,6 +7,7 @@ import {
   isNull,
   sortByProps,
   toFalse,
+  toFixed,
   toNumber
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
@@ -14,7 +15,7 @@ import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  CellSpanFn,
+  CellSpanResult,
   ColumnWithKey,
   Data,
   ExpandRenderFn,
@@ -24,6 +25,7 @@ import type {
   StoreOptions,
   StoreState,
   TableCellPropFn,
+  TableCellSpanFn,
   TableColumnOptions,
   TableDragColumn,
   TableExpandColumn,
@@ -75,7 +77,9 @@ export function useStore(options: StoreOptions) {
     virtualData: [],
     totalHeight: options.rowMinHeight * options.data.length,
     colResizing: false,
-    resizeLeft: 0
+    resizeLeft: 0,
+    cellSpanMap: new Map(),
+    collapseMap: new Map()
   }) as StoreState
 
   setColumns(options.columns)
@@ -209,7 +213,6 @@ export function useStore(options: StoreOptions) {
     setHeadStyle,
     setHeadAttrs,
     setTableWidth,
-    setColumnWidth,
     fixRowHeight,
     setBorderHeight,
     setRowHeight,
@@ -252,7 +255,8 @@ export function useStore(options: StoreOptions) {
     handleDrag,
     handleTreeExpand,
     getParentRow,
-    handleColumnResize
+    handleColumnResize,
+    updateCellSpan
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -608,12 +612,6 @@ export function useStore(options: StoreOptions) {
     state.width = width
   }
 
-  function setColumnWidth(key: Key, width: number) {
-    if (state.widths.has(key)) {
-      state.widths.set(key, width)
-    }
-  }
-
   function fixRowHeight(key: Key, height: number) {
     const { rowMap } = state
     const row = rowMap.get(key)
@@ -725,7 +723,7 @@ export function useStore(options: StoreOptions) {
     state.expandRenderer = renderer
   }
 
-  function setCellSpan(spanFn: CellSpanFn | null) {
+  function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
   }
 
@@ -1196,9 +1194,98 @@ export function useStore(options: StoreOptions) {
     return null
   }
 
-  function handleColumnResize(key: Key, newWidth: number) {
-    state.resized.add(key)
-    setColumnWidth(key, newWidth)
+  let lastColumnWidth: number | undefined
+
+  function handleColumnResize(keys: Key[], newWidth: number) {
+    const { resized, widths, columns, width: tableWidth } = state
+
+    if (!columns.length || !keys.length) return
+
+    const deltaWidth = newWidth / keys.length
+    const lastKey = columns.at(-1)!.key
+
+    for (const key of keys) {
+      resized.add(key)
+      widths.set(key, deltaWidth)
+    }
+
+    let totalWidth = 0
+
+    for (const width of widths.values()) {
+      totalWidth += width
+    }
+
+    totalWidth = toFixed(totalWidth, 1)
+
+    if (
+      totalWidth - widths.get(lastKey)! <
+      tableWidth - (lastColumnWidth ?? widths.get(lastKey)!)
+    ) {
+      if (!lastColumnWidth) {
+        lastColumnWidth = widths.get(lastKey)
+      }
+
+      widths.set(lastKey, widths.get(lastKey)! + tableWidth - totalWidth)
+    } else if (lastColumnWidth) {
+      widths.set(lastKey, lastColumnWidth!)
+      lastColumnWidth = undefined
+    }
+  }
+
+  function updateCellSpan(rowIndex: number, columnIndex: number, span: Required<CellSpanResult>) {
+    const { colSpan, rowSpan } = span
+    const { cellSpanMap, collapseMap } = state
+
+    const masterKey = `${rowIndex},${columnIndex}`
+    const prevSpan = cellSpanMap.get(masterKey)
+
+    let colLen = colSpan
+    let rowLen = rowSpan
+    let prevColSpan = 0
+    let prevRowSpan = 0
+
+    if (prevSpan) {
+      prevColSpan = prevSpan.colSpan
+      prevRowSpan = prevSpan.rowSpan
+      colLen = Math.max(colLen, prevColSpan)
+      rowLen = Math.max(rowLen, prevRowSpan)
+    }
+
+    for (let i = 0; i < colLen; ++i) {
+      for (let j = 0; j < rowLen; ++j) {
+        if ((!i && !j) || (i < colSpan && i < prevColSpan && j < rowSpan && j < prevRowSpan)) { continue }
+
+        const key = `${rowIndex + j},${columnIndex + i}`
+        let masterSet = collapseMap.get(key)
+
+        if (i < prevColSpan && j < prevRowSpan) {
+          if (masterSet) {
+            masterSet.delete(masterKey)
+
+            if (!masterSet.size) {
+              collapseMap.delete(key)
+            }
+          }
+        }
+
+        if (i < colSpan && j < rowSpan) {
+          if (!masterSet) {
+            masterSet = new Set()
+            collapseMap.set(key, masterSet)
+          }
+
+          masterSet.add(masterKey)
+        }
+      }
+    }
+
+    collapseMap.delete(masterKey)
+
+    if (span.colSpan === 1 && span.rowSpan === 1) {
+      cellSpanMap.delete(masterKey)
+    } else {
+      cellSpanMap.set(masterKey, span)
+    }
   }
 
   type Store = Readonly<{

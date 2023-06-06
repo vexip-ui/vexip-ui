@@ -1,32 +1,15 @@
 <template>
-  <Table :columns="columns" :data="data">
-    <TableColumn name="First Name" id-key="firstName" :order="0">
-      <template #default="{ row }">
-        <Icon style="margin-right: 8px">
-          <User></User>
-        </Icon>
-        {{ row.firstName }}
-      </template>
-    </TableColumn>
-    <TableColumn
-      name="Job"
-      id-key="job"
-      :accessor="jobAccessor"
-      :order="3"
-    ></TableColumn>
-    <TableColumn
-      name="Age"
-      id-key="age"
-      :order="2"
-      :renderer="renderAge"
-    ></TableColumn>
+  <Table use-y-bar :data="data" :width="1000">
+    <TableColumn name="First Name" id-key="firstName" :cell-span="fistNameCellSpan"></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName"></TableColumn>
+    <TableColumn name="Job" id-key="job" :cell-span="jobCellSpan"></TableColumn>
+    <TableColumn name="Age" id-key="age"></TableColumn>
+    <TableColumn name="Email" id-key="email"></TableColumn>
   </Table>
 </template>
 
 <script setup lang="ts">
-import { h, ref } from 'vue'
-
-import { User } from '@vexip-ui/icons'
+import { ref } from 'vue'
 
 interface RowData {
   id: string,
@@ -37,13 +20,6 @@ interface RowData {
   age: string
 }
 
-const columns = ref([
-  {
-    name: 'Last Name',
-    key: 'lastName',
-    order: 1
-  }
-])
 const data = ref([
   {
     id: '1',
@@ -87,22 +63,15 @@ const data = ref([
   }
 ])
 
-function jobAccessor(row: RowData) {
-  return row.job
+function fistNameCellSpan({ index }: { index: number }) {
+  if (index === 3) {
+    return { colSpan: 2 }
+  }
 }
 
-function handleAgeClick() {
-  console.info('clicked')
-}
-
-function renderAge({ row }: { row: RowData }) {
-  return h(
-    'span',
-    {
-      class: 'my-age',
-      onClick: handleAgeClick
-    },
-    ['age: ', row.age]
-  )
+function jobCellSpan({ index }: { index: number }) {
+  if (index === 1) {
+    return { rowSpan: 2 }
+  }
 }
 </script>
