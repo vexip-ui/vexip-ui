@@ -9,19 +9,24 @@
     :data="data"
     :width="1000"
     :row-height="40"
-    :height="120"
+    :height="140"
   >
-    <TableColumn name="First Name" id-key="firstName"></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName"></TableColumn>
-    <TableColumn name="Job" id-key="job"></TableColumn>
-    <TableColumn name="Age" id-key="age"></TableColumn>
+    <TableColumn
+      name="First Name"
+      id-key="firstName"
+      :width="300"
+      fixed
+    ></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName" :width="300"></TableColumn>
+    <TableColumn name="Job" id-key="job" :width="300"></TableColumn>
+    <TableColumn name="Age" id-key="age" :width="300"></TableColumn>
   </Table>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const soureData = [
+const sourceData = [
   {
     id: '1',
     job: 'Cashier',
@@ -64,9 +69,9 @@ const soureData = [
   }
 ]
 
-const data = ref(soureData.slice(-2))
+const data = ref(sourceData.slice(-2))
 
 function toggleData() {
-  data.value = data.value.length === 3 ? soureData : data.value.slice(-2)
+  data.value = data.value.length !== 3 ? sourceData.slice(0, -2) : sourceData.slice(-2)
 }
 </script>

@@ -101,7 +101,13 @@ export function useStore(options: StoreOptions) {
       : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
   })
   const processedData = computed(() => {
-    return pageData(state.currentPage, state.pageSize, sortedData.value)
+    const data = pageData(state.currentPage, state.pageSize, sortedData.value)
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      data[i].listIndex = i
+    }
+
+    return data
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
@@ -176,6 +182,11 @@ export function useStore(options: StoreOptions) {
   const totalWidths = computed(() => getColumnsWidths())
   const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
   const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
+  const expandColumn = computed(() => {
+    return state.columns.find(column => (column as TableExpandColumn).type === 'expand') as
+      | TableExpandColumn
+      | undefined
+  })
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -196,7 +207,8 @@ export function useStore(options: StoreOptions) {
     rowDragging,
     totalWidths,
     leftFixedWidths,
-    rightFixedWidths
+    rightFixedWidths,
+    expandColumn
   })
 
   const mutations = {
@@ -293,8 +305,13 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns = []
     const leftFixedColumns = []
 
+    let first = false
+
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
+
+      column.first = false
+      column.last = false
 
       if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
@@ -339,6 +356,9 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
+      } else if (!first) {
+        column.first = true
+        first = true
       }
 
       let key = column.key
@@ -357,8 +377,6 @@ export function useStore(options: StoreOptions) {
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
-      column.first = false
-      column.last = false
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -493,6 +511,7 @@ export function useStore(options: StoreOptions) {
             treeExpanded: !!treeExpanded,
             partial: false,
             dragging: false,
+            listIndex: 0,
             data: item
           }
 
@@ -954,10 +973,10 @@ export function useStore(options: StoreOptions) {
     state.partial = partial
   }
 
-  function setRenderRows(start: number, end: number) {
+  function setRenderRows(start: number, end: number, force = false) {
     const { startRow, endRow, heightBITree, virtualData } = state
 
-    if (start === startRow && end === endRow) return
+    if (!force && start === startRow && end === endRow) return
 
     const { processedData } = getters
     virtualData.length = 0

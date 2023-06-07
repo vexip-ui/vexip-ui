@@ -1,6 +1,6 @@
 <template>
   <div :class="nh.be('body')" role="rowgroup" :style="style">
-    <div v-if="renderData.length" :class="nh.be('row-list')" :style="listStyle">
+    <template v-if="renderData.length">
       <TableRow
         v-for="row in renderData"
         :key="row.index"
@@ -12,13 +12,13 @@
           v-for="(column, columnIndex) in currentColumns"
           :key="columnIndex"
           :row="row"
-          :row-index="row.index"
+          :row-index="row.listIndex"
           :column="column"
           :column-index="columnIndex"
           :fixed="fixed"
         ></TableCell>
       </TableRow>
-    </div>
+    </template>
     <div v-else :class="nh.be('empty')" :style="emptyStyle">
       <slot name="empty" :is-fixed="!!fixed">
         <template v-if="!fixed">
@@ -76,7 +76,7 @@ export default defineComponent({
     })
     const listStyle = computed(() => {
       return {
-        transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
+        // transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
       }
     })
     const emptyStyle = computed(() => {

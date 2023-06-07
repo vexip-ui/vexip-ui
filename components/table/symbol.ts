@@ -98,7 +98,6 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   type?: never,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
-  // type?: TableColumnType,
   /**
    * @deprecated Use 'class' prop to replace it
    **/
@@ -218,6 +217,7 @@ export type TableSorterProfile<
   order: number
 }
 
+/* @internal */
 export interface TableRowState {
   key: Key,
   index: number,
@@ -234,6 +234,7 @@ export interface TableRowState {
   treeExpanded: boolean,
   partial: boolean,
   dragging: boolean,
+  listIndex: number,
   data: Data
 }
 

@@ -80,7 +80,7 @@
 
 ### 表格排序
 
-在列选项添加 `sorter` 属性并设置，可以启用排序功能。
+在列选项设置 `sorter` 属性，可以启用排序功能。
 
 如果你希望只派发排序事件而不执行内部的过滤逻辑（例如在远程排序时），可以为表格组件添加 `custom-sorter` 属性。
 
@@ -90,7 +90,7 @@
 
 ### 数据过滤
 
-在列选项添加 `filter` 属性并设置，可以启用过滤功能。
+在列选项设置 `filter` 属性，可以启用过滤功能。
 
 如果你希望只派发过滤事件而不执行内部的逻辑（例如在远程过滤时），可以为表格组件添加 `custom-filter` 属性。
 
@@ -160,7 +160,7 @@
 
 ### 虚拟滚动
 
-数据太多的时候，你应该会需要它。
+添加 `virtual` 属性开启虚拟化，数据太多的时候，你应该会需要它。
 
 :::
 
@@ -190,6 +190,16 @@
 
 :::
 
+:::demo table/cell-span
+
+### 单元格合并
+
+在列选项通过 `cell-span` 属性提供一个回调函数，可以设置各个单元格的跨度。
+
+如果想要合并头部，则需要在列选项设置 `head-span` 属性。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -200,6 +210,11 @@ type Data = any
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
+
+interface CellSpanResult {
+  colSpan?: number,
+  rowSpan?: number
+}
 
 interface TableKeyConfig {
   id?: string,
@@ -212,12 +227,17 @@ type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
 ) => Val
-type ExpandRenderFn = (data: {
+type ExpandRenderFn<D = Data> = (data: {
   leftFixed: number,
   rightFixed: number,
-  row: Data,
+  row: D,
   rowIndex: number
 }) => any
+type ColumnCellSpanFn<D = Data> = (data: {
+  row: D,
+  index: number,
+  fixed?: 'left' | 'right'
+}) => CellSpanResult | undefined
 
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
@@ -259,10 +279,11 @@ interface TableSorterOptions<D = Data> {
 
 interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: keyof D,
+  key: keyof D,
+  type?: never,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
-  className?: ClassType,
+  class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
@@ -270,8 +291,11 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
+  textAlign?: TableTextAlign,
+  headSpan?: number,
   accessor?: Accessor<D, Val>,
-  renderer?: ColumnRenderFn<D>,
+  cellSpan?: ColumnCellSpanFn<D>,
+  renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn
 }
@@ -314,19 +338,30 @@ type ColumnWithKey<
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
 
-type ColumnRenderFn = (data: {
-  row: any,
+type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
   rowIndex: number,
-  column: TableColumnOptions,
+  column: TableBaseColumn<D, Val>,
   columnIndex: number
 }) => any
-type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
-type FilterRenderFn = (data: {
-  column: TableColumnOptions,
+type HeadRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number
+}) => any
+type FilterRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
   index: number,
-  filter: Required<TableFilterOptions>,
+  filter: Required<TableFilterOptions<D, Val>>,
   handleFilter: (active: any) => void
 }) => any
+
+type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
+  rowIndex: number,
+  column: TableColumnOptions<D, Val>,
+  columnIndex: number,
+  fixed?: 'left' | 'right'
+}) => CellSpanResult | undefined
 
 type TableCellPropFn<P = any> = (
   data: Data,
@@ -427,6 +462,7 @@ interface TableColResizePayload extends TableHeadPayload {
 | row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6`  |
 | no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6`  |
 | col-resizable   | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
+| cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
 
 ### Table 事件
 
@@ -505,6 +541,8 @@ interface TableColResizePayload extends TableHeadPayload {
 | order-label     | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -        |
 | meta-data       | `Data`                                 | 设置列的元数据                                                               | `{}`        | -        |
 | text-align      | `TableTextAlign`                       | 设置列的横向对其方式                                                         | `'left'`    | `2.1.19` |
+| head-span       | `number`                               | 设置头部跨度                                                                 | `1`         | `2.1.24` |
+| cell-span       | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                                     | `null`      | `2.1.24` |
 
 ### TableColumn 插槽
 

@@ -5,7 +5,6 @@
     :data="data"
     :width="800"
     :height="260"
-    border
   ></Table>
 </template>
 

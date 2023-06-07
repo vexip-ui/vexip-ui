@@ -24,6 +24,7 @@
       <NativeScroll
         ref="mainScroll"
         inherit
+        observe-deep
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -662,6 +663,7 @@ export default defineComponent({
           }
         })
 
+      computeRenderRows(true)
       emitEvent(
         props.onRowFilter,
         profiles,
@@ -687,6 +689,7 @@ export default defineComponent({
           }
         })
 
+      computeRenderRows(true)
       emitEvent(
         props.onRowSort,
         profiles,
@@ -860,7 +863,7 @@ export default defineComponent({
       emitEvent(props[`onColResize${type}`], payload)
     }
 
-    function computeRenderRows() {
+    function computeRenderRows(force = false) {
       const { totalHeight, bodyScroll, heightBITree } = state
       const { processedData } = getters
       const rowCount = processedData.length
@@ -890,7 +893,7 @@ export default defineComponent({
       const renderStart = Math.max(start - props.bufferCount, 0)
       const renderEnd = Math.min(end + props.bufferCount + 1, rowCount)
 
-      setRenderRows(renderStart, renderEnd)
+      setRenderRows(renderStart, renderEnd, force)
     }
 
     function refresh() {
@@ -923,7 +926,9 @@ export default defineComponent({
           0
         )
         syncBarScroll()
-        nextTick(computeBodyHeight)
+        nextTick(() => {
+          computeBodyHeight()
+        })
         nextFrameOnce(computeRenderRows)
       }, 10)
     }

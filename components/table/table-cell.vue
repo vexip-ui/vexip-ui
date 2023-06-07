@@ -277,7 +277,7 @@ export default defineComponent({
             colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1 ? 0 : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
-          transform: `translateX(${getters.totalWidths[props.columnIndex]}px)`
+          transform: `translate3d(${getters.totalWidths[props.columnIndex]}px, 0, 0)`
         }
       ]
     })

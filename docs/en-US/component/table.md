@@ -160,7 +160,7 @@ However, this way will disable other interactions of rows. You can instead add a
 
 ### Virtual Scroll
 
-You should need it when there is too much data.
+Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
 
 :::
 
@@ -190,6 +190,16 @@ Adding the `col-resizable` prop enables resize column width.
 
 :::
 
+:::demo table/cell-span
+
+### Merge Cells
+
+Provide a callback function via the `cell-span` of column options to set the span of each cell.
+
+If you want to merge the header, you need to set the `head-span` of column options.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -200,6 +210,11 @@ type Data = any
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
+
+interface CellSpanResult {
+  colSpan?: number,
+  rowSpan?: number
+}
 
 interface TableKeyConfig {
   id?: string,
@@ -212,12 +227,17 @@ type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
 ) => Val
-type ExpandRenderFn = (data: {
+type ExpandRenderFn<D = Data> = (data: {
   leftFixed: number,
   rightFixed: number,
-  row: Data,
+  row: D,
   rowIndex: number
 }) => any
+type ColumnCellSpanFn<D = Data> = (data: {
+  row: D,
+  index: number,
+  fixed?: 'left' | 'right'
+}) => CellSpanResult | undefined
 
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
@@ -259,10 +279,11 @@ interface TableSorterOptions<D = Data> {
 
 interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: keyof D,
+  key: keyof D,
+  type?: never,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
-  className?: ClassType,
+  class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
@@ -270,8 +291,11 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
+  textAlign?: TableTextAlign,
+  headSpan?: number,
   accessor?: Accessor<D, Val>,
-  renderer?: ColumnRenderFn<D>,
+  cellSpan?: ColumnCellSpanFn<D>,
+  renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn
 }
@@ -314,19 +338,30 @@ type ColumnWithKey<
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
 
-type ColumnRenderFn = (data: {
-  row: any,
+type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
   rowIndex: number,
-  column: TableColumnOptions,
+  column: TableBaseColumn<D, Val>,
   columnIndex: number
 }) => any
-type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
-type FilterRenderFn = (data: {
-  column: TableColumnOptions,
+type HeadRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number
+}) => any
+type FilterRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
   index: number,
-  filter: Required<TableFilterOptions>,
+  filter: Required<TableFilterOptions<D, Val>>,
   handleFilter: (active: any) => void
 }) => any
+
+type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
+  row: D,
+  rowIndex: number,
+  column: TableColumnOptions<D, Val>,
+  columnIndex: number,
+  fixed?: 'left' | 'right'
+}) => CellSpanResult | undefined
 
 type TableCellPropFn<P = any> = (
   data: Data,
@@ -427,6 +462,7 @@ interface TableColResizePayload extends TableHeadPayload {
 | row-indent      | `string \| number`                                            | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6`  |
 | no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6`  |
 | col-resizable   | `boolean`                                                     | Set whether the width of columns can be resized                                                                                                       | `false`        | `2.1.23` |
+| cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
 
 ### Table Events
 
@@ -505,6 +541,8 @@ interface TableColResizePayload extends TableHeadPayload {
 | order-label     | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
 | meta-data       | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -        |
 | text-align      | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
+| head-span       | `number`                               | Set the head span                                                                                                                            | `1`         | `2.1.24` |
+| cell-span       | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                                                   | `null`      | `2.1.24` |
 
 ### TableColumn Slots
 
