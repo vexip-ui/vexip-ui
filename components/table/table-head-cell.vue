@@ -154,7 +154,7 @@ import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
+import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -187,7 +187,7 @@ export default defineComponent({
       default: -1
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
@@ -203,16 +203,26 @@ export default defineComponent({
     const wrapper = ref<HTMLElement>()
 
     let currentWidth = 0
-    let prevSpan = 1
 
     const headSpan = computed(() => {
-      if (props.column.master) return 0
+      const fixed = props.fixed || 'default'
 
-      const span = Math.max(props.column.headSpan ?? 1, 0)
+      if (state.collapseMap.get(fixed)!.has(`-1,${props.index}`)) {
+        return 0
+      }
 
-      recordHeadSpan(span)
+      const columns =
+        fixed === 'left'
+          ? state.leftFixedColumns
+          : fixed === 'right'
+            ? state.rightFixedColumns
+            : state.columns
 
-      return span
+      const colSpan = boundRange(props.column.headSpan ?? 1, 0, columns.length - props.index)
+
+      mutations.updateCellSpan(-1, props.index, fixed, { colSpan, rowSpan: 1 })
+
+      return colSpan
     })
 
     const { target: resizer } = useMoving({
@@ -345,24 +355,6 @@ export default defineComponent({
         !Object.values(getters.disableCheckRows).includes(false)
       )
     })
-
-    function recordHeadSpan(span: number) {
-      if (span !== prevSpan) {
-        const len = props.index + Math.max(prevSpan, span)
-
-        if (prevSpan > span) {
-          for (let i = props.index + span; i < len; ++i) {
-            state.columns[i].master = undefined
-          }
-        } else {
-          for (let i = props.index + prevSpan; i < len; ++i) {
-            state.columns[i].master = props.column
-          }
-        }
-
-        prevSpan = span
-      }
-    }
 
     function isSelection(column: unknown): column is TableSelectionColumn {
       return (column as TableTypeColumn).type === 'selection'

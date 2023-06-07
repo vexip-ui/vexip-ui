@@ -114,15 +114,6 @@ $table: map.merge(
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-
-    // &::after {
-    //   position: absolute;
-    //   bottom: 0;
-    //   width: 100%;
-    //   height: 0;
-    //   content: '';
-    //   border-bottom: $border-a get-css-var('table-row-b-color-bottom');
-    // }
   }
 
   &__head &__group {
@@ -140,22 +131,7 @@ $table: map.merge(
     display: inline-flex;
     flex: 0 0 auto;
     width: 100%;
-
-    // padding-bottom: 1px;
-    background-color: get-css-var('table-row-bg-color');
     transition: all get-css-var('transition-base');
-
-    &--hover {
-      background-color: get-css-var('table-row-bg-color-hover') !important;
-    }
-  }
-
-  &__head &__row {
-    background-color: get-css-var('table-head-bg-color');
-  }
-
-  &--stripe &__row--stripe {
-    background-color: get-css-var('table-row-bg-color-stripe');
   }
 
   &__cell,
@@ -171,6 +147,7 @@ $table: map.merge(
     white-space: nowrap;
     border-right: $border-a transparent;
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+    transition: background-color get-css-var('transition-base');
 
     &:last-child {
       border-right-width: 0;
@@ -192,6 +169,29 @@ $table: map.merge(
     }
   }
 
+  &__cell {
+    &[colspan],
+    &[rowspan] {
+      z-index: 1;
+    }
+  }
+
+  &__head-cell {
+    background-color: get-css-var('table-head-bg-color');
+  }
+
+  &__row &__cell {
+    background-color: get-css-var('table-row-bg-color');
+  }
+
+  &__row--hover &__cell {
+    background-color: get-css-var('table-row-bg-color-hover');
+  }
+
+  &--stripe &__row--stripe &__cell {
+    background-color: get-css-var('table-row-bg-color-stripe');
+  }
+
   &__collapse {
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
   }
@@ -208,10 +208,6 @@ $table: map.merge(
   &__body &__group {
     &:last-child {
       margin-bottom: -1px;
-
-      // &::after {
-      //   border-bottom-color: transparent;
-      // }
 
       #{$cell},
       #{$head-cell},
@@ -262,7 +258,8 @@ $table: map.merge(
     #{$cell},
     #{$head-cell} {
       will-change: width, transform;
-      transition: width get-css-var('transition-base'), get-css-var('transition-transform');
+      transition: width get-css-var('transition-base'),
+        background-color get-css-var('transition-base'), get-css-var('transition-transform');
     }
   }
 
@@ -501,7 +498,7 @@ $table: map.merge(
 
     #{$cell},
     #{$head-cell} {
-      border-right-width: get-css-var('table-border-width');
+      border-right-width: get-css-var('table-b-width');
     }
   }
 

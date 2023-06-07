@@ -82,6 +82,11 @@ export function useStore(options: StoreOptions) {
     collapseMap: new Map()
   }) as StoreState
 
+  for (const type of ['left', 'default', 'right'] as const) {
+    state.cellSpanMap.set(type, new Map())
+    state.collapseMap.set(type, new Map())
+  }
+
   setColumns(options.columns)
   setData(options.data)
 
@@ -603,10 +608,21 @@ export function useStore(options: StoreOptions) {
       flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
     }
 
+    let usedWidth = 0
+
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
+      const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
 
-      widths.set(column.key, flexUnitWidth)
+      if (i < flexColumnCount - 1) {
+        usedWidth += width
+      }
+
+      widths.set(column.key, width)
+    }
+
+    if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
+      widths.set(flexColumns.at(-1)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
@@ -1198,15 +1214,21 @@ export function useStore(options: StoreOptions) {
 
   function handleColumnResize(keys: Key[], newWidth: number) {
     const { resized, widths, columns, width: tableWidth } = state
+    const length = keys.length
 
-    if (!columns.length || !keys.length) return
+    if (!columns.length || !length) return
 
-    const deltaWidth = newWidth / keys.length
+    const deltaWidth = newWidth / length
     const lastKey = columns.at(-1)!.key
 
-    for (const key of keys) {
+    for (let i = 0; i < length; ++i) {
+      const key = keys[i]
+
       resized.add(key)
-      widths.set(key, deltaWidth)
+      widths.set(
+        key,
+        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
+      )
     }
 
     let totalWidth = 0
@@ -1232,9 +1254,15 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function updateCellSpan(rowIndex: number, columnIndex: number, span: Required<CellSpanResult>) {
+  function updateCellSpan(
+    rowIndex: number,
+    columnIndex: number,
+    fixed: 'left' | 'default' | 'right',
+    span: Required<CellSpanResult>
+  ) {
     const { colSpan, rowSpan } = span
-    const { cellSpanMap, collapseMap } = state
+    const cellSpanMap = state.cellSpanMap.get(fixed)!
+    const collapseMap = state.collapseMap.get(fixed)!
 
     const masterKey = `${rowIndex},${columnIndex}`
     const prevSpan = cellSpanMap.get(masterKey)
@@ -1253,7 +1281,9 @@ export function useStore(options: StoreOptions) {
 
     for (let i = 0; i < colLen; ++i) {
       for (let j = 0; j < rowLen; ++j) {
-        if ((!i && !j) || (i < colSpan && i < prevColSpan && j < rowSpan && j < prevRowSpan)) { continue }
+        if ((!i && !j) || (i < colSpan && i < prevColSpan && j < rowSpan && j < prevRowSpan)) {
+          continue
+        }
 
         const key = `${rowIndex + j},${columnIndex + i}`
         let masterSet = collapseMap.get(key)

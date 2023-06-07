@@ -1,24 +1,26 @@
 <template>
-  <Table use-y-bar :data="data" :width="1000">
+  <Table
+    use-y-bar
+    border
+    :data="data"
+    :width="1000"
+    highlight
+  >
     <TableColumn name="First Name" id-key="firstName" :cell-span="fistNameCellSpan"></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName"></TableColumn>
+    <TableColumn
+      name="Last Name"
+      id-key="lastName"
+      :head-span="2"
+      :cell-span="lastNameCellSpan"
+    ></TableColumn>
     <TableColumn name="Job" id-key="job" :cell-span="jobCellSpan"></TableColumn>
+    <TableColumn name="Email" id-key="email" :cell-span="emailCellSpan"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
-    <TableColumn name="Email" id-key="email"></TableColumn>
   </Table>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-interface RowData {
-  id: string,
-  job: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  age: string
-}
 
 const data = ref([
   {
@@ -69,9 +71,22 @@ function fistNameCellSpan({ index }: { index: number }) {
   }
 }
 
+function lastNameCellSpan({ index }: { index: number }) {
+  // The cell was merged first, so its merge attribute will be ignored
+  if (index === 3) {
+    return { colSpan: 2 }
+  }
+}
+
 function jobCellSpan({ index }: { index: number }) {
   if (index === 1) {
     return { rowSpan: 2 }
+  }
+}
+
+function emailCellSpan({ index }: { index: number }) {
+  if (index === 3) {
+    return { colSpan: 3, rowSpan: 3 }
   }
 }
 </script>

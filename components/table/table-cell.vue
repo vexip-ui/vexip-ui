@@ -112,7 +112,7 @@ import { Renderer } from '@/components/renderer'
 import { computed, defineComponent, inject, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { isFunction } from '@vexip-ui/utils'
+import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -153,7 +153,7 @@ export default defineComponent({
       default: -1
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
@@ -195,30 +195,44 @@ export default defineComponent({
       ]
     })
     const cellSpan = computed(() => {
-      if (state.collapseMap.has(`${props.rowIndex},${props.columnIndex}`)) {
+      const fixed = props.fixed || 'default'
+
+      if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.columnIndex}`)) {
         return { colSpan: 0, rowSpan: 0 }
       }
+
+      const columns =
+        fixed === 'left'
+          ? state.leftFixedColumns
+          : fixed === 'right'
+            ? state.rightFixedColumns
+            : state.columns
 
       let result: CellSpanResult | undefined
 
       if (typeof props.column.cellSpan === 'function') {
-        result = props.column.cellSpan({ row: props.row, index: props.rowIndex })
+        result = props.column.cellSpan({
+          row: props.row.data,
+          index: props.rowIndex,
+          fixed: props.fixed
+        })
       } else if (typeof state.cellSpan === 'function') {
         result = state.cellSpan({
-          row: props.row,
+          row: props.row.data,
           rowIndex: props.rowIndex,
           column: props.column,
-          columnIndex: props.columnIndex
+          columnIndex: props.columnIndex,
+          fixed: props.fixed
         })
       }
 
       const { colSpan, rowSpan } = result || { colSpan: 1, rowSpan: 1 }
       const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
-      span.colSpan = Math.max(span.colSpan, 0)
-      span.rowSpan = Math.max(span.rowSpan, 0)
+      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
+      span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
 
-      mutations.updateCellSpan(props.rowIndex, props.columnIndex, span)
+      mutations.updateCellSpan(props.rowIndex, props.columnIndex, fixed, span)
 
       return span
     })

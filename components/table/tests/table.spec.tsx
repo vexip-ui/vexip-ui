@@ -234,13 +234,13 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        className: 'test1'
+        class: 'test1'
       }
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
       <Table columns={columns} data={data}>
-        <TableColumn id-key={'label'} name={'Label'} class-name={'test2'}></TableColumn>
+        <TableColumn id-key={'label'} name={'Label'} class={'test2'}></TableColumn>
       </Table>
     ))
 

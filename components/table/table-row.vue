@@ -95,7 +95,7 @@ export default defineComponent({
       default: false
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },

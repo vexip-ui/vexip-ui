@@ -44,7 +44,8 @@ export type ExpandRenderFn<D = Data> = (data: {
 }) => any
 export type ColumnCellSpanFn<D = Data> = (data: {
   row: D,
-  index: number
+  index: number,
+  fixed?: 'left' | 'right'
 }) => CellSpanResult | undefined
 
 export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
@@ -163,9 +164,7 @@ export type ColumnWithKey<
   /** @internal */
   first?: boolean,
   /** @internal */
-  last?: boolean,
-  /** @internal */
-  master?: TableColumnOptions<D, Val>
+  last?: boolean
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -189,7 +188,8 @@ export type TableCellSpanFn<D = Data, Val extends string | number = string | num
   row: D,
   rowIndex: number,
   column: TableColumnOptions<D, Val>,
-  columnIndex: number
+  columnIndex: number,
+  fixed?: 'left' | 'right'
 }) => CellSpanResult | undefined
 
 export type TableCellPropFn<P = any> = (
@@ -296,8 +296,8 @@ export interface StoreState extends StoreOptions {
   totalHeight: number,
   colResizing: boolean,
   resizeLeft: number,
-  cellSpanMap: Map<string, Required<CellSpanResult>>,
-  collapseMap: Map<string, Set<string>>
+  cellSpanMap: Map<'left' | 'default' | 'right', Map<string, Required<CellSpanResult>>>,
+  collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>
 }
 
 export interface TableRowInstance {
