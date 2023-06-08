@@ -24,6 +24,7 @@ import type {
   ParsedTableSorterOptions,
   StoreOptions,
   StoreState,
+  SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
   TableColumnOptions,
@@ -35,13 +36,14 @@ import type {
   TableRowPropFn,
   TableRowState,
   TableSelectionColumn,
-  TableSorterOptions
+  TableSorterOptions,
+  TableSummaryOptions
 } from './symbol'
 
 let indexId = 1
 
 function getIndexId() {
-  return `__vtr-${indexId++}`
+  return `__vxp-table-key-${indexId++}`
 }
 
 function defaultIndexLabel(index: number) {
@@ -53,13 +55,16 @@ export function useStore(options: StoreOptions) {
     ...options,
     columns: [],
     data: [],
-    width: 0,
+    summaries: [],
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
-    rowMinHeight: options.rowMinHeight || 36,
-    rowDraggable: !!options.rowDraggable,
+    width: 0,
     rowData: [],
     rightFixedColumns: [],
     leftFixedColumns: [],
+    aboveSummaries: [],
+    belowSummaries: [],
+    rowMinHeight: options.rowMinHeight || 36,
+    rowDraggable: !!options.rowDraggable,
     rowMap: new Map(),
     idMaps: new WeakMap(),
     checkedAll: false,
@@ -84,6 +89,7 @@ export function useStore(options: StoreOptions) {
 
   setColumns(options.columns)
   setData(options.data)
+  setSummaries(options.summaries)
 
   const filteredData = computed(() => {
     return state.customFilter
@@ -207,10 +213,11 @@ export function useStore(options: StoreOptions) {
   })
 
   const mutations = {
-    // 这两个方法被 deep watch 回调
+    // 这几个个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
     setColumns: debounceMinor(setColumns),
     setData: debounceMinor(setData),
+    setSummaries: debounceMinor(setSummaries),
 
     setDataKey,
     setCurrentPage,
@@ -298,9 +305,9 @@ export function useStore(options: StoreOptions) {
 
     const { widths, sorters, filters } = state
 
-    const normalColumns = []
-    const rightFixedColumns = []
-    const leftFixedColumns = []
+    const normalColumns: ColumnWithKey[] = []
+    const rightFixedColumns: ColumnWithKey[] = []
+    const leftFixedColumns: ColumnWithKey[] = []
 
     let first = false
 
@@ -366,14 +373,14 @@ export function useStore(options: StoreOptions) {
         console.error('[vexip-ui:Table] Table column requires key prop, but missing')
       }
 
-      const fixed = column.fixed
-
       // 独立属性解析时注意隔断同对象引用
       widths.set(key, column.width || 100)
       sorters.set(key, parseSorter(column.sorter))
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
+
+      const fixed = column.fixed
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -384,10 +391,9 @@ export function useStore(options: StoreOptions) {
       }
     }
 
-    state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
+    state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
 
     if (state.columns.length) {
-      state.columns[0].first = true
       state.columns.at(-1)!.last = true
     }
 
@@ -547,6 +553,39 @@ export function useStore(options: StoreOptions) {
 
     refreshRowIndex()
     computePartial()
+  }
+
+  function setSummaries(summaries: TableSummaryOptions[]) {
+    summaries = Array.from(summaries).sort((prev, next) => {
+      return (prev.order || 0) - (next.order || 0)
+    })
+
+    const aboveSummaries: SummaryWithKey[] = []
+    const belowSummaries: SummaryWithKey[] = []
+
+    for (let i = 0, len = summaries.length; i < len; ++i) {
+      const summary = { ...summaries[i] } as SummaryWithKey
+
+      let key = summary.key
+
+      if (isNull(key)) {
+        key = getIndexId()
+
+        console.error('[vexip-ui:Table] Table summary requires key prop, but missing')
+      }
+
+      (summary.above ? aboveSummaries : belowSummaries).push(summary)
+    }
+
+    state.summaries = Array.from(aboveSummaries).concat(belowSummaries)
+
+    if (aboveSummaries.length) {
+      state.aboveSummaries = aboveSummaries
+    }
+
+    if (belowSummaries.length) {
+      state.belowSummaries = belowSummaries
+    }
   }
 
   function setCurrentPage(currentPage: number) {

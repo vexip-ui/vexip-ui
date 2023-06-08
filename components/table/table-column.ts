@@ -174,6 +174,10 @@ export default defineComponent({
           return props.renderer(data)
         }
 
+        if (options.type === 'expand') {
+          return ''
+        }
+
         const row = data.row
         const rowIndex = data.rowIndex as number
 
@@ -192,7 +196,7 @@ export default defineComponent({
     function setHeadRenderer() {
       if (options.type === 'selection') return
 
-      options.headRenderer = (data: any) => {
+      options.headRenderer = data => {
         if (typeof slots.head === 'function') {
           return renderSlot(slots, 'head', data)
         }
@@ -207,7 +211,7 @@ export default defineComponent({
 
     function setFilterRenderer() {
       if (typeof slots.filter === 'function' || typeof props.filterRenderer === 'function') {
-        options.filterRenderer = (data: any) => {
+        options.filterRenderer = data => {
           if (typeof slots.filter === 'function') {
             return renderSlot(slots, 'filter', data)
           }

@@ -20,6 +20,7 @@ import type {
   ExpandRenderFn,
   FilterRenderFn,
   HeadRenderFn,
+  SummaryRenderFn,
   TableCellPayload,
   TableCellPropFn,
   TableCellSpanFn,
@@ -34,6 +35,7 @@ import type {
   TableRowPropFn,
   TableSorterOptions,
   TableSorterProfile,
+  TableSummaryOptions,
   TableTextAlign
 } from './symbol'
 
@@ -41,6 +43,7 @@ export const tableProps = buildProps({
   locale: localeProp('table'),
   columns: Array as PropType<TableColumnOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
+  summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   dataKey: String,
   width: [Number, String],
   height: Number,
@@ -124,7 +127,10 @@ export const tableProps = buildProps({
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>
-export type TableCProps = ConfigurableProps<TableProps, 'columns' | 'data' | 'currentPage'>
+export type TableCProps = ConfigurableProps<
+  TableProps,
+  'columns' | 'data' | 'currentPage' | 'summaries'
+>
 
 export const tableColumnProps = buildProps({
   idKey: [Number, String],
@@ -163,5 +169,31 @@ export const tableColumnProps = buildProps({
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
 export type TableColumnCProps = ConfigurableProps<
   TableColumnProps,
-  'idKey' | 'name' | 'accessor' | 'fixed' | 'type' | 'renderer' | 'headRenderer' | 'order'
+  | 'idKey'
+  | 'name'
+  | 'accessor'
+  | 'fixed'
+  | 'type'
+  | 'renderer'
+  | 'headRenderer'
+  | 'order'
+  | 'headSpan'
+>
+
+export const tableSummaryProps = buildProps({
+  idKey: [Number, String],
+  name: String,
+  class: classProp,
+  style: styleProp,
+  attrs: Object,
+  colSpan: Number,
+  order: Number,
+  above: booleanProp,
+  renderer: Function as PropType<SummaryRenderFn>
+})
+
+export type TableSummaryProps = ExtractPropTypes<typeof tableSummaryProps>
+export type TableSummaryCProps = ConfigurableProps<
+  TableSummaryProps,
+  'idKey' | 'name' | 'renderer' | 'colSpan' | 'order' | 'above'
 >

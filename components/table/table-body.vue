@@ -7,6 +7,7 @@
         :row="row"
         :index="row.index"
         :fixed="fixed"
+        :aria-rowindex="row.index"
       >
         <TableCell
           v-for="(column, columnIndex) in currentColumns"
@@ -16,6 +17,7 @@
           :column="column"
           :column-index="columnIndex"
           :fixed="fixed"
+          :aria-colindex="columnIndex"
         ></TableCell>
       </TableRow>
     </template>

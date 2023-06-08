@@ -3,9 +3,18 @@
     ref="wrapper"
     :class="className"
     role="columnheader"
+    scope="col"
     :colspan="headSpan !== 1 ? headSpan : undefined"
     :style="style"
-    :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
+    :aria-sort="
+      sorter.able
+        ? sorter.type
+          ? sorter.type === 'asc'
+            ? 'ascending'
+            : 'descending'
+          : 'none'
+        : undefined
+    "
     v-bind="attrs"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"

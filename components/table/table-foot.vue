@@ -1,19 +1,7 @@
 <template>
-  <div :class="nh.be('head')" role="rowgroup" :style="style">
-    <TableRow
-      is-head
-      :fixed="fixed"
-      :row="headRow"
-      aria-rowindex="0"
-    >
-      <TableHeadCell
-        v-for="(column, index) in currentColumns"
-        :key="index"
-        :column="column"
-        :index="index"
-        :fixed="fixed"
-        :aria-colindex="index"
-      ></TableHeadCell>
+  <div :class="nh.be('foot')" role="rowgroup">
+    <TableRow>
+      <TableCell></TableCell>
     </TableRow>
   </div>
 </template>
@@ -21,18 +9,17 @@
 <script lang="ts">
 import { computed, defineComponent, inject } from 'vue'
 
-import TableHeadCell from './table-head-cell.vue'
+import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
+import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableRowState } from './symbol'
 
 export default defineComponent({
-  name: 'TableHead',
+  name: 'TableFoot',
   components: {
-    TableHeadCell,
+    TableCell,
     TableRow
   },
   props: {
@@ -62,16 +49,12 @@ export default defineComponent({
         }px`
       }
     })
-    const headRow = computed(
-      () => state.rowMap.get(TABLE_HEAD_KEY) || ({ key: TABLE_HEAD_KEY } as TableRowState)
-    )
 
     return {
       nh: useNameHelper('table'),
 
       currentColumns,
-      style,
-      headRow
+      style
     }
   }
 })

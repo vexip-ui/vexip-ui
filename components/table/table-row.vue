@@ -3,8 +3,9 @@
     v-if="!row.hidden"
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
-    :style="groupStyle"
+    role="row"
     :draggable="draggable || row.dragging"
+    :style="groupStyle"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
@@ -18,9 +19,7 @@
     <div
       ref="rowEl"
       :class="className"
-      role="row"
       :style="style"
-      :aria-rowindex="index"
       v-bind="attrs"
     >
       <slot></slot>

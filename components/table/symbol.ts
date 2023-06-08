@@ -6,11 +6,14 @@ import type { TableStore } from './store'
 
 export type Key = string | number | symbol
 export type Data = any
+
+export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
+export type MoveEventType = 'Start' | 'Move' | 'End'
+
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
-export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
-export type MoveEventType = 'Start' | 'Move' | 'End'
+export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
 export interface CellSpanResult {
   colSpan?: number,
@@ -47,8 +50,6 @@ export type ColumnCellSpanFn<D = Data> = (data: {
   index: number,
   fixed?: 'left' | 'right'
 }) => CellSpanResult | undefined
-
-export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
@@ -182,6 +183,12 @@ export type FilterRenderFn<D = Data, Val extends string | number = string | numb
   filter: Required<TableFilterOptions<D, Val>>,
   handleFilter: (active: any) => void
 }) => any
+export type SummaryRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number,
+  rows: D[],
+  summary: { sum: number, min: number, max: number }
+}) => any
 
 export type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
@@ -217,6 +224,23 @@ export type TableSorterProfile<
   order: number
 }
 
+export interface TableSummaryOptions<D = Data, Val extends string | number = string | number> {
+  name: string,
+  key: keyof D,
+  class?: ClassType,
+  style?: StyleType,
+  attrs?: Record<string, any>,
+  colSpan?: number,
+  order?: number,
+  above?: boolean,
+  renderer?: SummaryRenderFn<D, Val>
+}
+
+export type SummaryWithKey<
+  D = Data,
+  Val extends string | number = string | number
+> = TableSummaryOptions<D, Val> & { key: Key }
+
 /* @internal */
 export interface TableRowState {
   key: Key,
@@ -241,6 +265,7 @@ export interface TableRowState {
 export interface StoreOptions {
   columns: TableColumnOptions[],
   data: Data[],
+  summaries: TableSummaryOptions[],
   rowClass: ClassType | TableRowPropFn<ClassType>,
   rowStyle: StyleType | TableRowPropFn<StyleType>,
   rowAttrs: Record<string, any> | TableRowPropFn<Record<string, any>>,
@@ -276,9 +301,12 @@ export interface StoreOptions {
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
   rowData: TableRowState[],
+  summaries: SummaryWithKey[],
   width: number,
   rightFixedColumns: ColumnWithKey[],
   leftFixedColumns: ColumnWithKey[],
+  aboveSummaries: SummaryWithKey[],
+  belowSummaries: SummaryWithKey[],
   rowMap: Map<Key, TableRowState>,
   idMaps: WeakMap<Data, Key>,
   checkedAll: boolean,
@@ -337,6 +365,8 @@ export interface TableColResizePayload extends TableHeadPayload {
 export interface TableActions {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
+  increaseSummary(column: TableSummaryOptions): void,
+  decreaseSummary(column: TableSummaryOptions): void,
   getTableElement(): HTMLElement | undefined,
   refreshXScroll(): void,
   emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,

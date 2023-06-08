@@ -2,6 +2,7 @@
   <div
     :class="className"
     role="cell"
+    :scope="column.first ? 'row' : undefined"
     :colspan="cellSpan.colSpan !== 1 ? cellSpan.colSpan : undefined"
     :rowspan="cellSpan.rowSpan !== 1 ? cellSpan.rowSpan : undefined"
     :style="style"

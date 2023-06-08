@@ -159,7 +159,8 @@ import type {
   TableKeyConfig,
   TableRowInstance,
   TableRowPayload,
-  TableRowState
+  TableRowState,
+  TableSummaryOptions
 } from './symbol'
 
 const defaultKeyConfig: Required<TableKeyConfig> = {
@@ -251,6 +252,10 @@ export default defineComponent({
       cellSpan: {
         default: null,
         isFunc: true
+      },
+      summaries: {
+        default: () => [],
+        static: true
       }
     })
 
@@ -262,7 +267,8 @@ export default defineComponent({
     const headHeight = ref(0)
     const indicatorShow = ref(false)
     const indicatorType = ref(DropType.BEFORE)
-    const templateColumns = ref(new Set<TableColumnOptions>())
+    const tempColumns = ref(new Set<TableColumnOptions>())
+    const tempSummaries = ref(new Set<TableSummaryOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
     const hasDragColumn = ref(false)
@@ -304,10 +310,18 @@ export default defineComponent({
 
       return keyConfig.value.id
     })
+    const allColumns = computed(() => {
+      return Array.from(tempColumns.value).concat(props.columns)
+    })
+    const allSummaries = computed(() => {
+      return Array.from(tempSummaries.value).concat(props.summaries)
+    })
 
     const store = useStore({
-      columns: props.columns as TableColumnOptions[],
+      columns: allColumns.value,
       data: props.data,
+      summaries: allSummaries.value,
+      dataKey: dataKey.value,
       rowClass: props.rowClass,
       rowStyle: props.rowStyle,
       rowAttrs: props.rowAttrs,
@@ -317,7 +331,6 @@ export default defineComponent({
       headClass: props.headClass,
       headStyle: props.headStyle,
       headAttrs: props.headAttrs,
-      dataKey: dataKey.value,
       highlight: props.highlight,
       currentPage: props.currentPage,
       pageSize: props.pageSize,
@@ -344,6 +357,8 @@ export default defineComponent({
     provide(TABLE_ACTIONS, {
       increaseColumn,
       decreaseColumn,
+      increaseSummary,
+      decreaseSummary,
       getTableElement,
       refreshXScroll,
       emitRowCheck,
@@ -420,14 +435,12 @@ export default defineComponent({
 
       return 35
     })
-    const allColumns = computed(() => {
-      return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
-    })
 
     const {
       setColumns,
       setDataKey,
       setData,
+      setSummaries,
       setTableWidth,
       setBodyScroll,
       setRenderRows,
@@ -451,6 +464,13 @@ export default defineComponent({
         nextTick(() => {
           hasDragColumn.value = getters.hasDragColumn
         })
+      },
+      { immediate: true, deep: true }
+    )
+    watch(
+      allSummaries,
+      value => {
+        setSummaries(value)
       },
       { immediate: true, deep: true }
     )
@@ -618,11 +638,19 @@ export default defineComponent({
     }
 
     function increaseColumn(column: TableColumnOptions) {
-      templateColumns.value.add(column)
+      tempColumns.value.add(column)
     }
 
     function decreaseColumn(column: TableColumnOptions) {
-      templateColumns.value.delete(column)
+      tempColumns.value.delete(column)
+    }
+
+    function increaseSummary(summary: TableSummaryOptions) {
+      tempSummaries.value.add(summary)
+    }
+
+    function decreaseSummary(summary: TableSummaryOptions) {
+      tempSummaries.value.delete(summary)
     }
 
     function getTableElement() {
