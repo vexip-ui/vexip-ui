@@ -15,7 +15,7 @@
     ></TableColumn>
     <TableColumn name="Job" id-key="job" :cell-span="jobCellSpan"></TableColumn>
     <TableColumn name="Email" id-key="email" :cell-span="emailCellSpan"></TableColumn>
-    <TableColumn name="Age" id-key="age"></TableColumn>
+    <TableColumn name="Age" id-key="age" :cell-span="ageCellSpan"></TableColumn>
   </Table>
 </template>
 
@@ -87,6 +87,12 @@ function jobCellSpan({ index }: { index: number }) {
 function emailCellSpan({ index }: { index: number }) {
   if (index === 3) {
     return { colSpan: 3, rowSpan: 3 }
+  }
+}
+
+function ageCellSpan({ index }: { index: number }) {
+  if (index === 0) {
+    return { colSpan: 2, rowSpan: 2 }
   }
 }
 </script>
