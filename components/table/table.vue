@@ -53,7 +53,6 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="left">
@@ -76,7 +75,6 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="right">

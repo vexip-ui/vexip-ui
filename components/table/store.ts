@@ -82,11 +82,6 @@ export function useStore(options: StoreOptions) {
     collapseMap: new Map()
   }) as StoreState
 
-  for (const type of ['left', 'default', 'right'] as const) {
-    state.cellSpanMap.set(type, new Map())
-    state.collapseMap.set(type, new Map())
-  }
-
   setColumns(options.columns)
   setData(options.data)
 
@@ -295,6 +290,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumns(columns: TableColumnOptions[]) {
+    resetCellSpan()
+
     columns = Array.from(columns).sort((prev, next) => {
       return (prev.order || 0) - (next.order || 0)
     })
@@ -1270,6 +1267,13 @@ export function useStore(options: StoreOptions) {
     } else if (lastColumnWidth) {
       widths.set(lastKey, lastColumnWidth!)
       lastColumnWidth = undefined
+    }
+  }
+
+  function resetCellSpan() {
+    for (const type of ['left', 'default', 'right'] as const) {
+      state.cellSpanMap.set(type, new Map())
+      state.collapseMap.set(type, new Map())
     }
   }
 

@@ -383,9 +383,7 @@ export default defineComponent({
     function handleExpandTree(row: TableRowState) {
       if (!row.children?.length) return
 
-      const expanded = !row.treeExpanded
-
-      mutations.handleTreeExpand(row.key, expanded)
+      mutations.handleTreeExpand(row.key, !row.treeExpanded)
     }
 
     return {
