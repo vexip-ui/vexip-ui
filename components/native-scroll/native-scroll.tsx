@@ -117,8 +117,8 @@ export default defineComponent({
       mode: toRef(props, 'mode'),
       disabled: toRef(props, 'disabled'),
       appear: toRef(props, 'appear'),
-      width: toRef(props, 'width'),
-      height: toRef(props, 'height'),
+      // width: toRef(props, 'width'),
+      // height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
       onResize: entry => {

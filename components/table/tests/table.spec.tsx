@@ -5,7 +5,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { noop } from '@vexip-ui/utils'
-import { Table } from '..'
+import { Table, defineColumns } from '..'
 import TableBody from '../table-body.vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -234,13 +234,13 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        className: 'test1'
+        class: 'test1'
       }
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
       <Table columns={columns} data={data}>
-        <TableColumn id-key={'label'} name={'Label'} class-name={'test2'}></TableColumn>
+        <TableColumn id-key={'label'} name={'Label'} class={'test2'}></TableColumn>
       </Table>
     ))
 
@@ -782,5 +782,92 @@ describe('Table', () => {
     expect(wrapper.classes()).not.toContain('vxp-table--col-resizing')
 
     elRectMock.mockRestore()
+  })
+
+  it('cell span', async () => {
+    const columns = defineColumns([
+      {
+        name: 'Name',
+        key: 'name',
+        cellSpan: ({ index }) => {
+          if (index === 3) {
+            return { colSpan: 2 }
+          }
+        }
+      },
+      {
+        name: 'Label',
+        key: 'label',
+        cellSpan: ({ index }) => {
+          if (index === 3) {
+            return { colSpan: 2 }
+          }
+        }
+      },
+      {
+        name: 'Address',
+        key: 'address',
+        cellSpan: ({ index }) => {
+          if (index === 1) {
+            return { rowSpan: 2 }
+          }
+        }
+      },
+      {
+        name: 'Job',
+        key: 'job',
+        cellSpan: ({ index }) => {
+          if (index === 3) {
+            return { colSpan: 3, rowSpan: 3 }
+          }
+        }
+      },
+      {
+        name: 'Value',
+        key: 'value',
+        cellSpan: ({ index }) => {
+          if (index === 0) {
+            return { colSpan: 2, rowSpan: 2 }
+          }
+        }
+      }
+    ])
+    const data = Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      name: `n${i}`,
+      label: `l${i}`,
+      address: `a${i}`,
+      job: `j${i}`,
+      value: i + 1
+    }))
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    const cells = rows.map(row => row.findAll('.vxp-table__cell'))
+
+    expect(cells[0][0].attributes('colspan')).toBeUndefined()
+    expect(cells[0][0].attributes('rowspan')).toBeUndefined()
+
+    expect(cells[3][0].attributes('colspan')).toEqual('2')
+    expect(cells[3][1].attributes('colspan')).toEqual('0')
+    expect(cells[3][1].attributes('rowspan')).toEqual('0')
+
+    expect(cells[1][2].attributes('rowspan')).toEqual('2')
+    expect(cells[2][2].attributes('colspan')).toEqual('0')
+    expect(cells[2][2].attributes('rowspan')).toEqual('0')
+
+    expect(cells[3][3].attributes('colspan')).toEqual('2')
+    expect(cells[3][3].attributes('rowspan')).toEqual('2')
+    expect(cells[3][4].attributes('colspan')).toEqual('0')
+    expect(cells[3][4].attributes('rowspan')).toEqual('0')
+    expect(cells[4][3].attributes('colspan')).toEqual('0')
+    expect(cells[4][3].attributes('rowspan')).toEqual('0')
+    expect(cells[4][4].attributes('colspan')).toEqual('0')
+    expect(cells[4][4].attributes('rowspan')).toEqual('0')
+
+    expect(cells[0][4].attributes('colspan')).toBeUndefined()
+    expect(cells[0][4].attributes('rowspan')).toEqual('2')
   })
 })

@@ -90,6 +90,15 @@ export default defineComponent({
       textAlign: {
         default: 'left',
         validator: value => aligns.includes(value)
+      },
+      headSpan: {
+        default: 1,
+        static: true
+      },
+      cellSpan: {
+        default: null,
+        isFunc: true,
+        static: true
       }
     })
 

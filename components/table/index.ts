@@ -27,5 +27,6 @@ export type {
   TableRowPayload,
   TableCellPayload,
   TableHeadPayload,
-  TableColResizePayload
+  TableColResizePayload,
+  TableCellSpanFn
 } from './symbol'

@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="className"
     role="columnheader"
+    :colspan="headSpan !== 1 ? headSpan : undefined"
     :style="style"
     :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
     v-bind="attrs"
@@ -153,7 +154,7 @@ import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
+import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -186,7 +187,7 @@ export default defineComponent({
       default: -1
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
@@ -203,10 +204,31 @@ export default defineComponent({
 
     let currentWidth = 0
 
+    const headSpan = computed(() => {
+      const fixed = props.fixed || 'default'
+
+      if (state.collapseMap.get(fixed)!.has(`-1,${props.index}`)) {
+        return 0
+      }
+
+      const columns =
+        fixed === 'left'
+          ? state.leftFixedColumns
+          : fixed === 'right'
+            ? state.rightFixedColumns
+            : state.columns
+
+      const colSpan = boundRange(props.column.headSpan ?? 1, 0, columns.length - props.index)
+
+      mutations.updateCellSpan(-1, props.index, fixed, { colSpan, rowSpan: 1 })
+
+      return colSpan
+    })
+
     const { target: resizer } = useMoving({
       capture: false,
       onStart: (state, event) => {
-        if (!resizable.value || resizing.value) return false
+        if (!resizable.value || resizing.value || !headSpan.value) return false
 
         const table = tableAction.getTableElement()
 
@@ -226,14 +248,17 @@ export default defineComponent({
           width: currentWidth + state.deltaX
         })
       },
-      onEnd: (state, event) => {
+      onEnd: ({ deltaX }, event) => {
         mutations.setColumnResizing(false)
 
         if (!wrapper.value) return
 
-        const width = wrapper.value.getBoundingClientRect().width + state.deltaX
+        const width = wrapper.value.getBoundingClientRect().width + deltaX
 
-        mutations.handleColumnResize(props.column.key, width)
+        mutations.handleColumnResize(
+          state.columns.slice(props.index, props.index + headSpan.value).map(column => column.key),
+          width
+        )
         tableAction.emitColResize('End', { ...buildEventPayload(event), width })
       }
     })
@@ -261,10 +286,14 @@ export default defineComponent({
       ]
     })
     const style = computed(() => {
-      const width = state.widths.get(props.column.key) || 0
-      const maxWidth = state.resized.has(props.column.key)
-        ? `${width}px`
-        : `${props.column.width}px`
+      const span = headSpan.value
+      const totalWidths =
+        props.fixed === 'left'
+          ? getters.leftFixedWidths
+          : props.fixed === 'right'
+            ? getters.rightFixedWidths
+            : getters.totalWidths
+      const width = totalWidths[props.index + span] - totalWidths[props.index]
 
       let customStyle
 
@@ -275,14 +304,15 @@ export default defineComponent({
       }
 
       return [
-        {
-          maxWidth,
-          flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`,
-          transform: `translateX(${getters.totalWidths[props.index]}px)`
-        },
         props.column.style || '',
-        customStyle
+        customStyle,
+        {
+          display: !span ? 'none' : undefined,
+          width: `${width}px`,
+          borderRightWidth:
+            span > 1 && props.index + span >= totalWidths.length - 1 ? 0 : undefined,
+          transform: `translate3d(${getters.totalWidths[props.index]}px, 0, 0)`
+        }
       ]
     })
     const attrs = computed(() => {
@@ -441,6 +471,7 @@ export default defineComponent({
       resizable,
 
       className,
+      headSpan,
       style,
       attrs,
       sorter,

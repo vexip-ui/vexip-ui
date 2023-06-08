@@ -3,6 +3,7 @@
     v-if="!row.hidden"
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
+    :style="groupStyle"
     :draggable="draggable || row.dragging"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -24,12 +25,7 @@
     >
       <slot></slot>
     </div>
-    <CollapseTransition
-      v-if="!!expandColumn"
-      appear
-      @after-enter="computeRectHeight"
-      @after-leave="computeRectHeight"
-    >
+    <CollapseTransition v-if="!!expandColumn" @enter="computeRectHeight" @leave="computeRectHeight">
       <div
         v-if="row.expanded"
         ref="expand"
@@ -73,7 +69,7 @@ import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
 
 import type { CSSProperties, PropType } from 'vue'
-import type { TableExpandColumn, TableRowState } from './symbol'
+import type { TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',
@@ -95,7 +91,7 @@ export default defineComponent({
       default: false
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
@@ -130,7 +126,7 @@ export default defineComponent({
         nh.be('row'),
         {
           [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.index % 2 === 1,
+          [nh.bem('row', 'stripe')]: props.row.listIndex % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
@@ -148,10 +144,10 @@ export default defineComponent({
       }
 
       return [
+        customStyle,
         {
           minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
-        },
-        customStyle
+        }
       ]
     })
     const attrs = computed(() => {
@@ -165,13 +161,21 @@ export default defineComponent({
 
       return null
     })
+    const groupStyle = computed(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      state.totalHeight
+
+      const offset =
+        state.heightBITree && !props.isHead && props.row.listIndex
+          ? state.heightBITree.sum(props.row.listIndex)
+          : 0
+
+      return {
+        transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
+      }
+    })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
-    const expandColumn = computed(() => {
-      return state.columns.find(column => (column as TableExpandColumn).type === 'expand') as
-        | TableExpandColumn
-        | undefined
-    })
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
       return props.fixed
@@ -200,7 +204,10 @@ export default defineComponent({
 
       computeBorderHeight()
       computeRowHeight()
+      updateTotalHeight()
+    }
 
+    function updateTotalHeight() {
       if (state.heightBITree && !props.fixed) {
         nextTick(() => {
           const height = getRowHeight(props.row)
@@ -238,6 +245,7 @@ export default defineComponent({
         computeRectHeight()
       } else if (!props.row.hidden) {
         computeBorderHeight()
+        updateTotalHeight()
       }
     })
 
@@ -274,7 +282,7 @@ export default defineComponent({
         const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
 
         mutations.setBorderHeight(rowKey.value, borderHeight)
-        mutations.setRowExpandHeight(rowKey.value, expandElement.value?.offsetHeight || 0)
+        mutations.setRowExpandHeight(rowKey.value, expandElement.value?.scrollHeight || 0)
       }
     }
 
@@ -362,12 +370,13 @@ export default defineComponent({
       className,
       style,
       attrs,
+      groupStyle,
       draggable,
-      expandColumn,
       expandRenderer,
       expandStyle,
       leftFixed: computed(() => getters.leftFixedWidths.at(-1)),
       rightFixed: computed(() => getters.rightFixedWidths.at(-1)),
+      expandColumn: toRef(getters, 'expandColumn'),
 
       wrapper,
       rowEl: rowElement,

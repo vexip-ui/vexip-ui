@@ -7,6 +7,7 @@ import {
   isNull,
   sortByProps,
   toFalse,
+  toFixed,
   toNumber
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
@@ -14,7 +15,7 @@ import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  CellSpanFn,
+  CellSpanResult,
   ColumnWithKey,
   Data,
   ExpandRenderFn,
@@ -24,6 +25,7 @@ import type {
   StoreOptions,
   StoreState,
   TableCellPropFn,
+  TableCellSpanFn,
   TableColumnOptions,
   TableDragColumn,
   TableExpandColumn,
@@ -75,7 +77,9 @@ export function useStore(options: StoreOptions) {
     virtualData: [],
     totalHeight: options.rowMinHeight * options.data.length,
     colResizing: false,
-    resizeLeft: 0
+    resizeLeft: 0,
+    cellSpanMap: new Map(),
+    collapseMap: new Map()
   }) as StoreState
 
   setColumns(options.columns)
@@ -92,7 +96,13 @@ export function useStore(options: StoreOptions) {
       : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
   })
   const processedData = computed(() => {
-    return pageData(state.currentPage, state.pageSize, sortedData.value)
+    const data = pageData(state.currentPage, state.pageSize, sortedData.value)
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      data[i].listIndex = i
+    }
+
+    return data
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
@@ -167,6 +177,11 @@ export function useStore(options: StoreOptions) {
   const totalWidths = computed(() => getColumnsWidths())
   const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
   const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
+  const expandColumn = computed(() => {
+    return state.columns.find(column => (column as TableExpandColumn).type === 'expand') as
+      | TableExpandColumn
+      | undefined
+  })
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -187,7 +202,8 @@ export function useStore(options: StoreOptions) {
     rowDragging,
     totalWidths,
     leftFixedWidths,
-    rightFixedWidths
+    rightFixedWidths,
+    expandColumn
   })
 
   const mutations = {
@@ -209,7 +225,6 @@ export function useStore(options: StoreOptions) {
     setHeadStyle,
     setHeadAttrs,
     setTableWidth,
-    setColumnWidth,
     fixRowHeight,
     setBorderHeight,
     setRowHeight,
@@ -252,7 +267,8 @@ export function useStore(options: StoreOptions) {
     handleDrag,
     handleTreeExpand,
     getParentRow,
-    handleColumnResize
+    handleColumnResize,
+    updateCellSpan
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -274,6 +290,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumns(columns: TableColumnOptions[]) {
+    resetCellSpan()
+
     columns = Array.from(columns).sort((prev, next) => {
       return (prev.order || 0) - (next.order || 0)
     })
@@ -284,8 +302,13 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns = []
     const leftFixedColumns = []
 
+    let first = false
+
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = { ...columns[i] } as ColumnWithKey
+
+      column.first = false
+      column.last = false
 
       if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
@@ -330,6 +353,9 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
+      } else if (!first) {
+        column.first = true
+        first = true
       }
 
       let key = column.key
@@ -348,8 +374,6 @@ export function useStore(options: StoreOptions) {
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
-      column.first = false
-      column.last = false
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -484,6 +508,7 @@ export function useStore(options: StoreOptions) {
             treeExpanded: !!treeExpanded,
             partial: false,
             dragging: false,
+            listIndex: 0,
             data: item
           }
 
@@ -599,19 +624,24 @@ export function useStore(options: StoreOptions) {
       flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
     }
 
+    let usedWidth = 0
+
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
+      const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
 
-      widths.set(column.key, flexUnitWidth)
+      if (i < flexColumnCount - 1) {
+        usedWidth += width
+      }
+
+      widths.set(column.key, width)
+    }
+
+    if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
+      widths.set(flexColumns.at(-1)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
-  }
-
-  function setColumnWidth(key: Key, width: number) {
-    if (state.widths.has(key)) {
-      state.widths.set(key, width)
-    }
   }
 
   function fixRowHeight(key: Key, height: number) {
@@ -725,7 +755,7 @@ export function useStore(options: StoreOptions) {
     state.expandRenderer = renderer
   }
 
-  function setCellSpan(spanFn: CellSpanFn | null) {
+  function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
   }
 
@@ -940,10 +970,10 @@ export function useStore(options: StoreOptions) {
     state.partial = partial
   }
 
-  function setRenderRows(start: number, end: number) {
+  function setRenderRows(start: number, end: number, force = false) {
     const { startRow, endRow, heightBITree, virtualData } = state
 
-    if (start === startRow && end === endRow) return
+    if (!force && start === startRow && end === endRow) return
 
     const { processedData } = getters
     virtualData.length = 0
@@ -1196,9 +1226,119 @@ export function useStore(options: StoreOptions) {
     return null
   }
 
-  function handleColumnResize(key: Key, newWidth: number) {
-    state.resized.add(key)
-    setColumnWidth(key, newWidth)
+  let lastColumnWidth: number | undefined
+
+  function handleColumnResize(keys: Key[], newWidth: number) {
+    const { resized, widths, columns, width: tableWidth } = state
+    const length = keys.length
+
+    if (!columns.length || !length) return
+
+    const deltaWidth = newWidth / length
+    const lastKey = columns.at(-1)!.key
+
+    for (let i = 0; i < length; ++i) {
+      const key = keys[i]
+
+      resized.add(key)
+      widths.set(
+        key,
+        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
+      )
+    }
+
+    let totalWidth = 0
+
+    for (const width of widths.values()) {
+      totalWidth += width
+    }
+
+    totalWidth = toFixed(totalWidth, 1)
+
+    if (
+      totalWidth - widths.get(lastKey)! <
+      tableWidth - (lastColumnWidth ?? widths.get(lastKey)!)
+    ) {
+      if (!lastColumnWidth) {
+        lastColumnWidth = widths.get(lastKey)
+      }
+
+      widths.set(lastKey, widths.get(lastKey)! + tableWidth - totalWidth)
+    } else if (lastColumnWidth) {
+      widths.set(lastKey, lastColumnWidth!)
+      lastColumnWidth = undefined
+    }
+  }
+
+  function resetCellSpan() {
+    for (const type of ['left', 'default', 'right'] as const) {
+      state.cellSpanMap.set(type, new Map())
+      state.collapseMap.set(type, new Map())
+    }
+  }
+
+  function updateCellSpan(
+    rowIndex: number,
+    columnIndex: number,
+    fixed: 'left' | 'default' | 'right',
+    span: Required<CellSpanResult>
+  ) {
+    const { colSpan, rowSpan } = span
+    const cellSpanMap = state.cellSpanMap.get(fixed)!
+    const collapseMap = state.collapseMap.get(fixed)!
+
+    const masterKey = `${rowIndex},${columnIndex}`
+    const prevSpan = cellSpanMap.get(masterKey)
+
+    let colLen = colSpan
+    let rowLen = rowSpan
+    let prevColSpan = 0
+    let prevRowSpan = 0
+
+    if (prevSpan) {
+      prevColSpan = prevSpan.colSpan
+      prevRowSpan = prevSpan.rowSpan
+      colLen = Math.max(colLen, prevColSpan)
+      rowLen = Math.max(rowLen, prevRowSpan)
+    }
+
+    for (let i = 0; i < colLen; ++i) {
+      for (let j = 0; j < rowLen; ++j) {
+        if ((!i && !j) || (i < colSpan && i < prevColSpan && j < rowSpan && j < prevRowSpan)) {
+          continue
+        }
+
+        const key = `${rowIndex + j},${columnIndex + i}`
+        let masterSet = collapseMap.get(key)
+
+        if (i < prevColSpan && j < prevRowSpan) {
+          if (masterSet) {
+            masterSet.delete(masterKey)
+
+            if (!masterSet.size) {
+              collapseMap.delete(key)
+            }
+          }
+        }
+
+        if (i < colSpan && j < rowSpan) {
+          if (!masterSet) {
+            masterSet = new Set()
+            collapseMap.set(key, masterSet)
+          }
+
+          masterSet.add(masterKey)
+        }
+      }
+    }
+
+    collapseMap.delete(masterKey)
+
+    if (span.colSpan === 1 && span.rowSpan === 1) {
+      cellSpanMap.delete(masterKey)
+    } else {
+      cellSpanMap.set(masterKey, span)
+    }
   }
 
   type Store = Readonly<{

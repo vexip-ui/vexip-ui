@@ -24,6 +24,7 @@
       <NativeScroll
         ref="mainScroll"
         inherit
+        observe-deep
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -52,7 +53,6 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="left">
@@ -75,7 +75,6 @@
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="right">
@@ -267,6 +266,7 @@ export default defineComponent({
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
     const hasDragColumn = ref(false)
+    const noTransition = ref(true)
 
     const wrapper = ref<HTMLElement>()
     const xScroll = ref<NativeScrollExposed>()
@@ -375,7 +375,8 @@ export default defineComponent({
         [nh.bm('transparent')]: props.transparent,
         [nh.bm('virtual')]: props.virtual,
         [nh.bm('col-resizable')]: props.colResizable,
-        [nh.bm('col-resizing')]: state.colResizing
+        [nh.bm('col-resizing')]: state.colResizing,
+        [nh.bm('locked')]: noTransition.value
       }
     })
     const style = computed(() => {
@@ -660,6 +661,7 @@ export default defineComponent({
           }
         })
 
+      computeRenderRows(true)
       emitEvent(
         props.onRowFilter,
         profiles,
@@ -685,6 +687,7 @@ export default defineComponent({
           }
         })
 
+      computeRenderRows(true)
       emitEvent(
         props.onRowSort,
         profiles,
@@ -858,7 +861,7 @@ export default defineComponent({
       emitEvent(props[`onColResize${type}`], payload)
     }
 
-    function computeRenderRows() {
+    function computeRenderRows(force = false) {
       const { totalHeight, bodyScroll, heightBITree } = state
       const { processedData } = getters
       const rowCount = processedData.length
@@ -888,15 +891,17 @@ export default defineComponent({
       const renderStart = Math.max(start - props.bufferCount, 0)
       const renderEnd = Math.min(end + props.bufferCount + 1, rowCount)
 
-      setRenderRows(renderStart, renderEnd)
+      setRenderRows(renderStart, renderEnd, force)
     }
 
     function refresh() {
+      noTransition.value = true
       nextTick(computeTableWidth)
       setTimeout(() => {
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
+        noTransition.value = false
       }, 0)
     }
 
@@ -919,7 +924,9 @@ export default defineComponent({
           0
         )
         syncBarScroll()
-        nextTick(computeBodyHeight)
+        nextTick(() => {
+          computeBodyHeight()
+        })
         nextFrameOnce(computeRenderRows)
       }, 10)
     }

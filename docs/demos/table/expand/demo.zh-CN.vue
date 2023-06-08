@@ -19,7 +19,6 @@
           </Cell>
           <Cell :width="12">
             Email: {{ row.email }}
-            {{ leftFixed }}
           </Cell>
         </Grid>
       </template>

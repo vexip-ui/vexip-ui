@@ -1,6 +1,6 @@
 <template>
-  <Grid tag="nav" class="dev-nav">
-    <Cell :width="18" :use-flex="{ align: 'middle' }">
+  <div class="dev-nav">
+    <div class="dev-nav__section">
       <router-link
         v-for="route in router.options.routes"
         :key="route.path"
@@ -9,11 +9,12 @@
       >
         {{ route.name }}
       </router-link>
-    </Cell>
-    <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px">
+    </div>
+    <span role="none" style="flex: auto"></span>
+    <div class="dev-nav__section" style="padding-right: 10px">
       <ThemeSwitch></ThemeSwitch>
-    </Cell>
-  </Grid>
+    </div>
+  </div>
   <main class="dev-main">
     <router-view v-slot="{ Component }">
       <component :is="Component"></component>
@@ -56,6 +57,10 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  font-family: var(--vxp-font-family-base);
+  font-size: var(--vxp-font-size-base);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--vxp-line-height-base);
   color: var(--vxp-content-color-base);
   background-color: var(--body-bg-color);
   transition: var(--vxp-transition-background);
@@ -67,8 +72,14 @@ body {
 }
 
 .dev-nav {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 50px;
+
+  &__section {
+    display: flex;
+  }
 }
 
 .dev-main {
