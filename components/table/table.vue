@@ -39,6 +39,7 @@
           </template>
         </TableBody>
       </NativeScroll>
+      <TableFoot v-if="belowSummaries.length" ref="tfoot"></TableFoot>
     </NativeScroll>
     <div
       v-if="leftFixedColumns.length"
@@ -61,6 +62,7 @@
           </template>
         </TableBody>
       </NativeScroll>
+      <TableFoot v-if="belowSummaries.length" fixed="left"></TableFoot>
     </div>
     <div
       v-if="rightFixedColumns.length"
@@ -81,6 +83,7 @@
           <slot></slot>
         </TableBody>
       </NativeScroll>
+      <TableFoot v-if="belowSummaries.length" fixed="right"></TableFoot>
     </div>
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
@@ -91,7 +94,7 @@
       :fade="props.barFade"
       :disabled="!!bodyHeight && totalHeight <= bodyHeight"
       :bar-length="barLength"
-      :style="{ top: `${headHeight}px` }"
+      :style="{ top: `${headHeight}px`, bottom: `${footHeight}px` }"
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
@@ -131,6 +134,7 @@ import {
 
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
+import TableFoot from './table-foot.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
@@ -155,6 +159,7 @@ import type {
   TableCellPayload,
   TableColResizePayload,
   TableColumnOptions,
+  TableFootPayload,
   TableHeadPayload,
   TableKeyConfig,
   TableRowInstance,
@@ -178,7 +183,8 @@ export default defineComponent({
     NativeScroll,
     Scrollbar,
     TableHead,
-    TableBody
+    TableBody,
+    TableFoot
   },
   props: tableProps,
   emits: [],
@@ -186,6 +192,10 @@ export default defineComponent({
     const props = useProps('table', _props, {
       locale: null,
       columns: {
+        default: () => [],
+        static: true
+      },
+      summaries: {
         default: () => [],
         static: true
       },
@@ -242,6 +252,9 @@ export default defineComponent({
       headClass: null,
       headStyle: null,
       headAttrs: null,
+      footClass: null,
+      footStyle: null,
+      footAttrs: null,
       customSorter: false,
       customFilter: false,
       keyConfig: () => ({}),
@@ -252,10 +265,6 @@ export default defineComponent({
       cellSpan: {
         default: null,
         isFunc: true
-      },
-      summaries: {
-        default: () => [],
-        static: true
       }
     })
 
@@ -265,6 +274,7 @@ export default defineComponent({
     const xScrollPercent = ref(0)
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
+    const footHeight = ref(0)
     const indicatorShow = ref(false)
     const indicatorType = ref(DropType.BEFORE)
     const tempColumns = ref(new Set<TableColumnOptions>())
@@ -277,6 +287,7 @@ export default defineComponent({
     const wrapper = ref<HTMLElement>()
     const xScroll = ref<NativeScrollExposed>()
     const thead = ref<InstanceType<typeof TableHead>>()
+    const tfoot = ref<InstanceType<typeof TableFoot>>()
     const mainScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
@@ -331,6 +342,9 @@ export default defineComponent({
       headClass: props.headClass,
       headStyle: props.headStyle,
       headAttrs: props.headAttrs,
+      footClass: props.footClass,
+      footStyle: props.footStyle,
+      footAttrs: props.footAttrs,
       highlight: props.highlight,
       currentPage: props.currentPage,
       pageSize: props.pageSize,
@@ -373,7 +387,8 @@ export default defineComponent({
       emitRowEvent,
       emitCellEvent,
       emitHeadEvent,
-      emitColResize
+      emitColResize,
+      emitFootEvent
     })
 
     const { state, getters, mutations } = store
@@ -438,9 +453,9 @@ export default defineComponent({
 
     const {
       setColumns,
-      setDataKey,
-      setData,
       setSummaries,
+      setData,
+      setDataKey,
       setTableWidth,
       setBodyScroll,
       setRenderRows,
@@ -595,10 +610,22 @@ export default defineComponent({
 
       if (isDefined(height)) {
         const tableHead = thead.value?.$el as HTMLElement
+        const tableFoot = tfoot.value?.$el as HTMLElement
 
-        if (tableHead) {
-          headHeight.value = tableHead.offsetHeight
-          bodyHeight.value = height - headHeight.value
+        if (tableHead || tableFoot) {
+          let fixedHeight = 0
+
+          if (tableHead) {
+            headHeight.value = tableHead.offsetHeight
+            fixedHeight += headHeight.value
+          }
+
+          if (tableFoot) {
+            footHeight.value = tableFoot.offsetHeight
+            fixedHeight += footHeight.value
+          }
+
+          bodyHeight.value = height - fixedHeight
         } else {
           bodyHeight.value = height - (props.rowHeight || props.rowMinHeight)
         }
@@ -889,6 +916,10 @@ export default defineComponent({
       emitEvent(props[`onColResize${type}`], payload)
     }
 
+    function emitFootEvent(type: MouseEventType, payload: TableFootPayload) {
+      emitEvent(props[`onFoot${type}`], payload)
+    }
+
     function computeRenderRows(force = false) {
       const { totalHeight, bodyScroll, heightBITree } = state
       const { processedData } = getters
@@ -982,8 +1013,11 @@ export default defineComponent({
       xScrollPercent,
       yScrollPercent,
       headHeight,
+      footHeight,
       indicatorShow,
       indicatorType,
+      aboveSummaries: toRef(state, 'aboveSummaries'),
+      belowSummaries: toRef(state, 'belowSummaries'),
       leftFixedColumns: toRef(state, 'leftFixedColumns'),
       rightFixedColumns: toRef(state, 'rightFixedColumns'),
       bodyScroll: toRef(state, 'bodyScroll'),
@@ -1004,6 +1038,7 @@ export default defineComponent({
       wrapper,
       xScroll,
       thead,
+      tfoot,
       mainScroll,
       indicator,
       scrollbar,

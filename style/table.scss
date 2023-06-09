@@ -79,7 +79,8 @@ $table: map.merge(
   }
 
   &__head,
-  &__body {
+  &__body,
+  &__foot {
     position: relative;
     display: flex;
     flex: 1 0 0;
@@ -88,9 +89,16 @@ $table: map.merge(
     background-color: get-css-var('table-bg-color');
   }
 
-  &__head {
+  &__head,
+  &__foot {
     z-index: 1;
     user-select: none;
+  }
+
+  &__foot {
+    &--below {
+      border-top: $border-a get-css-var('table-b-color');
+    }
   }
 
   &__body {
@@ -124,12 +132,6 @@ $table: map.merge(
     width: 100%;
   }
 
-  &__head &__group {
-    &::after {
-      border-bottom-color: get-css-var('table-b-color');
-    }
-  }
-
   &--virtual &__group {
     flex: 0 0 auto;
   }
@@ -143,7 +145,8 @@ $table: map.merge(
   }
 
   &__cell,
-  &__head-cell {
+  &__head-cell,
+  &__foot-cell {
     position: absolute;
     left: 0;
     display: flex;
@@ -175,9 +178,7 @@ $table: map.merge(
       word-break: break-all;
       white-space: pre-wrap;
     }
-  }
 
-  &__cell {
     &[colspan],
     &[rowspan] {
       z-index: 1;
@@ -214,7 +215,8 @@ $table: map.merge(
   $collapse: #{&}__collapse;
   $fixed-active: #{&}__fixed--active;
 
-  &__body &__group {
+  &__body &__group,
+  &__foot &__group {
     position: absolute;
     transition: get-css-var('transition-transform');
 
@@ -227,6 +229,10 @@ $table: map.merge(
         border-bottom-color: transparent;
       }
     }
+  }
+
+  &__foot &__group {
+    position: relative;
   }
 
   &--transparent {

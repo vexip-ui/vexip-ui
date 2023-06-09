@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TableColumnOptions } from 'vexip-ui'
+import type { TableCellPropFn, TableHeadPropFn } from 'vexip-ui'
 
 type ItemType<D> = D extends (infer I)[] ? I : Record<string, any>
 
@@ -69,30 +69,18 @@ const data = [
 
 const rowClass = 'demo-row-class'
 
-function headClass(column: TableColumnOptions, index: number) {
-  return `head-${index}`
-}
+const headClass: TableHeadPropFn = ({ index }) => `head-${index}`
 
-function headStyle(column: TableColumnOptions, index: number) {
-  return {
-    color: `var(--vxp-color-error-opacity-${index + 1})`
-  }
-}
+const headStyle: TableHeadPropFn = ({ index }) => ({
+  color: `var(--vxp-color-error-opacity-${index + 1})`
+})
 
-function hadeAttrs(column: TableColumnOptions, index: number) {
-  return {
-    'data-index': index
-  }
-}
+const hadeAttrs: TableHeadPropFn = ({ index }) => ({
+  'data-index': index
+})
 
-function cellClass(
-  row: ItemType<typeof data>,
-  column: TableColumnOptions,
-  rowIndex: number,
-  columnIndex: number
-) {
-  return `cell-${rowIndex}-${columnIndex}`
-}
+const cellClass: TableCellPropFn<ItemType<typeof data>> = ({ rowIndex, columnIndex }) =>
+  `cell-${rowIndex}-${columnIndex}`
 </script>
 
 <style scoped>

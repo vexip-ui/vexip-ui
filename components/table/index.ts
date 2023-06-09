@@ -35,5 +35,6 @@ export type {
   TableHeadPayload,
   TableColResizePayload,
   TableCellSpanFn,
-  TableSummaryOptions
+  TableSummaryOptions,
+  TableSummaryData
 } from './symbol'

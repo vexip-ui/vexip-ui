@@ -125,7 +125,7 @@ export default defineComponent({
         nh.be('row'),
         {
           [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.row.listIndex % 2 === 1,
+          [nh.bem('row', 'stripe')]: props.index % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
@@ -165,9 +165,7 @@ export default defineComponent({
       state.totalHeight
 
       const offset =
-        state.heightBITree && !props.isHead && props.row.listIndex
-          ? state.heightBITree.sum(props.row.listIndex)
-          : 0
+        state.heightBITree && !props.isHead && props.index ? state.heightBITree.sum(props.index) : 0
 
       return {
         transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined

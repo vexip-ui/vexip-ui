@@ -20,6 +20,7 @@ import type {
   ExpandRenderFn,
   FilterRenderFn,
   HeadRenderFn,
+  SummaryCellSpanFn,
   SummaryRenderFn,
   TableCellPayload,
   TableCellPropFn,
@@ -28,6 +29,8 @@ import type {
   TableColumnType,
   TableFilterOptions,
   TableFilterProfile,
+  TableFootPayload,
+  TableFootPropFn,
   TableHeadPayload,
   TableHeadPropFn,
   TableKeyConfig,
@@ -42,8 +45,8 @@ import type {
 export const tableProps = buildProps({
   locale: localeProp('table'),
   columns: Array as PropType<TableColumnOptions<any, any>[]>,
-  data: Array as PropType<Data[]>,
   summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
+  data: Array as PropType<Data[]>,
   dataKey: String,
   width: [Number, String],
   height: Number,
@@ -78,15 +81,24 @@ export const tableProps = buildProps({
   tooltipWidth: [Number, String],
   singleSorter: booleanProp,
   singleFilter: booleanProp,
-  cellClass: [String, Object, Array, Function] as PropType<ClassType | TableCellPropFn<ClassType>>,
-  cellStyle: [String, Object, Array, Function] as PropType<StyleType | TableCellPropFn<StyleType>>,
+  cellClass: [String, Object, Array, Function] as PropType<
+    ClassType | TableCellPropFn<any, ClassType>
+  >,
+  cellStyle: [String, Object, Array, Function] as PropType<
+    StyleType | TableCellPropFn<any, StyleType>
+  >,
   cellAttrs: [Object, Function] as PropType<
-    Record<string, any> | TableCellPropFn<Record<string, any>>
+    Record<string, any> | TableCellPropFn<any, Record<string, any>>
   >,
   headClass: [String, Object, Array, Function] as PropType<ClassType | TableHeadPropFn<ClassType>>,
   headStyle: [String, Object, Array, Function] as PropType<StyleType | TableHeadPropFn<StyleType>>,
   headAttrs: [Object, Function] as PropType<
     Record<string, any> | TableHeadPropFn<Record<string, any>>
+  >,
+  footClass: [String, Object, Array, Function] as PropType<ClassType | TableFootPropFn<ClassType>>,
+  footStyle: [String, Object, Array, Function] as PropType<StyleType | TableFootPropFn<StyleType>>,
+  footAttrs: [Object, Function] as PropType<
+    Record<string, any> | TableFootPropFn<Record<string, any>>
   >,
   customSorter: booleanProp,
   customFilter: booleanProp,
@@ -123,7 +135,12 @@ export const tableProps = buildProps({
   onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>(),
   onColResizeStart: eventProp<(payload: TableHeadPayload) => void>(),
   onColResizeMove: eventProp<(payload: TableHeadPayload) => void>(),
-  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>()
+  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>(),
+  onFootEnter: eventProp<(payload: TableFootPayload) => void>(),
+  onFootLeave: eventProp<(payload: TableFootPayload) => void>(),
+  onFootClick: eventProp<(payload: TableFootPayload) => void>(),
+  onFootDblclick: eventProp<(payload: TableFootPayload) => void>(),
+  onFootContextmenu: eventProp<(payload: TableFootPayload) => void>()
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>
@@ -163,7 +180,9 @@ export const tableColumnProps = buildProps({
   metaData: Object as PropType<Data>,
   textAlign: String as PropType<TableTextAlign>,
   headSpan: Number,
-  cellSpan: Function as PropType<ColumnCellSpanFn>
+  cellSpan: Function as PropType<ColumnCellSpanFn>,
+  noSummary: booleanProp,
+  summaryRenderer: Function as PropType<SummaryRenderFn>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
@@ -186,7 +205,7 @@ export const tableSummaryProps = buildProps({
   class: classProp,
   style: styleProp,
   attrs: Object,
-  colSpan: Number,
+  cellSpan: Function as PropType<SummaryCellSpanFn>,
   order: Number,
   above: booleanProp,
   renderer: Function as PropType<SummaryRenderFn>

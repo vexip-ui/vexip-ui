@@ -23,6 +23,12 @@ const aliases: Partial<Record<SummaryPropKey, string>> = {
 }
 const deepProps: SummaryPropKey[] = ['class', 'style', 'attrs']
 
+const funcProp = {
+  default: null,
+  isFunc: true,
+  static: true
+}
+
 export default defineComponent({
   name: 'TableSummary',
   props: tableSummaryProps,
@@ -40,6 +46,7 @@ export default defineComponent({
       class: null,
       style: null,
       attrs: null,
+      cellSpan: funcProp,
       order: {
         default: 0,
         static: true
@@ -48,11 +55,7 @@ export default defineComponent({
         default: false,
         static: true
       },
-      renderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      }
+      renderer: funcProp
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
@@ -89,6 +92,13 @@ export default defineComponent({
 
     function setRenderer() {
       options.renderer = data => {
+        if (typeof data.column.summaryRenderer === 'function') {
+          return data.column.summaryRenderer({
+            ...data,
+            summary: options
+          })
+        }
+
         if (typeof slots.default === 'function') {
           return renderSlot(slots, 'default', data)
         }

@@ -50,6 +50,11 @@ export type ColumnCellSpanFn<D = Data> = (data: {
   index: number,
   fixed?: 'left' | 'right'
 }) => CellSpanResult | undefined
+export type SummaryCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number,
+  fixed?: 'left' | 'right'
+}) => CellSpanResult | undefined
 
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {
@@ -93,6 +98,30 @@ export interface TableSorterOptions<D = Data> {
 
 export type ParsedTableSorterOptions = Required<TableSorterOptions>
 
+export interface TableSummaryData {
+  sum: number,
+  min: number,
+  max: number
+}
+
+export type SummaryRenderFn<D = Data, Val extends string | number = string | number> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number,
+  rows: D[],
+  meta: TableSummaryData
+}) => any
+
+export type ColumnSummaryRenderFn<
+  D = Data,
+  Val extends string | number = string | number
+> = (data: {
+  column: TableColumnOptions<D, Val>,
+  index: number,
+  rows: D[],
+  meta: TableSummaryData,
+  summary: TableSummaryOptions<D, Val>
+}) => any
+
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
   key: keyof D,
@@ -113,11 +142,13 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noEllipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
+  noSummary?: boolean,
   accessor?: Accessor<D, Val>,
   cellSpan?: ColumnCellSpanFn<D>,
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
-  filterRenderer?: FilterRenderFn
+  filterRenderer?: FilterRenderFn,
+  summaryRenderer?: ColumnSummaryRenderFn<D, Val>
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
@@ -183,12 +214,6 @@ export type FilterRenderFn<D = Data, Val extends string | number = string | numb
   filter: Required<TableFilterOptions<D, Val>>,
   handleFilter: (active: any) => void
 }) => any
-export type SummaryRenderFn<D = Data, Val extends string | number = string | number> = (data: {
-  column: TableColumnOptions<D, Val>,
-  index: number,
-  rows: D[],
-  summary: { sum: number, min: number, max: number }
-}) => any
 
 export type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
@@ -198,13 +223,19 @@ export type TableCellSpanFn<D = Data, Val extends string | number = string | num
   fixed?: 'left' | 'right'
 }) => CellSpanResult | undefined
 
-export type TableCellPropFn<P = any> = (
-  data: Data,
-  column: ColumnWithKey,
+export type TableCellPropFn<D = Data, P = any> = (data: {
+  row: D,
   rowIndex: number,
+  column: ColumnWithKey,
   columnIndex: number
-) => P
-export type TableHeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
+}) => P
+export type TableHeadPropFn<P = any> = (data: { column: ColumnWithKey, index: number }) => P
+export type TableFootPropFn<P = any> = (data: {
+  column: ColumnWithKey,
+  columnIndex: number,
+  summary: SummaryWithKey,
+  summaryIndex: number
+}) => P
 
 export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
@@ -230,9 +261,9 @@ export interface TableSummaryOptions<D = Data, Val extends string | number = str
   class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
-  colSpan?: number,
   order?: number,
   above?: boolean,
+  cellSpan?: SummaryCellSpanFn<D, Val>,
   renderer?: SummaryRenderFn<D, Val>
 }
 
@@ -264,8 +295,9 @@ export interface TableRowState {
 
 export interface StoreOptions {
   columns: TableColumnOptions[],
-  data: Data[],
   summaries: TableSummaryOptions[],
+  data: Data[],
+  dataKey: string,
   rowClass: ClassType | TableRowPropFn<ClassType>,
   rowStyle: StyleType | TableRowPropFn<StyleType>,
   rowAttrs: Record<string, any> | TableRowPropFn<Record<string, any>>,
@@ -275,7 +307,9 @@ export interface StoreOptions {
   headClass: ClassType | TableHeadPropFn<ClassType>,
   headStyle: StyleType | TableHeadPropFn<StyleType>,
   headAttrs: Record<string, any> | TableHeadPropFn<Record<string, any>>,
-  dataKey: string,
+  footClass: ClassType | TableFootPropFn<ClassType>,
+  footStyle: StyleType | TableFootPropFn<StyleType>,
+  footAttrs: Record<string, any> | TableFootPropFn<Record<string, any>>,
   highlight: boolean,
   currentPage: number,
   pageSize: number,
@@ -300,8 +334,8 @@ export interface StoreOptions {
 
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
-  rowData: TableRowState[],
   summaries: SummaryWithKey[],
+  rowData: TableRowState[],
   width: number,
   rightFixedColumns: ColumnWithKey[],
   leftFixedColumns: ColumnWithKey[],
@@ -358,6 +392,14 @@ export interface TableHeadPayload {
   event: Event
 }
 
+export interface TableFootPayload {
+  column: TableColumnOptions,
+  columnIndex: number,
+  summary: TableSummaryOptions,
+  summaryIndex: number,
+  event: Event
+}
+
 export interface TableColResizePayload extends TableHeadPayload {
   width: number
 }
@@ -381,6 +423,7 @@ export interface TableActions {
   emitRowEvent(type: MouseEventType, payload: TableRowPayload): void,
   emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
   emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
+  emitFootEvent(type: MouseEventType, payload: TableFootPayload): void,
   emitColResize(type: MoveEventType, payload: TableColResizePayload): void
 }
 
@@ -394,5 +437,6 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  */
 export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')
+export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']

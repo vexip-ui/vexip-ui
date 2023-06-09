@@ -353,12 +353,12 @@ describe('Table', () => {
       expect(cell.find('.vxp-table__sorter--desc').exists()).toBe(true)
     })
 
-    let renderRows = body.vm.renderData as TableRowState[]
+    let renderRows = body.vm.data as TableRowState[]
 
     const clickSorter = async (cell: DOMWrapper<Element>, type: 'asc' | 'desc') => {
       await cell.find(`.vxp-table__sorter--${type}`).trigger('click')
       await nextTick()
-      renderRows = body.vm.renderData
+      renderRows = body.vm.data
     }
 
     await clickSorter(headCells[1], 'asc')

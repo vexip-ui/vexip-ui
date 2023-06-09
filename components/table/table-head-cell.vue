@@ -202,7 +202,7 @@ export default defineComponent({
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject(TABLE_ACTIONS)!
+    const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
@@ -239,7 +239,7 @@ export default defineComponent({
       onStart: (state, event) => {
         if (!resizable.value || resizing.value || !headSpan.value) return false
 
-        const table = tableAction.getTableElement()
+        const table = tableActions.getTableElement()
 
         if (!table || !wrapper.value) return false
 
@@ -248,11 +248,11 @@ export default defineComponent({
 
         mutations.setColumnResizing(true)
         mutations.setResizeLeft(state.xStart)
-        tableAction.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
+        tableActions.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
       },
       onMove: (state, event) => {
         mutations.setResizeLeft(state.xEnd)
-        tableAction.emitColResize('Move', {
+        tableActions.emitColResize('Move', {
           ...buildEventPayload(event),
           width: currentWidth + state.deltaX
         })
@@ -268,7 +268,7 @@ export default defineComponent({
           state.columns.slice(props.index, props.index + headSpan.value).map(column => column.key),
           width
         )
-        tableAction.emitColResize('End', { ...buildEventPayload(event), width })
+        tableActions.emitColResize('End', { ...buildEventPayload(event), width })
       }
     })
 
@@ -276,7 +276,7 @@ export default defineComponent({
       let customClass = null
 
       if (typeof state.headClass === 'function') {
-        customClass = state.headClass(props.column, props.index)
+        customClass = state.headClass({ column: props.column, index: props.index })
       } else {
         customClass = state.headClass
       }
@@ -287,10 +287,11 @@ export default defineComponent({
           [nh.bem('head-cell', 'center')]:
             columnTypes.includes((props.column as TableTypeColumn).type) ||
             props.column.textAlign === 'center',
-          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right'
+          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
+          [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis
         },
-        props.column.className || null,
-        props.column.class || null,
+        props.column.className,
+        props.column.class,
         customClass
       ]
     })
@@ -307,7 +308,7 @@ export default defineComponent({
       let customStyle
 
       if (typeof state.headStyle === 'function') {
-        customStyle = state.headStyle(props.column, props.index)
+        customStyle = state.headStyle({ column: props.column, index: props.index })
       } else {
         customStyle = state.headStyle
       }
@@ -328,7 +329,7 @@ export default defineComponent({
       let customAttrs: Record<string, any>
 
       if (typeof state.headAttrs === 'function') {
-        customAttrs = state.headAttrs(props.column, props.index)
+        customAttrs = state.headAttrs({ column: props.column, index: props.index })
       } else {
         customAttrs = state.headAttrs
       }
@@ -378,23 +379,23 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Enter', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Enter', buildEventPayload(event))
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Leave', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Leave', buildEventPayload(event))
     }
 
     function handleClick(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Click', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Click', buildEventPayload(event))
     }
 
     function handleDblclick(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Dblclick', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Dblclick', buildEventPayload(event))
     }
 
     function handleContextmenu(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Contextmenu', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Contextmenu', buildEventPayload(event))
     }
 
     function handleSortAsc() {
@@ -402,7 +403,7 @@ export default defineComponent({
       const type = sorter.value.type === 'asc' ? null : 'asc'
 
       mutations.handleSort(key, type)
-      tableAction.emitRowSort()
+      tableActions.emitRowSort()
     }
 
     function handleSortDesc() {
@@ -410,7 +411,7 @@ export default defineComponent({
       const type = sorter.value.type === 'desc' ? null : 'desc'
 
       mutations.handleSort(key, type)
-      tableAction.emitRowSort()
+      tableActions.emitRowSort()
     }
 
     function handleFilter(value: ParsedFilterOptions['active']) {
@@ -426,7 +427,7 @@ export default defineComponent({
       })
       handleFilter(value)
       filterVisible.value = false
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleFilterCheck(value: string | number, checked: boolean) {
@@ -451,7 +452,7 @@ export default defineComponent({
 
       handleFilter(activeValues)
       filterVisible.value = false
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleResetFilter() {
@@ -462,12 +463,12 @@ export default defineComponent({
         value: null,
         disableOthers: true
       })
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleCheckAllRow() {
       mutations.handleCheckAll()
-      tableAction.emitAllRowCheck(state.checkedAll, state.partial)
+      tableActions.emitAllRowCheck(state.checkedAll, state.partial)
     }
 
     return {
@@ -506,7 +507,7 @@ export default defineComponent({
       handleFilterMultiple,
       handleResetFilter,
       handleCheckAllRow,
-      refreshXScroll: () => nextFrameOnce(tableAction.refreshXScroll)
+      refreshXScroll: () => nextFrameOnce(tableActions.refreshXScroll)
     }
   }
 })

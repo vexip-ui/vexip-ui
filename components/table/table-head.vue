@@ -7,7 +7,7 @@
       aria-rowindex="0"
     >
       <TableHeadCell
-        v-for="(column, index) in currentColumns"
+        v-for="(column, index) in columns"
         :key="index"
         :column="column"
         :index="index"
@@ -44,7 +44,7 @@ export default defineComponent({
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
-    const currentColumns = computed(() => {
+    const columns = computed(() => {
       return props.fixed === 'left'
         ? state.leftFixedColumns
         : props.fixed === 'right'
@@ -69,7 +69,7 @@ export default defineComponent({
     return {
       nh: useNameHelper('table'),
 
-      currentColumns,
+      columns,
       style,
       headRow
     }

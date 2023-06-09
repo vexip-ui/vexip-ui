@@ -24,7 +24,7 @@ const aliases: Partial<Record<ColumnPropKey, string>> = {
 const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
 const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
-const rendererProp = {
+const funcProp = {
   default: null,
   isFunc: true,
   static: true
@@ -65,9 +65,9 @@ export default defineComponent({
       width: null,
       filter: null,
       sorter: false,
-      renderer: rendererProp,
-      headRenderer: rendererProp,
-      filterRenderer: rendererProp,
+      renderer: funcProp,
+      headRenderer: funcProp,
+      filterRenderer: funcProp,
       order: {
         default: 0,
         static: true
@@ -95,11 +95,9 @@ export default defineComponent({
         default: 1,
         static: true
       },
-      cellSpan: {
-        default: null,
-        isFunc: true,
-        static: true
-      }
+      cellSpan: funcProp,
+      noSummary: false,
+      summaryRenderer: funcProp
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
@@ -145,10 +143,12 @@ export default defineComponent({
     watch(() => props.renderer, setRenderer)
     watch(() => props.headRenderer, setHeadRenderer)
     watch(() => props.filterRenderer, setFilterRenderer)
+    watch(() => props.summaryRenderer, setSummaryRenderer)
 
     setRenderer()
     setHeadRenderer()
     setFilterRenderer()
+    setSummaryRenderer()
 
     tableAction?.increaseColumn(options)
 
@@ -163,7 +163,10 @@ export default defineComponent({
     })
 
     function setRenderer() {
-      if (options.type && options.type !== 'expand') return
+      if (options.type && options.type !== 'expand') {
+        (options as any).renderer = undefined
+        return
+      }
 
       options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
@@ -194,7 +197,10 @@ export default defineComponent({
     }
 
     function setHeadRenderer() {
-      if (options.type === 'selection') return
+      if (options.type === 'selection') {
+        (options as any).renderer = undefined
+        return
+      }
 
       options.headRenderer = data => {
         if (typeof slots.head === 'function') {
@@ -220,6 +226,24 @@ export default defineComponent({
         }
       } else {
         options.filterRenderer = undefined
+      }
+    }
+
+    function setSummaryRenderer() {
+      if (typeof slots.summary === 'function' || typeof props.summaryRenderer === 'function') {
+        options.summaryRenderer = data => {
+          if (typeof slots.summary === 'function') {
+            return renderSlot(slots, 'summary', data)
+          }
+
+          if (typeof props.summaryRenderer === 'function') {
+            return props.summaryRenderer(data)
+          }
+
+          return ''
+        }
+      } else {
+        options.summaryRenderer = undefined
       }
     }
 
