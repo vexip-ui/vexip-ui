@@ -80,7 +80,8 @@ export function useStore(options: StoreOptions) {
     sorters: new Map(),
     filters: new Map(),
     resized: new Set(),
-    bodyScroll: 0,
+    bodyYScroll: 0,
+    bodyXScroll: 0,
     padTop: 0,
     startRow: 0,
     endRow: 0,
@@ -291,7 +292,8 @@ export function useStore(options: StoreOptions) {
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
-    setBodyScroll,
+    setBodyYScroll,
+    setBodyXScroll,
     setHighlight,
     setRowHover,
     setLocale,
@@ -365,6 +367,8 @@ export function useStore(options: StoreOptions) {
 
       heights.push(height)
     }
+
+    return heights
   }
 
   function setColumns(columns: TableColumnOptions[]) {
@@ -817,8 +821,12 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setBodyScroll(scroll: number) {
-    state.bodyScroll = scroll
+  function setBodyYScroll(scroll: number) {
+    state.bodyYScroll = scroll
+  }
+
+  function setBodyXScroll(scroll: number) {
+    state.bodyXScroll = scroll
   }
 
   function setHighlight(able: boolean) {

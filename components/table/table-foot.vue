@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" role="rowgroup">
+  <div :class="className" role="rowgroup" :style="style">
     <TableRow
       v-for="({ row, summary }, index) in data"
       :key="row.key"

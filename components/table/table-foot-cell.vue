@@ -85,7 +85,11 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
 
+    const prefix = computed(() => (props.above ? 'af' : 'bf'))
     const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
+    const heights = computed(() =>
+      props.above ? getters.topFixedHeights : getters.bottomFixedHeights
+    )
     const className = computed(() => {
       let customClass = null
 
@@ -115,7 +119,11 @@ export default defineComponent({
     const cellSpan = computed(() => {
       const fixed = props.fixed || 'default'
 
-      if (state.collapseMap.get(fixed)!.has(`s${props.summaryIndex},${props.columnIndex}`)) {
+      if (
+        state.collapseMap
+          .get(fixed)!
+          .has(`${prefix.value}${props.summaryIndex},${props.columnIndex}`)
+      ) {
         return { colSpan: 0, rowSpan: 0 }
       }
 
@@ -142,7 +150,7 @@ export default defineComponent({
       span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
       span.rowSpan = boundRange(span.rowSpan, 0, summaries.value.length - props.summaryIndex)
 
-      mutations.updateCellSpan(props.summaryIndex, props.columnIndex, fixed, span, 's')
+      mutations.updateCellSpan(props.summaryIndex, props.columnIndex, fixed, span, prefix.value)
 
       return span
     })
@@ -156,12 +164,12 @@ export default defineComponent({
       const { colSpan, rowSpan } = cellSpan.value
       const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
 
-      // let height: number | undefined
+      let height: number | undefined
 
-      // if (rowSpan > 1 && state.heightBITree) {
-      //   height =
-      //     state.heightBITree.sum(props.rowIndex + rowSpan) - state.heightBITree.sum(props.rowIndex)
-      // }
+      if (rowSpan > 1) {
+        debugger
+        height = heights.value[props.summaryIndex + rowSpan] - heights.value[props.summaryIndex]
+      }
 
       let customStyle
 
@@ -182,7 +190,7 @@ export default defineComponent({
         {
           display: !colSpan || !rowSpan ? 'none' : undefined,
           width: `${width}px`,
-          // height: height ? `${height}px` : undefined,
+          height: height ? `${height}px` : undefined,
           borderRightWidth:
             colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1 ? 0 : undefined,
           borderBottomWidth:

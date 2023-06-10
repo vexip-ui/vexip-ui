@@ -71,6 +71,7 @@ $table: map.merge(
   border-bottom-color: get-css-var('table-b-color');
 
   &__wrapper {
+    position: relative;
     width: 100%;
 
     .#{$namespace}-scroll__wrapper {
@@ -95,12 +96,6 @@ $table: map.merge(
     user-select: none;
   }
 
-  &__foot {
-    &--below {
-      border-top: $border-a get-css-var('table-b-color');
-    }
-  }
-
   &__body {
     transition: min-height get-css-var('transition-base');
   }
@@ -109,10 +104,30 @@ $table: map.merge(
     transition-duration: 0ms;
   }
 
+  &__head-wrapper {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
   &__body-wrapper {
     display: inline-block;
     width: 100%;
     vertical-align: top;
+  }
+
+  &__foot-wrapper {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+
+    &--above {
+      box-shadow: 0 2px get-css-var('shadow-blur') get-css-var('table-s-color');
+    }
+
+    &--below {
+      box-shadow: 0 -2px get-css-var('shadow-blur') get-css-var('table-s-color');
+    }
   }
 
   &__row-list {

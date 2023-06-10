@@ -3,11 +3,11 @@
     use-y-bar
     :data="data"
     :width="1000"
-    :height="300"
+    :height="420"
   >
     <TableColumn
-      name="Name"
       id-key="name"
+      name="Name"
       fixed
       text-align="center"
       :width="180"
@@ -19,18 +19,28 @@
     <TableColumn
       v-for="(month, index) in months"
       :key="month"
-      :name="month"
       :id-key="`m${index + 1}`"
+      :name="month"
       text-align="center"
     ></TableColumn>
 
-    <TableSummary v-slot="{ meta }" name="Sum" id-key="sum">
+    <TableSummary
+      v-slot="{ meta }"
+      id-key="sum"
+      above
+      name="Sum"
+    >
       {{ meta.sum }}
     </TableSummary>
-    <TableSummary v-slot="{ meta }" name="Min" id-key="min">
+    <TableSummary
+      v-slot="{ meta }"
+      id-key="min"
+      name="Min"
+      :cell-span="footCellSpan"
+    >
       {{ meta.min }}
     </TableSummary>
-    <TableSummary v-slot="{ meta }" name="Max" id-key="max">
+    <TableSummary v-slot="{ meta }" id-key="max" name="Max">
       {{ meta.max }}
     </TableSummary>
   </Table>
@@ -75,4 +85,10 @@ const data = ref(
     }
   })
 )
+
+function footCellSpan({ index }: { index: number }) {
+  if (index === 0) {
+    return { rowSpan: 2 }
+  }
+}
 </script>

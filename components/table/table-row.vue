@@ -65,7 +65,7 @@ import {
 
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { CSSProperties, PropType } from 'vue'
 import type { TableRowState } from './symbol'
@@ -109,7 +109,7 @@ export default defineComponent({
       row: toRef(props, 'row')
     })
 
-    const rowKey = computed(() => (props.isHead ? TABLE_HEAD_KEY : props.row.key))
+    const rowKey = computed(() => props.row.key)
     const className = computed(() => {
       let customClass = null
 
@@ -201,7 +201,7 @@ export default defineComponent({
 
       computeBorderHeight()
       computeRowHeight()
-      updateTotalHeight()
+      !props.isHead && updateTotalHeight()
     }
 
     function updateTotalHeight() {
