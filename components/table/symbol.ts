@@ -15,15 +15,15 @@ export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
 export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
 
-export interface CellSpanResult {
-  colSpan?: number,
-  rowSpan?: number
-}
-
 export const enum DropType {
   BEFORE = 'before',
   INNER = 'inner',
   AFTER = 'after'
+}
+
+export interface CellSpanResult {
+  colSpan?: number,
+  rowSpan?: number
 }
 
 export interface TableKeyConfig {
@@ -126,7 +126,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   name: string,
   key: keyof D,
   type?: never,
-  metaData?: Data,
+  metaData?: Record<any, any>,
   fixed?: boolean | 'left' | 'right',
   /**
    * @deprecated Use 'class' prop to replace it
@@ -263,6 +263,7 @@ export interface TableSummaryOptions<D = Data, Val extends string | number = str
   attrs?: Record<string, any>,
   order?: number,
   above?: boolean,
+  meta?: Record<any, any>,
   cellSpan?: SummaryCellSpanFn<D, Val>,
   renderer?: SummaryRenderFn<D, Val>
 }
@@ -393,16 +394,16 @@ export interface TableHeadPayload {
   event: Event
 }
 
+export interface TableColResizePayload extends TableHeadPayload {
+  width: number
+}
+
 export interface TableFootPayload {
   column: TableColumnOptions,
   columnIndex: number,
   summary: TableSummaryOptions,
   summaryIndex: number,
   event: Event
-}
-
-export interface TableColResizePayload extends TableHeadPayload {
-  width: number
 }
 
 export interface TableActions {

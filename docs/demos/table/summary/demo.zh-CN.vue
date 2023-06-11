@@ -7,7 +7,7 @@
   >
     <TableColumn
       id-key="name"
-      name="Name"
+      name="名称"
       fixed
       text-align="center"
       :width="180"
@@ -28,14 +28,14 @@
       v-slot="{ meta }"
       id-key="sum"
       above
-      name="Sum"
+      name="合计值"
     >
       {{ meta.sum }}
     </TableSummary>
     <TableSummary
       v-slot="{ meta }"
       id-key="min"
-      name="Min"
+      name="最小值/最大值"
       :cell-span="footCellSpan"
     >
       {{ meta.min }}
@@ -50,18 +50,18 @@
 import { ref } from 'vue'
 
 const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
+  '1月',
+  '2月',
+  '3月',
+  '4月',
+  '5月',
+  '6月',
+  '7月',
+  '8月',
+  '9月',
+  '10月',
+  '11月',
+  '12月'
 ]
 const random = () => Math.round(100 * Math.random())
 

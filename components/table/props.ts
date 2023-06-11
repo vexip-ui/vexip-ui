@@ -15,6 +15,7 @@ import type {
   Accessor,
   ColumnCellSpanFn,
   ColumnRenderFn,
+  ColumnSummaryRenderFn,
   Data,
   DropType,
   ExpandRenderFn,
@@ -177,12 +178,12 @@ export const tableColumnProps = buildProps({
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>,
+  metaData: Object as PropType<Record<any, any>>,
   textAlign: String as PropType<TableTextAlign>,
   headSpan: Number,
   cellSpan: Function as PropType<ColumnCellSpanFn>,
   noSummary: booleanProp,
-  summaryRenderer: Function as PropType<SummaryRenderFn>
+  summaryRenderer: Function as PropType<ColumnSummaryRenderFn>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
@@ -197,6 +198,7 @@ export type TableColumnCProps = ConfigurableProps<
   | 'headRenderer'
   | 'order'
   | 'headSpan'
+  | 'summaryRenderer'
 >
 
 export const tableSummaryProps = buildProps({
@@ -208,6 +210,7 @@ export const tableSummaryProps = buildProps({
   cellSpan: Function as PropType<SummaryCellSpanFn>,
   order: Number,
   above: booleanProp,
+  meta: Object as PropType<Record<any, any>>,
   renderer: Function as PropType<SummaryRenderFn>
 })
 

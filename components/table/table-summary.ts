@@ -21,7 +21,7 @@ const propKeys = Object.keys(tableSummaryProps) as SummaryPropKey[]
 const aliases: Partial<Record<SummaryPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: SummaryPropKey[] = ['class', 'style', 'attrs']
+const deepProps: SummaryPropKey[] = ['class', 'style', 'attrs', 'meta']
 
 const funcProp = {
   default: null,
@@ -39,10 +39,6 @@ export default defineComponent({
         validator: value => !isNull(value),
         static: true
       },
-      name: {
-        default: '',
-        static: true
-      },
       class: null,
       style: null,
       attrs: null,
@@ -54,6 +50,10 @@ export default defineComponent({
       above: {
         default: false,
         static: true
+      },
+      meta: {
+        default: () => ({}),
+        validator: value => !isNull(value)
       },
       renderer: funcProp
     })

@@ -167,7 +167,6 @@ export default defineComponent({
       let height: number | undefined
 
       if (rowSpan > 1) {
-        debugger
         height = heights.value[props.summaryIndex + rowSpan] - heights.value[props.summaryIndex]
       }
 
