@@ -429,8 +429,8 @@ export default defineComponent({
 
     const store = useStore({
       columns: allColumns.value,
-      data: props.data,
       summaries: allSummaries.value,
+      data: props.data,
       dataKey: dataKey.value,
       rowClass: props.rowClass,
       rowStyle: props.rowStyle,
@@ -587,7 +587,7 @@ export default defineComponent({
       value => {
         setSummaries(value)
       },
-      { immediate: true, deep: true }
+      { deep: true }
     )
     watch(dataKey, setDataKey)
     watch(

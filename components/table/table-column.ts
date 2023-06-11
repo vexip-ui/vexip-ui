@@ -22,6 +22,12 @@ const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
 const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const ignoredProps: ColumnPropKey[] = [
+  'renderer',
+  'headRenderer',
+  'filterRenderer',
+  'summaryRenderer'
+]
 const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
 const funcProp = {
@@ -111,7 +117,7 @@ export default defineComponent({
     }
 
     for (const key of propKeys) {
-      if (key === 'renderer' || key === 'headRenderer') continue
+      if (ignoredProps.includes(key)) continue
 
       const aliasKey = (aliases[key] || key) as keyof ColumnWithKey
 

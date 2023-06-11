@@ -1,4 +1,5 @@
 import { TableColumn } from '@/components/table-column'
+import { TableSummary } from '@/components/table-summary'
 
 import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
@@ -869,5 +870,42 @@ describe('Table', () => {
 
     expect(cells[0][4].attributes('colspan')).toBeUndefined()
     expect(cells[0][4].attributes('rowspan')).toEqual('2')
+  })
+
+  it('summaries', async () => {
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, value: i }))
+    const wrapper = mount(() => (
+      <Table data={data}>
+        <TableColumn id-key={'name'} name={'Name'}>
+          {{
+            summary: ({ summary }: any) => summary.name
+          }}
+        </TableColumn>
+        <TableColumn id-key={'value'} name={'Value'}></TableColumn>
+        <TableSummary id-key={'sum'} name={'Sum'} above>
+          {{
+            default: ({ meta }: any) => meta.sum
+          }}
+        </TableSummary>
+        <TableSummary id-key={'min'} name={'Min'}>
+          {{
+            default: ({ meta }: any) => meta.min
+          }}
+        </TableSummary>
+      </Table>
+    ))
+
+    await runScrollTimers()
+
+    const aboveFoot = wrapper.find('.vxp-table__foot--above')
+    const belowFoot = wrapper.find('.vxp-table__foot--below')
+
+    expect(aboveFoot.exists()).toBe(true)
+    expect(aboveFoot.find('.vxp-table__foot-cell').text()).toEqual('Sum')
+    expect(aboveFoot.findAll('.vxp-table__foot-cell')[1].text()).toEqual('45')
+
+    expect(belowFoot.exists()).toBe(true)
+    expect(belowFoot.find('.vxp-table__foot-cell').text()).toEqual('Min')
+    expect(belowFoot.findAll('.vxp-table__foot-cell')[1].text()).toEqual('0')
   })
 })

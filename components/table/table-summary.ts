@@ -1,12 +1,4 @@
-import {
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  reactive,
-  renderSlot,
-  watch
-} from 'vue'
+import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
 
 import { useProps } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
@@ -22,6 +14,7 @@ const aliases: Partial<Record<SummaryPropKey, string>> = {
   idKey: 'key'
 }
 const deepProps: SummaryPropKey[] = ['class', 'style', 'attrs', 'meta']
+const ignoredProps: SummaryPropKey[] = ['renderer']
 
 const funcProp = {
   default: null,
@@ -62,7 +55,7 @@ export default defineComponent({
     const options = reactive({}) as SummaryWithKey
 
     for (const key of propKeys) {
-      if (key === 'renderer') continue
+      if (ignoredProps.includes(key)) continue
 
       const aliasKey = (aliases[key] || key) as keyof SummaryWithKey
 
@@ -81,10 +74,6 @@ export default defineComponent({
 
     setRenderer()
     tableAction?.increaseSummary(options)
-
-    onBeforeUpdate(() => {
-      setRenderer()
-    })
 
     onBeforeUnmount(() => {
       tableAction?.decreaseSummary(options)
