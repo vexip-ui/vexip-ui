@@ -6,7 +6,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { noop } from '@vexip-ui/utils'
-import { Table, defineColumns } from '..'
+import { Table, defineColumns, defineSummaries } from '..'
 import TableBody from '../table-body.vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -872,6 +872,40 @@ describe('Table', () => {
     expect(cells[0][4].attributes('rowspan')).toEqual('2')
   })
 
+  it('head cell span', async () => {
+    const columns = defineColumns([
+      {
+        name: 'Name',
+        key: 'name'
+      },
+      {
+        name: 'Label',
+        key: 'label',
+        headSpan: 3
+      },
+      {
+        name: 'Address',
+        key: 'address'
+      }
+    ])
+    const data = Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      name: `n${i}`,
+      label: `l${i}`,
+      address: `a${i}`
+    }))
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const heads = wrapper.findAll('.vxp-table__head .vxp-table__head-cell')
+
+    expect(heads[0].attributes('colspan')).toBeUndefined()
+
+    expect(heads[1].attributes('colspan')).toEqual('2')
+    expect(heads[2].attributes('colspan')).toEqual('0')
+  })
+
   it('summaries', async () => {
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, value: i }))
     const wrapper = mount(() => (
@@ -907,5 +941,75 @@ describe('Table', () => {
     expect(belowFoot.exists()).toBe(true)
     expect(belowFoot.find('.vxp-table__foot-cell').text()).toEqual('Min')
     expect(belowFoot.findAll('.vxp-table__foot-cell')[1].text()).toEqual('0')
+  })
+
+  it('summary cell span', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      },
+      {
+        name: 'Label',
+        key: 'label'
+      },
+      {
+        name: 'Value',
+        key: 'value'
+      }
+    ]
+    const summaries = defineSummaries([
+      {
+        name: 'Sum',
+        key: 'sum',
+        above: true,
+        cellSpan: ({ index }) => {
+          if (index === 1) {
+            return { colSpan: 2 }
+          }
+        }
+      },
+      {
+        name: 'Min',
+        key: 'min',
+        cellSpan: ({ index }) => {
+          if (index === 1) {
+            return { colSpan: 3, rowSpan: 3 }
+          }
+        }
+      },
+      {
+        name: 'Max',
+        key: 'max'
+      }
+    ])
+    const data = Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      name: `n${i}`,
+      label: i,
+      value: i + 1
+    }))
+    const wrapper = mount(() => <Table columns={columns} summaries={summaries} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const rows = wrapper.findAll('.vxp-table__foot .vxp-table__row')
+    const cells = rows.map(row => row.findAll('.vxp-table__foot-cell'))
+
+    expect(cells[0][0].attributes('colspan')).toBeUndefined()
+    expect(cells[0][1].attributes('rowspan')).toBeUndefined()
+
+    expect(cells[0][1].attributes('colspan')).toEqual('2')
+    expect(cells[0][2].attributes('colspan')).toEqual('0')
+    expect(cells[0][2].attributes('rowspan')).toEqual('0')
+
+    expect(cells[1][1].attributes('colspan')).toEqual('2')
+    expect(cells[1][1].attributes('rowspan')).toEqual('2')
+    expect(cells[1][2].attributes('colspan')).toEqual('0')
+    expect(cells[1][2].attributes('rowspan')).toEqual('0')
+    expect(cells[2][1].attributes('colspan')).toEqual('0')
+    expect(cells[2][1].attributes('rowspan')).toEqual('0')
+    expect(cells[2][2].attributes('colspan')).toEqual('0')
+    expect(cells[2][2].attributes('rowspan')).toEqual('0')
   })
 })

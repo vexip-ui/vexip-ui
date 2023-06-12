@@ -118,7 +118,7 @@ import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  CellSpanResult,
+  ColumnCellSpanFn,
   ColumnWithKey,
   TableDragColumn,
   TableExpandColumn,
@@ -209,7 +209,7 @@ export default defineComponent({
             ? state.rightFixedColumns
             : state.columns
 
-      let result: CellSpanResult | undefined
+      let result: ReturnType<ColumnCellSpanFn>
 
       if (typeof props.column.cellSpan === 'function') {
         result = props.column.cellSpan({

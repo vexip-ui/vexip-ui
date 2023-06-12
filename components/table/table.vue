@@ -505,7 +505,9 @@ export default defineComponent({
         [nh.bm('virtual')]: props.virtual,
         [nh.bm('col-resizable')]: props.colResizable,
         [nh.bm('col-resizing')]: state.colResizing,
-        [nh.bm('locked')]: noTransition.value
+        [nh.bm('locked')]: noTransition.value,
+        [nh.bm('above-foot')]: state.aboveSummaries.length,
+        [nh.bm('below-foot')]: state.belowSummaries.length
       }
     })
     const style = computed(() => {

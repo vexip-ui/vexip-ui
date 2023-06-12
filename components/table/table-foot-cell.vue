@@ -45,7 +45,7 @@ import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { CellSpanResult, ColumnWithKey, SummaryWithKey } from './symbol'
+import type { ColumnWithKey, SummaryCellSpanFn, SummaryWithKey } from './symbol'
 
 export default defineComponent({
   name: 'TableFootCell',
@@ -134,7 +134,7 @@ export default defineComponent({
             ? state.rightFixedColumns
             : state.columns
 
-      let result: CellSpanResult | undefined
+      let result: ReturnType<SummaryCellSpanFn>
 
       if (typeof props.summary.cellSpan === 'function') {
         result = props.summary.cellSpan({

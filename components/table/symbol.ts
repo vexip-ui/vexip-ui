@@ -49,12 +49,12 @@ export type ColumnCellSpanFn<D = Data> = (data: {
   row: D,
   index: number,
   fixed?: 'left' | 'right'
-}) => CellSpanResult | undefined
+}) => CellSpanResult | void
 export type SummaryCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
   column: TableColumnOptions<D, Val>,
   index: number,
   fixed?: 'left' | 'right'
-}) => CellSpanResult | undefined
+}) => CellSpanResult | void
 
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
   | {

@@ -122,11 +122,11 @@ $table: map.merge(
     overflow: hidden;
 
     &--above {
-      box-shadow: 0 2px get-css-var('shadow-blur') get-css-var('table-s-color');
+      box-shadow: 0 1px get-css-var('shadow-blur') get-css-var('table-s-color');
     }
 
     &--below {
-      box-shadow: 0 -2px get-css-var('shadow-blur') get-css-var('table-s-color');
+      box-shadow: 0 -1px get-css-var('shadow-blur') get-css-var('table-s-color');
     }
   }
 
@@ -248,6 +248,10 @@ $table: map.merge(
 
   &__foot &__group {
     position: relative;
+  }
+
+  &--below-foot &__body &__group:last-child {
+    margin-bottom: 0;
   }
 
   &--transparent {
