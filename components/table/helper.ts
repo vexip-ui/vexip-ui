@@ -9,11 +9,11 @@ import type {
 export function defineFilter<D = Data, Val extends string | number = string | number>(
   filter: TableFilterOptions<D, Val>
 ) {
-  return filter
+  return filter as TableFilterOptions<any, any>
 }
 
 export function defineSorter<D = Data>(sorter: TableSorterOptions<D>) {
-  return sorter
+  return sorter as TableSorterOptions<any>
 }
 
 export function defineColumn<D = Data, Val extends string | number = string | number>(

@@ -76,28 +76,6 @@ Set the `width` prop for a Column to specify the width of the column, and set th
 
 :::
 
-:::demo table/sorter
-
-### Sort Data
-
-Adding the `sorter` prop to the column options and setting it enables sorting.
-
-If you want to only the sort events will be emitted (e.g. remote sort), you can add `custom-sorter` prop to Table component.
-
-:::
-
-:::demo table/filter
-
-### Filter Data
-
-Adding the `filter` prop to the column options and setting it enables filtering.
-
-If you want to only the filter events will be emitted (e.g. remote filter), you can add `custom-filter` prop to Table component.
-
-Also you can custom the renderer of filter via `filter` slot of TableColumn component.
-
-:::
-
 :::demo table/selection
 
 ### Checkbox Column
@@ -121,6 +99,28 @@ Add a `type` prop to the column options and set its value to `'order'` to make t
 ### Expand Content
 
 Adding a `type` prop to the column options and setting its value to `'expand'` can make the column as an expansion column, the default slot content of the column will be rendered as the expansion template content.
+
+:::
+
+:::demo table/sorter
+
+### Sort Data
+
+Adding the `sorter` prop to the column options and setting it enables sorting.
+
+If you want to only the sort events will be emitted (e.g. remote sort), you can add `custom-sorter` prop to Table component.
+
+:::
+
+:::demo table/filter
+
+### Filter Data
+
+Adding the `filter` prop to the column options and setting it enables filtering.
+
+If you want to only the filter events will be emitted (e.g. remote filter), you can add `custom-filter` prop to Table component.
+
+Also you can custom the renderer of filter via `filter` slot of TableColumn component.
 
 :::
 

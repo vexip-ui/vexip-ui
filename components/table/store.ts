@@ -109,14 +109,20 @@ export function useStore(options: StoreOptions) {
       ? filteredData.value
       : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
 
+    // for (let i = 0, len = data.length; i < len; ++i) {
+    //   data[i].listIndex = i
+    // }
+
+    return data
+  })
+  const processedData = computed(() => {
+    const data = pageData(state.currentPage, state.pageSize, sortedData.value)
+
     for (let i = 0, len = data.length; i < len; ++i) {
       data[i].listIndex = i
     }
 
     return data
-  })
-  const processedData = computed(() => {
-    return pageData(state.currentPage, state.pageSize, sortedData.value)
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
@@ -294,6 +300,7 @@ export function useStore(options: StoreOptions) {
     setRowExpandHeight,
     setBodyYScroll,
     setBodyXScroll,
+    setStripe,
     setHighlight,
     setRowHover,
     setLocale,
@@ -827,6 +834,10 @@ export function useStore(options: StoreOptions) {
 
   function setBodyXScroll(scroll: number) {
     state.bodyXScroll = scroll
+  }
+
+  function setStripe(able: boolean) {
+    state.stripe = !!able
   }
 
   function setHighlight(able: boolean) {

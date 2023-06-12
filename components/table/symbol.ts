@@ -123,8 +123,8 @@ export type ColumnSummaryRenderFn<
 }) => any
 
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
-  name: string,
   key: keyof D,
+  name?: string,
   type?: never,
   metaData?: Record<any, any>,
   fixed?: boolean | 'left' | 'right',
@@ -152,28 +152,32 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
 export interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer' | 'headRenderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer' | 'headRenderer'> {
+  key?: keyof D,
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
 export interface TableExpandColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'expand',
   disableRow?: (data: Data) => boolean,
   renderer?: ExpandRenderFn<D>
 }
 
 export interface TableDragColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'drag',
   disableRow?: (data: Data) => boolean
 }
@@ -311,6 +315,7 @@ export interface StoreOptions {
   footClass: ClassType | TableFootPropFn<ClassType>,
   footStyle: StyleType | TableFootPropFn<StyleType>,
   footAttrs: Record<string, any> | TableFootPropFn<Record<string, any>>,
+  stripe: boolean,
   highlight: boolean,
   currentPage: number,
   pageSize: number,

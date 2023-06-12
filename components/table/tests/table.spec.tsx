@@ -195,17 +195,30 @@ describe('Table', () => {
   })
 
   it('style props', async () => {
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}` }))
     const wrapper = mount(Table, {
       props: {
+        data,
         stripe: true,
         border: true,
         transparent: true
       }
     })
 
+    await runScrollTimers()
+
     expect(wrapper.classes()).toContain('vxp-table--stripe')
     expect(wrapper.classes()).toContain('vxp-table--border')
     expect(wrapper.classes()).toContain('vxp-table--transparent')
+
+    let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows[0].classes()).not.toContain('vxp-table__row--stripe')
+    expect(rows[1].classes()).toContain('vxp-table__row--stripe')
+
+    await wrapper.setProps({ stripe: false })
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows[0].classes()).not.toContain('vxp-table__row--stripe')
+    expect(rows[1].classes()).not.toContain('vxp-table__row--stripe')
   })
 
   it('highlight', async () => {
@@ -228,6 +241,11 @@ describe('Table', () => {
 
     await rowGroup.trigger('mouseleave')
     expect(rowGroup.find('.vxp-table__row').classes()).not.toContain('vxp-table__row--hover')
+
+    const headGroup = wrapper.find('.vxp-table__head .vxp-table__group')
+
+    await headGroup.trigger('mouseenter')
+    expect(headGroup.find('.vxp-table__row').classes()).not.toContain('vxp-table__row--hover')
   })
 
   it('custom column class name', async () => {
