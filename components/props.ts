@@ -72,6 +72,7 @@ import type { SwitchCProps } from './switch'
 import type { TabNavCProps } from './tab-nav'
 import type { TableCProps } from './table'
 import type { TableColumnCProps } from './table-column'
+import type { TableSummaryCProps } from './table-summary'
 import type { TabsCProps } from './tabs'
 import type { TagCProps } from './tag'
 import type { TextareaCProps } from './textarea'
@@ -181,6 +182,7 @@ export interface PropsOptions {
   tabNav?: TabNavCProps,
   table?: TableCProps,
   tableColumn?: TableColumnCProps,
+  tableSummary?: TableSummaryCProps,
   tabs?: TabsCProps,
   tag?: TagCProps,
   textarea?: TextareaCProps,
