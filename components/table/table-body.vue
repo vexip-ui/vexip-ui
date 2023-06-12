@@ -1,21 +1,23 @@
 <template>
   <div :class="nh.be('body')" role="rowgroup" :style="style">
-    <template v-if="renderData.length">
+    <template v-if="data.length">
       <TableRow
-        v-for="row in renderData"
+        v-for="row in data"
         :key="row.index"
         :row="row"
-        :index="row.index"
+        :index="row.listIndex"
         :fixed="fixed"
+        :aria-rowindex="row.index"
       >
         <TableCell
-          v-for="(column, columnIndex) in currentColumns"
+          v-for="(column, columnIndex) in columns"
           :key="columnIndex"
           :row="row"
           :row-index="row.listIndex"
           :column="column"
           :column-index="columnIndex"
           :fixed="fixed"
+          :aria-colindex="columnIndex"
         ></TableCell>
       </TableRow>
     </template>
@@ -54,14 +56,14 @@ export default defineComponent({
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
-    const currentColumns = computed(() => {
+    const columns = computed(() => {
       return props.fixed === 'left'
         ? state.leftFixedColumns
         : props.fixed === 'right'
           ? state.rightFixedColumns
           : state.columns
     })
-    const renderData = computed(() => (state.virtual ? state.virtualData : getters.processedData))
+    const data = computed(() => (state.virtual ? state.virtualData : getters.processedData))
     const style = computed(() => {
       return {
         minWidth: `${
@@ -72,11 +74,6 @@ export default defineComponent({
             : getters.totalWidths.at(-1)
         }px`,
         minHeight: `${state.totalHeight}px`
-      }
-    })
-    const listStyle = computed(() => {
-      return {
-        // transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
       }
     })
     const emptyStyle = computed(() => {
@@ -91,11 +88,10 @@ export default defineComponent({
       nh: useNameHelper('table'),
       locale: toRef(state, 'locale'),
 
-      currentColumns,
+      columns,
+      data,
       style,
-      listStyle,
-      emptyStyle,
-      renderData
+      emptyStyle
     }
   }
 })

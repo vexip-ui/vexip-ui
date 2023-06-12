@@ -10,7 +10,7 @@ import {
   toFixed,
   toNumber
 } from '@vexip-ui/utils'
-import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY, columnTypes } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_FOOT_PREFIX, TABLE_HEAD_KEY, columnTypes } from './symbol'
 
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
@@ -24,6 +24,7 @@ import type {
   ParsedTableSorterOptions,
   StoreOptions,
   StoreState,
+  SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
   TableColumnOptions,
@@ -35,13 +36,21 @@ import type {
   TableRowPropFn,
   TableRowState,
   TableSelectionColumn,
-  TableSorterOptions
+  TableSorterOptions,
+  TableSummaryData,
+  TableSummaryOptions
 } from './symbol'
+
+const defaultSummaryData = Object.freeze<TableSummaryData>({
+  sum: NaN,
+  min: NaN,
+  max: NaN
+})
 
 let indexId = 1
 
 function getIndexId() {
-  return `__vtr-${indexId++}`
+  return `__vxp-table-key-${indexId++}`
 }
 
 function defaultIndexLabel(index: number) {
@@ -52,14 +61,17 @@ export function useStore(options: StoreOptions) {
   const state = reactive({
     ...options,
     columns: [],
+    summaries: [],
     data: [],
-    width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
-    rowMinHeight: options.rowMinHeight || 36,
-    rowDraggable: !!options.rowDraggable,
+    width: 0,
     rowData: [],
     rightFixedColumns: [],
     leftFixedColumns: [],
+    aboveSummaries: [],
+    belowSummaries: [],
+    rowMinHeight: options.rowMinHeight || 36,
+    rowDraggable: !!options.rowDraggable,
     rowMap: new Map(),
     idMaps: new WeakMap(),
     checkedAll: false,
@@ -68,7 +80,8 @@ export function useStore(options: StoreOptions) {
     sorters: new Map(),
     filters: new Map(),
     resized: new Set(),
-    bodyScroll: 0,
+    bodyYScroll: 0,
+    bodyXScroll: 0,
     padTop: 0,
     startRow: 0,
     endRow: 0,
@@ -83,6 +96,7 @@ export function useStore(options: StoreOptions) {
   }) as StoreState
 
   setColumns(options.columns)
+  setSummaries(options.summaries)
   setData(options.data)
 
   const filteredData = computed(() => {
@@ -91,9 +105,15 @@ export function useStore(options: StoreOptions) {
       : filterData(state.filters, state.rowData, state.singleFilter)
   })
   const sortedData = computed(() => {
-    return state.customSorter
+    const data = state.customSorter
       ? filteredData.value
       : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
+
+    // for (let i = 0, len = data.length; i < len; ++i) {
+    //   data[i].listIndex = i
+    // }
+
+    return data
   })
   const processedData = computed(() => {
     const data = pageData(state.currentPage, state.pageSize, sortedData.value)
@@ -182,6 +202,47 @@ export function useStore(options: StoreOptions) {
       | TableExpandColumn
       | undefined
   })
+  const summaryData = computed(() => {
+    const { columns, summaries, data } = state
+    const map = new Map<Key, TableSummaryData>()
+
+    if (!summaries.length) return map
+
+    for (const column of columns) {
+      const key = column.key
+
+      if (column.type || column.noSummary) {
+        map.set(key, defaultSummaryData)
+        continue
+      }
+
+      const accessor =
+        typeof column.accessor === 'function' ? column.accessor : (data: Data) => data[key]
+
+      let sum = 0
+      let min = Infinity
+      let max = -Infinity
+      let valid = false
+
+      for (let i = 0, len = data.length; i < len; ++i) {
+        const value = accessor(data[i], i)
+        const number = parseFloat(value as string)
+
+        if (Number.isNaN(number)) continue
+
+        sum += number
+        min = Math.min(min, number)
+        max = Math.max(max, number)
+        valid = true
+      }
+
+      valid ? map.set(key, { sum, min, max }) : map.set(key, defaultSummaryData)
+    }
+
+    return map
+  })
+  const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
+  const bottomFixedHeights = computed(() => getSummariesHeights())
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -203,15 +264,20 @@ export function useStore(options: StoreOptions) {
     totalWidths,
     leftFixedWidths,
     rightFixedWidths,
-    expandColumn
+    expandColumn,
+    summaryData,
+    topFixedHeights,
+    bottomFixedHeights
   })
 
   const mutations = {
-    // 这两个方法被 deep watch 回调
+    // 这几个个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
     setColumns: debounceMinor(setColumns),
+    setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
+    buildSummaryKey,
     setDataKey,
     setCurrentPage,
     setPageSize,
@@ -232,7 +298,9 @@ export function useStore(options: StoreOptions) {
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
-    setBodyScroll,
+    setBodyYScroll,
+    setBodyXScroll,
+    setStripe,
     setHighlight,
     setRowHover,
     setLocale,
@@ -289,6 +357,27 @@ export function useStore(options: StoreOptions) {
     return combinedWidths
   }
 
+  function getSummariesHeights(summaries = state.belowSummaries) {
+    const rowMap = state.rowMap
+    const heights: number[] = [0]
+
+    let height = 0
+
+    for (let i = 0, len = summaries.length; i < len; ++i) {
+      const summary = summaries[i]
+      const key = buildSummaryKey(summary.key)
+      const row = rowMap.get(key)
+
+      if (row) {
+        height += (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+      }
+
+      heights.push(height)
+    }
+
+    return heights
+  }
+
   function setColumns(columns: TableColumnOptions[]) {
     resetCellSpan()
 
@@ -298,9 +387,9 @@ export function useStore(options: StoreOptions) {
 
     const { widths, sorters, filters } = state
 
-    const normalColumns = []
-    const rightFixedColumns = []
-    const leftFixedColumns = []
+    const normalColumns: ColumnWithKey[] = []
+    const rightFixedColumns: ColumnWithKey[] = []
+    const leftFixedColumns: ColumnWithKey[] = []
 
     let first = false
 
@@ -366,14 +455,14 @@ export function useStore(options: StoreOptions) {
         console.error('[vexip-ui:Table] Table column requires key prop, but missing')
       }
 
-      const fixed = column.fixed
-
       // 独立属性解析时注意隔断同对象引用
       widths.set(key, column.width || 100)
       sorters.set(key, parseSorter(column.sorter))
       filters.set(key, parseFilter(column.filter))
 
       column.key = key
+
+      const fixed = column.fixed
 
       if (fixed === true || fixed === 'left') {
         leftFixedColumns.push(column)
@@ -384,10 +473,9 @@ export function useStore(options: StoreOptions) {
       }
     }
 
-    state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
+    state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
 
     if (state.columns.length) {
-      state.columns[0].first = true
       state.columns.at(-1)!.last = true
     }
 
@@ -397,6 +485,59 @@ export function useStore(options: StoreOptions) {
 
     if (rightFixedColumns.length) {
       state.rightFixedColumns = rightFixedColumns
+    }
+  }
+
+  function buildSummaryKey(key: Key) {
+    return typeof key === 'symbol' ? key : `${TABLE_FOOT_PREFIX}${key}`
+  }
+
+  function setSummaries(summaries: TableSummaryOptions[]) {
+    summaries = Array.from(summaries).sort((prev, next) => {
+      return (prev.order || 0) - (next.order || 0)
+    })
+
+    const prevKeys = new Set(state.summaries.map(summary => summary.key))
+    const aboveSummaries: SummaryWithKey[] = []
+    const belowSummaries: SummaryWithKey[] = []
+
+    for (let i = 0, len = summaries.length; i < len; ++i) {
+      const summary = { ...summaries[i] } as SummaryWithKey
+
+      let key = summary.key
+
+      if (isNull(key)) {
+        key = getIndexId()
+
+        console.error('[vexip-ui:Table] Table summary requires key prop, but missing')
+      }
+
+      summary.key = key
+      ;(summary.above ? aboveSummaries : belowSummaries).push(summary)
+
+      if (!prevKeys.has(summary.key)) {
+        const rowKey = buildSummaryKey(summary.key)
+
+        state.rowMap.set(rowKey, { key: rowKey } as TableRowState)
+      }
+
+      prevKeys.delete(summary.key)
+    }
+
+    state.summaries = Array.from(aboveSummaries).concat(belowSummaries)
+
+    if (aboveSummaries.length) {
+      state.aboveSummaries = aboveSummaries
+    }
+
+    if (belowSummaries.length) {
+      state.belowSummaries = belowSummaries
+    }
+
+    if (prevKeys.size) {
+      for (const key of prevKeys) {
+        state.rowMap.delete(buildSummaryKey(key))
+      }
     }
   }
 
@@ -454,6 +595,14 @@ export function useStore(options: StoreOptions) {
           key: TABLE_HEAD_KEY
         } as TableRowState)
     )
+
+    for (const summary of state.summaries) {
+      const key = buildSummaryKey(summary.key)
+
+      if (oldDataMap.has(key)) {
+        rowMap.set(key, oldDataMap.get(key)!)
+      }
+    }
 
     function parseRow(origin: Data[], result: TableRowState[], parent?: TableRowState) {
       for (let i = 0, len = origin.length; i < len; ++i) {
@@ -544,6 +693,8 @@ export function useStore(options: StoreOptions) {
     } else {
       state.rowData = clonedData
     }
+
+    state.data = data
 
     refreshRowIndex()
     computePartial()
@@ -677,8 +828,16 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setBodyScroll(scroll: number) {
-    state.bodyScroll = scroll
+  function setBodyYScroll(scroll: number) {
+    state.bodyYScroll = scroll
+  }
+
+  function setBodyXScroll(scroll: number) {
+    state.bodyXScroll = scroll
+  }
+
+  function setStripe(able: boolean) {
+    state.stripe = !!able
   }
 
   function setHighlight(able: boolean) {
@@ -757,6 +916,7 @@ export function useStore(options: StoreOptions) {
 
   function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
+    resetCellSpan()
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {
@@ -1281,13 +1441,14 @@ export function useStore(options: StoreOptions) {
     rowIndex: number,
     columnIndex: number,
     fixed: 'left' | 'default' | 'right',
-    span: Required<CellSpanResult>
+    span: Required<CellSpanResult>,
+    prefix = ''
   ) {
     const { colSpan, rowSpan } = span
     const cellSpanMap = state.cellSpanMap.get(fixed)!
     const collapseMap = state.collapseMap.get(fixed)!
 
-    const masterKey = `${rowIndex},${columnIndex}`
+    const masterKey = `${prefix}${rowIndex},${columnIndex}`
     const prevSpan = cellSpanMap.get(masterKey)
 
     let colLen = colSpan
@@ -1308,7 +1469,7 @@ export function useStore(options: StoreOptions) {
           continue
         }
 
-        const key = `${rowIndex + j},${columnIndex + i}`
+        const key = `${prefix}${rowIndex + j},${columnIndex + i}`
         let masterSet = collapseMap.get(key)
 
         if (i < prevColSpan && j < prevRowSpan) {

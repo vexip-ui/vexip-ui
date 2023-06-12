@@ -3,8 +3,9 @@
     v-if="!row.hidden"
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
-    :style="groupStyle"
+    role="row"
     :draggable="draggable || row.dragging"
+    :style="groupStyle"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
@@ -18,9 +19,7 @@
     <div
       ref="rowEl"
       :class="className"
-      role="row"
       :style="style"
-      :aria-rowindex="index"
       v-bind="attrs"
     >
       <slot></slot>
@@ -66,7 +65,7 @@ import {
 
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { CSSProperties, PropType } from 'vue'
 import type { TableRowState } from './symbol'
@@ -110,7 +109,7 @@ export default defineComponent({
       row: toRef(props, 'row')
     })
 
-    const rowKey = computed(() => (props.isHead ? TABLE_HEAD_KEY : props.row.key))
+    const rowKey = computed(() => props.row.key)
     const className = computed(() => {
       let customClass = null
 
@@ -126,7 +125,7 @@ export default defineComponent({
         nh.be('row'),
         {
           [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.row.listIndex % 2 === 1,
+          [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
@@ -166,9 +165,7 @@ export default defineComponent({
       state.totalHeight
 
       const offset =
-        state.heightBITree && !props.isHead && props.row.listIndex
-          ? state.heightBITree.sum(props.row.listIndex)
-          : 0
+        state.heightBITree && !props.isHead && props.index ? state.heightBITree.sum(props.index) : 0
 
       return {
         transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
@@ -204,7 +201,7 @@ export default defineComponent({
 
       computeBorderHeight()
       computeRowHeight()
-      updateTotalHeight()
+      !props.isHead && updateTotalHeight()
     }
 
     function updateTotalHeight() {

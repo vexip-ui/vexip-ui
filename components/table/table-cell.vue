@@ -2,6 +2,7 @@
   <div
     :class="className"
     role="cell"
+    :scope="column.first ? 'row' : undefined"
     :colspan="cellSpan.colSpan !== 1 ? cellSpan.colSpan : undefined"
     :rowspan="cellSpan.rowSpan !== 1 ? cellSpan.rowSpan : undefined"
     :style="style"
@@ -117,7 +118,7 @@ import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  CellSpanResult,
+  ColumnCellSpanFn,
   ColumnWithKey,
   TableDragColumn,
   TableExpandColumn,
@@ -170,12 +171,12 @@ export default defineComponent({
       let customClass = null
 
       if (typeof state.cellClass === 'function') {
-        customClass = state.cellClass(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customClass = state.cellClass({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customClass = state.cellClass
       }
@@ -189,8 +190,8 @@ export default defineComponent({
           [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
-        props.column.className || null,
-        props.column.class || null,
+        props.column.className,
+        props.column.class,
         customClass
       ]
     })
@@ -208,7 +209,7 @@ export default defineComponent({
             ? state.rightFixedColumns
             : state.columns
 
-      let result: CellSpanResult | undefined
+      let result: ReturnType<ColumnCellSpanFn>
 
       if (typeof props.column.cellSpan === 'function') {
         result = props.column.cellSpan({
@@ -250,18 +251,19 @@ export default defineComponent({
 
       if (rowSpan > 1 && state.heightBITree) {
         height =
-          state.heightBITree.sum(props.rowIndex + rowSpan) - state.heightBITree.sum(props.rowIndex)
+          state.heightBITree.sum(props.row.listIndex + rowSpan) -
+          state.heightBITree.sum(props.row.listIndex)
       }
 
       let customStyle
 
       if (typeof state.cellStyle === 'function') {
-        customStyle = state.cellStyle(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customStyle = state.cellStyle({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customStyle = state.cellStyle
       }
@@ -285,12 +287,12 @@ export default defineComponent({
       let customAttrs: Record<string, any>
 
       if (typeof state.cellAttrs === 'function') {
-        customAttrs = state.cellAttrs(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customAttrs = state.cellAttrs({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customAttrs = state.cellAttrs
       }

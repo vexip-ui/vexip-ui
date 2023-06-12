@@ -1,12 +1,18 @@
 <template>
   <div :class="nh.be('head')" role="rowgroup" :style="style">
-    <TableRow is-head :fixed="fixed" :row="headRow">
+    <TableRow
+      is-head
+      :fixed="fixed"
+      :row="headRow"
+      aria-rowindex="0"
+    >
       <TableHeadCell
-        v-for="(item, index) in currentColumns"
+        v-for="(column, index) in columns"
         :key="index"
-        :column="item"
+        :column="column"
         :index="index"
         :fixed="fixed"
+        :aria-colindex="index"
       ></TableHeadCell>
     </TableRow>
   </div>
@@ -38,7 +44,7 @@ export default defineComponent({
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
-    const currentColumns = computed(() => {
+    const columns = computed(() => {
       return props.fixed === 'left'
         ? state.leftFixedColumns
         : props.fixed === 'right'
@@ -63,7 +69,7 @@ export default defineComponent({
     return {
       nh: useNameHelper('table'),
 
-      currentColumns,
+      columns,
       style,
       headRow
     }
