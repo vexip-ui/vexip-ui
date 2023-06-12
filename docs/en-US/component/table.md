@@ -319,7 +319,7 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   name: string,
   key: keyof D,
   type?: never,
-  metaData?: Data,
+  meta?: any,
   fixed?: boolean | 'left' | 'right',
   class?: ClassType,
   style?: StyleType,
@@ -422,7 +422,7 @@ type TableFootPropFn<P = any> = (data: {
 
 type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
-  'name' | 'key' | 'metaData'
+  'name' | 'key' | 'metaData' | 'meta'
 >
 type TableFilterProfile<
   D = Data,
@@ -622,7 +622,8 @@ interface TableFootPayload {
 | disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -        |
 | truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
 | order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
-| meta-data        | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -        |
+| ~~meta-data~~    | `Record<any, any>`                     | Set the column metadata                                                                                                                      | `null`      | -        |
+| meta             | `any`                                  | Set the column metadata                                                                                                                      | `null`      | `2.1.24` |
 | text-align       | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
 | head-span        | `number`                               | Set the head span                                                                                                                            | `1`         | `2.1.24` |
 | cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                                                   | `null`      | `2.1.24` |
@@ -652,7 +653,7 @@ interface TableFootPayload {
 | cell-span     | `SummaryCellSpanFn`   | Set the callback function to set cell span                                    | `null`  | -     |
 | order         | `number`              | The rendering order of the summary                                            | `0`     | -     |
 | above         | `boolean`             | Set whether the summary is at the top of table                                | `false` | -     |
-| meta          | `Record<any, any>`    | Set the summary metadata                                                      | `{}`    | -     |
+| meta          | `any`                 | Set the summary metadata                                                      | `null`  | -     |
 | renderer      | `SummaryRenderFn`     | Custom render function                                                        | `null`  | -     |
 
 ### TableSummary Slots

@@ -44,10 +44,7 @@ export default defineComponent({
         default: false,
         static: true
       },
-      meta: {
-        default: () => ({}),
-        validator: value => !isNull(value)
-      },
+      meta: null,
       renderer: funcProp
     })
 

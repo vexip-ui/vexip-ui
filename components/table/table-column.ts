@@ -21,7 +21,15 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const deepProps: ColumnPropKey[] = [
+  'class',
+  'style',
+  'attrs',
+  'filter',
+  'sorter',
+  'metaData',
+  'meta'
+]
 const ignoredProps: ColumnPropKey[] = [
   'renderer',
   'headRenderer',
@@ -89,10 +97,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      metaData: {
-        default: () => ({}),
-        validator: value => !isNull(value)
-      },
+      metaData: null,
+      meta: null,
       textAlign: {
         default: 'left',
         validator: value => aligns.includes(value)
@@ -113,6 +119,13 @@ export default defineComponent({
       warnOnce(
         "[vexip-ui:TableColumn] 'class-name' prop has been deprecated, please " +
           "use 'class' prop to replace it"
+      )
+    }
+
+    if (!isNull(props.meta)) {
+      warnOnce(
+        "[vexip-ui:TableColumn] 'meta-data' prop has been deprecated, please " +
+          "use 'meta' prop to replace it"
       )
     }
 

@@ -126,7 +126,11 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   key: keyof D,
   name?: string,
   type?: never,
+  /**
+   * @deprecated Use 'meta' prop to replace it
+   **/
   metaData?: Record<any, any>,
+  meta?: any,
   fixed?: boolean | 'left' | 'right',
   /**
    * @deprecated Use 'class' prop to replace it
@@ -243,7 +247,7 @@ export type TableFootPropFn<P = any> = (data: {
 
 export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
-  'name' | 'key' | 'metaData'
+  'name' | 'key' | 'metaData' | 'meta'
 >
 export type TableFilterProfile<
   D = Data,

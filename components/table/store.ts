@@ -442,6 +442,10 @@ export function useStore(options: StoreOptions) {
             break
           }
         }
+
+        if (!column.key) {
+          column.key = `__vxp_${column.type}`
+        }
       } else if (!first) {
         column.first = true
         first = true

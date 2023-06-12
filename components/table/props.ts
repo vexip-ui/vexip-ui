@@ -179,6 +179,7 @@ export const tableColumnProps = buildProps({
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
   metaData: Object as PropType<Record<any, any>>,
+  meta: Object as PropType<any>,
   textAlign: String as PropType<TableTextAlign>,
   headSpan: Number,
   cellSpan: Function as PropType<ColumnCellSpanFn>,
@@ -210,7 +211,7 @@ export const tableSummaryProps = buildProps({
   cellSpan: Function as PropType<SummaryCellSpanFn>,
   order: Number,
   above: booleanProp,
-  meta: Object as PropType<Record<any, any>>,
+  meta: Object as PropType<any>,
   renderer: Function as PropType<SummaryRenderFn>
 })
 

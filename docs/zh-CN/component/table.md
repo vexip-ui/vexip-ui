@@ -319,7 +319,7 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   name: string,
   key: keyof D,
   type?: never,
-  metaData?: Data,
+  meta?: any,
   fixed?: boolean | 'left' | 'right',
   class?: ClassType,
   style?: StyleType,
@@ -422,7 +422,7 @@ type TableFootPropFn<P = any> = (data: {
 
 type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
-  'name' | 'key' | 'metaData'
+  'name' | 'key' | 'metaData' | 'meta'
 >
 type TableFilterProfile<
   D = Data,
@@ -622,7 +622,8 @@ interface TableFootPayload {
 | disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -        |
 | truth-index      | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
 | order-label      | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -        |
-| meta-data        | `Record<any, any>`                     | 设置列的元数据                                                               | `{}`        | -        |
+| ~~meta-data~~    | `Record<any, any>`                     | 设置列的元数据                                                               | `null`      | -        |
+| meta             | `any`                                  | 设置列的元数据                                                               | `null`      | `2.1.24` |
 | text-align       | `TableTextAlign`                       | 设置列的横向对其方式                                                         | `'left'`    | `2.1.19` |
 | head-span        | `number`                               | 设置头部跨度                                                                 | `1`         | `2.1.24` |
 | cell-span        | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                                     | `null`      | `2.1.24` |
@@ -652,7 +653,7 @@ interface TableFootPayload {
 | cell-span     | `SummaryCellSpanFn`   | 设置单元格跨度的回调函数                           | `null`  | -    |
 | order         | `number`              | 总结行的渲染顺序                                   | `0`     | -    |
 | above         | `boolean`             | 设置总结行是否在表格上部                           | `false` | -    |
-| meta          | `Record<any, any>`    | 设置总结行的元数据                                 | `{}`    | -    |
+| meta          | `any`                 | 设置总结行的元数据                                 | `null`  | -    |
 | renderer      | `SummaryRenderFn`     | 自定义渲染函数                                     | `null`  | -    |
 
 ### TableSummary 插槽
