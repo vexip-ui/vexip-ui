@@ -404,14 +404,14 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string | number, type: InputEventType) {
+    function setValue(value: string | number, type: InputEventType, sync = props.sync) {
       if (type !== 'input') {
         currentValue.value = isEmpty(value) ? getEmptyValue() : toNumber(value)
       } else {
         currentValue.value = value
       }
 
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
     function getEmptyValue() {
@@ -425,7 +425,7 @@ export default defineComponent({
       }
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       const empty = isEmpty(currentValue.value)
       const value = empty ? getEmptyValue() : toNumber(currentValue.value)
 
@@ -444,38 +444,39 @@ export default defineComponent({
           currentValue.value = boundValue
         }
 
-        if (!props.sync && Object.is(lastValue, boundValue)) {
+        if (!sync && Object.is(lastValue, boundValue)) {
           !Object.is(props.value, value) && emit('update:value', boundValue)
           return
         }
 
         lastValue = boundValue
-        ;(!props.sync || boundChange) && setFieldValue(boundValue)
+
+        if (!sync || boundChange) {
+          emit('update:value', boundValue)
+          setFieldValue(boundValue)
+        }
+
         emitEvent(props.onChange, boundValue)
 
-        if (!props.sync || boundChange) {
-          emit('update:value', boundValue)
+        if (!sync || boundChange) {
           validateField()
         }
       } else {
-        props.sync && setFieldValue(value)
+        if (sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onInput, value)
 
-        if (props.sync) {
-          emit('update:value', value)
+        if (sync) {
           validateField()
         }
       }
     }
 
     function handleClear() {
-      setValue(NaN, 'change')
-
-      if (props.sync) {
-        emit('update:value', getEmptyValue())
-        validateField()
-      }
-
+      setValue(NaN, 'change', false)
       emitEvent(props.onClear)
       clearField()
     }

@@ -322,9 +322,6 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emitEvent(props.onToggle, value)
-      emit('update:active', value)
-
       if (value) {
         nextTick(() => {
           computeTop()
@@ -369,6 +366,15 @@ export default defineComponent({
         }
       })
     })
+
+    function setActive(active: boolean) {
+      if (currentActive.value === active) return
+
+      currentActive.value = active
+
+      emit('update:active', active)
+      emitEvent(props.onToggle, active)
+    }
 
     function normalizeSizeValue(value: string | number) {
       return value === 'auto' ? 'auto' : toNumber(value)
@@ -443,7 +449,7 @@ export default defineComponent({
 
       if (result !== false) {
         nextTick(() => {
-          currentActive.value = false
+          setActive(false)
           emitEvent(props.onClose)
         })
       }

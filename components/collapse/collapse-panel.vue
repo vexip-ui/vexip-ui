@@ -111,15 +111,14 @@ export default defineComponent({
         currentLabel.value = value || value === 0 ? value : prevValue
 
         if (collapseState && prevValue !== currentLabel.value) {
-          collapseState.unregisterPane(prevValue)
-          collapseState.registerPane(currentLabel.value, currentExpanded)
+          collapseState.unregisterPanel(prevValue)
+          collapseState.registerPanel(currentLabel.value, {
+            expanded: currentExpanded,
+            setExpanded
+          })
         }
       }
     )
-    watch(currentExpanded, value => {
-      emitEvent(props.onToggle, value)
-      emit('update:expanded', value)
-    })
 
     if (!collapseState) {
       watch(
@@ -138,12 +137,22 @@ export default defineComponent({
           currentLabel.value = randomString()
         }
 
-        collapseState.registerPane(currentLabel.value, currentExpanded)
+        collapseState.registerPanel(currentLabel.value, {
+          expanded: currentExpanded,
+          setExpanded
+        })
       })
 
       onBeforeUnmount(() => {
-        collapseState.unregisterPane(currentLabel.value)
+        collapseState.unregisterPanel(currentLabel.value)
       })
+    }
+
+    function setExpanded(expanded: boolean) {
+      currentExpanded.value = expanded
+
+      emit('update:expanded', expanded)
+      emitEvent(props.onToggle, expanded)
     }
 
     function handleToggle() {
@@ -151,9 +160,9 @@ export default defineComponent({
 
       if (collapseState) {
         // 由父级进行管理
-        collapseState.expandPane(currentLabel.value, !currentExpanded.value)
+        collapseState.expandPanel(currentLabel.value, !currentExpanded.value)
       } else {
-        currentExpanded.value = !currentExpanded.value
+        setExpanded(!currentExpanded.value)
       }
     }
 

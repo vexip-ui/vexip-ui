@@ -109,15 +109,16 @@ export default defineComponent({
         currentValue.value = value
       }
     )
-    watch(currentValue, value => {
-      setFieldValue(value)
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-      validateField()
-    })
 
     function updateValue(value: string | number) {
-      currentValue.value = value
+      if (currentValue.value !== value) {
+        currentValue.value = value
+
+        emit('update:value', value)
+        setFieldValue(value)
+        emitEvent(props.onChange, value)
+        validateField()
+      }
     }
 
     function registerInput(input: Ref<HTMLElement | null | undefined>) {

@@ -168,8 +168,8 @@ export default defineComponent({
       layoutState.changeInLock(() => {
         currentSignType.value = type
 
-        emitEvent(props.onNavChange, type)
         emit('update:sign-type', type)
+        emitEvent(props.onNavChange, type)
       })
     }
 
@@ -188,8 +188,8 @@ export default defineComponent({
     function handleColorChange(color: string) {
       currentColor.value = color
 
-      emitEvent(props.onColorChange, color)
       emit('update:color', color)
+      emitEvent(props.onColorChange, color)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -199,8 +199,8 @@ export default defineComponent({
     function toggleUserDropped(dropped = !currentUserDropped.value) {
       currentUserDropped.value = dropped
 
-      emitEvent(props.onDroppedChange, dropped)
       emit('update:user-dropped', dropped)
+      emitEvent(props.onDroppedChange, dropped)
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
@@ -215,8 +215,8 @@ export default defineComponent({
     function toggleTheme(darkMode: boolean) {
       isDark.value = darkMode
 
-      emitEvent(props.onToggleTheme, darkMode)
       emit('update:dark-mode', darkMode)
+      emitEvent(props.onToggleTheme, darkMode)
 
       if (!isClient) return
 

@@ -299,9 +299,9 @@ export default defineComponent({
     }
 
     function emitChangeEvent() {
+      emit('update:file-list', fileStates.value)
       setFieldValue(fileStates.value)
       emitEvent(props.onChange, fileStates.value)
-      emit('update:file-list', fileStates.value)
       validateField()
     }
 

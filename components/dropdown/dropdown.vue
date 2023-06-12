@@ -164,9 +164,6 @@ export default defineComponent({
       if (value) {
         updatePopper()
       }
-
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
     })
 
     onMounted(() => {
@@ -175,23 +172,32 @@ export default defineComponent({
       })
     })
 
+    function setVisible(visible: boolean) {
+      if (currentVisible.value === visible) return
+
+      currentVisible.value = visible
+
+      emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
+    }
+
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
-        currentVisible.value = false
+        setVisible(false)
         emitEvent(props.onOutsideClose)
       }
     }
 
-    function handleSelect(labels: (string | number)[], metas: Array<Record<string, any>>) {
+    function handleSelect(labels: (string | number)[], metaList: Array<Record<string, any>>) {
       if (props.trigger !== 'custom') {
-        currentVisible.value = false
-        emitEvent(props.onSelect, labels, metas)
+        setVisible(false)
+        emitEvent(props.onSelect, labels, metaList)
       }
 
       if (typeof parentState?.handleSelect === 'function') {
-        parentState.handleSelect([currentLabel.value!, ...labels], [props.meta || {}, ...metas])
+        parentState.handleSelect([currentLabel.value!, ...labels], [props.meta || {}, ...metaList])
       }
     }
 
@@ -216,7 +222,7 @@ export default defineComponent({
         }
 
         timer.hover = setTimeout(() => {
-          currentVisible.value = true
+          setVisible(true)
         }, 250)
       }
     }
@@ -230,14 +236,14 @@ export default defineComponent({
         }
 
         timer.hover = setTimeout(() => {
-          currentVisible.value = false
+          setVisible(false)
         }, 250)
       }
     }
 
     function handleTriggerClick() {
       if (props.trigger === 'click') {
-        currentVisible.value = !currentVisible.value
+        setVisible(!currentVisible.value)
       }
     }
 

@@ -463,9 +463,6 @@ export default defineComponent({
       if (value) {
         updatePopper()
       }
-
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
@@ -499,7 +496,7 @@ export default defineComponent({
       () => props.disabled,
       value => {
         if (value) {
-          currentVisible.value = false
+          setVisible(false)
           handleBlur()
         }
       }
@@ -508,7 +505,7 @@ export default defineComponent({
       () => props.loading,
       value => {
         if (value && props.loadingLock) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -516,7 +513,7 @@ export default defineComponent({
       () => props.loadingLock,
       value => {
         if (props.loading && value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -621,6 +618,15 @@ export default defineComponent({
       }
     }
 
+    function setVisible(visible: boolean) {
+      if (currentVisible.value === visible) return
+
+      currentVisible.value = visible
+
+      emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
+    }
+
     function emitChange() {
       verifyTime()
 
@@ -628,9 +634,9 @@ export default defineComponent({
         lastValue.value = getStringValue()
 
         toggleActivated(true)
+        emit('update:value', currentValue.value)
         setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
-        emit('update:value', currentValue.value)
         validateField()
       }
     }
@@ -663,8 +669,8 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       const target = event.target as Node
-      currentVisible.value = true
 
+      setVisible(true)
       handleFocused()
 
       if (wrapper.value && target) {
@@ -678,7 +684,7 @@ export default defineComponent({
     }
 
     function finishInput(shouldChange = true) {
-      currentVisible.value = false
+      setVisible(false)
 
       shouldChange && emitChange()
       startState.resetColumn()
@@ -692,8 +698,8 @@ export default defineComponent({
 
           parseValue(null)
           finish && finishInput(false)
-          emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
+          emitEvent(props.onChange, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue)
           finish && handleBlur()

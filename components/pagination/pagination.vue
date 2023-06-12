@@ -427,7 +427,7 @@ export default defineComponent({
       props.pageCount && plugins.push('size')
       props.pageJump && plugins.push('jump')
 
-      if (plugins.length) {
+      if (plugins.length > 1) {
         warnOnce(
           "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
             " have been deprecated, please use 'plugins' prop to replace them"
@@ -466,12 +466,6 @@ export default defineComponent({
         changeActive(value, false)
       }
     )
-    watch(currentActive, value => {
-      computePagers()
-      jumpValue.value = value
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
     watch(() => props.maxCount, computePagers)
     watch(pagerCount, computePagers)
     watch(
@@ -481,8 +475,8 @@ export default defineComponent({
       }
     )
     watch(currentPageSize, (value, prevValue) => {
-      emitEvent(props.onPageSizeChange, value)
       emit('update:page-size', value)
+      emitEvent(props.onPageSizeChange, value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)
@@ -517,6 +511,17 @@ export default defineComponent({
       return active
     }
 
+    function handleChange(value: number) {
+      if (currentActive.value === value) return
+
+      currentActive.value = value
+
+      computePagers()
+      jumpValue.value = value
+      emit('update:active', value)
+      emitEvent(props.onChange, value)
+    }
+
     function changeActive(active: number, focus = true) {
       active = parseInt(active.toString())
 
@@ -524,7 +529,7 @@ export default defineComponent({
         return
       }
 
-      currentActive.value = active
+      handleChange(active)
 
       if (isClient && focus) {
         const activeEl = itemElList.value.find(el => el === document.activeElement) as HTMLElement
@@ -646,7 +651,7 @@ export default defineComponent({
           }
         }
 
-        currentActive.value = active
+        handleChange(active)
       }
 
       nextTick(() => {

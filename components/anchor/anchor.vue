@@ -128,10 +128,6 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
     watch(() => props.viewer, updateContainer)
 
     onMounted(() => {
@@ -302,8 +298,13 @@ export default defineComponent({
         }
       }
 
-      currentActive.value = currentLink
       prevScrollTop = scrollTop
+
+      if (currentActive.value !== currentLink) {
+        currentActive.value = currentLink
+        emit('update:active', currentLink)
+        emitEvent(props.onChange, currentLink)
+      }
     }
 
     function handleContainerScroll(event: Event) {

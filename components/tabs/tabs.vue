@@ -161,8 +161,8 @@ export default defineComponent({
       currentActive.value = label
 
       computeIndex()
-      emitEvent(props.onChange as ChangeListener, label)
       emit('update:active', label)
+      emitEvent(props.onChange as ChangeListener, label)
     }
 
     function handleAdd() {

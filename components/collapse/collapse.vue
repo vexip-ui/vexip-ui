@@ -22,8 +22,7 @@ import { removeArrayItem } from '@vexip-ui/utils'
 import { collapseProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
-import type { Ref } from 'vue'
-import type { CollapseArrowType } from './symbol'
+import type { CollapseArrowType, PanelState } from './symbol'
 
 export default defineComponent({
   name: 'Collapse',
@@ -45,7 +44,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('collapse')
-    const paneExpandedMap = new Map<string | number, Ref<boolean>>()
+    const panelExpandedMap = new Map<string | number, PanelState>()
     const currentExpanded = ref<(string | number)[]>([])
 
     const className = computed(() => {
@@ -65,9 +64,9 @@ export default defineComponent({
       COLLAPSE_STATE,
       reactive({
         arrowType: toRef(props, 'arrowType'),
-        registerPane,
-        unregisterPane,
-        expandPane
+        registerPanel,
+        unregisterPanel,
+        expandPanel
       })
     )
 
@@ -87,22 +86,22 @@ export default defineComponent({
       nextTick(updateItemExpanded)
     })
 
-    function registerPane(label: string | number, paneExpanded: Ref<boolean>) {
-      paneExpandedMap.set(label, paneExpanded)
+    function registerPanel(label: string | number, panel: PanelState) {
+      panelExpandedMap.set(label, panel)
 
       if (currentExpanded.value.includes(label)) {
-        paneExpanded.value = true
-      } else if (paneExpanded.value) {
-        expandPane(label, true)
+        panel.expanded.value = true
+      } else if (panel.expanded.value) {
+        expandPanel(label, true)
       }
     }
 
-    function unregisterPane(label: string | number) {
-      paneExpandedMap.delete(label)
-      expandPane(label, false)
+    function unregisterPanel(label: string | number) {
+      panelExpandedMap.delete(label)
+      expandPanel(label, false)
     }
 
-    function expandPane(label: string | number, expanded: boolean) {
+    function expandPanel(label: string | number, expanded: boolean) {
       if (!label && label !== 0) return
 
       if (props.accordion) {
@@ -120,13 +119,13 @@ export default defineComponent({
     }
 
     function emitChangeEvent() {
-      emitEvent(props.onChange, currentExpanded.value)
       emit('update:expanded', currentExpanded.value)
+      emitEvent(props.onChange, currentExpanded.value)
     }
 
     function updateItemExpanded() {
-      paneExpandedMap.forEach((expanded, label) => {
-        expanded.value = currentExpanded.value.includes(label)
+      panelExpandedMap.forEach((panel, label) => {
+        panel.setExpanded(currentExpanded.value.includes(label))
       })
     }
 
