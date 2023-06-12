@@ -122,7 +122,7 @@ export default defineComponent({
       )
     }
 
-    if (!isNull(props.meta)) {
+    if (!isNull(props.metaData)) {
       warnOnce(
         "[vexip-ui:TableColumn] 'meta-data' prop has been deprecated, please " +
           "use 'meta' prop to replace it"
