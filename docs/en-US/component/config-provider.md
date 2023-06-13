@@ -12,7 +12,7 @@ If you want global configuration, see [Global Config](/en-US/guide/global-config
 
 ### Basis Usage
 
-Provides config for all child components.
+Provides configuration injection for all components in scope.
 
 :::
 
@@ -32,12 +32,24 @@ Some props are object type, you should use a function to return a new value to p
 
 :::
 
+:::demo config-provider/theme
+
+### Specify Theme
+
+A theme can be specified for a scope via the `theme` prop.
+
+After the theme is specified, an element will be used to wrap the scope, and the class name shipping the theme variables will be added.
+
+:::
+
 ## API
 
 ### ConfigProvider Props
 
-| Name   | Type                                                                                                    | Description                                                                                                                                                                                                                                     | Default | Since   |
-| ------ | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------- |
-| props  | `Record<string, any>`                                                                                   | The component props configuration to be injected, the key value is the camel case name of the component, the value is the props configuration of the component, the injected values will override the component's original props default values | `{}`    | -       |
-| locale | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5) | The internationalization configuration to be injected                                                                                                                                                                                           | `{}`    | -       |
-| icons  | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)         | The internal icons configuration to be injected                                                                                                                                                                                                 | `{}`    | `2.1.9` |
+| Name    | Type                                                                                                    | Description                                                                                                                                                                                                                                     | Default | Since    |
+| ------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| props   | `Record<string, any>`                                                                                   | The component props configuration to be injected, the key value is the camel case name of the component, the value is the props configuration of the component, the injected values will override the component's original props default values | `{}`    | -        |
+| locale  | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5) | The internationalization configuration to be injected                                                                                                                                                                                           | `{}`    | -        |
+| icons   | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)         | The internal icons configuration to be injected                                                                                                                                                                                                 | `{}`    | `2.1.9`  |
+| z-index | `number`                                                                                                | The number of base z-index that need to be injected                                                                                                                                                                                             | `null`  | `2.1.17` |
+| theme   | `string`                                                                                                | Set theme of the scope                                                                                                                                                                                                                          | `null`  | `2.1.24` |

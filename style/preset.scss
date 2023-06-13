@@ -5,7 +5,8 @@
 @use './animation';
 @use './icon.scss';
 
-:root {
+:root,
+.#{$namespace}-theme-vars-base {
   @include define-css-var('color-black', $color-black);
   @include define-css-var('color-white', $color-white);
 

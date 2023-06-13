@@ -89,7 +89,7 @@ body {
   overflow: auto;
   background-color: var(--bg-color);
   border: var(--vxp-border-base);
-  border-radius: var(--vxp-border-radius-large);
+  border-radius: var(--vxp-radius-large);
   transition: var(--vxp-transition-background), var(--vxp-transition-border);
 }
 

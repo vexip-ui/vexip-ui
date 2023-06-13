@@ -1,3 +1,5 @@
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
+
 import type { AlertCProps } from './alert'
 import type { AnchorCProps } from './anchor'
 import type { AutoCompleteCProps } from './auto-complete'
@@ -106,8 +108,17 @@ import type {
   ULCProps
 } from './typography'
 
+interface SuggestedDefault {
+  size?: ComponentSize,
+  state?: ComponentState,
+  transfer?: boolean,
+  disabled?: boolean,
+  loading?: boolean,
+  clearable?: boolean
+}
+
 export interface PropsOptions {
-  default?: Record<string, any>,
+  default?: SuggestedDefault & Record<string, any>,
   alert?: AlertCProps,
   anchor?: AnchorCProps,
   autoComplete?: AutoCompleteCProps,

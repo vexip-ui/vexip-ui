@@ -4,7 +4,8 @@
 @use '../design/variables.scss' as c;
 @use './variables.scss' as *;
 
-:root.dark {
+:root.dark,
+.#{c.$namespace}-theme-vars-dark {
   color-scheme: dark;
 
   @include define-preset-values('content-color', $content-color-map);
