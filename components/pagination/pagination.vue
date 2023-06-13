@@ -78,14 +78,15 @@
       </li>
       <template v-if="currentPagers.length">
         <li
-          v-for="(page, index) in currentPagers"
-          :key="index"
+          v-for="page in currentPagers"
+          :key="page"
           :ref="el => el && itemElList.push(el as any)"
           :class="{
             [nh.be('item')]: true,
             [nh.bem('item', 'disabled')]: props.disableItem(page),
             [nh.bem('item', 'active')]: currentActive === page
           }"
+          :title="props.noTitle ? undefined : `${page}`"
           role="menuitemradio"
           :tabindex="currentActive === page ? '0' : '-1'"
           :aria-posinset="page"
@@ -224,6 +225,7 @@ import {
   nextTick,
   onBeforeUpdate,
   onMounted,
+  reactive,
   ref,
   toRef,
   watch
@@ -307,7 +309,7 @@ export default defineComponent({
     const inPrevEllipsis = ref(false)
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
-    const itemElList = ref<unknown[]>([])
+    const itemElList = reactive<HTMLElement[]>([])
 
     const locale = useLocale('pagination', toRef(props, 'locale'))
 
@@ -320,13 +322,11 @@ export default defineComponent({
           const sign = modifier.up || modifier.left ? -1 : 1
 
           if (isClient && document.activeElement) {
-            const index = itemElList.value.findIndex(el => el === document.activeElement)
+            const index = itemElList.findIndex(el => el === document.activeElement)
 
             if (!~index) return
 
-            const target = itemElList.value[
-              boundRange(index + sign, 0, itemElList.value.length - 1)
-            ] as HTMLElement
+            const target = itemElList[boundRange(index + sign, 0, itemElList.length - 1)]
 
             target.focus()
           }
@@ -334,13 +334,11 @@ export default defineComponent({
           event.preventDefault()
 
           if (document && document.activeElement) {
-            const index = itemElList.value.findIndex(el => el === document.activeElement)
+            const index = itemElList.findIndex(el => el === document.activeElement)
 
             if (!~index) {
               const activeClass = nh.bem('item', 'active')
-              const activeEl = (itemElList.value as HTMLElement[]).find(el =>
-                el.classList.contains(activeClass)
-              )
+              const activeEl = itemElList.find(el => el.classList.contains(activeClass))
 
               activeEl?.focus()
             }
@@ -495,8 +493,9 @@ export default defineComponent({
     onMounted(() => {
       nextTick(computePagers)
     })
+
     onBeforeUpdate(() => {
-      itemElList.value.length = 0
+      itemElList.length = 0
     })
 
     function queryEnabledActive(active: number, step: number) {
@@ -515,9 +514,9 @@ export default defineComponent({
       if (currentActive.value === value) return
 
       currentActive.value = value
+      jumpValue.value = value
 
       computePagers()
-      jumpValue.value = value
       emit('update:active', value)
       emitEvent(props.onChange, value)
     }
@@ -532,13 +531,11 @@ export default defineComponent({
       handleChange(active)
 
       if (isClient && focus) {
-        const activeEl = itemElList.value.find(el => el === document.activeElement) as HTMLElement
+        const activeEl = itemElList.find(el => el === document.activeElement)
 
         activeEl?.blur()
-
         nextTick(() => {
-          const el = (itemElList.value as HTMLElement[]).find(el => el.tabIndex >= 0)
-          el?.focus()
+          itemElList.find(el => el.tabIndex >= 0)?.focus()
         })
       }
     }
