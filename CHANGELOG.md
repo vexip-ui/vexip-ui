@@ -1,3 +1,41 @@
+## [2.1.24](https://github.com/vexip-ui/vexip-ui/compare/v2.1.23...v2.1.24) (2023-06-13)
+
+
+### ✨ Features
+
+* **config-provider:** support specify the scope theme ([1f5387b](https://github.com/vexip-ui/vexip-ui/commit/1f5387b61c38253c77fe119cf7f89def8befd770)), closes [#380](https://github.com/vexip-ui/vexip-ui/issues/380)
+* **layout:** add fit-window prop ([d610f36](https://github.com/vexip-ui/vexip-ui/commit/d610f36286e5d8bb53984a5de48dca2f94589dcc))
+* **layout:** add inner-classes prop ([874f9a4](https://github.com/vexip-ui/vexip-ui/commit/874f9a4b21cee716045332e948c812a6662797b5))
+* **table:** support add table summaries (footer) ([#386](https://github.com/vexip-ui/vexip-ui/issues/386)) ([27d0fd6](https://github.com/vexip-ui/vexip-ui/commit/27d0fd683bf7c5ad438d257301339f6d7e94d936))
+* **table:** support merge cells ([#384](https://github.com/vexip-ui/vexip-ui/issues/384)) ([5ce3280](https://github.com/vexip-ui/vexip-ui/commit/5ce3280eb902c6719678ad19d512b53da3bed504))
+
+
+### 🐞 Bug Fixes
+
+* adjust `update:` events emitted order ([#388](https://github.com/vexip-ui/vexip-ui/issues/388)) ([b6d826b](https://github.com/vexip-ui/vexip-ui/commit/b6d826b0c1bd4ebeb08a59e03fb1a40ec6c8e9f9))
+* **anchor:** effect working with window scroll ([d1cb5b6](https://github.com/vexip-ui/vexip-ui/commit/d1cb5b684d3b6b02ab5b33f6bea400fddbae83c8))
+* **anchor:** incorrect track-color-active variable ([#378](https://github.com/vexip-ui/vexip-ui/issues/378)) ([4e14a6a](https://github.com/vexip-ui/vexip-ui/commit/4e14a6a1815e86d7a5cf36c02ec5805c69830115))
+* **drawer:** remove internal --vxp-drawer-hanlder-offset variable ([7c32a6a](https://github.com/vexip-ui/vexip-ui/commit/7c32a6abe22c64ea09bfc51f1892f740cc59ae6e))
+* enable hardware acceleration for masker, modal, drawer ([2f99288](https://github.com/vexip-ui/vexip-ui/commit/2f992885581507635ea24d83436edce856e325d6))
+* **layout:** ensure emit resize event in fit-window ([b634de5](https://github.com/vexip-ui/vexip-ui/commit/b634de53b6a78bc6400dd50edf7b01accb4c285d))
+* **pagination:** center page items missing title ([5135a87](https://github.com/vexip-ui/vexip-ui/commit/5135a8751d2a06d99d5d8d0d648926136a1d3635))
+* **radio:** normalize button and border type style ([24cb6c0](https://github.com/vexip-ui/vexip-ui/commit/24cb6c000a983cf7dc7838dbd59255d60bd2a020))
+* **tab-nav:** incorrect active content border style ([2f6d78d](https://github.com/vexip-ui/vexip-ui/commit/2f6d78dbba88daf4ff5d52f3b7c7ce7a740ccd54))
+
+
+### 🔨 Code Refactoring
+
+* **table:** rename `meta-data` prop to `meta` ([6f03cf1](https://github.com/vexip-ui/vexip-ui/commit/6f03cf1cce27cfe5e7ca7c80c81b3c2060e77c23))
+* **table:** simplify code and improve columns layout ([#383](https://github.com/vexip-ui/vexip-ui/issues/383)) ([48608d9](https://github.com/vexip-ui/vexip-ui/commit/48608d9afe45f03d286267024194c7171f7cfc4c))
+
+
+### ❌ Breaking Changes
+
+* **table:** TableColumn's `meta-data` prop has been deprecated,
+please use `meta` prop to replace it.
+
+
+
 ## [2.1.23](https://github.com/vexip-ui/vexip-ui/compare/v2.1.22...v2.1.23) (2023-06-02)
 
 

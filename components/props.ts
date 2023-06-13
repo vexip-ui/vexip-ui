@@ -1,5 +1,3 @@
-import type { ComponentSize, ComponentState } from '@vexip-ui/config'
-
 import type { AlertCProps } from './alert'
 import type { AnchorCProps } from './anchor'
 import type { AutoCompleteCProps } from './auto-complete'
@@ -107,6 +105,8 @@ import type {
   TitleCProps,
   ULCProps
 } from './typography'
+
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 interface SuggestedDefault {
   size?: ComponentSize,
