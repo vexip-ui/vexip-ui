@@ -154,19 +154,25 @@ export default defineComponent({
 
         lastValue = currentValue.value
 
-        !props.sync && setFieldValue(currentValue.value)
+        if (!props.sync) {
+          emit('update:value', currentValue.value)
+          setFieldValue(currentValue.value)
+        }
+
         emitEvent(props.onChange, currentValue.value)
 
         if (!props.sync) {
-          emit('update:value', currentValue.value)
           validateField()
         }
       } else {
-        props.sync && setFieldValue(currentValue.value)
+        if (props.sync) {
+          emit('update:value', currentValue.value)
+          setFieldValue(currentValue.value)
+        }
+
         emitEvent(props.onInput, currentValue.value)
 
         if (props.sync) {
-          emit('update:value', currentValue.value)
           validateField()
         }
       }

@@ -124,7 +124,8 @@ describe('Pagination', () => {
   })
 
   it('plugins', () => {
-    const wrapper = mount(() => <Pagination page-jump page-total page-count></Pagination>)
+    // eslint-disable-next-line no-sparse-arrays
+    const wrapper = mount(() => <Pagination plugins={['total', , 'size', 'jump']}></Pagination>)
 
     expect(wrapper.find('.vxp-pagination__total').exists()).toBe(true)
     expect(wrapper.find('.vxp-pagination__size').exists()).toBe(true)

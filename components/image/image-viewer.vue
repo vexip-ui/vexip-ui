@@ -101,45 +101,59 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      emitEvent(props.onToggle, value)
-      emit('update:active', value)
-    })
     watch(
       () => props.index,
       value => {
         currentIndex.value = value
       }
     )
-    watch(currentIndex, value => {
-      viewer.value?.handleReset()
-      emitEvent(props.onChange, value, srcList.value[value])
-      emit('update:index', value)
-    })
     watch(() => srcList.value.length, verifyIndex)
+
+    function setActive(active: boolean) {
+      if (currentActive.value === active) return
+
+      currentActive.value = active
+
+      emit('update:active', active)
+      emitEvent(props.onToggle, active)
+    }
 
     function verifyIndex() {
       currentIndex.value = boundRange(currentIndex.value, 0, srcList.value.length - 1)
     }
 
+    function handleChange() {
+      const value = currentIndex.value
+
+      viewer.value?.handleReset()
+      emit('update:index', value)
+      emitEvent(props.onChange, value, srcList.value[value])
+    }
+
     function handlePrev() {
       if (prevDisabled.value) return
 
+      const prev = currentIndex.value
+
       currentIndex.value--
       verifyIndex()
+      currentIndex.value !== prev && handleChange()
       emitEvent(props.onPrev, currentIndex.value, srcList.value[currentIndex.value])
     }
 
     function handleNext() {
       if (nextDisabled.value) return
 
+      const prev = currentIndex.value
+
       currentIndex.value++
       verifyIndex()
+      currentIndex.value !== prev && handleChange()
       emitEvent(props.onNext, currentIndex.value, srcList.value[currentIndex.value])
     }
 
     function handleClose() {
-      currentActive.value = false
+      setActive(false)
       emitEvent(props.onClose)
     }
 

@@ -129,15 +129,15 @@ export default defineComponent({
     function toggleExpanded(expanded = !currentExpanded.value) {
       currentExpanded.value = expanded
 
-      emitEvent(props.onExpandedChange, expanded)
       emit('update:expanded', expanded)
+      emitEvent(props.onExpandedChange, expanded)
     }
 
     function toggleReduced(reduced = !currentReduced.value) {
       currentReduced.value = reduced
 
-      emitEvent(props.onReducedChange, reduced)
       emit('update:reduced', reduced)
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleSignClick(event: MouseEvent) {

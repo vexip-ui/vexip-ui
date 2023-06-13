@@ -137,12 +137,6 @@ export default defineComponent({
         currentValue.value = value
       }
     )
-    watch(currentValue, value => {
-      setFieldValue(value)
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-      validateField()
-    })
 
     async function handleChange(checked = !currentValue.value) {
       if (checked === currentValue.value) return
@@ -159,6 +153,11 @@ export default defineComponent({
 
       if (result !== false) {
         currentValue.value = checked
+
+        emit('update:value', checked)
+        setFieldValue(checked)
+        emitEvent(props.onChange, checked)
+        validateField()
       }
     }
 

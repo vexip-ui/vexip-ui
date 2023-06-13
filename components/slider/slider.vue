@@ -286,9 +286,9 @@ export default defineComponent({
       const [start, end] = truthValue.value
       const value = props.range ? (start > end ? [end, start] : [start, end]) : end
 
+      emit('update:value', value)
       setFieldValue(value)
       emitEvent(props.onChange, value)
-      emit('update:value', value)
       validateField()
     }
 

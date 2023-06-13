@@ -283,7 +283,7 @@ export default defineComponent({
       emitEvent(props.onInput, value)
     }
 
-    function handleChange() {
+    function handleChange(valid = true) {
       if (!changed || currentValue.value === lastValue) return
 
       changed = false
@@ -292,10 +292,10 @@ export default defineComponent({
 
       const option = optionStates.value.find(option => option.value === lastValue)
 
+      emit('update:value', currentValue.value)
       setFieldValue(currentValue.value)
       emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
-      emit('update:value', currentValue.value)
-      validateField()
+      valid && validateField()
 
       visible.value = false
 
@@ -381,7 +381,7 @@ export default defineComponent({
           changed = true
         }
 
-        handleChange()
+        handleChange(false)
         emitEvent(props.onClear)
         nextTick(clearField)
       }

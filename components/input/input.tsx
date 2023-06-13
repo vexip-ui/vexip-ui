@@ -231,12 +231,12 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string, type: InputEventType) {
+    function setValue(value: string, type: InputEventType, sync = props.sync) {
       currentValue.value = value
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       type = type === 'input' ? 'input' : 'change'
 
       const value =
@@ -247,19 +247,25 @@ export default defineComponent({
 
         lastValue = value
 
-        !props.sync && setFieldValue(value)
+        if (!sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onChange as ChangeListener, value)
 
-        if (!props.sync) {
-          emit('update:value', value)
+        if (!sync) {
           validateField()
         }
       } else {
-        props.sync && setFieldValue(value)
+        if (sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onInput as ChangeListener, value)
 
-        if (props.sync) {
-          emit('update:value', value)
+        if (sync) {
           validateField()
         }
       }
@@ -295,13 +301,7 @@ export default defineComponent({
 
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
-      setValue('', 'change')
-
-      if (props.sync) {
-        emit('update:value', currentValue.value)
-        validateField()
-      }
-
+      setValue('', 'change', false)
       emitEvent(props.onClear)
       nextTick(clearField)
     }

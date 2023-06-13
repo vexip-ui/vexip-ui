@@ -620,12 +620,12 @@ export default defineComponent({
           } else if (showDynamic.value) {
             handleSelect(dynamicOption)
           } else {
-            currentVisible.value = false
+            setVisible(false)
           }
 
           modifier.resetAll()
         } else if (modifier.tab || modifier.escape) {
-          currentVisible.value = false
+          setVisible(false)
           modifier.resetAll()
         }
       }
@@ -728,8 +728,6 @@ export default defineComponent({
       }
 
       syncInputValue()
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
     })
     watch(
       () => props.value,
@@ -745,7 +743,7 @@ export default defineComponent({
       () => props.disabled,
       value => {
         if (value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -753,7 +751,7 @@ export default defineComponent({
       () => props.loading,
       value => {
         if (value && props.loadingLock) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -761,7 +759,7 @@ export default defineComponent({
       () => props.loadingLock,
       value => {
         if (props.loading && value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -850,6 +848,15 @@ export default defineComponent({
 
         updateHitting(visibleOptions.value.findIndex(option => option.value === value))
       }
+    }
+
+    function setVisible(visible: boolean) {
+      if (currentVisible.value === visible) return
+
+      currentVisible.value = visible
+
+      emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
     }
 
     function updateHitting(hitting: number, ensureInView = true) {
@@ -978,7 +985,7 @@ export default defineComponent({
         syncInputValue()
         updatePopper()
       } else {
-        currentVisible.value = false
+        setVisible(false)
       }
 
       anchorWidth.value = 0
@@ -1000,14 +1007,14 @@ export default defineComponent({
 
         emittedValue = Array.from(currentValues.value)
 
+        emit('update:value', emittedValue)
+        emit('update:label', currentLabels.value)
         setFieldValue(emittedValue)
         emitEvent(
           props.onChange as ChangeListener,
           emittedValue,
           emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
-        emit('update:value', emittedValue)
-        emit('update:label', currentLabels.value)
         validateField()
       } else {
         const prevValue = currentValues.value[0]
@@ -1020,10 +1027,10 @@ export default defineComponent({
         if (prevValue !== option.value) {
           emittedValue = option.value
 
-          setFieldValue(emittedValue)
-          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
           emit('update:value', emittedValue)
           emit('update:label', currentLabels.value[0])
+          setFieldValue(emittedValue)
+          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
           validateField()
         }
       }
@@ -1032,7 +1039,7 @@ export default defineComponent({
     function toggleVisible() {
       if (props.disabled || (props.loading && props.loadingLock)) return
 
-      currentVisible.value = !currentVisible.value
+      setVisible(!currentVisible.value)
     }
 
     function handleClickOutside() {
@@ -1040,7 +1047,7 @@ export default defineComponent({
       emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
-        currentVisible.value = false
+        setVisible(false)
         emitEvent(props.onOutsideClose)
       }
     }
@@ -1061,8 +1068,8 @@ export default defineComponent({
         emittedValue = props.multiple ? [] : ''
 
         syncInputValue()
-        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
         emit('update:value', emittedValue)
+        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
         emitEvent(props.onClear)
         clearField(emittedValue!)
         updatePopper()

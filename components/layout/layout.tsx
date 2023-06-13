@@ -184,8 +184,8 @@ export default defineComponent({
       }
     )
     watch(currentSignType, value => {
-      emitEvent(props.onNavChange, value)
       emit('update:sign-type', value)
+      emitEvent(props.onNavChange, value)
     })
     watch(
       () => props.color,
@@ -194,8 +194,8 @@ export default defineComponent({
       }
     )
     watch(currentColor, value => {
-      emitEvent(props.onColorChange, value)
       emit('update:color', value)
+      emitEvent(props.onColorChange, value)
     })
     watch(
       () => props.darkMode,
@@ -215,15 +215,15 @@ export default defineComponent({
     function toggleExpanded(expanded = !asideReduced.value) {
       asideExpanded.value = expanded
 
-      emitEvent(props.onExpandedChange, expanded)
       emit('update:expanded', expanded)
+      emitEvent(props.onExpandedChange, expanded)
     }
 
     function toggleReduced(reduced = !asideReduced.value) {
       asideReduced.value = reduced
 
-      emitEvent(props.onReducedChange, reduced)
       emit('update:reduced', reduced)
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -235,8 +235,8 @@ export default defineComponent({
     }
 
     function handleToggleTheme(isDark: boolean) {
-      emitEvent(props.onToggleTheme, isDark)
       emit('update:dark-mode', isDark)
+      emitEvent(props.onToggleTheme, isDark)
     }
 
     function handleUserAction(label: string, meta: Record<string, any>) {

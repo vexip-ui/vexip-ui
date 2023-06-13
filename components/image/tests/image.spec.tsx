@@ -252,17 +252,11 @@ describe('Image', () => {
   it('viewer toggle active', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(ImageViewer, {
-      props: { onToggle }
+      props: { active: true, onToggle }
     })
 
-    await wrapper.setProps({ active: true })
-    expect(onToggle).toHaveBeenCalledTimes(1)
-    expect(onToggle).toHaveBeenLastCalledWith(true)
-    expect(wrapper.emitted()).toHaveProperty('update:active')
-    expect(wrapper.emitted()['update:active'][0]).toEqual([true])
-
     await wrapper.find('.vxp-image-viewer__close').trigger('click')
-    expect(onToggle).toHaveBeenCalledTimes(2)
+    expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(false)
   })
 
