@@ -321,7 +321,7 @@ export default defineComponent({
           width: `${width}px`,
           borderRightWidth:
             span > 1 && props.index + span >= totalWidths.length - 1 ? 0 : undefined,
-          transform: `translate3d(${getters.totalWidths[props.index]}px, 0, 0)`
+          transform: `translate3d(${totalWidths[props.index]}px, 0, 0)`
         }
       ]
     })

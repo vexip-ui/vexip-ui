@@ -64,17 +64,7 @@ The appearance without data, can be customized with the `empty` slot.
 
 Table provide various mouse events to quickly implement custom interactions.
 
-:::
-
-:::demo table/fixed
-
-### Fixed Width And Height
-
-Set the `width` and `height` props to constrain the width and height of the table.
-
-Set the `width` prop for a Column to specify the width of the column, and set the `fixed` prop to specify a fixed column.
-
-:::
+::
 
 :::demo table/selection
 
@@ -121,6 +111,16 @@ Adding the `filter` prop to the column options and setting it enables filtering.
 If you want to only the filter events will be emitted (e.g. remote filter), you can add `custom-filter` prop to Table component.
 
 Also you can custom the renderer of filter via `filter` slot of TableColumn component.
+
+:::
+
+:::demo table/fixed
+
+### Fixed Width And Height
+
+Set the `width` and `height` props to constrain the width and height of the table.
+
+Set the `width` prop for a Column to specify the width of the column, and set the `fixed` prop to specify a fixed column.
 
 :::
 

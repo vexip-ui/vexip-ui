@@ -66,16 +66,6 @@
 
 :::
 
-:::demo table/fixed
-
-### 固定行列
-
-设置 `width` 和 `height` 属性可以为表格限制宽度和高度。
-
-为 Column 设置 `width` 属性可以指定该列宽，设置 `fixed` 属性可以指定固定的列。
-
-:::
-
 :::demo table/selection
 
 ### 复选框列
@@ -121,6 +111,16 @@
 如果你希望只派发过滤事件而不执行内部的逻辑（例如在远程过滤时），可以为表格组件添加 `custom-filter` 属性。
 
 通过 TableColumn 组件的 `filter` 插槽你还可以自定义过滤器的渲染。
+
+:::
+
+:::demo table/fixed
+
+### 固定行列
+
+设置 `width` 和 `height` 属性可以为表格限制宽度和高度。
+
+为 Column 设置 `width` 属性可以指定该列宽，设置 `fixed` 属性可以指定固定的列。
 
 :::
 
