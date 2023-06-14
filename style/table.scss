@@ -73,6 +73,7 @@ $table: map.merge(
   &__wrapper {
     position: relative;
     width: 100%;
+    overflow: hidden;
 
     .#{$namespace}-scroll__wrapper {
       min-width: 100%;
@@ -237,6 +238,7 @@ $table: map.merge(
   $group: #{&}__group;
   $cell: #{&}__cell;
   $head-cell: #{&}__head-cell;
+  $foot-cell: #{&}__foot-cell;
   $collapse: #{&}__collapse;
   $fixed-active: #{&}__fixed--active;
 
@@ -296,14 +298,16 @@ $table: map.merge(
     // }
 
     #{$cell},
-    #{$head-cell} {
+    #{$head-cell},
+    #{$foot-cell} {
       border-right-color: get-css-var('table-cell-b-color-right');
     }
   }
 
   &--col-resizable {
     #{$cell},
-    #{$head-cell} {
+    #{$head-cell},
+    #{$foot-cell} {
       will-change: width, transform;
       transition: width get-css-var('transition-base'), get-css-var('transition-background'),
         get-css-var('transition-transform');
@@ -313,7 +317,8 @@ $table: map.merge(
   &--locked {
     #{$group},
     #{$cell},
-    #{$head-cell} {
+    #{$head-cell},
+    #{$foot-cell} {
       transition-duration: 0ms;
     }
   }
@@ -560,7 +565,8 @@ $table: map.merge(
     }
 
     #{$cell},
-    #{$head-cell} {
+    #{$head-cell},
+    #{$foot-cell} {
       border-right-width: get-css-var('table-b-width');
     }
   }

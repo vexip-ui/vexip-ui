@@ -67,10 +67,10 @@ async function main() {
   }
 
   const props = `
-    import type { ComponentSize, ComponentState } from '@vexip-ui/config'
-
     ${imports.join('\n')}
     import { ${typography.map(name => `${toCapitalCase(name)}CProps`).join()} } from './typography'
+
+    import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
     interface SuggestedDefault {
       size?: ComponentSize,
