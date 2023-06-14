@@ -319,6 +319,7 @@ export interface StoreOptions {
   footClass: ClassType | TableFootPropFn<ClassType>,
   footStyle: StyleType | TableFootPropFn<StyleType>,
   footAttrs: Record<string, any> | TableFootPropFn<Record<string, any>>,
+  border: boolean,
   stripe: boolean,
   highlight: boolean,
   currentPage: number,

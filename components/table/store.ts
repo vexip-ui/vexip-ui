@@ -300,6 +300,7 @@ export function useStore(options: StoreOptions) {
     setRowExpandHeight,
     setBodyYScroll,
     setBodyXScroll,
+    setBorder,
     setStripe,
     setHighlight,
     setRowHover,
@@ -838,6 +839,10 @@ export function useStore(options: StoreOptions) {
 
   function setBodyXScroll(scroll: number) {
     state.bodyXScroll = scroll
+  }
+
+  function setBorder(able: boolean) {
+    state.border = !!able
   }
 
   function setStripe(able: boolean) {

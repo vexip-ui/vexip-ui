@@ -191,7 +191,9 @@ export default defineComponent({
           width: `${width}px`,
           height: height ? `${height}px` : undefined,
           borderRightWidth:
-            colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1 ? 0 : undefined,
+            !state.border && colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1
+              ? 0
+              : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
           transform: `translate3d(${totalWidths[props.columnIndex]}px, 0, 0)`
