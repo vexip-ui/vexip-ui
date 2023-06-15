@@ -12,6 +12,7 @@
     :auto-remove="props.autoRemove"
     @show="handleShow"
     @hide="handleHide"
+    @resize="handleResize"
   >
     <template #default="{ show }">
       <section
@@ -87,11 +88,11 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 
-import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isNull, isPromise, toNumber } from '@vexip-ui/utils'
+import { debounce, isNull, isPromise } from '@vexip-ui/utils'
 import { modalProps } from './props'
 
 const positionValidator = (value: string | number) => {
@@ -151,73 +152,88 @@ export default defineComponent({
       autoRemove: false
     })
 
+    function normalizeStyle(value: string | number) {
+      return typeof value === 'number' ? `${value}px` : value
+    }
+
     const currentActive = ref(props.active)
-    const currentTop = ref(toNumber(props.top))
-    const currentLeft = ref(toNumber(props.left))
-    const currentWidth = ref<'auto' | number>(normalizeSizeValue(props.width))
-    const currentHeight = ref<'auto' | number>(normalizeSizeValue(props.height))
+    const rect = reactive({
+      top: normalizeStyle(props.top),
+      right: normalizeStyle(props.right),
+      bottom: normalizeStyle(props.bottom),
+      left: normalizeStyle(props.left),
+      width: normalizeStyle(props.width),
+      height: normalizeStyle(props.height)
+    })
 
     const idIndex = `${idCount++}`
 
-    let hasComputedTop = false
-    let hasComputedLeft = false
+    let transformed = false
 
     const wrapper = ref<HTMLElement>()
     const footer = ref<HTMLElement>()
 
+    const uselessTop = computed(() => {
+      return (
+        props.top === 'auto' &&
+        !isNull(props.bottom) &&
+        props.bottom !== 'auto' &&
+        props.height !== 'auto'
+      )
+    })
+    const uselessLeft = computed(() => {
+      return (
+        props.left === 'auto' &&
+        !isNull(props.right) &&
+        props.right !== 'auto' &&
+        props.width !== 'auto'
+      )
+    })
+
     const { target: header, moving: dragging } = useMoving({
       capture: false,
       onStart: (state, event) => {
-        if (!props.draggable || event.button > 0) {
+        if (!wrapper.value || !props.draggable || event.button > 0) {
           return false
         }
 
-        state.xStart = currentLeft.value
-        state.yStart = currentTop.value
+        transferRect(false)
+
+        transformed = true
+        state.xStart = parseFloat(rect.left)
+        state.yStart = parseFloat(rect.top)
 
         emitEvent(props.onDragStart, {
-          top: currentTop.value,
-          left: currentLeft.value
+          top: state.yStart,
+          left: state.xStart
         })
       },
       onMove: state => {
-        currentLeft.value = state.xEnd
-        currentTop.value = state.yEnd
+        rect.left = `${state.xEnd}px`
+        rect.top = `${state.yEnd}px`
 
         emitEvent(props.onDragMove, {
-          top: currentTop.value,
-          left: currentLeft.value
+          top: state.yEnd,
+          left: state.xEnd
         })
       },
-      onEnd: () => {
+      onEnd: state => {
         emitEvent(props.onDragEnd, {
-          top: currentTop.value,
-          left: currentLeft.value
+          top: state.yEnd,
+          left: state.xEnd
         })
       }
     })
 
     const { target: resizer, moving: resizing } = useMoving({
       onStart: (state, event) => {
-        if (!props.resizable || event.button > 0) {
+        if (!wrapper.value || !props.resizable || event.button > 0) {
           return false
         }
 
-        let widthStart
-        let heightStart
+        transferRect()
+
         let minHeight = 32
-
-        if (currentWidth.value === 'auto') {
-          widthStart = wrapper.value?.offsetWidth ?? 0
-        } else {
-          widthStart = currentWidth.value
-        }
-
-        if (currentHeight.value === 'auto') {
-          heightStart = wrapper.value?.offsetHeight ?? 0
-        } else {
-          heightStart = currentHeight.value
-        }
 
         if (header.value) {
           minHeight += header.value.offsetHeight
@@ -227,35 +243,34 @@ export default defineComponent({
           minHeight += footer.value.offsetHeight
         }
 
-        state.xStart = widthStart
-        state.yStart = heightStart
+        transformed = true
+        state.xStart = parseFloat(rect.width)
+        state.yStart = parseFloat(rect.height)
         state.minHeight = Math.max(minHeight, props.minHeight)
 
         emitEvent(props.onResizeStart, {
-          width: widthStart,
-          height: heightStart
+          width: state.xStart,
+          height: state.yStart
         })
       },
       onMove: state => {
-        currentWidth.value = state.xEnd
-        currentHeight.value = state.yEnd
+        const width = Math.max(props.minWidth, state.xEnd, 32)
+        const height = Math.max(state.minHeight as number, state.yEnd)
 
-        currentWidth.value = Math.max(props.minWidth, state.xEnd)
-        currentHeight.value = Math.max(state.minHeight as number, state.yEnd)
+        rect.width = `${width}px`
+        rect.height = `${height}px`
 
-        emitEvent(props.onResizeMove, {
-          width: currentWidth.value as number,
-          height: currentHeight.value as number
-        })
+        emitEvent(props.onResizeMove, { width, height })
       },
-      onEnd: () => {
-        emitEvent(props.onResizeEnd, {
-          width: currentWidth.value as number,
-          height: currentHeight.value as number
-        })
+      onEnd: state => {
+        const width = Math.max(props.minWidth, state.xEnd, 32)
+        const height = Math.max(state.minHeight as number, state.yEnd)
+
+        emitEvent(props.onResizeEnd, { width, height })
       }
     })
 
+    // const shouldParse = computed(() => !props.draggable && !props.resizable)
     const className = computed(() => {
       return [
         nh.b(),
@@ -278,34 +293,12 @@ export default defineComponent({
         props.modalClass
       ]
     })
-    const uslessTop = computed(() => {
-      return (
-        props.top === 'auto' &&
-        !isNull(props.bottom) &&
-        props.bottom !== 'auto' &&
-        currentHeight.value !== 'auto'
-      )
-    })
-    const uslessLeft = computed(() => {
-      return (
-        props.left === 'auto' &&
-        !isNull(props.right) &&
-        props.right !== 'auto' &&
-        currentWidth.value !== 'auto'
-      )
-    })
     const wrapperStyle = computed(() => {
-      const fixedHeight = currentHeight.value !== 'auto'
-
       return [
         props.modalStyle,
         {
-          top: uslessTop.value ? 'auto' : `${currentTop.value}px`,
-          right: isNull(props.right) || props.right === 'auto' ? undefined : `${props.right}px`,
-          bottom: isNull(props.bottom) || props.bottom === 'auto' ? undefined : `${props.bottom}px`,
-          left: uslessLeft.value ? undefined : `${currentLeft.value}px`,
-          width: `${currentWidth.value}px`,
-          height: fixedHeight ? `${currentHeight.value}px` : undefined
+          ...rect,
+          height: rect.height !== 'auto' ? rect.height : undefined
         }
       ]
     })
@@ -321,51 +314,19 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      if (value) {
-        nextTick(() => {
-          computeTop()
-          computeLeft()
-        })
-      }
+    watch([() => props.top, () => props.bottom, () => props.height], () => {
+      currentActive.value && computeTop()
     })
-    watch(
-      () => props.top,
-      () => {
-        hasComputedTop = false
-        currentActive.value && computeTop()
-      }
-    )
-    watch(
-      () => props.left,
-      () => {
-        hasComputedLeft = false
-        currentActive.value && computeLeft()
-      }
-    )
-    watch(
-      () => props.width,
-      value => {
-        currentWidth.value = normalizeSizeValue(value)
+    watch([() => props.left, () => props.right, () => props.width], () => {
+      currentActive.value && computeLeft()
+    })
+
+    const handleResize = debounce(() => {
+      if (currentActive.value && !transformed) {
+        computeTop()
         computeLeft()
       }
-    )
-    watch(
-      () => props.height,
-      value => {
-        currentHeight.value = normalizeSizeValue(value)
-        computeTop()
-      }
-    )
-
-    onMounted(() => {
-      nextTick(() => {
-        if (currentActive.value) {
-          computeTop()
-          computeLeft()
-        }
-      })
-    })
+    }, 16)
 
     function setActive(active: boolean) {
       if (currentActive.value === active) return
@@ -374,10 +335,6 @@ export default defineComponent({
 
       emit('update:active', active)
       emitEvent(props.onToggle, active)
-    }
-
-    function normalizeSizeValue(value: string | number) {
-      return value === 'auto' ? 'auto' : toNumber(value)
     }
 
     function findPositionalParent() {
@@ -397,33 +354,49 @@ export default defineComponent({
     }
 
     function computeTop() {
-      if (!wrapper.value || hasComputedTop) return
+      if (!wrapper.value || props.top !== 'auto' || uselessTop.value) return
 
       const currentHeight = wrapper.value.offsetHeight
 
-      if (props.top === 'auto' && props.inner) {
-        currentTop.value = (findPositionalParent().offsetHeight - currentHeight) / 2
+      if (props.inner) {
+        rect.top = `${(findPositionalParent().offsetHeight - currentHeight) / 2}px`
       } else {
-        currentTop.value =
-          props.top === 'auto' ? (window.innerHeight - currentHeight) / 2 - 20 : toNumber(props.top)
+        rect.top = `${(window.innerHeight - currentHeight) / 2 - 20}px`
       }
-
-      hasComputedTop = true
     }
 
     function computeLeft() {
-      if (!wrapper.value || hasComputedLeft) return
+      if (!wrapper.value || props.left !== 'auto' || uselessLeft.value) return
 
       const currentWidth = wrapper.value.offsetWidth
 
-      if (props.left === 'auto' && props.inner) {
-        currentLeft.value = (findPositionalParent().offsetWidth - currentWidth) / 2
+      if (props.inner) {
+        rect.left = `${(findPositionalParent().offsetWidth - currentWidth) / 2}px`
       } else {
-        currentLeft.value =
-          props.left === 'auto' ? (window.innerWidth - currentWidth) / 2 : toNumber(props.left)
+        rect.left = `${(window.innerWidth - currentWidth) / 2}px`
       }
+    }
 
-      hasComputedLeft = true
+    function transferRect(withSize = true) {
+      if (!wrapper.value) return
+
+      const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = wrapper.value
+
+      Object.assign(
+        rect,
+        {
+          top: `${offsetTop}px`,
+          right: 'auto',
+          bottom: 'auto',
+          left: `${offsetLeft}px`
+        },
+        withSize
+          ? {
+              width: `${offsetWidth}px`,
+              height: `${offsetHeight}px`
+            }
+          : {}
+      )
     }
 
     function handleConfirm() {
@@ -492,6 +465,7 @@ export default defineComponent({
       footer,
       resizer,
 
+      handleResize,
       handleConfirm,
       handleCancel,
       handleClose,

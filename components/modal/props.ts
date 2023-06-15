@@ -11,6 +11,16 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
+interface PositionPayload {
+  top: number,
+  left: number
+}
+
+interface SizePayload {
+  width: number,
+  height: number
+}
+
 const positionType = [Number, String]
 
 export const modalProps = buildProps({
@@ -47,12 +57,12 @@ export const modalProps = buildProps({
   onClose: eventProp(),
   onShow: eventProp(),
   onHide: eventProp(),
-  onDragStart: eventProp<(position: { top: number, left: number }) => void>(),
-  onDragMove: eventProp<(position: { top: number, left: number }) => void>(),
-  onDragEnd: eventProp<(position: { top: number, left: number }) => void>(),
-  onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
-  onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-  onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
+  onDragStart: eventProp<(position: PositionPayload) => void>(),
+  onDragMove: eventProp<(position: PositionPayload) => void>(),
+  onDragEnd: eventProp<(position: PositionPayload) => void>(),
+  onResizeStart: eventProp<(size: SizePayload) => void>(),
+  onResizeMove: eventProp<(size: SizePayload) => void>(),
+  onResizeEnd: eventProp<(size: SizePayload) => void>()
 })
 
 export type ModalProps = ExtractPropTypes<typeof modalProps>

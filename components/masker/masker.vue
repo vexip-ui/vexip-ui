@@ -21,7 +21,9 @@
         @after-leave="afterClose"
       >
         <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
-          <div :class="nh.be('mask-inner')"></div>
+          <ResizeObserver @resize="handleResize">
+            <div :class="nh.be('mask-inner')"></div>
+          </ResizeObserver>
         </div>
       </transition>
       <span
@@ -45,6 +47,7 @@
 
 <script lang="ts">
 import { Portal } from '@/components/portal'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 
@@ -55,7 +58,8 @@ import { maskerProps } from './props'
 export default defineComponent({
   name: 'Masker',
   components: {
-    Portal
+    Portal,
+    ResizeObserver
   },
   props: maskerProps,
   emits: ['update:active'],
@@ -208,6 +212,10 @@ export default defineComponent({
       }
     }
 
+    function handleResize(entry: ResizeObserverEntry) {
+      emitEvent(props.onResize, entry)
+    }
+
     return {
       props,
       nh,
@@ -225,7 +233,8 @@ export default defineComponent({
       handleClose,
       afterClose,
       afterOpen,
-      handleFocusIn
+      handleFocusIn,
+      handleResize
     }
   }
 })
