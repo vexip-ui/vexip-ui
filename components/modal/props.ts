@@ -10,16 +10,7 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-
-interface PositionPayload {
-  top: number,
-  left: number
-}
-
-interface SizePayload {
-  width: number,
-  height: number
-}
+import type { PositionPayload, SizePayload } from './symbol'
 
 const positionType = [Number, String]
 
