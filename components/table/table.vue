@@ -11,6 +11,7 @@
     </div>
     <div ref="thead" :class="nh.be('head-wrapper')">
       <NativeScroll
+        ref="xHeadScroll"
         inherit
         mode="horizontal"
         :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
@@ -46,6 +47,7 @@
       :class="[nh.be('foot-wrapper'), nh.bem('foot-wrapper', 'above')]"
     >
       <NativeScroll
+        ref="xAboveScroll"
         inherit
         mode="horizontal"
         :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
@@ -154,6 +156,7 @@
       :class="[nh.be('foot-wrapper'), nh.bem('foot-wrapper', 'below')]"
     >
       <NativeScroll
+        ref="xBelowScroll"
         inherit
         mode="horizontal"
         :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
@@ -384,6 +387,9 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement>()
     const xScroll = ref<NativeScrollExposed>()
+    const xHeadScroll = ref<NativeScrollExposed>()
+    const xAboveScroll = ref<NativeScrollExposed>()
+    const xBelowScroll = ref<NativeScrollExposed>()
     const thead = ref<HTMLElement>()
     const aboveTfoot = ref<HTMLElement>()
     const belowTfoot = ref<HTMLElement>()
@@ -708,6 +714,7 @@ export default defineComponent({
 
       nextTick(() => {
         xScroll.value?.$el && setTableWidth(xScroll.value?.$el.offsetWidth)
+        refreshXScroll()
       })
     }
 
@@ -793,6 +800,9 @@ export default defineComponent({
 
     function refreshXScroll() {
       xScroll.value?.refresh()
+      xHeadScroll.value?.refresh()
+      xAboveScroll.value?.refresh()
+      xBelowScroll.value?.refresh()
     }
 
     function emitRowCheck(payload: TableRowPayload & { checked: boolean }) {
@@ -1145,6 +1155,9 @@ export default defineComponent({
 
       wrapper,
       xScroll,
+      xHeadScroll,
+      xAboveScroll,
+      xBelowScroll,
       thead,
       aboveTfoot,
       belowTfoot,
