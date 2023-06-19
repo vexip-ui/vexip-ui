@@ -118,6 +118,7 @@
       >
         <NativeScroll
           inherit
+          observe-deep
           :class="[nh.be('body-wrapper'), props.scrollClass.left]"
           :height="bodyScrollHeight"
           :scroll-y="bodyYScroll"
@@ -139,6 +140,7 @@
       >
         <NativeScroll
           inherit
+          observe-deep
           :class="[nh.be('body-wrapper'), props.scrollClass.right]"
           :height="bodyScrollHeight"
           :scroll-y="bodyYScroll"
