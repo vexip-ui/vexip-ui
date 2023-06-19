@@ -40,6 +40,7 @@ export const numberInputProps = buildProps({
   altStep: Number,
   disabled: booleanProp,
   inputClass: classProp,
+  controlClass: classProp,
   debounce: booleanProp,
   delay: Number,
   clearable: booleanProp,

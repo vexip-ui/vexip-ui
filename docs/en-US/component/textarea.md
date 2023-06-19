@@ -87,6 +87,7 @@ Different states can be set via `state`.
 | loading-effect | `string`                                         | Set the effect animation for the loading icon                                                                              | `false`              | `2.0.0`  |
 | sync           | `boolean`                                        | Set whether enable sync input mode                                                                                         | `false`              | `2.0.6`  |
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`               | `2.1.0`  |
+| control-class  | `ClassType`                                      | Set the class name of the control element                                                                                  | `null`               | `2.1.25` |
 
 ### Textarea Events
 

@@ -13,7 +13,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, isNull, noop, throttle, toNumber } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle, toNumber, warnOnce } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'
@@ -73,7 +73,8 @@ export default defineComponent({
       autocomplete: false,
       readonly: false,
       disabled: () => disabled.value,
-      inputClass: '',
+      inputClass: null,
+      controlClass: null,
       debounce: false,
       delay: null,
       maxLength: 0,
@@ -88,6 +89,13 @@ export default defineComponent({
       transparent: false,
       sync: false
     })
+
+    if (!isNull(props.inputClass)) {
+      warnOnce(
+        "[vexip-ui:Input] 'input-class' prop has been deprecated, please " +
+          "use 'control-class' prop to replace it"
+      )
+    }
 
     const initValue = toNotNullString(props.value)
 
@@ -479,7 +487,7 @@ export default defineComponent({
           {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
-            class={[nh.be('control'), props.inputClass]}
+            class={[nh.be('control'), props.inputClass, props.controlClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}

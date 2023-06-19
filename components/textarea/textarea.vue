@@ -2,7 +2,7 @@
   <div :id="idFor" :class="className" @click="textarea?.focus()">
     <textarea
       ref="textarea"
-      :class="nh.be('control')"
+      :class="[nh.be('control'), props.controlClass]"
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
@@ -90,7 +90,8 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      sync: false
+      sync: false,
+      controlClass: null
     })
 
     const nh = useNameHelper('textarea')
