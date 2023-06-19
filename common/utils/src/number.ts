@@ -21,6 +21,19 @@ export function doubleDigits(number: number) {
 }
 
 /**
+ * Return digits length of a number.
+ *
+ * @param number The input number
+ */
+export function digitLength(number: number | string) {
+  // Get digit length of e
+  const eSplit = number.toString().split(/[eE]/)
+  const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0)
+
+  return len > 0 ? len : 0
+}
+
+/**
  * 将给定的数字格式化为三位阶
  *
  * @param number 需要格式化的数字
@@ -56,7 +69,8 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
 export function toFixed(number: number, decimal: number) {
   if (decimal === 0) return Math.round(number)
 
-  let snum = String(number)
+  let snum = number.toFixed(digitLength(number))
+
   const pointPos = snum.indexOf('.')
 
   if (pointPos === -1) return number
@@ -173,19 +187,6 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
   }
 
   return targetSize
-}
-
-/**
- * Return digits length of a number.
- *
- * @param number The input number
- */
-export function digitLength(number: number | string) {
-  // Get digit length of e
-  const eSplit = number.toString().split(/[eE]/)
-  const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0)
-
-  return len > 0 ? len : 0
 }
 
 /**
