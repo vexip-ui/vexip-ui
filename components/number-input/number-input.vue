@@ -164,6 +164,7 @@ export default defineComponent({
       disabled: () => disabled.value,
       inputClass: null,
       debounce: false,
+      delay: null,
       clearable: false,
       loading: () => loading.value,
       loadingIcon: null,
@@ -497,7 +498,10 @@ export default defineComponent({
       emitEvent(props.onKeyPress, event)
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     return {
       props,

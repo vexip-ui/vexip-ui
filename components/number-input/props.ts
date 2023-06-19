@@ -41,6 +41,7 @@ export const numberInputProps = buildProps({
   disabled: booleanProp,
   inputClass: classProp,
   debounce: booleanProp,
+  delay: Number,
   clearable: booleanProp,
   loading: booleanProp,
   loadingIcon: Object,
