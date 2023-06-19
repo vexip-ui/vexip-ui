@@ -38,12 +38,12 @@ const placement = ref(placements[0])
   padding: 3px 0;
 }
 
-:deep(.vxp-tab-nav__item) {
+.vxp-tab-nav:deep(.vxp-tab-nav__item) {
   position: relative;
   height: 32px;
 }
 
-:deep(.vxp-tab-nav__content) {
+.vxp-tab-nav:deep(.vxp-tab-nav__content) {
   z-index: 1;
   height: 100%;
   padding: 0 10px;
@@ -51,11 +51,11 @@ const placement = ref(placements[0])
   border: 0;
 }
 
-:deep(.vxp-tab-nav__content--active) {
+.vxp-tab-nav:deep(.vxp-tab-nav__content--active) {
   color: #fff;
 }
 
-:deep(.vxp-tab-nav__track) {
+.vxp-tab-nav:deep(.vxp-tab-nav__track) {
   inset: 3px auto;
 }
 
@@ -63,7 +63,7 @@ const placement = ref(placements[0])
   inset: auto 3px;
 }
 
-:deep(.vxp-tab-nav__marker) {
+.vxp-tab-nav:deep(.vxp-tab-nav__marker) {
   width: 100%;
   height: 100%;
   border-radius: var(--vxp-radius-small);
