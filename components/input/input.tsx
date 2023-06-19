@@ -13,7 +13,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, isNull, noop, throttle } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle, toNumber } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'
@@ -75,6 +75,7 @@ export default defineComponent({
       disabled: () => disabled.value,
       inputClass: '',
       debounce: false,
+      delay: null,
       maxLength: 0,
       before: '',
       after: '',
@@ -354,7 +355,10 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     function renderPrefix() {
       return (
