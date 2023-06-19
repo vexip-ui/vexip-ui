@@ -17,6 +17,7 @@ export const textareaProps = buildProps({
   readonly: booleanProp,
   disabled: booleanProp,
   debounce: booleanProp,
+  delay: Number,
   maxLength: Number,
   loading: booleanProp,
   loadingIcon: Object,
