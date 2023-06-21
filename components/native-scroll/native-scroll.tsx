@@ -35,13 +35,10 @@ const UP_EVENT = 'mouseup'
 
 export default defineComponent({
   name: 'NativeScroll',
-  components: {
-    Scrollbar,
-    ResizeObserver
-  },
+  inheritAttrs: false,
   props: nativeScrollProps,
   emits: [],
-  setup(_props, { slots, expose }) {
+  setup(_props, { attrs, slots, expose }) {
     const props = useProps('nativeScroll', _props, {
       scrollClass: null,
       scrollStyle: null,
@@ -76,7 +73,8 @@ export default defineComponent({
       barDuration: null,
       useBarTrack: false,
       scrollTag: 'div',
-      observeDeep: false
+      observeDeep: false,
+      scrollOnly: false
     })
 
     const emitter = createEventEmitter()
@@ -618,8 +616,11 @@ export default defineComponent({
         <Content
           ref={contentElement}
           {...props.scrollAttrs}
+          {...(props.scrollOnly ? attrs : {})}
           class={wrapperClass.value}
-          style={[props.scrollAttrs?.style, props.scrollStyle]}
+          style={[props.scrollAttrs?.style, props.scrollStyle, props.scrollOnly && style.value]}
+          onMousedown={handleMouseDown}
+          onWheel={event => handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')}
           onScroll={handleScroll}
         >
           {slots.extra && (
@@ -652,14 +653,12 @@ export default defineComponent({
     }
 
     return () => {
+      if (props.scrollOnly) {
+        return <ResizeObserver on-resize={handleResize}>{renderContent()}</ResizeObserver>
+      }
+
       return (
-        <div
-          ref={wrapper}
-          class={className.value}
-          style={style.value}
-          onMousedown={handleMouseDown}
-          onWheel={event => handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')}
-        >
+        <div ref={wrapper} {...attrs} class={className.value} style={style.value}>
           <ResizeObserver on-resize={handleResize}>{renderContent()}</ResizeObserver>
           {props.useXBar && (
             <Scrollbar

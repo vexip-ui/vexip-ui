@@ -1,5 +1,6 @@
 <template>
   <Table
+    use-x-bar
     use-y-bar
     :data="data"
     :width="1000"

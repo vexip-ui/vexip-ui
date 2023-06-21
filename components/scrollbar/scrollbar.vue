@@ -336,6 +336,8 @@ export default defineComponent({
     }
 
     function handleScroll(scroll: number) {
+      if (Math.abs(currentScroll.value - scroll) < 0.0001) return
+
       currentScroll.value = boundRange(scroll, 0, 100)
       triggerUpdate()
     }
