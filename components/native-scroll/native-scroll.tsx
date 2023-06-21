@@ -19,8 +19,10 @@ import {
   createEventEmitter,
   flatVNodes,
   isClient,
+  isDefined,
   isElement,
-  isTrue
+  isTrue,
+  warnOnce
 } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
@@ -76,6 +78,13 @@ export default defineComponent({
       observeDeep: false,
       scrollOnly: false
     })
+
+    if (isDefined(props.onBeforeScroll)) {
+      warnOnce(
+        "[vexip-ui:Table] 'on-before-scroll' prop has been deprecated, please " +
+          'do not use it anymore'
+      )
+    }
 
     const emitter = createEventEmitter()
 
@@ -387,13 +396,6 @@ export default defineComponent({
       event.stopPropagation()
       event.preventDefault()
 
-      const signX = event.clientX - cursorXPosition > 0 ? 1 : -1
-      const signY = event.clientY - cursorYPosition > 0 ? 1 : -1
-
-      if (props.onBeforeScroll?.({ signX, signY }) === false) {
-        return false
-      }
-
       scrolling.value = true
 
       if (enableXScroll.value) {
@@ -431,10 +433,7 @@ export default defineComponent({
 
       emitEvent(props.onWheel, event, type)
 
-      if (
-        (isVerticalScroll || isHorizontalScroll) &&
-        props.onBeforeScroll?.({ signX: sign, signY: sign }) !== false
-      ) {
+      if (isVerticalScroll || isHorizontalScroll) {
         const maxLimit = isVerticalScroll ? yScrollLimit.value : xScrollLimit.value
         const scroll = isVerticalScroll ? y.value : x.value
 
@@ -450,19 +449,8 @@ export default defineComponent({
       if (!contentElement.value) return
 
       event.stopPropagation()
-      event.preventDefault()
 
       const type = contentElement.value?.scrollLeft !== x.value ? 'horizontal' : 'vertical'
-
-      const signX = contentElement.value.scrollLeft - x.value > 0 ? 1 : -1
-      const signY = contentElement.value.scrollTop - y.value > 0 ? 1 : -1
-
-      if (props.onBeforeScroll?.({ signX, signY }) === false) {
-        contentElement.value.scrollTop = y.value
-        contentElement.value.scrollLeft = x.value
-
-        return
-      }
 
       y.value = contentElement.value.scrollTop
       x.value = contentElement.value.scrollLeft
@@ -608,7 +596,7 @@ export default defineComponent({
     }
 
     function renderContent() {
-      const Content = (props.scrollTag || 'div') as 'div'
+      const Content = (props.scrollTag || 'div') as any
       const children =
         props.observeDeep && slots.default ? renderSlot(slots, 'default', slotParams).children : []
 
@@ -620,7 +608,9 @@ export default defineComponent({
           class={wrapperClass.value}
           style={[props.scrollAttrs?.style, props.scrollStyle, props.scrollOnly && style.value]}
           onMousedown={handleMouseDown}
-          onWheel={event => handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')}
+          onWheelPassive={(event: WheelEvent) =>
+            handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')
+          }
           onScroll={handleScroll}
         >
           {slots.extra && (
