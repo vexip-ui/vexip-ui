@@ -219,4 +219,39 @@ describe('Affix', () => {
     affixRectMock.mockRestore()
     targetRectMock.mockRestore()
   })
+
+  it('should emit change event when fixed change', async () => {
+    const handleChange = vi.fn()
+    const wrapper = mount(() => (
+      <>
+        <Affix onChange={handleChange}></Affix>
+      </>
+    ))
+
+    const affixRectMock = vi
+      .spyOn(wrapper.find('.vxp-affix').element, 'getBoundingClientRect')
+      .mockReturnValue({
+        height: 40,
+        width: 1000,
+        top: -200,
+        bottom: -200
+      } as DOMRect)
+    const evt = new CustomEvent('scroll', {
+      detail: {
+        target: {
+          scrollTop: 200
+        }
+      }
+    })
+
+    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(false)
+
+    window.dispatchEvent(evt)
+    await nextFrame()
+
+    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(true)
+    expect(handleChange).toHaveBeenCalled()
+
+    affixRectMock.mockRestore()
+  })
 })
