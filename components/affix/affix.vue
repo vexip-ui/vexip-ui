@@ -35,7 +35,7 @@ export default defineComponent({
   name: 'Affix',
   props: affixProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { expose }) {
     const props = useProps('affix', _props, {
       offset: 0,
       zIndex: 100,
@@ -187,7 +187,7 @@ export default defineComponent({
 
     watchEffect(update)
     watch(fixed, fixed => {
-      emitEvent(props.onFixed, fixed)
+      emitEvent(props.onChange, fixed)
     })
 
     onMounted(() => {
@@ -205,6 +205,10 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       removeListener()
+    })
+
+    expose({
+      update
     })
 
     return {

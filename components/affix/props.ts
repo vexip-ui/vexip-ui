@@ -12,7 +12,7 @@ export const affixProps = buildProps({
   target: String,
 
   onScroll: eventProp(),
-  onFixed: eventProp()
+  onChange: eventProp()
 })
 
 export type AffixProps = ExtractPropTypes<typeof affixProps>

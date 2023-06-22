@@ -1,5 +1,7 @@
 <template>
-  <Affix> test </Affix>
+  <Affix :offset="100">
+    <Button type="primary">
+      Affix top
+    </Button>
+  </Affix>
 </template>
-
-<script setup lang="ts"></script>

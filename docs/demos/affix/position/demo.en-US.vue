@@ -1,7 +1,7 @@
 <template>
-  <Affix :offset="100">
+  <Affix position="bottom">
     <Button type="primary">
-      固定顶部
+      Affix bottom
     </Button>
   </Affix>
 </template>
