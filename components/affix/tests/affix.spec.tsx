@@ -7,18 +7,30 @@ function nextFrame() {
   return new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
 }
 
-beforeAll(() => {
-  Object.defineProperty(document.documentElement, 'clientHeight', {
+function defineGetter(obj: Record<string, any>, prop: string, value: any, defaultValue?: any) {
+  const oldValue = defaultValue ?? obj?.[prop] ?? undefined
+
+  Object.defineProperty(obj, prop, {
     configurable: true,
-    get: () => 1000
+    get: () => value
   })
+
+  return () => {
+    Object.defineProperty(obj, prop, {
+      configurable: true,
+      get: () => oldValue
+    })
+  }
+}
+
+let clientHeightRestore: () => void
+
+beforeAll(() => {
+  clientHeightRestore = defineGetter(document.documentElement, 'clientHeight', 1000)
 })
 
 afterAll(() => {
-  Object.defineProperty(document.documentElement, 'clientHeight', {
-    configurable: true,
-    get: () => undefined
-  })
+  clientHeightRestore()
 })
 
 describe('Affix', () => {
@@ -221,10 +233,10 @@ describe('Affix', () => {
   })
 
   it('should emit change event when fixed change', async () => {
-    const handleChange = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(() => (
       <>
-        <Affix onChange={handleChange}></Affix>
+        <Affix onChange={onChange}></Affix>
       </>
     ))
 
@@ -250,8 +262,48 @@ describe('Affix', () => {
     await nextFrame()
 
     expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(true)
-    expect(handleChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith(true)
 
     affixRectMock.mockRestore()
+  })
+
+  it('should emit scroll event when scroller scroll', async () => {
+    const onScroll = vi.fn()
+    const wrapper = mount(() => (
+      <>
+        <Affix onScroll={onScroll}></Affix>
+      </>
+    ))
+    const scrollTopRestore = defineGetter(document.documentElement, 'scrollTop', 200)
+
+    const affixRectMock = vi
+      .spyOn(wrapper.find('.vxp-affix').element, 'getBoundingClientRect')
+      .mockReturnValue({
+        height: 40,
+        width: 1000,
+        top: -200,
+        bottom: -200
+      } as DOMRect)
+    const evt = new CustomEvent('scroll', {
+      detail: {
+        target: {
+          scrollTop: 200
+        }
+      }
+    })
+
+    window.dispatchEvent(evt)
+    await nextFrame()
+
+    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(true)
+    expect(onScroll).toHaveBeenCalled()
+    expect(onScroll).toHaveBeenCalledWith({
+      scrollTop: 200,
+      fixed: true
+    })
+
+    affixRectMock.mockRestore()
+    scrollTopRestore()
   })
 })
