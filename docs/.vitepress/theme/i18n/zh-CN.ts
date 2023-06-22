@@ -148,6 +148,7 @@ export const zhCN = defineI18n({
     Spin: '加载中',
     Toast: '吐司提示',
 
+    Affix: '固钉',
     ConfigProvider: '配置注入',
     Masker: '遮罩',
     Overflow: '溢出',

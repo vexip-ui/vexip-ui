@@ -146,6 +146,7 @@ export interface I18nConfig {
     Spin: string,
     Toast: string,
 
+    Affix: string,
     ConfigProvider: string,
     Masker: string,
     Overflow: string,

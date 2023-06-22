@@ -1,8 +1,8 @@
-# Affix
+# 固钉 Affix
 
 将页面元素固定在一个特定的可见区域。
 
-## Demos
+## 代码示例
 
 :::demo affix/basis
 

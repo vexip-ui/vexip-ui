@@ -148,6 +148,7 @@ export const enUS = defineI18n({
     Spin: 'Spin',
     Toast: 'Toast',
 
+    Affix: 'Affix',
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     Overflow: 'Overflow',
