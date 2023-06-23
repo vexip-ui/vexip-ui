@@ -63,7 +63,7 @@ async function main() {
     if (targets.some(name => !name || allComponents.includes(name))) {
       process.exit(1)
     } else {
-      name = targets.find(name => !name || allComponents.includes(name))!
+      name = targets[0]
       await runParallel(cpus().length, targets, create)
     }
   }
@@ -431,11 +431,23 @@ async function getConvertCompTypeFiles(): Promise<
   compConfigSource.splice(
     compConfigIndex,
     0,
-    `{ name: '${name}', since: 'the comp create since' },`
+    `// make sure the order of components object (delete the comment after confirming the order)\n{ name: '${name}', since: 'the comp create since' },`
   )
-  i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
-  i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
-  i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+  i18nUsSource.splice(
+    i18nUsIndex,
+    0,
+    `// make sure the order of components object (delete the comment after confirming the order)\n${capitalCaseName}: '${capitalCaseName}',`
+  )
+  i18nCnSource.splice(
+    i18nCnIndex,
+    0,
+    `// 确保组件对象的顺序排列 (确认了顺序正确后删除该注释)\n${capitalCaseName}: '${capitalCaseName} (需翻译为中文)',`
+  )
+  i18nHelperSource.splice(
+    i18nHelperIndex,
+    0,
+    `// make sure the order of components object (delete the comment after confirming the order)\n${capitalCaseName}: string,`
+  )
 
   return [
     { filePath: compConfigPath, source: compConfigSource.join('\n'), convert: true },
