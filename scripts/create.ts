@@ -18,14 +18,32 @@ import {
   toKebabCase
 } from './utils'
 
+let name: string
+
 const args = minimist(process.argv.slice(2))
 const targets = args._
+const compType = (
+  await prompts({
+    type: 'select',
+    name: 'compType',
+    message: 'select a component type',
+    choices: [
+      { title: 'basis (基础)', value: 'basis' },
+      { title: 'layout (布局)', value: 'layout' },
+      { title: 'navigation (导航)', value: 'navigation' },
+      { title: 'form (表单)', value: 'form' },
+      { title: 'data (数据)', value: 'data' },
+      { title: 'effect (反应)', value: 'effect' },
+      { title: 'else (其他)', value: 'else' }
+    ]
+  })
+).compType
 
 const eslint = new ESLint({ fix: true })
 
 async function main() {
   if (!targets.length) {
-    const name = (
+    name = (
       await prompts({
         type: 'text',
         name: 'component',
@@ -45,6 +63,7 @@ async function main() {
     if (targets.some(name => !name || allComponents.includes(name))) {
       process.exit(1)
     } else {
+      name = targets.find(name => !name || allComponents.includes(name))!
       await runParallel(cpus().length, targets, create)
     }
   }
@@ -79,7 +98,7 @@ async function create(name: string) {
     camelCaseName = toCamelCase(name)
   }
 
-  const generatedFiles: Array<{ filePath: string, source: string }> = [
+  const generatedFiles: Array<{ filePath: string, source: string, convert?: boolean }> = [
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),
       source: `
@@ -117,7 +136,7 @@ async function create(name: string) {
           bool: booleanProp,
           onClick: eventProp<(bool: boolean) => void>()
         })
-        
+
         export type ${capitalCaseName}Props = ExtractPropTypes<typeof ${camelCaseName}Props>
         export type ${capitalCaseName}CProps = ConfigurableProps<ExtractPropTypes<typeof ${camelCaseName}Props>>
       `
@@ -152,7 +171,7 @@ async function create(name: string) {
             function handleClick() {
               emitEvent(props.onClick, props.bool)
             }
-        
+
             return {
               props,
               nh,
@@ -182,7 +201,7 @@ async function create(name: string) {
         describe('${capitalCaseName}', () => {
           it('render', () => {
             const wrapper = mount(${capitalCaseName})
-        
+
             expect(wrapper.classes()).toContain('vxp-${kebabCaseName}-vars')
           })
         })
@@ -321,12 +340,13 @@ async function create(name: string) {
 
         <script setup lang="ts"></script>
       `
-    }
+    },
+    ...(await getConvertCompTypeFiles())
   ]
 
   await Promise.all(
-    generatedFiles.map(async ({ filePath, source }) => {
-      if (fs.existsSync(filePath)) {
+    generatedFiles.map(async ({ filePath, source, convert }) => {
+      if (fs.existsSync(filePath) && !convert) {
         logger.warningText(`exists ${filePath}, skip`)
         return
       }
@@ -384,6 +404,45 @@ async function create(name: string) {
       logger.infoText(`generated ${filePath}`)
     })
   )
+}
+
+async function getConvertCompTypeFiles(): Promise<
+  Array<{ filePath: string, source: string, convert?: boolean }>
+> {
+  const capitalCaseName = toCapitalCase(name)
+  const capitalCaseCompType = toCapitalCase(compType)
+
+  const compConfigPath = path.resolve(rootDir, 'docs/.vitepress/config/component.ts')
+  const i18nUsPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/en-US.ts')
+  const i18nCnPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/zh-CN.ts')
+  const i18nHelperPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/helper.ts')
+
+  const compConfigSource = (await fs.readFile(compConfigPath, 'utf-8')).split('\n')
+  const i18nUsSource = (await fs.readFile(i18nUsPath, 'utf-8')).split('\n')
+  const i18nCnSource = (await fs.readFile(i18nCnPath, 'utf-8')).split('\n')
+  const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split('\n')
+
+  const compConfigIndex = compConfigSource.findIndex(i => i.includes(`name: '${compType}'`)) + 2
+  const i18nUsIndex = i18nUsSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nCnIndex = i18nCnSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nHelperIndex =
+    i18nHelperSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+
+  compConfigSource.splice(
+    compConfigIndex,
+    0,
+    `{ name: '${name}', since: 'the comp create since' },`
+  )
+  i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+  i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+  i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+
+  return [
+    { filePath: compConfigPath, source: compConfigSource.join('\n'), convert: true },
+    { filePath: i18nUsPath, source: i18nUsSource.join('\n'), convert: true },
+    { filePath: i18nCnPath, source: i18nCnSource.join('\n'), convert: true },
+    { filePath: i18nHelperPath, source: i18nHelperSource.join('\n'), convert: true }
+  ]
 }
 
 main().catch(error => {
