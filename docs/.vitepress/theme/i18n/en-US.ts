@@ -75,11 +75,13 @@ export const enUS = defineI18n({
     sponsor: 'Buy a Cup of Coffee'
   },
   component: {
+    // Basis
     Button: 'Button',
     Icon: 'Icon',
     Linker: 'Linker',
     Typography: 'Typography',
 
+    // Layout
     Grid: 'Grid',
     Divider: 'Divider',
     Layout: 'Layout',
@@ -89,12 +91,14 @@ export const enUS = defineI18n({
     Space: 'Space',
     Split: 'Split',
 
+    // Navigation
     Anchor: 'Anchor',
     Breadcrumb: 'Breadcrumb',
     Dropdown: 'Dropdown',
     Menu: 'Menu',
     Pagination: 'Pagination',
 
+    // Form
     AutoComplete: 'AutoComplete',
     Cascader: 'Cascader',
     Checkbox: 'Checkbox',
@@ -115,6 +119,7 @@ export const enUS = defineI18n({
     Upload: 'Upload',
     Wheel: 'Wheel',
 
+    // Data
     Avatar: 'Avatar',
     Badge: 'Badge',
     Bubble: 'Bubble',
@@ -135,6 +140,7 @@ export const enUS = defineI18n({
     Tree: 'Tree',
     Viewer: 'Viewer',
 
+    // Effect
     Alert: 'Alert',
     Confirm: 'Confirm',
     Contextmenu: 'Contextmenu',
@@ -148,6 +154,7 @@ export const enUS = defineI18n({
     Spin: 'Spin',
     Toast: 'Toast',
 
+    // Else
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     Overflow: 'Overflow',

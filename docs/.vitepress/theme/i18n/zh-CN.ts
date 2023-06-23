@@ -75,11 +75,13 @@ export const zhCN = defineI18n({
     sponsor: '赞助一杯喜茶'
   },
   component: {
+    // Basis
     Button: '按钮',
     Icon: '图标',
     Linker: '链接',
     Typography: '排版',
 
+    // Layout
     Grid: '栅格布局',
     Divider: '分割线',
     Layout: '布局',
@@ -89,12 +91,14 @@ export const zhCN = defineI18n({
     Space: '间距',
     Split: '分割面板',
 
+    // Navigation
     Anchor: '锚点',
     Breadcrumb: '面包屑',
     Dropdown: '下拉菜单',
     Menu: '导航菜单',
     Pagination: '分页器',
 
+    // Form
     AutoComplete: '自动完成',
     Cascader: '联级选择器',
     Checkbox: '多选框',
@@ -135,6 +139,7 @@ export const zhCN = defineI18n({
     Tree: '树形列表',
     Viewer: '查看器',
 
+    // Data
     Alert: '警告提示',
     Confirm: '确认框',
     Contextmenu: '右键菜单',
@@ -148,6 +153,7 @@ export const zhCN = defineI18n({
     Spin: '加载中',
     Toast: '吐司提示',
 
+    // Else
     ConfigProvider: '配置注入',
     Masker: '遮罩',
     Overflow: '溢出',
