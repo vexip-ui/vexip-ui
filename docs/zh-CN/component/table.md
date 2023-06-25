@@ -517,6 +517,7 @@ interface TableFootPayload {
 | stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -        |
 | border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -        |
 | highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -        |
+| use-x-bar       | `boolean`                                                     | 设置表格是否使用横向滚动条                                   | `false`        | `2.1.25` |
 | use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -        |
 | bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -        |
 | scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -        |
@@ -546,7 +547,8 @@ interface TableFootPayload {
 
 | 名称             | 说明                                                                         | 参数                                                                                    | 始于     |
 | ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
-| body-scroll      | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | `(scroll: { client: number, percent: number })`                                         | -        |
+| ~~body-scroll~~  | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | `(scroll: { client: number, percent: number })`                                         | -        |
+| scroll           | 当表格滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象                   | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
 | row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
 | row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
 | row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -        |

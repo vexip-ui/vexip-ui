@@ -190,6 +190,7 @@ export default defineComponent({
           display: !colSpan || !rowSpan ? 'none' : undefined,
           width: `${width}px`,
           height: height ? `${height}px` : undefined,
+          visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
           borderRightWidth:
             !state.border && colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1
               ? 0

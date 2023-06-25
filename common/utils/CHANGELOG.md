@@ -1,3 +1,12 @@
+# [1.15.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.1...utils@1.15.0) (2023-06-21)
+
+
+### ✨ Features
+
+* **utils:** toFixed supports scientific notation ([62485f7](https://github.com/vexip-ui/vexip-ui/commit/62485f74f01bfe330317df0e9b3e4a5c21515681))
+
+
+
 ## [1.14.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.0...utils@1.14.1) (2023-06-02)
 
 

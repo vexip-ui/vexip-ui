@@ -11,7 +11,8 @@ export interface ContextmenuConfig {
   shortcut?: string,
   divided?: boolean,
   disabled?: boolean,
-  children?: ContextmenuConfig[]
+  children?: ContextmenuConfig[],
+  renderer?: () => any
 }
 
 export interface ContextmenuOptions {

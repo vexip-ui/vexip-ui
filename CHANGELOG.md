@@ -1,3 +1,40 @@
+## [2.1.25](https://github.com/vexip-ui/vexip-ui/compare/v2.1.24...v2.1.25) (2023-06-21)
+
+
+### ⚡ Performance Improvements
+
+* **table:** improve table horizontal scroll performance ([9916a44](https://github.com/vexip-ui/vexip-ui/commit/9916a4406f213c32229eb34179cf1b38b1882719))
+
+
+### ✨ Features
+
+* **auto-complete:** add debounce and delay props ([12ae1af](https://github.com/vexip-ui/vexip-ui/commit/12ae1af4733b5d747519bd82ed03cf1564acb5d4))
+* **contextmenu:** support set renderer for each menu ([e29c538](https://github.com/vexip-ui/vexip-ui/commit/e29c5385a9fdd96676684b51d0033a28a288f5ff))
+* **input:** support custom input throttle or debounce delay ([f220e82](https://github.com/vexip-ui/vexip-ui/commit/f220e8260f0ea2b913f29b6617c9630b7cf1625c))
+* **number-input:** support custom input throttle or debounce delay ([274f906](https://github.com/vexip-ui/vexip-ui/commit/274f906a45de029b5f7392900590a83a7418cd7e))
+* **renderer:** support store variables and resue them via slot ([322cb6e](https://github.com/vexip-ui/vexip-ui/commit/322cb6e4a01790a6078dc611a16a7bedcbc173d1))
+* **textarea:** support custom input throttle or debounce delay ([d0cc62c](https://github.com/vexip-ui/vexip-ui/commit/d0cc62cdbaab53d205a207fb7f361774053c5467))
+* **utils:** toFixed supports scientific notation ([62485f7](https://github.com/vexip-ui/vexip-ui/commit/62485f74f01bfe330317df0e9b3e4a5c21515681))
+
+
+### 🐞 Bug Fixes
+
+* **modal:** should responsive when no draggable or resizable ([bf5b646](https://github.com/vexip-ui/vexip-ui/commit/bf5b6462a86bfe4343501c3fea7bef852acea3eb))
+* **native-scroll:** deprecated on-before-scroll prop ([7e2062d](https://github.com/vexip-ui/vexip-ui/commit/7e2062de5cd1b477440505dbc5602c6284e8c64a))
+* **table:** add missing foot cell style ([cc7a12d](https://github.com/vexip-ui/vexip-ui/commit/cc7a12d159afcaf160a1ed592c29b70c92d27782))
+* **table:** ensure refresh all horizontal scrolls ([00a54a4](https://github.com/vexip-ui/vexip-ui/commit/00a54a4404e303f17a2c240781f573d954fedaa3))
+* **table:** ensure refresh vertical scrollbar when data changed ([9ffeab8](https://github.com/vexip-ui/vexip-ui/commit/9ffeab864ecef568d64362260da9ace9e6c312e1))
+* **table:** incorrect fixed columns width calculate ([39e2ee3](https://github.com/vexip-ui/vexip-ui/commit/39e2ee394cd83ca6a7095a6dee22901ceefa315c))
+* **table:** infinite watch when dynamically render columns ([d134812](https://github.com/vexip-ui/vexip-ui/commit/d1348123875b7dd1adc00e70a252e8a183587577))
+* **table:** missing right border when merging cells ([16550b9](https://github.com/vexip-ui/vexip-ui/commit/16550b95f6589b0a53bf4137c9153ff6a7425a7a))
+
+
+### 🔨 Code Refactoring
+
+* **input:** using control-class prop replace input-class prop ([8aba1ee](https://github.com/vexip-ui/vexip-ui/commit/8aba1ee72a106389f708f62f81e61356654be789))
+
+
+
 ## [2.1.24](https://github.com/vexip-ui/vexip-ui/compare/v2.1.23...v2.1.24) (2023-06-13)
 
 

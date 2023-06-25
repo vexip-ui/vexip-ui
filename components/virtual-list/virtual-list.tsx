@@ -124,11 +124,11 @@ export default defineComponent({
       return (
         <NativeScroll
           ref={scroll}
+          {...attrs}
           inherit={props.inherit}
           class={nh.b()}
           use-y-bar
           scroll-y={scrollOffset.value}
-          {...attrs}
           onScroll={onScroll}
           onResize={onResize}
         >

@@ -14,6 +14,16 @@ Works better with the `tsx` syntax.
 
 :::
 
+:::demo renderer/slot
+
+### Slot Usage
+
+Sometimes, you want to be able to define variables in the template and use them multiple times. Unfortunately, Vue has no official feature support yet.
+
+This example demonstrates how to use the Renderer component to store variables in the template and reuse them.
+
+:::
+
 ## API
 
 ### Renderer Props

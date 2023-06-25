@@ -1,12 +1,4 @@
-import {
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  reactive,
-  renderSlot,
-  watch
-} from 'vue'
+import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
@@ -171,11 +163,12 @@ export default defineComponent({
 
     tableAction?.increaseColumn(options)
 
-    onBeforeUpdate(() => {
-      setRenderer()
-      setHeadRenderer()
-      setFilterRenderer()
-    })
+    // TODO: 在动态列时会触发无限 watch，初步估计是重置单元格合并状态导致的
+    // onBeforeUpdate(() => {
+    //   setRenderer()
+    //   setHeadRenderer()
+    //   setFilterRenderer()
+    // })
 
     onBeforeUnmount(() => {
       tableAction?.decreaseColumn(options)

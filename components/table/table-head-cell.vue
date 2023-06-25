@@ -319,6 +319,7 @@ export default defineComponent({
         {
           display: !span ? 'none' : undefined,
           width: `${width}px`,
+          visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
           borderRightWidth:
             !state.border && span > 1 && props.index + span >= totalWidths.length - 1
               ? 0

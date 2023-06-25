@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.1.24",
+  "version": "2.1.25",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
@@ -39,6 +39,7 @@
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"{common,component,directives,playground,dev-server,docs}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
     "prettier:scripts": "prettier --write \"scripts/**/*.{ts,js,json}\"",
+    "preview:docs": "pnpm -C docs preview",
     "publish:ci": "tsx scripts/publish.ts",
     "release": "tsx scripts/release.ts",
     "test": "vitest run",

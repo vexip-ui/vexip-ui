@@ -59,6 +59,7 @@ export const tableProps = buildProps({
   stripe: booleanProp,
   border: booleanProp,
   highlight: booleanProp,
+  useXBar: booleanProp,
   useYBar: booleanProp,
   barFade: Number,
   scrollDeltaY: Number,
@@ -110,6 +111,10 @@ export const tableProps = buildProps({
   colResizable: booleanProp,
   cellSpan: Function as PropType<TableCellSpanFn>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
+  onScroll:
+    eventProp<
+      (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void
+    >(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
   onRowClick: eventProp<(payload: TableRowPayload) => void>(),

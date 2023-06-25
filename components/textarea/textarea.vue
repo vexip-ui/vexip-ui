@@ -2,7 +2,7 @@
   <div :id="idFor" :class="className" @click="textarea?.focus()">
     <textarea
       ref="textarea"
-      :class="nh.be('control')"
+      :class="[nh.be('control'), props.controlClass]"
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
@@ -54,7 +54,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, throttle } from '@vexip-ui/utils'
+import { debounce, throttle, toNumber } from '@vexip-ui/utils'
 import { textareaProps } from './props'
 
 export default defineComponent({
@@ -84,12 +84,14 @@ export default defineComponent({
       readonly: false,
       disabled: () => disabled.value,
       debounce: false,
+      delay: null,
       maxLength: 0,
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      sync: false
+      sync: false,
+      controlClass: null
     })
 
     const nh = useNameHelper('textarea')
@@ -210,6 +212,11 @@ export default defineComponent({
       return isSuccess
     }
 
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
+
     return {
       props,
       nh,
@@ -226,7 +233,7 @@ export default defineComponent({
 
       handleFocus,
       handleBlur,
-      handleInput: props.debounce ? debounce(handleChange) : throttle(handleChange),
+      handleInput,
       handleChange,
       handleEnter,
       handleKeyDown,

@@ -5,10 +5,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import type { FileState } from 'vexip-ui'
+
 const fileId = ref<string | null>(null)
 
 // The specific type of response is determined by the backend
-function handleSuccess(response: { id: string | null }) {
+function handleSuccess(file: FileState, response: { id: string | null }) {
   // After successful callback, the id of the file can be returned for subsequent use
   fileId.value = response.id
 }
