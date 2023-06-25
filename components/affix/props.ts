@@ -2,13 +2,12 @@ import { buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-
-type PositionType = 'bottom' | 'top'
+import type { AffixPositionType } from './symbol'
 
 export const affixProps = buildProps({
   offset: Number,
   zIndex: Number,
-  position: String as PropType<PositionType>,
+  position: String as PropType<AffixPositionType>,
   target: String,
 
   onScroll: eventProp(),

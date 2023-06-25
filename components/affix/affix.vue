@@ -23,6 +23,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { affixProps } from './props'
+import { isClient } from '@vexip-ui/utils'
 
 import type { NativeScrollExposed } from '../native-scroll'
 import type { Scroll } from '@/components/scroll'
@@ -39,8 +40,8 @@ export default defineComponent({
     const props = useProps('affix', _props, {
       offset: 0,
       zIndex: 100,
-      target: '',
-      position: 'top'
+      position: 'top',
+      target: ''
     })
 
     const nh = useNameHelper('affix')
@@ -70,14 +71,13 @@ export default defineComponent({
       if (!fixed.value) return {}
 
       const offset = props.offset ? `${props.offset}px` : 0
-      const _transform = transform.value ? `translateY(${transform.value}px)` : ''
 
       return {
         height: `${affixHeight.value}px`,
         width: `${affixWidth.value}px`,
         top: props.position === 'top' ? offset : '',
         bottom: props.position === 'bottom' ? offset : '',
-        transform: _transform,
+        transform: transform.value ? `translateY(${transform.value}px)` : '',
         zIndex: props.zIndex
       }
     })
@@ -90,7 +90,7 @@ export default defineComponent({
       affixHeight.value = wrapperRect.height
       affixWidth.value = wrapperRect.width
       scrollTop.value =
-        container instanceof Window
+        container === window
           ? document.documentElement.scrollTop
           : (container as unknown as ScrollType).scrollY || 0
       scrollTop.value = document.documentElement.scrollTop
@@ -127,7 +127,11 @@ export default defineComponent({
     }
 
     function updateContainer() {
-      let _container: ComponentInternalInstance | null = instance.parent!
+      removeListener()
+
+      if (!isClient) return
+
+      let _container: ComponentInternalInstance | null = instance.parent
       const refName = 'scroll'
 
       while (_container) {

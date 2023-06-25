@@ -16,7 +16,7 @@ Holds the element at the top of the page.
 
 ### Target Container
 
-Fixes the element inside the specified container by the attribute `target`, and hides it if it goes beyond the container.
+Fixes the element inside the specified container by the `target` prop, and hides it if it goes beyond the container.
 
 :::
 
@@ -24,7 +24,7 @@ Fixes the element inside the specified container by the attribute `target`, and 
 
 ### Fixed Position
 
-Change the fixed position of an element with the attribute `position`.
+Change the fixed position of an element with the `position` prop.
 
 :::
 
@@ -34,15 +34,15 @@ Change the fixed position of an element with the attribute `position`.
 | ---------- | ----------------- | ------------------------------- | ------- | ----- |
 | `offset`   | number            | offset position                 | `0`     | -     |
 | `position` | 'bottom' \| 'top' | position of affix               | `top`   | -     |
-| `target`   | string            | target container (CSS selector) | ''      | -     |
+| `target`   | string            | target container (CSS selector) | `''`    | -     |
 | `z-index`  | number            | z-index of affix                | `100`   | -     |
 
 ### Affix Events
 
-| Name      | Description                       | Parameters                                       | Since |
-| --------- | --------------------------------- | ------------------------------------------------ | ----- |
-| `changed` | triggers when fixed state changed | `(fixed: boolean)`                               | -     |
-| `scroll`  | triggers when scrolling           | `(value: { scrollTop: number, fixed: boolean })` | -     |
+| Name      | Description                       | Parameters                                         | Since |
+| --------- | --------------------------------- | -------------------------------------------------- | ----- |
+| `changed` | triggers when fixed state changed | `(fixed: boolean)`                                 | -     |
+| `scroll`  | triggers when scrolling           | `(payload: { scrollTop: number, fixed: boolean })` | -     |
 
 ### Affix Slots
 

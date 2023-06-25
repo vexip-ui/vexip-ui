@@ -109,8 +109,8 @@ export function getComponentConfig(): ComponentGroup[] {
     {
       name: 'else',
       components: [
-        { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'Affix', since: '2.2.0' },
+        { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'FullScreen', since: '2.1.0' },
         { name: 'Masker' },
         { name: 'Overflow', since: '2.0.0' },
