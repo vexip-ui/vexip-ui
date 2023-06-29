@@ -35,7 +35,8 @@ $textarea: map.merge(
   &__control {
     height: auto;
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-family: inherit;
     font-feature-settings: 'tnum';
     font-variant-numeric: inherit;
