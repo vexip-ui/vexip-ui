@@ -19,9 +19,9 @@ export const optionProps = wrapProps({
     type: Boolean,
     default: false
   },
-  noTitle: {
-    type: Boolean,
-    default: false
+  title: {
+    type: String,
+    default: ''
   },
   hitting: {
     type: Boolean,

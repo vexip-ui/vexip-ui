@@ -2,7 +2,7 @@
   <li
     ref="wrapper"
     :class="className"
-    :title="noTitle ? undefined : String(value)"
+    :title="title || undefined"
     role="option"
     :aria-disabled="disabled ? 'true' : undefined"
     :aria-selected="selected"
