@@ -648,7 +648,12 @@ export default defineComponent({
       }
 
       return (
-        <div ref={wrapper} {...attrs} class={className.value} style={style.value}>
+        <div
+          ref={wrapper}
+          {...attrs}
+          class={[className.value, attrs.class]}
+          style={[style.value, attrs.style as any]}
+        >
           <ResizeObserver on-resize={handleResize}>{renderContent()}</ResizeObserver>
           {props.useXBar && (
             <Scrollbar

@@ -126,7 +126,7 @@ export default defineComponent({
           ref={scroll}
           {...attrs}
           inherit={props.inherit}
-          class={nh.b()}
+          class={[nh.b(), attrs.class]}
           use-y-bar
           scroll-y={scrollOffset.value}
           onScroll={onScroll}
