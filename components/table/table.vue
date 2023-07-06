@@ -629,6 +629,7 @@ export default defineComponent({
       () => props.data,
       value => {
         setData(value)
+        nextTick(() => computeRenderRows(true))
         refreshPercentScroll()
       },
       { deep: true }
