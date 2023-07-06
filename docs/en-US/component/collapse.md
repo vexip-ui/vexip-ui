@@ -46,7 +46,7 @@ Adding the value of the `arrow-type` prop can change the position of the panel a
 
 ### Use Alone
 
-Not all cases require multiple panels to be juxtaposed, in which case the panel can be used alone to form an independent expandable panel.
+Not all cases require multiple panels to be juxtaposed, and the CollapsePanel component can be used alone.
 
 :::
 
