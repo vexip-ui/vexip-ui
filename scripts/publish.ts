@@ -27,10 +27,10 @@ async function main() {
     }
   }
 
-  const { pkg, pkgPath, pkgDir, currentVersion } = await getPackageInfo(inputPkg)
-  const { engine, ...copiedPkg } = pkg
+  const { pkg, rawPkg, pkgPath, pkgDir, currentVersion } = await getPackageInfo(inputPkg)
+  const { engines, ...copiedPkg } = pkg
 
-  await writeFile(pkgPath, copiedPkg, 'utf-8')
+  await writeFile(pkgPath, JSON.stringify(copiedPkg, null, 2), 'utf-8')
 
   logger.withStartLn(() => logger.infoText('Publishing package...'))
 
@@ -61,7 +61,7 @@ async function main() {
       throw error
     }
   } finally {
-    await writeFile(pkgPath, pkg, 'utf-8')
+    await writeFile(pkgPath, rawPkg, 'utf-8')
   }
 }
 

@@ -1,0 +1,79 @@
+<template>
+  <!-- Assuming this div is document -->
+  <div style="height: 500px; overflow-x: hidden; overflow-y: auto">
+    <!-- After add fit-window, --vxp-layout-view-height will be 100vh -->
+    <!-- Here it is forced to set to 500px for simulation -->
+    <Layout
+      logo="https://www.vexipui.com/vexip-ui.svg"
+      sign-name="Vexip UI"
+      :user="user"
+      :menus="menus"
+      fit-window
+      style="--vxp-layout-view-height: 500px"
+      @user-action="handleUserAction"
+    >
+      <template #main>
+        <div style="width: 100%; padding: 0 20px">
+          <p v-for="n in 40" :key="n">
+            {{ n }}
+          </p>
+        </div>
+      </template>
+    </Layout>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
+
+import type { MenuOptions } from 'vexip-ui'
+
+const user = {
+  name: 'VexipUI',
+  email: 'email@vexip-ui.com'
+}
+
+const menus: MenuOptions[] = [
+  {
+    label: '1',
+    name: 'Menu 1',
+    icon: EnvelopesBulk,
+    children: [
+      { label: '1-1', name: 'Child Menu 1' },
+      { label: '1-2', name: 'Child Menu 2' },
+      { label: '1-3', name: 'Child Menu 3' }
+    ]
+  },
+  {
+    label: '2',
+    name: 'Menu 2',
+    icon: City,
+    disabled: true
+  },
+  {
+    label: '3',
+    name: 'Menu 3',
+    icon: ChartPie
+  },
+  {
+    label: '4',
+    name: 'Menu 4',
+    icon: User
+  },
+  {
+    label: '5',
+    name: 'Menu 5',
+    icon: Marker
+  }
+]
+
+function handleUserAction(label: string) {
+  console.info(label)
+}
+</script>
+
+<style scoped>
+.vxp-layout {
+  height: 500px;
+}
+</style>

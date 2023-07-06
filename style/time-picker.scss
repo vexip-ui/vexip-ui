@@ -122,7 +122,7 @@ $time-picker: map.merge(
     padding: 0 4px;
     color: get-css-var('time-picker-exchange-color');
 
-    &--endabled:hover {
+    &--enabled:hover {
       color: get-css-var('time-picker-exchange-color-hover');
     }
   }

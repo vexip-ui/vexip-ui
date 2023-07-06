@@ -8,9 +8,12 @@
     aside-fixed="min"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px">
+      <div style="width: 100%; padding: 20px">
         <p>Click the bottom left caret</p>
         <p>And scroll back and forth</p>
+        <p v-for="n in 20" :key="n">
+          {{ n % 2 ? '↓' : '↑' }}
+        </p>
       </div>
     </template>
   </Layout>

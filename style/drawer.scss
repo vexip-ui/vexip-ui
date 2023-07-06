@@ -45,6 +45,7 @@ $drawer: map.merge(
     flex-direction: column;
     background-color: get-css-var('drawer-bg-color');
     border: 0;
+    transform: translateZ(0);
 
     &--top,
     &--bottom {
@@ -140,10 +141,7 @@ $drawer: map.merge(
   }
 
   &__handler {
-    @include define-css-var(
-      'drawer-hanlder-offset',
-      calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px)
-    );
+    $offset: calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px);
 
     position: absolute;
     z-index: 1;
@@ -169,19 +167,19 @@ $drawer: map.merge(
     }
 
     &--top {
-      bottom: get-css-var('drawer-hanlder-offset');
+      bottom: $offset;
     }
 
     &--right {
-      left: get-css-var('drawer-hanlder-offset');
+      left: $offset;
     }
 
     &--bottom {
-      top: get-css-var('drawer-hanlder-offset');
+      top: $offset;
     }
 
     &--left {
-      right: get-css-var('drawer-hanlder-offset');
+      right: $offset;
     }
 
     &:hover,

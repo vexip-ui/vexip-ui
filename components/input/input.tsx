@@ -13,7 +13,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, isNull, noop, throttle } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle, toNumber, warnOnce } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
 import type { InputType } from './symbol'
@@ -73,8 +73,10 @@ export default defineComponent({
       autocomplete: false,
       readonly: false,
       disabled: () => disabled.value,
-      inputClass: '',
+      inputClass: null,
+      controlClass: null,
       debounce: false,
+      delay: null,
       maxLength: 0,
       before: '',
       after: '',
@@ -87,6 +89,13 @@ export default defineComponent({
       transparent: false,
       sync: false
     })
+
+    if (!isNull(props.inputClass)) {
+      warnOnce(
+        "[vexip-ui:Input] 'input-class' prop has been deprecated, please " +
+          "use 'control-class' prop to replace it"
+      )
+    }
 
     const initValue = toNotNullString(props.value)
 
@@ -231,12 +240,12 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string, type: InputEventType) {
+    function setValue(value: string, type: InputEventType, sync = props.sync) {
       currentValue.value = value
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       type = type === 'input' ? 'input' : 'change'
 
       const value =
@@ -247,19 +256,25 @@ export default defineComponent({
 
         lastValue = value
 
-        !props.sync && setFieldValue(value)
+        if (!sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onChange as ChangeListener, value)
 
-        if (!props.sync) {
-          emit('update:value', value)
+        if (!sync) {
           validateField()
         }
       } else {
-        props.sync && setFieldValue(value)
+        if (sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onInput as ChangeListener, value)
 
-        if (props.sync) {
-          emit('update:value', value)
+        if (sync) {
           validateField()
         }
       }
@@ -295,13 +310,7 @@ export default defineComponent({
 
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
-      setValue('', 'change')
-
-      if (props.sync) {
-        emit('update:value', currentValue.value)
-        validateField()
-      }
-
+      setValue('', 'change', false)
       emitEvent(props.onClear)
       nextTick(clearField)
     }
@@ -354,7 +363,10 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     function renderPrefix() {
       return (
@@ -475,7 +487,7 @@ export default defineComponent({
           {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
-            class={[nh.be('control'), props.inputClass]}
+            class={[nh.be('control'), props.inputClass, props.controlClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}

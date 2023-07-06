@@ -23,11 +23,14 @@ export default defineComponent({
     const horizontalMatched = useMediaQuery(toRef(props, 'verticalLinks'))
 
     const className = computed(() => {
-      return {
-        [nh.be('footer')]: true,
-        [nh.bs('vars')]: !layoutState.isLayout,
-        [nh.bem('footer', 'inherit')]: layoutState.isLayout || props.inherit
-      }
+      return [
+        nh.be('footer'),
+        {
+          [nh.bs('vars')]: !layoutState.isLayout,
+          [nh.bem('footer', 'inherit')]: layoutState.isLayout || props.inherit
+        },
+        layoutState.classes.footer
+      ]
     })
 
     function renderLinks() {
@@ -36,7 +39,13 @@ export default defineComponent({
       }
 
       return (
-        <div class={[nh.be('links'), !horizontalMatched.value && nh.bem('links', 'vertical')]}>
+        <div
+          class={[
+            nh.be('links'),
+            !horizontalMatched.value && nh.bem('links', 'vertical'),
+            layoutState.classes.footerLinks
+          ]}
+        >
           <div class={nh.be('links-row')}>
             {props.links.map(group => (
               <div
@@ -82,7 +91,7 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {slots.links ? renderSlot(slots, 'links') : renderLinks()}
-          <div class={nh.be('copyright')}>
+          <div class={[nh.be('copyright'), layoutState.classes.copyright]}>
             {slots.copyright ? slots.copyright() : props.copyright}
           </div>
         </CustomTag>

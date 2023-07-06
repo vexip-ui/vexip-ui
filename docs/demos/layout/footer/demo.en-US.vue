@@ -9,8 +9,11 @@
     :links="links"
   >
     <template #main>
-      <div style="width: 100%; height: 800px; padding: 20px">
-        Scroll to the bottom
+      <div style="width: 100%; padding: 0 20px">
+        <p>Scroll to the bottom</p>
+        <p v-for="n in 20" :key="n">
+          ↓
+        </p>
       </div>
     </template>
   </Layout>

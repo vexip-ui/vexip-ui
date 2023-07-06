@@ -64,7 +64,7 @@ $anchor: map.merge(
   }
 
   &--no-marker &__link--active {
-    border-left-color: get-css-var('trak-color-active');
+    border-left-color: get-css-var('track-color-active');
   }
 
   &__marker {

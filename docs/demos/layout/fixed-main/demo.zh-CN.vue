@@ -8,8 +8,8 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 100%; padding: 20px">
-        在一个固定区域创建
+      <div style="width: 100%; padding: 0 20px">
+        <p>在一个固定区域创建</p>
       </div>
     </template>
   </Layout>

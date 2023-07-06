@@ -163,8 +163,8 @@ export default defineComponent({
         updatePopper()
       }
 
-      emitEvent(props.onToggle, visible)
       emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
     }
 
     function computeTriggerWidth() {

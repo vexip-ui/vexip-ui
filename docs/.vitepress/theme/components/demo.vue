@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { markRaw, onMounted, ref, watch, watchEffect } from 'vue'
+
+import { useI18n } from 'vue-i18n'
+
 import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
-import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
 import { hashTarget } from '../common/hash-target'
 import { usePlayground } from '../common/playground'
 
 import type { RowExposed } from 'vexip-ui'
-
-const demos = import.meta.glob('@docs/demos/**/*.vue', { eager: true, import: 'default' })
-const codes = import.meta.glob('@docs/demos/**/*.vue', { eager: true, as: 'raw' })
 
 const extensionMap: Record<string, string> = {
   vue: 'markup',
@@ -31,6 +30,14 @@ const props = defineProps({
   src: {
     type: String,
     default: ''
+  },
+  demos: {
+    type: Object,
+    default: () => ({})
+  },
+  codes: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -72,11 +79,11 @@ onMounted(() => {
 
 async function internalInit() {
   const basePath = `/demos/${props.src}/demo.${locale.value}.vue`
-  const path = Object.keys(demos).find(path => path.endsWith(basePath))
+  const path = Object.keys(props.demos).find(path => path.endsWith(basePath))
 
   if (path) {
-    demo.value = markRaw(demos[path] as any)
-    code.value = codes[path]
+    demo.value = markRaw(props.demos[path] as any)
+    code.value = props.codes[path]
   }
 }
 

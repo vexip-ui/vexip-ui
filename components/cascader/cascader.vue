@@ -480,8 +480,6 @@ export default defineComponent({
       }
 
       outsideClosed = false
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
     })
 
     let outsideChanged = false
@@ -568,7 +566,7 @@ export default defineComponent({
       () => props.disabled,
       value => {
         if (value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -576,7 +574,7 @@ export default defineComponent({
       () => props.loading,
       value => {
         if (value && props.loadingLock) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -584,7 +582,7 @@ export default defineComponent({
       () => props.loadingLock,
       value => {
         if (props.loading && value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -799,6 +797,15 @@ export default defineComponent({
 
         openedIds.value = ids.reverse().slice(0, -1)
       }
+    }
+
+    function setVisible(visible: boolean) {
+      if (currentVisible.value === visible) return
+
+      currentVisible.value = visible
+
+      emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
     }
 
     async function handlePanelOpen(option: CascaderOptionState, depth: number) {
@@ -1042,7 +1049,7 @@ export default defineComponent({
       const { value, data } = queryArrayMeta(fullValue)
 
       emitChangeEvent(value, data)
-      currentVisible.value = false
+      setVisible(false)
     }
 
     function emitChangeEvent(value: CascaderValue, data: Data[] | Data[][]) {
@@ -1051,9 +1058,9 @@ export default defineComponent({
       nextTick(() => {
         outsideChanged = false
 
+        emit('update:value', value)
         setFieldValue(value)
         emitEvent(props.onChange as ChangeListener, value, data)
-        emit('update:value', value)
         validateField()
       })
     }
@@ -1085,7 +1092,7 @@ export default defineComponent({
     function toggleVisible(visible = !currentVisible.value) {
       if (props.disabled || (props.loading && props.loadingLock)) return
 
-      currentVisible.value = visible
+      setVisible(visible)
     }
 
     function handleClickOutside() {
@@ -1093,7 +1100,7 @@ export default defineComponent({
       emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
-        currentVisible.value = false
+        setVisible(false)
         outsideClosed = true
         emitEvent(props.onOutsideClose)
       }
@@ -1101,12 +1108,14 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
+        const prev = emittedValue.value
+
         currentValues.value.length = 0
         currentLabels.value.length = 0
         mergedValues.value.length = 0
         mergedLabels.value.length = 0
         openedIds.value.length = 0
-        emittedValue.value = []
+        emittedValue.value = prev?.length === 0 ? prev : []
         restTipShow.value = false
 
         for (const option of optionIdMap.values()) {
@@ -1114,8 +1123,11 @@ export default defineComponent({
           option.partial = false
         }
 
-        emitEvent(props.onChange as ChangeListener, emittedValue.value, [])
-        emit('update:value', emittedValue.value)
+        if (prev?.length !== 0) {
+          emit('update:value', emittedValue.value)
+          emitEvent(props.onChange as ChangeListener, emittedValue.value, [])
+        }
+
         emitEvent(props.onClear)
         clearField(emittedValue.value)
       }

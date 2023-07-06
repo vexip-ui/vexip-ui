@@ -235,8 +235,8 @@ export default defineComponent({
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emitEvent(props.onSelect, label, meta)
         emit('update:active', label)
+        emitEvent(props.onSelect, label, meta)
 
         if (!props.manualRoute && props.router && route) {
           props.router.push(route)

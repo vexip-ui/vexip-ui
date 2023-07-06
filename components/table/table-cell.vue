@@ -1,8 +1,10 @@
 <template>
   <div
-    v-if="isTableTypeColumn(column)"
     :class="className"
     role="cell"
+    :scope="column.first ? 'row' : undefined"
+    :colspan="cellSpan.colSpan !== 1 ? cellSpan.colSpan : undefined"
+    :rowspan="cellSpan.rowSpan !== 1 ? cellSpan.rowSpan : undefined"
     :style="style"
     v-bind="attrs"
     @mouseenter="handleMouseEnter"
@@ -11,101 +13,92 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
-    <Checkbox
-      v-if="isSelectionColumn(column)"
-      inherit
-      :class="nh.be('selection')"
-      :checked="row.checked"
-      :size="column.checkboxSize || 'default'"
-      :disabled="disableCheckRows.has(row.key)"
-      :partial="row.partial"
-      :control="!!row.children?.length"
-      @click.prevent.stop="handleCheckRow(row, $event)"
-    ></Checkbox>
-    <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
-      {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
-    </span>
-    <template v-else-if="isExpandColumn(column)">
-      <button
-        v-if="!disableExpandRows.has(row.key)"
-        type="button"
-        :class="{
-          [nh.be('expand')]: true,
-          [nh.bem('expand', 'active')]: row.expanded
-        }"
-        @click.stop="handleExpandRow(row, $event)"
-      >
-        <Icon v-bind="icons.angleRight"></Icon>
-      </button>
-    </template>
-    <template v-else-if="isDragColumn(column)">
-      <button
-        v-if="!disableDragRows.has(row.key)"
-        type="button"
-        :class="nh.be('dragger')"
-        @mousedown="handleDragRow(row)"
-      >
-        <Icon v-bind="icons.dragger"></Icon>
-      </button>
-    </template>
-  </div>
-  <div
-    v-else
-    :class="className"
-    role="cell"
-    :style="style"
-    v-bind="attrs"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-    @click="handleClick"
-    @dblclick="handleDblclick"
-    @contextmenu="handleContextmenu"
-  >
-    <template v-if="usingTree && column.first">
-      <span
-        :class="nh.be('pad')"
-        :style="{
-          [nh.cv('row-depth')]: row.depth
-        }"
-      ></span>
-      <button
-        type="button"
-        :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
-        @click="handleExpandTree(row)"
-      >
-        <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
-        <Icon v-else v-bind="icons.plus"></Icon>
-      </button>
-    </template>
-    <Ellipsis
-      v-if="!column.noEllipsis"
-      inherit
-      :tooltip-theme="tooltipTheme"
-      :tip-max-width="tooltipWidth"
-    >
-      <Renderer
-        v-if="isFunction(column.renderer)"
-        :renderer="column.renderer"
-        :data="{ row: row.data, rowIndex, column, columnIndex }"
-      ></Renderer>
-      <template v-else-if="isFunction(column.accessor)">
-        {{ column.accessor(row.data, rowIndex) }}
+    <template v-if="isTableTypeColumn(column)">
+      <Checkbox
+        v-if="isSelectionColumn(column)"
+        inherit
+        :class="nh.be('selection')"
+        :checked="row.checked"
+        :size="column.checkboxSize || 'default'"
+        :disabled="disableCheckRows.has(row.key)"
+        :partial="row.partial"
+        :control="!!row.children?.length"
+        @click.prevent.stop="handleCheckRow(row, $event)"
+      ></Checkbox>
+      <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
+        {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
+      </span>
+      <template v-else-if="isExpandColumn(column)">
+        <button
+          v-if="!disableExpandRows.has(row.key)"
+          type="button"
+          :class="{
+            [nh.be('expand')]: true,
+            [nh.bem('expand', 'active')]: row.expanded
+          }"
+          @click.stop="handleExpandRow(row, $event)"
+        >
+          <Icon v-bind="icons.angleRight"></Icon>
+        </button>
       </template>
-      <template v-else>
-        {{ row.data[column.key] }}
+      <template v-else-if="isDragColumn(column)">
+        <button
+          v-if="!disableDragRows.has(row.key)"
+          type="button"
+          :class="nh.be('dragger')"
+          @mousedown="handleDragRow(row)"
+        >
+          <Icon v-bind="icons.dragger"></Icon>
+        </button>
       </template>
-    </Ellipsis>
+    </template>
     <template v-else>
-      <Renderer
-        v-if="isFunction(column.renderer)"
-        :renderer="column.renderer"
-        :data="{ row: row.data, rowIndex, column, columnIndex }"
-      ></Renderer>
-      <template v-else-if="isFunction(column.accessor)">
-        {{ column.accessor(row.data, rowIndex) }}
+      <template v-if="usingTree && column.first">
+        <span
+          :class="nh.be('pad')"
+          :style="{
+            [nh.cv('row-depth')]: row.depth
+          }"
+        ></span>
+        <button
+          type="button"
+          :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
+          @click="handleExpandTree(row)"
+        >
+          <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
+          <Icon v-else v-bind="icons.plus"></Icon>
+        </button>
       </template>
+      <Ellipsis
+        v-if="!column.noEllipsis"
+        inherit
+        :tooltip-theme="tooltipTheme"
+        :tip-max-width="tooltipWidth"
+      >
+        <Renderer
+          v-if="isFunction(column.renderer)"
+          :renderer="column.renderer"
+          :data="{ row: row.data, rowIndex, column, columnIndex }"
+        ></Renderer>
+        <template v-else-if="isFunction(column.accessor)">
+          {{ column.accessor(row.data, rowIndex) }}
+        </template>
+        <template v-else>
+          {{ row.data[column.key] }}
+        </template>
+      </Ellipsis>
       <template v-else>
-        {{ row.data[column.key] }}
+        <Renderer
+          v-if="isFunction(column.renderer)"
+          :renderer="column.renderer"
+          :data="{ row: row.data, rowIndex, column, columnIndex }"
+        ></Renderer>
+        <template v-else-if="isFunction(column.accessor)">
+          {{ column.accessor(row.data, rowIndex) }}
+        </template>
+        <template v-else>
+          {{ row.data[column.key] }}
+        </template>
       </template>
     </template>
   </div>
@@ -120,11 +113,12 @@ import { Renderer } from '@/components/renderer'
 import { computed, defineComponent, inject, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { isFunction } from '@vexip-ui/utils'
+import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
+  ColumnCellSpanFn,
   ColumnWithKey,
   TableDragColumn,
   TableExpandColumn,
@@ -158,6 +152,10 @@ export default defineComponent({
     columnIndex: {
       type: Number,
       default: -1
+    },
+    fixed: {
+      type: String as PropType<'left' | 'right' | undefined>,
+      default: null
     }
   },
   setup(props) {
@@ -173,12 +171,12 @@ export default defineComponent({
       let customClass = null
 
       if (typeof state.cellClass === 'function') {
-        customClass = state.cellClass(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customClass = state.cellClass({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customClass = state.cellClass
       }
@@ -192,50 +190,112 @@ export default defineComponent({
           [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
-        props.column.className || null,
-        props.column.class || null,
+        props.column.className,
+        props.column.class,
         customClass
       ]
     })
+    const cellSpan = computed(() => {
+      const fixed = props.fixed || 'default'
+
+      if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.columnIndex}`)) {
+        return { colSpan: 0, rowSpan: 0 }
+      }
+
+      const columns =
+        fixed === 'left'
+          ? state.leftFixedColumns
+          : fixed === 'right'
+            ? state.rightFixedColumns
+            : state.columns
+
+      let result: ReturnType<ColumnCellSpanFn>
+
+      if (typeof props.column.cellSpan === 'function') {
+        result = props.column.cellSpan({
+          row: props.row.data,
+          index: props.rowIndex,
+          fixed: props.fixed
+        })
+      } else if (typeof state.cellSpan === 'function') {
+        result = state.cellSpan({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex,
+          fixed: props.fixed
+        })
+      }
+
+      const { colSpan, rowSpan } = result || { colSpan: 1, rowSpan: 1 }
+      const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
+
+      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
+      span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
+
+      mutations.updateCellSpan(props.rowIndex, props.columnIndex, fixed, span)
+
+      return span
+    })
     const style = computed(() => {
-      const width = state.widths.get(props.column.key) || 0
-      const maxWidth = state.resized.has(props.column.key)
-        ? `${width}px`
-        : `${props.column.width}px`
+      const totalWidths =
+        props.fixed === 'left'
+          ? getters.leftFixedWidths
+          : props.fixed === 'right'
+            ? getters.rightFixedWidths
+            : getters.totalWidths
+      const { colSpan, rowSpan } = cellSpan.value
+      const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+
+      let height: number | undefined
+
+      if (rowSpan > 1 && state.heightBITree) {
+        height =
+          state.heightBITree.sum(props.row.listIndex + rowSpan) -
+          state.heightBITree.sum(props.row.listIndex)
+      }
 
       let customStyle
 
       if (typeof state.cellStyle === 'function') {
-        customStyle = state.cellStyle(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customStyle = state.cellStyle({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customStyle = state.cellStyle
       }
 
       return [
-        {
-          maxWidth,
-          flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`
-        },
         props.column.style || '',
-        customStyle
+        customStyle,
+        {
+          display: !colSpan || !rowSpan ? 'none' : undefined,
+          width: `${width}px`,
+          height: height ? `${height}px` : undefined,
+          visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
+          borderRightWidth:
+            !state.border && colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1
+              ? 0
+              : undefined,
+          borderBottomWidth:
+            rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
+          transform: `translate3d(${totalWidths[props.columnIndex]}px, 0, 0)`
+        }
       ]
     })
     const attrs = computed(() => {
       let customAttrs: Record<string, any>
 
       if (typeof state.cellAttrs === 'function') {
-        customAttrs = state.cellAttrs(
-          props.row.data,
-          props.column,
-          props.rowIndex,
-          props.columnIndex
-        )
+        customAttrs = state.cellAttrs({
+          row: props.row.data,
+          rowIndex: props.rowIndex,
+          column: props.column,
+          columnIndex: props.columnIndex
+        })
       } else {
         customAttrs = state.cellAttrs
       }
@@ -328,9 +388,7 @@ export default defineComponent({
     function handleExpandTree(row: TableRowState) {
       if (!row.children?.length) return
 
-      const expanded = !row.treeExpanded
-
-      mutations.handleTreeExpand(row.key, expanded)
+      mutations.handleTreeExpand(row.key, !row.treeExpanded)
     }
 
     return {
@@ -338,6 +396,7 @@ export default defineComponent({
       icons: useIcons(),
 
       className,
+      cellSpan,
       style,
       attrs,
       tooltipTheme: toRef(state, 'tooltipTheme'),

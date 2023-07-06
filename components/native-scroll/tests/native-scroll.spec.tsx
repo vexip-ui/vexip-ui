@@ -167,7 +167,7 @@ describe('NativeScroll', () => {
     wrapper = await createScroll({
       onWheel
     })
-    const wrapperEl = wrapper.element as HTMLElement
+    const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
     emitWheel(wrapperEl, 'bottom')
     expect(onWheel).toHaveBeenCalled()
@@ -197,7 +197,7 @@ describe('NativeScroll', () => {
       onScroll,
       onScrollEnd
     })
-    const wrapperEl = wrapper.element as HTMLElement
+    const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
     const downEvent = new CustomEvent('mousedown') as any
     downEvent.button = 0

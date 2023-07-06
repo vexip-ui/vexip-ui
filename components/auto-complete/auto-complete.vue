@@ -97,7 +97,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
 import type { AutoCompleteRawOption } from './symbol'
@@ -165,7 +165,9 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      transparent: false
+      transparent: false,
+      debounce: false,
+      delay: null
     })
 
     const currentValue = ref(props.value)
@@ -268,7 +270,7 @@ export default defineComponent({
       }
     }
 
-    function handleInput(event: string | Event) {
+    function handleInputInternal(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
 
       visible.value = !props.dropDisabled
@@ -283,7 +285,12 @@ export default defineComponent({
       emitEvent(props.onInput, value)
     }
 
-    function handleChange() {
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleInputInternal, delay || 100)
+      : throttle(handleInputInternal, delay || 16)
+
+    function handleChange(valid = true) {
       if (!changed || currentValue.value === lastValue) return
 
       changed = false
@@ -292,10 +299,10 @@ export default defineComponent({
 
       const option = optionStates.value.find(option => option.value === lastValue)
 
+      emit('update:value', currentValue.value)
       setFieldValue(currentValue.value)
       emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
-      emit('update:value', currentValue.value)
-      validateField()
+      valid && validateField()
 
       visible.value = false
 
@@ -381,7 +388,7 @@ export default defineComponent({
           changed = true
         }
 
-        handleChange()
+        handleChange(false)
         emitEvent(props.onClear)
         nextTick(clearField)
       }

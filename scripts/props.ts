@@ -70,8 +70,19 @@ async function main() {
     ${imports.join('\n')}
     import { ${typography.map(name => `${toCapitalCase(name)}CProps`).join()} } from './typography'
 
+    import type { ComponentSize, ComponentState } from '@vexip-ui/config'
+
+    interface SuggestedDefault {
+      size?: ComponentSize,
+      state?: ComponentState,
+      transfer?: boolean,
+      disabled?: boolean,
+      loading?: boolean,
+      clearable?: boolean
+    }
+
     export interface PropsOptions {
-      default?: Record<string, any>,
+      default?: SuggestedDefault & Record<string, any>,
       ${types.join(',\n')},
       ${typography.map(name => `${toCamelCase(name)}?: ${toCapitalCase(name)}CProps`).join(',\n')}
     }

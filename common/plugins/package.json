@@ -13,7 +13,8 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "private": false,
@@ -27,15 +28,15 @@
     "directory": "common/plugins"
   },
   "dependencies": {
-    "@vexip-ui/utils": "workspace:^",
+    "@vexip-ui/utils": "workspace:~",
     "compare-versions": "6.0.0-rc.1",
-    "local-pkg": "^0.4.2"
+    "local-pkg": "^0.4.3"
   },
   "devDependencies": {
-    "@types/node": "^18.7.23",
+    "@types/node": "^18.16.18",
     "execa": "^6.1.0",
-    "kolorist": "^1.6.0",
-    "tsup": "^6.2.3",
-    "unplugin-vue-components": "^0.22.7"
+    "kolorist": "^1.8.0",
+    "tsup": "^6.7.0",
+    "unplugin-vue-components": "^0.22.12"
   }
 }

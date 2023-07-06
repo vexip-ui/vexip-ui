@@ -8,8 +8,8 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 100; padding: 20px">
-        Make in a fixed area
+      <div style="width: 100%; padding: 0 20px">
+        <p>Make in a fixed area</p>
       </div>
     </template>
   </Layout>

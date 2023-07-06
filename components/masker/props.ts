@@ -16,7 +16,8 @@ export const maskerProps = buildProps({
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onHide: eventProp(),
-  onShow: eventProp()
+  onShow: eventProp(),
+  onResize: eventProp<(entry: ResizeObserverEntry) => void>()
 })
 
 export type MaskerProps = ExtractPropTypes<typeof maskerProps>

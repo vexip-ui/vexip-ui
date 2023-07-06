@@ -16,6 +16,11 @@ import type { TableSorterProfile } from 'vexip-ui'
 
 const columns = reactive(
   defineColumns([
+    { type: 'selection' },
+    {
+      type: 'order',
+      name: '#'
+    },
     {
       name: 'First Name',
       key: 'firstName'

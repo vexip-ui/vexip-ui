@@ -40,7 +40,7 @@ module.exports = {
       }
     },
     {
-      files: ['docs/**'],
+      files: ['docs/demos/**'],
       globals: {
         __ROLLBACK_LANG__: 'readonly'
       },

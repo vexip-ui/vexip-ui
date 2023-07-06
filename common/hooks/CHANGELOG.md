@@ -1,3 +1,12 @@
+## [1.11.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.11.0...hooks@1.11.1) (2023-06-02)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useMoving incorrect delay move process ([f58a173](https://github.com/vexip-ui/vexip-ui/commit/f58a1733e9f8f9736ac2d44f42e07c56ca0be3af))
+
+
+
 # [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.10.0...hooks@1.11.0) (2023-05-20)
 
 

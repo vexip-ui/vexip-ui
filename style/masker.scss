@@ -31,6 +31,8 @@ $masker: map.merge(
   &__mask {
     @include fixed;
 
+    transform: translateZ(0);
+
     &-inner {
       width: 100%;
       height: 100%;

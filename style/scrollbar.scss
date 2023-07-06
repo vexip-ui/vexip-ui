@@ -41,6 +41,7 @@ $scrollbar: map.merge(
 
     #{$bar} {
       height: 100%;
+      will-change: width;
     }
   }
 
@@ -52,6 +53,7 @@ $scrollbar: map.merge(
 
     #{$bar} {
       width: 100%;
+      will-change: height;
     }
   }
 

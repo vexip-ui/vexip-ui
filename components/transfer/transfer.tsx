@@ -222,9 +222,9 @@ export default defineComponent({
     function handleChange() {
       emittedValue = Array.from(currentValue.value)
 
+      emit('update:value', emittedValue)
       setFieldValue(emittedValue)
       emitEvent(props.onChange, emittedValue)
-      emit('update:value', emittedValue)
       validateField()
     }
 
@@ -334,7 +334,7 @@ export default defineComponent({
                     onClick={handleToTarget}
                   >
                     {{
-                      icon: () => <Icon {...icons.value.arrowRight} label="to right"></Icon>
+                      icon: () => <Icon {...icons.value.arrowRight} label='to right'></Icon>
                     }}
                   </Button>,
                   <Button
@@ -350,7 +350,7 @@ export default defineComponent({
                     onClick={handleToSource}
                   >
                     {{
-                      icon: () => <Icon {...icons.value.arrowLeft} label="to left"></Icon>
+                      icon: () => <Icon {...icons.value.arrowLeft} label='to left'></Icon>
                     }}
                   </Button>
                 ]}

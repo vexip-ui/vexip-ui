@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+
 import { useData, useRoute } from 'vitepress'
 import { debounceFrame } from '@vexip-ui/utils'
 import { ussTocAnchor } from '../common/toc-anchor'
@@ -87,6 +88,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
         class="toc-anchor"
         :offset="15"
         bind-hash
+        viewer="window"
         :style="{ visibility: !loading ? undefined : 'hidden' }"
       >
         <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
@@ -102,6 +104,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
 
 .article {
   position: relative;
+  z-index: 0;
   flex-wrap: nowrap;
   min-height: calc(var(--vxp-layout-view-height) - var(--vxp-layout-header-height));
   padding: calc(var(--sub-header-height) + 16px) 30px 30px;
@@ -158,6 +161,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
     th:nth-child(1),
     td:nth-child(1) {
       white-space: nowrap;
+    }
+
+    s {
+      color: var(--vxp-color-error-opacity-1);
     }
   }
 }

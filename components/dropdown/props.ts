@@ -1,4 +1,11 @@
-import { booleanProp, booleanStringProp, buildProps, classProp, eventProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  booleanStringProp,
+  buildProps,
+  classProp,
+  eventProp,
+  wrapProps
+} from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -26,3 +33,33 @@ export const dropdownProps = buildProps({
 
 export type DropdownProps = ExtractPropTypes<typeof dropdownProps>
 export type DropdownCProps = ConfigurableProps<DropdownProps>
+
+export const dropdownItemProps = wrapProps({
+  label: {
+    type: [String, Number],
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  selected: {
+    type: Boolean,
+    default: false
+  },
+  divided: {
+    type: Boolean,
+    default: false
+  },
+  reference: {
+    type: Boolean,
+    default: false
+  },
+  meta: {
+    type: Object,
+    default: () => ({})
+  },
+  onSelect: eventProp<(label: string | number) => void>()
+})
+
+export type DropdownItemProps = ExtractPropTypes<typeof dropdownItemProps>

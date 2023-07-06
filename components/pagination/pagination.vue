@@ -78,14 +78,15 @@
       </li>
       <template v-if="currentPagers.length">
         <li
-          v-for="(page, index) in currentPagers"
-          :key="index"
+          v-for="page in currentPagers"
+          :key="page"
           :ref="el => el && itemElList.push(el as any)"
           :class="{
             [nh.be('item')]: true,
             [nh.bem('item', 'disabled')]: props.disableItem(page),
             [nh.bem('item', 'active')]: currentActive === page
           }"
+          :title="props.noTitle ? undefined : `${page}`"
           role="menuitemradio"
           :tabindex="currentActive === page ? '0' : '-1'"
           :aria-posinset="page"
@@ -224,6 +225,7 @@ import {
   nextTick,
   onBeforeUpdate,
   onMounted,
+  reactive,
   ref,
   toRef,
   watch
@@ -307,7 +309,7 @@ export default defineComponent({
     const inPrevEllipsis = ref(false)
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
-    const itemElList = ref<unknown[]>([])
+    const itemElList = reactive<HTMLElement[]>([])
 
     const locale = useLocale('pagination', toRef(props, 'locale'))
 
@@ -320,13 +322,11 @@ export default defineComponent({
           const sign = modifier.up || modifier.left ? -1 : 1
 
           if (isClient && document.activeElement) {
-            const index = itemElList.value.findIndex(el => el === document.activeElement)
+            const index = itemElList.findIndex(el => el === document.activeElement)
 
             if (!~index) return
 
-            const target = itemElList.value[
-              boundRange(index + sign, 0, itemElList.value.length - 1)
-            ] as HTMLElement
+            const target = itemElList[boundRange(index + sign, 0, itemElList.length - 1)]
 
             target.focus()
           }
@@ -334,13 +334,11 @@ export default defineComponent({
           event.preventDefault()
 
           if (document && document.activeElement) {
-            const index = itemElList.value.findIndex(el => el === document.activeElement)
+            const index = itemElList.findIndex(el => el === document.activeElement)
 
             if (!~index) {
               const activeClass = nh.bem('item', 'active')
-              const activeEl = (itemElList.value as HTMLElement[]).find(el =>
-                el.classList.contains(activeClass)
-              )
+              const activeEl = itemElList.find(el => el.classList.contains(activeClass))
 
               activeEl?.focus()
             }
@@ -427,7 +425,7 @@ export default defineComponent({
       props.pageCount && plugins.push('size')
       props.pageJump && plugins.push('jump')
 
-      if (plugins.length) {
+      if (plugins.length > 1) {
         warnOnce(
           "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
             " have been deprecated, please use 'plugins' prop to replace them"
@@ -466,12 +464,6 @@ export default defineComponent({
         changeActive(value, false)
       }
     )
-    watch(currentActive, value => {
-      computePagers()
-      jumpValue.value = value
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
     watch(() => props.maxCount, computePagers)
     watch(pagerCount, computePagers)
     watch(
@@ -481,8 +473,8 @@ export default defineComponent({
       }
     )
     watch(currentPageSize, (value, prevValue) => {
-      emitEvent(props.onPageSizeChange, value)
       emit('update:page-size', value)
+      emitEvent(props.onPageSizeChange, value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)
@@ -501,8 +493,9 @@ export default defineComponent({
     onMounted(() => {
       nextTick(computePagers)
     })
+
     onBeforeUpdate(() => {
-      itemElList.value.length = 0
+      itemElList.length = 0
     })
 
     function queryEnabledActive(active: number, step: number) {
@@ -517,6 +510,17 @@ export default defineComponent({
       return active
     }
 
+    function handleChange(value: number) {
+      if (currentActive.value === value) return
+
+      currentActive.value = value
+      jumpValue.value = value
+
+      computePagers()
+      emit('update:active', value)
+      emitEvent(props.onChange, value)
+    }
+
     function changeActive(active: number, focus = true) {
       active = parseInt(active.toString())
 
@@ -524,16 +528,14 @@ export default defineComponent({
         return
       }
 
-      currentActive.value = active
+      handleChange(active)
 
       if (isClient && focus) {
-        const activeEl = itemElList.value.find(el => el === document.activeElement) as HTMLElement
+        const activeEl = itemElList.find(el => el === document.activeElement)
 
         activeEl?.blur()
-
         nextTick(() => {
-          const el = (itemElList.value as HTMLElement[]).find(el => el.tabIndex >= 0)
-          el?.focus()
+          itemElList.find(el => el.tabIndex >= 0)?.focus()
         })
       }
     }
@@ -646,7 +648,7 @@ export default defineComponent({
           }
         }
 
-        currentActive.value = active
+        handleChange(active)
       }
 
       nextTick(() => {

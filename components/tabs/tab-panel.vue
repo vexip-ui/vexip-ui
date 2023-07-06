@@ -16,36 +16,15 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper } from '@vexip-ui/config'
+import { tabPanelProps } from './props'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
 export default defineComponent({
   name: 'TabPanel',
-  props: {
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    icon: {
-      type: Object,
-      default: null
-    },
-    closable: {
-      type: Boolean,
-      default: null
-    },
-    onToggle: eventProp<(active: boolean) => void>()
-  },
+  props: tabPanelProps,
   emits: [],
   setup(props, { slots }) {
     const tabsState = inject(TABS_STATE, null)

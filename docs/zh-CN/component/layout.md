@@ -90,6 +90,16 @@
 
 :::
 
+:::demo layout/fit-window
+
+### 适应窗口
+
+添加 `fit-window` 属性可以使布局适应浏览器窗口。
+
+添加后，内部的滚动组件将被禁用，布局将会跟随浏览器窗口的滚动，在移动端可以获得更好的滚动交互。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -100,6 +110,27 @@ import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'
+type LayoutSection =
+  | 'wrapper'
+  | 'section'
+  | 'header'
+  | 'headerLeft'
+  | 'headerMain'
+  | 'headerRight'
+  | 'headerUser'
+  | 'sidebar'
+  | 'aside'
+  | 'asideTop'
+  | 'asideMain'
+  | 'asideBottom'
+  | 'expandHandler'
+  | 'main'
+  | 'footer'
+  | 'footerLinks'
+  | 'copyright'
+  | 'scrollbar'
+
+type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
 
 interface LayoutMenuProps {
   accordion?: boolean,
@@ -178,6 +209,8 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | locale           | `LocaleConfig['layout']` | 设置多语言配置                                                                                              | `null`                                                               | `2.1.0`  |
 | dark-mode        | `boolean`                | 手动设置当前主题模式，除了初始化时，其他时候改变时会修改 `<html>` 上相应的类名，可以使用 `v-model` 双向绑定 | `null`                                                               | `2.1.1`  |
 | fixed-main       | `boolean`                | 设置主内容是否为固定的                                                                                      | `false`                                                              | `2.1.14` |
+| fit-window       | `boolean`                | 开启后将适应浏览器窗口并移除内置得滚动                                                                      | `false`                                                              | `2.1.24` |
+| inner-classes    | `LayoutInnerClass`       | 设置内部元素的自定义类名                                                                                    | `{}`                                                                 | `2.1.24` |
 
 ### Layout 事件
 
@@ -265,16 +298,17 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### LayoutAside 属性
 
-| 名称       | 类型              | 说明                                                                     | 默认值  | 始于 |
-| ---------- | ----------------- | ------------------------------------------------------------------------ | ------- | ---- |
-| tag        | `string`          | 设置渲染的标签                                                           | `aside` | -    |
-| expanded   | `boolean`         | 当边栏不固定时，设置边栏是否为展开状态，可以使用 `v-model` 双向绑定      | `false` | -    |
-| reduced    | `boolean`         | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                      | `false` | -    |
-| menus      | `MenuOptions[]`   | 设置菜单选项                                                             | `[]`    | -    |
-| menu-props | `LayoutMenuProps` | 设置菜单属性                                                             | `null`  | -    |
-| logo       | `string`          | 设置 Logo 图片地址                                                       | `''`    | -    |
-| sign-name  | `string`          | 设置标语                                                                 | `''`    | -    |
-| fixed      | `string`          | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定 | `'lg'`  | -    |
+| 名称       | 类型                  | 说明                                                                     | 默认值    | 始于     |
+| ---------- | --------------------- | ------------------------------------------------------------------------ | --------- | -------- |
+| tag        | `string`              | 设置渲染的标签                                                           | `aside`   | -        |
+| expanded   | `boolean`             | 当边栏不固定时，设置边栏是否为展开状态，可以使用 `v-model` 双向绑定      | `false`   | -        |
+| reduced    | `boolean`             | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                      | `false`   | -        |
+| menus      | `MenuOptions[]`       | 设置菜单选项                                                             | `[]`      | -        |
+| menu-props | `LayoutMenuProps`     | 设置菜单属性                                                             | `null`    | -        |
+| logo       | `string`              | 设置 Logo 图片地址                                                       | `''`      | -        |
+| sign-name  | `string`              | 设置标语                                                                 | `''`      | -        |
+| fixed      | `string`              | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定 | `'lg'`    | -        |
+| sign-type  | `'aside' \| 'header'` | 设置标语所在的块，非 `'aside'` 时边栏的上定位会调整                      | `'aside'` | `2.1.23` |
 
 ### LayoutAside 事件
 

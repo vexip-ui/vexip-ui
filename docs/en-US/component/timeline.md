@@ -80,6 +80,13 @@ In both-sides mode, if you don't want the component to automatically calculate t
 
 ### TimelineItem Events
 
-| Name         | Description                                                          | Parameters                  | Since |
-| ------------ | -------------------------------------------------------------------- | --------------------------- | ----- |
-| signal-click | Emitted when a timeline node is clicked, returns the current `label` | `(label: string \| number)` | -     |
+| Name         | Description                                                                 | Parameters                  | Since |
+| ------------ | --------------------------------------------------------------------------- | --------------------------- | ----- |
+| signal-click | Emitted when a timeline node signal is clicked, returns the current `label` | `(label: string \| number)` | -     |
+
+### Textarea Slots
+
+| Name    | Description                | Parameters | Since |
+| ------- | -------------------------- | ---------- | ----- |
+| default | Timeline node content slot | -          | -     |
+| signal  | Timeline node signal slot  | -          | -     |

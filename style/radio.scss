@@ -23,7 +23,10 @@ $radio: map.merge(
     s-color-focus: get-css-var('color-primary-opacity-6'),
     shadow-focus: get-css-var('shadow-focus') get-css-var('radio-s-color-focus'),
     signal-size: 18px,
-    signal-inner-size: 10px
+    signal-inner-size: 10px,
+    button-height: 32px,
+    button-v-padding: 0,
+    button-h-padding: 10px
   ),
   $radio
 );
@@ -113,32 +116,36 @@ $radio: map.merge(
     box-shadow: get-css-var('radio-shadow-focus');
   }
 
-  @mixin small-signal {
+  @mixin small-vars {
     @include define-preset-values(
       'radio',
       (
         signal-size: 14px,
-        signal-inner-size: 7px
+        signal-inner-size: 7px,
+        button-height: 24px,
+        button-h-padding: 8px
       )
     );
   }
 
-  @mixin large-signal {
+  @mixin large-vars {
     @include define-preset-values(
       'radio',
       (
         signal-size: 22px,
-        signal-inner-size: 13px
+        signal-inner-size: 13px,
+        button-height: 40px,
+        button-h-padding: 14px
       )
     );
   }
 
-  &--small &__signal {
-    @include small-signal;
+  &--small {
+    @include small-vars;
   }
 
-  &--large &__signal {
-    @include large-signal;
+  &--large {
+    @include large-vars;
   }
 
   &:hover &__signal {
@@ -255,7 +262,8 @@ $radio: map.merge(
     }
 
     &-group--border & {
-      padding: 8px 10px;
+      height: get-css-var('radio-button-height');
+      padding: get-css-var('radio-button-v-padding') get-css-var('radio-button-h-padding');
       border: get-css-var('radio-border');
       border-radius: get-css-var('radius-base');
 
@@ -299,7 +307,8 @@ $radio: map.merge(
     &-group--button & {
       position: relative;
       z-index: 0;
-      padding: 8px 10px;
+      height: get-css-var('radio-button-height');
+      padding: get-css-var('radio-button-v-padding') get-css-var('radio-button-h-padding');
       margin: 0;
       border: get-css-var('radio-border');
       border-left-width: 0;
@@ -366,20 +375,20 @@ $radio: map.merge(
     }
 
     &-group--small & {
-      @include small-signal;
+      @include small-vars;
     }
 
     &-group--large & {
-      @include large-signal;
+      @include large-vars;
     }
 
-    &-group--button#{&}-group--small & {
-      padding: 6px 8px;
-    }
+    // &-group--button#{&}-group--small & {
+    //   padding: 6px 8px;
+    // }
 
-    &-group--button#{&}-group--large & {
-      padding: 10px 14px;
-    }
+    // &-group--button#{&}-group--large & {
+    //   padding: 10px 14px;
+    // }
 
     &-group--button#{&}-group--disabled &,
     &-group--button &--disabled {

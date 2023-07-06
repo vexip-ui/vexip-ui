@@ -2,10 +2,16 @@ import Table from './table.vue'
 
 export { Table }
 export { tableProps } from './props'
+export {
+  defineFilter,
+  defineSorter,
+  defineColumn,
+  defineColumns,
+  defineSummary,
+  defineSummaries
+} from './helper'
 
 export type TableExposed = InstanceType<typeof Table>
-
-export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
 export type { TableProps, TableCProps } from './props'
 export type {
   TableKeyConfig,
@@ -27,5 +33,8 @@ export type {
   TableRowPayload,
   TableCellPayload,
   TableHeadPayload,
-  TableColResizePayload
+  TableColResizePayload,
+  TableCellSpanFn,
+  TableSummaryOptions,
+  TableSummaryData
 } from './symbol'

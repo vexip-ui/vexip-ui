@@ -104,8 +104,9 @@ export default defineComponent({
     let timer: ReturnType<typeof setTimeout>
 
     let isRawViewer = false
-    let container: HTMLElement | null = null
+    let container: Window | HTMLElement | null = null
     let scroller: ScrollType | null = null
+    let prevScrollTop = 0
 
     if (isClient && !currentActive.value && props.bindHash) {
       currentActive.value = decodeURIComponent(location.hash)
@@ -127,10 +128,6 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
     watch(() => props.viewer, updateContainer)
 
     onMounted(() => {
@@ -156,96 +153,109 @@ export default defineComponent({
 
     function updateContainer() {
       removeListener()
-      nextTick(() => {
-        const viewer: unknown = props.viewer
+      isClient &&
+        nextTick(() => {
+          const viewer: unknown = props.viewer
 
-        let _container: Node | ComponentInternalInstance | null = null
-        let refName = 'scroll'
+          prevScrollTop = 0
 
-        if (typeof viewer === 'string') {
-          if (viewer.startsWith('ref:')) {
-            refName = viewer.substring(4)
-            refName = refName || 'scroll'
-          } else if (['window', 'document', 'body'].includes(viewer)) {
-            _container = document.body
-          } else if (viewer === 'root') {
-            _container = instance.root
-          } else {
-            _container = document.querySelector(viewer)
-          }
-        } else if (typeof viewer === 'function') {
-          _container = viewer()
-        } else if (isElement(viewer)) {
-          _container = viewer
-        }
+          let _container: Window | Node | ComponentInternalInstance | null = null
+          let refName = 'scroll'
 
-        if (isElement(_container)) {
-          isRawViewer = true
-        } else {
-          isRawViewer = false
-          // container = this.$parent
-        }
-
-        if (!isRawViewer) {
-          // ComponentInternalInstance
-          _container = _container as ComponentInternalInstance
-          _container = isVNode(_container?.vnode) ? _container : instance.parent
-
-          while (_container) {
-            const name = _container.type?.name
-
-            if (name === 'Scroll' || name === 'NativeScroll') {
-              const { exposeProxy, exposed, proxy } = _container
-
-              scroller = new Proxy({} as any, {
-                get(_, key) {
-                  return (
-                    (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
-                  )
-                }
-              })
-
-              break
+          if (typeof viewer === 'string') {
+            if (viewer.startsWith('ref:')) {
+              refName = viewer.substring(4)
+              refName = refName || 'scroll'
+            } else if (['window', 'document', 'html'].includes(viewer)) {
+              _container = window
+            } else if (viewer === 'body') {
+              _container = document.body
+            } else if (viewer === 'root') {
+              _container = instance.root
+            } else {
+              _container = document.querySelector(viewer)
             }
+          } else if (typeof viewer === 'function') {
+            _container = viewer()
+          } else if (isElement(viewer)) {
+            _container = viewer
+          }
 
-            const refTemp = _container.refs?.[refName]
+          if (_container === window || isElement(_container)) {
+            isRawViewer = true
+          } else {
+            isRawViewer = false
+            // container = this.$parent
+          }
 
-            if (refTemp) {
-              if (isElement(refTemp)) {
-                isRawViewer = true
-                container = refTemp as HTMLElement
-              } else {
-                scroller = refTemp as ScrollType
+          if (!isRawViewer) {
+            // ComponentInternalInstance
+            _container = _container as ComponentInternalInstance
+            _container = isVNode(_container?.vnode) ? _container : instance.parent
+
+            while (_container) {
+              const name = _container.type?.name
+
+              if (name === 'Scroll' || name === 'NativeScroll') {
+                const { exposeProxy, exposed, proxy } = _container
+
+                scroller = new Proxy({} as any, {
+                  get(_, key) {
+                    return (
+                      (proxy as any)?.[key] ??
+                      (exposeProxy as any)?.[key] ??
+                      (exposed as any)?.[key]
+                    )
+                  }
+                })
+
+                break
               }
 
-              break
+              const refTemp = _container.refs?.[refName]
+
+              if (refTemp) {
+                if (isElement(refTemp)) {
+                  isRawViewer = true
+                  container = refTemp as HTMLElement
+                } else {
+                  scroller = refTemp as ScrollType
+                }
+
+                break
+              }
+
+              _container = _container.parent
             }
 
-            _container = _container.parent
-          }
+            if (scroller) {
+              scroller.addScrollListener(handleContainerScroll)
+              container = scroller.$el
+            } else if (!container) {
+              isRawViewer = true
+              container = instance.parent?.proxy?.$el as HTMLElement
+            }
 
-          if (scroller) {
-            scroller.addScrollListener(handleContainerScroll)
-            container = scroller.$el
-          } else if (!container) {
-            isRawViewer = true
-            container = instance.parent?.proxy?.$el as HTMLElement
-          }
-
-          if (isRawViewer && container) {
+            if (isRawViewer && container) {
+              container.addEventListener('scroll', handleContainerScroll)
+            }
+          } else {
+            container = _container as HTMLElement
             container.addEventListener('scroll', handleContainerScroll)
           }
-        } else {
-          container = _container as HTMLElement
-          container.addEventListener('scroll', handleContainerScroll)
-        }
-      })
+        })
+    }
+
+    function getContainerEl() {
+      if (!container) return null
+
+      return container === window ? document.documentElement : (container as HTMLElement)
     }
 
     function computeCurrentLink(scrollTop: number) {
       if (!linkStates.size || !container) return
 
-      const containerTop = container.offsetTop
+      const containerTop = getContainerEl()!.offsetTop
       const offsetList: { link: string, offset: number }[] = []
 
       let offset = scrollTop + props.offset
@@ -288,14 +298,24 @@ export default defineComponent({
         }
       }
 
-      currentActive.value = currentLink
+      prevScrollTop = scrollTop
+
+      if (currentActive.value !== currentLink) {
+        currentActive.value = currentLink
+        emit('update:active', currentLink)
+        emitEvent(props.onChange, currentLink)
+      }
     }
 
     function handleContainerScroll(event: Event) {
       if (animating.value) return
 
       const scrollTop = isRawViewer
-        ? (event.target as HTMLElement).scrollTop
+        ? (
+            (event.target === window || event.target === document
+              ? document.documentElement
+              : event.target) as HTMLElement
+          ).scrollTop
         : (event as MouseEvent).clientY
 
       computeCurrentLink(scrollTop)
@@ -334,13 +354,14 @@ export default defineComponent({
       const duration = Math.max(props.scrollDuration, 0)
 
       if (isRawViewer && container) {
-        const from = container.scrollTop
+        const containerEl = getContainerEl()!
+        // const from = containerEl.scrollTop
         const to = Math.min(
-          elementTop - container.offsetTop - props.offset,
-          container.scrollHeight - container.offsetHeight
+          elementTop - containerEl.offsetTop - props.offset,
+          containerEl.scrollHeight - containerEl.clientHeight
         )
 
-        animateScrollTo(container, from, to, duration, () => {
+        animateScrollTo(containerEl, prevScrollTop, to, duration, () => {
           timer = setTimeout(() => {
             animating.value = false
           }, 10)

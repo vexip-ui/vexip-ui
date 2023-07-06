@@ -10,7 +10,7 @@ $textarea: map.merge(
     min-height: 32px,
     resize: vertical,
     count-color: get-css-var('input-count-color'),
-    count-color-disbaled: get-css-var('input-count-color-disbaled'),
+    count-color-disabled: get-css-var('input-count-color-disabled'),
     count-font-size: get-css-var('input-count-font-size'),
     count-line-height: get-css-var('input-count-line-height')
   ),
@@ -35,7 +35,8 @@ $textarea: map.merge(
   &__control {
     height: auto;
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-family: inherit;
     font-feature-settings: 'tnum';
     font-variant-numeric: inherit;
@@ -77,6 +78,6 @@ $textarea: map.merge(
   }
 
   &--disabled &__count {
-    color: get-css-var('textarea-count-color-disbaled');
+    color: get-css-var('textarea-count-color-disabled');
   }
 }

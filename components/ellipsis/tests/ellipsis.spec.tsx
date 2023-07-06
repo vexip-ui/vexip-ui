@@ -43,13 +43,13 @@ describe('Ellipsis', () => {
         toJSON: noop
       }))
 
-    expect(wrapper.findComponent(Ellipsis).vm.active).toBe(false)
+    // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(false)
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
     wrapper.find('.vxp-ellipsis').trigger('mouseenter')
     vi.runAllTimers()
     await nextTick()
-    expect(wrapper.findComponent(Ellipsis).vm.active).toBe(true)
+    // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(true)
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(true)
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
     expect(wrapper.find('.vxp-tooltip__popper').text()).toBe(TEXT)
@@ -57,7 +57,7 @@ describe('Ellipsis', () => {
     wrapper.find('.vxp-ellipsis').trigger('mouseleave')
     vi.runAllTimers()
     await nextTick()
-    expect(wrapper.findComponent(Ellipsis).vm.active).toBe(false)
+    expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
     rectMock.mockRestore()
   })

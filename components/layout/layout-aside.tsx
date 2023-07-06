@@ -35,7 +35,8 @@ export default defineComponent({
       menuProps: null,
       logo: '',
       signName: '',
-      fixed: 'lg'
+      fixed: 'lg',
+      signType: 'aside'
     })
 
     const nh = useNameHelper('layout')
@@ -60,8 +61,10 @@ export default defineComponent({
           [nh.bem('aside', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
-          [nh.bem('aside', 'reduced')]: currentReduced.value
-        }
+          [nh.bem('aside', 'reduced')]: currentReduced.value,
+          [nh.bem('aside', 'no-sign')]: props.signType !== 'aside'
+        },
+        layoutState.classes.aside
       ]
     })
     const hasTop = computed(() => {
@@ -126,15 +129,15 @@ export default defineComponent({
     function toggleExpanded(expanded = !currentExpanded.value) {
       currentExpanded.value = expanded
 
-      emitEvent(props.onExpandedChange, expanded)
       emit('update:expanded', expanded)
+      emitEvent(props.onExpandedChange, expanded)
     }
 
     function toggleReduced(reduced = !currentReduced.value) {
       currentReduced.value = reduced
 
-      emitEvent(props.onReducedChange, reduced)
       emit('update:reduced', reduced)
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -155,7 +158,7 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {hasTop.value && (
-            <div ref={top} class={nh.be('aside-top')}>
+            <div ref={top} class={[nh.be('aside-top'), layoutState.classes.asideTop]}>
               {slots.top
                 ? (
                     renderSlot(slots, 'top', slotParams)
@@ -172,7 +175,12 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} use-y-bar height={scrollHeight.value}>
+          <NativeScroll
+            class={[nh.be('aside-main'), layoutState.classes.main]}
+            use-y-bar
+            observe-deep
+            height={scrollHeight.value}
+          >
             {slots.default
               ? (
                   renderSlot(slots, 'default', slotParams)
@@ -190,7 +198,7 @@ export default defineComponent({
                   )
                 : null}
           </NativeScroll>
-          <div ref={bottom} class={nh.be('aside-bottom')}>
+          <div ref={bottom} class={[nh.be('aside-bottom'), layoutState.classes.asideBottom]}>
             {slots.bottom
               ? (
                   renderSlot(slots, 'bottom', slotParams)
@@ -207,7 +215,10 @@ export default defineComponent({
               </div>
                 )}
           </div>
-          <div class={nh.be('expand-handler')} onClick={() => toggleExpanded()}>
+          <div
+            class={[nh.be('expand-handler'), layoutState.classes.expandHandler]}
+            onClick={() => toggleExpanded()}
+          >
             {slots.expand
               ? (
                   renderSlot(slots, 'expand', slotParams)

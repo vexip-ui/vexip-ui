@@ -19,10 +19,10 @@ import { onMounted, ref } from 'vue'
 
 import { boundRange, multipleFixed } from '@vexip-ui/utils'
 
-import type { Scrollbar } from 'vexip-ui'
+import type { ScrollbarExposed } from 'vexip-ui'
 
 const pane = ref<HTMLElement>()
-const bar = ref<InstanceType<typeof Scrollbar>>()
+const bar = ref<ScrollbarExposed>()
 const barLength = ref(35)
 
 onMounted(() => {

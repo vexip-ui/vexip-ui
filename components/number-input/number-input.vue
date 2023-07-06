@@ -18,7 +18,7 @@
     <input
       ref="input"
       type="text"
-      :class="[nh.be('control'), inputClass]"
+      :class="[nh.be('control'), props.inputClass, props.controlClass]"
       :value="inputValue"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
@@ -102,7 +102,8 @@ import {
   plus,
   throttle,
   toFixed,
-  toNumber
+  toNumber,
+  warnOnce
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -155,7 +156,7 @@ export default defineComponent({
       autofocus: false,
       spellcheck: false,
       autocomplete: false,
-      precision: 0,
+      precision: -1,
       readonly: false,
       step: 1,
       ctrlStep: 100,
@@ -163,7 +164,9 @@ export default defineComponent({
       altStep: 0.1,
       disabled: () => disabled.value,
       inputClass: null,
+      controlClass: null,
       debounce: false,
+      delay: null,
       clearable: false,
       loading: () => loading.value,
       loadingIcon: null,
@@ -173,6 +176,13 @@ export default defineComponent({
       controlType: 'right',
       emptyType: 'NaN'
     })
+
+    if (!isNull(props.inputClass)) {
+      warnOnce(
+        "[vexip-ui:NumberInput] 'input-class' prop has been deprecated, please " +
+          "use 'control-class' prop to replace it"
+      )
+    }
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
@@ -210,7 +220,7 @@ export default defineComponent({
       }
     })
 
-    let lastValue = props.value
+    let lastValue: number
 
     const outOfRange = computed(() => {
       return (
@@ -227,7 +237,7 @@ export default defineComponent({
         nh.ns('input-vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm('focused')]: focused.value,
+          [nh.bm('focused')]: inputting.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
@@ -251,7 +261,7 @@ export default defineComponent({
       }
     })
     const preciseNumber = computed(() => {
-      return !inputting.value && typeof currentValue.value === 'number' && props.precision > 0
+      return !inputting.value && typeof currentValue.value === 'number' && props.precision >= 0
         ? toFixed(currentValue.value, props.precision)
         : currentValue.value
     })
@@ -271,7 +281,7 @@ export default defineComponent({
         return ''
       }
 
-      return focused.value ? preciseNumber.value : formattedValue.value
+      return inputting.value ? preciseNumber.value : formattedValue.value
     })
     const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const controlFade = computed(() => props.controlType?.endsWith('fade'))
@@ -279,11 +289,32 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        if (!focused.value || !numberRE.test(String(currentValue.value))) {
-          currentValue.value = isNull(value) ? NaN : value
+        if (value !== lastValue) {
+          parseValue()
         }
-      }
+      },
+      { immediate: true }
     )
+
+    function boundValueRange(value: number) {
+      return boundRange(value, props.min, props.max)
+    }
+
+    function parseValue() {
+      let value = props.value
+      value = inputting.value
+        ? value
+        : numberRE.test(String(value))
+          ? toNumber(value)
+          : getEmptyValue()
+
+      if (props.precision >= 0 && !isNullOrNaN(value)) {
+        value = toFixed(boundValueRange(value), props.precision)
+      }
+
+      currentValue.value = value
+      lastValue = value
+    }
 
     function focus(options?: FocusOptions) {
       inputControl.value?.focus(options)
@@ -383,14 +414,14 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string | number, type: InputEventType) {
+    function setValue(value: string | number, type: InputEventType, sync = props.sync) {
       if (type !== 'input') {
-        currentValue.value = isEmpty(value) ? NaN : toNumber(value)
+        currentValue.value = isEmpty(value) ? getEmptyValue() : toNumber(value)
       } else {
         currentValue.value = value
       }
 
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
     function getEmptyValue() {
@@ -404,49 +435,58 @@ export default defineComponent({
       }
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       const empty = isEmpty(currentValue.value)
       const value = empty ? getEmptyValue() : toNumber(currentValue.value)
 
       type = type === 'input' ? 'input' : 'change'
 
       if (type === 'change') {
-        const boundValue = empty ? value : boundRange(toNumber(value), props.min, props.max)
-        const boundChange = boundValue !== value
+        let boundValue = empty ? value : boundValueRange(toNumber(value))
+
+        if (props.precision >= 0) {
+          boundValue = toFixed(boundValue, props.precision)
+        }
+
+        const boundChange = !Object.is(boundValue, value)
 
         if (!empty) {
           currentValue.value = boundValue
         }
 
-        if (!props.sync && lastValue === boundValue) return
+        if (!sync && Object.is(lastValue, boundValue)) {
+          !Object.is(props.value, value) && emit('update:value', boundValue)
+          return
+        }
 
         lastValue = boundValue
-        ;(!props.sync || boundChange) && setFieldValue(boundValue)
+
+        if (!sync || boundChange) {
+          emit('update:value', boundValue)
+          setFieldValue(boundValue)
+        }
+
         emitEvent(props.onChange, boundValue)
 
-        if (!props.sync || boundChange) {
-          emit('update:value', boundValue)
+        if (!sync || boundChange) {
           validateField()
         }
       } else {
-        props.sync && setFieldValue(value)
+        if (sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onInput, value)
 
-        if (props.sync) {
-          emit('update:value', value)
+        if (sync) {
           validateField()
         }
       }
     }
 
     function handleClear() {
-      setValue(NaN, 'change')
-
-      if (props.sync) {
-        emit('update:value', getEmptyValue())
-        validateField()
-      }
-
+      setValue(NaN, 'change', false)
       emitEvent(props.onClear)
       clearField()
     }
@@ -467,7 +507,10 @@ export default defineComponent({
       emitEvent(props.onKeyPress, event)
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     return {
       props,

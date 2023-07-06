@@ -117,23 +117,11 @@ export default defineComponent({
         currentValue.value = value
       }
     )
-    watch(currentValue, value => {
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-
-      if (groupState && value === props.label) {
-        groupState.updateValue(value)
-      }
-    })
 
     if (groupState) {
-      watch(
-        () => groupState.currentValue,
-        value => {
-          currentValue.value = value
-        },
-        { immediate: true }
-      )
+      currentValue.value = groupState.currentValue
+
+      watch(() => groupState.currentValue, emitChange)
 
       onMounted(() => {
         groupState.registerInput(input)
@@ -144,12 +132,25 @@ export default defineComponent({
       })
     }
 
+    function emitChange(value: string | number) {
+      if (currentValue.value === value) return
+
+      currentValue.value = value
+
+      emit('update:value', value)
+      emitEvent(props.onChange, value)
+    }
+
     function handleChange() {
       if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
         return
       }
 
-      currentValue.value = props.label!
+      emitChange(props.label)
+
+      if (groupState && currentValue.value === props.label) {
+        groupState.updateValue(currentValue.value)
+      }
     }
 
     return {

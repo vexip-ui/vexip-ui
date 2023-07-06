@@ -1,3 +1,30 @@
+# [1.15.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.1...utils@1.15.0) (2023-06-21)
+
+
+### ✨ Features
+
+* **utils:** toFixed supports scientific notation ([62485f7](https://github.com/vexip-ui/vexip-ui/commit/62485f74f01bfe330317df0e9b3e4a5c21515681))
+
+
+
+## [1.14.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.0...utils@1.14.1) (2023-06-02)
+
+
+
+# [1.14.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.13.0...utils@1.14.0) (2023-06-02)
+
+
+### ✨ Features
+
+* **utils:** add getXBorder and getYBorder methods ([6f360d2](https://github.com/vexip-ui/vexip-ui/commit/6f360d2cc0a61280e13ff9d22f4103dc02ef6a43))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** incorrect leap year function name ([#345](https://github.com/vexip-ui/vexip-ui/issues/345)) ([1958a46](https://github.com/vexip-ui/vexip-ui/commit/1958a46a63ce5f26f6d16e46d328abe7f019fe92))
+
+
+
 # [1.13.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.12.0...utils@1.13.0) (2023-05-20)
 
 

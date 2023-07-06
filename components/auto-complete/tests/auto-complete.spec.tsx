@@ -8,10 +8,17 @@ import { AutoComplete } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
 
+vi.useFakeTimers()
+
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 
 function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
+}
+
+function emitInput(input: HTMLInputElement, value: string) {
+  input.value = value
+  input.dispatchEvent(new Event('input'))
 }
 
 describe('AutoComplete', () => {
@@ -75,10 +82,13 @@ describe('AutoComplete', () => {
         ignoreCase: true
       }
     })
-    const inputEl = wrapper.find('input')
+    const input = wrapper.find('input').element
     const value = OPTIONS[0]
 
-    await inputEl.setValue(value.toLocaleUpperCase())
+    emitInput(input, value.toLocaleUpperCase())
+    vi.runAllTimers()
+    await nextTick()
+
     const selectPopperEl = wrapper.find('.vxp-select__popper')
     expect(selectPopperEl.exists()).toBe(true)
     expect(selectPopperEl.find('.vxp-select__label').text()).toEqual(value)

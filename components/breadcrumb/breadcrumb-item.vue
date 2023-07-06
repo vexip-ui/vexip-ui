@@ -28,8 +28,9 @@ import { Renderer } from '@/components/renderer'
 
 import { defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-import { emitEvent, eventProp, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
+import { breadcrumbItemProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { BreadcrumbItemState, SeparatorRenderFn } from './symbol'
@@ -39,14 +40,7 @@ export default defineComponent({
   components: {
     Renderer
   },
-  props: {
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    onSelect: eventProp<(label: string | number) => void>(),
-    onSeparatorClick: eventProp<(label: string | number) => void>()
-  },
+  props: breadcrumbItemProps,
   emits: [],
   setup(props) {
     const breadcrumbState = inject(BREADCRUMB_STATE, null)

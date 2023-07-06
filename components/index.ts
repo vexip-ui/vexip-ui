@@ -94,6 +94,7 @@ import { TabNavItem } from './tab-nav-item'
 import { TabPanel } from './tab-panel'
 import { Table } from './table'
 import { TableColumn } from './table-column'
+import { TableSummary } from './table-summary'
 import { Tabs } from './tabs'
 import { Tag } from './tag'
 import { Textarea } from './textarea'
@@ -211,6 +212,7 @@ const components = [
   TabPanel,
   Table,
   TableColumn,
+  TableSummary,
   Tabs,
   Tag,
   Textarea,
@@ -348,6 +350,7 @@ export * from './tab-nav-item'
 export * from './tab-panel'
 export * from './table'
 export * from './table-column'
+export * from './table-summary'
 export * from './tabs'
 export * from './tag'
 export * from './textarea'

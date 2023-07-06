@@ -1,12 +1,18 @@
 <template>
   <div :class="nh.be('head')" role="rowgroup" :style="style">
-    <TableRow is-head :row="headRow">
+    <TableRow
+      is-head
+      :fixed="fixed"
+      :row="headRow"
+      aria-rowindex="0"
+    >
       <TableHeadCell
-        v-for="(item, index) in currentColumns"
+        v-for="(column, index) in columns"
         :key="index"
-        :column="item"
+        :column="column"
         :index="index"
         :fixed="fixed"
+        :aria-colindex="index"
       ></TableHeadCell>
     </TableRow>
   </div>
@@ -31,14 +37,14 @@ export default defineComponent({
   },
   props: {
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
-    const currentColumns = computed(() => {
+    const columns = computed(() => {
       return props.fixed === 'left'
         ? state.leftFixedColumns
         : props.fixed === 'right'
@@ -49,10 +55,10 @@ export default defineComponent({
       return {
         minWidth: `${
           props.fixed === 'left'
-            ? getters.leftFixedWidth
+            ? getters.leftFixedWidths.at(-1)
             : props.fixed === 'right'
-            ? getters.rightFixedWidth
-            : getters.totalWidth
+            ? getters.rightFixedWidths.at(-1)
+            : getters.totalWidths.at(-1)
         }px`
       }
     })
@@ -63,7 +69,7 @@ export default defineComponent({
     return {
       nh: useNameHelper('table'),
 
-      currentColumns,
+      columns,
       style,
       headRow
     }

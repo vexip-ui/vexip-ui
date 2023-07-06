@@ -1,5 +1,6 @@
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import {
   computed,
@@ -79,7 +80,9 @@ export default defineComponent({
       miniHeaderSign: 'lg',
       verticalLinks: 'md',
       darkMode: null,
-      fixedMain: false
+      fixedMain: false,
+      fitWindow: false,
+      innerClasses: () => ({})
     })
 
     const nh = useNameHelper('layout')
@@ -113,6 +116,7 @@ export default defineComponent({
       expanded: asideExpanded,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside),
+      classes: toRef(props, 'innerClasses'),
       changeInLock
     })
 
@@ -124,7 +128,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
           [nh.bm('header-main')]: currentSignType.value === 'header',
-          [nh.bm('locked')]: !isMounted.value || locked.value
+          [nh.bm('locked')]: !isMounted.value || locked.value,
+          [nh.bm('fit-window')]: props.fitWindow
         }
       ]
     })
@@ -140,7 +145,7 @@ export default defineComponent({
 
     const style = computed(() => {
       return {
-        [nh.cv('view-height')]: `${viewHeight.value}px`
+        [nh.cv('view-height')]: props.fitWindow ? '100vh' : `${viewHeight.value}px`
       }
     })
 
@@ -179,8 +184,8 @@ export default defineComponent({
       }
     )
     watch(currentSignType, value => {
-      emitEvent(props.onNavChange, value)
       emit('update:sign-type', value)
+      emitEvent(props.onNavChange, value)
     })
     watch(
       () => props.color,
@@ -189,8 +194,8 @@ export default defineComponent({
       }
     )
     watch(currentColor, value => {
-      emitEvent(props.onColorChange, value)
       emit('update:color', value)
+      emitEvent(props.onColorChange, value)
     })
     watch(
       () => props.darkMode,
@@ -210,15 +215,15 @@ export default defineComponent({
     function toggleExpanded(expanded = !asideReduced.value) {
       asideExpanded.value = expanded
 
-      emitEvent(props.onExpandedChange, expanded)
       emit('update:expanded', expanded)
+      emitEvent(props.onExpandedChange, expanded)
     }
 
     function toggleReduced(reduced = !asideReduced.value) {
       asideReduced.value = reduced
 
-      emitEvent(props.onReducedChange, reduced)
       emit('update:reduced', reduced)
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -230,8 +235,8 @@ export default defineComponent({
     }
 
     function handleToggleTheme(isDark: boolean) {
-      emitEvent(props.onToggleTheme, isDark)
       emit('update:dark-mode', isDark)
+      emitEvent(props.onToggleTheme, isDark)
     }
 
     function handleUserAction(label: string, meta: Record<string, any>) {
@@ -354,7 +359,11 @@ export default defineComponent({
 
       return (
         <div
-          class={[nh.be('sider'), !expandMatched.value && nh.bem('sider', 'away')]}
+          class={[
+            nh.be('sidebar'),
+            !expandMatched.value && nh.bem('sidebar', 'away'),
+            props.innerClasses.sidebar
+          ]}
           onWheel={stopAndPrevent}
           onMousemove={stopAndPrevent}
         >
@@ -367,6 +376,7 @@ export default defineComponent({
               ref={aside}
               v-model:expanded={asideExpanded.value}
               v-model:reduced={asideReduced.value}
+              sign-type={currentSignType.value}
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}
@@ -421,8 +431,50 @@ export default defineComponent({
       )
     }
 
-    return () => {
+    function renderWrapper() {
       const CustomTag = (props.tag || 'section') as any
+
+      return (
+        <CustomTag
+          class={[
+            nh.be('wrapper'),
+            props.fixedMain && nh.bem('wrapper', 'fixed'),
+            props.innerClasses.wrapper
+          ]}
+        >
+          {currentSignType.value === 'header' && renderHeader()}
+          {renderAside()}
+          <section
+            ref={section}
+            class={[
+              nh.be('section'),
+              {
+                [nh.bem('section', 'away')]: expandMatched.value,
+                [nh.bem('section', 'reduced')]: asideReduced.value,
+                [nh.bem('section', 'locked')]: locked.value,
+                [nh.bem('section', 'fixed')]: props.fixedMain
+              },
+              props.innerClasses.section
+            ]}
+          >
+            {currentSignType.value === 'aside' && renderHeader()}
+            {renderMain()}
+            {props.footer && renderFooter()}
+          </section>
+        </CustomTag>
+      )
+    }
+
+    return () => {
+      if (props.fitWindow) {
+        return (
+          <section class={className.value} style={style.value}>
+            <ResizeObserver throttle onResize={handleResize}>
+              {renderWrapper()}
+            </ResizeObserver>
+          </section>
+        )
+      }
 
       return (
         <NativeScroll
@@ -431,29 +483,10 @@ export default defineComponent({
           style={style.value}
           use-y-bar
           observe-deep
-          bar-class={nh.be('scrollbar')}
+          bar-class={[nh.be('scrollbar'), props.innerClasses.scrollbar]}
           onResize={handleResize}
         >
-          <CustomTag class={[nh.be('wrapper'), props.fixedMain && nh.bem('wrapper', 'fixed')]}>
-            {currentSignType.value === 'header' && renderHeader()}
-            {renderAside()}
-            <section
-              ref={section}
-              class={[
-                nh.be('section'),
-                {
-                  [nh.bem('section', 'away')]: expandMatched.value,
-                  [nh.bem('section', 'reduced')]: asideReduced.value,
-                  [nh.bem('section', 'locked')]: locked.value,
-                  [nh.bem('section', 'fixed')]: props.fixedMain
-                }
-              ]}
-            >
-              {currentSignType.value === 'aside' && renderHeader()}
-              {renderMain()}
-              {props.footer && renderFooter()}
-            </section>
-          </CustomTag>
+          {renderWrapper()}
         </NativeScroll>
       )
     }

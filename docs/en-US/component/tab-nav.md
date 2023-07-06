@@ -96,6 +96,16 @@ When the number of tab navigation is too large, internal scroll will be automati
 
 :::
 
+:::demo tab-nav/custom
+
+### Custom Style
+
+Simply change a little style to implement a segment controller.
+
+You can give full play to your imagination to achieve a distinctive appearance.
+
+:::
+
 ## API
 
 ### Preset Types

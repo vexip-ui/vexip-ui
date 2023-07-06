@@ -219,14 +219,14 @@ const repoMeta: Record<string, RepoMeta> = reactive({
   }
 })
 
-const versions = computed(() => {
-  const versions: Record<string, string> = {}
+const versionsMap = computed(() => {
+  const map: Record<string, string> = {}
 
   for (const pkg of Object.keys(repoMeta)) {
-    versions[pkg] = repoMeta[pkg].active
+    map[pkg] = repoMeta[pkg].active
   }
 
-  return versions
+  return map
 })
 
 const cdnOptions = Object.keys(cdnTemplates)
@@ -312,7 +312,7 @@ function reset() {
 function changeVersion(pkg: string, version: string) {
   repoMeta[pkg].active = version
 
-  props.store.setVersions(versions.value)
+  props.store.setVersions(versionsMap.value)
   history.replaceState({}, '', `${buildSearch()}${location.hash}`)
 }
 
@@ -322,8 +322,8 @@ function applyCdn() {
 }
 
 function buildSearch() {
-  if (Object.keys(versions.value).length) {
-    return `?${Object.entries(versions.value)
+  if (Object.keys(versionsMap.value).length) {
+    return `?${Object.entries(versionsMap.value)
       .map(([key, value]) => `${key}=${value}`)
       .join('&')}`
   }

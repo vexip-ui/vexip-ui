@@ -5,6 +5,7 @@ import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'
 import type { Color } from '@vexip-ui/utils'
+import type { LayoutState } from './symbol'
 
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
@@ -63,15 +64,16 @@ export function useLayoutState() {
       expanded: false,
       reduced: false,
       navConfig: false,
+      classes: Object.freeze({}),
       changeInLock: noop
-    })
+    }) as LayoutState
   )
 }
 
 const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
 export function useMediaQuery(query: Ref<string | boolean>) {
-  const matched = ref(false)
+  const matched = ref(!isClient)
 
   const computedStyle = isClient && getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {

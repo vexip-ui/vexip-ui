@@ -42,13 +42,14 @@
     "directory": "common/icons"
   },
   "devDependencies": {
-    "@types/node": "^18.7.23",
-    "@types/prettier": "^2.7.1",
+    "@types/node": "^18.16.18",
+    "@types/prettier": "^2.7.3",
     "execa": "^6.1.0",
     "fast-glob": "^3.2.12",
     "fs-extra": "^10.1.0",
-    "kolorist": "^1.6.0",
-    "prettier": "^2.7.1"
+    "kolorist": "^1.8.0",
+    "prettier": "^2.8.8",
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

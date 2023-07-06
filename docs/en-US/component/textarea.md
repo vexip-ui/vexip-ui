@@ -66,26 +66,28 @@ Different states can be set via `state`.
 
 ### Textarea Props
 
-| Name           | Type                                             | Description                                                                                            | Default              | Since   |
-| -------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | -------------------- | ------- |
-| state          | `'default' \| 'success' \| 'error' \| 'warning'` | The state of textarea                                                                                  | `'default'`          | -       |
-| value          | `string`                                         | Set the value of textarea                                                                              | `''`                 | -       |
-| placeholder    | `string`                                         | Set the placeholder of textarea                                                                        | `locale.placeholder` | -       |
-| rows           | `number`                                         | Set the default number of rows in textarea                                                             | `2`                  | -       |
-| no-resize      | `boolean`                                        | Set whether to disable resize                                                                          | `false`              | -       |
-| autofocus      | `boolean`                                        | Set the autofocus of textarea                                                                          | `false`              | -       |
-| spellcheck     | `boolean`                                        | Set spellcheck for textarea                                                                            | `false`              | -       |
-| autocomplete   | `boolean`                                        | Set autocomplete for textarea                                                                          | `false`              | -       |
-| readonly       | `boolean`                                        | Set the read-only property of textarea                                                                 | `false`              | -       |
-| disabled       | `boolean`                                        | set whether to disable textarea                                                                        | `false`              | -       |
-| debounce       | `boolean`                                        | Enable debounce, only trigger `input` event once when typing fast, note that this prop is not reactive | `false`              | -       |
-| max-length     | `number`                                         | Set the maximum length of the textarea content, if the value is `0`, there is no limit                 | `0`                  | -       |
-| loading        | `boolean`                                        | Set whether is loading                                                                                 | `false`              | `2.0.0` |
-| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                                                   | `Spinner`            | `2.0.0` |
-| loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                                               | `false`              | `2.0.0` |
-| loading-effect | `string`                                         | Set the effect animation for the loading icon                                                          | `false`              | `2.0.0` |
-| sync           | `boolean`                                        | Set whether enable sync input mode                                                                     | `false`              | `2.0.6` |
-| locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                  | `null`               | `2.1.0` |
+| Name           | Type                                             | Description                                                                                                                | Default              | Since    |
+| -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | -------------------- | -------- |
+| state          | `'default' \| 'success' \| 'error' \| 'warning'` | The state of textarea                                                                                                      | `'default'`          | -        |
+| value          | `string`                                         | Set the value of textarea                                                                                                  | `''`                 | -        |
+| placeholder    | `string`                                         | Set the placeholder of textarea                                                                                            | `locale.placeholder` | -        |
+| rows           | `number`                                         | Set the default number of rows in textarea                                                                                 | `2`                  | -        |
+| no-resize      | `boolean`                                        | Set whether to disable resize                                                                                              | `false`              | -        |
+| autofocus      | `boolean`                                        | Set the autofocus of textarea                                                                                              | `false`              | -        |
+| spellcheck     | `boolean`                                        | Set spellcheck for textarea                                                                                                | `false`              | -        |
+| autocomplete   | `boolean`                                        | Set autocomplete for textarea                                                                                              | `false`              | -        |
+| readonly       | `boolean`                                        | Set the read-only property of textarea                                                                                     | `false`              | -        |
+| disabled       | `boolean`                                        | set whether to disable textarea                                                                                            | `false`              | -        |
+| debounce       | `boolean`                                        | Enable debounce for `input` event, by default is throttle, not reactive prop                                               | `false`              | -        |
+| delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`              | `2.1.25` |
+| max-length     | `number`                                         | Set the maximum length of the textarea content, if the value is `0`, there is no limit                                     | `0`                  | -        |
+| loading        | `boolean`                                        | Set whether is loading                                                                                                     | `false`              | `2.0.0`  |
+| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                                                                       | `Spinner`            | `2.0.0`  |
+| loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                                                                   | `false`              | `2.0.0`  |
+| loading-effect | `string`                                         | Set the effect animation for the loading icon                                                                              | `false`              | `2.0.0`  |
+| sync           | `boolean`                                        | Set whether enable sync input mode                                                                                         | `false`              | `2.0.6`  |
+| locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`               | `2.1.0`  |
+| control-class  | `ClassType`                                      | Set the class name of the control element                                                                                  | `null`               | `2.1.25` |
 
 ### Textarea Events
 

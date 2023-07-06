@@ -72,6 +72,7 @@ import type { SwitchCProps } from './switch'
 import type { TabNavCProps } from './tab-nav'
 import type { TableCProps } from './table'
 import type { TableColumnCProps } from './table-column'
+import type { TableSummaryCProps } from './table-summary'
 import type { TabsCProps } from './tabs'
 import type { TagCProps } from './tag'
 import type { TextareaCProps } from './textarea'
@@ -105,8 +106,19 @@ import type {
   ULCProps
 } from './typography'
 
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
+
+interface SuggestedDefault {
+  size?: ComponentSize,
+  state?: ComponentState,
+  transfer?: boolean,
+  disabled?: boolean,
+  loading?: boolean,
+  clearable?: boolean
+}
+
 export interface PropsOptions {
-  default?: Record<string, any>,
+  default?: SuggestedDefault & Record<string, any>,
   alert?: AlertCProps,
   anchor?: AnchorCProps,
   autoComplete?: AutoCompleteCProps,
@@ -181,6 +193,7 @@ export interface PropsOptions {
   tabNav?: TabNavCProps,
   table?: TableCProps,
   tableColumn?: TableColumnCProps,
+  tableSummary?: TableSummaryCProps,
   tabs?: TabsCProps,
   tag?: TagCProps,
   textarea?: TextareaCProps,
