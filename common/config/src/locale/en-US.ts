@@ -32,7 +32,8 @@ export function enUSLocale() {
     captcha: {
       toRight: 'Please slide to the right',
       slide: 'Please slide to a suitable position',
-      success: 'Test successful'
+      success: 'Test successful',
+      fixImage: 'Fix image to complete captcha'
     },
 
     checkbox: {

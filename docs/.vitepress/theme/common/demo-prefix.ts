@@ -20,6 +20,7 @@ const components = [
   'Calendar',
   'CalendarPanel',
   'Captcha',
+  'CaptchaSlider',
   'Card',
   'Carousel',
   'CarouselItem',

@@ -30,9 +30,10 @@ export function zhCNLocale() {
     },
 
     captcha: {
-      toRight: '请滑动到最右侧',
+      toRight: '请滑动到右侧',
       slide: '请滑动到适当的位置',
-      success: '验证成功'
+      success: '验证成功',
+      fixImage: '修复图片以完成验证'
     },
 
     checkbox: {

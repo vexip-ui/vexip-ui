@@ -13,6 +13,7 @@ import {
   watch
 } from 'vue'
 
+import CaptchaSlider from './captcha-slider.vue'
 import {
   createSizeProp,
   createStateProp,
@@ -37,19 +38,16 @@ export default defineComponent({
       idFor,
       state,
       disabled,
-      loading,
-      size
+      loading
       // validateField,
       // clearField,
       // getFieldValue,
       // setFieldValue
-    } = useFieldStore<number>(focus)
+    } = useFieldStore<unknown>(focus)
 
     const props = useProps('captcha', _props, {
-      size: createSizeProp(size),
       state: createStateProp(state),
       type: 'slide',
-      visible: false,
       loading: () => loading.value,
       slideTarget: {
         default: null,
@@ -72,12 +70,6 @@ export default defineComponent({
       },
       canvasSize: () => [1000, 600],
       refreshIcon: null,
-      placement: {
-        default: 'bottom-start',
-        validator: value => placementWhileList.includes(value)
-      },
-      transfer: false,
-      outsideClose: true,
       disabled: () => disabled.value
     })
 
@@ -85,29 +77,19 @@ export default defineComponent({
     const locale = useLocale('captcha')
     const icons = useIcons()
 
-    const currentVisible = ref(props.visible)
-    const currentLeft = ref(0)
     const currentTarget = ref(parseTarget(props.slideTarget))
-    const resetting = ref(false)
-    const isSuccess = ref(false)
-    const placement = toRef(props, 'placement')
-    const transfer = toRef(props, 'transfer')
 
-    const wrapper = useClickOutside(handleClickOutside)
-    const popper = ref<PopperExposed>()
-
-    const { reference, transferTo, updatePopper } = usePopper({
-      placement,
-      transfer,
-      wrapper,
-      popper: computed(() => popper.value?.wrapper),
-      isDrop: true
-    })
-
-    const track = ref<HTMLElement>()
+    const wrapper = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
     const subImage = ref<HTMLImageElement>()
     const subCanvas = ref<HTMLCanvasElement>()
+    const slider = ref<InstanceType<typeof CaptchaSlider>>()
+
+    const track = computed(() => slider.value?.track)
+
+    const isSuccess = computed(() => slider.value?.isSuccess)
+    const currentLeft = computed(() => slider.value?.currentLeft || 0)
+    const resetting = computed(() => slider.value?.resetting)
 
     const usingPopper = computed(() => props.type !== 'slide')
     const usedTarget = computed(() => (!usingPopper.value ? 100 : currentTarget.value[0]))
@@ -115,48 +97,6 @@ export default defineComponent({
 
     let imageLoaded = false
     let image: HTMLImageElement | false
-    let widthLimit: number
-
-    const { target: trigger, moving: dragging } = useMoving({
-      onStart: (_, event) => {
-        if (
-          !track.value ||
-          !trigger.value ||
-          isSuccess.value ||
-          resetting.value ||
-          event.button > 0
-        ) {
-          return false
-        }
-
-        widthLimit = track.value.getBoundingClientRect().width
-        currentLeft.value = 0
-        verifyPosition()
-      },
-      onMove: state => {
-        if (isSuccess.value || resetting.value) {
-          return false
-        }
-
-        currentLeft.value = (state.deltaX / widthLimit) * 100
-        verifyPosition()
-      },
-      onEnd: () => {
-        const matched = matchTarget(currentLeft.value)
-
-        if (currentLeft.value && !matched) {
-          resetting.value = true
-          currentLeft.value = 0
-
-          emitEvent(props.onFail)
-        } else if (matched) {
-          // currentLeft.value = usedTarget.value
-          isSuccess.value = true
-
-          emitEvent(props.onSuccess)
-        }
-      }
-    })
 
     const className = computed(() => {
       return [
@@ -164,39 +104,12 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.type),
         {
-          [nh.bm('dragging')]: dragging.value
+          // [nh.bm('dragging')]: dragging.value,
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading,
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
-    })
-    const selectorClass = computed(() => {
-      const baseCls = nh.be('selector')
-
-      return {
-        [baseCls]: true,
-        [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
-        [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading,
-        [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--${props.state}`]: props.state !== 'default'
-      }
-    })
-    const fillerStyle = computed(() => {
-      return {
-        [nh.cv('filler-transition')]: resetting.value ? 'transform 250ms ease' : undefined,
-        transform: `scaleX(${currentLeft.value / 100})`
-      }
-    })
-    const tipStyle = computed(() => {
-      return {
-        [nh.cv('tip-transition')]: resetting.value ? 'background-position 250ms ease' : undefined,
-        backgroundPosition: `-${currentLeft.value}%`
-      }
-    })
-    const triggerStyle = computed(() => {
-      return {
-        left: `${currentLeft.value}%`,
-        [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
-      }
     })
     const subCanvasStyle = computed(() => {
       return {
@@ -206,10 +119,8 @@ export default defineComponent({
     })
     const normalTip = computed(() => {
       switch (props.type) {
-        case 'slide-image':
-          return locale.value.slide
         default:
-          return locale.value.toRight
+          return locale.value.slide
       }
     })
     const hasImage = computed(() => {
@@ -219,20 +130,6 @@ export default defineComponent({
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
 
-    watch(
-      () => props.visible,
-      value => {
-        currentVisible.value = value
-      }
-    )
-    watch(currentVisible, value => {
-      if (value) {
-        updatePopper()
-      }
-
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
-    })
     watch(() => props.slideTarget, parseTarget)
     watch(
       () => props.image,
@@ -250,22 +147,8 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadImage()
-      currentVisible.value && drawImage()
+      drawImage()
     })
-
-    function toggleVisible() {
-      if (props.disabled) return
-
-      currentVisible.value = !currentVisible.value
-    }
-
-    function verifyPosition() {
-      currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
-    }
-
-    function afterReset() {
-      resetting.value = false
-    }
 
     function loadImage() {
       return new Promise<void>(resolve => {
@@ -334,7 +217,8 @@ export default defineComponent({
 
     function refresh(target = props.slideTarget) {
       currentTarget.value = parseTarget(target)
-      isSuccess.value = false
+      // isSuccess.value = false
+      slider.value?.refresh()
     }
 
     function parseTarget(target = props.slideTarget) {
@@ -345,160 +229,77 @@ export default defineComponent({
       return [targetX, targetY]
     }
 
-    function matchTarget(value: number) {
-      return Math.abs(usedTarget.value - value) <= tolerance.value
-    }
-
-    function handleClickOutside() {
-      emitEvent(props.onClickOutside)
-
-      if (props.outsideClose && currentVisible.value) {
-        currentVisible.value = false
-        emitEvent(props.onOutsideClose)
-      }
-    }
-
     function focus(options?: FocusOptions) {
-      reference.value?.focus(options)
-    }
-
-    function stopPropagation(event: Event) {
-      event.stopPropagation()
-    }
-
-    function renderSlider() {
-      return (
-        <div class={nh.be('slider')}>
-          <div
-            class={{
-              [nh.be('filler')]: true,
-              [nh.bem('filler', 'loading')]: props.loading,
-              [nh.bem('filler', 'success')]: isSuccess.value
-            }}
-            style={fillerStyle.value}
-          ></div>
-          <div
-            class={{
-              [nh.be('tip')]: true,
-              [nh.bem('tip', 'focused')]: dragging.value,
-              [nh.bem('tip', 'loading')]: props.loading,
-              [nh.bem('tip', 'success')]: isSuccess.value
-            }}
-            style={tipStyle.value}
-          >
-            {slots.tip
-              ? renderSlot(slots, 'tip', { success: isSuccess.value })
-              : usingPopper.value && isSuccess.value
-                ? props.successTip ?? locale.value.success
-                : props.tip ?? normalTip.value}
-          </div>
-          <div ref={track} class={nh.be('track')}>
-            <div
-              ref={trigger}
-              class={{
-                [nh.be('trigger')]: true,
-                [nh.bem('trigger', 'focused')]: dragging.value,
-                [nh.bem('trigger', 'loading')]: props.loading,
-                [nh.bem('trigger', 'success')]: isSuccess.value
-              }}
-              tabindex={0}
-              style={triggerStyle.value}
-              onTransitionend={afterReset}
-            >
-              {slots.trigger
-                ? (
-                    renderSlot(slots, 'trigger', { success: isSuccess.value })
-                  )
-                : isSuccess.value
-                  ? (
-                <Icon {...icons.value.check}></Icon>
-                    )
-                  : props.loading
-                    ? (
-                <Icon {...icons.value.loading}></Icon>
-                      )
-                    : (
-                <Icon {...icons.value.anglesRight}></Icon>
-                      )}
-            </div>
-          </div>
-        </div>
-      )
+      // reference.value?.focus(options)
+      wrapper.value?.focus(options)
     }
 
     return () => {
       return (
-        <div
-          ref={wrapper}
-          id={idFor.value}
-          class={className.value}
-          tabindex={-1}
-          onClick={toggleVisible}
-        >
-          {usingPopper.value
-            ? (
-            <div ref={reference} class={selectorClass.value} tabindex={0}></div>
-              )
-            : (
-                renderSlider()
-              )}
-          {usingPopper.value && (
-            <Popper
-              ref={popper}
-              class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', props.type)]}
-              visible={currentVisible.value}
-              to={transferTo.value}
-              onClick={stopPropagation}
-              onAfterEnter={drawImage}
+        <div ref={wrapper} id={idFor.value} class={className.value} tabindex={0}>
+          <div class={nh.be('header')}>
+            <div class={nh.be('title')}>
+              {slots.title
+                ? renderSlot(slots, 'title', { success: isSuccess.value })
+                : props.title ?? locale.value.fixImage}
+            </div>
+            <span role={'none'} style={'flex: auto'}></span>
+            <button
+              class={[nh.be('action'), nh.be('refresh')]}
+              onClick={() => emitEvent(props.onRefresh)}
             >
-              <div class={nh.be('panel')}>
-                <div class={nh.be('actions')}>
-                  <button
-                    class={[nh.be('action'), nh.be('refresh')]}
-                    onClick={() => emitEvent(props.onRefresh)}
-                  >
-                    {slots.refresh
-                      ? (
-                          renderSlot(slots, 'refresh')
-                        )
-                      : (
-                      <Icon
-                        {...icons.value.refresh}
-                        scale={1.2}
-                        icon={props.refreshIcon || icons.value.refresh.icon}
-                      ></Icon>
-                        )}
-                  </button>
-                </div>
-                {hasImage.value && (
-                  <div class={nh.be('image')}>
-                    <canvas
-                      ref={canvas}
-                      class={nh.be('canvas')}
-                      width={canvasSize.value[0]}
-                      height={canvasSize.value[1]}
-                    ></canvas>
-                    <div ref={subImage} class={nh.be('sub-image')}>
-                      <canvas
-                        ref={subCanvas}
-                        class={nh.be('sub-canvas')}
-                        height={canvasSize.value[1]}
-                        style={subCanvasStyle.value}
-                      ></canvas>
-                    </div>
-                    <Transition name={nh.ns('fade')}>
-                      {props.type === 'slide-image' && isSuccess.value && (
-                        <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
-                          {props.successTip ?? locale.value.success}
-                        </div>
-                      )}
-                    </Transition>
+              {slots.refresh
+                ? (
+                    renderSlot(slots, 'refresh')
+                  )
+                : (
+                <Icon
+                  {...icons.value.refresh}
+                  icon={props.refreshIcon || icons.value.refresh.icon}
+                ></Icon>
+                  )}
+            </button>
+          </div>
+          {hasImage.value && (
+            <div class={nh.be('image')}>
+              <canvas
+                ref={canvas}
+                class={nh.be('canvas')}
+                width={canvasSize.value[0]}
+                height={canvasSize.value[1]}
+              ></canvas>
+              <div ref={subImage} class={nh.be('sub-image')}>
+                <canvas
+                  ref={subCanvas}
+                  class={nh.be('sub-canvas')}
+                  height={canvasSize.value[1]}
+                  style={subCanvasStyle.value}
+                ></canvas>
+              </div>
+              <Transition name={nh.ns('fade')}>
+                {props.type === 'slide-image' && isSuccess.value && (
+                  <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
+                    {props.successTip ?? locale.value.success}
                   </div>
                 )}
-                {renderSlider()}
-              </div>
-            </Popper>
+              </Transition>
+            </div>
           )}
+          <CaptchaSlider
+            ref={slider}
+            class={nh.bem('slider', 'inner')}
+            target={usedTarget.value}
+            tolerance={tolerance.value}
+          >
+            {{
+              tip: () =>
+                slots.tip
+                  ? renderSlot(slots, 'tip', { success: isSuccess.value })
+                  : isSuccess.value
+                    ? props.successTip ?? locale.value.success
+                    : props.tip ?? normalTip.value
+            }}
+          </CaptchaSlider>
         </div>
       )
     }

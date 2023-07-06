@@ -33,7 +33,8 @@ export interface LocaleConfig {
   captcha: {
     toRight: string,
     slide: string,
-    success: string
+    success: string,
+    fixImage: string
   },
 
   checkbox: {
