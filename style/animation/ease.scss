@@ -5,12 +5,12 @@ $-name: '#{$namespace}-ease';
 
 @mixin -start {
   opacity: 0%;
-  transform: scale(0.9);
+  transform: translateZ(0) scale(0.9);
 }
 
 @mixin -end {
   opacity: 100%;
-  transform: scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .#{$-name} {
