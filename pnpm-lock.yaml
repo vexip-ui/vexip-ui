@@ -410,8 +410,8 @@ importers:
         specifier: workspace:~
         version: link:../common/icons
       '@vue/repl':
-        specifier: ^1.5.0
-        version: 1.5.0(vue@3.3.4)
+        specifier: ^2.5.2
+        version: 2.5.2
       fflate:
         specifier: ^0.7.4
         version: 0.7.4
@@ -2704,15 +2704,9 @@ packages:
     dependencies:
       '@vue/shared': 3.3.4
 
-  /@vue/repl@1.5.0(vue@3.3.4):
-    resolution: {integrity: sha512-qFqKtvA2FM9viYXzbWrpGrL8mDGswsqDsEjfaibr/YOqeza7i49VmO0AKPrOdQDOS2qmq9uV+G6OPX1rGhUSIQ==}
-    peerDependencies:
-      vue: ^3.2.13
-    peerDependenciesMeta:
-      vue:
-        optional: true
-    dependencies:
-      vue: 3.3.4
+  /@vue/repl@2.5.2:
+    resolution: {integrity: sha512-2+YwL5/7QFhnwkK1A2sSJMVie04kY9Kz3l6Z60QySIldDUDfxUNxe0xICUwRucEOdQnu3TueUXn4+F504QmM5Q==}
+    requiresBuild: true
     dev: false
 
   /@vue/runtime-core@3.3.4:

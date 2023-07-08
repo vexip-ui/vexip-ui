@@ -47,7 +47,7 @@
             :title="locale.theme"
             @click="toggleDark"
           >
-            <Icon v-if="isDarkTheme" :scale="1.3">
+            <Icon v-if="dark" :scale="1.3">
               <Moon></Moon>
             </Icon>
             <Icon v-else :scale="1.3">
@@ -183,7 +183,10 @@ const props = defineProps({
   }
 })
 
-const isDarkTheme = ref(document.documentElement.classList.contains('dark'))
+const { dark } = props.store
+
+dark.value = document.documentElement.classList.contains('dark')
+
 const libVersion = `Repl@${__REPL_VERSION__}`
 
 const computedStyle = getComputedStyle(document.documentElement)
@@ -214,6 +217,15 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     name: 'Vue',
     versions: [props.versions.vue || __VUE_VERSION__],
     active: props.versions.vue || __VUE_VERSION__,
+    loading: false,
+    loaded: false
+  },
+  typescript: {
+    owner: 'microsoft',
+    repo: 'TypeScript',
+    name: 'TypeScript',
+    versions: [props.versions.typescript || __TS_VERSION__],
+    active: props.versions.typescript || __TS_VERSION__,
     loading: false,
     loaded: false
   }
@@ -280,15 +292,15 @@ function handleWindowBlur() {
 function toggleDark() {
   const cls = document.documentElement.classList
   cls.toggle('dark')
-  isDarkTheme.value = cls.contains('dark')
-  localStorage.setItem('vexip-sfc-playground-prefer-dark', String(isDarkTheme.value))
+  dark.value = cls.contains('dark')
+  localStorage.setItem('vexip-sfc-playground-prefer-dark', String(dark.value))
 }
 
 async function copyLink() {
   await navigator.clipboard.writeText(location.href)
   Message.success({
     content: 'Sharable URL has been copied to clipboard.',
-    background: !isDarkTheme.value
+    background: !dark.value
   })
 }
 
