@@ -92,6 +92,12 @@ This component can be used independently to add collapsing transition effects to
 | icon          | `string`                      | Set the subordinate icon for the panel title           | `''`      | -     |
 | ghost         | `boolean`                     | Set whether to be in borderless mode                   | `false`   | -     |
 
+### CollapsePanel Events
+
+| Name   | Description                                                                        | Parameters            | Since |
+| ------ | ---------------------------------------------------------------------------------- | --------------------- | ----- |
+| toggle | Emitted when the panel's expanded changes, returns the expanded state of the panel | `(expanded: boolean)` | -     |
+
 ### CollapsePanel Slots
 
 | Name    | Description                | Parameters | Since |
