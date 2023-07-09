@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "@vexip-ui/utils": "workspace:~",
-    "compare-versions": "6.0.0-rc.1",
+    "compare-versions": "6.0.0",
     "local-pkg": "^0.4.3"
   },
   "devDependencies": {
-    "@types/node": "^18.16.18",
-    "execa": "^6.1.0",
+    "@types/node": "^20.4.1",
+    "execa": "^7.1.1",
     "kolorist": "^1.8.0",
-    "tsup": "^6.7.0",
-    "unplugin-vue-components": "^0.22.12"
+    "tsup": "^7.1.0",
+    "unplugin-vue-components": "^0.25.1"
   }
 }
