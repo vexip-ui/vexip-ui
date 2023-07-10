@@ -48,7 +48,7 @@
   },
   "main": "lib/index.cjs",
   "module": "es/index.mjs",
-  "types": "dist/components/index.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./es/index.mjs",
