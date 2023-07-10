@@ -252,6 +252,7 @@ $table: map.merge(
 
       #{$cell},
       #{$head-cell},
+      #{$foot-cell},
       #{$collapse} {
         border-bottom-color: transparent;
       }
@@ -267,35 +268,23 @@ $table: map.merge(
   }
 
   &--transparent {
-    #{$head},
-    #{$body},
-    #{$row} {
-      background-color: transparent;
-    }
-  }
-
-  &--transparent &__body {
-    background-color: transparent;
-  }
-
-  &--transparent:not(#{&}--border) {
-    #{$head},
-    #{$body},
-    #{$group} {
-      border-bottom-width: 0;
-    }
-
-    #{$group}::after {
-      display: none;
-    }
+    @include define-preset-values(
+      'table',
+      (
+        bg-color: transparent,
+        b-color: transparent,
+        s-color: transparent,
+        head-bg-color: transparent,
+        row-bg-color: transparent,
+        row-bg-color-stripe: transparent,
+        row-b-color-bottom: transparent,
+        cell-b-color-right: transparent
+      )
+    );
   }
 
   &--border {
     border-color: get-css-var('table-b-color');
-
-    // #{$body} {
-    //   border-bottom-width: 0;
-    // }
 
     #{$cell},
     #{$head-cell},
