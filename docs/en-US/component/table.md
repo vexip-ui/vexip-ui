@@ -542,6 +542,7 @@ interface TableFootPayload {
 | no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6`  |
 | col-resizable   | `boolean`                                                     | Set whether the width of columns can be resized                                                                                                       | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
+| side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
 
 ### Table Events
 

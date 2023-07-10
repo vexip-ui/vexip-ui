@@ -24,6 +24,8 @@ $table: map.merge(
     row-b-color-bottom: get-css-var('border-color-light-1'),
     row-indent-width: 16px,
     row-depth: -1,
+    side-pad-left: 0,
+    side-pad-right: 0,
     cell-v-padding: 6px,
     cell-h-padding: 6px,
     cell-b-color-right: get-css-var('border-color-light-2'),
@@ -176,7 +178,8 @@ $table: map.merge(
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
     transition: get-css-var('transition-background');
 
-    &:last-child {
+    &:last-child,
+    &--last {
       border-right-width: 0;
     }
 
@@ -201,7 +204,22 @@ $table: map.merge(
     }
   }
 
-  &__head-cell {
+  &__side-pad {
+    position: absolute;
+    flex: 1 0 0;
+    width: get-css-var('table-side-pad-left');
+    height: 100%;
+    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+    transition: get-css-var('transition-background');
+
+    &--right {
+      right: 0;
+      width: get-css-var('table-side-pad-right');
+    }
+  }
+
+  &__head-cell,
+  &__head &__side-pad {
     background-color: get-css-var('table-head-bg-color');
   }
 
@@ -209,11 +227,13 @@ $table: map.merge(
     background-color: get-css-var('table-row-bg-color');
   }
 
-  &__row--stripe &__cell {
+  &__row--stripe &__cell,
+  &__row--stripe &__side-pad {
     background-color: get-css-var('table-row-bg-color-stripe');
   }
 
-  &__row--hover &__cell {
+  &__row--hover &__cell,
+  &__row--hover &__side-pad {
     background-color: get-css-var('table-row-bg-color-hover');
   }
 
@@ -241,6 +261,7 @@ $table: map.merge(
   $foot-cell: #{&}__foot-cell;
   $collapse: #{&}__collapse;
   $fixed-active: #{&}__fixed--active;
+  $side-pad: #{&}__side-pad;
 
   &__body &__group,
   &__foot &__group {
@@ -253,7 +274,8 @@ $table: map.merge(
       #{$cell},
       #{$head-cell},
       #{$foot-cell},
-      #{$collapse} {
+      #{$collapse},
+      #{$side-pad} {
         border-bottom-color: transparent;
       }
     }
@@ -531,6 +553,10 @@ $table: map.merge(
     top: 0;
     z-index: 1;
     transition: get-css-var('transition-shadow');
+
+    #{$collapse} * {
+      visibility: hidden;
+    }
   }
 
   &__fixed--right {

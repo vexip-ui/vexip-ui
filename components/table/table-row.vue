@@ -22,7 +22,19 @@
       :style="style"
       v-bind="attrs"
     >
+      <div
+        v-if="fixed !== 'right'"
+        :class="nh.be('side-pad')"
+        role="none"
+        aria-hidden
+      ></div>
       <slot></slot>
+      <div
+        v-if="fixed !== 'left'"
+        :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+        role="none"
+        aria-hidden
+      ></div>
     </div>
     <CollapseTransition v-if="!!expandColumn" @enter="computeRectHeight" @leave="computeRectHeight">
       <div
@@ -175,19 +187,26 @@ export default defineComponent({
     const dragging = computed(() => state.dragging)
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
+      const width =
+        props.fixed === 'right' ? getters.rightFixedWidths.at(-1) : getters.leftFixedWidths.at(-1)
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+      const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+
       return props.fixed
         ? {
-            width: `${
-              props.fixed === 'right'
-                ? getters.rightFixedWidths.at(-1)
-                : getters.leftFixedWidths.at(-1)
-            }px`,
+            width: width && `${width + padLeft + padRight}px`,
             whiteSpace: 'nowrap'
           }
         : {}
     })
     const cellDraggable = computed(() => {
       return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
+    const leftFixed = computed(() => {
+      return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
+    })
+    const rightFixed = computed(() => {
+      return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
     })
 
     function getRowHeight(row: TableRowState) {
@@ -371,8 +390,8 @@ export default defineComponent({
       draggable,
       expandRenderer,
       expandStyle,
-      leftFixed: computed(() => getters.leftFixedWidths.at(-1)),
-      rightFixed: computed(() => getters.rightFixedWidths.at(-1)),
+      leftFixed,
+      rightFixed,
       expandColumn: toRef(getters, 'expandColumn'),
 
       wrapper,

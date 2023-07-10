@@ -188,7 +188,8 @@ export default defineComponent({
             columnTypes.includes((props.column as TableTypeColumn).type) ||
             props.column.textAlign === 'center',
           [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
-          [nh.bem('cell', 'wrap')]: props.column.noEllipsis
+          [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
+          [nh.bem('cell', 'last')]: props.column.last
         },
         props.column.className,
         props.column.class,
@@ -227,7 +228,7 @@ export default defineComponent({
         })
       }
 
-      const { colSpan, rowSpan } = result || { colSpan: 1, rowSpan: 1 }
+      const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
       const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
       span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
@@ -246,6 +247,7 @@ export default defineComponent({
             : getters.totalWidths
       const { colSpan, rowSpan } = cellSpan.value
       const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let height: number | undefined
 
@@ -282,7 +284,7 @@ export default defineComponent({
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
-          transform: `translate3d(${totalWidths[props.columnIndex]}px, 0, 0)`
+          transform: `translate3d(${padLeft + totalWidths[props.columnIndex]}px, 0, 0)`
         }
       ]
     })

@@ -95,7 +95,7 @@
           :class="[nh.be('body-wrapper'), props.scrollClass.major]"
           :height="bodyScrollHeight"
           :scroll-y="bodyYScroll"
-          :style="{ minWidth: `${totalWidths.at(-1)}px` }"
+          :style="{ minWidth: `${totalWidths}px` }"
           @scroll="handleYScroll"
           @y-enabled-change="yScrollEnabled = $event"
         >
@@ -326,7 +326,7 @@ export default defineComponent({
       rowStyle: null,
       rowAttrs: null,
       stripe: false,
-      border: false,
+      border: true,
       highlight: false,
       useXBar: false,
       useYBar: false,
@@ -382,7 +382,8 @@ export default defineComponent({
       cellSpan: {
         default: null,
         isFunc: true
-      }
+      },
+      sidePadding: 0
     })
 
     const nh = useNameHelper('table')
@@ -397,7 +398,7 @@ export default defineComponent({
     const indicatorType = ref(DropType.BEFORE)
     const tempColumns = ref(new Set<TableColumnOptions>())
     const tempSummaries = ref(new Set<TableSummaryOptions>())
-    const tableWidth = ref<number | string | null>(null)
+    const tableWidth = ref<number | string>()
     const hasDragColumn = ref(false)
     const noTransition = ref(true)
 
@@ -495,7 +496,10 @@ export default defineComponent({
       noCascaded: props.noCascaded,
       colResizable: props.colResizable,
       expandRenderer: props.expandRenderer,
-      cellSpan: props.cellSpan
+      cellSpan: props.cellSpan,
+      sidePadding: Array.isArray(props.sidePadding)
+        ? props.sidePadding
+        : [props.sidePadding, props.sidePadding]
     })
 
     provide(TABLE_STORE, store)
@@ -548,15 +552,22 @@ export default defineComponent({
           typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
       }
       const width = tableWidth.value ?? props.width
+      const [padLeft, padRight] = state.sidePadding
 
-      if (width !== null) {
+      if (padLeft) {
+        style[nh.cv('side-pad-left')] = `${padLeft}px`
+      }
+
+      if (padRight) {
+        style[nh.cv('side-pad-right')] = `${padRight}px`
+      }
+
+      if (isDefined(width)) {
         if (typeof width === 'string' && parseFloat(width).toString() !== width) {
           style.width = width
         } else {
-          Object.assign(style, {
-            width: `${width}px`,
-            minWidth: `${width}px`
-          })
+          style.width = `${width}px`
+          style.minWidth = `${width}px`
         }
       }
 
@@ -583,6 +594,13 @@ export default defineComponent({
       }
 
       return 35
+    })
+    const totalWidths = computed(() => {
+      return (
+        (getters.totalWidths.at(-1) || 0) +
+        (state.sidePadding[0] || 0) +
+        (state.sidePadding[1] || 0)
+      )
     })
 
     const {
@@ -693,7 +711,8 @@ export default defineComponent({
       'noCascaded',
       'colResizable',
       'expandRenderer',
-      'cellSpan'
+      'cellSpan',
+      'sidePadding'
     ] as const
 
     for (const prop of normalProps) {
@@ -1188,7 +1207,7 @@ export default defineComponent({
       xBarLength,
       yBarLength,
       bodyScrollHeight,
-      totalWidths: toRef(getters, 'totalWidths'),
+      totalWidths,
       totalHeight: toRef(state, 'totalHeight'),
 
       store,

@@ -52,14 +52,17 @@ export default defineComponent({
           : state.columns
     })
     const style = computed(() => {
-      return {
-        minWidth: `${
-          props.fixed === 'left'
-            ? getters.leftFixedWidths.at(-1)
-            : props.fixed === 'right'
+      const width =
+        props.fixed === 'left'
+          ? getters.leftFixedWidths.at(-1)
+          : props.fixed === 'right'
             ? getters.rightFixedWidths.at(-1)
             : getters.totalWidths.at(-1)
-        }px`
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+      const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+
+      return {
+        minWidth: width && `${width + padLeft + padRight}px`
       }
     })
     const headRow = computed(

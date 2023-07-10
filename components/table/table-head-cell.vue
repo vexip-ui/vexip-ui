@@ -288,7 +288,8 @@ export default defineComponent({
             columnTypes.includes((props.column as TableTypeColumn).type) ||
             props.column.textAlign === 'center',
           [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
-          [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis
+          [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
+          [nh.bem('head-cell', 'last')]: props.column.last
         },
         props.column.className,
         props.column.class,
@@ -304,6 +305,7 @@ export default defineComponent({
             ? getters.rightFixedWidths
             : getters.totalWidths
       const width = totalWidths[props.index + span] - totalWidths[props.index]
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let customStyle
 
@@ -324,7 +326,7 @@ export default defineComponent({
             !state.border && span > 1 && props.index + span >= totalWidths.length - 1
               ? 0
               : undefined,
-          transform: `translate3d(${totalWidths[props.index]}px, 0, 0)`
+          transform: `translate3d(${padLeft + totalWidths[props.index]}px, 0, 0)`
         }
       ]
     })

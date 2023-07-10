@@ -110,6 +110,7 @@ export const tableProps = buildProps({
   noCascaded: booleanProp,
   colResizable: booleanProp,
   cellSpan: Function as PropType<TableCellSpanFn>,
+  sidePadding: [Number, Array] as PropType<number | number[]>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onScroll:
     eventProp<

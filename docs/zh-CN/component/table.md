@@ -542,6 +542,7 @@ interface TableFootPayload {
 | no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6`  |
 | col-resizable   | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
+| side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
 
 ### Table 事件
 

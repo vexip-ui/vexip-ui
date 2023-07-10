@@ -340,7 +340,8 @@ export interface StoreOptions {
   noCascaded: boolean,
   colResizable: boolean,
   expandRenderer: ExpandRenderFn | null,
-  cellSpan: TableCellSpanFn | null
+  cellSpan: TableCellSpanFn | null,
+  sidePadding: number[]
 }
 
 export interface StoreState extends StoreOptions {
