@@ -1,6 +1,6 @@
 import { getCurrentScope, onScopeDispose, ref, unref, watch } from 'vue'
 
-import { ensureArray, isClient, noop } from '@vexip-ui/utils'
+import { ensureArray, isClient, noop, toNumber } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 
@@ -27,6 +27,9 @@ const observerCache = new WeakMap<
   >
 >()
 
+const spaceRE = /\s+/g
+const unitRE = /(px|%)$/
+
 export function useIntersection(options: UseIntersectionOptions) {
   const target = options.target || ref(null)
 
@@ -39,7 +42,7 @@ export function useIntersection(options: UseIntersectionOptions) {
   let root = options.root ?? document
 
   const threshold = ensureArray(options.threshold || 0).join() || '0'
-  const margin = options.rootMargin || '_'
+  const margin = normalizeMargin(options.rootMargin)
 
   if (!observerCache.has(root)) {
     observerCache.set(root, new Map())
@@ -55,7 +58,7 @@ export function useIntersection(options: UseIntersectionOptions) {
 
   if (!marginCache.has(margin)) {
     marginCache.set(margin, {
-      ob: new IntersectionObserver(handleIntersect, options),
+      ob: new IntersectionObserver(handleIntersect, { ...options, rootMargin: margin }),
       count: 0,
       handlers: new WeakMap<Element, IntersectionHandler>()
     })
@@ -90,6 +93,21 @@ export function useIntersection(options: UseIntersectionOptions) {
   )
 
   getCurrentScope() && onScopeDispose(disconnect)
+
+  function normalizeMargin(margin?: string) {
+    if (!margin || !margin.trim()) return '_'
+
+    const parts = margin.trim().split(spaceRE, 4)
+    parts.length = 4
+
+    for (let i = 0; i < 4; ++i) {
+      const part = parts[i]
+
+      parts[i] = unitRE.test(part) ? part : `${toNumber(part)}px`
+    }
+
+    return parts.join(' ')
+  }
 
   function handleIntersect(entries: IntersectionObserverEntry[]) {
     for (let i = 0, len = entries.length; i < len; ++i) {
