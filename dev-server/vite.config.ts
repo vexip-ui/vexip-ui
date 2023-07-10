@@ -107,7 +107,7 @@ export default defineConfig(() => {
 
           modules.forEach(m => {
             if (!m.url.match(/\.(s|p)?css/)) {
-              m.importedModules = new Set()
+              m.clientImportedModules = new Set()
               m.importers = new Set()
             }
           })
