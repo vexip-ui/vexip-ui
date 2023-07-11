@@ -1,5 +1,5 @@
 <template>
-  <VirtualList :items="items" use-bar-track style="height: 200px;">
+  <VirtualList :items="items" use-bar-track style="height: 200px">
     <template #default="{ item }">
       <li class="virtual-list__item" :style="{ minHeight: `${item.height}px` }">
         {{ item.value }}

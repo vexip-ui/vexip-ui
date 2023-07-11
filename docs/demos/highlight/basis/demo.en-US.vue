@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 500px; text-indent: 2em;">
+  <div style="max-width: 500px; text-indent: 2em">
     <Highlight :content="content" :key-words="keyWords"></Highlight>
   </div>
 </template>

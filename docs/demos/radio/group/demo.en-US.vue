@@ -4,7 +4,7 @@
       {{ item }}
     </Radio>
   </RadioGroup>
-  <p style="margin-top: 10px;">
+  <p style="margin-top: 10px">
     value: {{ value }}
   </p>
 </template>

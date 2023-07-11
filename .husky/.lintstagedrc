@@ -1,15 +1,15 @@
 {
-  "*.{js,jsx,ts,tsx}": [
+  "*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}": [
     "prettier --write",
     "eslint --fix"
   ],
   "{!(package)*.json,*.code-snippets,.!(browserslist|npm)*rc}": [
-    "prettier --write--parser json"
+    "prettier --write --parser json"
   ],
   "package.json": [
     "prettier --write"
   ],
-  "*.{css,scss,pcss,html}": [
+  "*.{css,scss,html}": [
     "prettier --write",
     "stylelint --fix"
   ],

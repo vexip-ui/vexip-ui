@@ -468,7 +468,7 @@ export default defineComponent({
                   renderSlot(slots, 'password', { plain: showPassword.value })
                 )
               : (
-              <Icon {...passwordIcon.value}></Icon>
+                <Icon {...passwordIcon.value}></Icon>
                 )}
           </div>
         )

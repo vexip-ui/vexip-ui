@@ -114,8 +114,9 @@ export default defineComponent({
         <CustomTag class={className.value} style={style.value}>
           {vnodes.map((vnode, index) => (
             <div
+              key={vnode.key ?? index}
               class={nh.be('item')}
-              role="none"
+              role={'none'}
               style={[
                 props.itemStyle,
                 !props.gapDisabled

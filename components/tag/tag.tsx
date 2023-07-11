@@ -112,7 +112,7 @@ export default defineComponent({
 
       return (
         <button type={'button'} class={nh.be('close')} onClick={handleClose}>
-          <Icon {...icons.value.close} label="close"></Icon>
+          <Icon {...icons.value.close} label={'close'}></Icon>
         </button>
       )
     }
@@ -124,16 +124,16 @@ export default defineComponent({
         <div class={className.value} style={style.value}>
           {props.prefix === 0 || props.prefix || slots.prefix
             ? (
-            <span
-              class={[nh.be('unit'), nh.be('prefix')]}
-              style={{
-                color: props.prefixColor,
-                backgroundColor: props.prefixBg,
-                borderColor: props.prefixBg
-              }}
-            >
-              {slots.prefix ? slots.prefix() : props.prefix}
-            </span>
+              <span
+                class={[nh.be('unit'), nh.be('prefix')]}
+                style={{
+                  color: props.prefixColor,
+                  backgroundColor: props.prefixBg,
+                  borderColor: props.prefixBg
+                }}
+              >
+                {slots.prefix ? slots.prefix() : props.prefix}
+              </span>
               )
             : null}
           <span class={[nh.be('unit'), nh.be('content')]}>
@@ -142,17 +142,17 @@ export default defineComponent({
           </span>
           {hasSuffix
             ? (
-            <span
-              class={[nh.be('unit'), nh.be('suffix')]}
-              style={{
-                color: props.suffixColor,
-                backgroundColor: props.suffixBg,
-                borderColor: props.suffixBg
-              }}
-            >
-              {slots.suffix ? slots.suffix() : props.suffix}
-              {renderClose()}
-            </span>
+              <span
+                class={[nh.be('unit'), nh.be('suffix')]}
+                style={{
+                  color: props.suffixColor,
+                  backgroundColor: props.suffixBg,
+                  borderColor: props.suffixBg
+                }}
+              >
+                {slots.suffix ? slots.suffix() : props.suffix}
+                {renderClose()}
+              </span>
               )
             : null}
         </div>

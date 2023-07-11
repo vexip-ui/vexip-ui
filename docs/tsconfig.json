@@ -16,9 +16,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["../*"],
       "@docs/*": ["./*"],
@@ -27,9 +25,5 @@
     },
     "lib": ["esnext", "dom"]
   },
-  "include": [
-    "**/*",
-    ".vitepress/**/*",
-    "../types.d.ts"
-  ]
+  "include": ["**/*", ".vitepress/**/*", "../types.d.ts"]
 }
