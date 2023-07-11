@@ -86,6 +86,12 @@ body {
   &__section {
     display: flex;
   }
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .dev-main {

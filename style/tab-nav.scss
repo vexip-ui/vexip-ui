@@ -283,7 +283,7 @@ $tab-nav: map.merge(
 
       #{$content},
       #{$add} {
-        border-radius: $content-radius $content-radius 0 0;
+        @include logical-radius($content-radius $content-radius 0 0);
       }
     }
 
@@ -314,7 +314,7 @@ $tab-nav: map.merge(
 
       #{$content},
       #{$add} {
-        border-radius: 0 $content-radius $content-radius 0;
+        @include logical-radius(0 $content-radius $content-radius 0);
       }
     }
 
@@ -345,7 +345,7 @@ $tab-nav: map.merge(
 
       #{$content},
       #{$add} {
-        border-radius: 0 0 $content-radius $content-radius;
+        @include logical-radius(0 0 $content-radius $content-radius);
       }
     }
 
@@ -376,7 +376,7 @@ $tab-nav: map.merge(
 
       #{$content},
       #{$add} {
-        border-radius: $content-radius 0 0 $content-radius;
+        @include logical-radius($content-radius 0 0 $content-radius);
       }
     }
 
