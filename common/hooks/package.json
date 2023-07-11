@@ -13,7 +13,8 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "private": false,
@@ -28,8 +29,11 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
-    "@popperjs/core": "^2.11.6",
-    "@vexip-ui/utils": "workspace:^"
+    "@popperjs/core": "^2.11.8",
+    "@vexip-ui/utils": "workspace:~"
+  },
+  "devDependencies": {
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

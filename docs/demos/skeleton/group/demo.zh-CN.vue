@@ -21,7 +21,7 @@
     ></Skeleton>
   </SkeletonGroup>
   <template v-else>
-    <div style="margin-bottom: 14px;">
+    <div style="margin-bottom: 14px">
       标题
     </div>
     <br />

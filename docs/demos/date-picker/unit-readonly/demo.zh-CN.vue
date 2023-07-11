@@ -3,7 +3,7 @@
     v-model:value="date"
     clearable
     unit-readonly
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
 </template>
 

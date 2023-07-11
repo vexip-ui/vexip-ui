@@ -237,12 +237,6 @@ export default defineComponent({
         handleWheel(value - props.activeOffset)
       }
     )
-    watch(currentActive, value => {
-      const active = (value + props.activeOffset) % itemStates.value.size
-
-      emitEvent(props.onChange, active)
-      emit('update:active', active)
-    })
     watch(isHover, value => {
       if (props.ignoreHover) return
 
@@ -389,6 +383,13 @@ export default defineComponent({
       }, 0)
     }
 
+    function emitChangeEvent() {
+      const active = (currentActive.value + props.activeOffset) % itemStates.value.size
+
+      emit('update:active', active)
+      emitEvent(props.onChange, active)
+    }
+
     function handlePrev(amount = 1) {
       if (isDisabled.value || inTransition) return
 
@@ -396,6 +397,7 @@ export default defineComponent({
       const itemList = Array.from(itemStates.value)
       const itemCount = itemList.length
       const targetIndex = (currentActive.value - amount + itemCount) % itemCount
+      const prevActive = currentActive.value
 
       if (targetIndex >= itemCount - props.viewSize) {
         if (!props.loop) return
@@ -429,6 +431,8 @@ export default defineComponent({
 
       shouldReset = currentActive.value <= itemCount - props.viewSize
       inTransition = true
+
+      currentActive.value !== prevActive && emitChangeEvent()
     }
 
     function handleNext(amount = 1) {
@@ -438,6 +442,7 @@ export default defineComponent({
       const itemList = Array.from(itemStates.value)
       const itemCount = itemList.length
       const targetIndex = currentActive.value + amount
+      const prevActive = currentActive.value
 
       if (targetIndex > itemStates.value.size - props.viewSize) {
         if (!props.loop) return
@@ -465,6 +470,8 @@ export default defineComponent({
 
       shouldReset = currentActive.value <= itemCount - props.viewSize
       inTransition = true
+
+      currentActive.value !== prevActive && emitChangeEvent()
     }
 
     function handleWheel(active: number) {

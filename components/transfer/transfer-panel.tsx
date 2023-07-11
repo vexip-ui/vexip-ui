@@ -29,16 +29,6 @@ import type { TransferOptionState } from './symbol'
 
 export default defineComponent({
   name: 'TransferPanel',
-  // components: {
-  //   Checkbox,
-  //   CollapseTransition,
-  //   Icon,
-  //   Input,
-  //   NumberInput,
-  //   Renderer,
-  //   ResizeObserver,
-  //   VirtualList
-  // },
   props: {
     type: {
       type: String as PropType<'source' | 'target'>,
@@ -479,17 +469,18 @@ export default defineComponent({
           {slots.option
             ? renderSlot(slots, 'option', { type: props.type, option, index })
             : [
-                <Checkbox
-                  class={nh.be('checkbox')}
-                  state={props.deepState ? props.state : undefined}
-                  checked={currentSelected.value.has(option.value)}
-                  disabled={disabled}
-                  tab-index={-1}
-                  onClick={handleCheck}
-                ></Checkbox>,
-                <span class={nh.be('label')}>
-                  {slots.label ? renderSlot(slots, 'label', { option, index }) : option.label}
-                </span>
+              <Checkbox
+                key={1}
+                class={nh.be('checkbox')}
+                state={props.deepState ? props.state : undefined}
+                checked={currentSelected.value.has(option.value)}
+                disabled={disabled}
+                tab-index={-1}
+                onClick={handleCheck}
+              ></Checkbox>,
+              <span key={2} class={nh.be('label')}>
+                {slots.label ? renderSlot(slots, 'label', { option, index }) : option.label}
+              </span>
               ]}
         </li>
       )
@@ -503,45 +494,45 @@ export default defineComponent({
                 renderSlot(slots, 'header', slotParams)
               )
             : (
-            <>
-              <Checkbox
-                inherit
-                control
-                class={nh.be('checkbox')}
-                state={props.deepState ? props.state : undefined}
-                checked={allSelected.value}
-                partial={partial.value}
-                disabled={props.disabled}
-                tab-index={-1}
-                onClick={toggleSelectAll}
-              ></Checkbox>
-              <div
-                class={[nh.be('reverse'), props.disabled && nh.bem('reverse', 'disabled')]}
-                title={props.locale.reverse}
-                onClick={handleReverse}
-              >
-                <Icon {...icons.value.retweet} scale={1.2}></Icon>
-              </div>
-              <div class={nh.be('counter')}>
-                {`${currentSelected.value.size}/${visibleOptions.value.length}`}
-              </div>
-              {(props.title || slots.title) && (
-                <span class={nh.be('title')}>
-                  {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
-                </span>
-              )}
-              <CollapseTransition appear horizontal fade-effect>
-                {props.loading && (
-                  <div class={nh.be('loading')}>
-                    <Icon
-                      {...icons.value.loading}
-                      effect={props.loadingEffect || icons.value.loading.effect}
-                      icon={props.loadingIcon || icons.value.loading.icon}
-                    ></Icon>
-                  </div>
+              <>
+                <Checkbox
+                  inherit
+                  control
+                  class={nh.be('checkbox')}
+                  state={props.deepState ? props.state : undefined}
+                  checked={allSelected.value}
+                  partial={partial.value}
+                  disabled={props.disabled}
+                  tab-index={-1}
+                  onClick={toggleSelectAll}
+                ></Checkbox>
+                <div
+                  class={[nh.be('reverse'), props.disabled && nh.bem('reverse', 'disabled')]}
+                  title={props.locale.reverse}
+                  onClick={handleReverse}
+                >
+                  <Icon {...icons.value.retweet} scale={1.2}></Icon>
+                </div>
+                <div class={nh.be('counter')}>
+                  {`${currentSelected.value.size}/${visibleOptions.value.length}`}
+                </div>
+                {(props.title || slots.title) && (
+                  <span class={nh.be('title')}>
+                    {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
+                  </span>
                 )}
-              </CollapseTransition>
-            </>
+                <CollapseTransition appear horizontal fade-effect>
+                  {props.loading && (
+                    <div class={nh.be('loading')}>
+                      <Icon
+                        {...icons.value.loading}
+                        effect={props.loadingEffect || icons.value.loading.effect}
+                        icon={props.loadingIcon || icons.value.loading.icon}
+                      ></Icon>
+                    </div>
+                  )}
+                </CollapseTransition>
+              </>
               )}
         </div>
       )
@@ -589,7 +580,7 @@ export default defineComponent({
                       pagedOptions.value.map((option, index) => renderOption({ option, index }))
                     )
                   : (
-                <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+                    <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
                     )}
             </ul>
           </ResizeObserver>
@@ -628,35 +619,35 @@ export default defineComponent({
                 renderSlot(slots, 'footer', slotParams)
               )
             : (
-            <div class={nh.be('pagination')}>
-              <Icon
-                {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
-                class={[
-                  nh.be('page-plus'),
-                  currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
-                ]}
-                onClick={() => handlePageChange(currentPage.value - 1)}
-              ></Icon>
-              <NumberInput
-                inherit
-                value={currentPage.value}
-                class={nh.be('page-input')}
-                size={'small'}
-                min={1}
-                max={totalPages.value}
-                onChange={handlePageChange}
-              ></NumberInput>
-              <span style={'margin: 0 4px'}>/</span>
-              <span>{totalPages.value}</span>
-              <Icon
-                {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
-                class={[
-                  nh.be('page-minus'),
-                  currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
-                ]}
-                onClick={() => handlePageChange(currentPage.value + 1)}
-              ></Icon>
-            </div>
+              <div class={nh.be('pagination')}>
+                <Icon
+                  {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
+                  class={[
+                    nh.be('page-plus'),
+                    currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
+                  ]}
+                  onClick={() => handlePageChange(currentPage.value - 1)}
+                ></Icon>
+                <NumberInput
+                  inherit
+                  value={currentPage.value}
+                  class={nh.be('page-input')}
+                  size={'small'}
+                  min={1}
+                  max={totalPages.value}
+                  onChange={handlePageChange}
+                ></NumberInput>
+                <span style={'margin: 0 4px'}>{'/'}</span>
+                <span>{totalPages.value}</span>
+                <Icon
+                  {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                  class={[
+                    nh.be('page-minus'),
+                    currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
+                  ]}
+                  onClick={() => handlePageChange(currentPage.value + 1)}
+                ></Icon>
+              </div>
               )}
         </div>
       )

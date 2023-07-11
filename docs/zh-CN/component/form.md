@@ -114,7 +114,7 @@ const model = reactive({} as Model)
 
 ### 纯净字段
 
-由于约定了一个 FormItem 下最多只有一个控件组件，因为在多控件组合时你可能希望 FormItem 不要渲染额外的样式。
+由于约定了一个 FormItem 下最多只有一个控件组件，因此在多控件组合时你可能希望 FormItem 不要渲染额外的样式。
 
 在添加 `pure` 属性后 FormItem 便会直接渲染默认插槽的内容。
 
@@ -132,7 +132,7 @@ const model = reactive({} as Model)
 
 ### 表单布局
 
-表单内置了行布局（一维栅格）的大部分功能，因此你可以像使用行布局组件那样使用它。
+Form 和 FormItem 组件分别内置了 Row 和 Column 组件（一维栅格）的大部分功能，因此你可以像使用行布局那样使用它们。
 
 :::
 
@@ -210,6 +210,8 @@ interface Rule<T = any> {
 
 ### FormItem 属性
 
+> 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl，下方只列出 FormItem 组件特有的属性。
+
 | 名称             | 类型                   | 说明                                                                 | 默认值       | 始于    |
 | ---------------- | ---------------------- | -------------------------------------------------------------------- | ------------ | ------- |
 | label            | `string`               | 表单字段的标签                                                       | `''`         | -       |
@@ -228,8 +230,6 @@ interface Rule<T = any> {
 | help             | `string`               | 设置字段的帮助信息                                                   | `''`         | `2.0.0` |
 | locale           | `LocaleConfig['form']` | 设置多语言配置                                                       | `null`       | `2.1.0` |
 
-> 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl
-
 ### FormItem 插槽
 
 | 名称    | 说明               | 参数            | 始于    |
@@ -241,7 +241,7 @@ interface Rule<T = any> {
 
 ### FormSubmit 属性
 
-> FormSubmit 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 Submit 组件特有的属性。
+> FormSubmit 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 FormSubmit 组件特有的属性。
 
 | 名称             | 类型                   | 说明                                                                    | 默认值          | 始于    |
 | ---------------- | ---------------------- | ----------------------------------------------------------------------- | --------------- | ------- |
@@ -259,7 +259,7 @@ interface Rule<T = any> {
 
 ### FormReset 属性
 
-> FormReset 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 Reset 组件特有的属性。
+> FormReset 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 FormReset 组件特有的属性。
 
 | 名称            | 类型                   | 说明                                                                    | 默认值         | 始于    |
 | --------------- | ---------------------- | ----------------------------------------------------------------------- | -------------- | ------- |

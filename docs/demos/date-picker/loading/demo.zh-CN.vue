@@ -1,12 +1,12 @@
 <template>
-  <DatePicker :loading="loading" placeholder="加载中可编辑" style="max-width: 300px;"></DatePicker>
+  <DatePicker :loading="loading" placeholder="加载中可编辑" style="max-width: 300px"></DatePicker>
   <br />
   <br />
   <DatePicker
     :loading="loading"
     loading-lock
     placeholder="加载中不可编辑"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
   <p>
     加载中：

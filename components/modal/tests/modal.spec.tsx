@@ -183,7 +183,8 @@ describe('Modal', () => {
     await nextTick()
     await nextTick()
     expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--draggable')
-    expect(modal.attributes('style')).toContain('top: 0px; left: 0px;')
+    expect(modal.attributes('style')).toContain('top: 0px;')
+    expect(modal.attributes('style')).toContain('left: 0px;')
 
     const downEvent = new CustomEvent('pointerdown') as any
     downEvent.button = 0
@@ -201,12 +202,15 @@ describe('Modal', () => {
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
     vi.runAllTimers()
+    await nextTick()
     expect(onDragMove).toHaveBeenCalled()
     expect(onDragMove).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
-    await nextTick()
-    expect(modal.attributes('style')).toContain('top: 40px; left: 40px;')
+    expect(modal.attributes('style')).toContain('top: 40px;')
+    expect(modal.attributes('style')).toContain('left: 40px;')
 
     const upEvent = new CustomEvent('pointerup') as any
+    upEvent.clientX = 40
+    upEvent.clientY = 40
     document.dispatchEvent(upEvent)
     expect(onDragEnd).toHaveBeenCalled()
     expect(onDragEnd).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
@@ -223,8 +227,8 @@ describe('Modal', () => {
       <Modal
         active
         resizable
-        width={200}
-        height={100}
+        min-width={40}
+        min-height={40}
         onResizeStart={onResizeStart}
         onResizeMove={onResizeMove}
         onResizeEnd={onResizeEnd}
@@ -237,7 +241,6 @@ describe('Modal', () => {
     await nextTick()
     expect(wrapper.find('.vxp-modal__resizer').exists()).toBe(true)
     expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--resizable')
-    expect(modal.attributes('style')).toContain('width: 200px; height: 100px;')
 
     const downEvent = new CustomEvent('pointerdown') as any
     downEvent.button = 0
@@ -245,25 +248,28 @@ describe('Modal', () => {
     downEvent.clientY = 0
     resizer.dispatchEvent(downEvent)
     expect(onResizeStart).toHaveBeenCalled()
-    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 200, height: 100 }))
+    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 0, height: 0 }))
 
     await nextTick()
     expect(modal.classes()).toContain('vxp-modal__wrapper--resizing')
 
     const moveEvent = new CustomEvent('pointermove') as any
-    moveEvent.clientX = 40
-    moveEvent.clientY = 40
+    moveEvent.clientX = 80
+    moveEvent.clientY = 80
     document.dispatchEvent(moveEvent)
     vi.runAllTimers()
-    expect(onResizeMove).toHaveBeenCalled()
-    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
     await nextTick()
-    expect(modal.attributes('style')).toContain('width: 240px; height: 140px;')
+    expect(onResizeMove).toHaveBeenCalled()
+    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 80, height: 80 }))
+    expect(modal.attributes('style')).toContain('width: 80px;')
+    expect(modal.attributes('style')).toContain('height: 80px;')
 
     const upEvent = new CustomEvent('pointerup') as any
+    upEvent.clientX = 80
+    upEvent.clientY = 80
     document.dispatchEvent(upEvent)
     expect(onResizeEnd).toHaveBeenCalled()
-    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
+    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 80, height: 80 }))
 
     await nextTick()
     expect(modal.classes()).not.toContain('vxp-modal__wrapper--resizing')
@@ -286,6 +292,6 @@ describe('Modal', () => {
     expect(modal.attributes('style')).toContain('height: 100px;')
     expect(modal.attributes('style')).toContain('right: 10px;')
     expect(modal.attributes('style')).toContain('width: 100px;')
-    expect(modal.attributes('style')).not.toContain('left:')
+    expect(modal.attributes('style')).toContain('left: auto;')
   })
 })

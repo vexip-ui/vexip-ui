@@ -9,7 +9,7 @@
     rest-background="orange"
   >
     <template #tip="{ options: rest }">
-      <div style="display: flex; flex-direction: column; white-space: nowrap;">
+      <div style="display: flex; flex-direction: column; white-space: nowrap">
         <div v-for="(option, index) in rest" :key="index">
           {{ option.name }}
         </div>

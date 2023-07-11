@@ -206,9 +206,9 @@ export default defineComponent({
     }
 
     function handleChange(value: (string | number)[]) {
+      emit('update:value', value)
       setFieldValue(value)
       emitEvent(props.onChange, value)
-      emit('update:value', value)
       validateField()
     }
 

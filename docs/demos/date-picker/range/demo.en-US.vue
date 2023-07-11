@@ -4,14 +4,14 @@
     range
     type="year"
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
   <p>Current Year Range: {{ yearRange }}</p>
   <DatePicker
     v-model:value="dateRange"
     range
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
   <p>Current Date Range: {{ dateRange }}</p>
   <DatePicker
@@ -19,7 +19,7 @@
     range
     type="datetime"
     clearable
-    style="max-width: 380px;"
+    style="max-width: 380px"
   ></DatePicker>
   <p>Current Datetime Range: {{ datetimeRange }}</p>
 </template>

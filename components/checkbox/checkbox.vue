@@ -128,11 +128,6 @@ export default defineComponent({
         currentPartial.value = value
       }
     )
-    watch(currentChecked, checked => {
-      setFieldValue(checked)
-      emitEvent(props.onChange, checked)
-      emit('update:checked', checked)
-    })
 
     if (groupState) {
       let increased = false
@@ -184,11 +179,20 @@ export default defineComponent({
       })
     }
 
+    function emitCheckEvent() {
+      const checked = currentChecked.value
+
+      emit('update:checked', checked)
+      setFieldValue(checked)
+      emitEvent(props.onChange, checked)
+    }
+
     function setCurrentChecked(checked: boolean) {
       if (props.control && isFunction(groupState?.handleControlChange)) {
         groupState!.handleControlChange()
-      } else {
+      } else if (currentChecked.value !== checked) {
         currentChecked.value = checked
+        emitCheckEvent()
       }
     }
 

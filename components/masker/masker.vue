@@ -21,7 +21,9 @@
         @after-leave="afterClose"
       >
         <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
-          <div :class="nh.be('mask-inner')"></div>
+          <ResizeObserver @resize="handleResize">
+            <div :class="nh.be('mask-inner')"></div>
+          </ResizeObserver>
         </div>
       </transition>
       <span
@@ -45,6 +47,7 @@
 
 <script lang="ts">
 import { Portal } from '@/components/portal'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 
@@ -55,7 +58,8 @@ import { maskerProps } from './props'
 export default defineComponent({
   name: 'Masker',
   components: {
-    Portal
+    Portal,
+    ResizeObserver
   },
   props: maskerProps,
   emits: ['update:active'],
@@ -91,7 +95,7 @@ export default defineComponent({
     const bottomTrap = ref<HTMLElement>()
 
     let showing = false
-    let prevFocusdEl: HTMLElement | null = null
+    let prevFocusedEl: HTMLElement | null = null
 
     const transferTo = computed(() => {
       return props.inner
@@ -128,21 +132,23 @@ export default defineComponent({
       if (!value) {
         showing = false
 
-        if (prevFocusdEl) {
-          prevFocusdEl.focus()
-          prevFocusdEl = null
+        if (prevFocusedEl) {
+          prevFocusedEl.focus()
+          prevFocusedEl = null
         }
       } else {
-        prevFocusdEl = document.activeElement as HTMLElement
+        prevFocusedEl = document.activeElement as HTMLElement
         zIndex.value = getIndex()
       }
-
-      emitEvent(props.onToggle, value)
-      emit('update:active', value)
     })
 
-    function toggleActive(value: boolean) {
-      currentActive.value = value
+    function toggleActive(active: boolean) {
+      if (currentActive.value === active) return
+
+      currentActive.value = active
+
+      emit('update:active', active)
+      emitEvent(props.onToggle, active)
     }
 
     async function handleClose() {
@@ -206,6 +212,10 @@ export default defineComponent({
       }
     }
 
+    function handleResize(entry: ResizeObserverEntry) {
+      emitEvent(props.onResize, entry)
+    }
+
     return {
       props,
       nh,
@@ -223,7 +233,8 @@ export default defineComponent({
       handleClose,
       afterClose,
       afterOpen,
-      handleFocusIn
+      handleFocusIn,
+      handleResize
     }
   }
 })

@@ -136,7 +136,7 @@ export default defineComponent({
 
           state.target = value
         } else {
-          currentValue.value = value
+          handleChange(value)
         }
 
         emitEvent(props.onMove, value)
@@ -146,14 +146,14 @@ export default defineComponent({
           guide.value.style.display = ''
         }
 
-        const target = state.target as number
-
         if (state.splitLazy) {
+          const target = state.target as number
+
           if (Math.abs(target - currentValue.value) > 0.01) {
             setTransition()
           }
 
-          currentValue.value = target
+          handleChange(target)
         }
 
         emitEvent(props.onMoveEnd, currentValue.value)
@@ -227,9 +227,6 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-
       if (guide.value) {
         guide.value.style[position.value[0]] = `${value * 100}%`
       }
@@ -269,6 +266,15 @@ export default defineComponent({
         currentFull.value = 0
       } else {
         currentFull.value = type
+      }
+    }
+
+    function handleChange(value: number) {
+      if (value.toFixed(5) !== currentValue.value.toFixed(5)) {
+        currentValue.value = value
+
+        emitEvent(props.onChange, value)
+        emit('update:value', value)
       }
     }
 

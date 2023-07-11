@@ -3,8 +3,18 @@
     ref="wrapper"
     :class="className"
     role="columnheader"
+    scope="col"
+    :colspan="headSpan !== 1 ? headSpan : undefined"
     :style="style"
-    :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
+    :aria-sort="
+      sorter.able
+        ? sorter.type
+          ? sorter.type === 'asc'
+            ? 'ascending'
+            : 'descending'
+          : 'none'
+        : undefined
+    "
     v-bind="attrs"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -138,7 +148,7 @@
         </template>
       </Tooltip>
     </template>
-    <div v-if="!column.last" ref="resizer" :class="nh.be('resizer')"></div>
+    <div v-if="resizable && !column.last" ref="resizer" :class="nh.be('resizer')"></div>
   </div>
 </template>
 
@@ -149,11 +159,11 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, defineComponent, inject, onMounted, ref, toRef } from 'vue'
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
+import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -186,52 +196,79 @@ export default defineComponent({
       default: -1
     },
     fixed: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<'left' | 'right' | undefined>,
       default: null
     }
   },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableAction = inject(TABLE_ACTIONS)!
+    const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
+    const resizable = toRef(state, 'colResizable')
     const resizing = computed(() => state.colResizing)
 
     const wrapper = ref<HTMLElement>()
 
     let currentWidth = 0
 
+    const headSpan = computed(() => {
+      const fixed = props.fixed || 'default'
+
+      if (state.collapseMap.get(fixed)!.has(`-1,${props.index}`)) {
+        return 0
+      }
+
+      const columns =
+        fixed === 'left'
+          ? state.leftFixedColumns
+          : fixed === 'right'
+            ? state.rightFixedColumns
+            : state.columns
+
+      const colSpan = boundRange(props.column.headSpan ?? 1, 0, columns.length - props.index)
+
+      mutations.updateCellSpan(-1, props.index, fixed, { colSpan, rowSpan: 1 })
+
+      return colSpan
+    })
+
     const { target: resizer } = useMoving({
       capture: false,
       onStart: (state, event) => {
-        const table = tableAction.getTableElement()
+        if (!resizable.value || resizing.value || !headSpan.value) return false
 
-        if (resizing.value || !table || !wrapper.value) return false
+        const table = tableActions.getTableElement()
+
+        if (!table || !wrapper.value) return false
 
         state.xStart = state.clientX - table.getBoundingClientRect().left
         currentWidth = wrapper.value.getBoundingClientRect().width
 
         mutations.setColumnResizing(true)
         mutations.setResizeLeft(state.xStart)
-        tableAction.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
+        tableActions.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
       },
       onMove: (state, event) => {
         mutations.setResizeLeft(state.xEnd)
-        tableAction.emitColResize('Move', {
+        tableActions.emitColResize('Move', {
           ...buildEventPayload(event),
           width: currentWidth + state.deltaX
         })
       },
-      onEnd: (state, event) => {
+      onEnd: ({ deltaX }, event) => {
         mutations.setColumnResizing(false)
 
         if (!wrapper.value) return
 
-        const width = wrapper.value.getBoundingClientRect().width + state.deltaX
+        const width = wrapper.value.getBoundingClientRect().width + deltaX
 
-        mutations.handleColumnResize(props.column.key, width)
-        tableAction.emitColResize('End', { ...buildEventPayload(event), width })
+        mutations.handleColumnResize(
+          state.columns.slice(props.index, props.index + headSpan.value).map(column => column.key),
+          width
+        )
+        tableActions.emitColResize('End', { ...buildEventPayload(event), width })
       }
     })
 
@@ -239,7 +276,7 @@ export default defineComponent({
       let customClass = null
 
       if (typeof state.headClass === 'function') {
-        customClass = state.headClass(props.column, props.index)
+        customClass = state.headClass({ column: props.column, index: props.index })
       } else {
         customClass = state.headClass
       }
@@ -250,42 +287,54 @@ export default defineComponent({
           [nh.bem('head-cell', 'center')]:
             columnTypes.includes((props.column as TableTypeColumn).type) ||
             props.column.textAlign === 'center',
-          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right'
+          [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
+          [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
+          [nh.bem('head-cell', 'last')]: props.column.last
         },
-        props.column.className || null,
-        props.column.class || null,
+        props.column.className,
+        props.column.class,
         customClass
       ]
     })
     const style = computed(() => {
-      const width = state.widths.get(props.column.key) || 0
-      const maxWidth = state.resized.has(props.column.key)
-        ? `${width}px`
-        : `${props.column.width}px`
+      const span = headSpan.value
+      const totalWidths =
+        props.fixed === 'left'
+          ? getters.leftFixedWidths
+          : props.fixed === 'right'
+            ? getters.rightFixedWidths
+            : getters.totalWidths
+      const width = totalWidths[props.index + span] - totalWidths[props.index]
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let customStyle
 
       if (typeof state.headStyle === 'function') {
-        customStyle = state.headStyle(props.column, props.index)
+        customStyle = state.headStyle({ column: props.column, index: props.index })
       } else {
         customStyle = state.headStyle
       }
 
       return [
-        {
-          maxWidth,
-          flex: `${width} 0 auto`,
-          width: `${props.column.width ?? width}px`
-        },
         props.column.style || '',
-        customStyle
+        customStyle,
+        {
+          display: !span ? 'none' : undefined,
+          width: `${width}px`,
+          visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
+          borderRightWidth:
+            !state.border && span > 1 && props.index + span >= totalWidths.length - 1
+              ? 0
+              : undefined,
+          transform: `translate3d(${padLeft + totalWidths[props.index]}px, 0, 0)`
+        }
       ]
     })
     const attrs = computed(() => {
       let customAttrs: Record<string, any>
 
       if (typeof state.headAttrs === 'function') {
-        customAttrs = state.headAttrs(props.column, props.index)
+        customAttrs = state.headAttrs({ column: props.column, index: props.index })
       } else {
         customAttrs = state.headAttrs
       }
@@ -322,18 +371,6 @@ export default defineComponent({
       )
     })
 
-    onMounted(() => {
-      setTimeout(() => {
-        if (wrapper.value) {
-          const width = wrapper.value.getBoundingClientRect().width
-
-          state.colResizable
-            ? mutations.handleColumnResize(props.column.key, width)
-            : mutations.setColumnWidth(props.column.key, width)
-        }
-      }, 0)
-    })
-
     function isSelection(column: unknown): column is TableSelectionColumn {
       return (column as TableTypeColumn).type === 'selection'
     }
@@ -347,23 +384,23 @@ export default defineComponent({
     }
 
     function handleMouseEnter(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Enter', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Enter', buildEventPayload(event))
     }
 
     function handleMouseLeave(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Leave', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Leave', buildEventPayload(event))
     }
 
     function handleClick(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Click', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Click', buildEventPayload(event))
     }
 
     function handleDblclick(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Dblclick', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Dblclick', buildEventPayload(event))
     }
 
     function handleContextmenu(event: MouseEvent) {
-      tableAction?.emitHeadEvent('Contextmenu', buildEventPayload(event))
+      tableActions?.emitHeadEvent('Contextmenu', buildEventPayload(event))
     }
 
     function handleSortAsc() {
@@ -371,7 +408,7 @@ export default defineComponent({
       const type = sorter.value.type === 'asc' ? null : 'asc'
 
       mutations.handleSort(key, type)
-      tableAction.emitRowSort()
+      tableActions.emitRowSort()
     }
 
     function handleSortDesc() {
@@ -379,7 +416,7 @@ export default defineComponent({
       const type = sorter.value.type === 'desc' ? null : 'desc'
 
       mutations.handleSort(key, type)
-      tableAction.emitRowSort()
+      tableActions.emitRowSort()
     }
 
     function handleFilter(value: ParsedFilterOptions['active']) {
@@ -395,7 +432,7 @@ export default defineComponent({
       })
       handleFilter(value)
       filterVisible.value = false
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleFilterCheck(value: string | number, checked: boolean) {
@@ -420,7 +457,7 @@ export default defineComponent({
 
       handleFilter(activeValues)
       filterVisible.value = false
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleResetFilter() {
@@ -431,12 +468,12 @@ export default defineComponent({
         value: null,
         disableOthers: true
       })
-      tableAction.emitRowFilter()
+      tableActions.emitRowFilter()
     }
 
     function handleCheckAllRow() {
       mutations.handleCheckAll()
-      tableAction.emitAllRowCheck(state.checkedAll, state.partial)
+      tableActions.emitAllRowCheck(state.checkedAll, state.partial)
     }
 
     return {
@@ -446,8 +483,10 @@ export default defineComponent({
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),
+      resizable,
 
       className,
+      headSpan,
       style,
       attrs,
       sorter,
@@ -473,7 +512,7 @@ export default defineComponent({
       handleFilterMultiple,
       handleResetFilter,
       handleCheckAllRow,
-      refreshXScroll: () => nextFrameOnce(tableAction.refreshXScroll)
+      refreshXScroll: () => nextFrameOnce(tableActions.refreshXScroll)
     }
   }
 })

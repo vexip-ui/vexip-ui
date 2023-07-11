@@ -1,7 +1,7 @@
 <template>
   <Space>
     <span v-for="fit in objectFits" :key="fit">
-      <p style="text-align: center;">
+      <p style="text-align: center">
         {{ fit }}
       </p>
       <Image
@@ -9,7 +9,7 @@
         width="100"
         height="100"
         :fit="fit"
-        style="background-color: var(--vxp-fill-color-hover);"
+        style="background-color: var(--vxp-fill-color-hover)"
       ></Image>
     </span>
   </Space>

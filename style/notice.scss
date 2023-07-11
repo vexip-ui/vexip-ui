@@ -8,8 +8,7 @@ $notice: map.merge(
   (
     color: inherit,
     bg-color: get-css-var('bg-color-base'),
-    b-color: transparent,
-    border: get-css-var('border-shape') get-css-var('notice-b-color'),
+    b-color: get-css-var('border-color-light-2'),
     radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('notice-s-color'),
@@ -92,7 +91,7 @@ $notice: map.merge(
     padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding');
     color: get-css-var('notice-color');
     background-color: get-css-var('notice-bg-color');
-    border: get-css-var('notice-border');
+    border: get-css-var('border-shape') get-css-var('notice-b-color');
     border-radius: get-css-var('notice-radius');
     box-shadow: get-css-var('notice-shadow');
 

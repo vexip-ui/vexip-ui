@@ -28,7 +28,7 @@ async function main() {
   }
 
   const { pkg, rawPkg, pkgPath, pkgDir, currentVersion } = await getPackageInfo(inputPkg)
-  const { engine, ...copiedPkg } = pkg
+  const { engines, ...copiedPkg } = pkg
 
   await writeFile(pkgPath, JSON.stringify(copiedPkg, null, 2), 'utf-8')
 

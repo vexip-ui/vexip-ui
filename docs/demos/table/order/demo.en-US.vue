@@ -5,29 +5,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const columns = ref([
-  {
-    name: 'Order',
-    type: 'order',
-    key: 'order'
-  },
-  {
-    name: 'First Name',
-    key: 'firstName'
-  },
-  {
-    name: 'Last Name',
-    key: 'lastName'
-  },
-  {
-    name: 'Job',
-    key: 'job'
-  },
-  {
-    name: 'Age',
-    key: 'age'
-  }
-])
+import { defineColumns } from 'vexip-ui'
+
+const columns = ref(
+  defineColumns([
+    {
+      name: 'Order',
+      type: 'order',
+      key: 'order'
+    },
+    {
+      name: 'First Name',
+      key: 'firstName'
+    },
+    {
+      name: 'Last Name',
+      key: 'lastName'
+    },
+    {
+      name: 'Job',
+      key: 'job'
+    },
+    {
+      name: 'Age',
+      key: 'age'
+    }
+  ])
+)
 const data = ref([
   {
     id: '1',

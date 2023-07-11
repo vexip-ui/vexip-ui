@@ -1,5 +1,5 @@
 <template>
-  <div style="display: inline-flex; border: var(--vxp-border-base);">
+  <div style="display: inline-flex; border: var(--vxp-border-base)">
     <Scroll :mode="`horizontal${exact ? '-exact' : ''}`" use-x-bar width="25em">
       <p>在此处滚动鼠标滚轮</p>
       <p>

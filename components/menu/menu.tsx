@@ -235,8 +235,8 @@ export default defineComponent({
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emitEvent(props.onSelect, label, meta)
         emit('update:active', label)
+        emitEvent(props.onSelect, label, meta)
 
         if (!props.manualRoute && props.router && route) {
           props.router.push(route)
@@ -336,9 +336,9 @@ export default defineComponent({
       return menus.value.map(menu =>
         menu.group
           ? (
-          <MenuGroup label={menu.name ? callIfFunc(menu.name) : menu.label}>
-            {menu.children?.length ? menu.children.map(renderMenuItem) : null}
-          </MenuGroup>
+            <MenuGroup key={menu.label} label={menu.name ? callIfFunc(menu.name) : menu.label}>
+              {menu.children?.length ? menu.children.map(renderMenuItem) : null}
+            </MenuGroup>
             )
           : (
               renderMenuItem(menu)
@@ -355,14 +355,14 @@ export default defineComponent({
               )
             : props.horizontal
               ? (
-            <Overflow class={nh.be('overflow')} inherit>
-              {{
-                default: renderMenus,
-                counter: ({ count }: { count: number }) => (
-                  <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
-                )
-              }}
-            </Overflow>
+                <Overflow class={nh.be('overflow')} inherit>
+                  {{
+                    default: renderMenus,
+                    counter: ({ count }: { count: number }) => (
+                      <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
+                    )
+                  }}
+                </Overflow>
                 )
               : (
                   renderMenus()

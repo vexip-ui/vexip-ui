@@ -62,8 +62,9 @@
           aria-autocomplete="list"
           @submit.prevent
           @input="handleInput"
-          @keydown.enter.stop="handleEnter"
           @keydown="handleKeyDown"
+          @compositionstart="composing = true"
+          @compositionend="composing = false"
         />
       </slot>
     </template>
@@ -97,7 +98,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
 import type { AutoCompleteRawOption } from './symbol'
@@ -165,12 +166,15 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      transparent: false
+      transparent: false,
+      debounce: false,
+      delay: null
     })
 
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
     const visible = ref(false)
+    const composing = ref(false)
 
     let changed = false
     let lastValue = props.value
@@ -251,7 +255,7 @@ export default defineComponent({
     }
 
     function handleSelect(value: string | number, data: AutoCompleteRawOption) {
-      if (isNull(value)) {
+      if (composing.value || isNull(value)) {
         return
       }
 
@@ -268,7 +272,7 @@ export default defineComponent({
       }
     }
 
-    function handleInput(event: string | Event) {
+    function handleInputInternal(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
 
       visible.value = !props.dropDisabled
@@ -283,7 +287,12 @@ export default defineComponent({
       emitEvent(props.onInput, value)
     }
 
-    function handleChange() {
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleInputInternal, delay || 100)
+      : throttle(handleInputInternal, delay || 16)
+
+    function handleChange(valid = true) {
       if (!changed || currentValue.value === lastValue) return
 
       changed = false
@@ -292,10 +301,10 @@ export default defineComponent({
 
       const option = optionStates.value.find(option => option.value === lastValue)
 
+      emit('update:value', currentValue.value)
       setFieldValue(currentValue.value)
       emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
-      emit('update:value', currentValue.value)
-      validateField()
+      valid && validateField()
 
       visible.value = false
 
@@ -321,9 +330,16 @@ export default defineComponent({
     }
 
     function handleKeyDown(event: KeyboardEvent) {
+      if (composing.value) {
+        event.stopPropagation()
+        return
+      }
+
       const key = event.code || event.key
 
-      if (key === 'ArrowDown' || key === 'ArrowUp') {
+      if (key === 'Enter') {
+        handleEnter(event)
+      } else if (key === 'ArrowDown' || key === 'ArrowUp') {
         event.preventDefault()
         event.stopPropagation()
 
@@ -356,7 +372,11 @@ export default defineComponent({
       }
     }
 
-    function handleEnter() {
+    function handleEnter(event: KeyboardEvent) {
+      event.stopPropagation()
+
+      if (composing.value) return
+
       if (filteredOptions.value.length) {
         const option = filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value]
 
@@ -381,7 +401,7 @@ export default defineComponent({
           changed = true
         }
 
-        handleChange()
+        handleChange(false)
         emitEvent(props.onClear)
         nextTick(clearField)
       }
@@ -395,6 +415,7 @@ export default defineComponent({
       currentValue,
       currentIndex,
       visible,
+      composing,
 
       hasPrefix,
       hasSuffix,

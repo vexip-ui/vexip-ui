@@ -12,16 +12,15 @@ const Repl = {
 }
 
 const mount = () => {
-  const app = (window.__app__ = createApp(Repl).use(install))
+  const app = ((window as any).__app__ = createApp(Repl).use(install))
 
-  app.config.unwrapInjectedRef = true
   app.config.errorHandler = e => console.error(e)
   app.mount('#app')
 }
 
-new Promise((resolve, reject) => {
+new Promise<void>((resolve, reject) => {
   const id = '__vexip_style__'
-  const old = document.querySelector(`#${id}`)
+  const old = document.querySelector(`#${id}`) as HTMLLinkElement | null
   const href = '__VEXIP_UI_STYLE__'
 
   if (old && old.href === href) {
@@ -35,7 +34,7 @@ new Promise((resolve, reject) => {
   link.rel = 'stylesheet'
   link.href = href
 
-  link.onload = resolve
+  link.onload = () => resolve()
   link.onerror = reject
 
   document.head.insertBefore(link, document.head.firstChild)

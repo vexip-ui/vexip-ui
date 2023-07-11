@@ -1,7 +1,7 @@
 <template>
   <AutoComplete
     v-model:value="value"
-    style="max-width: 400px;"
+    style="max-width: 400px"
     :options="options"
     @input="setOptions"
   ></AutoComplete>

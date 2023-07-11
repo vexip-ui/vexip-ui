@@ -20,14 +20,13 @@ describe('Option', () => {
     const wrapper = mount(() => <Option value={TEXT}></Option>)
 
     expect(wrapper.find('.vxp-option').text()).toEqual(TEXT)
-    expect(wrapper.find('.vxp-option').attributes('title')).toEqual(TEXT)
   })
 
   it('slot', () => {
     const wrapper = mount(() => (
       <Option label={TEXT}>
         {{
-          default: () => <span class="option"></span>
+          default: () => <span class={'option'}></span>
         }}
       </Option>
     ))
@@ -54,10 +53,10 @@ describe('Option', () => {
     expect(onSelect).not.toHaveBeenCalled()
   })
 
-  it('no title', () => {
-    const wrapper = mount(() => <Option value={TEXT} no-title></Option>)
+  it('title', () => {
+    const wrapper = mount(() => <Option value={TEXT} title={TEXT}></Option>)
 
-    expect(wrapper.find('.vxp-option').attributes('title')).toBeFalsy()
+    expect(wrapper.find('.vxp-option').attributes('title')).toEqual(TEXT)
   })
 
   it('state classes', async () => {

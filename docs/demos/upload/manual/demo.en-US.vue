@@ -27,7 +27,7 @@ import { ref } from 'vue'
 
 import { Check, Upload as IUpload } from '@vexip-ui/icons'
 
-import type { UploadExposed } from 'vexip-ui'
+import type { FileState, UploadExposed } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 const upload = ref<UploadExposed>()
@@ -51,7 +51,7 @@ async function doUpload() {
 
 // When the url is not set, you can record the selected file through the change event,
 // and then operate it by yourself, such as putting it into a FormData
-function handleChange(files: File[]) {
+function handleChange(files: FileState[]) {
   console.info(files)
 }
 </script>

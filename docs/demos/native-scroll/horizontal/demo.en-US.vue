@@ -1,8 +1,8 @@
 <template>
-  <div style="display: inline-flex; border: var(--vxp-border-base);">
+  <div style="display: inline-flex; border: var(--vxp-border-base)">
     <NativeScroll mode="horizontal" use-x-bar width="25em">
       <p>Scroll mouse wheel here (Shift)</p>
-      <p style="white-space: nowrap;">
+      <p style="white-space: nowrap">
         This is a long long long long long long long long long long long long long long long long
         long long long long long text
       </p>

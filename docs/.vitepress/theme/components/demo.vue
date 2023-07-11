@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { markRaw, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, markRaw, onMounted, ref, watch, watchEffect } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 
 import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
+import { useBEM } from '@vexip-ui/bem-helper'
+import { useIntersection } from '@vexip-ui/hooks'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
 import { hashTarget } from '../common/hash-target'
@@ -43,8 +45,8 @@ const props = defineProps({
 
 const { t, locale } = useI18n({ useScope: 'global' })
 
-const prefix = 'demo'
-const activeClass = `${prefix}--active`
+const nh = useBEM('demo')
+const activeClass = nh.bm('active')
 
 const demo = ref<Record<string, any>>()
 const code = ref('')
@@ -54,6 +56,17 @@ const codeLines = ref(0)
 
 const wrapper = ref<RowExposed>()
 const codeRef = ref<HTMLElement>()
+
+const wrapperEl = computed(() => wrapper.value?.$el as HTMLElement | undefined)
+const intersected = ref(false)
+
+useIntersection({
+  target: wrapperEl,
+  rootMargin: '200 0 200 0',
+  handler: entry => {
+    intersected.value = entry.isIntersecting
+  }
+})
 
 watchEffect(async () => {
   if (!codeRef.value) return
@@ -153,9 +166,14 @@ function editOnPlayground() {
 </script>
 
 <template>
-  <Row ref="wrapper" tag="section" :class="[prefix]">
+  <Row
+    ref="wrapper"
+    tag="section"
+    :class="nh.b()"
+    :style="{ visibility: !intersected ? 'hidden' : undefined }"
+  >
     <Column>
-      <div :class="`${prefix}__example`">
+      <div :class="nh.be('example')">
         <NativeScroll
           mode="horizontal"
           width="100%"
@@ -170,14 +188,14 @@ function editOnPlayground() {
           </ClientOnly>
         </NativeScroll>
       </div>
-      <div :class="`${prefix}__description`">
+      <div :class="nh.be('description')">
         <slot></slot>
       </div>
     </Column>
-    <Column :class="`${prefix}__actions`">
+    <Column :class="nh.be('actions')">
       <Tooltip reverse transfer>
         <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
+          <button type="button" :class="nh.be('action')">
             <Icon :scale="1.1" @click="copyCodes">
               <PasteR></PasteR>
             </Icon>
@@ -187,7 +205,7 @@ function editOnPlayground() {
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
+          <button type="button" :class="nh.be('action')">
             <Icon :scale="1.1" :label="t('common.editOnGithub')" @click="editOnGithub">
               <PenToSquareR></PenToSquareR>
             </Icon>
@@ -197,7 +215,7 @@ function editOnPlayground() {
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
+          <button type="button" :class="nh.be('action')">
             <Icon :scale="1.1" :label="t('common.editOnPlayground')" @click="editOnPlayground">
               <PaperPlaneR></PaperPlaneR>
             </Icon>
@@ -207,7 +225,7 @@ function editOnPlayground() {
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
-          <button type="button" :class="`${prefix}__action`">
+          <button type="button" :class="nh.be('action')">
             <Icon
               :scale="1.1"
               :label="codeExpanded ? t('common.hideCode') : t('common.showCode')"
@@ -221,16 +239,16 @@ function editOnPlayground() {
       </Tooltip>
     </Column>
     <CollapseTransition>
-      <Column v-show="codeExpanded" :class="`${prefix}__code`">
+      <Column v-show="codeExpanded" :class="nh.be('code')">
         <div :class="`language-vue`">
           <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
           <span v-if="codeLines > 0" class="code-line-numbers">
             <span v-for="n in codeLines" :key="n"></span>
           </span>
         </div>
-        <button type="button" :class="`${prefix}__reduce`" @click="expandCodes">
+        <button type="button" :class="nh.be('reduce')" @click="expandCodes">
           <Icon><ChevronUp></ChevronUp></Icon>
-          <span :class="`${prefix}__tip`">
+          <span :class="nh.be('tip')">
             {{ t('common.hideCode') }}
           </span>
         </button>

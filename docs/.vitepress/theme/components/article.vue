@@ -162,6 +162,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
     td:nth-child(1) {
       white-space: nowrap;
     }
+
+    s {
+      color: var(--vxp-color-error-opacity-1);
+    }
   }
 }
 </style>

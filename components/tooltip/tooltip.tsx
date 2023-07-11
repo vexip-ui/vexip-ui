@@ -163,8 +163,8 @@ export default defineComponent({
         updatePopper()
       }
 
-      emitEvent(props.onToggle, visible)
       emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
     }
 
     function computeTriggerWidth() {
@@ -279,16 +279,16 @@ export default defineComponent({
         triggerVNode &&
           (CustomTag
             ? (
-            <CustomTag
-              {...attrs}
-              ref={originalTrigger}
-              class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
-            >
-              {triggers}
-            </CustomTag>
+              <CustomTag
+                {...attrs}
+                ref={originalTrigger}
+                class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
+              >
+                {triggers}
+              </CustomTag>
               )
             : (
-            <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
+              <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
               )),
         !props.disabled && (
           <Popper

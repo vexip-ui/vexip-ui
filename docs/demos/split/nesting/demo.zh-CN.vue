@@ -1,7 +1,7 @@
 <template>
   <Split style="max-width: 500px; height: 320px; box-shadow: 0 0 1px">
     <template #left>
-      <Split vertical can-full style="padding: 10px">
+      <Split vertical style="padding: 10px">
         <template #left>
           <div style="padding: 10px">
             左上侧面板

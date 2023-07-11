@@ -1,5 +1,6 @@
 <template>
   <Table
+    use-x-bar
     use-y-bar
     :columns="columns"
     :data="data"
@@ -9,16 +10,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 
 import { defineColumns } from 'vexip-ui'
 
 const columns = ref(
   defineColumns([
+    { type: 'selection', fixed: true },
     {
       type: 'order',
       name: 'Order',
-      key: 'order',
       fixed: true
     },
     {
@@ -34,18 +35,27 @@ const columns = ref(
     {
       name: 'Job',
       key: 'job',
-      width: 160,
-      fixed: 'right'
+      width: 160
     },
     {
       name: 'Age',
       key: 'age',
-      width: 160
+      width: 60,
+      textAlign: 'center',
+      fixed: 'right'
     },
     {
       name: 'Email',
       key: 'email',
       width: 240
+    },
+    {
+      name: 'Action',
+      key: 'action',
+      width: 120,
+      textAlign: 'center',
+      fixed: 'right',
+      renderer: () => h('a', { href: 'javascript:void 0' }, ['Action'])
     }
   ])
 )

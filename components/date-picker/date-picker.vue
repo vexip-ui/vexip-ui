@@ -626,9 +626,6 @@ export default defineComponent({
       if (value) {
         updatePopper()
       }
-
-      emitEvent(props.onToggle, value)
-      emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
@@ -662,7 +659,7 @@ export default defineComponent({
       () => props.disabled,
       value => {
         if (value) {
-          currentVisible.value = false
+          setVisible(false)
           handleBlur()
         }
       }
@@ -671,7 +668,7 @@ export default defineComponent({
       () => props.loading,
       value => {
         if (value && props.loadingLock) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -679,7 +676,7 @@ export default defineComponent({
       () => props.loadingLock,
       value => {
         if (props.loading && value) {
-          currentVisible.value = false
+          setVisible(false)
         }
       }
     )
@@ -888,6 +885,15 @@ export default defineComponent({
       }
     }
 
+    function setVisible(visible: boolean) {
+      if (currentVisible.value === visible) return
+
+      currentVisible.value = visible
+
+      emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
+    }
+
     function emitChange() {
       verifyDate()
 
@@ -912,15 +918,15 @@ export default defineComponent({
         const emitValue = usingRange.value ? emitValues : emitValues[0]
 
         toggleActivated(true)
+        emit('update:value', emitValue)
         setFieldValue(emitValue)
         emitEvent(props.onChange, emitValue)
-        emit('update:value', emitValue)
         validateField()
       }
     }
 
     function finishInput(shouldChange = true) {
-      currentVisible.value = false
+      setVisible(false)
 
       shouldChange && emitChange()
       startState.resetColumn()
@@ -998,7 +1004,8 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       const target = event.target as Node
-      currentVisible.value = true
+
+      setVisible(true)
 
       if (wrapper.value && target) {
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
@@ -1149,8 +1156,8 @@ export default defineComponent({
 
           parseValue(null)
           finish && finishInput(false)
-          emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
+          emitEvent(props.onChange, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)
           finish && handleBlur()

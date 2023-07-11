@@ -239,11 +239,11 @@ export default defineComponent({
                 slots.loading()
               )
             : (
-            <Icon
-              {...icons.value.loading}
-              effect={props.loadingEffect || icons.value.loading.effect}
-              icon={props.loadingIcon || icons.value.loading.icon}
-            ></Icon>
+              <Icon
+                {...icons.value.loading}
+                effect={props.loadingEffect || icons.value.loading.effect}
+                icon={props.loadingIcon || icons.value.loading.icon}
+              ></Icon>
               )}
         </div>
       )
@@ -255,9 +255,9 @@ export default defineComponent({
             renderLoadingIcon()
           )
         : (
-        <div class={nh.be('icon')}>
-          {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
-        </div>
+          <div class={nh.be('icon')}>
+            {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
+          </div>
           )
     }
 
@@ -268,9 +268,9 @@ export default defineComponent({
               renderLoadingIcon()
             )
           : (
-          <div class={nh.be('icon')}>
-            {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
-          </div>
+            <div class={nh.be('icon')}>
+              {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
+            </div>
             )
       }
 

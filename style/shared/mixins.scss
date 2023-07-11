@@ -113,11 +113,11 @@
 
 @mixin h-moving-border($border-color, $duration: 2000ms) {
   position: relative;
-  will-change: left, right;
+  will-change: inset;
 
   &::before {
     position: absolute;
-    inset: -4px 0 auto;
+    inset: -4px 25% auto;
     width: auto;
     height: 0;
     content: '';
@@ -128,7 +128,7 @@
 
   &::after {
     position: absolute;
-    inset: auto 0 -4px;
+    inset: auto 25% -4px;
     width: auto;
     height: 0;
     content: '';
@@ -140,11 +140,11 @@
 
 @mixin v-moving-border($border-color, $duration: 2000ms) {
   position: relative;
-  will-change: top, bottom;
+  will-change: inset;
 
   &::before {
     position: absolute;
-    inset: 0 auto 0 -4px;
+    inset: 25% auto 25% -4px;
     width: 0;
     height: auto;
     content: '';
@@ -155,7 +155,7 @@
 
   &::after {
     position: absolute;
-    inset: 0 -4px 0 auto;
+    inset: 25% -4px 25% auto;
     width: 0;
     height: auto;
     content: '';

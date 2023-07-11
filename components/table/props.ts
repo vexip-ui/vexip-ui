@@ -12,18 +12,26 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import type { ClassType, ConfigurableProps, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
+  Accessor,
+  ColumnCellSpanFn,
   ColumnRenderFn,
+  ColumnSummaryRenderFn,
   Data,
   DropType,
   ExpandRenderFn,
   FilterRenderFn,
   HeadRenderFn,
+  SummaryCellSpanFn,
+  SummaryRenderFn,
   TableCellPayload,
   TableCellPropFn,
+  TableCellSpanFn,
   TableColumnOptions,
   TableColumnType,
   TableFilterOptions,
   TableFilterProfile,
+  TableFootPayload,
+  TableFootPropFn,
   TableHeadPayload,
   TableHeadPropFn,
   TableKeyConfig,
@@ -31,12 +39,14 @@ import type {
   TableRowPropFn,
   TableSorterOptions,
   TableSorterProfile,
+  TableSummaryOptions,
   TableTextAlign
 } from './symbol'
 
 export const tableProps = buildProps({
   locale: localeProp('table'),
   columns: Array as PropType<TableColumnOptions<any, any>[]>,
+  summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
   dataKey: String,
   width: [Number, String],
@@ -49,6 +59,7 @@ export const tableProps = buildProps({
   stripe: booleanProp,
   border: booleanProp,
   highlight: booleanProp,
+  useXBar: booleanProp,
   useYBar: booleanProp,
   barFade: Number,
   scrollDeltaY: Number,
@@ -72,15 +83,24 @@ export const tableProps = buildProps({
   tooltipWidth: [Number, String],
   singleSorter: booleanProp,
   singleFilter: booleanProp,
-  cellClass: [String, Object, Array, Function] as PropType<ClassType | TableCellPropFn<ClassType>>,
-  cellStyle: [String, Object, Array, Function] as PropType<StyleType | TableCellPropFn<StyleType>>,
+  cellClass: [String, Object, Array, Function] as PropType<
+    ClassType | TableCellPropFn<any, ClassType>
+  >,
+  cellStyle: [String, Object, Array, Function] as PropType<
+    StyleType | TableCellPropFn<any, StyleType>
+  >,
   cellAttrs: [Object, Function] as PropType<
-    Record<string, any> | TableCellPropFn<Record<string, any>>
+    Record<string, any> | TableCellPropFn<any, Record<string, any>>
   >,
   headClass: [String, Object, Array, Function] as PropType<ClassType | TableHeadPropFn<ClassType>>,
   headStyle: [String, Object, Array, Function] as PropType<StyleType | TableHeadPropFn<StyleType>>,
   headAttrs: [Object, Function] as PropType<
     Record<string, any> | TableHeadPropFn<Record<string, any>>
+  >,
+  footClass: [String, Object, Array, Function] as PropType<ClassType | TableFootPropFn<ClassType>>,
+  footStyle: [String, Object, Array, Function] as PropType<StyleType | TableFootPropFn<StyleType>>,
+  footAttrs: [Object, Function] as PropType<
+    Record<string, any> | TableFootPropFn<Record<string, any>>
   >,
   customSorter: booleanProp,
   customFilter: booleanProp,
@@ -89,7 +109,13 @@ export const tableProps = buildProps({
   rowIndent: [String, Number],
   noCascaded: booleanProp,
   colResizable: booleanProp,
+  cellSpan: Function as PropType<TableCellSpanFn>,
+  sidePadding: [Number, Array] as PropType<number | number[]>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
+  onScroll:
+    eventProp<
+      (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void
+    >(),
   onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
   onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
   onRowClick: eventProp<(payload: TableRowPayload) => void>(),
@@ -116,16 +142,24 @@ export const tableProps = buildProps({
   onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>(),
   onColResizeStart: eventProp<(payload: TableHeadPayload) => void>(),
   onColResizeMove: eventProp<(payload: TableHeadPayload) => void>(),
-  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>()
+  onColResizeEnd: eventProp<(payload: TableHeadPayload) => void>(),
+  onFootEnter: eventProp<(payload: TableFootPayload) => void>(),
+  onFootLeave: eventProp<(payload: TableFootPayload) => void>(),
+  onFootClick: eventProp<(payload: TableFootPayload) => void>(),
+  onFootDblclick: eventProp<(payload: TableFootPayload) => void>(),
+  onFootContextmenu: eventProp<(payload: TableFootPayload) => void>()
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>
-export type TableCProps = ConfigurableProps<TableProps, 'columns' | 'data' | 'currentPage'>
+export type TableCProps = ConfigurableProps<
+  TableProps,
+  'columns' | 'data' | 'currentPage' | 'summaries'
+>
 
 export const tableColumnProps = buildProps({
   idKey: [Number, String],
   name: String,
-  accessor: Function as PropType<(row: any, index: number) => any>,
+  accessor: Function as PropType<Accessor>,
   fixed: {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: null
@@ -150,12 +184,45 @@ export const tableColumnProps = buildProps({
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>,
-  textAlign: String as PropType<TableTextAlign>
+  metaData: Object as PropType<Record<any, any>>,
+  meta: Object as PropType<any>,
+  textAlign: String as PropType<TableTextAlign>,
+  headSpan: Number,
+  cellSpan: Function as PropType<ColumnCellSpanFn>,
+  noSummary: booleanProp,
+  summaryRenderer: Function as PropType<ColumnSummaryRenderFn>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
 export type TableColumnCProps = ConfigurableProps<
   TableColumnProps,
-  'idKey' | 'name' | 'accessor' | 'fixed' | 'type' | 'renderer' | 'headRenderer' | 'order'
+  | 'idKey'
+  | 'name'
+  | 'accessor'
+  | 'fixed'
+  | 'type'
+  | 'renderer'
+  | 'headRenderer'
+  | 'order'
+  | 'headSpan'
+  | 'summaryRenderer'
+>
+
+export const tableSummaryProps = buildProps({
+  idKey: [Number, String],
+  name: String,
+  class: classProp,
+  style: styleProp,
+  attrs: Object,
+  cellSpan: Function as PropType<SummaryCellSpanFn>,
+  order: Number,
+  above: booleanProp,
+  meta: Object as PropType<any>,
+  renderer: Function as PropType<SummaryRenderFn>
+})
+
+export type TableSummaryProps = ExtractPropTypes<typeof tableSummaryProps>
+export type TableSummaryCProps = ConfigurableProps<
+  TableSummaryProps,
+  'idKey' | 'name' | 'renderer' | 'colSpan' | 'order' | 'above'
 >

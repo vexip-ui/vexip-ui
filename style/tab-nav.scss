@@ -270,17 +270,17 @@ $tab-nav: map.merge(
       border-bottom-width: 1px;
     }
 
-    #{$content} {
-      &--active {
-        &,
-        &:hover,
-        &:focus {
-          border-bottom-color: transparent;
+    &#{$card} {
+      #{$content} {
+        &--active {
+          &,
+          &:hover,
+          &:focus {
+            border-bottom-color: transparent;
+          }
         }
       }
-    }
 
-    &#{$card} {
       #{$content},
       #{$add} {
         border-radius: $content-radius $content-radius 0 0;
@@ -301,17 +301,17 @@ $tab-nav: map.merge(
       border-inline-start-width: 1px;
     }
 
-    #{$content} {
-      &--active {
-        &,
-        &:hover,
-        &:focus {
-          border-inline-start-color: transparent;
+    &#{$card} {
+      #{$content} {
+        &--active {
+          &,
+          &:hover,
+          &:focus {
+            border-inline-start-color: transparent;
+          }
         }
       }
-    }
 
-    &#{$card} {
       #{$content},
       #{$add} {
         border-radius: 0 $content-radius $content-radius 0;
@@ -332,17 +332,17 @@ $tab-nav: map.merge(
       border-top-width: 1px;
     }
 
-    #{$content} {
-      &--active {
-        &,
-        &:hover,
-        &:focus {
-          border-top-color: transparent;
+    &#{$card} {
+      #{$content} {
+        &--active {
+          &,
+          &:hover,
+          &:focus {
+            border-top-color: transparent;
+          }
         }
       }
-    }
 
-    &#{$card} {
       #{$content},
       #{$add} {
         border-radius: 0 0 $content-radius $content-radius;
@@ -363,17 +363,17 @@ $tab-nav: map.merge(
       border-inline-end-width: 1px;
     }
 
-    #{$content} {
-      &--active {
-        &,
-        &:hover,
-        &:focus {
-          border-inline-end-color: transparent;
+    &#{$card} {
+      #{$content} {
+        &--active {
+          &,
+          &:hover,
+          &:focus {
+            border-inline-end-color: transparent;
+          }
         }
       }
-    }
 
-    &#{$card} {
       #{$content},
       #{$add} {
         border-radius: $content-radius 0 0 $content-radius;

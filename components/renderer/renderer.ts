@@ -1,14 +1,14 @@
-import { defineComponent } from 'vue'
+import { defineComponent, renderSlot } from 'vue'
 
 import { rendererProps } from './props'
 
 export default defineComponent({
   name: 'Renderer',
   props: rendererProps,
-  setup(props) {
+  setup(props, { slots }) {
     return () => {
       if (typeof props.renderer !== 'function') {
-        return null
+        return renderSlot(slots, 'default', props.data)
       }
 
       return props.renderer(props.data)

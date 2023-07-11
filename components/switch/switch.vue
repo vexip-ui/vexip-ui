@@ -95,7 +95,8 @@ export default defineComponent({
       onBeforeChange: {
         default: null,
         isFunc: true
-      }
+      },
+      rectangle: false
     })
 
     const nh = useNameHelper('switch')
@@ -113,7 +114,8 @@ export default defineComponent({
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading
+          [nh.bm('loading')]: props.loading,
+          [nh.bm('rectangle')]: props.rectangle
         }
       ]
     })
@@ -137,12 +139,6 @@ export default defineComponent({
         currentValue.value = value
       }
     )
-    watch(currentValue, value => {
-      setFieldValue(value)
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-      validateField()
-    })
 
     async function handleChange(checked = !currentValue.value) {
       if (checked === currentValue.value) return
@@ -159,6 +155,11 @@ export default defineComponent({
 
       if (result !== false) {
         currentValue.value = checked
+
+        emit('update:value', checked)
+        setFieldValue(checked)
+        emitEvent(props.onChange, checked)
+        validateField()
       }
     }
 

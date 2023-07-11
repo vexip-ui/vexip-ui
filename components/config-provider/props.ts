@@ -20,6 +20,11 @@ export const configProviderProps = wrapProps({
   zIndex: {
     type: Number,
     default: null
+  },
+  theme: {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    type: String as PropType<'base' | 'dark' | (string & {})>,
+    default: null
   }
 })
 

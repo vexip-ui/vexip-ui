@@ -5,12 +5,12 @@ $-name: '#{$namespace}-drop';
 
 @mixin -start {
   opacity: 0%;
-  transform: scaleY(0.35);
+  transform: translateZ(0) scaleY(0.35);
 }
 
 @mixin -end {
   opacity: 100%;
-  transform: scaleY(1);
+  transform: translateZ(0) scaleY(1);
 }
 
 .#{$-name} {

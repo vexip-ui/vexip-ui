@@ -269,10 +269,6 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      emitEvent(props.onToggle, value)
-      emit('update:active', value)
-    })
     watch(
       () => props.width,
       value => {
@@ -285,6 +281,15 @@ export default defineComponent({
         currentHeight.value = value
       }
     )
+
+    function setActive(active: boolean) {
+      if (currentActive.value === active) return
+
+      currentActive.value = active
+
+      emit('update:active', active)
+      emitEvent(props.onToggle, active)
+    }
 
     async function handleClose(isConfirm = false) {
       let result: unknown = true
@@ -299,7 +304,7 @@ export default defineComponent({
 
       if (result !== false) {
         nextTick(() => {
-          currentActive.value = false
+          setActive(false)
           emitEvent(props.onClose)
         })
       }

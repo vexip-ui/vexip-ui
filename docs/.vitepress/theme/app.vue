@@ -307,7 +307,7 @@ function refreshScroll() {
     z-index: calc(var(--header-z-index) - 2);
 
     &--away {
-      z-index: calc(var(--header-z-index) + 2);
+      z-index: 10000;
     }
   }
 

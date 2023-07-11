@@ -11,9 +11,9 @@
       :loading="loading"
       :on-before-close="beforeClose"
     >
-      <p style="margin-bottom: 3px;">
+      <p style="margin-bottom: 3px">
         点击
-        <Tag style="vertical-align: baseline;">
+        <Tag style="vertical-align: baseline">
           确定
         </Tag>
         后

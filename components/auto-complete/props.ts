@@ -52,6 +52,8 @@ export const autoCompleteProps = buildProps({
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
+  debounce: booleanProp,
+  delay: Number,
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),

@@ -3,7 +3,7 @@
     :items="items"
     use-bar-track
     item-fixed
-    style="height: 200px;"
+    style="height: 200px"
   >
     <template #default="{ item }">
       <li class="virtual-list__item">

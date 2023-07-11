@@ -3,7 +3,9 @@
     v-if="!row.hidden"
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
+    role="row"
     :draggable="draggable || row.dragging"
+    :style="groupStyle"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
@@ -17,19 +19,24 @@
     <div
       ref="rowEl"
       :class="className"
-      role="row"
       :style="style"
-      :aria-rowindex="index"
       v-bind="attrs"
     >
+      <div
+        v-if="fixed !== 'right'"
+        :class="nh.be('side-pad')"
+        role="none"
+        aria-hidden
+      ></div>
       <slot></slot>
+      <div
+        v-if="fixed !== 'left'"
+        :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+        role="none"
+        aria-hidden
+      ></div>
     </div>
-    <CollapseTransition
-      v-if="!!expandColumn"
-      appear
-      @after-enter="computeRectHeight"
-      @after-leave="computeRectHeight"
-    >
+    <CollapseTransition v-if="!!expandColumn" @enter="computeRectHeight" @leave="computeRectHeight">
       <div
         v-if="row.expanded"
         ref="expand"
@@ -70,10 +77,10 @@ import {
 
 import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
 import type { CSSProperties, PropType } from 'vue'
-import type { ColumnWithKey, TableExpandColumn, TableRowState } from './symbol'
+import type { TableRowState } from './symbol'
 
 export default defineComponent({
   name: 'TableRow',
@@ -94,9 +101,9 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    isFixed: {
-      type: Boolean,
-      default: false
+    fixed: {
+      type: String as PropType<'left' | 'right' | undefined>,
+      default: null
     }
   },
   setup(props) {
@@ -114,7 +121,7 @@ export default defineComponent({
       row: toRef(props, 'row')
     })
 
-    const rowKey = computed(() => (props.isHead ? TABLE_HEAD_KEY : props.row.key))
+    const rowKey = computed(() => props.row.key)
     const className = computed(() => {
       let customClass = null
 
@@ -130,7 +137,7 @@ export default defineComponent({
         nh.be('row'),
         {
           [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.index % 2 === 1,
+          [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
@@ -148,10 +155,10 @@ export default defineComponent({
       }
 
       return [
+        customStyle,
         {
           minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
-        },
-        customStyle
+        }
       ]
     })
     const attrs = computed(() => {
@@ -165,29 +172,41 @@ export default defineComponent({
 
       return null
     })
+    const groupStyle = computed(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      state.totalHeight
+
+      const offset =
+        state.heightBITree && !props.isHead && props.index ? state.heightBITree.sum(props.index) : 0
+
+      return {
+        transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
+      }
+    })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
-    const expandColumn = computed(() => {
-      return state.columns.find(column => (column as TableExpandColumn).type === 'expand') as
-        | TableExpandColumn
-        | undefined
-    })
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
-      return props.isFixed
+      const width =
+        props.fixed === 'right' ? getters.rightFixedWidths.at(-1) : getters.leftFixedWidths.at(-1)
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+      const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+
+      return props.fixed
         ? {
-            width: '1px',
-            // height: `${props.row.expandHeight}px`,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            visibility: 'hidden'
+            width: width && `${width + padLeft + padRight}px`,
+            whiteSpace: 'nowrap'
           }
         : {}
     })
-    const leftFixed = computed(() => computeFixedWidth(state.leftFixedColumns))
-    const rightFixed = computed(() => computeFixedWidth(state.rightFixedColumns))
     const cellDraggable = computed(() => {
       return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
+    const leftFixed = computed(() => {
+      return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
+    })
+    const rightFixed = computed(() => {
+      return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
     })
 
     function getRowHeight(row: TableRowState) {
@@ -196,33 +215,16 @@ export default defineComponent({
       return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
     }
 
-    function computeFixedWidth(columns: ColumnWithKey[]) {
-      if (!columns?.length) {
-        return 0
-      }
-
-      const widths = state.widths
-
-      let width = 0
-
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths.get(key) || 0
-
-        width += columnWidth
-      }
-
-      return width
-    }
-
     function computeRectHeight() {
       if (!Object.keys(props.row).length || props.row.hidden) return
 
       computeBorderHeight()
       computeRowHeight()
+      !props.isHead && updateTotalHeight()
+    }
 
-      if (state.heightBITree && !props.isFixed) {
+    function updateTotalHeight() {
+      if (state.heightBITree && !props.fixed) {
         nextTick(() => {
           const height = getRowHeight(props.row)
           const tree = state.heightBITree
@@ -259,12 +261,13 @@ export default defineComponent({
         computeRectHeight()
       } else if (!props.row.hidden) {
         computeBorderHeight()
+        updateTotalHeight()
       }
     })
 
     function computeRowHeight() {
       if (state.rowHeight) {
-        mutations.setRowHeight(rowKey.value, state.rowHeight)
+        mutations.fixRowHeight(rowKey.value, state.rowHeight)
 
         nextTick(() => {
           if (rowElement.value) {
@@ -274,9 +277,9 @@ export default defineComponent({
         })
       } else {
         nextTick(() => {
-          if (!props.isFixed) {
+          if (!props.fixed) {
             if (rowElement.value) {
-              mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
+              mutations.fixRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
           } else {
             setTimeout(() => {
@@ -295,7 +298,7 @@ export default defineComponent({
         const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
 
         mutations.setBorderHeight(rowKey.value, borderHeight)
-        mutations.setRowExpandHeight(rowKey.value, expandElement.value?.offsetHeight || 0)
+        mutations.setRowExpandHeight(rowKey.value, expandElement.value?.scrollHeight || 0)
       }
     }
 
@@ -383,12 +386,13 @@ export default defineComponent({
       className,
       style,
       attrs,
+      groupStyle,
       draggable,
-      expandColumn,
       expandRenderer,
       expandStyle,
       leftFixed,
       rightFixed,
+      expandColumn: toRef(getters, 'expandColumn'),
 
       wrapper,
       rowEl: rowElement,

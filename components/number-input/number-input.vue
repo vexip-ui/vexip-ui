@@ -18,7 +18,7 @@
     <input
       ref="input"
       type="text"
-      :class="[nh.be('control'), inputClass]"
+      :class="[nh.be('control'), props.inputClass, props.controlClass]"
       :value="inputValue"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
@@ -102,7 +102,8 @@ import {
   plus,
   throttle,
   toFixed,
-  toNumber
+  toNumber,
+  warnOnce
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -163,7 +164,9 @@ export default defineComponent({
       altStep: 0.1,
       disabled: () => disabled.value,
       inputClass: null,
+      controlClass: null,
       debounce: false,
+      delay: null,
       clearable: false,
       loading: () => loading.value,
       loadingIcon: null,
@@ -173,6 +176,13 @@ export default defineComponent({
       controlType: 'right',
       emptyType: 'NaN'
     })
+
+    if (!isNull(props.inputClass)) {
+      warnOnce(
+        "[vexip-ui:NumberInput] 'input-class' prop has been deprecated, please " +
+          "use 'control-class' prop to replace it"
+      )
+    }
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
@@ -404,14 +414,14 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string | number, type: InputEventType) {
+    function setValue(value: string | number, type: InputEventType, sync = props.sync) {
       if (type !== 'input') {
         currentValue.value = isEmpty(value) ? getEmptyValue() : toNumber(value)
       } else {
         currentValue.value = value
       }
 
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
     function getEmptyValue() {
@@ -425,7 +435,7 @@ export default defineComponent({
       }
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       const empty = isEmpty(currentValue.value)
       const value = empty ? getEmptyValue() : toNumber(currentValue.value)
 
@@ -444,38 +454,39 @@ export default defineComponent({
           currentValue.value = boundValue
         }
 
-        if (!props.sync && Object.is(lastValue, boundValue)) {
+        if (!sync && Object.is(lastValue, boundValue)) {
           !Object.is(props.value, value) && emit('update:value', boundValue)
           return
         }
 
         lastValue = boundValue
-        ;(!props.sync || boundChange) && setFieldValue(boundValue)
+
+        if (!sync || boundChange) {
+          emit('update:value', boundValue)
+          setFieldValue(boundValue)
+        }
+
         emitEvent(props.onChange, boundValue)
 
-        if (!props.sync || boundChange) {
-          emit('update:value', boundValue)
+        if (!sync || boundChange) {
           validateField()
         }
       } else {
-        props.sync && setFieldValue(value)
+        if (sync) {
+          emit('update:value', value)
+          setFieldValue(value)
+        }
+
         emitEvent(props.onInput, value)
 
-        if (props.sync) {
-          emit('update:value', value)
+        if (sync) {
           validateField()
         }
       }
     }
 
     function handleClear() {
-      setValue(NaN, 'change')
-
-      if (props.sync) {
-        emit('update:value', getEmptyValue())
-        validateField()
-      }
-
+      setValue(NaN, 'change', false)
       emitEvent(props.onClear)
       clearField()
     }
@@ -496,7 +507,10 @@ export default defineComponent({
       emitEvent(props.onKeyPress, event)
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     return {
       props,

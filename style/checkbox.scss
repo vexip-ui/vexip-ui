@@ -72,8 +72,6 @@ $checkbox: map.merge(
   }
 
   &__signal {
-    @include around-border(get-css-var('checkbox-b-color'), get-css-var('checkbox-signal-radius'));
-
     position: relative;
     display: inline-block;
     width: get-css-var('checkbox-signal-size');
@@ -85,11 +83,19 @@ $checkbox: map.merge(
       get-css-var('transition-shadow');
 
     &::before {
+      position: absolute;
+      inset: -4px 25% auto;
+      width: auto;
+      height: 0;
+      pointer-events: none;
+      content: '';
+      border-top: get-css-var('border-shape') get-css-var('checkbox-b-color');
       opacity: 0%;
     }
 
     &--active::before {
       opacity: 100%;
+      animation: vxp-h-moving-border 1000ms infinite linear;
     }
 
     &::after {

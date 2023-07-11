@@ -65,6 +65,8 @@ body {
   overflow: hidden;
   font-family: var(--vxp-font-family-base);
   font-size: var(--vxp-font-size-base);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--vxp-line-height-base);
   color: var(--vxp-content-color-base);
   background-color: var(--body-bg-color);
   transition: var(--vxp-transition-background);
@@ -81,14 +83,8 @@ body {
   width: 100%;
   height: 50px;
 
-  &__left,
-  &__right {
+  &__section {
     display: flex;
-    align-items: center;
-  }
-
-  &__right {
-    padding: 0 10px;
   }
 }
 
@@ -99,7 +95,7 @@ body {
   overflow: auto;
   background-color: var(--bg-color);
   border: var(--vxp-border-base);
-  border-radius: var(--vxp-border-radius-large);
+  border-radius: var(--vxp-radius-large);
   transition: var(--vxp-transition-background), var(--vxp-transition-border);
 }
 

@@ -1,5 +1,10 @@
 <template>
-  <Table :data="data" :width="800" @row-expand="handleExpand">
+  <Table
+    use-x-bar
+    :data="data"
+    :width="800"
+    @row-expand="handleExpand"
+  >
     <TableColumn type="expand" id-key="expand" fixed>
       <template #default="{ row, leftFixed, rightFixed }">
         <Grid
