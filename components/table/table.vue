@@ -326,7 +326,7 @@ export default defineComponent({
       rowStyle: null,
       rowAttrs: null,
       stripe: false,
-      border: true,
+      border: false,
       highlight: false,
       useXBar: false,
       useYBar: false,
