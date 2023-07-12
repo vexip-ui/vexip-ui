@@ -62,7 +62,6 @@ export const tableProps = buildProps({
   useXBar: booleanProp,
   useYBar: booleanProp,
   barFade: Number,
-  scrollDeltaY: Number,
   rowDraggable: booleanProp,
   rowHeight: Number,
   rowMinHeight: Number,

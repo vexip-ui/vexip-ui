@@ -88,7 +88,7 @@
         @x-enabled-change="xScrollEnabled = $event"
       >
         <NativeScroll
-          ref="mainScroll"
+          ref="yScroll"
           inherit
           observe-deep
           scroll-only
@@ -331,7 +331,6 @@ export default defineComponent({
       useXBar: false,
       useYBar: false,
       barFade: 1500,
-      scrollDeltaY: 36,
       rowDraggable: false,
       rowHeight: null,
       rowMinHeight: {
@@ -410,7 +409,7 @@ export default defineComponent({
     const thead = ref<HTMLElement>()
     const aboveTfoot = ref<HTMLElement>()
     const belowTfoot = ref<HTMLElement>()
-    const mainScroll = ref<NativeScrollExposed>()
+    const yScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const xScrollbar = ref<ScrollbarExposed>()
     const yScrollbar = ref<ScrollbarExposed>()
@@ -741,7 +740,7 @@ export default defineComponent({
       window.addEventListener('resize', handlerResize)
 
       xScrollEnabled.value = xScroll.value?.enableXScroll ?? false
-      yScrollEnabled.value = mainScroll.value?.enableYScroll ?? false
+      yScrollEnabled.value = yScroll.value?.enableYScroll ?? false
     })
 
     onBeforeUnmount(() => {
@@ -1139,8 +1138,8 @@ export default defineComponent({
     }
 
     // function syncVerticalScroll() {
-    //   if (mainScroll.value) {
-    //     setBodyYScroll(-mainScroll.value.y)
+    //   if (yScroll.value) {
+    //     setBodyYScroll(-yScroll.value.y)
     //   }
     // }
 
@@ -1214,13 +1213,13 @@ export default defineComponent({
 
       wrapper,
       xScroll,
+      yScroll,
       xHeadScroll,
       xAboveScroll,
       xBelowScroll,
       thead,
       aboveTfoot,
       belowTfoot,
-      mainScroll,
       indicator,
       xScrollbar,
       yScrollbar,
