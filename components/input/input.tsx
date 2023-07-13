@@ -108,7 +108,7 @@ export default defineComponent({
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
-    const inputControl = ref<HTMLElement>()
+    const inputControl = ref<HTMLInputElement>()
 
     const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input', toRef(props, 'locale'))
@@ -344,6 +344,14 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
+    function handleCompositionStart(event: CompositionEvent) {
+      emitEvent(props.onCompositionStart, event)
+    }
+
+    function handleCompositionEnd(event: CompositionEvent) {
+      emitEvent(props.onCompositionStart, event)
+    }
+
     function copyValue() {
       const input = document.createElement('input')
 
@@ -506,6 +514,8 @@ export default defineComponent({
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
             onSubmit={preventDefault}
+            onCompositionstart={handleCompositionStart}
+            onCompositionend={handleCompositionEnd}
           />
           {renderSuffix()}
           {props.maxLength > 0 ? renderCount() : null}
