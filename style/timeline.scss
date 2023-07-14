@@ -19,7 +19,8 @@ $timeline: map.merge(
     line-style: solid,
     line-style-pending: dashed,
     line-color: get-css-var('border-color-light-2'),
-    line-inset: 0px
+    line-inset-start: 0px,
+    line-inset-end: 0px
   ),
   $timeline
 );
@@ -187,8 +188,8 @@ $timeline: map.merge(
     flex-direction: column;
     align-items: center;
     width: 0;
-    padding-top: calc($pointer-size + get-css-var('timeline-line-inset'));
-    padding-bottom: get-css-var('timeline-line-inset');
+    padding-top: calc($pointer-size + get-css-var('timeline-line-inset-start'));
+    padding-bottom: get-css-var('timeline-line-inset-end');
 
     &::after {
       height: 100%;
@@ -204,8 +205,8 @@ $timeline: map.merge(
     width: 100%;
     height: 0;
     padding: 0;
-    padding-right: get-css-var('timeline-line-inset');
-    padding-left: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-right: get-css-var('timeline-line-inset-end');
+    padding-left: calc($pointer-size + get-css-var('timeline-line-inset-start'));
 
     &::after {
       width: 100%;

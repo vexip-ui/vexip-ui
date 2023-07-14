@@ -92,7 +92,8 @@ In both-sides mode, if you don't want the component to automatically calculate t
 
 ### Textarea Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| default | Timeline node content slot | -          | -     |
-| signal  | Timeline node signal slot  | -          | -     |
+| Name    | Description                       | Parameters | Since    |
+| ------- | --------------------------------- | ---------- | -------- |
+| default | Timeline node content slot        | -          | -        |
+| signal  | Timeline node signal slot         | -          | -        |
+| line    | Timeline line prefix content slot | -          | `2.1.28` |
