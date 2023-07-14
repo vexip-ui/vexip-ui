@@ -304,9 +304,7 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__content {
-    padding: {
-      inset: $content-pad 0 0;
-    }
+    padding: $content-pad 0 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(odd) &__content {
