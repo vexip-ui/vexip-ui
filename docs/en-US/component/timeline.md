@@ -2,6 +2,12 @@
 
 It is often used to show some content step by step.
 
+::: info
+
+When modifying the signal size and line width, keep their parity the same to ensure timeline alignment.
+
+:::
+
 ## Demos
 
 :::demo timeline/basis
