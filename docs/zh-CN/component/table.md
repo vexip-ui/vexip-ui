@@ -217,10 +217,13 @@
 ```ts
 type Key = string | number | symbol
 type Data = any
+type TableIconName = 'filter' | 'asc' | 'desc' | 'dragger' | 'expand' | 'plus' | 'minus'
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+
+type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
 interface CellSpanResult {
   colSpan?: number,
@@ -543,6 +546,7 @@ interface TableFootPayload {
 | col-resizable   | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
+| icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
 
 ### Table 事件
 
@@ -585,10 +589,11 @@ interface TableFootPayload {
 
 ### Table 插槽
 
-| 名称    | 说明                                      | 参数                 | 始于 |
-| ------- | ----------------------------------------- | -------------------- | ---- |
-| default | 用于定义 TableColumn 和 TableSummary 组件 | -                    | -    |
-| empty   | 空数据提示内容的插槽                      | `(isFixed: boolean)` | -    |
+| 名称        | 说明                                                         | 参数                 | 始于     |
+| ----------- | ------------------------------------------------------------ | -------------------- | -------- |
+| default     | 用于定义 TableColumn 和 TableSummary 组件                    | -                    | -        |
+| empty       | 空数据提示内容的插槽                                         | `(isFixed: boolean)` | -        |
+| icon-[name] | 表格图标的插槽，其中 `[name]` 的可选值请参考 `TableIconName` | -                    | `2.1.28` |
 
 ### Table 方法
 

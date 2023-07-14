@@ -243,6 +243,7 @@ import {
   onMounted,
   provide,
   ref,
+  renderSlot,
   toRef,
   watch
 } from 'vue'
@@ -263,7 +264,7 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DropType, TABLE_ACTIONS, TABLE_STORE } from './symbol'
+import { DropType, TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
 import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
@@ -304,7 +305,7 @@ export default defineComponent({
   },
   props: tableProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { slots }) {
     const props = useProps('table', _props, {
       locale: null,
       columns: {
@@ -382,7 +383,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      sidePadding: 0
+      sidePadding: 0,
+      icons: () => ({})
     })
 
     const nh = useNameHelper('table')
@@ -522,8 +524,12 @@ export default defineComponent({
       emitCellEvent,
       emitHeadEvent,
       emitColResize,
-      emitFootEvent
+      emitFootEvent,
+      hasIcon: name => !!props.icons[name],
+      getIcon: name => props.icons[name],
+      renderTableSlot
     })
+    provide(TABLE_SLOTS, slots)
 
     const { state, getters, mutations } = store
 
@@ -1137,12 +1143,6 @@ export default defineComponent({
       }, 0)
     }
 
-    // function syncVerticalScroll() {
-    //   if (yScroll.value) {
-    //     setBodyYScroll(-yScroll.value.y)
-    //   }
-    // }
-
     const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
@@ -1176,6 +1176,10 @@ export default defineComponent({
       }
 
       return selectedData
+    }
+
+    function renderTableSlot({ name }: { name: string }) {
+      return renderSlot(slots, name)
     }
 
     return {

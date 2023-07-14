@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
+import { User } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
 import { Table, defineColumns, defineSummaries } from '..'
 import TableBody from '../table-body.vue'
@@ -1029,5 +1030,69 @@ describe('Table', () => {
     expect(cells[2][1].attributes('rowspan')).toEqual('0')
     expect(cells[2][2].attributes('colspan')).toEqual('0')
     expect(cells[2][2].attributes('rowspan')).toEqual('0')
+  })
+
+  it('set icons', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name',
+        sorter: true,
+        filter: {
+          able: true,
+          options: [{ label: 'Includes A', value: 'A' }],
+          method: (value: string, data: any) => data.name.includes(value)
+        }
+      },
+      { type: 'expand' },
+      { type: 'drag' }
+    ]
+    const data = [
+      {
+        name: 'Angelique',
+        children: [{ name: 'Aeris' }],
+        treeExpanded: true
+      },
+      {
+        name: 'Elisabeth',
+        children: [{ name: 'Sharon' }]
+      },
+      { name: 'Evie', label: 'Farmer' }
+    ]
+    const icons = {
+      filter: User,
+      asc: User,
+      desc: User,
+      expand: User,
+      dragger: User,
+      plus: User,
+      minus: User
+    }
+    const wrapper = mount(() => <Table columns={columns} data={data} icons={icons}></Table>)
+
+    await runScrollTimers()
+
+    const headCell = wrapper.find('.vxp-table__head-cell')
+    const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+
+    expect(headCell.find('.vxp-table__filter-trigger').findComponent(User).exists()).toBe(true)
+    expect(headCell.find('.vxp-table__sorter--asc').findComponent(User).exists()).toBe(true)
+    expect(headCell.find('.vxp-table__sorter--desc').findComponent(User).exists()).toBe(true)
+
+    expect(rows[0].find('.vxp-table__expand').findComponent(User).exists()).toBe(true)
+    expect(rows[1].find('.vxp-table__dragger').findComponent(User).exists()).toBe(true)
+
+    expect(
+      rows[0]
+        .find('.vxp-table__tree-expand:not(.vxp-table__tree-expand--hidden)')
+        .findComponent(User)
+        .exists()
+    ).toBe(true)
+    expect(
+      rows[2]
+        .find('.vxp-table__tree-expand:not(.vxp-table__tree-expand--hidden)')
+        .findComponent(User)
+        .exists()
+    ).toBe(true)
   })
 })

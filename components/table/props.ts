@@ -34,6 +34,7 @@ import type {
   TableFootPropFn,
   TableHeadPayload,
   TableHeadPropFn,
+  TableIcons,
   TableKeyConfig,
   TableRowPayload,
   TableRowPropFn,
@@ -110,6 +111,7 @@ export const tableProps = buildProps({
   colResizable: booleanProp,
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
+  icons: Object as PropType<TableIcons>,
   onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onScroll:
     eventProp<
