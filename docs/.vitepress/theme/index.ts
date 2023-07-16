@@ -1,6 +1,10 @@
 import './style/index.scss'
 
-import { withBase } from 'vitepress'
+import { h } from 'vue'
+
+import { type App, type MetaHTMLAttributes, type Ref } from 'vue'
+
+import { useData, withBase } from 'vitepress'
 import { Loading, install as VexipUI } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
 import { i18n, langOptions, vexipuiLocale } from './i18n'
@@ -12,11 +16,17 @@ import prismjs from 'prismjs'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
-import type { App, MetaHTMLAttributes, Ref } from 'vue'
-import type { Router } from 'vitepress'
+import type { HeadConfig, Router } from 'vitepress'
 
 export default {
-  Layout,
+  Layout() {
+    const { theme } = useData()
+    const head = theme.value.head
+
+    setMetaHead(head)
+
+    return h(Layout)
+  },
   enhanceApp({ app, router }: { app: App, router: Router }) {
     (prismjs as any).manual = false
 
@@ -125,11 +135,36 @@ function enhanceRouter(router: Router) {
 
 function syncMetaTitle() {
   const titleMetaEl = document.querySelector('meta[property="og:title"]') as MetaHTMLAttributes
+
   if (!titleMetaEl) return
 
-  const titleEl = document.getElementsByTagName('title')[0]
-  const title = titleEl?.innerText.replace(/\s\|.*/, '') || 'Vexip UI'
+  const titleEl = document.querySelector('title')
+  const title = titleEl?.textContent!.replace(/\s\|.*/, '') || 'Vexip UI'
   const newTitle = `${title} | ${titleMetaEl?.content?.replace(/.*\s\|\s/, '')}`
 
   titleMetaEl.content = newTitle
+}
+
+function isMeta(headConfig: HeadConfig) {
+  return headConfig[0] === 'meta'
+}
+
+function createHeadElement([tag, attrs, innerHTML]: any[]) {
+  const el = document.createElement(tag)
+  for (const key in attrs) {
+    el.setAttribute(key, attrs[key])
+  }
+  if (innerHTML) {
+    el.innerHTML = innerHTML
+  }
+  return el
+}
+
+function setMetaHead(headList: HeadConfig[]) {
+  for (const headConfig of headList) {
+    if (isMeta(headConfig)) {
+      const el = createHeadElement(headConfig)
+      document.head.appendChild(el)
+    }
+  }
 }
