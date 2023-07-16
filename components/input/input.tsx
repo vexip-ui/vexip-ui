@@ -108,7 +108,7 @@ export default defineComponent({
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
-    const inputControl = ref<HTMLElement>()
+    const inputControl = ref<HTMLInputElement>()
 
     const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input', toRef(props, 'locale'))
@@ -233,6 +233,7 @@ export default defineComponent({
       const type = event.type as InputEventType
 
       currentValue.value = (event.target as HTMLInputElement).value
+      console.log(currentValue.value)
       limitValueLength()
 
       const value = currentValue.value
@@ -341,6 +342,14 @@ export default defineComponent({
       }
 
       emitEvent(props.onKeyUp, event)
+    }
+
+    function handleCompositionStart(event: CompositionEvent) {
+      emitEvent(props.onCompositionStart, event)
+    }
+
+    function handleCompositionEnd(event: CompositionEvent) {
+      emitEvent(props.onCompositionStart, event)
     }
 
     function copyValue() {
@@ -467,7 +476,7 @@ export default defineComponent({
                   renderSlot(slots, 'password', { plain: showPassword.value })
                 )
               : (
-              <Icon {...passwordIcon.value}></Icon>
+                <Icon {...passwordIcon.value}></Icon>
                 )}
           </div>
         )
@@ -505,6 +514,8 @@ export default defineComponent({
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
             onSubmit={preventDefault}
+            onCompositionstart={handleCompositionStart}
+            onCompositionend={handleCompositionEnd}
           />
           {renderSuffix()}
           {props.maxLength > 0 ? renderCount() : null}

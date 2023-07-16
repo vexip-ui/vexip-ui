@@ -166,7 +166,7 @@ export interface SelectKeyConfig {
   label?: string,
   disabled?: string,
   divided?: string,
-  noTitle?: string,
+  title?: string,
   group?: string,
   children?: string
 }
@@ -179,7 +179,7 @@ interface SelectOptionState {
   label: string,
   disabled: boolean,
   divided: boolean,
-  noTitle: boolean,
+  title: string,
   hidden: boolean,
   hitting: boolean,
   group: boolean,

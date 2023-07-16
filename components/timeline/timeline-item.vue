@@ -5,7 +5,9 @@
         <div :class="nh.be('pointer')"></div>
       </slot>
     </div>
-    <div :class="nh.be('line')" :style="lineStyle"></div>
+    <div :class="nh.be('line')" :style="lineStyle">
+      <slot name="line"></slot>
+    </div>
     <div ref="content" :class="nh.be('content')">
       <slot></slot>
     </div>

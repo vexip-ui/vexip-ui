@@ -3,7 +3,7 @@
     v-model:value="time"
     range
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
   <p>Current Time Range: {{ time }}</p>
 </template>

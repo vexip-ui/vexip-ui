@@ -79,7 +79,7 @@ export interface AutoCompleteKeyConfig {
   value?: string,
   disabled?: string,
   divided?: string,
-  noTitle?: string,
+  title?: string,
   group?: string,
   children?: string
 }
@@ -90,7 +90,7 @@ interface AutoCompleteOptionState {
   value: string | number,
   disabled: boolean,
   divided: boolean,
-  noTitle: boolean,
+  title: string,
   hidden: boolean,
   hitting: boolean,
   group: boolean,

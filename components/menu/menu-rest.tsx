@@ -136,6 +136,7 @@ export default defineComponent({
 
       return props.menus.map(item => (
         <MenuItem
+          key={item.label}
           label={item.label}
           icon={item.icon}
           icon-props={item.iconProps}

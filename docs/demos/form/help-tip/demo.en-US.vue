@@ -1,10 +1,10 @@
 <template>
-  <Form style="max-width: 400px;" label-suffix=":">
+  <Form style="max-width: 400px" label-suffix=":">
     <FormItem label="Input" prop="input" help="Some help tips">
       <Input></Input>
     </FormItem>
   </Form>
-  <Form label-align="top" style="max-width: 400px;">
+  <Form label-align="top" style="max-width: 400px">
     <FormItem label="Select" prop="select">
       <Select :options="options"></Select>
       <template #help>

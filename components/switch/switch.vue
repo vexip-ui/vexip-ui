@@ -6,6 +6,15 @@
     :aria-checked="currentValue"
     :style="style"
   >
+    <input
+      ref="input"
+      type="checkbox"
+      :class="nh.be('input')"
+      :checked="currentValue"
+      :disabled="isDisabled"
+      @submit.prevent
+      @change="handleChange()"
+    />
     <span :class="nh.be('placeholder')">
       <span :class="nh.be('open-text')">
         <slot name="open">{{ props.openText }}</slot>
@@ -35,15 +44,6 @@
         <slot name="close">{{ props.closeText }}</slot>
       </span>
     </span>
-    <input
-      ref="input"
-      type="checkbox"
-      :class="nh.be('input')"
-      :checked="currentValue"
-      :disabled="isDisabled"
-      @submit.prevent
-      @change="handleChange()"
-    />
   </label>
 </template>
 
@@ -95,13 +95,14 @@ export default defineComponent({
       onBeforeChange: {
         default: null,
         isFunc: true
-      }
+      },
+      rectangle: false
     })
 
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement>()
+    const input = ref<HTMLInputElement>()
 
     const className = computed(() => {
       return [
@@ -113,7 +114,8 @@ export default defineComponent({
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading
+          [nh.bm('loading')]: props.loading,
+          [nh.bm('rectangle')]: props.rectangle
         }
       ]
     })

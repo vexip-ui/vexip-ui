@@ -61,9 +61,9 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
                   item.renderer()
                 )
               : (
-              <span class={nh.be('label')} style={{ color: item.color }}>
-                {item.label || item.key}
-              </span>
+                <span class={nh.be('label')} style={{ color: item.color }}>
+                  {item.label || item.key}
+                </span>
                 )}
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
@@ -111,9 +111,9 @@ export function renderItem({ config, nh }: { config: ContextmenuConfig, nh: Name
               config.renderer()
             )
           : (
-          <span class={nh.be('label')} style={{ color: config.color }}>
-            {config.label || config.key}
-          </span>
+            <span class={nh.be('label')} style={{ color: config.color }}>
+              {config.label || config.key}
+            </span>
             )}
         {renderItemShortcut(config, nh)}
       </DropdownItem>

@@ -4,7 +4,7 @@
     filter
     ignore-case
     :options="options"
-    style="max-width: 400px;"
+    style="max-width: 400px"
   ></AutoComplete>
   <p>Current Value: {{ value }}</p>
 </template>

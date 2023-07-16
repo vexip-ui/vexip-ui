@@ -358,8 +358,8 @@ describe('NumberInput', () => {
     expect(getValue(wrapper.find('input'))).toEqual(`${NUMBER}Y`)
   })
 
-  it('input class', () => {
-    const wrapper = mount(() => <NumberInput input-class={'test'}></NumberInput>)
+  it('control class', () => {
+    const wrapper = mount(() => <NumberInput control-class={'test'}></NumberInput>)
 
     expect(wrapper.find('input').classes()).toContain('test')
   })

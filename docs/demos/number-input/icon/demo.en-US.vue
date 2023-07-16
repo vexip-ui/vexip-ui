@@ -1,11 +1,11 @@
 <template>
-  <NumberInput placeholder="Prefix Icon" style="max-width: 300px;" :prefix="User"></NumberInput>
+  <NumberInput placeholder="Prefix Icon" style="max-width: 300px" :prefix="User"></NumberInput>
   <br />
   <br />
   <NumberInput
     clearable
     placeholder="Suffix Icon"
-    style="max-width: 300px;"
+    style="max-width: 300px"
     :suffix="User"
   ></NumberInput>
 </template>

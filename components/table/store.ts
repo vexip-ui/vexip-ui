@@ -92,7 +92,8 @@ export function useStore(options: StoreOptions) {
     colResizing: false,
     resizeLeft: 0,
     cellSpanMap: new Map(),
-    collapseMap: new Map()
+    collapseMap: new Map(),
+    sidePadding: options.sidePadding || [0, 0]
   }) as StoreState
 
   setColumns(options.columns)
@@ -320,6 +321,7 @@ export function useStore(options: StoreOptions) {
     setResizeLeft,
     setExpandRenderer,
     setCellSpan,
+    setSidePadding,
 
     handleSort,
     clearSort,
@@ -752,12 +754,12 @@ export function useStore(options: StoreOptions) {
   function setTableWidth(width: number) {
     width = toNumber(width)
 
-    const { columns, widths, resized } = state
+    const { columns, widths, resized, sidePadding } = state
 
     const hasWidthColumns = []
     const flexColumns = []
 
-    let flexWidth = width
+    let flexWidth = width - (sidePadding[0] || 0) - (sidePadding[1] || 0)
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
@@ -926,6 +928,10 @@ export function useStore(options: StoreOptions) {
   function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
     resetCellSpan()
+  }
+
+  function setSidePadding(padding: number | number[]) {
+    state.sidePadding = Array.isArray(padding) ? padding : [padding, padding]
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

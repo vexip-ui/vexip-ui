@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; padding-left: 16px;">
+  <div style="position: relative; padding-left: 16px">
     <div
       :style="{
         position: 'absolute',

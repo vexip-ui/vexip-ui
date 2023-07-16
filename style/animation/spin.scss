@@ -4,11 +4,11 @@
 $-name: '#{$namespace}-spin';
 
 @mixin -start {
-  transform: rotate(0deg);
+  transform: translateZ(0) rotate(0deg);
 }
 
 @mixin -end {
-  transform: rotate(360deg);
+  transform: translateZ(0) rotate(360deg);
 }
 
 .#{$-name} {

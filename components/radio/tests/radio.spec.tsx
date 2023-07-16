@@ -155,7 +155,8 @@ describe('Radio', () => {
     const onChange = vi.fn()
     const wrapper = mount(() => (
       <RadioGroup disabled onChange={onChange}>
-        <Radio label={'1'}></Radio>,<Radio label={'2'} disabled></Radio>,
+        <Radio label={'1'}></Radio>
+        <Radio label={'2'} disabled></Radio>
         <Radio label={'3'} disabled={false}></Radio>
       </RadioGroup>
     ))

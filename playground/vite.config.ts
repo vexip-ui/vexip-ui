@@ -9,8 +9,13 @@ import autoprefixer from 'autoprefixer'
 const upstreamPkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 
-const getVersion = (name: string) =>
-  /^\d/.test(pkg.dependencies[name]) ? pkg.dependencies[name] : pkg.dependencies[name].slice(1)
+const getVersion = (name: string) => {
+  const [dep] = [pkg, upstreamPkg]
+    .map(pkg => pkg.dependencies[name] || pkg.devDependencies[name])
+    .filter(Boolean)
+
+  return dep && (/^\d/.test(dep) ? dep : dep.slice(1))
+}
 
 export default defineConfig(({ command }) => {
   const useServer = command === 'serve'
@@ -19,6 +24,7 @@ export default defineConfig(({ command }) => {
     define: {
       __VERSION__: JSON.stringify(upstreamPkg.version),
       __VUE_VERSION__: JSON.stringify(getVersion('vue')),
+      __TS_VERSION__: JSON.stringify(getVersion('typescript')),
       __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl')),
       __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
     },

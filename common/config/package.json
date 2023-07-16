@@ -10,6 +10,9 @@
     "@vexip-ui/bem-helper": "workspace:~",
     "@vexip-ui/utils": "workspace:~"
   },
+  "devDependencies": {
+    "vue": "^3.3.4"
+  },
   "peerDependencies": {
     "vue": "^3.2.25"
   }

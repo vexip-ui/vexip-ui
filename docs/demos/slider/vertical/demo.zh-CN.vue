@@ -1,5 +1,5 @@
 <template>
-  <Space style="height: 200px;">
+  <Space style="height: 200px">
     <Slider v-model:value="value" vertical></Slider>
     <Slider v-model:value="rangeValue" vertical range></Slider>
   </Space>

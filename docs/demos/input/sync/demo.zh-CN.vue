@@ -3,7 +3,7 @@
     v-model:value="value"
     sync
     clearable=""
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></Input>
   <p>Input Value: {{ value }}</p>
 </template>

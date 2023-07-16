@@ -62,8 +62,9 @@
           aria-autocomplete="list"
           @submit.prevent
           @input="handleInput"
-          @keydown.enter.stop="handleEnter"
           @keydown="handleKeyDown"
+          @compositionstart="composing = true"
+          @compositionend="composing = false"
         />
       </slot>
     </template>
@@ -173,6 +174,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
     const visible = ref(false)
+    const composing = ref(false)
 
     let changed = false
     let lastValue = props.value
@@ -253,7 +255,7 @@ export default defineComponent({
     }
 
     function handleSelect(value: string | number, data: AutoCompleteRawOption) {
-      if (isNull(value)) {
+      if (composing.value || isNull(value)) {
         return
       }
 
@@ -328,9 +330,16 @@ export default defineComponent({
     }
 
     function handleKeyDown(event: KeyboardEvent) {
+      if (composing.value) {
+        event.stopPropagation()
+        return
+      }
+
       const key = event.code || event.key
 
-      if (key === 'ArrowDown' || key === 'ArrowUp') {
+      if (key === 'Enter') {
+        handleEnter(event)
+      } else if (key === 'ArrowDown' || key === 'ArrowUp') {
         event.preventDefault()
         event.stopPropagation()
 
@@ -363,7 +372,11 @@ export default defineComponent({
       }
     }
 
-    function handleEnter() {
+    function handleEnter(event: KeyboardEvent) {
+      event.stopPropagation()
+
+      if (composing.value) return
+
       if (filteredOptions.value.length) {
         const option = filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value]
 
@@ -402,6 +415,7 @@ export default defineComponent({
       currentValue,
       currentIndex,
       visible,
+      composing,
 
       hasPrefix,
       hasSuffix,

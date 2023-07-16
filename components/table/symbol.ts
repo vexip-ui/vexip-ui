@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, Slots } from 'vue'
 import type { ClassType, ComponentSize, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
@@ -10,10 +10,13 @@ export type Data = any
 export type MouseEventType = 'Enter' | 'Leave' | 'Click' | 'Dblclick' | 'Contextmenu'
 export type MoveEventType = 'Start' | 'Move' | 'End'
 
+export type TableIconName = 'filter' | 'asc' | 'desc' | 'dragger' | 'expand' | 'plus' | 'minus'
 export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
 export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+
+export type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
 export const enum DropType {
   BEFORE = 'before',
@@ -340,7 +343,8 @@ export interface StoreOptions {
   noCascaded: boolean,
   colResizable: boolean,
   expandRenderer: ExpandRenderFn | null,
-  cellSpan: TableCellSpanFn | null
+  cellSpan: TableCellSpanFn | null,
+  sidePadding: number[]
 }
 
 export interface StoreState extends StoreOptions {
@@ -436,7 +440,10 @@ export interface TableActions {
   emitCellEvent(type: MouseEventType, payload: TableCellPayload): void,
   emitHeadEvent(type: MouseEventType, payload: TableHeadPayload): void,
   emitFootEvent(type: MouseEventType, payload: TableFootPayload): void,
-  emitColResize(type: MoveEventType, payload: TableColResizePayload): void
+  emitColResize(type: MoveEventType, payload: TableColResizePayload): void,
+  hasIcon(name: TableIconName): boolean,
+  getIcon(name: TableIconName): TableIcons[TableIconName],
+  renderTableSlot(payload: { name: string }): any
 }
 
 export const DEFAULT_KEY_FIELD = 'id'
@@ -448,6 +455,7 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  * 表格组件的顶层 Api
  */
 export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
+export const TABLE_SLOTS: InjectionKey<Slots> = Symbol('TABLE_SLOTS')
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')
 export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
 

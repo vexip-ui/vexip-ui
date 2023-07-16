@@ -187,6 +187,7 @@ export default defineComponent({
       () => props.active,
       value => {
         currentActive.value = value
+        updateMarkerPosition()
       }
     )
     watch(

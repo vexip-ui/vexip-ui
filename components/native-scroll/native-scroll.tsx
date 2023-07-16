@@ -609,8 +609,7 @@ export default defineComponent({
           style={[props.scrollAttrs?.style, props.scrollStyle, props.scrollOnly && style.value]}
           onMousedown={handleMouseDown}
           onWheelPassive={(event: WheelEvent) =>
-            handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')
-          }
+            handleWheel(event, event.shiftKey ? 'horizontal' : 'vertical')}
           onScroll={handleScroll}
         >
           {slots.extra && (
@@ -634,8 +633,12 @@ export default defineComponent({
           )}
           {slots.default &&
             (props.observeDeep
-              ? flatVNodes(children).map(vnode => {
-                return <ResizeObserver on-resize={handleResize}>{() => vnode}</ResizeObserver>
+              ? flatVNodes(children).map((vnode, index) => {
+                return (
+                  <ResizeObserver key={vnode.key ?? index} on-resize={handleResize}>
+                    {() => vnode}
+                  </ResizeObserver>
+                )
               })
               : renderSlot(slots, 'default', slotParams))}
         </Content>
@@ -648,7 +651,12 @@ export default defineComponent({
       }
 
       return (
-        <div ref={wrapper} {...attrs} class={className.value} style={style.value}>
+        <div
+          ref={wrapper}
+          {...attrs}
+          class={[className.value, attrs.class]}
+          style={[style.value, attrs.style as any]}
+        >
           <ResizeObserver on-resize={handleResize}>{renderContent()}</ResizeObserver>
           {props.useXBar && (
             <Scrollbar

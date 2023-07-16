@@ -50,18 +50,18 @@ export default defineComponent({
 
       return props.code
         ? (
-        <code class={className.value}>{props.delete ? <del>{children}</del> : children}</code>
+          <code class={className.value}>{props.delete ? <del>{children}</del> : children}</code>
           )
         : props.keyboard
           ? (
-        <kbd class={className.value}>{props.delete ? <del>{children}</del> : children}</kbd>
+            <kbd class={className.value}>{props.delete ? <del>{children}</del> : children}</kbd>
             )
           : props.delete
             ? (
-        <del class={className.value}>{children}</del>
+              <del class={className.value}>{children}</del>
               )
             : (
-        <CustomTag class={className.value}>{children}</CustomTag>
+              <CustomTag class={className.value}>{children}</CustomTag>
               )
     }
   }

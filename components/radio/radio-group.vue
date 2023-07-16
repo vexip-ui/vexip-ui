@@ -2,7 +2,12 @@
   <div :id="idFor" :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
-        <Radio v-if="isObject(item)" inherit :label="item.label">
+        <Radio
+          v-if="isObject(item)"
+          inherit
+          :label="item.label"
+          :disabled="item.disabled"
+        >
           {{ item.content || item.label }}
         </Radio>
         <Radio v-else inherit :label="item">

@@ -1,9 +1,10 @@
-import { resolve, basename } from 'node:path'
+import { basename, resolve } from 'node:path'
 import { readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
+
 import fs from 'fs-extra'
 import { execa } from 'execa'
-import { red, cyan, green } from 'kolorist'
+import { cyan, green, red } from 'kolorist'
 import glob from 'fast-glob'
 import { format } from 'prettier'
 
@@ -95,17 +96,18 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
   let exports = ''
   let types = ''
 
-  await Promise.all(svgFiles.map(async svgFile => {
-    const fileName = basename(svgFile, '.svg')
-    const svg = (await readFile(svgFile, 'utf-8'))
-      .replace(/<!--[\s\S]*-->/, '')
-      .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
+  await Promise.all(
+    svgFiles.map(async svgFile => {
+      const fileName = basename(svgFile, '.svg')
+      const svg = (await readFile(svgFile, 'utf-8'))
+        .replace(/<!--[\s\S]*-->/, '')
+        .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
 
-    let name = toCapitalCase(fileName)
-    name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
-    name += suffix
+      let name = toCapitalCase(fileName)
+      name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
+      name += suffix
 
-    const vue = `
+      const vue = `
       <template>${svg}</template>
       <script lang="ts">
         import { defineComponent, markRaw } from 'vue'
@@ -113,15 +115,16 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
       </script>
     `
 
-    await writeFile(
-      resolve(outDir, `${fileName}.vue`),
-      format(vue, { parser: 'vue', semi: false, singleQuote: true }),
-      'utf-8'
-    )
+      await writeFile(
+        resolve(outDir, `${fileName}.vue`),
+        format(vue, { parser: 'vue', semi: false, singleQuote: true }),
+        'utf-8'
+      )
 
-    exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
-    types += `export const ${name}: SvgIcon\n`
-  }))
+      exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
+      types += `export const ${name}: SvgIcon\n`
+    })
+  )
 
   console.log(cyan(`generated icon vue components for: ${dir}`))
 
