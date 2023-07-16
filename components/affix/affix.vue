@@ -70,14 +70,22 @@ export default defineComponent({
     const fixedStyle = computed<CSSProperties>(() => {
       if (!fixed.value) return {}
 
-      const offset = props.offset ? `${props.offset}px` : 0
+      let _top = props.offset
+      let _bottom = props.offset
+
+      if (isElement(container)) {
+        if (props.target && props.position === 'top') {
+          _top += transform.value
+        } else {
+          _bottom += transform.value
+        }
+      }
 
       return {
         height: `${affixHeight.value}px`,
         width: `${affixWidth.value}px`,
-        top: props.position === 'top' ? offset : '',
-        bottom: props.position === 'bottom' ? offset : '',
-        transform: transform.value ? `translateY(${transform.value}px)` : '',
+        top: props.position === 'top' ? `${_top}px` : '',
+        bottom: props.position === 'bottom' ? `${_bottom}px` : '',
         zIndex: props.zIndex
       }
     })
@@ -98,19 +106,15 @@ export default defineComponent({
 
       if (props.position === 'top') {
         if (props.target) {
-          const difference = targetRect.bottom - props.offset - affixHeight.value
-          fixed.value = props.offset > wrapperRect.top && targetRect.bottom > 0
-          transform.value = difference < 0 ? difference : 0
+          transform.value = targetRect.top
+          fixed.value = wrapperRect.top < targetRect.top + props.offset
         } else {
           fixed.value = props.offset > wrapperRect.top
         }
       } else {
         if (props.target) {
-          const difference = clientHeight.value - targetRect.top - props.offset - affixHeight.value
-          fixed.value =
-            clientHeight.value - props.offset < wrapperRect.bottom &&
-            clientHeight.value > targetRect.top
-          transform.value = difference < 0 ? -difference : 0
+          transform.value = clientHeight.value - targetRect.bottom
+          fixed.value = targetRect.bottom < props.offset + wrapperRect.bottom
         } else {
           fixed.value = clientHeight.value - props.offset < wrapperRect.bottom
         }
@@ -131,50 +135,60 @@ export default defineComponent({
 
       if (!isClient) return
 
-      let _container: ComponentInternalInstance | null = instance.parent
-      const refName = 'scroll'
+      if (props.target) {
+        container = target.value!
+        container.addEventListener('scroll', handleContainerScroll)
+      } else {
+        let _container: ComponentInternalInstance | null = instance.parent!
+        const refName = 'scroll'
 
-      while (_container) {
-        const name = _container.type?.name
+        while (_container) {
+          const name = _container.type?.name
 
-        if (name === 'Scroll' || name === 'NativeScroll') {
-          const { exposeProxy, exposed, proxy } = _container
+          if (name === 'Scroll' || name === 'NativeScroll') {
+            const { exposeProxy, exposed, proxy } = _container
+            const _scroller = new Proxy({} as any, {
+              get(_, key) {
+                return (
+                  (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
+                )
+              }
+            })
+            const scrollerEl = _scroller?.$el as HTMLElement
 
-          scroller = new Proxy({} as any, {
-            get(_, key) {
-              return (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
+            if (!scrollerEl.getAttribute('class')?.includes('vxp-native-scroll--horizontal')) {
+              scroller = _scroller
+              break
             }
-          })
-
-          break
-        }
-
-        const refTemp = _container.refs?.[refName]
-
-        if (refTemp) {
-          if (isElement(refTemp)) {
-            isRawViewer = true
-            container = refTemp as HTMLElement
-          } else {
-            scroller = refTemp as ScrollType
           }
 
-          break
+          const refTemp = _container.refs?.[refName]
+
+          if (refTemp) {
+            if (isElement(refTemp)) {
+              isRawViewer = true
+              container = refTemp as HTMLElement
+            } else {
+              scroller = refTemp as ScrollType
+            }
+
+            break
+          }
+
+          _container = _container.parent
         }
 
-        _container = _container.parent
-      }
+        if (scroller) {
+          scroller.addScrollListener(handleContainerScroll)
+          container = scroller.$el
+        } else if (!container) {
+          isRawViewer = true
+          container = window
+        }
 
-      if (scroller) {
-        scroller.addScrollListener(handleContainerScroll)
-        container = scroller.$el
-      } else if (!container) {
-        isRawViewer = true
-        container = window
-      }
-
-      if (isRawViewer && container) {
-        container.addEventListener('scroll', handleContainerScroll)
+        if (isRawViewer && container) {
+          container.addEventListener('scroll', handleContainerScroll)
+        }
       }
     }
 
@@ -196,7 +210,9 @@ export default defineComponent({
 
     onMounted(() => {
       if (props.target) {
-        target.value = document.querySelector<HTMLElement>(props.target) ?? undefined
+        if (typeof props.target === 'string') {
+          target.value = document.querySelector<HTMLElement>(props.target) ?? undefined
+        }
         if (!target.value) {
           throw new Error(`Affix prop target is not existed: ${props.target}`)
         }
