@@ -23,6 +23,12 @@ function defineGetter(obj: Record<string, any>, prop: string, value: any, defaul
   }
 }
 
+function setStyles(element: HTMLElement, styles: Record<string, any>) {
+  for (const prop in styles) {
+    element.style[prop as unknown as number] = styles[prop]
+  }
+}
+
 let clientHeightRestore: () => void
 
 beforeAll(() => {
@@ -170,14 +176,27 @@ describe('Affix', () => {
     const wrapper = mount(
       () => (
         <>
-          <div class="target" style="height: 200px">
-            <Affix target=".target"></Affix>
+          <div class="affix-container">
+            <div class="background">
+              <Affix target=".affix-container" offset="80" style="margin-top: 300px">
+                指定容器
+              </Affix>
+            </div>
           </div>
-          <div style="height: 1000px"></div>
         </>
       ),
       { attachTo: document.body }
     )
+    const targetEl = document.querySelector('.affix-container')! as HTMLElement
+    const bgEl = document.querySelector('.background')! as HTMLElement
+
+    setStyles(targetEl, {
+      height: '400px',
+      overflow: 'auto'
+    })
+    setStyles(bgEl, {
+      height: '500px'
+    })
 
     let scrollTop = 100
     const affixRectMock = vi
@@ -185,16 +204,16 @@ describe('Affix', () => {
       .mockReturnValue({
         height: 40,
         width: 1000,
-        top: -100,
-        bottom: -100
+        top: 300,
+        bottom: 332
       } as DOMRect)
     const targetRectMock = vi
-      .spyOn(wrapper.find('.target').element, 'getBoundingClientRect')
+      .spyOn(wrapper.find('.affix-container').element, 'getBoundingClientRect')
       .mockReturnValue({
         height: 40,
         width: 1000,
-        top: -100,
-        bottom: 100
+        top: 0,
+        bottom: 500
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
@@ -204,29 +223,29 @@ describe('Affix', () => {
       }
     })
 
-    window.dispatchEvent(evt)
+    targetEl.dispatchEvent(evt)
     await nextFrame()
 
-    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(true)
+    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(false)
 
     scrollTop = 300
     affixRectMock.mockReturnValue({
       height: 40,
       width: 1000,
-      top: -300,
-      bottom: -300
+      top: 0,
+      bottom: 32
     } as DOMRect)
     targetRectMock.mockReturnValue({
       height: 40,
       width: 1000,
-      top: -300,
-      bottom: -100
+      top: 0,
+      bottom: 500
     } as DOMRect)
 
-    window.dispatchEvent(evt)
+    targetEl.dispatchEvent(evt)
     await nextFrame()
 
-    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(false)
+    expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(true)
 
     affixRectMock.mockRestore()
     targetRectMock.mockRestore()
