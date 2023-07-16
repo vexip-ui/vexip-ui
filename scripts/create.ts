@@ -17,6 +17,7 @@ import {
   toCapitalCase,
   toKebabCase
 } from './utils'
+import pkg from '../package.json'
 
 let name: string
 
@@ -423,31 +424,40 @@ async function getConvertCompTypeFiles(): Promise<
   const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split('\n')
 
   const compConfigIndex = compConfigSource.findIndex(i => i.includes(`name: '${compType}'`)) + 2
+  const compConfigEndIndex = compConfigSource.findIndex(
+    (item, index) => index > compConfigIndex && item.includes(']')
+  )
   const i18nUsIndex = i18nUsSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
   const i18nCnIndex = i18nCnSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
   const i18nHelperIndex =
     i18nHelperSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
 
+  compConfigSource.splice(compConfigIndex, 0, `{ name: '${name}', since: '${getSinceVersion()}' },`)
+
+  const convertCompConfig = compConfigSource
+    .slice(compConfigIndex, compConfigEndIndex + 1)
+    .sort((pre, cur) => {
+      const preValue = pre
+        .match(/name:\s*['"]([\w]+)['"]/)?.[1]
+        .charAt(0)
+        .toLowerCase()
+      const curValue = cur
+        .match(/name:\s*['"]([\w]+)['"]/)?.[1]
+        .charAt(0)
+        .toLowerCase()
+
+      return preValue?.localeCompare(curValue as string) as number
+    })
+
   compConfigSource.splice(
     compConfigIndex,
-    0,
-    `// make sure the order of components object (delete the comment after confirming the order)\n{ name: '${name}', since: 'the comp create since' },`
+    compConfigEndIndex - compConfigIndex + 1,
+    ...convertCompConfig
   )
-  i18nUsSource.splice(
-    i18nUsIndex,
-    0,
-    `// make sure the order of components object (delete the comment after confirming the order)\n${capitalCaseName}: '${capitalCaseName}',`
-  )
-  i18nCnSource.splice(
-    i18nCnIndex,
-    0,
-    `// 确保组件对象的顺序排列 (确认了顺序正确后删除该注释)\n${capitalCaseName}: '${capitalCaseName} (需翻译为中文)',`
-  )
-  i18nHelperSource.splice(
-    i18nHelperIndex,
-    0,
-    `// make sure the order of components object (delete the comment after confirming the order)\n${capitalCaseName}: string,`
-  )
+
+  i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+  i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${capitalCaseName} (需翻译为中文)',`)
+  i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: string,`)
 
   return [
     { filePath: compConfigPath, source: compConfigSource.join('\n'), convert: true },
@@ -455,6 +465,19 @@ async function getConvertCompTypeFiles(): Promise<
     { filePath: i18nCnPath, source: i18nCnSource.join('\n'), convert: true },
     { filePath: i18nHelperPath, source: i18nHelperSource.join('\n'), convert: true }
   ]
+}
+
+function getSinceVersion() {
+  const splitStr = pkg.version.split('.')
+  let addMidVer = String(parseInt(splitStr[1]) + 1)
+
+  if (addMidVer.length === 2) {
+    addMidVer = addMidVer.substring(1)
+    splitStr[0] = String(parseInt(splitStr[0]) + 1)
+  }
+  splitStr[1] = addMidVer
+
+  return splitStr.join('.')
 }
 
 main().catch(error => {
