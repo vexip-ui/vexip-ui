@@ -176,10 +176,10 @@ describe('Affix', () => {
     const wrapper = mount(
       () => (
         <>
-          <div class="affix-container">
-            <div class="background">
-              <Affix target=".affix-container" offset="80" style="margin-top: 300px">
-                指定容器
+          <div class={'affix-container'}>
+            <div class={'background'}>
+              <Affix target={'.affix-container'} offset={'80'} style={'margin-top: 300px'}>
+                {'指定容器'}
               </Affix>
             </div>
           </div>
