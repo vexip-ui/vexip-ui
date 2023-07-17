@@ -52,7 +52,12 @@ describe('Option', () => {
     const items = Array.from({ length: 5 }, (_, i) => ({ index: i + 1 }))
     const wrapper = mount(Overflow, {
       slots: {
-        default: () => items.map(item => <div class={'item'}>{item.index}</div>),
+        default: () =>
+          items.map(item => (
+            <div key={item.index} class={'item'}>
+              {item.index}
+            </div>
+          )),
         counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>
       }
     })

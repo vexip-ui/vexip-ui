@@ -5,12 +5,12 @@ $-name: '#{$namespace}-zoom';
 
 @mixin -start {
   opacity: 0%;
-  transform: scale(0.35);
+  transform: translateZ(0) scale(0.35);
 }
 
 @mixin -end {
   opacity: 100%;
-  transform: scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .#{$-name} {

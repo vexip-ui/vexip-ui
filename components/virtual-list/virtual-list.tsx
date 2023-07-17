@@ -126,7 +126,7 @@ export default defineComponent({
           ref={scroll}
           {...attrs}
           inherit={props.inherit}
-          class={nh.b()}
+          class={[nh.b(), attrs.class]}
           use-y-bar
           scroll-y={scrollOffset.value}
           onScroll={onScroll}
@@ -154,9 +154,9 @@ export default defineComponent({
                     const onResize = handleItemResize.bind(null, key)
 
                     return (
-                        <ResizeObserver key={key} throttle onResize={onResize}>
-                          {() => vnode}
-                        </ResizeObserver>
+                      <ResizeObserver key={key} throttle onResize={onResize}>
+                        {() => vnode}
+                      </ResizeObserver>
                     )
                   })
                   : slots.empty?.()}

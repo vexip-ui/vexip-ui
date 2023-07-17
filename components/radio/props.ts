@@ -32,7 +32,8 @@ export type RawOption =
   | string
   | {
     label: string | number,
-    content?: string
+    content?: string,
+    disabled?: boolean
   }
 
 export const radioGroupProps = buildProps({

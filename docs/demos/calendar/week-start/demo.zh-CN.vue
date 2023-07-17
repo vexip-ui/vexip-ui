@@ -2,7 +2,7 @@
   <Calendar :week-start="weekStart">
     <template #title>
       每周开始于：
-      <Select v-model:value="weekStart" :options="options" style="max-width: 200px;"></Select>
+      <Select v-model:value="weekStart" :options="options" style="max-width: 200px"></Select>
     </template>
   </Calendar>
 </template>

@@ -5,18 +5,20 @@
       show-compile-output
       auto-resize
       :clear-console="false"
-      :show-import-map="false"
       :store="store"
       :sfc-options="sfcOptions"
+      :editor="Monaco"
+      :theme="dark ? 'dark' : 'light'"
       @keydown="handleKeyDown"
     ></Repl>
   </template>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
 
+import Monaco from '@vue/repl/monaco-editor'
 import Header from './components/header.vue'
 import { useReplStore } from './store'
 import { prettierCode } from './format'
@@ -29,6 +31,8 @@ const store = useReplStore({
   serializedState: hash,
   versions
 })
+
+const dark = computed(() => store.dark.value)
 
 // enable experimental features
 const sfcOptions = {
@@ -83,7 +87,7 @@ body {
 }
 
 .vue-repl {
-  height: calc(100vh - var(--nav-height));
+  height: calc(100vh - var(--nav-height)) !important;
 }
 
 .vue-repl,
@@ -106,6 +110,13 @@ body {
 
 .iframe-container {
   background-color: var(--vxp-bg-color-base) !important;
+}
+
+.monaco-editor {
+  &-background,
+  .margin {
+    transition: var(--vxp-transition-background);
+  }
 }
 
 .split-pane {

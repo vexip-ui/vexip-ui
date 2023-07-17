@@ -3,8 +3,12 @@
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
+    <Radio label="测试">
+      测试
+      <Input></Input>
+    </Radio>
   </RadioGroup>
-  <p style="margin-top: 10px;">
+  <p style="margin-top: 10px">
     value: {{ value }}
   </p>
 </template>

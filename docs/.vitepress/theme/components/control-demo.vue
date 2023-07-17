@@ -15,7 +15,7 @@
       :class="bem.be('control')"
       :disabled="disabled"
       :value="currentValue"
-      @chage="handleChange"
+      @change="handleChange"
     />
   </div>
 </template>

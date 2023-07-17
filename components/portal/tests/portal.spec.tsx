@@ -20,7 +20,7 @@ describe('Portal', () => {
 
   it('transfer', async () => {
     const wrapper = mount(() => (
-      <Portal to="body">
+      <Portal to={'body'}>
         <span class={'test'}>{TEXT}</span>
       </Portal>
     ))

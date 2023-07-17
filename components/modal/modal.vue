@@ -314,6 +314,9 @@ export default defineComponent({
         currentActive.value = value
       }
     )
+    watch(currentActive, value => {
+      props.hideMask && value && handleResize()
+    })
     watch([() => props.top, () => props.bottom, () => props.height], () => {
       currentActive.value && computeTop()
     })

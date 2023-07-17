@@ -10,3 +10,6 @@ cache
 *.sh
 
 CHANGELOG.md
+
+common/icons/vue
+common/icons/types

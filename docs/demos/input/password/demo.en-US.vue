@@ -1,12 +1,12 @@
 <template>
-  <Input type="password" plain-password style="max-width: 300px;"></Input>
+  <Input type="password" plain-password style="max-width: 300px"></Input>
   <br />
   <br />
   <Input
     type="password"
     plain-password
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   >
     <template #password="{ plain }">
       <Icon v-if="plain">

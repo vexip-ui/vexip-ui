@@ -16,8 +16,8 @@ describe('SSR for Breadcrumb', () => {
       await renderToString(
         createSSRApp(() => (
           <Breadcrumb>
-            <BreadcrumbItem>item1</BreadcrumbItem>
-            <BreadcrumbItem>item2</BreadcrumbItem>
+            <BreadcrumbItem>{'item1'}</BreadcrumbItem>
+            <BreadcrumbItem>{'item2'}</BreadcrumbItem>
           </Breadcrumb>
         ))
       )

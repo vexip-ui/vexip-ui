@@ -1,12 +1,12 @@
 <template>
-  <TimePicker :shortcuts="singleShortcuts" clearable style="max-width: 300px;"></TimePicker>
+  <TimePicker :shortcuts="singleShortcuts" clearable style="max-width: 300px"></TimePicker>
   <br />
   <br />
   <TimePicker
     range
     :shortcuts="multipleShortcuts"
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
 </template>
 

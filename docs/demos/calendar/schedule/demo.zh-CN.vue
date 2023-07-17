@@ -4,7 +4,7 @@
       <p
         v-for="(item, index) in getData(date)"
         :key="index"
-        style="margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+        style="margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
       >
         <Badge is-dot :type="item.type"></Badge>
         {{ item.content }}

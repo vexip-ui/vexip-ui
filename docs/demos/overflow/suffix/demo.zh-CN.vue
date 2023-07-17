@@ -12,7 +12,7 @@
         </div>
       </template>
       <template #suffix>
-        <Input style="width: 80px;"></Input>
+        <Input style="width: 80px"></Input>
       </template>
     </Overflow>
   </div>

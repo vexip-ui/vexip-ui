@@ -1,5 +1,15 @@
 <template>
   <label :class="className">
+    <input
+      ref="input"
+      type="radio"
+      :class="nh.be('input')"
+      :checked="currentValue === props.label"
+      :disabled="isDisabled || (isLoading && isLoadingLock)"
+      :tabindex="props.tabIndex"
+      @submit.prevent
+      @change="handleChange"
+    />
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span :class="[nh.be('label'), props.labelClass]">
       <CollapseTransition
@@ -18,16 +28,6 @@
       </CollapseTransition>
       <slot>{{ props.label }}</slot>
     </span>
-    <input
-      ref="input"
-      type="radio"
-      :class="nh.be('input')"
-      :checked="currentValue === props.label"
-      :disabled="isDisabled || (isLoading && isLoadingLock)"
-      :tabindex="props.tabIndex"
-      @submit.prevent
-      @change="handleChange"
-    />
   </label>
 </template>
 
@@ -84,7 +84,7 @@ export default defineComponent({
     const icons = useIcons()
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement>()
+    const input = ref<HTMLInputElement>()
 
     const size = computed(() => groupState?.size || props.size)
     const state = computed(() => groupState?.state || props.state)

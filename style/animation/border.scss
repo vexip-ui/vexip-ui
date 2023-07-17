@@ -1,22 +1,3 @@
-@keyframes vxp-border-clip {
-  0%,
-  100% {
-    clip-path: inset(0 0 calc(100% - 1px) 0);
-  }
-
-  25% {
-    clip-path: inset(0 0 0 calc(100% - 1px));
-  }
-
-  50% {
-    clip-path: inset(calc(100% - 1px) 0 0 0);
-  }
-
-  75% {
-    clip-path: inset(0 calc(100% - 1px) 0 0);
-  }
-}
-
 @keyframes vxp-border-round {
   100% {
     transform: rotate(1turn);
@@ -26,45 +7,37 @@
 @keyframes vxp-h-moving-border {
   0%,
   100% {
-    right: 90%;
-    left: 0;
+    transform: translate3d(-100%, 0, 0) scaleX(0.2);
   }
 
   25% {
-    right: 25%;
-    left: 25%;
+    transform: translate3d(0, 0, 0) scaleX(1);
   }
 
   50% {
-    right: 0;
-    left: 90%;
+    transform: translate3d(100%, 0, 0) scaleX(0.2);
   }
 
   75% {
-    right: 25%;
-    left: 25%;
+    transform: translate3d(0, 0, 0) scaleX(1);
   }
 }
 
 @keyframes vxp-v-moving-border {
   0%,
   100% {
-    top: 0;
-    bottom: 90%;
+    transform: translate3d(0, -100%, 0) scaleY(0.2);
   }
 
   25% {
-    top: 25%;
-    bottom: 25%;
+    transform: translate3d(0, 0, 0) scaleY(1);
   }
 
   50% {
-    top: 90%;
-    bottom: 0;
+    transform: translate3d(0, 100%, 0) scaleY(0.2);
   }
 
   75% {
-    top: 25%;
-    bottom: 25%;
+    transform: translate3d(0, 0, 0) scaleY(1);
   }
 }

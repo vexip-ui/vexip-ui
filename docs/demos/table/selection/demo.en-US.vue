@@ -6,7 +6,7 @@
     <TableColumn name="Job" id-key="job"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
-  <Button style="margin-top: 10px;" @click="getSelectedRows">
+  <Button style="margin-top: 10px" @click="getSelectedRows">
     Get Selected Rows
   </Button>
 </template>

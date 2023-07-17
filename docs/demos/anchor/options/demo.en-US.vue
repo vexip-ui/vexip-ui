@@ -11,43 +11,43 @@
           boxShadow: '0 0 1px'
         }"
       >
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h2 id="anchor-1">
           Anchor 1
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h2 id="anchor-2">
           Anchor 2
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h2 id="anchor-3">
           Anchor 3
         </h2>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h3 id="anchor-3-1">
           Anchor 3-1
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h3 id="anchor-3-2">
           Anchor 3-2
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
         <h3 id="anchor-3-3">
           Anchor 3-3
         </h3>
-        <p v-for="n in 5" :key="n" style="height: 50px;">
+        <p v-for="n in 5" :key="n" style="height: 50px">
           Some content to fill
         </p>
       </div>

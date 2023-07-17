@@ -3,13 +3,13 @@
     v-for="(meta, index) in tooltipMeta"
     :key="index"
     :justify="meta.justify"
-    style="max-width: 500px; margin: 10px 0;"
+    style="max-width: 500px; margin: 10px 0"
   >
     <template v-for="placement in meta.placements" :key="placement">
       <Tooltip theme="dark" :placement="placement" trigger="click">
         <template #trigger>
-          <span style="padding: 0 5px;">
-            <Button style="max-width: 120px;">{{ placement }}</Button>
+          <span style="padding: 0 5px">
+            <Button style="max-width: 120px">{{ placement }}</Button>
           </span>
         </template>
         {{ `The ${placement.split('-').join(' ')} text` }}

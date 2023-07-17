@@ -29,7 +29,7 @@
     :options="options"
     multiple
     clearable
-    style="--vxp-input-height: 48px;"
+    style="--vxp-input-height: 48px"
     placeholder="大过头的"
   ></Cascader>
 </template>

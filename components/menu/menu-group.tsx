@@ -81,7 +81,7 @@ const MenuGroup = defineComponent({
       return props.children.map(child => {
         if (child.group) {
           return (
-            <MenuGroup label={child.name ? callIfFunc(child.name) : child.label}>
+            <MenuGroup key={child.label} label={child.name ? callIfFunc(child.name) : child.label}>
               {child.children?.map(renderItem)}
             </MenuGroup>
           )

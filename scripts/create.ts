@@ -273,6 +273,8 @@ async function create(name: string) {
 
         :::
 
+        ## API
+
         ### ${capitalCaseName} 属性
 
         | 名称 | 类型 | 说明 | 默认值 | 始于 |
@@ -305,6 +307,8 @@ async function create(name: string) {
         Simplest usage.
 
         :::
+
+        ## API
 
         ### ${capitalCaseName} Props
 

@@ -5,7 +5,7 @@
       padding: 20px;
       border: var(--vxp-border-base);
       border-radius: var(--vxp-radius-base);
-"
+    "
   >
     <p>Start</p>
     <Space justify="start">

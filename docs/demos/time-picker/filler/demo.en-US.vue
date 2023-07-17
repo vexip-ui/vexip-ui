@@ -3,7 +3,7 @@
     v-model:value="time"
     filler="?"
     clearable
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    :id="idFor"
+    :id="field.idFor"
     :class="[
       bem.b(),
       bem.bm(store.state),
@@ -16,7 +16,7 @@
       :class="bem.be('control')"
       :disabled="store.disabled"
       :value="currentValue"
-      @chage="handleChange"
+      @change="handleChange"
     />
   </div>
 </template>
@@ -54,26 +54,16 @@ const props = defineProps({
 })
 const emit = defineEmits(['change', 'update:value'])
 
-const {
-  idFor,
-  state,
-  disabled,
-  loading,
-  size,
-  validateField,
-  // clearField,
-  getFieldValue,
-  setFieldValue
-} = useFieldStore<string>(focus)
+const field = useFieldStore<string>(focus)
 
 const get = <V = any>(value: V, def: V) => (value != null ? value : def)
 
 const store = reactive({
-  value: computed(() => get(props.value, getFieldValue(''))),
-  disabled: computed(() => get(props.disabled, disabled.value)),
-  loading: computed(() => get(props.loading, loading.value)),
-  state: computed(() => get(props.state, state.value)),
-  size: computed(() => get(props.size, size.value))
+  value: computed(() => get(props.value, field.getFieldValue(''))),
+  disabled: computed(() => get(props.disabled, field.disabled.value)),
+  loading: computed(() => get(props.loading, field.loading.value)),
+  state: computed(() => get(props.state, field.state.value)),
+  size: computed(() => get(props.size, field.size.value))
 })
 
 const bem = useBEM('input')
@@ -92,10 +82,10 @@ function handleChange(event: Event) {
   if (store.disabled) return
 
   currentValue.value = (event.target as HTMLInputElement).value
-  setFieldValue(currentValue.value)
+  field.setFieldValue(currentValue.value)
   emit('change', currentValue.value)
   emit('update:value', currentValue.value)
-  validateField()
+  field.validateField()
 }
 
 function focus(options?: FocusOptions) {

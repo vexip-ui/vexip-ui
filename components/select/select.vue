@@ -240,7 +240,7 @@
             :value="option.value"
             :disabled="option.disabled"
             :divided="option.divided"
-            :no-title="option.noTitle"
+            :no-title="option.title"
             :hitting="option.hitting"
             :selected="isSelected(option)"
             no-hover
@@ -314,7 +314,7 @@ const defaultKeyConfig: Required<SelectKeyConfig> = {
   label: 'label',
   disabled: 'disabled',
   divided: 'divided',
-  noTitle: 'noTitle',
+  title: 'title',
   group: 'group',
   children: 'children'
 }
@@ -442,7 +442,7 @@ export default defineComponent({
     const dynamicOption = reactive<SelectOptionState>({
       disabled: false,
       divided: false,
-      noTitle: false,
+      title: '',
       value: '',
       label: '',
       group: false,
@@ -473,7 +473,9 @@ export default defineComponent({
       props.keyConfig.label
       props.keyConfig.disabled
       props.keyConfig.divided
-      props.keyConfig.noTitle
+      props.keyConfig.title
+      props.keyConfig.group
+      props.keyConfig.children
       props.options
       /* eslint-enable */
 
@@ -488,7 +490,7 @@ export default defineComponent({
         label: labelKey,
         disabled: disabledKey,
         divided: dividedKey,
-        noTitle: noTitleKey,
+        title: titleKey,
         group: groupKey,
         children: childrenKey
       } = keyConfig.value
@@ -518,14 +520,14 @@ export default defineComponent({
         const {
           [disabledKey]: disabled = false,
           [dividedKey]: divided = false,
-          [noTitleKey]: noTitle = false,
+          [titleKey]: title = '',
           [childrenKey]: children = null
         } = rawOption
         const oldState = oldMap.get(rawOption.value)
         const optionState = reactive({
           disabled,
           divided,
-          noTitle,
+          title,
           value,
           label,
           group,
@@ -809,7 +811,7 @@ export default defineComponent({
             value,
             disabled: false,
             divided: false,
-            noTitle: false,
+            title: '',
             label: String(value),
             group: false,
             depth: -1,

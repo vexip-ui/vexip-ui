@@ -46,7 +46,7 @@ Adding the value of the `arrow-type` prop can change the position of the panel a
 
 ### Use Alone
 
-Not all cases require multiple panels to be juxtaposed, in which case the panel can be used alone to form an independent expandable panel.
+Not all cases require multiple panels to be juxtaposed, and the CollapsePanel component can be used alone.
 
 :::
 
@@ -91,6 +91,12 @@ This component can be used independently to add collapsing transition effects to
 | arrow-type    | `'right' \| 'left' \| 'none'` | Set the type of the panel's indicator arrow            | `'right'` | -     |
 | icon          | `string`                      | Set the subordinate icon for the panel title           | `''`      | -     |
 | ghost         | `boolean`                     | Set whether to be in borderless mode                   | `false`   | -     |
+
+### CollapsePanel Events
+
+| Name   | Description                                                                        | Parameters            | Since |
+| ------ | ---------------------------------------------------------------------------------- | --------------------- | ----- |
+| toggle | Emitted when the panel's expanded changes, returns the expanded state of the panel | `(expanded: boolean)` | -     |
 
 ### CollapsePanel Slots
 

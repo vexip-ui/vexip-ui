@@ -1,6 +1,6 @@
 # Switch
 
-Used to toggle the two-sided state.
+It is often used in occasions where the positive and negative states need to be switched visually.
 
 ## Demos
 
@@ -32,7 +32,7 @@ Adding `loading` prop allows the switch to be loading, and can be used with `on-
 
 ### Background Colors
 
-With `open-color` and `close-color` you can specify the background color of the switch.
+With `open-color` and `close-color` props you can specify the background color of the switch.
 
 :::
 
@@ -40,7 +40,7 @@ With `open-color` and `close-color` you can specify the background color of the 
 
 ### Embedded Texts
 
-Embedded text for switch can be set via `open-text` and `close-text`.
+Embedded text for switch can be set via `open-text` and `close-text` props.
 
 :::
 
@@ -48,7 +48,15 @@ Embedded text for switch can be set via `open-text` and `close-text`.
 
 ### Custom Icons
 
-The icons on the handler can be customized via `open-icon` and `close-icon`.
+The icons on the handler can be customized via `open-icon` and `close-icon` props.
+
+:::
+
+:::demo switch/rectangle
+
+### Rectangle Switch
+
+The switch can be made into a rectangle by the `rectangle` prop.
 
 :::
 
@@ -56,7 +64,7 @@ The icons on the handler can be customized via `open-icon` and `close-icon`.
 
 ### Different States
 
-Different states can be set via `state`.
+Different states can be set via `state` prop.
 
 :::
 
@@ -64,22 +72,23 @@ Different states can be set via `state`.
 
 ### Switch Props
 
-| Name             | Type                                             | Description                                                                                                                                                                                                 | Default     | Since   |
-| ---------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
-| value            | `boolean`                                        | value of the switch, can use `v-model` two-way binding                                                                                                                                                      | `false`     | -       |
-| disabled         | `boolean`                                        | set whether to disable the switch                                                                                                                                                                           | `false`     | -       |
-| size             | `'small' \| 'default' \| 'large'`                | size of switch                                                                                                                                                                                              | `'default'` | -       |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'` | State of the switch                                                                                                                                                                                         | `'default'` | -       |
-| open-color       | `string`                                         | The fill color of the switch when it is open                                                                                                                                                                | `''`        | -       |
-| close-color      | `string`                                         | The fill color of the switch when closed                                                                                                                                                                    | `''`        | -       |
-| loading          | `boolean`                                        | Set whether to load state                                                                                                                                                                                   | `false`     | -       |
-| loading-icon     | `Record<string, any>`                            | Set the loading icon                                                                                                                                                                                        | `Spinner`   | `2.0.0` |
-| loading-effect   | `string`                                         | Set the effect animation for the loading icon                                                                                                                                                               | `false`     | `2.0.0` |
-| open-icon        | `Record<string, any>`                            | The icon in the handler when the switch is opened and not loading, invalid after using the `icon` slot                                                                                                      | `null`      | -       |
-| close-icon       | `Record<string, any>`                            | The icon in the handler when the switch is closed and not loading, invalid after using the `icon` slot                                                                                                      | `null`      | -       |
-| open-text        | `string`                                         | Fill text for the switch when open                                                                                                                                                                          | `''`        | -       |
-| close-text       | `string`                                         | Fill text for the switch when closed                                                                                                                                                                        | `''`        | -       |
-| on-before-change | `(checked: boolean) => unknown`                  | Set the callback before the value of the switch changes, receive a value that the parameter will be changed to, support asynchronous functions and Promise, the return value of `false` will prevent change | `null`      | -       |
+| Name             | Type                                             | Description                                                                                                                                                                                                 | Default     | Since    |
+| ---------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| value            | `boolean`                                        | value of the switch, can use `v-model` two-way binding                                                                                                                                                      | `false`     | -        |
+| disabled         | `boolean`                                        | set whether to disable the switch                                                                                                                                                                           | `false`     | -        |
+| size             | `'small' \| 'default' \| 'large'`                | size of switch                                                                                                                                                                                              | `'default'` | -        |
+| state            | `'default' \| 'success' \| 'error' \| 'warning'` | State of the switch                                                                                                                                                                                         | `'default'` | -        |
+| open-color       | `string`                                         | The fill color of the switch when it is open                                                                                                                                                                | `''`        | -        |
+| close-color      | `string`                                         | The fill color of the switch when closed                                                                                                                                                                    | `''`        | -        |
+| loading          | `boolean`                                        | Set whether to load state                                                                                                                                                                                   | `false`     | -        |
+| loading-icon     | `Record<string, any>`                            | Set the loading icon                                                                                                                                                                                        | `Spinner`   | `2.0.0`  |
+| loading-effect   | `string`                                         | Set the effect animation for the loading icon                                                                                                                                                               | `false`     | `2.0.0`  |
+| open-icon        | `Record<string, any>`                            | The icon in the handler when the switch is opened and not loading, invalid after using the `icon` slot                                                                                                      | `null`      | -        |
+| close-icon       | `Record<string, any>`                            | The icon in the handler when the switch is closed and not loading, invalid after using the `icon` slot                                                                                                      | `null`      | -        |
+| open-text        | `string`                                         | Fill text for the switch when open                                                                                                                                                                          | `''`        | -        |
+| close-text       | `string`                                         | Fill text for the switch when closed                                                                                                                                                                        | `''`        | -        |
+| on-before-change | `(checked: boolean) => unknown`                  | Set the callback before the value of the switch changes, receive a value that the parameter will be changed to, support asynchronous functions and Promise, the return value of `false` will prevent change | `null`      | -        |
+| rectangle        | `boolean`                                        | Set whether the switch is rectangular                                                                                                                                                                       | `false`     | `2.1.28` |
 
 ### Switch Events
 

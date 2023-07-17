@@ -15,6 +15,8 @@ export type TableExposed = InstanceType<typeof Table>
 export type { TableProps, TableCProps } from './props'
 export type {
   TableKeyConfig,
+  TableIconName,
+  TableIcons,
   TableRowPropFn,
   TableRowDropType,
   TableColumnType,

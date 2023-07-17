@@ -191,7 +191,11 @@ describe('Checkbox', () => {
     const onChange = vi.fn()
     const wrapper = mount(() => (
       <CheckboxGroup disabled onChange={onChange}>
-        <Checkbox></Checkbox>,<Checkbox disabled></Checkbox>,<Checkbox disabled={false}></Checkbox>
+        <Checkbox></Checkbox>
+        {','}
+        <Checkbox disabled></Checkbox>
+        {','}
+        <Checkbox disabled={false}></Checkbox>
       </CheckboxGroup>
     ))
 

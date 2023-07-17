@@ -22,7 +22,19 @@
       :style="style"
       v-bind="attrs"
     >
+      <div
+        v-if="fixed !== 'right'"
+        :class="nh.be('side-pad')"
+        role="none"
+        aria-hidden
+      ></div>
       <slot></slot>
+      <div
+        v-if="fixed !== 'left'"
+        :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+        role="none"
+        aria-hidden
+      ></div>
     </div>
     <CollapseTransition v-if="!!expandColumn" @enter="computeRectHeight" @leave="computeRectHeight">
       <div
@@ -89,6 +101,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    isFoot: {
+      type: Boolean,
+      default: false
+    },
     fixed: {
       type: String as PropType<'left' | 'right' | undefined>,
       default: null
@@ -110,10 +126,11 @@ export default defineComponent({
     })
 
     const rowKey = computed(() => props.row.key)
+    const rowType = computed(() => (props.isHead ? 'head' : props.isFoot ? 'foot' : undefined))
     const className = computed(() => {
       let customClass = null
 
-      if (!props.isHead) {
+      if (!rowType.value) {
         if (typeof state.rowClass === 'function') {
           customClass = state.rowClass(props.row.data, props.index)
         } else {
@@ -124,7 +141,7 @@ export default defineComponent({
       return [
         nh.be('row'),
         {
-          [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
+          [nh.bem('row', 'hover')]: !rowType.value && state.highlight && props.row.hover,
           [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked
         },
@@ -134,7 +151,7 @@ export default defineComponent({
     const style = computed(() => {
       let customStyle: any = ''
 
-      if (!props.isHead) {
+      if (!rowType.value) {
         if (typeof state.rowStyle === 'function') {
           customStyle = state.rowStyle(props.row.data, props.index)
         } else {
@@ -150,7 +167,7 @@ export default defineComponent({
       ]
     })
     const attrs = computed(() => {
-      if (!props.isHead) {
+      if (!rowType.value) {
         if (typeof state.rowAttrs === 'function') {
           return state.rowAttrs(props.row.data, props.index)
         } else {
@@ -165,29 +182,38 @@ export default defineComponent({
       state.totalHeight
 
       const offset =
-        state.heightBITree && !props.isHead && props.index ? state.heightBITree.sum(props.index) : 0
+        state.heightBITree && !rowType.value && props.index
+          ? state.heightBITree.sum(props.index)
+          : 0
 
       return {
         transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
       }
     })
-    const draggable = computed(() => !props.isHead && state.rowDraggable)
+    const draggable = computed(() => !rowType.value && state.rowDraggable)
     const dragging = computed(() => state.dragging)
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
+      const width =
+        props.fixed === 'right' ? getters.rightFixedWidths.at(-1) : getters.leftFixedWidths.at(-1)
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+      const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+
       return props.fixed
         ? {
-            width: `${
-              props.fixed === 'right'
-                ? getters.rightFixedWidths.at(-1)
-                : getters.leftFixedWidths.at(-1)
-            }px`,
+            width: width && `${width + padLeft + padRight}px`,
             whiteSpace: 'nowrap'
           }
         : {}
     })
     const cellDraggable = computed(() => {
       return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
+    const leftFixed = computed(() => {
+      return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
+    })
+    const rightFixed = computed(() => {
+      return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
     })
 
     function getRowHeight(row: TableRowState) {
@@ -201,7 +227,7 @@ export default defineComponent({
 
       computeBorderHeight()
       computeRowHeight()
-      !props.isHead && updateTotalHeight()
+      !rowType.value && updateTotalHeight()
     }
 
     function updateTotalHeight() {
@@ -295,7 +321,7 @@ export default defineComponent({
     function handleMouseEnter(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, true)
 
-      if (!props.isHead && tableAction) {
+      if (!rowType.value && tableAction) {
         tableAction.emitRowEvent('Enter', buildEventPayload(event))
       }
     }
@@ -303,25 +329,25 @@ export default defineComponent({
     function handleMouseLeave(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, false)
 
-      if (!props.isHead && tableAction) {
+      if (!rowType.value && tableAction) {
         tableAction.emitRowEvent('Leave', buildEventPayload(event))
       }
     }
 
     function handleClick(event: MouseEvent) {
-      if (!props.isHead && tableAction) {
+      if (!rowType.value && tableAction) {
         tableAction.emitRowEvent('Click', buildEventPayload(event))
       }
     }
 
     function handleDblclick(event: MouseEvent) {
-      if (!props.isHead && tableAction) {
+      if (!rowType.value && tableAction) {
         tableAction.emitRowEvent('Dblclick', buildEventPayload(event))
       }
     }
 
     function handleContextmenu(event: MouseEvent) {
-      if (!props.isHead && tableAction) {
+      if (!rowType.value && tableAction) {
         tableAction.emitRowEvent('Contextmenu', buildEventPayload(event))
       }
     }
@@ -371,8 +397,8 @@ export default defineComponent({
       draggable,
       expandRenderer,
       expandStyle,
-      leftFixed: computed(() => getters.leftFixedWidths.at(-1)),
-      rightFixed: computed(() => getters.rightFixedWidths.at(-1)),
+      leftFixed,
+      rightFixed,
       expandColumn: toRef(getters, 'expandColumn'),
 
       wrapper,

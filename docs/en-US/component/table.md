@@ -217,10 +217,13 @@ You can also define the summary content of a column independently via the `summa
 ```ts
 type Key = string | number | symbol
 type Data = any
+type TableIconName = 'filter' | 'asc' | 'desc' | 'dragger' | 'expand' | 'plus' | 'minus'
 type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+
+type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
 interface CellSpanResult {
   colSpan?: number,
@@ -542,6 +545,8 @@ interface TableFootPayload {
 | no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6`  |
 | col-resizable   | `boolean`                                                     | Set whether the width of columns can be resized                                                                                                       | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
+| side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
+| icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |
 
 ### Table Events
 
@@ -584,10 +589,11 @@ interface TableFootPayload {
 
 ### Table Slots
 
-| Name    | Description                                                | Parameters             | Since |
-| ------- | ---------------------------------------------------------- | ---------------------- | ----- |
-| default | Used to define the TableColumn and TableSummary components | -                      | -     |
-| empty   | Slot for empty data tip content                            | `{ isFixed: boolean }` | -     |
+| Name        | Description                                                                     | Parameters             | Since    |
+| ----------- | ------------------------------------------------------------------------------- | ---------------------- | -------- |
+| default     | Used to define the TableColumn and TableSummary components                      | -                      | -        |
+| empty       | Slot for empty data tip content                                                 | `{ isFixed: boolean }` | -        |
+| icon-[name] | Table icon slot, where `[name]` optional values please refer to `TableIconName` | -                      | `2.1.28` |
 
 ### Table Methods
 

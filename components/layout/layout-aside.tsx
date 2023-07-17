@@ -164,14 +164,14 @@ export default defineComponent({
                     renderSlot(slots, 'top', slotParams)
                   )
                 : (
-                <div class={nh.be('sign')} onClick={handleSignClick}>
-                  {props.logo && (
-                    <div class={nh.be('logo')}>
-                      <img src={props.logo} alt={'Logo'} />
-                    </div>
-                  )}
-                  {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
-                </div>
+                  <div class={nh.be('sign')} onClick={handleSignClick}>
+                    {props.logo && (
+                      <div class={nh.be('logo')}>
+                        <img src={props.logo} alt={'Logo'} />
+                      </div>
+                    )}
+                    {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
+                  </div>
                   )}
             </div>
           )}
@@ -187,14 +187,14 @@ export default defineComponent({
                 )
               : hasMenu.value
                 ? (
-              <Menu
-                ref={menu}
-                {...(props.menuProps || {})}
-                transfer
-                options={props.menus}
-                reduced={currentReduced.value}
-                onSelect={handleMenuSelect}
-              ></Menu>
+                  <Menu
+                    ref={menu}
+                    {...(props.menuProps || {})}
+                    transfer
+                    options={props.menus}
+                    reduced={currentReduced.value}
+                    onSelect={handleMenuSelect}
+                  ></Menu>
                   )
                 : null}
           </NativeScroll>
@@ -204,15 +204,15 @@ export default defineComponent({
                   renderSlot(slots, 'bottom', slotParams)
                 )
               : (
-              <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
-                {currentReduced.value
-                  ? (
-                  <Icon {...icons.value.indent}></Icon>
-                    )
-                  : (
-                  <Icon {...icons.value.outdent}></Icon>
-                    )}
-              </div>
+                <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
+                  {currentReduced.value
+                    ? (
+                      <Icon {...icons.value.indent}></Icon>
+                      )
+                    : (
+                      <Icon {...icons.value.outdent}></Icon>
+                      )}
+                </div>
                 )}
           </div>
           <div
@@ -224,7 +224,7 @@ export default defineComponent({
                   renderSlot(slots, 'expand', slotParams)
                 )
               : (
-              <Icon {...icons.value.caretRight}></Icon>
+                <Icon {...icons.value.caretRight}></Icon>
                 )}
           </div>
         </CustomTag>
