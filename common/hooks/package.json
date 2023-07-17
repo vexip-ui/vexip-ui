@@ -30,7 +30,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "@popperjs/core": "^2.11.8",
-    "@vexip-ui/utils": "workspace:~"
+    "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
     "vue": "^3.3.4"

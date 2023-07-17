@@ -11,12 +11,12 @@
   },
   "type": "module",
   "dependencies": {
-    "@vexip-ui/icons": "workspace:~",
+    "@vexip-ui/icons": "workspace:*",
     "@vue/repl": "^2.5.3",
     "fflate": "^0.8.0",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
-    "vexip-ui": "workspace:~",
+    "vexip-ui": "workspace:*",
     "vue": "^3.3.4"
   },
   "devDependencies": {
