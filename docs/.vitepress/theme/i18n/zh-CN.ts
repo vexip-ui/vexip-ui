@@ -119,6 +119,7 @@ export const zhCN = defineI18n({
     Upload: '上传',
     Wheel: '滚轮',
 
+    // Data
     Avatar: '头像',
     Badge: '徽标',
     Bubble: '气泡框',
@@ -139,7 +140,7 @@ export const zhCN = defineI18n({
     Tree: '树形列表',
     Viewer: '查看器',
 
-    // Data
+    // Effect
     Alert: '警告提示',
     Confirm: '确认框',
     Contextmenu: '右键菜单',

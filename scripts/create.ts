@@ -1,5 +1,4 @@
 import path from 'node:path'
-import { cpus } from 'node:os'
 
 import fs from 'fs-extra'
 import prettier from 'prettier'
@@ -12,30 +11,30 @@ import {
   logger,
   prettierConfig,
   rootDir,
-  runParallel,
   toCamelCase,
   toCapitalCase,
   toKebabCase
 } from './utils'
 import pkg from '../package.json'
 
-let name: string
-
 const args = minimist(process.argv.slice(2))
-const targets = args._
+
+let name = args._[0]
+let cname: string
+
 const compType = (
   await prompts({
     type: 'select',
     name: 'compType',
     message: 'select a component type',
     choices: [
-      { title: 'basis (基础)', value: 'basis' },
-      { title: 'layout (布局)', value: 'layout' },
-      { title: 'navigation (导航)', value: 'navigation' },
-      { title: 'form (表单)', value: 'form' },
-      { title: 'data (数据)', value: 'data' },
-      { title: 'effect (反应)', value: 'effect' },
-      { title: 'else (其他)', value: 'else' }
+      { title: 'Basis (基础)', value: 'basis' },
+      { title: 'Layout (布局)', value: 'layout' },
+      { title: 'Navigation (导航)', value: 'navigation' },
+      { title: 'Form (表单)', value: 'form' },
+      { title: 'Data (数据)', value: 'data' },
+      { title: 'Effect (反应)', value: 'effect' },
+      { title: 'Else (其他)', value: 'else' }
     ]
   })
 ).compType
@@ -43,7 +42,7 @@ const compType = (
 const eslint = new ESLint({ fix: true })
 
 async function main() {
-  if (!targets.length) {
+  if (!name) {
     name = (
       await prompts({
         type: 'text',
@@ -51,31 +50,35 @@ async function main() {
         message: 'Input a component name:'
       })
     ).component
+  }
 
-    if (!name || allComponents.includes(name)) {
-      process.exit(1)
-    } else {
-      logger.ln()
-
-      await create(name)
-      targets.push(name)
-    }
+  if (!name || allComponents.includes(name)) {
+    process.exit(1)
   } else {
-    if (targets.some(name => !name || allComponents.includes(name))) {
-      process.exit(1)
-    } else {
-      name = targets[0]
-      await runParallel(cpus().length, targets, create)
+    cname = (
+      await prompts({
+        type: 'text',
+        name: 'component',
+        message: 'Input Chinese name of the component:'
+      })
+    ).component
+
+    if (!cname) {
+      cname = cname || `[${name} 中文]`
+
+      logger.warningText(
+        `Get empty Chinese name, you can globally replace '${cname}' with the Chinese name afterwards`
+      )
     }
+
+    logger.ln()
+
+    await create(name)
   }
 
   logger.withBothLn(() => {
     if (!process.exitCode) {
-      if (targets.length > 1) {
-        logger.success('All components created successfully')
-      } else {
-        logger.success(`Component '${targets[0]}' created successfully`)
-      }
+      logger.success(`Component '${name}' created successfully`)
     } else {
       logger.error('Component name must be specified and not exists')
     }
@@ -259,7 +262,7 @@ async function create(name: string) {
     {
       filePath: path.resolve(rootDir, 'docs/zh-CN/component', `${kebabCaseName}.md`),
       source: `
-        # ${capitalCaseName}
+        # ${cname} ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
         <!-- 请删除该注释，并描述组件的使用场景 -->
 
@@ -294,9 +297,9 @@ async function create(name: string) {
     {
       filePath: path.resolve(rootDir, 'docs/en-US/component', `${kebabCaseName}.md`),
       source: `
-        # ${capitalCaseName}
+        # ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
-        <!-- Please remove this comment and descript what scenes to be used of the component -->
+        <!-- Please remove this comment and describe what scenes to be used of the component -->
 
         ## Demos
 
@@ -436,21 +439,25 @@ async function getConvertCompTypeFiles(): Promise<
   const i18nHelperIndex =
     i18nHelperSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
 
-  compConfigSource.splice(compConfigIndex, 0, `{ name: '${name}', since: '${getSinceVersion()}' },`)
+  compConfigSource.splice(
+    compConfigIndex,
+    0,
+    `{ name: '${capitalCaseName}', since: '${getSinceVersion()}' },`
+  )
 
   const convertCompConfig = compConfigSource
     .slice(compConfigIndex, compConfigEndIndex + 1)
-    .sort((pre, cur) => {
-      const preValue = pre
+    .sort((prev, next) => {
+      const prevValue = prev
         .match(/name:\s*['"]([\w]+)['"]/)?.[1]
         .charAt(0)
         .toLowerCase()
-      const curValue = cur
+      const nextValue = next
         .match(/name:\s*['"]([\w]+)['"]/)?.[1]
         .charAt(0)
         .toLowerCase()
 
-      return preValue?.localeCompare(curValue as string) as number
+      return prevValue?.localeCompare(nextValue as string) as number
     })
 
   compConfigSource.splice(
@@ -460,7 +467,7 @@ async function getConvertCompTypeFiles(): Promise<
   )
 
   i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
-  i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${capitalCaseName} (需翻译为中文)',`)
+  i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${cname}',`)
   i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: string,`)
 
   return [
@@ -473,13 +480,9 @@ async function getConvertCompTypeFiles(): Promise<
 
 function getSinceVersion() {
   const splitStr = pkg.version.split('.')
-  let addMidVer = String(parseInt(splitStr[1]) + 1)
 
-  if (addMidVer.length === 2) {
-    addMidVer = addMidVer.substring(1)
-    splitStr[0] = String(parseInt(splitStr[0]) + 1)
-  }
-  splitStr[1] = addMidVer
+  splitStr[1] = String(parseInt(splitStr[1]) + 1)
+  splitStr[2] = '0'
 
   return splitStr.join('.')
 }
