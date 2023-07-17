@@ -199,6 +199,7 @@ export default defineComponent({
     )
 
     expose({
+      isDragOver,
       execute,
       handleDelete,
       focus,
