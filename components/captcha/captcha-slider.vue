@@ -1,5 +1,5 @@
 <template>
-  <div :id="idFor" :class="className">
+  <div :id="idFor" ref="wrapper" :class="className">
     <div
       :class="{
         [nh.be('filler')]: true,
@@ -109,6 +109,7 @@ export default defineComponent({
     const resetting = ref(false)
     const isSuccess = ref(false)
 
+    const wrapper = ref<HTMLElement>()
     const track = ref<HTMLElement>()
 
     let widthLimit: number
@@ -203,6 +204,10 @@ export default defineComponent({
       return Math.abs(props.target - value) <= props.tolerance
     }
 
+    function focus(options?: FocusOptions) {
+      wrapper.value?.focus(options)
+    }
+
     return {
       props,
       nh,
@@ -220,6 +225,7 @@ export default defineComponent({
       tipStyle,
       triggerStyle,
 
+      wrapper,
       track,
       trigger,
 

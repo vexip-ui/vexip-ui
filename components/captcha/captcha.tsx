@@ -253,10 +253,10 @@ export default defineComponent({
                     renderSlot(slots, 'refresh')
                   )
                 : (
-                <Icon
-                  {...icons.value.refresh}
-                  icon={props.refreshIcon || icons.value.refresh.icon}
-                ></Icon>
+                  <Icon
+                    {...icons.value.refresh}
+                    icon={props.refreshIcon || icons.value.refresh.icon}
+                  ></Icon>
                   )}
             </button>
           </div>
