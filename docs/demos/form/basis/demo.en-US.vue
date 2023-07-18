@@ -1,6 +1,6 @@
 <template>
   <ConfigProvider :props="providedProps">
-    <Form :model="formModel" style="max-width: 500px;">
+    <Form :model="formModel" style="max-width: 500px">
       <FormItem label="Input" prop="input">
         <Input></Input>
       </FormItem>

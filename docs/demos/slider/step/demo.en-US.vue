@@ -4,7 +4,7 @@
     :step="5"
     :max="100"
     :min="-50"
-    style="max-width: 400px;"
+    style="max-width: 400px"
   ></Slider>
 </template>
 

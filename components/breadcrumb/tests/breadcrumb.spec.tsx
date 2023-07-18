@@ -16,8 +16,8 @@ describe('Breadcrumb', () => {
   it('items', () => {
     const wrapper = mount(() => (
       <Breadcrumb>
-        <BreadcrumbItem>item1</BreadcrumbItem>
-        <BreadcrumbItem>item2</BreadcrumbItem>
+        <BreadcrumbItem>{'item1'}</BreadcrumbItem>
+        <BreadcrumbItem>{'item2'}</BreadcrumbItem>
       </Breadcrumb>
     ))
 
@@ -27,8 +27,8 @@ describe('Breadcrumb', () => {
   it('separator', () => {
     const wrapper = mount(() => (
       <Breadcrumb separator={'-'}>
-        <BreadcrumbItem>item1</BreadcrumbItem>
-        <BreadcrumbItem>item2</BreadcrumbItem>
+        <BreadcrumbItem>{'item1'}</BreadcrumbItem>
+        <BreadcrumbItem>{'item2'}</BreadcrumbItem>
       </Breadcrumb>
     ))
 
@@ -39,8 +39,8 @@ describe('Breadcrumb', () => {
     const wrapper = mount(() => (
       <Breadcrumb>
         {{
-          default: () => <BreadcrumbItem>item</BreadcrumbItem>,
-          separator: () => <span class={'sep'}>666</span>
+          default: () => <BreadcrumbItem>{'item'}</BreadcrumbItem>,
+          separator: () => <span class={'sep'}>{'666'}</span>
         }}
       </Breadcrumb>
     ))
@@ -57,7 +57,7 @@ describe('Breadcrumb', () => {
         onSelect
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>
       }
     })
 
@@ -73,7 +73,7 @@ describe('Breadcrumb', () => {
         onSelect
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>
       }
     })
 
@@ -89,7 +89,7 @@ describe('Breadcrumb', () => {
         onSeparatorClick
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>
       }
     })
 

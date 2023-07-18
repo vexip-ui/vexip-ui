@@ -154,9 +154,9 @@ export default defineComponent({
                     const onResize = handleItemResize.bind(null, key)
 
                     return (
-                        <ResizeObserver key={key} throttle onResize={onResize}>
-                          {() => vnode}
-                        </ResizeObserver>
+                      <ResizeObserver key={key} throttle onResize={onResize}>
+                        {() => vnode}
+                      </ResizeObserver>
                     )
                   })
                   : slots.empty?.()}

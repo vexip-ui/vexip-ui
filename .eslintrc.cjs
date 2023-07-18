@@ -1,4 +1,6 @@
-module.exports = {
+const { defineConfig } = require('eslint-define-config')
+
+module.exports = defineConfig({
   extends: ['@vexip-ui/eslint-config'],
   root: true,
   rules: {
@@ -34,9 +36,9 @@ module.exports = {
       }
     },
     {
-      files: ['components/**/*.tsx'],
+      files: ['**/*.spec.tsx'],
       rules: {
-        'no-sequences': 'off'
+        'react/jsx-key': 'off'
       }
     },
     {
@@ -74,4 +76,4 @@ module.exports = {
   globals: {
     __VERSION__: 'readonly'
   }
-}
+})

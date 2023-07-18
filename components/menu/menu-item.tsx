@@ -370,7 +370,7 @@ const MenuItem = defineComponent({
       return props.children.map(child => {
         if (child.group) {
           return (
-            <MenuGroup label={child.name ? callIfFunc(child.name) : child.label}>
+            <MenuGroup key={child.label} label={child.name ? callIfFunc(child.name) : child.label}>
               {child.children?.map(renderItem)}
             </MenuGroup>
           )
@@ -417,7 +417,7 @@ const MenuItem = defineComponent({
                             props.icon()
                           )
                         : (
-                      <Icon {...props.iconProps} icon={props.icon}></Icon>
+                          <Icon {...props.iconProps} icon={props.icon}></Icon>
                           )}
                   </div>
                 )}

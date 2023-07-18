@@ -7,8 +7,8 @@
   "types": "dist/index.d.ts",
   "private": true,
   "dependencies": {
-    "@vexip-ui/bem-helper": "workspace:~",
-    "@vexip-ui/utils": "workspace:~"
+    "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
     "vue": "^3.3.4"

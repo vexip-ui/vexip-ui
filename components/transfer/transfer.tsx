@@ -321,38 +321,40 @@ export default defineComponent({
             {slots.actions
               ? renderSlot(slots, 'actions', { handleToTarget, handleToSource })
               : [
-                  <Button
-                    inherit
-                    class={nh.be('action')}
-                    type={actionType.value}
-                    size={'small'}
-                    disabled={props.disabled || !toTargetEnabled.value}
-                    loading={props.loading && props.loadingLock}
-                    loading-icon={props.loadingIcon}
-                    loading-effect={props.loadingEffect}
-                    style={{ marginBottom: '6px' }}
-                    onClick={handleToTarget}
-                  >
-                    {{
-                      icon: () => <Icon {...icons.value.arrowRight} label='to right'></Icon>
-                    }}
-                  </Button>,
-                  <Button
-                    inherit
-                    class={nh.be('action')}
-                    type={actionType.value}
-                    size={'small'}
-                    disabled={props.disabled || !toSourceEnabled.value}
-                    loading={props.loading && props.loadingLock}
-                    loading-icon={props.loadingIcon}
-                    loading-effect={props.loadingEffect}
-                    style={{ margin: '0' }}
-                    onClick={handleToSource}
-                  >
-                    {{
-                      icon: () => <Icon {...icons.value.arrowLeft} label='to left'></Icon>
-                    }}
-                  </Button>
+                <Button
+                  key={1}
+                  inherit
+                  class={nh.be('action')}
+                  type={actionType.value}
+                  size={'small'}
+                  disabled={props.disabled || !toTargetEnabled.value}
+                  loading={props.loading && props.loadingLock}
+                  loading-icon={props.loadingIcon}
+                  loading-effect={props.loadingEffect}
+                  style={{ marginBottom: '6px' }}
+                  onClick={handleToTarget}
+                >
+                  {{
+                    icon: () => <Icon {...icons.value.arrowRight} label={'to right'}></Icon>
+                  }}
+                </Button>,
+                <Button
+                  key={2}
+                  inherit
+                  class={nh.be('action')}
+                  type={actionType.value}
+                  size={'small'}
+                  disabled={props.disabled || !toSourceEnabled.value}
+                  loading={props.loading && props.loadingLock}
+                  loading-icon={props.loadingIcon}
+                  loading-effect={props.loadingEffect}
+                  style={{ margin: '0' }}
+                  onClick={handleToSource}
+                >
+                  {{
+                    icon: () => <Icon {...icons.value.arrowLeft} label={'to left'}></Icon>
+                  }}
+                </Button>
                 ]}
           </div>
           <TransferPanel

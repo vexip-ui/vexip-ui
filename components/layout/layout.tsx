@@ -372,27 +372,27 @@ export default defineComponent({
                 renderSlot(slots, 'aside', slotParams)
               )
             : (
-            <LayoutAside
-              ref={aside}
-              v-model:expanded={asideExpanded.value}
-              v-model:reduced={asideReduced.value}
-              sign-type={currentSignType.value}
-              menus={props.menus}
-              menu-props={props.menuProps}
-              fixed={props.asideFixed}
-              onExpandedChange={toggleExpanded}
-              onReducedChange={toggleReduced}
-              onMenuSelect={handleMenuSelect}
-            >
-              {{
-                top: createSlotRender(['aside-top', 'asideTop'], () =>
-                  !signInHeader.value ? renderSign() : null
-                ),
-                default: createSlotRender(['aside-main', 'asideMain']),
-                bottom: createSlotRender(['aside-bottom', 'asideBottom']),
-                expand: createSlotRender(['aside-expand', 'asideExpand'])
-              }}
-            </LayoutAside>
+              <LayoutAside
+                ref={aside}
+                v-model:expanded={asideExpanded.value}
+                v-model:reduced={asideReduced.value}
+                sign-type={currentSignType.value}
+                menus={props.menus}
+                menu-props={props.menuProps}
+                fixed={props.asideFixed}
+                onExpandedChange={toggleExpanded}
+                onReducedChange={toggleReduced}
+                onMenuSelect={handleMenuSelect}
+              >
+                {{
+                  top: createSlotRender(['aside-top', 'asideTop'], () =>
+                    !signInHeader.value ? renderSign() : null
+                  ),
+                  default: createSlotRender(['aside-main', 'asideMain']),
+                  bottom: createSlotRender(['aside-bottom', 'asideBottom']),
+                  expand: createSlotRender(['aside-expand', 'asideExpand'])
+                }}
+              </LayoutAside>
               )}
         </div>
       )

@@ -1,5 +1,5 @@
 <template>
-  <Space vertical style="max-width: 400px;">
+  <Space vertical style="max-width: 400px">
     <Slider :value="42" :markers="markers" marker-only></Slider>
     <Slider
       :value="[42, 68]"

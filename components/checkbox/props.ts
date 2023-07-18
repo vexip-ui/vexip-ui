@@ -38,7 +38,8 @@ export type RawOption =
   | {
     value: string | number,
     label?: string,
-    control?: boolean
+    control?: boolean,
+    disabled?: boolean
   }
 
 export const checkboxGroupProps = buildProps({

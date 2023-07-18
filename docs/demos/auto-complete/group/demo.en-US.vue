@@ -3,7 +3,7 @@
     v-model:value="value"
     filter
     :options="options"
-    style="max-width: 400px;"
+    style="max-width: 400px"
   ></AutoComplete>
 </template>
 

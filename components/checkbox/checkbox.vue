@@ -1,9 +1,5 @@
 <template>
   <label :class="className" :aria-disabled="isDisabled" @click="handleClick">
-    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
-    <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
-      <slot>{{ props.label }}</slot>
-    </span>
     <input
       ref="input"
       type="checkbox"
@@ -14,6 +10,10 @@
       @submit.prevent
       @change="handleChange(!currentChecked)"
     />
+    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
+    <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
+      <slot>{{ props.label }}</slot>
+    </span>
   </label>
 </template>
 
@@ -78,7 +78,7 @@ export default defineComponent({
     const currentChecked = ref(props.checked)
     const currentPartial = ref(props.partial)
 
-    const input = ref<HTMLElement>()
+    const input = ref<HTMLInputElement>()
 
     const controlState = reactive({
       checked: currentChecked,

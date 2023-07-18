@@ -38,7 +38,7 @@
           }"
           @click.stop="handleExpandRow(row, $event)"
         >
-          <Icon v-bind="icons.angleRight"></Icon>
+          <TableIcon name="expand" :origin="icons.angleRight"></TableIcon>
         </button>
       </template>
       <template v-else-if="isDragColumn(column)">
@@ -48,7 +48,7 @@
           :class="nh.be('dragger')"
           @mousedown="handleDragRow(row)"
         >
-          <Icon v-bind="icons.dragger"></Icon>
+          <TableIcon name="dragger" :origin="icons.dragger"></TableIcon>
         </button>
       </template>
     </template>
@@ -65,8 +65,8 @@
           :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
           @click="handleExpandTree(row)"
         >
-          <Icon v-if="row.treeExpanded" v-bind="icons.minus"></Icon>
-          <Icon v-else v-bind="icons.plus"></Icon>
+          <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minus"></TableIcon>
+          <TableIcon v-else name="plus" :origin="icons.plus"></TableIcon>
         </button>
       </template>
       <Ellipsis
@@ -107,12 +107,12 @@
 <script lang="ts">
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
-import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 
 import { computed, defineComponent, inject, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
+import TableIcon from './table-icon.vue'
 import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
@@ -133,8 +133,8 @@ export default defineComponent({
   components: {
     Checkbox,
     Ellipsis,
-    Icon,
-    Renderer
+    Renderer,
+    TableIcon
   },
   props: {
     row: {
@@ -188,7 +188,8 @@ export default defineComponent({
             columnTypes.includes((props.column as TableTypeColumn).type) ||
             props.column.textAlign === 'center',
           [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
-          [nh.bem('cell', 'wrap')]: props.column.noEllipsis
+          [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
+          [nh.bem('cell', 'last')]: props.column.last
         },
         props.column.className,
         props.column.class,
@@ -227,7 +228,7 @@ export default defineComponent({
         })
       }
 
-      const { colSpan, rowSpan } = result || { colSpan: 1, rowSpan: 1 }
+      const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
       const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
       span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
@@ -246,6 +247,7 @@ export default defineComponent({
             : getters.totalWidths
       const { colSpan, rowSpan } = cellSpan.value
       const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let height: number | undefined
 
@@ -282,7 +284,7 @@ export default defineComponent({
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
-          transform: `translate3d(${totalWidths[props.columnIndex]}px, 0, 0)`
+          transform: `translate3d(${padLeft + totalWidths[props.columnIndex]}px, 0, 0)`
         }
       ]
     })

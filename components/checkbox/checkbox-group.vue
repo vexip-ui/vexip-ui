@@ -10,6 +10,7 @@
           inherit
           :value="item.value"
           :control="item.control"
+          :disabled="item.disabled"
         >
           {{ item.label || item.value }}
         </Checkbox>

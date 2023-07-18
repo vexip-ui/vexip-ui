@@ -7,7 +7,7 @@
       minute: '分',
       second: '秒'
     }"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
 </template>
 

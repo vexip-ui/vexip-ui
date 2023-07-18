@@ -88,14 +88,14 @@
         @x-enabled-change="xScrollEnabled = $event"
       >
         <NativeScroll
-          ref="mainScroll"
+          ref="yScroll"
           inherit
           observe-deep
           scroll-only
           :class="[nh.be('body-wrapper'), props.scrollClass.major]"
           :height="bodyScrollHeight"
           :scroll-y="bodyYScroll"
-          :style="{ minWidth: `${totalWidths.at(-1)}px` }"
+          :style="{ minWidth: `${totalWidths}px` }"
           @scroll="handleYScroll"
           @y-enabled-change="yScrollEnabled = $event"
         >
@@ -243,6 +243,7 @@ import {
   onMounted,
   provide,
   ref,
+  renderSlot,
   toRef,
   watch
 } from 'vue'
@@ -263,7 +264,7 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DropType, TABLE_ACTIONS, TABLE_STORE } from './symbol'
+import { DropType, TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
 import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
@@ -304,7 +305,7 @@ export default defineComponent({
   },
   props: tableProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { slots }) {
     const props = useProps('table', _props, {
       locale: null,
       columns: {
@@ -331,7 +332,6 @@ export default defineComponent({
       useXBar: false,
       useYBar: false,
       barFade: 1500,
-      scrollDeltaY: 36,
       rowDraggable: false,
       rowHeight: null,
       rowMinHeight: {
@@ -382,7 +382,9 @@ export default defineComponent({
       cellSpan: {
         default: null,
         isFunc: true
-      }
+      },
+      sidePadding: 0,
+      icons: () => ({})
     })
 
     const nh = useNameHelper('table')
@@ -397,7 +399,7 @@ export default defineComponent({
     const indicatorType = ref(DropType.BEFORE)
     const tempColumns = ref(new Set<TableColumnOptions>())
     const tempSummaries = ref(new Set<TableSummaryOptions>())
-    const tableWidth = ref<number | string | null>(null)
+    const tableWidth = ref<number | string>()
     const hasDragColumn = ref(false)
     const noTransition = ref(true)
 
@@ -409,7 +411,7 @@ export default defineComponent({
     const thead = ref<HTMLElement>()
     const aboveTfoot = ref<HTMLElement>()
     const belowTfoot = ref<HTMLElement>()
-    const mainScroll = ref<NativeScrollExposed>()
+    const yScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const xScrollbar = ref<ScrollbarExposed>()
     const yScrollbar = ref<ScrollbarExposed>()
@@ -495,7 +497,10 @@ export default defineComponent({
       noCascaded: props.noCascaded,
       colResizable: props.colResizable,
       expandRenderer: props.expandRenderer,
-      cellSpan: props.cellSpan
+      cellSpan: props.cellSpan,
+      sidePadding: Array.isArray(props.sidePadding)
+        ? props.sidePadding
+        : [props.sidePadding, props.sidePadding]
     })
 
     provide(TABLE_STORE, store)
@@ -519,8 +524,12 @@ export default defineComponent({
       emitCellEvent,
       emitHeadEvent,
       emitColResize,
-      emitFootEvent
+      emitFootEvent,
+      hasIcon: name => !!props.icons[name],
+      getIcon: name => props.icons[name],
+      renderTableSlot
     })
+    provide(TABLE_SLOTS, slots)
 
     const { state, getters, mutations } = store
 
@@ -548,15 +557,22 @@ export default defineComponent({
           typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
       }
       const width = tableWidth.value ?? props.width
+      const [padLeft, padRight] = state.sidePadding
 
-      if (width !== null) {
+      if (padLeft) {
+        style[nh.cv('side-pad-left')] = `${padLeft}px`
+      }
+
+      if (padRight) {
+        style[nh.cv('side-pad-right')] = `${padRight}px`
+      }
+
+      if (isDefined(width)) {
         if (typeof width === 'string' && parseFloat(width).toString() !== width) {
           style.width = width
         } else {
-          Object.assign(style, {
-            width: `${width}px`,
-            minWidth: `${width}px`
-          })
+          style.width = `${width}px`
+          style.minWidth = `${width}px`
         }
       }
 
@@ -583,6 +599,13 @@ export default defineComponent({
       }
 
       return 35
+    })
+    const totalWidths = computed(() => {
+      return (
+        (getters.totalWidths.at(-1) || 0) +
+        (state.sidePadding[0] || 0) +
+        (state.sidePadding[1] || 0)
+      )
     })
 
     const {
@@ -629,6 +652,7 @@ export default defineComponent({
       () => props.data,
       value => {
         setData(value)
+        nextTick(() => computeRenderRows(true))
         refreshPercentScroll()
       },
       { deep: true }
@@ -692,7 +716,8 @@ export default defineComponent({
       'noCascaded',
       'colResizable',
       'expandRenderer',
-      'cellSpan'
+      'cellSpan',
+      'sidePadding'
     ] as const
 
     for (const prop of normalProps) {
@@ -721,7 +746,7 @@ export default defineComponent({
       window.addEventListener('resize', handlerResize)
 
       xScrollEnabled.value = xScroll.value?.enableXScroll ?? false
-      yScrollEnabled.value = mainScroll.value?.enableYScroll ?? false
+      yScrollEnabled.value = yScroll.value?.enableYScroll ?? false
     })
 
     onBeforeUnmount(() => {
@@ -1118,12 +1143,6 @@ export default defineComponent({
       }, 0)
     }
 
-    // function syncVerticalScroll() {
-    //   if (mainScroll.value) {
-    //     setBodyYScroll(-mainScroll.value.y)
-    //   }
-    // }
-
     const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
@@ -1159,6 +1178,10 @@ export default defineComponent({
       return selectedData
     }
 
+    function renderTableSlot({ name }: { name: string }) {
+      return renderSlot(slots, name)
+    }
+
     return {
       props,
       nh,
@@ -1187,20 +1210,20 @@ export default defineComponent({
       xBarLength,
       yBarLength,
       bodyScrollHeight,
-      totalWidths: toRef(getters, 'totalWidths'),
+      totalWidths,
       totalHeight: toRef(state, 'totalHeight'),
 
       store,
 
       wrapper,
       xScroll,
+      yScroll,
       xHeadScroll,
       xAboveScroll,
       xBelowScroll,
       thead,
       aboveTfoot,
       belowTfoot,
-      mainScroll,
       indicator,
       xScrollbar,
       yScrollbar,

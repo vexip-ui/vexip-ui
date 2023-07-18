@@ -3,7 +3,7 @@
     Radio
   </Radio>
   <br />
-  <p style="margin: 10px 0;">
+  <p style="margin: 10px 0">
     value: {{ value }}
   </p>
   <Button type="primary" size="small" @click="value = value ? '' : 'radio'">

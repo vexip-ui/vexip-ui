@@ -19,7 +19,8 @@ $timeline: map.merge(
     line-style: solid,
     line-style-pending: dashed,
     line-color: get-css-var('border-color-light-2'),
-    line-inset: 0px
+    line-inset-start: 0px,
+    line-inset-end: 0px
   ),
   $timeline
 );
@@ -182,11 +183,13 @@ $timeline: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: calc($line-width * -0.5);
+    left: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 0;
-    padding-top: calc($pointer-size + get-css-var('timeline-line-inset'));
-    padding-bottom: get-css-var('timeline-line-inset');
+    padding-top: calc($pointer-size + get-css-var('timeline-line-inset-start'));
+    padding-bottom: get-css-var('timeline-line-inset-end');
 
     &::after {
       height: 100%;
@@ -197,12 +200,13 @@ $timeline: map.merge(
   }
 
   &--horizontal &__line {
-    inset: calc($line-width * -0.5) 0 auto;
-    width: auto;
+    bottom: auto;
+    flex-direction: row;
+    width: 100%;
     height: 0;
     padding: 0;
-    padding-right: get-css-var('timeline-line-inset');
-    padding-left: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-right: get-css-var('timeline-line-inset-end');
+    padding-left: calc($pointer-size + get-css-var('timeline-line-inset-start'));
 
     &::after {
       width: 100%;
@@ -213,29 +217,29 @@ $timeline: map.merge(
   }
 
   &--flip &__line {
-    left: calc($line-width * -0.5 + 100%);
+    left: 100%;
   }
 
   &--horizontal#{&}--flip &__line {
-    top: calc($line-width * -0.5 + 100%);
+    top: 100%;
     left: 0;
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__line {
-    left: calc($line-width * -0.5 + 100%);
+    left: 100%;
   }
 
   &--alternate#{&}--flip &__item:nth-child(even) &__line {
-    left: calc($line-width * -0.5);
+    left: 0;
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
-    top: calc($line-width * -0.5 + 100%);
+    top: 100%;
     left: 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
-    top: calc($line-width * -0.5);
+    top: 0;
     left: 0;
   }
 
@@ -304,9 +308,7 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__content {
-    padding: {
-      inset: $content-pad 0 0;
-    }
+    padding: $content-pad 0 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(odd) &__content {

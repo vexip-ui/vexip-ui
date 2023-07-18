@@ -1,9 +1,8 @@
 import { computed, defineComponent, renderSlot } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { supportFlexGap } from '@vexip-ui/utils'
+import { flatVNodes, supportFlexGap } from '@vexip-ui/utils'
 import { spaceProps } from './props'
-import { flatVNodes } from './helper'
 
 import type { ClassType } from '@vexip-ui/config'
 import type { SpaceAlign, SpaceJustify } from './symbol'
@@ -114,8 +113,9 @@ export default defineComponent({
         <CustomTag class={className.value} style={style.value}>
           {vnodes.map((vnode, index) => (
             <div
+              key={index}
               class={nh.be('item')}
-              role="none"
+              role={'none'}
               style={[
                 props.itemStyle,
                 !props.gapDisabled

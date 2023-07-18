@@ -147,19 +147,21 @@
 
 ### Input 事件
 
-| 名称         | 说明                                 | 参数                        | 始于 |
-| ------------ | ------------------------------------ | --------------------------- | ---- |
-| focus        | 输入框聚焦时触发，返回事件对象       | `(event: FocusEvent)`       | -    |
-| blur         | 输入框失去焦点时触发，返回事件对象   | `(event: FocusEvent)`       | -    |
-| change       | 当输入框值改变时触发                 | `(value: string \| number)` | -    |
-| input        | 当键入了值时触发                     | `(value: string \| number)` | -    |
-| enter        | 当键入回车时触发，返回按键事件       | `(event: KeyboardEvent)`    | -    |
-| prefix-click | 当点击前缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -    |
-| suffix-click | 当点击后缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -    |
-| key-down     | 当键按下时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
-| key-press    | 当键按住时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
-| key-up       | 当键松开时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
-| clear        | 当通过清除按钮清空值时触发，无返回值 | -                           | -    |
+| 名称              | 说明                                 | 参数                        | 始于     |
+| ----------------- | ------------------------------------ | --------------------------- | -------- |
+| focus             | 输入框聚焦时触发，返回事件对象       | `(event: FocusEvent)`       | -        |
+| blur              | 输入框失去焦点时触发，返回事件对象   | `(event: FocusEvent)`       | -        |
+| change            | 当输入框值改变时触发                 | `(value: string \| number)` | -        |
+| input             | 当键入了值时触发                     | `(value: string \| number)` | -        |
+| enter             | 当键入回车时触发，返回按键事件       | `(event: KeyboardEvent)`    | -        |
+| prefix-click      | 当点击前缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -        |
+| suffix-click      | 当点击后缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -        |
+| key-down          | 当键按下时触发，返回按键事件         | `(event: KeyboardEvent)`    | -        |
+| key-press         | 当键按住时触发，返回按键事件         | `(event: KeyboardEvent)`    | -        |
+| key-up            | 当键松开时触发，返回按键事件         | `(event: KeyboardEvent)`    | -        |
+| clear             | 当通过清除按钮清空值时触发，无返回值 | -                           | -        |
+| composition-start | 文本开始合成时触发                   | `(event: CompositionEvent)` | `2.1.28` |
+| composition-end   | 文本结束合成时触发                   | `(event: CompositionEvent)` | `2.1.28` |
 
 ### Input 插槽
 

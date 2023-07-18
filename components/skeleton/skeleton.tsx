@@ -113,11 +113,12 @@ export default defineComponent({
         },
         props.image
           ? [
-              <Icon
-                {...icons.value.image}
-                icon={props.imageIcon || icons.value.image.icon}
-                scale={props.iconScale}
-              ></Icon>
+            <Icon
+              key={1}
+              {...icons.value.image}
+              icon={props.imageIcon || icons.value.image.icon}
+              scale={props.iconScale}
+            ></Icon>
             ]
           : []
       )

@@ -111,8 +111,9 @@ describe('Space', () => {
     const wrapper = mount(() => (
       <Space>
         <>
-          666<span>{TEXT}</span>
-          23333
+          {'666'}
+          <span>{TEXT}</span>
+          {'23333\r'}
         </>
       </Space>
     ))

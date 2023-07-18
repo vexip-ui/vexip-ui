@@ -80,6 +80,7 @@ export interface DirectoryReader {
 }
 
 export interface UploadExposed extends ComponentPublicInstance {
+  isDragOver: boolean,
   execute: () => Promise<false | any[]>,
   handleDelete: (file: FileState) => void,
   focus: (options?: FocusOptions) => void,

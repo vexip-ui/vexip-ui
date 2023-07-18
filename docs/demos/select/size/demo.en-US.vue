@@ -8,7 +8,7 @@
   <Select size="large" placeholder="Large size" :options="options"></Select>
   <br />
   <br />
-  <Select placeholder="Custom size" :options="options" style="--vxp-input-height: 48px;"></Select>
+  <Select placeholder="Custom size" :options="options" style="--vxp-input-height: 48px"></Select>
 </template>
 
 <script setup lang="ts">

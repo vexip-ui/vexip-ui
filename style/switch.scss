@@ -19,7 +19,8 @@ $switch: map.merge(
     series-span: 8px,
     icon-color: get-css-var('color-black'),
     icon-color-loading: get-css-var('color-primary-base'),
-    circle-opacity: 0
+    circle-opacity: 0,
+    radius-rectangle: get-css-var('radius-base')
   ),
   $switch
 );
@@ -33,6 +34,9 @@ $switch: map.merge(
     @include define-preset-style('switch', $style-map);
   }
 
+  $height: get-css-var('switch-height');
+  $signal: get-css-var('switch-signal-size');
+
   @include basis;
 
   position: relative;
@@ -42,7 +46,7 @@ $switch: map.merge(
   cursor: pointer;
   user-select: none;
   background-color: get-css-var('switch-bg-color');
-  border-radius: 30px;
+  border-radius: $height;
   transition: get-css-var('transition-background'), get-css-var('transition-border'),
     get-css-var('transition-shadow'), get-css-var('transition-opacity');
 
@@ -80,9 +84,6 @@ $switch: map.merge(
   &--open {
     background-color: get-css-var('switch-bg-color-open');
   }
-
-  $height: get-css-var('switch-height');
-  $signal: get-css-var('switch-signal-size');
 
   &__placeholder {
     display: flex;
@@ -145,6 +146,12 @@ $switch: map.merge(
 
   &--loading &__signal .#{$namespace}-icon {
     color: get-css-var('switch-icon-color-loading');
+  }
+
+  &--rectangle,
+  &--rectangle &__label,
+  &--rectangle &__signal {
+    border-radius: get-css-var('switch-radius-rectangle');
   }
 
   $states: success, error, warning;

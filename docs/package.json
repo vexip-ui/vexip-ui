@@ -9,22 +9,22 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@vexip-ui/bem-helper": "workspace:~",
-    "@vexip-ui/hooks": "workspace:~",
-    "@vexip-ui/icons": "workspace:~",
-    "@vexip-ui/utils": "workspace:~",
-    "fflate": "^0.7.4",
+    "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/hooks": "workspace:*",
+    "@vexip-ui/icons": "workspace:*",
+    "@vexip-ui/utils": "workspace:*",
+    "fflate": "^0.8.0",
     "prismjs": "^1.29.0",
-    "vexip-ui": "workspace:~",
+    "vexip-ui": "workspace:*",
     "vue": "^3.3.4",
     "vue-i18n": "^9.3.0-beta.19",
-    "vue-router": "^4.2.2"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
-    "@intlify/unplugin-vue-i18n": "^0.10.1",
+    "@intlify/unplugin-vue-i18n": "^0.12.2",
     "@types/markdown-it": "^12.2.3",
     "@types/markdown-it-container": "^2.0.5",
-    "@types/node": "^18.16.18",
+    "@types/node": "^20.4.1",
     "@types/prismjs": "^1.26.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
@@ -35,11 +35,11 @@
     "markdown-it": "^13.0.1",
     "markdown-it-anchor": "^8.6.7",
     "markdown-it-container": "^3.0.0",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.25",
     "postcss-discard-duplicates": "^6.0.0",
     "sass": "^1.63.6",
-    "vite": "^4.3.9",
-    "vite-plugin-inspect": "^0.7.29",
-    "vitepress": "1.0.0-beta.1"
+    "vite": "^4.4.2",
+    "vite-plugin-inspect": "^0.7.32",
+    "vitepress": "1.0.0-beta.5"
   }
 }

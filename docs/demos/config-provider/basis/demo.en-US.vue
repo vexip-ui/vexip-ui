@@ -8,7 +8,7 @@
     </Tag>
     <br />
     <br />
-    <Input style="max-width: 400px;"></Input>
+    <Input style="max-width: 400px"></Input>
   </ConfigProvider>
 </template>
 

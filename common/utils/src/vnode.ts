@@ -15,12 +15,18 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
       loop.unshift(...vnode)
     }
 
-    if (!isVNode(vnode) || vnode.type === Comment) continue
+    if (
+      typeof vnode !== 'string' &&
+      typeof vnode !== 'number' &&
+      (!isVNode(vnode) || vnode.type === Comment)
+    ) {
+      continue
+    }
 
-    if (vnode.type === Fragment && Array.isArray(vnode.children)) {
+    if (typeof vnode === 'string' || typeof vnode === 'number') {
+      result.push(createTextVNode(String(vnode)))
+    } else if (vnode.type === Fragment && Array.isArray(vnode.children)) {
       loop.unshift(vnode.children)
-    } else if (typeof vnode === 'string' || typeof vnode === 'number') {
-      result.push(createTextVNode(vnode))
     } else {
       result.push(vnode)
     }

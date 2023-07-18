@@ -26,7 +26,7 @@ describe('Option', () => {
     const wrapper = mount(() => (
       <Option label={TEXT}>
         {{
-          default: () => <span class='option'></span>
+          default: () => <span class={'option'}></span>
         }}
       </Option>
     ))
