@@ -3,7 +3,7 @@
     <TableRow
       v-for="({ row, summary }, index) in data"
       :key="row.key"
-      is-head
+      is-foot
       :fixed="fixed"
       :row="row"
       :aria-rowindex="index"

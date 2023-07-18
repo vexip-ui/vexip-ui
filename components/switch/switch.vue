@@ -6,6 +6,15 @@
     :aria-checked="currentValue"
     :style="style"
   >
+    <input
+      ref="input"
+      type="checkbox"
+      :class="nh.be('input')"
+      :checked="currentValue"
+      :disabled="isDisabled"
+      @submit.prevent
+      @change="handleChange()"
+    />
     <span :class="nh.be('placeholder')">
       <span :class="nh.be('open-text')">
         <slot name="open">{{ props.openText }}</slot>
@@ -35,15 +44,6 @@
         <slot name="close">{{ props.closeText }}</slot>
       </span>
     </span>
-    <input
-      ref="input"
-      type="checkbox"
-      :class="nh.be('input')"
-      :checked="currentValue"
-      :disabled="isDisabled"
-      @submit.prevent
-      @change="handleChange()"
-    />
   </label>
 </template>
 
@@ -102,7 +102,7 @@ export default defineComponent({
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement>()
+    const input = ref<HTMLInputElement>()
 
     const className = computed(() => {
       return [

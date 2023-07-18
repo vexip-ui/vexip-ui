@@ -52,7 +52,7 @@
         }"
         @click="handleSortAsc()"
       >
-        <Icon v-bind="icons.caretUp"></Icon>
+        <TableIcon name="asc" :origin="icons.caretUp"></TableIcon>
       </span>
       <span
         :class="{
@@ -61,7 +61,7 @@
         }"
         @click="handleSortDesc()"
       >
-        <Icon v-bind="icons.caretDown"></Icon>
+        <TableIcon name="desc" :origin="icons.caretDown"></TableIcon>
       </span>
     </div>
     <template v-if="filter.able">
@@ -89,7 +89,7 @@
       >
         <template #trigger>
           <div :class="nh.be('filter-trigger')">
-            <Icon v-bind="icons.filter"></Icon>
+            <TableIcon name="filter" :origin="icons.filter"></TableIcon>
           </div>
         </template>
         <template v-if="filter.multiple" #default>
@@ -155,16 +155,16 @@
 <script lang="ts">
 import { Button } from '@/components/button'
 import { Checkbox } from '@/components/checkbox'
-import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 
 import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
+import TableIcon from './table-icon.vue'
 import { useMoving } from '@vexip-ui/hooks'
 import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -182,8 +182,8 @@ export default defineComponent({
   components: {
     Button,
     Checkbox,
-    Icon,
     Renderer,
+    TableIcon,
     Tooltip
   },
   props: {
@@ -203,6 +203,7 @@ export default defineComponent({
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableActions = inject(TABLE_ACTIONS)!
+    const tableSlots = inject(TABLE_SLOTS)!
 
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
@@ -480,6 +481,7 @@ export default defineComponent({
       nh,
       locale: toRef(state, 'locale'),
       icons: useIcons(),
+      tableSlots,
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),
@@ -512,7 +514,8 @@ export default defineComponent({
       handleFilterMultiple,
       handleResetFilter,
       handleCheckAllRow,
-      refreshXScroll: () => nextFrameOnce(tableActions.refreshXScroll)
+      refreshXScroll: () => nextFrameOnce(tableActions.refreshXScroll),
+      renderTableSlot: tableActions.renderTableSlot
     }
   }
 })

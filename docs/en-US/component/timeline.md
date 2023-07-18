@@ -2,6 +2,12 @@
 
 It is often used to show some content step by step.
 
+::: info
+
+When modifying the signal size and line width, keep their parity the same to ensure timeline alignment.
+
+:::
+
 ## Demos
 
 :::demo timeline/basis
@@ -69,14 +75,14 @@ In both-sides mode, if you don't want the component to automatically calculate t
 
 ### TimelineItem Props
 
-| Name      | Type                                                           | Description                                                                           | Default     | Since |
-| --------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------- | ----- |
-| type      | `'default' \| 'success' \| 'error' \| 'warning' \| 'disabled'` | Time node type                                                                        | `'default'` | -     |
-| color     | `string`                                                       | You can specify a custom color for the node                                           | `''`        | -     |
-| label     | `number \| string`                                             | Set the `label` of the node, useful when listening for node click events              | `null`      | -     |
-| dashed    | `boolean`                                                      | Set whether the line of the time node is dashed                                       | `false`     | -     |
-| lineColor | `string`                                                       | Set the line color of the time node                                                   | `null`      | -     |
-| spacing   | `number \| string`                                             | Set the spacing between time nodes, you can pass a number or a legal css length value | `null`      | -     |
+| Name       | Type                                                           | Description                                                                           | Default     | Since |
+| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------- | ----- |
+| type       | `'default' \| 'success' \| 'error' \| 'warning' \| 'disabled'` | Time node type                                                                        | `'default'` | -     |
+| color      | `string`                                                       | You can specify a custom color for the node                                           | `''`        | -     |
+| label      | `number \| string`                                             | Set the `label` of the node, useful when listening for node click events              | `null`      | -     |
+| dashed     | `boolean`                                                      | Set whether the line of the time node is dashed                                       | `false`     | -     |
+| line-color | `string`                                                       | Set the line color of the time node                                                   | `null`      | -     |
+| spacing    | `number \| string`                                             | Set the spacing between time nodes, you can pass a number or a legal css length value | `null`      | -     |
 
 ### TimelineItem Events
 
@@ -86,7 +92,8 @@ In both-sides mode, if you don't want the component to automatically calculate t
 
 ### Textarea Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| default | Timeline node content slot | -          | -     |
-| signal  | Timeline node signal slot  | -          | -     |
+| Name    | Description                       | Parameters | Since    |
+| ------- | --------------------------------- | ---------- | -------- |
+| default | Timeline node content slot        | -          | -        |
+| signal  | Timeline node signal slot         | -          | -        |
+| line    | Timeline line prefix content slot | -          | `2.1.28` |

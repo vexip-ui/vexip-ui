@@ -13,16 +13,16 @@ importers:
   .:
     dependencies:
       '@vexip-ui/bem-helper':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:common/bem-helper
       '@vexip-ui/hooks':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:common/hooks
       '@vexip-ui/icons':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:common/icons
       '@vexip-ui/utils':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:common/utils
     devDependencies:
       '@commitlint/cli':
@@ -185,8 +185,8 @@ importers:
         specifier: ^4.4.2
         version: 4.4.2(@types/node@20.4.1)(sass@1.63.6)
       vite-plugin-dts:
-        specifier: ^3.2.0
-        version: 3.2.0(@types/node@20.4.1)(sass@1.63.6)(typescript@5.0.4)
+        specifier: ^3.3.1
+        version: 3.3.1(@types/node@20.4.1)(typescript@5.0.4)(vite@4.4.2)
       vitest:
         specifier: ^0.33.0
         version: 0.33.0(happy-dom@10.1.1)(sass@1.63.6)
@@ -202,10 +202,10 @@ importers:
   common/config:
     dependencies:
       '@vexip-ui/bem-helper':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../bem-helper
       '@vexip-ui/utils':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../utils
     devDependencies:
       vue:
@@ -221,7 +221,7 @@ importers:
         specifier: ^2.11.8
         version: 2.11.8
       '@vexip-ui/utils':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../utils
     devDependencies:
       vue:
@@ -267,7 +267,7 @@ importers:
   common/plugins:
     dependencies:
       '@vexip-ui/utils':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../utils
       compare-versions:
         specifier: 6.0.0
@@ -316,16 +316,16 @@ importers:
   docs:
     dependencies:
       '@vexip-ui/bem-helper':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../common/bem-helper
       '@vexip-ui/hooks':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../common/hooks
       '@vexip-ui/icons':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../common/icons
       '@vexip-ui/utils':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../common/utils
       fflate:
         specifier: ^0.8.0
@@ -334,7 +334,7 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
       vexip-ui:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:..
       vue:
         specifier: ^3.3.4
@@ -410,7 +410,7 @@ importers:
   playground:
     dependencies:
       '@vexip-ui/icons':
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../common/icons
       '@vue/repl':
         specifier: ^2.5.3
@@ -425,7 +425,7 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1
       vexip-ui:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:..
       vue:
         specifier: ^3.3.4
@@ -2027,7 +2027,7 @@ packages:
     dependencies:
       '@intlify/bundle-utils': 7.0.2(vue-i18n@9.3.0-beta.11-04f2dc8)
       '@intlify/shared': 9.3.0-beta.24
-      '@rollup/pluginutils': 5.0.2(rollup@3.25.3)
+      '@rollup/pluginutils': 5.0.2
       '@vue/compiler-sfc': 3.3.4
       debug: 4.3.4
       fast-glob: 3.3.0
@@ -2201,7 +2201,7 @@ packages:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
 
-  /@rollup/pluginutils@5.0.2(rollup@3.25.3):
+  /@rollup/pluginutils@5.0.2:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -2213,7 +2213,6 @@ packages:
       '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.25.3
     dev: true
 
   /@rushstack/node-core-library@3.59.4(@types/node@20.4.1):
@@ -9577,7 +9576,7 @@ packages:
         optional: true
     dependencies:
       '@antfu/utils': 0.7.4
-      '@rollup/pluginutils': 5.0.2(rollup@3.25.3)
+      '@rollup/pluginutils': 5.0.2
       chokidar: 3.5.3
       debug: 4.3.4
       fast-glob: 3.3.0
@@ -9608,7 +9607,7 @@ packages:
         optional: true
     dependencies:
       '@antfu/utils': 0.7.4
-      '@rollup/pluginutils': 5.0.2(rollup@3.25.3)
+      '@rollup/pluginutils': 5.0.2
       chokidar: 3.5.3
       debug: 4.3.4
       fast-glob: 3.3.0
@@ -9775,32 +9774,28 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-dts@3.2.0(@types/node@20.4.1)(sass@1.63.6)(typescript@5.0.4):
-    resolution: {integrity: sha512-s+dwJvDcb/AWgb49oVbq9JiUSIMwaVpFfV4SVIaBZmv9OZyeyDGxujaq+z4HJ4LB4hUG5c4oRAJyLfV66c763Q==}
+  /vite-plugin-dts@3.3.1(@types/node@20.4.1)(typescript@5.0.4)(vite@4.4.2):
+    resolution: {integrity: sha512-RFebFGg6GWKkZqRQ5n6ls8giSiygKMBriJTFp8N+CRbYgI4lMXBxXEx0z2bthfeQv/xB53Wmhn/LNOOqb9OQHQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       typescript: '*'
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
     dependencies:
       '@microsoft/api-extractor': 7.36.0(@types/node@20.4.1)
-      '@rollup/pluginutils': 5.0.2(rollup@3.25.3)
-      '@rushstack/node-core-library': 3.59.4(@types/node@20.4.1)
+      '@rollup/pluginutils': 5.0.2
       '@vue/language-core': 1.8.2(typescript@5.0.4)
       debug: 4.3.4
       kolorist: 1.8.0
       typescript: 5.0.4
-      vue-tsc: 1.8.2(typescript@5.0.4)
-    optionalDependencies:
-      rollup: 3.25.3
       vite: 4.4.2(@types/node@20.4.1)(sass@1.63.6)
+      vue-tsc: 1.8.2(typescript@5.0.4)
     transitivePeerDependencies:
       - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
+      - rollup
       - supports-color
-      - terser
     dev: true
 
   /vite-plugin-inspect@0.7.32(vite@4.4.2):
@@ -9810,7 +9805,7 @@ packages:
       vite: ^3.1.0 || ^4.0.0
     dependencies:
       '@antfu/utils': 0.7.4
-      '@rollup/pluginutils': 5.0.2(rollup@3.25.3)
+      '@rollup/pluginutils': 5.0.2
       debug: 4.3.4
       fs-extra: 11.1.1
       open: 9.1.0

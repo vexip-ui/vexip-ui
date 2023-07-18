@@ -61,7 +61,9 @@ export const inputProps = buildProps({
   onSuffixClick: eventProp<(event: MouseEvent) => void>(),
   onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-  onKeyUp: eventProp<(event: KeyboardEvent) => void>()
+  onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
+  onCompositionStart: eventProp<(event: CompositionEvent) => void>(),
+  onCompositionEnd: eventProp<(event: CompositionEvent) => void>()
 })
 
 export type InputProps = ExtractPropTypes<typeof inputProps>
