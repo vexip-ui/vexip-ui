@@ -23,19 +23,35 @@ export function normalizePath(path: string) {
 export function transformListToMap<T = any, K = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor: (item: T) => K = v => v as any
-): Record<string, K> {
-  const map = {} as Record<string, any>
+  accessor?: (item: T) => K,
+  isMap?: false
+): Record<string, K>
+export function transformListToMap<T = any, K = T>(
+  list: T[],
+  prop: keyof T | ((item: T) => any),
+  accessor?: (item: T) => K,
+  isMap?: true
+): Map<string, K>
+export function transformListToMap<T = any, K = T>(
+  list: T[],
+  prop: keyof T | ((item: T) => any),
+  accessor: (item: T) => K = v => v as any,
+  isMap = false
+) {
+  const map = (isMap ? new Map<string, any>() : {}) as any
 
   if (!isDefined(prop)) return map
 
+  const set = isMap
+    ? (key: any, value: K) => map.set(key, value)
+    : (key: any, value: K) => (map[key] = value)
   const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
     const key = propAccessor(item)
 
     if (isDefined(key)) {
-      map[key] = accessor(item)
+      set(key, accessor(item))
     }
   })
 
