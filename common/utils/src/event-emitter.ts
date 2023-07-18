@@ -1,9 +1,6 @@
 export type EventType = number | string | symbol
-
 export type EventHandler = (...payload: any[]) => void
-
 export type EventHandlerSet = Set<EventHandler>
-
 export type EventHandlerMap = Map<EventType, EventHandlerSet>
 
 export interface EventEmitter {

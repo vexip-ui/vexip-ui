@@ -139,10 +139,10 @@ export interface TreeOptions<T = string> {
 }
 
 /**
- * 转换扁平结构为树形结构
+ * Transform the given flatted list to tree
  *
- * @param list 需要转换的扁平数据
- * @param options 转化配置项
+ * @param list the flatted list
+ * @param options the config for transforming
  */
 export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> = {}) {
   const {
@@ -188,10 +188,10 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
 }
 
 /**
- * 转换树形结构为扁平结构
+ * Transform the given tree to flatted list
  *
- * @param tree 需要转换的树形数据
- * @param options 转化配置项
+ * @param tree the tree
+ * @param options the config for transforming
  */
 export function flatTree<T = any>(
   tree: T[],
@@ -255,6 +255,40 @@ export function flatTree<T = any>(
   }
 
   return list
+}
+
+/**
+ * Walk the given tree value and call the callback for each node
+ *
+ * @param tree the tree to walk
+ * @param cb the callback function
+ * @param options the config for walk
+ */
+export function walkTree<T = any>(
+  tree: T[],
+  cb: (item: T) => void,
+  options: {
+    depthFirst?: boolean,
+    childField?: keyof T
+  } = {}
+) {
+  const { childField = 'children' as keyof T, depthFirst = false } = options
+  const loop = [...tree]
+
+  while (loop.length) {
+    const item = loop.shift()!
+    const children = item[childField] as T[]
+
+    cb(item)
+
+    if (children?.length) {
+      if (depthFirst) {
+        loop.unshift(...children)
+      } else {
+        loop.push(...children)
+      }
+    }
+  }
 }
 
 export interface SortOptions<T = string> {

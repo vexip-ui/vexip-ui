@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
-import { flatTree, sortByProps, transformListToMap } from '../src/transform'
+import { flatTree, normalizePath, sortByProps, transformListToMap } from '../src/transform'
 
 describe('transform', () => {
+  it('normalizePath', () => {
+    expect(normalizePath('a')).toEqual('a')
+    expect(normalizePath('/a/b/c')).toEqual('/a/b/c')
+    expect(normalizePath('\\a\\b\\c')).toEqual('/a/b/c')
+    expect(normalizePath('a/b\\c')).toEqual('a/b/c')
+    expect(normalizePath('D:\\\\a/b\\c')).toEqual('D:/a/b/c')
+    expect(normalizePath('./b\\c')).toEqual('./b/c')
+    expect(normalizePath('..\\b/c')).toEqual('../b/c')
+  })
+
   it('transformListToMap', () => {
     expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id')).toMatchObject({
       1: { id: '1' },
