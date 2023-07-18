@@ -10,7 +10,7 @@ export function callIfFunc<T>(value: T | (() => T)) {
 }
 
 export function normalizePath(path: string) {
-  return path.replace(/\/+/g, '/')
+  return path.replace(/[\\/]+/g, '/')
 }
 
 /**
