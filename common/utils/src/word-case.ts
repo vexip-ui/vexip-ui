@@ -24,30 +24,23 @@ export function toKebabCase(value: string) {
   )
 }
 
+type CapitalCase<T extends string> = T extends `${infer First} ${infer Rest}`
+  ? CapitalCase<`${First}-${Rest}`>
+  : T extends `${infer First}-${infer Rest}`
+    ? `${Capitalize<First>}${CapitalCase<Rest>}`
+    : Capitalize<T>
+
 /**
  * 将命名转换为首字母大写的驼峰
  *
  * @param value 需要转换的命名
  */
-
-type CapitalCase<T extends string> = T extends `${infer First}-${infer Rest}`
-  ? `${Capitalize<First>}${CapitalCase<Rest>}`
-  : Capitalize<T>
-
 export function toCapitalCase<T extends string>(value: T) {
-  return (value.charAt(0).toUpperCase() +
-    value
-      .slice(1)
-      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as CapitalCase<T>
-}
+  value = value.trim().replace(/\s+/g, '-') as T
+  value = value.replace(/-+(\w)/g, (_, char) => (char ? char.toUpperCase() : '')) as T
 
-/**
- *  将命名转换为驼峰命名
- *
- * @param value 需要转换的命名
- */
-export function toCamelCase(value: string) {
-  const capitalName = toCapitalCase(value)
-
-  return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
+  return (value.charAt(0).toLocaleUpperCase() + value.slice(1)).replace(
+    /[^\w]/g,
+    ''
+  ) as CapitalCase<T>
 }
