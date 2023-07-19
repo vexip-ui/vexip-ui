@@ -30,7 +30,7 @@ export function enUSLocale() {
     },
 
     captcha: {
-      toRight: 'Please slide to the right',
+      slideEnd: 'Please slide to the end',
       slide: 'Please slide to a suitable position',
       success: 'Test successful',
       fixImage: 'Fix image to complete captcha'

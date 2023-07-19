@@ -1,54 +1,21 @@
 import { Icon } from '@/components/icon'
-import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
 
-import {
-  Transition,
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  renderSlot,
-  toRef,
-  watch
-} from 'vue'
+import { Transition, computed, defineComponent, onMounted, ref, renderSlot, watch } from 'vue'
 
 import CaptchaSlider from './captcha-slider.vue'
-import {
-  createSizeProp,
-  createStateProp,
-  emitEvent,
-  useIcons,
-  useLocale,
-  useNameHelper,
-  useProps
-} from '@vexip-ui/config'
-import { placementWhileList, useClickOutside, useMoving, usePopper } from '@vexip-ui/hooks'
-import { boundRange, ensureArray, isClient, isNull, random, toFixed } from '@vexip-ui/utils'
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { ensureArray, isClient, isNull, random } from '@vexip-ui/utils'
 import { captchaProps } from './props'
-
-import type { PopperExposed } from '@/components/popper'
 
 export default defineComponent({
   name: 'Captcha',
   props: captchaProps,
   emits: ['update:visible'],
-  setup(_props, { emit, slots, expose }) {
-    const {
-      idFor,
-      state,
-      disabled,
-      loading
-      // validateField,
-      // clearField,
-      // getFieldValue,
-      // setFieldValue
-    } = useFieldStore<unknown>(focus)
+  setup(_props, { slots, expose }) {
+    const { idFor, disabled, loading, validateField, setFieldValue } = useFieldStore<number>(focus)
 
     const props = useProps('captcha', _props, {
-      state: createStateProp(state),
-      type: 'slide',
-      loading: () => loading.value,
       slideTarget: {
         default: null,
         validator: value => {
@@ -70,7 +37,11 @@ export default defineComponent({
       },
       canvasSize: () => [1000, 600],
       refreshIcon: null,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: () => loading.value,
+      loadingIcon: null,
+      loadingLock: false,
+      loadingEffect: null
     })
 
     const nh = useNameHelper('captcha')
@@ -78,6 +49,7 @@ export default defineComponent({
     const icons = useIcons()
 
     const currentTarget = ref(parseTarget(props.slideTarget))
+    const dragging = ref(false)
 
     const wrapper = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
@@ -91,9 +63,8 @@ export default defineComponent({
     const currentLeft = computed(() => slider.value?.currentLeft || 0)
     const resetting = computed(() => slider.value?.resetting)
 
-    const usingPopper = computed(() => props.type !== 'slide')
-    const usedTarget = computed(() => (!usingPopper.value ? 100 : currentTarget.value[0]))
-    const tolerance = computed(() => (!usingPopper.value ? 0 : props.tolerance ?? 2))
+    const usedTarget = computed(() => currentTarget.value[0])
+    const tolerance = computed(() => props.tolerance ?? 2)
 
     let imageLoaded = false
     let image: HTMLImageElement | false
@@ -102,12 +73,11 @@ export default defineComponent({
       return [
         nh.b(),
         nh.bs('vars'),
-        nh.bm(props.type),
+        nh.bm('slide-image'),
         {
-          // [nh.bm('dragging')]: dragging.value,
+          [nh.bm('dragging')]: dragging.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -116,15 +86,6 @@ export default defineComponent({
         left: `${currentLeft.value}%`,
         [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
       }
-    })
-    const normalTip = computed(() => {
-      switch (props.type) {
-        default:
-          return locale.value.slide
-      }
-    })
-    const hasImage = computed(() => {
-      return props.type === 'slide-image' && props.image
     })
     const canvasSize = computed(() => {
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
@@ -138,12 +99,9 @@ export default defineComponent({
         drawImage()
       }
     )
-    watch(
-      [() => props.type, currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]],
-      drawImage
-    )
+    watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], drawImage)
 
-    expose({ refresh })
+    expose({ dragging, reset })
 
     onMounted(async () => {
       await loadImage()
@@ -215,10 +173,9 @@ export default defineComponent({
       )
     }
 
-    function refresh(target = props.slideTarget) {
+    function reset(target = props.slideTarget) {
       currentTarget.value = parseTarget(target)
-      // isSuccess.value = false
-      slider.value?.refresh()
+      slider.value?.reset()
     }
 
     function parseTarget(target = props.slideTarget) {
@@ -230,8 +187,31 @@ export default defineComponent({
     }
 
     function focus(options?: FocusOptions) {
-      // reference.value?.focus(options)
-      wrapper.value?.focus(options)
+      slider.value?.focus(options)
+    }
+
+    function handleDragStart(percent: number) {
+      dragging.value = true
+      emitEvent(props.onDragStart, percent)
+    }
+
+    function handleDrag(percent: number) {
+      emitEvent(props.onDrag, percent)
+    }
+
+    function handleDragEnd(percent: number) {
+      dragging.value = false
+      emitEvent(props.onDragEnd, percent)
+    }
+
+    function handleSuccess(percent: number) {
+      emitEvent(props.onSuccess, percent)
+      setFieldValue(percent)
+      validateField()
+    }
+
+    function handleRefresh() {
+      emitEvent(props.onRefresh)
     }
 
     return () => {
@@ -245,8 +225,12 @@ export default defineComponent({
             </div>
             <span role={'none'} style={'flex: auto'}></span>
             <button
-              class={[nh.be('action'), nh.be('refresh')]}
-              onClick={() => emitEvent(props.onRefresh)}
+              class={[
+                nh.be('action'),
+                nh.be('refresh'),
+                isSuccess.value && nh.bem('action', 'disabled')
+              ]}
+              onClick={handleRefresh}
             >
               {slots.refresh
                 ? (
@@ -260,7 +244,7 @@ export default defineComponent({
                   )}
             </button>
           </div>
-          {hasImage.value && (
+          {props.image && (
             <div class={nh.be('image')}>
               <canvas
                 ref={canvas}
@@ -277,7 +261,7 @@ export default defineComponent({
                 ></canvas>
               </div>
               <Transition name={nh.ns('fade')}>
-                {props.type === 'slide-image' && isSuccess.value && (
+                {isSuccess.value && (
                   <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
                     {props.successTip ?? locale.value.success}
                   </div>
@@ -290,6 +274,15 @@ export default defineComponent({
             class={nh.bem('slider', 'inner')}
             target={usedTarget.value}
             tolerance={tolerance.value}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-lock={props.loadingLock}
+            loading-effect={props.loadingEffect}
+            onSuccess={handleSuccess}
+            onFail={() => emitEvent(props.onFail)}
+            onDragStart={handleDragStart}
+            onDrag={handleDrag}
+            onDragEnd={handleDragEnd}
           >
             {{
               tip: () =>
@@ -297,7 +290,7 @@ export default defineComponent({
                   ? renderSlot(slots, 'tip', { success: isSuccess.value })
                   : isSuccess.value
                     ? props.successTip ?? locale.value.success
-                    : props.tip ?? normalTip.value
+                    : props.tip ?? locale.value.slide
             }}
           </CaptchaSlider>
         </div>

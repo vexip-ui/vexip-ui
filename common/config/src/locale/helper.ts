@@ -31,7 +31,7 @@ export interface LocaleConfig {
   },
 
   captcha: {
-    toRight: string,
+    slideEnd: string,
     slide: string,
     success: string,
     fixImage: string

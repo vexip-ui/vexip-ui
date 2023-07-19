@@ -1,5 +1,8 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * Tamil language config
+ */
 export function taINLocale() {
   return defineLocaleConfig({
     locale: 'ta-IN',
@@ -30,9 +33,10 @@ export function taINLocale() {
     },
 
     captcha: {
-      toRight: 'வலதுபுறம் ஸ்லைடு செய்யவும்',
-      slide: 'பொருத்தமான இடத்திற்கு ஸ்லைடு செய்யவும்',
-      success: 'சோதனை வெற்றி'
+      slideEnd: 'இறுதிக்கு ஸ்லைடு',
+      slide: 'சரியான நிலைக்கு ஸ்லைடு செய்யவும்',
+      success: 'சோதனை வெற்றி',
+      fixImage: 'படத்தை சரிசெய்யவும்'
     },
 
     checkbox: {

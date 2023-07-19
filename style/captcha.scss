@@ -22,6 +22,7 @@ $captcha: map.merge(
     filler-transition: 'transform 0ms ease',
     tip-color: get-css-var('content-color-base'),
     tip-color-fill: get-css-var('color-white'),
+    tip-color-disabled: get-css-var('content-color-disabled'),
     tip-transition: 'background-position 0ms ease',
     tip-bg-color-success: get-css-var('color-success-opacity-3'),
     tip-bg-color-error: get-css-var('color-error-opacity-3'),
@@ -30,11 +31,13 @@ $captcha: map.merge(
     trigger-color: get-css-var('content-color-third'),
     trigger-color-hover: get-css-var('color-primary-base'),
     trigger-color-success: get-css-var('color-success-base'),
+    trigger-color-disabled: get-css-var('content-color-disabled'),
     trigger-bg-color: get-css-var('color-white'),
     trigger-radius: get-css-var('radius-small'),
     trigger-transition: 'left 0ms ease',
     action-color: get-css-var('content-color-secondary'),
-    action-color-hover: get-css-var('color-primary-base')
+    action-color-hover: get-css-var('color-primary-base'),
+    action-color-disabled: get-css-var('content-color-disabled')
   ),
   $captcha
 );
@@ -48,41 +51,16 @@ $captcha: map.merge(
 
   width: get-css-var('captcha-width');
   padding: 12px 16px;
+  user-select: none;
   background-color: get-css-var('captcha-bg-color');
   border: get-css-var('border-shape') get-css-var('captcha-b-color');
   border-radius: get-css-var('captcha-radius');
+  outline: 0;
   box-shadow: get-css-var('captcha-shadow');
 
-  // &--slide-image {
-  //   padding: 12px 16px;
-  //   background-color: get-css-var('captcha-bg-color');
-  //   border: get-css-var('border-shape') get-css-var('captcha-b-color');
-  //   border-radius: get-css-var('captcha-radius');
-  //   box-shadow: get-css-var('captcha-shadow');
-  // }
-
-  // &__selector {
-  //   position: relative;
-  //   display: inline-flex;
-  //   align-items: center;
-  //   width: 100%;
-  //   height: get-css-var('captcha-height');
-  //   cursor: pointer;
-  //   border: get-css-var('border-shape') get-css-var('captcha-b-color');
-  //   border-radius: get-css-var('captcha-radius');
-  //   outline: 0;
-  //   transition: get-css-var('transition-background'), get-css-var('transition-border'),
-  //     get-css-var('transition-shadow');
-  // }
-
-  // &__panel {
-  //   display: flex;
-  //   flex-direction: column;
-  //   padding: 12px 16px;
-  //   background-color: get-css-var('captcha-panel-bg-color');
-  //   border-radius: get-css-var('captcha-panel-border-radius');
-  //   box-shadow: get-css-var('captcha-panel-shadow');
-  // }
+  &--dragging {
+    cursor: move;
+  }
 
   &__image {
     position: relative;
@@ -159,6 +137,16 @@ $captcha: map.merge(
     &:focus {
       color: get-css-var('captcha-action-color-hover');
     }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('captcha-action-color-disabled');
+      }
+    }
   }
 
   &__slider {
@@ -171,9 +159,32 @@ $captcha: map.merge(
     width: 100%;
     height: get-css-var('captcha-slider-height');
     padding: 0 calc(#{get-css-var('captcha-trigger-width')} * 0.5);
+    user-select: none;
     background-color: get-css-var('captcha-slider-bg-color');
     border: get-css-var('border-light-2');
     border-radius: get-css-var('captcha-slider-radius');
+
+    &--small {
+      @include define-preset-values(
+        'captcha',
+        (
+          slider-height: 24px,
+          trigger-width: 24px,
+          trigger-height: 24px
+        )
+      );
+    }
+
+    &--large {
+      @include define-preset-values(
+        'captcha',
+        (
+          slider-height: 40px,
+          trigger-width: 40px,
+          trigger-height: 40px
+        )
+      );
+    }
 
     &--inner {
       @include define-preset-values(
@@ -185,6 +196,10 @@ $captcha: map.merge(
           trigger-height: 36px
         )
       );
+    }
+
+    &--disabled {
+      cursor: not-allowed;
     }
   }
 
@@ -228,13 +243,17 @@ $captcha: map.merge(
     background-position: 0%;
     background-clip: text;
     background-size: 200% 100%;
-    transition: get-css-var('captcha-tip-transition');
+    transition: get-css-var('transition-color'), get-css-var('captcha-tip-transition');
   }
 
   &--slide-image &__tip {
     line-height: 1;
     color: get-css-var('content-color-third');
     background-image: none;
+  }
+
+  &__slider--disabled &__tip {
+    color: get-css-var('captcha-tip-color-disabled');
   }
 
   &__track {
@@ -257,6 +276,7 @@ $captcha: map.merge(
     background-color: get-css-var('captcha-trigger-bg-color');
     border-radius: get-css-var('captcha-trigger-radius');
     will-change: left;
+    outline: 0;
     box-shadow: get-css-var('shadow-base');
     transition: get-css-var('transition-color'), get-css-var('captcha-trigger-transition');
     transform: translate3d(-50%, 0, 0);
@@ -278,5 +298,10 @@ $captcha: map.merge(
 
   &--slide-image &__trigger {
     border-radius: 50%;
+  }
+
+  &__slider--disabled &__trigger {
+    color: get-css-var('captcha-trigger-color-disabled');
+    cursor: not-allowed;
   }
 }

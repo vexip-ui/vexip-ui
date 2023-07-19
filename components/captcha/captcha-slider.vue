@@ -1,5 +1,10 @@
 <template>
-  <div :id="idFor" ref="wrapper" :class="className">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    tabindex="-1"
+  >
     <div
       :class="{
         [nh.be('filler')]: true,
@@ -18,7 +23,7 @@
       :style="tipStyle"
     >
       <slot name="tip" :success="isSuccess">
-        {{ isSuccess ? props.successTip ?? locale.success : props.tip ?? locale.toRight }}
+        {{ isSuccess ? props.successTip ?? locale.success : props.tip ?? locale.slideEnd }}
       </slot>
     </div>
     <div ref="track" :class="nh.be('track')">
@@ -36,7 +41,12 @@
       >
         <slot name="trigger" :success="isSuccess">
           <Icon v-if="isSuccess" v-bind="icons.check"></Icon>
-          <Icon v-else-if="props.loading" v-bind="icons.loading"></Icon>
+          <Icon
+            v-else-if="props.loading"
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+          ></Icon>
           <Icon v-else v-bind="icons.anglesRight"></Icon>
         </slot>
       </div>
@@ -48,11 +58,10 @@
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 
 import {
   createSizeProp,
-  createStateProp,
   emitEvent,
   useIcons,
   useLocale,
@@ -71,22 +80,11 @@ export default defineComponent({
   props: captchaSliderProps,
   emits: ['update:visible'],
   setup(_props) {
-    const {
-      idFor,
-      state,
-      disabled,
-      loading,
-      size
-      // validateField,
-      // clearField,
-      // getFieldValue,
-      // setFieldValue
-    } = useFieldStore<unknown>(focus)
+    const { idFor, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<boolean>(focus)
 
     const props = useProps('captcha', _props, {
       size: createSizeProp(size),
-      state: createStateProp(state),
-      loading: () => loading.value,
       target: {
         default: 100,
         validator: value => value >= 0 && value <= 100
@@ -97,8 +95,11 @@ export default defineComponent({
         default: 0,
         validator: value => value >= 0
       },
-      refreshIcon: null,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: () => loading.value,
+      loadingIcon: null,
+      loadingLock: false,
+      loadingEffect: null
     })
 
     const nh = useNameHelper('captcha')
@@ -109,14 +110,16 @@ export default defineComponent({
     const resetting = ref(false)
     const isSuccess = ref(false)
 
-    const wrapper = ref<HTMLElement>()
     const track = ref<HTMLElement>()
+
+    const readonly = computed(() => props.disabled || (props.loading && props.loadingLock))
 
     let widthLimit: number
 
     const { target: trigger, moving: dragging } = useMoving({
       onStart: (_, event) => {
         if (
+          readonly.value ||
           !track.value ||
           !trigger.value ||
           isSuccess.value ||
@@ -129,29 +132,40 @@ export default defineComponent({
         widthLimit = track.value.getBoundingClientRect().width
         currentLeft.value = 0
         verifyPosition()
+        trigger.value.focus()
+        emitEvent(props.onDragStart, currentLeft.value)
       },
       onMove: state => {
-        if (isSuccess.value || resetting.value) {
+        if (readonly.value || isSuccess.value || resetting.value) {
           return false
         }
 
         currentLeft.value = (state.deltaX / widthLimit) * 100
         verifyPosition()
+        emitEvent(props.onDrag, currentLeft.value)
       },
       onEnd: () => {
+        if (readonly.value) return
+
         const matched = matchTarget(currentLeft.value)
 
         if (currentLeft.value && !matched) {
           resetting.value = true
           currentLeft.value = 0
+          isSuccess.value = false
 
+          setFieldValue(false)
           emitEvent(props.onFail)
         } else if (matched) {
-          // currentLeft.value = usedTarget.value
           isSuccess.value = true
 
-          emitEvent(props.onSuccess)
+          setFieldValue(true)
+          emitEvent(props.onSuccess, currentLeft.value)
         }
+
+        validateField()
+        trigger.value?.blur()
+        emitEvent(props.onDragEnd, currentLeft.value)
       }
     })
 
@@ -163,8 +177,7 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [`${baseCls}--disabled`]: props.disabled,
         [`${baseCls}--loading`]: props.loading,
-        [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--${props.state}`]: props.state !== 'default'
+        [`${baseCls}--${props.size}`]: props.size !== 'default'
       }
     })
     const fillerStyle = computed(() => {
@@ -186,18 +199,35 @@ export default defineComponent({
       }
     })
 
+    watch(
+      () => getFieldValue(false),
+      value => {
+        if (!value) {
+          reset()
+        } else {
+          if (!matchTarget(currentLeft.value)) {
+            resetting.value = true
+            currentLeft.value = props.target
+          }
+
+          isSuccess.value = true
+        }
+      }
+    )
+    watch(readonly, value => value && reset())
+
     function verifyPosition() {
       currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
     }
 
-    function afterReset() {
-      resetting.value = false
-    }
-
-    function refresh() {
+    function reset() {
       resetting.value = true
       currentLeft.value = 0
       isSuccess.value = false
+    }
+
+    function afterReset() {
+      resetting.value = false
     }
 
     function matchTarget(value: number) {
@@ -205,7 +235,7 @@ export default defineComponent({
     }
 
     function focus(options?: FocusOptions) {
-      wrapper.value?.focus(options)
+      trigger.value?.focus(options)
     }
 
     return {
@@ -225,12 +255,11 @@ export default defineComponent({
       tipStyle,
       triggerStyle,
 
-      wrapper,
       track,
       trigger,
 
-      afterReset,
-      refresh
+      reset,
+      afterReset
     }
   }
 })
