@@ -42,22 +42,22 @@
 
 ### Captcha 属性
 
-| 名称           | 类型                                             | 说明 | 默认值        | 始于 |
-| -------------- | ------------------------------------------------ | ---- | ------------- | ---- |
-| slide-target   | `number \| number[]`                             |      | `null`        | -    |
-| title          | `string`                                         |      | `null`        | -    |
-| tip            | `string`                                         |      | `null`        | -    |
-| success-tip    | `string`                                         |      | `null`        | -    |
-| image          | `string`                                         |      | `null`        | -    |
-| tolerance      | `number`                                         |      | `null`        | -    |
-| canvas-size    | `number[]`                                       |      | `[1000, 600]` | -    |
-| refresh-icon   | `Record<string, any>`                            |      | `null`        | -    |
-| disabled       | `boolean`                                        |      | `false`       | -    |
-| loading        | `boolean`                                        |      | `false`       | -    |
-| loading-icon   | `Record<string, any>`                            |      | `null`        | -    |
-| loading-lock   | `boolean`                                        |      | `false`       | -    |
-| loading-effect | `string`                                         |      | `null`        | -    |
-| on-before-test | `(percent: number, matched: boolean) => unknown` |      | `null`        | -    |
+| 名称           | 类型                                             | 说明                                                                     | 默认值        | 始于 |
+| -------------- | ------------------------------------------------ | ------------------------------------------------------------------------ | ------------- | ---- |
+| slide-target   | `number \| number[]`                             | 设置滑动目标位置，传入数组时第二位为纵向位置                             | `null`        | -    |
+| title          | `string`                                         | 设置验证的标题                                                           | `null`        | -    |
+| tip            | `string`                                         | 设置验证的提示语                                                         | `null`        | -    |
+| success-tip    | `string`                                         | 设置验证成功时的提示语                                                   | `null`        | -    |
+| image          | `string`                                         | 设置验证的图片                                                           | `null`        | -    |
+| tolerance      | `number`                                         | 设置验证目标位置允许的误差范围                                           | `null`        | -    |
+| canvas-size    | `number[]`                                       | 设置画布大小                                                             | `[1000, 600]` | -    |
+| refresh-icon   | `Record<string, any>`                            | 设置验证的刷新图标                                                       | `null`        | -    |
+| disabled       | `boolean`                                        | 设置是否禁用验证                                                         | `false`       | -    |
+| loading        | `boolean`                                        | 设置是否为加载中                                                         | `false`       | -    |
+| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                                                         | `null`        | -    |
+| loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                                 | `false`       | -    |
+| loading-effect | `string`                                         | 设置加载中图标的效果动画                                                 | `null`        | -    |
+| on-before-test | `(percent: number, matched: boolean) => unknown` | 设置验证前的回调，支持异步函数和 Promise，返回布尔值时将直接作为验证结果 | `null`        | -    |
 
 ### Captcha 事件
 
