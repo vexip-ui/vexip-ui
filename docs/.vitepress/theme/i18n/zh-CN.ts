@@ -97,6 +97,7 @@ export const zhCN = defineI18n({
 
     AutoComplete: '自动完成',
     Cascader: '联级选择器',
+    Captcha: '验证',
     Checkbox: '多选框',
     ColorPicker: '颜色选择器',
     DatePicker: '日期选择器',

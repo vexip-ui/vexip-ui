@@ -95,6 +95,7 @@ export interface I18nConfig {
 
     AutoComplete: string,
     Cascader: string,
+    Captcha: string,
     Checkbox: string,
     ColorPicker: string,
     DatePicker: string,

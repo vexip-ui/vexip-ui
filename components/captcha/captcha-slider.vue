@@ -99,7 +99,11 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: null
+      loadingEffect: null,
+      onBeforeTest: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('captcha')
@@ -107,12 +111,15 @@ export default defineComponent({
     const icons = useIcons()
 
     const currentLeft = ref(0)
+    const testing = ref(false)
     const resetting = ref(false)
     const isSuccess = ref(false)
 
     const track = ref<HTMLElement>()
 
-    const readonly = computed(() => props.disabled || (props.loading && props.loadingLock))
+    const readonly = computed(() => {
+      return props.disabled || (props.loading && props.loadingLock) || testing.value
+    })
 
     let widthLimit: number
 
@@ -144,20 +151,32 @@ export default defineComponent({
         verifyPosition()
         emitEvent(props.onDrag, currentLeft.value)
       },
-      onEnd: () => {
+      onEnd: async () => {
         if (readonly.value) return
 
-        const matched = matchTarget(currentLeft.value)
+        testing.value = true
 
-        if (currentLeft.value && !matched) {
+        const matched = matchTarget(currentLeft.value)
+        let customResult: unknown
+
+        if (typeof props.onBeforeTest === 'function') {
+          customResult = await props.onBeforeTest(currentLeft.value, matched)
+        }
+
+        if (currentLeft.value && (!matched || customResult === false)) {
           resetting.value = true
           currentLeft.value = 0
           isSuccess.value = false
 
           setFieldValue(false)
           emitEvent(props.onFail)
-        } else if (matched) {
+        } else if (matched || customResult === true) {
           isSuccess.value = true
+
+          if (customResult && !matched) {
+            resetting.value = true
+            currentLeft.value = props.target
+          }
 
           setFieldValue(true)
           emitEvent(props.onSuccess, currentLeft.value)
@@ -166,6 +185,8 @@ export default defineComponent({
         validateField()
         trigger.value?.blur()
         emitEvent(props.onDragEnd, currentLeft.value)
+
+        testing.value = false
       }
     })
 

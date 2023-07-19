@@ -28,6 +28,7 @@ export default defineComponent({
           }
         }
       },
+      title: null,
       tip: null,
       successTip: null,
       image: null,
@@ -41,7 +42,11 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: null
+      loadingEffect: null,
+      onBeforeTest: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('captcha')
@@ -64,7 +69,9 @@ export default defineComponent({
     const resetting = computed(() => slider.value?.resetting)
 
     const usedTarget = computed(() => currentTarget.value[0])
-    const tolerance = computed(() => props.tolerance ?? 2)
+    const tolerance = computed(() => props.tolerance ?? 1)
+
+    const imageLoading = ref(false)
 
     let imageLoaded = false
     let image: HTMLImageElement | false
@@ -77,7 +84,7 @@ export default defineComponent({
         {
           [nh.bm('dragging')]: dragging.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading
+          [nh.bm('loading')]: props.loading || imageLoading.value
         }
       ]
     })
@@ -91,7 +98,12 @@ export default defineComponent({
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
 
-    watch(() => props.slideTarget, parseTarget)
+    watch(
+      () => props.slideTarget,
+      value => {
+        currentTarget.value = parseTarget(value)
+      }
+    )
     watch(
       () => props.image,
       async () => {
@@ -117,10 +129,12 @@ export default defineComponent({
           return
         }
 
+        imageLoading.value = true
         imageLoaded = false
         image.src = props.image
         image.onload = () => {
           imageLoaded = true
+          imageLoading.value = false
           resolve()
         }
       })
@@ -211,12 +225,12 @@ export default defineComponent({
     }
 
     function handleRefresh() {
-      emitEvent(props.onRefresh)
+      !isSuccess.value && emitEvent(props.onRefresh)
     }
 
     return () => {
       return (
-        <div ref={wrapper} id={idFor.value} class={className.value} tabindex={0}>
+        <div ref={wrapper} id={idFor.value} class={className.value} tabindex={-1}>
           <div class={nh.be('header')}>
             <div class={nh.be('title')}>
               {slots.title
@@ -274,10 +288,11 @@ export default defineComponent({
             class={nh.bem('slider', 'inner')}
             target={usedTarget.value}
             tolerance={tolerance.value}
-            loading={props.loading}
+            loading={props.loading || imageLoading.value}
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
             loading-effect={props.loadingEffect}
+            onBeforeTest={props.onBeforeTest}
             onSuccess={handleSuccess}
             onFail={() => emitEvent(props.onFail)}
             onDragStart={handleDragStart}
@@ -288,9 +303,7 @@ export default defineComponent({
               tip: () =>
                 slots.tip
                   ? renderSlot(slots, 'tip', { success: isSuccess.value })
-                  : isSuccess.value
-                    ? props.successTip ?? locale.value.success
-                    : props.tip ?? locale.value.slide
+                  : props.tip ?? locale.value.slide
             }}
           </CaptchaSlider>
         </div>

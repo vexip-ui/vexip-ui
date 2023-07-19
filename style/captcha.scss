@@ -288,6 +288,8 @@ $captcha: map.merge(
     }
 
     &--success {
+      cursor: inherit;
+
       &,
       &:focus,
       &:hover {
