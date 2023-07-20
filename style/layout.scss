@@ -77,13 +77,25 @@ $layout: map.merge(
       get-css-var('transition-transform');
     transform: translateX(-100%);
 
+    @include rtl {
+      transform: translateX(100%);
+    }
+
     &--fixed {
       z-index: 1;
       transform: translateX(0);
+
+      @include rtl {
+        transform: translateX(0);
+      }
     }
 
     &--expanded {
       transform: translateX(0);
+
+      @include rtl {
+        transform: translateX(0);
+      }
     }
 
     &--reduced {
@@ -157,7 +169,7 @@ $layout: map.merge(
 
     position: sticky;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     z-index: get-css-var('layout-header-z-index');
     display: flex;
     align-items: center;
@@ -301,7 +313,7 @@ $layout: map.merge(
   &__expand-handler {
     position: absolute;
     bottom: 47px;
-    left: 100%;
+    inset-inline-start: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -345,7 +357,7 @@ $layout: map.merge(
       &::after {
         position: absolute;
         bottom: calc(-5px - 0.5px);
-        left: 0;
+        inset-inline-start: 0;
         display: block;
         width: 100%;
         height: 0;
@@ -379,7 +391,7 @@ $layout: map.merge(
     &::after {
       position: absolute;
       bottom: calc(-5px - 0.5px);
-      left: 0;
+      inset-inline-start: 0;
       display: block;
       width: 100%;
       height: 0;

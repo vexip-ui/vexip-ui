@@ -87,11 +87,11 @@ $column: map.merge(
     }
 
     &--pull-#{$i} {
-      right: $size;
+      inset-inline-end: $size;
     }
 
     &--push-#{$i} {
-      left: $size;
+      inset-inline-start: $size;
     }
 
     &--order-#{$i} {
@@ -119,11 +119,11 @@ $column: map.merge(
         }
 
         &--#{$point}-pull-#{$i} {
-          right: $size;
+          inset-inline-end: $size;
         }
 
         &--#{$point}-push-#{$i} {
-          left: $size;
+          inset-inline-start: $size;
         }
 
         &--#{$point}-order-#{$i} {

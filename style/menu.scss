@@ -76,6 +76,10 @@ $menu: map.merge(
     padding: 0;
     transform-origin: 0 0 !important;
 
+    @include rtl {
+      transform-origin: 100% 0 !important;
+    }
+
     &--drop {
       padding: 5px 0;
     }
@@ -327,7 +331,7 @@ $menu: map.merge(
 
     #{$self}--horizontal & {
       position: relative;
-      right: auto;
+      inset-inline-end: auto;
       margin-inline-start: 6px;
       margin-inline-end: 0;
       transform: rotate(0);

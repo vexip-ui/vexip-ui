@@ -8,7 +8,7 @@
         <transition name="vxp-fade">
           <Button
             v-if="getState().scrollY > 60"
-            style="position: absolute; right: 12px; bottom: 12px"
+            style="position: absolute; inset-inline-end: 12px; bottom: 12px"
             @click="scrollTo(0, 0)"
           >
             返回顶部

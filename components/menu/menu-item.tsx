@@ -20,7 +20,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
 import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
@@ -67,8 +67,11 @@ const MenuItem = defineComponent({
 
     const nh = useNameHelper('menu')
     const icons = useIcons()
+
+    const { isRtl } = useRtl()
+
     const baseClass = nh.be('item')
-    const placement = ref<Placement>('right-start')
+    const placement = ref<Placement>(isRtl.value ? 'left-start' : 'right-start')
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
@@ -182,7 +185,7 @@ const MenuItem = defineComponent({
     watch(
       isHorizontal,
       value => {
-        placement.value = value ? 'bottom' : 'right-start'
+        placement.value = value ? 'bottom' : isRtl.value ? 'left-start' : 'right-start'
       },
       { immediate: true }
     )
@@ -383,7 +386,7 @@ const MenuItem = defineComponent({
     function renderLabel() {
       return (
         <Tooltip
-          placement={'right'}
+          placement={isRtl.value ? 'left' : 'right'}
           reverse={tooltipReverse.value}
           transfer
           disabled={tooltipDisabled.value}

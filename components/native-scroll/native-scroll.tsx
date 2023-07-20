@@ -517,8 +517,13 @@ export default defineComponent({
     }
 
     function getState() {
+      const { clientX: scrollX, clientY: scrollY, percentX, percentY } = getCommonPayload()
+
       return {
-        ...getCommonPayload(),
+        scrollX,
+        scrollY,
+        percentX,
+        percentY,
         enableXScroll: enableXScroll.value,
         enableYScroll: enableYScroll.value
       }
