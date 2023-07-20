@@ -7,7 +7,8 @@ import {
   eventProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
+  valuesProp
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -46,7 +47,7 @@ export const selectProps = buildProps({
   suffix: Object,
   suffixColor: String,
   noSuffix: booleanProp,
-  value: [String, Number, Array] as PropType<SelectValue>,
+  value: valuesProp as PropType<SelectValue>,
   multiple: booleanProp,
   clearable: booleanProp,
   maxListHeight: Number,

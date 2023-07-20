@@ -6,7 +6,8 @@ export interface SelectKeyConfig extends OptionKeyConfig {
 }
 
 export type SelectRawOption = RawOption
-export type SelectValue = string | number | null | (string | number)[]
+export type BaseValue = string | number | boolean
+export type SelectValue = BaseValue | BaseValue[] | null
 
 export interface SelectOptionState extends OptionState {
   group: boolean,

@@ -304,9 +304,15 @@ import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectOptionState, SelectRawOption, SelectValue } from './symbol'
+import type {
+  BaseValue,
+  SelectKeyConfig,
+  SelectOptionState,
+  SelectRawOption,
+  SelectValue
+} from './symbol'
 
-type SelectListener = (value: string | number, data: SelectRawOption) => void
+type SelectListener = (value: BaseValue, data: SelectRawOption) => void
 type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
@@ -425,7 +431,7 @@ export default defineComponent({
     const locale = useLocale('select', toRef(props, 'locale'))
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
-    const currentValues = ref<(string | number)[]>([])
+    const currentValues = ref<BaseValue[]>([])
     const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
@@ -460,9 +466,9 @@ export default defineComponent({
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
-    const cachedSelected = new Map<string | number, SelectOptionState>()
+    const cachedSelected = new Map<BaseValue, SelectOptionState>()
 
-    let optionValueMap = new Map<string | number, SelectOptionState>()
+    let optionValueMap = new Map<BaseValue, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
@@ -694,7 +700,7 @@ export default defineComponent({
       return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
     })
 
-    function getOptionFromMap(value?: string | number | null) {
+    function getOptionFromMap(value?: BaseValue | null) {
       if (isNull(value)) return null
 
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
@@ -793,7 +799,7 @@ export default defineComponent({
       const normalizedValue = !Array.isArray(value) ? [value] : value
 
       const valueSet = new Set(normalizedValue)
-      const selectedValues: (string | number)[] = []
+      const selectedValues: BaseValue[] = []
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
@@ -942,7 +948,7 @@ export default defineComponent({
       updateHitting(currentIndex.value)
     }
 
-    function handleTagClose(value?: string | number | null) {
+    function handleTagClose(value?: BaseValue | null) {
       !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 

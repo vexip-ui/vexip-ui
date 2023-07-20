@@ -291,3 +291,6 @@ export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => 
 export function localeProp<N extends LocaleNames>(_name: N) {
   return Object as PropType<Partial<LocaleConfig[N]>>
 }
+
+export const valueProp = [String, Number, Boolean]
+export const valuesProp = [String, Number, Boolean, Array]
