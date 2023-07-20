@@ -159,10 +159,12 @@ export function useTrack({
   }
 
   return {
+    currentScroll,
     trackSpeed,
     track,
     bar,
     tracking,
+    type,
     barLength,
     disabled,
 
