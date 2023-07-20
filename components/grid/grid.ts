@@ -83,13 +83,13 @@ export default defineComponent({
         return {
           justify: 'start',
           align: 'top'
-        }
+        } as const
       } else if (props.cellFlex) {
         return {
           justify: 'start',
           align: 'top',
           ...props.cellFlex
-        }
+        } as const
       }
 
       return false

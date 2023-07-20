@@ -34,7 +34,7 @@ export default defineComponent({
     const gridState = inject(GRID_STATE, null)
     const nh = useNameHelper('cell')
 
-    provide(GRID_STATE, null)
+    provide(GRID_STATE, null!)
 
     const layoutState = reactive({
       top: props.top,
@@ -44,7 +44,7 @@ export default defineComponent({
       width: props.width,
       height: props.height
     })
-    const leyoutKeys = Object.keys(layoutState) as (
+    const layoutKeys = Object.keys(layoutState) as (
       | 'top'
       | 'right'
       | 'bottom'
@@ -68,20 +68,20 @@ export default defineComponent({
 
         if (matchSize) {
           if (typeof matchSize === 'number') {
-            leyoutKeys.forEach(key => {
+            layoutKeys.forEach(key => {
               layoutState[key] = props[key] as any
             })
 
             layoutState.width = matchSize
           } else {
-            leyoutKeys.forEach(key => {
+            layoutKeys.forEach(key => {
               layoutState[key] = has(matchSize, key) ? matchSize[key] : (props[key] as any)
             })
 
             layoutState.width = layoutState.width ?? defaultWidth.value
           }
         } else {
-          leyoutKeys.forEach(key => {
+          layoutKeys.forEach(key => {
             layoutState[key] = props[key] as any
           })
 
@@ -92,7 +92,7 @@ export default defineComponent({
     )
 
     const className = computed(() => {
-      const cellFelx = props.useFlex !== false &&
+      const cellFlex = props.useFlex !== false &&
         (props.useFlex || gridState?.cellFlex) && {
         ...(gridState?.cellFlex || {}),
         ...(props.useFlex
@@ -104,12 +104,12 @@ export default defineComponent({
       const className: ClassType = {
         [nh.b()]: true,
         [nh.bm('inherit')]: gridState || props.inherit,
-        [nh.bm('flex')]: cellFelx
+        [nh.bm('flex')]: cellFlex
       }
 
-      if (cellFelx) {
-        if (cellFelx.justify) className[nh.bm(cellFelx.justify)] = true
-        if (cellFelx.align) className[nh.bm(cellFelx.align)] = true
+      if (cellFlex) {
+        if (cellFlex.justify) className[nh.bm(cellFlex.justify)] = true
+        if (cellFlex.align) className[nh.bm(cellFlex.align)] = true
       }
 
       return className
