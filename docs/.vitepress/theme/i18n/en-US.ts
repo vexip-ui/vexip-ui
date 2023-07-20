@@ -96,8 +96,8 @@ export const enUS = defineI18n({
     Pagination: 'Pagination',
 
     AutoComplete: 'AutoComplete',
-    Cascader: 'Cascader',
     Captcha: 'Captcha',
+    Cascader: 'Cascader',
     Checkbox: 'Checkbox',
     ColorPicker: 'ColorPicker',
     DatePicker: 'DatePicker',

@@ -8,7 +8,7 @@
     <div
       :class="{
         [nh.be('filler')]: true,
-        [nh.bem('filler', 'loading')]: props.loading,
+        [nh.bem('filler', 'loading')]: isLoading,
         [nh.bem('filler', 'success')]: isSuccess
       }"
       :style="fillerStyle"
@@ -17,7 +17,7 @@
       :class="{
         [nh.be('tip')]: true,
         [nh.bem('tip', 'focused')]: dragging,
-        [nh.bem('tip', 'loading')]: props.loading,
+        [nh.bem('tip', 'loading')]: isLoading,
         [nh.bem('tip', 'success')]: isSuccess
       }"
       :style="tipStyle"
@@ -32,7 +32,7 @@
         :class="{
           [nh.be('trigger')]: true,
           [nh.bem('trigger', 'focused')]: dragging,
-          [nh.bem('trigger', 'loading')]: props.loading,
+          [nh.bem('trigger', 'loading')]: isLoading,
           [nh.bem('trigger', 'success')]: isSuccess
         }"
         tabindex="0"
@@ -42,7 +42,7 @@
         <slot name="trigger" :success="isSuccess">
           <Icon v-if="isSuccess" v-bind="icons.check"></Icon>
           <Icon
-            v-else-if="props.loading"
+            v-else-if="isLoading"
             v-bind="icons.loading"
             :effect="props.loadingEffect || icons.loading.effect"
             :icon="props.loadingIcon || icons.loading.icon"
@@ -68,7 +68,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { useMoving } from '@vexip-ui/hooks'
+import { useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { captchaSliderProps } from './props'
 
@@ -110,22 +110,24 @@ export default defineComponent({
     const locale = useLocale('captcha')
     const icons = useIcons()
 
+    const { timer } = useSetTimeout()
+
     const currentLeft = ref(0)
     const testing = ref(false)
     const resetting = ref(false)
     const isSuccess = ref(false)
+    const testLoading = ref(false)
 
     const track = ref<HTMLElement>()
 
-    const readonly = computed(() => {
-      return props.disabled || (props.loading && props.loadingLock) || testing.value
-    })
+    const readonly = computed(() => props.disabled || (props.loading && props.loadingLock))
 
     let widthLimit: number
 
     const { target: trigger, moving: dragging } = useMoving({
       onStart: (_, event) => {
         if (
+          testing.value ||
           readonly.value ||
           !track.value ||
           !trigger.value ||
@@ -143,7 +145,7 @@ export default defineComponent({
         emitEvent(props.onDragStart, currentLeft.value)
       },
       onMove: state => {
-        if (readonly.value || isSuccess.value || resetting.value) {
+        if (testing.value || readonly.value || isSuccess.value || resetting.value) {
           return false
         }
 
@@ -152,7 +154,7 @@ export default defineComponent({
         emitEvent(props.onDrag, currentLeft.value)
       },
       onEnd: async () => {
-        if (readonly.value) return
+        if (testing.value || readonly.value) return
 
         testing.value = true
 
@@ -160,6 +162,9 @@ export default defineComponent({
         let customResult: unknown
 
         if (typeof props.onBeforeTest === 'function') {
+          timer.testing = setTimeout(() => {
+            testLoading.value = true
+          }, 100)
           customResult = await props.onBeforeTest(currentLeft.value, matched)
         }
 
@@ -186,10 +191,12 @@ export default defineComponent({
         trigger.value?.blur()
         emitEvent(props.onDragEnd, currentLeft.value)
 
+        clearTimeout(timer.testing)
         testing.value = false
       }
     })
 
+    const isLoading = computed(() => props.loading || testLoading.value)
     const className = computed(() => {
       const baseCls = nh.be('slider')
 
@@ -197,7 +204,7 @@ export default defineComponent({
         [baseCls]: true,
         [nh.bs('vars')]: true,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading,
+        [`${baseCls}--loading`]: isLoading.value,
         [`${baseCls}--${props.size}`]: props.size !== 'default'
       }
     })
@@ -271,6 +278,7 @@ export default defineComponent({
       isSuccess,
       dragging,
 
+      isLoading,
       className,
       fillerStyle,
       tipStyle,
