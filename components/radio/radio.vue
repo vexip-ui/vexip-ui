@@ -49,7 +49,7 @@ import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-type ChangeEvent = (value: string | number | boolean) => void
+import type { ChangeEvent } from './symbol'
 
 export default defineComponent({
   name: 'Radio',

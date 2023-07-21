@@ -18,9 +18,7 @@ import { callIfFunc, debounceMinor, isNull } from '@vexip-ui/utils'
 import { breadcrumbProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
-
-type SelectListener = (label: string | number) => void
+import type { BreadcrumbItemState, BreadcrumbState, SelectEvent } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
@@ -99,11 +97,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      emitEvent(props.onSelect as SelectListener, label)
+      emitEvent(props.onSelect as SelectEvent, label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emitEvent(props.onSeparatorClick as SelectListener, label)
+      emitEvent(props.onSeparatorClick as SelectEvent, label)
     }
 
     return {

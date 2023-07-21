@@ -36,8 +36,7 @@ import { radioGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 import type { Ref } from 'vue'
-
-type ChangeEvent = (value: string | number | boolean) => void
+import type { ChangeEvent } from './symbol'
 
 export default defineComponent({
   name: 'RadioGroup',

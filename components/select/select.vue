@@ -305,15 +305,13 @@ import { selectProps } from './props'
 import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
+  ChangeEvent,
   SelectBaseValue,
+  SelectEvent,
   SelectKeyConfig,
   SelectOptionState,
-  SelectRawOption,
   SelectValue
 } from './symbol'
-
-type SelectListener = (value: SelectBaseValue, data: SelectRawOption) => void
-type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -981,7 +979,7 @@ export default defineComponent({
       }
 
       emitEvent(
-        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectListener,
+        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectEvent,
         value,
         option.data
       )
@@ -1019,7 +1017,7 @@ export default defineComponent({
         emit('update:label', currentLabels.value)
         setFieldValue(emittedValue)
         emitEvent(
-          props.onChange as ChangeListener,
+          props.onChange as ChangeEvent,
           emittedValue,
           emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
@@ -1038,7 +1036,7 @@ export default defineComponent({
           emit('update:value', emittedValue)
           emit('update:label', currentLabels.value[0])
           setFieldValue(emittedValue)
-          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
+          emitEvent(props.onChange as ChangeEvent, emittedValue, option.data)
           validateField()
         }
       }
@@ -1077,7 +1075,7 @@ export default defineComponent({
 
         syncInputValue()
         emit('update:value', emittedValue)
-        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
+        emitEvent(props.onChange as ChangeEvent, emittedValue, props.multiple ? [] : '')
         emitEvent(props.onClear)
         clearField(emittedValue!)
         updatePopper()

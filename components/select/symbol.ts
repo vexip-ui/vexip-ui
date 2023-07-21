@@ -17,3 +17,6 @@ export interface SelectOptionState extends OptionState {
 }
 
 export type SelectFilter = (value: string, option: SelectOptionState) => boolean
+
+export type SelectEvent = (value: SelectBaseValue, data: any) => void
+export type ChangeEvent = (value: SelectValue, data: any | any[]) => void

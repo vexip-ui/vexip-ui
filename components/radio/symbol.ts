@@ -18,4 +18,6 @@ export interface GroupState {
   unregisterInput(input: Ref<HTMLElement | null | undefined>): void
 }
 
+export type ChangeEvent = (value: string | number | boolean) => void
+
 export const GROUP_STATE: InjectionKey<GroupState> = Symbol('RADIO_GROUP_STATE')

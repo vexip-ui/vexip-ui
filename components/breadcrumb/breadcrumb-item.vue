@@ -33,7 +33,7 @@ import { isFunction } from '@vexip-ui/utils'
 import { breadcrumbItemProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { BreadcrumbItemState, SeparatorRenderFn } from './symbol'
+import type { BreadcrumbItemState, SelectEvent, SeparatorRenderFn } from './symbol'
 
 export default defineComponent({
   name: 'BreadcrumbItem',
@@ -85,12 +85,12 @@ export default defineComponent({
     }
 
     function handleClick() {
-      emitEvent(props.onSelect!, currentLabel.value)
+      emitEvent(props.onSelect! as SelectEvent, currentLabel.value)
       breadcrumbState?.handleSelect(currentLabel.value)
     }
 
     function handleSeparatorClick() {
-      emitEvent(props.onSeparatorClick!, currentLabel.value)
+      emitEvent(props.onSeparatorClick! as SelectEvent, currentLabel.value)
       breadcrumbState?.handleSeparatorClick(currentLabel.value)
     }
 

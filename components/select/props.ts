@@ -13,25 +13,21 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
 import type {
+  ChangeEvent,
   SelectBaseValue,
+  SelectEvent,
   SelectFilter,
   SelectKeyConfig,
   SelectRawOption,
   SelectValue
 } from './symbol'
 
-type SelectEvent =
-  | ((value: SelectBaseValue, data: any) => void)
-  | ((value: string, data: any) => void)
-  | ((value: number, data: any) => void)
-  | ((value: boolean, data: any) => void)
-
-type ChangeEvent =
-  | ((value: SelectValue, data: any | any[]) => void)
+type CustomChangeEvent =
+  | ChangeEvent
   | ((value: SelectBaseValue, data: any) => void)
   | ((value: string, data: any) => void)
   | ((value: number, data: any) => void)
@@ -87,9 +83,9 @@ export const selectProps = buildProps({
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onSelect: eventProp<SelectEvent>(),
-  onCancel: eventProp<SelectEvent>(),
-  onChange: eventProp<ChangeEvent>(),
+  onSelect: eventProp<EventListener<SelectEvent>>(),
+  onCancel: eventProp<EventListener<SelectEvent>>(),
+  onChange: eventProp<CustomChangeEvent>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp(),
