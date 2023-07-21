@@ -9,6 +9,7 @@ export type { SelectProps, SelectCProps } from './props'
 export type {
   SelectKeyConfig,
   SelectRawOption,
+  SelectBaseValue,
   SelectValue,
   SelectOptionState,
   SelectFilter

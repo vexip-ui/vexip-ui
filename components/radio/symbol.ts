@@ -3,7 +3,7 @@ import type { IconEffect } from '@/components/icon'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 export interface GroupState {
-  currentValue: string | number,
+  currentValue: string | number | boolean,
   size: ComponentSize,
   state: ComponentState,
   disabled: boolean,
@@ -13,7 +13,7 @@ export interface GroupState {
   loadingIcon: Record<string, any>,
   loadingLock: boolean,
   loadingEffect: IconEffect,
-  updateValue(value: string | number): void,
+  updateValue(value: string | number | boolean): void,
   registerInput(input: Ref<HTMLElement | null | undefined>): void,
   unregisterInput(input: Ref<HTMLElement | null | undefined>): void
 }

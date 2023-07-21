@@ -16,21 +16,30 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
-import type { SelectFilter, SelectKeyConfig, SelectRawOption, SelectValue } from './symbol'
+import type {
+  SelectBaseValue,
+  SelectFilter,
+  SelectKeyConfig,
+  SelectRawOption,
+  SelectValue
+} from './symbol'
 
 type SelectEvent =
-  | ((value: string | number, data: any) => void)
+  | ((value: SelectBaseValue, data: any) => void)
   | ((value: string, data: any) => void)
   | ((value: number, data: any) => void)
+  | ((value: boolean, data: any) => void)
 
 type ChangeEvent =
   | ((value: SelectValue, data: any | any[]) => void)
-  | ((value: string | number, data: any) => void)
+  | ((value: SelectBaseValue, data: any) => void)
   | ((value: string, data: any) => void)
   | ((value: number, data: any) => void)
-  | ((values: (string | number)[], data: any[]) => void)
+  | ((value: boolean, data: any) => void)
+  | ((values: SelectBaseValue[], data: any[]) => void)
   | ((values: string[], data: any[]) => void)
   | ((values: number[], data: any[]) => void)
+  | ((value: boolean[], data: any) => void)
 
 export const selectProps = buildProps({
   size: sizeProp,

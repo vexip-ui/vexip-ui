@@ -88,7 +88,7 @@ Different states can be set via `state`.
 type RawOption =
   | string
   | {
-    label: string | number,
+    label: string | number | boolean,
     content?: string,
     disabled?: boolean
   }
@@ -98,8 +98,8 @@ type RawOption =
 
 | Name         | Type                                             | Description                                                                                                              | Default     | Since   |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------- | ------- |
-| value        | `string \| number`                               | The value of the radio, the radio will be checked when it is equal to `label`, not valid when used with RadioGroup       | `null`      | -       |
-| label        | `string \| number`                               | The label of the radio, **required**, the radio will be checked when it is equal to `value` or `value` of the RadioGroup | `null`      | -       |
+| value        | `string \| number \| boolean`                    | The value of the radio, the radio will be checked when it is equal to `label`, not valid when used with RadioGroup       | `null`      | -       |
+| label        | `string \| number \| boolean`                    | The label of the radio, **required**, the radio will be checked when it is equal to `value` or `value` of the RadioGroup | `null`      | -       |
 | label-class  | `ClassType`                                      | Custom class name of the label content of the radio button                                                               | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | The size of the radio                                                                                                    | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of radio                                                                                                       | `'default'` | -       |
@@ -110,9 +110,9 @@ type RawOption =
 
 ### Radio Events
 
-| Name   | Description                                                                   | Parameters                  | Since |
-| ------ | ----------------------------------------------------------------------------- | --------------------------- | ----- |
-| change | Emitted when the value of the radio button changes, returns the current value | `(value: string \| number)` | -     |
+| Name   | Description                                                                   | Parameters                             | Since |
+| ------ | ----------------------------------------------------------------------------- | -------------------------------------- | ----- |
+| change | Emitted when the value of the radio button changes, returns the current value | `(value: string \| number \| boolean)` | -     |
 
 ### Radio Slots
 
@@ -124,7 +124,7 @@ type RawOption =
 
 | Name           | Type                              | Description                                                                                                                       | Default     | Since   |
 | -------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
-| value          | `string \| number`                | The value of the radio group, the radio with the same label value will be selected                                                | `null`      | -       |
+| value          | `string \| number \| boolean`     | The value of the radio group, the radio with the same label value will be selected                                                | `null`      | -       |
 | vertical       | `boolean`                         | Set whether to enable vertical display                                                                                            | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | The size of the radio box, it will override the `size` set by the radio box alone                                                 | `'default'` | -       |
 | disabled       | `boolean`                         | Set whether to disable the radio group                                                                                            | `false`     | -       |
@@ -138,6 +138,6 @@ type RawOption =
 
 ### RadioGroup Events
 
-| Name   | Description                                                                         | Parameters                  | Since |
-| ------ | ----------------------------------------------------------------------------------- | --------------------------- | ----- |
-| change | Emitted when the value of the radio button group changes, returns the current value | `(value: string \| number)` | -     |
+| Name   | Description                                                                         | Parameters                             | Since |
+| ------ | ----------------------------------------------------------------------------------- | -------------------------------------- | ----- |
+| change | Emitted when the value of the radio button group changes, returns the current value | `(value: string \| number \| boolean)` | -     |

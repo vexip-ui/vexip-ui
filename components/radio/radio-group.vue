@@ -37,6 +37,8 @@ import { GROUP_STATE } from './symbol'
 
 import type { Ref } from 'vue'
 
+type ChangeEvent = (value: string | number | boolean) => void
+
 export default defineComponent({
   name: 'RadioGroup',
   components: {
@@ -46,7 +48,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<string | number>(focus)
+      useFieldStore<string | number | boolean>(focus)
 
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(size),
@@ -115,13 +117,13 @@ export default defineComponent({
       }
     )
 
-    function updateValue(value: string | number) {
+    function updateValue(value: string | number | boolean) {
       if (currentValue.value !== value) {
         currentValue.value = value
 
         emit('update:value', value)
         setFieldValue(value)
-        emitEvent(props.onChange, value)
+        emitEvent(props.onChange as ChangeEvent, value)
         validateField()
       }
     }
