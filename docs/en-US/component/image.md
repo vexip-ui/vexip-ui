@@ -128,7 +128,7 @@ type ImageSkeletonProps = Pick<
 | radius          | `number`                        | Set the border radius of the image                                                       | `0`       | -     |
 | border          | `boolean \| string`             | Whether the image has border, support passing a color string to specify the border color | `false`   | -     |
 | preview-src     | `string`                        | The preview source of image                                                              | `''`      | -     |
-| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `false`   | -     |
+| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `null`    | -     |
 
 ### Image Events
 
@@ -152,7 +152,7 @@ type ImageSkeletonProps = Pick<
 | --------------- | ------------------- | ------------------------------------------- | ------- | ----- |
 | show-all        | `boolean`           | Whether to show all images                  | `false` | -     |
 | preview         | `boolean`           | Whether to enable preview                   | `false` | -     |
-| viewer-transfer | `boolean \| string` | Set the `transfer` prop of the image viewer | `false` | -     |
+| viewer-transfer | `boolean \| string` | Set the `transfer` prop of the image viewer | `null`  | -     |
 
 ### ImageGroup Events
 

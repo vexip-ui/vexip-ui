@@ -129,7 +129,7 @@ export default defineComponent({
       radius: 0,
       border: false,
       previewSrc: '',
-      viewerTransfer: false
+      viewerTransfer: null
     })
 
     const groupState = inject(GROUP_STATE, null)
