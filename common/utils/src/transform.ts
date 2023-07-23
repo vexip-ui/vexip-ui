@@ -19,23 +19,30 @@ export function normalizePath(path: string) {
  * @param list 需要被转换的数组
  * @param prop 需要被转换的属性或提供一个读取方法
  * @param accessor 映射的值的读取方法，默认返回元素本身
+ * @param isMap 是否使用 Map 对象储存结果
  */
-export function transformListToMap<T = any, K = T>(
+export function transformListToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor?: (item: T) => K,
+  accessor?: (item: T) => O,
   isMap?: false
-): Record<string, K>
-export function transformListToMap<T = any, K = T>(
+): Record<string, O>
+export function transformListToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
-  prop: keyof T | ((item: T) => any),
-  accessor?: (item: T) => K,
+  prop: K,
+  accessor?: (item: T) => O,
   isMap?: true
-): Map<string, K>
-export function transformListToMap<T = any, K = T>(
+): Map<T[K], O>
+export function transformListToMap<T = any, O = T, K = any>(
+  list: T[],
+  prop: (item: T) => K,
+  accessor?: (item: T) => O,
+  isMap?: true
+): Map<K extends keyof T ? T[K] : unknown, O>
+export function transformListToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor: (item: T) => K = v => v as any,
+  accessor: (item: T) => O = v => v as any,
   isMap = false
 ) {
   const map = (isMap ? new Map<string, any>() : {}) as any
@@ -43,8 +50,8 @@ export function transformListToMap<T = any, K = T>(
   if (!isDefined(prop)) return map
 
   const set = isMap
-    ? (key: any, value: K) => map.set(key, value)
-    : (key: any, value: K) => (map[key] = value)
+    ? (key: any, value: O) => map.set(key, value)
+    : (key: any, value: O) => (map[key] = value)
   const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
