@@ -165,13 +165,6 @@ import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import {
-  placementWhileList,
-  useClickOutside,
-  useHover,
-  usePopper,
-  useSetTimeout
-} from '@vexip-ui/hooks'
-import {
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -182,6 +175,14 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
+import {
+  placementWhileList,
+  useClickOutside,
+  useHover,
+  usePopper,
+  useRtl,
+  useSetTimeout
+} from '@vexip-ui/hooks'
 import {
   boundRange,
   differenceDays,
@@ -228,6 +229,7 @@ export default defineComponent({
     } = useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('date-picker')
+    const { isRtl } = useRtl()
     const props = useProps('datePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
@@ -238,7 +240,7 @@ export default defineComponent({
       },
       visible: false,
       placement: {
-        default: 'bottom-start',
+        default: () => (isRtl.value ? 'bottom-end' : 'bottom-start'),
         validator: value => placementWhileList.includes(value)
       },
       transfer: false,

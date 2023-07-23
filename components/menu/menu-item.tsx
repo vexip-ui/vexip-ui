@@ -113,7 +113,7 @@ const MenuItem = defineComponent({
       const multiplier = indent.value + (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25
 
       return {
-        paddingLeft:
+        paddingInlineStart:
           parentItemState && parentItemState.isUsePopper
             ? undefined
             : `calc(${indentWidth} * ${multiplier})`

@@ -228,7 +228,7 @@
             <slot name="group" :option="option" :index="index">
               <div
                 :class="[nh.be('label'), nh.bem('label', 'group')]"
-                :style="{ paddingLeft: `${option.depth * 6}px` }"
+                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
               >
                 {{ option.label }}
               </div>
@@ -248,7 +248,10 @@
             @mousemove="updateHitting(index, false)"
           >
             <slot :option="option" :index="index" :selected="isSelected(option)">
-              <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
+              <span
+                :class="nh.be('label')"
+                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+              >
                 {{ option.label }}
               </span>
               <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>

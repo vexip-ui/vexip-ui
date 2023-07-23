@@ -200,13 +200,6 @@ import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from
 import TimeWheel from './time-wheel.vue'
 import TimeControl from './time-control.vue'
 import {
-  placementWhileList,
-  useClickOutside,
-  useHover,
-  usePopper,
-  useSetTimeout
-} from '@vexip-ui/hooks'
-import {
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -217,6 +210,14 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
+import {
+  placementWhileList,
+  useClickOutside,
+  useHover,
+  usePopper,
+  useRtl,
+  useSetTimeout
+} from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, doubleDigits, isDefined, warnOnce } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -252,13 +253,14 @@ export default defineComponent({
     } = useFieldStore<string | string[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('time-picker')
+    const { isRtl } = useRtl()
     const props = useProps('timePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
       locale: null,
       visible: false,
       placement: {
-        default: 'bottom-start',
+        default: () => (isRtl.value ? 'bottom-end' : 'bottom-start'),
         validator: value => placementWhileList.includes(value)
       },
       transfer: false,
