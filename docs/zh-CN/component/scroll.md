@@ -102,8 +102,8 @@ interface ScrollSlotParams {
 | scroll-attrs     | `Record<string, any>`                                        | 滚动内容包围元素的自定义属性                                                  | `null`       | `2.1.0`  |
 | width            | `number \| string`                                           | 滚动视窗的宽度，内容的宽度大于视窗的宽度时才可滚动                            | `''`         | -        |
 | height           | `number \| string`                                           | 滚动视窗的高度，内容的高度大于视窗的高度时才可滚动                            | `''`         | -        |
-| delta-x          | `number`                                                     | 每次横向滚动的距离                                                            | `20`         | -        |
-| delta-y          | `number`                                                     | 每次纵向滚动的距离                                                            | `20`         | -        |
+| delta-x          | `number`                                                     | 每次横向滚动的距离                                                            | `40`         | -        |
+| delta-y          | `number`                                                     | 每次纵向滚动的距离                                                            | `40`         | -        |
 | disabled         | `boolean`                                                    | 设置是否禁用滚动                                                              | `false`      | -        |
 | pointer          | `boolean`                                                    | 设置是否开启鼠标拖动滚动                                                      | `false`      | -        |
 | wheel            | `boolean`                                                    | 设置是否开启滚轮滚动                                                          | `true`       | -        |

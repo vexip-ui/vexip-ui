@@ -10,18 +10,15 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { AutoCompleteFilter, AutoCompleteKeyConfig, AutoCompleteRawOption } from './symbol'
-
-type ChangeListener =
-  | ((value: string | number, data: AutoCompleteRawOption) => void)
-  | ((value: string, data: AutoCompleteRawOption) => void)
-  | ((value: number, data: AutoCompleteRawOption) => void)
-type EnterListener =
-  | ((value: string | number) => void)
-  | ((value: string) => void)
-  | ((value: number) => void)
+import type {
+  AutoCompleteFilter,
+  AutoCompleteKeyConfig,
+  AutoCompleteRawOption,
+  ChangeEvent,
+  EnterEvent
+} from './symbol'
 
 export const autoCompleteProps = buildProps({
   size: sizeProp,
@@ -57,11 +54,11 @@ export const autoCompleteProps = buildProps({
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
-  onSelect: eventProp<ChangeListener>(),
+  onSelect: eventProp<EventListener<ChangeEvent>>(),
   onInput: eventProp<(value: string) => void>(),
-  onChange: eventProp<ChangeListener>(),
+  onChange: eventProp<EventListener<ChangeEvent>>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onEnter: eventProp<EnterListener>(),
+  onEnter: eventProp<EventListener<EnterEvent>>(),
   onClear: eventProp()
 })
 

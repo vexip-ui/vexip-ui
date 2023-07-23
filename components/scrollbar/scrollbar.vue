@@ -116,9 +116,11 @@ export default defineComponent({
       handleMove: () => clearTimeout(fadeTimer),
       handleUp: scroll => {
         setScrollbarFade()
+        triggerUpdate()
         emitEvent(props.onScrollEnd, scroll)
       },
       handleScroll: scroll => {
+        triggerUpdate()
         emitEvent(props.onScroll, scroll)
       }
     })

@@ -31,4 +31,6 @@ export interface TabNavState {
   refreshLabels: () => void
 }
 
+export type ChangeEvent = (label: string | number) => void
+
 export const TAB_NAV_STATE: InjectionKey<TabNavState> = Symbol('TAB_NAV_STATE')

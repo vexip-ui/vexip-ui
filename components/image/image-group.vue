@@ -38,7 +38,7 @@ export default defineComponent({
     const props = useProps('imageGroup', _props, {
       showAll: false,
       preview: false,
-      viewerTransfer: false
+      viewerTransfer: null
     })
 
     const currentActive = ref(false)

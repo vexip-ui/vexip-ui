@@ -49,6 +49,8 @@ import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
 import { GROUP_STATE } from './symbol'
 
+import type { ChangeEvent } from './symbol'
+
 export default defineComponent({
   name: 'Radio',
   components: {
@@ -132,13 +134,13 @@ export default defineComponent({
       })
     }
 
-    function emitChange(value: string | number) {
+    function emitChange(value: string | number | boolean) {
       if (currentValue.value === value) return
 
       currentValue.value = value
 
       emit('update:value', value)
-      emitEvent(props.onChange, value)
+      emitEvent(props.onChange as ChangeEvent, value)
     }
 
     function handleChange() {

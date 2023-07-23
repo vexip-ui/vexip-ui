@@ -1,5 +1,10 @@
 <template>
-  <div :class="className" role="tablist">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="tablist"
+    tabindex="-1"
+  >
     <slot></slot>
   </div>
 </template>
@@ -18,7 +23,8 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { removeArrayItem } from '@vexip-ui/utils'
+import { useModifier } from '@vexip-ui/hooks'
+import { debounceMinor, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { collapseProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -44,8 +50,39 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('collapse')
-    const panelExpandedMap = new Map<string | number, PanelState>()
+    const panelStates = reactive(new Set<PanelState>())
     const currentExpanded = ref<(string | number)[]>([])
+
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.left || modifier.right) {
+          if (!wrapper.value) return
+
+          const tabs = Array.from(wrapper.value.querySelectorAll(nh.cbe('header'))) as HTMLElement[]
+
+          if (tabs.length < 1) return
+
+          event.preventDefault()
+          event.stopPropagation()
+
+          const index = document.activeElement
+            ? tabs.findIndex(panel => panel === document.activeElement)
+            : -1
+
+          if (~index) {
+            const target = tabs[(index + (modifier.left ? -1 : 1) + tabs.length) % tabs.length]
+
+            target?.focus()
+          }
+        } else if (modifier.escape) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          clearExpanded()
+        }
+      }
+    })
 
     const className = computed(() => {
       return [
@@ -60,13 +97,32 @@ export default defineComponent({
       ]
     })
 
+    const refreshLabels = debounceMinor(() => {
+      Array.from(panelStates.values()).forEach((item, index) => {
+        if (isNull(item.label)) {
+          item.label = index + 1
+        }
+      })
+
+      if (panelStates.size) {
+        for (const panel of panelStates) {
+          if (currentExpanded.value.includes(panel.label)) {
+            panel.expanded = true
+          } else if (panel.expanded) {
+            expandPanel(panel.label, true)
+          }
+        }
+      }
+    })
+
     provide(
       COLLAPSE_STATE,
       reactive({
         arrowType: toRef(props, 'arrowType'),
         registerPanel,
         unregisterPanel,
-        expandPanel
+        expandPanel,
+        refreshLabels
       })
     )
 
@@ -86,19 +142,16 @@ export default defineComponent({
       nextTick(updateItemExpanded)
     })
 
-    function registerPanel(label: string | number, panel: PanelState) {
-      panelExpandedMap.set(label, panel)
+    function registerPanel(panel: PanelState) {
+      panelStates.add(panel)
 
-      if (currentExpanded.value.includes(label)) {
-        panel.expanded.value = true
-      } else if (panel.expanded.value) {
-        expandPanel(label, true)
-      }
+      refreshLabels()
     }
 
-    function unregisterPanel(label: string | number) {
-      panelExpandedMap.delete(label)
-      expandPanel(label, false)
+    function unregisterPanel(panel: PanelState) {
+      panelStates.delete(panel)
+      expandPanel(panel.label, false)
+      refreshLabels()
     }
 
     function expandPanel(label: string | number, expanded: boolean) {
@@ -114,6 +167,16 @@ export default defineComponent({
         }
       }
 
+      console.log(expanded, currentExpanded.value)
+      emitChangeEvent()
+      updateItemExpanded()
+    }
+
+    function clearExpanded() {
+      if (!currentExpanded.value.length) return
+
+      currentExpanded.value = []
+
       emitChangeEvent()
       updateItemExpanded()
     }
@@ -124,12 +187,14 @@ export default defineComponent({
     }
 
     function updateItemExpanded() {
-      panelExpandedMap.forEach((panel, label) => {
-        panel.setExpanded(currentExpanded.value.includes(label))
+      panelStates.forEach(panel => {
+        panel.setExpanded(currentExpanded.value.includes(panel.label))
       })
     }
 
     return {
+      currentExpanded,
+      wrapper,
       className
     }
   }

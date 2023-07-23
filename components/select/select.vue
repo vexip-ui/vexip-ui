@@ -304,10 +304,14 @@ import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectOptionState, SelectRawOption, SelectValue } from './symbol'
-
-type SelectListener = (value: string | number, data: SelectRawOption) => void
-type ChangeListener = (value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void
+import type {
+  ChangeEvent,
+  SelectBaseValue,
+  SelectEvent,
+  SelectKeyConfig,
+  SelectOptionState,
+  SelectValue
+} from './symbol'
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -425,7 +429,7 @@ export default defineComponent({
     const locale = useLocale('select', toRef(props, 'locale'))
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
-    const currentValues = ref<(string | number)[]>([])
+    const currentValues = ref<SelectBaseValue[]>([])
     const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
@@ -460,9 +464,24 @@ export default defineComponent({
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
-    const cachedSelected = new Map<string | number, SelectOptionState>()
+    const wrapper = useClickOutside(handleClickOutside)
+    const input = ref<HTMLInputElement>()
+    const device = ref<HTMLElement>()
+    const virtualList = ref<VirtualListExposed>()
+    const popper = ref<PopperExposed>()
 
-    let optionValueMap = new Map<string | number, SelectOptionState>()
+    const { reference, transferTo, updatePopper } = usePopper({
+      placement,
+      transfer,
+      wrapper,
+      popper: computed(() => popper.value?.wrapper),
+      isDrop: true
+    })
+    const { isHover } = useHover(reference)
+
+    const cachedSelected = new Map<SelectBaseValue, SelectOptionState>()
+
+    let optionValueMap = new Map<SelectBaseValue, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
@@ -561,21 +580,6 @@ export default defineComponent({
 
       initValueAndLabel(emittedValue)
     }
-
-    const wrapper = useClickOutside(handleClickOutside)
-    const input = ref<HTMLInputElement>()
-    const device = ref<HTMLElement>()
-    const virtualList = ref<VirtualListExposed>()
-    const popper = ref<PopperExposed>()
-
-    const { reference, transferTo, updatePopper } = usePopper({
-      placement,
-      transfer,
-      wrapper,
-      popper: computed(() => popper.value?.wrapper),
-      isDrop: true
-    })
-    const { isHover } = useHover(reference)
 
     useModifier({
       target: wrapper,
@@ -694,7 +698,7 @@ export default defineComponent({
       return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
     })
 
-    function getOptionFromMap(value?: string | number | null) {
+    function getOptionFromMap(value?: SelectBaseValue | null) {
       if (isNull(value)) return null
 
       return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
@@ -793,7 +797,7 @@ export default defineComponent({
       const normalizedValue = !Array.isArray(value) ? [value] : value
 
       const valueSet = new Set(normalizedValue)
-      const selectedValues: (string | number)[] = []
+      const selectedValues: SelectBaseValue[] = []
       const selectedLabels: string[] = []
 
       valueSet.forEach(value => {
@@ -942,7 +946,7 @@ export default defineComponent({
       updateHitting(currentIndex.value)
     }
 
-    function handleTagClose(value?: string | number | null) {
+    function handleTagClose(value?: SelectBaseValue | null) {
       !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
@@ -975,7 +979,7 @@ export default defineComponent({
       }
 
       emitEvent(
-        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectListener,
+        props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectEvent,
         value,
         option.data
       )
@@ -1013,7 +1017,7 @@ export default defineComponent({
         emit('update:label', currentLabels.value)
         setFieldValue(emittedValue)
         emitEvent(
-          props.onChange as ChangeListener,
+          props.onChange as ChangeEvent,
           emittedValue,
           emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
         )
@@ -1032,7 +1036,7 @@ export default defineComponent({
           emit('update:value', emittedValue)
           emit('update:label', currentLabels.value[0])
           setFieldValue(emittedValue)
-          emitEvent(props.onChange as ChangeListener, emittedValue, option.data)
+          emitEvent(props.onChange as ChangeEvent, emittedValue, option.data)
           validateField()
         }
       }
@@ -1071,7 +1075,7 @@ export default defineComponent({
 
         syncInputValue()
         emit('update:value', emittedValue)
-        emitEvent(props.onChange as ChangeListener, emittedValue, props.multiple ? [] : '')
+        emitEvent(props.onChange as ChangeEvent, emittedValue, props.multiple ? [] : '')
         emitEvent(props.onClear)
         clearField(emittedValue!)
         updatePopper()

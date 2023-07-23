@@ -68,7 +68,7 @@ import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
-type ChangeListener = (label: string | number) => void
+type ChangeEvent = (label: string | number) => void
 
 export default defineComponent({
   name: 'Tabs',
@@ -162,7 +162,7 @@ export default defineComponent({
 
       computeIndex()
       emit('update:active', label)
-      emitEvent(props.onChange as ChangeListener, label)
+      emitEvent(props.onChange as ChangeEvent, label)
     }
 
     function handleAdd() {
@@ -170,7 +170,7 @@ export default defineComponent({
     }
 
     function handleClose(label: string | number) {
-      emitEvent(props.onClose as ChangeListener, label)
+      emitEvent(props.onClose as ChangeEvent, label)
     }
 
     return {

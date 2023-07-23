@@ -1,11 +1,12 @@
 <template>
+  <p>Current value: {{ value }}</p>
   <Select v-model:value="value" :options="options"></Select>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const value = ref('')
+const value = ref()
 
 const options = [
   'Option 1',
@@ -15,6 +16,10 @@ const options = [
   {
     label: 'Option 3',
     value: 3
+  },
+  {
+    label: 'Option 4',
+    value: true
   }
 ]
 </script>

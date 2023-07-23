@@ -8,3 +8,5 @@ export interface InputExposed extends ComponentPublicInstance {
   focus: (options?: FocusOptions) => void,
   blur: () => void
 }
+
+export type ChangeEvent = (value: string | number) => void

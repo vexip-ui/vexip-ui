@@ -176,10 +176,11 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
-type SelectValue = string | number | null | (string | number)[]
+type SelectBaseValue = string | number | boolean
+type SelectValue = SelectBaseValue | SelectBaseValue[] | null
 
 interface SelectOptionState {
-  value: string | number,
+  value: SelectBaseValue,
   label: string,
   disabled: boolean,
   divided: boolean,
@@ -192,7 +193,7 @@ interface SelectOptionState {
   data: SelectRawOption
 }
 
-type SelectFilter = (value: string | number, options: SelectOptionState) => boolean
+type SelectFilter = (value: string, options: SelectOptionState) => boolean
 ```
 
 ### Select Props
@@ -244,8 +245,8 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | Name          | Description                                                                                                                              | Parameters                                                         | Since   |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
 | toggle        | Emitted when the option list display state changes, returns the current state                                                            | `(visible: boolean)`                                               | -       |
-| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: string \| number, data: SelectRawOption)`                 | -       |
-| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
+| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
 | change        | Emitted when the selected value changes, returns the value and label of the option, the value array and label array in multi-select mode | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
 | outside-click | Emitted when clicking outside the selector, no return value                                                                              | -                                                                  | -       |
 | outside-close | Emitted when the option list is closed by clicking outside, no return value                                                              | -                                                                  | -       |

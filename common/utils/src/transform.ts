@@ -10,7 +10,7 @@ export function callIfFunc<T>(value: T | (() => T)) {
 }
 
 export function normalizePath(path: string) {
-  return path.replace(/\/+/g, '/')
+  return path.replace(/[\\/]+/g, '/')
 }
 
 /**
@@ -19,23 +19,46 @@ export function normalizePath(path: string) {
  * @param list 需要被转换的数组
  * @param prop 需要被转换的属性或提供一个读取方法
  * @param accessor 映射的值的读取方法，默认返回元素本身
+ * @param isMap 是否使用 Map 对象储存结果
  */
-export function transformListToMap<T = any, K = T>(
+export function transformListToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor: (item: T) => K = v => v as any
-): Record<string, K> {
-  const map = {} as Record<string, any>
+  accessor?: (item: T) => O,
+  isMap?: false
+): Record<string, O>
+export function transformListToMap<T = any, O = T, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  accessor?: (item: T) => O,
+  isMap?: true
+): Map<T[K], O>
+export function transformListToMap<T = any, O = T, K = any>(
+  list: T[],
+  prop: (item: T) => K,
+  accessor?: (item: T) => O,
+  isMap?: true
+): Map<K extends keyof T ? T[K] : unknown, O>
+export function transformListToMap<T = any, O = T>(
+  list: T[],
+  prop: keyof T | ((item: T) => any),
+  accessor: (item: T) => O = v => v as any,
+  isMap = false
+) {
+  const map = (isMap ? new Map<string, any>() : {}) as any
 
   if (!isDefined(prop)) return map
 
+  const set = isMap
+    ? (key: any, value: O) => map.set(key, value)
+    : (key: any, value: O) => (map[key] = value)
   const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
     const key = propAccessor(item)
 
     if (isDefined(key)) {
-      map[key] = accessor(item)
+      set(key, accessor(item))
     }
   })
 
@@ -123,10 +146,10 @@ export interface TreeOptions<T = string> {
 }
 
 /**
- * 转换扁平结构为树形结构
+ * Transform the given flatted list to tree
  *
- * @param list 需要转换的扁平数据
- * @param options 转化配置项
+ * @param list the flatted list
+ * @param options the config for transforming
  */
 export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> = {}) {
   const {
@@ -172,10 +195,10 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
 }
 
 /**
- * 转换树形结构为扁平结构
+ * Transform the given tree to flatted list
  *
- * @param tree 需要转换的树形数据
- * @param options 转化配置项
+ * @param tree the tree
+ * @param options the config for transforming
  */
 export function flatTree<T = any>(
   tree: T[],
@@ -239,6 +262,40 @@ export function flatTree<T = any>(
   }
 
   return list
+}
+
+/**
+ * Walk the given tree value and call the callback for each node
+ *
+ * @param tree the tree to walk
+ * @param cb the callback function
+ * @param options the config for walk
+ */
+export function walkTree<T = any>(
+  tree: T[],
+  cb: (item: T) => void,
+  options: {
+    depthFirst?: boolean,
+    childField?: keyof T
+  } = {}
+) {
+  const { childField = 'children' as keyof T, depthFirst = false } = options
+  const loop = [...tree]
+
+  while (loop.length) {
+    const item = loop.shift()!
+    const children = item[childField] as T[]
+
+    cb(item)
+
+    if (children?.length) {
+      if (depthFirst) {
+        loop.unshift(...children)
+      } else {
+        loop.push(...children)
+      }
+    }
+  }
 }
 
 export interface SortOptions<T = string> {

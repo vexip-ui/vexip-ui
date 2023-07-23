@@ -128,7 +128,7 @@ type ImageSkeletonProps = Pick<
 | radius          | `number`                        | 设置图片的圆角半径                             | `0`       | -    |
 | border          | `boolean \| string`             | 是否有边框，支持传入一个颜色值指定边框颜色     | `false`   | -    |
 | preview-src     | `string`                        | 图片的预览源                                   | `''`      | -    |
-| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `false`   | -    |
+| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `null`    | -    |
 
 ### Image 事件
 
@@ -152,7 +152,7 @@ type ImageSkeletonProps = Pick<
 | --------------- | ------------------- | ---------------------------- | ------- | ---- |
 | show-all        | `boolean`           | 是否显示所有的图片           | `false` | -    |
 | preview         | `boolean`           | 是否可预览                   | `false` | -    |
-| viewer-transfer | `boolean \| string` | 设置查看器的 `transfer` 属性 | `false` | -    |
+| viewer-transfer | `boolean \| string` | 设置查看器的 `transfer` 属性 | `null`  | -    |
 
 ### ImageGroup 事件
 

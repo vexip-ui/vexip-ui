@@ -21,4 +21,6 @@ export interface BreadcrumbState {
   handleSeparatorClick: (label: string | number) => void
 }
 
+export type SelectEvent = (label: string | number) => void
+
 export const BREADCRUMB_STATE: InjectionKey<BreadcrumbState> = Symbol('BREADCRUMB_STATE')
