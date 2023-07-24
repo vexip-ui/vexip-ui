@@ -1,6 +1,7 @@
 <template>
   <div
     :class="className"
+    :style="style"
     role="progressbar"
     :aria-valuenow="percentValue"
     aria-valuemin="0"
@@ -8,7 +9,7 @@
   >
     <div :class="nh.be('track')" :style="trackStyle">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
-      <div v-if="props.infoType === 'inside'" :class="nh.be('info')" :style="infoStyle">
+      <div v-if="props.infoType === 'inside'" :class="nh.be('info')">
         <slot>
           <span :class="nh.be('percentage')">
             {{ `${percentValue}%` }}
@@ -16,7 +17,7 @@
         </slot>
       </div>
     </div>
-    <div v-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
+    <div v-if="useBubble" :class="nh.be('reference')">
       <Bubble
         inherit
         :class="nh.be('bubble')"
@@ -101,6 +102,9 @@ export default defineComponent({
         }
       ]
     })
+    const style = computed(() => {
+      return { [nh.cv('percentage')]: props.percentage }
+    })
     const trackStyle = computed(() => {
       return {
         height: `${props.strokeWidth}px`,
@@ -109,7 +113,6 @@ export default defineComponent({
     })
     const fillerStyle = computed(() => {
       const style: CSSProperties = {
-        [nh.cv('percentage')]: props.percentage,
         borderRadius: `${props.strokeWidth}px`
       }
 
@@ -126,11 +129,6 @@ export default defineComponent({
       }
 
       return style
-    })
-    const infoStyle = computed(() => {
-      return {
-        transform: `translateX(${props.percentage - 100}%)`
-      }
     })
     const useBubble = computed(() => {
       return props.infoType.includes('bubble')
@@ -158,9 +156,9 @@ export default defineComponent({
       nh,
 
       className,
+      style,
       trackStyle,
       fillerStyle,
-      infoStyle,
       useBubble,
       bubbleType,
       bubbleStyle,
