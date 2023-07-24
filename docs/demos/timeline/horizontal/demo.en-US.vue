@@ -1,8 +1,10 @@
 <template>
-  <p style="margin-bottom: 28px">
-    <span>Flip: </span>
+  <p>
+    Flip:
     <Switch v-model:value="flip" style="margin-inline-end: 10px"></Switch>
-    <span>Alternate: </span>
+  </p>
+  <p style="margin-bottom: 28px">
+    Alternate:
     <Switch v-model:value="alternate"></Switch>
   </p>
   <Timeline

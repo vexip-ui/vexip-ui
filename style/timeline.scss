@@ -143,11 +143,11 @@ $timeline: map.merge(
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
-    left: calc($pointer-size * -0.5 + 100%);
+    inset-inline-start: calc($pointer-size * -0.5 + 100%);
   }
 
   &--alternate#{&}--flip &__item:nth-child(even) &__signal {
-    left: calc($pointer-size * -0.5);
+    inset-inline-start: calc($pointer-size * -0.5);
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {

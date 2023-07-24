@@ -6,7 +6,9 @@
   <br />
   <CollapsePanel card>
     <template #title>
-      <Icon><ChartLine></ChartLine></Icon>
+      <Icon style="margin-inline-end: 6px">
+        <ChartLine></ChartLine>
+      </Icon>
       Independent Panel 2
     </template>
     <p>Some content to fill</p>
