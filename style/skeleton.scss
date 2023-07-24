@@ -12,7 +12,8 @@ $skeleton: map.merge(
     color: get-css-var('content-color-placeholder'),
     bg-color: get-css-var('fill-color-hover'),
     shine-color: rgba(125, 125, 125, 20%),
-    radius: get-css-var('radius-base')
+    radius: get-css-var('radius-base'),
+    activated-dir: 1
   ),
   $skeleton
 );
@@ -33,6 +34,10 @@ $skeleton: map.merge(
   color: get-css-var('skeleton-color');
   background-color: get-css-var('skeleton-bg-color');
   border-radius: get-css-var('skeleton-radius');
+
+  @include rtl {
+    @include define-css-var('skeleton-activated-dir', -1);
+  }
 
   &--default {
     @include define-preset-values(
@@ -86,11 +91,11 @@ $skeleton: map.merge(
 
   @keyframes #{$namespace}-skeleton-loading {
     0% {
-      transform: translate(-37.5%);
+      transform: translate(calc(#{get-css-var('skeleton-activated-dir')} * -37.5%));
     }
 
     100% {
-      transform: translate(37.5%);
+      transform: translate(calc(#{get-css-var('skeleton-activated-dir')} * 37.5%));
     }
   }
 
