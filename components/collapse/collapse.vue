@@ -167,7 +167,6 @@ export default defineComponent({
         }
       }
 
-      console.log(expanded, currentExpanded.value)
       emitChangeEvent()
       updateItemExpanded()
     }
