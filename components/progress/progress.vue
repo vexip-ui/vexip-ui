@@ -15,23 +15,23 @@
           </span>
         </slot>
       </div>
-      <div v-else-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
-        <Bubble
-          inherit
-          :class="nh.be('bubble')"
-          :style="bubbleStyle"
-          :placement="bubbleType"
-          :content-class="nh.be('info')"
-        >
-          <slot>
-            <span :class="nh.be('percentage')">
-              {{ `${percentValue}%` }}
-            </span>
-          </slot>
-        </Bubble>
-      </div>
     </div>
-    <div v-if="props.infoType === 'outside'" :class="nh.be('info')">
+    <div v-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
+      <Bubble
+        inherit
+        :class="nh.be('bubble')"
+        :style="bubbleStyle"
+        :placement="bubbleType"
+        :content-class="nh.be('info')"
+      >
+        <slot>
+          <span :class="nh.be('percentage')">
+            {{ `${percentValue}%` }}
+          </span>
+        </slot>
+      </Bubble>
+    </div>
+    <div v-else-if="props.infoType === 'outside'" :class="nh.be('info')">
       <slot>
         <span :class="nh.be('percentage')">
           {{ `${percentValue}%` }}
@@ -109,8 +109,8 @@ export default defineComponent({
     })
     const fillerStyle = computed(() => {
       const style: CSSProperties = {
-        borderRadius: `${props.strokeWidth}px`,
-        transform: `translateX(${(props.percentage - 100) / 2}%) scaleX(${props.percentage / 100})`
+        [nh.cv('percentage')]: props.percentage,
+        borderRadius: `${props.strokeWidth}px`
       }
 
       let strokeColor = props.strokeColor

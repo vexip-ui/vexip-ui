@@ -26,6 +26,7 @@ $progress: map.merge(
 
   @include basis;
 
+  position: relative;
   display: inline-flex;
   align-items: center;
   width: 100%;
@@ -33,11 +34,9 @@ $progress: map.merge(
   &__track {
     position: relative;
     width: 100%;
-    background-color: get-css-var('progress-track-bg-color');
-  }
-
-  &--info-inside &__track {
     overflow: hidden;
+    line-height: 1;
+    background-color: get-css-var('progress-track-bg-color');
   }
 
   &__filler {
@@ -50,7 +49,10 @@ $progress: map.merge(
     background-color: get-css-var('progress-filler-bg-color');
     will-change: transform;
     transition: get-css-var('transition-transform');
+    transform: translateX(calc(#{get-css-var('progress-percentage')} * 1% - 100%));
   }
+
+  $a-scale: scaleX(calc(#{get-css-var('progress-percentage')} * 0.01));
 
   &--activated &__filler::after {
     position: absolute;
@@ -59,6 +61,7 @@ $progress: map.merge(
     pointer-events: none;
     content: '';
     background-color: get-css-var('progress-activated-color');
+    transform-origin: right;
     animation: #{$namespace}-progress-flowing get-css-var('progress-animation-duration') get-css-var(
         'progress-animation-timing'
       ) infinite;
@@ -67,17 +70,17 @@ $progress: map.merge(
   @keyframes #{$namespace}-progress-flowing {
     0% {
       opacity: 100%;
-      transform: translateX(-50%) scaleX(0);
+      transform: translateX(calc(#{get-css-var('progress-percentage')} * -1%)) scaleX(0);
     }
 
     70% {
       opacity: 0%;
-      transform: translateX(0) scaleX(100%);
+      transform: translateX(0) $a-scale;
     }
 
     100% {
       opacity: 0%;
-      transform: translateX(0) scaleX(100%);
+      transform: translateX(0) $a-scale;
     }
   }
 
