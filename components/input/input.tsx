@@ -232,7 +232,7 @@ export default defineComponent({
       const type = event.type as InputEventType
 
       currentValue.value = (event.target as HTMLInputElement).value
-      console.log(currentValue.value)
+
       limitValueLength()
 
       const value = currentValue.value

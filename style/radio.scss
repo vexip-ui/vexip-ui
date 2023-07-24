@@ -171,6 +171,7 @@ $radio: map.merge(
     display: inline-flex;
     align-items: center;
     color: get-css-var('radio-label-color');
+    white-space: nowrap;
     transition: get-css-var('transition-color');
   }
 
