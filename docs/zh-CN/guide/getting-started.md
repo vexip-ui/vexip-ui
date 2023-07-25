@@ -71,9 +71,7 @@ import { createApp } from 'vue'
 import App from './app.vue'
 import { install } from 'vexip-ui'
 
-const app = createApp(App)
-app.use(install)
-app.mount('#app')
+createApp(App).use(install).mount('#app')
 ```
 
 ## 自动引入
