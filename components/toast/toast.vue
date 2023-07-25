@@ -18,6 +18,7 @@
         :class="[nh.be('mask'), state.maskClass]"
         :style="state.maskStyle"
         @click="handleMaskClick"
+        @wheel.stop.prevent
       ></div>
     </transition>
     <transition :name="state.transition">
@@ -29,6 +30,7 @@
           [nh.bem('wrapper', 'closable')]: state.closable
         }"
         @click="handleWrapperClick"
+        @wheel.stop.prevent
       >
         <Renderer v-if="isFunction(state.renderer)" :renderer="state.renderer"></Renderer>
         <template v-else>

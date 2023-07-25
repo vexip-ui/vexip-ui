@@ -80,7 +80,8 @@ export default defineComponent({
         isFunc: true
       },
       transfer: false,
-      autoRemove: false
+      autoRemove: false,
+      permeable: false
     })
 
     const getIndex = useZIndex()
@@ -141,6 +142,24 @@ export default defineComponent({
         zIndex.value = getIndex()
       }
     })
+    watch(
+      [() => props.permeable, wrapper],
+      () => {
+        if (wrapper.value) {
+          wrapper.value.removeEventListener('wheel', disableWheel)
+
+          if (!props.permeable) {
+            wrapper.value.addEventListener('wheel', disableWheel)
+          }
+        }
+      },
+      { immediate: true, flush: 'post' }
+    )
+
+    function disableWheel(event: WheelEvent) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
 
     function toggleActive(active: boolean) {
       if (currentActive.value === active) return

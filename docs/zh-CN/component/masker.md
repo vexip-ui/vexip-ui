@@ -25,6 +25,7 @@
 | on-before-close | `() => any \| Promise<any>` | 设置遮罩关闭前的回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭 | `null`       | -        |
 | transfer        | `boolean \| string`         | 设置遮罩的渲染位置，设置为 `true` 时默认渲染至 `<body>`                     | `false`      | -        |
 | auto-remove     | `boolean`                   | 设置不显示时是否自动移除                                                    | `false`      | `2.0.13` |
+| permeable       | `boolean`                   | 设置 `wheel` 事件是否可以穿透                                               | `false`      | `2.1.29` |
 
 ### Masker 事件
 
