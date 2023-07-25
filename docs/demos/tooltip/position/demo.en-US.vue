@@ -5,7 +5,12 @@
   >
     Click on the orange area
   </div>
-  <Tooltip :visible="visible" trigger="custom" :virtual="position">
+  <Tooltip
+    :visible="visible"
+    trigger="custom"
+    :virtual="position"
+    @click-outside="visible = false"
+  >
     Some tip content
   </Tooltip>
 </template>
