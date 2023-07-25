@@ -20,21 +20,25 @@ export const CLICK_OUTSIDE = 'clickoutside'
 createEvent(CLICK_OUTSIDE)
 
 if (isClient) {
-  document.addEventListener(CLICK_TYPE, (event: Event) => {
-    const target = event.target
-    const path = event.composedPath && event.composedPath()
+  document.addEventListener(
+    CLICK_TYPE,
+    (event: Event) => {
+      const target = event.target as Node | null
+      const path = event.composedPath && event.composedPath()
 
-    getObservers(CLICK_OUTSIDE).forEach((el: TransferNode) => {
-      if (
-        el !== target &&
-        (path ? !path.includes(el) : !el.contains(target as Node)) &&
-        (!el.__transferElement ||
-          (el.__transferElement !== target && !el.__transferElement.contains(target as Node)))
-      ) {
-        dispatchEvent(el, { type: CLICK_OUTSIDE })
-      }
-    })
-  })
+      getObservers(CLICK_OUTSIDE).forEach((el: TransferNode) => {
+        if (
+          el !== target &&
+          (path ? !path.includes(el) : !el.contains(target)) &&
+          (!el.__transferElement ||
+            (el.__transferElement !== target && !el.__transferElement.contains(target)))
+        ) {
+          dispatchEvent(el, { type: CLICK_OUTSIDE })
+        }
+      })
+    },
+    true
+  )
 }
 
 /**
@@ -58,10 +62,10 @@ export function useClickOutside(
         return
       }
 
-      observe(target.value as TransferNode, CLICK_OUTSIDE)
+      observe(el as TransferNode, CLICK_OUTSIDE)
 
       remove = () => {
-        disconnect(target.value as TransferNode, CLICK_OUTSIDE)
+        disconnect(el as TransferNode, CLICK_OUTSIDE)
         remove = noop
       }
     },
