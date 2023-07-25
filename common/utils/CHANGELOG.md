@@ -1,3 +1,88 @@
+# [1.16.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.15.0...utils@1.16.0) (2023-07-25)
+
+
+### Bug Fixes
+
+* **card:** correct header flex style ([43d509a](https://github.com/vexip-ui/vexip-ui/commit/43d509a5f2164e0c0a9567058453c12dd89cc1a6))
+* **color-picker:** alpha cannot be confirmed to 0 ([9921700](https://github.com/vexip-ui/vexip-ui/commit/9921700cf2a09490259159a03900ba8ea53be1fe))
+* **color-picker:** cannot parse rgba color value ([8f4c57f](https://github.com/vexip-ui/vexip-ui/commit/8f4c57f4cf2c4ba4ab1b2f6f07f46209b1ff8b82))
+* **date-picker:** format should ignore content in quotations ([31d7f16](https://github.com/vexip-ui/vexip-ui/commit/31d7f1689a1229582f6f2a71ae80e47d63011ac8))
+* **hooks:** flatVNodes ensure support text and number nodes ([7fbbb4a](https://github.com/vexip-ui/vexip-ui/commit/7fbbb4ab5b3f0d9ab75c440d13bd8013b145fd7d))
+* **utils:** correct flatTree filter method ([94dacad](https://github.com/vexip-ui/vexip-ui/commit/94dacad0625fbd2e520d646a4afaad2692909c47))
+* **utils:** debounceMinor not effective ([0873b28](https://github.com/vexip-ui/vexip-ui/commit/0873b28f5abcc634226d07c99061f34fa81d03a9))
+* **utils:** flatTree don't set parent if parentField is empty ([a1d51a5](https://github.com/vexip-ui/vexip-ui/commit/a1d51a52de5d82b251e63e829499d6f35aa4db0b))
+* **utils:** flatTree not init id when nonexists ([e298729](https://github.com/vexip-ui/vexip-ui/commit/e29872966070450c17c28f6882f9c1e6dd662d29))
+* **utils:** improve toFixed method ([4234dbc](https://github.com/vexip-ui/vexip-ui/commit/4234dbc5f4766ec75d020e34ee1d72c44cb2567f))
+* **utils:** imrpove number operations loop ([5d10739](https://github.com/vexip-ui/vexip-ui/commit/5d10739ec7a1fe1d083128c469f10e7d845bf681))
+* **utils:** incorrect leap year function name ([#345](https://github.com/vexip-ui/vexip-ui/issues/345)) ([1958a46](https://github.com/vexip-ui/vexip-ui/commit/1958a46a63ce5f26f6d16e46d328abe7f019fe92))
+* **utils:** incorrect matching rootId in tree transform ([4e9d253](https://github.com/vexip-ui/vexip-ui/commit/4e9d2537170761d3a29cdcec63f5443fdb002c95))
+* **utils:** normalizePath should replace '\' to '/' ([ec4de2f](https://github.com/vexip-ui/vexip-ui/commit/ec4de2f38d2160291dc346a2b2cf21a792bc4267))
+* **utils:** rename toPascalCase to toCapitalCase ([b0efc84](https://github.com/vexip-ui/vexip-ui/commit/b0efc84ec4f0791af497600550e2cfc1440f726e))
+* **utils:** toCapitalCase imporve borderline cases ([161883b](https://github.com/vexip-ui/vexip-ui/commit/161883b0620b090102d5ab5e70780f082dfce096))
+* **utils:** use color name set to check named color ([6e3df86](https://github.com/vexip-ui/vexip-ui/commit/6e3df86433971ff76955c67937131800e90672e0))
+* **utils:** using pointerdown event for touch action ([e03462f](https://github.com/vexip-ui/vexip-ui/commit/e03462fa2eabbfc247cfc206a6a26fc4d33169ab))
+* **utils:** using string schema to process toFixed ([7135f82](https://github.com/vexip-ui/vexip-ui/commit/7135f82bcf7a6314b47285fc240aa70a982ed20b))
+
+
+### Code Refactoring
+
+* icon rewrite to use component ([#22](https://github.com/vexip-ui/vexip-ui/issues/22)) ([d825637](https://github.com/vexip-ui/vexip-ui/commit/d82563709def1c65ee548d5ecfb09e296ac6c53a))
+
+
+### Features
+
+* add locale config ([0a0ec74](https://github.com/vexip-ui/vexip-ui/commit/0a0ec7487dfc8f89e18a38c50a7e001ea7440209))
+* **bem-helper:** create bem-helper package ([f91208e](https://github.com/vexip-ui/vexip-ui/commit/f91208e661ac1ecb0d14289dc57286683392f212))
+* **color:** add mixColor method ([8c7cdda](https://github.com/vexip-ui/vexip-ui/commit/8c7cddaa3d2d4c76c186d8d61156c67d32a7bfb6))
+* **date-picker:** support min and max props to bound date ([#216](https://github.com/vexip-ui/vexip-ui/issues/216)) ([9cfd677](https://github.com/vexip-ui/vexip-ui/commit/9cfd6772ce6da6b5e20a11eff7c29b88c29ffb5a))
+* **Image:** add Image component ([#225](https://github.com/vexip-ui/vexip-ui/issues/225)) ([e26a75e](https://github.com/vexip-ui/vexip-ui/commit/e26a75eb4c714ae6e49193724b4f20f2bb7a5d38))
+* **Result:** add Result component ([#238](https://github.com/vexip-ui/vexip-ui/issues/238)) ([0812183](https://github.com/vexip-ui/vexip-ui/commit/0812183fc0d4b5f716b9b03498aa0891b9cd6353))
+* **select:** add max-tag-count, no-rest-tip and tag-type props ([#224](https://github.com/vexip-ui/vexip-ui/issues/224)) ([bdc7517](https://github.com/vexip-ui/vexip-ui/commit/bdc751789ebee18353900bcab1436d7d352739b0))
+* support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+* **tree:** add cache-node and root-id props ([13e721e](https://github.com/vexip-ui/vexip-ui/commit/13e721eb3ff2072ec90c1c38ea82a2c751793c76))
+* **utils:** add adjustAlpha method ([107023a](https://github.com/vexip-ui/vexip-ui/commit/107023a83edb7abec8461bcc433cae79f8c83c91))
+* **utils:** add compute dom react methods ([20fcb71](https://github.com/vexip-ui/vexip-ui/commit/20fcb7134286b7ad99a8e3f5e39ca695354b944f))
+* **utils:** add createBITree method ([dbf76b2](https://github.com/vexip-ui/vexip-ui/commit/dbf76b2116e9ca59ce05afa09b06691b2703a2ff))
+* **utils:** add debounceFrame, nextTickOnce and nextFrameOnce ([7204479](https://github.com/vexip-ui/vexip-ui/commit/7204479082899bdfe28bd5ac93aba9b430e49a32))
+* **utils:** add dom utils ([b461c9a](https://github.com/vexip-ui/vexip-ui/commit/b461c9a133365f3c4fa786bc669ddabd18c05724))
+* **utils:** add ensureArray and callIfFunc methods ([2b4e986](https://github.com/vexip-ui/vexip-ui/commit/2b4e986bcce50a620c9dd2d71a96f025123d70fb))
+* **utils:** add escapeHtml method ([75ee4a9](https://github.com/vexip-ui/vexip-ui/commit/75ee4a956b2d7d69ee500fb508ba37135a1f637f))
+* **utils:** add exact number operate methods ([504ffb6](https://github.com/vexip-ui/vexip-ui/commit/504ffb6b9a4f6971d6777be8d0ebf3119e5e8687))
+* **utils:** add flatVNodes method ([35bd9e6](https://github.com/vexip-ui/vexip-ui/commit/35bd9e6c9acedd4be60df5bc2638a1ceb73139c0))
+* **utils:** add formatByteSize method ([0f2458a](https://github.com/vexip-ui/vexip-ui/commit/0f2458aa6fd8494cfea4feab62420cc0092719d1))
+* **utils:** add getXBorder and getYBorder methods ([6f360d2](https://github.com/vexip-ui/vexip-ui/commit/6f360d2cc0a61280e13ff9d22f4103dc02ef6a43))
+* **utils:** add isBigInt function ([259a990](https://github.com/vexip-ui/vexip-ui/commit/259a990e73091bfcc9bfbfe9c8a55fafeece22db))
+* **utils:** add normalizePath method ([4411b49](https://github.com/vexip-ui/vexip-ui/commit/4411b496bef1548d7c48c2dc8999d642dd1f2b75))
+* **utils:** add randomColor method ([adc3878](https://github.com/vexip-ui/vexip-ui/commit/adc387828749bd4426f5ffc14123a75e2d874111))
+* **utils:** add runQueueFrame method ([a376a15](https://github.com/vexip-ui/vexip-ui/commit/a376a15bbcb29ab93224d1fe1f13e0b8442ddb4e))
+* **utils:** add series log once methods ([c4fc460](https://github.com/vexip-ui/vexip-ui/commit/c4fc4608ebd72fa516700f032cca22d3df67d673))
+* **utils:** add supportFlexGap method ([ff158dc](https://github.com/vexip-ui/vexip-ui/commit/ff158dcb2dcbeccb3fc384be5d0085b2f1dda0b4))
+* **utils:** add walkTree function ([eaeb9b4](https://github.com/vexip-ui/vexip-ui/commit/eaeb9b4945d4b8fea6b8b9065b5fad3395f77615))
+* **utils:** enhance flatTree to support depth first and filter ([c5a5728](https://github.com/vexip-ui/vexip-ui/commit/c5a57284863de973dc0480243af114cc02217b44))
+* **utils:** toFixed supports scientific notation ([62485f7](https://github.com/vexip-ui/vexip-ui/commit/62485f74f01bfe330317df0e9b3e4a5c21515681))
+* **utils:** transformListToMap supports Map reslut ([534eb5e](https://github.com/vexip-ui/vexip-ui/commit/534eb5e5b6228ae387e648f2b86403eed94b6633))
+
+
+### Performance Improvements
+
+* **scroll:** refactor slot params to improve content render ([5838d8f](https://github.com/vexip-ui/vexip-ui/commit/5838d8fe62a8abcb70bbfcbdfd55d6528d36e04f)), closes [#316](https://github.com/vexip-ui/vexip-ui/issues/316)
+
+
+### BREAKING CHANGES
+
+* **scroll:** Slot parameters of Scroll (also NativeScroll) is changed
+to methods only, and now using the getState method to get scroll state.
+And the modifier class names of Scroll's wrapper are transfered to the
+Scroll root element.
+* All icons have rewrite to svg vue components, package has published to 
+`@vexip-ui/icons`, using `<Icon>` default slot to provide the icon svg component instead of before 
+way which import from `vexip-ui/icons/**`.
+* The original install config are
+no longer supported, use `prop` attribute of the new
+install config instead.
+
+
+
 # [1.15.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.14.1...utils@1.15.0) (2023-06-21)
 
 
