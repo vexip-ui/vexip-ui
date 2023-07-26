@@ -1,0 +1,15 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$tour: () !default;
+$tour: map.merge((), $tour);
+
+.#{$namespace}-tour {
+  &-vars {
+    @include define-preset-values('tour', $tour);
+  }
+
+  @include basis;
+}
