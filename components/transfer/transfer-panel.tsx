@@ -3,7 +3,6 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { NumberInput } from '@/components/number-input'
-// import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 
@@ -542,7 +541,7 @@ export default defineComponent({
       if (typeof props.filter !== 'function') return null
 
       const stop = (e: Event) => e.stopPropagation()
-      const setFilter = (value: string) => (currentFilter.value = value)
+      // const setFilter = (value: string) => (currentFilter.value = value)
 
       return (
         <div ref={search} class={nh.be('filter')}>
@@ -551,10 +550,10 @@ export default defineComponent({
             v-model:value={currentFilter.value}
             inherit
             clearable
+            sync
             disabled={props.disabled}
             placeholder={searching.value ? undefined : props.locale.search}
             onKeydown={stop}
-            onInput={setFilter}
             onFocus={() => (searching.value = true)}
             onBlur={() => (searching.value = false)}
           >

@@ -235,6 +235,7 @@ export default defineComponent({
         nh.be('wrapper'),
         nh.bem('wrapper', props.placement),
         {
+          [nh.bem('wrapper', 'hide-mask')]: props.hideMask,
           [nh.bem('wrapper', 'resizing')]: resizing.value
         },
         props.drawerClass

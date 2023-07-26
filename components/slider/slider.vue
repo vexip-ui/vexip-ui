@@ -237,6 +237,7 @@ export default defineComponent({
         transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
       }
     })
+    const readOnly = computed(() => props.disabled || (props.loading && props.loadingLock))
 
     parseValue(props.value)
     verifyValue()
@@ -357,7 +358,7 @@ export default defineComponent({
     })
 
     function handleTrackDown(event: PointerEvent) {
-      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
+      if (!track.value || readOnly.value) return
 
       clearTimeout(timer.sliding)
       event.stopPropagation()
@@ -462,7 +463,11 @@ export default defineComponent({
     }
 
     function handlePlus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
-      if (extra === 'alt') {
+      if (readOnly.value) return
+
+      if (props.markerOnly || extra === 'alt') {
+        if (!markerValues.value.length) return
+
         const value = truthValue.value[type]
 
         for (const markerValue of markerValues.value) {
@@ -479,7 +484,11 @@ export default defineComponent({
     }
 
     function handleMinus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
-      if (extra === 'alt') {
+      if (readOnly.value) return
+
+      if (props.markerOnly || extra === 'alt') {
+        if (!markerValues.value.length) return
+
         const value = truthValue.value[type]
 
         for (let i = markerValues.value.length - 1; i >= 0; --i) {

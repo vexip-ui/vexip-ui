@@ -86,6 +86,7 @@
         :scroll-x="bodyXScroll"
         @scroll="handleXScroll"
         @x-enabled-change="xScrollEnabled = $event"
+        @resize="handleResize"
       >
         <NativeScroll
           ref="yScroll"
@@ -840,6 +841,10 @@ export default defineComponent({
       emitEvent(props.onScroll, { type: 'vertical', client, percent })
     }
 
+    function handleResize() {
+      isMounted && refresh()
+    }
+
     function increaseColumn(column: TableColumnOptions) {
       tempColumns.value.add(column)
     }
@@ -1232,7 +1237,7 @@ export default defineComponent({
       handleXScroll,
       handleXBarScroll,
       handleYBarScroll,
-      // syncVerticalScroll,
+      handleResize,
 
       clearSort,
       clearFilter,

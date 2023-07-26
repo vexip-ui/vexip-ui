@@ -218,6 +218,7 @@ $transfer: map.merge(
     display: flex;
     align-items: center;
     margin-inline-start: auto;
+    line-height: 1;
   }
 
   &__page-input {
@@ -226,6 +227,7 @@ $transfer: map.merge(
 
   &__page-plus,
   &__page-minus {
+    color: get-css-var('content-color-secondary');
     cursor: pointer;
     transition: get-css-var('transition-color');
 

@@ -1,3 +1,24 @@
+## [1.11.3](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.11.2...hooks@1.11.3) (2023-07-25)
+
+
+### Bug Fixes
+
+* **hooks:** click outside event should process in capture ([8d59f55](https://github.com/vexip-ui/vexip-ui/commit/8d59f55a3212436431317907682e516162ef88ab))
+* **hooks:** improve intersection count record ([2d2f360](https://github.com/vexip-ui/vexip-ui/commit/2d2f360ba3401d82b81f1952edce5faf7c22ca3d))
+* **hooks:** improve useHover using useListener ([007dba8](https://github.com/vexip-ui/vexip-ui/commit/007dba8308e3199d08f9e65c4a3d96297031d6e5))
+* **hooks:** useMoving incorrect delay move process ([f58a173](https://github.com/vexip-ui/vexip-ui/commit/f58a1733e9f8f9736ac2d44f42e07c56ca0be3af))
+
+
+### Features
+
+* **hooks:** add useIntersection hook ([37b6147](https://github.com/vexip-ui/vexip-ui/commit/37b6147a5913215b49cd388b222bc0e14c23f937))
+* **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
+* **hooks:** useIntersection support numberish rootMargin ([b7a2bb4](https://github.com/vexip-ui/vexip-ui/commit/b7a2bb40b62e9e82be23cbd4b8bd7a8d5778931f))
+* **hooks:** useMounted support wait a tick or frame ([ccd77f6](https://github.com/vexip-ui/vexip-ui/commit/ccd77f696db86502b83f8071a1db99436ebb4c41))
+* support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+
+
+
 ## [1.11.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.11.1...hooks@1.11.2) (2023-07-17)
 
 

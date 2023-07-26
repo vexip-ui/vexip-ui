@@ -33,7 +33,7 @@ export default defineComponent({
   name: 'Tooltip',
   inheritAttrs: true,
   props: tooltipProps,
-  emits: ['update:visible'],
+  emits: ['clickoutside', 'update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
     const nh = useNameHelper('tooltip')
     const props = useProps('tooltip', _props, {
@@ -98,8 +98,6 @@ export default defineComponent({
       return isElement(reference.value) ? reference.value : null
     })
 
-    useClickOutside(handleClickOutside, originalTrigger)
-
     const popper = ref<PopperExposed>()
     const popperEl = computed(() => popper.value?.wrapper)
     const { transferTo, updatePopper } = usePopper({
@@ -109,6 +107,13 @@ export default defineComponent({
       wrapper: originalTrigger,
       popper: popperEl
     })
+
+    useClickOutside(handleClickOutside, originalTrigger)
+    useClickOutside(() => {
+      if (currentVisible.value && !originalTrigger.value) {
+        handleClickOutside()
+      }
+    }, popperEl)
 
     const tipStyle = computed(() => {
       if (props.width === 'auto') {
@@ -152,7 +157,7 @@ export default defineComponent({
       }
     )
 
-    expose({ toggleVisible, updatePopper })
+    expose({ trigger, toggleVisible, updatePopper })
 
     function toggleVisible(visible = !currentVisible.value) {
       currentVisible.value = visible

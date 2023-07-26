@@ -25,6 +25,7 @@ Open the mask directly, and of course you can render something on the mask.
 | on-before-close | `() => any \| Promise<any>` | Set the callback before the mask is closed, supports asynchronous functions and `Promise`, the return value of `false` will prevent the closure | `null`       | -        |
 | transfer        | `boolean \| string`         | Set the rendering position of the mask, when set to `true`, it will render to `<body>` by default                                               | `false`      | -        |
 | auto-remove     | `boolean`                   | Set whether to automatically remove when not active                                                                                             | `false`      | `2.0.13` |
+| permeable       | `boolean`                   | Set whether `wheel` event is permeable                                                                                                          | `false`      | `2.1.29` |
 
 ### Masker Events
 
