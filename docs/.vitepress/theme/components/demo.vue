@@ -238,22 +238,31 @@ function editOnPlayground() {
         {{ codeExpanded ? t('common.hideCode') : t('common.showCode') }}
       </Tooltip>
     </Column>
-    <CollapseTransition>
-      <Column v-show="codeExpanded" :class="nh.be('code')">
-        <div :class="`language-vue`">
-          <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
-          <span v-if="codeLines > 0" class="code-line-numbers">
-            <span v-for="n in codeLines" :key="n"></span>
-          </span>
-        </div>
-        <button type="button" :class="nh.be('reduce')" @click="expandCodes">
+    <div style="width: 100%">
+      <CollapseTransition>
+        <Column v-show="codeExpanded" :class="nh.be('code')">
+          <div :class="`language-vue`">
+            <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
+            <span v-if="codeLines > 0" class="code-line-numbers">
+              <span v-for="n in codeLines" :key="n"></span>
+            </span>
+          </div>
+        </Column>
+      </CollapseTransition>
+      <transition name="vxp-fade">
+        <button
+          v-show="codeExpanded"
+          type="button"
+          :class="nh.be('reduce')"
+          @click="expandCodes"
+        >
           <Icon><ChevronUp></ChevronUp></Icon>
           <span :class="nh.be('tip')">
             {{ t('common.hideCode') }}
           </span>
         </button>
-      </Column>
-    </CollapseTransition>
+      </transition>
+    </div>
   </Row>
 </template>
 
@@ -389,12 +398,18 @@ function editOnPlayground() {
   }
 
   &__code {
-    overflow: hidden;
     border-top: var(--vxp-border-light-2);
     border-radius: 0 0 var(--vxp-border-radius-base) var(--vxp-border-radius-base);
+
+    pre {
+      margin: 0;
+    }
   }
 
   &__reduce {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -403,9 +418,10 @@ function editOnPlayground() {
     padding: 6px 0;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
-    background-color: transparent;
+    background-color: var(--bg-color);
     border: 0;
     border-top: var(--vxp-border-light-2);
+    border-radius: 0 0 var(--vxp-radius-base) var(--vxp-radius-base);
     outline: 0;
 
     &:hover,
