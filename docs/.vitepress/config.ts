@@ -15,23 +15,20 @@ compiler.parseCache.max = 10000
 const SITE_URL = 'https://www.vexipui.com/'
 const SITE_DESC =
   'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good.'
-const SITE_TITLE =
-  'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good. | Vexip UI'
-const SITE_DESC_ZH = '一个Vue 3的UI库，高度可定制化，全量TypeScript，性能很不错。'
-const SITE_TITLE_ZH = '一个Vue 3的UI库，高度可定制化，全量TypeScript，性能很不错。 | Vexip UI'
+const SITE_TITLE = 'Vexip UI - Make interesting in development'
+const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
+const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
 
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
-  description: '一个Vue 3的UI库，高度可定制化，全量TypeScript，性能很不错。',
   lastUpdated: true,
   head: [
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
-    // og
-    ['meta', { property: 'og:url', content: SITE_URL }]
+    ['meta', { property: 'og:url', content: SITE_URL }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }]
   ],
   markdown: {
     highlight,
@@ -74,23 +71,25 @@ export default <UserConfig<ThemeConfig>>{
     'en-US': {
       label: 'English',
       lang: 'en-US',
+      description: SITE_DESC,
+      head: [
+        ['meta', { property: 'og:description', content: SITE_DESC }],
+        ['meta', { property: 'og:title', content: SITE_TITLE }]
+      ],
       themeConfig: {
-        footerLinks: getFooterLinks('en-US'),
-        head: [
-          ['meta', { property: 'og:description', content: SITE_DESC }],
-          ['meta', { property: 'og:title', content: SITE_TITLE }]
-        ]
+        footerLinks: getFooterLinks('en-US')
       }
     },
     'zh-CN': {
       label: '中文',
       lang: 'zh-CN',
+      description: SITE_DESC_ZH,
+      head: [
+        ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
+        ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
+      ],
       themeConfig: {
-        footerLinks: getFooterLinks('zh-CN'),
-        head: [
-          ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
-          ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
-        ]
+        footerLinks: getFooterLinks('zh-CN')
       }
     }
   }
