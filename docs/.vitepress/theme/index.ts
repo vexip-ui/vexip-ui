@@ -64,7 +64,7 @@ function enhanceRouter(router: Router) {
 
   if (isClient && location.pathname === '/') {
     currentPath = currentPath === '/' ? `/${locale.value}/` : currentPath
-    isClient && history.replaceState(null, document.title, `/${locale.value}/`)
+    isClient && (window.location.href = currentPath)
   }
 
   syncLocale(currentPath)
