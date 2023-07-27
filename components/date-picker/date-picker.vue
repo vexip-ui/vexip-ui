@@ -1172,6 +1172,7 @@ export default defineComponent({
     }
 
     function handleShortcut(name: string, value: Dateable | Dateable[]) {
+      fallbackFocus()
       parseValue(value)
       emitEvent(props.onShortcut, name, value)
       finishInput()
