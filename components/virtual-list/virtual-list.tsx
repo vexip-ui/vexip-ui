@@ -45,6 +45,7 @@ export default defineComponent({
 
     const {
       indexMap,
+      heightTree,
       scrollOffset,
       visibleItems,
       listStyle,
@@ -73,6 +74,8 @@ export default defineComponent({
       scroll,
       wrapper,
       list,
+      indexMap,
+      heightTree,
       scrollOffset,
       scrollTo,
       scrollBy,

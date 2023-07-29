@@ -205,7 +205,8 @@ export function flatTree<T = any>(
   options: TreeOptions<keyof T> & {
     depthFirst?: boolean,
     injectId?: boolean,
-    filter?: (item: T) => boolean
+    filter?: (item: T) => boolean,
+    cascaded?: boolean
   } = {}
 ) {
   const {
@@ -215,7 +216,8 @@ export function flatTree<T = any>(
     rootId = null,
     depthFirst = false,
     injectId = true,
-    filter = toTrue
+    filter = toTrue,
+    cascaded = false
   } = options
 
   const hasRootId = isDefined(rootId) && rootId !== ''
@@ -244,21 +246,25 @@ export function flatTree<T = any>(
       (item as any)[parentField] = rootId
     }
 
-    for (let i = 0, len = children.length; i < len; ++i) {
-      const child = children[i]
+    const filterResult = filter(item)
 
-      if (injectId && parentField) {
-        child[parentField] = id
+    if (filterResult) list.push(item)
+
+    if (filterResult || !cascaded) {
+      for (let i = 0, len = children.length; i < len; ++i) {
+        const child = children[i]
+
+        if (injectId && parentField) {
+          child[parentField] = id
+        }
+
+        !depthFirst && loop.push(child)
       }
 
-      !depthFirst && loop.push(child)
+      if (depthFirst) {
+        loop.unshift(...children)
+      }
     }
-
-    if (depthFirst) {
-      loop.unshift(...children)
-    }
-
-    if (filter(item)) list.push(item)
   }
 
   return list

@@ -1,137 +1,143 @@
 <template>
-  <li
-    v-if="visible && (matched || childMatched)"
-    ref="wrapper"
-    v-bind="$attrs"
-    :class="className"
-    :draggable="draggable"
-    tabindex="-1"
-    :aria-disabled="isDisabled"
-    :aria-grabbed="draggable && dragging ? 'true' : undefined"
-    :style="{ [nh.cv('depth')]: depth }"
-    @click.left="handleClick"
-    @focus="focused = true"
-    @blur="focused = false"
-    @dragstart.stop="handleDragStart"
-    @dragover="handleDragOver"
-    @dragleave="handleDragLeave"
-    @dragend="handleDragEnd"
-    @drop="handleDrop"
-  >
-    <slot
-      :data="node.data"
-      :node="node"
-      :depth="depth"
-      :focused="focused"
-      :toggle-check="handleToggleCheck"
-      :toggle-expand="handleToggleExpand"
-      :toggle-select="handleToggleSelect"
+  <ResizeObserver v-if="nodeVisible" throttle @resize="handleResize">
+    <li
+      ref="wrapper"
+      v-bind="$attrs"
+      :class="className"
+      :draggable="draggable"
+      tabindex="-1"
+      :aria-disabled="isDisabled"
+      :aria-grabbed="draggable && dragging ? 'true' : undefined"
+      :style="{ [nh.cv('depth')]: depth }"
+      @click.left="handleClick"
+      @focus="focused = true"
+      @blur="focused = false"
+      @dragstart.stop="handleDragStart"
+      @dragover="handleDragOver"
+      @dragleave="handleDragLeave"
+      @dragend="handleDragEnd"
+      @drop="handleDrop"
     >
-      <div :class="nh.be('content')">
-        <span
-          ref="arrowEl"
-          :class="{
-            [nh.be('arrow')]: true,
-            [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
-            [nh.bem('arrow', 'expanded')]: expanded,
-            [nh.bem('arrow', 'disabled')]: isDisabled || expandDisabled
-          }"
-          :aria-hidden="!loading && !hasArrow"
-          @click.stop="handleToggleExpand()"
-        >
-          <Icon v-if="loading" v-bind="icons.loading"></Icon>
-          <Icon v-else v-bind="icons.arrowRight"></Icon>
-        </span>
-        <Checkbox
-          v-if="hasCheckbox && !suffixCheckbox"
-          inherit
-          :class="nh.be('checkbox')"
-          :tab-index="-1"
-          :control="hasArrow"
-          :checked="checked"
-          :disabled="isDisabled || checkDisabled"
-          :partial="partial"
-          @click.prevent.stop="handleToggleCheck()"
-        ></Checkbox>
-        <div
-          :class="{
-            [nh.be('label')]: true,
-            [nh.bem('label', 'focused')]: focused,
-            [nh.bem('label', 'selected')]: selected,
-            [nh.bem('label', 'disabled')]: isDisabled || selectDisabled,
-            [nh.bem('label', 'readonly')]: isReadonly,
-            [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
-            [nh.bem('label', 'secondary')]: secondary
-          }"
-          @click="handleLabelClick()"
-        >
-          <Renderer
-            v-if="renderer"
-            :renderer="renderer"
-            :data="{ node, depth, data: node.data }"
-          ></Renderer>
-          <template v-else>
-            <slot
-              name="label"
-              :data="node.data"
-              :node="node"
-              :depth="depth"
-              :focused="focused"
-            >
-              {{ data[labelKey] }}
-            </slot>
-          </template>
+      <slot
+        :data="node.data"
+        :node="node"
+        :depth="depth"
+        :focused="focused"
+        :toggle-check="handleToggleCheck"
+        :toggle-expand="handleToggleExpand"
+        :toggle-select="handleToggleSelect"
+      >
+        <div :class="nh.be('content')">
+          <span
+            ref="arrowEl"
+            :class="{
+              [nh.be('arrow')]: true,
+              [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
+              [nh.bem('arrow', 'expanded')]: expanded,
+              [nh.bem('arrow', 'disabled')]: isDisabled || expandDisabled
+            }"
+            :aria-hidden="!loading && !hasArrow"
+            @click.stop="handleToggleExpand()"
+          >
+            <Icon v-if="loading" v-bind="icons.loading"></Icon>
+            <Icon v-else v-bind="icons.arrowRight"></Icon>
+          </span>
+          <Checkbox
+            v-if="hasCheckbox && !suffixCheckbox"
+            inherit
+            :class="nh.be('checkbox')"
+            :tab-index="-1"
+            :control="hasArrow"
+            :checked="checked"
+            :disabled="isDisabled || checkDisabled"
+            :partial="partial"
+            @click.prevent.stop="handleToggleCheck()"
+          ></Checkbox>
+          <div
+            :class="{
+              [nh.be('label')]: true,
+              [nh.bem('label', 'focused')]: focused,
+              [nh.bem('label', 'selected')]: selected,
+              [nh.bem('label', 'disabled')]: isDisabled || selectDisabled,
+              [nh.bem('label', 'readonly')]: isReadonly,
+              [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
+              [nh.bem('label', 'secondary')]: secondary
+            }"
+            @click="handleLabelClick()"
+          >
+            <Renderer
+              v-if="renderer"
+              :renderer="renderer"
+              :data="{ node, depth, data: node.data }"
+            ></Renderer>
+            <template v-else>
+              <slot
+                name="label"
+                :data="node.data"
+                :node="node"
+                :depth="depth"
+                :focused="focused"
+              >
+                {{ data[labelKey] }}
+              </slot>
+            </template>
+          </div>
+          <Checkbox
+            v-if="hasCheckbox && suffixCheckbox"
+            inherit
+            :class="[nh.be('checkbox'), nh.bem('checkbox', 'suffix')]"
+            :tab-index="-1"
+            :control="hasArrow"
+            :checked="checked"
+            :disabled="isDisabled || checkDisabled"
+            :partial="partial"
+            @click.prevent.stop="handleToggleCheck()"
+          ></Checkbox>
         </div>
-        <Checkbox
-          v-if="hasCheckbox && suffixCheckbox"
-          inherit
-          :class="[nh.be('checkbox'), nh.bem('checkbox', 'suffix')]"
-          :tab-index="-1"
-          :control="hasArrow"
-          :checked="checked"
-          :disabled="isDisabled || checkDisabled"
-          :partial="partial"
-          @click.prevent.stop="handleToggleCheck()"
-        ></Checkbox>
-      </div>
-    </slot>
-  </li>
-  <CollapseTransition :appear="appear" @after-enter="updateVisible" @after-leave="updateVisible">
+      </slot>
+    </li>
+  </ResizeObserver>
+  <CollapseTransition
+    v-if="nodeVisible || listVisible"
+    :appear="appear"
+    @after-enter="updateVisible"
+    @after-leave="updateVisible"
+  >
     <ul
       v-if="showChildren"
       :class="[nh.be('list'), !last && hasLinkLine && nh.bem('list', 'link-line')]"
       :style="{ [nh.cv('depth')]: depth }"
     >
       <TreeNode
-        v-for="(item, index) in node.children"
-        :key="index"
-        v-bind="nodeProps!(item.data, item)"
-        :node="item"
-        :data="item.data"
-        :arrow="item.arrow"
-        :checkbox="item.checkbox"
+        v-for="(child, index) in node.children"
+        v-bind="nodeProps!(child.data, child)"
+        :key="child.id ?? index"
+        :node="child"
+        :data="child.data"
+        :arrow="child.arrow"
+        :checkbox="child.checkbox"
         :appear="appear"
-        :visible="item.visible"
-        :selected="item.selected"
-        :expanded="item.expanded"
-        :disabled="item.disabled"
+        :visible="child.visible"
+        :selected="child.selected"
+        :expanded="child.expanded"
+        :disabled="child.disabled"
         :label-key="labelKey"
-        :checked="item.checked"
-        :loading="item.loading"
-        :loaded="item.loaded"
-        :partial="item.partial"
-        :readonly="item.readonly"
+        :checked="child.checked"
+        :loading="child.loading"
+        :loaded="child.loaded"
+        :partial="child.partial"
+        :readonly="child.readonly"
         :indent="indent"
         :draggable="draggable"
         :floor-select="floorSelect"
-        :matched="item.matched"
-        :child-matched="item.childMatched"
-        :upper-matched="item.upperMatched"
+        :matched="child.matched"
+        :child-matched="child.childMatched"
+        :upper-matched="child.upperMatched"
         :node-props="nodeProps"
         :last="index === node.children.length - 1"
-        :select-disabled="item.selectDisabled"
-        :expand-disabled="item.expandDisabled"
-        :check-disabled="item.checkDisabled"
+        :select-disabled="child.selectDisabled"
+        :expand-disabled="child.expandDisabled"
+        :check-disabled="child.checkDisabled"
       >
         <template #default="payload: any">
           <slot v-bind="payload"></slot>
@@ -149,6 +155,7 @@ import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
 
@@ -166,7 +173,8 @@ export default defineComponent({
     Checkbox,
     CollapseTransition,
     Icon,
-    Renderer
+    Renderer,
+    ResizeObserver
   },
   inheritAttrs: false,
   props: {
@@ -347,9 +355,6 @@ export default defineComponent({
         [nh.bem('node', 'no-arrow')]: !hasArrow.value
       }
     })
-    const showChildren = computed(() => {
-      return props.expanded && props.node.children?.length > 0
-    })
     const hasArrow = computed(() => {
       const arrow = props.arrow
 
@@ -376,6 +381,37 @@ export default defineComponent({
     })
     const renderer = computed(() => treeState.renderer)
     const suffixCheckbox = computed(() => treeState.suffixCheckbox)
+    const virtual = computed(() => treeState.virtual)
+    const nodeVisible = computed(() => {
+      return treeState.virtual
+        ? treeState.virtualIds.has(props.node.id)
+        : props.visible && (props.matched || props.childMatched || props.upperMatched)
+    })
+    const listVisible = computed(() => {
+      return (
+        props.node.children?.length > 0 &&
+        (!treeState.virtual || hasVisibleChild(props.node.children, treeState.virtualIds))
+      )
+    })
+    const showChildren = computed(() => {
+      return props.expanded && props.node.children?.length > 0
+    })
+
+    function hasVisibleChild(nodes: TreeNodeProps[], ids: Set<string | number>) {
+      if (!nodes.length) return false
+
+      const children: TreeNodeProps[] = []
+
+      for (const node of nodes) {
+        if (ids.has(node.id)) return true
+
+        if (node.expanded && node.children?.length) {
+          children.push(...node.children)
+        }
+      }
+
+      return hasVisibleChild(children, ids)
+    }
 
     provide(
       TREE_NODE_STATE,
@@ -520,6 +556,10 @@ export default defineComponent({
       return node.children
     }
 
+    function handleResize(entry: ResizeObserverEntry) {
+      treeState.handleItemResize(props.node.id, entry)
+    }
+
     return {
       nh,
       icons: useIcons(),
@@ -533,11 +573,14 @@ export default defineComponent({
       secondary,
       hasLinkLine,
       className,
-      showChildren,
       hasArrow,
       hasCheckbox,
       renderer,
       suffixCheckbox,
+      virtual,
+      nodeVisible,
+      listVisible,
+      showChildren,
 
       wrapper: nodeElement,
       arrowEl: arrowElement,
@@ -553,7 +596,8 @@ export default defineComponent({
       handleDragLeave,
       handleDrop,
       handleDragEnd,
-      getNodeChildren
+      getNodeChildren,
+      handleResize
     }
   }
 })

@@ -1,4 +1,5 @@
 import type { InjectionKey } from 'vue'
+import type { BITree } from '@vexip-ui/utils'
 
 export type Key = string | number
 export type Data = Record<string, any>
@@ -80,11 +81,17 @@ export interface TreeState {
   suffixCheckbox: boolean,
   noCascaded: boolean,
   linkLine: false | TreeLinkLine,
+  virtual: boolean,
   renderer: TreeNodeRenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,
+  indexMap: Map<number | string | symbol, number>,
+  heightTree: BITree,
+  startIndex: number,
+  virtualIds: Set<Key>,
   updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,
+  handleItemResize(key: Key, entry: ResizeObserverEntry): void,
   handleNodeClick(node: TreeNodeProps): void,
   handleNodeSelect(node: TreeNodeProps): void,
   handleNodeCancel(node: TreeNodeProps): void,

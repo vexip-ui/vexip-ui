@@ -48,6 +48,8 @@ export const treeProps = buildProps({
     default: null
   },
   postCreate: Function as PropType<TreeNodePostCreate>,
+  virtual: booleanProp,
+  nodeMinHeight: Number,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
