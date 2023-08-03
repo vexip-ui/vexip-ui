@@ -10,7 +10,8 @@ import { Confirm, Message } from 'vexip-ui'
 async function confirm() {
   const isConfirm = await Confirm.open({
     content: '确认删除吗？',
-    confirmType: 'error'
+    confirmType: 'error',
+    cancelType: 'success'
   })
 
   if (isConfirm) {

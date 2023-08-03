@@ -14,9 +14,9 @@
 
 :::demo confirm/type
 
-### 确认类型
+### 按钮类型
 
-设置 `confirmType` 选项可以改变确认按钮的类型。
+设置 `confirmType` 和 `cancelType` 选项可以改变确认按钮和取消按钮的类型。
 
 :::
 
@@ -65,7 +65,8 @@ type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, c
 | content         | `string`                             | 确认框的提示内容                                                              | `''`             | -        |
 | className       | `ClassType`                          | 提示的自定义类名                                                              | `null`           | -        |
 | style           | `StyleType`                          | 确认框的内联样式                                                              | `null`           | -        |
-| confirmType     | `ConfirmType`                        | 确认按钮的类型                                                                | `'primary'`      | -        |
+| confirmType     | `ConfirmButtonType`                  | 确认按钮的类型                                                                | `'primary'`      | -        |
+| cancelType      | `ConfirmButtonType`                  | 取消按钮的类型                                                                | `'default'`      | `2.1.30` |
 | confirmText     | `string`                             | 确认按钮的内容                                                                | `locale.confirm` | -        |
 | cancelText      | `string`                             | 取消按钮的内容                                                                | `locale.cancel`  | -        |
 | maskClose       | `boolean`                            | 是否可以通过遮罩关闭                                                          | `false`          | -        |
