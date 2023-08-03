@@ -16,7 +16,7 @@
 
 ### 按钮类型
 
-设置 `confirmType` 和 `cancelType`选项可以改变确认按钮和取消按钮的类型。
+设置 `confirmType` 和 `cancelType` 选项可以改变确认按钮和取消按钮的类型。
 
 :::
 

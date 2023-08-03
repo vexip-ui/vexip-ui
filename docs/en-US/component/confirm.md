@@ -66,7 +66,7 @@ type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, c
 | className       | `ClassType`                          | The custom class name for the confirm                                                                        | `null`           | -        |
 | style           | `StyleType`                          | Inline style for the confirm                                                                                 | `null`           | -        |
 | confirmType     | `ConfirmButtonType`                  | Confirm button type                                                                                          | `'primary'`      | -        |
-| cancelType      | `ConfirmButtonType`                  | Cancel button type                                                                                           | `'default'`      | -        |
+| cancelType      | `ConfirmButtonType`                  | Cancel button type                                                                                           | `'default'`      | `2.1.30` |
 | confirmText     | `string`                             | The content of the confirm button                                                                            | `locale.confirm` | -        |
 | cancelText      | `string`                             | The content of the cancel button                                                                             | `locale.cancel`  | -        |
 | maskClose       | `boolean`                            | Whether be closed by the mask                                                                                | `false`          | -        |
