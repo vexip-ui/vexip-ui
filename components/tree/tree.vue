@@ -528,16 +528,10 @@ export default defineComponent({
       }
     }
 
-    function buildTreeNodes(nodes: TreeNodeProps[]) {
-      const tree = transformTree(nodes, {
-        keyField: 'id',
-        parentField: 'parent',
-        childField: 'children',
-        rootId: props.rootId
-      })
+    function refreshNodesDepth() {
       const linkLine = props.linkLine
 
-      walkTree(tree, (node, depth) => {
+      walkTree(treeNodes.value, (node, depth) => {
         node.depth = depth
 
         if (node.parent && nodeMap.has(node.parent)) {
@@ -567,8 +561,17 @@ export default defineComponent({
           }
         }
       })
+    }
 
-      treeNodes.value = tree
+    function buildTreeNodes(nodes: TreeNodeProps[]) {
+      treeNodes.value = transformTree(nodes, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        rootId: props.rootId
+      })
+
+      refreshNodesDepth()
     }
 
     function parseAndTransformData() {
@@ -1044,6 +1047,7 @@ export default defineComponent({
         }
       }
 
+      refreshNodesDepth()
       emitEvent(props.onDrop, nodeInstance.node.data, nodeInstance.node, dropType)
     }
 
