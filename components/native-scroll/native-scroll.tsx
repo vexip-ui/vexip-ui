@@ -14,6 +14,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { createSlotRender } from '@vexip-ui/hooks'
 import {
   USE_TOUCH,
   createEventEmitter,
@@ -657,6 +658,7 @@ export default defineComponent({
           class={[className.value, attrs.class]}
           style={[style.value, attrs.style as any]}
         >
+          {createSlotRender(slots, ['prefix-trap', 'prefixTrap'])?.()}
           <ResizeObserver on-resize={handleResize}>{renderContent()}</ResizeObserver>
           {props.useXBar && (
             <Scrollbar
@@ -692,6 +694,7 @@ export default defineComponent({
               onScrollEnd={() => handleBarScrollEnd('vertical')}
             ></Scrollbar>
           )}
+          {createSlotRender(slots, ['suffix-trap', 'suffixTrap'])?.()}
         </div>
       )
     }

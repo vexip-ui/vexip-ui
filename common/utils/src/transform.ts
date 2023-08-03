@@ -167,7 +167,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
     const item = list[i]
     const id = item[keyField]
 
-    if (hasRootId ? id === rootId : !id) {
+    if (hasRootId ? id === rootId : !isDefined(id)) {
       continue
     }
 
@@ -279,27 +279,23 @@ export function flatTree<T = any>(
  */
 export function walkTree<T = any>(
   tree: T[],
-  cb: (item: T) => void,
+  cb: (item: T, depth: number) => void,
   options: {
     depthFirst?: boolean,
     childField?: keyof T
   } = {}
 ) {
   const { childField = 'children' as keyof T, depthFirst = false } = options
-  const loop = [...tree]
+  const loop = [...tree.map(item => ({ item, depth: 0 }))]
 
   while (loop.length) {
-    const item = loop.shift()!
+    const { item, depth } = loop.shift()!
     const children = item[childField] as T[]
 
-    cb(item)
+    cb(item, depth)
 
     if (children?.length) {
-      if (depthFirst) {
-        loop.unshift(...children)
-      } else {
-        loop.push(...children)
-      }
+      loop[depthFirst ? 'unshift' : 'push'](...children.map(item => ({ item, depth: depth + 1 })))
     }
   }
 }

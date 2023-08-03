@@ -1,55 +1,41 @@
 <template>
-  <NativeScroll
-    ref="scroll"
+  <VirtualList
+    ref="virtualList"
     :class="[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]"
-    use-y-bar
+    :items="renderedNodes"
+    :item-size="props.nodeMinHeight"
+    items-tag="ul"
+    :items-attrs="{ class: nh.be('list') }"
+    :hide-bar="!props.useYBar"
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
     :style="style"
     @scroll="handleScroll"
-    @resize="handleResize"
   >
-    <ResizeObserver throttle @resize="refreshScroll">
-      <div :style="listStyle">
-        <span
-          ref="trap"
-          tabindex="0"
-          aria-hidden="true"
-          style="width: 0; height: 0; overflow: hidden; outline: none"
-          @focus="handleTreeFocus"
-        ></span>
-        <ul :class="nh.be('list')" :style="itemsStyle">
+    <template #prefix-trap>
+      <span
+        ref="trap"
+        tabindex="0"
+        aria-hidden="true"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
+        @focus="handleTreeFocus"
+      ></span>
+    </template>
+    <template #default="{ item: node }: { item: TreeNodeProps }">
+      <CollapseTransition
+        v-if="isCollapse(node)"
+        appear
+        :reverse="node.type === 'reduce'"
+        @after-enter="afterExpanded"
+      >
+        <div :class="nh.be('collapse')" :style="{ height: `${node.height}px` }">
           <TreeNode
-            v-for="(node, index) in treeNodes"
-            v-bind="getNodeProps(node.data, node)"
-            :key="node.id ?? index"
-            :node="node"
-            :data="node.data"
-            :arrow="node.arrow"
-            :checkbox="node.checkbox"
-            :appear="props.appear"
-            :visible="node.visible"
-            :selected="node.selected"
-            :expanded="node.expanded"
-            :disabled="node.disabled"
-            :label-key="labelKey"
-            :checked="node.checked"
-            :loading="node.loading"
-            :loaded="node.loaded"
-            :partial="node.partial"
-            :readonly="node.readonly"
-            :indent="props.indent"
-            :draggable="props.draggable"
-            :floor-select="props.floorSelect"
-            :matched="node.matched"
-            :child-matched="node.childMatched"
-            :upper-matched="node.upperMatched"
-            :node-props="getNodeProps"
-            :select-disabled="node.selectDisabled"
-            :expand-disabled="node.expandDisabled"
-            :check-disabled="node.checkDisabled"
+            v-for="(innerNode, index) in node.nodes"
+            :key="innerNode.id ?? index"
+            v-bind="getNodeProps(innerNode.data, innerNode)"
+            :node="innerNode"
           >
             <template #default="payload">
               <slot name="node" v-bind="payload"></slot>
@@ -58,30 +44,44 @@
               <slot name="label" v-bind="payload"></slot>
             </template>
           </TreeNode>
-        </ul>
-        <div v-if="!props.data || !props.data.length || !anyMatched" :class="nh.be('empty-tip')">
-          <slot name="empty">
-            {{ props.emptyTip ?? locale.empty }}
-          </slot>
         </div>
-        <div
-          v-if="props.draggable"
-          v-show="indicatorShow"
-          ref="indicator"
-          :class="nh.be('indicator')"
-        ></div>
+      </CollapseTransition>
+      <TreeNode v-else v-bind="getNodeProps(node.data, node)" :node="node">
+        <template #default="payload">
+          <slot name="node" v-bind="payload"></slot>
+        </template>
+        <template #label="payload">
+          <slot name="label" v-bind="payload"></slot>
+        </template>
+      </TreeNode>
+    </template>
+    <template #empty>
+      <div :class="nh.be('empty-tip')">
+        <slot name="empty">
+          {{ props.emptyTip ?? locale.empty }}
+        </slot>
       </div>
-    </ResizeObserver>
-  </NativeScroll>
+    </template>
+    <template #suffix-trap>
+      <div
+        v-if="props.draggable"
+        v-show="indicatorShow"
+        ref="indicator"
+        :class="nh.be('indicator')"
+      ></div>
+    </template>
+  </VirtualList>
 </template>
 
 <script lang="ts">
-import { NativeScroll } from '@/components/native-scroll'
-import { ResizeObserver } from '@/components/resize-observer'
+import { CollapseTransition } from '@/components/collapse-transition'
+// import { ResizeObserver } from '@/components/resize-observer'
+import { VirtualList } from '@/components/virtual-list'
 
 import {
   computed,
   defineComponent,
+  nextTick,
   onMounted,
   provide,
   reactive,
@@ -93,26 +93,30 @@ import {
 
 import TreeNode from './tree-node.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { useMounted, useVirtual } from '@vexip-ui/hooks'
+import { useMounted } from '@vexip-ui/hooks'
 import {
+  debounce,
   flatTree,
   isNull,
   isPromise,
   queryAll,
   removeArrayItem,
-  transformTree
+  transformTree,
+  walkTree
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { DropType, TREE_NODE_STATE, TREE_STATE } from './symbol'
 
-import type { NativeScrollExposed } from '@/components/native-scroll'
+import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
   Data,
   FilterFn,
   Key,
+  TreeCollapseProps,
   TreeNodeInstance,
   TreeNodeKeyConfig,
-  TreeNodeProps
+  TreeNodeProps,
+  TreeNodeState
 } from './symbol'
 
 const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
@@ -138,9 +142,10 @@ const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
 export default defineComponent({
   name: 'Tree',
   components: {
-    NativeScroll,
-    ResizeObserver,
-    TreeNode
+    CollapseTransition,
+    // ResizeObserver,
+    TreeNode,
+    VirtualList
   },
   props: treeProps,
   emits: [],
@@ -187,7 +192,12 @@ export default defineComponent({
         isFunc: true
       },
       virtual: false,
-      nodeMinHeight: 28
+      nodeMinHeight: {
+        default: 28,
+        validator: value => value > 0
+      },
+      useYBar: false,
+      noTransition: false
     })
 
     const nh = useNameHelper('tree')
@@ -198,14 +208,17 @@ export default defineComponent({
     const indicatorShow = ref(false)
     const anyMatched = ref(false)
     const keyConfig = reactive({ ...defaultKeyConfig })
+    const nodeStates = reactive(new Map<Key, TreeNodeState>())
+    const expanding = ref(false)
+    const expandingNodes = ref<TreeNodeProps[]>([])
 
     const { isMounted } = useMounted()
 
-    const scroll = ref<NativeScrollExposed>()
+    const virtualList = ref<VirtualListExposed>()
     const trap = ref<HTMLElement>()
     const indicator = ref<HTMLElement>()
 
-    const wrapper = computed(() => scroll.value?.content)
+    const wrapper = computed(() => virtualList.value?.wrapper)
 
     let visibleNodeEls: HTMLElement[] = []
 
@@ -229,7 +242,6 @@ export default defineComponent({
     const boundAsyncLoad = computed(() => {
       return typeof props.onAsyncLoad === 'function'
     })
-    const labelKey = computed(() => keyConfig.label)
     const linkLine = computed(() => {
       return props.linkLine === true ? 'dashed' : props.linkLine === 'none' ? false : props.linkLine
     })
@@ -240,53 +252,24 @@ export default defineComponent({
         [nh.cv('link-line-type')]: linkLine.value || undefined
       }
     })
-    const visibleNodes = computed(() => {
-      return flatTree(treeNodes.value, {
-        keyField: 'id',
-        parentField: 'parent',
-        childField: 'children',
-        injectId: false,
-        depthFirst: true,
-        cascaded: true,
-        filter: node => {
-          const parentNode = getParentNode(node)
+    const visibleNodes = computed(() => flatNodes(treeNodes.value))
+    const expandedNodeIds = computed(() => {
+      const ids = new Set<Key>()
 
-          return (
-            node.visible &&
-            (node.matched || node.childMatched || node.upperMatched) &&
-            (!parentNode || parentNode.expanded)
-          )
-        }
-      })
+      for (const node of flattedNodes.value) {
+        node.expanded && ids.add(node.id)
+      }
+
+      return ids
     })
-
-    const {
-      indexMap,
-      heightTree,
-      startIndex,
-      scrollOffset,
-      visibleItems: virtualNodes,
-      listStyle,
-      itemsStyle,
-      handleScroll,
-      handleResize,
-      handleItemResize
-    } = useVirtual({
-      wrapper,
-      items: visibleNodes,
-      itemSize: toRef(props, 'nodeMinHeight'),
-      itemFixed: false,
-      idKey: 'id',
-      bufferSize: 5,
-      autoResize: false
+    const renderedNodes = computed(() => {
+      return expanding.value ? expandingNodes.value : visibleNodes.value
     })
-
-    const virtualIds = computed(() => new Set(virtualNodes.value.map(node => node.id)))
 
     function createDefaultFilter(value: string) {
       const pattern = props.ignoreCase ? String(value).toLocaleLowerCase() : value
       const defaultFilter: FilterFn = data => {
-        const label = data[labelKey.value]
+        const label = data[keyConfig.label]
 
         return props.ignoreCase
           ? String(label).toLocaleLowerCase().includes(pattern)
@@ -295,6 +278,12 @@ export default defineComponent({
 
       return defaultFilter
     }
+
+    const updateVisibleNodeEls = debounce(() => {
+      if (wrapper.value) {
+        visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
+      }
+    }, 500)
 
     provide(
       TREE_STATE,
@@ -305,16 +294,16 @@ export default defineComponent({
         noCascaded: toRef(props, 'noCascaded'),
         linkLine,
         virtual: toRef(props, 'virtual'),
+        labelKey: toRef(keyConfig, 'label'),
+        draggable: toRef(props, 'draggable'),
+        floorSelect: toRef(props, 'floorSelect'),
         renderer: toRef(props, 'renderer'),
         dragging,
         boundAsyncLoad,
-        indexMap,
-        heightTree,
-        startIndex,
-        virtualIds,
+        nodeStates,
+        getParentNode,
         updateVisibleNodeEls,
         computeCheckedState,
-        handleItemResize,
         handleNodeClick,
         handleNodeSelect,
         handleNodeCancel,
@@ -339,8 +328,20 @@ export default defineComponent({
       })
     )
 
+    let disableExpand = false
+
+    function disableExpandTick() {
+      disableExpand = true
+
+      nextTick(() => {
+        disableExpand = false
+      })
+    }
+
     watchEffect(() => {
       const nodes = flattedNodes.value
+
+      disableExpandTick()
 
       if (!props.filter) {
         for (let i = 0, len = nodes.length; i < len; ++i) {
@@ -401,13 +402,122 @@ export default defineComponent({
           parentField: 'parent',
           childField: 'children',
           rootId: props.rootId,
-          injectId: false
+          injectId: false,
+          depthFirst: true
         })
       },
       { immediate: true }
     )
+    watch(expandedNodeIds, (value, prev) => {
+      if (props.noTransition || disableExpand || !wrapper.value) return
+
+      let addedId: Key | undefined
+      let removedId: Key | undefined
+
+      for (const id of value) {
+        if (!prev.has(id)) {
+          if (addedId != null) return
+
+          addedId = id
+        }
+      }
+
+      for (const id of prev) {
+        if (!value.has(id)) {
+          if (removedId != null) return
+
+          removedId = id
+        }
+      }
+
+      if (addedId == null && removedId == null) return
+
+      expanding.value = true
+
+      let baseExpandedIds: Set<Key> | undefined
+
+      if (addedId != null) {
+        baseExpandedIds = prev
+      }
+
+      if (removedId != null) {
+        if (!baseExpandedIds) {
+          baseExpandedIds = value
+        } else {
+          baseExpandedIds = new Set(baseExpandedIds)
+          baseExpandedIds.delete(removedId)
+        }
+      }
+
+      const baseNodes = flatNodes(treeNodes.value, baseExpandedIds!)
+
+      const virtual = props.virtual
+      const viewHeight = wrapper.value.offsetHeight
+      const nodeHeight = props.nodeMinHeight || 1
+      const viewCount = Math.ceil(viewHeight / nodeHeight) + 1
+
+      const loop = [
+        addedId != null && { id: addedId, type: 'expand' },
+        removedId != null && { id: removedId, type: 'reduce' }
+      ]
+
+      for (const meta of loop) {
+        if (!meta) continue
+
+        const { id, type } = meta
+        const index = baseNodes.findIndex(node => node.id === id)
+
+        if (~index) {
+          const children = baseNodes[index].children
+
+          if (children?.length) {
+            const addedNodes = flatNodes(children, value)
+
+            baseNodes.splice(index + 1, 0, {
+              id: Symbol(''),
+              collapse: true,
+              type,
+              height: virtual ? addedNodes.length * nodeHeight : undefined,
+              nodes: virtual ? addedNodes.slice(0, viewCount) : addedNodes
+            } as any)
+          }
+        }
+      }
+
+      expandingNodes.value = baseNodes
+    })
 
     onMounted(updateVisibleNodeEls)
+
+    function flatNodes(nodes: TreeNodeProps[], expandedIds?: Set<Key>) {
+      const rootNodes = new Set(nodes)
+
+      return flatTree(nodes, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        injectId: false,
+        depthFirst: true,
+        cascaded: true,
+        filter: node => {
+          if (rootNodes.has(node)) {
+            return node.matched || node.childMatched || node.upperMatched
+          }
+
+          const parentNode = getParentNode(node)
+
+          return (
+            node.visible &&
+            (node.matched || node.childMatched || node.upperMatched) &&
+            (!parentNode || (expandedIds ? expandedIds.has(parentNode.id) : parentNode.expanded))
+          )
+        }
+      })
+    }
+
+    function isCollapse(node: any): node is TreeCollapseProps {
+      return node.collapse
+    }
 
     function getTreeOptions() {
       return {
@@ -418,12 +528,47 @@ export default defineComponent({
       }
     }
 
-    function updateVisibleNodeEls() {
-      requestAnimationFrame(() => {
-        if (wrapper.value) {
-          visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
+    function buildTreeNodes(nodes: TreeNodeProps[]) {
+      const tree = transformTree(nodes, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        rootId: props.rootId
+      })
+      const linkLine = props.linkLine
+
+      walkTree(tree, (node, depth) => {
+        node.depth = depth
+
+        if (node.parent && nodeMap.has(node.parent)) {
+          const parent = nodeMap.get(node.parent)!
+
+          node.last = parent.children.at(-1) === node
+
+          if (linkLine) {
+            if (parent.inLastCount) {
+              node.inLastCount = parent.inLastCount + (parent.last ? 1 : 0)
+            } else {
+              let current = parent
+              let upper = nodeMap.get(current.parent)
+              let count = 0
+
+              while (upper) {
+                if (upper.children.at(-1) === current) {
+                  ++count
+                }
+
+                current = upper
+                upper = nodeMap.get(current.parent)
+              }
+
+              node.inLastCount = count
+            }
+          }
         }
       })
+
+      treeNodes.value = tree
     }
 
     function parseAndTransformData() {
@@ -456,12 +601,7 @@ export default defineComponent({
         nodes.push(node)
       }
 
-      treeNodes.value = transformTree(nodes, {
-        keyField: 'id',
-        parentField: 'parent',
-        childField: 'children',
-        rootId: props.rootId
-      })
+      buildTreeNodes(nodes)
 
       if (!props.noCascaded) {
         const checkedNodes = flattedNodes.value.filter(item => item.checked)
@@ -552,13 +692,7 @@ export default defineComponent({
         nodes.push(node)
       }
 
-      treeNodes.value = transformTree(nodes, {
-        keyField: 'id',
-        parentField: 'parent',
-        childField: 'children',
-        rootId: props.rootId
-      })
-
+      buildTreeNodes(nodes)
       isMounted.value && updateVisibleNodeEls()
     }
 
@@ -634,10 +768,10 @@ export default defineComponent({
         selectDisabled,
         expandDisabled,
         checkDisabled
-      } as TreeNodeProps
+      }
 
       if (typeof props.postCreate === 'function') {
-        props.postCreate(node)
+        props.postCreate(node as TreeNodeProps)
       }
 
       return reactive({
@@ -648,12 +782,11 @@ export default defineComponent({
         partial: false,
         matched: false,
         childMatched: false,
-        upperMatched: false
+        upperMatched: false,
+        depth: -1,
+        last: false,
+        inLastCount: 0
       })
-    }
-
-    function getNodeChildren(node: TreeNodeProps) {
-      return node.children
     }
 
     function updateCheckedUpward(originNode: TreeNodeProps) {
@@ -941,6 +1074,11 @@ export default defineComponent({
       }
     }
 
+    function handleScroll() {
+      // onScroll()
+      updateVisibleNodeEls()
+    }
+
     function handleTreeFocus(event: FocusEvent) {
       const target = event.target as HTMLElement
 
@@ -954,7 +1092,11 @@ export default defineComponent({
     }
 
     function refreshScroll() {
-      scroll.value?.refresh()
+      virtualList.value?.refresh()
+    }
+
+    function afterExpanded() {
+      expanding.value = false
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
@@ -987,6 +1129,10 @@ export default defineComponent({
       }
 
       return null
+    }
+
+    function getNodeChildren(node: TreeNodeProps) {
+      return node.children
     }
 
     function getSiblingNodes(node: TreeNodeProps, includeSelf = false): TreeNodeProps[] {
@@ -1106,34 +1252,39 @@ export default defineComponent({
       }
     }
 
+    function toggleAllExpanded(expanded: boolean) {
+      for (const node of flattedNodes.value) {
+        if (!node.disabled && !node.expandDisabled && !node.loading && node.children?.length) {
+          node.expanded = expanded
+        }
+      }
+    }
+
     return {
       props,
       nh,
       locale: useLocale('tree', toRef(props, 'locale')),
+      keyConfig,
       treeNodes,
       indicatorShow,
       anyMatched,
-      labelKey,
+      expanding,
       style,
-      childrenKey: computed(() => keyConfig.children),
       getNodeProps: computed(() => {
         return typeof props.nodeProps === 'function' ? props.nodeProps : () => props.nodeProps
       }),
-      visibleNodes,
-      scrollOffset,
-      virtualNodes,
-      virtualIds,
-      listStyle,
-      itemsStyle,
+      renderedNodes,
 
-      scroll,
+      virtualList,
       trap,
       indicator,
 
+      isCollapse,
       handleScroll,
-      handleResize,
+      // handleResize,
       handleTreeFocus,
       refreshScroll,
+      afterExpanded,
 
       // api
       parseAndTransformData,
@@ -1145,8 +1296,8 @@ export default defineComponent({
       getSelectedNodeData,
       getExpandedNodes,
       getDisabledNodes,
-      getNodeChildren,
       getParentNode,
+      getNodeChildren,
       getSiblingNodes,
       getPrevSiblingNode,
       getNextSiblingNode,
@@ -1154,7 +1305,8 @@ export default defineComponent({
       expandNodeByData,
       selectNodeByData,
       checkNodeByData,
-      toggleNodeLoadingByData
+      toggleNodeLoadingByData,
+      toggleAllExpanded
     }
   }
 })

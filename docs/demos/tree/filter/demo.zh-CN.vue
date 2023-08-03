@@ -1,5 +1,5 @@
 <template>
-  <Input v-model:value="filter"></Input>
+  <Input v-model:value="filter" clearable></Input>
   <Tree :data="data" :filter="filter"></Tree>
 </template>
 

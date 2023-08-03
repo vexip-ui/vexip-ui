@@ -41,6 +41,7 @@ export const collapseTransitionProps = buildProps({
   duration: Number,
   timing: String,
   fadeEffect: booleanProp,
+  reverse: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),
   onAfterEnter: eventProp<(el: Element) => void>(),
