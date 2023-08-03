@@ -59,6 +59,7 @@
           :class="nh.be('button')"
           inherit
           no-pulse
+          :type="cancelTypeR"
           @click="handleCancel"
         >
           {{ cancelTextR || locale.cancel }}
@@ -101,13 +102,13 @@ import { useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { isFunction, isPromise } from '@vexip-ui/utils'
 import { confirmProps } from './props'
 
-import type { ConfirmOptions, ConfirmRenderFn, ConfirmType } from './symbol'
+import type { ConfirmButtonType, ConfirmOptions, ConfirmRenderFn } from './symbol'
 
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze<ConfirmType[]>([
+const confirmButtonTypes = Object.freeze<ConfirmButtonType[]>([
   'default',
   'primary',
   'info',
@@ -142,8 +143,12 @@ export default defineComponent({
       },
       maskClose: false,
       confirmType: {
+        default: 'primary',
+        validator: value => confirmButtonTypes.includes(value)
+      },
+      cancelType: {
         default: 'default',
-        validator: value => confirmTypes.includes(value)
+        validator: value => confirmButtonTypes.includes(value)
       },
       confirmText: null,
       cancelText: null,
@@ -170,6 +175,7 @@ export default defineComponent({
     const classR = ref(props.className)
     const styleR = ref(props.style || ({} as any))
     const confirmTypeR = ref(props.confirmType)
+    const cancelTypeR = ref(props.cancelType)
     const confirmTextR = ref(props.confirmText)
     const cancelTextR = ref(props.cancelText)
     const maskCloseR = ref(props.maskClose)
@@ -201,6 +207,7 @@ export default defineComponent({
         iconColorR.value = options.iconColor ?? props.iconColor
         maskCloseR.value = options.maskClose ?? props.maskClose
         confirmTypeR.value = options.confirmType ?? props.confirmType
+        cancelTypeR.value = options.cancelType ?? props.cancelType
         confirmTextR.value = options.confirmText ?? props.confirmText
         cancelTextR.value = options.cancelText ?? props.cancelText
         parseHtmlR.value = options.parseHtml ?? props.parseHtml
@@ -272,6 +279,7 @@ export default defineComponent({
       styleR.value = props.style
       maskCloseR.value = props.maskClose
       confirmTypeR.value = props.confirmType
+      cancelTypeR.value = props.cancelType
       confirmTextR.value = props.confirmText
       cancelTextR.value = props.cancelText
       parseHtmlR.value = props.parseHtml
@@ -297,6 +305,7 @@ export default defineComponent({
       iconColorR,
       maskCloseR,
       confirmTypeR,
+      cancelTypeR,
       confirmTextR,
       cancelTextR,
       parseHtmlR,

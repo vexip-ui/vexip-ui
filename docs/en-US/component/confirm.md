@@ -14,9 +14,9 @@ Simplest usage. Confirm is using `Promise` inside, which can be used with `async
 
 :::demo confirm/type
 
-### Confirm Type
+### Button Type
 
-Set the `confirmType` option to change the type of the confirm button.
+Set the `confirmType` and `cancelType` options to change the type of the confirm and cancel buttons.
 
 :::
 
@@ -65,7 +65,8 @@ type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, c
 | content         | `string`                             | The prompt content of the confirm                                                                            | `''`             | -        |
 | className       | `ClassType`                          | The custom class name for the confirm                                                                        | `null`           | -        |
 | style           | `StyleType`                          | Inline style for the confirm                                                                                 | `null`           | -        |
-| confirmType     | `ConfirmType`                        | Confirm button type                                                                                          | `'primary'`      | -        |
+| confirmType     | `ConfirmButtonType`                  | Confirm button type                                                                                          | `'primary'`      | -        |
+| cancelType      | `ConfirmButtonType`                  | Cancel button type                                                                                           | `'default'`      | -        |
 | confirmText     | `string`                             | The content of the confirm button                                                                            | `locale.confirm` | -        |
 | cancelText      | `string`                             | The content of the cancel button                                                                             | `locale.cancel`  | -        |
 | maskClose       | `boolean`                            | Whether be closed by the mask                                                                                | `false`          | -        |
