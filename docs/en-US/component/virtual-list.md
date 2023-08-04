@@ -36,3 +36,4 @@ Renders a list of `10000` elements with a fixed height.
 | items-tag      | `string`                     | The tag name of the elements wrapper element                                                                           | `'ul'`  | -        |
 | items-attrs    | `Record<string, any>`        | The html attributes of elements wrapper element                                                                        | `null`  | -        |
 | hide-bar       | `boolean`                    | Set whether the scroll bar is hidden                                                                                   | `false` | `2.1.30` |
+| lock-items     | `boolean`                    | Disable elements resize callback, which is used to improve performance when elements change height in transition       | `false` | `2.1.30` |

@@ -41,6 +41,11 @@ export const collapseTransitionProps = buildProps({
   duration: Number,
   timing: String,
   fadeEffect: booleanProp,
+  /**
+   * Internal prop for Tree, reverse the enter transition
+   *
+   * @internal
+   */
   reverse: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),

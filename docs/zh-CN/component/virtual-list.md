@@ -36,3 +36,4 @@
 | items-tag      | `string`                     | 可视区域的渲染元素                                                           | `'ul'`  | -        |
 | items-attrs    | `Record<string, any>`        | 可视区域的元素的属性                                                         | `null`  | -        |
 | hide-bar       | `boolean`                    | 设置滚动条是否隐藏                                                           | `false` | `2.1.30` |
+| lock-items     | `boolean`                    | 禁用元素缩放回调，用于元素发生高度变化的过渡时减少不必要的性能开销           | `false` | `2.1.30` |

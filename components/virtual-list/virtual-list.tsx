@@ -33,7 +33,8 @@ export default defineComponent({
       listTag: 'div',
       itemsTag: 'ul',
       itemsAttrs: null,
-      hideBar: false
+      hideBar: false,
+      lockItems: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -104,6 +105,12 @@ export default defineComponent({
       emitEvent(props.onResize, entry)
     }
 
+    function onItemResize(key: number | string | symbol, entry: ResizeObserverEntry) {
+      if (!props.lockItems) {
+        handleItemResize(key, entry)
+      }
+    }
+
     function refresh() {
       scroll.value?.refresh()
     }
@@ -157,10 +164,10 @@ export default defineComponent({
                           return vnode
                         }
 
-                        const onResize = handleItemResize.bind(null, key)
+                        const onResize = onItemResize.bind(null, key)
 
                         return (
-                          <ResizeObserver key={key} throttle onResize={onResize}>
+                          <ResizeObserver key={key} onResize={onResize}>
                             {() => vnode}
                           </ResizeObserver>
                         )

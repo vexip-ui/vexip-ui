@@ -2,7 +2,7 @@ import type { InjectionKey } from 'vue'
 // import type { BITree } from '@vexip-ui/utils'
 
 export type Key = string | number
-export type Data = Record<string, any>
+export type Data = any
 export type TreeNodeDropType = 'before' | 'inner' | 'after'
 export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 

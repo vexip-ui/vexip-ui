@@ -7,6 +7,7 @@
     items-tag="ul"
     :items-attrs="{ class: nh.be('list') }"
     :hide-bar="!props.useYBar"
+    :ignore-resize="expanding"
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"
@@ -1199,7 +1200,7 @@ export default defineComponent({
     function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
       const idKey = keyConfig.id
 
-      return flattedNodes.value.find(item => item.data[idKey] === data[idKey]) ?? null
+      return flattedNodes.value.find(item => item.data[idKey] === data[idKey as keyof T]) ?? null
     }
 
     function expandNodeByData<T extends Data>(data: T, expanded?: boolean, upstream = false) {

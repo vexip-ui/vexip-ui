@@ -153,9 +153,12 @@ export default defineComponent({
             const el = $el as HTMLElement
 
             el.style.transition = enterRecord.transition || ''
-            el.style[height] = ''
-            el.style.overflow = enterRecord.overflow!
-            el.style.boxSizing = enterRecord.boxSizing!
+
+            if (!props.reverse) {
+              el.style[height] = ''
+              el.style.overflow = enterRecord.overflow!
+              el.style.boxSizing = enterRecord.boxSizing!
+            }
 
             enterStage = null
             emitEvent(props.onAfterEnter, $el)
@@ -247,9 +250,7 @@ export default defineComponent({
             emitEvent(props.onLeaveCancelled, $el)
           }
         },
-        {
-          default: () => slots.default && slots.default()
-        }
+        slots
       )
     }
   }
