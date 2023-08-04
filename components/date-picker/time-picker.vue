@@ -822,6 +822,7 @@ export default defineComponent({
         value = value()
       }
 
+      fallbackFocus()
       parseValue(value)
       emitEvent(props.onShortcut, name, value)
       finishInput()
