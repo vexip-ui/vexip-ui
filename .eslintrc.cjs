@@ -23,7 +23,7 @@ module.exports = defineConfig({
         'vue/component-tags-order': [
           'error',
           {
-            order: ['template', 'script']
+            order: [['template', 'script']]
           }
         ],
         'vue/no-restricted-block': [

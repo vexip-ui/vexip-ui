@@ -2,15 +2,17 @@ import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TourStepConfig, TourTarget } from './symbol'
+import type { TourStepOptions, TourStepRenderFn, TourTarget } from './symbol'
 
 export const tourProps = buildProps({
-  steps: Array as PropType<TourStepConfig[]>,
+  active: booleanProp,
+  index: Number,
+  steps: Array as PropType<TourStepOptions[]>,
   hideMask: booleanProp,
-  onChange: eventProp<(index: number, step: TourStepConfig) => void>(),
+  onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onStart: eventProp(),
-  onPrev: eventProp<(index: number, step: TourStepConfig) => void>(),
-  onNext: eventProp<(index: number, step: TourStepConfig) => void>(),
+  onPrev: eventProp<(index: number, step: TourStepOptions) => void>(),
+  onNext: eventProp<(index: number, step: TourStepOptions) => void>(),
   onFinish: eventProp()
 })
 
@@ -21,6 +23,7 @@ export const tourStepProps = buildProps({
   title: String,
   content: String,
   target: [String, Object, Function] as PropType<TourTarget>,
+  renderer: Function as PropType<TourStepRenderFn>,
   onPrev: eventProp(),
   onNext: eventProp()
 })
