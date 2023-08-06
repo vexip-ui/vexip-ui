@@ -25,6 +25,8 @@ import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { affixProps } from './props'
 import { isClient } from '@vexip-ui/utils'
 
+import { handleLastScroller } from './handleLast'
+
 import type { NativeScrollExposed } from '../native-scroll'
 import type { Scroll } from '@/components/scroll'
 
@@ -122,6 +124,7 @@ export default defineComponent({
     }
 
     function handleContainerScroll() {
+      handleLastScroller(target)
       update()
 
       emitEvent(props.onScroll, {
