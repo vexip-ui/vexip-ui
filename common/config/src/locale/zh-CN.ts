@@ -147,6 +147,12 @@ export function zhCNLocale() {
       }
     },
 
+    tour: {
+      prev: '上一步',
+      next: '下一步',
+      stepCount: '第 {n} 步'
+    },
+
     transfer: {
       source: '源',
       target: '目标',

@@ -148,6 +148,12 @@ export interface LocaleConfig {
     }
   },
 
+  tour: {
+    prev: string,
+    next: string,
+    stepCount: string
+  },
+
   transfer: {
     source: string,
     target: string,
