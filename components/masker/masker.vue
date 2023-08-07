@@ -13,19 +13,20 @@
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
     >
-      <transition
-        v-if="!props.disabled"
-        :appear="props.autoRemove"
-        :name="props.maskTransition"
-        @after-enter="afterOpen"
-        @after-leave="afterClose"
-      >
-        <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
-          <ResizeObserver @resize="handleResize">
-            <div :class="nh.be('mask-inner')"></div>
-          </ResizeObserver>
-        </div>
-      </transition>
+      <ResizeObserver v-if="!props.disabled" @resize="handleResize">
+        <transition
+          :appear="props.autoRemove"
+          :name="props.maskTransition"
+          @after-enter="afterOpen"
+          @after-leave="afterClose"
+        >
+          <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
+            <slot name="mask">
+              <div :class="nh.be('mask-inner')"></div>
+            </slot>
+          </div>
+        </transition>
+      </ResizeObserver>
       <span
         ref="topTrap"
         tabindex="0"
@@ -232,6 +233,7 @@ export default defineComponent({
     }
 
     function handleResize(entry: ResizeObserverEntry) {
+      console.log('a')
       emitEvent(props.onResize, entry)
     }
 
