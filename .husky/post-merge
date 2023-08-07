@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-huskyDir=$(dirname -- "$0")
-. "$huskyDir/_/husky.sh"
+#!/bin/sh
+huskyDir=$(dirname "$0")
 
-. "$huskyDir/scripts/update-dep"
+. "$huskyDir/_/husky.sh"
+. "$huskyDir/scripts/common.sh"
+. "$huskyDir/scripts/update-deps.sh"
