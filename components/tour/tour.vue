@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { Bubble } from '@/components/bubble'
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { Renderer } from '@/components/renderer'
 
-import { computed, provide, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
+import { computed, provide, reactive, ref, shallowReadonly, toRef, unref, watch } from 'vue'
 
 import { getStepByWord, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { isFunction } from '@vexip-ui/utils'
+import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
-import { TOUR_STATE } from './symbol'
+import { TOUR_STATE, getIdIndex } from './symbol'
 
 import type { TourStepOptions } from './symbol'
 
@@ -23,10 +24,13 @@ const props = useProps('tour', _props, {
   },
   steps: () => [],
   hideMask: false,
-  signType: 'dot'
+  signType: 'dot',
+  padding: 10
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
+
+const idIndex = `${getIdIndex()}`
 
 const nh = useNameHelper('tour')
 const locale = useLocale('tour', toRef(props, 'locale'))
@@ -35,6 +39,7 @@ const icons = useIcons()
 const currentActive = ref(props.active)
 const currentIndex = ref(props.index)
 const tempSteps = reactive(new Set<TourStepOptions>())
+const currentRect = ref<number[]>()
 
 const allSteps = computed(() => Array.from(tempSteps).concat(props.steps))
 const currentStep = computed(() => allSteps.value[currentIndex.value])
@@ -47,6 +52,16 @@ const className = computed(() => {
     }
   ]
 })
+const padding = computed(() => {
+  if (Array.isArray(props.padding)) {
+    return props.padding.length === 2
+      ? [props.padding[0], props.padding[1], props.padding[0], props.padding[1]]
+      : props.padding
+  } else {
+    return new Array<number>(4).fill(props.padding)
+  }
+})
+const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
 
 watch(
   () => props.active,
@@ -60,6 +75,28 @@ watch(
     currentIndex.value = Math.max(0, value)
   }
 )
+watch([currentActive, currentStep], () => {
+  currentRect.value = undefined
+
+  if (!isClient || !currentActive.value || !currentStep.value.target) return
+
+  let target = callIfFunc(unref(currentStep.value.target))
+
+  if (typeof target === 'string') {
+    target = document.querySelector(target)!
+
+    if (!target) return
+  }
+
+  const { top, left, width, height } = (target as HTMLElement).getBoundingClientRect()
+
+  currentRect.value = [
+    left - padding.value[3],
+    top - padding.value[0],
+    width + padding.value[1] + padding.value[3],
+    height + padding.value[0] + padding.value[2]
+  ]
+})
 
 provide(TOUR_STATE, {
   increaseStep,
@@ -129,9 +166,18 @@ function close() {
   <div v-show="false" role="none" aria-hidden="true">
     <slot></slot>
   </div>
-  <Masker :class="className" :disabled="props.hideMask">
+  <Masker
+    v-model:active="currentActive"
+    :inherit="props.inherit"
+    :class="className"
+    :disabled="props.hideMask"
+  >
     <template #default="{ show }">
-      <Bubble v-show="show && currentStep" :class="nh.be('bubble')">
+      <Bubble
+        v-show="show && currentStep"
+        :class="nh.be('bubble')"
+        :placement="currentStep.placement"
+      >
         <Renderer
           v-if="isFunction(currentStep.renderer)"
           :renderer="currentStep.renderer"
@@ -162,10 +208,59 @@ function close() {
               <div :class="nh.be('sign')">
                 <slot name="sign" v-bind="slotParams"></slot>
               </div>
+              <span style="flex: auto" role="none"></span>
+              <Button
+                v-if="currentIndex > 0"
+                inherit
+                size="small"
+                @click="prev"
+              >
+                {{ locale.prev }}
+              </Button>
+              <Button
+                v-if="currentIndex < allSteps.length - 1"
+                inherit
+                type="primary"
+                size="small"
+                @click="next()"
+              >
+                {{ currentIndex === allSteps.length - 1 ? locale.done : locale.next }}
+              </Button>
             </slot>
           </div>
         </template>
       </Bubble>
+    </template>
+    <template #mask>
+      <svg style="width: 100%; height: 100%">
+        <defs>
+          <mask :id="maskId">
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="white"
+            />
+            <rect
+              v-if="currentRect"
+              :x="currentRect[0]"
+              :y="currentRect[1]"
+              :width="currentRect[2]"
+              :height="currentRect[3]"
+              fill="black"
+            />
+          </mask>
+        </defs>
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          fill="rgba(0, 0, 0, 45%)"
+          :mask="`url(#${maskId})`"
+        />
+      </svg>
     </template>
   </Masker>
 </template>

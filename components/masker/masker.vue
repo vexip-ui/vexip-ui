@@ -33,9 +33,14 @@
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
-      <transition :appear="props.autoRemove" :name="props.transitionName">
+      <transition
+        v-if="props.transitionName"
+        :appear="props.autoRemove"
+        :name="props.transitionName"
+      >
         <slot :show="currentActive"></slot>
       </transition>
+      <slot v-else :show="currentActive"></slot>
       <span
         ref="bottomTrap"
         tabindex="0"

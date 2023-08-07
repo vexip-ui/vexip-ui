@@ -150,6 +150,7 @@ export function enUSLocale() {
     tour: {
       prev: 'Prev',
       next: 'Next',
+      done: 'Done',
       stepCount: 'Step {n}'
     },
 

@@ -12,6 +12,7 @@ export const tourProps = buildProps({
   steps: Array as PropType<TourStepOptions[]>,
   hideMask: booleanProp,
   signType: String as PropType<TourSignType>,
+  padding: [Number, Array] as PropType<number | number[]>,
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onStart: eventProp(),
   onPrev: eventProp<(index: number, step: TourStepOptions) => void>(),

@@ -151,6 +151,7 @@ export interface LocaleConfig {
   tour: {
     prev: string,
     next: string,
+    done: string,
     stepCount: string
   },
 

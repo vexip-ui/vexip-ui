@@ -1,8 +1,8 @@
 <template>
-  <Button id="button" type="primary">
+  <Button id="button" type="primary" @click="active = true">
     开始漫游
   </Button>
-  <Tour>
+  <Tour v-model:active="active">
     <TourStep
       target="#button"
       title="开始漫游按钮"
@@ -11,4 +11,8 @@
   </Tour>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref(false)
+</script>

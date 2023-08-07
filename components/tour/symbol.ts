@@ -14,7 +14,7 @@ export interface TourPayload {
 export type TourStepRenderFn = (payload: TourPayload) => any
 
 export interface TourStepOptions {
-  target: TourTarget,
+  target?: TourTarget,
   placement?: Placement,
   title?: string,
   content?: string,
@@ -27,3 +27,9 @@ export interface TourState {
 }
 
 export const TOUR_STATE = Symbol('TOUR_STATE') as InjectionKey<TourState>
+
+let index = 0
+
+export function getIdIndex() {
+  return index++
+}

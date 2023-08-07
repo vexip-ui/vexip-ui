@@ -43,7 +43,7 @@ export default defineComponent({
         value => {
           (options[key as keyof TourStepOptions] as any) = value
         },
-        { deep: deepProps.includes(key) }
+        { immediate: true, deep: deepProps.includes(key) }
       )
     }
 
