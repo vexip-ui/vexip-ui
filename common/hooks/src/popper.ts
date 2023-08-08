@@ -1,16 +1,11 @@
-import { nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
+import { onMounted, ref, unref, watch, watchEffect } from 'vue'
 
-import { createPopper as createInternalPopper } from '@popperjs/core'
+import { autoUpdate, computePosition, flip, offset } from '@floating-ui/dom'
+import { isClient } from '@vexip-ui/utils'
 
-import type { Ref, WatchStopHandle } from 'vue'
-import type { Instance, Modifier, Placement, Rect, VirtualElement } from '@popperjs/core'
+import type { Ref } from 'vue'
+import type { Middleware, OffsetOptions, Placement, VirtualElement } from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
-
-type OffsetsFunction = (options: {
-  popper: Rect,
-  reference: Rect,
-  placement: Placement
-}) => [number?, number?]
 
 interface UsePopperOptions {
   /**
@@ -42,7 +37,7 @@ interface UsePopperOptions {
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
-  offset?: OffsetsFunction | [number?, number?]
+  offset?: OffsetOptions
 }
 
 export type { Placement, VirtualElement }
@@ -74,63 +69,36 @@ export function usePopper(initOptions: UsePopperOptions) {
 
   const options: {
     placement: Placement,
-    modifiers: Partial<Modifier<any, any>>[]
+    middleware: Middleware[]
   } = {
     placement: placement.value,
-    modifiers: [
-      {
-        name: 'preventOverflow',
-        options: {
-          rootBoundary: 'window'
-        }
-      },
-      {
-        name: 'computeStyles',
-        options: {
-          gpuAcceleration: false
-        }
-      }
-    ]
+    middleware: [flip()]
   }
 
   if (isDrop) {
-    options.modifiers.push({
+    options.middleware.push({
       name: 'setTransformOrigin',
-      enabled: true,
-      phase: 'afterWrite',
-      fn({ state }) {
-        const origin = setPopperDropOrigin(state.placement)
+      fn({ placement, elements }) {
+        const origin = setPopperDropOrigin(placement)
 
         if (origin) {
-          state.elements.popper.style.transformOrigin = origin
+          elements.floating.style.transformOrigin = origin
         }
+
+        return {}
       }
     })
   }
 
   if (initOptions.offset) {
-    options.modifiers.push({
-      name: 'offset',
-      options: {
-        offset: initOptions.offset
-      }
-    })
+    options.middleware.push(offset(initOptions.offset))
   }
-
-  let popperInstance: Instance | null = null
-
-  watch(placement, value => {
-    options.placement = value
-    popperInstance && popperInstance.setOptions({ placement: value })
-  })
 
   watchEffect(() => {
     if (wrapper.value && popper.value) {
       (wrapper.value as TransferNode).__transferElement = popper.value
     }
   })
-
-  let stopWatchPopper: WatchStopHandle | null = null
 
   if (transfer) {
     watch(transfer, value => {
@@ -142,60 +110,43 @@ export function usePopper(initOptions: UsePopperOptions) {
   }
 
   onMounted(() => {
-    nextTick(createPopper)
+    watchEffect(updatePopper)
   })
 
-  onBeforeUnmount(destroyPopper)
+  let cleanup: (() => void) | undefined
 
   function updatePopper() {
-    nextTick(() => {
-      popperInstance && popperInstance.forceUpdate()
-    })
-  }
+    if (!isClient) return
 
-  function createPopper() {
-    destroyPopper()
-    popperInstance && popperInstance.destroy()
-    createPopperInstance()
+    cleanup?.()
 
-    const cancelWatchReference = watch(reference, createPopperInstance)
-    const cancelWatchPopper = watch(popper, createPopperInstance)
+    const referenceEl = unref(reference)
+    const popperEl = unref(popper)
 
-    stopWatchPopper = () => {
-      cancelWatchReference()
-      cancelWatchPopper()
+    if (!referenceEl || !popperEl) return
+
+    const update = async () => {
+      const { x, y } = await computePosition(referenceEl, popperEl, options)
+
+      Object.assign(popperEl.style, {
+        position: 'absolute',
+        top: `${y}px`,
+        left: `${x}px`
+      })
     }
+
+    cleanup = autoUpdate(referenceEl, popperEl, update)
   }
 
   function setTransferTo(value: boolean | string) {
     transferTo.value = typeof value === 'boolean' ? (value ? 'body' : '') : value
   }
 
-  function createPopperInstance() {
-    if (reference.value && popper.value) {
-      popperInstance && popperInstance.destroy()
-      popperInstance = createInternalPopper(reference.value, popper.value as HTMLElement, options)
-      updatePopper()
-    }
-  }
-
-  function destroyPopper() {
-    popperInstance && popperInstance.destroy()
-    popperInstance = null
-
-    if (typeof stopWatchPopper === 'function') {
-      stopWatchPopper()
-      stopWatchPopper = null
-    }
-  }
-
   return {
     reference,
     popper,
     transferTo,
-    updatePopper,
-    createPopper,
-    destroyPopper
+    updatePopper
   }
 }
 
