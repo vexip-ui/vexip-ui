@@ -1,8 +1,7 @@
 import { isClient, isDefined } from './common'
 
 export interface TransferNode extends Node {
-  __transferNode?: Node,
-  __transferElement?: Node
+  __transferElement?: Node | null
 }
 
 export interface EventPayload extends EventInit {
