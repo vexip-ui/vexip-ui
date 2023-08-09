@@ -16,13 +16,13 @@ interface UsePopperOptions {
   /**
    * popper 元素需要迁移至的目标选择器，为 true 时会迁移至 body
    */
-  transfer: MaybeRef<boolean | string>,
+  transfer?: MaybeRef<boolean | string>,
   /**
    * 包围元素，用于判断 clickoutside 事件
    *
    * 即使 popper 元素迁移至 wrapper 元素外部，点击 popper 元素时仍认为处于 wrapper 元素内部
    */
-  wrapper: Ref<HTMLElement | null | undefined>,
+  wrapper?: Ref<HTMLElement | null | undefined>,
   /**
    * 设置 popper 元素为否需要 drop，此时 transform-origin 会自动调整
    */
@@ -71,14 +71,16 @@ export function usePopper(initOptions: UsePopperOptions) {
   const arrowRef: Ref<HTMLElement | null | undefined> = initOptions.arrow ?? shallowRef(null)
   const transferTo = ref('')
 
-  watchEffect(() => {
-    const wrapperEl = unref(wrapper)
-    const popperEl = unref(popper)
+  if (wrapper) {
+    watchEffect(() => {
+      const wrapperEl = unref(wrapper)
+      const popperEl = unref(popper)
 
-    if (wrapperEl && popperEl) {
-      (wrapperEl as TransferNode).__transferElement = popperEl
-    }
-  })
+      if (wrapperEl) {
+        (wrapperEl as TransferNode).__transferElement = popperEl
+      }
+    })
+  }
 
   if (transfer != null) {
     watch(
