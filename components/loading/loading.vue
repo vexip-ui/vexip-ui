@@ -1,5 +1,5 @@
 <template>
-  <transition :name="nh.ns('fade')" appear>
+  <Transition :name="nh.ns('fade')" appear>
     <div
       v-show="visible"
       :class="className"
@@ -11,7 +11,7 @@
     >
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script lang="ts">

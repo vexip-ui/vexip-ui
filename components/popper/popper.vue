@@ -1,6 +1,6 @@
 <template>
   <Portal :to="props.to">
-    <transition
+    <Transition
       :name="props.transition"
       :appear="props.appear"
       @before-enter="emitHookEvent('be', $event)"
@@ -22,7 +22,7 @@
       >
         <slot></slot>
       </div>
-    </transition>
+    </Transition>
   </Portal>
 </template>
 

@@ -12,7 +12,7 @@
     aria-atomic="true"
     aria-live="assertive"
   >
-    <transition :name="nh.ns('fade')">
+    <Transition :name="nh.ns('fade')">
       <div
         v-if="state.showMask && state.visible"
         :class="[nh.be('mask'), state.maskClass]"
@@ -20,8 +20,8 @@
         @click="handleMaskClick"
         @wheel.stop.prevent
       ></div>
-    </transition>
-    <transition :name="state.transition">
+    </Transition>
+    <Transition :name="state.transition">
       <div
         v-if="state.visible"
         :class="{
@@ -56,7 +56,7 @@
           </div>
         </template>
       </div>
-    </transition>
+    </Transition>
   </div>
 </template>
 

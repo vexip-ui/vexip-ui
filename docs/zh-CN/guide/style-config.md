@@ -150,9 +150,9 @@ export default defineConfig({
 
 ```vue
 <template>
-  <transition name="vxp-fade">
+  <Transition name="vxp-fade">
     <div v-if="active"></div>
-  </transition>
+  </Transition>
 </template>
 ```
 
