@@ -1,7 +1,8 @@
 import { computed, defineComponent, renderSlot } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { flatVNodes, supportFlexGap } from '@vexip-ui/utils'
+import { flatVNodes } from '@vexip-ui/hooks'
+import { supportFlexGap } from '@vexip-ui/utils'
 import { spaceProps } from './props'
 
 import type { ClassType } from '@vexip-ui/config'
