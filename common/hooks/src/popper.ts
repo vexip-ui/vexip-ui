@@ -1,8 +1,9 @@
-import { onMounted, ref, unref, watch, watchEffect } from 'vue'
+import { onMounted, ref, shallowRef, unref, watch, watchEffect } from 'vue'
 
 import { arrow, autoUpdate, computePosition, flip, hide, offset } from '@floating-ui/dom'
 import { isClient } from '@vexip-ui/utils'
 
+import type { Ref } from 'vue'
 import type { Middleware, OffsetOptions, Placement, VirtualElement } from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
 import type { MaybeRef } from './shared/types'
@@ -21,7 +22,7 @@ interface UsePopperOptions {
    *
    * 即使 popper 元素迁移至 wrapper 元素外部，点击 popper 元素时仍认为处于 wrapper 元素内部
    */
-  wrapper: MaybeRef<HTMLElement | null | undefined>,
+  wrapper: Ref<HTMLElement | null | undefined>,
   /**
    * 设置 popper 元素为否需要 drop，此时 transform-origin 会自动调整
    */
@@ -29,15 +30,15 @@ interface UsePopperOptions {
   /**
    * 参考元素，popper 元素的位置计算依据
    */
-  reference?: MaybeRef<HTMLElement | VirtualElement | null | undefined>,
+  reference?: Ref<HTMLElement | VirtualElement | null | undefined>,
   /**
    * popper 元素
    */
-  popper?: MaybeRef<HTMLElement | null | undefined>,
+  popper?: Ref<HTMLElement | null | undefined>,
   /**
    * arrow 元素
    */
-  arrow?: MaybeRef<HTMLElement | null | undefined>,
+  arrow?: Ref<HTMLElement | null | undefined>,
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
@@ -46,10 +47,7 @@ interface UsePopperOptions {
 
 export type { Placement, VirtualElement }
 
-export const placementWhileList = Object.freeze([
-  'auto',
-  'auto-start',
-  'auto-end',
+export const placementWhileList = Object.freeze<Placement[]>([
   'top',
   'top-start',
   'top-end',
@@ -62,15 +60,15 @@ export const placementWhileList = Object.freeze([
   'right',
   'right-start',
   'right-end'
-] as Placement[])
+])
 
 export function usePopper(initOptions: UsePopperOptions) {
   const { placement, transfer, wrapper, isDrop = false } = initOptions
 
-  const reference: MaybeRef<HTMLElement | null | undefined> =
-    (initOptions.reference as any) ?? ref(null)
-  const popper: MaybeRef<HTMLElement | null | undefined> = initOptions.popper ?? ref(null)
-  const arrowRef: MaybeRef<HTMLElement | null | undefined> = initOptions.arrow ?? ref(null)
+  const reference: Ref<HTMLElement | null | undefined> =
+    (initOptions.reference as any) ?? shallowRef(null)
+  const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? shallowRef(null)
+  const arrowRef: Ref<HTMLElement | null | undefined> = initOptions.arrow ?? shallowRef(null)
   const transferTo = ref('')
 
   watchEffect(() => {
@@ -160,15 +158,21 @@ export function usePopper(initOptions: UsePopperOptions) {
 
       if (middlewareData.hide?.referenceHidden) {
         style.visibility = 'hidden'
+      } else {
+        style.visibility = ''
       }
 
-      if (arrowEl && middlewareData.arrow) {
-        const { x, y } = middlewareData.arrow
+      if (arrowEl) {
+        if (middlewareData.arrow) {
+          const { x, y } = middlewareData.arrow
 
-        Object.assign(arrowEl.style, {
-          top: y != null ? `${y}px` : '',
-          left: x != null ? `${x}px` : ''
-        })
+          Object.assign(arrowEl.style, {
+            top: y != null ? `${y}px` : '',
+            left: x != null ? `${x}px` : ''
+          })
+        } else {
+          Object.assign(arrowEl.style, { top: '', left: '' })
+        }
       }
 
       Object.assign(popperEl.style, style)
