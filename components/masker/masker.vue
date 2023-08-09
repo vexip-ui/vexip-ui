@@ -14,7 +14,7 @@
       @keydown.escape.prevent="handleClose"
     >
       <ResizeObserver v-if="!props.disabled" @resize="handleResize">
-        <transition
+        <Transition
           :appear="props.autoRemove"
           :name="props.maskTransition"
           @after-enter="afterOpen"
@@ -25,7 +25,7 @@
               <div :class="nh.be('mask-inner')"></div>
             </slot>
           </div>
-        </transition>
+        </Transition>
       </ResizeObserver>
       <span
         ref="topTrap"
@@ -238,7 +238,6 @@ export default defineComponent({
     }
 
     function handleResize(entry: ResizeObserverEntry) {
-      console.log('a')
       emitEvent(props.onResize, entry)
     }
 

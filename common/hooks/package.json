@@ -28,8 +28,8 @@
     "directory": "common/hooks"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.5.1",
     "@juggle/resize-observer": "^3.4.0",
-    "@popperjs/core": "^2.11.8",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {

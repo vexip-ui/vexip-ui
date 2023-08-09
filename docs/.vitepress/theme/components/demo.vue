@@ -249,7 +249,7 @@ function editOnPlayground() {
           </div>
         </Column>
       </CollapseTransition>
-      <transition name="vxp-fade">
+      <Transition name="vxp-fade">
         <button
           v-show="codeExpanded"
           type="button"
@@ -261,7 +261,7 @@ function editOnPlayground() {
             {{ t('common.hideCode') }}
           </span>
         </button>
-      </transition>
+      </Transition>
     </div>
   </Row>
 </template>

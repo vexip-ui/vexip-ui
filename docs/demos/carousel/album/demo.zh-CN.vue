@@ -1,9 +1,9 @@
 <template>
   <Row style="max-width: 840px">
     <Column :span="20" style="padding-right: 10px">
-      <transition name="vxp-fade" mode="out-in">
+      <Transition name="vxp-fade" mode="out-in">
         <img :key="active" style="width: 100%; height: 400px" :src="images[active]" />
-      </transition>
+      </Transition>
     </Column>
     <Column :span="4">
       <Carousel

@@ -14,11 +14,10 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { createSlotRender } from '@vexip-ui/hooks'
+import { createSlotRender, flatVNodes } from '@vexip-ui/hooks'
 import {
   USE_TOUCH,
   createEventEmitter,
-  flatVNodes,
   isClient,
   isDefined,
   isElement,

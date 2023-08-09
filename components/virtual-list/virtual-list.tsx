@@ -167,7 +167,7 @@ export default defineComponent({
                         const onResize = onItemResize.bind(null, key)
 
                         return (
-                          <ResizeObserver key={key} onResize={onResize}>
+                          <ResizeObserver key={key} throttle onResize={onResize}>
                             {() => vnode}
                           </ResizeObserver>
                         )

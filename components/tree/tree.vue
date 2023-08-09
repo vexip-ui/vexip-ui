@@ -1286,7 +1286,6 @@ export default defineComponent({
 
       isCollapse,
       handleScroll,
-      // handleResize,
       handleTreeFocus,
       refreshScroll,
       afterExpanded,

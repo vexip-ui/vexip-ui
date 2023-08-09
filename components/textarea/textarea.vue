@@ -22,7 +22,7 @@
       @change="handleChange"
     ></textarea>
     <div :class="nh.be('extra')">
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="props.loading" :class="nh.be('loading')">
           <Icon
             v-bind="icons.loading"
@@ -30,7 +30,7 @@
             :icon="props.loadingIcon || icons.loading.icon"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
       <div v-if="props.maxLength > 0" :class="nh.be('count')">
         <slot name="count" :value="currentValue">
           {{ `${currentLength}/${props.maxLength}` }}

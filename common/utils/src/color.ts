@@ -92,6 +92,7 @@ export interface ColorMeta {
   hsla: HSLAColor,
   hsva: HSVAColor,
   hex8: string,
+  gray: number,
   origin: Color
 }
 
@@ -464,6 +465,7 @@ export function parseColor(color: Color): ColorMeta {
     hsla: { ...hsl, a, format: 'hsla' },
     hsva: { ...hsv, a, format: 'hsva' },
     hex8,
+    gray: rgbToGrayScale(rgb),
     origin: color
   }
 }
@@ -816,6 +818,10 @@ export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hs
   return color.toString()
 }
 
+export function toGrayScale(color: string) {
+  return rgbToGrayScale(parseColorToRgba(color))
+}
+
 function repairDigits(str: string) {
   return str.length === 1 ? `0${str}` : str.toString()
 }
@@ -882,4 +888,8 @@ function toHsvString(this: HSV) {
   }
 
   return `hsv(${this.h}, ${this.s}, ${this.v})`
+}
+
+function rgbToGrayScale(rgb: RGB) {
+  return (rgb.r * 0.2126 + rgb.g * 0.7152 + rgb.b * 0.0722) / 255
 }

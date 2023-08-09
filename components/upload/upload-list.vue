@@ -3,7 +3,7 @@
     :class="[nh.be('files'), nh.bs('vars'), props.inherit && nh.bem('files', 'inherit')]"
     :style="props.style"
   >
-    <transition
+    <Transition
       v-for="item in props.files"
       :key="item.id"
       appear
@@ -33,7 +33,7 @@
           <slot name="icon" :file="file"></slot>
         </template>
       </UploadFile>
-    </transition>
+    </Transition>
     <slot name="suffix"></slot>
   </ul>
 </template>

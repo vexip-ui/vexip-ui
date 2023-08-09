@@ -5,7 +5,7 @@
     :aria-busy="currentActive ? 'true' : undefined"
   >
     <slot></slot>
-    <transition
+    <Transition
       appear
       :name="props.transitionName"
       @after-enter="handleShow"
@@ -35,9 +35,9 @@
           </div>
         </slot>
       </div>
-    </transition>
+    </Transition>
   </div>
-  <transition
+  <Transition
     v-else
     appear
     :name="props.transitionName"
@@ -68,7 +68,7 @@
         </div>
       </slot>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script lang="ts">
