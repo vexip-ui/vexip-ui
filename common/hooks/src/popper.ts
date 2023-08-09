@@ -1,10 +1,16 @@
 import { onMounted, ref, shallowRef, unref, watch, watchEffect } from 'vue'
 
-import { arrow, autoUpdate, computePosition, flip, hide, offset } from '@floating-ui/dom'
+import { arrow, autoUpdate, computePosition, flip, hide, offset, shift } from '@floating-ui/dom'
 import { isClient } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
-import type { Middleware, OffsetOptions, Placement, VirtualElement } from '@floating-ui/dom'
+import type {
+  Middleware,
+  OffsetOptions,
+  Placement,
+  ShiftOptions,
+  VirtualElement
+} from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
 import type { MaybeRef } from './shared/types'
 
@@ -42,7 +48,11 @@ interface UsePopperOptions {
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
-  offset?: MaybeRef<OffsetOptions>
+  offset?: MaybeRef<OffsetOptions>,
+  /**
+   * popper 元素是否限制在窗口内
+   */
+  shift?: MaybeRef<boolean | ShiftOptions>
 }
 
 export type { Placement, VirtualElement }
@@ -137,6 +147,16 @@ export function usePopper(initOptions: UsePopperOptions) {
 
     if (initOptions.offset) {
       options.middleware.push(offset(unref(initOptions.offset)))
+    }
+
+    if (initOptions.shift) {
+      let shiftOptions = unref(initOptions.shift)
+
+      if (typeof shiftOptions === 'boolean') {
+        shiftOptions = {}
+      }
+
+      options.middleware.push(shift(shiftOptions))
     }
 
     if (arrowEl) {

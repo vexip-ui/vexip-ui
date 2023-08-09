@@ -8,10 +8,13 @@ import { Renderer } from '@/components/renderer'
 import { computed, provide, reactive, ref, shallowReadonly, toRef, unref, watch } from 'vue'
 
 import { getStepByWord, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { usePopper } from '@vexip-ui/hooks'
 import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE, getIdIndex } from './symbol'
 
+import type { BubbleExposed } from '@/components/bubble'
+import type { MaskerExposed } from '@/components/masker'
 import type { TourStepOptions } from './symbol'
 
 const _props = defineProps(tourProps)
@@ -41,6 +44,9 @@ const currentIndex = ref(props.index)
 const tempSteps = reactive(new Set<TourStepOptions>())
 const currentRect = ref<number[]>()
 
+const masker = ref<MaskerExposed>()
+const bubble = ref<BubbleExposed>()
+
 const allSteps = computed(() => Array.from(tempSteps).concat(props.steps))
 const currentStep = computed(() => allSteps.value[currentIndex.value])
 const className = computed(() => {
@@ -62,6 +68,14 @@ const padding = computed(() => {
   }
 })
 const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
+
+const { reference, updatePopper } = usePopper({
+  placement: computed(() => currentStep.value?.placement || 'bottom'),
+  wrapper: computed(() => masker.value?.$el),
+  popper: computed(() => bubble.value?.$el),
+  arrow: computed(() => bubble.value?.arrow),
+  shift: { crossAxis: true }
+})
 
 watch(
   () => props.active,
@@ -171,12 +185,15 @@ function close() {
     :inherit="props.inherit"
     :class="className"
     :disabled="props.hideMask"
+    @show="updatePopper"
   >
     <template #default="{ show }">
       <Bubble
         v-show="show && currentStep"
+        ref="bubble"
         :class="nh.be('bubble')"
-        :placement="currentStep.placement"
+        :content-class="nh.be('step')"
+        :placement="currentStep.placement || 'bottom'"
       >
         <Renderer
           v-if="isFunction(currentStep.renderer)"
@@ -218,7 +235,7 @@ function close() {
                 {{ locale.prev }}
               </Button>
               <Button
-                v-if="currentIndex < allSteps.length - 1"
+                v-if="currentIndex <= allSteps.length - 1"
                 inherit
                 type="primary"
                 size="small"
@@ -244,6 +261,7 @@ function close() {
             />
             <rect
               v-if="currentRect"
+              ref="reference"
               :x="currentRect[0]"
               :y="currentRect[1]"
               :width="currentRect[2]"

@@ -93,7 +93,7 @@ $bubble: map.merge(
     bottom: 0;
     border-width: $size $size 0;
     border-top-color: $border-color;
-    transform: translate(-50%, 100%);
+    transform: translateY(100%);
 
     &::after {
       bottom: 1px;
@@ -131,7 +131,7 @@ $bubble: map.merge(
     top: 0;
     border-width: 0 $size $size;
     border-bottom-color: $border-color;
-    transform: translate(-50%, -100%);
+    transform: translateY(-100%);
 
     &::after {
       top: 1px;
@@ -169,7 +169,7 @@ $bubble: map.merge(
     right: 0;
     border-width: $size 0 $size $size;
     border-left-color: $border-color;
-    transform: translate(100%, -50%);
+    transform: translateX(100%);
 
     &::after {
       right: 1px;
@@ -207,7 +207,7 @@ $bubble: map.merge(
     left: 0;
     border-width: $size $size $size 0;
     border-right-color: $border-color;
-    transform: translate(-100%, -50%);
+    transform: translateX(-100%);
 
     &::after {
       left: 1px;

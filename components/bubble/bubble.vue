@@ -1,14 +1,14 @@
 <template>
   <div :class="className">
     <div :class="[nh.be('content'), props.contentClass]" :style="contentStyle">
-      <div :class="nh.be('arrow')" :style="arrowStyle"></div>
+      <div ref="arrow" :class="nh.be('arrow')" :style="arrowStyle"></div>
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 import { placementWhileList } from '@vexip-ui/hooks'
 import { useNameHelper, useProps } from '@vexip-ui/config'
@@ -31,6 +31,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('bubble')
+
+    const arrow = ref<HTMLElement>()
 
     const className = computed(() => {
       return [
@@ -69,7 +71,9 @@ export default defineComponent({
 
       className,
       contentStyle,
-      arrowStyle
+      arrowStyle,
+
+      arrow
     }
   }
 })

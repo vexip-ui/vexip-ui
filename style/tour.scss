@@ -4,7 +4,22 @@
 @use './design' as *;
 
 $tour: () !default;
-$tour: map.merge((), $tour);
+$tour: map.merge(
+  (
+    title-font-size: get-css-var('font-size-primary'),
+    title-weight: 500,
+    title-color: get-css-var('content-color-primary'),
+    header-v-padding: 8px,
+    header-h-padding: 14px,
+    body-v-padding: 8px,
+    body-h-padding: 14px,
+    footer-v-padding: 8px,
+    footer-h-padding: 14px,
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base')
+  ),
+  $tour
+);
 
 .#{$namespace}-tour {
   &-vars {
@@ -12,4 +27,59 @@ $tour: map.merge((), $tour);
   }
 
   @include basis;
+
+  &__step {
+    padding: 0;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: get-css-var('tour-header-v-padding') get-css-var('tour-header-h-padding');
+  }
+
+  &__title {
+    flex: 1 0 0;
+    font-size: get-css-var('tour-title-font-size');
+    font-weight: get-css-var('tour-title-weight');
+    color: get-css-var('tour-title-color');
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 0;
+    margin-left: 6px;
+    color: get-css-var('tour-close-color');
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('tour-close-color-hover');
+    }
+  }
+
+  &__content {
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: get-css-var('tour-body-v-padding') get-css-var('tour-body-h-padding');
+  }
+
+  &__footer {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+    padding: get-css-var('tour-footer-v-padding') get-css-var('tour-footer-h-padding');
+  }
 }
