@@ -73,12 +73,14 @@ export const placementWhileList = Object.freeze<Placement[]>([
 ])
 
 export function usePopper(initOptions: UsePopperOptions) {
-  const { placement, transfer, wrapper, isDrop = false } = initOptions
+  const { transfer, wrapper, isDrop = false } = initOptions
 
   const reference: Ref<HTMLElement | null | undefined> =
     (initOptions.reference as any) ?? shallowRef(null)
   const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? shallowRef(null)
   const arrowRef: Ref<HTMLElement | null | undefined> = initOptions.arrow ?? shallowRef(null)
+
+  const placement = ref(unref(initOptions.placement))
   const transferTo = ref('')
 
   if (wrapper) {
@@ -126,13 +128,13 @@ export function usePopper(initOptions: UsePopperOptions) {
       placement: Placement,
       middleware: Middleware[]
     } = {
-      placement: unref(placement),
+      placement: unref(initOptions.placement),
       middleware: [flip()]
     }
 
     if (isDrop) {
       options.middleware.push({
-        name: 'setTransformOrigin',
+        name: 'origin',
         fn({ placement, elements }) {
           const origin = setPopperDropOrigin(placement)
 
@@ -163,14 +165,16 @@ export function usePopper(initOptions: UsePopperOptions) {
       options.middleware.push(arrow({ element: arrowEl }))
     }
 
-    options.middleware.push(hide())
+    options.middleware.push(hide({ strategy: 'escaped' }))
 
     const update = async () => {
-      const { x, y, placement, strategy, middlewareData } = await computePosition(
-        referenceEl,
-        popperEl,
-        options
-      )
+      const {
+        x,
+        y,
+        placement: activePlacement,
+        strategy,
+        middlewareData
+      } = await computePosition(referenceEl, popperEl, options)
 
       const style: Partial<CSSStyleDeclaration> = {
         position: strategy,
@@ -178,7 +182,7 @@ export function usePopper(initOptions: UsePopperOptions) {
         left: `${x}px`
       }
 
-      if (middlewareData.hide?.referenceHidden) {
+      if (middlewareData.hide?.escaped) {
         style.visibility = 'hidden'
       } else {
         style.visibility = ''
@@ -198,7 +202,8 @@ export function usePopper(initOptions: UsePopperOptions) {
       }
 
       Object.assign(popperEl.style, style)
-      popperEl.dataset.popperPlacement = placement
+      popperEl.dataset.popperPlacement = activePlacement
+      placement.value = activePlacement
     }
 
     cleanup = autoUpdate(referenceEl, popperEl, update)
@@ -209,8 +214,10 @@ export function usePopper(initOptions: UsePopperOptions) {
   }
 
   return {
+    wrapper,
     reference,
     popper,
+    placement,
     transferTo,
     updatePopper
   }
