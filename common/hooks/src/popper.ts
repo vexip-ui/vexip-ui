@@ -52,7 +52,13 @@ interface UsePopperOptions {
   /**
    * popper 元素是否限制在窗口内
    */
-  shift?: MaybeRef<boolean | ShiftOptions>
+  shift?: MaybeRef<boolean | ShiftOptions>,
+  /**
+   * 设置是否自动更新 popper 元素
+   *
+   * @default true
+   */
+  autoUpdate?: boolean
 }
 
 export type { Placement, VirtualElement }
@@ -176,6 +182,18 @@ export function usePopper(initOptions: UsePopperOptions) {
         middlewareData
       } = await computePosition(referenceEl, popperEl, options)
 
+      if (unref(reference) !== referenceEl) {
+        if (unref(popper) === popperEl) {
+          Object.assign(popperEl.style, {
+            position: '',
+            top: '',
+            left: ''
+          })
+        }
+
+        return
+      }
+
       const style: Partial<CSSStyleDeclaration> = {
         position: strategy,
         top: `${y}px`,
@@ -206,7 +224,11 @@ export function usePopper(initOptions: UsePopperOptions) {
       placement.value = activePlacement
     }
 
-    cleanup = autoUpdate(referenceEl, popperEl, update)
+    if (initOptions.autoUpdate !== false) {
+      cleanup = autoUpdate(referenceEl, popperEl, update)
+    } else {
+      update()
+    }
   }
 
   function setTransferTo(value: boolean | string) {
