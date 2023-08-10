@@ -9,7 +9,6 @@ $bubble: map.merge(
     bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
     s-color: get-css-var('shadow-color-base'),
-    border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('radius-base'),
     min-width: 60px,
     min-height: 30px,
@@ -41,7 +40,7 @@ $bubble: map.merge(
     padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
     word-break: break-all;
     background-color: get-css-var('bubble-bg-color');
-    border: get-css-var('bubble-border');
+    border: get-css-var('border-shape') get-css-var('bubble-b-color');
     border-radius: get-css-var('bubble-radius');
   }
 

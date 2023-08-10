@@ -3,7 +3,7 @@ import { booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { TourSignType, TourStepOptions, TourStepRenderFn, TourTarget } from './symbol'
+import type { TourSignType, TourStepOptions, TourStepRenderFn } from './symbol'
 
 export const tourProps = buildProps({
   locale: localeProp('tour'),
@@ -13,6 +13,7 @@ export const tourProps = buildProps({
   hideMask: booleanProp,
   signType: String as PropType<TourSignType>,
   padding: [Number, Array] as PropType<number | number[]>,
+  skippable: booleanProp,
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onStart: eventProp(),
   onPrev: eventProp<(index: number, step: TourStepOptions) => void>(),
@@ -24,10 +25,11 @@ export type TourProps = ExtractPropTypes<typeof tourProps>
 export type TourCProps = ConfigurableProps<ExtractPropTypes<typeof tourProps>>
 
 export const tourStepProps = buildProps({
+  target: [String, Object, Function] as PropType<string | object | (() => any)>,
+  placement: String as PropType<Placement>,
   title: String,
   content: String,
-  target: [String, Object, Function] as PropType<TourTarget>,
-  placement: String as PropType<Placement>,
+  order: Number,
   renderer: Function as PropType<TourStepRenderFn>,
   onPrev: eventProp(),
   onNext: eventProp()

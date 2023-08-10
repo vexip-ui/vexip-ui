@@ -147,6 +147,7 @@ export const enUS = defineI18n({
     Skeleton: 'Skeleton',
     Spin: 'Spin',
     Toast: 'Toast',
+    Tour: 'Tour',
 
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',

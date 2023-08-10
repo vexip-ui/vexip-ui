@@ -5,10 +5,10 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { Renderer } from '@/components/renderer'
 
-import { computed, provide, reactive, ref, shallowReadonly, toRef, unref, watch } from 'vue'
+import { computed, provide, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
 import { getStepByWord, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { usePopper } from '@vexip-ui/hooks'
+import { unrefElement, usePopper } from '@vexip-ui/hooks'
 import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE, getIdIndex } from './symbol'
@@ -69,18 +69,23 @@ const padding = computed(() => {
 })
 const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
 
-const { reference, updatePopper } = usePopper({
+const { reference, placement, updatePopper } = usePopper({
   placement: computed(() => currentStep.value?.placement || 'bottom'),
   wrapper: computed(() => masker.value?.$el),
   popper: computed(() => bubble.value?.$el),
   arrow: computed(() => bubble.value?.arrow),
-  shift: { crossAxis: true }
+  shift: { crossAxis: true },
+  autoUpdate: false
 })
 
 watch(
   () => props.active,
   value => {
-    currentActive.value = value
+    if (value) {
+      start()
+    } else {
+      currentActive.value = value
+    }
   }
 )
 watch(
@@ -90,19 +95,16 @@ watch(
   }
 )
 watch([currentActive, currentStep], () => {
-  currentRect.value = undefined
+  if (!isClient || !currentActive.value) return
 
-  if (!isClient || !currentActive.value || !currentStep.value.target) return
+  const target = unrefElement(callIfFunc(currentStep.value.target))
 
-  let target = callIfFunc(unref(currentStep.value.target))
-
-  if (typeof target === 'string') {
-    target = document.querySelector(target)!
-
-    if (!target) return
+  if (!target) {
+    currentRect.value = undefined
+    return
   }
 
-  const { top, left, width, height } = (target as HTMLElement).getBoundingClientRect()
+  const { top, left, width, height } = target.getBoundingClientRect()
 
   currentRect.value = [
     left - padding.value[3],
@@ -158,14 +160,16 @@ function prev() {
 function next(autoClose = true) {
   const lastIndex = allSteps.value.length - 1
 
-  if (!currentActive.value || currentIndex.value >= lastIndex) return
+  if (!currentActive.value) return
+
+  if (currentIndex.value >= lastIndex) {
+    if (!autoClose) return
+
+    close()
+  }
 
   ++currentIndex.value
   emit('update:index', currentIndex.value)
-
-  if (currentIndex.value >= lastIndex && autoClose) {
-    close()
-  }
 }
 
 function close() {
@@ -184,16 +188,20 @@ function close() {
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
+    transfer
+    auto-remove
     :disabled="props.hideMask"
     @show="updatePopper"
+    @hide="currentRect = undefined"
   >
     <template #default="{ show }">
       <Bubble
-        v-show="show && currentStep"
+        v-if="show && currentStep"
         ref="bubble"
-        :class="nh.be('bubble')"
+        inherit
+        :class="[nh.be('bubble'), !currentRect && nh.bem('bubble', 'center')]"
         :content-class="nh.be('step')"
-        :placement="currentStep.placement || 'bottom'"
+        :placement="placement"
       >
         <Renderer
           v-if="isFunction(currentStep.renderer)"
@@ -222,13 +230,31 @@ function close() {
           </div>
           <div :class="nh.be('footer')">
             <slot name="footer" v-bind="slotParams">
-              <div :class="nh.be('sign')">
-                <slot name="sign" v-bind="slotParams"></slot>
+              <div :class="[nh.be('sign'), nh.bem('sign', props.signType)]">
+                <slot name="sign" v-bind="slotParams">
+                  <template v-if="props.signType === 'count'">
+                    <span>{{ currentIndex + 1 }}</span>
+                    <span :class="nh.be('count-sep')">/</span>
+                    <span>{{ allSteps.length }}</span>
+                  </template>
+                  <template v-else>
+                    <span
+                      v-for="n in allSteps.length"
+                      :key="n"
+                      :class="[
+                        nh.be(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`),
+                        n - 1 === currentIndex &&
+                          nh.bem(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`, 'active')
+                      ]"
+                    ></span>
+                  </template>
+                </slot>
               </div>
               <span style="flex: auto" role="none"></span>
               <Button
                 v-if="currentIndex > 0"
                 inherit
+                :class="nh.be('action')"
                 size="small"
                 @click="prev"
               >
@@ -237,6 +263,7 @@ function close() {
               <Button
                 v-if="currentIndex <= allSteps.length - 1"
                 inherit
+                :class="nh.be('action')"
                 type="primary"
                 size="small"
                 @click="next()"
@@ -262,6 +289,15 @@ function close() {
             <rect
               v-if="currentRect"
               ref="reference"
+              :x="currentRect[0]"
+              :y="currentRect[1]"
+              :width="currentRect[2]"
+              :height="currentRect[3]"
+              fill="white"
+            />
+            <rect
+              v-if="currentRect"
+              :class="[nh.be('hollow'), nh.bem('hollow', 'active')]"
               :x="currentRect[0]"
               :y="currentRect[1]"
               :width="currentRect[2]"

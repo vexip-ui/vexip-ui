@@ -151,7 +151,8 @@ export function enUSLocale() {
       prev: 'Prev',
       next: 'Next',
       done: 'Done',
-      stepCount: 'Step {n}'
+      stepCount: 'Step {n}',
+      skip: 'Skip'
     },
 
     transfer: {

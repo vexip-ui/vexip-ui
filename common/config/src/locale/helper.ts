@@ -152,7 +152,8 @@ export interface LocaleConfig {
     prev: string,
     next: string,
     done: string,
-    stepCount: string
+    stepCount: string,
+    skip: string
   },
 
   transfer: {

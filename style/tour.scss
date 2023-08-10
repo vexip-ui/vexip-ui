@@ -6,17 +6,29 @@
 $tour: () !default;
 $tour: map.merge(
   (
+    min-width: 360px,
+    max-width: 520px,
     title-font-size: get-css-var('font-size-primary'),
     title-weight: 500,
     title-color: get-css-var('content-color-primary'),
     header-v-padding: 8px,
     header-h-padding: 14px,
-    body-v-padding: 8px,
+    body-v-padding: 4px,
     body-h-padding: 14px,
-    footer-v-padding: 8px,
+    footer-v-padding: 10px,
     footer-h-padding: 14px,
     close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base')
+    close-color-hover: get-css-var('content-color-base'),
+    dot-size: 6px,
+    dot-bg: get-css-var('fill-color-secondary'),
+    dot-bg-active: get-css-var('color-primary-base'),
+    dot-span: 6px,
+    bar-width: 12px,
+    bar-height: 4px,
+    bar-width-active: 20px,
+    bar-bg: get-css-var('fill-color-secondary'),
+    bar-bg-active: get-css-var('color-primary-base'),
+    bar-span: 3px
   ),
   $tour
 );
@@ -28,8 +40,24 @@ $tour: map.merge(
 
   @include basis;
 
+  &__bubble {
+    position: absolute;
+
+    &--center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .#{$namespace}-bubble__arrow {
+        display: none;
+      }
+    }
+  }
+
   &__step {
-    padding: 0;
+    min-width: get-css-var('tour-min-width');
+    max-width: get-css-var('tour-max-width');
+    padding: 4px 0;
   }
 
   &__header {
@@ -52,7 +80,7 @@ $tour: map.merge(
     align-items: center;
     height: 24px;
     padding: 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('tour-close-color');
     cursor: pointer;
     background-color: transparent;
@@ -81,5 +109,52 @@ $tour: map.merge(
     align-items: center;
     justify-content: flex-end;
     padding: get-css-var('tour-footer-v-padding') get-css-var('tour-footer-h-padding');
+  }
+
+  &__sign {
+    display: inline-flex;
+    align-items: center;
+
+    &--count {
+      line-height: get-css-var('line-height-secondary');
+    }
+  }
+
+  &__sign-dot {
+    width: get-css-var('tour-dot-size');
+    height: get-css-var('tour-dot-size');
+    margin-inline-end: get-css-var('tour-dot-span');
+    background-color: get-css-var('tour-dot-bg');
+    border-radius: 50%;
+
+    &--active {
+      background-color: get-css-var('tour-dot-bg-active');
+    }
+  }
+
+  &__sign-bar {
+    width: get-css-var('tour-bar-width');
+    height: get-css-var('tour-bar-height');
+    margin-inline-end: get-css-var('tour-bar-span');
+    background-color: get-css-var('tour-bar-bg');
+    border-radius: get-css-var('tour-bar-height');
+
+    &--active {
+      width: get-css-var('tour-bar-width-active');
+      background-color: get-css-var('tour-dot-bg-active');
+    }
+  }
+
+  &__count-sep {
+    margin: 0 2px;
+  }
+
+  &__action {
+    line-height: get-css-var('line-height-secondary');
+  }
+
+  &__hollow--active {
+    /* stylelint-disable-next-line declaration-property-value-disallowed-list */
+    transition: all get-css-var('transition-base');
   }
 }

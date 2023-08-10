@@ -23,10 +23,15 @@ export default defineComponent({
   props: tourStepProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
-      title: '',
-      content: '',
       target: {
         default: null,
+        static: true
+      },
+      placement: 'bottom',
+      title: '',
+      content: '',
+      order: {
+        default: 0,
         static: true
       },
       renderer: funcProp
