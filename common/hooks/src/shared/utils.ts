@@ -1,6 +1,9 @@
-import { Comment, Fragment, createTextVNode, isVNode, renderSlot } from 'vue'
+import { Comment, Fragment, createTextVNode, isVNode, renderSlot, toValue } from 'vue'
 
-import type { Slots, VNode, VNodeNormalizedChildren } from 'vue'
+import { isClient } from '@vexip-ui/utils'
+
+import type { ComponentPublicInstance, Slots, VNode, VNodeNormalizedChildren } from 'vue'
+import type { MaybeElement, MaybeInstance, MaybeRef } from './types'
 
 export function createSlotRender(slots: Slots, names: string[], fallback?: (params?: any) => any) {
   for (const name of names) {
@@ -43,4 +46,16 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
   }
 
   return result
+}
+
+export function unrefElement<T extends string | MaybeInstance>(
+  ref: MaybeRef<T>
+): T extends string | ComponentPublicInstance ? MaybeElement : T {
+  const plain = toValue(ref)
+
+  if (typeof plain === 'string') {
+    return isClient ? document.querySelector(plain) : (null as any)
+  }
+
+  return (plain as ComponentPublicInstance)?.$el ?? plain
 }
