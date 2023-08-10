@@ -1,10 +1,16 @@
 import { onMounted, ref, shallowRef, unref, watch, watchEffect } from 'vue'
 
-import { arrow, autoUpdate, computePosition, flip, hide, offset } from '@floating-ui/dom'
+import { arrow, autoUpdate, computePosition, flip, hide, offset, shift } from '@floating-ui/dom'
 import { isClient } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
-import type { Middleware, OffsetOptions, Placement, VirtualElement } from '@floating-ui/dom'
+import type {
+  Middleware,
+  OffsetOptions,
+  Placement,
+  ShiftOptions,
+  VirtualElement
+} from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
 import type { MaybeRef } from './shared/types'
 
@@ -42,7 +48,11 @@ interface UsePopperOptions {
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
-  offset?: MaybeRef<OffsetOptions>
+  offset?: MaybeRef<OffsetOptions>,
+  /**
+   * popper 元素是否限制在窗口内
+   */
+  shift?: MaybeRef<boolean | ShiftOptions>
 }
 
 export type { Placement, VirtualElement }
@@ -63,12 +73,14 @@ export const placementWhileList = Object.freeze<Placement[]>([
 ])
 
 export function usePopper(initOptions: UsePopperOptions) {
-  const { placement, transfer, wrapper, isDrop = false } = initOptions
+  const { transfer, wrapper, isDrop = false } = initOptions
 
   const reference: Ref<HTMLElement | null | undefined> =
     (initOptions.reference as any) ?? shallowRef(null)
   const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? shallowRef(null)
   const arrowRef: Ref<HTMLElement | null | undefined> = initOptions.arrow ?? shallowRef(null)
+
+  const placement = ref(unref(initOptions.placement))
   const transferTo = ref('')
 
   if (wrapper) {
@@ -116,13 +128,13 @@ export function usePopper(initOptions: UsePopperOptions) {
       placement: Placement,
       middleware: Middleware[]
     } = {
-      placement: unref(placement),
+      placement: unref(initOptions.placement),
       middleware: [flip()]
     }
 
     if (isDrop) {
       options.middleware.push({
-        name: 'setTransformOrigin',
+        name: 'origin',
         fn({ placement, elements }) {
           const origin = setPopperDropOrigin(placement)
 
@@ -139,18 +151,30 @@ export function usePopper(initOptions: UsePopperOptions) {
       options.middleware.push(offset(unref(initOptions.offset)))
     }
 
+    if (initOptions.shift) {
+      let shiftOptions = unref(initOptions.shift)
+
+      if (typeof shiftOptions === 'boolean') {
+        shiftOptions = {}
+      }
+
+      options.middleware.push(shift(shiftOptions))
+    }
+
     if (arrowEl) {
       options.middleware.push(arrow({ element: arrowEl }))
     }
 
-    options.middleware.push(hide())
+    options.middleware.push(hide({ strategy: 'escaped' }))
 
     const update = async () => {
-      const { x, y, placement, strategy, middlewareData } = await computePosition(
-        referenceEl,
-        popperEl,
-        options
-      )
+      const {
+        x,
+        y,
+        placement: activePlacement,
+        strategy,
+        middlewareData
+      } = await computePosition(referenceEl, popperEl, options)
 
       const style: Partial<CSSStyleDeclaration> = {
         position: strategy,
@@ -158,7 +182,7 @@ export function usePopper(initOptions: UsePopperOptions) {
         left: `${x}px`
       }
 
-      if (middlewareData.hide?.referenceHidden) {
+      if (middlewareData.hide?.escaped) {
         style.visibility = 'hidden'
       } else {
         style.visibility = ''
@@ -178,7 +202,8 @@ export function usePopper(initOptions: UsePopperOptions) {
       }
 
       Object.assign(popperEl.style, style)
-      popperEl.dataset.popperPlacement = placement
+      popperEl.dataset.popperPlacement = activePlacement
+      placement.value = activePlacement
     }
 
     cleanup = autoUpdate(referenceEl, popperEl, update)
@@ -189,8 +214,10 @@ export function usePopper(initOptions: UsePopperOptions) {
   }
 
   return {
+    wrapper,
     reference,
     popper,
+    placement,
     transferTo,
     updatePopper
   }
