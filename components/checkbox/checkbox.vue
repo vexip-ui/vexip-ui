@@ -9,6 +9,7 @@
       :tabindex="props.tabIndex"
       @submit.prevent
       @change="handleChange(!currentChecked)"
+      @click.stop
     />
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">

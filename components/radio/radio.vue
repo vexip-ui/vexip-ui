@@ -9,6 +9,7 @@
       :tabindex="props.tabIndex"
       @submit.prevent
       @change="handleChange"
+      @click.stop
     />
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span :class="[nh.be('label'), props.labelClass]">
