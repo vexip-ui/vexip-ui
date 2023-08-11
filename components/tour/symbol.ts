@@ -22,6 +22,9 @@ export interface TourStepOptions {
   renderer?: TourStepRenderFn
 }
 
+export type TourSlotParams = TourPayload & { step: TourStepOptions, index: number }
+export type TourCommonSLot = (params: TourSlotParams) => any
+
 export interface TourState {
   increaseStep(step: TourStepOptions): void,
   decreaseStep(step: TourStepOptions): void

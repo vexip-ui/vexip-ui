@@ -40,8 +40,18 @@ $tour: map.merge(
 
   @include basis;
 
+  &--permeable {
+    pointer-events: none;
+  }
+
+  &__reference {
+    position: absolute;
+    pointer-events: none;
+  }
+
   &__bubble {
     position: absolute;
+    pointer-events: auto;
 
     &--center {
       top: 50%;

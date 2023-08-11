@@ -18,8 +18,6 @@
 
 使用 TourStep 组件可以以模版的形式配置漫游。
 
-当你想要完全自定义某个步骤的提示内容，可以使用 TourStep 组件的默认插槽。
-
 :::
 
 :::demo tour/placement
@@ -42,12 +40,68 @@
 
 :::
 
+:::demo tour/permeable
+
+### 点击穿透
+
+默认情况下，目标区域会被遮罩隔开无法交互。
+
+添加 `permeable` 属性可以使得目标区域的点击交互可穿透。
+
+:::
+
+:::demo tour/slots
+
+### 使用插槽
+
+Tour 组件提供了各种插槽以满足自定义步骤的提示内容。
+
+当你想要完全自定义某个步骤的提示内容，可以使用 TourStep 组件的默认插槽。
+
+:::
+
 ## API
+
+### 预设类型
+
+```ts
+export type TourSignType = 'dot' | 'bar' | 'count'
+export type TourTarget = MaybeRef<any> | (() => string | MaybeElement)
+
+interface TourPayload {
+  start(): void,
+  prev(): void,
+  next(autoClose?: boolean): void,
+  close(): void
+}
+
+type TourStepRenderFn = (payload: TourPayload) => any
+
+interface TourStepOptions {
+  target?: TourTarget,
+  placement?: Placement,
+  title?: string,
+  content?: string,
+  order?: number,
+  renderer?: TourStepRenderFn
+}
+
+type TourSlotParams = TourPayload & { step: TourStepOptions, index: number }
+```
 
 ### Tour 属性
 
-| 名称 | 类型 | 说明 | 默认值 | 始于 |
-| ---- | ---- | ---- | ------ | ---- |
+| 名称      | 类型                   | 说明 | 默认值  | 始于 |
+| --------- | ---------------------- | ---- | ------- | ---- |
+| active    | `boolean`              |      | `false` | -    |
+| index     | `number`               |      | `0`     | -    |
+| steps     | `TourStepOptions[]`    |      | `[]`    | -    |
+| hideMask  | `boolean`              |      | `false` | -    |
+| signType  | `TourSignType`         |      | `'dot'` | -    |
+| padding   | `number \| number`     |      | `10`    | -    |
+| closable  | `boolean`              |      | `true`  | -    |
+| permeable | `boolean`              |      | `false` | -    |
+| locale    | `LocaleConfig['tour']` |      | `null`  | -    |
 
 ### Tour 事件
 
@@ -56,5 +110,13 @@
 
 ### Tour 插槽
 
-| 名称 | 说明 | 参数 | 始于 |
-| ---- | ---- | ---- | ---- |
+| 名称    | 说明                   | 参数             | 始于 |
+| ------- | ---------------------- | ---------------- | ---- |
+| default | 用于定义 TourStep 组件 | -                | -    |
+| header  | 提示的头部插槽         | `TourSlotParams` | -    |
+| title   | 提示的标题插槽         | `TourSlotParams` | -    |
+| close   | 提示的关闭按钮插槽     | `TourSlotParams` | -    |
+| body    | 提示的内容插槽         | `TourSlotParams` | -    |
+| footer  | 提示的脚部插槽         | `TourSlotParams` | -    |
+| sign    | 提示的标志插槽         | `TourSlotParams` | -    |
+| actions | 提示的操作插槽         | `TourSlotParams` | -    |

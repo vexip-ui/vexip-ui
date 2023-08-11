@@ -15,23 +15,40 @@ import { TOUR_STATE, getIdIndex } from './symbol'
 
 import type { BubbleExposed } from '@/components/bubble'
 import type { MaskerExposed } from '@/components/masker'
-import type { TourStepOptions } from './symbol'
+import type { TourCommonSLot, TourStepOptions } from './symbol'
 
 const _props = defineProps(tourProps)
 const props = useProps('tour', _props, {
   locale: null,
   active: false,
   index: {
+    static: true,
     default: 0,
     validator: value => value >= 0
   },
-  steps: () => [],
+  steps: {
+    static: true,
+    default: () => []
+  },
   hideMask: false,
   signType: 'dot',
-  padding: 10
+  padding: 10,
+  closable: true,
+  permeable: false
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
+
+defineSlots<{
+  default: () => any,
+  header: TourCommonSLot,
+  title: TourCommonSLot,
+  close: TourCommonSLot,
+  body: TourCommonSLot,
+  footer: TourCommonSLot,
+  sign: TourCommonSLot,
+  actions: TourCommonSLot
+}>()
 
 const idIndex = `${getIdIndex()}`
 
@@ -43,6 +60,7 @@ const currentActive = ref(props.active)
 const currentIndex = ref(props.index)
 const tempSteps = reactive(new Set<TourStepOptions>())
 const currentRect = ref<number[]>()
+const sideRects = ref<(number | string)[][]>()
 
 const masker = ref<MaskerExposed>()
 const bubble = ref<BubbleExposed>()
@@ -54,7 +72,8 @@ const className = computed(() => {
     nh.b(),
     nh.bs('vars'),
     {
-      [nh.bm('hide-mask')]: props.hideMask
+      [nh.bm('hide-mask')]: props.hideMask,
+      [nh.bm('permeable')]: props.permeable
     }
   ]
 })
@@ -95,6 +114,8 @@ watch(
   }
 )
 watch([currentActive, currentStep], () => {
+  sideRects.value = undefined
+
   if (!isClient || !currentActive.value) return
 
   const target = unrefElement(callIfFunc(currentStep.value.target))
@@ -112,6 +133,17 @@ watch([currentActive, currentStep], () => {
     width + padding.value[1] + padding.value[3],
     height + padding.value[0] + padding.value[2]
   ]
+
+  if (props.permeable) {
+    const [x, y, w, h] = currentRect.value
+
+    sideRects.value = [
+      [0, 0, '100%', y],
+      [x + w, 0, `calc(100% - ${x + w}px)`, '100%'],
+      [0, y + h, '100%', `calc(100% - ${y + h}px)`],
+      [0, 0, x, '100%']
+    ]
+  }
 })
 
 provide(TOUR_STATE, {
@@ -190,90 +222,113 @@ function close() {
     :class="className"
     transfer
     auto-remove
+    transition-name=""
     :disabled="props.hideMask"
     @show="updatePopper"
     @hide="currentRect = undefined"
   >
     <template #default="{ show }">
-      <Bubble
-        v-if="show && currentStep"
-        ref="bubble"
-        inherit
-        :class="[nh.be('bubble'), !currentRect && nh.bem('bubble', 'center')]"
-        :content-class="nh.be('step')"
-        :placement="placement"
-      >
-        <Renderer
-          v-if="isFunction(currentStep.renderer)"
-          :renderer="currentStep.renderer"
-          :data="actions"
-        ></Renderer>
-        <template v-else>
-          <div :class="nh.be('header')">
-            <slot name="header" v-bind="slotParams">
-              <div :class="nh.be('title')">
-                <slot name="title" v-bind="slotParams">
-                  {{ currentStep.title ?? getStepByWord(locale.stepCount, currentIndex) }}
+      <div
+        v-if="currentRect"
+        ref="reference"
+        :class="nh.be('reference')"
+        role="none"
+        aria-hidden="true"
+        :style="{
+          top: `${currentRect[1]}px`,
+          left: `${currentRect[0]}px`,
+          width: `${currentRect[2]}px`,
+          height: `${currentRect[3]}px`
+        }"
+      ></div>
+      <Transition appear :name="nh.ns('fade')">
+        <Bubble
+          v-if="show && currentStep"
+          ref="bubble"
+          inherit
+          :class="[nh.be('bubble'), !currentRect && nh.bem('bubble', 'center')]"
+          :content-class="nh.be('step')"
+          :placement="placement"
+        >
+          <Renderer
+            v-if="isFunction(currentStep.renderer)"
+            :renderer="currentStep.renderer"
+            :data="actions"
+          ></Renderer>
+          <template v-else>
+            <div :class="nh.be('header')">
+              <slot name="header" v-bind="slotParams">
+                <div :class="nh.be('title')">
+                  <slot name="title" v-bind="slotParams">
+                    {{ currentStep.title ?? getStepByWord(locale.stepCount, currentIndex) }}
+                  </slot>
+                </div>
+                <button
+                  v-if="props.closable"
+                  type="button"
+                  :class="nh.be('close')"
+                  @click="close"
+                >
+                  <slot name="close" v-bind="slotParams">
+                    <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
+                  </slot>
+                </button>
+              </slot>
+            </div>
+            <div :class="nh.be('content')">
+              <slot name="body" v-bind="slotParams">
+                {{ currentStep.content }}
+              </slot>
+            </div>
+            <div :class="nh.be('footer')">
+              <slot name="footer" v-bind="slotParams">
+                <div :class="[nh.be('sign'), nh.bem('sign', props.signType)]">
+                  <slot name="sign" v-bind="slotParams">
+                    <template v-if="props.signType === 'count'">
+                      <span>{{ currentIndex + 1 }}</span>
+                      <span :class="nh.be('count-sep')">/</span>
+                      <span>{{ allSteps.length }}</span>
+                    </template>
+                    <template v-else>
+                      <span
+                        v-for="n in allSteps.length"
+                        :key="n"
+                        :class="[
+                          nh.be(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`),
+                          n - 1 === currentIndex &&
+                            nh.bem(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`, 'active')
+                        ]"
+                      ></span>
+                    </template>
+                  </slot>
+                </div>
+                <span style="flex: auto" role="none"></span>
+                <slot name="actions" v-bind="slotParams">
+                  <Button
+                    v-if="currentIndex > 0"
+                    inherit
+                    :class="nh.be('action')"
+                    size="small"
+                    @click="prev"
+                  >
+                    {{ locale.prev }}
+                  </Button>
+                  <Button
+                    v-if="currentIndex <= allSteps.length - 1"
+                    inherit
+                    :class="nh.be('action')"
+                    type="primary"
+                    size="small"
+                    @click="next()"
+                  >
+                    {{ currentIndex === allSteps.length - 1 ? locale.done : locale.next }}
+                  </Button>
                 </slot>
-              </div>
-              <button type="button" :class="nh.be('close')" @click="close">
-                <slot name="close" v-bind="slotParams">
-                  <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
-                </slot>
-              </button>
-            </slot>
-          </div>
-          <div :class="nh.be('content')">
-            <slot name="body" v-bind="slotParams">
-              {{ currentStep.content }}
-            </slot>
-          </div>
-          <div :class="nh.be('footer')">
-            <slot name="footer" v-bind="slotParams">
-              <div :class="[nh.be('sign'), nh.bem('sign', props.signType)]">
-                <slot name="sign" v-bind="slotParams">
-                  <template v-if="props.signType === 'count'">
-                    <span>{{ currentIndex + 1 }}</span>
-                    <span :class="nh.be('count-sep')">/</span>
-                    <span>{{ allSteps.length }}</span>
-                  </template>
-                  <template v-else>
-                    <span
-                      v-for="n in allSteps.length"
-                      :key="n"
-                      :class="[
-                        nh.be(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`),
-                        n - 1 === currentIndex &&
-                          nh.bem(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`, 'active')
-                      ]"
-                    ></span>
-                  </template>
-                </slot>
-              </div>
-              <span style="flex: auto" role="none"></span>
-              <Button
-                v-if="currentIndex > 0"
-                inherit
-                :class="nh.be('action')"
-                size="small"
-                @click="prev"
-              >
-                {{ locale.prev }}
-              </Button>
-              <Button
-                v-if="currentIndex <= allSteps.length - 1"
-                inherit
-                :class="nh.be('action')"
-                type="primary"
-                size="small"
-                @click="next()"
-              >
-                {{ currentIndex === allSteps.length - 1 ? locale.done : locale.next }}
-              </Button>
-            </slot>
-          </div>
-        </template>
-      </Bubble>
+              </slot>
+            </div>
+          </template>
+        </Bubble>
+      </Transition>
     </template>
     <template #mask>
       <svg style="width: 100%; height: 100%">
@@ -284,15 +339,6 @@ function close() {
               y="0"
               width="100%"
               height="100%"
-              fill="white"
-            />
-            <rect
-              v-if="currentRect"
-              ref="reference"
-              :x="currentRect[0]"
-              :y="currentRect[1]"
-              :width="currentRect[2]"
-              :height="currentRect[3]"
               fill="white"
             />
             <rect
@@ -314,6 +360,16 @@ function close() {
           fill="rgba(0, 0, 0, 45%)"
           :mask="`url(#${maskId})`"
         />
+        <g v-if="sideRects?.length" fill="transparent" style="pointer-events: auto">
+          <rect
+            v-for="(rect, index) in sideRects"
+            :key="index"
+            :x="rect[0]"
+            :y="rect[1]"
+            :width="rect[2]"
+            :height="rect[3]"
+          />
+        </g>
       </svg>
     </template>
   </Masker>
