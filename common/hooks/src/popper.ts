@@ -48,7 +48,7 @@ interface UsePopperOptions {
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
-  offset?: MaybeRef<OffsetOptions>,
+  offset?: MaybeRef<number[] | OffsetOptions>,
   /**
    * popper 元素是否限制在窗口内
    */
@@ -154,7 +154,16 @@ export function usePopper(initOptions: UsePopperOptions) {
     }
 
     if (initOptions.offset) {
-      options.middleware.push(offset(unref(initOptions.offset)))
+      let offsetOptions = unref(initOptions.offset)
+
+      if (Array.isArray(offsetOptions)) {
+        offsetOptions = {
+          mainAxis: offsetOptions[1],
+          crossAxis: offsetOptions[0]
+        }
+      }
+
+      options.middleware.push(offset(offsetOptions))
     }
 
     if (initOptions.shift) {
