@@ -14,6 +14,7 @@
       :disabled="isDisabled"
       @submit.prevent
       @change="handleChange()"
+      @click.stop
     />
     <span :class="nh.be('placeholder')">
       <span :class="nh.be('open-text')">
