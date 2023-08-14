@@ -65,8 +65,9 @@ Tour 组件提供了各种插槽以满足自定义步骤的提示内容。
 ### 预设类型
 
 ```ts
-export type TourSignType = 'dot' | 'bar' | 'count'
-export type TourTarget = MaybeRef<any> | (() => string | MaybeElement)
+type TourType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
+type TourSignType = 'dot' | 'bar' | 'count'
+type TourTarget = MaybeRef<any> | (() => string | MaybeElement)
 
 interface TourPayload {
   start(): void,
@@ -91,17 +92,18 @@ type TourSlotParams = TourPayload & { step: TourStepOptions, index: number }
 
 ### Tour 属性
 
-| 名称      | 类型                   | 说明 | 默认值  | 始于 |
-| --------- | ---------------------- | ---- | ------- | ---- |
-| active    | `boolean`              |      | `false` | -    |
-| index     | `number`               |      | `0`     | -    |
-| steps     | `TourStepOptions[]`    |      | `[]`    | -    |
-| hideMask  | `boolean`              |      | `false` | -    |
-| signType  | `TourSignType`         |      | `'dot'` | -    |
-| padding   | `number \| number`     |      | `10`    | -    |
-| closable  | `boolean`              |      | `true`  | -    |
-| permeable | `boolean`              |      | `false` | -    |
-| locale    | `LocaleConfig['tour']` |      | `null`  | -    |
+| 名称      | 类型                   | 说明 | 默认值      | 始于 |
+| --------- | ---------------------- | ---- | ----------- | ---- |
+| active    | `boolean`              |      | `false`     | -    |
+| index     | `number`               |      | `0`         | -    |
+| steps     | `TourStepOptions[]`    |      | `[]`        | -    |
+| type      | `TourType`             |      | `'default'` | -    |
+| hideMask  | `boolean`              |      | `false`     | -    |
+| signType  | `TourSignType`         |      | `'dot'`     | -    |
+| padding   | `number \| number`     |      | `10`        | -    |
+| closable  | `boolean`              |      | `true`      | -    |
+| permeable | `boolean`              |      | `false`     | -    |
+| locale    | `LocaleConfig['tour']` |      | `null`      | -    |
 
 ### Tour 事件
 
@@ -120,3 +122,15 @@ type TourSlotParams = TourPayload & { step: TourStepOptions, index: number }
 | footer  | 提示的脚部插槽         | `TourSlotParams` | -    |
 | sign    | 提示的标志插槽         | `TourSlotParams` | -    |
 | actions | 提示的操作插槽         | `TourSlotParams` | -    |
+
+### TourStep 属性
+
+| 名称      | 类型               | 说明                                 | 默认值      | 始于 |
+| --------- | ------------------ | ------------------------------------ | ----------- | ---- |
+| target    | `TourTarget`       | 提示的目标                           | `null`      | -    |
+| placement | `Placement`        | 提示出现的位置，可选值同 floating-ui | `'bottom'`  | -    |
+| title     | `string`           | 提示的标题                           | `''`        | -    |
+| content   | `string`           | 提示的内容                           | `''`        | -    |
+| order     | `number`           | 提示出现的顺序                       | `0`         | -    |
+| type      | `TourType`         | 提示的类型                           | `'default'` | -    |
+| renderer  | `TourStepRenderFn` | 提示的自定义渲染函数                 | `null`      | -    |

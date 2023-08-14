@@ -30,12 +30,12 @@ const props = useProps('tour', _props, {
     static: true,
     default: () => []
   },
+  type: 'default',
   hideMask: false,
   signType: 'dot',
   padding: 10,
   closable: true,
-  permeable: false,
-  type: 'default'
+  permeable: false
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
@@ -66,7 +66,11 @@ const sideRects = ref<(number | string)[][]>()
 const masker = ref<MaskerExposed>()
 const bubble = ref<BubbleExposed>()
 
-const allSteps = computed(() => Array.from(tempSteps).concat(props.steps))
+const allSteps = computed(() => {
+  return Array.from(tempSteps)
+    .concat(props.steps)
+    .sort((prev, next) => (prev.order || 0) - (next.order || 0))
+})
 const currentStep = computed(() => allSteps.value[currentIndex.value])
 const className = computed(() => {
   return [

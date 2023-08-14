@@ -34,6 +34,7 @@ export default defineComponent({
         default: 0,
         static: true
       },
+      type: 'default',
       renderer: funcProp
     })
 
