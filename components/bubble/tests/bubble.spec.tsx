@@ -30,14 +30,7 @@ describe('Bubble', () => {
     })
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--background')
-    // expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
-    //   'background-color: cyan;'
-    // )
-    // expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
-    //   'border-right-color: cyan;'
-    // )
-    expect(wrapper.vm.contentStyle).toMatchObject({ backgroundColor: 'cyan' })
-    expect(wrapper.vm.arrowStyle).toMatchObject({ 'border-right-color': 'cyan' })
+    expect(wrapper.attributes('style')).toContain('--vxp-bubble-bg-color: cyan;')
   })
 
   it('shadow', () => {

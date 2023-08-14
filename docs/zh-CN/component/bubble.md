@@ -6,7 +6,25 @@
 
 ### 基础用法
 
-随便放一个气泡聊天框。
+随便放一个气泡框。
+
+:::
+
+:::demo bubble/types
+
+### 气泡类型
+
+通过设置 `type` 属性的值为 `primary`、`info`、`success`、`warning` 和 `error` 来创建不同类型的气泡框。
+
+:::
+
+:::demo bubble/background
+
+### 背景颜色
+
+如果内置类型不满足你，可以通过设置 `background` 属性自定义背景颜色。
+
+注意，设置 `background` 后，内容颜色默认变为白色，可通过样式覆盖。
 
 :::
 
@@ -20,14 +38,21 @@
 
 ## API
 
+### 预设类型
+
+```ts
+type BubbleType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
+```
+
 ### Bubble 属性
 
-| 名称          | 类型                | 说明                                           | 默认值    | 始于 |
-| ------------- | ------------------- | ---------------------------------------------- | --------- | ---- |
-| placement     | `Placement`         | 气泡框出现的位置，可选值同 Popper.js           | `'right'` | -    |
-| background    | `string`            | 气泡的背景颜色                                 | `''`      | -    |
-| shadow        | `boolean \| string` | 气泡是否使用阴影，传入字符串时会作为阴影的颜色 | `false`   | -    |
-| content-class | `ClassType`         | 气泡内容的自定义类名                           | `null`    | -    |
+| 名称          | 类型                | 说明                                                                                             | 默认值      | 始于    |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------ | ----------- | ------- |
+| placement     | `Placement`         | 气泡框出现的位置，可选值同 [floating-ui](https://floating-ui.com/docs/computePosition#placement) | `'right'`   | -       |
+| type          | `BubbleType`        | 气泡框的类型                                                                                     | `'default'` | `2.2.0` |
+| background    | `string`            | 气泡的背景颜色                                                                                   | `''`        | -       |
+| shadow        | `boolean \| string` | 气泡是否使用阴影，传入字符串时会作为阴影的颜色                                                   | `false`     | -       |
+| content-class | `ClassType`         | 气泡内容的自定义类名                                                                             | `null`      | -       |
 
 ### Bubble 插槽
 
