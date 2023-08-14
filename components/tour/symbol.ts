@@ -1,6 +1,8 @@
 import type { InjectionKey } from 'vue'
 import type { MaybeElement, MaybeInstance, MaybeRef, Placement } from '@vexip-ui/hooks'
+import type { BubbleType } from '@/components/bubble'
 
+export type TourType = BubbleType
 export type TourSignType = 'dot' | 'bar' | 'count'
 export type TourTarget = MaybeRef<string | MaybeInstance> | (() => string | MaybeElement)
 
@@ -19,6 +21,7 @@ export interface TourStepOptions {
   title?: string,
   content?: string,
   order?: number,
+  type?: TourType,
   renderer?: TourStepRenderFn
 }
 

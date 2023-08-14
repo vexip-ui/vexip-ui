@@ -34,7 +34,8 @@ const props = useProps('tour', _props, {
   signType: 'dot',
   padding: 10,
   closable: true,
-  permeable: false
+  permeable: false,
+  type: 'default'
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
@@ -249,6 +250,7 @@ function close() {
           :class="[nh.be('bubble'), !currentRect && nh.bem('bubble', 'center')]"
           :content-class="nh.be('step')"
           :placement="placement"
+          :type="currentStep.type || props.type"
         >
           <Renderer
             v-if="isFunction(currentStep.renderer)"
