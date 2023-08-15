@@ -233,7 +233,7 @@ export function usePopper(initOptions: UsePopperOptions) {
       placement.value = activePlacement
     }
 
-    if (initOptions.autoUpdate !== false) {
+    if (initOptions.autoUpdate) {
       cleanup = autoUpdate(referenceEl, popperEl, update)
     } else {
       update()

@@ -107,7 +107,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | Name           | Type                                             | Description                                                                                                                | Default     | Since    |
 | -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
 | value          | `string \| number`                               | Value of Input control                                                                                                     | `''`        | -        |
-| options        | `AutoCompleteRawOption[]`                        | list of options, can be a string or object conforming to `ObjectOption`                                                    | `[]`        | -        |
+| options        | `AutoCompleteRawOption[]`                        | Set options, can be a string or object conforming to `ObjectOption`                                                        | `[]`        | -        |
 | filter         | `boolean \| AutoCompleteFilter`                  | The method of filtering `options`, the built-in filter method is used when `true` is passed                                | `false`     | -        |
 | prefix         | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                                            | `null`      | -        |
 | prefix-color   | `string`                                         | The color of the prefix content, affects the prefix slot                                                                   | `''`        | -        |
@@ -115,9 +115,9 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | suffix-color   | `string`                                         | The color of the suffix content, which affects the suffix slot                                                             | `''`        | -        |
 | placeholder    | `string`                                         | Input control placeholder                                                                                                  | `null`      | -        |
 | size           | `'small' \| 'default' \| 'large'`                | Set input control size                                                                                                     | `'default'` | -        |
-| state          | `'default' \| 'success' \| 'error' \| 'warning'` | state of the input                                                                                                         | `'default'` | -        |
+| state          | `'default' \| 'success' \| 'error' \| 'warning'` | Set the State of the input                                                                                                 | `'default'` | -        |
 | disabled       | `boolean`                                        | Set whether to disable                                                                                                     | `false`     | -        |
-| drop-disabled  | `boolean`                                        | whether to allow drop-down list display                                                                                    | `false`     | -        |
+| drop-disabled  | `boolean`                                        | Whether to allow option list display                                                                                       | `false`     | -        |
 | placement      | `Placement`                                      | The position where the option list appears, the optional value is the same as Popper.js                                    | `'bottom'`  | -        |
 | clearable      | `boolean`                                        | Set whether the value can be cleared                                                                                       | `false`     | -        |
 | ignore-case    | `boolean`                                        | Set whether to ignore case when using built-in filtering                                                                   | `false`     | -        |
@@ -130,17 +130,18 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`      | `2.1.0`  |
 | debounce       | `boolean`                                        | Enable debounce for `input` event, by default is throttle, not reactive prop                                               | `false`     | `2.1.25` |
 | delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`     | `2.1.25` |
+| show-empty     | `boolean`                                        | Whether show option list when empty                                                                                        | `false`     | `2.2.0`  |
 
 ### AutoComplete Events
 
-| Name   | Description                                                                        | Parameters                                               | Since |
-| ------ | ---------------------------------------------------------------------------------- | -------------------------------------------------------- | ----- |
-| input  | When input is triggered in the Input control, return the current input value       | `(value: string)`                                        | -     |
-| toggle | Emitted when the candidate list display state changes, returns the current state   | `(visible: boolean)`                                     | -     |
-| change | Emitted when the value changes and the focus disappears, returns the current value | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
-| select | Emitted when an option is used, returns the current value                          | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
-| enter  | Emitted when Enter is pressed, returns the current value                           | `(value: number \| string)`                              | -     |
-| clear  | Emitted when the clear button is used to clear                                     | -                                                        | -     |
+| Name   | Description                                             | Parameters                                               | Since |
+| ------ | ------------------------------------------------------- | -------------------------------------------------------- | ----- |
+| input  | Emitted when input                                      | `(value: string)`                                        | -     |
+| toggle | Emitted when the candidate list display state changes   | `(visible: boolean)`                                     | -     |
+| change | Emitted when the value changes and the focus disappears | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
+| select | Emitted when an option is used                          | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
+| enter  | Emitted when Enter is pressed                           | `(value: number \| string)`                              | -     |
+| clear  | Emitted when the clear button is used to clear          | -                                                        | -     |
 
 ### AutoComplete Slots
 

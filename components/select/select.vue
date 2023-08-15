@@ -53,6 +53,7 @@
                   inherit
                   :class="[nh.be('tag'), nh.be('counter')]"
                   :type="props.tagType"
+                  @click.stop="toggleVisible"
                 >
                   {{ `+${count}` }}
                 </Tag>
@@ -1156,6 +1157,7 @@ export default defineComponent({
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
       } else {
+        toggleVisible()
         restTipShow.value = false
       }
     }
