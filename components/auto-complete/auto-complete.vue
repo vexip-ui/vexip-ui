@@ -73,10 +73,10 @@
         <Icon :icon="props.suffix"></Icon>
       </slot>
     </template>
-    <template #default="{ option, index, selected }">
+    <template v-if="$slots.default" #default="{ option, index, selected }">
       <slot :option="option" :index="index" :selected="selected"></slot>
     </template>
-    <template #group="{ option, index }">
+    <template v-if="$slots.group" #group="{ option, index }">
       <slot name="group" :option="option" :index="index"></slot>
     </template>
   </Select>
@@ -87,7 +87,7 @@ import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
 import { placementWhileList } from '@vexip-ui/hooks'
 import {
@@ -207,6 +207,11 @@ export default defineComponent({
       if (props.filter && select.value) {
         select.value.currentFilter = `${value}`
       }
+    })
+    watchEffect(() => {
+      if (!props.filter || !visible.value || !select.value) return
+
+      select.value.currentFilter = String(currentValue.value)
     })
 
     onMounted(() => {
