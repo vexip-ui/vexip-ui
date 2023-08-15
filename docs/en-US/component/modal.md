@@ -114,20 +114,20 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 ### Modal Events
 
-| Name         | Description                                                                                                        | Parameters                                  | Since |
-| ------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- | ----- |
-| toggle       | Emitted when the active state of the modal changes, returns the current active state                               | `(active: boolean)`                         | -     |
-| confirm      | Emitted when the bottom confirm button is clicked, no return value                                                 | -                                           | -     |
-| cancel       | Emitted when the cancel button at the bottom is clicked, no return value                                           | -                                           | -     |
-| close        | Emitted when the close button is used to trigger the close, no return value                                        | -                                           | -     |
-| show         | When the modal is opened, emitted after the transition effect ends, no return value                                | -                                           | -     |
-| hide         | When the modal is closed, the transition effect ends, it is emitted when it disappears completely, no return value | -                                           | -     |
-| drag-start   | Emitted when dragging is about to start, no return value                                                           | `(position: { top: number, left: number })` | -     |
-| drag-move    | Emitted when dragging, returns an object containing position information                                           | `(position: { top: number, left: number })` | -     |
-| drag-end     | Emitted when the drag is finished, no return value                                                                 | `(position: { top: number, left: number })` | -     |
-| resize-start | Emitted when the modal is about to start resize, no return value                                                   | `(size: { width: number, height: number })` | -     |
-| resize-move  | Emitted when the modal is being resized, returns an object containing the width and height of the modal            | `(size: { width: number, height: number })` | -     |
-| resize-end   | Emitted when the modal finishes resize, no return value                                                            | `(size: { width: number, height: number })` | -     |
+| Name         | Description                                                                                             | Parameters                                  | Since |
+| ------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
+| toggle       | Emitted when the active state of the modal changes, returns the current active state                    | `(active: boolean)`                         | -     |
+| confirm      | Emitted when the bottom confirm button is clicked                                                       | -                                           | -     |
+| cancel       | Emitted when the cancel button at the bottom is clicked                                                 | -                                           | -     |
+| close        | Emitted when the close function is used to trigger the close                                            | -                                           | -     |
+| show         | When the modal is opened, emitted after the transition effect ends                                      | -                                           | -     |
+| hide         | When the modal is closed, the transition effect ends, it is emitted when it disappears completely       | -                                           | -     |
+| drag-start   | Emitted when dragging is about to start                                                                 | `(position: { top: number, left: number })` | -     |
+| drag-move    | Emitted when dragging, returns an object containing position information                                | `(position: { top: number, left: number })` | -     |
+| drag-end     | Emitted when the drag is finished                                                                       | `(position: { top: number, left: number })` | -     |
+| resize-start | Emitted when the modal is about to start resize                                                         | `(size: { width: number, height: number })` | -     |
+| resize-move  | Emitted when the modal is being resized, returns an object containing the width and height of the modal | `(size: { width: number, height: number })` | -     |
+| resize-end   | Emitted when the modal finishes resize                                                                  | `(size: { width: number, height: number })` | -     |
 
 ### Modal Slots
 

@@ -117,7 +117,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | size           | `'small' \| 'default' \| 'large'`                | 设置输入控件大小                                                                             | `'default'` | -        |
 | state          | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                                                                 | `'default'` | -        |
 | disabled       | `boolean`                                        | 设置是否禁用                                                                                 | `false`     | -        |
-| drop-disabled  | `boolean`                                        | 是否允许下拉列表显示                                                                         | `false`     | -        |
+| drop-disabled  | `boolean`                                        | 是否允许下拉选项列表显示                                                                     | `false`     | -        |
 | placement      | `Placement`                                      | 选项列表出现的位置，可选值同 Popper.js                                                       | `'bottom'`  | -        |
 | clearable      | `boolean`                                        | 设置是否可以清空值                                                                           | `false`     | -        |
 | ignore-case    | `boolean`                                        | 在使用内置的过滤时，设置是否忽略大小写                                                       | `false`     | -        |
@@ -130,17 +130,18 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | locale         | `LocaleConfig['input']`                          | 设置多语言配置                                                                               | `null`      | `2.1.0`  |
 | debounce       | `boolean`                                        | 为 `input` 事件开启防抖，默认情况下为节流，非响应式属性                                      | `false`     | `2.1.25` |
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`      | `2.1.25` |
+| show-empty     | `boolean`                                        | 是否在选项为空时也显示下拉选项列表                                                           | `false`     | `2.2.0`  |
 
 ### AutoComplete 事件
 
-| 名称   | 说明                                        | 参数                                                     | 始于 |
-| ------ | ------------------------------------------- | -------------------------------------------------------- | ---- |
-| input  | 当在 Input 控件中输入触发，返回当前输入的值 | `(value: string)`                                        | -    |
-| toggle | 当候选列表显示状态改变时触发，返回当前状态  | `(visible: boolean)`                                     | -    |
-| change | 当值改变后并焦点消失时触发，返回当前的值    | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
-| select | 当使用选项时触发，返回当前的值              | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
-| enter  | 当按下回车时触发，返回当前的值              | `(value: number \| string)`                              | -    |
-| clear  | 当使用清空按钮清空时触发，无返回值          | -                                                        | -    |
+| 名称   | 说明                         | 参数                                                     | 始于 |
+| ------ | ---------------------------- | -------------------------------------------------------- | ---- |
+| input  | 当在 Input 控件中输入触发    | `(value: string)`                                        | -    |
+| toggle | 当候选列表显示状态改变时触发 | `(visible: boolean)`                                     | -    |
+| change | 当值改变后并焦点消失时触发   | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
+| select | 当使用选项时触发             | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
+| enter  | 当按下回车时触发             | `(value: number \| string)`                              | -    |
+| clear  | 当使用清空按钮清空时触发     | -                                                        | -    |
 
 ### AutoComplete 插槽
 

@@ -108,7 +108,7 @@ const defaultShortcuts = [
 | 名称          | 说明                                               | 参数                                                     | 始于 |
 | ------------- | -------------------------------------------------- | -------------------------------------------------------- | ---- |
 | toggle        | 颜色控制面板显示状态改变时触发，返回当前状态       | `(visible: boolean)`                                     | -    |
-| click-outside | 当点击控件外部时触发，无返回值                     | -                                                        | -    |
-| outside-close | 当点击控件外部触发面板关闭时触发，无返回值         | -                                                        | -    |
+| click-outside | 当点击控件外部时触发                               | -                                                        | -    |
+| outside-close | 当点击控件外部触发面板关闭时触发                   | -                                                        | -    |
 | change        | 当选择的颜色发生变化时触发，返回格式化后的颜色值   | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -    |
 | shortcut      | 当使用快捷功能选取颜色时触发，返回格式化后的颜色值 | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -    |

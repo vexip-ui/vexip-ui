@@ -117,17 +117,17 @@ Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height
 | 名称         | 说明                                                     | 参数                                        | 始于 |
 | ------------ | -------------------------------------------------------- | ------------------------------------------- | ---- |
 | toggle       | 当模态框的激活状态改变时触发，返回当前的激活状态         | `(active: boolean)`                         | -    |
-| confirm      | 当点击了底部的确定按钮时触发，无返回值                   | -                                           | -    |
-| cancel       | 当点击了底部的取消按钮时触发，无返回值                   | -                                           | -    |
-| close        | 当用关闭功能触发关闭时触发，无返回值                     | -                                           | -    |
-| show         | 当模态框打开后，过渡效果结束后触发，无返回值             | -                                           | -    |
-| hide         | 当模态框关闭后，过渡效果结束，完全消失时触发，无返回值   | -                                           | -    |
-| drag-start   | 当将要开始拖拽时触发，无返回值                           | `(position: { top: number, left: number })` | -    |
+| confirm      | 当点击了底部的确定按钮时触发                             | -                                           | -    |
+| cancel       | 当点击了底部的取消按钮时触发                             | -                                           | -    |
+| close        | 当用关闭功能触发关闭时触发                               | -                                           | -    |
+| show         | 当模态框打开后，过渡效果结束后触发                       | -                                           | -    |
+| hide         | 当模态框关闭后，过渡效果结束，完全消失时触发             | -                                           | -    |
+| drag-start   | 当将要开始拖拽时触发                                     | `(position: { top: number, left: number })` | -    |
 | drag-move    | 当正在拖拽时触发，返回一个包含位置信息的对象             | `(position: { top: number, left: number })` | -    |
-| drag-end     | 当结束拖拽时触发，无返回值                               | `(position: { top: number, left: number })` | -    |
-| resize-start | 当模态框将要开始调整大小时触发，无返回值                 | `(size: { width: number, height: number })` | -    |
+| drag-end     | 当结束拖拽时触发                                         | `(position: { top: number, left: number })` | -    |
+| resize-start | 当模态框将要开始调整大小时触发                           | `(size: { width: number, height: number })` | -    |
 | resize-move  | 当模态框正在调整大小时触发，返回一个包含模态框宽高的对象 | `(size: { width: number, height: number })` | -    |
-| resize-end   | 当模态框结束调整大小时触发，无返回值                     | `(size: { width: number, height: number })` | -    |
+| resize-end   | 当模态框结束调整大小时触发                               | `(size: { width: number, height: number })` | -    |
 
 ### Modal 插槽
 

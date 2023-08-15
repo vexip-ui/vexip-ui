@@ -193,9 +193,9 @@ interface CascaderOptionState {
 | select        | 当选项被选时触发，返回被选选项的值路径和选项数据                                     | `(value: (string \| number)[], data: Data)`        | -    |
 | cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值路径和选项数据             | `(value: (string \| number)[], data: Data)`        | -    |
 | change        | 当被选值改变时触发，返回选项的值路径和选项数据，多选模式下为值路径数组和选项数据数组 | `(value: CascaderValue, data: Data[] \| Data[][])` | -    |
-| click-outside | 当点击联级选择器外部是触发，无返回值                                                 | -                                                  | -    |
-| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                                           | -                                                  | -    |
-| clear         | 当通过清除按钮清空值时触发，无返回值                                                 | -                                                  | -    |
+| click-outside | 当点击联级选择器外部是触发                                                           | -                                                  | -    |
+| outside-close | 当通过点击外部关闭选项列表时触发                                                     | -                                                  | -    |
+| clear         | 当通过清除按钮清空值时触发                                                           | -                                                  | -    |
 
 ### Cascader 插槽
 
