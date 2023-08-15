@@ -4,7 +4,14 @@ import type { BubbleType } from '@/components/bubble'
 
 export type TourType = BubbleType
 export type TourSignType = 'dot' | 'bar' | 'count'
-export type TourTarget = MaybeRef<string | MaybeInstance> | (() => string | MaybeElement)
+
+export interface TourVirtual {
+  getBoundingClientRect(): { top: number, left: number, width: number, height: number }
+}
+
+export type TourTarget =
+  | MaybeRef<string | MaybeInstance | TourVirtual>
+  | (() => string | MaybeElement | TourVirtual)
 
 export interface TourPayload {
   start(): void,

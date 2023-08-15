@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -16,6 +16,7 @@ export const tourProps = buildProps({
   padding: [Number, Array] as PropType<number | number[]>,
   closable: booleanProp,
   permeable: booleanProp,
+  transfer: booleanStringProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onClose: eventProp()

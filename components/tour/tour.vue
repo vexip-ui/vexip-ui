@@ -42,7 +42,8 @@ const props = useProps('tour', _props, {
   signType: 'dot',
   padding: 10,
   closable: true,
-  permeable: false
+  permeable: false,
+  transfer: false
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
@@ -130,38 +131,42 @@ watch(
     currentIndex.value = Math.max(0, value)
   }
 )
-watch([currentActive, currentStep], () => {
-  sideRects.value = undefined
+watch(
+  [currentActive, currentStep],
+  () => {
+    sideRects.value = undefined
 
-  if (!isClient || !currentActive.value) return
+    if (!isClient || !currentActive.value || !currentStep.value) return
 
-  const target = unrefElement(callIfFunc(currentStep.value.target))
+    const target = unrefElement(callIfFunc(currentStep.value.target) as HTMLElement)
 
-  if (!target) {
-    currentRect.value = undefined
-    return
-  }
+    if (!target) {
+      currentRect.value = undefined
+      return
+    }
 
-  const { top, left, width, height } = target.getBoundingClientRect()
+    const { top, left, width, height } = target.getBoundingClientRect()
 
-  currentRect.value = [
-    left - padding.value[3],
-    top - padding.value[0],
-    width + padding.value[1] + padding.value[3],
-    height + padding.value[0] + padding.value[2]
-  ]
-
-  if (props.permeable) {
-    const [x, y, w, h] = currentRect.value
-
-    sideRects.value = [
-      [0, 0, '100%', y],
-      [x + w, 0, `calc(100% - ${x + w}px)`, '100%'],
-      [0, y + h, '100%', `calc(100% - ${y + h}px)`],
-      [0, 0, x, '100%']
+    currentRect.value = [
+      left - padding.value[3],
+      top - padding.value[0],
+      width + padding.value[1] + padding.value[3],
+      height + padding.value[0] + padding.value[2]
     ]
-  }
-})
+
+    if (props.permeable) {
+      const [x, y, w, h] = currentRect.value
+
+      sideRects.value = [
+        [0, 0, '100%', y],
+        [x + w, 0, `calc(100% - ${x + w}px)`, '100%'],
+        [0, y + h, '100%', `calc(100% - ${y + h}px)`],
+        [0, 0, x, '100%']
+      ]
+    }
+  },
+  { immediate: true, flush: 'post' }
+)
 
 provide(TOUR_STATE, {
   increaseStep,
@@ -257,7 +262,7 @@ function handleClose() {
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
-    transfer
+    :transfer="transfer"
     auto-remove
     transition-name=""
     :disabled="props.hideMask"
@@ -350,7 +355,7 @@ function handleClose() {
                   <Button
                     v-if="currentIndex > 0"
                     inherit
-                    :class="nh.be('action')"
+                    :class="[nh.be('action'), nh.bem('action', 'prev')]"
                     size="small"
                     :text="!!type"
                     @click="prev"
@@ -360,7 +365,7 @@ function handleClose() {
                   <Button
                     v-if="currentIndex <= allSteps.length - 1"
                     inherit
-                    :class="nh.be('action')"
+                    :class="[nh.be('action'), nh.bem('action', 'next')]"
                     :type="type ? 'default' : 'primary'"
                     size="small"
                     @click="next()"

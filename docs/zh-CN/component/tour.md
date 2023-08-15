@@ -77,7 +77,14 @@ Tour 组件提供了各种插槽以满足自定义步骤的提示内容。
 ```ts
 type TourType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 type TourSignType = 'dot' | 'bar' | 'count'
-type TourTarget = MaybeRef<any> | (() => string | MaybeElement)
+
+interface TourVirtual {
+  getBoundingClientRect(): { top: number, left: number, width: number, height: number }
+}
+
+type TourTarget =
+  | MaybeRef<string | MaybeInstance | TourVirtual>
+  | (() => string | MaybeElement | TourVirtual)
 
 interface TourPayload {
   start(): void,

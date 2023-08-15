@@ -77,7 +77,14 @@ When you want to fully customize the tip content of a certain step, you can use 
 ```ts
 type TourType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 type TourSignType = 'dot' | 'bar' | 'count'
-type TourTarget = MaybeRef<any> | (() => string | MaybeElement)
+
+interface TourVirtual {
+  getBoundingClientRect(): { top: number, left: number, width: number, height: number }
+}
+
+type TourTarget =
+  | MaybeRef<string | MaybeInstance | TourVirtual>
+  | (() => string | MaybeElement | TourVirtual)
 
 interface TourPayload {
   start(): void,
