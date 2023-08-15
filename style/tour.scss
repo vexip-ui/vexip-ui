@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'sass:map';
 
 @use './shared' as *;
@@ -61,6 +62,31 @@ $tour: map.merge(
       .#{$namespace}-bubble__arrow {
         display: none;
       }
+    }
+
+    &--typed {
+      @include define-preset-style(
+        'tour',
+        (
+          title-color: 'color-white'
+        )
+      );
+
+      @include define-preset-values(
+        'tour',
+        (
+          close-color: rgba($color-white, 0.6),
+          close-color-hover: rgba($color-white, 0.9),
+          dot-bg: rgba($color-white, 0.2),
+          dot-bg-active: rgba($color-white, 0.8),
+          bar-bg: rgba($color-white, 0.2),
+          bar-bg-active: rgba($color-white, 0.8)
+        )
+      );
+    }
+
+    .#{$namespace}-bubble__content {
+      word-break: normal;
     }
   }
 
@@ -161,6 +187,40 @@ $tour: map.merge(
 
   &__action {
     line-height: get-css-var('line-height-secondary');
+  }
+
+  @each $type in $types {
+    @at-root {
+      &__bubble--#{$type} &__action {
+        color: get-css-var('color-#{$type}-base');
+        border-color: $color-white;
+
+        &:hover {
+          background-color: color.mix($color-white, $color-black, 93%);
+        }
+
+        &::after {
+          display: none;
+        }
+
+        &.#{$namespace}-button--text {
+          color: $color-white;
+          border-color: transparent;
+        }
+      }
+    }
+  }
+
+  &__bubble--typed &__action {
+    background-color: $color-white;
+
+    &.#{$namespace}-button--text {
+      background-color: transparent;
+
+      &:hover {
+        background-color: rgba($color-white, 0.2);
+      }
+    }
   }
 
   &__hollow--active {

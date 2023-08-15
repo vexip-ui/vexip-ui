@@ -16,11 +16,9 @@ export const tourProps = buildProps({
   padding: [Number, Array] as PropType<number | number[]>,
   closable: booleanProp,
   permeable: booleanProp,
+  onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
-  onStart: eventProp(),
-  onPrev: eventProp<(index: number, step: TourStepOptions) => void>(),
-  onNext: eventProp<(index: number, step: TourStepOptions) => void>(),
-  onFinish: eventProp()
+  onClose: eventProp()
 })
 
 export type TourProps = ExtractPropTypes<typeof tourProps>

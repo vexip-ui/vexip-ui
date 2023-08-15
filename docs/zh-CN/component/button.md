@@ -131,7 +131,7 @@ type ButtonAttrType = 'button' | 'submit' | 'reset'
 | icon           | `Record<string, any>`             | 按钮的辅助图标，加载状态时会切换为加载图标     | `''`        | -       |
 | loading-icon   | `Record<string, any>`             | 加载状态时显示的图标，具有脉冲效果             | `Spinner`   | -       |
 | loading-effect | `string`                          | 开启后，加载中图标原有的脉冲效果将变位旋转效果 | `false`     | -       |
-| button-type    | `ButtonAttrType`                  | 设置原生 <button> 的 type 属性                 | `'button'`  | -       |
+| button-type    | `ButtonAttrType`                  | 设置原生 `<button>` 的 type 属性               | `'button'`  | -       |
 | block          | `boolean`                         | 是否为块级元素，设置后宽度变为 `100%`          | `false`     | -       |
 | color          | `string`                          | 设置按钮的主题色                               | `null`      | `2.0.0` |
 | tag            | `string`                          | 设置按钮的渲染标签                             | `'button'`  | `2.0.0` |

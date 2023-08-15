@@ -7,7 +7,14 @@ import { Renderer } from '@/components/renderer'
 
 import { computed, provide, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
-import { getStepByWord, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  emitEvent,
+  getStepByWord,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { unrefElement, usePopper } from '@vexip-ui/hooks'
 import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
@@ -72,6 +79,11 @@ const allSteps = computed(() => {
     .sort((prev, next) => (prev.order || 0) - (next.order || 0))
 })
 const currentStep = computed(() => allSteps.value[currentIndex.value])
+const type = computed(() => {
+  const type = currentStep.value?.type || props.type
+
+  return type === 'default' ? undefined : type
+})
 const className = computed(() => {
   return [
     nh.b(),
@@ -156,7 +168,16 @@ provide(TOUR_STATE, {
   decreaseStep
 })
 
-defineExpose({ start, prev, next, close })
+defineExpose({
+  currentActive,
+  currentIndex,
+  currentStep,
+  allSteps,
+  start,
+  prev,
+  next,
+  close
+})
 
 const actions = { start, prev, next, close }
 const slotParams = shallowReadonly(
@@ -180,6 +201,7 @@ function start() {
 
   currentActive.value = true
   emit('update:active', true)
+  emitEvent(props.onToggle, true)
 
   if (currentIndex.value) {
     currentIndex.value = 0
@@ -192,21 +214,23 @@ function prev() {
 
   --currentIndex.value
   emit('update:index', currentIndex.value)
+  emitEvent(props.onChange, currentIndex.value, currentStep.value)
 }
 
 function next(autoClose = true) {
-  const lastIndex = allSteps.value.length - 1
-
   if (!currentActive.value) return
 
-  if (currentIndex.value >= lastIndex) {
-    if (!autoClose) return
+  if (currentIndex.value >= allSteps.value.length - 1) {
+    if (autoClose) {
+      close()
+    }
 
-    close()
+    return
   }
 
   ++currentIndex.value
   emit('update:index', currentIndex.value)
+  emitEvent(props.onChange, currentIndex.value, currentStep.value)
 }
 
 function close() {
@@ -214,6 +238,14 @@ function close() {
 
   currentActive.value = false
   emit('update:active', false)
+  emitEvent(props.onToggle, false)
+}
+
+function handleClose() {
+  if (!currentActive.value) return
+
+  close()
+  emitEvent(props.onClose)
 }
 </script>
 
@@ -251,7 +283,12 @@ function close() {
           v-if="show && currentStep"
           ref="bubble"
           inherit
-          :class="[nh.be('bubble'), !currentRect && nh.bem('bubble', 'center')]"
+          :class="[
+            nh.be('bubble'),
+            !currentRect && nh.bem('bubble', 'center'),
+            type && nh.bem('bubble', 'typed'),
+            type && nh.bem('bubble', type)
+          ]"
           :content-class="nh.be('step')"
           :placement="placement"
           :type="currentStep.type || props.type"
@@ -273,7 +310,7 @@ function close() {
                   v-if="props.closable"
                   type="button"
                   :class="nh.be('close')"
-                  @click="close"
+                  @click="handleClose"
                 >
                   <slot name="close" v-bind="slotParams">
                     <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
@@ -315,6 +352,7 @@ function close() {
                     inherit
                     :class="nh.be('action')"
                     size="small"
+                    :text="!!type"
                     @click="prev"
                   >
                     {{ locale.prev }}
@@ -323,7 +361,7 @@ function close() {
                     v-if="currentIndex <= allSteps.length - 1"
                     inherit
                     :class="nh.be('action')"
-                    type="primary"
+                    :type="type ? 'default' : 'primary'"
                     size="small"
                     @click="next()"
                   >
