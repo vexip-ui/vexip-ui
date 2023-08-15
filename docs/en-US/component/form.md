@@ -269,6 +269,6 @@ interface Rule<T = any> {
 
 ### FormReset Events
 
-| Name  | Description                                                                                                             | Parameters | Since |
-| ----- | ----------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
-| reset | Event callback before commit reset is about to occur, no return value, triggering this event means reset is not blocked | -          | -     |
+| Name  | Description                                                                                            | Parameters | Since |
+| ----- | ------------------------------------------------------------------------------------------------------ | ---------- | ----- |
+| reset | Event callback before commit reset is about to occur, triggering this event means reset is not blocked | -          | -     |

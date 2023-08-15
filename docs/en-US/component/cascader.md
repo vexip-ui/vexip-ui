@@ -193,9 +193,9 @@ interface CascaderOptionState {
 | select        | Emitted when an option is selected, returns the value path and option data of the selected option                                                              | `(value: (string \| number)[], data: Data)`        | -     |
 | cancel        | Emitted when the option is canceled, only in multi-select mode, returns the value path and option data of the canceled option                                  | `(value: (string \| number)[], data: Data)`        | -     |
 | change        | Emitted when the selected value changes, returns the value path and option data of the option, the value path array and option data array in multi-select mode | `(value: CascaderValue, data: Data[] \| Data[][])` | -     |
-| click-outside | Emitted when clicking outside the cascade selector, no return value                                                                                            | -                                                  | -     |
-| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                                                    | -                                                  | -     |
-| clear         | Emitted when the value is cleared by the clear button, no return value                                                                                         | -                                                  | -     |
+| click-outside | Emitted when clicking outside the cascade selector                                                                                                             | -                                                  | -     |
+| outside-close | Emitted when the option list is closed by clicking outside                                                                                                     | -                                                  | -     |
+| clear         | Emitted when the value is cleared by the clear button                                                                                                          | -                                                  | -     |
 
 ### Cascader Slots
 

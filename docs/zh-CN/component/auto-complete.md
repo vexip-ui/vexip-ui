@@ -140,7 +140,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | change | 当值改变后并焦点消失时触发，返回当前的值    | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
 | select | 当使用选项时触发，返回当前的值              | `(value: number \| string, data: AutoCompleteRawOption)` | -    |
 | enter  | 当按下回车时触发，返回当前的值              | `(value: number \| string)`                              | -    |
-| clear  | 当使用清空按钮清空时触发，无返回值          | -                                                        | -    |
+| clear  | 当使用清空按钮清空时触发                    | -                                                        | -    |
 
 ### AutoComplete 插槽
 

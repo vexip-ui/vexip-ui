@@ -41,9 +41,9 @@ Adding the `is-dot` prop and not using slot allows you to set the badge as a sta
 
 ### Badge Events
 
-| Name        | Description                                       | Parameters | Since |
-| ----------- | ------------------------------------------------- | ---------- | ----- |
-| badge-click | Emitted when the logo is clicked, no return value | -          | -     |
+| Name        | Description                      | Parameters | Since |
+| ----------- | -------------------------------- | ---------- | ----- |
+| badge-click | Emitted when the logo is clicked | -          | -     |
 
 ### Badge Slots
 

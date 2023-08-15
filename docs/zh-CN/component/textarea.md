@@ -101,7 +101,7 @@
 | key-down  | 当键按下时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
 | key-press | 当键按住时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
 | key-up    | 当键松开时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
-| clear     | 当通过清除按钮清空值时触发，无返回值         | -                        | -    |
+| clear     | 当通过清除按钮清空值时触发                   | -                        | -    |
 
 ### Textarea 插槽
 

@@ -140,7 +140,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | change | Emitted when the value changes and the focus disappears, returns the current value | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
 | select | Emitted when an option is used, returns the current value                          | `(value: number \| string, data: AutoCompleteRawOption)` | -     |
 | enter  | Emitted when Enter is pressed, returns the current value                           | `(value: number \| string)`                              | -     |
-| clear  | Emitted when the clear button is used to clear, no return value                    | -                                                        | -     |
+| clear  | Emitted when the clear button is used to clear                                     | -                                                        | -     |
 
 ### AutoComplete Slots
 

@@ -131,7 +131,7 @@ type ButtonAttrType = 'button' | 'submit' | 'reset'
 | icon           | `Record<string, any>`             | Auxiliary icon of the button, it will switch to the loading icon when loading          | `''`        | -       |
 | loading-icon   | `Record<string, any>`             | Icon displayed when loading state, with pulse effect                                   | `Spinner`   | -       |
 | loading-effect | `string`                          | After set, the original pulse effect of the loading icon will be displaced and rotated | `false`     | -       |
-| button-type    | `ButtonAttrType`                  | Set the type attribute of the native <button>                                          | `'button'`  | -       |
+| button-type    | `ButtonAttrType`                  | Set the type attribute of the native `<button>`                                        | `'button'`  | -       |
 | block          | `boolean`                         | Whether it is a block-level element, the width becomes 100% after setting              | `false`     | -       |
 | color          | `string`                          | Set the major color of the button                                                      | `null`      | `2.0.0` |
 | tag            | `string`                          | Set button rendering tag                                                               | `'button'`  | `2.0.0` |

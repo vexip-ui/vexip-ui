@@ -107,9 +107,9 @@ type TagType = TagState | TagNamedColor
 
 ### Tag Events
 
-| Name  | Description                                                                         | Parameters | Since |
-| ----- | ----------------------------------------------------------------------------------- | ---------- | ----- |
-| close | Emitted when the tab can be closed and the close button is clicked, no return value | -          | -     |
+| Name  | Description                                                        | Parameters | Since |
+| ----- | ------------------------------------------------------------------ | ---------- | ----- |
+| close | Emitted when the tab can be closed and the close button is clicked | -          | -     |
 
 ### Tag Slots
 
