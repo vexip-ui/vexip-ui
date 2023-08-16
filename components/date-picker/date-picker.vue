@@ -180,7 +180,6 @@ import {
   useClickOutside,
   useHover,
   usePopper,
-  useRtl,
   useSetTimeout
 } from '@vexip-ui/hooks'
 import {
@@ -229,7 +228,6 @@ export default defineComponent({
     } = useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('date-picker')
-    const { isRtl } = useRtl()
     const props = useProps('datePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
@@ -240,7 +238,7 @@ export default defineComponent({
       },
       visible: false,
       placement: {
-        default: () => (isRtl.value ? 'bottom-end' : 'bottom-start'),
+        default: 'bottom-start',
         validator: value => placementWhileList.includes(value)
       },
       transfer: false,

@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRouter } from 'vitepress'
 import { GithubB, Language } from '@vexip-ui/icons'
+import { isClient } from '@vexip-ui/utils'
 
 import ThemeSwitch from './theme-switch.vue'
 import DirectionSwitch from './direction-switch.vue'
 
 import type { I18nConfig } from '../i18n'
+import type { ThemeConfig } from '../types'
 
 const router = useRouter()
 
-const { site, page } = useData()
+const { site, page } = useData<ThemeConfig>()
 const { locale, getLocaleMessage } = useI18n({ useScope: 'global' })
+
+const isRtl = ref(false)
+
+watch(() => router.route.path, syncVitepressDir)
 
 const langOptions = computed(() => {
   return Object.entries(site.value.locales).map(([key, value]) => {
@@ -42,6 +48,19 @@ function changeLanguage(lang: string, link?: string) {
     router.go(`${link}${path}`.replace(/(^|\/)?index.md$/, '$1').replace(/\.md$/, '.html'))
   }
 }
+
+function handleRtlChange(rtl: boolean) {
+  isRtl.value = rtl
+  syncVitepressDir()
+}
+
+function syncVitepressDir() {
+  site.value.dir = isRtl.value ? 'rtl' : 'ltr'
+
+  if (isClient) {
+    document.documentElement.dir = site.value.dir
+  }
+}
 </script>
 
 <template>
@@ -67,7 +86,7 @@ function changeLanguage(lang: string, link?: string) {
       </template>
     </Dropdown>
     <div class="rtl">
-      <DirectionSwitch></DirectionSwitch>
+      <DirectionSwitch ref="dir" @change="handleRtlChange"></DirectionSwitch>
     </div>
     <div class="theme">
       <ThemeSwitch></ThemeSwitch>

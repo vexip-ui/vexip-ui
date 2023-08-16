@@ -215,7 +215,6 @@ import {
   useClickOutside,
   useHover,
   usePopper,
-  useRtl,
   useSetTimeout
 } from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, doubleDigits, isDefined, warnOnce } from '@vexip-ui/utils'
@@ -253,14 +252,13 @@ export default defineComponent({
     } = useFieldStore<string | string[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('time-picker')
-    const { isRtl } = useRtl()
     const props = useProps('timePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
       locale: null,
       visible: false,
       placement: {
-        default: () => (isRtl.value ? 'bottom-end' : 'bottom-start'),
+        default: 'bottom-start',
         validator: value => placementWhileList.includes(value)
       },
       transfer: false,

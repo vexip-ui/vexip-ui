@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 import { AlignLeft, AlignRight } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
+const emit = defineEmits(['change'])
+
 const rootCls = isClient ? document.documentElement.classList : undefined
 const rtl = ref<boolean>(false)
+
+watch(
+  rtl,
+  () => {
+    emit('change', rtl.value)
+  },
+  { flush: 'post' }
+)
 
 onMounted(() => {
   rtl.value = !!rootCls && rootCls.contains('rtl')

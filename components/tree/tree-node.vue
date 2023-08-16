@@ -57,7 +57,7 @@
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="node.loading" v-bind="icons.loading"></Icon>
-          <Icon v-else v-bind="icons.arrowRight"></Icon>
+          <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
@@ -257,59 +257,6 @@ export default defineComponent({
     })
     const renderer = computed(() => treeState.renderer)
     const suffixCheckbox = computed(() => treeState.suffixCheckbox)
-    // const virtual = computed(() => treeState.virtual)
-    // const nodeVisible = computed(() => {
-    //   return treeState.virtual
-    //     ? treeState.virtualIds.has(props.node.id)
-    //     : props.node.visible && (props.node.matched || props.node.childMatched || props.node.upperMatched)
-    // })
-    // const listVisible = computed(() => {
-    //   return (
-    //     props.node.children?.length > 0 &&
-    //     (!treeState.virtual || hasVisibleChild(props.node.children, treeState.virtualIds))
-    //   )
-    // })
-    // const showChildren = computed(() => {
-    //   return props.expanded && props.node.children?.length > 0
-    // })
-    // const parentLast = computed(() => {
-    //   if (!hasLinkLine.value) return 0
-
-    //   let current = treeState.getParentNode(props.node)
-
-    //   if (!current) return 0
-
-    //   let upper = treeState.getParentNode(current)
-    //   let count = 0
-
-    //   while (upper) {
-    //     if (upper.children.at(-1) === current) {
-    //       ++count
-    //     }
-
-    //     current = upper
-    //     upper = treeState.getParentNode(current)
-    //   }
-
-    //   return count
-    // })
-
-    // function hasVisibleChild(nodes: TreeNodeProps[], ids: Set<string | number>) {
-    //   if (!nodes.length) return false
-
-    //   const children: TreeNodeProps[] = []
-
-    //   for (const node of nodes) {
-    //     if (ids.has(node.id)) return true
-
-    //     if (node.expanded && node.children?.length) {
-    //       children.push(...node.children)
-    //     }
-    //   }
-
-    //   return hasVisibleChild(children, ids)
-    // }
-
     const nodeState = reactive({
       el: wrapper,
       depth: computed(() => props.node.depth),
@@ -485,16 +432,10 @@ export default defineComponent({
       hasCheckbox,
       renderer,
       suffixCheckbox,
-      // virtual,
-      // nodeVisible,
-      // listVisible,
-      // showChildren,
-      // parentLast,
 
       wrapper,
       arrowEl,
 
-      // updateVisible,
       handleClick,
       handleToggleCheck,
       handleToggleExpand,
@@ -506,7 +447,6 @@ export default defineComponent({
       handleDrop,
       handleDragEnd,
       getNodeChildren
-      // handleResize
     }
   }
 })

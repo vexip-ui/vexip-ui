@@ -3,8 +3,10 @@ import { computed, ref } from 'vue'
 import { isClient } from '@vexip-ui/utils'
 import { observeResize } from './resize'
 
+import type { Ref } from 'vue'
+
 const rtl = ref(false)
-const computedRtl = computed(() => rtl.value)
+const computedRtl: Ref<boolean> = computed(() => rtl.value)
 
 const elId = '__rtl_observer__'
 

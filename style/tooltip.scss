@@ -85,9 +85,9 @@ $tooltip: map.merge(
         border-width: $size $size 0;
         transform: translateY(100%);
 
-        @include rtl {
-          transform: translate(50%, 100%);
-        }
+        // @include rtl {
+        //   transform: translate(50%, 100%);
+        // }
 
         &::after {
           bottom: 1px;
@@ -109,9 +109,9 @@ $tooltip: map.merge(
         border-width: 0 $size $size;
         transform: translateY(-100%);
 
-        @include rtl {
-          transform: translate(50%, -100%);
-        }
+        // @include rtl {
+        //   transform: translate(50%, -100%);
+        // }
 
         &::after {
           top: 1px;
@@ -135,7 +135,7 @@ $tooltip: map.merge(
 
         @include rtl {
           border-width: $size $size $size 0;
-          transform: translate(100%, -50%) scaleX(-1);
+          transform: translateX(100%) scaleX(-1);
         }
 
         &::after {
@@ -160,7 +160,7 @@ $tooltip: map.merge(
 
         @include rtl {
           border-width: $size 0 $size $size;
-          transform: translate(-100%, -50%) scaleX(-1);
+          transform: translateX(-100%) scaleX(-1);
         }
 
         &::after {
@@ -191,42 +191,42 @@ $tooltip: map.merge(
     $h-offset: get-css-var('tooltip-arrow-h-offset');
 
     &[data-popper-placement='top'] #{$arrow} {
-      inset-inline-start: 50%;
+      left: 50%;
     }
 
     &[data-popper-placement='top-start'] #{$arrow} {
-      inset-inline-start: $h-offset;
+      left: $h-offset;
 
       @include rtl {
-        inset-inline-start: calc(100% - #{$h-offset});
+        left: calc(100% - #{$h-offset});
       }
     }
 
     &[data-popper-placement='top-end'] #{$arrow} {
-      inset-inline-start: calc(100% - #{$h-offset});
+      left: calc(100% - #{$h-offset});
 
       @include rtl {
-        inset-inline-start: $h-offset;
+        left: $h-offset;
       }
     }
 
     &[data-popper-placement='bottom'] #{$arrow} {
-      inset-inline-start: 50%;
+      left: 50%;
     }
 
     &[data-popper-placement='bottom-start'] #{$arrow} {
-      inset-inline-start: $h-offset;
+      left: $h-offset;
 
       @include rtl {
-        inset-inline-start: calc(100% - #{$h-offset});
+        left: calc(100% - #{$h-offset});
       }
     }
 
     &[data-popper-placement='bottom-end'] #{$arrow} {
-      inset-inline-start: calc(100% - #{$h-offset});
+      left: calc(100% - #{$h-offset});
 
       @include rtl {
-        inset-inline-start: $h-offset;
+        left: $h-offset;
       }
     }
 

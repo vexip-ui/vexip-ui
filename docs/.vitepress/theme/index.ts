@@ -50,6 +50,7 @@ function syncDirection() {
 
   if (isRtl === 'true') {
     document.documentElement.classList.add('rtl')
+    document.documentElement.dir = 'rtl'
   }
 }
 
