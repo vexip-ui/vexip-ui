@@ -4,7 +4,7 @@ Fixes a page element to a specific visible area.
 
 ## Demos
 
-:::demo affix/basis
+:::demo affix/basis alive
 
 ### Basis Usage
 
@@ -12,7 +12,7 @@ Holds the element at the top of the page.
 
 :::
 
-:::demo affix/target
+:::demo affix/target alive
 
 ### Target Container
 
@@ -20,7 +20,7 @@ Fixes the element inside the specified container by the `target` prop, and hides
 
 :::
 
-:::demo affix/position
+:::demo affix/position alive
 
 ### Fixed Position
 

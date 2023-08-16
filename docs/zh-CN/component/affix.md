@@ -4,7 +4,7 @@
 
 ## 代码示例
 
-:::demo affix/basis
+:::demo affix/basis alive
 
 ### 基础用法
 
@@ -12,7 +12,7 @@
 
 :::
 
-:::demo affix/target
+:::demo affix/target alive
 
 ### 指定容器
 
@@ -20,7 +20,7 @@
 
 :::
 
-:::demo affix/position
+:::demo affix/position alive
 
 ### 固定位置
 

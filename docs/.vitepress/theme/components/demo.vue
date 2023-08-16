@@ -40,6 +40,10 @@ const props = defineProps({
   codes: {
     type: Object,
     default: () => ({})
+  },
+  alive: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -58,15 +62,17 @@ const wrapper = ref<RowExposed>()
 const codeRef = ref<HTMLElement>()
 
 const wrapperEl = computed(() => wrapper.value?.$el as HTMLElement | undefined)
-const intersected = ref(false)
+const intersected = ref(props.alive)
 
-useIntersection({
-  target: wrapperEl,
-  rootMargin: '200 0 200 0',
-  handler: entry => {
-    intersected.value = entry.isIntersecting
-  }
-})
+if (!props.alive) {
+  useIntersection({
+    target: wrapperEl,
+    rootMargin: '200 0 200 0',
+    handler: entry => {
+      intersected.value = entry.isIntersecting
+    }
+  })
+}
 
 watchEffect(async () => {
   if (!codeRef.value) return
