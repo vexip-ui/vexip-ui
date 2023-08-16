@@ -68,7 +68,7 @@ function toComponentDoc(fullName: string) {
 
 <template>
   <div class="doc-search">
-    <AutoComplete
+    <Select
       ref="search"
       v-model:value="searchValue"
       v-model:visible="visible"
@@ -86,7 +86,7 @@ function toComponentDoc(fullName: string) {
           {{ suffix }}
         </kbd>
       </template>
-    </AutoComplete>
+    </Select>
   </div>
 </template>
 
@@ -118,10 +118,16 @@ function toComponentDoc(fullName: string) {
       }
     }
 
-    .vxp-select__selector {
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
+    .vxp-select {
+      &__selector {
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+
+      &__prefix {
+        padding-top: 1px;
+      }
     }
 
     .vxp-icon {

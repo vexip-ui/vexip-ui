@@ -6,16 +6,15 @@
 $bubble: () !default;
 $bubble: map.merge(
   (
+    color: get-css-var('content-color-base'),
     bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
     s-color: get-css-var('shadow-color-base'),
-    border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('radius-base'),
     min-width: 60px,
     min-height: 30px,
     content-v-padding: 8px,
     content-h-padding: 14px,
-    content-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color'),
     arrow-size: 7px,
     arrow-v-offset: 16px,
     arrow-h-offset: 28px
@@ -28,20 +27,26 @@ $bubble: map.merge(
     @include define-preset-values('bubble', $bubble);
   }
 
+  @mixin define-bubble-style($style-map) {
+    @include define-preset-style('bubble', $style-map);
+  }
+
   @include basis;
 
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  color: get-css-var('bubble-color');
 
   &__content {
     position: relative;
     min-width: get-css-var('bubble-min-width');
     min-height: get-css-var('bubble-min-height');
     padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
+    color: inherit;
     word-break: break-all;
     background-color: get-css-var('bubble-bg-color');
-    border: get-css-var('bubble-border');
+    border: get-css-var('border-shape') get-css-var('bubble-b-color');
     border-radius: get-css-var('bubble-radius');
   }
 
@@ -51,7 +56,7 @@ $bubble: map.merge(
 
   &--shadow &__content {
     border: 0;
-    box-shadow: get-css-var('bubble-content-shadow');
+    box-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color');
   }
 
   &__arrow {
@@ -60,11 +65,7 @@ $bubble: map.merge(
       position: absolute;
       width: 0;
       height: 0;
-      border: {
-        width: 0;
-        color: transparent;
-        style: solid;
-      }
+      border: 0 solid transparent;
     }
 
     &::after {
@@ -72,8 +73,40 @@ $bubble: map.merge(
     }
   }
 
-  &--background &__arrow::after {
-    display: none;
+  $content: #{&}__content;
+  $arrow: #{&}__arrow;
+
+  @mixin with-bg {
+    @include define-bubble-style(
+      (
+        b-color: 'bubble-bg-color'
+      )
+    );
+
+    #{$arrow} {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  @each $type in $types {
+    @at-root {
+      &--#{$type} {
+        @include define-bubble-style(
+          (
+            color: 'color-white',
+            bg-color: 'color' $type 'base'
+          )
+        );
+
+        @include with-bg;
+      }
+    }
+  }
+
+  &--background {
+    @include with-bg;
   }
 
   $size: get-css-var('bubble-arrow-size');

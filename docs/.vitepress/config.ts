@@ -12,6 +12,13 @@ import type { ThemeConfig } from './theme/types'
 
 compiler.parseCache.max = 10000
 
+const SITE_URL = 'https://www.vexipui.com/'
+const SITE_DESC =
+  'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good.'
+const SITE_TITLE = 'Vexip UI - Make interesting in development'
+const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
+const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
+
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
@@ -20,6 +27,7 @@ export default <UserConfig<ThemeConfig>>{
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
+    ['meta', { property: 'og:url', content: SITE_URL }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }]
   ],
   markdown: {
@@ -63,6 +71,11 @@ export default <UserConfig<ThemeConfig>>{
     'en-US': {
       label: 'English',
       lang: 'en-US',
+      description: SITE_DESC,
+      head: [
+        ['meta', { property: 'og:description', content: SITE_DESC }],
+        ['meta', { property: 'og:title', content: SITE_TITLE }]
+      ],
       themeConfig: {
         footerLinks: getFooterLinks('en-US')
       }
@@ -70,6 +83,11 @@ export default <UserConfig<ThemeConfig>>{
     'zh-CN': {
       label: '中文',
       lang: 'zh-CN',
+      description: SITE_DESC_ZH,
+      head: [
+        ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
+        ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
+      ],
       themeConfig: {
         footerLinks: getFooterLinks('zh-CN')
       }

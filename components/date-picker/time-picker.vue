@@ -103,7 +103,7 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
           <Icon v-bind="icons.clear"></Icon>
         </div>
@@ -114,7 +114,7 @@
             :icon="props.loadingIcon || icons.loading.icon"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
     </div>
     <Popper
       ref="popper"
@@ -824,6 +824,7 @@ export default defineComponent({
         value = value()
       }
 
+      fallbackFocus()
       parseValue(value)
       emitEvent(props.onShortcut, name, value)
       finishInput()

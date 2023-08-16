@@ -148,21 +148,21 @@ Add the `transparent` prop to remove the original style, and then you can wrap t
 
 ### Input Events
 
-| Name              | Description                                                            | Parameters                  | Since    |
-| ----------------- | ---------------------------------------------------------------------- | --------------------------- | -------- |
-| focus             | Emitted when the input is focused, returns the event object            | `(event: FocusEvent)`       | -        |
-| blur              | Emitted when the input loses focus, returns the event object           | `(event: FocusEvent)`       | -        |
-| change            | Emitted when the value of the input changes                            | `(value: string \| number)` | -        |
-| input             | Emitted when a value is entered                                        | `(value: string \| number)` | -        |
-| enter             | Emitted when enter, returns the key event                              | `(event: KeyboardEvent)`    | -        |
-| prefix-click      | Emitted when the prefix part is clicked, returns the click event       | `(event: MouseEvent)`       | -        |
-| suffix-click      | Emitted when the suffix part is clicked, returns the click event       | `(event: MouseEvent)`       | -        |
-| key-down          | Emitted when the key is pressed, returns the key event                 | `(event: KeyboardEvent)`    | -        |
-| key-press         | Emitted when the key is held down, returns the key event               | `(event: KeyboardEvent)`    | -        |
-| key-up            | Emitted when the key is released, returns the key event                | `(event: KeyboardEvent)`    | -        |
-| clear             | Emitted when the value is cleared by the clear button, no return value | -                           | -        |
-| composition-start | Emitted when composition start                                         | `(event: CompositionEvent)` | `2.1.28` |
-| composition-end   | Emitted when composition end                                           | `(event: CompositionEvent)` | `2.1.28` |
+| Name              | Description                                                      | Parameters                  | Since    |
+| ----------------- | ---------------------------------------------------------------- | --------------------------- | -------- |
+| focus             | Emitted when the input is focused, returns the event object      | `(event: FocusEvent)`       | -        |
+| blur              | Emitted when the input loses focus, returns the event object     | `(event: FocusEvent)`       | -        |
+| change            | Emitted when the value of the input changes                      | `(value: string \| number)` | -        |
+| input             | Emitted when a value is entered                                  | `(value: string \| number)` | -        |
+| enter             | Emitted when enter, returns the key event                        | `(event: KeyboardEvent)`    | -        |
+| prefix-click      | Emitted when the prefix part is clicked, returns the click event | `(event: MouseEvent)`       | -        |
+| suffix-click      | Emitted when the suffix part is clicked, returns the click event | `(event: MouseEvent)`       | -        |
+| key-down          | Emitted when the key is pressed, returns the key event           | `(event: KeyboardEvent)`    | -        |
+| key-press         | Emitted when the key is held down, returns the key event         | `(event: KeyboardEvent)`    | -        |
+| key-up            | Emitted when the key is released, returns the key event          | `(event: KeyboardEvent)`    | -        |
+| clear             | Emitted when the value is cleared by the clear button            | -                           | -        |
+| composition-start | Emitted when composition start                                   | `(event: CompositionEvent)` | `2.1.28` |
+| composition-end   | Emitted when composition end                                     | `(event: CompositionEvent)` | `2.1.28` |
 
 ### Input Slots
 

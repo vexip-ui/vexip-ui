@@ -67,6 +67,10 @@ pnpm run create [component]
 - `docs/en-US/component/[component].md`
 - `docs/zh-CN/component/[component].md`
 - `style/[component].scss`
+- `docs/.vitepress/theme/i18n/en-US.ts`
+- `docs/.vitepress/theme/i18n/zh-CN.ts`
+- `docs/.vitepress/theme/i18n/helper.ts`
+- `docs/.vitepress/config/component.ts`
 
 确认无误后，执行引导命令，即可开始开发组件及其文档开发。
 

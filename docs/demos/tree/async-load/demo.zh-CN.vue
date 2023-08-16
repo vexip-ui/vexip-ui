@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 interface NodeData {
   id: number,
@@ -13,7 +13,7 @@ interface NodeData {
   loaded?: boolean
 }
 
-const nodeData = ref<NodeData[]>([
+const nodeData = reactive<NodeData[]>([
   {
     id: 1,
     label: '动物',
@@ -36,14 +36,22 @@ function loadData(data: NodeData) {
   return new Promise<void>(resolve => {
     setTimeout(() => {
       if (data.id === 3) {
-        nodeData.value.push({
-          id: 7,
-          label: '蚯蚓',
-          parent: 3,
-          loaded: true
-        })
+        nodeData.push(
+          {
+            id: 7,
+            label: '蚯蚓',
+            parent: 3,
+            loaded: true
+          },
+          {
+            id: 8,
+            label: '水母',
+            parent: 3,
+            loaded: true
+          }
+        )
       } else if (data.id === 5) {
-        nodeData.value.push(
+        nodeData.push(
           {
             id: 2,
             label: '鸟类',
@@ -57,10 +65,25 @@ function loadData(data: NodeData) {
           }
         )
       } else if (data.id === 2) {
-        nodeData.value.push({
-          id: 6,
-          label: '喜鹊',
-          parent: 2,
+        nodeData.push(
+          {
+            id: 6,
+            label: '喜鹊',
+            parent: 2,
+            loaded: true
+          },
+          {
+            id: 10,
+            label: '红隼',
+            parent: 2,
+            loaded: true
+          }
+        )
+      } else if (data.id === 4) {
+        nodeData.push({
+          id: 9,
+          label: '穿山甲',
+          parent: 4,
           loaded: true
         })
       }

@@ -100,17 +100,17 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 
 ### Drawer Events
 
-| Name         | Description                                                                                                             | Parameters                                  | Since   |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------- |
-| toggle       | Emitted when the active state of the drawer changes, returns the current active state                                   | `(active: boolean)`                         | -       |
-| close        | Emitted when the close function is used to trigger the close (including the closing of the mask layer), no return value | `(isConfirm: boolean)`                      | -       |
-| show         | When the drawer is opened, emitted after the transition effect ends, no return value                                    | -                                           | -       |
-| hide         | When the drawer is closed, emitted after the transition effect ends, no return value                                    | -                                           | -       |
-| resize-start | Emitted when the drawer is about to start resize, no return value                                                       | -                                           | -       |
-| resize-move  | Emitted when the drawer is being resized, returns an object containing the width and height of the drawer               | `(rect: { width: number, height: number })` | -       |
-| resize-end   | Emitted when the drawer has finished resize, no return value                                                            | `(rect: { width: number, height: number })` | -       |
-| confirm      | Emitted when the bottom confirm button is clicked, no return value                                                      | -                                           | `2.0.0` |
-| cancel       | Emitted when the cancel button at the bottom is clicked, no return value                                                | -                                           | `2.0.0` |
+| Name         | Description                                                                                               | Parameters                                  | Since   |
+| ------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------- |
+| toggle       | Emitted when the active state of the drawer changes, returns the current active state                     | `(active: boolean)`                         | -       |
+| close        | Emitted when the close function is used to trigger the close (including the closing of the mask layer)    | `(isConfirm: boolean)`                      | -       |
+| show         | When the drawer is opened, emitted after the transition effect ends                                       | -                                           | -       |
+| hide         | When the drawer is closed, emitted after the transition effect ends                                       | -                                           | -       |
+| resize-start | Emitted when the drawer is about to start resize                                                          | -                                           | -       |
+| resize-move  | Emitted when the drawer is being resized, returns an object containing the width and height of the drawer | `(rect: { width: number, height: number })` | -       |
+| resize-end   | Emitted when the drawer has finished resize                                                               | `(rect: { width: number, height: number })` | -       |
+| confirm      | Emitted when the bottom confirm button is clicked                                                         | -                                           | `2.0.0` |
+| cancel       | Emitted when the cancel button at the bottom is clicked                                                   | -                                           | `2.0.0` |
 
 ### Drawer Slots
 

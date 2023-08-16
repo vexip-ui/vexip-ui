@@ -101,7 +101,7 @@ Different states can be set via `state`.
 | key-down  | Emitted when a key is pressed, returns the key event                                          | `(event: KeyboardEvent)` | -     |
 | key-press | Emitted when the key is held down, returns the key event                                      | `(event: KeyboardEvent)` | -     |
 | key-up    | Emitted when the key is released, returns the key event                                       | `(event: KeyboardEvent)` | -     |
-| clear     | Emitted when the value is cleared by the clear button, no return value                        | -                        | -     |
+| clear     | Emitted when the value is cleared by the clear button                                         | -                        | -     |
 
 ### Textarea Slots
 

@@ -53,6 +53,7 @@
                   inherit
                   :class="[nh.be('tag'), nh.be('counter')]"
                   :type="props.tagType"
+                  @click.stop="toggleVisible"
                 >
                   {{ `+${count}` }}
                 </Tag>
@@ -178,7 +179,7 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon v-bind="icons.clear"></Icon>
         </div>
@@ -189,7 +190,7 @@
             :icon="props.loadingIcon || icons.loading.icon"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
     </div>
     <Popper
       ref="popper"
@@ -254,9 +255,9 @@
               >
                 {{ option.label }}
               </span>
-              <transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+              <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
                 <Icon v-if="isSelected(option)" v-bind="icons.check" :class="nh.be('check')"></Icon>
-              </transition>
+              </Transition>
             </slot>
           </Option>
         </template>
@@ -1159,6 +1160,7 @@ export default defineComponent({
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
       } else {
+        toggleVisible()
         restTipShow.value = false
       }
     }

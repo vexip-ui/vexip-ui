@@ -52,6 +52,21 @@ const mockData = [
     id: 7,
     label: '蚯蚓',
     parent: 3
+  },
+  {
+    id: 8,
+    label: '水母',
+    parent: 3
+  },
+  {
+    id: 9,
+    label: '穿山甲',
+    parent: 4
+  },
+  {
+    id: 10,
+    label: '红隼',
+    parent: 2
   }
 ]
 </script>

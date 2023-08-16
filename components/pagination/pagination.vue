@@ -66,7 +66,7 @@
         @mouseenter="handleEnterPrevEllipsis"
         @mouseleave="handleLeavePrevEllipsis"
       >
-        <transition :name="nh.ns('fade')">
+        <Transition :name="nh.ns('fade')">
           <Icon
             v-if="inPrevEllipsis"
             v-bind="isRtl ? icons.anglesRight : icons.anglesLeft"
@@ -78,7 +78,7 @@
             :scale="0.8"
             style="position: absolute"
           ></Icon>
-        </transition>
+        </Transition>
       </li>
       <template v-if="currentPagers.length">
         <li
@@ -123,7 +123,7 @@
         @mouseenter="handleEnterNextEllipsis"
         @mouseleave="handleLeaveNextEllipsis"
       >
-        <transition :name="nh.ns('fade')">
+        <Transition :name="nh.ns('fade')">
           <Icon
             v-if="inNextEllipsis"
             v-bind="isRtl ? icons.anglesLeft : icons.anglesRight"
@@ -135,7 +135,7 @@
             :scale="0.8"
             style="position: absolute"
           ></Icon>
-        </transition>
+        </Transition>
       </li>
       <li
         v-if="pagerCount > 1"

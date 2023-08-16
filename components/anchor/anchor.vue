@@ -21,7 +21,7 @@
         </AnchorLink>
       </slot>
     </ul>
-    <transition appear :name="props.markerTransition">
+    <Transition appear :name="props.markerTransition">
       <div
         v-if="props.marker && currentActive"
         :class="nh.be('marker')"
@@ -31,7 +31,7 @@
           <div :class="nh.be('pointer')"></div>
         </slot>
       </div>
-    </transition>
+    </Transition>
   </div>
 </template>
 

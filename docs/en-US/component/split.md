@@ -68,7 +68,7 @@ Can be nested by itself.
 | ------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----- |
 | change | Emitted when the scale of the panel changes, returns the current scale of the left or top panel | `(value: number)`                                | -     |
 | full   | Emitted when full screen mode is enabled, returns the current full screen panel                 | `(pane: 'top' \| 'right' \| 'bottom' \| 'left')` | -     |
-| reset  | Emitted when fullscreen mode is closed, no return value                                         | -                                                | -     |
+| reset  | Emitted when fullscreen mode is closed                                                          | -                                                | -     |
 
 ### Split Slots
 

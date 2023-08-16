@@ -108,7 +108,7 @@ const defaultShortcuts = [
 | Name          | Description                                                                                     | Parameters                                               | Since |
 | ------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----- |
 | toggle        | Emitted when the color control panel display state changes, returns the current state           | `(visible: boolean)`                                     | -     |
-| click-outside | Emitted when the outside of the control is clicked, no return value                             | -                                                        | -     |
-| outside-close | Emitted when the panel is closed by clicking outside the control, no return value               | -                                                        | -     |
+| click-outside | Emitted when the outside of the control is clicked                                              | -                                                        | -     |
+| outside-close | Emitted when the panel is closed by clicking outside the control                                | -                                                        | -     |
 | change        | Emitted when the selected color changes, returns the formatted color value                      | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |
 | shortcut      | Emitted when a color is selected using the shortcut function, returns the formatted color value | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |

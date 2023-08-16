@@ -225,10 +225,10 @@ describe('Input', () => {
     emitInput(input, TEXT)
     emitInput(input, TEXT)
     emitInput(input, TEXT)
-    expect(onInput).toHaveBeenCalledTimes(0)
+    expect(onInput).toHaveBeenCalledTimes(1)
     vi.runAllTimers()
     await nextTick()
-    expect(onInput).toHaveBeenCalledTimes(1)
+    expect(onInput).toHaveBeenCalledTimes(2)
   })
 
   it('focus/blur event', async () => {

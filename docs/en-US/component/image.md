@@ -184,9 +184,9 @@ type ImageSkeletonProps = Pick<
 | change | Emitted when the viewed image changes, returns the index and source of the currently viewed image   | `(index: number, src: string)` | -     |
 | prev   | Emitted when viewing the previous image, returns the index and source of the currently viewed image | `(index: number, src: string)` | -     |
 | next   | Emitted when viewing the next image, returns the index and source of the currently viewed image     | `(index: number, src: string)` | -     |
-| close  | Emitted when close is triggered by the close button, no return value                                | -                              | -     |
-| show   | Emitted when the image viewer is opened and the transition effect ends, no return value             | -                              | -     |
-| hide   | Emitted when the image viewer is closed and the transition effect ends, no return value             | -                              | -     |
+| close  | Emitted when close is triggered by the close button                                                 | -                              | -     |
+| show   | Emitted when the image viewer is opened and the transition effect ends                              | -                              | -     |
+| hide   | Emitted when the image viewer is closed and the transition effect ends                              | -                              | -     |
 
 ### ImageViewer Slots
 

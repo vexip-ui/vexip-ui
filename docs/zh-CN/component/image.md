@@ -184,9 +184,9 @@ type ImageSkeletonProps = Pick<
 | change | 查看的图片发生改变时触发，返回当前查看的图片的索引和源 | `(index: number, src: string)` | -    |
 | prev   | 查看上一张图片时触发，返回当前查看的图片的索引和源     | `(index: number, src: string)` | -    |
 | next   | 查看下一张图片时触发，返回当前查看的图片的索引和源     | `(index: number, src: string)` | -    |
-| close  | 当用关闭功能触发关闭时触发，无返回值                   | -                              | -    |
-| show   | 当图片查看器打开，过渡效果结束后触发，无返回值         | -                              | -    |
-| hide   | 当图片查看器关闭，过渡效果结束后触发，无返回值         | -                              | -    |
+| close  | 当用关闭功能触发关闭时触发                             | -                              | -    |
+| show   | 当图片查看器打开，过渡效果结束后触发                   | -                              | -    |
+| hide   | 当图片查看器关闭，过渡效果结束后触发                   | -                              | -    |
 
 ### ImageViewer 插槽
 

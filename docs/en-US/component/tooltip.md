@@ -112,13 +112,13 @@ In this way, you need to manually control the visible of tooltip.
 
 ### Tooltip Events
 
-| Name          | Description                                                                         | Parameters           | Since |
-| ------------- | ----------------------------------------------------------------------------------- | -------------------- | ----- |
-| toggle        | Emitted when the display state of the tip changes, returns the current state        | `(visible: boolean)` | -     |
-| tip-enter     | Emitted when the mouse moves into the tip, no return value                          | -                    | -     |
-| tip-leave     | Emitted when the mouse moves out of the tip, no return value                        | -                    | -     |
-| click-outside | Emitted when the outside of the element is clicked, no return value                 | -                    | -     |
-| outside-close | Emitted when the tooltip is closed by clicking outside the element, no return value | -                    | -     |
+| Name          | Description                                                                  | Parameters           | Since |
+| ------------- | ---------------------------------------------------------------------------- | -------------------- | ----- |
+| toggle        | Emitted when the display state of the tip changes, returns the current state | `(visible: boolean)` | -     |
+| tip-enter     | Emitted when the mouse moves into the tip                                    | -                    | -     |
+| tip-leave     | Emitted when the mouse moves out of the tip                                  | -                    | -     |
+| click-outside | Emitted when the outside of the element is clicked                           | -                    | -     |
+| outside-close | Emitted when the tooltip is closed by clicking outside the element           | -                    | -     |
 
 ### Tooltip Slots
 

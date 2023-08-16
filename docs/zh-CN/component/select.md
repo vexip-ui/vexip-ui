@@ -244,9 +244,9 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
 | cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
 | change        | 当被选值改变时触发，返回选项的值和标签，多选模式下为值数组和标签数组 | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
-| outside-click | 当点击选择器外部是触发，无返回值                                     | -                                                                  | -       |
-| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                           | -                                                                  | -       |
-| clear         | 当通过清除按钮清空值时触发，无返回值                                 | -                                                                  | -       |
+| outside-click | 当点击选择器外部是触发                                               | -                                                                  | -       |
+| outside-close | 当通过点击外部关闭选项列表时触发                                     | -                                                                  | -       |
+| clear         | 当通过清除按钮清空值时触发                                           | -                                                                  | -       |
 | focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
 | update:label  | 当选项值改变时触发，用于快速当前选项的标签值                         | `(label: string)`                                                  | `2.0.0` |

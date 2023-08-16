@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <slot></slot>
-    <transition :name="transitionName">
+    <Transition :name="transitionName">
       <sup
         v-show="showSub"
         :class="{
@@ -17,7 +17,7 @@
           {{ renderContent }}
         </slot>
       </sup>
-    </transition>
+    </Transition>
   </div>
 </template>
 

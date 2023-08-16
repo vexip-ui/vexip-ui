@@ -10,6 +10,14 @@ Open the mask directly, and of course you can render something on the mask.
 
 :::
 
+:::demo masker/custom-mask
+
+### Custom Mask
+
+Through the `mask` slot, you can customize the mask layer, for example to make a hollow effect.
+
+:::
+
 ## API
 
 ### Masker Props
@@ -29,15 +37,16 @@ Open the mask directly, and of course you can render something on the mask.
 
 ### Masker Events
 
-| Name   | Description                                                                                                       | Parameters          | Since |
-| ------ | ----------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
-| toggle | Emitted when the active state of the mask changes, returns the current active state                               | `(active: boolean)` | -     |
-| close  | Emitted when the close function is used to trigger the close, no return value                                     | -                   | -     |
-| show   | When the mask is opened, emitted after the transition effect, no return value                                     | -                   | -     |
-| hide   | When the mask is closed, the transition effect ends, it is emitted when it disappears completely, no return value | -                   | -     |
+| Name   | Description                                                                                      | Parameters          | Since |
+| ------ | ------------------------------------------------------------------------------------------------ | ------------------- | ----- |
+| toggle | Emitted when the active state of the mask changes, returns the current active state              | `(active: boolean)` | -     |
+| close  | Emitted when the close function is used to trigger the close                                     | -                   | -     |
+| show   | When the mask is opened, emitted after the transition effect                                     | -                   | -     |
+| hide   | When the mask is closed, the transition effect ends, it is emitted when it disappears completely | -                   | -     |
 
 ### Masker Slots
 
-| Name    | Description        | Parameters          | Since |
-| ------- | ------------------ | ------------------- | ----- |
-| default | show layer content | `{ show: boolean }` | -     |
+| Name    | Description        | Parameters          | Since    |
+| ------- | ------------------ | ------------------- | -------- |
+| default | show layer content | `{ show: boolean }` | -        |
+| mask    | mask layer content | -                   | `2.1.30` |

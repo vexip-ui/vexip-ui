@@ -100,9 +100,11 @@ export default defineComponent({
 
     const popper = ref<PopperExposed>()
     const popperEl = computed(() => popper.value?.wrapper)
+    const arrow = ref<HTMLElement>()
     const { transferTo, updatePopper } = usePopper({
       placement,
       transfer,
+      arrow,
       reference,
       wrapper: originalTrigger,
       popper: popperEl
@@ -317,7 +319,7 @@ export default defineComponent({
             onTransitionend={syncRendering}
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
-              {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
+              {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
               {renderSlot(slots, 'default', slotParams)}
             </div>
           </Popper>
