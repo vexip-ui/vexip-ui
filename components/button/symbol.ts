@@ -2,7 +2,6 @@ import type { InjectionKey } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
 
 export type ButtonType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
-
 export type ButtonAttrType = 'button' | 'submit' | 'reset'
 
 export interface ButtonState {

@@ -83,7 +83,7 @@ $tooltip: map.merge(
       #{$arrow} {
         bottom: 0;
         border-width: $size $size 0;
-        transform: translate(-50%, 100%);
+        transform: translateY(100%);
 
         &::after {
           bottom: 1px;
@@ -99,7 +99,7 @@ $tooltip: map.merge(
       #{$arrow} {
         top: 0;
         border-width: 0 $size $size;
-        transform: translate(-50%, -100%);
+        transform: translateY(-100%);
 
         &::after {
           top: 1px;
@@ -115,7 +115,7 @@ $tooltip: map.merge(
       #{$arrow} {
         right: 0;
         border-width: $size 0 $size $size;
-        transform: translate(100%, -50%);
+        transform: translateX(100%);
 
         &::after {
           right: 1px;
@@ -131,7 +131,7 @@ $tooltip: map.merge(
       #{$arrow} {
         left: 0;
         border-width: $size $size $size 0;
-        transform: translate(-100%, -50%);
+        transform: translateX(-100%);
 
         &::after {
           left: 1px;

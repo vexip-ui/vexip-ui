@@ -19,7 +19,7 @@ import HeaderNav from './components/header-nav.vue'
 import HeaderSuffix from './components/header-suffix.vue'
 import AsideMenu from './components/aside-menu.vue'
 
-import type { LayoutExposed, LayoutInnerClass, ScrollbarExposed } from 'vexip-ui'
+import type { LayoutExposed, LayoutInnerClass, PropsOptions, ScrollbarExposed } from 'vexip-ui'
 import type { ThemeConfig } from './types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
@@ -34,6 +34,14 @@ const layoutClasses: LayoutInnerClass = {
   sidebar: nh.be('sidebar'),
   aside: nh.be('aside'),
   footer: nh.be('footer')
+}
+
+const providedProps: PropsOptions = {
+  default: { transfer: '#transfer-place' as any },
+  masker: { transfer: true },
+  modal: { transfer: true },
+  drawer: { transfer: true },
+  imageViewer: { transfer: true }
 }
 
 const fixedSub = ref(false)
@@ -243,7 +251,7 @@ function refreshScroll() {
       <Homepage v-if="frontmatter.homepage"></Homepage>
       <NotFound v-else-if="page.isNotFound"></NotFound>
       <template v-else>
-        <ConfigProvider :props="{ default: { transfer: '#transfer-place' } }">
+        <ConfigProvider :props="providedProps">
           <Article :anchor-level="outline">
             <Content class="markdown"></Content>
           </Article>

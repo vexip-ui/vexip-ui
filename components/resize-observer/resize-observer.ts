@@ -12,7 +12,7 @@ export default defineComponent({
     const props = useProps('resizeObserver', _props, {
       throttle: {
         default: false,
-        validator: (value: boolean | number) => typeof value === 'boolean' || value > 0
+        validator: value => typeof value === 'boolean' || value > 0
       }
     })
 

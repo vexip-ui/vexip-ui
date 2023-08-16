@@ -1,7 +1,7 @@
 <template>
-  <teleport v-if="isMounted && to" :to="to">
+  <Teleport v-if="isMounted && to" :to="to">
     <slot></slot>
-  </teleport>
+  </Teleport>
   <slot v-else></slot>
 </template>
 

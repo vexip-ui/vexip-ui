@@ -1,32 +1,32 @@
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 
 import { createBITree, isDefined, nextFrameOnce } from '@vexip-ui/utils'
 import { isHiddenElement } from './display'
 import { observeResize, unobserveResize } from './resize'
 
-import type { Ref } from 'vue'
-// import type { ResizeHandler } from './resize'
+import type { MaybeRef } from 'vue'
 
 type Key = number | string | symbol
+type Data = Record<string, any>
 type Behavior = ScrollToOptions['behavior']
 
-export interface VirtualOptions {
+export interface VirtualOptions<T extends Data> {
   /**
    * 虚拟滚动的元素
    */
-  items: Ref<Array<Record<string, any>>>,
+  items: MaybeRef<T[]>,
   /**
    * 设置元素的最小高度
    */
-  itemSize: Ref<number>,
+  itemSize: MaybeRef<number>,
   /**
    * 设置元素是否为固定高度，固定高度时不处理 resize
    */
-  itemFixed: Ref<boolean>,
+  itemFixed: MaybeRef<boolean>,
   /**
    * 元素的主键
    */
-  idKey: Ref<string>,
+  idKey: MaybeRef<keyof T>,
   /**
    * 默认停留在的元素的主键，未实现
    */
@@ -34,11 +34,11 @@ export interface VirtualOptions {
   /**
    * 设置前后的缓冲元素的个数
    */
-  bufferSize?: Ref<number>,
+  bufferSize?: MaybeRef<number>,
   /**
    * 虚拟滚动的包围元素
    */
-  wrapper?: Ref<HTMLElement | null | undefined>,
+  wrapper?: MaybeRef<HTMLElement | null | undefined>,
   /**
    * 是否自动观察 wrapper 缩放
    *
@@ -47,7 +47,7 @@ export interface VirtualOptions {
   autoResize?: boolean
 }
 
-export function useVirtual(options: VirtualOptions) {
+export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
   const {
     items,
     itemSize,
@@ -60,9 +60,9 @@ export function useVirtual(options: VirtualOptions) {
   } = options
 
   const indexMap = computed(() => {
-    const itemList = items.value
+    const itemList = unref(items)
     const length = itemList.length
-    const keyField = idKey.value
+    const keyField = unref(idKey)
     const map = new Map<Key, number>()
 
     for (let i = 0; i < length; ++i) {
@@ -74,10 +74,10 @@ export function useVirtual(options: VirtualOptions) {
   const visibleHeight = ref(0)
   const heightDiffMap = new Map<Key, number>()
   const heightTree = computed(() => {
-    const itemList = items.value
+    const itemList = unref(items)
     const length = itemList.length
-    const keyField = idKey.value
-    const tree = createBITree(length, itemSize.value)
+    const keyField = unref(idKey)
+    const tree = createBITree(length, unref(itemSize))
 
     for (let i = 0; i < length; ++i) {
       const key = itemList[i][keyField]
@@ -94,33 +94,35 @@ export function useVirtual(options: VirtualOptions) {
   const scrollOffset = ref(0)
   const startIndex = computed(() => {
     return Math.max(
-      heightTree.value.boundIndex(scrollOffset.value) - Math.max(bufferSize.value, 0),
+      heightTree.value.boundIndex(scrollOffset.value) - Math.max(unref(bufferSize), 0),
       0
     )
   })
   const visibleItems = computed(() => {
     if (!visibleHeight.value || visibleHeight.value < 0) return []
 
+    const unrefItems = unref(items)
     const endIndex = Math.min(
       heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) +
         1 +
-        Math.max(bufferSize.value, 0),
-      items.value.length
+        Math.max(unref(bufferSize), 0),
+      unrefItems.length
     )
 
-    return items.value.slice(startIndex.value, endIndex)
+    return unrefItems.slice(startIndex.value, endIndex)
   })
   const listStyle = computed(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     treeUpdateDep.value
 
     const height = heightTree.value.sum()
+    const fixed = unref(itemFixed)
 
     return {
-      height: itemFixed.value ? `${height}px` : undefined,
-      minHeight: itemFixed.value ? undefined : `${height}px`,
+      height: fixed ? `${height}px` : undefined,
+      minHeight: fixed ? undefined : `${height}px`,
       boxSizing: 'content-box'
-    }
+    } as const
   })
   const itemsStyle = computed(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -133,8 +135,10 @@ export function useVirtual(options: VirtualOptions) {
 
   onMounted(() => {
     nextTick(() => {
-      if (autoResize && wrapper.value) {
-        observeResize(wrapper.value, handleResize)
+      const wrapperEl = unref(wrapper)
+
+      if (autoResize && wrapperEl) {
+        observeResize(wrapperEl, handleResize)
       }
 
       if (isDefined(defaultKeyAt)) {
@@ -145,13 +149,17 @@ export function useVirtual(options: VirtualOptions) {
 
   if (autoResize) {
     onBeforeUnmount(() => {
-      wrapper.value && unobserveResize(wrapper.value)
+      const wrapperEl = unref(wrapper)
+
+      wrapperEl && unobserveResize(wrapperEl)
     })
   }
 
   function syncScrollOffset() {
-    if (wrapper.value) {
-      scrollOffset.value = wrapper.value.scrollTop
+    const wrapperEl = unref(wrapper)
+
+    if (wrapperEl) {
+      scrollOffset.value = wrapperEl.scrollTop
     }
   }
 
@@ -171,7 +179,7 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
-    if (itemFixed.value) return
+    if (unref(itemFixed)) return
 
     const index = indexMap.value.get(key)!
     const tree = heightTree.value
@@ -189,7 +197,7 @@ export function useVirtual(options: VirtualOptions) {
       return
     }
 
-    const diff = height - itemSize.value
+    const diff = height - unref(itemSize)
     const delta = height - prevHeight
 
     if (diff) {
@@ -203,20 +211,24 @@ export function useVirtual(options: VirtualOptions) {
     tree.add(index, delta)
     treeUpdateDep.value++
 
-    if (wrapper.value) {
+    const wrapperEl = unref(wrapper)
+
+    if (wrapperEl) {
       const prevTop = tree.sum(index)
 
-      if (wrapper.value.scrollTop > prevTop) {
-        wrapper.value.scrollBy(0, delta)
+      if (wrapperEl.scrollTop > prevTop) {
+        wrapperEl.scrollBy(0, delta)
       }
 
-      scrollOffset.value = wrapper.value.scrollTop
+      scrollOffset.value = wrapperEl.scrollTop
     }
   }
 
   function scrollTo(top: number, behavior?: Behavior) {
-    if (wrapper.value) {
-      wrapper.value.scrollTo({
+    const wrapperEl = unref(wrapper)
+
+    if (wrapperEl) {
+      wrapperEl.scrollTo({
         behavior,
         top,
         left: 0
@@ -225,8 +237,10 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function scrollBy(delta: number, behavior?: Behavior) {
-    if (wrapper.value) {
-      wrapper.value.scrollBy({
+    const wrapperEl = unref(wrapper)
+
+    if (wrapperEl) {
+      wrapperEl.scrollBy({
         behavior,
         top: delta,
         left: 0
@@ -237,14 +251,16 @@ export function useVirtual(options: VirtualOptions) {
   function scrollToKey(key: Key, behavior?: Behavior) {
     const index = indexMap.value.get(key)
 
-    if (index !== undefined) {
+    if (index != null) {
       scrollToIndex(index, behavior)
     }
   }
 
   function scrollToIndex(index: number, behavior?: Behavior) {
-    if (wrapper.value) {
-      wrapper.value.scrollTo({
+    const wrapperEl = unref(wrapper)
+
+    if (wrapperEl) {
+      wrapperEl.scrollTo({
         behavior,
         top: heightTree.value.sum(index),
         left: 0
@@ -253,10 +269,12 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function ensureIndexInView(index: number, behavior?: Behavior) {
-    if (!wrapper.value) return
+    const wrapperEl = unref(wrapper)
+
+    if (!wrapperEl) return
 
     const tree = heightTree.value
-    const viewTop = wrapper.value.scrollTop
+    const viewTop = wrapperEl.scrollTop
     const top = tree.sum(index)
 
     if (top < viewTop) {
@@ -264,7 +282,7 @@ export function useVirtual(options: VirtualOptions) {
       return
     }
 
-    const viewHeight = wrapper.value.offsetHeight
+    const viewHeight = wrapperEl.offsetHeight
     const viewBottom = viewTop + viewHeight
     const bottom = tree.sum(index + 1)
 
@@ -276,15 +294,17 @@ export function useVirtual(options: VirtualOptions) {
   function ensureKeyInView(key: Key, behavior?: Behavior) {
     const index = indexMap.value.get(key)
 
-    if (index !== undefined) {
+    if (index != null) {
       ensureIndexInView(index, behavior)
     }
   }
 
   return {
     wrapper,
-    scrollOffset,
     indexMap,
+    heightTree,
+    startIndex,
+    scrollOffset,
     visibleItems,
     listStyle,
     itemsStyle,

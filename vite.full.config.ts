@@ -76,7 +76,8 @@ export default defineConfig(async () => {
           'full-lib.ts',
           'types.d.ts'
         ],
-        outputDir: outDir,
+        exclude: ['node_modules', 'components/*/tests'],
+        outDir,
         compilerOptions: {
           sourceMap: false
         },

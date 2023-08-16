@@ -9,27 +9,27 @@
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-    <template v-if="markerPercent.length">
+    <template v-if="markerValues.length">
       <div :class="nh.be('points')">
         <div
-          v-for="(_, percent) in props.markers"
-          :key="percent"
-          :class="[nh.be('point'), isPercentInRange(percent) && nh.bem('point', 'in-range')]"
-          :style="getPointStyle(percent)"
+          v-for="(_, value) in props.markers"
+          :key="value"
+          :class="[nh.be('point'), isValueInRange(value) && nh.bem('point', 'in-range')]"
+          :style="getPointStyle(value)"
         ></div>
       </div>
       <div :class="nh.be('markers')">
-        <template v-for="(marker, percent) in props.markers" :key="percent">
+        <template v-for="(marker, value) in props.markers" :key="value">
           <div
             v-if="typeof marker === 'string'"
             :class="nh.be('marker')"
-            :style="getMarkerStyle(percent)"
+            :style="getMarkerStyle(value)"
           >
             <slot
               name="marker"
               :marker="{ label: marker }"
-              :percent="percent"
-              :in-range="isPercentInRange(percent)"
+              :percent="value"
+              :in-range="isValueInRange(value)"
             >
               {{ marker }}
             </slot>
@@ -38,7 +38,7 @@
             v-else
             :class="[nh.be('marker'), marker.class]"
             :style="[
-              getMarkerStyle(percent),
+              getMarkerStyle(value),
               marker.style as any
             ]"
             v-bind="marker.attrs"
@@ -46,8 +46,8 @@
             <slot
               name="marker"
               :marker="marker"
-              :percent="percent"
-              :in-range="isPercentInRange(percent)"
+              :percent="value"
+              :in-range="isValueInRange(value)"
             >
               {{ marker.label }}
             </slot>
@@ -69,6 +69,8 @@
       :reverse="props.reverse"
       :sliding="sliding[0]"
       :style="startTriggerStyle"
+      @key-plus="handlePlus(0, $event)"
+      @key-minus="handleMinus(0, $event)"
     >
       <template #tip="{ value: startValue }">
         <slot name="tip" :value="startValue">
@@ -89,6 +91,8 @@
       :reverse="props.reverse"
       :sliding="sliding[1]"
       :style="endTriggerStyle"
+      @key-plus="handlePlus(1, $event)"
+      @key-minus="handleMinus(1, $event)"
     >
       <template #tip="{ value: endValue }">
         <slot name="tip" :value="endValue">
@@ -151,7 +155,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('slider')
-    const currentValue = ref([0, 0]) // 按每 step 为 1 的 value
+    const stepOneValue = ref([0, 0]) // 按每 step 为 1 的 value
     const sliding = ref([false, false])
     const triggerType = ref(TriggerType.END)
 
@@ -161,7 +165,7 @@ export default defineComponent({
     const startTrigger = ref<InstanceType<typeof SliderTrigger>>()
     const endTrigger = ref<InstanceType<typeof SliderTrigger>>()
 
-    const markerPercent = computed(() => {
+    const markerValues = computed(() => {
       return Object.keys(props.markers)
         .map(parseFloat)
         .filter(percent => {
@@ -179,25 +183,22 @@ export default defineComponent({
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('loading')]: props.loading && props.loadingLock,
         [nh.bm('reverse')]: props.reverse,
-        [nh.bm('with-marker')]: markerPercent.value.length
+        [nh.bm('with-marker')]: markerValues.value.length
       }
     })
-    // 按每 step 算的最小值
-    const stepMin = computed(() => Math.round(Math.min(props.min, props.max) / props.step))
-    // 按每 step 算的最大值
-    const stepMax = computed(() => Math.round(Math.max(props.min, props.max) / props.step))
+    // 按每 step 为 1 算的最小值
+    const stepOneMin = computed(() => Math.round(Math.min(props.min, props.max) / props.step))
+    // 按每 step 为 1 算的最大值
+    const stepOneMax = computed(() => Math.round(Math.max(props.min, props.max) / props.step))
     const truthValue = computed(() => {
       return [
-        Math.round(currentValue.value[0] * props.step),
-        Math.round(currentValue.value[1] * props.step)
+        Math.round(stepOneValue.value[0] * props.step),
+        Math.round(stepOneValue.value[1] * props.step)
       ]
     })
-    const total = computed(() => stepMax.value - stepMin.value || 1)
+    const stepOneTotal = computed(() => stepOneMax.value - stepOneMin.value || 1)
     const triggerPercent = computed(() => {
-      return [
-        ((currentValue.value[0] - stepMin.value) / total.value) * 100,
-        ((currentValue.value[1] - stepMin.value) / total.value) * 100
-      ]
+      return [toPercent(stepOneValue.value[0]), toPercent(stepOneValue.value[1])]
     })
     const fillerStyle = computed(() => {
       const { vertical, reverse } = props
@@ -236,6 +237,7 @@ export default defineComponent({
         transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
       }
     })
+    const readOnly = computed(() => props.disabled || (props.loading && props.loadingLock))
 
     parseValue(props.value)
     verifyValue()
@@ -248,34 +250,44 @@ export default defineComponent({
       }
     )
 
+    function toPercent(value: string | number) {
+      return ((parseFloat(value as string) - stepOneMin.value) / stepOneTotal.value) * 100
+    }
+
     function parseValue(value: number | number[]) {
       if (props.range) {
         const values = Array.isArray(value) ? value : [value, 100]
 
-        currentValue.value = [values[0] / props.step, values[1] / props.step]
+        stepOneValue.value = [values[0] / props.step, values[1] / props.step]
       } else {
-        currentValue.value = [stepMin.value, (Array.isArray(value) ? value[0] : value) / props.step]
+        stepOneValue.value = [
+          stepOneMin.value,
+          (Array.isArray(value) ? value[0] : value) / props.step
+        ]
       }
     }
 
     function verifyValue() {
-      currentValue.value = currentValue.value.map(value => {
-        let computedValue = Math.max(stepMin.value, Math.min(stepMax.value, Math.round(value)))
+      stepOneValue.value = stepOneValue.value.map(value => {
+        let computedValue = Math.max(
+          stepOneMin.value,
+          Math.min(stepOneMax.value, Math.round(value))
+        )
 
-        if (props.markerOnly && markerPercent.value.length) {
-          let nearest = 100
-          let nearestPercent = 0
+        if (props.markerOnly && markerValues.value.length) {
+          let nearest = Infinity
+          let nearestMarker = 0
 
-          for (const percent of markerPercent.value) {
-            const delta = Math.abs(((computedValue - stepMin.value) / total.value) * 100 - percent)
+          for (const markerValue of markerValues.value) {
+            const delta = Math.abs(computedValue * props.step - markerValue)
 
             if (nearest > delta) {
               nearest = delta
-              nearestPercent = percent
+              nearestMarker = markerValue
             }
           }
 
-          computedValue = (nearestPercent / 100) * total.value + stepMin.value
+          computedValue = nearestMarker / props.step
         }
 
         return computedValue
@@ -294,20 +306,20 @@ export default defineComponent({
 
     let trackRect: DOMRect | null = null
 
-    function computeValue(event: PointerEvent) {
+    function computePointedValue(event: PointerEvent) {
       if (!trackRect) return
 
       const vertical = props.vertical
       const reverse = props.reverse
       const client = vertical ? event.clientY : event.clientX
 
-      currentValue.value[triggerType.value] =
+      stepOneValue.value[triggerType.value] =
         (reverse ? -1 : 1) *
           ((client -
             trackRect[vertical ? (reverse ? 'bottom' : 'top') : reverse ? 'right' : 'left']) /
             trackRect[vertical ? 'height' : 'width']) *
-          total.value +
-        stepMin.value
+          stepOneTotal.value +
+        stepOneMin.value
     }
 
     let lastValue: number | number[]
@@ -325,7 +337,7 @@ export default defineComponent({
 
       event.preventDefault()
 
-      computeValue(event)
+      computePointedValue(event)
       verifyValue()
 
       if (startTrigger.value) {
@@ -346,7 +358,7 @@ export default defineComponent({
     })
 
     function handleTrackDown(event: PointerEvent) {
-      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
+      if (!track.value || readOnly.value) return
 
       clearTimeout(timer.sliding)
       event.stopPropagation()
@@ -375,7 +387,7 @@ export default defineComponent({
 
       sliding.value[triggerType.value] = true
 
-      computeValue(event)
+      computePointedValue(event)
       verifyValue()
 
       document.addEventListener('pointermove', handleMove)
@@ -406,38 +418,91 @@ export default defineComponent({
       }
     }
 
-    function getPointStyle(percent: number | string) {
+    function getPointStyle(value: number | string) {
       const { vertical, reverse } = props
+      value = toPercent(value)
 
       return {
-        [reverse ? 'bottom' : 'top']: vertical ? `${percent}%` : '50%',
-        [reverse ? 'right' : 'left']: vertical ? '50%' : `${percent}%`,
+        [reverse ? 'bottom' : 'top']: vertical ? `${value}%` : '50%',
+        [reverse ? 'right' : 'left']: vertical ? '50%' : `${value}%`,
         transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
       }
     }
 
-    function getMarkerStyle(percent: number | string) {
+    function getMarkerStyle(value: number | string) {
       const { vertical, reverse } = props
+      value = toPercent(value)
 
       return {
-        [reverse ? 'bottom' : 'top']: vertical ? `${percent}%` : undefined,
-        [reverse ? 'right' : 'left']: vertical ? undefined : `${percent}%`,
+        [reverse ? 'bottom' : 'top']: vertical ? `${value}%` : undefined,
+        [reverse ? 'right' : 'left']: vertical ? undefined : `${value}%`,
         transform: `translate${vertical ? 'Y' : 'X'}(${reverse ? '' : '-'}50%)`
       }
     }
 
-    function isPercentInRange(percent: number | string) {
-      const numberPercent = parseFloat(percent as string)
+    function isValueInRange(value: number | string) {
+      const number = parseFloat(value as string)
 
-      if (Number.isNaN(numberPercent)) return false
+      if (Number.isNaN(number)) return false
 
       if (props.range) {
-        const min = Math.min(triggerPercent.value[0], triggerPercent.value[1])
-        const max = Math.max(triggerPercent.value[0], triggerPercent.value[1])
+        const min = Math.min(truthValue.value[0], truthValue.value[1])
+        const max = Math.max(truthValue.value[0], truthValue.value[1])
 
-        return numberPercent >= min && numberPercent <= max
+        return number >= min && number <= max
       } else {
-        return numberPercent <= triggerPercent.value[1]
+        return number <= truthValue.value[1]
+      }
+    }
+
+    function adjustValue(type: TriggerType, delta: number, emitEvent = false) {
+      stepOneValue.value[type] += delta
+
+      verifyValue()
+      emitEvent && emitChange()
+    }
+
+    function handlePlus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
+      if (readOnly.value) return
+
+      if (props.markerOnly || extra === 'alt') {
+        if (!markerValues.value.length) return
+
+        const value = truthValue.value[type]
+
+        for (const markerValue of markerValues.value) {
+          if (markerValue > value) {
+            stepOneValue.value[type] = markerValue
+            break
+          }
+        }
+
+        emitChange()
+      } else {
+        adjustValue(type, extra === 'shift' ? 5 : extra === 'ctrl' ? 20 : 1, true)
+      }
+    }
+
+    function handleMinus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
+      if (readOnly.value) return
+
+      if (props.markerOnly || extra === 'alt') {
+        if (!markerValues.value.length) return
+
+        const value = truthValue.value[type]
+
+        for (let i = markerValues.value.length - 1; i >= 0; --i) {
+          const markerValue = markerValues.value[i]
+
+          if (markerValue < value) {
+            stepOneValue.value[type] = markerValue
+            break
+          }
+        }
+
+        emitChange()
+      } else {
+        adjustValue(type, extra === 'shift' ? -5 : extra === 'ctrl' ? -20 : -1)
       }
     }
 
@@ -451,7 +516,7 @@ export default defineComponent({
       idFor,
       sliding,
 
-      markerPercent,
+      markerValues,
       className,
       truthValue,
       fillerStyle,
@@ -466,7 +531,9 @@ export default defineComponent({
       disableEvent,
       getPointStyle,
       getMarkerStyle,
-      isPercentInRange,
+      isValueInRange,
+      handlePlus,
+      handleMinus,
 
       focus,
       blur: () => (startTrigger.value || endTrigger.value)?.blur()

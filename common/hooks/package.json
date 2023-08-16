@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/hooks",
-  "version": "1.11.1",
+  "version": "1.11.4",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -28,9 +28,9 @@
     "directory": "common/hooks"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.5.1",
     "@juggle/resize-observer": "^3.4.0",
-    "@popperjs/core": "^2.11.8",
-    "@vexip-ui/utils": "workspace:~"
+    "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
     "vue": "^3.3.4"

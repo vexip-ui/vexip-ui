@@ -12,15 +12,16 @@
     aria-atomic="true"
     aria-live="assertive"
   >
-    <transition :name="nh.ns('fade')">
+    <Transition :name="nh.ns('fade')">
       <div
         v-if="state.showMask && state.visible"
         :class="[nh.be('mask'), state.maskClass]"
         :style="state.maskStyle"
         @click="handleMaskClick"
+        @wheel.stop.prevent
       ></div>
-    </transition>
-    <transition :name="state.transition">
+    </Transition>
+    <Transition :name="state.transition">
       <div
         v-if="state.visible"
         :class="{
@@ -29,6 +30,7 @@
           [nh.bem('wrapper', 'closable')]: state.closable
         }"
         @click="handleWrapperClick"
+        @wheel.stop.prevent
       >
         <Renderer v-if="isFunction(state.renderer)" :renderer="state.renderer"></Renderer>
         <template v-else>
@@ -54,7 +56,7 @@
           </div>
         </template>
       </div>
-    </transition>
+    </Transition>
   </div>
 </template>
 

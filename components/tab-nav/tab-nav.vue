@@ -73,9 +73,7 @@ import { debounceMinor, isNull } from '@vexip-ui/utils'
 import { tabNavProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
 
-import type { ItemState } from './symbol'
-
-type ChangeListener = (label: string | number) => void
+import type { ChangeEvent, ItemState } from './symbol'
 
 const trackStyleMap = {
   top: ['left', 'width'],
@@ -218,7 +216,7 @@ export default defineComponent({
 
       updateMarkerPosition()
       emit('update:active', label)
-      emitEvent(props.onChange as ChangeListener, label)
+      emitEvent(props.onChange as ChangeEvent, label)
     }
 
     function handleAdd() {
@@ -226,7 +224,7 @@ export default defineComponent({
     }
 
     function handleClose(label: string | number) {
-      emitEvent(props.onClose as ChangeListener, label)
+      emitEvent(props.onClose as ChangeEvent, label)
 
       requestAnimationFrame(updateMarkerPosition)
     }

@@ -1,5 +1,7 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-. "$(dirname "$0")/common.sh"
+huskyDir=$(dirname "$0")
+
+. "$huskyDir/_/husky.sh"
+. "$huskyDir/scripts/common.sh"
 
 npx --no-install commitlint --edit "$1"

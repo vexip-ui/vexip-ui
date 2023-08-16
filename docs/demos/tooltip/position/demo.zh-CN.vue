@@ -9,7 +9,7 @@
     :visible="visible"
     trigger="custom"
     :virtual="position"
-    @clickoutside="visible = false"
+    @click-outside="visible = false"
   >
     一些提示的内容
   </Tooltip>

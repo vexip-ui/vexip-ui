@@ -1,7 +1,13 @@
 <template>
   <Space vertical style="max-width: 400px; margin-bottom: 20px">
     <Slider :value="56" :markers="markers"></Slider>
-    <Slider :value="[28, 56]" range :markers="markers"></Slider>
+    <Slider
+      :value="[28, 56]"
+      :min="-50"
+      :max="150"
+      range
+      :markers="markers"
+    ></Slider>
   </Space>
   <Space :size="[24, 16]" style="height: 200px; margin-bottom: 20px">
     <Slider :value="56" vertical :markers="markers"></Slider>

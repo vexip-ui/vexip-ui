@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.1.27",
+  "version": "2.1.30",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
@@ -109,10 +109,10 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@vexip-ui/bem-helper": "workspace:~",
-    "@vexip-ui/hooks": "workspace:~",
-    "@vexip-ui/icons": "workspace:~",
-    "@vexip-ui/utils": "workspace:~"
+    "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/hooks": "workspace:*",
+    "@vexip-ui/icons": "workspace:*",
+    "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
@@ -168,7 +168,7 @@
     "tsx": "^3.12.7",
     "typescript": "5.0.4",
     "vite": "^4.4.2",
-    "vite-plugin-dts": "^3.2.0",
+    "vite-plugin-dts": "^3.3.1",
     "vitest": "^0.33.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"

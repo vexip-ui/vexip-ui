@@ -1,8 +1,44 @@
 import { describe, expect, it } from 'vitest'
 
-import { flatTree, sortByProps } from '../src/transform'
+import { flatTree, normalizePath, sortByProps, transformListToMap } from '../src/transform'
 
 describe('transform', () => {
+  it('normalizePath', () => {
+    expect(normalizePath('a')).toEqual('a')
+    expect(normalizePath('/a/b/c')).toEqual('/a/b/c')
+    expect(normalizePath('\\a\\b\\c')).toEqual('/a/b/c')
+    expect(normalizePath('a/b\\c')).toEqual('a/b/c')
+    expect(normalizePath('D:\\\\a/b\\c')).toEqual('D:/a/b/c')
+    expect(normalizePath('./b\\c')).toEqual('./b/c')
+    expect(normalizePath('..\\b/c')).toEqual('../b/c')
+  })
+
+  it('transformListToMap', () => {
+    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id')).toMatchObject({
+      1: { id: '1' },
+      2: { id: '2' }
+    })
+    expect(transformListToMap([{ id: '1' }, { id: '2' }], i => i.id)).toMatchObject({
+      1: { id: '1' },
+      2: { id: '2' }
+    })
+    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id', i => i.id)).toMatchObject({
+      1: '1',
+      2: '2'
+    })
+    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id', undefined, true)).toMatchObject(
+      new Map().set('1', { id: '1' }).set('2', { id: '2' })
+    )
+    expect(
+      transformListToMap(
+        [{ id: '1' }, { id: '2' }],
+        i => i.id,
+        i => i.id,
+        true
+      )
+    ).toMatchObject(new Map().set('1', '1').set('2', '2'))
+  })
+
   it('sortByProps', () => {
     const data = Array.from({ length: 10 }, (_, i) => ({
       name: `n${Math.floor(i / 2)}`,

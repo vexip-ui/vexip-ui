@@ -15,3 +15,6 @@ export type AutoCompleteFilter = (
   value: string | number,
   options: AutoCompleteOptionState
 ) => boolean
+
+export type ChangeEvent = (value: string | number, data: AutoCompleteRawOption) => void
+export type EnterEvent = (value: string | number) => void

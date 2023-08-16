@@ -1,5 +1,5 @@
 <template>
-  <transition appear :name="transitionName" @after-leave="handleDelete(state.key)">
+  <Transition appear :name="transitionName" @after-leave="handleDelete(state.key)">
     <div
       v-show="state.visible"
       ref="wrapper"
@@ -19,7 +19,7 @@
         </slot>
       </div>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script lang="ts">

@@ -90,6 +90,7 @@ describe('Confirm', () => {
 
     await nextTick()
     wrapper.vm.openConfirm({
+      title: 'title',
       content: 'content',
       closable: true
     })

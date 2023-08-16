@@ -7,29 +7,35 @@ import {
   eventProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
+  valuesProp
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
-import type { SelectFilter, SelectKeyConfig, SelectRawOption, SelectValue } from './symbol'
+import type {
+  ChangeEvent,
+  SelectBaseValue,
+  SelectEvent,
+  SelectFilter,
+  SelectKeyConfig,
+  SelectRawOption,
+  SelectValue
+} from './symbol'
 
-type SelectEvent =
-  | ((value: string | number, data: any) => void)
+type CustomChangeEvent =
+  | ChangeEvent
+  | ((value: SelectBaseValue, data: any) => void)
   | ((value: string, data: any) => void)
   | ((value: number, data: any) => void)
-
-type ChangeEvent =
-  | ((value: SelectValue, data: any | any[]) => void)
-  | ((value: string | number, data: any) => void)
-  | ((value: string, data: any) => void)
-  | ((value: number, data: any) => void)
-  | ((values: (string | number)[], data: any[]) => void)
+  | ((value: boolean, data: any) => void)
+  | ((values: SelectBaseValue[], data: any[]) => void)
   | ((values: string[], data: any[]) => void)
   | ((values: number[], data: any[]) => void)
+  | ((value: boolean[], data: any) => void)
 
 export const selectProps = buildProps({
   size: sizeProp,
@@ -46,7 +52,7 @@ export const selectProps = buildProps({
   suffix: Object,
   suffixColor: String,
   noSuffix: booleanProp,
-  value: [String, Number, Array] as PropType<SelectValue>,
+  value: valuesProp as PropType<SelectValue>,
   multiple: booleanProp,
   clearable: booleanProp,
   maxListHeight: Number,
@@ -77,9 +83,9 @@ export const selectProps = buildProps({
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onSelect: eventProp<SelectEvent>(),
-  onCancel: eventProp<SelectEvent>(),
-  onChange: eventProp<ChangeEvent>(),
+  onSelect: eventProp<EventListener<SelectEvent>>(),
+  onCancel: eventProp<EventListener<SelectEvent>>(),
+  onChange: eventProp<CustomChangeEvent>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp(),

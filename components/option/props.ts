@@ -1,10 +1,10 @@
-import { eventProp, wrapProps } from '@vexip-ui/config'
+import { eventProp, valueProp, wrapProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes } from 'vue'
 
 export const optionProps = wrapProps({
   value: {
-    type: [String, Number],
+    type: valueProp,
     default: null
   },
   label: {

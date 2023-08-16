@@ -181,8 +181,8 @@ export default defineComponent({
     const defaultFilter = computed(() => {
       return props.ignoreCase
         ? (value: string, option: TransferOptionState) =>
-            String(option.value).toLocaleLowerCase().includes(value)
-        : (value: string, option: TransferOptionState) => String(option.value).includes(value)
+            option.label.toLocaleLowerCase().includes(value)
+        : (value: string, option: TransferOptionState) => option.label.includes(value)
     })
     const sourceFilter = computed(() => getFilterMethod('source'))
     const targetFilter = computed(() => getFilterMethod('target'))

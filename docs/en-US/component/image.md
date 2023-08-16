@@ -128,7 +128,7 @@ type ImageSkeletonProps = Pick<
 | radius          | `number`                        | Set the border radius of the image                                                       | `0`       | -     |
 | border          | `boolean \| string`             | Whether the image has border, support passing a color string to specify the border color | `false`   | -     |
 | preview-src     | `string`                        | The preview source of image                                                              | `''`      | -     |
-| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `false`   | -     |
+| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `null`    | -     |
 
 ### Image Events
 
@@ -152,7 +152,7 @@ type ImageSkeletonProps = Pick<
 | --------------- | ------------------- | ------------------------------------------- | ------- | ----- |
 | show-all        | `boolean`           | Whether to show all images                  | `false` | -     |
 | preview         | `boolean`           | Whether to enable preview                   | `false` | -     |
-| viewer-transfer | `boolean \| string` | Set the `transfer` prop of the image viewer | `false` | -     |
+| viewer-transfer | `boolean \| string` | Set the `transfer` prop of the image viewer | `null`  | -     |
 
 ### ImageGroup Events
 
@@ -184,9 +184,9 @@ type ImageSkeletonProps = Pick<
 | change | Emitted when the viewed image changes, returns the index and source of the currently viewed image   | `(index: number, src: string)` | -     |
 | prev   | Emitted when viewing the previous image, returns the index and source of the currently viewed image | `(index: number, src: string)` | -     |
 | next   | Emitted when viewing the next image, returns the index and source of the currently viewed image     | `(index: number, src: string)` | -     |
-| close  | Emitted when close is triggered by the close button, no return value                                | -                              | -     |
-| show   | Emitted when the image viewer is opened and the transition effect ends, no return value             | -                              | -     |
-| hide   | Emitted when the image viewer is closed and the transition effect ends, no return value             | -                              | -     |
+| close  | Emitted when close is triggered by the close button                                                 | -                              | -     |
+| show   | Emitted when the image viewer is opened and the transition effect ends                              | -                              | -     |
+| hide   | Emitted when the image viewer is closed and the transition effect ends                              | -                              | -     |
 
 ### ImageViewer Slots
 

@@ -19,9 +19,7 @@ describe('Progress', () => {
   it('percentage', () => {
     const wrapper = mount(() => <Progress percentage={30}></Progress>)
 
-    expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-      'transform: translateX(-35%) scaleX(0.3);'
-    )
+    expect(wrapper.attributes('style')).toContain('--vxp-progress-percentage: 30;')
     expect(wrapper.find('.vxp-progress__percentage').text()).toEqual('30%')
   })
 

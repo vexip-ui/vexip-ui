@@ -96,11 +96,11 @@ This example shows how to make a carousel content in Alert with the Carousel com
 
 ### Alert Events
 
-| Name       | Description                                                 | Parameters | Since   |
-| ---------- | ----------------------------------------------------------- | ---------- | ------- |
-| close      | Emitted when the warning prompt is closed, no return value  | -          | -       |
-| hide       | Emitted when the warning prompt disappears, no return value | -          | -       |
-| scroll-end | Emitted every time a content scroll ends                    | -          | `2.0.4` |
+| Name       | Description                                | Parameters | Since   |
+| ---------- | ------------------------------------------ | ---------- | ------- |
+| close      | Emitted when the warning prompt is closed  | -          | -       |
+| hide       | Emitted when the warning prompt disappears | -          | -       |
+| scroll-end | Emitted every time a content scroll ends   | -          | `2.0.4` |
 
 ### Alert Slots
 

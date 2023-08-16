@@ -12,8 +12,8 @@
 import { ref } from 'vue'
 
 const keyConfig = {
-  label: 'customLabel',
-  value: 'customValue'
+  label: 'myLabel',
+  value: 'myValue'
 }
 
 const value = ref('')

@@ -2,7 +2,7 @@
   <Select
     :id="idFor"
     ref="select"
-    v-model:visible="visible"
+    v-model:visible="currentVisible"
     :class="nh.b()"
     :inherit="props.inherit"
     :list-class="nh.be('list')"
@@ -33,6 +33,8 @@
     @focus="handleFocus"
     @blur="handleBlur"
     @outside-close="handleChange"
+    @click="handleClick"
+    @click.capture="beforeClick"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
@@ -63,6 +65,8 @@
           @submit.prevent
           @input="handleInput"
           @keydown="handleKeyDown"
+          @focus="props.filter && handleFocus($event)"
+          @blur="props.filter && handleBlur($event)"
           @compositionstart="composing = true"
           @compositionend="composing = false"
         />
@@ -73,10 +77,10 @@
         <Icon :icon="props.suffix"></Icon>
       </slot>
     </template>
-    <template #default="{ option, index, selected }">
+    <template v-if="$slots.default" #default="{ option, index, selected }">
       <slot :option="option" :index="index" :selected="selected"></slot>
     </template>
-    <template #group="{ option, index }">
+    <template v-if="$slots.group" #group="{ option, index }">
       <slot name="group" :option="option" :index="index"></slot>
     </template>
   </Select>
@@ -87,7 +91,7 @@ import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
 import { placementWhileList } from '@vexip-ui/hooks'
 import {
@@ -101,10 +105,7 @@ import {
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
-import type { AutoCompleteRawOption } from './symbol'
-
-type ChangeListener = (value: string | number, data: AutoCompleteRawOption) => void
-type EnterListener = (value: string | number) => void
+import type { AutoCompleteRawOption, ChangeEvent, EnterEvent } from './symbol'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -168,12 +169,13 @@ export default defineComponent({
       loadingEffect: null,
       transparent: false,
       debounce: false,
-      delay: null
+      delay: null,
+      showEmpty: false
     })
 
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
-    const visible = ref(false)
+    const currentVisible = ref(false)
     const composing = ref(false)
 
     let changed = false
@@ -198,10 +200,9 @@ export default defineComponent({
       }
     )
     watch(currentIndex, computeHitting)
-    watch(visible, value => {
+    watch(currentVisible, value => {
       if (!value) {
         currentIndex.value = -1
-        control.value?.blur()
       } else {
         control.value?.focus()
       }
@@ -210,6 +211,11 @@ export default defineComponent({
       if (props.filter && select.value) {
         select.value.currentFilter = `${value}`
       }
+    })
+    watchEffect(() => {
+      if (!props.filter || !currentVisible.value || !select.value) return
+
+      select.value.currentFilter = String(currentValue.value)
     })
 
     onMounted(() => {
@@ -262,20 +268,25 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emitEvent(props.onSelect as ChangeListener, value, data)
+      emitEvent(props.onSelect as ChangeEvent, value, data)
 
       if (value !== prevValue) {
         changed = true
         handleChange()
       } else {
-        visible.value = false
+        currentVisible.value = false
       }
     }
 
     function handleInputInternal(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
 
-      visible.value = !props.dropDisabled
+      currentVisible.value = !props.dropDisabled
+
+      if (select.value) {
+        select.value.currentVisible = currentVisible.value
+      }
+
       currentValue.value = value
       changed = true
       lastInput = value
@@ -285,6 +296,7 @@ export default defineComponent({
       }
 
       emitEvent(props.onInput, value)
+      nextTick(testOptionCanDrop)
     }
 
     const delay = toNumber(props.delay)
@@ -303,10 +315,10 @@ export default defineComponent({
 
       emit('update:value', currentValue.value)
       setFieldValue(currentValue.value)
-      emitEvent(props.onChange as ChangeListener, currentValue.value, option?.data || null!)
+      emitEvent(props.onChange as ChangeEvent, currentValue.value, option?.data || null!)
       valid && validateField()
 
-      visible.value = false
+      currentVisible.value = false
 
       if (control.value) {
         control.value.value = String(lastValue)
@@ -314,18 +326,54 @@ export default defineComponent({
       }
     }
 
-    function handleToggle() {
-      testOptionCanDrop()
-      emitEvent(props.onToggle, visible.value)
+    let beforeVisible = false
+    let inClickProcess = false
 
-      if (!visible.value) {
+    function beforeClick() {
+      beforeVisible = currentVisible.value
+      inClickProcess = true
+    }
+
+    function handleClick() {
+      inClickProcess = false
+
+      if (!select.value) return
+
+      currentVisible.value = true
+
+      if (!beforeVisible) {
+        testOptionCanDrop()
+        beforeVisible = currentVisible.value
+        beforeVisible && emitEvent(props.onToggle, beforeVisible)
+      } else {
+        select.value.currentVisible = true
+      }
+    }
+
+    function handleToggle(visible: boolean) {
+      if (inClickProcess) return
+
+      currentVisible.value = visible
+
+      testOptionCanDrop()
+      beforeVisible = currentVisible.value
+
+      if (currentVisible.value !== visible) {
+        emitEvent(props.onToggle, currentVisible.value)
+      }
+
+      if (!currentVisible.value) {
         currentIndex.value = -1
       }
     }
 
     function testOptionCanDrop() {
-      if (!filteredOptions.value.length || props.dropDisabled) {
-        visible.value = false
+      if (props.dropDisabled || (!props.showEmpty && !filteredOptions.value.length)) {
+        currentVisible.value = false
+
+        if (select.value) {
+          select.value.currentVisible = currentVisible.value
+        }
       }
     }
 
@@ -385,9 +433,9 @@ export default defineComponent({
         handleChange()
       }
 
-      emitEvent(props.onEnter as EnterListener, currentValue.value)
+      emitEvent(props.onEnter as EnterEvent, currentValue.value)
       control.value?.blur()
-      visible.value = false
+      currentVisible.value = false
     }
 
     function handleClear() {
@@ -395,7 +443,7 @@ export default defineComponent({
         const prevValue = currentValue.value
 
         currentValue.value = ''
-        visible.value = false
+        currentVisible.value = false
 
         if (!isNull(prevValue) && prevValue !== currentValue.value) {
           changed = true
@@ -414,7 +462,7 @@ export default defineComponent({
       idFor,
       currentValue,
       currentIndex,
-      visible,
+      currentVisible,
       composing,
 
       hasPrefix,
@@ -428,6 +476,8 @@ export default defineComponent({
       handleSelect,
       handleInput,
       handleChange,
+      beforeClick,
+      handleClick,
       handleToggle,
       handleKeyDown,
       handleEnter,

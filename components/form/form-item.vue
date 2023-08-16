@@ -60,13 +60,13 @@
       :style="controlStyle"
     >
       <slot></slot>
-      <transition :name="props.errorTransition">
+      <Transition :name="props.errorTransition">
         <div v-if="!props.hideErrorTip && isError" :class="nh.be('error-tip')">
           <slot name="error" :tip="errorTip">
             {{ errorTip }}
           </slot>
         </div>
-      </transition>
+      </Transition>
     </div>
   </Column>
 </template>

@@ -16,10 +16,9 @@ import {
 import { debounce, isNull, noop, throttle, toNumber, warnOnce } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
-import type { InputType } from './symbol'
+import type { ChangeEvent, InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
-type ChangeListener = (value: string | number) => void
 
 const inputTypes = Object.freeze<InputType[]>(['text', 'password', 'date', 'datetime', 'time'])
 
@@ -233,7 +232,7 @@ export default defineComponent({
       const type = event.type as InputEventType
 
       currentValue.value = (event.target as HTMLInputElement).value
-      console.log(currentValue.value)
+
       limitValueLength()
 
       const value = currentValue.value
@@ -262,7 +261,7 @@ export default defineComponent({
           setFieldValue(value)
         }
 
-        emitEvent(props.onChange as ChangeListener, value)
+        emitEvent(props.onChange as ChangeEvent, value)
 
         if (!sync) {
           validateField()
@@ -273,7 +272,7 @@ export default defineComponent({
           setFieldValue(value)
         }
 
-        emitEvent(props.onInput as ChangeListener, value)
+        emitEvent(props.onInput as ChangeEvent, value)
 
         if (sync) {
           validateField()

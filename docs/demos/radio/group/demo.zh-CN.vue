@@ -3,9 +3,9 @@
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
-    <Radio label="测试">
-      测试
-      <Input></Input>
+    <Radio label="其他">
+      其他
+      <Input style="margin-inline-start: 6px"></Input>
     </Radio>
   </RadioGroup>
   <p style="margin-top: 10px">

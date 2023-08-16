@@ -14,9 +14,9 @@ $tree: map.merge(
     label-color-disabled: get-css-var('content-color-disabled'),
     label-color-readonly: get-css-var('tree-label-color'),
     label-bg-color: transparent,
-    label-bg-color-hover: get-css-var('color-primary-opacity-8'),
+    label-bg-color-hover: get-css-var('fill-color-hover'),
     label-bg-color-focus: get-css-var('tree-label-bg-color-hover'),
-    label-bg-color-selected: get-css-var('color-primary-opacity-6'),
+    label-bg-color-selected: get-css-var('color-primary-opacity-8'),
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
     label-radius: get-css-var('radius-base'),
@@ -26,7 +26,8 @@ $tree: map.merge(
     arrow-color-disabled: get-css-var('content-color-disabled'),
     indicator-color: get-css-var('color-primary-base'),
     indent-width: 16px,
-    deepth: -1,
+    depth: -1,
+    link-line-index: -1,
     link-line-type: 'dashed',
     link-line-color: get-css-var('border-color-base')
   ),
@@ -42,68 +43,61 @@ $tree: map.merge(
 
   position: relative;
 
-  $arrow: get-css-var('tree-arrow-size');
-  $indent: get-css-var('tree-indent-width');
+  $arrow-s: get-css-var('tree-arrow-size');
+  $indent-w: get-css-var('tree-indent-width');
   $depth: get-css-var('tree-depth');
-  $link-line: 1px get-css-var('tree-link-line-type') get-css-var('tree-link-line-color');
 
-  &__list,
-  &__node {
-    list-style: none;
+  $link-line: #{&}__link-line;
 
-    &--link-line {
-      position: relative;
+  &__link-line {
+    position: absolute;
+    pointer-events: none;
+    border: 0 get-css-var('tree-link-line-type') get-css-var('tree-link-line-color');
 
-      &::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
-        pointer-events: none;
-        content: '';
-        border-left: $link-line;
-      }
+    &--vertical {
+      top: 0;
+      bottom: 0;
+      left: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      border-left-width: 1px;
+      transform: translateX(calc(-1 * #{get-css-var('tree-link-line-index')} * #{$indent-w}));
+    }
+
+    &--horizontal {
+      bottom: calc(50% - #{get-css-var('tree-node-span')});
+      left: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      width: calc(#{$indent-w} * 0.5);
+      border-bottom-width: 1px;
     }
   }
 
   &__list {
     padding: 0;
     margin: 0;
+    list-style: none;
   }
 
   &__node {
     padding-top: get-css-var('tree-node-span');
+    list-style: none;
     outline: 0;
 
     &--link-line {
-      &::after {
-        position: absolute;
-        bottom: calc(50% - #{get-css-var('tree-node-span')});
-        left: calc(#{$arrow} * 0.5 + #{$indent} * (#{$depth} - 1) - 1px);
-        width: calc(#{$indent} * 0.5);
-        pointer-events: none;
-        content: '';
-        border-bottom: $link-line;
-      }
+      position: relative;
     }
 
-    &--last {
-      &::before {
-        bottom: calc(50% - #{get-css-var('tree-node-span')});
-      }
+    &--last #{$link-line}--first {
+      bottom: calc(50% - #{get-css-var('tree-node-span')});
     }
 
-    &--no-arrow {
-      &::after {
-        width: calc(#{$indent} * 0.5 + #{$arrow});
-      }
+    &--no-arrow #{$link-line}--horizontal {
+      width: calc(#{$indent-w} * 0.5 + #{$arrow-s});
     }
   }
 
   &__content {
     display: flex;
     align-items: center;
-    padding-left: calc(#{$depth} * #{$indent});
+    padding-left: calc(#{$depth} * #{$indent-w});
   }
 
   &__label {
