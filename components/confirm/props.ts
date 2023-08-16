@@ -2,6 +2,7 @@ import { booleanProp, buildProps, classProp, localeProp, styleProp } from '@vexi
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { IconMinorProps } from '@/components/icon'
 import type { ConfirmAlign, ConfirmButtonType, ConfirmRenderFn } from './symbol'
 
 const positionType = [Number, String]
@@ -16,11 +17,14 @@ export const confirmProps = buildProps({
   cancelType: String as PropType<ConfirmButtonType>,
   confirmText: String,
   cancelText: String,
-  icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
+  icon: {
+    type: [Boolean, Object, Function] as PropType<boolean | Record<string, any> | (() => any)>,
+    default: null
+  },
   className: classProp,
   style: styleProp,
   renderer: Function as PropType<ConfirmRenderFn>,
-  iconColor: String,
+  iconProps: Object as PropType<IconMinorProps>,
   closable: booleanProp,
   contentAlign: String as PropType<ConfirmAlign>,
   actionsAlign: String as PropType<ConfirmAlign>,

@@ -36,17 +36,17 @@
         :class="[
           nh.be('body'),
           nh.bem('body', contentAlignR),
-          title && nh.bem('body', 'with-title')
+          !title && nh.bem('body', 'no-title')
         ]"
       >
-        <div :class="nh.be('icon')">
-          <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
+        <div v-if="iconR !== false" :class="nh.be('icon')">
+          <Renderer v-if="isFunction(iconR)" :renderer="iconR"></Renderer>
+          <Icon v-else-if="isObject(iconR)" v-bind="iconPropsR" :icon="iconR"></Icon>
           <Icon
             v-else
-            v-bind="icons.question"
-            :icon="iconR || icons.question.icon"
             :scale="2.2"
-            :style="{ color: iconColorR }"
+            v-bind="{ ...icons.question, ...iconPropsR }"
+            :icon="icons.question.icon"
           ></Icon>
         </div>
         <div v-if="parseHtmlR" :class="nh.be('content')" v-html="content"></div>
@@ -75,17 +75,6 @@
           {{ confirmTextR || locale.confirm }}
         </Button>
       </div>
-      <button
-        v-if="closableR && !title"
-        type="button"
-        :class="nh.be('close')"
-        @mousedown.stop
-        @click="handleCancel"
-      >
-        <slot name="close">
-          <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
-        </slot>
-      </button>
     </template>
   </Modal>
 </template>
@@ -99,7 +88,7 @@ import { Renderer } from '@/components/renderer'
 import { defineComponent, nextTick, onMounted, ref, toRef } from 'vue'
 
 import { useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { isFunction, isPromise } from '@vexip-ui/utils'
+import { isFunction, isObject, isPromise } from '@vexip-ui/utils'
 import { confirmProps } from './props'
 
 import type { ConfirmButtonType, ConfirmOptions, ConfirmRenderFn } from './symbol'
@@ -160,18 +149,18 @@ export default defineComponent({
         isFunc: true,
         static: true
       },
-      iconColor: '',
+      iconProps: () => ({}),
       closable: false,
       parseHtml: false,
-      contentAlign: 'center',
-      actionsAlign: 'center'
+      contentAlign: 'left',
+      actionsAlign: 'right'
     })
 
     const visible = ref(false)
     const loading = ref(false)
     const title = ref('')
     const content = ref('')
-    const iconColorR = ref(props.iconColor)
+    const iconPropsR = ref(props.iconProps)
     const classR = ref(props.className)
     const styleR = ref(props.style || ({} as any))
     const confirmTypeR = ref(props.confirmType)
@@ -204,7 +193,7 @@ export default defineComponent({
         content.value = options.content ?? ''
         classR.value = options.className ?? props.className
         styleR.value = options.style ?? props.style
-        iconColorR.value = options.iconColor ?? props.iconColor
+        iconPropsR.value = options.iconProps ?? props.iconProps
         maskCloseR.value = options.maskClose ?? props.maskClose
         confirmTypeR.value = options.confirmType ?? props.confirmType
         cancelTypeR.value = options.cancelType ?? props.cancelType
@@ -274,7 +263,7 @@ export default defineComponent({
       visible.value = false
       title.value = ''
       content.value = ''
-      iconColorR.value = props.iconColor
+      iconPropsR.value = props.iconProps
       classR.value = props.className
       styleR.value = props.style
       maskCloseR.value = props.maskClose
@@ -302,7 +291,7 @@ export default defineComponent({
 
       classR,
       styleR,
-      iconColorR,
+      iconPropsR,
       maskCloseR,
       confirmTypeR,
       cancelTypeR,
@@ -316,6 +305,7 @@ export default defineComponent({
       rendererR,
 
       isFunction,
+      isObject,
       openConfirm,
       handleConfirm,
       handleCancel,

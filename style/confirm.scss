@@ -15,7 +15,13 @@ $confirm: map.merge(
     header-padding: 8px,
     body-padding: 14px 8px,
     body-padding-with-title: 8px,
-    actions-padding: 14px 8px 8px
+    actions-padding: 14px 8px 8px,
+    header-v-padding: 10px,
+    header-h-padding: 14px,
+    body-v-padding: 10px,
+    body-h-padding: 14px,
+    footer-v-padding: 12px,
+    footer-h-padding: 14px
   ),
   $confirm
 );
@@ -29,13 +35,14 @@ $confirm: map.merge(
 
   .#{$namespace}-modal__content {
     position: relative;
+    padding: 0;
   }
 
   &__header {
     position: relative;
     display: flex;
     align-items: center;
-    padding: get-css-var('confirm-header-padding');
+    padding: get-css-var('confirm-header-v-padding') get-css-var('confirm-header-h-padding');
   }
 
   &__title {
@@ -50,10 +57,16 @@ $confirm: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: get-css-var('confirm-body-padding');
+    padding: get-css-var('confirm-body-v-padding') get-css-var('confirm-body-h-padding');
 
-    &--with-title {
-      padding: get-css-var('confirm-body-padding-with-title');
+    // &--with-title {
+    //   padding: get-css-var('confirm-body-padding-with-title');
+    // }
+
+    &--no-title {
+      padding-top: calc(
+        #{get-css-var('confirm-header-v-padding')} * 0.5 + #{get-css-var('confirm-body-v-padding')}
+      );
     }
 
     &--left {
@@ -77,7 +90,7 @@ $confirm: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: get-css-var('confirm-actions-padding');
+    padding: get-css-var('confirm-footer-v-padding') get-css-var('confirm-footer-h-padding');
 
     &--left {
       justify-content: flex-start;
@@ -97,9 +110,7 @@ $confirm: map.merge(
   }
 
   &__close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+    position: relative;
     display: flex;
     align-items: center;
     height: 24px;
@@ -116,11 +127,5 @@ $confirm: map.merge(
     &:focus {
       color: get-css-var('confirm-close-color-hover');
     }
-  }
-
-  &__header &__close {
-    position: relative;
-    top: 0;
-    right: 0;
   }
 }
