@@ -134,7 +134,7 @@ export default defineComponent({
     })
     const isAlive = computed(() => parentState?.alive || props.alive)
 
-    provide(SELECT_HANDLER, null)
+    provide(SELECT_HANDLER, null!)
     !props.custom &&
       provide(
         DROPDOWN_STATE,
@@ -162,7 +162,7 @@ export default defineComponent({
 
     watch(currentVisible, value => {
       if (value) {
-        updatePopper()
+        requestAnimationFrame(updatePopper)
       }
     })
 
