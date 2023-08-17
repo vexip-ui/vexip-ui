@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:list';
 
 @use './variables.scss' as *;
 
@@ -56,6 +57,37 @@
     }
   } @else {
     @content;
+  }
+}
+
+@mixin rtl {
+  $self: #{&};
+
+  @at-root {
+    html.rtl,
+    html[dir='rtl'] {
+      #{$self} {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin around-border($border-color, $border-radius, $duration: 2000ms) {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    pointer-events: none;
+    content: '';
+    border: get-css-var('border-shape') $border-color;
+    border-radius: $border-radius;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-border-clip $duration infinite linear;
   }
 }
 
@@ -116,7 +148,7 @@
     width: 0;
     height: auto;
     content: '';
-    border-left: get-css-var('border-shape') $border-color;
+    border-inline-start: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
     animation: vxp-v-moving-border $duration infinite;
   }
@@ -127,8 +159,26 @@
     width: 0;
     height: auto;
     content: '';
-    border-left: get-css-var('border-shape') $border-color;
+    border-inline-start: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
     animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
+  }
+}
+
+@mixin logical-radius($values) {
+  @if list.nth($values, 1) {
+    border-start-start-radius: list.nth($values, 1);
+  }
+
+  @if list.nth($values, 2) {
+    border-start-end-radius: list.nth($values, 2);
+  }
+
+  @if list.nth($values, 3) {
+    border-end-end-radius: list.nth($values, 3);
+  }
+
+  @if list.nth($values, 4) {
+    border-end-start-radius: list.nth($values, 4);
   }
 }

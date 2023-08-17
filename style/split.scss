@@ -145,7 +145,7 @@ $split: map.merge(
     }
 
     &--top-full {
-      margin-right: $button-margin;
+      margin-inline-end: $button-margin;
 
       &::before {
         left: $button-position;
@@ -174,7 +174,7 @@ $split: map.merge(
     }
 
     &--bottom-full {
-      margin-left: $button-margin;
+      margin-inline-start: $button-margin;
 
       &::before {
         left: $button-position;
@@ -269,6 +269,10 @@ $split: map.merge(
     & > #{$trigger} {
       #{$handler} {
         transform: translateX(-100%);
+
+        @include rtl {
+          transform: translateX(0) !important;
+        }
       }
 
       #{$button} {
@@ -394,11 +398,19 @@ $split: map.merge(
       width: 0;
       height: 100%;
 
+      @include rtl {
+        transform: translate(50%, -50%);
+      }
+
       #{$handler} {
         flex-direction: column;
         width: $handler-size;
         height: 100%;
         cursor: col-resize;
+
+        @include rtl {
+          transform: translateX(100%);
+        }
       }
 
       #{$button} {

@@ -13,7 +13,7 @@
         :prop="`skills.${index}.value`"
         :label="`Skill ${index + 1}`"
         flex="auto"
-        style="margin-left: 10px"
+        style="margin-inline-start: 10px"
       >
         <Input style="flex: 1"></Input>
         <Button
@@ -22,7 +22,7 @@
           circle
           size="small"
           :disabled="!index"
-          style="margin-left: 6px"
+          style="margin-inline-start: 6px"
           @click="removeSkill(index)"
         ></Button>
       </FormItem>

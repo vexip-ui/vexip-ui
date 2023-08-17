@@ -46,8 +46,8 @@ const contentHeight = ref(1000)
 const contentStyle = computed(() => ({
   height: `${contentHeight.value}px`,
   paddingTop: '80px',
-  paddingLeft: '50px',
-  marginRight: '-50px'
+  paddingInlineStart: '50px',
+  marginInlineEnd: '-50px'
 }))
 
 watch(
@@ -132,7 +132,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
   .toc-anchor {
     position: sticky;
     top: calc(40px + var(--header-height));
-    right: 10px;
+    inset-inline-end: 10px;
     display: none;
     width: var(--anchor-width);
 
@@ -154,7 +154,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
   }
 
   h1 > .vxp-tag {
-    margin-left: 8px;
+    margin-inline-start: 8px;
   }
 
   .md-table {

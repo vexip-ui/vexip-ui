@@ -3,7 +3,7 @@
     v-model:visible="visible"
     :class="[nh.b(), nh.bs('vars')]"
     trigger="click"
-    placement="right-start"
+    :placement="isRtl ? 'left-start' : 'right-start'"
     :appear="appear"
     :transfer="false"
     :style="{
@@ -44,6 +44,7 @@ import { Renderer } from '@/components/renderer'
 import { defineComponent, reactive, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { useRtl } from '@vexip-ui/hooks'
 import { isFunction } from '@vexip-ui/utils'
 import { renderItem } from './render'
 
@@ -58,6 +59,7 @@ export default defineComponent({
   },
   setup() {
     const nh = useNameHelper('contextmenu')
+    const { isRtl } = useRtl()
     const visible = ref(false)
     const configs = ref<ContextmenuConfig[]>([])
     const appear = ref(false)
@@ -113,6 +115,7 @@ export default defineComponent({
 
     return {
       nh,
+      isRtl,
       visible,
       configs,
       appear,

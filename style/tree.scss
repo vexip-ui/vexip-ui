@@ -57,14 +57,18 @@ $tree: map.merge(
     &--vertical {
       top: 0;
       bottom: 0;
-      left: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
-      border-left-width: 1px;
+      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      border-inline-start-width: 1px;
       transform: translateX(calc(-1 * #{get-css-var('tree-link-line-index')} * #{$indent-w}));
+
+      @include rtl {
+        transform: translateX(calc(#{get-css-var('tree-link-line-index')} * #{$indent-w}));
+      }
     }
 
     &--horizontal {
       bottom: calc(50% - #{get-css-var('tree-node-span')});
-      left: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
       width: calc(#{$indent-w} * 0.5);
       border-bottom-width: 1px;
     }
@@ -97,7 +101,7 @@ $tree: map.merge(
   &__content {
     display: flex;
     align-items: center;
-    padding-left: calc(#{$depth} * #{$indent-w});
+    padding-inline-start: calc(#{$depth} * #{$indent-w});
   }
 
   &__label {
@@ -157,7 +161,7 @@ $tree: map.merge(
     justify-content: center;
     width: get-css-var('tree-arrow-size');
     height: get-css-var('tree-arrow-size');
-    margin-right: 3px;
+    margin-inline-end: 3px;
     color: get-css-var('tree-arrow-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -169,6 +173,10 @@ $tree: map.merge(
 
     &--expanded .#{$namespace}-icon {
       transform: rotate(90deg);
+
+      @include rtl {
+        transform: rotate(-90deg);
+      }
     }
 
     &--disabled {
@@ -179,20 +187,20 @@ $tree: map.merge(
 
   &__checkbox {
     display: inline-flex;
-    margin-right: 6px;
+    margin-inline-end: 6px;
 
     &--suffix {
-      margin-right: 0;
-      margin-left: 6px;
+      margin-inline-start: 6px;
+      margin-inline-end: 0;
     }
   }
 
   &__indicator {
     position: absolute;
-    right: 0;
-    left: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     height: 1px;
-    will-change: top, left;
+    will-change: top, inset-inline-start;
     background-color: get-css-var('tree-indicator-color');
   }
 }

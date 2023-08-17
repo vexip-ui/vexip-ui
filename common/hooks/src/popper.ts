@@ -1,10 +1,21 @@
 import { onMounted, ref, shallowRef, unref, watch, watchEffect } from 'vue'
 
-import { arrow, autoUpdate, computePosition, flip, hide, offset, shift } from '@floating-ui/dom'
+import {
+  arrow,
+  autoUpdate,
+  computePosition,
+  flip,
+  hide,
+  offset,
+  platform,
+  shift
+} from '@floating-ui/dom'
+import { useRtl } from './rtl'
 import { isClient } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type {
+  ComputePositionConfig,
   Middleware,
   OffsetOptions,
   Placement,
@@ -23,6 +34,7 @@ interface UsePopperOptions {
    * popper 元素需要迁移至的目标选择器，为 true 时会迁移至 body
    */
   transfer?: MaybeRef<boolean | string>,
+  isRtl?: MaybeRef<boolean>,
   /**
    * 包围元素，用于判断 clickoutside 事件
    *
@@ -88,6 +100,7 @@ export function usePopper(initOptions: UsePopperOptions) {
 
   const placement = ref(unref(initOptions.placement))
   const transferTo = ref('')
+  const isRtl = initOptions.isRtl ?? useRtl().isRtl
 
   if (wrapper) {
     watchEffect(() => {
@@ -113,12 +126,14 @@ export function usePopper(initOptions: UsePopperOptions) {
   }
 
   onMounted(() => {
-    watchEffect(updatePopper)
+    requestAnimationFrame(() => {
+      watchEffect(updatePopperInternal)
+    })
   })
 
   let cleanup: (() => void) | undefined
 
-  function updatePopper() {
+  async function updatePopperInternal() {
     if (!isClient) return
 
     cleanup?.()
@@ -130,16 +145,10 @@ export function usePopper(initOptions: UsePopperOptions) {
 
     const arrowEl = unref(arrowRef)
 
-    const options: {
-      placement: Placement,
-      middleware: Middleware[]
-    } = {
-      placement: unref(initOptions.placement),
-      middleware: [flip()]
-    }
+    const middleware: Middleware[] = [flip()]
 
     if (isDrop) {
-      options.middleware.push({
+      middleware.push({
         name: 'origin',
         fn({ placement, elements }) {
           const origin = setPopperDropOrigin(placement)
@@ -163,7 +172,7 @@ export function usePopper(initOptions: UsePopperOptions) {
         }
       }
 
-      options.middleware.push(offset(offsetOptions))
+      middleware.push(offset(offsetOptions))
     }
 
     if (initOptions.shift) {
@@ -173,14 +182,24 @@ export function usePopper(initOptions: UsePopperOptions) {
         shiftOptions = {}
       }
 
-      options.middleware.push(shift(shiftOptions))
+      middleware.push(shift(shiftOptions))
     }
 
     if (arrowEl) {
-      options.middleware.push(arrow({ element: arrowEl }))
+      middleware.push(arrow({ element: arrowEl }))
     }
 
-    options.middleware.push(hide({ strategy: 'escaped' }))
+    middleware.push(hide({ strategy: 'escaped' }))
+
+    const rtl = unref(isRtl) || false
+    const options: ComputePositionConfig = {
+      middleware,
+      placement: unref(initOptions.placement),
+      platform: {
+        ...platform,
+        isRTL: async () => rtl
+      }
+    }
 
     const update = async () => {
       const {
@@ -209,11 +228,11 @@ export function usePopper(initOptions: UsePopperOptions) {
         left: `${x}px`
       }
 
-      if (middlewareData.hide?.escaped) {
-        style.visibility = 'hidden'
-      } else {
-        style.visibility = ''
-      }
+      // if (middlewareData.hide?.escaped) {
+      //   style.visibility = 'hidden'
+      // } else {
+      //   style.visibility = ''
+      // }
 
       if (arrowEl) {
         if (middlewareData.arrow) {
@@ -235,13 +254,47 @@ export function usePopper(initOptions: UsePopperOptions) {
 
     if (initOptions.autoUpdate) {
       cleanup = autoUpdate(referenceEl, popperEl, update)
-    } else {
-      update()
     }
+
+    await update()
+  }
+
+  const updatePopper = () => {
+    return new Promise<void>(resolve => {
+      requestAnimationFrame(() => {
+        updatePopperInternal().then(resolve)
+      })
+    })
   }
 
   function setTransferTo(value: boolean | string) {
     transferTo.value = typeof value === 'boolean' ? (value ? 'body' : '') : value
+  }
+
+  // function normalizePlacement(placement: Placement, rtl: boolean) {
+  //   if (!rtl) return placement
+
+  //   let [start, end] = placement.split('-')
+
+  //   if (start === 'left' || start === 'right') {
+  //     start = start === 'left' ? 'right' : 'left'
+  //   } else {
+  //     if (!end) return placement
+
+  //     end = end === 'start' ? 'end' : 'start'
+  //   }
+
+  //   return `${start}-${end}` as Placement
+  // }
+
+  function setPopperDropOrigin(placement: Placement) {
+    if (placement !== 'left' && placement !== 'right') {
+      const [start, end] = placement.split('-')
+
+      return start === 'bottom' || (start !== 'top' && end === 'start')
+        ? 'center top'
+        : 'center bottom'
+    }
   }
 
   return {
@@ -251,15 +304,5 @@ export function usePopper(initOptions: UsePopperOptions) {
     placement,
     transferTo,
     updatePopper
-  }
-}
-
-function setPopperDropOrigin(placement: Placement) {
-  if (placement !== 'left' && placement !== 'right') {
-    const [placementStart, placementEnd] = placement.split('-')
-
-    return placementStart === 'bottom' || (placementStart !== 'top' && placementEnd === 'start')
-      ? 'center top'
-      : 'center bottom'
   }
 }

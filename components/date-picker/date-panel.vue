@@ -16,14 +16,14 @@
         <div :class="nh.be('date-panel')">
           <div :class="nh.be('header')">
             <div :class="[nh.be('arrow'), nh.be('prev-year')]" @click="handleDoublePrevClick">
-              <Icon v-bind="icons.anglesLeft"></Icon>
+              <Icon v-bind="isRtl ? icons.anglesRight : icons.anglesLeft"></Icon>
             </div>
             <div
               v-show="currentPane === 'date'"
               :class="[nh.be('arrow'), nh.be('prev-month')]"
               @click="adjustCalendar('month', -1)"
             >
-              <Icon v-bind="icons.angleLeft"></Icon>
+              <Icon v-bind="isRtl ? icons.arrowRight : icons.angleLeft"></Icon>
             </div>
             <div :class="nh.be('year-month')">
               <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
@@ -47,10 +47,10 @@
               :class="[nh.be('arrow'), nh.be('next-month')]"
               @click="adjustCalendar('month', 1)"
             >
-              <Icon v-bind="icons.angleRight"></Icon>
+              <Icon v-bind="isRtl ? icons.angleLeft : icons.angleRight"></Icon>
             </div>
             <div :class="[nh.be('arrow'), nh.be('next-year')]" @click="handleDoubleNextClick">
-              <Icon v-bind="icons.anglesRight"></Icon>
+              <Icon v-bind="isRtl ? icons.anglesLeft : icons.anglesRight"></Icon>
             </div>
           </div>
           <div :class="nh.be('calendar')">
@@ -187,6 +187,7 @@ import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
+import { useRtl } from '@vexip-ui/hooks'
 import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -310,6 +311,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const today = toDate(props.today)
 
+    const { isRtl } = useRtl()
     const currentPane = ref<DateType>(
       props.type === 'year' ? 'year' : props.type === 'month' ? 'month' : 'date'
     )
@@ -653,6 +655,7 @@ export default defineComponent({
 
       isDatetime,
       calendarValue,
+      isRtl,
 
       getMonthLabel,
       togglePane,

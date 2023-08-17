@@ -322,12 +322,12 @@ function editOnPlayground() {
 
       &::before {
         width: 14px;
-        margin-right: 8px;
+        margin-inline-end: 8px;
       }
 
       &::after {
         width: calc(100% - 14px);
-        margin-left: 8px;
+        margin-inline-start: 8px;
       }
 
       &__link {
@@ -351,7 +351,7 @@ function editOnPlayground() {
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-left: 3px;
+    margin-inline-start: 3px;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
     background-color: transparent;
@@ -365,7 +365,7 @@ function editOnPlayground() {
     }
 
     &:first-child {
-      margin-left: 0;
+      margin-inline-start: 0;
     }
 
     .vxp-tooltip__trigger {
@@ -432,8 +432,8 @@ function editOnPlayground() {
 
   &__reduce &__tip {
     width: 80px;
-    padding-left: 10px;
-    margin-right: -80px;
+    padding-inline-start: 10px;
+    margin-inline-end: -80px;
     white-space: nowrap;
     opacity: 0%;
     transition: margin var(--vxp-transition-base), var(--vxp-transition-color),
@@ -442,7 +442,7 @@ function editOnPlayground() {
 
   &__reduce:hover &__tip,
   &__reduce:focus &__tip {
-    margin-right: 0;
+    margin-inline-end: 0;
     opacity: 100%;
   }
 

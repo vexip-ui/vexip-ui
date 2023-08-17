@@ -45,22 +45,22 @@
           <br />
         </template>
         <template v-for="state in states" :key="state">
-          <Input :state="state" style="margin-right: 20px"></Input>
+          <Input :state="state" style="margin-inline-end: 20px"></Input>
           <NumberInput :state="state"></NumberInput>
           <br />
           <br />
         </template>
-        <Input disabled style="margin-right: 20px"></Input>
+        <Input disabled style="margin-inline-end: 20px"></Input>
         <NumberInput disabled></NumberInput>
         <br />
         <br />
         <template v-for="state in states" :key="state">
-          <Select :options="options" :state="state" style="margin-right: 20px"></Select>
+          <Select :options="options" :state="state" style="margin-inline-end: 20px"></Select>
           <AutoComplete :options="options" :state="state"></AutoComplete>
           <br />
           <br />
         </template>
-        <Select :options="options" disabled style="margin-right: 20px"></Select>
+        <Select :options="options" disabled style="margin-inline-end: 20px"></Select>
         <AutoComplete :options="options" disabled></AutoComplete>
         <br />
         <br />
@@ -226,7 +226,7 @@
         <br />
         <br />
         <div style="display: flex">
-          <Button type="primary" style="margin-right: 20px" @click="spinActive = !spinActive">
+          <Button type="primary" style="margin-inline-end: 20px" @click="spinActive = !spinActive">
             Switch
           </Button>
           <Spin :active="spinActive" tip="Loading..." style="width: 600px">
@@ -287,7 +287,7 @@
         <br />
         <div style="display: flex">
           <template v-for="n in 2" :key="n">
-            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-right: 20px">
+            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-inline-end: 20px">
               <MenuItem
                 v-for="meta in menuMeta"
                 :key="meta.label"
@@ -424,7 +424,10 @@
               </Card>
             </TimelineItem>
           </Timeline>
-          <Timeline pending style="width: calc(50% - 30px); max-width: 300px; margin-left: 30px">
+          <Timeline
+            pending
+            style="width: calc(50% - 30px); max-width: 300px; margin-inline-start: 30px"
+          >
             <TimelineItem v-for="meta in timelineMeta" :key="meta.date" :type="meta.type">
               <p style="margin: 0 0 6px">
                 {{ meta.date }}

@@ -28,7 +28,10 @@ export interface I18nConfig {
     backHomepage: string,
     lastUpdated: string,
     contributors: string,
-    thanksContribute: string
+    thanksContribute: string,
+    toggleDirection: string,
+    toggleTheme: string,
+    viewInGithub: string
   },
   alert: {
     info: string,

@@ -113,6 +113,7 @@ import { computed, defineComponent, inject, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
+import { useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
@@ -163,6 +164,7 @@ export default defineComponent({
     const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
+    const { isRtl } = useRtl()
     const disableCheckRows = toRef(getters, 'disableCheckRows')
     const disableExpandRows = toRef(getters, 'disableExpandRows')
     const disableDragRows = toRef(getters, 'disableDragRows')
@@ -284,7 +286,9 @@ export default defineComponent({
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
-          transform: `translate3d(${padLeft + totalWidths[props.columnIndex]}px, 0, 0)`
+          transform: `translate3d(${isRtl.value ? '-' : ''}${
+            padLeft + totalWidths[props.columnIndex]
+          }px, 0, 0)`
         }
       ]
     })

@@ -165,13 +165,6 @@ import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import {
-  placementWhileList,
-  useClickOutside,
-  useHover,
-  usePopper,
-  useSetTimeout
-} from '@vexip-ui/hooks'
-import {
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -182,6 +175,13 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
+import {
+  placementWhileList,
+  useClickOutside,
+  useHover,
+  usePopper,
+  useSetTimeout
+} from '@vexip-ui/hooks'
 import {
   boundRange,
   differenceDays,

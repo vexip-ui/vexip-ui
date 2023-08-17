@@ -91,8 +91,8 @@ export default defineComponent({
       const color = props.lineColor ?? timelineState?.lineColor
 
       return {
-        borderLeftStyle: isDashed ? ('dashed' as const) : undefined,
-        borderLeftColor: color
+        borderInlineStartStyle: isDashed ? ('dashed' as const) : undefined,
+        borderInlineStartColor: color
       }
     })
 

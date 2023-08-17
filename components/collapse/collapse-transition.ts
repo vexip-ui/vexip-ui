@@ -54,10 +54,10 @@ export default defineComponent({
         scrollHeight = 'scrollWidth'
         transition = `
           max-width ${duration}ms ${timing},
-          padding-left ${duration}ms ${timing},
-          padding-right ${duration}ms ${timing},
-          margin-left ${duration}ms ${timing},
-          margin-right ${duration}ms ${timing}
+          padding-inline-start ${duration}ms ${timing},
+          padding-inline-end ${duration}ms ${timing},
+          margin-inline-start ${duration}ms ${timing},
+          margin-inline-end ${duration}ms ${timing}
         `
       }
 

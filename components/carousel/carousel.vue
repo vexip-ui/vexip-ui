@@ -100,7 +100,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useHover, useSetTimeout } from '@vexip-ui/hooks'
+import { useHover, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from '@vexip-ui/icons'
 import { carouselProps } from './props'
@@ -151,6 +151,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('carousel')
+    const { isRtl } = useRtl()
     const itemStates = ref(new Set<ItemState>())
     const currentActive = ref(0)
     const isLocked = ref(false) // 用于控制阻断快速连点
@@ -206,7 +207,9 @@ export default defineComponent({
         width: trackRect.width ? `${trackRect.width}px` : undefined,
         height: trackRect.height ? `${trackRect.height}px` : undefined,
         transform: trackRect.offset
-          ? `translate${props.vertical ? 'Y' : 'X'}(${trackRect.offset}px) translateZ(0)`
+          ? `translate${props.vertical ? 'Y' : 'X'}(${
+              isRtl.value && !props.vertical ? `${-trackRect.offset}` : trackRect.offset
+            }px) translateZ(0)`
           : undefined,
         transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`
       }
@@ -221,7 +224,11 @@ export default defineComponent({
       )
     })
     const arrowIcons = computed(() => {
-      return props.vertical ? [ArrowUp, ArrowDown] : [ArrowLeft, ArrowRight]
+      return props.vertical
+        ? [ArrowUp, ArrowDown]
+        : isRtl.value
+          ? [ArrowRight, ArrowLeft]
+          : [ArrowLeft, ArrowRight]
     })
 
     watch(
@@ -407,7 +414,10 @@ export default defineComponent({
           }
         } else {
           for (let i = 0; i < itemCount; ++i) {
-            itemList[i].offset = i < targetIndex ? 0 : -itemCount * itemLength
+            itemList[i].offset =
+              i < targetIndex
+                ? 0
+                : (isRtl.value && !props.vertical ? itemCount : -itemCount) * itemLength
           }
 
           trackRect.offset = itemLength * (itemCount - targetIndex)
@@ -443,7 +453,10 @@ export default defineComponent({
           const anchorIndex = targetIndex + props.viewSize - itemCount
 
           for (let i = 0, len = itemList.length; i < len; ++i) {
-            itemList[i].offset = i < anchorIndex ? itemCount * itemLength : 0
+            itemList[i].offset =
+              i < anchorIndex
+                ? (isRtl.value && !props.vertical ? -itemCount : itemCount) * itemLength
+                : 0
           }
 
           trackRect.offset = -targetIndex * itemLength

@@ -18,7 +18,7 @@ import {
 } from 'vue'
 
 import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -98,6 +98,8 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const nh = useNameHelper('transfer')
     const icons = useIcons()
+
+    const { isRtl } = useRtl()
 
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
@@ -618,7 +620,7 @@ export default defineComponent({
             : (
               <div class={nh.be('pagination')}>
                 <Icon
-                  {...icons.value.arrowLeft}
+                  {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
                   class={[
                     nh.be('page-plus'),
                     currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
@@ -637,7 +639,7 @@ export default defineComponent({
                 <span style={'margin: 0 4px'}>{'/'}</span>
                 <span>{totalPages.value}</span>
                 <Icon
-                  {...icons.value.arrowRight}
+                  {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
                   class={[
                     nh.be('page-minus'),
                     currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')

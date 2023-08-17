@@ -133,6 +133,10 @@ $bubble: map.merge(
       border-width: $size $size 0;
       border-top-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
@@ -171,6 +175,10 @@ $bubble: map.merge(
       border-width: 0 $size $size;
       border-bottom-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
@@ -195,19 +203,26 @@ $bubble: map.merge(
   &--left,
   &--left-start,
   &--left-end {
-    padding: 0 $padding 0 $size;
+    padding: 0;
+    padding-inline: $size $padding;
   }
 
   @mixin left-arrow {
-    right: 0;
-    border-width: $size 0 $size $size;
-    border-left-color: $border-color;
+    inset-inline-end: 0;
+    border-width: $size 0;
+    border-inline-start-color: $border-color;
+    border-inline-width: $size;
     transform: translate(100%, -50%);
 
+    @include rtl {
+      transform: translate(-100%, -50%);
+    }
+
     &::after {
-      right: 1px;
-      border-width: $size 0 $size $size;
-      border-left-color: $bg-color;
+      inset-inline-end: 1px;
+      border-width: $size 0;
+      border-inline-width: $size 0;
+      border-inline-start-color: $bg-color;
       transform: translateY(-50%);
     }
   }
@@ -233,19 +248,26 @@ $bubble: map.merge(
   &--right,
   &--right-start,
   &--right-end {
-    padding: 0 $size 0 $padding;
+    padding: 0;
+    padding-inline: $padding $size;
   }
 
   @mixin right-arrow {
-    left: 0;
-    border-width: $size $size $size 0;
-    border-right-color: $border-color;
+    inset-inline-start: 0;
+    border-width: $size 0;
+    border-inline-width: 0 $size;
+    border-inline-end-color: $border-color;
     transform: translate(-100%, -50%);
 
+    @include rtl {
+      transform: translate(100%, -50%);
+    }
+
     &::after {
-      left: 1px;
-      border-width: $size $size $size 0;
-      border-right-color: $bg-color;
+      inset-inline-start: 1px;
+      border-width: $size 0;
+      border-inline-width: 0 $size;
+      border-inline-end-color: $bg-color;
       transform: translateY(-50%);
     }
   }

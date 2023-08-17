@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 20px 0">
-    <span style="margin-right: 10px"> Toggle Theme: </span>
+    <span style="margin-inline-end: 10px"> Toggle Theme: </span>
     <Switch
       v-model:value="isDark"
       class="theme-switch"
