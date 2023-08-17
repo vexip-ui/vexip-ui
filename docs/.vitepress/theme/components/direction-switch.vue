@@ -7,7 +7,7 @@ import { isClient } from '@vexip-ui/utils'
 const emit = defineEmits(['change'])
 
 const rootCls = isClient ? document.documentElement.classList : undefined
-const rtl = ref<boolean>(false)
+const rtl = ref(false)
 
 watch(
   rtl,

@@ -16,7 +16,7 @@ import type { ThemeConfig } from '../types'
 const router = useRouter()
 
 const { site, page } = useData<ThemeConfig>()
-const { locale, getLocaleMessage } = useI18n({ useScope: 'global' })
+const { t, locale, getLocaleMessage } = useI18n({ useScope: 'global' })
 
 const isRtl = ref(false)
 
@@ -86,12 +86,19 @@ function syncVitepressDir() {
       </template>
     </Dropdown>
     <div class="rtl">
-      <DirectionSwitch ref="dir" @change="handleRtlChange"></DirectionSwitch>
+      <DirectionSwitch
+        :title="t('common.toggleDirection')"
+        @change="handleRtlChange"
+      ></DirectionSwitch>
     </div>
     <div class="theme">
-      <ThemeSwitch></ThemeSwitch>
+      <ThemeSwitch :title="t('common.toggleTheme')"></ThemeSwitch>
     </div>
-    <Linker class="github-link" to="//github.com/vexip-ui/vexip-ui/">
+    <Linker
+      class="github-link"
+      to="//github.com/vexip-ui/vexip-ui/"
+      :title="t('common.viewInGithub')"
+    >
       <Icon label="github" :scale="1.7">
         <GithubB></GithubB>
       </Icon>

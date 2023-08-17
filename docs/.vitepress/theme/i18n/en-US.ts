@@ -30,7 +30,10 @@ export const enUS = defineI18n({
     backHomepage: 'Back to homepage',
     lastUpdated: 'Last updated',
     contributors: 'Contributions',
-    thanksContribute: 'Thanks for all their contributions!'
+    thanksContribute: 'Thanks for all their contributions!',
+    toggleDirection: 'Toggle text direction',
+    toggleTheme: 'Toggle theme',
+    viewInGithub: 'View in GitHub'
   },
   alert: {
     info: 'Tip',
