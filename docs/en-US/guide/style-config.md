@@ -101,7 +101,7 @@ The full `sass` variables can be found in [here](https://github.com/vexip-ui/vex
 
 ### Import On Demand
 
-If you are using on demand import, some extra configuration is required. Here we take vite as an example, and the same applies to Webpack.
+If you are using on demand import, some extra configuration is required. Here we take Vite as an example, and the same applies to Webpack.
 
 First, you need to prepare a separate file, and use `@forward...with` to modify variables:
 

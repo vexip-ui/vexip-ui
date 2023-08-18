@@ -61,3 +61,48 @@ function handleClick() {
 }
 </script>
 ```
+
+### 自定义 Sass 变量
+
+修改的方法和 [样式配置](/zh-CN/guide/style-config.html#%E9%80%9A%E8%BF%87-sass-%E4%BF%AE%E6%94%B9) 中的一样，只不过需要通过 `nuxt.config.ts` 修改 Vite 配置。
+
+首先需要准备一个单独的文件，并改用 `@forward...with` 修改变量：
+
+```scss
+// style/variables.scss
+@forward 'vexip-ui/style/design' with (
+  $color-map: (
+    primary: (
+      base: #845ef7
+    )
+  )
+);
+```
+
+然后在 `nuxt.config.ts` 中拓展以下内容：
+
+```ts
+const vxpStylePresetRE = /vexip-ui\/style(?:\/dark)?\/preset/
+
+export default defineNuxtConfig({
+  modules: [
+    '@vexip-ui/nuxt'
+  ],
+  vexipUI: {
+    importStyle: 'sass'
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: (code: string, path: string) => {
+            return vxpStylePresetRE.test(path)
+              ? code.replace('@use \'./design/variables.scss\' as *;', '@use \'@/style/variables.scss\' as *;')
+              : code
+          }
+        }
+      }
+    }
+  }
+})
+```
