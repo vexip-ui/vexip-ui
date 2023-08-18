@@ -1,5 +1,5 @@
 import { getCountWord, makeSentence } from '@vexip-ui/config'
-import { DAY_ON_MILLIS, HOUR_ON_MILLS, MINUTE_ON_MILLS, SECOND_ON_MILLS } from '@vexip-ui/utils'
+import { DAY_ON_MILLS, HOUR_ON_MILLS, MINUTE_ON_MILLS, SECOND_ON_MILLS } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 
@@ -82,11 +82,11 @@ export function computeTimeAgo(
   } else if (diff < HOUR_ON_MILLS) {
     label = locale.minute
     usedDiff = Math.floor(diff / MINUTE_ON_MILLS)
-  } else if (diff < DAY_ON_MILLIS) {
+  } else if (diff < DAY_ON_MILLS) {
     label = locale.hour
     usedDiff = Math.floor(diff / HOUR_ON_MILLS)
-  } else if (diff < 30 * DAY_ON_MILLIS) {
-    usedDiff = Math.floor(diff / DAY_ON_MILLIS)
+  } else if (diff < 30 * DAY_ON_MILLS) {
+    usedDiff = Math.floor(diff / DAY_ON_MILLS)
 
     if (usedDiff === 1) {
       label = locale.yesterday
@@ -94,8 +94,8 @@ export function computeTimeAgo(
     } else {
       label = locale.days
     }
-  } else if (diff < 365 * DAY_ON_MILLIS) {
-    usedDiff = Math.floor(diff / (30 * DAY_ON_MILLIS))
+  } else if (diff < 365 * DAY_ON_MILLS) {
+    usedDiff = Math.floor(diff / (30 * DAY_ON_MILLS))
 
     if (usedDiff === 1) {
       label = locale.lastMonth
@@ -104,7 +104,7 @@ export function computeTimeAgo(
       label = locale.months
     }
   } else {
-    usedDiff = Math.floor(diff / 365 / DAY_ON_MILLIS)
+    usedDiff = Math.floor(diff / 365 / DAY_ON_MILLS)
 
     if (usedDiff === 1) {
       label = locale.lastYear
