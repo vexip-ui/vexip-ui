@@ -29,8 +29,10 @@ function toggleRtl(value: boolean) {
 
     if (value) {
       rootCls.add('rtl')
+      document.documentElement.dir = 'rtl'
     } else {
       rootCls.remove('rtl')
+      document.documentElement.dir = 'ltr'
     }
 
     localStorage.setItem('vexip-docs-direction-prefer-rtl', String(value))

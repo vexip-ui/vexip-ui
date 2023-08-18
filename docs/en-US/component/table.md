@@ -194,6 +194,8 @@ Adding the `col-resizable` prop enables resize column width.
 
 ### Merge Cells
 
+^[Since v2.1.24](!s)
+
 Provide a callback function via the `cell-span` of column options to set the span of each cell.
 
 If you want to merge the header, you need to set the `head-span` of column options.
@@ -203,6 +205,8 @@ If you want to merge the header, you need to set the `head-span` of column optio
 :::demo table/summary
 
 ### Table Summary
+
+^[Since v2.1.24](!s)
 
 Similar to columns, you can define summaries via the `summaries` prop or the TableSummary component.
 

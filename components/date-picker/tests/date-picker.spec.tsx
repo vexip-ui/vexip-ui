@@ -448,7 +448,7 @@ describe('DatePicker', () => {
   })
 
   it('change event', async () => {
-    const date = Date.now()
+    const date = new Date()
     vi.setSystemTime(date)
 
     const onChange = vi.fn()
@@ -459,7 +459,9 @@ describe('DatePicker', () => {
     await wrapper.trigger('click')
     await wrapper.trigger('clickoutside')
     expect(onChange).toHaveBeenCalled()
-    expect(onChange).toHaveBeenLastCalledWith(format(date, 'yyyy-MM-dd'))
+    expect(onChange).toHaveBeenLastCalledWith(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+    )
   })
 
   it('clearable', async () => {
@@ -695,8 +697,8 @@ describe('DatePicker', () => {
     await wrapper.trigger('clickoutside')
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([
-      format(date, 'yyyy-MM-dd'),
-      `${date.getFullYear()}-11-16`
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
+      new Date(date.getFullYear(), 10, 16).getTime()
     ])
   })
 

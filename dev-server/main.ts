@@ -12,6 +12,9 @@ if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').match
 
 if (isRtl === 'true') {
   document.documentElement.classList.add('rtl')
+  document.documentElement.dir = 'rtl'
+} else {
+  document.documentElement.dir = 'ltr'
 }
 
 if (__THEME__) {

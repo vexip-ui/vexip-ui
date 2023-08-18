@@ -13,7 +13,14 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps, LocaleConfig } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DatePickerType, DateShortcut, DateTimeType, TimeShortcut, TimeType } from './symbol'
+import type {
+  DatePickerFormatFn,
+  DatePickerType,
+  DateShortcut,
+  DateTimeType,
+  TimeShortcut,
+  TimeType
+} from './symbol'
 
 export const datePickerProps = buildProps({
   size: sizeProp,
@@ -25,6 +32,7 @@ export const datePickerProps = buildProps({
   transfer: booleanStringProp,
   value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
   format: String,
+  valueFormat: [String, Function] as PropType<string | DatePickerFormatFn>,
   filler: String,
   clearable: booleanProp,
   noAction: booleanProp,
@@ -62,7 +70,7 @@ export const datePickerProps = buildProps({
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
   onEnter: eventProp(),
   onCancel: eventProp(),
-  onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
+  onChange: eventProp<(value: number | number[] | null) => void>(),
   onClear: eventProp(),
   onShortcut: eventProp<(name: string, value: Dateable | Dateable[]) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

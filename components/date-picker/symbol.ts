@@ -6,6 +6,8 @@ export type DateTimeType = DateType | TimeType
 
 export type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
 
+export type DatePickerFormatFn = (timestamp: number) => Dateable
+
 export interface DateShortcut {
   name: string,
   value: Dateable | Dateable[] | (() => Dateable | Dateable[])

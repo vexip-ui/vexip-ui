@@ -186,6 +186,7 @@ import {
   boundRange,
   differenceDays,
   doubleDigits,
+  format,
   getTime,
   isLeapYear,
   startOfMonth,
@@ -198,7 +199,7 @@ import { datePickerTypes } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DateTimeType, TimeType } from './symbol'
+import type { DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
 
 const invalidDate = new Date('')
 
@@ -211,7 +212,7 @@ export default defineComponent({
     Popper
   },
   props: datePickerProps,
-  emits: ['update:value', 'update:visible'],
+  emits: ['update:value', 'update:formatted-value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const {
       idFor,
@@ -245,6 +246,7 @@ export default defineComponent({
         static: true
       },
       format: 'yyyy-MM-dd HH:mm:ss',
+      valueFormat: null,
       filler: {
         default: '-',
         validator: value => value.length === 1
@@ -877,24 +879,40 @@ export default defineComponent({
         lastValue.value = getStringValue()
 
         const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
-        const emitValues: string[] | number[] = []
+        const emitValues: number[] = []
+        const formattedValues: Dateable[] = []
+
+        const valueFormat = props.valueFormat
+        const formatValue: DatePickerFormatFn =
+          typeof valueFormat === 'function'
+            ? valueFormat
+            : valueFormat
+              ? timestamp => format(timestamp, valueFormat)
+              : timestamp => timestamp
 
         for (let i = 0; i < 2; ++i) {
           if (props.type === 'year') {
-            emitValues[i] = i === 0 ? startState.dateValue.year : endState.dateValue.year
+            emitValues[i] = new Date(
+              i === 0 ? startState.dateValue.year : endState.dateValue.year,
+              0
+            ).getTime()
           } else if (props.type !== 'datetime') {
-            emitValues[i] = values[i].split(' ')[0]
+            emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()
           } else {
-            emitValues[i] = values[i]
+            emitValues[i] = new Date(values[i]).getTime()
           }
+
+          formattedValues[i] = formatValue(emitValues[i])
 
           if (!props.range) break
         }
 
         const emitValue = props.range ? emitValues : emitValues[0]
+        const formattedValue = props.range ? formattedValues : formattedValues[0]
 
         toggleActivated(true)
         emit('update:value', emitValue)
+        emit('update:formatted-value', formattedValue)
         setFieldValue(emitValue)
         emitEvent(props.onChange, emitValue)
         validateField()
@@ -1128,11 +1146,12 @@ export default defineComponent({
     function handleClear(finish = true) {
       if (props.clearable) {
         nextTick(() => {
-          const emitValue = props.range ? ([] as string[] | number[]) : null
+          const emitValue = props.range ? ([] as number[]) : null
 
           parseValue(null)
           finish && finishInput(false)
           emit('update:value', emitValue)
+          emit('update:formatted-value', props.range ? [] : null)
           emitEvent(props.onChange, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)

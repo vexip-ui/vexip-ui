@@ -10,7 +10,19 @@
 
 基础用法，可以使用 `v-model:value` 进行双向绑定。
 
-默认情况下，尽管有初始值，日期选择框仍会呈现未未选择的状态。
+:::
+
+:::demo date-picker/value-format
+
+### 格式化值
+
+^[Since v2.2.0](!s)
+
+设置 `value-format` 属性可以指定如何格式化值，并通过 `@update:formatted-value` 事件获取格式化后的值。
+
+当然你可以像示例一样使用 `v-model:formatted-value` 的写法，不过组件内部并不会根据 `formatted-value` 更新值。
+
+你还可以指定 `value-format` 为一个函数进行自定义格式化。
 
 :::
 
@@ -109,10 +121,20 @@
 ### 预设类型
 
 ```ts
+// 该类型在 @vexip-ui/utils 包下
+type Dateable = number | string | Date
+
 type DateType = 'year' | 'month' | 'date'
 type TimeType = 'hour' | 'minute' | 'second'
 type DateTimeType = DateType | TimeType
-type Dateable = number | string | Date
+type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+
+type DatePickerFormatFn = (timestamp: number) => Dateable
+
+interface DateShortcut {
+  name: string,
+  value: Dateable | Dateable[] | (() => Dateable | Dateable[])
+}
 ```
 
 ### DatePicker 属性
@@ -160,23 +182,25 @@ type Dateable = number | string | Date
 | placeholder     | `string \| string[]`                                      | 设置日期选择器的占位符                                                  | `null`                  | `2.1.1`  |
 | unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                  | `false`                 | `2.1.2`  |
 | week-start      | `number`                                                  | 设置日期选择面板中每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天       | `null`                  | `2.1.9`  |
+| value-format    | `string \| DatePickerFormatFn`                            | 指定如何格式化值                                                        | `null`                  | `2.2.0`  |
 
 ### DatePicker 事件
 
-| 名称       | 说明                                                                                                                                   | 参数                                                        | 始于 |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---- |
-| toggle     | 当日期面板显示状态改变时触发，返回当前状态                                                                                             | `(visible: boolean)`                                        | -    |
-| focus      | 控件聚焦时触发                                                                                                                         | -                                                           | -    |
-| blur       | 控件失去焦点时触发                                                                                                                     | -                                                           | -    |
-| change     | 当选择的时间发生改变时触发，根据日期选择器类型是否为 `'year'` 以及是否开启了范围模式，会返回一个年份、年份范围、标准日期或标准日期范围 | `(value: string \| number \| number[] \| string[] \| null)` | -    |
-| change-col | 当选择的日期类型发生改变时触发，返回当前类型的名称                                                                                     | `(type: DateTimeType \| null)`                              | -    |
-| input      | 当通过按键输入任意类型日期的值发生改变时触发，返回当前类型的名称与输入的值                                                             | `(type: DateTimeType, value: number)`                       | -    |
-| enter      | 当使用回车键确定或点击了日期选择面板的确认按钮时触发                                                                                   | -                                                           | -    |
-| cancel     | 当使用 Esc 按键关闭或点击了日期选择面板的取消按钮时触发                                                                                | -                                                           | -    |
-| shortcut   | 当使用快捷功能选择日期时触发，返回快捷选择的名称和值                                                                                   | `(name: string, value: number \| string \| Date)`           | -    |
-| plus       | 当使用上箭头按键增加日期值时触发，返回类型名称的名称和对应的值                                                                         | `(type: DateTimeType, value: number)`                       | -    |
-| minus      | 当使用下箭头按键减少日期值时触发，返回类型名称的名称和列应的值                                                                         | `(type: DateTimeType, value: number)`                       | -    |
-| clear      | 当通过清除按钮清空值时触发                                                                                                             | -                                                           | -    |
+| 名称                   | 说明                                                                       | 参数                                              | 始于    |
+| ---------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- | ------- |
+| toggle                 | 当日期面板显示状态改变时触发，返回当前状态                                 | `(visible: boolean)`                              | -       |
+| focus                  | 控件聚焦时触发                                                             | -                                                 | -       |
+| blur                   | 控件失去焦点时触发                                                         | -                                                 | -       |
+| change                 | 当选择的时间发生改变时触发，返回时间戳                                     | `(value: number \| number[] \| null)`             | -       |
+| change-col             | 当选择的日期类型发生改变时触发，返回当前类型的名称                         | `(type: DateTimeType \| null)`                    | -       |
+| input                  | 当通过按键输入任意类型日期的值发生改变时触发，返回当前类型的名称与输入的值 | `(type: DateTimeType, value: number)`             | -       |
+| enter                  | 当使用回车键确定或点击了日期选择面板的确认按钮时触发                       | -                                                 | -       |
+| cancel                 | 当使用 Esc 按键关闭或点击了日期选择面板的取消按钮时触发                    | -                                                 | -       |
+| shortcut               | 当使用快捷功能选择日期时触发，返回快捷选择的名称和值                       | `(name: string, value: number \| string \| Date)` | -       |
+| plus                   | 当使用上箭头按键增加日期值时触发，返回类型名称的名称和对应的值             | `(type: DateTimeType, value: number)`             | -       |
+| minus                  | 当使用下箭头按键减少日期值时触发，返回类型名称的名称和列应的值             | `(type: DateTimeType, value: number)`             | -       |
+| clear                  | 当通过清除按钮清空值时触发                                                 | -                                                 | -       |
+| update:formatted-value | 当选择的时间发生改变时触发，返回格式化后的值                               | `(value: Dateable \| Dateable[])`                 | `2.2.0` |
 
 ### DatePicker 插槽
 
