@@ -1,5 +1,7 @@
 import type { BEM, NBEM } from './types'
 
+export * from './types'
+
 /**
  * Get `--variable` CSS variable.
  *
