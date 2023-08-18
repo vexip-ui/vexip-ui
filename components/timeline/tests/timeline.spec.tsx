@@ -36,7 +36,7 @@ describe('Timeline', () => {
   })
 
   it('alternate', () => {
-    const wrapper = mount(() => <Timeline both-sides></Timeline>)
+    const wrapper = mount(() => <Timeline alternate></Timeline>)
 
     expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--alternate')
   })

@@ -15,15 +15,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { createSlotRender, flatVNodes, useRtl } from '@vexip-ui/hooks'
-import {
-  USE_TOUCH,
-  createEventEmitter,
-  isClient,
-  isDefined,
-  isElement,
-  isTrue,
-  warnOnce
-} from '@vexip-ui/utils'
+import { USE_TOUCH, createEventEmitter, isClient, isElement, isTrue } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
@@ -67,10 +59,6 @@ export default defineComponent({
       barClass: null,
       autoplay: false,
       playWaiting: 500,
-      onBeforeScroll: {
-        default: null,
-        isFunc: true
-      },
       appear: false,
       barDuration: null,
       useBarTrack: false,
@@ -78,13 +66,6 @@ export default defineComponent({
       observeDeep: false,
       scrollOnly: false
     })
-
-    if (isDefined(props.onBeforeScroll)) {
-      warnOnce(
-        "[vexip-ui:Table] 'on-before-scroll' prop has been deprecated, please " +
-          'do not use it anymore'
-      )
-    }
 
     const emitter = createEventEmitter()
 

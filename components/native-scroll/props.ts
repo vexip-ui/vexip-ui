@@ -28,7 +28,6 @@ export const nativeScrollProps = buildProps({
   barClass: classProp,
   autoplay: booleanNumberProp,
   playWaiting: Number,
-  onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
   appear: booleanProp,
   barDuration: Number,
   useBarTrack: booleanProp,

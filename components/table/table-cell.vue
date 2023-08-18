@@ -193,7 +193,6 @@ export default defineComponent({
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('cell', 'last')]: props.column.last
         },
-        props.column.className,
         props.column.class,
         customClass
       ]

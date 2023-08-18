@@ -115,7 +115,6 @@ export default defineComponent({
           [nh.bem('foot-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('foot-cell', 'last')]: props.column.last
         },
-        props.column.className,
         props.column.class,
         customClass
       ]

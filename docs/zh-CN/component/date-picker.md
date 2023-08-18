@@ -128,7 +128,6 @@ type Dateable = number | string | Date
 | transfer        | `boolean \| string`                                       | 设置日期选择面板的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>` | `false`                 | -        |
 | format          | `string`                                                  | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏     | `'yyyy-MM-dd HH:mm:ss'` | -        |
 | filler          | `string`                                                  | 日期未选择时的填充符，长度固定为 1                                      | `'-'`                   | -        |
-| ~~no-filler~~   | `boolean`                                                 | 是否禁用初始填充，如果禁用，初始化后控件内会显示当前 `value`            | `false`                 | -        |
 | clearable       | `boolean`                                                 | 是否允许清空值                                                          | `false`                 | -        |
 | no-action       | `boolean`                                                 | 是否禁用日期选择面板的底部操作栏并改变选择模式                          | `false`                 | -        |
 | labels          | `Partial<Record<DateTimeType, string>>`                   | 设置在每个日期或时间单元后面的标签                                      | `{}`                    | -        |
@@ -148,7 +147,6 @@ type Dateable = number | string | Date
 | confirm-text    | `string`                                                  | 日期选择面板确认按钮的文本内容                                          | `locale.confirm`        | -        |
 | cancel-text     | `string`                                                  | 日期选择面板取消按钮的文本内容                                          | `locale.cancel`         | -        |
 | today           | `Dateable`                                                | 设置作为今天的日期，这主要会影响日期选择面板中日历的一些表现            | `new Date()`            | -        |
-| ~~is-range~~    | `boolean`                                                 | 设置是否开启范围选择模式                                                | `false`                 | -        |
 | loading         | `boolean`                                                 | 设置是否为加载中                                                        | `false`                 | `2.0.0`  |
 | loading-icon    | `Record<string, any>`                                     | 设置加载中的图标                                                        | `Spinner`               | `2.0.0`  |
 | loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                | `false`                 | `2.0.0`  |

@@ -91,7 +91,6 @@
 | format          | `string`                                                  | 根据是否具有 Hms 来控制时间选择列的显示隐藏                                        | `'HH:mm:ss'`     | -        |
 | separator       | `string`                                                  | 时间的连接符                                                                       | `':'`            | -        |
 | filler          | `string`                                                  | 时间未选择时的填充符，长度固定为 1                                                 | `'-'`            | -        |
-| ~~no-filler~~   | `boolean`                                                 | 是否禁用 filler，如果禁用，初始化后控件内会显示当前 value                          | `false`          | -        |
 | clearable       | `boolean`                                                 | 是否允许清空值                                                                     | `false`          | -        |
 | no-action       | `boolean`                                                 | 是否禁用时间选择窗口的底部操作栏                                                   | `false`          | -        |
 | no-arrow        | `boolean`                                                 | 是否禁用滚轮选择器的箭头指示器                                                     | `false`          | -        |
@@ -109,7 +108,6 @@
 | transition-name | `string`                                                  | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | -        |
 | ok-text         | `string`                                                  | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm` | -        |
 | cancel-text     | `string`                                                  | 时间选择窗口取消按钮的文本内容                                                     | `locale.cancel`  | -        |
-| ~~is-range~~    | `boolean`                                                 | 设置是否开启范围选择模式                                                           | `false`          | -        |
 | loading         | `boolean`                                                 | 设置是否为加载中                                                                   | `false`          | `2.0.0`  |
 | loading-icon    | `Record<string, any>`                                     | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
 | loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                           | `false`          | `2.0.0`  |

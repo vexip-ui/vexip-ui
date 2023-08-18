@@ -294,7 +294,6 @@ export default defineComponent({
           [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('head-cell', 'last')]: props.column.last
         },
-        props.column.className,
         props.column.class,
         customClass
       ]

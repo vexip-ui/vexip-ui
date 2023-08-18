@@ -48,7 +48,6 @@ export const calendarPanelProps = buildProps({
   weekStart: Number,
   today: [Number, String, Date] as PropType<Dateable>,
   disabledDate: Function as PropType<(data: Date) => boolean>,
-  isRange: booleanProp,
   valueType: String as PropType<'start' | 'end'>,
   min: [Number, String, Date] as PropType<Dateable>,
   max: [Number, String, Date] as PropType<Dateable>,

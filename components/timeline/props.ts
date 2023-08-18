@@ -6,7 +6,6 @@ import type { TimelineItemType } from './symbol'
 
 export const timelineProps = buildProps({
   pending: booleanProp,
-  bothSides: booleanProp,
   dashed: booleanProp,
   lineColor: String,
   spacing: [Number, String],

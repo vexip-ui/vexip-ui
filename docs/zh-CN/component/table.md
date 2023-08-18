@@ -425,7 +425,7 @@ type TableFootPropFn<P = any> = (data: {
 
 type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
-  'name' | 'key' | 'metaData' | 'meta'
+  'name' | 'key' | 'meta'
 >
 type TableFilterProfile<
   D = Data,
@@ -552,7 +552,6 @@ interface TableFootPayload {
 
 | 名称             | 说明                                                                         | 参数                                                                                    | 始于     |
 | ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
-| ~~body-scroll~~  | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | `(scroll: { client: number, percent: number })`                                         | -        |
 | scroll           | 当表格滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象                   | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
 | row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
 | row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
@@ -613,7 +612,6 @@ interface TableFootPayload {
 | key \| id-key    | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `null`      | -        |
 | accessor         | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -        |
 | fixed            | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -        |
-| ~~class-name~~   | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | -        |
 | class            | `ClassType`                            | 该列单元格的自定义类名                                                       | `null`      | `2.1.19` |
 | style            | `StyleType`                            | 该列单元格的自定义样式                                                       | `null`      | `2.0.1`  |
 | attrs            | `Record<string, any>`                  | 该列单元格的自定义属性                                                       | `null`      | `2.0.1`  |
@@ -630,7 +628,6 @@ interface TableFootPayload {
 | disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -        |
 | truth-index      | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
 | order-label      | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -        |
-| ~~meta-data~~    | `Record<any, any>`                     | 设置列的元数据                                                               | `null`      | -        |
 | meta             | `any`                                  | 设置列的元数据                                                               | `null`      | `2.1.24` |
 | text-align       | `TableTextAlign`                       | 设置列的横向对其方式                                                         | `'left'`    | `2.1.19` |
 | head-span        | `number`                               | 设置头部跨度                                                                 | `1`         | `2.1.24` |

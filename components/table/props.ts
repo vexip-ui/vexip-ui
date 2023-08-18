@@ -49,7 +49,6 @@ export const tableProps = buildProps({
   columns: Array as PropType<TableColumnOptions<any, any>[]>,
   summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
-  dataKey: String,
   width: [Number, String],
   height: Number,
   rowClass: [String, Object, Array, Function] as PropType<ClassType | TableRowPropFn<ClassType>>,
@@ -78,7 +77,6 @@ export const tableProps = buildProps({
   currentPage: Number,
   pageSize: Number,
   transparent: booleanProp,
-  emptyText: String,
   tooltipTheme: String as PropType<TooltipTheme>,
   tooltipWidth: [Number, String],
   singleSorter: booleanProp,
@@ -112,7 +110,6 @@ export const tableProps = buildProps({
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
   icons: Object as PropType<TableIcons>,
-  onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void
@@ -165,7 +162,6 @@ export const tableColumnProps = buildProps({
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: null
   },
-  className: classProp,
   class: classProp,
   style: styleProp,
   attrs: Object,
@@ -185,7 +181,6 @@ export const tableColumnProps = buildProps({
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Record<any, any>>,
   meta: Object as PropType<any>,
   textAlign: String as PropType<TableTextAlign>,
   headSpan: Number,

@@ -98,10 +98,6 @@ export default defineComponent({
       default: '-',
       validator: (value: string) => value.length === 1
     },
-    noFiller: {
-      type: Boolean,
-      default: false
-    },
     steps: {
       type: Array as PropType<number[]>,
       default: () => [1, 1, 1]
@@ -160,7 +156,7 @@ export default defineComponent({
     })
 
     function formatValue(type: TimeType) {
-      return props.noFiller || props.activated[type]
+      return props.activated[type]
         ? doubleDigits(props.timeValue[type])
         : `${props.filler}${props.filler}`
     }
