@@ -46,7 +46,7 @@ $alert: map.merge(
   }
 
   &--has-icon {
-    padding-left: get-css-var('alert-icon-width');
+    padding-inline-start: get-css-var('alert-icon-width');
   }
 
   &--has-icon#{&}--has-title {
@@ -85,7 +85,7 @@ $alert: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,7 +103,7 @@ $alert: map.merge(
     display: inline-flex;
     align-items: center;
     padding: 3px 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('alert-close-color');
     cursor: pointer;
     background-color: transparent;

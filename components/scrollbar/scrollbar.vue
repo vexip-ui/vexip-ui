@@ -35,7 +35,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useManualRef } from '@vexip-ui/hooks'
+import { useManualRef, useRtl } from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, isDefined, throttle } from '@vexip-ui/utils'
 import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
@@ -84,6 +84,8 @@ export default defineComponent({
     const scrolling = ref(false)
 
     const { manualRef, triggerUpdate } = useManualRef()
+
+    const { isRtl } = useRtl()
 
     const currentScroll = manualRef(props.scroll)
 
@@ -164,7 +166,7 @@ export default defineComponent({
         bar.value.style.transform = `translate3d(0, ${position}, 0)`
       } else {
         bar.value.style.width = length
-        bar.value.style.transform = `translate3d(${position}, 0, 0)`
+        bar.value.style.transform = `translate3d(${isRtl.value ? '-' : ''}${position}, 0, 0)`
       }
     })
     watchEffect(() => {
@@ -274,7 +276,7 @@ export default defineComponent({
         cursorAt = event.clientY
       } else {
         length = rect.width
-        startAt = barRect.left - rect.left
+        startAt = isRtl.value ? barRect.right - rect.right : barRect.left - rect.left
         cursorAt = event.clientX
       }
 
@@ -290,7 +292,9 @@ export default defineComponent({
       if (type.value === ScrollbarType.VERTICAL) {
         position = startAt + event.clientY - cursorAt
       } else {
-        position = startAt + event.clientX - cursorAt
+        position = isRtl.value
+          ? -(startAt + event.clientX - cursorAt)
+          : startAt + event.clientX - cursorAt
       }
 
       // position / length * 100 === (100 - barLength) * currentScroll / 100

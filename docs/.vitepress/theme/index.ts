@@ -21,6 +21,7 @@ export default {
     (prismjs as any).manual = false
 
     syncThemeColors()
+    syncDirection()
     enhanceApp(app)
     enhanceRouter(router)
   }
@@ -39,6 +40,19 @@ function syncThemeColors() {
   if (majorColor && isColor(majorColor)) {
     document.documentElement.style.setProperty('--vxp-color-primary-base', majorColor)
     computeSeriesColors(majorColor)
+  }
+}
+
+function syncDirection() {
+  if (!isClient) return
+
+  const isRtl = localStorage.getItem('vexip-docs-direction-prefer-rtl')
+
+  if (isRtl === 'true') {
+    document.documentElement.classList.add('rtl')
+    document.documentElement.dir = 'rtl'
+  } else {
+    document.documentElement.dir = 'ltr'
   }
 }
 

@@ -48,14 +48,14 @@ $menu: map.merge(
   padding: 0;
   margin: 0;
   background-color: get-css-var('menu-bg-color');
-  border-right: get-css-var('border-shape') get-css-var('menu-b-color');
+  border-inline-end: get-css-var('border-shape') get-css-var('menu-b-color');
   outline: 0;
   transition: width get-css-var('transition-base'), get-css-var('transition-shadow');
 
   &--horizontal {
     flex-direction: row;
     width: auto;
-    border-right: 0;
+    border-inline-end: 0;
   }
 
   &::before,
@@ -75,6 +75,10 @@ $menu: map.merge(
   &__popper {
     padding: 0;
     transform-origin: 0 0 !important;
+
+    @include rtl {
+      transform-origin: 100% 0 !important;
+    }
 
     &--drop {
       padding: 5px 0;
@@ -107,7 +111,8 @@ $menu: map.merge(
     }
 
     #{$self}--horizontal & {
-      padding: 0 calc(#{get-css-var('menu-item-x-span')} * 0.5);
+      padding: 0;
+      padding-inline: calc(#{get-css-var('menu-item-x-span')} * 0.5);
       margin-top: 0;
     }
   }
@@ -118,19 +123,20 @@ $menu: map.merge(
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 10px 20px;
+    padding: 10px 0;
+    padding-inline: 20px;
     color: get-css-var('menu-label-color');
     cursor: pointer;
     user-select: none;
     background-color: get-css-var('menu-bg-color');
     outline: 0;
-    transition: padding-left get-css-var('transition-base'), get-css-var('transition-color'),
+    transition: padding-inline-start get-css-var('transition-base'), get-css-var('transition-color'),
       get-css-var('transition-background'), get-css-var('transition-shadow');
 
     &::after {
       position: absolute;
       top: 0;
-      right: -1px;
+      inset-inline-start: -1px;
       bottom: 0;
       display: block;
       width: 3px;
@@ -145,8 +151,8 @@ $menu: map.merge(
     }
 
     &--marker-left::after {
-      right: auto;
-      left: 0;
+      inset-inline-end: auto;
+      inset-inline-start: 0;
     }
 
     #{$self}--horizontal & {
@@ -245,20 +251,21 @@ $menu: map.merge(
     align-items: center;
     justify-content: center;
     min-width: 14px;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     transition: margin get-css-var('transition-base');
 
     #{$self}--reduced & {
-      margin: 0 5px;
+      margin: 0;
+      margin-inline: 5px;
     }
 
     #{$self}--horizontal & {
-      margin-right: 6px;
+      margin-inline-end: 6px;
     }
 
     #{$popper} & {
-      margin-right: 6px;
-      margin-left: -2px;
+      margin-inline-start: -2px;
+      margin-inline-end: 6px;
     }
   }
 
@@ -271,7 +278,7 @@ $menu: map.merge(
     transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
 
     &--in-group {
-      padding-right: 20px;
+      padding-inline-end: 20px;
     }
 
     #{$self}--reduced & {
@@ -285,7 +292,7 @@ $menu: map.merge(
     }
 
     #{$self}--horizontal &--in-group {
-      padding-left: 12px;
+      padding-inline-start: 12px;
     }
 
     #{$popper} & {
@@ -297,14 +304,14 @@ $menu: map.merge(
       width: 100%;
 
       #{$self}--horizontal & {
-        margin-right: 0;
+        margin-inline-end: 0;
       }
     }
   }
 
   &__arrow {
     position: absolute;
-    right: 22px;
+    inset-inline-end: 22px;
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
@@ -319,14 +326,14 @@ $menu: map.merge(
 
     #{$self}--dropdown &,
     #{$label}--in-popper > & {
-      right: 12px;
+      inset-inline-end: 12px;
     }
 
     #{$self}--horizontal & {
       position: relative;
-      right: auto;
-      margin-right: 0;
-      margin-left: 6px;
+      inset-inline-end: auto;
+      margin-inline-start: 6px;
+      margin-inline-end: 0;
       transform: rotate(0);
 
       &--visible {
@@ -335,14 +342,18 @@ $menu: map.merge(
     }
 
     #{$popper} & {
-      right: 12px;
+      inset-inline-end: 12px;
       opacity: 100%;
       transform: rotate(-90deg);
+
+      @include rtl {
+        transform: rotate(90deg);
+      }
     }
   }
 
   &__list {
-    padding-left: 0;
+    padding-inline-start: 0;
     margin: 0;
 
     @include clear-both;
@@ -365,7 +376,8 @@ $menu: map.merge(
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 10px 20px;
+    padding: 10px 0;
+    padding-inline: 20px;
     cursor: pointer;
     background-color: get-css-var('menu-bg-color');
     transition: get-css-var('transition-color'), get-css-var('transition-background');
@@ -394,7 +406,7 @@ $menu: map.merge(
         &::before {
           position: absolute;
           top: 50%;
-          left: 50%;
+          inset-inline-start: 50%;
           width: 24px;
           height: 1px;
           content: '';

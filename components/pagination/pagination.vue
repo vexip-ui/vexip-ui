@@ -24,7 +24,7 @@
         @keydown.space="handlePrev"
       >
         <slot name="prev">
-          <Icon v-bind="icons.arrowLeft" :scale="0.8"></Icon>
+          <Icon v-bind="isRtl ? icons.arrowRight : icons.arrowLeft" :scale="0.8"></Icon>
         </slot>
       </li>
       <li
@@ -67,7 +67,11 @@
         @mouseleave="handleLeavePrevEllipsis"
       >
         <Transition :name="nh.ns('fade')">
-          <Icon v-if="inPrevEllipsis" v-bind="icons.anglesLeft" :scale="0.8"></Icon>
+          <Icon
+            v-if="inPrevEllipsis"
+            v-bind="isRtl ? icons.anglesRight : icons.anglesLeft"
+            :scale="0.8"
+          ></Icon>
           <Icon
             v-else
             v-bind="icons.ellipsis"
@@ -120,7 +124,11 @@
         @mouseleave="handleLeaveNextEllipsis"
       >
         <Transition :name="nh.ns('fade')">
-          <Icon v-if="inNextEllipsis" v-bind="icons.anglesRight" :scale="0.8"></Icon>
+          <Icon
+            v-if="inNextEllipsis"
+            v-bind="isRtl ? icons.anglesLeft : icons.anglesRight"
+            :scale="0.8"
+          ></Icon>
           <Icon
             v-else
             v-bind="icons.ellipsis"
@@ -168,19 +176,19 @@
         @keydown.space="handleNext"
       >
         <slot name="next">
-          <Icon v-bind="icons.arrowRight" :scale="0.8"></Icon>
+          <Icon v-bind="isRtl ? icons.arrowLeft : icons.arrowRight" :scale="0.8"></Icon>
         </slot>
       </li>
     </ul>
     <div
-      v-if="usedPlugins.includes('total')"
+      v-if="props.plugins.includes('total')"
       :class="[nh.be('total'), pluginOrders.total < 0 && nh.bem('total', 'prefix')]"
       :style="{ order: pluginOrders.total }"
     >
       {{ `${locale.total} ${getCountWord(props.itemUnit ?? locale.itemUnit, props.total)}` }}
     </div>
     <div
-      v-if="usedPlugins.includes('size')"
+      v-if="props.plugins.includes('size')"
       :class="[nh.be('size'), pluginOrders.size < 0 && nh.bem('size', 'prefix')]"
       :style="{ order: pluginOrders.size }"
     >
@@ -195,7 +203,7 @@
       ></Select>
     </div>
     <div
-      v-if="usedPlugins.includes('jump')"
+      v-if="props.plugins.includes('jump')"
       :class="[nh.be('jump'), pluginOrders.jump < 0 && nh.bem('jump', 'prefix')]"
       :style="{ order: pluginOrders.jump }"
     >
@@ -241,11 +249,9 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
-import { boundRange, isClient, isFunction, isNull, range, warnOnce } from '@vexip-ui/utils'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
+import { boundRange, isClient, isFunction, isNull, range } from '@vexip-ui/utils'
 import { paginationProps } from './props'
-
-import type { PaginationPlugin } from './symbol'
 
 const enum PaginationMode {
   LEFT = 'left',
@@ -293,14 +299,15 @@ export default defineComponent({
         isFunc: true
       },
       turnPageCount: 5,
-      pageJump: false,
-      pageCount: false,
-      pageTotal: false,
       itemUnit: null,
-      plugins: null,
+      plugins: {
+        default: () => [],
+        validator: value => Array.isArray(value)
+      },
       noTitle: false
     })
 
+    const { isRtl } = useRtl()
     const nh = useNameHelper('pagination')
     const currentPagers = ref<number[]>([])
     const currentActive = ref(props.active)
@@ -414,28 +421,8 @@ export default defineComponent({
         }
       })
     })
-    const usedPlugins = computed(() => {
-      if (props.plugins) {
-        return props.plugins
-      }
-
-      const plugins: (PaginationPlugin | undefined | null)[] = [undefined]
-
-      props.pageTotal && plugins.push('total')
-      props.pageCount && plugins.push('size')
-      props.pageJump && plugins.push('jump')
-
-      if (plugins.length > 1) {
-        warnOnce(
-          "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
-            " have been deprecated, please use 'plugins' prop to replace them"
-        )
-      }
-
-      return plugins
-    })
     const pluginOrders = computed(() => {
-      const plugins = usedPlugins.value
+      const plugins = props.plugins
       const pagerPosition = plugins.findIndex(isNull)
 
       return {
@@ -445,11 +432,11 @@ export default defineComponent({
       }
     })
     const jumpInputWidth = computed(() => {
-      if (!usedPlugins.value.includes('jump')) return 0
+      if (!props.plugins.includes('jump')) return 0
 
       let pageCount = 0
 
-      if (usedPlugins.value.includes('size')) {
+      if (props.plugins.includes('size')) {
         pageCount = Math.ceil(props.total / (Math.min(...props.sizeOptions) || 10))
       } else {
         pageCount = Math.ceil(props.total / (props.pageSize || 10))
@@ -681,11 +668,11 @@ export default defineComponent({
       prevEllipsisTarget,
       nextEllipsisTarget,
       sizeObjectOptions,
-      usedPlugins,
       pluginOrders,
       jumpInputWidth,
 
       wrapper,
+      isRtl,
 
       isFunction,
       getCountWord,

@@ -12302,7 +12302,7 @@ to instead.
 * **color-picker:** incorrect marker color when change value ([f63daec](https://github.com/vexip-ui/vexip-ui/commit/f63daec73375948e6baa0a52cad1354343b409b3))
 * **dropdown:** add border for dropdown list ([c786b34](https://github.com/vexip-ui/vexip-ui/commit/c786b3457a2f1ddec06d81746ee6ca25e2224dc7))
 * **dropdown:** trigger display default to flex ([3242cb4](https://github.com/vexip-ui/vexip-ui/commit/3242cb468e8813aeb905317375a3aa93c1370371))
-* **menu:** adjust item padding-left when inside group ([670fd33](https://github.com/vexip-ui/vexip-ui/commit/670fd334cd99fcf7c507696e634908e4f3f78cba))
+* **menu:** adjust item padding-inline-start when inside group ([670fd33](https://github.com/vexip-ui/vexip-ui/commit/670fd334cd99fcf7c507696e634908e4f3f78cba))
 * **select:** accurately parse option props ([7d8d8cf](https://github.com/vexip-ui/vexip-ui/commit/7d8d8cfcc09ffce7e0b86838050207c0825c20cb))
 * **table:** endless loop when using page-size ([e6c2337](https://github.com/vexip-ui/vexip-ui/commit/e6c23375bcc6e66a6153ae5584e1586cafeeec3f))
 * **utils:** rename toPascalCase to toCapitalCase ([b0efc84](https://github.com/vexip-ui/vexip-ui/commit/b0efc84ec4f0791af497600550e2cfc1440f726e))

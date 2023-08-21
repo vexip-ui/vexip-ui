@@ -42,7 +42,7 @@ $avatar: map.merge(
   border-radius: get-css-var('avatar-radius');
 
   & + & {
-    margin-left: get-css-var('avatar-series-span');
+    margin-inline-start: get-css-var('avatar-series-span');
   }
 
   &--circle {
@@ -104,7 +104,7 @@ $avatar: map.merge(
         }
 
         &:not(:first-child) {
-          margin-left: get-css-var('avatar-group-offset');
+          margin-inline-start: get-css-var('avatar-group-offset');
         }
 
         & > #{$self} {
@@ -120,8 +120,8 @@ $avatar: map.merge(
 
       &--vertical &__item {
         &:not(:first-child) {
+          margin-inline-start: 0;
           margin-top: get-css-var('avatar-group-offset');
-          margin-left: 0;
         }
       }
 

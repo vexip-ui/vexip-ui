@@ -11,6 +11,7 @@ export type {
   TimeType,
   DateTimeType,
   DatePickerType,
+  DatePickerFormatFn,
   DateShortcut,
   TimeShortcut
 } from './symbol'

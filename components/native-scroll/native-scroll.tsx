@@ -14,16 +14,8 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { createSlotRender, flatVNodes } from '@vexip-ui/hooks'
-import {
-  USE_TOUCH,
-  createEventEmitter,
-  isClient,
-  isDefined,
-  isElement,
-  isTrue,
-  warnOnce
-} from '@vexip-ui/utils'
+import { createSlotRender, flatVNodes, useRtl } from '@vexip-ui/hooks'
+import { USE_TOUCH, createEventEmitter, isClient, isElement, isTrue } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
@@ -67,10 +59,6 @@ export default defineComponent({
       barClass: null,
       autoplay: false,
       playWaiting: 500,
-      onBeforeScroll: {
-        default: null,
-        isFunc: true
-      },
       appear: false,
       barDuration: null,
       useBarTrack: false,
@@ -79,16 +67,10 @@ export default defineComponent({
       scrollOnly: false
     })
 
-    if (isDefined(props.onBeforeScroll)) {
-      warnOnce(
-        "[vexip-ui:Table] 'on-before-scroll' prop has been deprecated, please " +
-          'do not use it anymore'
-      )
-    }
-
     const emitter = createEventEmitter()
 
     const nh = useNameHelper('native-scroll')
+    const { isRtl } = useRtl()
     const usingBar = ref(false)
     const scrolling = ref(false)
 
@@ -348,6 +330,15 @@ export default defineComponent({
       removeScrollListener
     })
 
+    function getCommonPayload() {
+      return {
+        clientX: (isRtl.value ? -1 : 1) * x.value,
+        clientY: y.value,
+        percentX: percentX.value,
+        percentY: percentY.value
+      }
+    }
+
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)
       yBar.value?.handleScroll(percentY.value)
@@ -384,12 +375,7 @@ export default defineComponent({
       document.addEventListener(MOVE_EVENT, handlePointerMove)
       document.addEventListener(UP_EVENT, handlePointerUp)
 
-      emitEvent(props.onScrollStart, {
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
-      })
+      emitEvent(props.onScrollStart, getCommonPayload())
     }
 
     function handlePointerMove(event: MouseEvent) {
@@ -416,13 +402,7 @@ export default defineComponent({
       document.removeEventListener(MOVE_EVENT, handlePointerMove)
       document.removeEventListener(UP_EVENT, handlePointerUp)
 
-      emitEvent(props.onScrollEnd, {
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
-      })
-
+      emitEvent(props.onScrollEnd, getCommonPayload())
       startAutoplay()
     }
 
@@ -469,11 +449,8 @@ export default defineComponent({
       usingBar.value = true
       prepareScroll()
       emitEvent(props.onBarScrollStart, {
-        type,
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type
       })
     }
 
@@ -481,11 +458,8 @@ export default defineComponent({
       usingBar.value = false
       startAutoplay()
       emitEvent(props.onBarScrollEnd, {
-        type,
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type
       })
     }
 
@@ -494,11 +468,8 @@ export default defineComponent({
       setScrollX((percent * xScrollLimit.value) / 100)
       triggerUpdate()
       emitEvent(props.onBarScroll, {
-        type: 'horizontal',
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type: 'horizontal'
       })
       emitScrollEvent('horizontal')
     }
@@ -508,38 +479,31 @@ export default defineComponent({
       setScrollY((percent * yScrollLimit.value) / 100)
       triggerUpdate()
       emitEvent(props.onBarScroll, {
-        type: 'vertical',
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type: 'vertical'
       })
       emitScrollEvent('vertical')
     }
 
     function emitScrollEvent(type: NativeScrollMode) {
       emitEvent(props.onScroll, {
-        type,
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type
       })
       emitter.emit('scroll', {
-        type,
-        clientX: x.value,
-        clientY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value
+        ...getCommonPayload(),
+        type
       })
     }
 
     function getState() {
+      const { clientX: scrollX, clientY: scrollY, percentX, percentY } = getCommonPayload()
+
       return {
-        scrollX: x.value,
-        scrollY: y.value,
-        percentX: percentX.value,
-        percentY: percentY.value,
+        scrollX,
+        scrollY,
+        percentX,
+        percentY,
         enableXScroll: enableXScroll.value,
         enableYScroll: enableYScroll.value
       }

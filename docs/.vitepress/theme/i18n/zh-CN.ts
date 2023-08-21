@@ -30,7 +30,10 @@ export const zhCN = defineI18n({
     backHomepage: '返回首页',
     lastUpdated: '上次更新',
     contributors: '贡献者',
-    thanksContribute: '感谢他们的所做的一切贡献！'
+    thanksContribute: '感谢他们的所做的一切贡献！',
+    toggleDirection: '切换文本方向',
+    toggleTheme: '切换主题',
+    viewInGithub: '在 GitHub 查看'
   },
   alert: {
     info: '提示',

@@ -970,7 +970,7 @@ export default defineComponent({
 
       if (indicator.value) {
         indicator.value.style.top = `${indicatorTop}px`
-        indicator.value.style.left = `${dropArrowRect.right - treeRect.left}px`
+        indicator.value.style.insetInlineStart = `${dropArrowRect.right - treeRect.left}px`
       }
 
       dragState.willDropNode = nodeInstance.node

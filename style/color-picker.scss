@@ -64,7 +64,7 @@ $color-picker: map.merge(
     width: calc(100% - 8px);
     min-width: 40px;
     height: 100%;
-    margin-right: 8px;
+    margin-inline-end: 8px;
     color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
     border-radius: get-css-var('color-picker-marker-radius');
@@ -174,7 +174,7 @@ $color-picker: map.merge(
     border-top: get-css-var('color-picker-divider');
 
     .#{$namespace}-button {
-      margin-left: 4px !important;
+      margin-inline-start: 4px !important;
     }
 
     .#{$namespace}-input {

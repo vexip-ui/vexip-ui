@@ -18,7 +18,7 @@
     <input
       ref="input"
       type="text"
-      :class="[nh.be('control'), props.inputClass, props.controlClass]"
+      :class="[nh.be('control'), props.controlClass]"
       :value="inputValue"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
@@ -102,8 +102,7 @@ import {
   plus,
   throttle,
   toFixed,
-  toNumber,
-  warnOnce
+  toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -163,7 +162,6 @@ export default defineComponent({
       shiftStep: 10,
       altStep: 0.1,
       disabled: () => disabled.value,
-      inputClass: null,
       controlClass: null,
       debounce: false,
       delay: null,
@@ -176,13 +174,6 @@ export default defineComponent({
       controlType: 'right',
       emptyType: 'NaN'
     })
-
-    if (!isNull(props.inputClass)) {
-      warnOnce(
-        "[vexip-ui:NumberInput] 'input-class' prop has been deprecated, please " +
-          "use 'control-class' prop to replace it"
-      )
-    }
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)

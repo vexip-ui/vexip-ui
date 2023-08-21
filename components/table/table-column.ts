@@ -1,7 +1,7 @@
 import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull, warnOnce } from '@vexip-ui/utils'
+import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { TABLE_ACTIONS, columnTypes } from './symbol'
 
@@ -13,15 +13,7 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = [
-  'class',
-  'style',
-  'attrs',
-  'filter',
-  'sorter',
-  'metaData',
-  'meta'
-]
+const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'meta']
 const ignoredProps: ColumnPropKey[] = [
   'renderer',
   'headRenderer',
@@ -59,7 +51,6 @@ export default defineComponent({
         default: false,
         static: true
       },
-      className: null,
       class: null,
       style: null,
       attrs: null,
@@ -89,7 +80,6 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      metaData: null,
       meta: null,
       textAlign: {
         default: 'left',
@@ -106,20 +96,6 @@ export default defineComponent({
 
     const tableAction = inject(TABLE_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
-
-    if (!isNull(props.className)) {
-      warnOnce(
-        "[vexip-ui:TableColumn] 'class-name' prop has been deprecated, please " +
-          "use 'class' prop to replace it"
-      )
-    }
-
-    if (!isNull(props.metaData)) {
-      warnOnce(
-        "[vexip-ui:TableColumn] 'meta-data' prop has been deprecated, please " +
-          "use 'meta' prop to replace it"
-      )
-    }
 
     for (const key of propKeys) {
       if (ignoredProps.includes(key)) continue

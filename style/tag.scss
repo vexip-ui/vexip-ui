@@ -46,7 +46,7 @@ $tag: map.merge(
   transition: get-css-var('transition-color');
 
   & + & {
-    margin-left: get-css-var('tag-series-span');
+    margin-inline-start: get-css-var('tag-series-span');
   }
 
   &--small {
@@ -73,43 +73,32 @@ $tag: map.merge(
     padding: get-css-var('tag-v-padding') get-css-var('tag-h-padding');
     background-color: get-css-var('tag-bg-color');
     border: get-css-var('border-shape') get-css-var('tag-b-color');
-    border-right-width: 0;
-    border-left-color: get-css-var('tag-d-color');
+    border-inline-start-color: get-css-var('tag-d-color');
+    border-inline-end-width: 0;
     transition: get-css-var('transition-background');
 
     &:first-child {
-      border-left-color: get-css-var('tag-b-color');
-      border-top-left-radius: $radius;
-      border-bottom-left-radius: $radius;
+      border-inline-start-color: get-css-var('tag-b-color');
+
+      @include logical-radius($radius null null $radius);
     }
 
     &:last-child {
-      border-right-width: get-css-var('border-width');
-      border-top-right-radius: $radius;
-      border-bottom-right-radius: $radius;
+      border-inline-end-width: get-css-var('border-width');
+
+      @include logical-radius(null $radius $radius null);
     }
   }
 
-  // &--closable &__unit {
-  //   &:nth-last-child(2) {
-  //     padding-right: 0;
-  //   }
-
-  //   &:last-child {
-  //     padding-left: 0;
-  //     border-left-width: 0;
-  //   }
-  // }
-
   &__close {
     position: relative;
-    left: 3px;
+    inset-inline-start: 3px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     height: 12px;
     padding: 0;
-    margin-left: 4px;
+    margin-inline-start: 4px;
     color: get-css-var('tag-close-color');
     cursor: pointer;
     background-color: transparent;

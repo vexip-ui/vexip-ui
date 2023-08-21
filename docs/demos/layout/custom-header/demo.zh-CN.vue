@@ -13,7 +13,10 @@
       </div>
     </template>
     <template #header-right>
-      <Linker to="https://github.com/vexip-ui/vexip-ui" style="display: flex; margin-right: 16px">
+      <Linker
+        to="https://github.com/vexip-ui/vexip-ui"
+        style="display: flex; margin-inline-end: 16px"
+      >
         <Icon :scale="1.6">
           <GithubB></GithubB>
         </Icon>

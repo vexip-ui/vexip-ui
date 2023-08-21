@@ -166,7 +166,7 @@ $table: map.merge(
   &__head-cell,
   &__foot-cell {
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     display: flex;
     flex: 1 0 0;
     align-items: center;
@@ -174,13 +174,13 @@ $table: map.merge(
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: $border-a transparent;
+    border-inline-end: $border-a transparent;
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
     transition: get-css-var('transition-background');
 
     &:last-child,
     &--last {
-      border-right-width: 0;
+      border-inline-end-width: 0;
     }
 
     &--center {
@@ -206,6 +206,7 @@ $table: map.merge(
 
   &__side-pad {
     position: absolute;
+    inset-inline-start: 0;
     flex: 1 0 0;
     width: get-css-var('table-side-pad-left');
     height: 100%;
@@ -213,7 +214,8 @@ $table: map.merge(
     transition: get-css-var('transition-background');
 
     &--right {
-      right: 0;
+      inset-inline-start: auto;
+      inset-inline-end: 0;
       width: get-css-var('table-side-pad-right');
     }
   }
@@ -311,7 +313,7 @@ $table: map.merge(
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
-      border-right-color: get-css-var('table-cell-b-color-right');
+      border-inline-end-color: get-css-var('table-cell-b-color-right');
     }
   }
 
@@ -381,7 +383,7 @@ $table: map.merge(
   &__tree-expand {
     width: get-css-var('table-tree-expand-size');
     height: get-css-var('table-tree-expand-size');
-    margin-right: 6px;
+    margin-inline-end: 6px;
     color: get-css-var('table-tree-expand-color');
     transition: get-css-var('transition-color');
 
@@ -404,7 +406,7 @@ $table: map.merge(
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 3px;
+    margin-inline-start: 3px;
 
     &--asc,
     &--desc {
@@ -439,7 +441,7 @@ $table: map.merge(
     align-items: center;
     justify-content: center;
     height: 15px;
-    margin-left: 3px;
+    margin-inline-start: 3px;
     color: get-css-var('table-filter-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -493,7 +495,7 @@ $table: map.merge(
       padding: 0 14px;
 
       .#{$namespace}-checkbox {
-        margin-right: 0;
+        margin-inline-end: 0;
         margin-bottom: 6px;
 
         &:last-child {
@@ -520,22 +522,21 @@ $table: map.merge(
   &__resizer {
     position: absolute;
     top: 0;
-    right: -6px;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: 1;
-    width: 12px;
+    width: 6px;
     cursor: col-resize;
 
     &::after {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 50%;
-      width: 4px;
+      inset-inline-end: 0;
+      width: 3px;
       content: '';
       background-color: transparent;
       transition: get-css-var('transition-background');
-      transform: translateX(-50%);
     }
 
     &:hover::after {
@@ -560,34 +561,42 @@ $table: map.merge(
   }
 
   &__fixed--right {
-    right: 0;
-    border-left: 0 transparent;
+    inset-inline-end: 0;
+    border-inline-start: 0 transparent;
 
     &#{$fixed-active} {
       box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
+
+      @include rtl {
+        box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
+      }
     }
   }
 
   &--border &__fixed--right {
-    border-left-color: $border-a get-css-var('table-cell-b-color-right');
+    border-inline-start-color: $border-a get-css-var('table-cell-b-color-right');
   }
 
   &__fixed--left {
-    left: 0;
+    inset-inline-start: 0;
 
     &#{$fixed-active} {
       box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
+
+      @include rtl {
+        box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
+      }
     }
 
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
-      border-right-width: get-css-var('table-b-width');
+      border-inline-end-width: get-css-var('table-b-width');
     }
   }
 
   &--use-y-bar &__bar--horizontal {
-    right: 6px;
+    inset-inline-end: 6px;
   }
 
   &__indicator {
@@ -633,7 +642,7 @@ $table: map.merge(
     z-index: 10;
     will-change: left;
     pointer-events: none;
-    border-left: get-css-var('border-shape') get-css-var('table-indicator-color');
+    border-inline-start: get-css-var('border-shape') get-css-var('table-indicator-color');
   }
 
   &__empty {

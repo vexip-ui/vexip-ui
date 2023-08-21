@@ -16,6 +16,6 @@
 
 <style scoped>
 .vxp-skeleton {
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div style="position: relative; padding-left: 16px">
+  <div style="position: relative; padding-inline-start: 16px">
     <div
       :style="{
         position: 'absolute',
         top: '0',
         bottom: '0',
-        left: '0',
+        insetInlineStart: '0',
         width: '16px',
         backgroundColor: 'var(--vxp-fill-color-humble)'
       }"

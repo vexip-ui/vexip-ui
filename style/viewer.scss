@@ -107,12 +107,12 @@ $viewer: map.merge(
 
     &--top-start,
     &--bottom-start {
-      left: $h-padding;
+      inset-inline-start: $h-padding;
     }
 
     &--top-end,
     &--bottom-end {
-      right: $h-padding;
+      inset-inline-end: $h-padding;
     }
 
     &--right,

@@ -82,7 +82,7 @@ $confirm: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4px;
+    margin-inline-end: 4px;
     color: get-css-var('confirm-icon-color');
   }
 
@@ -105,7 +105,7 @@ $confirm: map.merge(
     padding: 0 28px;
 
     &:last-child {
-      margin-left: 14px;
+      margin-inline-start: 14px;
     }
   }
 
@@ -115,7 +115,7 @@ $confirm: map.merge(
     align-items: center;
     height: 24px;
     padding: 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('confirm-close-color');
     cursor: pointer;
     background-color: transparent;
