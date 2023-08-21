@@ -1,12 +1,12 @@
 <template>
   <div class="affix-container">
-    <div style="height: 500px">
-      <Affix target=".affix-container" :offset="80">
-        <Button type="primary">
-          指定元素
-        </Button>
-      </Affix>
-    </div>
+    <div style="height: 200px"></div>
+    <Affix target=".affix-container" :offset="80">
+      <Button type="primary">
+        指定容器
+      </Button>
+    </Affix>
+    <div style="height: 500px"></div>
   </div>
 </template>
 

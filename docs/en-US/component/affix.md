@@ -16,7 +16,7 @@ Holds the element at the top of the page.
 
 ### Specify Container
 
-You can fix the element inside the specified container by `target` prop, and it will be hidden if it goes beyond the container.
+You can fix the element inside the specified container by `target` prop.
 
 :::
 
@@ -35,7 +35,7 @@ Change the fixed position of the element by setting the `position` prop.
 | `offset`   | `number`            | Set the offset when fixed                                                                                                                                                    | `0`     | -     |
 | `position` | `'bottom' \| 'top'` | Set the fixed position                                                                                                                                                       | `top`   | -     |
 | `target`   | `unknown`           | Specifies the container, when passed in a string, it will try to select an element as a selector, and when passed in a function, the return value will be used as an element | `null`  | -     |
-| `z-index`  | `number`            | set the z-index of a fixed element                                                                                                                                           | `100`   | -     |
+| `z-index`  | `number`            | Set z-index of the fixed element                                                                                                                                             | `100`   | -     |
 
 ### Affix Events
 

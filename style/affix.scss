@@ -10,6 +10,4 @@ $affix: map.merge((), $affix);
   &--fixed {
     position: fixed;
   }
-
-  @include basis;
 }
