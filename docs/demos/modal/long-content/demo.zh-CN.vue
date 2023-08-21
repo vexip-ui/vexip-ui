@@ -11,6 +11,7 @@
     modal-class="demo-modal"
   >
     <NativeScroll use-y-bar height="100%" scroll-style="padding: 14px;">
+      <Select transfer></Select>
       <p v-for="n in 20" :key="n">
         一些内容
       </p>

@@ -1,5 +1,9 @@
 # 气泡框 Bubble
 
+常用作对话框或提示框。
+
+在用作提示框的时候，我们通常会与 [Floating UI](https://floating-ui.com/) 一同使用，通过组件实例的 `arrow` 属性可以获取箭头的元素。
+
 ## 代码示例
 
 :::demo bubble/basis
@@ -7,6 +11,14 @@
 ### 基础用法
 
 随便放一个气泡框。
+
+:::
+
+:::demo bubble/placement
+
+### 气泡位置
+
+通过 `placement` 属性可以设置气泡的位置。
 
 :::
 
@@ -25,14 +37,6 @@
 如果内置类型不满足你，可以通过设置 `background` 属性自定义背景颜色。
 
 注意，设置 `background` 后，内容颜色默认变为白色，可通过样式覆盖。
-
-:::
-
-:::demo bubble/background
-
-### 背景颜色
-
-设置 `background` 属性的值可以指定气泡的颜色。
 
 :::
 

@@ -102,6 +102,8 @@ const components = [
   'Timeline',
   'TimelineItem',
   'Tooltip',
+  'Tour',
+  'TourStep',
   'Transfer',
   'Tree',
   'Upload',

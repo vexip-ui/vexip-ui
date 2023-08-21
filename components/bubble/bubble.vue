@@ -6,14 +6,14 @@
         boxShadow: props.shadow ? `0 0 4px ${props.shadow}` : undefined
       }"
     >
-      <div :class="nh.be('arrow')"></div>
+      <div ref="arrow" :class="nh.be('arrow')"></div>
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 import { placementWhileList } from '@vexip-ui/hooks'
 import { useNameHelper, useProps } from '@vexip-ui/config'
@@ -39,6 +39,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('bubble')
+
+    const arrow = ref<HTMLElement>()
 
     const className = computed(() => {
       return [
@@ -69,7 +71,9 @@ export default defineComponent({
       nh,
 
       className,
-      style
+      style,
+
+      arrow
     }
   }
 })
