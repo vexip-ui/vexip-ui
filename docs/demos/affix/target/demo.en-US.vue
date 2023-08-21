@@ -1,24 +1,20 @@
 <template>
   <div class="affix-container">
-    <Affix target=".affix-container" :offset="80">
-      <Button type="primary">
-        Target container
-      </Button>
-    </Affix>
+    <div style="height: 500px">
+      <Affix target=".affix-container" :offset="80">
+        <Button type="primary">
+          Specified Target
+        </Button>
+      </Affix>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .affix-container {
   height: 400px;
+  overflow-y: auto;
   text-align: center;
-  background: var(--vxp-color-primary-light-9);
-  border-radius: 4px;
-}
-
-.dark {
-  .affix-container {
-    --vxp-color-primary-light-9: var(--vxp-color-primary-opacity-9);
-  }
+  background-color: var(--vxp-color-primary-opacity-9);
 }
 </style>

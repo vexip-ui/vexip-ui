@@ -1,9 +1,9 @@
 <template>
   <div class="affix-container">
-    <div class="background">
-      <Affix target=".affix-container" :offset="80" style="margin-top: 300px">
+    <div style="height: 500px">
+      <Affix target=".affix-container" :offset="80">
         <Button type="primary">
-          指定容器
+          指定元素
         </Button>
       </Affix>
     </div>
@@ -13,19 +13,8 @@
 <style lang="scss" scoped>
 .affix-container {
   height: 400px;
-  overflow: auto;
+  overflow-y: auto;
   text-align: center;
-  background: var(--vxp-color-primary-light-9);
-  border-radius: 4px;
-
-  .background {
-    height: 500px;
-  }
-}
-
-.dark {
-  .affix-container {
-    --vxp-color-primary-light-9: var(--vxp-color-primary-opacity-9);
-  }
+  background-color: var(--vxp-color-primary-opacity-9);
 }
 </style>

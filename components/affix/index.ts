@@ -1,5 +1,7 @@
 import Affix from './affix.vue'
 
+Affix.name = 'Affix'
+
 export { Affix }
 export type AffixExposed = InstanceType<typeof Affix>
 

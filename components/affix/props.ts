@@ -8,7 +8,7 @@ export const affixProps = buildProps({
   offset: Number,
   zIndex: Number,
   position: String as PropType<AffixPositionType>,
-  target: String,
+  target: [String, Object, Function] as PropType<unknown>,
 
   onScroll: eventProp(),
   onChange: eventProp()
