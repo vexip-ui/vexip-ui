@@ -1,5 +1,6 @@
 declare module 'vue' {
   export interface GlobalComponents {
+    Affix: typeof import('vexip-ui')['Affix'],
     Alert: typeof import('vexip-ui')['Alert'],
     Anchor: typeof import('vexip-ui')['Anchor'],
     AnchorLink: typeof import('vexip-ui')['AnchorLink'],

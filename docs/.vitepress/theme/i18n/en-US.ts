@@ -159,6 +159,7 @@ export const enUS = defineI18n({
     Tour: 'Tour',
 
     // Else
+    Affix: 'Affix',
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     Overflow: 'Overflow',

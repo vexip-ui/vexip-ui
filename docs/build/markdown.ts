@@ -109,9 +109,12 @@ function createDemoContainer() {
         const demoReg = /^demo\s*(.*)$/
 
         if (token.nesting === 1) {
-          const src = token.info.trim().match(demoReg)?.[1].trim()
+          const matched = token.info.trim().match(demoReg)
+          const params = matched?.[1].trim().split(/\s+/) || []
+          const src = params[0]
+          const alive = params[1] === 'alive'
 
-          return `<Demo :demos="demos" :codes="codes" src="${src}">\n`
+          return `<Demo :demos="demos" :codes="codes" src="${src}" :alive="${alive}">\n`
         } else {
           return '</Demo>\n'
         }

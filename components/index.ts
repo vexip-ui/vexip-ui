@@ -1,5 +1,6 @@
 import { install as installDirectives } from '@/directives'
 
+import { Affix } from './affix'
 import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'
@@ -124,6 +125,7 @@ export * from './create'
 export type { PropsOptions } from './props'
 
 const components = [
+  Affix,
   Alert,
   Anchor,
   AnchorLink,
@@ -258,6 +260,7 @@ const components = [
 
 export const install = buildInstall(components)
 
+export * from './affix'
 export * from './alert'
 export * from './anchor'
 export * from './anchor-link'

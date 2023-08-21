@@ -157,6 +157,7 @@ export interface I18nConfig {
     Tour: string,
 
     // Else
+    Affix: string,
     ConfigProvider: string,
     Masker: string,
     Overflow: string,

@@ -159,6 +159,7 @@ export const zhCN = defineI18n({
     Tour: '漫游指引',
 
     // Else
+    Affix: '固钉',
     ConfigProvider: '配置注入',
     Masker: '遮罩',
     Overflow: '溢出',
