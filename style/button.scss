@@ -116,7 +116,12 @@ $button: map.merge(
     border-color: get-css-var('button-b-color-disabled');
   }
 
-  & + & {
+  &--block {
+    display: flex;
+    width: 100%;
+  }
+
+  &:not(#{&}--block) + &:not(#{&}--block) {
     margin-inline-start: get-css-var('button-series-span');
   }
 

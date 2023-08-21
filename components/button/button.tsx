@@ -78,7 +78,8 @@ export default defineComponent({
         [nh.bm(size.value)]: size.value !== 'default',
         [nh.bm('pulsing')]: pulsing.value,
         [nh.bm('first')]: index.value === 1,
-        [nh.bm('last')]: isLast.value
+        [nh.bm('last')]: isLast.value,
+        [nh.bm('block')]: props.block
       }
     })
     const colorMap = computed(() => {
