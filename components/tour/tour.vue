@@ -164,6 +164,8 @@ watch(
         [0, 0, x, '100%']
       ]
     }
+
+    updatePopper()
   },
   { immediate: true, flush: 'post' }
 )

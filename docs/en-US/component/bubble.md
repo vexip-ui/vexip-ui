@@ -10,6 +10,14 @@ Just put a bubble.
 
 :::
 
+:::demo bubble/placement
+
+### 气泡位置
+
+The position of the bubble can be set by `placement` prop.
+
+:::
+
 :::demo bubble/types
 
 ### Bubble Types

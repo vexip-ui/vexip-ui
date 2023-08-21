@@ -10,6 +10,14 @@
 
 :::
 
+:::demo bubble/placement
+
+### 气泡位置
+
+通过 `placement` 属性可以设置气泡的位置。
+
+:::
+
 :::demo bubble/types
 
 ### 气泡类型
@@ -25,14 +33,6 @@
 如果内置类型不满足你，可以通过设置 `background` 属性自定义背景颜色。
 
 注意，设置 `background` 后，内容颜色默认变为白色，可通过样式覆盖。
-
-:::
-
-:::demo bubble/background
-
-### 背景颜色
-
-设置 `background` 属性的值可以指定气泡的颜色。
 
 :::
 
