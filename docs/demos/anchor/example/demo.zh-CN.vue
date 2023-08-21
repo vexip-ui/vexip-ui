@@ -6,7 +6,7 @@
         use-y-bar
         pointer
         :delta-y="50"
-        style="padding: 15px; margin-right: 15px; box-shadow: 0 0 1px"
+        style="padding: 15px; margin-inline-end: 15px; box-shadow: 0 0 1px"
         :height="400"
       >
         <p v-for="n in 5" :key="n" style="height: 50px">

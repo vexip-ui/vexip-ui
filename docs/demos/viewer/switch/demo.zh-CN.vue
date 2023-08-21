@@ -48,13 +48,13 @@ function reset() {
 .image-list img {
   width: 100px;
   height: 60px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   user-select: none;
   opacity: 60%;
 }
 
 .image-list img:last-child {
-  margin-right: 0;
+  margin-inline-end: 0;
 }
 
 .image-list img.is-active {

@@ -24,7 +24,7 @@
               <Icon
                 v-bind="icons.loading"
                 :icon="props.icon || icons.loading.icon"
-                :effect="effect || icons.loading.effect"
+                :effect="props.iconEffect || icons.loading.effect"
               ></Icon>
             </slot>
           </div>
@@ -57,7 +57,7 @@
             <Icon
               v-bind="icons.loading"
               :icon="props.icon || icons.loading.icon"
-              :effect="effect || icons.loading.effect"
+              :effect="props.iconEffect || icons.loading.effect"
             ></Icon>
           </slot>
         </div>
@@ -77,7 +77,7 @@ import { Icon } from '@/components/icon'
 import { computed, defineComponent, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { toNumber, warnOnce } from '@vexip-ui/utils'
+import { toNumber } from '@vexip-ui/utils'
 import { spinProps } from './props'
 
 export default defineComponent({
@@ -94,7 +94,6 @@ export default defineComponent({
         static: true
       },
       icon: null,
-      spin: false,
       inner: false,
       delay: false,
       tip: '',
@@ -105,18 +104,8 @@ export default defineComponent({
       iconEffect: null
     })
 
-    if (props.spin) {
-      warnOnce(
-        "[vexip-ui:Spin] 'spin' prop has been deprecated, please set the 'icon-effect'" +
-          " prop to 'spin-in' or 'spin-out' to replace it"
-      )
-    }
-
     const currentActive = ref(props.active)
 
-    const effect = computed(() => {
-      return props.iconEffect || (props.spin ? 'spin-in' : undefined)
-    })
     const hasTip = computed(() => !!(props.tip || slots.tip))
     const maskStyle = computed(() => {
       const style = {} as any
@@ -183,7 +172,6 @@ export default defineComponent({
 
       currentActive,
 
-      effect,
       hasTip,
       maskStyle,
 

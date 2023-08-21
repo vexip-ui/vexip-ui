@@ -4,12 +4,12 @@ import Component from './confirm.vue'
 import { destroyObject, isClient } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { ConfirmInstance, ConfirmOptions, ConfirmType } from './symbol'
+import type { ConfirmButtonType, ConfirmInstance, ConfirmOptions } from './symbol'
 
 export { confirmProps } from './props'
 
 export type { ConfirmProps, ConfirmCProps } from './props'
-export type { ConfirmType, ConfirmOptions }
+export type { ConfirmButtonType, ConfirmOptions }
 
 type FuzzyOptions = string | ConfirmOptions
 
@@ -33,10 +33,10 @@ export class ConfirmManager {
     this.config(options)
   }
 
-  open(content: string, type?: ConfirmType): Promise<boolean>
+  open(content: string, type?: ConfirmButtonType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
-  open(content: string, title: string, type?: ConfirmType): Promise<boolean>
-  open(options: FuzzyOptions, title?: string, type?: ConfirmType) {
+  open(content: string, title: string, type?: ConfirmButtonType): Promise<boolean>
+  open(options: FuzzyOptions, title?: string, type?: ConfirmButtonType) {
     if (!isClient) {
       return
     }
@@ -45,13 +45,13 @@ export class ConfirmManager {
       if (type) {
         options = { title, content: options, confirmType: type }
       } else {
-        options = { content: options, confirmType: title as ConfirmType }
+        options = { content: options, confirmType: title as ConfirmButtonType }
       }
     }
 
     const item: ConfirmOptions = { ...this.defaults, ...options }
 
-    if (item.icon && typeof item.icon !== 'function') {
+    if (item.icon && typeof item.icon === 'object') {
       item.icon = markRaw(item.icon)
     }
 

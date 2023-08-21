@@ -65,9 +65,6 @@
 | disabled        | `boolean`                                             | 设置是否禁用分页器                                       | `false`             | -        |
 | disable-item    | `(page: number) => boolean`                           | 设置禁用页码的判断方法                                   | `[]`                | -        |
 | turn-page-count | `number`                                              | 设置大翻页的翻页页数                                     | `5`                 | -        |
-| ~~page-jump~~   | `boolean`                                             | 是否开启页码跳转插件                                     | `false`             | -        |
-| ~~page-count~~  | `boolean`                                             | 是否开启切换每页条数的插件                               | `false`             | -        |
-| ~~page-total~~  | `boolean`                                             | 是否开启显示总条数的插件                                 | `false`             | -        |
 | plugins         | `('total' \| 'jump' \|'size' \| undefined \| null)[]` | 设置插件及其渲染的位置                                   | `[]`                | `2.0.8`  |
 | no-title        | `boolean`                                             | 设置是否禁用页码 title 属性                              | `false`             | `2.0.11` |
 | locale          | `LocaleConfig['pagination']`                          | 设置多语言配置                                           | `null`              | `2.1.0`  |

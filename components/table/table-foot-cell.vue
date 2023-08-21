@@ -41,6 +41,7 @@ import { Renderer } from '@/components/renderer'
 import { computed, defineComponent, inject, toRef } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
@@ -84,7 +85,9 @@ export default defineComponent({
     const tableActions = inject(TABLE_ACTIONS)!
 
     const nh = useNameHelper('table')
+    const { isRtl } = useRtl()
 
+    // We use 'a' and 'b' to distinguish above and below
     const prefix = computed(() => (props.above ? 'af' : 'bf'))
     const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
     const heights = computed(() =>
@@ -112,7 +115,6 @@ export default defineComponent({
           [nh.bem('foot-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('foot-cell', 'last')]: props.column.last
         },
-        props.column.className,
         props.column.class,
         customClass
       ]
@@ -199,7 +201,9 @@ export default defineComponent({
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
-          transform: `translate3d(${padLeft + totalWidths[props.columnIndex]}px, 0, 0)`
+          transform: `translate3d(${isRtl.value ? '-' : ''}${
+            padLeft + totalWidths[props.columnIndex]
+          }px, 0, 0)`
         }
       ]
     })

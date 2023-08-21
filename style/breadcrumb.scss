@@ -90,8 +90,7 @@ $breadcrumb: map.merge(
     color: get-css-var('breadcrumb-separator-color');
     cursor: pointer;
     user-select: none;
-    border-right: $border-a transparent;
-    border-left: $border-a transparent;
+    border-inline: $border-a transparent;
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
@@ -104,6 +103,6 @@ $breadcrumb: map.merge(
   }
 
   &--border &__item:hover &__separator {
-    border-left-color: get-css-var('breadcrumb-item-b-color-hover');
+    border-inline-start-color: get-css-var('breadcrumb-item-b-color-hover');
   }
 }

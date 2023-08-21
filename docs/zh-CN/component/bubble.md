@@ -28,6 +28,14 @@
 
 :::
 
+:::demo bubble/background
+
+### 背景颜色
+
+设置 `background` 属性的值可以指定气泡的颜色。
+
+:::
+
 :::demo bubble/example
 
 ### 一个例子

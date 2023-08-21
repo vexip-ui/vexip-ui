@@ -1,15 +1,15 @@
 [class*='language-'] {
-  font-family: Lucida, 'lucida console', 'Courier New', Consolas, Monaco, 'andale mono',
-    'ubuntu mono', monospace;
-  font-size: 14px;
+  font-family: var(--vxp-font-family-mono);
+  font-size: var(--vxp-font-size-base);
   hyphens: none;
-  line-height: 28px;
+  line-height: calc(var(--vxp-font-size-base) * 2);
   color: var(--vxp-content-color-base);
   text-align: left;
   word-break: normal;
   word-wrap: normal;
-  tab-size: 4;
+  tab-size: 2;
   white-space: pre;
+  direction: ltr;
   background-color: transparent;
   word-spacing: normal;
 
@@ -28,7 +28,7 @@ div[class*='language-'] {
 
 pre[class*='language-'] {
   padding: 12px 20px;
-  padding-left: 56px;
+  padding-inline-start: 56px;
   margin: 0;
   overflow-x: auto;
 

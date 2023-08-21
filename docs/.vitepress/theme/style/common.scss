@@ -23,6 +23,8 @@ html {
   --ghost-bg-color: #234;
   --ghost-padding: 10px;
 
+  --text-align: left;
+
   &.dark {
     --bg-color: #131719;
     --body-bg-color: #1b1b1b;
@@ -38,6 +40,12 @@ html {
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  &.rtl {
+    --text-align: right;
+
+    direction: rtl;
   }
 }
 
@@ -105,7 +113,7 @@ p .vxp-linker {
     margin: 14px 0;
     font-size: 90%;
     color: var(--vxp-content-color-secondary);
-    border-left: 4px solid var(--vxp-border-color-base);
+    border-inline-start: 4px solid var(--vxp-border-color-base);
 
     p {
       margin: 0;
@@ -132,11 +140,11 @@ p .vxp-linker {
 
   ul:not([class*='vxp-']),
   ol:not([class*='vxp-']) {
-    padding-left: 4px;
+    padding-inline-start: 4px;
 
     & > li {
       padding: 2px 4px;
-      margin-left: 20px;
+      margin-inline-start: 20px;
     }
   }
 
@@ -169,7 +177,7 @@ p .vxp-linker {
     }
 
     th {
-      text-align: left;
+      text-align: var(--text-align);
       white-space: normal;
       background-color: var(--vxp-color-primary-opacity-9);
     }
@@ -181,7 +189,7 @@ p .vxp-linker {
   align-items: center;
 
   &__link {
-    margin-left: 6px;
+    margin-inline-start: 6px;
     font-size: 20px;
     color: var(--vxp-color-primary-light-1);
     text-decoration: none;

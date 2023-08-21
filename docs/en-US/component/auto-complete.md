@@ -14,14 +14,6 @@ The autocomplete data source is set via the `options` prop.
 
 :::
 
-:::demo auto-complete/clearable
-
-### Clearable
-
-Add the `clearable` prop to enable clearable functionality.
-
-:::
-
 :::demo auto-complete/filter
 
 ### Filter Options
@@ -31,6 +23,14 @@ You can set the `filter` property to enable option filtering when used as a sear
 The built-in filter method will be enabled when set to `true`, or set to function to use custom filter method.
 
 Add the `ignore-case` prop to make the filter to ignore case when compare.
+
+:::
+
+:::demo auto-complete/clearable
+
+### Clearable
+
+Add the `clearable` prop to enable clearable functionality.
 
 :::
 

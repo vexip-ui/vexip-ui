@@ -35,7 +35,7 @@ export default defineComponent({
     const rowState = inject(ROW_STATE, null)
     const nh = useNameHelper('column')
 
-    provide(ROW_STATE, null)
+    provide(ROW_STATE, null!)
 
     const className = computed(() => {
       const columnFlex = (props.useFlex || rowState?.columnFlex) && {
@@ -94,9 +94,9 @@ export default defineComponent({
 
       if (rowState) {
         if (typeof rowState.gap === 'number') {
-          style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
+          style.paddingInlineStart = style.paddingInlineEnd = `${rowState.gap / 2}px`
         } else if (Array.isArray(rowState.gap)) {
-          style.paddingRight = style.paddingLeft = `${rowState.gap[0] / 2}px`
+          style.paddingInlineStart = style.paddingInlineEnd = `${rowState.gap[0] / 2}px`
         }
       }
 

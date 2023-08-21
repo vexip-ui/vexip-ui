@@ -55,7 +55,13 @@ import {
   watch
 } from 'vue'
 
-import { placementWhileList, useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import {
+  placementWhileList,
+  useClickOutside,
+  usePopper,
+  useRtl,
+  useSetTimeout
+} from '@vexip-ui/hooks'
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
 import { dropdownProps } from './props'
@@ -103,6 +109,7 @@ export default defineComponent({
     })
 
     const parentState = inject(DROPDOWN_STATE, null)
+    const { isRtl } = useRtl()
 
     const isNested = !!parentState
     const label = toRef(props, 'label')
@@ -134,7 +141,7 @@ export default defineComponent({
     })
     const isAlive = computed(() => parentState?.alive || props.alive)
 
-    provide(SELECT_HANDLER, null)
+    provide(SELECT_HANDLER, null!)
     !props.custom &&
       provide(
         DROPDOWN_STATE,
@@ -205,7 +212,7 @@ export default defineComponent({
       const [xPlacement] = value.split('-')
 
       if (isNested && xPlacement !== 'right' && xPlacement !== 'left') {
-        placement.value = 'right-start'
+        placement.value = isRtl.value ? 'left-start' : 'right-start'
       } else {
         placement.value = value
       }

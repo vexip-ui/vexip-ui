@@ -11,8 +11,8 @@
     </Tag>
     <Button
       dashed
-      szie="small"
-      style="height: auto; margin-left: 10px; line-height: 1.5"
+      size="small"
+      style="height: auto; margin-inline-start: 6px; line-height: 1.5"
       :icon="Plus"
       @click="addTag"
     >

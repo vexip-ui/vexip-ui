@@ -69,7 +69,10 @@
             <div :class="nh.be('icon')">
               <Icon v-if="item.loading" v-bind="icons.loading"></Icon>
               <Icon v-else-if="item.error" v-bind="icons.refresh"></Icon>
-              <Icon v-else-if="hasChildren(item)" v-bind="icons.arrowRight"></Icon>
+              <template v-else-if="hasChildren(item)">
+                <Icon v-if="isRtl" v-bind="icons.arrowLeft"></Icon>
+                <Icon v-else v-bind="icons.arrowRight"></Icon>
+              </template>
               <Icon
                 v-else-if="!multiple && !noCascaded && checkIcon && values.includes(item.fullValue)"
                 v-bind="icons.check"
@@ -92,7 +95,7 @@ import { VirtualList } from '@/components/virtual-list'
 import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -153,6 +156,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const nh = useNameHelper('cascader')
     const icons = useIcons()
+    const { isRtl } = useRtl()
     const currentHitting = ref(-1)
 
     const list = ref<VirtualListExposed>()
@@ -345,6 +349,7 @@ export default defineComponent({
     return {
       nh,
       icons,
+      isRtl,
       currentHitting,
 
       wrapper,

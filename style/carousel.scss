@@ -92,19 +92,19 @@ $carousel: map.merge(
     }
 
     &--prev {
-      padding-right: $arrow-padding;
+      padding-inline-end: $arrow-padding;
     }
 
     &--inside#{&}--prev {
-      left: 20px;
+      inset-inline-start: 20px;
     }
 
     &--next {
-      padding-left: $arrow-padding;
+      padding-inline-start: $arrow-padding;
     }
 
     &--inside#{&}--next {
-      right: 20px;
+      inset-inline-end: 20px;
     }
 
     &--inside#{&}--show {

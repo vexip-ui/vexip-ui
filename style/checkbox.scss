@@ -152,7 +152,7 @@ $checkbox: map.merge(
   }
 
   &__label {
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('checkbox-label-color');
     transition: get-css-var('transition-color');
   }
@@ -272,11 +272,11 @@ $checkbox: map.merge(
     }
 
     &-group & {
-      margin-right: get-css-var('checkbox-series-h-span');
+      margin-inline-end: get-css-var('checkbox-series-h-span');
     }
 
     &-group--vertical & {
-      margin-right: 0;
+      margin-inline-end: 0;
       margin-bottom: get-css-var('checkbox-series-v-span');
 
       &:last-child {

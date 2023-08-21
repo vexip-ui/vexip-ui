@@ -162,7 +162,7 @@ import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
-import { useMoving } from '@vexip-ui/hooks'
+import { useMoving, useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
@@ -206,6 +206,7 @@ export default defineComponent({
     const tableSlots = inject(TABLE_SLOTS)!
 
     const nh = useNameHelper('table')
+    const { isRtl } = useRtl()
     const filterVisible = ref(false)
     const resizable = toRef(state, 'colResizable')
     const resizing = computed(() => state.colResizing)
@@ -245,6 +246,7 @@ export default defineComponent({
         if (!table || !wrapper.value) return false
 
         state.xStart = state.clientX - table.getBoundingClientRect().left
+        state.isRtl = isRtl.value
         currentWidth = wrapper.value.getBoundingClientRect().width
 
         mutations.setColumnResizing(true)
@@ -258,12 +260,12 @@ export default defineComponent({
           width: currentWidth + state.deltaX
         })
       },
-      onEnd: ({ deltaX }, event) => {
+      onEnd: ({ deltaX, isRtl }, event) => {
         mutations.setColumnResizing(false)
 
         if (!wrapper.value) return
 
-        const width = wrapper.value.getBoundingClientRect().width + deltaX
+        const width = wrapper.value.getBoundingClientRect().width + (isRtl ? -1 : 1) * deltaX
 
         mutations.handleColumnResize(
           state.columns.slice(props.index, props.index + headSpan.value).map(column => column.key),
@@ -292,7 +294,6 @@ export default defineComponent({
           [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('head-cell', 'last')]: props.column.last
         },
-        props.column.className,
         props.column.class,
         customClass
       ]
@@ -327,7 +328,9 @@ export default defineComponent({
             !state.border && span > 1 && props.index + span >= totalWidths.length - 1
               ? 0
               : undefined,
-          transform: `translate3d(${padLeft + totalWidths[props.index]}px, 0, 0)`
+          transform: `translate3d(${isRtl.value ? '-' : ''}${
+            padLeft + totalWidths[props.index]
+          }px, 0, 0)`
         }
       ]
     })

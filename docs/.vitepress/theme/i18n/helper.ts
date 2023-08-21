@@ -28,7 +28,10 @@ export interface I18nConfig {
     backHomepage: string,
     lastUpdated: string,
     contributors: string,
-    thanksContribute: string
+    thanksContribute: string,
+    toggleDirection: string,
+    toggleTheme: string,
+    viewInGithub: string
   },
   alert: {
     info: string,
@@ -73,11 +76,13 @@ export interface I18nConfig {
     sponsor: string
   },
   component: {
+    // Basis
     Button: string,
     Icon: string,
     Linker: string,
     Typography: string,
 
+    // Layout
     Grid: string,
     Divider: string,
     Layout: string,
@@ -87,12 +92,14 @@ export interface I18nConfig {
     Space: string,
     Split: string,
 
+    // Navigation
     Anchor: string,
     Breadcrumb: string,
     Dropdown: string,
     Menu: string,
     Pagination: string,
 
+    // Form
     AutoComplete: string,
     Cascader: string,
     Checkbox: string,
@@ -113,6 +120,7 @@ export interface I18nConfig {
     Upload: string,
     Wheel: string,
 
+    // Data
     Avatar: string,
     Badge: string,
     Bubble: string,
@@ -133,6 +141,7 @@ export interface I18nConfig {
     Tree: string,
     Viewer: string,
 
+    // Effect
     Alert: string,
     Confirm: string,
     Contextmenu: string,
@@ -147,6 +156,7 @@ export interface I18nConfig {
     Toast: string,
     Tour: string,
 
+    // Else
     ConfigProvider: string,
     Masker: string,
     Overflow: string,

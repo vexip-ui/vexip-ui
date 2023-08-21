@@ -39,7 +39,6 @@ export const numberInputProps = buildProps({
   shiftStep: Number,
   altStep: Number,
   disabled: booleanProp,
-  inputClass: classProp,
   controlClass: classProp,
   debounce: booleanProp,
   delay: Number,

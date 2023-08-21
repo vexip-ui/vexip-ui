@@ -101,7 +101,7 @@ function resetMajorColor() {
     font-size: 15px;
 
     .vxp-icon {
-      margin-left: 3px;
+      margin-inline-start: 3px;
       color: var(--vxp-content-color-third);
       cursor: pointer;
       transition: var(--vxp-transition-color);

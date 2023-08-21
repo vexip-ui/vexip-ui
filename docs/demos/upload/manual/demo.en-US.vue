@@ -13,7 +13,7 @@
       <Button
         type="success"
         :icon="Check"
-        style="margin-left: 6px"
+        style="margin-inline-start: 6px"
         @click.stop="doUpload"
       >
         Manual upload

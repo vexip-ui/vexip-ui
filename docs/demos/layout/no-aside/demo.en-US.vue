@@ -7,7 +7,7 @@
     :no-aside="!showAside"
   >
     <template #header-right>
-      <div style="margin-right: 24px">
+      <div style="margin-inline-end: 24px">
         <Switch v-model:value="showAside" open-text="Show aside" close-text="Hide aside"></Switch>
       </div>
     </template>

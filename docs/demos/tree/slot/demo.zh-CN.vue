@@ -3,7 +3,7 @@
     <template #node="{ data, node, depth, toggleExpand }">
       <span
         :style="{
-          paddingLeft: `${depth * 20}px`,
+          paddingInlineStart: `${depth * 20}px`,
           color: node.expanded ? '#fa5252' : '#228be6',
           cursor: 'pointer'
         }"

@@ -1,6 +1,6 @@
 <template>
   <Row style="max-width: 840px">
-    <Column :span="20" style="padding-right: 10px">
+    <Column :span="20" style="padding-inline-end: 10px">
       <Transition name="vxp-fade" mode="out-in">
         <img :key="active" style="width: 100%; height: 400px" :src="images[active]" />
       </Transition>

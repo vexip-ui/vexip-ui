@@ -20,7 +20,7 @@ $loading: map.merge(
   @include basis;
 
   position: fixed;
-  left: 0;
+  inset-inline-start: 0;
   z-index: get-css-var('loading-z-index');
   width: 100%;
 

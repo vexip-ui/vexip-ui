@@ -1,8 +1,10 @@
 <template>
+  <p>
+    翻转：
+    <Switch v-model:value="flip" style="margin-inline-end: 10px"></Switch>
+  </p>
   <p style="margin-bottom: 28px">
-    <span>翻转：</span>
-    <Switch v-model:value="flip" style="margin-right: 10px"></Switch>
-    <span>交替：</span>
+    交替：
     <Switch v-model:value="alternate"></Switch>
   </p>
   <Timeline

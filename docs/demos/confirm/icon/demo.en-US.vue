@@ -1,6 +1,9 @@
 <template>
-  <Button type="error" @click="confirm">
+  <Button type="error" @click="confirm()">
     Delete
+  </Button>
+  <Button type="error" @click="confirm(false)">
+    No Icon
   </Button>
 </template>
 
@@ -8,12 +11,15 @@
 import { Confirm, Message } from 'vexip-ui'
 import { TriangleExclamation } from '@vexip-ui/icons'
 
-async function confirm() {
+async function confirm(hasIcon = true) {
   const isConfirm = await Confirm.open({
     content: 'Confirm to delete?',
     confirmType: 'error',
-    icon: TriangleExclamation,
-    iconColor: '#f03e3e'
+    icon: hasIcon && TriangleExclamation,
+    iconProps: {
+      style: { color: '#f03e3e' },
+      scale: 2
+    }
   })
 
   if (isConfirm) {

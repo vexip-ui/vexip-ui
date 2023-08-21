@@ -14,14 +14,6 @@
 
 :::
 
-:::demo auto-complete/clearable
-
-### 可清空
-
-添加 `clearable` 属性可以开启可清空功能。
-
-:::
-
 :::demo auto-complete/filter
 
 ### 过滤选项
@@ -31,6 +23,14 @@
 当设置为 `true` 时将启用内置的过滤方法，当设置为函数时可以传入一个自定义的过滤方法。
 
 添加 `ignore-case` 属性可以设置过滤时忽略大小写进行比较。
+
+:::
+
+:::demo auto-complete/clearable
+
+### 可清空
+
+添加 `clearable` 属性可以开启可清空功能。
 
 :::
 

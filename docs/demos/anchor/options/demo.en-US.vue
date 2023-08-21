@@ -6,7 +6,7 @@
         :style="{
           height: '400px',
           padding: '15px',
-          marginRight: '15px',
+          marginInlineEnd: '15px',
           overflow: 'auto',
           boxShadow: '0 0 1px'
         }"

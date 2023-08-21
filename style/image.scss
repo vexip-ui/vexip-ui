@@ -124,14 +124,14 @@ $image: map.merge(
       @include handler;
 
       top: get-css-var('image-action-offset');
-      right: get-css-var('image-action-offset');
+      inset-inline-end: get-css-var('image-action-offset');
     }
 
     &__prev {
       @include handler;
 
       top: 50%;
-      left: get-css-var('image-action-offset');
+      inset-inline-start: get-css-var('image-action-offset');
       transform: translateY(-50%);
     }
 
@@ -139,7 +139,7 @@ $image: map.merge(
       @include handler;
 
       top: 50%;
-      right: get-css-var('image-action-offset');
+      inset-inline-end: get-css-var('image-action-offset');
       transform: translateY(-50%);
     }
 

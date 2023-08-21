@@ -1,6 +1,6 @@
 <template>
-  <div class="dev-nav">
-    <div class="dev-nav__section">
+  <nav class="dev-nav">
+    <div class="dev-nav__left">
       <router-link
         v-for="route in router.options.routes"
         :key="route.path"
@@ -11,10 +11,11 @@
       </router-link>
     </div>
     <span role="none" style="flex: auto"></span>
-    <div class="dev-nav__section" style="padding-right: 10px">
+    <div class="dev-nav__right">
+      <DirectionSwitch style="margin-inline-end: 20px"></DirectionSwitch>
       <ThemeSwitch></ThemeSwitch>
     </div>
-  </div>
+  </nav>
   <main class="dev-main">
     <router-view v-slot="{ Component }">
       <component :is="Component"></component>
@@ -25,6 +26,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
+import DirectionSwitch from '../docs/.vitepress/theme/components/direction-switch.vue'
 import ThemeSwitch from '../docs/.vitepress/theme/components/theme-switch.vue'
 
 const router = useRouter()
@@ -50,6 +52,10 @@ html {
     --body-bg-color: #1b1b1b;
     --ghost-bg-color: transparent;
     --ghost-padding: 0;
+  }
+
+  &.rtl {
+    direction: rtl;
   }
 }
 
@@ -79,6 +85,12 @@ body {
 
   &__section {
     display: flex;
+  }
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
   }
 }
 

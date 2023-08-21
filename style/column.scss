@@ -83,15 +83,15 @@ $column: map.merge(
     }
 
     &--offset-#{$i} {
-      margin-left: $size;
+      margin-inline-start: $size;
     }
 
     &--pull-#{$i} {
-      right: $size;
+      inset-inline-end: $size;
     }
 
     &--push-#{$i} {
-      left: $size;
+      inset-inline-start: $size;
     }
 
     &--order-#{$i} {
@@ -115,15 +115,15 @@ $column: map.merge(
         }
 
         &--#{$point}-offset-#{$i} {
-          margin-left: $size;
+          margin-inline-start: $size;
         }
 
         &--#{$point}-pull-#{$i} {
-          right: $size;
+          inset-inline-end: $size;
         }
 
         &--#{$point}-push-#{$i} {
-          left: $size;
+          inset-inline-start: $size;
         }
 
         &--#{$point}-order-#{$i} {

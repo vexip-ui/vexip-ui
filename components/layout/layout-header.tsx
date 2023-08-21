@@ -19,7 +19,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { useMounted } from '@vexip-ui/hooks'
+import { useMounted, useRtl } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
 import { layoutHeaderProps } from './props'
 import { computeSeriesColors, useLayoutState } from './helper'
@@ -65,6 +65,7 @@ export default defineComponent({
 
     const menu = ref<MenuExposed>()
 
+    const { isRtl } = useRtl()
     const { isMounted } = useMounted()
 
     const rootEl = computed(() => {
@@ -443,7 +444,7 @@ export default defineComponent({
               <Dropdown
                 class={[nh.be('user'), layoutState.classes.headerUser]}
                 transfer
-                placement={'bottom-end'}
+                placement={isRtl.value ? 'bottom-start' : 'bottom-end'}
                 visible={currentUserDropped.value}
                 trigger={'custom'}
                 onClickOutside={() => toggleUserDropped(false)}

@@ -33,7 +33,7 @@ $anchor: map.merge(
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-left: calc(get-css-var('anchor-pointer-size') * 0.5);
+  padding-inline-start: calc(get-css-var('anchor-pointer-size') * 0.5);
   vertical-align: middle;
 
   &__list {
@@ -47,11 +47,11 @@ $anchor: map.merge(
 
   &__link {
     padding: 4px 14px;
-    margin-left: calc(get-css-var('anchor-track-width') * -1);
+    margin-inline-start: calc(get-css-var('anchor-track-width') * -1);
     color: get-css-var('anchor-link-color');
     text-decoration: none;
     cursor: pointer;
-    border-left: get-css-var('anchor-track');
+    border-inline-start: get-css-var('anchor-track');
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
@@ -64,17 +64,22 @@ $anchor: map.merge(
   }
 
   &--no-marker &__link--active {
-    border-left-color: get-css-var('track-color-active');
+    border-inline-start-color: get-css-var('track-color-active');
   }
 
   &__marker {
     position: absolute;
-    left: calc(get-css-var('anchor-pointer-size') * 0.5 - 1px);
+    inset-inline-start: calc(get-css-var('anchor-pointer-size') * 0.5 - 1px);
     display: flex;
     align-items: center;
     justify-content: center;
+    will-change: top;
     transition: top get-css-var('transition-base');
     transform: translate3d(-50%, -50%, 0);
+
+    @include rtl {
+      transform: translate3d(50%, -50%, 0);
+    }
   }
 
   &__pointer {

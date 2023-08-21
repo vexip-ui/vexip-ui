@@ -32,7 +32,7 @@
             :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
             :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
             :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
-            :in-range="usingRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+            :in-range="props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
           >
             <div
               :class="{
@@ -43,7 +43,7 @@
                 [nh.bem('index', 'today')]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
                 [nh.bem('index', 'disabled')]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
                 [nh.bem('index', 'in-range')]:
-                  usingRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
+                  props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])
               }"
               tabindex="0"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
@@ -71,12 +71,10 @@ import {
   debounceMinor,
   differenceDays,
   endOfDay,
-  isDefined,
   rangeDate,
   startOfDay,
   startOfWeek,
-  toFalse,
-  warnOnce
+  toFalse
 } from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'
 
@@ -115,7 +113,6 @@ export default defineComponent({
         default: toFalse,
         isFunc: true
       },
-      isRange: null,
       valueType: {
         default: 'start',
         validator: value => value === 'start' || value === 'end'
@@ -141,16 +138,6 @@ export default defineComponent({
       }
 
       return min.value > max.value
-    })
-    const usingRange = computed(() => {
-      if (isDefined(props.isRange)) {
-        warnOnce(
-          "[vexip-ui:CalendarPanel] 'is-range' prop has been deprecated, please " +
-            "use 'range' prop to replace it"
-        )
-      }
-
-      return props.range ?? props.isRange ?? false
     })
 
     const updateDateRange = debounceMinor(setDateRange)
@@ -196,7 +183,7 @@ export default defineComponent({
           endValue.value = Number.isNaN(+date) ? null : date
         }
 
-        if (!usingRange.value) break
+        if (!props.range) break
       }
     }
 
@@ -327,8 +314,6 @@ export default defineComponent({
       endValue,
       dateRange,
       hoveredDate,
-
-      usingRange,
 
       body: wrapper,
 

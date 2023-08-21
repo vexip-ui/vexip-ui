@@ -1,5 +1,5 @@
 <template>
-  <ColorPicker v-model:value="color1" shortcut style="margin-right: 25px"></ColorPicker>
+  <ColorPicker v-model:value="color1" shortcut style="margin-inline-end: 25px"></ColorPicker>
   <ColorPicker v-model:value="color2" shortcut :shortcut-list="shortcuts"></ColorPicker>
 </template>
 

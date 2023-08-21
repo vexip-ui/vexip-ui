@@ -30,7 +30,6 @@ export const inputProps = buildProps({
   autocomplete: booleanProp,
   readonly: booleanProp,
   disabled: booleanProp,
-  inputClass: classProp,
   controlClass: classProp,
   debounce: booleanProp,
   delay: Number,

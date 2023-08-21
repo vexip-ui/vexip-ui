@@ -2,7 +2,7 @@
   <Select
     :id="idFor"
     ref="select"
-    :visible="currentVisible"
+    v-model:visible="currentVisible"
     :class="nh.b()"
     :inherit="props.inherit"
     :list-class="nh.be('list')"
@@ -283,6 +283,10 @@ export default defineComponent({
 
       currentVisible.value = !props.dropDisabled
 
+      if (select.value) {
+        select.value.currentVisible = currentVisible.value
+      }
+
       currentValue.value = value
       changed = true
       lastInput = value
@@ -342,8 +346,7 @@ export default defineComponent({
         beforeVisible = currentVisible.value
         beforeVisible && emitEvent(props.onToggle, beforeVisible)
       } else {
-        currentVisible.value = true
-        select.value.currentVisible = currentVisible.value
+        select.value.currentVisible = true
       }
     }
 

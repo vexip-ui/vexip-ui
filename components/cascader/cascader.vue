@@ -134,7 +134,7 @@
     </div>
     <Popper
       ref="popper"
-      :class="[nh.be('popper'), nh.bs('vars')]"
+      :class="[nh.be('popper'), nh.ns('input-vars'), nh.bs('vars')]"
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
@@ -463,11 +463,11 @@ export default defineComponent({
         currentVisible.value = value
       }
     )
-    watch(currentVisible, value => {
+    watch(currentVisible, async value => {
       if (value) {
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
-        updatePopper()
+        await updatePopper()
         nextTick(() => {
           panelElList.value.at(-1)?.$el?.focus()
         })
@@ -551,6 +551,7 @@ export default defineComponent({
     watch(
       () => optionsList.value.length,
       () => {
+        updatePopper()
         nextTick(() => {
           const panel = panelElList.value.at(-1)
 

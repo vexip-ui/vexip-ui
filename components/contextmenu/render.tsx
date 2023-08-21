@@ -4,6 +4,7 @@ import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 
 import { useIcons } from '@vexip-ui/config'
+import { useRtl } from '@vexip-ui/hooks'
 
 import type { NameHelper } from '@vexip-ui/config'
 import type { ContextmenuConfig } from './symbol'
@@ -35,6 +36,7 @@ function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
 
 function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
   const icons = useIcons()
+  const { isRtl } = useRtl()
 
   return (
     <Dropdown
@@ -68,7 +70,7 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon
-                {...icons.value.arrowRight}
+                {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
                 style={{ color: item.iconColor || item.color }}
               ></Icon>
             </div>

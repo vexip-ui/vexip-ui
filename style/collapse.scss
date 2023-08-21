@@ -96,6 +96,10 @@ $collapse: map.merge(
     color: get-css-var('collapse-arrow-color');
     transition: get-css-var('transition-color'), get-css-var('transition-transform');
     transform: translate(-50%, -50%);
+
+    @include rtl {
+      transform: translate(50%, -50%);
+    }
   }
 
   &__header {
@@ -125,22 +129,22 @@ $collapse: map.merge(
   &--arrow-left,
   &__panel--arrow-left {
     #{$header} {
-      padding-left: 36px;
+      padding-inline-start: 36px;
     }
 
     #{$arrow} {
-      left: 16px;
+      inset-inline-start: 16px;
     }
   }
 
   &--arrow-right,
   &__panel--arrow-right {
     #{$header} {
-      padding-right: 36px;
+      padding-inline-end: 36px;
     }
 
     #{$arrow} {
-      left: calc(100% - 16px);
+      inset-inline-start: calc(100% - 16px);
     }
   }
 
@@ -153,6 +157,10 @@ $collapse: map.merge(
 
   &__panel--expanded &__arrow {
     transform: translate(-50%, -50%) rotate(90deg);
+
+    @include rtl {
+      transform: translate(50%, -50%) rotate(90deg);
+    }
   }
 
   &__panel--disabled &__header {
@@ -183,7 +191,7 @@ $collapse: map.merge(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__panel--disabled &__content {
