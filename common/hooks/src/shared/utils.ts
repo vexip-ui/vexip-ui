@@ -1,4 +1,4 @@
-import { Comment, Fragment, createTextVNode, isVNode, renderSlot, toValue } from 'vue'
+import { Comment, Fragment, createTextVNode, isVNode, renderSlot, unref } from 'vue'
 
 import { isClient } from '@vexip-ui/utils'
 
@@ -51,7 +51,7 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
 export function unrefElement<T extends string | MaybeInstance>(
   ref: MaybeRef<T>
 ): T extends string | ComponentPublicInstance ? MaybeElement : T {
-  const plain = toValue(ref)
+  const plain = unref(ref)
 
   if (typeof plain === 'string') {
     return isClient ? document.querySelector(plain) : (null as any)
