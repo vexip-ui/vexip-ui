@@ -3,8 +3,6 @@ import { TourStep } from '@/components/tour-step'
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { nextTick } from 'vue'
-
 import { Tour } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'

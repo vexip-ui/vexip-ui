@@ -1,5 +1,9 @@
 # 气泡框 Bubble
 
+常用作对话框或提示框。
+
+在用作提示框的时候，我们通常会与 [Floating UI](https://floating-ui.com/) 一同使用，通过组件实例的 `arrow` 属性可以获取箭头的元素。
+
 ## 代码示例
 
 :::demo bubble/basis

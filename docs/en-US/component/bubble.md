@@ -1,5 +1,9 @@
 # Bubble
 
+Normally used as a chat dialog or tooltip.
+
+When used as a tooltip, we usually use it with [Floating UI](https://floating-ui.com/), and the arrow element can be obtained via the `arrow` property of the component instance.
+
 ## Demos
 
 :::demo bubble/basis
