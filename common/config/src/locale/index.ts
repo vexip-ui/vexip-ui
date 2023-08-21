@@ -109,3 +109,7 @@ export function getCountWordOnly(wordTemplate: string, count: number) {
 export function makeSentence(words: string, wordSpace = globalLocal.value.wordSpace ?? false) {
   return !wordSpace ? words.replace(/\s+/g, '') : words
 }
+
+export function getStepByWord(wordTemplate: string, step: number) {
+  return wordTemplate.replace(/{n}/g, `${step}`)
+}

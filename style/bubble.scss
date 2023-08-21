@@ -126,7 +126,7 @@ $bubble: map.merge(
     bottom: 0;
     border-width: $size $size 0;
     border-top-color: $border-color;
-    transform: translate(-50%, 100%);
+    transform: translateY(100%);
 
     &::after {
       bottom: 1px;
@@ -143,19 +143,19 @@ $bubble: map.merge(
   &--top &__arrow {
     @include top-arrow;
 
-    left: 50%;
+    left: calc(50% - #{$size});
   }
 
   &--top-start &__arrow {
     @include top-arrow;
 
-    left: $h-offset;
+    left: calc(#{$h-offset} - #{$size});
   }
 
   &--top-end &__arrow {
     @include top-arrow;
 
-    left: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset} - #{$size});
   }
 
   &--bottom,
@@ -168,7 +168,7 @@ $bubble: map.merge(
     top: 0;
     border-width: 0 $size $size;
     border-bottom-color: $border-color;
-    transform: translate(-50%, -100%);
+    transform: translateY(-100%);
 
     &::after {
       top: 1px;
@@ -185,19 +185,19 @@ $bubble: map.merge(
   &--bottom &__arrow {
     @include bottom-arrow;
 
-    left: 50%;
+    left: calc(50% - #{$size});
   }
 
   &--bottom-start &__arrow {
     @include bottom-arrow;
 
-    left: $h-offset;
+    left: calc(#{$h-offset} - #{$size});
   }
 
   &--bottom-end &__arrow {
     @include bottom-arrow;
 
-    left: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset} - #{$size});
   }
 
   &--left,
@@ -208,41 +208,44 @@ $bubble: map.merge(
   }
 
   @mixin left-arrow {
-    inset-inline-end: 0;
-    border-width: $size 0;
+    right: 0;
+    border-width: $size 0 $size $size;
     border-inline-start-color: $border-color;
-    border-inline-width: $size;
-    transform: translate(100%, -50%);
+    transform: translateX(100%);
 
     @include rtl {
-      transform: translate(-100%, -50%);
+      border-width: $size $size $size 0;
+      transform: translateX(100%) scaleX(-1);
     }
 
     &::after {
       inset-inline-end: 1px;
-      border-width: $size 0;
-      border-inline-width: $size 0;
+      border-width: $size 0 $size $size;
       border-inline-start-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        border-width: $size $size $size 0;
+      }
     }
   }
 
   &--left &__arrow {
     @include left-arrow;
 
-    top: 50%;
+    top: calc(50% - #{$size});
   }
 
   &--left-start &__arrow {
     @include left-arrow;
 
-    top: $v-offset;
+    top: calc(#{$v-offset} - #{$size});
   }
 
   &--left-end &__arrow {
     @include left-arrow;
 
-    top: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset} - #{$size});
   }
 
   &--right,
@@ -253,40 +256,43 @@ $bubble: map.merge(
   }
 
   @mixin right-arrow {
-    inset-inline-start: 0;
-    border-width: $size 0;
-    border-inline-width: 0 $size;
+    left: 0;
+    border-width: $size $size $size 0;
     border-inline-end-color: $border-color;
-    transform: translate(-100%, -50%);
+    transform: translateX(-100%);
 
     @include rtl {
-      transform: translate(100%, -50%);
+      border-width: $size 0 $size $size;
+      transform: translateX(-100%) scaleX(-1);
     }
 
     &::after {
       inset-inline-start: 1px;
-      border-width: $size 0;
-      border-inline-width: 0 $size;
+      border-width: $size $size $size 0;
       border-inline-end-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        border-width: $size 0 $size $size;
+      }
     }
   }
 
   &--right &__arrow {
     @include right-arrow;
 
-    top: 50%;
+    top: calc(50% - #{$size});
   }
 
   &--right-start &__arrow {
     @include right-arrow;
 
-    top: $v-offset;
+    top: calc($v-offset - #{$size});
   }
 
   &--right-end &__arrow {
     @include right-arrow;
 
-    top: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset} - #{$size});
   }
 }

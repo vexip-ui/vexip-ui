@@ -147,6 +147,13 @@ export function enUSLocale() {
       }
     },
 
+    tour: {
+      prev: 'Prev',
+      next: 'Next',
+      done: 'Done',
+      stepCount: 'Step {n}'
+    },
+
     transfer: {
       source: 'Source',
       target: 'Target',

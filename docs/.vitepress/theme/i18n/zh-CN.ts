@@ -156,6 +156,7 @@ export const zhCN = defineI18n({
     Skeleton: '骨架屏',
     Spin: '加载中',
     Toast: '吐司提示',
+    Tour: '漫游指引',
 
     // Else
     Affix: '固钉',

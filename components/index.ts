@@ -104,6 +104,8 @@ import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
 import { Toast } from './toast'
 import { Tooltip } from './tooltip'
+import { Tour } from './tour'
+import { TourStep } from './tour-step'
 import { Transfer } from './transfer'
 import { Tree } from './tree'
 import { Upload } from './upload'
@@ -221,6 +223,8 @@ const components = [
   Timeline,
   TimelineItem,
   Tooltip,
+  Tour,
+  TourStep,
   Transfer,
   Tree,
   Upload,
@@ -360,6 +364,8 @@ export * from './timeline'
 export * from './timeline-item'
 export * from './toast'
 export * from './tooltip'
+export * from './tour'
+export * from './tour-step'
 export * from './transfer'
 export * from './tree'
 export * from './typography'

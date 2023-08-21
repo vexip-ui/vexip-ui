@@ -154,6 +154,7 @@ export interface I18nConfig {
     Skeleton: string,
     Spin: string,
     Toast: string,
+    Tour: string,
 
     // Else
     Affix: string,
