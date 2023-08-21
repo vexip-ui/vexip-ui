@@ -41,6 +41,9 @@ export const enum DisabledType {
   FALSE
 }
 
+export type DatePickerChangeEvent = (value: number | number[] | null) => void
+export type TimePickerChangeEvent = (value: string | string[]) => void
+
 export const datePickerTypes = Object.freeze<DatePickerType[]>([
   'date',
   'datetime',

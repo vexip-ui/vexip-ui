@@ -220,7 +220,7 @@ import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 
 import type { PopperExposed } from '@/components/popper'
-import type { TimeType } from './symbol'
+import type { TimePickerChangeEvent, TimeType } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
 const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
@@ -612,7 +612,7 @@ export default defineComponent({
         toggleActivated(true)
         emit('update:value', currentValue.value)
         setFieldValue(currentValue.value)
-        emitEvent(props.onChange, currentValue.value)
+        emitEvent(props.onChange as TimePickerChangeEvent, currentValue.value)
         validateField()
       }
     }
@@ -675,7 +675,7 @@ export default defineComponent({
           parseValue(null)
           finish && finishInput(false)
           emit('update:value', emitValue)
-          emitEvent(props.onChange, emitValue)
+          emitEvent(props.onChange as TimePickerChangeEvent, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue)
           finish && handleBlur()
@@ -800,7 +800,7 @@ export default defineComponent({
 
       fallbackFocus()
       parseValue(value)
-      emitEvent(props.onShortcut, name, value)
+      emitEvent(props.onShortcut as (name: string, value: string | string[]) => void, name, value)
       finishInput()
     }
 

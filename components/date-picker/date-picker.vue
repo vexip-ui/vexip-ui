@@ -199,7 +199,7 @@ import { datePickerTypes } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
+import type { DatePickerChangeEvent, DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
 
 const invalidDate = new Date('')
 
@@ -914,7 +914,7 @@ export default defineComponent({
         emit('update:value', emitValue)
         emit('update:formatted-value', formattedValue)
         setFieldValue(emitValue)
-        emitEvent(props.onChange, emitValue)
+        emitEvent(props.onChange as DatePickerChangeEvent, emitValue)
         validateField()
       }
     }
@@ -1152,7 +1152,7 @@ export default defineComponent({
           finish && finishInput(false)
           emit('update:value', emitValue)
           emit('update:formatted-value', props.range ? [] : null)
-          emitEvent(props.onChange, emitValue)
+          emitEvent(props.onChange as DatePickerChangeEvent, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)
           finish && handleBlur()
@@ -1169,7 +1169,11 @@ export default defineComponent({
     function handleShortcut(name: string, value: Dateable | Dateable[]) {
       fallbackFocus()
       parseValue(value)
-      emitEvent(props.onShortcut, name, value)
+      emitEvent(
+        props.onShortcut as (name: string, value: Dateable | Dateable[]) => void,
+        name,
+        value
+      )
       finishInput()
     }
 
