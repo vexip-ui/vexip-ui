@@ -48,6 +48,28 @@
 
 :::
 
+:::demo pagination/item-tag
+
+### 自定义标签
+
+^[Since v2.2.0](!s)
+
+通过 `list-tag` 和 `item-tag` 属性可以自定义元素的标签。
+
+未指定 `list-tag` 时，其会根据 `item-tag` 是否为 `'li'` 取值为 `'ul'` 或 `'div'`。
+
+:::
+
+:::demo pagination/slots
+
+### 使用插槽
+
+组件提供了数个插槽以满足自定义。
+
+通过插槽你可以将分页器与 RouterLink 或者 NuxtLink 这样的组件结合使用。
+
+:::
+
 ## API
 
 ### Pagination 属性
@@ -68,6 +90,8 @@
 | plugins         | `('total' \| 'jump' \|'size' \| undefined \| null)[]` | 设置插件及其渲染的位置                                   | `[]`                | `2.0.8`  |
 | no-title        | `boolean`                                             | 设置是否禁用页码 title 属性                              | `false`             | `2.0.11` |
 | locale          | `LocaleConfig['pagination']`                          | 设置多语言配置                                           | `null`              | `2.1.0`  |
+| item-tag        | `string`                                              | 设置分页元素的标签                                       | `'li'`              | `2.2.0`  |
+| list-tag        | `string`                                              | 设置分页列表的标签                                       | `null`              | `2.2.0`  |
 
 ### Pagination 事件
 
@@ -78,8 +102,10 @@
 
 ### Pagination 插槽
 
-| 名称 | 说明               | 参数             | 始于 |
-| ---- | ------------------ | ---------------- | ---- |
-| prev | 向前翻页按钮的插槽 | -                | -    |
-| next | 向后翻页按钮的插槽 | -                | -    |
-| item | 页码显示内容的插槽 | `(page: number)` | -    |
+| 名称      | 说明               | 参数                                                 | 始于    |
+| --------- | ------------------ | ---------------------------------------------------- | ------- |
+| prev      | 向前翻页按钮的插槽 | `(disabled: boolean)`                                | -       |
+| next      | 向后翻页按钮的插槽 | `(disabled: boolean)`                                | -       |
+| item      | 页码显示内容的插槽 | `(page: number, disabled: boolean, active: boolean)` | -       |
+| prev-jump | 向前跳页按钮的插槽 | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
+| next-jump | 向后跳页按钮的插槽 | `(disabled: boolean, entered: boolean)`              | `2.2.0` |

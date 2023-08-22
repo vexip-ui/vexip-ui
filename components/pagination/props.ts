@@ -20,6 +20,8 @@ export const paginationProps = buildProps({
   itemUnit: String,
   plugins: Array as PropType<(PaginationPlugin | undefined | null)[]>,
   noTitle: booleanProp,
+  itemTag: String,
+  listTag: String,
   onChange: eventProp<(page: number) => void>(),
   onPageSizeChange: eventProp<(size: number) => void>()
 })

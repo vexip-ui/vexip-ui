@@ -48,6 +48,28 @@ The order within the array determines where the plugin renders, with a null valu
 
 :::
 
+:::demo pagination/item-tag
+
+### Custom Tags
+
+^[Since v2.2.0](!s)
+
+The tag of the elements can be customized through the `list-tag` and `item-tag` props.
+
+When `list-tag` is not specified, it will take `'ul'` or `'div'` depending on whether `item-tag` is `'li'`.
+
+:::
+
+:::demo pagination/slots
+
+### Using Slots
+
+Components provide several slots for customization.
+
+Using slots allow you to combine Pagination with components like RouterLink or NuxtLink.
+
+:::
+
 ## API
 
 ### Pagination Props
@@ -68,6 +90,8 @@ The order within the array determines where the plugin renders, with a null valu
 | plugins         | `('total' \| 'jump' \|'size' \| undefined \| null)[]` | Set the plugins and where they render                                                                      | `[]`                | `2.0.8`  |
 | no-title        | `boolean`                                             | Set whether disable page items title attribute                                                             | `false`             | `2.0.11` |
 | locale          | `LocaleConfig['pagination']`                          | Set the locale config                                                                                      | `null`              | `2.1.0`  |
+| item-tag        | `string`                                              | Set tag for the pagination items                                                                           | `'li'`              | `2.2.0`  |
+| list-tag        | `string`                                              | Set tag for the pagination list                                                                            | `null`              | `2.2.0`  |
 
 ### Pagination Events
 
@@ -78,8 +102,10 @@ The order within the array determines where the plugin renders, with a null valu
 
 ### Pagination Slots
 
-| Name | Description                          | Parameters       | Since |
-| ---- | ------------------------------------ | ---------------- | ----- |
-| prev | Slot for page forward button         | -                | -     |
-| next | Slot for page back button            | -                | -     |
-| item | Slot for page number display content | `(page: number)` | -     |
+| Name      | Description                          | Parameters                                           | Since   |
+| --------- | ------------------------------------ | ---------------------------------------------------- | ------- |
+| prev      | Slot for page forward button         | `(disabled: boolean)`                                | -       |
+| next      | Slot for page back button            | `(disabled: boolean)`                                | -       |
+| item      | Slot for page number display content | `(page: number, disabled: boolean, active: boolean)` | -       |
+| prev-jump | Slot for page forward jump button    | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
+| next-jump | Slot for page back jump button       | `(disabled: boolean, entered: boolean)`              | `2.2.0` |

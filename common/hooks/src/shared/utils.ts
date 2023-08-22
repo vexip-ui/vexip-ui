@@ -5,6 +5,12 @@ import { isClient } from '@vexip-ui/utils'
 import type { ComponentPublicInstance, Slots, VNode, VNodeNormalizedChildren } from 'vue'
 import type { MaybeElement, MaybeInstance, MaybeRef } from './types'
 
+export function createSlotRender(slots: Slots, names: string[]): ((params?: any) => any) | null
+export function createSlotRender(
+  slots: Slots,
+  names: string[],
+  fallback: (params?: any) => any
+): (params?: any) => any
 export function createSlotRender(slots: Slots, names: string[], fallback?: (params?: any) => any) {
   for (const name of names) {
     if (slots[name]) {

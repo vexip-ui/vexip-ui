@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "jsxImportSource": "vue",
     "sourceMap": false,
     "baseUrl": ".",
     "types": ["node", "vite/client"],
