@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { isElement } from '@/common/utils'
-
 import {
   computed,
   getCurrentInstance,
@@ -14,7 +12,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { affixProps } from './props'
-import { callIfFunc, isClient } from '@vexip-ui/utils'
+import { callIfFunc, isClient, isElement } from '@vexip-ui/utils'
 import { clearLastScroller, handleLastScroller } from './helpers'
 
 import type { NativeScrollExposed } from '@/components/native-scroll'
