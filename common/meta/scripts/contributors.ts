@@ -87,7 +87,7 @@ async function fetchContributors(fetchOptions: FetchOptions) {
           ... on Commit {
             ${paths
               .map(({ path, cursor }, index) => {
-                return `path${index}: history(first: 100, path: "${path}"${
+                return `path${index}: history(path: "${path}"${
                   cursor ? ', after: ' + cursor : ''
                 }) {
                 pageInfo {
@@ -115,7 +115,6 @@ async function fetchContributors(fetchOptions: FetchOptions) {
   `
 
   const response = await graphql<FetchResponse>(query)
-
   const target = response?.repository?.object || {}
 
   for (let i = 0, len = paths.length; i < len; ++i) {
@@ -127,16 +126,9 @@ async function fetchContributors(fetchOptions: FetchOptions) {
       const author: ContributorInfo = node?.author?.user || {}
 
       if (author.url) {
-        if (!nodeFlag[component].includes(author.url)) {
-          contributors.push({
-            component,
-            login: author.login,
-            name: author.name,
-            email: author.email,
-            url: author.url,
-            avatarUrl: author.avatarUrl
-          })
-          nodeFlag[component].push(author.url)
+        if (!nodeFlag[component].includes(author.login)) {
+          contributors.push({ ...author, component })
+          nodeFlag[component].push(author.login)
         }
       }
     }
@@ -148,8 +140,6 @@ async function fetchContributors(fetchOptions: FetchOptions) {
 
   if (endCursorList.length) {
     contributors.push(...(await fetchContributors({ paths: endCursorList })))
-
-    return contributors
   }
 
   return contributors
@@ -192,14 +182,11 @@ async function main() {
     mkdirSync(outputDir, { recursive: true })
   }
 
-  const contributors: Record<string, Omit<ContributorInfo, 'component'>[]> = {}
-  const fetchData: FetchOptions = {
-    paths: []
-  }
+  const paths = []
 
   for (const component of allComponents) {
     nodeFlag[component] = []
-    fetchData.paths.push(
+    paths.push(
       ...[
         { path: `components/${component}`, component },
         { path: `style/${component}.scss`, component },
@@ -208,40 +195,35 @@ async function main() {
     )
   }
 
-  const chunkPathsList = chunk(fetchData.paths, 200)
+  const contributors: Record<string, string[]> = {}
+  const users: Record<string, Omit<ContributorInfo, 'component'>> = {}
+  const pathsChunk = chunk(paths, 50)
 
-  for (const chunkPaths of chunkPathsList) {
-    const fetchData = {
-      paths: chunkPaths
-    }
-
-    await fetchFn(fetchData)
-  }
-
-  async function fetchFn(fetchData: FetchOptions) {
-    const resultData = await fetchContributors(fetchData)
+  for (const paths of pathsChunk) {
+    const resultData = await fetchContributors({ paths })
 
     for (let i = 0; i < resultData.length; i++) {
-      const resData: Omit<ContributorInfo, 'component'> = {} as Omit<ContributorInfo, 'component'>
+      const { component, ...contributor } = resultData[i]
+      const loginList = contributors[component]
 
-      for (const key in resultData[i]) {
-        if (!key.includes('component')) {
-          (resData as any)[key] = (resultData[i] as any)[key]
-        }
+      if (!users[contributor.login]) {
+        users[contributor.login] = contributor
       }
 
-      const component = resultData[i].component
-      const contributorInfo = contributors[component]
-
-      if (contributorInfo) {
-        contributorInfo.push(...[resData])
-        continue
+      if (loginList) {
+        loginList.push(contributor.login)
+      } else {
+        contributors[component] = [contributor.login]
       }
-      contributors[component] = [resData]
     }
+
+    logger.infoText(`Fetched: ${[...new Set(paths.map(({ component }) => component))].join(', ')}`)
   }
 
+  (contributors as any)._users = users
+
   writeFileSync(resolve(outputDir, 'contributors.json'), JSON.stringify(contributors))
+
   logger.success(`Generated contributors meta data in ${Date.now() - startTime}ms`)
 }
 
