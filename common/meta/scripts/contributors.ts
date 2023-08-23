@@ -21,22 +21,18 @@ interface PageInfo {
   endCursor: string
 }
 
-interface EdgeNode {
-  node: {
-    author: {
-      user: ContributorInfo
-    }
+interface Node {
+  author: {
+    user: ContributorInfo
   }
 }
 
 interface FetchResponse {
   repository: {
-    defaultBranchRef: {
-      target: {
-        [key in string]: {
-          pageInfo: PageInfo,
-          edges: EdgeNode[]
-        }
+    object: {
+      [key in string]: {
+        pageInfo: PageInfo,
+        nodes: Node[]
       }
     }
   }
@@ -54,18 +50,28 @@ async function graphql<Result>(query: string) {
     body: JSON.stringify({ query })
   })
 
-  const { data } = await response.json().catch((error: string) => {
+  const result = await response.json().catch((error: string) => {
     logger.error(error as unknown as string)
     process.exit(1)
   })
 
-  return data as Result
+  if (result.error?.length) {
+    for (const error of result.error) {
+      logger.errorText(error.message)
+    }
+
+    logger.error('Request failed due to above response errors.')
+    process.exit(1)
+  }
+
+  return result.data as Result
 }
 
 const nodeFlag: Record<string, string[]> = {}
 
 const OWNER = 'vexip-ui'
 const REPO = 'vexip-ui'
+const BRANCH = 'main'
 
 async function fetchContributors(fetchOptions: FetchOptions) {
   const { paths } = fetchOptions
@@ -77,35 +83,31 @@ async function fetchContributors(fetchOptions: FetchOptions) {
   const query = `
     query {
       repository(owner: "${OWNER}", name: "${REPO}") {
-        defaultBranchRef {
-          target {
-            ... on Commit {
-              ${paths
-                .map(({ path, cursor }, index) => {
-                  return `path${index}: history(first: 100, path: "${path}"${
-                    cursor ? ', after: ' + cursor : ''
-                  }) {
-                  pageInfo {
-                    hasNextPage
-                    endCursor
-                  }
-                  edges {
-                    node {
-                      author {
-                        user {
-                          login
-                          name
-                          email
-                          url
-                          avatarUrl
-                        }
-                      }
+        object(expression: "${BRANCH}") {
+          ... on Commit {
+            ${paths
+              .map(({ path, cursor }, index) => {
+                return `path${index}: history(first: 100, path: "${path}"${
+                  cursor ? ', after: ' + cursor : ''
+                }) {
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+                nodes {
+                  author {
+                    user {
+                      login
+                      name
+                      email
+                      url
+                      avatarUrl
                     }
                   }
-                }`
-                })
-                .join('\n')}
-            }
+                }
+              }`
+              })
+              .join('\n')}
           }
         }
       }
@@ -114,14 +116,14 @@ async function fetchContributors(fetchOptions: FetchOptions) {
 
   const response = await graphql<FetchResponse>(query)
 
-  const target = response?.repository?.defaultBranchRef?.target || {}
+  const target = response?.repository?.object || {}
 
   for (let i = 0, len = paths.length; i < len; ++i) {
     const pageInfo: PageInfo = target?.[`path${i}`]?.pageInfo || {}
-    const edgesList: EdgeNode[] = target?.[`path${i}`]?.edges || []
+    const nodes: Node[] = target?.[`path${i}`]?.nodes || []
     const component = paths[i].component
 
-    for (const { node } of edgesList) {
+    for (const node of nodes) {
       const author: ContributorInfo = node?.author?.user || {}
 
       if (author.url) {
@@ -145,8 +147,8 @@ async function fetchContributors(fetchOptions: FetchOptions) {
   }
 
   if (endCursorList.length) {
-    const nextContributors = await fetchContributors({ paths: endCursorList })
-    contributors.concat(nextContributors)
+    contributors.push(...(await fetchContributors({ paths: endCursorList })))
+
     return contributors
   }
 
@@ -161,9 +163,10 @@ function chunk<T>(array: T[], size = 1) {
     return []
   }
 
+  const result: T[][] = new Array(Math.ceil(length / size))
+
   let index = 0
   let resIndex = 0
-  const result: T[][] = new Array(Math.ceil(length / size))
 
   while (index < length) {
     result[resIndex++] = array.slice(index, (index += size))
