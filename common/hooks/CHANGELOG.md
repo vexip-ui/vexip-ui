@@ -1,3 +1,35 @@
+# [2.0.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.11.4...hooks@2.0.0) (2023-08-23)
+
+
+### Bug Fixes
+
+* **hooks:** click outside event should process in capture ([8d59f55](https://github.com/vexip-ui/vexip-ui/commit/8d59f55a3212436431317907682e516162ef88ab))
+* **hooks:** improve intersection count record ([2d2f360](https://github.com/vexip-ui/vexip-ui/commit/2d2f360ba3401d82b81f1952edce5faf7c22ca3d))
+* **hooks:** improve useHover using useListener ([007dba8](https://github.com/vexip-ui/vexip-ui/commit/007dba8308e3199d08f9e65c4a3d96297031d6e5))
+* **hooks:** remove toValue for Vue 3.2 compat ([c219e0f](https://github.com/vexip-ui/vexip-ui/commit/c219e0f507be5c7a3ab6c4c0aa2da4c64ff99d8e))
+* **hooks:** useMoving incorrect delay move process ([f58a173](https://github.com/vexip-ui/vexip-ui/commit/f58a1733e9f8f9736ac2d44f42e07c56ca0be3af))
+* **hooks:** usePopper compat array type offset property ([a5a6da4](https://github.com/vexip-ui/vexip-ui/commit/a5a6da41e0d8623d216288c96bf29629d59dbf68))
+* **hooks:** usePopper correct popper element style ([8412cd5](https://github.com/vexip-ui/vexip-ui/commit/8412cd53b792daa11d66d8f3454fb669f725cfcd))
+* **hooks:** usePopper optional wrapper property ([67456e8](https://github.com/vexip-ui/vexip-ui/commit/67456e8ec903cbff37cfdb74f9956491386f2b42))
+
+
+### Features
+
+* **auto-complete:** support control show list if empty ([34f2f1a](https://github.com/vexip-ui/vexip-ui/commit/34f2f1aeb28e6b843e72909f83df53ced7787d47))
+* **hooks:** add unrefElement method ([cf73f4b](https://github.com/vexip-ui/vexip-ui/commit/cf73f4b9d83d6c9c0c605450d57a95de4659c36e))
+* **hooks:** add useIntersection hook ([37b6147](https://github.com/vexip-ui/vexip-ui/commit/37b6147a5913215b49cd388b222bc0e14c23f937))
+* **hooks:** add useManualRef hook ([da0cd38](https://github.com/vexip-ui/vexip-ui/commit/da0cd387593c49d05408147c1f58ff9900ec93b3))
+* **hooks:** useIntersection support numberish rootMargin ([b7a2bb4](https://github.com/vexip-ui/vexip-ui/commit/b7a2bb40b62e9e82be23cbd4b8bd7a8d5778931f))
+* **hooks:** useMounted support wait a tick or frame ([ccd77f6](https://github.com/vexip-ui/vexip-ui/commit/ccd77f696db86502b83f8071a1db99436ebb4c41))
+* **hooks:** usePopper add autoUpdate property ([3157882](https://github.com/vexip-ui/vexip-ui/commit/31578822a30a65babd70c6a79aa0e0286a0400c6))
+* **hooks:** usePopper support shift property ([912055f](https://github.com/vexip-ui/vexip-ui/commit/912055f59d749fc7e676444a5ecb9d93548ed2f5))
+* **hooks:** usePopper supports dynamic arrow position ([7cce562](https://github.com/vexip-ui/vexip-ui/commit/7cce56204f5ca0ab7852fa47b2d9b1680f38b02c))
+* support rtl for components ([#344](https://github.com/vexip-ui/vexip-ui/issues/344)) ([76bab50](https://github.com/vexip-ui/vexip-ui/commit/76bab500aec0fd5d31c65eaf6af0d66ea0f4479b)), closes [#353](https://github.com/vexip-ui/vexip-ui/issues/353)
+* support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+* **tree:** support virtual scroll and disable transition ([#396](https://github.com/vexip-ui/vexip-ui/issues/396)) ([3a9370b](https://github.com/vexip-ui/vexip-ui/commit/3a9370bd4d9a54b37f3bbea44c82fad50791c34b))
+
+
+
 ## [1.11.4](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.11.3...hooks@1.11.4) (2023-08-07)
 
 
