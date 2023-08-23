@@ -1,9 +1,11 @@
 import Form from './form.vue'
 
+import type { ComponentPublicInstance } from 'vue'
+
 export { Form }
 export { formProps } from './props'
 
-export type FormExposed = InstanceType<typeof Form>
+export type FormExposed = ComponentPublicInstance & InstanceType<typeof Form>
 
 export * from './helper'
 export * from './validator'

@@ -1,9 +1,11 @@
 import Select from './select.vue'
 
+import type { ComponentPublicInstance } from 'vue'
+
 export { Select }
 export { selectProps } from './props'
 
-export type SelectExposed = InstanceType<typeof Select>
+export type SelectExposed = ComponentPublicInstance & InstanceType<typeof Select>
 
 export type { SelectProps, SelectCProps } from './props'
 export type {
