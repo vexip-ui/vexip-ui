@@ -58,7 +58,7 @@
 
 通过 `router` 属性传入一个 `vue-router` 的 Router 对象可以快速根据路由创建菜单。
 
-使用路由时，会假定每个 `route.meta` 为菜单选项进行解析，并自动将路由本身作为 `option.route` 属性。
+使用路由时，会假定每个 `route.meta` 为选项进行解析，并自动将路由本身作为 `option.route` 属性。
 
 配置 `route.meta.menu` 为 `false` 可以将特定的路由排除在解析外。
 
@@ -100,7 +100,7 @@ interface MenuOptions {
 | tooltip-theme | `'light' \| 'dark'`                                | 设置菜单气泡提示的主题                                                         | `'dark'`     | -       |
 | transfer      | `boolean \| string`                                | 设置其下 MenuItem 的 `transfer` 属性，当 MenuItem 单独设置了该属性时优先级更高 | `false`      | -       |
 | options       | `MenuOptions[]`                                    | 设置菜单的配置                                                                 | `[]`         | `2.0.0` |
-| router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
+| router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析                | `null`       | `2.0.0` |
 | manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
 | indent        | `string \| number`                                 | 置每层菜单的基础缩进距离                                                       | `null`       | `2.1.2` |
 
