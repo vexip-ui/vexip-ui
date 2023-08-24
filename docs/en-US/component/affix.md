@@ -1,4 +1,4 @@
-# Affix
+# Affix ^[Since v2.2.0](!s)
 
 Used to fix a element to a specific area.
 

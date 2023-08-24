@@ -16,7 +16,7 @@ Just put a bubble.
 
 :::demo bubble/placement
 
-### 气泡位置
+### Bubble Position
 
 The position of the bubble can be set by `placement` prop.
 
@@ -25,6 +25,8 @@ The position of the bubble can be set by `placement` prop.
 :::demo bubble/types
 
 ### Bubble Types
+
+^[Since v2.2.0](!s)
 
 Different types of bubbles can be created by setting the `type` prop to `primary`, `info`, `success`, `warning` and `error`.
 

@@ -186,6 +186,8 @@ At this time, you need to call the `refresh` method of the Table instance to rec
 
 ### Resize Column Width
 
+^[Since v2.1.24](!s)
+
 Adding the `col-resizable` prop enables resize column width.
 
 :::

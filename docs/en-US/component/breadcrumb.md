@@ -40,6 +40,8 @@ A use case similar to the breadcrumb navigation at the top of the Windows 10 fil
 
 ### Use Router
 
+^[Since v2.2.0](!s)
+
 Passing a `vue-router` Router object through the `router` prop can quickly create breadcrumbs based on the routes.
 
 When using router, each `route.meta` is assumed to be parsed as a option.
