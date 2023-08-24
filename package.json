@@ -50,16 +50,40 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./es/index.mjs",
-      "require": "./lib/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./lib/index.cjs"
     },
-    "./es": "./es/index.mjs",
-    "./lib": "./lib/index.cjs",
-    "./es/*.mjs": "./es/*.mjs",
-    "./es/*": "./es/*.mjs",
-    "./lib/*.cjs": "./lib/*.cjs",
-    "./lib/*": "./lib/*.cjs",
+    "./es": {
+      "types": "./dist/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./lib": {
+      "types": "./dist/index.d.ts",
+      "require": "./lib/index.cjs"
+    },
+    "./es/*.mjs": {
+      "types": "./dist/*.d.ts",
+      "import": "./es/*.mjs"
+    },
+    "./es/*": {
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "import": "./es/*.mjs"
+    },
+    "./lib/*.cjs": {
+      "types": "./dist/*.d.ts",
+      "require": "./lib/*.cjs"
+    },
+    "./lib/*": {
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "require": "./lib/*.cjs"
+    },
     "./package.json": "./package.json",
     "./*": "./*"
   },
