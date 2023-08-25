@@ -1,6 +1,6 @@
 import anchor from 'markdown-it-anchor'
 import container from 'markdown-it-container'
-// import { isExternal } from '../.vitepress/shared'
+import tableSort from 'markdown-it-table-sort'
 
 import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token'
@@ -9,6 +9,7 @@ import type StateCore from 'markdown-it/lib/rules_core/state_core'
 export function markdownItSetup(md: MarkdownIt) {
   md.use(anchor, { permalink: true, renderPermalink })
     // .use(useLinkTarget)
+    .use(tableSort)
     .use(useContainer)
     .use(useCodeWrapper)
     .use(useTableWrapper)
@@ -136,11 +137,23 @@ function useCodeWrapper(md: MarkdownIt) {
 }
 
 function useTableWrapper(md: MarkdownIt) {
-  md.renderer.rules.table_open = () => {
-    return '<div class="md-table"><table>'
+  const tableOpen = md.renderer.rules.table_open
+  const tableClose = md.renderer.rules.table_close
+
+  md.renderer.rules.table_open = (tokens, idx, options, env, self) => {
+    const result = tableOpen
+      ? tableOpen(tokens, idx, options, env, self)
+      : self.renderToken(tokens, idx, options)
+
+    return '<div class="md-table">' + result
   }
-  md.renderer.rules.table_close = () => {
-    return '</table></div>'
+
+  md.renderer.rules.table_close = (tokens, idx, options, env, self) => {
+    const result = tableClose
+      ? tableClose(tokens, idx, options, env, self)
+      : self.renderToken(tokens, idx, options)
+
+    return result + '</div>'
   }
 }
 

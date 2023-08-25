@@ -35,6 +35,7 @@
     "markdown-it": "^13.0.1",
     "markdown-it-anchor": "^8.6.7",
     "markdown-it-container": "^3.0.0",
+    "markdown-it-table-sort": "^1.0.1",
     "postcss": "^8.4.25",
     "postcss-discard-duplicates": "^6.0.0",
     "sass": "^1.63.6",

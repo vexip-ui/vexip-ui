@@ -395,6 +395,9 @@ importers:
       markdown-it-container:
         specifier: ^3.0.0
         version: 3.0.0
+      markdown-it-table-sort:
+        specifier: ^1.0.1
+        version: 1.0.1(markdown-it@13.0.1)
       postcss:
         specifier: ^8.4.25
         version: 8.4.25
@@ -6802,6 +6805,14 @@ packages:
 
   /markdown-it-container@3.0.0:
     resolution: {integrity: sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==}
+    dev: true
+
+  /markdown-it-table-sort@1.0.1(markdown-it@13.0.1):
+    resolution: {integrity: sha512-Vbq8n+0vLkOKhUlVTgFEmSA+PfL4odeZGUnHBCLH3i8nvsPxhIvZ0pV+VL+xWK7sx+7sd2xiUiz+sG3iVQmRfA==}
+    peerDependencies:
+      markdown-it: '*'
+    dependencies:
+      markdown-it: 13.0.1
     dev: true
 
   /markdown-it@13.0.1:
