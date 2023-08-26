@@ -72,9 +72,9 @@ $layout: map.merge(
     pointer-events: all;
     background-color: get-css-var('layout-aside-bg-color');
     border-inline-end: get-css-var('layout-aside-border');
-    will-change: width transform;
-    transition: width get-css-var('transition-base'), get-css-var('transition-border'),
-      get-css-var('transition-transform');
+    will-change: width, transform;
+    transition: width get-css-var('transition-base'), get-css-var('transition-background'),
+      get-css-var('transition-border'), get-css-var('transition-transform');
     transform: translateX(-100%);
 
     @include rtl {
@@ -178,8 +178,8 @@ $layout: map.merge(
     padding: 0 16px;
     background-color: get-css-var('layout-header-bg-color');
     border-bottom: get-css-var('layout-header-border');
-    transition: height get-css-var('transition-base'), get-css-var('transition-border'),
-      get-css-var('transition-transform');
+    transition: height get-css-var('transition-base'), get-css-var('transition-background'),
+      get-css-var('transition-border'), get-css-var('transition-transform');
 
     &--affixed {
       transform: translateY(-100%);
