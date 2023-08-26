@@ -46,6 +46,16 @@
 
 :::
 
+:::demo confirm/renderer
+
+### 自定义渲染
+
+通过 `renderer` 选项可以自定义渲染确认框的内容。
+
+一个更进阶的用法，你可以通过 [属性配置](/zh-CN/guide/global-config) 或者 `Confirm.defaults` 属性设置一个通用渲染方法。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -53,7 +63,29 @@
 ```ts
 type ConfirmButtonType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 type ConfirmAlign = 'left' | 'center' | 'right'
-type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, cancel: () => void) => any
+
+interface ConfirmState {
+  visible: boolean,
+  loading: boolean,
+  title: string,
+  content: string,
+  icon: Record<string, any> | (() => any) | null | boolean,
+  iconProps: IconMinorProps,
+  className: string | Record<string, any>,
+  style: string | Record<string, any>,
+  confirmType: ConfirmButtonType,
+  cancelType: ConfirmButtonType,
+  confirmText: string,
+  cancelText: string,
+  maskClose: boolean,
+  parseHtml: boolean,
+  closable: boolean,
+  contentAlign: ConfirmAlign,
+  actionsAlign: ConfirmAlign,
+  raw: Record<any, any>
+}
+
+type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
 ```
 
 ### Confirm 选项

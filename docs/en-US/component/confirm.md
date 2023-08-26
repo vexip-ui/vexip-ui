@@ -46,6 +46,16 @@ Setting the `title` option can add a title, so we can change the layout style.
 
 :::
 
+:::demo confirm/renderer
+
+### Custom Render
+
+You can specify a custom rendering method via the `renderer` option.
+
+For a advanced usage, you can set a general rendering method via [Props Config](/en-US/guide/global-config) or `Confirm.defaults` property.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -53,7 +63,29 @@ Setting the `title` option can add a title, so we can change the layout style.
 ```ts
 type ConfirmButtonType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 type ConfirmAlign = 'left' | 'center' | 'right'
-type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, cancel: () => void) => any
+
+interface ConfirmState {
+  visible: boolean,
+  loading: boolean,
+  title: string,
+  content: string,
+  icon: Record<string, any> | (() => any) | null | boolean,
+  iconProps: IconMinorProps,
+  className: string | Record<string, any>,
+  style: string | Record<string, any>,
+  confirmType: ConfirmButtonType,
+  cancelType: ConfirmButtonType,
+  confirmText: string,
+  cancelText: string,
+  maskClose: boolean,
+  parseHtml: boolean,
+  closable: boolean,
+  contentAlign: ConfirmAlign,
+  actionsAlign: ConfirmAlign,
+  raw: Record<any, any>
+}
+
+type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
 ```
 
 ### Confirm Options
