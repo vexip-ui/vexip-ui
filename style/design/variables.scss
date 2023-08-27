@@ -270,3 +270,37 @@ $break-point-map: map.merge(
   ),
   $break-point-map
 );
+
+$padding-map: () !default;
+$padding-map: map.merge(
+  (
+    base: 8px,
+    small-1: 6px,
+    small-2: 4px,
+    small-3: 3px,
+    small-4: 2px,
+    large-1: 10px,
+    large-2: 12px,
+    large-3: 14px,
+    large-4: 16px,
+    large-5: 20px
+  ),
+  $padding-map
+);
+
+$margin-map: () !default;
+$margin-map: map.merge(
+  (
+    base: 8px,
+    small-1: 6px,
+    small-2: 4px,
+    small-3: 3px,
+    small-4: 2px,
+    large-1: 10px,
+    large-2: 12px,
+    large-3: 14px,
+    large-4: 16px,
+    large-5: 20px
+  ),
+  $margin-map
+);

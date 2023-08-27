@@ -60,6 +60,9 @@
   @include define-preset-values('transition', $transition-map);
   @include define-preset-values('z-index', $z-index-map);
   @include define-preset-values('break-point', $break-point-map, true);
+
+  @include define-preset-values('padding', $padding-map);
+  @include define-preset-values('margin', $margin-map);
 }
 
 body {
