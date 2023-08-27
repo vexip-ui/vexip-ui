@@ -58,11 +58,11 @@ export default defineComponent({
       sizeOptions: () => [10, 20, 50, 100],
       maxCount: {
         default: null,
-        validator: value => value === parseInt(value.toString()) && value > 6
+        validator: value => value === parseInt(String(value)) && value > 6
       },
       itemCount: {
         default: null,
-        validator: value => value === parseInt(value.toString()) && value > 6
+        validator: value => value === parseInt(String(value)) && value > 6
       },
       active: {
         default: 1,
@@ -102,6 +102,8 @@ export default defineComponent({
     const { target: wrapper } = useModifier({
       passive: false,
       onKeyDown: (event, modifier) => {
+        if (props.disabled) return
+
         if (modifier.up || modifier.down || modifier.left || modifier.right) {
           event.preventDefault()
 
@@ -442,26 +444,28 @@ export default defineComponent({
     }
 
     function renderPrev(Tag: any) {
+      const disabled = props.disabled || disabledPrev.value
+
       return (
         <Tag
           ref={el => el && !disabledPrev.value && itemElList.push(el as any)}
           class={[
             nh.be('item'),
             nh.bem('item', 'prev'),
-            disabledPrev.value ? nh.bem('item', 'disabled') : ''
+            disabled ? nh.bem('item', 'disabled') : ''
           ]}
           title={props.noTitle ? undefined : locale.value.prevPage}
           role={'menuitem'}
           tabindex={'-1'}
           aria-label={locale.value.prevPage}
-          aria-hidden={disabledPrev.value ? 'true' : undefined}
+          aria-hidden={disabled ? 'true' : undefined}
           onClick={handlePrev}
           onKeydownEnter={handlePrev}
           onKeydownSpace={handlePrev}
         >
           {slots.prev
             ? (
-                renderSlot(slots, 'prev', { disabled: disabledPrev.value })
+                renderSlot(slots, 'prev', { disabled })
               )
             : (
               <Icon
@@ -474,26 +478,28 @@ export default defineComponent({
     }
 
     function renderNext(Tag: any) {
+      const disabled = props.disabled || disabledNext.value
+
       return (
         <Tag
           ref={el => el && !disabledNext.value && itemElList.push(el as any)}
           class={[
             nh.be('item'),
             nh.bem('item', 'next'),
-            disabledNext.value ? nh.bem('item', 'disabled') : ''
+            disabled ? nh.bem('item', 'disabled') : ''
           ]}
           title={props.noTitle ? undefined : locale.value.nextPage}
           role={'menuitem'}
           tabindex={'-1'}
           aria-label={locale.value.nextPage}
-          aria-hidden={disabledNext.value ? 'true' : undefined}
+          aria-hidden={disabled ? 'true' : undefined}
           onClick={handleNext}
           onKeydownEnter={handleNext}
           onKeydownSpace={handleNext}
         >
           {slots.next
             ? (
-                renderSlot(slots, 'next', { disabled: disabledNext.value })
+                renderSlot(slots, 'next', { disabled })
               )
             : (
               <Icon
@@ -508,13 +514,15 @@ export default defineComponent({
     function renderPrevEllipsis(Tag: any) {
       if (!useEllipsis.value || mode.value === PaginationMode.LEFT) return null
 
+      const disabled = props.disabled || !prevEllipsisTarget.value
+
       return (
         <Tag
-          ref={el => el && itemElList.push(el as any)}
+          ref={el => el && prevEllipsisTarget.value && itemElList.push(el as any)}
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'more')]: true,
-            [nh.bem('item', 'disabled')]: !prevEllipsisTarget.value
+            [nh.bem('item', 'disabled')]: disabled
           }}
           title={props.noTitle ? undefined : prevTurnPageTitle.value}
           role={'menuitem'}
@@ -539,7 +547,7 @@ export default defineComponent({
                   <Icon {...icons.value.ellipsis} scale={0.8} style={'position: absolute'}></Icon>
                   )}
             </Transition>
-          ))({ disabled: !prevEllipsisTarget.value, entered: inPrevEllipsis.value })}
+          ))({ disabled, entered: inPrevEllipsis.value })}
         </Tag>
       )
     }
@@ -547,13 +555,15 @@ export default defineComponent({
     function renderNextEllipsis(Tag: any) {
       if (!useEllipsis.value || mode.value === PaginationMode.RIGHT) return null
 
+      const disabled = props.disabled || !prevEllipsisTarget.value
+
       return (
         <Tag
-          ref={el => el && itemElList.push(el as any)}
+          ref={el => el && prevEllipsisTarget.value && itemElList.push(el as any)}
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'more')]: true,
-            [nh.bem('item', 'disabled')]: !nextEllipsisTarget.value
+            [nh.bem('item', 'disabled')]: disabled
           }}
           title={props.noTitle ? undefined : nextTurnPageTitle.value}
           role={'menuitem'}
@@ -584,7 +594,7 @@ export default defineComponent({
     }
 
     function renderItem(Tag: any, page: number) {
-      const disabled = props.disableItem(page)
+      const disabled = props.disabled || props.disableItem(page)
       const active = currentActive.value === page
 
       return (

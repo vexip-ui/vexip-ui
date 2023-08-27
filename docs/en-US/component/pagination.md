@@ -38,6 +38,14 @@ Three built-in sizes, set via `size` prop, can be set by yourself if they are no
 
 :::
 
+:::demo pagination/disabled
+
+### Disabled
+
+Add `disabled` prop to disable the pagination.
+
+:::
+
 :::demo pagination/plugin
 
 ### Internal Plugins

@@ -38,6 +38,14 @@
 
 :::
 
+:::demo pagination/disabled
+
+### 禁用状态
+
+添加 `disabled` 属性可以禁用整个分页器。
+
+:::
+
 :::demo pagination/plugin
 
 ### 分页插件
