@@ -19,7 +19,8 @@ export const tourProps = buildProps({
   transfer: booleanStringProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
-  onClose: eventProp()
+  onClose: eventProp(),
+  onMaskClick: eventProp<(event: MouseEvent) => void>()
 })
 
 export type TourProps = ExtractPropTypes<typeof tourProps>

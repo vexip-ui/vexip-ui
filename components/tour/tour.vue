@@ -24,6 +24,11 @@ import type { BubbleExposed } from '@/components/bubble'
 import type { MaskerExposed } from '@/components/masker'
 import type { TourCommonSLot, TourStepOptions } from './symbol'
 
+defineOptions({
+  name: 'Tour',
+  inheritAttrs: false
+})
+
 const _props = defineProps(tourProps)
 const props = useProps('tour', _props, {
   locale: null,
@@ -261,6 +266,7 @@ function handleClose() {
     <slot></slot>
   </div>
   <Masker
+    v-bind="$attrs"
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
@@ -270,6 +276,7 @@ function handleClose() {
     :disabled="props.hideMask"
     @show="updatePopper"
     @hide="currentRect = undefined"
+    @mask-click="emitEvent(props.onMaskClick, $event)"
   >
     <template #default="{ show }">
       <div
