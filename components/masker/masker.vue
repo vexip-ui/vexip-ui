@@ -147,6 +147,10 @@ export default defineComponent({
         prevFocusedEl = document.activeElement as HTMLElement
         zIndex.value = getIndex()
       }
+
+      if (!props.maskTransition) {
+        value ? afterOpen() : afterClose()
+      }
     })
     watch(
       [() => props.permeable, wrapper],

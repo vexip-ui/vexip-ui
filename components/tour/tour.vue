@@ -15,7 +15,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { unrefElement, usePopper } from '@vexip-ui/hooks'
+import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
 import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE, getIdIndex } from './symbol'
@@ -78,6 +78,34 @@ const sideRects = ref<(number | string)[][]>()
 
 const masker = ref<MaskerExposed>()
 const bubble = ref<BubbleExposed>()
+const wrapper = computed(() => masker.value?.wrapper)
+
+useModifier({
+  target: wrapper,
+  passive: false,
+  onKeyDown: (event, modifier) => {
+    if (!currentActive.value) return
+
+    if (modifier.left || modifier.up) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      prev()
+    } else if (modifier.right || modifier.down) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      next()
+    } else if (modifier.escape) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      handleClose()
+    }
+
+    modifier.resetAll()
+  }
+})
 
 const allSteps = computed(() => {
   return Array.from(tempSteps)
@@ -112,8 +140,8 @@ const padding = computed(() => {
 const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
 
 const { reference, placement, updatePopper } = usePopper({
+  wrapper,
   placement: computed(() => currentStep.value?.placement || 'bottom'),
-  wrapper: computed(() => masker.value?.$el),
   popper: computed(() => bubble.value?.$el),
   arrow: computed(() => bubble.value?.arrow),
   shift: { crossAxis: true },
@@ -181,6 +209,7 @@ provide(TOUR_STATE, {
 })
 
 defineExpose({
+  wrapper,
   currentActive,
   currentIndex,
   currentStep,
@@ -266,6 +295,7 @@ function handleClose() {
     <slot></slot>
   </div>
   <Masker
+    ref="masker"
     v-bind="$attrs"
     v-model:active="currentActive"
     :inherit="props.inherit"
