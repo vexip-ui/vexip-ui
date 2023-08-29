@@ -19,6 +19,9 @@ importers:
       '@vexip-ui/bem-helper':
         specifier: workspace:*
         version: link:common/bem-helper
+      '@vexip-ui/config':
+        specifier: workspace:*
+        version: link:common/config
       '@vexip-ui/hooks':
         specifier: workspace:*
         version: link:common/hooks
@@ -214,6 +217,9 @@ importers:
       '@vexip-ui/bem-helper':
         specifier: workspace:*
         version: link:../bem-helper
+      '@vexip-ui/icons':
+        specifier: workspace:*
+        version: link:../icons
       '@vexip-ui/utils':
         specifier: workspace:*
         version: link:../utils
@@ -325,6 +331,9 @@ importers:
       '@vexip-ui/bem-helper':
         specifier: workspace:*
         version: link:../common/bem-helper
+      '@vexip-ui/config':
+        specifier: workspace:*
+        version: link:../common/config
       '@vexip-ui/hooks':
         specifier: workspace:*
         version: link:../common/hooks

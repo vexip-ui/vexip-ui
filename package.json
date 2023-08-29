@@ -15,7 +15,7 @@
     "serve:theme": "tsx scripts/serve.ts --theme",
     "build": "tsx scripts/build.ts",
     "build:bem": "pnpm -C common/bem-helper build && pnpm i",
-    "build:common": "run-s build:utils build:bem build:config build:hooks build:icons",
+    "build:common": "run-s build:utils build:bem build:hooks build:icons build:config",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:docs": "pnpm -C docs build",
     "build:full": "tsx scripts/build-full.ts",
