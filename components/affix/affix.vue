@@ -22,6 +22,8 @@ import type { CSSProperties, ComponentInternalInstance } from 'vue'
 
 type ScrollType = NativeScrollExposed & ScrollExposed
 
+defineOptions({ name: 'Affix' })
+
 const _props = defineProps(affixProps)
 const props = useProps('affix', _props, {
   offset: 0,
