@@ -10,6 +10,7 @@
   "private": true,
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/config": "workspace:*",
     "@vexip-ui/hooks": "workspace:*",
     "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*",

@@ -1,5 +1,8 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * Chinese (Simplified) locale config
+ */
 export function zhCNLocale() {
   return defineLocaleConfig({
     locale: 'zh-CN',

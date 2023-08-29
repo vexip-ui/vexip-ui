@@ -108,10 +108,16 @@ async function create(name: string) {
       source: `
         import ${capitalCaseName} from './${kebabCaseName}.vue'
 
+        import type { ComponentPublicInstance } from 'vue'
+
         export { ${capitalCaseName} }
         export { ${camelCaseName}Props } from './props'
 
+<<<<<<< HEAD
         export type ${capitalCaseName}Exposed = InstanceType<typeof ${capitalCaseName}>
+=======
+        export type ${capitalCaseName}Exposed = ComponentPublicInstance & InstanceType<typeof ${capitalCaseName}>
+>>>>>>> upstream/main
 
         export type { ${capitalCaseName}Props, ${capitalCaseName}CProps } from './props'
       `
