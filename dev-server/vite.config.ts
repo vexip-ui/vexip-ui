@@ -99,22 +99,7 @@ export default defineConfig(() => {
           }
         ],
         exclude: ['../components/**']
-      }),
-      {
-        name: 'single-hmr',
-        handleHotUpdate({ modules, file }) {
-          if (file.match(/xml$/)) return []
-
-          modules.forEach(m => {
-            if (!m.url.match(/\.(s|p)?css/)) {
-              m.clientImportedModules = new Set()
-              m.importers = new Set()
-            }
-          })
-
-          return modules
-        }
-      }
+      })
     ]
   }
 })
