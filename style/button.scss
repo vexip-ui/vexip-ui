@@ -457,11 +457,14 @@ $button: map.merge(
       display: inline-flex;
       align-items: center;
 
-      #{$self} + #{$self} {
-        margin-inline-start: 0;
-      }
-
       #{$self} {
+        @include define-preset-values(
+          'button',
+          (
+            series-span: 0
+          )
+        );
+
         border-radius: 0;
 
         &:hover,
