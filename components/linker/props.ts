@@ -5,7 +5,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 import type { LinkerType } from './symbol'
 
 export const linkerProps = buildProps({
-  to: String,
+  href: String,
   type: String as PropType<LinkerType>,
   icon: Object,
   underline: booleanProp,

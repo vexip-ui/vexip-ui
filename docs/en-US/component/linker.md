@@ -40,7 +40,7 @@ Added the `underline` prop to display the underline when the hover a link.
 
 | Name      | Type                                                                    | Description                                           | Default     | Since |
 | --------- | ----------------------------------------------------------------------- | ----------------------------------------------------- | ----------- | ----- |
-| to        | `string`                                                                | Destination address of the link                       | `null`      | -     |
+| href      | `string`                                                                | Destination address of the link                       | `null`      | -     |
 | type      | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning' \| 'info'` | The types of link                                     | `'default'` | -     |
 | icon      | `Record<string, any>`                                                   | Prefix icon of link                                   | `null`      | -     |
 | underline | `boolean`                                                               | Set whether display underline when hover              | `false`     | -     |

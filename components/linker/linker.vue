@@ -1,7 +1,7 @@
 <template>
   <a
     :class="className"
-    :href="props.to"
+    :href="props.href"
     tabindex="0"
     :target="props.target"
     @click="handleClick"
@@ -40,7 +40,7 @@ export default defineComponent({
   props: linkerProps,
   setup(_props) {
     const props = useProps('linker', _props, {
-      to: {
+      href: {
         default: null,
         static: true
       },
