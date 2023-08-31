@@ -12,6 +12,7 @@
       :class="nh.be('input')"
       :checked="currentValue"
       :disabled="isDisabled"
+      :name="props.name"
       @submit.prevent
       @change="handleChange()"
       @click.stop
@@ -98,7 +99,11 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      rectangle: false
+      rectangle: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('switch')

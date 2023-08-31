@@ -182,6 +182,7 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 | can-preview      | `(file: FileState) => boolean>`                  | 判断文件是否可以预览                                                                                             | `isImage`          | `2.0.0` |
 | image            | `boolean`                                        | 是否开启图片上传模式，开启后 `accept` 和 `list-type` 属性将会失效                                                | `false`            | `2.0.8` |
 | locale           | `LocaleConfig['upload']`                         | 设置多语言配置                                                                                                   | `null`             | `2.1.0` |
+| name             | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                                                | `''`               | `2.2.2` |
 
 ### Upload 事件
 

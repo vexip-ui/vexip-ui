@@ -21,7 +21,7 @@
         :class="nh.be('close')"
         @click.stop="handleClose"
       >
-        <Icon v-bind="icons.close"></Icon>
+        <Icon v-bind="icons.close" label="close"></Icon>
       </button>
     </div>
   </li>

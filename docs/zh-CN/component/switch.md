@@ -89,6 +89,7 @@
 | close-text       | `string`                                         | 关闭状态时开关的填充文字                                                                                  | `''`        | -        |
 | on-before-change | `(checked: boolean) => unknown`                  | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 `false` 会阻止变化 | `null`      | -        |
 | rectangle        | `boolean`                                        | 设置开发是否为矩形                                                                                        | `false`     | `2.1.28` |
+| name             | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                                         | `''`        | `2.2.2`  |
 
 ### Switch 事件
 

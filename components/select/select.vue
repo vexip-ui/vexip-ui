@@ -109,6 +109,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                :name="props.name"
                 @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
@@ -133,6 +134,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                :name="props.name"
                 @submit.prevent
                 @input="handleFilterInput"
                 @focus="handleFocus($event)"
@@ -428,7 +430,11 @@ export default defineComponent({
       tagType: null,
       noPreview: false,
       remote: false,
-      fitPopper: false
+      fitPopper: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))

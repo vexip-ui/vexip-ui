@@ -89,6 +89,7 @@ Different states can be set via `state`.
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`               | `2.1.0`  |
 | control-class  | `ClassType`                                      | Set the class name of the control element                                                                                  | `null`               | `2.1.25` |
 | control-attrs  | `Record<string, any>`                            | Set the attributes of the control element                                                                                  | `null`               | `2.2.2`  |
+| name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`                 | `2.2.2`  |
 
 ### Textarea Events
 

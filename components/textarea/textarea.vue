@@ -13,6 +13,7 @@
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
       :maxlength="props.maxLength > 0 ? props.maxLength : undefined"
+      :name="props.name || props.controlAttrs?.name"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -94,7 +95,11 @@ export default defineComponent({
       loadingEffect: null,
       sync: false,
       controlClass: null,
-      controlAttrs: null
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('textarea')

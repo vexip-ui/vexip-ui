@@ -239,6 +239,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | no-preview      | `boolean`                                        | Set whether to disable the option label dynamic preview                                                                                                       | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | Whether to enable remote mode                                                                                                                                 | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | Set whether the option list and the selector are forced to be of equal width, or you can pass in a value to specify the width of the option list              | `false`        | `2.1.23` |
+| name            | `string`                                         | set `name` attribute of internal `<input>`, only effect when using filter                                                                                     | `''`           | `2.2.2`  |
 
 ### Select Events
 

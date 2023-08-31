@@ -27,6 +27,7 @@
       :disabled="props.disabled"
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      :name="props.name || props.controlAttrs?.name"
       role="spinbutton"
       :title="outOfRange ? locale.outOfRange : undefined"
       :aria-valuenow="preciseNumber"
@@ -175,7 +176,11 @@ export default defineComponent({
       sync: false,
       controlType: 'right',
       emptyType: 'NaN',
-      controlAttrs: null
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('number-input')

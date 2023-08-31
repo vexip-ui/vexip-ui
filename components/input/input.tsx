@@ -86,7 +86,11 @@ export default defineComponent({
       loadingEffect: null,
       transparent: false,
       sync: false,
-      controlAttrs: null
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const initValue = toNotNullString(props.value)
@@ -500,6 +504,7 @@ export default defineComponent({
             readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
+            name={props.name || props.controlAttrs?.name}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

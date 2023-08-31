@@ -131,6 +131,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | debounce       | `boolean`                                        | Enable debounce for `input` event, by default is throttle, not reactive prop                                               | `false`     | `2.1.25` |
 | delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`     | `2.1.25` |
 | show-empty     | `boolean`                                        | Whether show option list when empty                                                                                        | `false`     | `2.2.0`  |
+| name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
 
 ### AutoComplete Events
 

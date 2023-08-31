@@ -58,6 +58,7 @@ export const uploadProps = buildProps({
   defaultFiles: Array as PropType<FileOptions[]>,
   canPreview: Function as PropType<(file: FileState) => boolean>,
   listStyle: styleProp,
+  name: String,
   onExceed: eventProp<(files: FileState[]) => void>(),
   onChange: eventProp<(files: FileState[]) => void>(),
   onFilterError: eventProp<(files: FileState) => void>(),

@@ -131,6 +131,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | debounce       | `boolean`                                        | 为 `input` 事件开启防抖，默认情况下为节流，非响应式属性                                      | `false`     | `2.1.25` |
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`      | `2.1.25` |
 | show-empty     | `boolean`                                        | 是否在选项为空时也显示下拉选项列表                                                           | `false`     | `2.2.0`  |
+| name           | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
 
 ### AutoComplete 事件
 

@@ -145,6 +145,7 @@ Add the `transparent` prop to remove the original style, and then you can wrap t
 | sync           | `boolean`                                                | Set whether enable sync input mode                                                                                         | `false`     | `2.0.6`  |
 | locale         | `LocaleConfig['input']`                                  | Set the locale config                                                                                                      | `null`      | `2.1.0`  |
 | control-attrs  | `Record<string, any>`                                    | Set the attributes of the control element                                                                                  | `null`      | `2.2.2`  |
+| name           | `string`                                                 | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
 
 ### Input Events
 

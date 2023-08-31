@@ -182,6 +182,7 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 | can-preview      | `(file: FileState) => boolean>`                  | Determine whether the file can be previewed                                                                                                                                                         | `isImage`          | `2.0.0` |
 | image            | `boolean`                                        | Whether to enable image upload mode, `accept` and `list-type` props will be invalid after enable                                                                                                    | `false`            | `2.0.8` |
 | locale           | `LocaleConfig['upload']`                         | Set the locale config                                                                                                                                                                               | `null`             | `2.1.0` |
+| name             | `string`                                         | set `name` attribute of internal `<input>`                                                                                                                                                          | `''`               | `2.2.2` |
 
 ### Upload Events
 

@@ -33,6 +33,7 @@ export const textareaProps = buildProps({
   sync: booleanProp,
   controlClass: classProp,
   controlAttrs: Object as PropType<Record<string, any>>,
+  name: String,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<(value: string) => void>(),
