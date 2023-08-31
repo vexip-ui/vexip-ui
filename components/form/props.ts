@@ -39,6 +39,7 @@ export const formItemProps = buildProps({
   locale: localeProp('form'),
   label: String,
   prop: String,
+  name: String,
   rules: [Object, Array] as PropType<Rule | Rule[]>,
   labelWidth: Number,
   required: booleanProp,

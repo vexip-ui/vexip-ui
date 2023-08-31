@@ -23,7 +23,7 @@
     <input
       v-if="isNative"
       type="hidden"
-      :name="props.prop"
+      :name="props.name || props.prop"
       :value="inputValue"
       style="display: none"
     />
@@ -123,6 +123,10 @@ export default defineComponent({
         static: true
       },
       prop: {
+        default: '',
+        static: true
+      },
+      name: {
         default: '',
         static: true
       },
