@@ -29,6 +29,7 @@
             v-bind="icons.loading"
             :effect="props.loadingEffect || icons.loading.effect"
             :icon="props.loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
       </Transition>

@@ -24,6 +24,7 @@
             v-bind="icons.loading"
             :effect="loadingEffect || icons.loading.effect"
             :icon="loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
       </CollapseTransition>

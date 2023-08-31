@@ -1,8 +1,8 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      ref="wrapper"
       v-bind="$attrs"
+      ref="wrapper"
       :class="className"
       tabindex="-1"
       :style="{

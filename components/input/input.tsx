@@ -411,7 +411,7 @@ export default defineComponent({
       if (showClear.value) {
         return (
           <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
-            <Icon {...icons.value.clear}></Icon>
+            <Icon {...icons.value.clear} label={'clear'}></Icon>
           </div>
         )
       }
@@ -423,6 +423,7 @@ export default defineComponent({
               {...icons.value.loading}
               effect={props.loadingEffect || icons.value.loading.effect}
               icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
             ></Icon>
           </div>
         )

@@ -510,7 +510,10 @@ export default defineComponent({
                   title={props.locale.reverse}
                   onClick={handleReverse}
                 >
-                  <Icon {...icons.value.retweet} scale={1.2}></Icon>
+                  <Icon
+                    {...icons.value.retweet}
+                    scale={(icons.value.retweet.scale || 1) * 1.2}
+                  ></Icon>
                 </div>
                 <div class={nh.be('counter')}>
                   {`${currentSelected.value.size}/${visibleOptions.value.length}`}
@@ -527,6 +530,7 @@ export default defineComponent({
                         {...icons.value.loading}
                         effect={props.loadingEffect || icons.value.loading.effect}
                         icon={props.loadingIcon || icons.value.loading.icon}
+                        label={'loading'}
                       ></Icon>
                     </div>
                   )}

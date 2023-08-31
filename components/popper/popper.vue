@@ -15,8 +15,8 @@
       <div
         v-if="props.alive || props.visible"
         v-show="!props.alive || props.visible"
-        ref="wrapper"
         v-bind="$attrs"
+        ref="wrapper"
         :class="[nh.b(), props.to !== 'body' && nh.bm('inherit')]"
         :style="{ zIndex: props.to && props.visible ? zIndex : undefined }"
       >

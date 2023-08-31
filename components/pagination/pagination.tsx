@@ -445,6 +445,7 @@ export default defineComponent({
 
     function renderPrev(Tag: any) {
       const disabled = props.disabled || disabledPrev.value
+      const arrow = isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft
 
       return (
         <Tag
@@ -468,10 +469,7 @@ export default defineComponent({
                 renderSlot(slots, 'prev', { disabled })
               )
             : (
-              <Icon
-                {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
-                scale={0.8}
-              ></Icon>
+              <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
               )}
         </Tag>
       )
@@ -479,6 +477,7 @@ export default defineComponent({
 
     function renderNext(Tag: any) {
       const disabled = props.disabled || disabledNext.value
+      const arrow = isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight
 
       return (
         <Tag
@@ -502,10 +501,7 @@ export default defineComponent({
                 renderSlot(slots, 'next', { disabled })
               )
             : (
-              <Icon
-                {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
-                scale={0.8}
-              ></Icon>
+              <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
               )}
         </Tag>
       )
@@ -534,20 +530,25 @@ export default defineComponent({
           onMouseenter={enterPrevEllipsis}
           onMouseleave={leavePrevEllipsis}
         >
-          {createSlotRender(slots, ['prev-jump', 'prevJump'], () => (
-            <Transition name={nh.ns('fade')}>
-              {inPrevEllipsis.value
-                ? (
-                  <Icon
-                    {...(isRtl.value ? icons.value.anglesRight : icons.value.anglesLeft)}
-                    scale={0.8}
-                  ></Icon>
-                  )
-                : (
-                  <Icon {...icons.value.ellipsis} scale={0.8} style={'position: absolute'}></Icon>
-                  )}
-            </Transition>
-          ))({ disabled, entered: inPrevEllipsis.value })}
+          {createSlotRender(slots, ['prev-jump', 'prevJump'], () => {
+            const arrow = isRtl.value ? icons.value.anglesRight : icons.value.anglesLeft
+
+            return (
+              <Transition name={nh.ns('fade')}>
+                {inPrevEllipsis.value
+                  ? (
+                    <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+                    )
+                  : (
+                    <Icon
+                      {...icons.value.ellipsis}
+                      scale={(icons.value.ellipsis.scale || 1) * 0.8}
+                      style={'position: absolute'}
+                    ></Icon>
+                    )}
+              </Transition>
+            )
+          })({ disabled, entered: inPrevEllipsis.value })}
         </Tag>
       )
     }
@@ -575,20 +576,25 @@ export default defineComponent({
           onMouseenter={enterNextEllipsis}
           onMouseleave={leaveNextEllipsis}
         >
-          {createSlotRender(slots, ['next-jump', 'nextJump'], () => (
-            <Transition name={nh.ns('fade')}>
-              {inNextEllipsis.value
-                ? (
-                  <Icon
-                    {...(isRtl.value ? icons.value.anglesLeft : icons.value.anglesRight)}
-                    scale={0.8}
-                  ></Icon>
-                  )
-                : (
-                  <Icon {...icons.value.ellipsis} scale={0.8} style={'position: absolute'}></Icon>
-                  )}
-            </Transition>
-          ))({ disabled: !nextEllipsisTarget.value, entered: inNextEllipsis.value })}
+          {createSlotRender(slots, ['next-jump', 'nextJump'], () => {
+            const arrow = isRtl.value ? icons.value.anglesLeft : icons.value.anglesRight
+
+            return (
+              <Transition name={nh.ns('fade')}>
+                {inNextEllipsis.value
+                  ? (
+                    <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+                    )
+                  : (
+                    <Icon
+                      {...icons.value.ellipsis}
+                      scale={(icons.value.ellipsis.scale || 1) * 0.8}
+                      style={'position: absolute'}
+                    ></Icon>
+                    )}
+              </Transition>
+            )
+          })({ disabled: !nextEllipsisTarget.value, entered: inNextEllipsis.value })}
         </Tag>
       )
     }

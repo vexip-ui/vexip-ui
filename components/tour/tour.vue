@@ -295,8 +295,8 @@ function handleClose() {
     <slot></slot>
   </div>
   <Masker
-    ref="masker"
     v-bind="$attrs"
+    ref="masker"
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
@@ -357,7 +357,11 @@ function handleClose() {
                   @click="handleClose"
                 >
                   <slot name="close" v-bind="slotParams">
-                    <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
+                    <Icon
+                      v-bind="icons.close"
+                      :scale="(icons.close.scale || 1) * 1.2"
+                      label="close"
+                    ></Icon>
                   </slot>
                 </button>
               </slot>

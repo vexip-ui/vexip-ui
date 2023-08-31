@@ -24,7 +24,11 @@
         >
           <slot name="prev" :disabled="prevDisabled">
             <div :class="nh.be('prev-handler')">
-              <Icon v-bind="icons.arrowLeft" :scale="1.4" label="prev"></Icon>
+              <Icon
+                v-bind="icons.arrowLeft"
+                :scale="(icons.arrowLeft.scale || 1) * 1.4"
+                label="prev"
+              ></Icon>
             </div>
           </slot>
         </button>
@@ -35,7 +39,11 @@
         >
           <slot name="next" :disabled="prevDisabled">
             <div :class="nh.be('next-handler')">
-              <Icon v-bind="icons.arrowRight" :scale="1.4" label="next"></Icon>
+              <Icon
+                v-bind="icons.arrowRight"
+                :scale="(icons.arrowRight.scale || 1) * 1.4"
+                label="next"
+              ></Icon>
             </div>
           </slot>
         </button>
@@ -43,7 +51,7 @@
       <button type="button" :class="nh.be('close')" @click.stop="handleClose">
         <slot name="close">
           <div :class="nh.be('close-handler')">
-            <Icon v-bind="icons.close" :scale="1.4" label="close"></Icon>
+            <Icon v-bind="icons.close" :scale="(icons.close.scale || 1) * 1.4" label="close"></Icon>
           </div>
         </slot>
       </button>

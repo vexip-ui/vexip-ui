@@ -244,6 +244,7 @@ export default defineComponent({
                 {...icons.value.loading}
                 effect={props.loadingEffect || icons.value.loading.effect}
                 icon={props.loadingIcon || icons.value.loading.icon}
+                label={'loading'}
               ></Icon>
               )}
         </div>

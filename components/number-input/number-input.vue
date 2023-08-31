@@ -58,22 +58,23 @@
     ></div>
     <Transition :name="nh.ns('fade')" appear>
       <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-        <Icon v-bind="icons.clear"></Icon>
+        <Icon v-bind="icons.clear" label="clear"></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
         <Icon
           v-bind="icons.loading"
           :effect="props.loadingEffect || icons.loading.effect"
           :icon="props.loadingIcon || icons.loading.icon"
+          label="loading"
         ></Icon>
       </div>
     </Transition>
     <template v-if="props.controlType !== 'none'">
       <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretUp" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretUp" :scale="(icons.caretUp.scale || 1) * 0.8"></Icon>
       </div>
       <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretDown" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretDown" :scale="(icons.caretDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>
   </div>
