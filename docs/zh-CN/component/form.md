@@ -229,6 +229,7 @@ interface Rule<T = any> {
 | error-transition | `string`               | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -       |
 | help             | `string`               | 设置字段的帮助信息                                                   | `''`         | `2.0.0` |
 | locale           | `LocaleConfig['form']` | 设置多语言配置                                                       | `null`       | `2.1.0` |
+| name             | `string`               | 内部隐藏 `<input>` 的 `name` 属性，未设置时采用 `prop` 的值          | `''`         | `2.2.2` |
 
 ### FormItem 插槽
 

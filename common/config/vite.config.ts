@@ -1,5 +1,16 @@
+import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
+
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
+
+const externalPkgs = ['@vue'].concat(
+  Object.keys(pkg.dependencies || {}),
+  Object.keys(pkg.peerDependencies || {})
+)
+const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
 export default defineConfig({
   build: {
@@ -10,7 +21,7 @@ export default defineConfig({
       fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`
     },
     rollupOptions: {
-      external: ['@vue', 'vue']
+      external
     }
   },
   plugins: [dts({ rollupTypes: true })]

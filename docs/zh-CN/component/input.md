@@ -143,6 +143,8 @@
 | transparent    | `boolean`                                                | 设置是否为透明模式                                                                           | `false`     | `2.0.2`  |
 | sync           | `boolean`                                                | 设置是否为同步输入模式                                                                       | `false`     | `2.0.6`  |
 | locale         | `LocaleConfig['input']`                                  | 设置多语言配置                                                                               | `null`      | `2.1.0`  |
+| control-attrs  | `Record<string, any>`                                    | 设置输入框控件元素的属性                                                                     | `null`      | `2.2.2`  |
+| name           | `string`                                                 | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
 
 ### Input 事件
 

@@ -109,6 +109,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                :name="props.name"
                 @submit.prevent
                 @input="handleFilterInput"
                 @keydown="handleFilterKeyDown"
@@ -133,6 +134,7 @@
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
+                :name="props.name"
                 @submit.prevent
                 @input="handleFilterInput"
                 @focus="handleFocus($event)"
@@ -181,13 +183,14 @@
       ></div>
       <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-          <Icon v-bind="icons.clear"></Icon>
+          <Icon v-bind="icons.clear" label="clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
             :effect="props.loadingEffect || icons.loading.effect"
             :icon="props.loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
       </Transition>
@@ -427,7 +430,11 @@ export default defineComponent({
       tagType: null,
       noPreview: false,
       remote: false,
-      fitPopper: false
+      fitPopper: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))

@@ -117,6 +117,7 @@ type RawOption =
 | partial      | `boolean`                                        | Whether it is a partial selection state, valid when control is `true`                                                        | `false`     | -       |
 | loading      | `boolean`                                        | Set whether is loading                                                                                                       | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                     | `false`     | `2.0.0` |
+| name         | `string`                                         | set `name` attribute of internal `<input>`                                                                                   | `''`        | `2.2.2` |
 
 ### Checkbox Events
 

@@ -50,6 +50,8 @@ export const numberInputProps = buildProps({
   sync: booleanProp,
   controlType: String as PropType<NumberInputControlType>,
   emptyType: String as PropType<NumberInputEmptyType>,
+  controlAttrs: Object as PropType<Record<string, any>>,
+  name: String,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<(value: number) => void>(),

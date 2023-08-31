@@ -83,7 +83,12 @@
                   {{ `${percentage}%` }}
                 </span>
               </div>
-              <Icon v-else v-bind="icons.loading" :scale="1.8"></Icon>
+              <Icon
+                v-else
+                v-bind="icons.loading"
+                :scale="(icons.loading.scale || 1) * 1.8"
+                label="loading"
+              ></Icon>
             </template>
             <img
               v-else-if="showThumb"
@@ -136,14 +141,14 @@
               :disabled="!props.canPreview(props.file)"
               @click="handlePreview(props.file)"
             >
-              <Icon v-bind="icons.preview" :scale="1.4"></Icon>
+              <Icon v-bind="icons.preview" :scale="(icons.preview.scale || 1) * 1.4"></Icon>
             </button>
             <button
               type="button"
               :class="[nh.be('icon'), nh.be('action')]"
               @click="handleDelete(props.file)"
             >
-              <Icon v-bind="icons.delete" :scale="1.4"></Icon>
+              <Icon v-bind="icons.delete" :scale="(icons.delete.scale || 1) * 1.4"></Icon>
             </button>
           </div>
         </div>

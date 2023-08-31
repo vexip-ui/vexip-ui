@@ -20,6 +20,7 @@ export const switchProps = buildProps({
   closeText: String,
   onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
   rectangle: booleanProp,
+  name: String,
   onChange: eventProp<(value: boolean) => void>()
 })
 

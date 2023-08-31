@@ -37,7 +37,11 @@
             @click="handleClose()"
           >
             <slot name="close">
-              <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
+              <Icon
+                v-bind="icons.close"
+                :scale="(icons.close.scale || 1) * 1.2"
+                label="close"
+              ></Icon>
             </slot>
           </button>
         </div>

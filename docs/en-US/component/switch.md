@@ -89,6 +89,7 @@ Different states can be set via `state` prop.
 | close-text       | `string`                                         | Fill text for the switch when closed                                                                                                                                                                        | `''`        | -        |
 | on-before-change | `(checked: boolean) => unknown`                  | Set the callback before the value of the switch changes, receive a value that the parameter will be changed to, support asynchronous functions and Promise, the return value of `false` will prevent change | `null`      | -        |
 | rectangle        | `boolean`                                        | Set whether the switch is rectangular                                                                                                                                                                       | `false`     | `2.1.28` |
+| name             | `string`                                         | set `name` attribute of internal `<input>`                                                                                                                                                                  | `''`        | `2.2.2`  |
 
 ### Switch Events
 

@@ -566,9 +566,9 @@ export default defineComponent({
 
       return (
         <Content
-          ref={contentElement}
           {...props.scrollAttrs}
           {...(props.scrollOnly ? attrs : {})}
+          ref={contentElement}
           class={wrapperClass.value}
           style={[props.scrollAttrs?.style, props.scrollStyle, props.scrollOnly && style.value]}
           onMousedown={handleMouseDown}
@@ -616,8 +616,8 @@ export default defineComponent({
 
       return (
         <div
-          ref={wrapper}
           {...attrs}
+          ref={wrapper}
           class={[className.value, attrs.class]}
           style={[style.value, attrs.style as any]}
         >

@@ -107,6 +107,7 @@ type RawOption =
 | border       | `boolean`                                        | Set whether the radio button has a border                                                                                | `false`     | -       |
 | loading      | `boolean`                                        | Set whether is loading                                                                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                 | `false`     | `2.0.0` |
+| name         | `string`                                         | set `name` attribute of internal `<input>`                                                                               | `''`        | `2.2.2` |
 
 ### Radio Events
 

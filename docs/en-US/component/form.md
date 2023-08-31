@@ -229,6 +229,7 @@ interface Rule<T = any> {
 | error-transition | `string`               | transition effect name for error message                                                                                                          | `'vxp-fade'` | -       |
 | help             | `string`               | Set the help information for field                                                                                                                | `''`         | `2.0.0` |
 | locale           | `LocaleConfig['form']` | Set the locale config                                                                                                                             | `null`       | `2.1.0` |
+| name             | `string`               | The `name` attribute of internally hidden `<input>`, and the value of `prop` is used when it is not set                                           | `''`         | `2.2.2` |
 
 ### FormItem Slots
 

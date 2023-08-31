@@ -122,7 +122,7 @@ export default {
 
 <template>
   <ResizeObserver throttle @resize="refresh">
-    <canvas ref="canvas" v-bind="$attrs" class="wave"></canvas>
+    <canvas v-bind="$attrs" ref="canvas" class="wave"></canvas>
   </ResizeObserver>
 </template>
 

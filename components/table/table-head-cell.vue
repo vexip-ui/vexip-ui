@@ -1,5 +1,6 @@
 <template>
   <div
+    v-bind="attrs"
     ref="wrapper"
     :class="className"
     role="columnheader"
@@ -15,7 +16,6 @@
           : 'none'
         : undefined
     "
-    v-bind="attrs"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"

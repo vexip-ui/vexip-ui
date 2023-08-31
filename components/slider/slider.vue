@@ -36,12 +36,12 @@
           </div>
           <div
             v-else
+            v-bind="marker.attrs"
             :class="[nh.be('marker'), marker.class]"
             :style="[
               getMarkerStyle(value),
               marker.style as any
             ]"
-            v-bind="marker.attrs"
           >
             <slot
               name="marker"

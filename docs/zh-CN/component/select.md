@@ -224,7 +224,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | loading-icon    | `Record<string, any>`                            | 设置加载中的图标                                                          | `Spinner`      | `2.0.0`  |
 | loading-lock    | `boolean`                                        | 设置在加载中时是否为只读                                                  | `false`        | `2.0.0`  |
 | loading-effect  | `string`                                         | 设置加载中图标的效果动画                                                  | `false`        | `2.1.0`  |
-| filter          | `boolean \| SelectFilter`                        | 过滤 `options` 的方法，传入 `ture` 时会使用内置比较方法                   | `false`        | `2.0.0`  |
+| filter          | `boolean \| SelectFilter`                        | 过滤 `options` 的方法，传入 `true` 时会使用内置比较方法                   | `false`        | `2.0.0`  |
 | ignore-case     | `boolean`                                        | 在使用内置的过滤时，设置是否忽略大小写                                    | `false`        | `2.0.0`  |
 | creatable       | `boolean`                                        | 设置在开启了过滤选项功能后，是否支持动态创建选项                          | `false`        | `2.0.0`  |
 | transparent     | `boolean`                                        | 设置是否为透明模式                                                        | `false`        | `2.0.2`  |
@@ -235,6 +235,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | no-preview      | `boolean`                                        | 设置是否禁用选项标签动态预览功能                                          | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | 是否开启远程模式                                                          | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | 设置选项列表与选择器是否强制等宽，也可以传入一个数值指定选项列表的宽度    | `false`        | `2.1.23` |
+| name            | `string`                                         | 设置内部 `<input>` 的 `name` 属性，仅使用过滤时有效                       | `''`           | `2.2.2`  |
 
 ### Select 事件
 

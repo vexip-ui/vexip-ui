@@ -24,6 +24,7 @@ export const radioProps = buildProps({
   tabIndex: [String, Number],
   loading: booleanProp,
   loadingLock: booleanProp,
+  name: String,
   onChange: eventProp<EventListener<ChangeEvent>>()
 })
 

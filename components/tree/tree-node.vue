@@ -1,7 +1,7 @@
 <template>
   <li
-    ref="wrapper"
     v-bind="$attrs"
+    ref="wrapper"
     :class="className"
     :draggable="treeState.draggable"
     tabindex="-1"
@@ -56,7 +56,7 @@
           :aria-hidden="!node.loading && !hasArrow"
           @click.stop="handleToggleExpand()"
         >
-          <Icon v-if="node.loading" v-bind="icons.loading"></Icon>
+          <Icon v-if="node.loading" v-bind="icons.loading" label="loading"></Icon>
           <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
         </span>
         <Checkbox

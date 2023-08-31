@@ -26,6 +26,7 @@ export const checkboxProps = buildProps({
   tabIndex: [String, Number],
   loading: booleanProp,
   loadingLock: booleanProp,
+  name: String,
   onChange: eventProp<(checked: boolean) => void>(),
   onClick: eventProp<(event: MouseEvent) => void>()
 })
