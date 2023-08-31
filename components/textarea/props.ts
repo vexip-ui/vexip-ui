@@ -32,6 +32,7 @@ export const textareaProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
   controlClass: classProp,
+  controlAttrs: Object as PropType<Record<string, any>>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<(value: string) => void>(),

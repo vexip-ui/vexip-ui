@@ -1,8 +1,9 @@
 <template>
   <div :id="idFor" :class="className" @click="textarea?.focus()">
     <textarea
+      v-bind="props.controlAttrs"
       ref="textarea"
-      :class="[nh.be('control'), props.controlClass]"
+      :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
@@ -91,7 +92,8 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       sync: false,
-      controlClass: null
+      controlClass: null,
+      controlAttrs: null
     })
 
     const nh = useNameHelper('textarea')

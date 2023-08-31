@@ -85,7 +85,8 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       transparent: false,
-      sync: false
+      sync: false,
+      controlAttrs: null
     })
 
     const initValue = toNotNullString(props.value)
@@ -486,8 +487,9 @@ export default defineComponent({
         >
           {hasPrefix.value && renderPrefix()}
           <input
+            {...props.controlAttrs}
             ref={inputControl}
-            class={[nh.be('control'), props.controlClass]}
+            class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}

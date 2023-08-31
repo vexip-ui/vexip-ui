@@ -154,6 +154,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | control-type   | `NumberInputControlType`                         | 设置控件类型                                                                                 | `'right'`   | `2.0.17` |
 | locale         | `LocaleConfig['input']`                          | 设置多语言配置                                                                               | `null`      | `2.1.0`  |
 | empty-type     | `NumberInputEmptyType`                           | 设置空值的类型                                                                               | `'NaN'`     | `2.1.8`  |
+| control-attrs  | `Record<string, any>`                            | 设置输入框控件元素的属性                                                                     | `null`      | `2.2.2`  |
 
 ### NumberInput 事件
 

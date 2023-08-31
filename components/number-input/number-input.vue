@@ -16,10 +16,11 @@
       </slot>
     </div>
     <input
+      v-bind="props.controlAttrs"
       ref="input"
-      type="text"
-      :class="[nh.be('control'), props.controlClass]"
+      :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       :value="inputValue"
+      type="text"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
@@ -172,7 +173,8 @@ export default defineComponent({
       loadingEffect: null,
       sync: false,
       controlType: 'right',
-      emptyType: 'NaN'
+      emptyType: 'NaN',
+      controlAttrs: null
     })
 
     const nh = useNameHelper('number-input')
