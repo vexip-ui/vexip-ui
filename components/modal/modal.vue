@@ -389,6 +389,16 @@ export default defineComponent({
 
       const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = wrapper.value
 
+      // If user is using top/bottom or right/left to specify size,
+      // here need to force transfer to use offset size
+      if (
+        !withSize &&
+        ((!uselessTop.value && props.bottom !== 'auto') ||
+          (!uselessLeft.value && props.right !== 'auto'))
+      ) {
+        withSize = true
+      }
+
       Object.assign(
         rect,
         {
