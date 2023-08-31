@@ -307,7 +307,7 @@ export default defineComponent({
       ]
     })
     const hasTitle = computed(() => {
-      return !!(slots.header || props.title)
+      return !!(slots.header || slots.title || props.title)
     })
     const titleId = computed(() => `${nh.bs(idIndex)}__title`)
     const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
