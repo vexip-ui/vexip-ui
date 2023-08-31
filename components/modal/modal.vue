@@ -312,6 +312,15 @@ export default defineComponent({
     const titleId = computed(() => `${nh.bs(idIndex)}__title`)
     const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 
+    for (const style of Object.keys(rect) as Array<keyof typeof rect>) {
+      watch(
+        () => props[style],
+        value => {
+          rect[style] = normalizeStyle(value)
+        }
+      )
+    }
+
     watch(
       () => props.active,
       value => {
@@ -322,10 +331,10 @@ export default defineComponent({
       props.hideMask && value && handleResize()
     })
     watch([() => props.top, () => props.bottom, () => props.height], () => {
-      currentActive.value && computeTop()
+      currentActive.value && nextTick(computeTop)
     })
     watch([() => props.left, () => props.right, () => props.width], () => {
-      currentActive.value && computeLeft()
+      currentActive.value && nextTick(computeLeft)
     })
 
     const handleResize = debounce(() => {
