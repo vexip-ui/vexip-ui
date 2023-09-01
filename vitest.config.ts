@@ -20,16 +20,13 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    include: ['@vexip-ui/bem-helper', '@vexip-ui/hooks', '@vexip-ui/icons', '@vexip-ui/utils']
+    include: ['@vexip-ui/icons']
   },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],
     environment: 'happy-dom',
     clearMocks: true,
     setupFiles: [resolve(__dirname, 'scripts/test-setup.ts')],
-    transformMode: {
-      web: [/\.[jt]sx$/]
-    },
     coverage: {
       exclude: dirs.filter(f => f !== 'components').map(f => `${f}/**`),
       reporter: ['text'],
