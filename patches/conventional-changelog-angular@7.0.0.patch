@@ -1,8 +1,8 @@
-diff --git a/writer-opts.js b/writer-opts.js
-index d5de1a3ade560a49022eb96095aa67374141ddbb..9ee7d102917c8b3a4aea73605ea91d089ec89b34 100644
---- a/writer-opts.js
-+++ b/writer-opts.js
-@@ -29,32 +29,38 @@ function getWriterOpts () {
+diff --git a/writerOpts.js b/writerOpts.js
+index 991947b85e2eac0e0ae246037624276882abb741..990ef6a37434a6539f27615d5aa7dae1f7621183 100644
+--- a/writerOpts.js
++++ b/writerOpts.js
+@@ -30,32 +30,38 @@ function getWriterOpts () {
        const issues = []
  
        commit.notes.forEach(note => {
