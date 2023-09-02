@@ -35,14 +35,15 @@ $alert: map.merge(
   position: relative;
   display: flex;
   align-items: center;
-  padding: 8px 14px;
-  margin-bottom: 14px;
+  padding: get-css-var('padding-base') get-css-var('padding-large-3');
+  margin-bottom: get-css-var('margin-large-3');
   background-color: get-css-var('alert-bg-color');
   border: get-css-var('alert-border');
   border-radius: get-css-var('alert-radius');
 
   &--has-title {
     padding: 10px 14px;
+    padding: get-css-var('padding-large-1') get-css-var('padding-large-3');
   }
 
   &--has-icon {
@@ -76,7 +77,7 @@ $alert: map.merge(
   }
 
   &__title {
-    margin-bottom: 4px;
+    margin-bottom: get-css-var('margin-small-2');
     font-size: get-css-var('alert-title-font-size');
     color: get-css-var('alert-title-color');
   }
@@ -95,15 +96,15 @@ $alert: map.merge(
 
   &--has-title &__icon {
     align-items: start;
-    padding-top: 16px;
+    padding-top: get-css-var('padding-large-4');
   }
 
   &__close {
     position: relative;
     display: inline-flex;
     align-items: center;
-    padding: 3px 0;
-    margin-inline-start: 6px;
+    padding: get-css-var('padding-small-3') 0;
+    margin-inline-start: get-css-var('margin-large-1');
     color: get-css-var('alert-close-color');
     cursor: pointer;
     background-color: transparent;
