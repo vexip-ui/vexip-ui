@@ -12,6 +12,7 @@
       :class="nh.be('input')"
       :checked="currentValue"
       :disabled="isDisabled"
+      :name="props.name"
       @submit.prevent
       @change="handleChange()"
       @click.stop
@@ -30,6 +31,7 @@
           v-bind="icons.loading"
           :effect="props.loadingEffect || icons.loading.effect"
           :icon="props.loadingIcon || icons.loading.icon"
+          label="loading"
         ></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
@@ -97,7 +99,11 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      rectangle: false
+      rectangle: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('switch')

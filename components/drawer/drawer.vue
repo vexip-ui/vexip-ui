@@ -25,21 +25,27 @@
         :aria-describedby="bodyId"
       >
         <div v-if="hasTitle" :class="nh.be('header')">
-          <div :id="titleId" :class="nh.be('title')">
-            <slot name="title">
-              {{ props.title }}
-            </slot>
-          </div>
-          <button
-            v-if="props.closable"
-            type="button"
-            :class="nh.be('close')"
-            @click="handleClose()"
-          >
-            <slot name="close">
-              <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
-            </slot>
-          </button>
+          <slot name="header">
+            <div :id="titleId" :class="nh.be('title')">
+              <slot name="title">
+                {{ props.title }}
+              </slot>
+            </div>
+            <button
+              v-if="props.closable"
+              type="button"
+              :class="nh.be('close')"
+              @click="handleClose()"
+            >
+              <slot name="close">
+                <Icon
+                  v-bind="icons.close"
+                  :scale="(icons.close.scale || 1) * 1.2"
+                  label="close"
+                ></Icon>
+              </slot>
+            </button>
+          </slot>
         </div>
         <div :id="bodyId" :class="nh.be('content')">
           <slot></slot>
@@ -259,7 +265,7 @@ export default defineComponent({
       }
     })
     const hasTitle = computed(() => {
-      return !!(slots.title ?? props.title)
+      return !!(slots.header || slots.title || props.title)
     })
     const titleId = computed(() => `${nh.bs(idIndex)}__title`)
     const bodyId = computed(() => `${nh.bs(idIndex)}__body`)

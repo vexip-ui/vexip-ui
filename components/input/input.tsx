@@ -85,7 +85,12 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       transparent: false,
-      sync: false
+      sync: false,
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const initValue = toNotNullString(props.value)
@@ -410,7 +415,7 @@ export default defineComponent({
       if (showClear.value) {
         return (
           <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
-            <Icon {...icons.value.clear}></Icon>
+            <Icon {...icons.value.clear} label={'clear'}></Icon>
           </div>
         )
       }
@@ -422,6 +427,7 @@ export default defineComponent({
               {...icons.value.loading}
               effect={props.loadingEffect || icons.value.loading.effect}
               icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
             ></Icon>
           </div>
         )
@@ -486,8 +492,9 @@ export default defineComponent({
         >
           {hasPrefix.value && renderPrefix()}
           <input
+            {...props.controlAttrs}
             ref={inputControl}
-            class={[nh.be('control'), props.controlClass]}
+            class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}
@@ -497,6 +504,7 @@ export default defineComponent({
             readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
+            name={props.name || props.controlAttrs?.name}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

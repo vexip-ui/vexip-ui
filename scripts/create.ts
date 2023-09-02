@@ -108,8 +108,12 @@ async function create(name: string) {
       source: `
         import ${capitalCaseName} from './${kebabCaseName}.vue'
 
+        import type { ComponentPublicInstance } from 'vue'
+
         export { ${capitalCaseName} }
-        export type ${capitalCaseName}Exposed = InstanceType<typeof ${capitalCaseName}>
+        export { ${camelCaseName}Props } from './props'
+
+        export type ${capitalCaseName}Exposed = ComponentPublicInstance & InstanceType<typeof ${capitalCaseName}>
 
         export type { ${capitalCaseName}Props, ${capitalCaseName}CProps } from './props'
       `
@@ -148,45 +152,32 @@ async function create(name: string) {
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
       source: `
-        <template>
-          <div :class="className" @click="handleClick"></div>
-        </template>
-
-        <script lang="ts">
-        import { defineComponent, computed } from 'vue'
+        <script setup lang="ts">
+        import { computed } from 'vue'
         import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
         import { ${camelCaseName}Props } from './props'
 
-        export default defineComponent({
-          name: '${capitalCaseName}',
-          props: ${camelCaseName}Props,
-          emits: [],
-          setup(_props) {
-            const props = useProps('${camelCaseName}', _props, {
-              bool: false
-            })
+        defineOptions({ name: '${capitalCaseName}' })
 
-            const nh = useNameHelper('${kebabCaseName}')
-
-            const className = computed(() => {
-              return [nh.b(), nh.bs('vars')]
-            })
-
-            function handleClick() {
-              emitEvent(props.onClick, props.bool)
-            }
-
-            return {
-              props,
-              nh,
-
-              className,
-
-              handleClick
-            }
-          }
+        const _props = defineProps(${camelCaseName}Props)
+        const props = useProps('${camelCaseName}', _props, {
+          bool: false
         })
+
+        const nh = useNameHelper('${kebabCaseName}')
+
+        const className = computed(() => {
+          return [nh.b(), nh.bs('vars')]
+        })
+
+        function handleClick() {
+          emitEvent(props.onClick, props.bool)
+        }
         </script>
+
+        <template>
+          <div :class="className" @click="handleClick"></div>
+        </template>
       `
     },
     {

@@ -52,7 +52,8 @@ export const zhCN = defineI18n({
     i18n: '国际化',
     ssr: '服务端渲染',
     customFormControl: '自定义表单控件',
-    developmentGuide: '开发指南'
+    developmentGuide: '开发指南',
+    customInternalIcons: '自定义内部图标'
   },
   group: {
     basis: '基础',

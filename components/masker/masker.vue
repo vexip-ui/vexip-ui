@@ -1,8 +1,8 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      ref="wrapper"
       v-bind="$attrs"
+      ref="wrapper"
       :class="className"
       tabindex="-1"
       :style="{
@@ -20,7 +20,7 @@
           @after-enter="afterOpen"
           @after-leave="afterClose"
         >
-          <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
+          <div v-show="currentActive" :class="nh.be('mask')" @click="handleMaskClick">
             <slot name="mask">
               <div :class="nh.be('mask-inner')"></div>
             </slot>
@@ -147,6 +147,10 @@ export default defineComponent({
         prevFocusedEl = document.activeElement as HTMLElement
         zIndex.value = getIndex()
       }
+
+      if (!props.maskTransition) {
+        value ? afterOpen() : afterClose()
+      }
     })
     watch(
       [() => props.permeable, wrapper],
@@ -217,6 +221,11 @@ export default defineComponent({
       })
     }
 
+    function handleMaskClick(event: MouseEvent) {
+      emitEvent(props.onMaskClick, event)
+      handleClose()
+    }
+
     function handleFocusIn(event: FocusEvent) {
       const target = event.target as HTMLElement
 
@@ -258,6 +267,7 @@ export default defineComponent({
       handleClose,
       afterClose,
       afterOpen,
+      handleMaskClick,
       handleFocusIn,
       handleResize
     }

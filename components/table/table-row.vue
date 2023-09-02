@@ -17,10 +17,10 @@
     @dragend="handleDragEnd"
   >
     <div
+      v-bind="attrs"
       ref="rowEl"
       :class="className"
       :style="style"
-      v-bind="attrs"
     >
       <div
         v-if="fixed !== 'right'"

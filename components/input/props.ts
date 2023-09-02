@@ -45,6 +45,8 @@ export const inputProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   sync: booleanProp,
+  controlAttrs: Object as PropType<Record<string, any>>,
+  name: String,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<EventListener<ChangeEvent>>(),

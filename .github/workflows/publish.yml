@@ -5,6 +5,7 @@ on:
     tags:
       - v*
       - bem-helper*
+      - config*
       - icons*
       - hooks*
       - plugins*

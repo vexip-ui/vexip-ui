@@ -10,6 +10,7 @@
   "private": true,
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/config": "workspace:*",
     "@vexip-ui/hooks": "workspace:*",
     "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*",
@@ -24,7 +25,7 @@
     "@intlify/unplugin-vue-i18n": "^0.12.2",
     "@types/markdown-it": "^12.2.3",
     "@types/markdown-it-container": "^2.0.5",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.5.7",
     "@types/prismjs": "^1.26.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
@@ -38,8 +39,8 @@
     "markdown-it-table-sort": "^1.0.1",
     "postcss": "^8.4.25",
     "postcss-discard-duplicates": "^6.0.0",
-    "sass": "^1.63.6",
-    "vite": "^4.4.2",
+    "sass": "^1.66.1",
+    "vite": "^4.4.9",
     "vite-plugin-inspect": "^0.7.32",
     "vitepress": "1.0.0-beta.5"
   }

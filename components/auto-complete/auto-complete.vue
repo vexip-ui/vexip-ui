@@ -58,6 +58,7 @@
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
           :readonly="props.loading && props.loadingLock"
+          :name="props.name"
           autocomplete="off"
           tabindex="-1"
           role="combobox"
@@ -170,7 +171,11 @@ export default defineComponent({
       transparent: false,
       debounce: false,
       delay: null,
-      showEmpty: false
+      showEmpty: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const currentValue = ref(props.value)

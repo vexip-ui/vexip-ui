@@ -80,6 +80,7 @@ export const selectProps = buildProps({
   noPreview: booleanProp,
   remote: booleanProp,
   fitPopper: booleanNumberProp,
+  name: String,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

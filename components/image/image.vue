@@ -9,9 +9,9 @@
     <slot v-if="loading" name="placeholder">
       <Skeleton
         v-if="props.skeleton"
+        v-bind="skeletonProps"
         :class="nh.be('skeleton')"
         image
-        v-bind="skeletonProps"
       ></Skeleton>
       <template v-else>
         <span :class="nh.be('placeholder')">
@@ -26,8 +26,8 @@
     </slot>
     <img
       v-if="shouldLoad && !showError"
-      :class="nh.be('img')"
       v-bind="props.imgAttrs"
+      :class="nh.be('img')"
       :src="loadSrc"
       :alt="props.alt"
       :width="props.width || undefined"

@@ -25,6 +25,7 @@
                 v-bind="icons.loading"
                 :icon="props.icon || icons.loading.icon"
                 :effect="props.iconEffect || icons.loading.effect"
+                label="loading"
               ></Icon>
             </slot>
           </div>
@@ -58,6 +59,7 @@
               v-bind="icons.loading"
               :icon="props.icon || icons.loading.icon"
               :effect="props.iconEffect || icons.loading.effect"
+              label="loading"
             ></Icon>
           </slot>
         </div>

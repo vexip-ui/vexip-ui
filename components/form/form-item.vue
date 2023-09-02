@@ -23,7 +23,7 @@
     <input
       v-if="isNative"
       type="hidden"
-      :name="props.prop"
+      :name="props.name || props.prop"
       :value="inputValue"
       style="display: none"
     />
@@ -96,7 +96,7 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
-import { createEventEmitter, getRangeWidth, isFunction, isNull } from '@vexip-ui/utils'
+import { createEventEmitter, getRangeWidth, isFunction, isNull, isObject } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -123,6 +123,10 @@ export default defineComponent({
         static: true
       },
       prop: {
+        default: '',
+        static: true
+      },
+      name: {
         default: '',
         static: true
       },
@@ -257,7 +261,7 @@ export default defineComponent({
     const inputValue = computed(() => {
       const value = currentValue.value
 
-      if (Array.isArray(value) || typeof value === 'object') {
+      if (Array.isArray(value) || isObject(value)) {
         return JSON.stringify(value)
       }
 

@@ -68,7 +68,7 @@ interface UsePopperOptions {
   /**
    * 设置是否自动更新 popper 元素
    *
-   * @default true
+   * @default false
    */
   autoUpdate?: boolean
 }

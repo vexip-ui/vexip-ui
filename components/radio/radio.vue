@@ -7,6 +7,7 @@
       :checked="currentValue === props.label"
       :disabled="isDisabled || (isLoading && isLoadingLock)"
       :tabindex="props.tabIndex"
+      :name="props.name"
       @submit.prevent
       @change="handleChange"
       @click.stop
@@ -24,6 +25,7 @@
             v-bind="icons.loading"
             :effect="loadingEffect || icons.loading.effect"
             :icon="loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
       </CollapseTransition>
@@ -78,7 +80,11 @@ export default defineComponent({
       border: false,
       tabIndex: 0,
       loading: false,
-      loadingLock: false
+      loadingLock: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const groupState = inject(GROUP_STATE, null)

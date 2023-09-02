@@ -50,7 +50,8 @@ export interface I18nConfig {
     i18n: string,
     ssr: string,
     customFormControl: string,
-    developmentGuide: string
+    developmentGuide: string,
+    customInternalIcons: string
   },
   group: {
     basis: string,

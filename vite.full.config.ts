@@ -32,12 +32,12 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
+        // {
+        //   find: /^@vexip-ui\/config/,
+        //   replacement: resolve(__dirname, 'common/config/src')
+        // },
         {
-          find: /^@vexip-ui\/config/,
-          replacement: resolve(__dirname, 'common/config/src')
-        },
-        {
-          find: /^@vexip-ui\/(bem-helper|utils|hooks)/,
+          find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, 'common/$1/src')
         }
       ]
@@ -94,7 +94,7 @@ export default defineConfig(async () => {
         },
         copyDtsFiles: true,
         pathsToAliases: false,
-        aliasesExclude: [/^@vexip-ui\/(bem-helper|utils|hooks)/]
+        aliasesExclude: [/^@vexip-ui\/(bem-helper|utils|hooks|config)/]
       })
     ]
   }

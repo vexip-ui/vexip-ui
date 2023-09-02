@@ -15,7 +15,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { unrefElement, usePopper } from '@vexip-ui/hooks'
+import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
 import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE, getIdIndex } from './symbol'
@@ -23,6 +23,11 @@ import { TOUR_STATE, getIdIndex } from './symbol'
 import type { BubbleExposed } from '@/components/bubble'
 import type { MaskerExposed } from '@/components/masker'
 import type { TourCommonSLot, TourStepOptions } from './symbol'
+
+defineOptions({
+  name: 'Tour',
+  inheritAttrs: false
+})
 
 const _props = defineProps(tourProps)
 const props = useProps('tour', _props, {
@@ -73,6 +78,34 @@ const sideRects = ref<(number | string)[][]>()
 
 const masker = ref<MaskerExposed>()
 const bubble = ref<BubbleExposed>()
+const wrapper = computed(() => masker.value?.wrapper)
+
+useModifier({
+  target: wrapper,
+  passive: false,
+  onKeyDown: (event, modifier) => {
+    if (!currentActive.value) return
+
+    if (modifier.left || modifier.up) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      prev()
+    } else if (modifier.right || modifier.down) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      next()
+    } else if (modifier.escape) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      handleClose()
+    }
+
+    modifier.resetAll()
+  }
+})
 
 const allSteps = computed(() => {
   return Array.from(tempSteps)
@@ -107,8 +140,8 @@ const padding = computed(() => {
 const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
 
 const { reference, placement, updatePopper } = usePopper({
+  wrapper,
   placement: computed(() => currentStep.value?.placement || 'bottom'),
-  wrapper: computed(() => masker.value?.$el),
   popper: computed(() => bubble.value?.$el),
   arrow: computed(() => bubble.value?.arrow),
   shift: { crossAxis: true },
@@ -176,6 +209,7 @@ provide(TOUR_STATE, {
 })
 
 defineExpose({
+  wrapper,
   currentActive,
   currentIndex,
   currentStep,
@@ -261,6 +295,8 @@ function handleClose() {
     <slot></slot>
   </div>
   <Masker
+    v-bind="$attrs"
+    ref="masker"
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
@@ -270,6 +306,7 @@ function handleClose() {
     :disabled="props.hideMask"
     @show="updatePopper"
     @hide="currentRect = undefined"
+    @mask-click="emitEvent(props.onMaskClick, $event)"
   >
     <template #default="{ show }">
       <div
@@ -320,7 +357,11 @@ function handleClose() {
                   @click="handleClose"
                 >
                   <slot name="close" v-bind="slotParams">
-                    <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
+                    <Icon
+                      v-bind="icons.close"
+                      :scale="(icons.close.scale || 1) * 1.2"
+                      label="close"
+                    ></Icon>
                   </slot>
                 </button>
               </slot>

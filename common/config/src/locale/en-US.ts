@@ -1,5 +1,8 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * English locale config
+ */
 export function enUSLocale() {
   return defineLocaleConfig({
     locale: 'en-US',

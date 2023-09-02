@@ -154,6 +154,8 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | control-type   | `NumberInputControlType`                         | Set the control type                                                                                                       | `'right'`   | `2.0.17` |
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`      | `2.1.0`  |
 | empty-type     | `NumberInputEmptyType`                           | Set the type of empty value                                                                                                | `'NaN'`     | `2.1.8`  |
+| control-attrs  | `Record<string, any>`                            | Set the attributes of the control element                                                                                  | `null`      | `2.2.2`  |
+| name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
 
 ### NumberInput Events
 

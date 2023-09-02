@@ -1,13 +1,35 @@
 {
   "name": "@vexip-ui/config",
+  "version": "1.1.0",
+  "license": "MIT",
   "author": "qmhc",
   "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/config#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/config"
+  },
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {

@@ -210,7 +210,7 @@ export default defineComponent({
       const renderCounter = () =>
         counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
       const render = () => (
-        <CustomTag ref={wrapper} {...attrs} class={className.value}>
+        <CustomTag {...attrs} ref={wrapper} class={className.value}>
           {itemSlot && isDefined(props.items)
             ? props.items.map((item, index) => {
               const vnode = itemSlot({ item, index })[0]

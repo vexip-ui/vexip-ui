@@ -15,8 +15,8 @@
     <ResizeObserver throttle :on-resize="handleResize">
       <component
         :is="props.scrollTag || 'div'"
-        ref="content"
         v-bind="props.scrollAttrs"
+        ref="content"
         :class="wrapperClass"
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"

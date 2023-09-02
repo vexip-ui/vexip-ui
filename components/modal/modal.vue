@@ -42,7 +42,11 @@
               @click="handleClose(false)"
             >
               <slot name="close">
-                <Icon v-bind="icons.close" :scale="1.2" label="close"></Icon>
+                <Icon
+                  v-bind="icons.close"
+                  :scale="(icons.close.scale || 1) * 1.2"
+                  label="close"
+                ></Icon>
               </slot>
             </button>
           </slot>
@@ -303,10 +307,19 @@ export default defineComponent({
       ]
     })
     const hasTitle = computed(() => {
-      return !!(slots.header || props.title)
+      return !!(slots.header || slots.title || props.title)
     })
     const titleId = computed(() => `${nh.bs(idIndex)}__title`)
     const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
+
+    for (const style of Object.keys(rect) as Array<keyof typeof rect>) {
+      watch(
+        () => props[style],
+        value => {
+          rect[style] = normalizeStyle(value)
+        }
+      )
+    }
 
     watch(
       () => props.active,
@@ -318,10 +331,10 @@ export default defineComponent({
       props.hideMask && value && handleResize()
     })
     watch([() => props.top, () => props.bottom, () => props.height], () => {
-      currentActive.value && computeTop()
+      currentActive.value && nextTick(computeTop)
     })
     watch([() => props.left, () => props.right, () => props.width], () => {
-      currentActive.value && computeLeft()
+      currentActive.value && nextTick(computeLeft)
     })
 
     const handleResize = debounce(() => {
@@ -384,6 +397,16 @@ export default defineComponent({
       if (!wrapper.value) return
 
       const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = wrapper.value
+
+      // If user is using top/bottom or right/left to specify size,
+      // here need to force transfer to use offset size
+      if (
+        !withSize &&
+        ((!uselessTop.value && props.bottom !== 'auto') ||
+          (!uselessLeft.value && props.right !== 'auto'))
+      ) {
+        withSize = true
+      }
 
       Object.assign(
         rect,

@@ -107,6 +107,7 @@ type RawOption =
 | border       | `boolean`                                        | 设置单选框是否具有边框                                                               | `false`     | -       |
 | loading      | `boolean`                                        | 设置是否为加载中                                                                     | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                                             | `false`     | `2.0.0` |
+| name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                    | `''`        | `2.2.2` |
 
 ### Radio 事件
 

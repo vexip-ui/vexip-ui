@@ -193,7 +193,9 @@ app.use(install, {
 
 结合 ConfigProvider 组件的 `icons` 属性，你还可以为局部的区域自定义图标，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
-> 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)。
+> 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90)。
+
+所有的内置图标预览可以参考 [自定义内置图标](/zh-CN/guide/custom-internal-icons#内部图标一览) 章节。
 
 最后，我们来看一个实际的效果替换后的效果：
 

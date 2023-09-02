@@ -117,6 +117,7 @@ type RawOption =
 | partial      | `boolean`                                        | 是否为部分选择状态，control 为 `true` 时有效                           | `false`     | -       |
 | loading      | `boolean`                                        | 设置是否为加载中                                                       | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                               | `false`     | `2.0.0` |
+| name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                      | `''`        | `2.2.2` |
 
 ### Checkbox 事件
 

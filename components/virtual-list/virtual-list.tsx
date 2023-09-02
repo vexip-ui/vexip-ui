@@ -134,8 +134,8 @@ export default defineComponent({
 
       return (
         <NativeScroll
-          ref={scroll}
           {...attrs}
+          ref={scroll}
           inherit={props.inherit}
           class={[nh.b(), attrs.class]}
           use-y-bar={!props.hideBar}

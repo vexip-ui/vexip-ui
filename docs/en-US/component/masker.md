@@ -37,12 +37,14 @@ Through the `mask` slot, you can customize the mask layer, for example to make a
 
 ### Masker Events
 
-| Name   | Description                                                                                      | Parameters          | Since |
-| ------ | ------------------------------------------------------------------------------------------------ | ------------------- | ----- |
-| toggle | Emitted when the active state of the mask changes, returns the current active state              | `(active: boolean)` | -     |
-| close  | Emitted when the close function is used to trigger the close                                     | -                   | -     |
-| show   | When the mask is opened, emitted after the transition effect                                     | -                   | -     |
-| hide   | When the mask is closed, the transition effect ends, it is emitted when it disappears completely | -                   | -     |
+| Name       | Description                                                                                      | Parameters                     | Since    |
+| ---------- | ------------------------------------------------------------------------------------------------ | ------------------------------ | -------- |
+| toggle     | Emitted when the active state of the mask changed, returns the current active state              | `(active: boolean)`            | -        |
+| close      | Emitted when the close function is used to trigger the close                                     | -                              | -        |
+| show       | When the mask is opened, emitted after the transition effect                                     | -                              | -        |
+| hide       | When the mask is closed, the transition effect ends, it is emitted when it disappears completely | -                              | -        |
+| resize     | Emitted when the mask size changed                                                               | `(entry: ResizeObserverEntry)` | `2.1.25` |
+| mask-click | Emitted when the mask layer is clicked                                                           | `(event: MouseEvent)`          | `2.2.1`  |
 
 ### Masker Slots
 

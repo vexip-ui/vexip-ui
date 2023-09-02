@@ -16,16 +16,18 @@
       </slot>
     </div>
     <input
+      v-bind="props.controlAttrs"
       ref="input"
-      type="text"
-      :class="[nh.be('control'), props.controlClass]"
+      :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       :value="inputValue"
+      type="text"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      :name="props.name || props.controlAttrs?.name"
       role="spinbutton"
       :title="outOfRange ? locale.outOfRange : undefined"
       :aria-valuenow="preciseNumber"
@@ -57,22 +59,23 @@
     ></div>
     <Transition :name="nh.ns('fade')" appear>
       <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-        <Icon v-bind="icons.clear"></Icon>
+        <Icon v-bind="icons.clear" label="clear"></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
         <Icon
           v-bind="icons.loading"
           :effect="props.loadingEffect || icons.loading.effect"
           :icon="props.loadingIcon || icons.loading.icon"
+          label="loading"
         ></Icon>
       </div>
     </Transition>
     <template v-if="props.controlType !== 'none'">
       <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretUp" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretUp" :scale="(icons.caretUp.scale || 1) * 0.8"></Icon>
       </div>
       <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretDown" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretDown" :scale="(icons.caretDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>
   </div>
@@ -172,7 +175,12 @@ export default defineComponent({
       loadingEffect: null,
       sync: false,
       controlType: 'right',
-      emptyType: 'NaN'
+      emptyType: 'NaN',
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('number-input')

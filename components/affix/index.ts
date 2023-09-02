@@ -2,9 +2,9 @@ import Affix from './affix.vue'
 
 import type { ComponentPublicInstance } from 'vue'
 
-Affix.name = 'Affix'
-
 export { Affix }
+export { affixProps } from './props'
+
 export type AffixExposed = ComponentPublicInstance & InstanceType<typeof Affix>
 
 export type { AffixProps, AffixCProps } from './props'
