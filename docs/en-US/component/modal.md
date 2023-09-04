@@ -82,6 +82,17 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 ## API
 
+### Preset Types
+
+```ts
+interface ModalSlotParams {
+  handleResize: () => void,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm: boolean) => Promise<void>
+}
+```
+
 ### Modal Props
 
 | Name            | Type                          | Description                                                                                                                                                                                                             | Default          | Since    |
@@ -131,10 +142,10 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 ### Modal Slots
 
-| Name    | Description                     | Parameters | Since |
-| ------- | ------------------------------- | ---------- | ----- |
-| default | The content slot for modal      | -          | -     |
-| close   | The close action slot for modal | -          | -     |
-| header  | The header slot for modal       | -          | -     |
-| footer  | The footer slot for modal       | -          | -     |
-| title   | The title slot for modal        | -          | -     |
+| Name    | Description                     | Parameters        | Since |
+| ------- | ------------------------------- | ----------------- | ----- |
+| default | The content slot for modal      | `ModalSlotParams` | -     |
+| title   | The title slot for modal        | `ModalSlotParams` | -     |
+| close   | The close action slot for modal | `ModalSlotParams` | -     |
+| header  | The header slot for modal       | `ModalSlotParams` | -     |
+| footer  | The footer slot for modal       | `ModalSlotParams` | -     |
