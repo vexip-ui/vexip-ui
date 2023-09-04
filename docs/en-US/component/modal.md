@@ -80,6 +80,16 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 :::
 
+:::demo modal/hook
+
+### Hook Method
+
+Modal component provides a static `open` method that can directly create a disposable modal.
+
+Or you can directly import `useModal` and use it as in the example.
+
+:::
+
 ## API
 
 ### Preset Types

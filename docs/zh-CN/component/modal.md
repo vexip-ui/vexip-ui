@@ -80,6 +80,16 @@ Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height
 
 :::
 
+:::demo modal/hook
+
+### Hook 方式
+
+Modal 组件提供了一个静态的 `open` 方法，可以直接创建一个一次性的模态框。
+
+或者你可以像示例中那样引入 `useModal` 直接使用。
+
+:::
+
 ## API
 
 ### 预设类型
