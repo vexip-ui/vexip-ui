@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue'
 import SliderTrigger from './slider-trigger.vue'
 import { createStateProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
-import { throttle } from '@vexip-ui/utils'
+import { digitLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
 import type { SliderCommonSlot, SliderMarker } from './symbol'
@@ -32,7 +32,7 @@ const props = useProps('slider', _props, {
   max: 100,
   step: {
     default: 1,
-    validator: value => value > 0 && Math.ceil(value) === value
+    validator: value => value > 0
   },
   vertical: false,
   hideTip: false,
@@ -92,14 +92,15 @@ const className = computed(() => {
     [nh.bm('with-marker')]: markerList.value.length
   }
 })
+const stepDigit = computed(() => digitLength(props.step))
 // 按每 step 为 1 算的最小值
-const stepOneMin = computed(() => Math.round(Math.min(props.min, props.max) / props.step))
+const stepOneMin = computed(() => Math.ceil(Math.min(props.min, props.max) / props.step))
 // 按每 step 为 1 算的最大值
-const stepOneMax = computed(() => Math.round(Math.max(props.min, props.max) / props.step))
+const stepOneMax = computed(() => Math.floor(Math.max(props.min, props.max) / props.step))
 const truthValue = computed(() => {
   return [
-    Math.round(stepOneValue.value[0] * props.step),
-    Math.round(stepOneValue.value[1] * props.step)
+    toFixed(stepOneValue.value[0] * props.step, stepDigit.value),
+    toFixed(stepOneValue.value[1] * props.step, stepDigit.value)
   ]
 })
 const stepOneTotal = computed(() => stepOneMax.value - stepOneMin.value || 1)
@@ -154,9 +155,18 @@ watch(
       Array.isArray(prevValue) &&
       value[0] === prevValue[0] &&
       value[1] === prevValue[1]
-    ) { return }
+    ) {
+      return
+    }
 
     parseValue(value)
+    verifyValue()
+  }
+)
+watch(
+  () => props.step,
+  () => {
+    parseValue(props.value)
     verifyValue()
   }
 )
@@ -509,7 +519,7 @@ function blur() {
       </template>
       <template #tip="payload">
         <slot name="tip" v-bind="payload">
-          {{ payload.value }}
+          {{ payload.value.toFixed(stepDigit) }}
         </slot>
       </template>
     </SliderTrigger>
@@ -534,7 +544,7 @@ function blur() {
       </template>
       <template #tip="payload">
         <slot name="tip" v-bind="payload">
-          {{ payload.value }}
+          {{ payload.value.toFixed(stepDigit) }}
         </slot>
       </template>
     </SliderTrigger>

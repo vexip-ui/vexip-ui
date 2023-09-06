@@ -90,6 +90,8 @@ Different states can be set via `state` prop.
 
 ### Custom Trigger
 
+^[Since v2.2.3](!s)
+
 You can custom the trigger content via `trigger` slot.
 
 :::
