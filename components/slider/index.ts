@@ -8,4 +8,4 @@ export { sliderProps } from './props'
 export type SliderExposed = ComponentPublicInstance & InstanceType<typeof Slider>
 
 export type { SliderProps, SliderCProps } from './props'
-export type { SliderMarker } from './symbol'
+export type { SliderCommonSlot, SliderMarker } from './symbol'
