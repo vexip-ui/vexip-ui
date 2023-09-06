@@ -78,7 +78,7 @@ const footerLinks = computed(() => {
       name: group.text || t(group.i18n!),
       children: group.items!.map(item => ({
         name: item.text || t(item.i18n!),
-        subname: item.subtext || (item.subi18n ? t(item.subi18n) : undefined),
+        subname: item.subtext || (item.subI18n ? t(item.subI18n) : undefined),
         to: item.link
       }))
     }))

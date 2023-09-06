@@ -19,6 +19,17 @@ const SITE_TITLE = 'Vexip UI - Make interesting in development'
 const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
 const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
 
+const LANG_SCRIPT = `
+(() => {
+  const lang = typeof navigator !== 'undefined'
+    ? ['zh-CN', 'en-US'].find(l => l  === navigator.language) || 'zh-CN'
+    : 'zh-CN'
+  if (location.pathname === '/') {
+    window.location.href = \`/\${lang}/\`
+  }
+})()
+`
+
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
@@ -28,7 +39,9 @@ export default <UserConfig<ThemeConfig>>{
     ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
     ['meta', { property: 'og:url', content: SITE_URL }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }]
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
+    ['script', {}, LANG_SCRIPT],
+    ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-M74ZHEQ1M1' }]
   ],
   markdown: {
     highlight,
@@ -141,9 +154,10 @@ function getAsideMenus(): ThemeConfig['asideMenus'] {
         items: group.components.map(component => ({
           key: component.name,
           link: `/component/${toKebabCase(component.name)}`,
-          i18n: `component.${component.name}`,
+          text: component.name,
           tag: component.since?.startsWith(versionPrefix) ? 'New' : '',
-          origin: component.name
+          subI18n: `component.${component.name}`,
+          noSub: ['en-US']
         }))
       }
     })
@@ -163,17 +177,17 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         },
         {
           text: 'Vexip Lint Config',
-          subi18n: t('lintConfigSet'),
+          subI18n: t('lintConfigSet'),
           link: 'https://github.com/vexip-ui/lint-config'
         },
         {
           text: 'Create Vexip',
-          subi18n: t('createProject'),
+          subI18n: t('createProject'),
           link: 'https://github.com/vexip-ui/create-vexip'
         },
         {
           text: 'Grid Layout Plus',
-          subi18n: t('gridLayout'),
+          subI18n: t('gridLayout'),
           link: `https://grid-layout-plus.netlify.app/${lang === 'zh-CN' ? 'zh/' : ''}`
         },
         {
@@ -182,7 +196,7 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         },
         {
           text: 'vue-hooks-plus',
-          subi18n: t('hooksLib'),
+          subI18n: t('hooksLib'),
           link: `https://inhiblabcore.github.io/docs/hooks/${lang !== 'zh-CN' ? 'en/' : ''}`
         },
         {
@@ -191,7 +205,7 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         },
         {
           text: 'RedBlues-1980',
-          subi18n: t('logoDesign'),
+          subI18n: t('logoDesign'),
           link: 'https://richuangangban1980.lofter.com/'
         }
       ]

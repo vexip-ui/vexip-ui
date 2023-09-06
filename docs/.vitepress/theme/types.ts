@@ -13,7 +13,9 @@ export interface AsideMenuItem {
   text?: string,
   i18n?: string,
   tag?: string,
-  origin?: string,
+  subtext?: string,
+  subI18n?: string,
+  noSub?: string[],
   count?: boolean,
   items?: Omit<AsideMenuItem, 'items'>[]
 }
@@ -28,7 +30,7 @@ export interface FooterLink {
   text?: string,
   subtext?: string,
   i18n?: string,
-  subi18n?: string
+  subI18n?: string
 }
 
 export interface FooterLinkGroup {

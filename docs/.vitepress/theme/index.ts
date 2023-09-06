@@ -78,7 +78,7 @@ function enhanceRouter(router: Router) {
 
   if (isClient && location.pathname === '/') {
     currentPath = currentPath === '/' ? `/${locale.value}/` : currentPath
-    isClient && (window.location.href = currentPath)
+    // isClient && (window.location.href = currentPath)
   }
 
   syncLocale(currentPath)
