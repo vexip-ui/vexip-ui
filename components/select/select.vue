@@ -201,6 +201,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
@@ -434,7 +435,8 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      popperAlive: null
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))

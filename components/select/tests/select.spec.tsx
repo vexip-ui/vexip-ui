@@ -181,6 +181,19 @@ describe('Select', () => {
       props: { options: OPTIONS }
     })
 
+    expect(wrapper.find('.vxp-select__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-select__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(Select, {
+      props: { popperAlive: false, options: OPTIONS }
+    })
+
     expect(wrapper.find('.vxp-select__popper').exists()).toBe(false)
 
     await wrapper.trigger('click')
