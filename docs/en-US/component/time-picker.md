@@ -120,6 +120,7 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 | range           | `boolean`                                                 | Set whether to enable range selection mode                                                                                     | `false`          | `2.1.1`  |
 | placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                | `null`           | `2.1.1`  |
 | unit-readonly   | `boolean`                                                 | Set whether the input control is read-only                                                                                     | `false`          | `2.1.2`  |
+| popper-alive    | `boolean`                                                 | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                     | `null`           | `2.2.3`  |
 
 ### TimePicker Events
 

@@ -236,7 +236,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | remote          | `boolean`                                        | 是否开启远程模式                                                          | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | 设置选项列表与选择器是否强制等宽，也可以传入一个数值指定选项列表的宽度    | `false`        | `2.1.23` |
 | name            | `string`                                         | 设置内部 `<input>` 的 `name` 属性，仅使用过滤时有效                       | `''`           | `2.2.2`  |
-| popper-alive    | `boolean`                                        | 设置在隐藏时是否不移除列表元素，默认会在设置了 `transfer` 属性时移除      | `null`         | `2.2.3`  |
+| popper-alive    | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化        | `null`         | `2.2.3`  |
 
 ### Select 事件
 

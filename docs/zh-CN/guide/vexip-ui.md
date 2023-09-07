@@ -17,7 +17,7 @@ Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>
 - 🔧 自由配置的属性默认值，快速完成全局/局部修改
 - ⚡ 组合式 Api，良好的性能基础
 - 🔨 TypeScript 编写，完整的类型
-- 💪 900+ 单元测试，为组件的提供良好的稳定性
+- 💪 1000+ 单元测试，为组件的提供良好的稳定性
 - 🎨 支持 CSS 变量，内置暗黑主题
 - 🚩 支持国际化
 - 🛫 配套 Resolver，支持 unplugin 插件

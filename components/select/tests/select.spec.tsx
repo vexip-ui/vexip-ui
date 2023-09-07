@@ -176,7 +176,7 @@ describe('Select', () => {
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
   })
 
-  it('options show', async () => {
+  it('popper show', async () => {
     const wrapper = mount(Select, {
       props: { options: OPTIONS }
     })

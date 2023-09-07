@@ -120,6 +120,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
     >
       <DatePanel
@@ -288,7 +289,8 @@ export default defineComponent({
       outsideCancel: false,
       placeholder: null,
       unitReadonly: false,
-      weekStart: null
+      weekStart: null,
+      popperAlive: null
     })
 
     const calendarLocale = useLocale('calendar')

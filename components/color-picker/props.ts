@@ -48,6 +48,7 @@ export const colorPickerProps = buildProps({
   loadingIcon: Object,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
+  popperAlive: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),

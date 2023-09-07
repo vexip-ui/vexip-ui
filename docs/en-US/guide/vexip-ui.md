@@ -17,7 +17,7 @@ There are currently **70+** components, many you see everywhere are here and are
 - 🔧 Configurable default value of props, quickly complete global/local modifications
 - ⚡ Composition Api, good performance base
 - 🔨 With TypeScript, fully types
-- 💪 900+ unit tests to provide good stability
+- 💪 1000+ unit tests to provide good stability
 - 🎨 Support CSS variable, built-in dark theme
 - 🚩 Support i18n
 - 🛫 Provide resolver, support unplugin

@@ -3,16 +3,12 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
+    @click="toggleVisible"
     @keydown.tab.stop="handleTabDown"
     @keydown.space="handleSpaceDown"
     @keydown.escape="handleEscDown"
   >
-    <div
-      ref="reference"
-      :class="selectorClass"
-      tabindex="0"
-      @click="toggleVisible"
-    >
+    <div ref="reference" :class="selectorClass" tabindex="0">
       <slot
         name="control"
         :color="rgb"
@@ -86,6 +82,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop
       @keydown.tab.stop="handleTabDown"
       @keydown.space="handleSpaceDown"
@@ -306,7 +303,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingEffect: null
+      loadingEffect: null,
+      popperAlive: null
     })
 
     const isEmpty = ref(true)

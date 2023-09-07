@@ -184,6 +184,7 @@ interface CascaderOptionState {
 | loading-effect  | `string`                                         | 设置加载中图标的效果动画                                                                             | `false`          | `2.1.0` |
 | transparent     | `boolean`                                        | 设置是否为透明模式                                                                                   | `false`          | `2.0.2` |
 | locale          | `LocaleConfig['select']`                         | 设置多语言配置                                                                                       | `null`           | `2.1.0` |
+| popper-alive    | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                                   | `null`           | `2.2.3` |
 
 ### Cascader 事件
 

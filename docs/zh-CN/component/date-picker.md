@@ -183,6 +183,7 @@ interface DateShortcut {
 | unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                  | `false`                 | `2.1.2`  |
 | week-start      | `number`                                                  | 设置日期选择面板中每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天       | `null`                  | `2.1.9`  |
 | value-format    | `string \| DatePickerFormatFn`                            | 指定如何格式化值                                                        | `null`                  | `2.2.0`  |
+| popper-alive    | `boolean`                                                 | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化      | `null`                  | `2.2.3`  |
 
 ### DatePicker 事件
 

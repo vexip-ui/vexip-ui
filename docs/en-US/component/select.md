@@ -240,7 +240,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | remote          | `boolean`                                        | Whether to enable remote mode                                                                                                                                 | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | Set whether the option list and the selector are forced to be of equal width, or you can pass in a value to specify the width of the option list              | `false`        | `2.1.23` |
 | name            | `string`                                         | set `name` attribute of internal `<input>`, only effect when using filter                                                                                     | `''`           | `2.2.2`  |
-| popper-alive    | `boolean`                                        | Set whether the popper will not be when hidden, by default it will be removed when the `transfer` prop is set                                                 | `null`         | `2.2.3`  |
+| popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                    | `null`         | `2.2.3`  |
 
 ### Select Events
 

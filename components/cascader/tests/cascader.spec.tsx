@@ -190,9 +190,22 @@ describe('Cascader', () => {
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
   })
 
-  it('options show', async () => {
+  it('popper show', async () => {
     const wrapper = mount(Cascader, {
       props: { options: createOptions() }
+    })
+
+    expect(wrapper.find('.vxp-cascader__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-cascader__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(Cascader, {
+      props: { popperAlive: false, options: createOptions() }
     })
 
     expect(wrapper.find('.vxp-cascader__popper').exists()).toBe(false)
@@ -341,6 +354,7 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader, {
       props: {
         visible: true,
+        popperAlive: false,
         options,
         onChange
       }
