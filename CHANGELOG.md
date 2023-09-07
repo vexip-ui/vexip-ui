@@ -1,3 +1,29 @@
+## [2.2.3](https://github.com/vexip-ui/vexip-ui/compare/v2.2.2...v2.2.3) (2023-09-07)
+
+
+### ✨ Features
+
+* add popper-alive prop for controls with popper ([e9e378e](https://github.com/vexip-ui/vexip-ui/commit/e9e378e0b27e3ef51fa82cdee5a6d3c04ffed081))
+* **modal:** add hook method to create disposable modal ([167d329](https://github.com/vexip-ui/vexip-ui/commit/167d329411e99401896211cae1eec95965fbc014)), closes [#374](https://github.com/vexip-ui/vexip-ui/issues/374)
+* **select:** add count-limit prop ([adbda63](https://github.com/vexip-ui/vexip-ui/commit/adbda6343fee59ffaf9d220d23899c64c195aa97))
+* **select:** add popper-alive prop ([f7e90bb](https://github.com/vexip-ui/vexip-ui/commit/f7e90bb0f570103d81e658958a2452aa77d6b1e2))
+
+
+### 🐞 Bug Fixes
+
+* **config:** cannot include default excluded props ([147fab5](https://github.com/vexip-ui/vexip-ui/commit/147fab51487871e9a09af7e3d9e88d2af3d0ff46))
+* **input:** keep cursor position when toggle plain password ([611c473](https://github.com/vexip-ui/vexip-ui/commit/611c4734c73f7303cfd3d16eaf61b7aba1e18e28))
+* **slider:** support decimal step ([3722fbc](https://github.com/vexip-ui/vexip-ui/commit/3722fbc455abae12d672469ff788c3758f3fce8d)), closes [#405](https://github.com/vexip-ui/vexip-ui/issues/405)
+* **utils:** unexpected isElement crash process ([4877ed6](https://github.com/vexip-ui/vexip-ui/commit/4877ed6bc4b078760ae22d55c8d646132f2cd660))
+
+
+### 🔨 Code Refactoring
+
+* **modal:** improve to provide params for slots ([c296454](https://github.com/vexip-ui/vexip-ui/commit/c296454265bc3910d51902a06ed5e3ce32b6f9a8))
+* **slider:** support trigger slot ([f1a3337](https://github.com/vexip-ui/vexip-ui/commit/f1a333725ee8235f5a3c554a39ccfa58d8bcb1ac)), closes [#405](https://github.com/vexip-ui/vexip-ui/issues/405)
+
+
+
 ## [2.2.2](https://github.com/vexip-ui/vexip-ui/compare/v2.2.1...v2.2.2) (2023-09-01)
 
 
