@@ -1,10 +1,9 @@
 import * as compiler from '@vue/compiler-sfc'
 
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
-import { getGuideConfig } from './config/guide'
-import { getComponentConfig } from './config/component'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
+import { getComponentConfig, getGuideConfig, getHeadConfig } from './config/index'
 import { toKebabCase } from '@vexip-ui/utils'
 
 import type { UserConfig } from 'vitepress'
@@ -19,30 +18,10 @@ const SITE_TITLE = 'Vexip UI - Make interesting in development'
 const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
 const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
 
-const LANG_SCRIPT = `
-(() => {
-  const lang = typeof navigator !== 'undefined'
-    ? ['zh-CN', 'en-US'].find(l => l  === navigator.language) || 'zh-CN'
-    : 'zh-CN'
-  if (location.pathname === '/') {
-    window.location.href = \`/\${lang}/\`
-  }
-})()
-`
-
 export default <UserConfig<ThemeConfig>>{
   titleTemplate: 'Vexip UI',
   lastUpdated: true,
-  head: [
-    ['meta', { 'http-equiv': 'Expires', content: '0' }],
-    ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
-    ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
-    ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
-    ['meta', { property: 'og:url', content: SITE_URL }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
-    ['script', {}, LANG_SCRIPT],
-    ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-M74ZHEQ1M1' }]
-  ],
+  head: [...getHeadConfig(), ['meta', { property: 'og:url', content: SITE_URL }]],
   markdown: {
     highlight,
     config: markdownItSetup
