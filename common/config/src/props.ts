@@ -159,9 +159,10 @@ type CommonExcludedProps =
   | 'visible'
   | 'label'
   | 'options'
+  | 'name'
 type ExcludeProps<P, E extends string = never, I extends string = never> =
-  | CommonExcludedProps
-  | E
+  | Exclude<CommonExcludedProps, I>
+  | Exclude<E, I>
   | (P extends I ? never : P extends `on${Capitalize<string>}` ? P : never)
 type PostProps<T, E extends string> = Omit<{ [P in keyof T]: MaybeFunction<T[P]> }, E>
 
