@@ -237,6 +237,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | fit-popper      | `boolean \| number`                              | 设置选项列表与选择器是否强制等宽，也可以传入一个数值指定选项列表的宽度    | `false`        | `2.1.23` |
 | name            | `string`                                         | 设置内部 `<input>` 的 `name` 属性，仅使用过滤时有效                       | `''`           | `2.2.2`  |
 | popper-alive    | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化        | `null`         | `2.2.3`  |
+| count-limit     | `number`                                         | 多选时限制最大的可选数量，为 `0` 时不限制                                 | `0`            | `2.2.3`  |
 
 ### Select 事件
 
