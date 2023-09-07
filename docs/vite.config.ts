@@ -7,7 +7,7 @@ import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
 import inspect from 'vite-plugin-inspect'
-import { demoImports } from './build/plugins/demo-imports'
+import { demoImports } from './.vitepress/build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
 

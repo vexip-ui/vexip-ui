@@ -29,11 +29,16 @@ gtag('config', 'G-YDXQW4BVVX');
 
 export function getHeadConfig(): HeadConfig[] {
   return [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
+
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'Vexip UI' }],
+    ['meta', { property: 'og:url', content: 'https://www.vexipui.com/' }],
+
     ['script', {}, LANG_SCRIPT],
     ['script', {}, GOOGLE_MANAGER],
     ['script', {}, GOOGLE_GTAG],

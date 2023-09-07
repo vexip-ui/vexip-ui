@@ -18,7 +18,7 @@ import type { Router } from 'vitepress'
 export default {
   Layout,
   enhanceApp({ app, router }: { app: App, router: Router }) {
-    (prismjs as any).manual = false
+    prismjs.manual = true
 
     syncThemeColors()
     syncDirection()

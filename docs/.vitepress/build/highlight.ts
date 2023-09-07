@@ -4,7 +4,7 @@ import { escapeHtml } from './escape-html'
 
 loadLanguages(['markup', 'css', 'scss', 'javascript', 'typescript'])
 
-export function highlight(str: string, lang?: string) {
+export function highlight(str: string, lang: string) {
   if (lang) {
     lang = lang.toLowerCase()
 
