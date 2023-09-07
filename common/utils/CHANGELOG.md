@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.0...utils@2.0.1) (2023-09-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** unexpected isElement crash process ([4877ed6](https://github.com/vexip-ui/vexip-ui/commit/4877ed6bc4b078760ae22d55c8d646132f2cd660))
+
+
+
 # [2.0.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.16.0...utils@2.0.0) (2023-08-23)
 
 
