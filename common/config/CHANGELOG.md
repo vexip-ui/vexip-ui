@@ -1,3 +1,17 @@
+## [1.1.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.0...config@1.1.1) (2023-09-07)
+
+
+### ✨ Features
+
+* **select:** add count-limit prop ([adbda63](https://github.com/vexip-ui/vexip-ui/commit/adbda6343fee59ffaf9d220d23899c64c195aa97))
+
+
+### 🐞 Bug Fixes
+
+* **config:** cannot include default excluded props ([147fab5](https://github.com/vexip-ui/vexip-ui/commit/147fab51487871e9a09af7e3d9e88d2af3d0ff46))
+
+
+
 # [1.1.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.0.1...config@1.1.0) (2023-08-30)
 
 
