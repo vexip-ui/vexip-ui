@@ -62,6 +62,8 @@ You can custom the major color through the `color` prop.
 
 ### Extra Content
 
+^[Since v2.1.0](!s)
+
 The `prefix` and `suffix` props can be used to insert extra content before and after respectively.
 
 :::
