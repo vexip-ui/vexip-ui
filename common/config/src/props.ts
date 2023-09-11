@@ -92,8 +92,7 @@ export function useProps<T extends Record<string, any>>(
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
-    import.meta.env.MODE !== 'test' &&
-      validator &&
+    validator &&
       watch(
         () => sourceProps[key],
         value => {

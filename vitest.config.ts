@@ -26,10 +26,14 @@ export default defineConfig({
     include: ['components/*/tests/*.spec.{ts,tsx}'],
     environment: 'happy-dom',
     clearMocks: true,
-    setupFiles: [resolve(__dirname, 'scripts/test-setup.ts')],
+    setupFiles: [resolve(rootDir, 'scripts/test-setup.ts')],
     coverage: {
-      exclude: dirs.filter(f => f !== 'components').map(f => `${f}/**`),
-      reporter: ['text'],
+      exclude: [
+        ...dirs.filter(f => f !== 'components').map(f => `${f}/**`),
+        '**/*.style.ts',
+        '**/*.css.ts'
+      ],
+      reporter: ['text', 'html'],
       extension: ['ts', 'tsx', 'vue']
     },
     testTimeout: 10000
