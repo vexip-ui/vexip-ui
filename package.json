@@ -33,7 +33,6 @@
     "lint:style": "stylelint --cache \"**/*.{vue,scss}\"",
     "postpublish": "pinst --enable",
     "precommit": "lint-staged -c ./.husky/.lintstagedrc -q --allow-empty",
-    "preinstall": "npx only-allow pnpm",
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,json,css,scss,vue,html,md}\"",
