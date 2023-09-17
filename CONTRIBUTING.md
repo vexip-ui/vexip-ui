@@ -73,8 +73,16 @@ Wait patiently for the files to be created, then you can check the files in the 
 - `docs/zh-CN/component/[component].md`
 - `style/[component].scss`
 
-After confirming, you can execute the bootstrap command and start developing the component and its documentation.
+In addition to the above template files, we also have some file name conventions:
+
+- `components/[component]/symbol.ts` is used to define types and some common constants and variables
+- `components/[component]/helpers.ts` is used to define some dedicated helper methods
+- `components/[component]/hooks.ts` is used to define some dedicated hook methods
+
+After confirming, you can execute the bootstrap command:
 
 ```sh
 pnpm run bootstrap
 ```
+
+After finished, you can start developing the component and its documentation.

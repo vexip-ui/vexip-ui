@@ -16,7 +16,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <Alert v-bind="$attrs" :title="title ? (i18n ? t(title) : title) : undefined">
+  <Alert class="docs-alert" v-bind="$attrs" :title="title ? (i18n ? t(title) : title) : undefined">
     <slot></slot>
   </Alert>
 </template>

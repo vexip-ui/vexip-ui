@@ -120,6 +120,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
     >
       <div :class="nh.be('panel')">
@@ -302,7 +303,8 @@ export default defineComponent({
       outsideClose: true,
       outsideCancel: false,
       placeholder: null,
-      unitReadonly: false
+      unitReadonly: false,
+      popperAlive: null
     })
 
     const locale = useLocale('timePicker', toRef(props, 'locale'))

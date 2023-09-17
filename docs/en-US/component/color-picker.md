@@ -20,6 +20,16 @@ Add the `alpha` prop to enable transparency selection.
 
 :::
 
+:::demo color-picker/label
+
+### Color Label
+
+^[Since v2.2.4](!s)
+
+Add the `show-label` prop to show the color label, and use `label-format` prop to specify the format of the color label individually.
+
+:::
+
 :::demo color-picker/shortcut
 
 ### Shortcuts
@@ -50,29 +60,38 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 ## API
 
+### Preset Types
+
+```ts
+type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
+```
+
 ### ColorPicker Props
 
-| Name           | Type                               | Description                                                                                   | Default     | Since   |
-| -------------- | ---------------------------------- | --------------------------------------------------------------------------------------------- | ----------- | ------- |
-| value          | `string`                           | The value of the color picker, can use `v-model` two-way binding                              | `'#339af0'` | -       |
-| visible        | `boolean`                          | Set the display state of the color control panel                                              | `false`     | -       |
-| format         | `'rgb' \| 'hsl' \| 'hsv' \| 'hex'` | Type to format the color before updating value                                                | `'rgb'`     | -       |
-| size           | `small \| default \| large`        | The size of color picker                                                                      | `'default'` | -       |
-| alpha          | `boolean`                          | whether to use transparency selection                                                         | `false`     | -       |
-| disabled       | `boolean`                          | Set whether is disabled                                                                       | `false`     | -       |
-| no-input       | `boolean`                          | Set whether to disable Input input color value                                                | `false`     | -       |
-| shortcut       | `boolean \| string[]`              | Set whether to use shortcut to select color, can specify the list when passing a string array | `false`     | -       |
-| prefix         | `Record<string, any>`              | The prefix icon, invalid when using prefix slot                                               | `null`      | `2.0.0` |
-| prefix-color   | `string`                           | The color of the prefix content, affects the prefix slot                                      | `''`        | `2.0.0` |
-| suffix         | `Record<string, any>`              | The suffix icon, invalid when using suffix slot                                               | `null`      | `2.0.0` |
-| suffix-color   | `string`                           | The color of the suffix content, which affects the suffix slot                                | `''`        | `2.0.0` |
-| no-suffix      | `boolean`                          | Set whether to disable suffix icon                                                            | `false`     | `2.0.0` |
-| static-suffix  | `boolean`                          | Set whether the suffix icon is static                                                         | `false`     | `2.0.0` |
-| loading        | `boolean`                          | Set whether is loading                                                                        | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`              | Set the loading icon                                                                          | `Spinner`   | `2.0.0` |
-| loading-lock   | `boolean`                          | Set whether to be read-only when loading                                                      | `false`     | `2.0.0` |
-| loading-effect | `string`                           | Set the effect animation for the loading icon                                                 | `false`     | `2.0.0` |
-| locale         | `LocaleConfig['colorPicker']`      | Set the locale config                                                                         | `null`      | `2.1.0` |
+| Name           | Type                          | Description                                                                                                | Default     | Since   |
+| -------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| value          | `string`                      | The value of the color picker, can use `v-model` two-way binding                                           | `''`        | -       |
+| visible        | `boolean`                     | Set the display state of the color control panel                                                           | `false`     | -       |
+| format         | `ColorFormat`                 | The formatting type of the color value                                                                     | `'rgb'`     | -       |
+| size           | `small \| default \| large`   | The size of color picker                                                                                   | `'default'` | -       |
+| alpha          | `boolean`                     | whether to use transparency selection                                                                      | `false`     | -       |
+| disabled       | `boolean`                     | Set whether is disabled                                                                                    | `false`     | -       |
+| no-input       | `boolean`                     | Set whether to disable Input input color value                                                             | `false`     | -       |
+| shortcut       | `boolean \| string[]`         | Set whether to use shortcut to select color, can specify the list when passing a string array              | `false`     | -       |
+| prefix         | `Record<string, any>`         | The prefix icon, invalid when using prefix slot                                                            | `null`      | `2.0.0` |
+| prefix-color   | `string`                      | The color of the prefix content, affects the prefix slot                                                   | `''`        | `2.0.0` |
+| suffix         | `Record<string, any>`         | The suffix icon, invalid when using suffix slot                                                            | `null`      | `2.0.0` |
+| suffix-color   | `string`                      | The color of the suffix content, which affects the suffix slot                                             | `''`        | `2.0.0` |
+| no-suffix      | `boolean`                     | Set whether to disable suffix icon                                                                         | `false`     | `2.0.0` |
+| static-suffix  | `boolean`                     | Set whether the suffix icon is static                                                                      | `false`     | `2.0.0` |
+| loading        | `boolean`                     | Set whether is loading                                                                                     | `false`     | `2.0.0` |
+| loading-icon   | `Record<string, any>`         | Set the loading icon                                                                                       | `Spinner`   | `2.0.0` |
+| loading-lock   | `boolean`                     | Set whether to be read-only when loading                                                                   | `false`     | `2.0.0` |
+| loading-effect | `string`                      | Set the effect animation for the loading icon                                                              | `false`     | `2.0.0` |
+| locale         | `LocaleConfig['colorPicker']` | Set the locale config                                                                                      | `null`      | `2.1.0` |
+| popper-alive   | `boolean`                     | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set | `null`      | `2.2.3` |
+| show-label     | `boolean`                     | Whether to display the color label                                                                         | `false`     | `2.2.4` |
+| label-format   | `ColorFormat`                 | The formatting type of the color label, the same as the `format` prop when not specified                   | `null`      | `2.2.4` |
 
 ```js
 const defaultShortcuts = [
@@ -112,3 +131,11 @@ const defaultShortcuts = [
 | outside-close | Emitted when the panel is closed by clicking outside the control                                | -                                                        | -     |
 | change        | Emitted when the selected color changes, returns the formatted color value                      | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |
 | shortcut      | Emitted when a color is selected using the shortcut function, returns the formatted color value | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |
+
+### ColorPicker Slots
+
+| Name   | Description                                    | Parameters                                                          | Since   |
+| ------ | ---------------------------------------------- | ------------------------------------------------------------------- | ------- |
+| prefix | Slot for prefix content, usually a single icon | -                                                                   | -       |
+| suffix | Slot for suffix content, usually a single icon | -                                                                   | -       |
+| label  | Slot for content of color label                | `{ color: RGBColor, alpha: number, empty: boolean, label: string }` | `2.2.4` |

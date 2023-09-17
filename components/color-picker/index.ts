@@ -9,3 +9,4 @@ export type ColorPickerExposed = ComponentPublicInstance & InstanceType<typeof C
 
 export type { Color } from '@vexip-ui/utils'
 export type { ColorPickerProps, ColorPickerCProps } from './props'
+export type { ColorFormat } from './symbol'

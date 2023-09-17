@@ -18,7 +18,7 @@ import type { Router } from 'vitepress'
 export default {
   Layout,
   enhanceApp({ app, router }: { app: App, router: Router }) {
-    (prismjs as any).manual = false
+    prismjs.manual = true
 
     syncThemeColors()
     syncDirection()
@@ -78,7 +78,7 @@ function enhanceRouter(router: Router) {
 
   if (isClient && location.pathname === '/') {
     currentPath = currentPath === '/' ? `/${locale.value}/` : currentPath
-    isClient && (window.location.href = currentPath)
+    // isClient && (window.location.href = currentPath)
   }
 
   syncLocale(currentPath)

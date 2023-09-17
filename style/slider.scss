@@ -10,7 +10,8 @@ $slider: map.merge(
     track-bg-color-hover: get-css-var('fill-color-hover'),
     track-bg-color-disabled: get-css-var('slider-track-bg-color'),
     track-height: 4px,
-    filler-bg-color: get-css-var('color-primary-base'),
+    filler-bg-color: get-css-var('color-primary-opacity-2'),
+    filler-bg-color-hover: get-css-var('color-primary-base'),
     filler-bg-color-disabled: get-css-var('fill-color-disabled'),
     handler-size: 16px,
     handler-bg-color: get-css-var('color-white'),
@@ -90,7 +91,8 @@ $slider: map.merge(
     transition: get-css-var('transition-background');
   }
 
-  &:hover &__track {
+  &:hover &__track,
+  &--sliding &__track {
     background-color: get-css-var('slider-track-bg-color-hover');
   }
 
@@ -105,7 +107,8 @@ $slider: map.merge(
   }
 
   &--disabled &__track,
-  &--disabled:hover &__track {
+  &--disabled:hover &__track,
+  &--disabled#{&}--sliding &__track {
     background-color: get-css-var('slider-track-bg-color-disabled');
   }
 
@@ -117,7 +120,14 @@ $slider: map.merge(
     transition: get-css-var('transition-background');
   }
 
-  &--disabled &__filler {
+  &:hover &__filler,
+  &--sliding &__filler {
+    background-color: get-css-var('slider-filler-bg-color-hover');
+  }
+
+  &--disabled &__filler,
+  &--disabled:hover &__filler,
+  &--disabled#{&}--sliding &__filler {
     background-color: get-css-var('slider-filler-bg-color-disabled');
   }
 
@@ -125,6 +135,9 @@ $slider: map.merge(
 
   &__trigger {
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: $handler-size;
     height: $handler-size;
 
@@ -152,23 +165,7 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
-      get-css-var('transition-transform');
-
-    &:hover {
-      box-shadow: get-css-var('slider-handler-shadow-hover');
-      transform: scale(get-css-var('slider-handler-scale-hover'));
-    }
-
-    &:focus {
-      box-shadow: get-css-var('slider-handler-shadow-focus');
-      transform: scale(get-css-var('slider-handler-scale-focus'));
-    }
-
-    &--sliding {
-      box-shadow: get-css-var('slider-handler-shadow-focus');
-      transform: scale(get-css-var('slider-handler-scale-focus'));
-    }
+    transition: get-css-var('transition-border'), get-css-var('transition-shadow');
 
     &::before {
       top: 2px;
@@ -177,24 +174,56 @@ $slider: map.merge(
       height: calc(100% - 4px);
       opacity: 0%;
     }
+  }
 
-    &--active::before {
+  $handler: #{&}__handler;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 0;
+    transition: get-css-var('transition-transform');
+
+    &:hover {
+      transform: scale(get-css-var('slider-handler-scale-hover'));
+
+      #{$handler} {
+        box-shadow: get-css-var('slider-handler-shadow-hover');
+      }
+    }
+
+    &:focus,
+    &--sliding {
+      transform: scale(get-css-var('slider-handler-scale-focus'));
+
+      #{$handler} {
+        box-shadow: get-css-var('slider-handler-shadow-focus');
+      }
+    }
+
+    &--loading #{$handler}::before {
       opacity: 100%;
     }
   }
 
-  &--disabled &__handler {
-    cursor: not-allowed;
-    border-color: get-css-var('slider-handler-b-color-disabled');
+  &--disabled &__button {
+    #{$handler} {
+      cursor: not-allowed;
+      border-color: get-css-var('slider-handler-b-color-disabled');
+    }
 
     &,
     &:hover {
-      box-shadow: get-css-var('slider-handler-shadow-disabled');
       transform: scale(1);
+
+      #{$handler} {
+        box-shadow: get-css-var('slider-handler-shadow-disabled');
+      }
     }
   }
 
-  &--disabled#{&}--sliding &__handler {
+  &--disabled#{&}--sliding &__button &__handler {
     box-shadow: get-css-var('slider-handler-shadow-disabled');
     transform: scale(1);
   }
@@ -216,10 +245,15 @@ $slider: map.merge(
     border: get-css-var('slider-handler-b-width') solid
       get-css-var('slider-handler-b-color-disabled');
     border-radius: $marker-size;
+    transition: get-css-var('transition-border');
 
     &--in-range {
       border-color: get-css-var('slider-handler-b-color');
     }
+  }
+
+  &--disabled &__point {
+    border-color: get-css-var('slider-handler-b-color-disabled');
   }
 
   &__markers {
@@ -248,7 +282,7 @@ $slider: map.merge(
         (
           filler-bg-color: 'color' $state 'base',
           handler-b-color: 'color' $state 'base',
-          handler-s-color: 'color' state 'light-6'
+          handler-s-color: 'color' $state 'light-6'
         )
       );
     }

@@ -138,6 +138,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop
       @enter="handlePanelsEnter"
     >
@@ -317,7 +318,8 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      transparent: false
+      transparent: false,
+      popperAlive: null
     })
 
     const icons = useIcons()

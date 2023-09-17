@@ -10,7 +10,7 @@ import type { DOMWrapper } from '@vue/test-utils'
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 const LONG_OPTIONS = [
-  'longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1 longOption 1'
+  'Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Option 1'
 ]
 
 function getValue(wrapper: DOMWrapper<Element>) {
@@ -176,9 +176,22 @@ describe('Select', () => {
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
   })
 
-  it('options show', async () => {
+  it('popper show', async () => {
     const wrapper = mount(Select, {
       props: { options: OPTIONS }
+    })
+
+    expect(wrapper.find('.vxp-select__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-select__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(Select, {
+      props: { popperAlive: false, options: OPTIONS }
     })
 
     expect(wrapper.find('.vxp-select__popper').exists()).toBe(false)
@@ -395,6 +408,33 @@ describe('Select', () => {
     await options[0].trigger('click')
     expect(onChange).toHaveBeenCalledTimes(4)
     expect(onChange).toHaveBeenLastCalledWith([OPTIONS[1], OPTIONS[0]], [OPTIONS[1], OPTIONS[0]])
+  })
+
+  it('count limit', async () => {
+    const onChange = vi.fn()
+    const onSelect = vi.fn()
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        multiple: true,
+        options: OPTIONS,
+        countLimit: 1,
+        onChange,
+        onSelect
+      }
+    })
+
+    const options = wrapper.findAll('.vxp-option')
+
+    await options[0].trigger('click')
+    expect(options[1].classes()).toContain('vxp-option--disabled')
+
+    onChange.mockClear()
+    onSelect.mockClear()
+
+    await options[1].trigger('click')
+    expect(onSelect).toHaveBeenCalledTimes(0)
+    expect(onChange).toHaveBeenCalledTimes(0)
   })
 
   it('clearable', async () => {

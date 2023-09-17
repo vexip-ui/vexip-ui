@@ -68,6 +68,11 @@ $color-picker: map.merge(
     color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
     border-radius: get-css-var('color-picker-marker-radius');
+
+    &--with-label {
+      width: 24px;
+      min-width: 24px;
+    }
   }
 
   &--alpha &__marker {
@@ -76,6 +81,13 @@ $color-picker: map.merge(
 
   &--empty &__marker {
     background-image: none;
+  }
+
+  &__label {
+    display: flex;
+    margin-inline-end: 6px;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   &__arrow {
@@ -87,7 +99,7 @@ $color-picker: map.merge(
     transition: get-css-var('transition-transform');
   }
 
-  &--focused &__arrow .#{$namespace}-icon {
+  &--focused &__arrow {
     transform: rotate(180deg);
   }
 

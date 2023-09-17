@@ -54,6 +54,7 @@ export const autoCompleteProps = buildProps({
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
   showEmpty: booleanProp,
   name: String,
+  popperAlive: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onSelect: eventProp<EventListener<ChangeEvent>>(),

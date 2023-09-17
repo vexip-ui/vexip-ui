@@ -183,6 +183,28 @@ describe('DatePicker', () => {
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
   })
 
+  it('popper show', async () => {
+    const wrapper = mount(DatePicker)
+
+    expect(wrapper.find('.vxp-date-picker__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-date-picker__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(DatePicker, {
+      props: { popperAlive: false }
+    })
+
+    expect(wrapper.find('.vxp-date-picker__popper').exists()).toBe(false)
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-date-picker__popper').exists()).toBe(true)
+  })
+
   it('panel actions', async () => {
     vi.setSystemTime('2022-05-27 09:24:47')
 

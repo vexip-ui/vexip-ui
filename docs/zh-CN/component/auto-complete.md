@@ -132,6 +132,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`      | `2.1.25` |
 | show-empty     | `boolean`                                        | 是否在选项为空时也显示下拉选项列表                                                           | `false`     | `2.2.0`  |
 | name           | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
+| popper-alive   | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                           | `null`      | `2.2.3`  |
 
 ### AutoComplete 事件
 

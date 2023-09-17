@@ -14,6 +14,14 @@ import type { PositionPayload, SizePayload } from './symbol'
 
 const positionType = [Number, String]
 
+export const positionValidator = (value: string | number) => {
+  return value === 'auto' || !Number.isNaN(parseFloat(value as string))
+}
+export const positionProp = {
+  default: 'auto' as const,
+  validator: positionValidator
+}
+
 export const modalProps = buildProps({
   locale: localeProp('modal'),
   transfer: booleanStringProp,

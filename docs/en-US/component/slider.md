@@ -82,7 +82,17 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 ### Different States
 
-Different states can be set via `state`.
+Different states can be set via `state` prop.
+
+:::
+
+:::demo slider/trigger
+
+### Custom Trigger
+
+^[Since v2.2.3](!s)
+
+You can custom the trigger content via `trigger` slot.
 
 :::
 
@@ -91,6 +101,13 @@ Different states can be set via `state`.
 ### Preset Types
 
 ```ts
+interface SliderSlotParams {
+  value: number,
+  disabled: boolean,
+  loading: boolean,
+  sliding: boolean
+}
+
 interface SliderMarker {
   label?: string,
   class?: ClassType,
@@ -110,7 +127,7 @@ interface SliderMarker {
 | step         | `number`                                           | The span of each value change of the sliding input bar                                         | `1`       | -       |
 | vertical     | `boolean`                                          | Set whether the sliding input bar is vertical, the parent element needs to have a valid height | `false`   | -       |
 | hide-tip     | `boolean`                                          | Set whether to disable Tooltip                                                                 | `false`   | -       |
-| tip-transfer | `boolean`                                          | Set Tooltip's `transfer` property                                                              | `false`   | -       |
+| tip-transfer | `boolean`                                          | Set Tooltip's `transfer` prop                                                                  | `false`   | -       |
 | disabled     | `boolean`                                          | Set whether to disable                                                                         | `false`   | -       |
 | loading      | `boolean`                                          | Set whether is loading                                                                         | `false`   | `2.0.0` |
 | loading-lock | `boolean`                                          | Set whether to be read-only when loading                                                       | `false`   | `2.0.0` |
@@ -128,7 +145,8 @@ interface SliderMarker {
 
 ### Slider Slots
 
-| Name   | Description             | Parameters                                                    | Since   |
-| ------ | ----------------------- | ------------------------------------------------------------- | ------- |
-| tip    | Slot for tip content    | `{ value: number }`                                           | -       |
-| marker | Slot for marker content | `{ marker: SliderMarker, percent: number, inRange: boolean }` | `2.0.0` |
+| Name    | Description              | Parameters                                                  | Since   |
+| ------- | ------------------------ | ----------------------------------------------------------- | ------- |
+| trigger | Slot for trigger content | `SliderSlotParams`                                          | `2.2.3` |
+| tip     | Slot for tip content     | `SliderSlotParams`                                          | -       |
+| marker  | Slot for marker content  | `{ marker: SliderMarker, value: number, inRange: boolean }` | `2.0.0` |

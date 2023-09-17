@@ -108,23 +108,46 @@ describe('ColorPicker', () => {
     const wrapper = mount(ColorPicker, {
       props: { onToggle }
     })
-    const selector = wrapper.find('.vxp-color-picker__selector')
 
-    await selector.trigger('click')
+    await wrapper.trigger('click')
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(true)
     expect(wrapper.emitted()).toHaveProperty('update:visible')
     expect(wrapper.emitted('update:visible')![0]).toEqual([true])
 
-    await selector.trigger('click')
+    await wrapper.trigger('click')
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(onToggle).toHaveBeenLastCalledWith(false)
     expect(wrapper.emitted('update:visible')![1]).toEqual([false])
 
     await wrapper.setProps({ disabled: true })
-    await selector.trigger('click')
+    await wrapper.trigger('click')
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
+  })
+
+  it('popper show', async () => {
+    const wrapper = mount(ColorPicker)
+
+    expect(wrapper.find('.vxp-color-picker__popper').attributes('style')).toContain(
+      'display: none;'
+    )
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-color-picker__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(ColorPicker, {
+      props: { popperAlive: false }
+    })
+
+    expect(wrapper.find('.vxp-color-picker__popper').exists()).toBe(false)
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-color-picker__popper').exists()).toBe(true)
   })
 
   it('prefix', () => {

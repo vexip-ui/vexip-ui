@@ -1,3 +1,5 @@
+import { isClient } from './common'
+
 import type { TransferNode } from './dom-event'
 
 const TABABLE_SELECTOR = [
@@ -13,7 +15,7 @@ const TABABLE_SELECTOR = [
   .join(', ')
 
 function isElement(el?: Element | null): el is HTMLElement {
-  return !!el && el.nodeType === Node.ELEMENT_NODE
+  return !!el && el.nodeType === (isClient ? Node.ELEMENT_NODE : 1)
 }
 
 function ensureElement(el?: Element | null) {

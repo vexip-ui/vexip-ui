@@ -120,6 +120,7 @@
 | range           | `boolean`                                                 | 设置是否开启范围选择模式                                                           | `false`          | `2.1.1`  |
 | placeholder     | `string \| string[]`                                      | 设置时间选择器的占位符                                                             | `null`           | `2.1.1`  |
 | unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                             | `false`          | `2.1.2`  |
+| popper-alive    | `boolean`                                                 | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                 | `null`           | `2.2.3`  |
 
 ### TimePicker 事件
 

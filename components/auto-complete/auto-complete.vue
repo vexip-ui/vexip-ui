@@ -27,6 +27,7 @@
     :transparent="transparent"
     :filter="props.filter"
     :ignore-case="props.ignoreCase"
+    :popper-alive="props.popperAlive"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -175,7 +176,8 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      popperAlive: null
     })
 
     const currentValue = ref(props.value)

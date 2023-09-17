@@ -132,6 +132,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`     | `2.1.25` |
 | show-empty     | `boolean`                                        | Whether show option list when empty                                                                                        | `false`     | `2.2.0`  |
 | name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
+| popper-alive   | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                 | `null`      | `2.2.3`  |
 
 ### AutoComplete Events
 

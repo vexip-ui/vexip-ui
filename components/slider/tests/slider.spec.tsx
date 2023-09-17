@@ -133,12 +133,12 @@ describe('Slider', () => {
   it('loading', async () => {
     const wrapper = mount(Slider)
 
-    expect(wrapper.find('.vxp-slider__handler').classes()).not.toContain(
-      'vxp-slider__handler--active'
+    expect(wrapper.find('.vxp-slider__button').classes()).not.toContain(
+      'vxp-slider__button--loading'
     )
 
     await wrapper.setProps({ loading: true })
-    expect(wrapper.find('.vxp-slider__handler').classes()).toContain('vxp-slider__handler--active')
+    expect(wrapper.find('.vxp-slider__button').classes()).toContain('vxp-slider__button--loading')
   })
 
   it('loading lock', async () => {

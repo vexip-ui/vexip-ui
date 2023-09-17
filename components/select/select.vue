@@ -201,6 +201,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
@@ -242,7 +243,7 @@
             v-else
             :label="option.label"
             :value="option.value"
-            :disabled="option.disabled"
+            :disabled="option.disabled || (limited && !isSelected(option))"
             :divided="option.divided"
             :no-title="option.title"
             :hitting="option.hitting"
@@ -434,7 +435,9 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      popperAlive: null,
+      countLimit: 0
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -708,6 +711,11 @@ export default defineComponent({
     const hittingLabel = computed(() => {
       return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
     })
+    const limited = computed(() => {
+      return (
+        props.multiple && props.countLimit > 0 && currentValues.value.length >= props.countLimit
+      )
+    })
 
     function getOptionFromMap(value?: SelectBaseValue | null) {
       if (isNull(value)) return null
@@ -979,6 +987,8 @@ export default defineComponent({
           userOptions.value.length = 0
         }
 
+        if (limited.value) return
+
         if (dynamicOption.value && value === dynamicOption.value) {
           const newOption = { ...dynamicOption }
 
@@ -1208,6 +1218,7 @@ export default defineComponent({
       normalOptions,
       optionParentMap,
       hittingLabel,
+      limited,
 
       wrapper,
       reference,

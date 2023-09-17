@@ -3,15 +3,16 @@ import { computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 
-import { useData } from 'vitepress'
+import { useData, useRouter } from 'vitepress'
 import { ChevronLeft, ChevronRight } from '@vexip-ui/icons'
 import { useRtl } from '@vexip-ui/hooks'
 import { flatTree } from '@vexip-ui/utils'
 import { ensureStartingSlash, removeExt } from '../../shared'
 
-import type { ThemeConfig } from '../types'
+import type { AsideMenuItem, ThemeConfig } from '../types'
 
 const { theme, page, frontmatter } = useData<ThemeConfig>()
+const router = useRouter()
 const { t, locale } = useI18n({ useScope: 'global' })
 const { isRtl } = useRtl()
 
@@ -40,40 +41,28 @@ const candidates = computed(() => {
 const index = computed(() => {
   return candidates.value.findIndex(item => path.value.startsWith(`/${locale.value}${item.link}`))
 })
-const prev = computed(() => {
-  const prev = frontmatter.value.prev
+const prev = computed(() => createLink(frontmatter.value.prev, candidates.value[index.value - 1]))
+const next = computed(() => createLink(frontmatter.value.next, candidates.value[index.value + 1]))
 
-  return prev === false
+function createLink(item: false | string | AsideMenuItem, fallback?: AsideMenuItem) {
+  return item === false
     ? undefined
     : {
+        text: (typeof item === 'object' ? item.text : undefined) ?? fallback?.text,
         i18n:
-          (typeof prev === 'string' ? prev : typeof prev === 'object' ? prev.i18n : undefined) ??
-          candidates.value[index.value - 1]?.i18n,
-        link:
-          (typeof prev === 'object' ? prev.link : undefined) ??
-          candidates.value[index.value - 1]?.link,
-        origin:
-          (typeof prev === 'object' ? prev.origin : undefined) ??
-          candidates.value[index.value - 1]?.origin
+          (typeof item === 'string'
+            ? item
+            : typeof item === 'object'
+              ? item.i18n || item.key
+              : undefined) ??
+          fallback?.i18n ??
+          fallback?.key,
+        link: (typeof item === 'object' ? item.link : undefined) ?? fallback?.link,
+        subtext: (typeof item === 'object' ? item.subtext : undefined) ?? fallback?.subtext,
+        subI18n: (typeof item === 'object' ? item.subI18n : undefined) ?? fallback?.subI18n,
+        noSub: (typeof item === 'object' ? item.noSub : undefined) ?? fallback?.noSub ?? []
       }
-})
-const next = computed(() => {
-  const next = frontmatter.value.next
-
-  return next === false
-    ? undefined
-    : {
-        i18n:
-          (typeof next === 'string' ? next : typeof next === 'object' ? next.i18n : undefined) ??
-          candidates.value[index.value + 1]?.i18n,
-        link:
-          (typeof next === 'object' ? next.link : undefined) ??
-          candidates.value[index.value + 1]?.link,
-        origin:
-          (typeof next === 'object' ? next.origin : undefined) ??
-          candidates.value[index.value + 1]?.origin
-      }
-})
+}
 </script>
 
 <template>
@@ -82,13 +71,15 @@ const next = computed(() => {
       v-if="prev?.link"
       class="page-links__prev"
       type="primary"
-      :to="`/${locale}${prev.link}`"
-      target="_self"
       :icon="isRtl ? ChevronRight : ChevronLeft"
+      @click="router.go(`/${locale}${prev.link}`)"
     >
-      <span>{{ t(prev.i18n) }}</span>
-      <span v-if="prev.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
-        {{ prev.origin }}
+      <span>{{ prev.text || t(prev.i18n!) }}</span>
+      <span
+        v-if="!prev.noSub.includes(locale as string) && (prev.subtext || prev.subI18n)"
+        style="margin-inline-start: 6px"
+      >
+        {{ prev.subtext || t(prev.subI18n!) }}
       </span>
     </Linker>
     <span role="none" style="flex: auto"></span>
@@ -96,12 +87,14 @@ const next = computed(() => {
       v-if="next?.link"
       class="page-links__next"
       type="primary"
-      :to="`/${locale}${next.link}`"
-      target="_self"
+      @click="router.go(`/${locale}${next.link}`)"
     >
-      <span>{{ t(next.i18n) }}</span>
-      <span v-if="next.origin && locale !== 'en-US'" style="margin-inline-start: 6px">
-        {{ next.origin }}
+      <span>{{ next.text || t(next.i18n!) }}</span>
+      <span
+        v-if="!next.noSub.includes(locale as string) && (next.subtext || next.subI18n)"
+        style="margin-inline-start: 6px"
+      >
+        {{ next.subtext || t(next.subI18n!) }}
       </span>
       <Icon
         :icon="isRtl ? ChevronLeft : ChevronRight"

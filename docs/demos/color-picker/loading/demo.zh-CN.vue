@@ -1,8 +1,12 @@
 <template>
-  <ColorPicker :loading="loading" placeholder="加载中可编辑"></ColorPicker>
-  <br />
-  <br />
-  <ColorPicker :loading="loading" loading-lock placeholder="加载中不可编辑"></ColorPicker>
+  <p>
+    加载中可编辑：
+    <ColorPicker :loading="loading"></ColorPicker>
+  </p>
+  <p>
+    加载中不可编辑：
+    <ColorPicker :loading="loading" loading-lock></ColorPicker>
+  </p>
   <p>
     加载中：
     <Switch v-model:value="loading"></Switch>

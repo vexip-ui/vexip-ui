@@ -302,7 +302,9 @@ export default defineComponent({
       }
 
       showPassword.value = !showPassword.value
-      inputControl.value?.focus()
+      nextTick(() => {
+        inputControl.value?.focus()
+      })
     }
 
     function handleClear(event: MouseEvent) {

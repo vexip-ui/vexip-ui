@@ -188,6 +188,6 @@ function useTag(md: MarkdownIt) {
 
     const type = typeShortcuts[info] || info
 
-    return `<Tag type="${type}" simple>${content}</Tag>`
+    return `<Tag class="docs-tag" type="${type}" simple>${content}</Tag>`
   }
 }

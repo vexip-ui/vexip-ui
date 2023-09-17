@@ -184,6 +184,7 @@ interface CascaderOptionState {
 | loading-effect  | `string`                                         | Set the effect animation for the loading icon                                                                                                                                      | `false`          | `2.1.0` |
 | transparent     | `boolean`                                        | Set whether to be transparent                                                                                                                                                      | `false`          | `2.0.2` |
 | locale          | `LocaleConfig['select']`                         | Set the locale config                                                                                                                                                              | `null`           | `2.1.0` |
+| popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                                         | `null`           | `2.2.3` |
 
 ### Cascader Events
 
