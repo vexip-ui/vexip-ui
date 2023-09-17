@@ -13,7 +13,7 @@ $avatar: map.merge(
     b-style: get-css-var('border-style'),
     size: 32px,
     radius: get-css-var('radius-base'),
-    series-span: 8px,
+    series-span: get-css-var('margin-base'),
     image-fit: 'cover',
     group-offset: -8px
   ),

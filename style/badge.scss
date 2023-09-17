@@ -12,7 +12,7 @@ $badge: map.merge(
     line-height: get-css-var('line-height-secondary'),
     height: 16px,
     v-padding: 0,
-    h-padding: 6px,
+    h-padding: get-css-var('padding-small-1'),
     family: #{Helvetica,
     'Microsoft YaHei',
     SimSun,

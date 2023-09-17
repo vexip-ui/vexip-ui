@@ -46,7 +46,7 @@ $anchor: map.merge(
   }
 
   &__link {
-    padding: 4px 14px;
+    padding: get-css-var('padding-small-2') get-css-var('padding-large-3');
     margin-inline-start: calc(get-css-var('anchor-track-width') * -1);
     color: get-css-var('anchor-link-color');
     text-decoration: none;

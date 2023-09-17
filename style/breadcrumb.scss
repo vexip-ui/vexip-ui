@@ -10,10 +10,10 @@ $breadcrumb: map.merge(
     b-color-hover: get-css-var('color-primary-light-1'),
     border-shape: get-css-var('border-shape'),
     radius: get-css-var('radius-base'),
-    v-padding: 4px,
-    h-padding: 8px,
-    v-padding-border: 4px,
-    h-padding-border: 8px,
+    v-padding: get-css-var('padding-small-2'),
+    h-padding: get-css-var('padding-base'),
+    v-padding-border: get-css-var('padding-small-2'),
+    h-padding-border: get-css-var('padding-base'),
     padding-border: get-css-var('breadcrumb-v-padding-border')
       get-css-var('breadcrumb-h-padding-border'),
     item-bg-color: transparent,
@@ -71,7 +71,7 @@ $breadcrumb: map.merge(
   }
 
   &__label {
-    padding: 0 6px;
+    padding: 0 get-css-var('padding-small-1');
     color: get-css-var('breadcrumb-label-color');
     text-decoration: none;
     cursor: pointer;
@@ -86,7 +86,7 @@ $breadcrumb: map.merge(
 
   &__separator {
     display: inline-flex;
-    padding: 0 6px;
+    padding: 0 get-css-var('padding-small-1');
     color: get-css-var('breadcrumb-separator-color');
     cursor: pointer;
     user-select: none;
