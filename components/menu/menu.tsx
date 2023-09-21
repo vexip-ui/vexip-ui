@@ -10,6 +10,7 @@ import {
   provide,
   reactive,
   ref,
+  renderSlot,
   toRef,
   watch
 } from 'vue'
@@ -19,7 +20,6 @@ import { callIfFunc, isDefined } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
-import { getSlotRealNodes } from './helper'
 
 import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
 import type { MenuItemState, MenuMarkerType, MenuOptions, MenuState } from './symbol'
@@ -348,17 +348,12 @@ export default defineComponent({
     }
 
     return () => {
-      const list = getSlotRealNodes(slots.default)
-
       return (
         <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1} style={style.value}>
-          {list.length
-            ? (
-                list
-              )
-            : props.horizontal
-              ? (
-                <Overflow class={nh.be('overflow')} inherit>
+          {renderSlot(slots, 'default', {}, () => {
+            return props.horizontal
+              ? [
+                <Overflow class={nh.be('overflow')} inherit key={0}>
                   {{
                     default: renderMenus,
                     counter: ({ count }: { count: number }) => (
@@ -366,10 +361,9 @@ export default defineComponent({
                     )
                   }}
                 </Overflow>
-                )
-              : (
-                  renderMenus()
-                )}
+                ]
+              : renderMenus()
+          })}
         </ul>
       )
     }
