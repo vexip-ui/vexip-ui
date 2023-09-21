@@ -63,10 +63,6 @@ const MenuGroup = defineComponent({
         return null
       }
 
-      if (!props.children?.length) {
-        return null
-      }
-
       const renderItem = (item: MenuOptions) => (
         <MenuItem
           label={item.label}
