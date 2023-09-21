@@ -19,6 +19,7 @@ import { callIfFunc, isDefined } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
+import { getSlotRealNodes } from './helper'
 
 import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
 import type { MenuItemState, MenuMarkerType, MenuOptions, MenuState } from './symbol'
@@ -347,11 +348,13 @@ export default defineComponent({
     }
 
     return () => {
+      const list = getSlotRealNodes(slots.default)
+
       return (
         <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1} style={style.value}>
-          {slots.default
+          {list.length
             ? (
-                slots.default()
+                list
               )
             : props.horizontal
               ? (

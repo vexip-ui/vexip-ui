@@ -5,6 +5,7 @@ import { computed, defineComponent, inject, provide, reactive, ref } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
+import { getSlotRealNodes } from './helper'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from './symbol'
@@ -52,8 +53,10 @@ const MenuGroup = defineComponent({
     provide(MENU_GROUP_STATE, reactive({ indent }))
 
     function renderChildren() {
-      if (slots.default) {
-        return slots.default()
+      const list = getSlotRealNodes(slots.default)
+
+      if (list.length) {
+        return list
       }
 
       if (!props.children?.length) {
