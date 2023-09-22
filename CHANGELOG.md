@@ -1,3 +1,19 @@
+## [2.2.4](https://github.com/vexip-ui/vexip-ui/compare/v2.2.3...v2.2.4) (2023-09-22)
+
+
+### ✨ Features
+
+* **color-picker:** support show and custom label ([7bbde77](https://github.com/vexip-ui/vexip-ui/commit/7bbde77561fdeedfe2f4e004549a45981c9e7032))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** missing header button type ([8dec9aa](https://github.com/vexip-ui/vexip-ui/commit/8dec9aa12582fa0dbfc5d0b5cf4cd7146353ccaf))
+* **hooks:** improve createSlotRender method ([70a0ce9](https://github.com/vexip-ui/vexip-ui/commit/70a0ce9d1ead1a590a2aa5849777cd7428e50ca3))
+* **menu:** ensure default slot display when includes valid content ([#408](https://github.com/vexip-ui/vexip-ui/issues/408)) ([e3466cb](https://github.com/vexip-ui/vexip-ui/commit/e3466cbd8429d174a72605387b317339db28afac))
+
+
+
 ## [2.2.3](https://github.com/vexip-ui/vexip-ui/compare/v2.2.2...v2.2.3) (2023-09-07)
 
 
