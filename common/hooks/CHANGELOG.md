@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.1...hooks@2.0.2) (2023-09-22)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** improve createSlotRender method ([70a0ce9](https://github.com/vexip-ui/vexip-ui/commit/70a0ce9d1ead1a590a2aa5849777cd7428e50ca3))
+
+
+
 ## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.0...hooks@2.0.1) (2023-09-01)
 
 
