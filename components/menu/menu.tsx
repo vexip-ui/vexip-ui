@@ -10,6 +10,7 @@ import {
   provide,
   reactive,
   ref,
+  renderSlot,
   toRef,
   watch
 } from 'vue'
@@ -349,13 +350,10 @@ export default defineComponent({
     return () => {
       return (
         <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1} style={style.value}>
-          {slots.default
-            ? (
-                slots.default()
-              )
-            : props.horizontal
-              ? (
-                <Overflow class={nh.be('overflow')} inherit>
+          {renderSlot(slots, 'default', {}, () => {
+            return props.horizontal
+              ? [
+                <Overflow class={nh.be('overflow')} inherit key={0}>
                   {{
                     default: renderMenus,
                     counter: ({ count }: { count: number }) => (
@@ -363,10 +361,9 @@ export default defineComponent({
                     )
                   }}
                 </Overflow>
-                )
-              : (
-                  renderMenus()
-                )}
+                ]
+              : renderMenus()
+          })}
         </ul>
       )
     }
