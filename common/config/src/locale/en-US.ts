@@ -36,7 +36,8 @@ export function enUSLocale() {
       slideEnd: 'Please slide to the end',
       slide: 'Please slide to a suitable position',
       success: 'Test successful',
-      fixImage: 'Fix image to complete captcha'
+      fixImage: 'Fix image to complete captcha',
+      pointImage: 'Point the text in the image'
     },
 
     checkbox: {

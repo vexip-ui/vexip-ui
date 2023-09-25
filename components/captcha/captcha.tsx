@@ -16,6 +16,7 @@ export default defineComponent({
     const { idFor, disabled, loading, validateField, setFieldValue } = useFieldStore<number>(focus)
 
     const props = useProps('captcha', _props, {
+      type: 'slide',
       slideTarget: {
         default: null,
         validator: value => {

@@ -3,8 +3,10 @@ import { booleanProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { CaptchaType } from './symbol'
 
 export const captchaProps = buildProps({
+  type: String as PropType<CaptchaType>,
   slideTarget: [Number, Array] as PropType<number | number[]>,
   title: String,
   tip: String,
