@@ -1,3 +1,7 @@
+## [1.0.1](https://github.com/vexip-ui/vexip-ui/compare/bem-helper@1.0.0...bem-helper@1.0.1) (2023-09-07)
+
+
+
 # 1.0.0 (2023-05-20)
 
 

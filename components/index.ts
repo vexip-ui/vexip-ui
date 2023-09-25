@@ -1,5 +1,6 @@
 import { install as installDirectives } from '@/directives'
 
+import { Affix } from './affix'
 import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'
@@ -105,6 +106,8 @@ import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
 import { Toast } from './toast'
 import { Tooltip } from './tooltip'
+import { Tour } from './tour'
+import { TourStep } from './tour-step'
 import { Transfer } from './transfer'
 import { Tree } from './tree'
 import { Upload } from './upload'
@@ -124,6 +127,7 @@ export * from './create'
 export type { PropsOptions } from './props'
 
 const components = [
+  Affix,
   Alert,
   Anchor,
   AnchorLink,
@@ -223,6 +227,8 @@ const components = [
   Timeline,
   TimelineItem,
   Tooltip,
+  Tour,
+  TourStep,
   Transfer,
   Tree,
   Upload,
@@ -258,6 +264,7 @@ const components = [
 
 export const install = buildInstall(components)
 
+export * from './affix'
 export * from './alert'
 export * from './anchor'
 export * from './anchor-link'
@@ -363,6 +370,8 @@ export * from './timeline'
 export * from './timeline-item'
 export * from './toast'
 export * from './tooltip'
+export * from './tour'
+export * from './tour-step'
 export * from './transfer'
 export * from './tree'
 export * from './typography'

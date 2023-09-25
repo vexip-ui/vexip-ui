@@ -1,17 +1,20 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './confirm.vue'
+import { proxyExposed } from '@vexip-ui/hooks'
 import { destroyObject, isClient } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { ConfirmInstance, ConfirmOptions, ConfirmType } from './symbol'
+import type { ConfirmButtonType, ConfirmInstance, ConfirmOptions, ConfirmState } from './symbol'
 
 export { confirmProps } from './props'
 
 export type { ConfirmProps, ConfirmCProps } from './props'
-export type { ConfirmType, ConfirmOptions }
+export type { ConfirmButtonType, ConfirmOptions, ConfirmState }
 
 type FuzzyOptions = string | ConfirmOptions
+
+Component.name = 'Confirm'
 
 export class ConfirmManager {
   name: string
@@ -33,10 +36,10 @@ export class ConfirmManager {
     this.config(options)
   }
 
-  open(content: string, type?: ConfirmType): Promise<boolean>
+  open(content: string, type?: ConfirmButtonType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
-  open(content: string, title: string, type?: ConfirmType): Promise<boolean>
-  open(options: FuzzyOptions, title?: string, type?: ConfirmType) {
+  open(content: string, title: string, type?: ConfirmButtonType): Promise<boolean>
+  open(options: FuzzyOptions, title?: string, type?: ConfirmButtonType) {
     if (!isClient) {
       return
     }
@@ -45,13 +48,13 @@ export class ConfirmManager {
       if (type) {
         options = { title, content: options, confirmType: type }
       } else {
-        options = { content: options, confirmType: title as ConfirmType }
+        options = { content: options, confirmType: title as ConfirmButtonType }
       }
     }
 
     const item: ConfirmOptions = { ...this.defaults, ...options }
 
-    if (item.icon && typeof item.icon !== 'function') {
+    if (item.icon && typeof item.icon === 'object') {
       item.icon = markRaw(item.icon)
     }
 
@@ -107,7 +110,7 @@ export class ConfirmManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.proxy as ConfirmInstance
+        this._instance = proxyExposed<ConfirmInstance>(vnode)
       }
 
       document.body.appendChild(this._container.firstElementChild!)

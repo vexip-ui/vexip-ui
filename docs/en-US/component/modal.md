@@ -80,7 +80,28 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 :::
 
+:::demo modal/hook
+
+### Hook Method
+
+Modal component provides a static `open` method that can directly create a disposable modal.
+
+Or you can directly import `useModal` and use it as in the example.
+
+:::
+
 ## API
+
+### Preset Types
+
+```ts
+interface ModalSlotParams {
+  handleResize: () => void,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm: boolean) => Promise<void>
+}
+```
 
 ### Modal Props
 
@@ -94,7 +115,7 @@ Both directions can customize the spatial relationship of the modal by setting t
 | bottom          | `number \| string`            | Set the initial distance from the bottom of the modal, will automatically calculate when it is `'auto'`                                                                                                                 | `'auto'`         | -        |
 | right           | `number \| string`            | Set the initial distance from the right side of the modal, will automatically calculate when it is `'auto'`                                                                                                             | `'auto'`         | -        |
 | title           | `string`                      | Set the title of the modal                                                                                                                                                                                              | `''`             | -        |
-| closable        | `boolean`                     | Set whether to have a close button                                                                                                                                                                                      | `true`           | -        |
+| closable        | `boolean`                     | Set whether to display a close button                                                                                                                                                                                   | `true`           | -        |
 | mask-close      | `boolean`                     | Set whether the mask layer can be closed by clicking                                                                                                                                                                    | `true`           | -        |
 | inner           | `boolean`                     | Set whether it is an inline modal, after opening, the positioning will change from fixed to absolute                                                                                                                    | `false`          | -        |
 | modal-class     | `ClassType`                   | Custom class name of the modal                                                                                                                                                                                          | `null`           | -        |
@@ -114,27 +135,27 @@ Both directions can customize the spatial relationship of the modal by setting t
 
 ### Modal Events
 
-| Name         | Description                                                                                                        | Parameters                                  | Since |
-| ------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- | ----- |
-| toggle       | Emitted when the active state of the modal changes, returns the current active state                               | `(active: boolean)`                         | -     |
-| confirm      | Emitted when the bottom confirm button is clicked, no return value                                                 | -                                           | -     |
-| cancel       | Emitted when the cancel button at the bottom is clicked, no return value                                           | -                                           | -     |
-| close        | Emitted when the close function is used to trigger the close, no return value                                      | -                                           | -     |
-| show         | When the modal is opened, emitted after the transition effect ends, no return value                                | -                                           | -     |
-| hide         | When the modal is closed, the transition effect ends, it is emitted when it disappears completely, no return value | -                                           | -     |
-| drag-start   | Emitted when dragging is about to start, no return value                                                           | `(position: { top: number, left: number })` | -     |
-| drag-move    | Emitted when dragging, returns an object containing position information                                           | `(position: { top: number, left: number })` | -     |
-| drag-end     | Emitted when the drag is finished, no return value                                                                 | `(position: { top: number, left: number })` | -     |
-| resize-start | Emitted when the modal is about to start resize, no return value                                                   | `(size: { width: number, height: number })` | -     |
-| resize-move  | Emitted when the modal is being resized, returns an object containing the width and height of the modal            | `(size: { width: number, height: number })` | -     |
-| resize-end   | Emitted when the modal finishes resize, no return value                                                            | `(size: { width: number, height: number })` | -     |
+| Name         | Description                                                                                             | Parameters                                  | Since |
+| ------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
+| toggle       | Emitted when the active state of the modal changes, returns the current active state                    | `(active: boolean)`                         | -     |
+| confirm      | Emitted when the bottom confirm button is clicked                                                       | -                                           | -     |
+| cancel       | Emitted when the cancel button at the bottom is clicked                                                 | -                                           | -     |
+| close        | Emitted when the close function is used to trigger the close                                            | -                                           | -     |
+| show         | When the modal is opened, emitted after the transition effect ends                                      | -                                           | -     |
+| hide         | When the modal is closed, the transition effect ends, it is emitted when it disappears completely       | -                                           | -     |
+| drag-start   | Emitted when dragging is about to start                                                                 | `(position: { top: number, left: number })` | -     |
+| drag-move    | Emitted when dragging, returns an object containing position information                                | `(position: { top: number, left: number })` | -     |
+| drag-end     | Emitted when the drag is finished                                                                       | `(position: { top: number, left: number })` | -     |
+| resize-start | Emitted when the modal is about to start resize                                                         | `(size: { width: number, height: number })` | -     |
+| resize-move  | Emitted when the modal is being resized, returns an object containing the width and height of the modal | `(size: { width: number, height: number })` | -     |
+| resize-end   | Emitted when the modal finishes resize                                                                  | `(size: { width: number, height: number })` | -     |
 
 ### Modal Slots
 
-| Name    | Description                     | Parameters | Since |
-| ------- | ------------------------------- | ---------- | ----- |
-| default | The content slot for modal      | -          | -     |
-| close   | The close action slot for modal | -          | -     |
-| header  | The header slot for modal       | -          | -     |
-| footer  | The footer slot for modal       | -          | -     |
-| title   | The title slot for modal        | -          | -     |
+| Name    | Description                     | Parameters        | Since |
+| ------- | ------------------------------- | ----------------- | ----- |
+| default | The content slot for modal      | `ModalSlotParams` | -     |
+| title   | The title slot for modal        | `ModalSlotParams` | -     |
+| close   | The close action slot for modal | `ModalSlotParams` | -     |
+| header  | The header slot for modal       | `ModalSlotParams` | -     |
+| footer  | The footer slot for modal       | `ModalSlotParams` | -     |

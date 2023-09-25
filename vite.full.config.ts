@@ -32,6 +32,10 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
+        // {
+        //   find: /^@vexip-ui\/config/,
+        //   replacement: resolve(__dirname, 'common/config/src')
+        // },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
           replacement: resolve(__dirname, 'common/$1/src')
@@ -79,9 +83,18 @@ export default defineConfig(async () => {
         exclude: ['node_modules', 'components/*/tests'],
         outDir,
         compilerOptions: {
-          sourceMap: false
+          sourceMap: false,
+          paths: {
+            '@/*': ['./*'],
+            '@vexip-ui/config': ['common/config/src'],
+            'vexip-ui': ['.'],
+            'vue-router': ['node_modules/vue-router'],
+            csstype: ['node_modules/csstype']
+          }
         },
-        copyDtsFiles: true
+        copyDtsFiles: true,
+        pathsToAliases: false,
+        aliasesExclude: [/^@vexip-ui\/(bem-helper|utils|hooks|config)/]
       })
     ]
   }

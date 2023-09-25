@@ -78,7 +78,8 @@ export default defineComponent({
         [nh.bm(size.value)]: size.value !== 'default',
         [nh.bm('pulsing')]: pulsing.value,
         [nh.bm('first')]: index.value === 1,
-        [nh.bm('last')]: isLast.value
+        [nh.bm('last')]: isLast.value,
+        [nh.bm('block')]: props.block
       }
     })
     const colorMap = computed(() => {
@@ -243,6 +244,7 @@ export default defineComponent({
                 {...icons.value.loading}
                 effect={props.loadingEffect || icons.value.loading.effect}
                 icon={props.loadingIcon || icons.value.loading.icon}
+                label={'loading'}
               ></Icon>
               )}
         </div>

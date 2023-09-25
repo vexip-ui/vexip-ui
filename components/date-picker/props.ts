@@ -10,10 +10,25 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps, LocaleConfig } from '@vexip-ui/config'
+import type { ConfigurableProps, EventListener, LocaleConfig } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DatePickerType, DateShortcut, DateTimeType, TimeShortcut, TimeType } from './symbol'
+import type {
+  DatePickerChangeEvent,
+  DatePickerFormatFn,
+  DatePickerType,
+  DateShortcut,
+  DateTimeType,
+  TimePickerChangeEvent,
+  TimeShortcut,
+  TimeType
+} from './symbol'
+
+export interface DatePickerShortcutEvent {
+  (name: string, value: Dateable | Dateable[]): void,
+  (name: string, value: Dateable): void,
+  (name: string, value: Dateable[]): void
+}
 
 export const datePickerProps = buildProps({
   size: sizeProp,
@@ -25,8 +40,8 @@ export const datePickerProps = buildProps({
   transfer: booleanStringProp,
   value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
   format: String,
+  valueFormat: [String, Function] as PropType<string | DatePickerFormatFn>,
   filler: String,
-  noFiller: booleanProp,
   clearable: booleanProp,
   noAction: booleanProp,
   labels: Object as PropType<Partial<Record<DateTimeType, string>>>,
@@ -46,7 +61,6 @@ export const datePickerProps = buildProps({
   confirmText: String,
   cancelText: String,
   today: [Number, String, Date] as PropType<Dateable>,
-  isRange: booleanProp,
   range: booleanProp,
   loading: booleanProp,
   loadingIcon: Object,
@@ -59,14 +73,15 @@ export const datePickerProps = buildProps({
   placeholder: [String, Array] as PropType<string | string[]>,
   unitReadonly: booleanProp,
   weekStart: Number,
+  popperAlive: booleanProp,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
   onEnter: eventProp(),
   onCancel: eventProp(),
-  onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
+  onChange: eventProp<EventListener<DatePickerChangeEvent>>(),
   onClear: eventProp(),
-  onShortcut: eventProp<(name: string, value: Dateable | Dateable[]) => void>(),
+  onShortcut: eventProp<DatePickerShortcutEvent>(),
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),
@@ -77,6 +92,12 @@ export const datePickerProps = buildProps({
 
 export type DatePickerProps = ExtractPropTypes<typeof datePickerProps>
 export type DatePickerCProps = ConfigurableProps<DatePickerProps>
+
+export interface TimePickerShortcutEvent {
+  (name: string, value: string | string[]): void,
+  (name: string, value: string): void,
+  (name: string, value: string[]): void
+}
 
 export const timePickerProps = buildProps({
   size: sizeProp,
@@ -89,7 +110,6 @@ export const timePickerProps = buildProps({
   separator: String,
   value: [String, Array] as PropType<string | string[]>,
   filler: String,
-  noFiller: booleanProp,
   clearable: booleanProp,
   noAction: booleanProp,
   noArrow: booleanProp,
@@ -98,7 +118,6 @@ export const timePickerProps = buildProps({
   steps: Array as PropType<number[]>,
   labels: Object as PropType<Partial<Record<TimeType, string>>>,
   shortcuts: Array as PropType<TimeShortcut[]>,
-  isRange: booleanProp,
   range: booleanProp,
   disabled: booleanProp,
   transitionName: String,
@@ -120,14 +139,15 @@ export const timePickerProps = buildProps({
   outsideClose: booleanProp,
   outsideCancel: booleanProp,
   unitReadonly: booleanProp,
+  popperAlive: booleanProp,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),
   onEnter: eventProp(),
   onCancel: eventProp(),
-  onChange: eventProp<(value: string | string[]) => void>(),
+  onChange: eventProp<EventListener<TimePickerChangeEvent>>(),
   onClear: eventProp(),
-  onShortcut: eventProp<(name: string, value: string | string[]) => void>(),
+  onShortcut: eventProp<TimePickerShortcutEvent>(),
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),

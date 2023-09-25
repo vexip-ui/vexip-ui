@@ -11,6 +11,6 @@
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
-    "unplugin-vue-components": "^0.22.12"
+    "unplugin-vue-components": "^0.25.1"
   }
 }

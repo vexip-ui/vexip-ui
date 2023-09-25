@@ -42,7 +42,7 @@
     "directory": "common/icons"
   },
   "devDependencies": {
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.5.7",
     "@types/prettier": "^2.7.3",
     "execa": "^7.1.1",
     "fast-glob": "^3.3.0",

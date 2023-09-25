@@ -1,5 +1,6 @@
 declare module 'vue' {
   export interface GlobalComponents {
+    Affix: typeof import('vexip-ui')['Affix'],
     Alert: typeof import('vexip-ui')['Alert'],
     Anchor: typeof import('vexip-ui')['Anchor'],
     AnchorLink: typeof import('vexip-ui')['AnchorLink'],
@@ -99,6 +100,8 @@ declare module 'vue' {
     Timeline: typeof import('vexip-ui')['Timeline'],
     TimelineItem: typeof import('vexip-ui')['TimelineItem'],
     Tooltip: typeof import('vexip-ui')['Tooltip'],
+    Tour: typeof import('vexip-ui')['Tour'],
+    TourStep: typeof import('vexip-ui')['TourStep'],
     Transfer: typeof import('vexip-ui')['Transfer'],
     Tree: typeof import('vexip-ui')['Tree'],
     Upload: typeof import('vexip-ui')['Upload'],

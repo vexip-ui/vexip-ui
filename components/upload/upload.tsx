@@ -111,8 +111,12 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       defaultFiles: () => [],
-      // 'canPreview' using UploadFile default
-      listStyle: null
+      // canPreview: don't set, using UploadFile default value
+      listStyle: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('upload')
@@ -665,6 +669,7 @@ export default defineComponent({
                     class={nh.be('loading-icon')}
                     effect={props.loadingEffect || icons.value.loading.effect}
                     icon={props.loadingIcon || icons.value.loading.icon}
+                    label={'loading'}
                   />
                 )
               }}
@@ -683,7 +688,7 @@ export default defineComponent({
             <Icon
               {...icons.value.cloud}
               class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-              scale={4}
+              scale={(icons.value.cloud.scale || 1) * 4}
             />
             {slots.tip
               ? (
@@ -697,6 +702,7 @@ export default defineComponent({
               class={nh.be('loading-icon')}
               effect={props.loadingEffect || icons.value.loading.effect}
               icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
               style={{ opacity: props.loading ? '100%' : '0%' }}
             />
           </div>
@@ -721,6 +727,7 @@ export default defineComponent({
                       class={nh.be('loading-icon')}
                       effect={props.loadingEffect || icons.value.loading.effect}
                       icon={props.loadingIcon || icons.value.loading.icon}
+                      label={'loading'}
                       style={{ marginBottom: '6px' }}
                     />
                     )
@@ -728,7 +735,7 @@ export default defineComponent({
                     <Icon
                       {...icons.value.plus}
                       class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-                      scale={1.2}
+                      scale={(icons.value.plus.scale || 1) * 1.2}
                       style={{ marginBottom: '6px' }}
                     />
                     )}
@@ -759,6 +766,7 @@ export default defineComponent({
               class={nh.be('input')}
               disabled={props.disabled}
               multiple={props.multiple}
+              name={props.name}
               accept={acceptString.value}
               webkitdirectory={props.directory}
               onChange={handleInputChange}

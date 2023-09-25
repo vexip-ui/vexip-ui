@@ -1,7 +1,8 @@
 import type { InjectionKey } from 'vue'
+// import type { BITree } from '@vexip-ui/utils'
 
 export type Key = string | number
-export type Data = Record<string, any>
+export type Data = any
 export type TreeNodeDropType = 'before' | 'inner' | 'after'
 export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
 
@@ -49,14 +50,20 @@ export type TreeNodeProps<D = Data> = {
   expandDisabled: boolean,
   checkDisabled: boolean,
   data: D,
-  /* @internal */
+  /** @internal */
   partial: boolean,
-  /* @internal */
+  /** @internal */
   matched: boolean,
-  /* @internal */
+  /** @internal */
   childMatched: boolean,
-  /* @internal */
-  upperMatched: boolean
+  /** @internal */
+  upperMatched: boolean,
+  /** @internal */
+  depth: number,
+  /** @internal */
+  last: boolean,
+  /** @internal */
+  inLastCount: number
 }
 
 export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
@@ -74,15 +81,36 @@ export interface TreeNodeInstance {
   node: TreeNodeProps
 }
 
+export interface TreeNodeState {
+  el?: HTMLElement | null,
+  depth: number,
+  disabled: boolean,
+  readonly: boolean
+}
+
+export interface TreeCollapseProps {
+  id: symbol,
+  placeholder: true,
+  type: 'expand' | 'reduce',
+  height: number,
+  nodes: TreeNodeProps[]
+}
+
 export interface TreeState {
   arrow: boolean | 'auto',
   checkbox: boolean,
   suffixCheckbox: boolean,
   noCascaded: boolean,
   linkLine: false | TreeLinkLine,
+  virtual: boolean,
+  labelKey: string,
+  draggable: boolean,
+  floorSelect: boolean,
   renderer: TreeNodeRenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,
+  nodeStates: Map<Key, TreeNodeState>,
+  getParentNode(node: TreeNodeProps): TreeNodeProps | null,
   updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,
   handleNodeClick(node: TreeNodeProps): void,
@@ -100,12 +128,5 @@ export interface TreeState {
   handleLabelClick(node: TreeNodeProps): void
 }
 
-export interface TreeNodePropsState {
-  el?: HTMLElement | null,
-  depth: number,
-  disabled: boolean,
-  readonly: boolean
-}
-
 export const TREE_STATE: InjectionKey<TreeState> = Symbol('TREE_STATE')
-export const TREE_NODE_STATE: InjectionKey<TreeNodePropsState> = Symbol('TREE_NODE_STATE')
+export const TREE_NODE_STATE: InjectionKey<TreeNodeState> = Symbol('TREE_NODE_STATE')

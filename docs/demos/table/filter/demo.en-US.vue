@@ -196,7 +196,7 @@ function resetAgeFilter() {
   align-items: center;
   justify-content: center;
   height: 15px;
-  margin-left: 3px;
+  margin-inline-start: 3px;
   color: var(--vxp-table-filter-color);
   cursor: pointer;
   transition: var(--vxp-transition-color);

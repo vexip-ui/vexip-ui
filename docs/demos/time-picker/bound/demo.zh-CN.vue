@@ -1,11 +1,10 @@
 <template>
-  <TimePicker value="12:34:56" no-filler min="11:20:30"></TimePicker>
+  <TimePicker value="12:34:56" min="11:20:30"></TimePicker>
   <br />
   <br />
   <TimePicker
     range
     :value="['12:34:56', '13:11:43']"
-    no-filler
     min="11:20:30"
     max="13:20:10"
   ></TimePicker>

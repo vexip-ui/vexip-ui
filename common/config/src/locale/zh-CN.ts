@@ -1,5 +1,8 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * Chinese (Simplified) locale config
+ */
 export function zhCNLocale() {
   return defineLocaleConfig({
     locale: 'zh-CN',
@@ -152,6 +155,13 @@ export function zhCNLocale() {
         end: '结束',
         select: '请选择'
       }
+    },
+
+    tour: {
+      prev: '上一步',
+      next: '下一步',
+      done: '完成',
+      stepCount: '第 {n} 步'
     },
 
     transfer: {

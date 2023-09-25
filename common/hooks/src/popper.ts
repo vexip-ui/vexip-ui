@@ -1,36 +1,50 @@
-import { nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
+import { onMounted, ref, shallowRef, unref, watch, watchEffect } from 'vue'
 
-import { createPopper as createInternalPopper } from '@popperjs/core'
+import {
+  arrow,
+  autoUpdate,
+  computePosition,
+  flip,
+  hide,
+  offset,
+  platform,
+  shift
+} from '@floating-ui/dom'
+import { useRtl } from './rtl'
+import { isClient } from '@vexip-ui/utils'
 
-import type { Ref, WatchStopHandle } from 'vue'
-import type { Instance, Modifier, Placement, Rect, VirtualElement } from '@popperjs/core'
+import type { Ref } from 'vue'
+import type {
+  ComputePositionConfig,
+  Middleware,
+  OffsetOptions,
+  Placement,
+  ShiftOptions,
+  VirtualElement
+} from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
-
-type OffsetsFunction = (options: {
-  popper: Rect,
-  reference: Rect,
-  placement: Placement
-}) => [number?, number?]
+import type { MaybeRef } from './shared/types'
 
 interface UsePopperOptions {
   /**
    * popper 元素出现的位置
    */
-  placement: Ref<Placement>,
+  placement: MaybeRef<Placement>,
   /**
    * popper 元素需要迁移至的目标选择器，为 true 时会迁移至 body
    */
-  transfer: Ref<boolean | string>,
+  transfer?: MaybeRef<boolean | string>,
+  isRtl?: MaybeRef<boolean>,
   /**
    * 包围元素，用于判断 clickoutside 事件
    *
    * 即使 popper 元素迁移至 wrapper 元素外部，点击 popper 元素时仍认为处于 wrapper 元素内部
    */
-  wrapper: Ref<HTMLElement | null | undefined>,
+  wrapper?: Ref<HTMLElement | null | undefined>,
   /**
    * 设置 popper 元素为否需要 drop，此时 transform-origin 会自动调整
    */
-  isDrop?: boolean,
+  isDrop?: MaybeRef<boolean>,
   /**
    * 参考元素，popper 元素的位置计算依据
    */
@@ -40,17 +54,28 @@ interface UsePopperOptions {
    */
   popper?: Ref<HTMLElement | null | undefined>,
   /**
+   * arrow 元素
+   */
+  arrow?: Ref<HTMLElement | null | undefined>,
+  /**
    * popper 元素的偏移量，可传入一个回调函数
    */
-  offset?: OffsetsFunction | [number?, number?]
+  offset?: MaybeRef<number[] | OffsetOptions>,
+  /**
+   * popper 元素是否限制在窗口内
+   */
+  shift?: MaybeRef<boolean | ShiftOptions>,
+  /**
+   * 设置是否自动更新 popper 元素
+   *
+   * @default false
+   */
+  autoUpdate?: boolean
 }
 
 export type { Placement, VirtualElement }
 
-export const placementWhileList = Object.freeze([
-  'auto',
-  'auto-start',
-  'auto-end',
+export const placementWhileList = Object.freeze<Placement[]>([
   'top',
   'top-start',
   'top-end',
@@ -63,148 +88,221 @@ export const placementWhileList = Object.freeze([
   'right',
   'right-start',
   'right-end'
-] as Placement[])
+])
 
 export function usePopper(initOptions: UsePopperOptions) {
-  const { placement, transfer, wrapper, isDrop = false } = initOptions
+  const { transfer, wrapper, isDrop = false } = initOptions
 
-  const reference: Ref<HTMLElement | null | undefined> = (initOptions.reference as any) ?? ref(null)
-  const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? ref(null)
+  const reference: Ref<HTMLElement | null | undefined> =
+    (initOptions.reference as any) ?? shallowRef(null)
+  const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? shallowRef(null)
+  const arrowRef: Ref<HTMLElement | null | undefined> = initOptions.arrow ?? shallowRef(null)
+
+  const placement = ref(unref(initOptions.placement))
   const transferTo = ref('')
+  const isRtl = initOptions.isRtl ?? useRtl().isRtl
 
-  const options: {
-    placement: Placement,
-    modifiers: Partial<Modifier<any, any>>[]
-  } = {
-    placement: placement.value,
-    modifiers: [
-      {
-        name: 'preventOverflow',
-        options: {
-          rootBoundary: 'window'
-        }
-      },
-      {
-        name: 'computeStyles',
-        options: {
-          gpuAcceleration: false
-        }
-      }
-    ]
-  }
+  if (wrapper) {
+    watchEffect(() => {
+      const wrapperEl = unref(wrapper)
+      const popperEl = unref(popper)
 
-  if (isDrop) {
-    options.modifiers.push({
-      name: 'setTransformOrigin',
-      enabled: true,
-      phase: 'afterWrite',
-      fn({ state }) {
-        const origin = setPopperDropOrigin(state.placement)
-
-        if (origin) {
-          state.elements.popper.style.transformOrigin = origin
-        }
+      if (wrapperEl) {
+        (wrapperEl as TransferNode).__transferElement = popperEl
       }
     })
   }
 
-  if (initOptions.offset) {
-    options.modifiers.push({
-      name: 'offset',
-      options: {
-        offset: initOptions.offset
+  if (transfer != null) {
+    watch(
+      () => unref(transfer),
+      value => {
+        setTransferTo(value)
+        updatePopper()
       }
-    })
-  }
+    )
 
-  let popperInstance: Instance | null = null
-
-  watch(placement, value => {
-    options.placement = value
-    popperInstance && popperInstance.setOptions({ placement: value })
-  })
-
-  watchEffect(() => {
-    if (wrapper.value && popper.value) {
-      (wrapper.value as TransferNode).__transferElement = popper.value
-    }
-  })
-
-  let stopWatchPopper: WatchStopHandle | null = null
-
-  if (transfer) {
-    watch(transfer, value => {
-      setTransferTo(value)
-      updatePopper()
-    })
-
-    setTransferTo(transfer.value)
+    setTransferTo(unref(transfer))
   }
 
   onMounted(() => {
-    nextTick(createPopper)
+    requestAnimationFrame(() => {
+      watchEffect(updatePopperInternal)
+    })
   })
 
-  onBeforeUnmount(destroyPopper)
+  let cleanup: (() => void) | undefined
 
-  function updatePopper() {
-    nextTick(() => {
-      popperInstance && popperInstance.forceUpdate()
-    })
+  async function updatePopperInternal() {
+    if (!isClient) return
+
+    cleanup?.()
+
+    const referenceEl = unref(reference)
+    const popperEl = unref(popper)
+
+    if (!referenceEl || !popperEl) return
+
+    const arrowEl = unref(arrowRef)
+
+    const middleware: Middleware[] = [flip()]
+
+    if (isDrop) {
+      middleware.push({
+        name: 'origin',
+        fn({ placement, elements }) {
+          const origin = setPopperDropOrigin(placement)
+
+          if (origin) {
+            elements.floating.style.transformOrigin = origin
+          }
+
+          return {}
+        }
+      })
+    }
+
+    if (initOptions.offset) {
+      let offsetOptions = unref(initOptions.offset)
+
+      if (Array.isArray(offsetOptions)) {
+        offsetOptions = {
+          mainAxis: offsetOptions[1],
+          crossAxis: offsetOptions[0]
+        }
+      }
+
+      middleware.push(offset(offsetOptions))
+    }
+
+    if (initOptions.shift) {
+      let shiftOptions = unref(initOptions.shift)
+
+      if (typeof shiftOptions === 'boolean') {
+        shiftOptions = {}
+      }
+
+      middleware.push(shift(shiftOptions))
+    }
+
+    if (arrowEl) {
+      middleware.push(arrow({ element: arrowEl }))
+    }
+
+    middleware.push(hide({ strategy: 'escaped' }))
+
+    const rtl = unref(isRtl) || false
+    const options: ComputePositionConfig = {
+      middleware,
+      placement: unref(initOptions.placement),
+      platform: {
+        ...platform,
+        isRTL: async () => rtl
+      }
+    }
+
+    const update = async () => {
+      const {
+        x,
+        y,
+        placement: activePlacement,
+        strategy,
+        middlewareData
+      } = await computePosition(referenceEl, popperEl, options)
+
+      if (unref(reference) !== referenceEl) {
+        if (unref(popper) === popperEl) {
+          Object.assign(popperEl.style, {
+            position: '',
+            top: '',
+            left: ''
+          })
+        }
+
+        return
+      }
+
+      const style: Partial<CSSStyleDeclaration> = {
+        position: strategy,
+        top: `${y}px`,
+        left: `${x}px`
+      }
+
+      // if (middlewareData.hide?.escaped) {
+      //   style.visibility = 'hidden'
+      // } else {
+      //   style.visibility = ''
+      // }
+
+      if (arrowEl) {
+        if (middlewareData.arrow) {
+          const { x, y } = middlewareData.arrow
+
+          Object.assign(arrowEl.style, {
+            top: y != null ? `${y}px` : '',
+            left: x != null ? `${x}px` : ''
+          })
+        } else {
+          Object.assign(arrowEl.style, { top: '', left: '' })
+        }
+      }
+
+      Object.assign(popperEl.style, style)
+      popperEl.dataset.popperPlacement = activePlacement
+      placement.value = activePlacement
+    }
+
+    if (initOptions.autoUpdate) {
+      cleanup = autoUpdate(referenceEl, popperEl, update)
+    }
+
+    await update()
   }
 
-  function createPopper() {
-    destroyPopper()
-    popperInstance && popperInstance.destroy()
-    createPopperInstance()
-
-    const cancelWatchReference = watch(reference, createPopperInstance)
-    const cancelWatchPopper = watch(popper, createPopperInstance)
-
-    stopWatchPopper = () => {
-      cancelWatchReference()
-      cancelWatchPopper()
-    }
+  const updatePopper = () => {
+    return new Promise<void>(resolve => {
+      requestAnimationFrame(() => {
+        updatePopperInternal().then(resolve)
+      })
+    })
   }
 
   function setTransferTo(value: boolean | string) {
     transferTo.value = typeof value === 'boolean' ? (value ? 'body' : '') : value
   }
 
-  function createPopperInstance() {
-    if (reference.value && popper.value) {
-      popperInstance && popperInstance.destroy()
-      popperInstance = createInternalPopper(reference.value, popper.value as HTMLElement, options)
-      updatePopper()
-    }
-  }
+  // function normalizePlacement(placement: Placement, rtl: boolean) {
+  //   if (!rtl) return placement
 
-  function destroyPopper() {
-    popperInstance && popperInstance.destroy()
-    popperInstance = null
+  //   let [start, end] = placement.split('-')
 
-    if (typeof stopWatchPopper === 'function') {
-      stopWatchPopper()
-      stopWatchPopper = null
+  //   if (start === 'left' || start === 'right') {
+  //     start = start === 'left' ? 'right' : 'left'
+  //   } else {
+  //     if (!end) return placement
+
+  //     end = end === 'start' ? 'end' : 'start'
+  //   }
+
+  //   return `${start}-${end}` as Placement
+  // }
+
+  function setPopperDropOrigin(placement: Placement) {
+    if (placement !== 'left' && placement !== 'right') {
+      const [start, end] = placement.split('-')
+
+      return start === 'bottom' || (start !== 'top' && end === 'start')
+        ? 'center top'
+        : 'center bottom'
     }
   }
 
   return {
+    wrapper,
     reference,
     popper,
+    placement,
     transferTo,
-    updatePopper,
-    createPopper,
-    destroyPopper
-  }
-}
-
-function setPopperDropOrigin(placement: Placement) {
-  if (placement !== 'left' && placement !== 'right') {
-    const [placementStart, placementEnd] = placement.split('-')
-
-    return placementStart === 'bottom' || (placementStart !== 'top' && placementEnd === 'start')
-      ? 'center top'
-      : 'center bottom'
+    updatePopper
   }
 }

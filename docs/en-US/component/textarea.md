@@ -88,6 +88,8 @@ Different states can be set via `state`.
 | sync           | `boolean`                                        | Set whether enable sync input mode                                                                                         | `false`              | `2.0.6`  |
 | locale         | `LocaleConfig['input']`                          | Set the locale config                                                                                                      | `null`               | `2.1.0`  |
 | control-class  | `ClassType`                                      | Set the class name of the control element                                                                                  | `null`               | `2.1.25` |
+| control-attrs  | `Record<string, any>`                            | Set the attributes of the control element                                                                                  | `null`               | `2.2.2`  |
+| name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`                 | `2.2.2`  |
 
 ### Textarea Events
 
@@ -101,7 +103,7 @@ Different states can be set via `state`.
 | key-down  | Emitted when a key is pressed, returns the key event                                          | `(event: KeyboardEvent)` | -     |
 | key-press | Emitted when the key is held down, returns the key event                                      | `(event: KeyboardEvent)` | -     |
 | key-up    | Emitted when the key is released, returns the key event                                       | `(event: KeyboardEvent)` | -     |
-| clear     | Emitted when the value is cleared by the clear button, no return value                        | -                        | -     |
+| clear     | Emitted when the value is cleared by the clear button                                         | -                        | -     |
 
 ### Textarea Slots
 

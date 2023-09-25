@@ -80,7 +80,28 @@ Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height
 
 :::
 
+:::demo modal/hook
+
+### Hook 方式
+
+Modal 组件提供了一个静态的 `open` 方法，可以直接创建一个一次性的模态框。
+
+或者你可以像示例中那样引入 `useModal` 直接使用。
+
+:::
+
 ## API
+
+### 预设类型
+
+```ts
+interface ModalSlotParams {
+  handleResize: () => void,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm: boolean) => Promise<void>
+}
+```
 
 ### Modal 属性
 
@@ -117,24 +138,24 @@ Modal 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height
 | 名称         | 说明                                                     | 参数                                        | 始于 |
 | ------------ | -------------------------------------------------------- | ------------------------------------------- | ---- |
 | toggle       | 当模态框的激活状态改变时触发，返回当前的激活状态         | `(active: boolean)`                         | -    |
-| confirm      | 当点击了底部的确定按钮时触发，无返回值                   | -                                           | -    |
-| cancel       | 当点击了底部的取消按钮时触发，无返回值                   | -                                           | -    |
-| close        | 当用关闭功能触发关闭时触发，无返回值                     | -                                           | -    |
-| show         | 当模态框打开后，过渡效果结束后触发，无返回值             | -                                           | -    |
-| hide         | 当模态框关闭后，过渡效果结束，完全消失时触发，无返回值   | -                                           | -    |
-| drag-start   | 当将要开始拖拽时触发，无返回值                           | `(position: { top: number, left: number })` | -    |
+| confirm      | 当点击了底部的确定按钮时触发                             | -                                           | -    |
+| cancel       | 当点击了底部的取消按钮时触发                             | -                                           | -    |
+| close        | 当用关闭功能触发关闭时触发                               | -                                           | -    |
+| show         | 当模态框打开后，过渡效果结束后触发                       | -                                           | -    |
+| hide         | 当模态框关闭后，过渡效果结束，完全消失时触发             | -                                           | -    |
+| drag-start   | 当将要开始拖拽时触发                                     | `(position: { top: number, left: number })` | -    |
 | drag-move    | 当正在拖拽时触发，返回一个包含位置信息的对象             | `(position: { top: number, left: number })` | -    |
-| drag-end     | 当结束拖拽时触发，无返回值                               | `(position: { top: number, left: number })` | -    |
-| resize-start | 当模态框将要开始调整大小时触发，无返回值                 | `(size: { width: number, height: number })` | -    |
+| drag-end     | 当结束拖拽时触发                                         | `(position: { top: number, left: number })` | -    |
+| resize-start | 当模态框将要开始调整大小时触发                           | `(size: { width: number, height: number })` | -    |
 | resize-move  | 当模态框正在调整大小时触发，返回一个包含模态框宽高的对象 | `(size: { width: number, height: number })` | -    |
-| resize-end   | 当模态框结束调整大小时触发，无返回值                     | `(size: { width: number, height: number })` | -    |
+| resize-end   | 当模态框结束调整大小时触发                               | `(size: { width: number, height: number })` | -    |
 
 ### Modal 插槽
 
-| 名称    | 说明             | 参数 | 始于 |
-| ------- | ---------------- | ---- | ---- |
-| default | 模态框的内容插槽 | -    | -    |
-| close   | 关闭按钮的插槽   | -    | -    |
-| header  | 模态框的头部插槽 | -    | -    |
-| footer  | 模态框的底部插槽 | -    | -    |
-| title   | 模态框的标题插槽 | -    | -    |
+| 名称    | 说明             | 参数              | 始于 |
+| ------- | ---------------- | ----------------- | ---- |
+| default | 模态框的内容插槽 | `ModalSlotParams` | -    |
+| title   | 模态框的标题插槽 | `ModalSlotParams` | -    |
+| close   | 关闭按钮的插槽   | `ModalSlotParams` | -    |
+| header  | 模态框的头部插槽 | `ModalSlotParams` | -    |
+| footer  | 模态框的底部插槽 | `ModalSlotParams` | -    |

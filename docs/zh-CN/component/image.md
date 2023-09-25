@@ -128,7 +128,7 @@ type ImageSkeletonProps = Pick<
 | radius          | `number`                        | 设置图片的圆角半径                             | `0`       | -    |
 | border          | `boolean \| string`             | 是否有边框，支持传入一个颜色值指定边框颜色     | `false`   | -    |
 | preview-src     | `string`                        | 图片的预览源                                   | `''`      | -    |
-| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `false`   | -    |
+| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `null`    | -    |
 
 ### Image 事件
 
@@ -152,7 +152,7 @@ type ImageSkeletonProps = Pick<
 | --------------- | ------------------- | ---------------------------- | ------- | ---- |
 | show-all        | `boolean`           | 是否显示所有的图片           | `false` | -    |
 | preview         | `boolean`           | 是否可预览                   | `false` | -    |
-| viewer-transfer | `boolean \| string` | 设置查看器的 `transfer` 属性 | `false` | -    |
+| viewer-transfer | `boolean \| string` | 设置查看器的 `transfer` 属性 | `null`  | -    |
 
 ### ImageGroup 事件
 
@@ -184,9 +184,9 @@ type ImageSkeletonProps = Pick<
 | change | 查看的图片发生改变时触发，返回当前查看的图片的索引和源 | `(index: number, src: string)` | -    |
 | prev   | 查看上一张图片时触发，返回当前查看的图片的索引和源     | `(index: number, src: string)` | -    |
 | next   | 查看下一张图片时触发，返回当前查看的图片的索引和源     | `(index: number, src: string)` | -    |
-| close  | 当用关闭功能触发关闭时触发，无返回值                   | -                              | -    |
-| show   | 当图片查看器打开，过渡效果结束后触发，无返回值         | -                              | -    |
-| hide   | 当图片查看器关闭，过渡效果结束后触发，无返回值         | -                              | -    |
+| close  | 当用关闭功能触发关闭时触发                             | -                              | -    |
+| show   | 当图片查看器打开，过渡效果结束后触发                   | -                              | -    |
+| hide   | 当图片查看器关闭，过渡效果结束后触发                   | -                              | -    |
 
 ### ImageViewer 插槽
 

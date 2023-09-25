@@ -5,6 +5,7 @@
     multiple
     clearable
     option-check
+    :count-limit="3"
     :options="options"
   ></Select>
   <br />

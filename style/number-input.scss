@@ -22,7 +22,7 @@ $number-input: map.merge(
 
   @at-root {
     & {
-      padding-right: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-end: calc(get-css-var('input-h-padding') + 20px);
     }
   }
 
@@ -32,13 +32,13 @@ $number-input: map.merge(
 
   &__clear,
   &__loading {
-    right: calc(get-css-var('input-h-padding') + 20px);
+    inset-inline-end: calc(get-css-var('input-h-padding') + 20px);
   }
 
   &__plus,
   &__minus {
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,7 +49,7 @@ $number-input: map.merge(
     user-select: none;
     border: get-css-var('input-border');
     border-width: 0;
-    border-left-width: get-css-var('border-width');
+    border-inline-start-width: get-css-var('border-width');
     transition: get-css-var('transition-color');
 
     .#{$namespace}-icon {
@@ -94,7 +94,7 @@ $number-input: map.merge(
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-right: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-end: calc(get-css-var('input-h-padding') + 20px);
 
       #{$plus},
       #{$minus} {
@@ -105,20 +105,19 @@ $number-input: map.merge(
 
   &--control-left {
     padding: $padding;
-    padding-left: calc(get-css-var('input-h-padding') + 20px);
+    padding-inline-start: calc(get-css-var('input-h-padding') + 20px);
 
     #{$clear},
     #{$loading} {
-      right: auto;
-      left: calc(get-css-var('input-h-padding') + 20px);
+      inset-block-end: auto;
+      inset-inline-start: calc(get-css-var('input-h-padding') + 20px);
     }
 
     #{$plus},
     #{$minus} {
-      right: auto;
-      left: 0;
-      border-right-width: get-css-var('border-width');
-      border-left-width: 0;
+      inset-inline-end: auto;
+      inset-inline-start: 0;
+      border-inline-width: 0 get-css-var('border-width');
     }
   }
 
@@ -128,7 +127,7 @@ $number-input: map.merge(
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-left: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-start: calc(get-css-var('input-h-padding') + 20px);
     }
   }
 
@@ -137,8 +136,7 @@ $number-input: map.merge(
 
     #{$clear},
     #{$loading} {
-      right: auto;
-      left: auto;
+      inset-inline: auto;
     }
 
     #{$plus},

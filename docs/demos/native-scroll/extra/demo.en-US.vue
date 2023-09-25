@@ -5,15 +5,15 @@
         {{ n }}. Scroll mouse wheel here
       </p>
       <template #extra="{ getState, scrollTo }">
-        <transition name="vxp-fade">
+        <Transition name="vxp-fade">
           <Button
             v-if="getState().scrollY > 60"
-            style="position: absolute; right: 12px; bottom: 12px"
+            style="position: absolute; inset-inline-end: 12px; bottom: 12px"
             @click="scrollTo(0, 0)"
           >
             Back to top
           </Button>
-        </transition>
+        </Transition>
       </template>
     </NativeScroll>
   </div>

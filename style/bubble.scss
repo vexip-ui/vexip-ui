@@ -6,16 +6,15 @@
 $bubble: () !default;
 $bubble: map.merge(
   (
+    color: get-css-var('content-color-base'),
     bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
     s-color: get-css-var('shadow-color-base'),
-    border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('radius-base'),
     min-width: 60px,
     min-height: 30px,
     content-v-padding: 8px,
     content-h-padding: 14px,
-    content-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color'),
     arrow-size: 7px,
     arrow-v-offset: 16px,
     arrow-h-offset: 28px
@@ -28,20 +27,26 @@ $bubble: map.merge(
     @include define-preset-values('bubble', $bubble);
   }
 
+  @mixin define-bubble-style($style-map) {
+    @include define-preset-style('bubble', $style-map);
+  }
+
   @include basis;
 
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  color: get-css-var('bubble-color');
 
   &__content {
     position: relative;
     min-width: get-css-var('bubble-min-width');
     min-height: get-css-var('bubble-min-height');
     padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
+    color: inherit;
     word-break: break-all;
     background-color: get-css-var('bubble-bg-color');
-    border: get-css-var('bubble-border');
+    border: get-css-var('border-shape') get-css-var('bubble-b-color');
     border-radius: get-css-var('bubble-radius');
   }
 
@@ -51,7 +56,7 @@ $bubble: map.merge(
 
   &--shadow &__content {
     border: 0;
-    box-shadow: get-css-var('bubble-content-shadow');
+    box-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color');
   }
 
   &__arrow {
@@ -60,11 +65,7 @@ $bubble: map.merge(
       position: absolute;
       width: 0;
       height: 0;
-      border: {
-        width: 0;
-        color: transparent;
-        style: solid;
-      }
+      border: 0 solid transparent;
     }
 
     &::after {
@@ -72,8 +73,40 @@ $bubble: map.merge(
     }
   }
 
-  &--background &__arrow::after {
-    display: none;
+  $content: #{&}__content;
+  $arrow: #{&}__arrow;
+
+  @mixin with-bg {
+    @include define-bubble-style(
+      (
+        b-color: 'bubble-bg-color'
+      )
+    );
+
+    #{$arrow} {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  @each $type in $types {
+    @at-root {
+      &--#{$type} {
+        @include define-bubble-style(
+          (
+            color: 'color-white',
+            bg-color: 'color' $type 'base'
+          )
+        );
+
+        @include with-bg;
+      }
+    }
+  }
+
+  &--background {
+    @include with-bg;
   }
 
   $size: get-css-var('bubble-arrow-size');
@@ -93,32 +126,36 @@ $bubble: map.merge(
     bottom: 0;
     border-width: $size $size 0;
     border-top-color: $border-color;
-    transform: translate(-50%, 100%);
+    transform: translateY(100%);
 
     &::after {
       bottom: 1px;
       border-width: $size $size 0;
       border-top-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
   &--top &__arrow {
     @include top-arrow;
 
-    left: 50%;
+    left: calc(50% - #{$size});
   }
 
   &--top-start &__arrow {
     @include top-arrow;
 
-    left: $h-offset;
+    left: calc(#{$h-offset} - #{$size});
   }
 
   &--top-end &__arrow {
     @include top-arrow;
 
-    left: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset} - #{$size});
   }
 
   &--bottom,
@@ -131,107 +168,131 @@ $bubble: map.merge(
     top: 0;
     border-width: 0 $size $size;
     border-bottom-color: $border-color;
-    transform: translate(-50%, -100%);
+    transform: translateY(-100%);
 
     &::after {
       top: 1px;
       border-width: 0 $size $size;
       border-bottom-color: $bg-color;
       transform: translateX(-50%);
+
+      @include rtl {
+        transform: translateX(50%);
+      }
     }
   }
 
   &--bottom &__arrow {
     @include bottom-arrow;
 
-    left: 50%;
+    left: calc(50% - #{$size});
   }
 
   &--bottom-start &__arrow {
     @include bottom-arrow;
 
-    left: $h-offset;
+    left: calc(#{$h-offset} - #{$size});
   }
 
   &--bottom-end &__arrow {
     @include bottom-arrow;
 
-    left: calc(100% - #{$h-offset});
+    left: calc(100% - #{$h-offset} - #{$size});
   }
 
   &--left,
   &--left-start,
   &--left-end {
-    padding: 0 $padding 0 $size;
+    padding: 0;
+    padding-inline: $size $padding;
   }
 
   @mixin left-arrow {
     right: 0;
     border-width: $size 0 $size $size;
-    border-left-color: $border-color;
-    transform: translate(100%, -50%);
+    border-inline-start-color: $border-color;
+    transform: translateX(100%);
+
+    @include rtl {
+      border-width: $size $size $size 0;
+      transform: translateX(100%) scaleX(-1);
+    }
 
     &::after {
-      right: 1px;
+      inset-inline-end: 1px;
       border-width: $size 0 $size $size;
-      border-left-color: $bg-color;
+      border-inline-start-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        border-width: $size $size $size 0;
+      }
     }
   }
 
   &--left &__arrow {
     @include left-arrow;
 
-    top: 50%;
+    top: calc(50% - #{$size});
   }
 
   &--left-start &__arrow {
     @include left-arrow;
 
-    top: $v-offset;
+    top: calc(#{$v-offset} - #{$size});
   }
 
   &--left-end &__arrow {
     @include left-arrow;
 
-    top: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset} - #{$size});
   }
 
   &--right,
   &--right-start,
   &--right-end {
-    padding: 0 $size 0 $padding;
+    padding: 0;
+    padding-inline: $padding $size;
   }
 
   @mixin right-arrow {
     left: 0;
     border-width: $size $size $size 0;
-    border-right-color: $border-color;
-    transform: translate(-100%, -50%);
+    border-inline-end-color: $border-color;
+    transform: translateX(-100%);
+
+    @include rtl {
+      border-width: $size 0 $size $size;
+      transform: translateX(-100%) scaleX(-1);
+    }
 
     &::after {
-      left: 1px;
+      inset-inline-start: 1px;
       border-width: $size $size $size 0;
-      border-right-color: $bg-color;
+      border-inline-end-color: $bg-color;
       transform: translateY(-50%);
+
+      @include rtl {
+        border-width: $size 0 $size $size;
+      }
     }
   }
 
   &--right &__arrow {
     @include right-arrow;
 
-    top: 50%;
+    top: calc(50% - #{$size});
   }
 
   &--right-start &__arrow {
     @include right-arrow;
 
-    top: $v-offset;
+    top: calc($v-offset - #{$size});
   }
 
   &--right-end &__arrow {
     @include right-arrow;
 
-    top: calc(100% - #{$v-offset});
+    top: calc(100% - #{$v-offset} - #{$size});
   }
 }

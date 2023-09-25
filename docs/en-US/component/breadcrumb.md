@@ -36,6 +36,20 @@ A use case similar to the breadcrumb navigation at the top of the Windows 10 fil
 
 :::
 
+:::demo breadcrumb/router
+
+### Use Router
+
+^[Since v2.2.0](!s)
+
+Passing a `vue-router` Router object through the `router` prop can quickly create breadcrumbs based on the routes.
+
+When using router, each `route.meta` is assumed to be parsed as a option.
+
+Configure `route.meta.menu` to `false` to exclude a route when parsing.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -49,11 +63,12 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb Props
 
-| Name      | Type                              | Description                                               | Default | Since |
-| --------- | --------------------------------- | --------------------------------------------------------- | ------- | ----- |
-| separator | `string`                          | Set the breadcrumb separator                              | `'/'`   | -     |
-| border    | `boolean`                         | Set whether to enable border mode                         | `false` | -     |
-| options   | `(string \| BreadcrumbOptions)[]` | Shortcut to set child elements, invalid after using slots | `[]`    | -     |
+| Name      | Type                              | Description                                                                                                                       | Default | Since   |
+| --------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------- | ------- |
+| separator | `string`                          | Set the breadcrumb separator                                                                                                      | `'/'`   | -       |
+| border    | `boolean`                         | Set whether to enable border mode                                                                                                 | `false` | -       |
+| options   | `(string \| BreadcrumbOptions)[]` | Shortcut to set child elements, invalid after using slots                                                                         | `[]`    | -       |
+| router    | `Router`                          | Set the Router object and its routes will be parsed automatically and generate the breadcrumbs, will use `options` to parse first | `null`  | `2.2.0` |
 
 ### Breadcrumb Events
 
@@ -64,10 +79,11 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb Slots
 
-| Name      | Description                       | Parameters                  | Since |
-| --------- | --------------------------------- | --------------------------- | ----- |
-| default   | child elements of the breadcrumb  | -                           | -     |
-| separator | Slot for custom separator content | `(label: string \| number)` | -     |
+| Name      | Description                              | Parameters                    | Since   |
+| --------- | ---------------------------------------- | ----------------------------- | ------- |
+| default   | child elements of the breadcrumb         | -                             | -       |
+| separator | Slot for custom separator content        | `(label: string \| number)`   | -       |
+| item      | Slot for each child element individually | `(option: BreadcrumbOptions)` | `2.2.0` |
 
 ### BreadcrumbItem Props
 

@@ -9,7 +9,7 @@ export function throttle<T extends (...args: any[]) => any>(method: T, delay = 1
     return method
   }
 
-  let start = Date.now()
+  let start = Date.now() - delay
   let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
@@ -20,7 +20,7 @@ export function throttle<T extends (...args: any[]) => any>(method: T, delay = 1
 
     if (remaining <= 0) {
       method(...args)
-      start = Date.now()
+      start = current
     } else {
       timer = setTimeout(() => {
         method(...args)

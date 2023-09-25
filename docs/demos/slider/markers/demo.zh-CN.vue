@@ -1,14 +1,31 @@
 <template>
+  <p>
+    Disabled:
+    <Switch v-model:value="disabled"></Switch>
+  </p>
   <Space vertical style="max-width: 400px; margin-bottom: 20px">
-    <Slider :value="56" :markers="markers"></Slider>
-    <Slider :value="[28, 56]" range :markers="markers"></Slider>
+    <Slider :value="56" :disabled="disabled" :markers="markers"></Slider>
+    <Slider
+      :value="[28, 56]"
+      :min="-50"
+      :max="150"
+      range
+      :disabled="disabled"
+      :markers="markers"
+    ></Slider>
   </Space>
-  <Space :size="[24, 16]" style="height: 200px; margin-bottom: 20px">
-    <Slider :value="56" vertical :markers="markers"></Slider>
+  <Space :size="[24, 16]" :disabled="disabled" style="height: 200px; margin-bottom: 20px">
+    <Slider
+      :value="56"
+      vertical
+      :disabled="disabled"
+      :markers="markers"
+    ></Slider>
     <Slider
       :value="[28, 56]"
       vertical
       range
+      :disabled="disabled"
       :markers="markers"
     ></Slider>
   </Space>
@@ -16,6 +33,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+const disabled = ref(false)
 
 const markers = ref({
   0: '0°C',

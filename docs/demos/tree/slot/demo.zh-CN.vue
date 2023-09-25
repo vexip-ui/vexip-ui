@@ -3,7 +3,7 @@
     <template #node="{ data, node, depth, toggleExpand }">
       <span
         :style="{
-          paddingLeft: `${depth * 20}px`,
+          paddingInlineStart: `${depth * 20}px`,
           color: node.expanded ? '#fa5252' : '#228be6',
           cursor: 'pointer'
         }"
@@ -52,6 +52,21 @@ const mockData = [
     id: 7,
     label: '蚯蚓',
     parent: 3
+  },
+  {
+    id: 8,
+    label: '水母',
+    parent: 3
+  },
+  {
+    id: 9,
+    label: '穿山甲',
+    parent: 4
+  },
+  {
+    id: 10,
+    label: '红隼',
+    parent: 2
   }
 ]
 </script>

@@ -1,8 +1,9 @@
 <template>
   <div :id="idFor" :class="className" @click="textarea?.focus()">
     <textarea
+      v-bind="props.controlAttrs"
       ref="textarea"
-      :class="[nh.be('control'), props.controlClass]"
+      :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
@@ -12,6 +13,7 @@
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
       :maxlength="props.maxLength > 0 ? props.maxLength : undefined"
+      :name="props.name || props.controlAttrs?.name"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -22,15 +24,16 @@
       @change="handleChange"
     ></textarea>
     <div :class="nh.be('extra')">
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="props.loading" :class="nh.be('loading')">
           <Icon
             v-bind="icons.loading"
             :effect="props.loadingEffect || icons.loading.effect"
             :icon="props.loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
       <div v-if="props.maxLength > 0" :class="nh.be('count')">
         <slot name="count" :value="currentValue">
           {{ `${currentLength}/${props.maxLength}` }}
@@ -91,7 +94,12 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       sync: false,
-      controlClass: null
+      controlClass: null,
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const nh = useNameHelper('textarea')

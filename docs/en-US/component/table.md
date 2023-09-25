@@ -186,6 +186,8 @@ At this time, you need to call the `refresh` method of the Table instance to rec
 
 ### Resize Column Width
 
+^[Since v2.1.24](!s)
+
 Adding the `col-resizable` prop enables resize column width.
 
 :::
@@ -193,6 +195,8 @@ Adding the `col-resizable` prop enables resize column width.
 :::demo table/cell-span
 
 ### Merge Cells
+
+^[Since v2.1.24](!s)
 
 Provide a callback function via the `cell-span` of column options to set the span of each cell.
 
@@ -203,6 +207,8 @@ If you want to merge the header, you need to set the `head-span` of column optio
 :::demo table/summary
 
 ### Table Summary
+
+^[Since v2.1.24](!s)
 
 Similar to columns, you can define summaries via the `summaries` prop or the TableSummary component.
 
@@ -425,7 +431,7 @@ type TableFootPropFn<P = any> = (data: {
 
 type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
   ColumnWithKey<D, Val>,
-  'name' | 'key' | 'metaData' | 'meta'
+  'name' | 'key' | 'meta'
 >
 type TableFilterProfile<
   D = Data,
@@ -552,7 +558,6 @@ interface TableFootPayload {
 
 | Name             | Description                                                                                                                          | Parameters                                                                              | Since    |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | -------- |
-| ~~body-scroll~~  | Emitted when the table is scrolled vertically, returns an object containing the scroll offset and scroll percentage                  | `(scroll: { client: number, percent: number })`                                         | -        |
 | scroll           | Emitted when the table is scrolled, returns an object containing the scroll offset and scroll percentage                             | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
 | row-enter        | Emitted when the mouse moves into a row, returns row data, row index and row position index                                          | `((payload: TableRowPayload)`                                                           | -        |
 | row-leave        | Emitted when the mouse moves out of the row, returns row data, row index and row position index                                      | `(payload: TableRowPayload)`                                                            | -        |
@@ -613,7 +618,6 @@ interface TableFootPayload {
 | key \| id-key    | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                                                  | `''`        | -        |
 | accessor         | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -        |
 | fixed            | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -        |
-| ~~class-name~~   | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | -        |
 | class            | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | `2.1.19` |
 | style            | `StyleType`                            | Custom style for the cell in this column                                                                                                     | `null`      | `2.0.1`  |
 | attrs            | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                                                | `null`      | `2.0.1`  |
@@ -630,7 +634,6 @@ interface TableFootPayload {
 | disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -        |
 | truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
 | order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
-| ~~meta-data~~    | `Record<any, any>`                     | Set the column metadata                                                                                                                      | `null`      | -        |
 | meta             | `any`                                  | Set the column metadata                                                                                                                      | `null`      | `2.1.24` |
 | text-align       | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
 | head-span        | `number`                               | Set the head span                                                                                                                            | `1`         | `2.1.24` |

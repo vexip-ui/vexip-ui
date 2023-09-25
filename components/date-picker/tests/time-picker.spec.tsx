@@ -124,6 +124,28 @@ describe('TimePicker', () => {
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
   })
 
+  it('popper show', async () => {
+    const wrapper = mount(TimePicker)
+
+    expect(wrapper.find('.vxp-time-picker__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-time-picker__popper').attributes('style') || '').not.toContain(
+      'display: none;'
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(TimePicker, {
+      props: { popperAlive: false }
+    })
+
+    expect(wrapper.find('.vxp-time-picker__popper').exists()).toBe(false)
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-time-picker__popper').exists()).toBe(true)
+  })
+
   it('disabled', async () => {
     const wrapper = mount(TimePicker)
     const selector = wrapper.find('.vxp-time-picker__selector')

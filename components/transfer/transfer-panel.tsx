@@ -3,7 +3,6 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { NumberInput } from '@/components/number-input'
-// import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 
@@ -19,7 +18,7 @@ import {
 } from 'vue'
 
 import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/hooks'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -29,16 +28,6 @@ import type { TransferOptionState } from './symbol'
 
 export default defineComponent({
   name: 'TransferPanel',
-  // components: {
-  //   Checkbox,
-  //   CollapseTransition,
-  //   Icon,
-  //   Input,
-  //   NumberInput,
-  //   Renderer,
-  //   ResizeObserver,
-  //   VirtualList
-  // },
   props: {
     type: {
       type: String as PropType<'source' | 'target'>,
@@ -109,6 +98,8 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const nh = useNameHelper('transfer')
     const icons = useIcons()
+
+    const { isRtl } = useRtl()
 
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
@@ -519,7 +510,10 @@ export default defineComponent({
                   title={props.locale.reverse}
                   onClick={handleReverse}
                 >
-                  <Icon {...icons.value.retweet} scale={1.2}></Icon>
+                  <Icon
+                    {...icons.value.retweet}
+                    scale={(icons.value.retweet.scale || 1) * 1.2}
+                  ></Icon>
                 </div>
                 <div class={nh.be('counter')}>
                   {`${currentSelected.value.size}/${visibleOptions.value.length}`}
@@ -536,6 +530,7 @@ export default defineComponent({
                         {...icons.value.loading}
                         effect={props.loadingEffect || icons.value.loading.effect}
                         icon={props.loadingIcon || icons.value.loading.icon}
+                        label={'loading'}
                       ></Icon>
                     </div>
                   )}
@@ -550,7 +545,7 @@ export default defineComponent({
       if (typeof props.filter !== 'function') return null
 
       const stop = (e: Event) => e.stopPropagation()
-      const setFilter = (value: string) => (currentFilter.value = value)
+      // const setFilter = (value: string) => (currentFilter.value = value)
 
       return (
         <div ref={search} class={nh.be('filter')}>
@@ -559,10 +554,10 @@ export default defineComponent({
             v-model:value={currentFilter.value}
             inherit
             clearable
+            sync
             disabled={props.disabled}
             placeholder={searching.value ? undefined : props.locale.search}
             onKeydown={stop}
-            onInput={setFilter}
             onFocus={() => (searching.value = true)}
             onBlur={() => (searching.value = false)}
           >
@@ -629,7 +624,7 @@ export default defineComponent({
             : (
               <div class={nh.be('pagination')}>
                 <Icon
-                  {...icons.value.arrowLeft}
+                  {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
                   class={[
                     nh.be('page-plus'),
                     currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
@@ -648,7 +643,7 @@ export default defineComponent({
                 <span style={'margin: 0 4px'}>{'/'}</span>
                 <span>{totalPages.value}</span>
                 <Icon
-                  {...icons.value.arrowRight}
+                  {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
                   class={[
                     nh.be('page-minus'),
                     currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')

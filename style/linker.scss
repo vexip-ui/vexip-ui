@@ -40,7 +40,7 @@ $linker: map.merge(
   transition: get-css-var('transition-color');
 
   & + & {
-    margin-left: get-css-var('linker-series-span');
+    margin-inline-start: get-css-var('linker-series-span');
   }
 
   &:hover,
@@ -58,7 +58,7 @@ $linker: map.merge(
       position: absolute;
       right: 0;
       bottom: 0;
-      left: 0;
+      inset-inline-start: 0;
       height: get-css-var('linker-underline-height');
       content: '';
       background-color: get-css-var('linker-color-hover');
@@ -91,7 +91,7 @@ $linker: map.merge(
   }
 
   &__icon {
-    margin-right: 3px;
+    margin-inline-end: 3px;
   }
 
   @each $type in $types {

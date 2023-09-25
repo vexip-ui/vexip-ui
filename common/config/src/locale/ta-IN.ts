@@ -1,7 +1,7 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * Tamil language config
+ * Tamil locale config
  */
 export function taINLocale() {
   return defineLocaleConfig({
@@ -155,6 +155,13 @@ export function taINLocale() {
         end: 'முடிவு',
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
       }
+    },
+
+    tour: {
+      prev: 'முன்',
+      next: 'அடுத்தவர்',
+      done: 'முடிந்த',
+      stepCount: 'படிமுறை {n}'
     },
 
     transfer: {

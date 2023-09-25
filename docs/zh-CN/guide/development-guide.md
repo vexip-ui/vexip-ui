@@ -67,9 +67,21 @@ pnpm run create [component]
 - `docs/en-US/component/[component].md`
 - `docs/zh-CN/component/[component].md`
 - `style/[component].scss`
+- `docs/.vitepress/theme/i18n/en-US.ts`
+- `docs/.vitepress/theme/i18n/zh-CN.ts`
+- `docs/.vitepress/theme/i18n/helper.ts`
+- `docs/.vitepress/config/component.ts`
 
-确认无误后，执行引导命令，即可开始开发组件及其文档开发。
+除了上述的模版文件外，我们还有一些文件名的约定：
+
+- `components/[component]/symbol.ts` 用来定义类型和一些通用的常量与变量
+- `components/[component]/helpers.ts` 用来定义一些专用的帮助方法
+- `components/[component]/hooks.ts` 用来定义一些专用的钩子方法
+
+确认无误后，执行引导命令：
 
 ```sh
 pnpm run bootstrap
 ```
+
+完成后即可开始开发组件及其文档开发。

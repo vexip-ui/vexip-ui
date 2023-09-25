@@ -3,6 +3,7 @@
 @use './preset.scss';
 
 @use './icon.scss';
+@use './affix.scss';
 @use './alert.scss';
 @use './anchor.scss';
 @use './anchor-link.scss';
@@ -110,6 +111,8 @@
 @use './timeline.scss';
 @use './timeline-item.scss';
 @use './toast.scss';
+@use './tour.scss';
+@use './tour-step.scss';
 @use './transfer.scss';
 @use './tree.scss';
 @use './typography.scss';

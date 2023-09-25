@@ -6,7 +6,8 @@ export interface SelectKeyConfig extends OptionKeyConfig {
 }
 
 export type SelectRawOption = RawOption
-export type SelectValue = string | number | null | (string | number)[]
+export type SelectBaseValue = string | number | boolean
+export type SelectValue = SelectBaseValue | SelectBaseValue[] | null
 
 export interface SelectOptionState extends OptionState {
   group: boolean,
@@ -16,3 +17,6 @@ export interface SelectOptionState extends OptionState {
 }
 
 export type SelectFilter = (value: string, option: SelectOptionState) => boolean
+
+export type SelectEvent = (value: SelectBaseValue, data: any) => void
+export type ChangeEvent = (value: SelectValue, data: any | any[]) => void

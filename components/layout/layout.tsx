@@ -15,7 +15,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useMounted } from '@vexip-ui/hooks'
+import { createSlotRender, useMounted } from '@vexip-ui/hooks'
 import { getXBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
@@ -271,16 +271,6 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    function createSlotRender(names: string[], fallback?: (params: any) => any) {
-      for (const name of names) {
-        if (slots[name]) {
-          return (params: any) => renderSlot(slots, name, params)
-        }
-      }
-
-      return fallback || null
-    }
-
     function renderSign() {
       if (!props.logo && !props.signName && !slots.sign) {
         return null
@@ -340,13 +330,13 @@ export default defineComponent({
           }}
         >
           {{
-            left: createSlotRender(['header-left', 'headerLeft'], () =>
+            left: createSlotRender(slots, ['header-left', 'headerLeft'], () =>
               signInHeader.value ? renderSign() : null
             ),
-            default: createSlotRender(['header-main', 'headerMain']),
-            right: createSlotRender(['header-right', 'headerRight']),
-            user: createSlotRender(['header-user', 'headerUser']),
-            avatar: createSlotRender(['header-avatar', 'headerAvatar'])
+            default: createSlotRender(slots, ['header-main', 'headerMain']),
+            right: createSlotRender(slots, ['header-right', 'headerRight']),
+            user: createSlotRender(slots, ['header-user', 'headerUser']),
+            avatar: createSlotRender(slots, ['header-avatar', 'headerAvatar'])
           }}
         </LayoutHeader>
       )
@@ -385,12 +375,12 @@ export default defineComponent({
                 onMenuSelect={handleMenuSelect}
               >
                 {{
-                  top: createSlotRender(['aside-top', 'asideTop'], () =>
+                  top: createSlotRender(slots, ['aside-top', 'asideTop'], () =>
                     !signInHeader.value ? renderSign() : null
                   ),
-                  default: createSlotRender(['aside-main', 'asideMain']),
-                  bottom: createSlotRender(['aside-bottom', 'asideBottom']),
-                  expand: createSlotRender(['aside-expand', 'asideExpand'])
+                  default: createSlotRender(slots, ['aside-main', 'asideMain']),
+                  bottom: createSlotRender(slots, ['aside-bottom', 'asideBottom']),
+                  expand: createSlotRender(slots, ['aside-expand', 'asideExpand'])
                 }}
               </LayoutAside>
               )}
@@ -406,7 +396,7 @@ export default defineComponent({
       return (
         <LayoutMain fixed={props.fixedMain}>
           {{
-            default: createSlotRender(['main'])
+            default: createSlotRender(slots, ['main'])
           }}
         </LayoutMain>
       )
@@ -424,8 +414,8 @@ export default defineComponent({
           vertical-links={props.verticalLinks}
         >
           {{
-            links: createSlotRender(['footer-links', 'footerLinks']),
-            copyright: createSlotRender(['footer-copyright', 'footerCopyright'])
+            links: createSlotRender(slots, ['footer-links', 'footerLinks']),
+            copyright: createSlotRender(slots, ['footer-copyright', 'footerCopyright'])
           }}
         </LayoutFooter>
       )

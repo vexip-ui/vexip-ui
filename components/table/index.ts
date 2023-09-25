@@ -1,5 +1,7 @@
 import Table from './table.vue'
 
+import type { ComponentPublicInstance } from 'vue'
+
 export { Table }
 export { tableProps } from './props'
 export {
@@ -11,7 +13,8 @@ export {
   defineSummaries
 } from './helper'
 
-export type TableExposed = InstanceType<typeof Table>
+export type TableExposed = ComponentPublicInstance & InstanceType<typeof Table>
+
 export type { TableProps, TableCProps } from './props'
 export type {
   TableKeyConfig,

@@ -100,7 +100,7 @@ createApp(App).use(install).mount('#app')
 
 ### 按需引入
 
-如果你正在使用按需引入，则需要一些额外的配置，这里我们以 vite 为例，Webpack 同理。
+如果你正在使用按需引入，则需要一些额外的配置，这里我们以 Vite 为例，Webpack 同理。
 
 首先需要准备一个单独的文件，并改用 `@forward...with` 修改变量：
 
@@ -150,9 +150,9 @@ export default defineConfig({
 
 ```vue
 <template>
-  <transition name="vxp-fade">
+  <Transition name="vxp-fade">
     <div v-if="active"></div>
-  </transition>
+  </Transition>
 </template>
 ```
 

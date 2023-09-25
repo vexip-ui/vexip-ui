@@ -61,6 +61,7 @@ export const cascaderProps = buildProps({
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
+  popperAlive: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(fullValue: string, data: Data) => void>(),
   onCancel: eventProp<(fullValue: string, data: Data) => void>(),

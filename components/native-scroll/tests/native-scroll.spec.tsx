@@ -157,6 +157,8 @@ describe('NativeScroll', () => {
     wrapper.vm.refresh()
     vi.runAllTimers()
     await nextTick()
+    vi.runAllTimers()
+    await nextTick()
 
     expect(onXEnabledChange).toHaveBeenCalled()
     expect(onYEnabledChange).toHaveBeenCalled()

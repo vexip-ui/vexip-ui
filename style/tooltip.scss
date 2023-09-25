@@ -83,12 +83,20 @@ $tooltip: map.merge(
       #{$arrow} {
         bottom: 0;
         border-width: $size $size 0;
-        transform: translate(-50%, 100%);
+        transform: translateY(100%);
+
+        // @include rtl {
+        //   transform: translate(50%, 100%);
+        // }
 
         &::after {
           bottom: 1px;
           border-width: $size $size 0;
           transform: translateX(-50%);
+
+          @include rtl {
+            transform: translateX(50%);
+          }
         }
       }
     }
@@ -99,12 +107,20 @@ $tooltip: map.merge(
       #{$arrow} {
         top: 0;
         border-width: 0 $size $size;
-        transform: translate(-50%, -100%);
+        transform: translateY(-100%);
+
+        // @include rtl {
+        //   transform: translate(50%, -100%);
+        // }
 
         &::after {
           top: 1px;
           border-width: 0 $size $size;
           transform: translateX(-50%);
+
+          @include rtl {
+            transform: translateX(50%);
+          }
         }
       }
     }
@@ -115,12 +131,21 @@ $tooltip: map.merge(
       #{$arrow} {
         right: 0;
         border-width: $size 0 $size $size;
-        transform: translate(100%, -50%);
+        transform: translateX(100%);
+
+        @include rtl {
+          border-width: $size $size $size 0;
+          transform: translateX(100%) scaleX(-1);
+        }
 
         &::after {
-          right: 1px;
+          inset-inline-end: 1px;
           border-width: $size 0 $size $size;
           transform: translateY(-50%);
+
+          @include rtl {
+            border-width: $size $size $size 0;
+          }
         }
       }
     }
@@ -131,12 +156,21 @@ $tooltip: map.merge(
       #{$arrow} {
         left: 0;
         border-width: $size $size $size 0;
-        transform: translate(-100%, -50%);
+        transform: translateX(-100%);
+
+        @include rtl {
+          border-width: $size 0 $size $size;
+          transform: translateX(-100%) scaleX(-1);
+        }
 
         &::after {
-          left: 1px;
+          inset-inline-start: 1px;
           border-width: $size $size $size 0;
           transform: translateY(-50%);
+
+          @include rtl {
+            border-width: $size 0 $size $size;
+          }
         }
       }
     }
@@ -162,10 +196,18 @@ $tooltip: map.merge(
 
     &[data-popper-placement='top-start'] #{$arrow} {
       left: $h-offset;
+
+      @include rtl {
+        left: calc(100% - #{$h-offset});
+      }
     }
 
     &[data-popper-placement='top-end'] #{$arrow} {
       left: calc(100% - #{$h-offset});
+
+      @include rtl {
+        left: $h-offset;
+      }
     }
 
     &[data-popper-placement='bottom'] #{$arrow} {
@@ -174,10 +216,18 @@ $tooltip: map.merge(
 
     &[data-popper-placement='bottom-start'] #{$arrow} {
       left: $h-offset;
+
+      @include rtl {
+        left: calc(100% - #{$h-offset});
+      }
     }
 
     &[data-popper-placement='bottom-end'] #{$arrow} {
       left: calc(100% - #{$h-offset});
+
+      @include rtl {
+        left: $h-offset;
+      }
     }
 
     &[data-popper-placement='left'] #{$arrow} {
@@ -240,20 +290,20 @@ $tooltip: map.merge(
 
       &[data-popper-placement^='left'] {
         #{$arrow} {
-          border-left-color: $border-color;
+          border-inline-start-color: $border-color;
 
           &::after {
-            border-left-color: $fill-color;
+            border-inline-start-color: $fill-color;
           }
         }
       }
 
       &[data-popper-placement^='right'] {
         #{$arrow} {
-          border-right-color: $border-color;
+          border-inline-end-color: $border-color;
 
           &::after {
-            border-right-color: $fill-color;
+            border-inline-end-color: $fill-color;
           }
         }
       }

@@ -1,5 +1,10 @@
 <template>
-  <label :class="className" :aria-disabled="isDisabled" @click="handleClick">
+  <label
+    :id="idFor"
+    :class="className"
+    :aria-disabled="isDisabled"
+    @click="handleClick"
+  >
     <input
       ref="input"
       type="checkbox"
@@ -7,8 +12,10 @@
       :checked="currentChecked"
       :disabled="isDisabled"
       :tabindex="props.tabIndex"
+      :name="props.name"
       @submit.prevent
       @change="handleChange(!currentChecked)"
+      @click.stop
     />
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
@@ -69,7 +76,11 @@ export default defineComponent({
       partial: false,
       tabIndex: 0,
       loading: () => loading.value,
-      loadingLock: false
+      loadingLock: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const groupState = inject(GROUP_STATE, null)

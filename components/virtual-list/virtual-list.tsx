@@ -4,7 +4,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 import { computed, defineComponent, nextTick, ref, toRefs, watch } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useVirtual } from '@vexip-ui/hooks'
+import { createSlotRender, useVirtual } from '@vexip-ui/hooks'
 import { virtualListProps } from './props'
 
 import type { NativeScrollExposed } from '@/components/native-scroll'
@@ -32,7 +32,9 @@ export default defineComponent({
       bufferSize: 5,
       listTag: 'div',
       itemsTag: 'ul',
-      itemsAttrs: null
+      itemsAttrs: null,
+      hideBar: false,
+      lockItems: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -45,6 +47,7 @@ export default defineComponent({
 
     const {
       indexMap,
+      heightTree,
       scrollOffset,
       visibleItems,
       listStyle,
@@ -73,6 +76,8 @@ export default defineComponent({
       scroll,
       wrapper,
       list,
+      indexMap,
+      heightTree,
       scrollOffset,
       scrollTo,
       scrollBy,
@@ -100,6 +105,12 @@ export default defineComponent({
       emitEvent(props.onResize, entry)
     }
 
+    function onItemResize(key: number | string | symbol, entry: ResizeObserverEntry) {
+      if (!props.lockItems) {
+        handleItemResize(key, entry)
+      }
+    }
+
     function refresh() {
       scroll.value?.refresh()
     }
@@ -123,46 +134,52 @@ export default defineComponent({
 
       return (
         <NativeScroll
-          ref={scroll}
           {...attrs}
+          ref={scroll}
           inherit={props.inherit}
           class={[nh.b(), attrs.class]}
-          use-y-bar
+          use-y-bar={!props.hideBar}
           scroll-y={scrollOffset.value}
           onScroll={onScroll}
           onResize={onResize}
         >
-          <ResizeObserver throttle onResize={refresh}>
-            <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
-              <ItemsTag
-                {...itemsAttrs}
-                class={[nh.be('items'), itemsClass]}
-                style={[itemsStyle.value, itemsOtherStyle]}
-              >
-                {itemSlot && props.items.length
-                  ? renderingItems.map(item => {
-                    const key = item[keyField]
-                    const index = keyIndexMap.get(key)
-                    const vnode = itemSlot({ item, index })[0]
+          {{
+            default: () => (
+              <ResizeObserver throttle onResize={refresh}>
+                <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
+                  <ItemsTag
+                    {...itemsAttrs}
+                    class={[nh.be('items'), itemsClass]}
+                    style={[itemsStyle.value, itemsOtherStyle]}
+                  >
+                    {itemSlot && props.items.length
+                      ? renderingItems.map(item => {
+                        const key = item[keyField]
+                        const index = keyIndexMap.get(key)
+                        const vnode = itemSlot({ item, index })[0]
 
-                    if (itemFixed) {
-                      vnode.key = key
+                        if (itemFixed) {
+                          vnode.key = key
 
-                      return vnode
-                    }
+                          return vnode
+                        }
 
-                    const onResize = handleItemResize.bind(null, key)
+                        const onResize = onItemResize.bind(null, key)
 
-                    return (
-                      <ResizeObserver key={key} throttle onResize={onResize}>
-                        {() => vnode}
-                      </ResizeObserver>
-                    )
-                  })
-                  : slots.empty?.()}
-              </ItemsTag>
-            </ListTag>
-          </ResizeObserver>
+                        return (
+                          <ResizeObserver key={key} throttle onResize={onResize}>
+                            {() => vnode}
+                          </ResizeObserver>
+                        )
+                      })
+                      : slots.empty?.()}
+                  </ItemsTag>
+                </ListTag>
+              </ResizeObserver>
+            ),
+            prefixTrap: createSlotRender(slots, ['prefix-trap', 'prefixTrap']),
+            suffixTrap: createSlotRender(slots, ['suffix-trap', 'suffixTrap'])
+          }}
         </NativeScroll>
       )
     }

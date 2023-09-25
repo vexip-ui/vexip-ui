@@ -8,6 +8,7 @@ $drawer: map.merge(
   (
     z-index: get-css-var('z-index-masker'),
     bg-color: get-css-var('bg-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     header-v-padding: 10px,
     header-h-padding: 14px,
     title-color: get-css-var('content-color-primary'),
@@ -62,20 +63,39 @@ $drawer: map.merge(
       max-width: calc(100vw - 14px);
     }
 
+    $hide-mask: #{&}--hide-mask;
+    $shadow: get-css-var('shadow-blur') get-css-var('drawer-s-color');
+
     &--top {
       top: 0;
+
+      &#{$hide-mask} {
+        box-shadow: 0 2px $shadow;
+      }
     }
 
     &--right {
       right: 0;
+
+      &#{$hide-mask} {
+        box-shadow: -2px 0 $shadow;
+      }
     }
 
     &--bottom {
       bottom: 0;
+
+      &#{$hide-mask} {
+        box-shadow: 0 -2px $shadow;
+      }
     }
 
     &--left {
       left: 0;
+
+      &#{$hide-mask} {
+        box-shadow: 2px 0 $shadow;
+      }
     }
 
     &--resizing {
@@ -126,7 +146,7 @@ $drawer: map.merge(
     align-items: center;
     height: 24px;
     padding: 0;
-    margin-left: 6px;
+    margin-inline-start: 6px;
     color: get-css-var('drawer-close-color');
     cursor: pointer;
     background-color: transparent;

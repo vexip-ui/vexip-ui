@@ -12,14 +12,14 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "jsxImportSource": "vue",
     "sourceMap": false,
     "baseUrl": ".",
     "types": ["node", "vite/client"],
     "paths": {
       "@/*": ["./*"],
       "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["."],
-      "vue-router": ["node_modules/vue-router"]
+      "vexip-ui": ["."]
     },
     "lib": ["esnext", "dom"]
   },

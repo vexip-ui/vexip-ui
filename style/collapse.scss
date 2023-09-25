@@ -6,10 +6,13 @@
 $collapse: () !default;
 $collapse: map.merge(
   (
+    header-color: inherit,
+    header-color-hover: get-css-var('color-primary-base'),
     header-color-disabled: get-css-var('content-color-disabled'),
     header-bg-color: transparent,
     header-bg-color-card: get-css-var('fill-color-background'),
     arrow-color: get-css-var('content-color-secondary'),
+    arrow-color-hover: get-css-var('color-primary-base'),
     arrow-color-disabled: get-css-var('content-color-humble'),
     content-color-disabled: get-css-var('content-color-disabled'),
     content-v-padding: 10px,
@@ -83,20 +86,6 @@ $collapse: map.merge(
     border-top: 0;
   }
 
-  &__header {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 8px 14px;
-    cursor: pointer;
-    transition: get-css-var('transition-color');
-  }
-
-  &__panel--disabled &__header {
-    color: get-css-var('collapse-header-color-disabled');
-    cursor: not-allowed;
-  }
-
   &__arrow {
     position: absolute;
     top: 50%;
@@ -107,27 +96,55 @@ $collapse: map.merge(
     color: get-css-var('collapse-arrow-color');
     transition: get-css-var('transition-color'), get-css-var('transition-transform');
     transform: translate(-50%, -50%);
+
+    @include rtl {
+      transform: translate(50%, -50%);
+    }
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 14px;
+    line-height: inherit;
+    color: get-css-var('collapse-header-color');
+    cursor: pointer;
+    background-color: get-css-var('collapse-header-bg-color');
+    border: 0;
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('collapse-header-color-hover');
+
+      #{$arrow} {
+        color: get-css-var('collapse-arrow-color-hover');
+      }
+    }
   }
 
   &--arrow-left,
   &__panel--arrow-left {
     #{$header} {
-      padding-left: 36px;
+      padding-inline-start: 36px;
     }
 
     #{$arrow} {
-      left: 16px;
+      inset-inline-start: 16px;
     }
   }
 
   &--arrow-right,
   &__panel--arrow-right {
     #{$header} {
-      padding-right: 36px;
+      padding-inline-end: 36px;
     }
 
     #{$arrow} {
-      left: calc(100% - 16px);
+      inset-inline-start: calc(100% - 16px);
     }
   }
 
@@ -140,10 +157,24 @@ $collapse: map.merge(
 
   &__panel--expanded &__arrow {
     transform: translate(-50%, -50%) rotate(90deg);
+
+    @include rtl {
+      transform: translate(50%, -50%) rotate(90deg);
+    }
   }
 
-  &__panel--disabled &__arrow {
-    color: get-css-var('collapse-arrow-color-disabled');
+  &__panel--disabled &__header {
+    cursor: not-allowed;
+
+    &,
+    &:hover,
+    &:focus {
+      color: get-css-var('collapse-header-color-disabled');
+
+      #{$arrow} {
+        color: get-css-var('collapse-arrow-color-disabled');
+      }
+    }
   }
 
   &__body {
@@ -160,7 +191,7 @@ $collapse: map.merge(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__panel--disabled &__content {

@@ -49,7 +49,7 @@
           @next-unit="enterColumn('next')"
           @blur="startState.column = null"
         ></DateControl>
-        <template v-if="usingRange">
+        <template v-if="props.range">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
               <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
@@ -100,18 +100,19 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
-          <Icon v-bind="icons.clear"></Icon>
+          <Icon v-bind="icons.clear" label="clear"></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
             :effect="props.loadingEffect || icons.loading.effect"
             :icon="props.loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
     </div>
     <Popper
       ref="popper"
@@ -119,6 +120,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
     >
       <DatePanel
@@ -135,7 +137,7 @@
         :today="props.today"
         :no-action="props.noAction"
         :steps="props.steps"
-        :range="usingRange"
+        :range="props.range"
         :min="props.min"
         :max="props.max"
         :disabled-date="isDateDisabled"
@@ -165,13 +167,6 @@ import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import {
-  placementWhileList,
-  useClickOutside,
-  useHover,
-  usePopper,
-  useSetTimeout
-} from '@vexip-ui/hooks'
-import {
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -183,16 +178,22 @@ import {
   useWordSpace
 } from '@vexip-ui/config'
 import {
+  placementWhileList,
+  useClickOutside,
+  useHover,
+  usePopper,
+  useSetTimeout
+} from '@vexip-ui/hooks'
+import {
   boundRange,
   differenceDays,
   doubleDigits,
+  format,
   getTime,
-  isDefined,
   isLeapYear,
   startOfMonth,
   toDate,
-  toFalse,
-  warnOnce
+  toFalse
 } from '@vexip-ui/utils'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -200,7 +201,7 @@ import { datePickerTypes } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DateTimeType, TimeType } from './symbol'
+import type { DatePickerChangeEvent, DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
 
 const invalidDate = new Date('')
 
@@ -213,7 +214,7 @@ export default defineComponent({
     Popper
   },
   props: datePickerProps,
-  emits: ['update:value', 'update:visible'],
+  emits: ['update:value', 'update:formatted-value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const {
       idFor,
@@ -247,11 +248,11 @@ export default defineComponent({
         static: true
       },
       format: 'yyyy-MM-dd HH:mm:ss',
+      valueFormat: null,
       filler: {
         default: '-',
         validator: value => value.length === 1
       },
-      noFiller: null,
       clearable: false,
       noAction: false,
       labels: () => ({}),
@@ -277,7 +278,6 @@ export default defineComponent({
         default: () => new Date(),
         validator: value => !Number.isNaN(new Date(value))
       },
-      isRange: null,
       range: null,
       loading: () => loading.value,
       loadingIcon: null,
@@ -289,15 +289,9 @@ export default defineComponent({
       outsideCancel: false,
       placeholder: null,
       unitReadonly: false,
-      weekStart: null
+      weekStart: null,
+      popperAlive: null
     })
-
-    if (isDefined(props.noFiller)) {
-      warnOnce(
-        "[vexip-ui:DatePicker] 'on-filler' prop has been deprecated, please " +
-          "use 'placeholder' prop to replace it"
-      )
-    }
 
     const calendarLocale = useLocale('calendar')
     const datePickerLocale = useLocale('datePicker')
@@ -331,16 +325,6 @@ export default defineComponent({
     const endInput = ref<InstanceType<typeof DateControl>>()
     const datePanel = ref<InstanceType<typeof DatePanel>>()
 
-    const usingRange = computed(() => {
-      if (isDefined(props.isRange)) {
-        warnOnce(
-          "[vexip-ui:DatePicker] 'is-range' prop has been deprecated, please " +
-            "use 'range' prop to replace it"
-        )
-      }
-
-      return props.range ?? props.isRange ?? false
-    })
     const mergedLocale = computed(() => {
       return {
         ...calendarLocale.value,
@@ -355,10 +339,7 @@ export default defineComponent({
 
       const { select, start, [props.type]: type } = mergedLocale.value.placeholder
 
-      return makeSentence(
-        usingRange.value ? `${start} ${type}` : `${select} ${type}`,
-        wordSpace.value
-      )
+      return makeSentence(props.range ? `${start} ${type}` : `${select} ${type}`, wordSpace.value)
     })
     const endPlaceholder = computed(() => {
       if (props.placeholder) {
@@ -386,7 +367,7 @@ export default defineComponent({
           [nh.bm('no-second')]: !startState.enabled.second,
           [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('is-range')]: usingRange.value
+          [nh.bm('is-range')]: props.range
         }
       ]
     })
@@ -412,7 +393,7 @@ export default defineComponent({
         return `${values.slice(0, 3).join('-')} ${values.slice(3).join(':')}`
       })
 
-      return usingRange.value ? values : values[0]
+      return props.range ? values : values[0]
     })
     const hoveredLarge = computed(() => {
       if (!firstSelected.value) return false
@@ -505,7 +486,7 @@ export default defineComponent({
     const endMinTime = computed(() => {
       if (
         props.type === 'datetime' &&
-        usingRange.value &&
+        props.range &&
         props.min &&
         !differenceDays(props.min, startState.getDate())
       ) {
@@ -517,7 +498,7 @@ export default defineComponent({
     const endMaxTime = computed(() => {
       if (
         props.type === 'datetime' &&
-        usingRange.value &&
+        props.range &&
         props.max &&
         !differenceDays(props.max, startState.getDate())
       ) {
@@ -527,7 +508,7 @@ export default defineComponent({
       return ''
     })
     const startReversed = computed(() => {
-      if (!usingRange.value) return false
+      if (!props.range) return false
 
       const startValue = startState.dateValue
       const endValue = endState.dateValue
@@ -573,7 +554,7 @@ export default defineComponent({
       )
     })
     const endError = computed(() => {
-      if (!usingRange.value) return false
+      if (!props.range) return false
 
       const { hour, minute, second } = endState.dateValue
       const { isTimeDisabled } = endTimeBound
@@ -800,7 +781,7 @@ export default defineComponent({
         state.setDate(date)
         toggleActivated(!!value[i], i === 0 ? 'start' : 'end')
 
-        if (!usingRange.value) break
+        if (!props.range) break
       }
     }
 
@@ -880,7 +861,7 @@ export default defineComponent({
     }
 
     function verifyDate() {
-      if (startError.value || (usingRange.value && endError.value)) {
+      if (startError.value || (props.range && endError.value)) {
         parseValue(props.value)
       }
     }
@@ -901,26 +882,42 @@ export default defineComponent({
         lastValue.value = getStringValue()
 
         const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
-        const emitValues: string[] | number[] = []
+        const emitValues: number[] = []
+        const formattedValues: Dateable[] = []
+
+        const valueFormat = props.valueFormat
+        const formatValue: DatePickerFormatFn =
+          typeof valueFormat === 'function'
+            ? valueFormat
+            : valueFormat
+              ? timestamp => format(timestamp, valueFormat)
+              : timestamp => timestamp
 
         for (let i = 0; i < 2; ++i) {
           if (props.type === 'year') {
-            emitValues[i] = i === 0 ? startState.dateValue.year : endState.dateValue.year
+            emitValues[i] = new Date(
+              i === 0 ? startState.dateValue.year : endState.dateValue.year,
+              0
+            ).getTime()
           } else if (props.type !== 'datetime') {
-            emitValues[i] = values[i].split(' ')[0]
+            emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()
           } else {
-            emitValues[i] = values[i]
+            emitValues[i] = new Date(values[i]).getTime()
           }
 
-          if (!usingRange.value) break
+          formattedValues[i] = formatValue(emitValues[i])
+
+          if (!props.range) break
         }
 
-        const emitValue = usingRange.value ? emitValues : emitValues[0]
+        const emitValue = props.range ? emitValues : emitValues[0]
+        const formattedValue = props.range ? formattedValues : formattedValues[0]
 
         toggleActivated(true)
         emit('update:value', emitValue)
+        emit('update:formatted-value', formattedValue)
         setFieldValue(emitValue)
-        emitEvent(props.onChange, emitValue)
+        emitEvent(props.onChange as DatePickerChangeEvent, emitValue)
         validateField()
       }
     }
@@ -1016,7 +1013,7 @@ export default defineComponent({
           endState.column = null
         }
 
-        if (usingRange.value && index >= units.length / 2) {
+        if (props.range && index >= units.length / 2) {
           toggleCurrentState('end')
         } else {
           toggleCurrentState('start')
@@ -1152,12 +1149,13 @@ export default defineComponent({
     function handleClear(finish = true) {
       if (props.clearable) {
         nextTick(() => {
-          const emitValue = usingRange.value ? ([] as string[] | number[]) : null
+          const emitValue = props.range ? ([] as number[]) : null
 
           parseValue(null)
           finish && finishInput(false)
           emit('update:value', emitValue)
-          emitEvent(props.onChange, emitValue)
+          emit('update:formatted-value', props.range ? [] : null)
+          emitEvent(props.onChange as DatePickerChangeEvent, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)
           finish && handleBlur()
@@ -1172,8 +1170,13 @@ export default defineComponent({
     }
 
     function handleShortcut(name: string, value: Dateable | Dateable[]) {
+      fallbackFocus()
       parseValue(value)
-      emitEvent(props.onShortcut, name, value)
+      emitEvent(
+        props.onShortcut as (name: string, value: Dateable | Dateable[]) => void,
+        name,
+        value
+      )
       finishInput()
     }
 
@@ -1188,7 +1191,7 @@ export default defineComponent({
     }
 
     function handleDateHover(hoverDate: Date | null) {
-      if (usingRange.value && hoverDate) {
+      if (props.range && hoverDate) {
         hoveredDate.value = hoverDate
 
         if (firstSelected.value) {
@@ -1229,7 +1232,7 @@ export default defineComponent({
         types = ['year', 'month', 'date']
       }
 
-      if (!usingRange.value) {
+      if (!props.range) {
         for (let i = 0, len = types.length; i < len; ++i) {
           startState.dateValue[types[i]] = values[i]
           updateDateActivated(types[i], 'start')
@@ -1293,7 +1296,7 @@ export default defineComponent({
     }
 
     function verifyRangeValue() {
-      if (!usingRange.value) return
+      if (!props.range) return
 
       const startDate = startState.getDate()
       const endDate = endState.getDate()
@@ -1309,7 +1312,7 @@ export default defineComponent({
     }
 
     function enterColumn(type: 'prev' | 'next') {
-      if (usingRange.value) {
+      if (props.range) {
         if (type === 'prev' && currentState.value === 'start' && !startState.column) {
           toggleCurrentState('end')
         }
@@ -1373,7 +1376,6 @@ export default defineComponent({
       currentState,
       hoveredLarge,
 
-      usingRange,
       mergedLocale,
       startPlaceholder,
       endPlaceholder,

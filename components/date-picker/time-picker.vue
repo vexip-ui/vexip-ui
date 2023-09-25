@@ -34,7 +34,6 @@
           :visible="currentVisible"
           :separator="props.separator"
           :filler="props.filler"
-          :no-filler="props.noFiller"
           :labels="props.labels"
           :has-error="startError"
           :placeholder="startPlaceholder"
@@ -49,7 +48,7 @@
           @next-unit="enterColumn('next')"
           @blur="startState.column = null"
         ></TimeControl>
-        <template v-if="usingRange">
+        <template v-if="props.range">
           <div
             :class="[nh.be('exchange'), props.exchange ? nh.bem('exchange', 'enabled') : '']"
             @click="handleExchangeClick"
@@ -70,7 +69,6 @@
             :visible="currentVisible"
             :separator="props.separator"
             :filler="props.filler"
-            :no-filler="props.noFiller"
             :labels="props.labels"
             :has-error="endError"
             :placeholder="endPlaceholder"
@@ -103,7 +101,7 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
           <Icon v-bind="icons.clear"></Icon>
         </div>
@@ -114,7 +112,7 @@
             :icon="props.loadingIcon || icons.loading.icon"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
     </div>
     <Popper
       ref="popper"
@@ -122,6 +120,7 @@
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
     >
       <div :class="nh.be('panel')">
@@ -151,7 +150,7 @@
               @toggle-col="toggleCurrentState('start')"
             ></TimeWheel>
             <TimeWheel
-              v-if="usingRange"
+              v-if="props.range"
               v-model:hour="endState.timeValue.hour"
               v-model:minute="endState.timeValue.minute"
               v-model:second="endState.timeValue.second"
@@ -200,13 +199,6 @@ import { computed, defineComponent, nextTick, reactive, ref, toRef, watch } from
 import TimeWheel from './time-wheel.vue'
 import TimeControl from './time-control.vue'
 import {
-  placementWhileList,
-  useClickOutside,
-  useHover,
-  usePopper,
-  useSetTimeout
-} from '@vexip-ui/hooks'
-import {
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -217,12 +209,19 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
-import { USE_TOUCH, boundRange, doubleDigits, isDefined, warnOnce } from '@vexip-ui/utils'
+import {
+  placementWhileList,
+  useClickOutside,
+  useHover,
+  usePopper,
+  useSetTimeout
+} from '@vexip-ui/hooks'
+import { USE_TOUCH, boundRange, doubleDigits } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 
 import type { PopperExposed } from '@/components/popper'
-import type { TimeType } from './symbol'
+import type { TimePickerChangeEvent, TimeType } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
 const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
@@ -272,7 +271,6 @@ export default defineComponent({
         default: '-',
         validator: value => value.length === 1
       },
-      noFiller: null,
       clearable: false,
       noAction: false,
       noArrow: false,
@@ -284,7 +282,6 @@ export default defineComponent({
       steps: () => [1, 1, 1],
       labels: () => ({}),
       shortcuts: () => [],
-      isRange: null,
       range: null,
       disabled: () => disabled.value,
       transitionName: () => nh.ns('drop'),
@@ -306,15 +303,9 @@ export default defineComponent({
       outsideClose: true,
       outsideCancel: false,
       placeholder: null,
-      unitReadonly: false
+      unitReadonly: false,
+      popperAlive: null
     })
-
-    if (isDefined(props.noFiller)) {
-      warnOnce(
-        "[vexip-ui:TimePicker] 'on-filler' prop has been deprecated, please " +
-          "use 'placeholder' prop to replace it"
-      )
-    }
 
     const locale = useLocale('timePicker', toRef(props, 'locale'))
     const wordSpace = useWordSpace()
@@ -345,16 +336,6 @@ export default defineComponent({
     const startInput = ref<InstanceType<typeof TimeControl>>()
     const endInput = ref<InstanceType<typeof TimeControl>>()
 
-    const usingRange = computed(() => {
-      if (isDefined(props.isRange)) {
-        warnOnce(
-          "[vexip-ui:TimePicker] 'is-range' prop has been deprecated, please " +
-            "use 'range' prop to replace it"
-        )
-      }
-
-      return props.range ?? props.isRange ?? false
-    })
     const startPlaceholder = computed(() => {
       if (props.placeholder) {
         return Array.isArray(props.placeholder) ? props.placeholder[0] : props.placeholder
@@ -362,10 +343,7 @@ export default defineComponent({
 
       const { select, start, time } = locale.value.placeholder
 
-      return makeSentence(
-        usingRange.value ? `${start} ${time}` : `${select} ${time}`,
-        wordSpace.value
-      )
+      return makeSentence(props.range ? `${start} ${time}` : `${select} ${time}`, wordSpace.value)
     })
     const endPlaceholder = computed(() => {
       if (props.placeholder) {
@@ -392,7 +370,7 @@ export default defineComponent({
           [nh.bm('no-second')]: !startState.enabled.second,
           [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('is-range')]: usingRange.value
+          [nh.bm('is-range')]: props.range
         }
       ]
     })
@@ -416,7 +394,7 @@ export default defineComponent({
         return Object.values(state.timeValue).map(doubleDigits).join(':')
       })
 
-      return usingRange.value ? values : values[0]
+      return props.range ? values : values[0]
     })
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && !!lastValue.value
@@ -431,7 +409,7 @@ export default defineComponent({
       )
     })
     const endError = computed(() => {
-      if (!usingRange.value) return false
+      if (!props.range) return false
 
       const { hour, minute, second } = endState.timeValue
 
@@ -582,7 +560,7 @@ export default defineComponent({
           toggleActivated(false, i === 0 ? 'start' : 'end')
         }
 
-        if (!usingRange.value) break
+        if (!props.range) break
       }
     }
 
@@ -613,7 +591,7 @@ export default defineComponent({
     }
 
     function verifyTime() {
-      if (startError.value || (usingRange.value && endError.value)) {
+      if (startError.value || (props.range && endError.value)) {
         parseValue(props.value)
       }
     }
@@ -636,7 +614,7 @@ export default defineComponent({
         toggleActivated(true)
         emit('update:value', currentValue.value)
         setFieldValue(currentValue.value)
-        emitEvent(props.onChange, currentValue.value)
+        emitEvent(props.onChange as TimePickerChangeEvent, currentValue.value)
         validateField()
       }
     }
@@ -694,12 +672,12 @@ export default defineComponent({
     function handleClear(finish = true) {
       if (props.clearable) {
         nextTick(() => {
-          const emitValue = usingRange.value ? ([] as string[]) : ''
+          const emitValue = props.range ? ([] as string[]) : ''
 
           parseValue(null)
           finish && finishInput(false)
           emit('update:value', emitValue)
-          emitEvent(props.onChange, emitValue)
+          emitEvent(props.onChange as TimePickerChangeEvent, emitValue)
           emitEvent(props.onClear)
           clearField(emitValue)
           finish && handleBlur()
@@ -740,7 +718,7 @@ export default defineComponent({
       const state = getCurrentState()
       const prev = state.timeValue[type]
 
-      if ((props.noFiller || state.activated[type]) && prev > 0 && prev < 10) {
+      if (state.activated[type] && prev > 0 && prev < 10) {
         state.timeValue[type] = prev * 10 + number
       } else {
         state.timeValue[type] = number
@@ -822,8 +800,9 @@ export default defineComponent({
         value = value()
       }
 
+      fallbackFocus()
       parseValue(value)
-      emitEvent(props.onShortcut, name, value)
+      emitEvent(props.onShortcut as (name: string, value: string | string[]) => void, name, value)
       finishInput()
     }
 
@@ -832,7 +811,7 @@ export default defineComponent({
     }
 
     function enterColumn(type: 'prev' | 'next') {
-      if (usingRange.value) {
+      if (props.range) {
         if (type === 'prev' && currentState.value === 'start' && !startState.column) {
           toggleCurrentState('end')
         }
@@ -905,7 +884,6 @@ export default defineComponent({
       currentState,
       currentValue,
 
-      usingRange,
       startPlaceholder,
       endPlaceholder,
       className,

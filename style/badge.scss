@@ -71,8 +71,12 @@ $badge: map.merge(
     &--fixed {
       position: absolute;
       top: 0;
-      right: 0;
+      inset-inline-end: 0;
       transform: translate(50%, -50%);
+
+      @include rtl {
+        transform: translate(-50%, -50%);
+      }
     }
 
     @each $type in $types {

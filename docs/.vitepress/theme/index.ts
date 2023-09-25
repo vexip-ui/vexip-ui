@@ -18,9 +18,10 @@ import type { Router } from 'vitepress'
 export default {
   Layout,
   enhanceApp({ app, router }: { app: App, router: Router }) {
-    (prismjs as any).manual = false
+    prismjs.manual = true
 
     syncThemeColors()
+    syncDirection()
     enhanceApp(app)
     enhanceRouter(router)
   }
@@ -39,6 +40,19 @@ function syncThemeColors() {
   if (majorColor && isColor(majorColor)) {
     document.documentElement.style.setProperty('--vxp-color-primary-base', majorColor)
     computeSeriesColors(majorColor)
+  }
+}
+
+function syncDirection() {
+  if (!isClient) return
+
+  const isRtl = localStorage.getItem('vexip-docs-direction-prefer-rtl')
+
+  if (isRtl === 'true') {
+    document.documentElement.classList.add('rtl')
+    document.documentElement.dir = 'rtl'
+  } else {
+    document.documentElement.dir = 'ltr'
   }
 }
 
@@ -64,7 +78,7 @@ function enhanceRouter(router: Router) {
 
   if (isClient && location.pathname === '/') {
     currentPath = currentPath === '/' ? `/${locale.value}/` : currentPath
-    isClient && history.replaceState(null, document.title, `/${locale.value}/`)
+    // isClient && (window.location.href = currentPath)
   }
 
   syncLocale(currentPath)

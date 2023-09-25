@@ -1,20 +1,24 @@
 <template>
-  <div :class="className">
-    <div :class="[nh.be('content'), props.contentClass]" :style="contentStyle">
-      <div :class="nh.be('arrow')" :style="arrowStyle"></div>
+  <div :class="className" :style="style">
+    <div
+      :class="[nh.be('content'), props.contentClass]"
+      :style="{
+        boxShadow: props.shadow ? `0 0 4px ${props.shadow}` : undefined
+      }"
+    >
+      <div ref="arrow" :class="nh.be('arrow')"></div>
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 import { placementWhileList } from '@vexip-ui/hooks'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { bubbleProps } from './props'
-
-import type { CSSProperties } from 'vue'
+import { bubbleTypes } from './symbol'
 
 export default defineComponent({
   name: 'Bubble',
@@ -25,12 +29,18 @@ export default defineComponent({
         default: 'right',
         validator: value => placementWhileList.includes(value)
       },
+      type: {
+        default: null,
+        validator: value => bubbleTypes.includes(value)
+      },
       background: '',
       shadow: false,
       contentClass: null
     })
 
     const nh = useNameHelper('bubble')
+
+    const arrow = ref<HTMLElement>()
 
     const className = computed(() => {
       return [
@@ -40,27 +50,20 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('background')]: props.background,
-          [nh.bm('shadow')]: props.shadow
+          [nh.bm('shadow')]: props.shadow,
+          [nh.bm(props.type)]: props.type !== 'default'
         }
       ]
     })
-    const contentStyle = computed(() => {
-      const style: CSSProperties = {
-        backgroundColor: props.background
+    const style = computed(() => {
+      if (props.background) {
+        return {
+          [nh.cv('color')]: nh.gnv('color-white'),
+          [nh.cv('bg-color')]: props.background
+        }
       }
 
-      if (typeof props.shadow === 'string') {
-        style.boxShadow = `0 0 4px ${props.shadow}`
-      }
-
-      return style
-    })
-    const arrowStyle = computed(() => {
-      const position = props.placement.split('-').shift()
-
-      return {
-        [`border-${position}-color`]: props.background
-      }
+      return undefined
     })
 
     return {
@@ -68,8 +71,9 @@ export default defineComponent({
       nh,
 
       className,
-      contentStyle,
-      arrowStyle
+      style,
+
+      arrow
     }
   }
 })

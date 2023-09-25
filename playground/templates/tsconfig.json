@@ -5,7 +5,9 @@
     "jsx": "preserve",
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "types": ["vexip-ui/types.d.ts"]
   },
   "vueCompilerOptions": {
     "target": 3.3

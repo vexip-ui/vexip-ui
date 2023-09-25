@@ -6,6 +6,8 @@ export type DateTimeType = DateType | TimeType
 
 export type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
 
+export type DatePickerFormatFn = (timestamp: number) => Dateable
+
 export interface DateShortcut {
   name: string,
   value: Dateable | Dateable[] | (() => Dateable | Dateable[])
@@ -38,6 +40,9 @@ export const enum DisabledType {
   AT_MAX_TRUE,
   FALSE
 }
+
+export type DatePickerChangeEvent = (value: number | number[] | null) => void
+export type TimePickerChangeEvent = (value: string | string[]) => void
 
 export const datePickerTypes = Object.freeze<DatePickerType[]>([
   'date',

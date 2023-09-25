@@ -91,8 +91,11 @@ function selectMenu(label: string, meta: AsideMenuItem) {
           :meta="child"
         >
           {{ child.text || t(child.i18n || child.key) }}
-          <span v-if="child.origin && locale !== 'en-US'" class="aside-menu__sub-name">
-            {{ child.origin }}
+          <span
+            v-if="!child.noSub?.includes(locale as string) && (child.subtext || child.subI18n)"
+            class="aside-menu__sub-name"
+          >
+            {{ child.subtext || t(child.subI18n!) }}
           </span>
           <Tag
             v-if="child.tag"
@@ -112,8 +115,11 @@ function selectMenu(label: string, meta: AsideMenuItem) {
         :meta="menu"
       >
         {{ menu.text || t(menu.i18n || menu.key) }}
-        <span v-if="menu.origin && locale !== 'en-US'" class="aside-menu__sub-name">
-          {{ menu.origin }}
+        <span
+          v-if="!menu.noSub?.includes(locale as string) && (menu.subtext || menu.subI18n)"
+          class="aside-menu__sub-name"
+        >
+          {{ menu.subtext || t(menu.subI18n!) }}
         </span>
         <Tag
           v-if="menu.tag"
@@ -133,13 +139,13 @@ function selectMenu(label: string, meta: AsideMenuItem) {
   padding-bottom: 126px;
 
   &__tag {
-    margin-left: 4px;
+    margin-inline-start: 4px;
     font-size: 10px;
     transform: scale(0.8);
   }
 
   &__sub-name {
-    margin-left: 8px;
+    margin-inline-start: 8px;
     color: var(--vxp-content-color-secondary);
     transition: var(--vxp-transition-color);
 

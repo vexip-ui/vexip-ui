@@ -167,7 +167,7 @@ $date-picker: map.merge(
       align-items: flex-start;
       padding: 6px 0;
       background-color: get-css-var('date-picker-shortcut-bg-color');
-      border-right: get-css-var('border-shape') get-css-var('date-picker-d-color');
+      border-inline-end: get-css-var('border-shape') get-css-var('date-picker-d-color');
     }
   }
 
@@ -228,19 +228,19 @@ $date-picker: map.merge(
   }
 
   &__prev-year {
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__next-year {
-    margin-left: 4px;
+    margin-inline-start: 4px;
   }
 
   &__prev-month {
-    left: 30px;
+    inset-inline-start: 30px;
   }
 
   &__next-month {
-    right: 30px;
+    inset-inline-end: 30px;
   }
 
   &__calendar {
@@ -385,7 +385,7 @@ $date-picker: map.merge(
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-left: get-css-var('border-shape') get-css-var('date-picker-d-color');
+    border-inline-start: get-css-var('border-shape') get-css-var('date-picker-d-color');
   }
 
   &__wheel {

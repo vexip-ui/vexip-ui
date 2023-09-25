@@ -10,13 +10,8 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps } from '@vexip-ui/config'
-import type { InputType } from './symbol'
-
-type ChangeListener =
-  | ((value: string | number) => void)
-  | ((value: string) => void)
-  | ((value: number) => void)
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type { ChangeEvent, InputType } from './symbol'
 
 export const inputProps = buildProps({
   size: sizeProp,
@@ -35,7 +30,6 @@ export const inputProps = buildProps({
   autocomplete: booleanProp,
   readonly: booleanProp,
   disabled: booleanProp,
-  inputClass: classProp,
   controlClass: classProp,
   debounce: booleanProp,
   delay: Number,
@@ -51,10 +45,12 @@ export const inputProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   sync: booleanProp,
+  controlAttrs: Object as PropType<Record<string, any>>,
+  name: String,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
-  onInput: eventProp<ChangeListener>(),
-  onChange: eventProp<ChangeListener>(),
+  onInput: eventProp<EventListener<ChangeEvent>>(),
+  onChange: eventProp<EventListener<ChangeEvent>>(),
   onEnter: eventProp(),
   onClear: eventProp(),
   onPrefixClick: eventProp<(event: MouseEvent) => void>(),

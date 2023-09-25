@@ -123,7 +123,7 @@ $transfer: map.merge(
   }
 
   &__checkbox {
-    margin-right: 6px;
+    margin-inline-end: 6px;
   }
 
   &__reverse {
@@ -131,7 +131,7 @@ $transfer: map.merge(
     align-items: center;
     justify-content: center;
     width: 18px;
-    margin-right: 6px;
+    margin-inline-end: 6px;
     color: get-css-var('transfer-reverse-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -162,7 +162,7 @@ $transfer: map.merge(
 
   &__loading {
     display: flex;
-    margin-left: 4px;
+    margin-inline-start: 4px;
   }
 
   &__filter {
@@ -217,7 +217,8 @@ $transfer: map.merge(
   &__pagination {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    margin-inline-start: auto;
+    line-height: 1;
   }
 
   &__page-input {
@@ -226,6 +227,7 @@ $transfer: map.merge(
 
   &__page-plus,
   &__page-minus {
+    color: get-css-var('content-color-secondary');
     cursor: pointer;
     transition: get-css-var('transition-color');
 
@@ -244,11 +246,11 @@ $transfer: map.merge(
   }
 
   &__page-plus {
-    margin-right: 2px;
+    margin-inline-end: 2px;
   }
 
   &__page-minus {
-    margin-left: 2px;
+    margin-inline-start: 2px;
   }
 
   &__empty {

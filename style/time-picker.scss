@@ -154,7 +154,7 @@ $time-picker: map.merge(
       align-items: flex-start;
       padding: 4px 0;
       background-color: get-css-var('time-picker-shortcut-bg-color');
-      border-right: get-css-var('time-picker-divider');
+      border-inline-end: get-css-var('time-picker-divider');
     }
   }
 

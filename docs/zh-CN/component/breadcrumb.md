@@ -36,6 +36,20 @@
 
 :::
 
+:::demo breadcrumb/router
+
+### 使用路由
+
+^[Since v2.2.0](!s)
+
+通过 `router` 属性传入一个 `vue-router` 的 Router 对象可以快速根据路由创建面包屑。
+
+使用路由时，会假定每个 `route.meta` 为选项进行解析。
+
+配置 `route.meta.menu` 为 `false` 可以将特定的路由排除在解析外。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -49,11 +63,12 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb 属性
 
-| 名称      | 类型                              | 说明                           | 默认值  | 始于 |
-| --------- | --------------------------------- | ------------------------------ | ------- | ---- |
-| separator | `string`                          | 设置面包屑的分隔符             | `'/'`   | -    |
-| border    | `boolean`                         | 设置是否开启 border 模式       | `false` | -    |
-| options   | `(string \| BreadcrumbOptions)[]` | 快捷设置子元素，使用插槽后失效 | `[]`    | -    |
+| 名称      | 类型                              | 说明                                                              | 默认值  | 始于    |
+| --------- | --------------------------------- | ----------------------------------------------------------------- | ------- | ------- |
+| separator | `string`                          | 设置面包屑的分隔符                                                | `'/'`   | -       |
+| border    | `boolean`                         | 设置是否开启 border 模式                                          | `false` | -       |
+| options   | `(string \| BreadcrumbOptions)[]` | 快捷设置子元素，使用插槽后失效                                    | `[]`    | -       |
+| router    | `Router`                          | 设置 Router 对象，并自动解析生成面包屑，会优先使用 `options` 解析 | `null`  | `2.2.0` |
 
 ### Breadcrumb 事件
 
@@ -64,10 +79,11 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb 插槽
 
-| 名称      | 说明                   | 参数                        | 始于 |
-| --------- | ---------------------- | --------------------------- | ---- |
-| default   | 面包屑的子元素         | -                           | -    |
-| separator | 自定义分隔符内容的插槽 | `(label: string \| number)` | -    |
+| 名称      | 说明                     | 参数                          | 始于    |
+| --------- | ------------------------ | ----------------------------- | ------- |
+| default   | 面包屑的子元素           | -                             | -       |
+| separator | 自定义分隔符内容的插槽   | `(label: string \| number)`   | -       |
+| item      | 单独定义每个子元素的插槽 | `(option: BreadcrumbOptions)` | `2.2.0` |
 
 ### BreadcrumbItem 属性
 

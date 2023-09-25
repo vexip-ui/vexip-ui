@@ -104,12 +104,14 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Progress' },
         { name: 'Skeleton', since: '2.0.0' },
         { name: 'Spin', since: '1.3.0' },
-        { name: 'Toast', since: '2.0.0' }
+        { name: 'Toast', since: '2.0.0' },
+        { name: 'Tour', since: '2.2.0' }
       ]
     },
     {
       name: 'else',
       components: [
+        { name: 'Affix', since: '2.2.0' },
         { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'FullScreen', since: '2.1.0' },
         { name: 'Masker' },

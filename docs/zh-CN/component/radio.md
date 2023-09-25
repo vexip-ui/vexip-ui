@@ -88,7 +88,7 @@
 type RawOption =
   | string
   | {
-    label: string | number,
+    label: string | number | boolean,
     content?: string,
     disabled?: boolean
   }
@@ -98,8 +98,8 @@ type RawOption =
 
 | 名称         | 类型                                             | 说明                                                                                 | 默认值      | 始于    |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------- | ------- |
-| value        | `string \| number`                               | 单选框的值，与 `label` 全等时单选框被选中，与 RadioGroup 一同使用时无效              | `null`      | -       |
-| label        | `string \| number`                               | 单选框的标签，**必须设置**，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中 | `null`      | -       |
+| value        | `string \| number \| boolean`                    | 单选框的值，与 `label` 全等时单选框被选中，与 RadioGroup 一同使用时无效              | `null`      | -       |
+| label        | `string \| number \| boolean`                    | 单选框的标签，**必须设置**，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中 | `null`      | -       |
 | label-class  | `ClassType`                                      | 单选框的标签内容的自定义类名                                                         | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                                         | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                                         | `'default'` | -       |
@@ -107,12 +107,13 @@ type RawOption =
 | border       | `boolean`                                        | 设置单选框是否具有边框                                                               | `false`     | -       |
 | loading      | `boolean`                                        | 设置是否为加载中                                                                     | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                                             | `false`     | `2.0.0` |
+| name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                    | `''`        | `2.2.2` |
 
 ### Radio 事件
 
-| 名称   | 说明                                   | 参数                        | 始于 |
-| ------ | -------------------------------------- | --------------------------- | ---- |
-| change | 当单选框的值发生变化时触发，返回当前值 | `(value: string \| number)` | -    |
+| 名称   | 说明                                   | 参数                                   | 始于 |
+| ------ | -------------------------------------- | -------------------------------------- | ---- |
+| change | 当单选框的值发生变化时触发，返回当前值 | `(value: string \| number \| boolean)` | -    |
 
 ### Radio 插槽
 
@@ -124,7 +125,7 @@ type RawOption =
 
 | 名称           | 类型                              | 说明                                                               | 默认值      | 始于    |
 | -------------- | --------------------------------- | ------------------------------------------------------------------ | ----------- | ------- |
-| value          | `string \| number`                | 单选框组的值，标签值与该值相同的单选框将被选中                     | `null`      | -       |
+| value          | `string \| number \| boolean`     | 单选框组的值，标签值与该值相同的单选框将被选中                     | `null`      | -       |
 | vertical       | `boolean`                         | 设置是否开启纵向显示                                               | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | 单选框的大小，会覆盖单选框单独设置的 `size`                        | `'default'` | -       |
 | disabled       | `boolean`                         | 设置是否禁用单选框组                                               | `false`     | -       |
@@ -138,6 +139,6 @@ type RawOption =
 
 ### RadioGroup 事件
 
-| 名称   | 说明                                     | 参数                        | 始于 |
-| ------ | ---------------------------------------- | --------------------------- | ---- |
-| change | 当单选框组的值发生变化时触发，返回当前值 | `(value: string \| number)` | -    |
+| 名称   | 说明                                     | 参数                                   | 始于 |
+| ------ | ---------------------------------------- | -------------------------------------- | ---- |
+| change | 当单选框组的值发生变化时触发，返回当前值 | `(value: string \| number \| boolean)` | -    |

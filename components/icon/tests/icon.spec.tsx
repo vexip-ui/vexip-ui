@@ -17,6 +17,13 @@ describe('Icon', () => {
     expect(wrapper.find('.vxp-icon').attributes('aria-hidden')).toEqual('true')
   })
 
+  it('empty', () => {
+    const wrapper = mount(() => <Icon></Icon>)
+
+    expect(wrapper.find('.vxp-icon').exists()).toBe(true)
+    expect(wrapper.element.innerHTML).toEqual('')
+  })
+
   it('icon prop', () => {
     const wrapper = mount(() => <Icon icon={Spinner}></Icon>)
 
@@ -86,5 +93,16 @@ describe('Icon', () => {
 
     await wrapper.setProps({ scale: 2 })
     expect(wrapper.attributes('style')).toContain('font-size: 2em;')
+
+    await wrapper.setProps({ scale: NaN })
+    expect(wrapper.attributes('style')).toBeUndefined()
+  })
+
+  it('custom effect', async () => {
+    const wrapper = mount(Icon, {
+      props: { effect: 'effect', icon: Spinner }
+    })
+
+    expect(wrapper.classes()).toContain('effect')
   })
 })

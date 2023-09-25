@@ -7,8 +7,10 @@
       :checked="currentValue === props.label"
       :disabled="isDisabled || (isLoading && isLoadingLock)"
       :tabindex="props.tabIndex"
+      :name="props.name"
       @submit.prevent
       @change="handleChange"
+      @click.stop
     />
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span :class="[nh.be('label'), props.labelClass]">
@@ -23,6 +25,7 @@
             v-bind="icons.loading"
             :effect="loadingEffect || icons.loading.effect"
             :icon="loadingIcon || icons.loading.icon"
+            label="loading"
           ></Icon>
         </div>
       </CollapseTransition>
@@ -48,6 +51,8 @@ import {
 import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
 import { GROUP_STATE } from './symbol'
+
+import type { ChangeEvent } from './symbol'
 
 export default defineComponent({
   name: 'Radio',
@@ -75,7 +80,11 @@ export default defineComponent({
       border: false,
       tabIndex: 0,
       loading: false,
-      loadingLock: false
+      loadingLock: false,
+      name: {
+        default: '',
+        static: true
+      }
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -132,13 +141,13 @@ export default defineComponent({
       })
     }
 
-    function emitChange(value: string | number) {
+    function emitChange(value: string | number | boolean) {
       if (currentValue.value === value) return
 
       currentValue.value = value
 
       emit('update:value', value)
-      emitEvent(props.onChange, value)
+      emitEvent(props.onChange as ChangeEvent, value)
     }
 
     function handleChange() {

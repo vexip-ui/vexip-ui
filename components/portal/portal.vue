@@ -1,33 +1,27 @@
-<template>
-  <teleport v-if="isMounted && to" :to="to">
-    <slot></slot>
-  </teleport>
-  <slot v-else></slot>
-</template>
+<script setup lang="ts">
+import { nextTick, onMounted, ref } from 'vue'
 
-<script lang="ts">
-import { defineComponent, nextTick, onMounted, ref } from 'vue'
+defineOptions({ name: 'Portal' })
 
-export default defineComponent({
-  name: 'Portal',
-  props: {
-    to: {
-      type: String,
-      default: ''
-    }
-  },
-  setup() {
-    const isMounted = ref(false)
-
-    onMounted(() => {
-      nextTick(() => {
-        isMounted.value = true
-      })
-    })
-
-    return {
-      isMounted
-    }
+defineProps({
+  to: {
+    type: String,
+    default: ''
   }
 })
+
+const isMounted = ref(false)
+
+onMounted(() => {
+  nextTick(() => {
+    isMounted.value = true
+  })
+})
 </script>
+
+<template>
+  <Teleport v-if="isMounted && to" :to="to">
+    <slot></slot>
+  </Teleport>
+  <slot v-else></slot>
+</template>

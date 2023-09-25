@@ -1,20 +1,17 @@
 import { booleanProp, buildProps, eventProp, wrapProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
-import type { BreadcrumbOptions } from './symbol'
-
-type SelectEvent =
-  | ((label: string | number) => void)
-  | ((label: string) => void)
-  | ((label: number) => void)
+import type { Router } from 'vue-router'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type { BreadcrumbOptions, SelectEvent } from './symbol'
 
 export const breadcrumbProps = buildProps({
   separator: String,
   border: booleanProp,
   options: Array as PropType<(string | BreadcrumbOptions)[]>,
-  onSelect: eventProp<SelectEvent>(),
-  onSeparatorClick: eventProp<SelectEvent>()
+  router: Object as PropType<Router>,
+  onSelect: eventProp<EventListener<SelectEvent>>(),
+  onSeparatorClick: eventProp<EventListener<SelectEvent>>()
 })
 
 export type BreadcrumbProps = ExtractPropTypes<typeof breadcrumbProps>
@@ -25,8 +22,8 @@ export const breadcrumbItemProps = wrapProps({
     type: [String, Number],
     default: null
   },
-  onSelect: eventProp<(label: string | number) => void>(),
-  onSeparatorClick: eventProp<(label: string | number) => void>()
+  onSelect: eventProp<EventListener<SelectEvent>>(),
+  onSeparatorClick: eventProp<EventListener<SelectEvent>>()
 })
 
 export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>

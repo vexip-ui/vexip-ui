@@ -13,11 +13,13 @@ export const maskerProps = buildProps({
   onBeforeClose: Function as PropType<() => any | Promise<any>>,
   transfer: booleanStringProp,
   autoRemove: booleanProp,
+  permeable: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onHide: eventProp(),
   onShow: eventProp(),
-  onResize: eventProp<(entry: ResizeObserverEntry) => void>()
+  onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
+  onMaskClick: eventProp<(event: MouseEvent) => void>()
 })
 
 export type MaskerProps = ExtractPropTypes<typeof maskerProps>

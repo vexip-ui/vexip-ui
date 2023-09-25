@@ -62,6 +62,8 @@ You can custom the major color through the `color` prop.
 
 ### Extra Content
 
+^[Since v2.1.0](!s)
+
 The `prefix` and `suffix` props can be used to insert extra content before and after respectively.
 
 :::
@@ -107,9 +109,9 @@ type TagType = TagState | TagNamedColor
 
 ### Tag Events
 
-| Name  | Description                                                                         | Parameters | Since |
-| ----- | ----------------------------------------------------------------------------------- | ---------- | ----- |
-| close | Emitted when the tab can be closed and the close button is clicked, no return value | -          | -     |
+| Name  | Description                                                        | Parameters | Since |
+| ----- | ------------------------------------------------------------------ | ---------- | ----- |
+| close | Emitted when the tab can be closed and the close button is clicked | -          | -     |
 
 ### Tag Slots
 

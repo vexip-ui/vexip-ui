@@ -30,7 +30,10 @@ export const zhCN = defineI18n({
     backHomepage: '返回首页',
     lastUpdated: '上次更新',
     contributors: '贡献者',
-    thanksContribute: '感谢他们的所做的一切贡献！'
+    thanksContribute: '感谢他们的所做的一切贡献！',
+    toggleDirection: '切换文本方向',
+    toggleTheme: '切换主题',
+    viewInGithub: '在 GitHub 查看'
   },
   alert: {
     info: '提示',
@@ -49,7 +52,8 @@ export const zhCN = defineI18n({
     i18n: '国际化',
     ssr: '服务端渲染',
     customFormControl: '自定义表单控件',
-    developmentGuide: '开发指南'
+    developmentGuide: '开发指南',
+    customInternalIcons: '自定义内部图标'
   },
   group: {
     basis: '基础',
@@ -75,11 +79,13 @@ export const zhCN = defineI18n({
     sponsor: '赞助一杯喜茶'
   },
   component: {
+    // Basis
     Button: '按钮',
     Icon: '图标',
     Linker: '链接',
     Typography: '排版',
 
+    // Layout
     Grid: '栅格布局',
     Divider: '分割线',
     Layout: '布局',
@@ -89,12 +95,14 @@ export const zhCN = defineI18n({
     Space: '间距',
     Split: '分割面板',
 
+    // Navigation
     Anchor: '锚点',
     Breadcrumb: '面包屑',
     Dropdown: '下拉菜单',
     Menu: '导航菜单',
     Pagination: '分页器',
 
+    // Form
     AutoComplete: '自动完成',
     Captcha: '验证',
     Cascader: '联级选择器',
@@ -116,6 +124,7 @@ export const zhCN = defineI18n({
     Upload: '上传',
     Wheel: '滚轮',
 
+    // Data
     Avatar: '头像',
     Badge: '徽标',
     Bubble: '气泡框',
@@ -136,6 +145,7 @@ export const zhCN = defineI18n({
     Tree: '树形列表',
     Viewer: '查看器',
 
+    // Effect
     Alert: '警告提示',
     Confirm: '确认框',
     Contextmenu: '右键菜单',
@@ -148,7 +158,10 @@ export const zhCN = defineI18n({
     Skeleton: '骨架屏',
     Spin: '加载中',
     Toast: '吐司提示',
+    Tour: '漫游指引',
 
+    // Else
+    Affix: '固钉',
     ConfigProvider: '配置注入',
     Masker: '遮罩',
     Overflow: '溢出',

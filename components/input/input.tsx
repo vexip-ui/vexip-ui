@@ -13,13 +13,12 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, isNull, noop, throttle, toNumber, warnOnce } from '@vexip-ui/utils'
+import { debounce, isNull, noop, throttle, toNumber } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
-import type { InputType } from './symbol'
+import type { ChangeEvent, InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
-type ChangeListener = (value: string | number) => void
 
 const inputTypes = Object.freeze<InputType[]>(['text', 'password', 'date', 'datetime', 'time'])
 
@@ -73,7 +72,6 @@ export default defineComponent({
       autocomplete: false,
       readonly: false,
       disabled: () => disabled.value,
-      inputClass: null,
       controlClass: null,
       debounce: false,
       delay: null,
@@ -87,15 +85,13 @@ export default defineComponent({
       loadingLock: false,
       loadingEffect: null,
       transparent: false,
-      sync: false
+      sync: false,
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
-
-    if (!isNull(props.inputClass)) {
-      warnOnce(
-        "[vexip-ui:Input] 'input-class' prop has been deprecated, please " +
-          "use 'control-class' prop to replace it"
-      )
-    }
 
     const initValue = toNotNullString(props.value)
 
@@ -233,7 +229,7 @@ export default defineComponent({
       const type = event.type as InputEventType
 
       currentValue.value = (event.target as HTMLInputElement).value
-      console.log(currentValue.value)
+
       limitValueLength()
 
       const value = currentValue.value
@@ -262,7 +258,7 @@ export default defineComponent({
           setFieldValue(value)
         }
 
-        emitEvent(props.onChange as ChangeListener, value)
+        emitEvent(props.onChange as ChangeEvent, value)
 
         if (!sync) {
           validateField()
@@ -273,7 +269,7 @@ export default defineComponent({
           setFieldValue(value)
         }
 
-        emitEvent(props.onInput as ChangeListener, value)
+        emitEvent(props.onInput as ChangeEvent, value)
 
         if (sync) {
           validateField()
@@ -306,7 +302,9 @@ export default defineComponent({
       }
 
       showPassword.value = !showPassword.value
-      inputControl.value?.focus()
+      nextTick(() => {
+        inputControl.value?.focus()
+      })
     }
 
     function handleClear(event: MouseEvent) {
@@ -419,7 +417,7 @@ export default defineComponent({
       if (showClear.value) {
         return (
           <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
-            <Icon {...icons.value.clear}></Icon>
+            <Icon {...icons.value.clear} label={'clear'}></Icon>
           </div>
         )
       }
@@ -431,6 +429,7 @@ export default defineComponent({
               {...icons.value.loading}
               effect={props.loadingEffect || icons.value.loading.effect}
               icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
             ></Icon>
           </div>
         )
@@ -495,8 +494,9 @@ export default defineComponent({
         >
           {hasPrefix.value && renderPrefix()}
           <input
+            {...props.controlAttrs}
             ref={inputControl}
-            class={[nh.be('control'), props.inputClass, props.controlClass]}
+            class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}
@@ -506,6 +506,7 @@ export default defineComponent({
             readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
+            name={props.name || props.controlAttrs?.name}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

@@ -16,9 +16,9 @@
     <template #trigger>
       <div
         ref="wrapper"
+        v-bind="$attrs"
         :class="className"
         :style="ellipsisStyle"
-        v-bind="$attrs"
       >
         <slot></slot>
       </div>

@@ -1,6 +1,6 @@
 <template>
   <Portal :to="props.to">
-    <transition
+    <Transition
       :name="props.transition"
       :appear="props.appear"
       @before-enter="emitHookEvent('be', $event)"
@@ -15,14 +15,14 @@
       <div
         v-if="props.alive || props.visible"
         v-show="!props.alive || props.visible"
-        ref="wrapper"
         v-bind="$attrs"
+        ref="wrapper"
         :class="[nh.b(), props.to !== 'body' && nh.bm('inherit')]"
         :style="{ zIndex: props.to && props.visible ? zIndex : undefined }"
       >
         <slot></slot>
       </div>
-    </transition>
+    </Transition>
   </Portal>
 </template>
 

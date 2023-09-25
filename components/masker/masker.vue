@@ -1,8 +1,8 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      ref="wrapper"
       v-bind="$attrs"
+      ref="wrapper"
       :class="className"
       tabindex="-1"
       :style="{
@@ -13,28 +13,34 @@
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
     >
-      <transition
-        v-if="!props.disabled"
-        :appear="props.autoRemove"
-        :name="props.maskTransition"
-        @after-enter="afterOpen"
-        @after-leave="afterClose"
-      >
-        <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
-          <ResizeObserver @resize="handleResize">
-            <div :class="nh.be('mask-inner')"></div>
-          </ResizeObserver>
-        </div>
-      </transition>
+      <ResizeObserver v-if="!props.disabled" @resize="handleResize">
+        <Transition
+          :appear="props.autoRemove"
+          :name="props.maskTransition"
+          @after-enter="afterOpen"
+          @after-leave="afterClose"
+        >
+          <div v-show="currentActive" :class="nh.be('mask')" @click="handleMaskClick">
+            <slot name="mask">
+              <div :class="nh.be('mask-inner')"></div>
+            </slot>
+          </div>
+        </Transition>
+      </ResizeObserver>
       <span
         ref="topTrap"
         tabindex="0"
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></span>
-      <transition :appear="props.autoRemove" :name="props.transitionName">
+      <Transition
+        v-if="props.transitionName"
+        :appear="props.autoRemove"
+        :name="props.transitionName"
+      >
         <slot :show="currentActive"></slot>
-      </transition>
+      </Transition>
+      <slot v-else :show="currentActive"></slot>
       <span
         ref="bottomTrap"
         tabindex="0"
@@ -80,7 +86,8 @@ export default defineComponent({
         isFunc: true
       },
       transfer: false,
-      autoRemove: false
+      autoRemove: false,
+      permeable: false
     })
 
     const getIndex = useZIndex()
@@ -140,7 +147,29 @@ export default defineComponent({
         prevFocusedEl = document.activeElement as HTMLElement
         zIndex.value = getIndex()
       }
+
+      if (!props.maskTransition) {
+        value ? afterOpen() : afterClose()
+      }
     })
+    watch(
+      [() => props.permeable, wrapper],
+      () => {
+        if (wrapper.value) {
+          wrapper.value.removeEventListener('wheel', disableWheel)
+
+          if (!props.permeable) {
+            wrapper.value.addEventListener('wheel', disableWheel)
+          }
+        }
+      },
+      { immediate: true, flush: 'post' }
+    )
+
+    function disableWheel(event: WheelEvent) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
 
     function toggleActive(active: boolean) {
       if (currentActive.value === active) return
@@ -192,6 +221,11 @@ export default defineComponent({
       })
     }
 
+    function handleMaskClick(event: MouseEvent) {
+      emitEvent(props.onMaskClick, event)
+      handleClose()
+    }
+
     function handleFocusIn(event: FocusEvent) {
       const target = event.target as HTMLElement
 
@@ -233,6 +267,7 @@ export default defineComponent({
       handleClose,
       afterClose,
       afterOpen,
+      handleMaskClick,
       handleFocusIn,
       handleResize
     }

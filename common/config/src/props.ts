@@ -159,9 +159,10 @@ type CommonExcludedProps =
   | 'visible'
   | 'label'
   | 'options'
+  | 'name'
 type ExcludeProps<P, E extends string = never, I extends string = never> =
-  | CommonExcludedProps
-  | E
+  | Exclude<CommonExcludedProps, I>
+  | Exclude<E, I>
   | (P extends I ? never : P extends `on${Capitalize<string>}` ? P : never)
 type PostProps<T, E extends string> = Omit<{ [P in keyof T]: MaybeFunction<T[P]> }, E>
 
@@ -270,6 +271,52 @@ export type StyleType = string | CSSProperties | Array<string | CSSProperties>
 export const classProp = [String, Object, Array] as PropType<ClassType>
 export const styleProp = [String, Object, Array] as PropType<StyleType>
 
+type ForceBoolean<T> = true extends T
+  ? Exclude<T, boolean> | boolean
+  : false extends T
+    ? Exclude<T, boolean> | boolean
+    : T
+type ForceBooleanDeep<T> = T extends unknown ? { [K in keyof T]: ForceBoolean<T[K]> } : never
+type SplitAndCombo<T, O = T> = T extends unknown
+  ?
+    | [T]
+    | (SplitAndCombo<Exclude<O, T>> extends infer U extends any[]
+      ? U extends U
+        ? [ForceBoolean<T | U[number]>]
+        : never
+      : never)
+  : never
+type GenerateEvent<T extends any[], Others extends any[], R = any> = T extends unknown
+  ? Others extends never
+    ? (value: T[0]) => R
+    : (value: T[0], ...args: Others) => R
+  : never
+
+/**
+ * Split and combo the first parameter of the given function
+ *
+ * @example
+ * // origin function
+ * type Fn = (value: string | number | boolean) => void
+ *
+ * // after transform
+ * type After =
+ *  | ((value: string | number | boolean) => void)
+ *  | ((value: string | number) => void)
+ *  | ((value: string | boolean) => void)
+ *  | ((value: number | boolean) => void)
+ *  | ((value: string) => void)
+ *  | ((value: number) => void)
+ *  | ((value: boolean) => void)
+ */
+export type EventListener<T extends AnyFunction> = Expand<
+  ForceBooleanDeep<SplitAndCombo<Parameters<T>[0]>>
+> extends infer F extends any[]
+  ? Parameters<T> extends [unknown, ...infer Others]
+    ? GenerateEvent<F, Others, ReturnType<T>>
+    : GenerateEvent<F, never, ReturnType<T>>
+  : never
+
 const eventTypes = [Function, Array]
 
 export function eventProp<F extends AnyFunction = VoidFunction>() {
@@ -291,3 +338,6 @@ export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => 
 export function localeProp<N extends LocaleNames>(_name: N) {
   return Object as PropType<Partial<LocaleConfig[N]>>
 }
+
+export const valueProp = [String, Number, Boolean]
+export const valuesProp = [String, Number, Boolean, Array]

@@ -10,7 +10,19 @@ Used to select or input a date.
 
 For basic usage, you can use `v-model:value` for two-way binding.
 
-By default, the date picker will appear unselected despite the initial value.
+:::
+
+:::demo date-picker/value-format
+
+### Format Value
+
+^[Since v2.2.0](!s)
+
+Set the `value-format` prop to specify how to format the value, and get the formatted value via the `@update:formatted-value` event.
+
+Of course, you can use `v-model:formatted-value` as in the example, but the component will not update the value according to `formatted-value`.
+
+You can also specify `value-format` as a function for custom formatting.
 
 :::
 
@@ -109,10 +121,20 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 ### Preset Types
 
 ```ts
+// This type is under @vexip-ui/utils package
+type Dateable = number | string | Date
+
 type DateType = 'year' | 'month' | 'date'
 type TimeType = 'hour' | 'minute' | 'second'
 type DateTimeType = DateType | TimeType
-type Dateable = number | string | Date
+type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+
+type DatePickerFormatFn = (timestamp: number) => Dateable
+
+interface DateShortcut {
+  name: string,
+  value: Dateable | Dateable[] | (() => Dateable | Dateable[])
+}
 ```
 
 ### DatePicker Props
@@ -128,7 +150,6 @@ type Dateable = number | string | Date
 | transfer        | `boolean \| string`                                       | Set the rendering position of the date selection panel. When enabled but no valid selector is specified, the default rendering is to `<body>` | `false`                 | -        |
 | format          | `string`                                                  | In `datetime` type, it will control the display and hide of the time selection column according to whether it has `Hms`                       | `'yyyy-MM-dd HH:mm:ss'` | -        |
 | filler          | `string`                                                  | Filler when the date is not selected, the length is fixed to 1                                                                                | `'-'`                   | -        |
-| ~~no-filler~~   | `boolean`                                                 | Whether to disable initial filling, if disabled, the current `value`                                                                          | `false`                 | -        |
 | clearable       | `boolean`                                                 | Whether to allow clearing of values                                                                                                           | `false`                 | -        |
 | no-action       | `boolean`                                                 | Whether to disable the bottom actions of the date selection panel and change the selection mode                                               | `false`                 | -        |
 | labels          | `Partial<Record<DateTimeType, string>>`                   | set at each date or time unit tag following                                                                                                   | `{}`                    | -        |
@@ -148,7 +169,6 @@ type Dateable = number | string | Date
 | confirm-text    | `string`                                                  | The text content of the date selection panel confirm button                                                                                   | `locale.confirm`        | -        |
 | cancel-text     | `string`                                                  | The text content of the cancel button of the date selection panel                                                                             | `locale.cancel`         | -        |
 | today           | `Dateable`                                                | Set as today's date, which mainly affects some of the performance of the calendar in the date selection panel                                 | `new Date()`            | -        |
-| ~~is-range~~    | `boolean`                                                 | Set whether to enable range selection mode                                                                                                    | `false`                 | -        |
 | loading         | `boolean`                                                 | Set whether is loading                                                                                                                        | `false`                 | `2.0.0`  |
 | loading-icon    | `Record<string, any>`                                     | Set the loading icon                                                                                                                          | `Spinner`               | `2.0.0`  |
 | loading-lock    | `boolean`                                                 | Set whether to be read-only when loading                                                                                                      | `false`                 | `2.0.0`  |
@@ -162,23 +182,26 @@ type Dateable = number | string | Date
 | placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                               | `null`                  | `2.1.1`  |
 | unit-readonly   | `boolean`                                                 | Set whether the input control is read-only                                                                                                    | `false`                 | `2.1.2`  |
 | week-start      | `number`                                                  | Set the first day of the week in date selection panel, the optional value is 0 ~ 7, where 0 is Sunday                                         | `null`                  | `2.1.9`  |
+| value-format    | `string \| DatePickerFormatFn`                            | Specify how to format the value                                                                                                               | `null`                  | `2.2.0`  |
+| popper-alive    | `boolean`                                                 | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                    | `null`                  | `2.2.3`  |
 
 ### DatePicker Events
 
-| Name       | Description                                                                                                                                                                                                  | Parameters                                                  | Since |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ----- |
-| toggle     | Emitted when the date panel display state changes, returns the current state                                                                                                                                 | `(visible: boolean)`                                        | -     |
-| focus      | Emitted when the control is focused, no return value                                                                                                                                                         | -                                                           | -     |
-| blur       | Emitted when the control loses focus, no return value                                                                                                                                                        | -                                                           | -     |
-| change     | Emitted when the selected time changes, depending on whether the date picker type is `'year'` and whether the range mode is enabled, it will return a year, year range, standard date or standard date range | `(value: string \| number \| number[] \| string[] \| null)` | -     |
-| change-col | Emitted when the selected date type changes, returns the name of the current type                                                                                                                            | `(type: DateTimeType \| null)`                              | -     |
-| input      | Emitted when the value of any type of date entered by pressing the key changes, returns the name of the current type and the input value                                                                     | `(type: DateTimeType, value: number)`                       | -     |
-| enter      | Emitted when the enter key is used to confirm or the confirm button of the date selection panel is clicked, no return value                                                                                  | -                                                           | -     |
-| cancel     | Emitted when the Esc key is closed or the cancel button of the date selection panel is clicked, no return value                                                                                              | -                                                           | -     |
-| shortcut   | Emitted when a date is selected using the shortcut function, returns the name and value of the shortcut selection                                                                                            | `(name: string, value: number \| string \| Date)`           | -     |
-| plus       | Emitted when the date value is incremented using the up arrow key, returns the name of the type name and the corresponding value                                                                             | `(type: DateTimeType, value: number)`                       | -     |
-| minus      | Emitted when a date value is decremented using the down arrow key, returns the name of the type name and the value of the column                                                                             | `(type: DateTimeType, value: number)`                       | -     |
-| clear      | Emitted when the value is cleared by the clear button, no return value                                                                                                                                       | -                                                           | -     |
+| Name                   | Description                                                                                                                              | Parameters                                        | Since   |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------- |
+| toggle                 | Emitted when the date panel display state changes, returns the current state                                                             | `(visible: boolean)`                              | -       |
+| focus                  | Emitted when the control is focused                                                                                                      | -                                                 | -       |
+| blur                   | Emitted when the control loses focus                                                                                                     | -                                                 | -       |
+| change                 | Emitted when the selected time changes, returns timestamp                                                                                | `(value: number \| number[] \| null)`             | -       |
+| change-col             | Emitted when the selected date type changes, returns the name of the current type                                                        | `(type: DateTimeType \| null)`                    | -       |
+| input                  | Emitted when the value of any type of date entered by pressing the key changes, returns the name of the current type and the input value | `(type: DateTimeType, value: number)`             | -       |
+| enter                  | Emitted when the enter key is used to confirm or the confirm button of the date selection panel is clicked                               | -                                                 | -       |
+| cancel                 | Emitted when the Esc key is closed or the cancel button of the date selection panel is clicked                                           | -                                                 | -       |
+| shortcut               | Emitted when a date is selected using the shortcut function, returns the name and value of the shortcut selection                        | `(name: string, value: number \| string \| Date)` | -       |
+| plus                   | Emitted when the date value is incremented using the up arrow key, returns the name of the type name and the corresponding value         | `(type: DateTimeType, value: number)`             | -       |
+| minus                  | Emitted when a date value is decremented using the down arrow key, returns the name of the type name and the value of the column         | `(type: DateTimeType, value: number)`             | -       |
+| clear                  | Emitted when the value is cleared by the clear button                                                                                    | -                                                 | -       |
+| update:formatted-value | Emitted when the selected time changes, returns formatted value                                                                          | `(value: Dateable \| Dateable[])`                 | `2.2.0` |
 
 ### DatePicker Slots
 

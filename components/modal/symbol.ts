@@ -7,3 +7,18 @@ export interface SizePayload {
   width: number,
   height: number
 }
+
+export interface ModalSlotParams {
+  handleResize: () => void,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm: boolean) => Promise<void>
+}
+
+export type ModalCommonSLot = (params: ModalSlotParams) => any
+
+let index = 0
+
+export function getIdIndex() {
+  return index++
+}

@@ -256,7 +256,12 @@ describe('Tree', () => {
       }
     ]
     const wrapper = mount(() => (
-      <Tree data={data} onNodeExpand={onNodeExpand} onNodeReduce={onNodeReduce}></Tree>
+      <Tree
+        data={data}
+        no-transition
+        onNodeExpand={onNodeExpand}
+        onNodeReduce={onNodeReduce}
+      ></Tree>
     ))
 
     await nextTick()
@@ -297,7 +302,13 @@ describe('Tree', () => {
       }
     ]
     const wrapper = mount(() => (
-      <Tree data={data} floor-select onNodeExpand={onNodeExpand} onNodeReduce={onNodeReduce}></Tree>
+      <Tree
+        data={data}
+        floor-select
+        no-transition
+        onNodeExpand={onNodeExpand}
+        onNodeReduce={onNodeReduce}
+      ></Tree>
     ))
 
     await nextTick()

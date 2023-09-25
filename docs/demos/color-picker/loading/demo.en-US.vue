@@ -1,10 +1,14 @@
 <template>
-  <ColorPicker :loading="loading" placeholder="loading and editable"></ColorPicker>
-  <br />
-  <br />
-  <ColorPicker :loading="loading" loading-lock placeholder="loading and readonly"></ColorPicker>
   <p>
-    Loaidng:
+    Loading and editable:
+    <ColorPicker :loading="loading"></ColorPicker>
+  </p>
+  <p>
+    Loading and readonly:
+    <ColorPicker :loading="loading" loading-lock></ColorPicker>
+  </p>
+  <p>
+    Loading:
     <Switch v-model:value="loading"></Switch>
   </p>
 </template>

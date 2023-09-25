@@ -184,6 +184,7 @@ interface CascaderOptionState {
 | loading-effect  | `string`                                         | Set the effect animation for the loading icon                                                                                                                                      | `false`          | `2.1.0` |
 | transparent     | `boolean`                                        | Set whether to be transparent                                                                                                                                                      | `false`          | `2.0.2` |
 | locale          | `LocaleConfig['select']`                         | Set the locale config                                                                                                                                                              | `null`           | `2.1.0` |
+| popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                                         | `null`           | `2.2.3` |
 
 ### Cascader Events
 
@@ -193,9 +194,9 @@ interface CascaderOptionState {
 | select        | Emitted when an option is selected, returns the value path and option data of the selected option                                                              | `(value: (string \| number)[], data: Data)`        | -     |
 | cancel        | Emitted when the option is canceled, only in multi-select mode, returns the value path and option data of the canceled option                                  | `(value: (string \| number)[], data: Data)`        | -     |
 | change        | Emitted when the selected value changes, returns the value path and option data of the option, the value path array and option data array in multi-select mode | `(value: CascaderValue, data: Data[] \| Data[][])` | -     |
-| click-outside | Emitted when clicking outside the cascade selector, no return value                                                                                            | -                                                  | -     |
-| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                                                    | -                                                  | -     |
-| clear         | Emitted when the value is cleared by the clear button, no return value                                                                                         | -                                                  | -     |
+| click-outside | Emitted when clicking outside the cascade selector                                                                                                             | -                                                  | -     |
+| outside-close | Emitted when the option list is closed by clicking outside                                                                                                     | -                                                  | -     |
+| clear         | Emitted when the value is cleared by the clear button                                                                                                          | -                                                  | -     |
 
 ### Cascader Slots
 

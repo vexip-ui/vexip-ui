@@ -11,6 +11,11 @@ export * from './moving'
 export * from './pointer'
 export * from './popper'
 export * from './resize'
+export * from './rtl'
 export * from './timer'
 export * from './trigger-handler'
 export * from './virtual'
+
+export * from './shared/utils'
+
+export type * from './shared/types'

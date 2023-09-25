@@ -16,16 +16,18 @@
       </slot>
     </div>
     <input
+      v-bind="props.controlAttrs"
       ref="input"
-      type="text"
-      :class="[nh.be('control'), props.inputClass, props.controlClass]"
+      :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       :value="inputValue"
+      type="text"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      :name="props.name || props.controlAttrs?.name"
       role="spinbutton"
       :title="outOfRange ? locale.outOfRange : undefined"
       :aria-valuenow="preciseNumber"
@@ -55,24 +57,25 @@
       v-else-if="props.clearable || props.loading"
       :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
     ></div>
-    <transition :name="nh.ns('fade')" appear>
+    <Transition :name="nh.ns('fade')" appear>
       <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
-        <Icon v-bind="icons.clear"></Icon>
+        <Icon v-bind="icons.clear" label="clear"></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
         <Icon
           v-bind="icons.loading"
           :effect="props.loadingEffect || icons.loading.effect"
           :icon="props.loadingIcon || icons.loading.icon"
+          label="loading"
         ></Icon>
       </div>
-    </transition>
+    </Transition>
     <template v-if="props.controlType !== 'none'">
       <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretUp" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretUp" :scale="(icons.caretUp.scale || 1) * 0.8"></Icon>
       </div>
       <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretDown" :scale="0.8"></Icon>
+        <Icon v-bind="icons.caretDown" :scale="(icons.caretDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>
   </div>
@@ -102,8 +105,7 @@ import {
   plus,
   throttle,
   toFixed,
-  toNumber,
-  warnOnce
+  toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -163,7 +165,6 @@ export default defineComponent({
       shiftStep: 10,
       altStep: 0.1,
       disabled: () => disabled.value,
-      inputClass: null,
       controlClass: null,
       debounce: false,
       delay: null,
@@ -174,15 +175,13 @@ export default defineComponent({
       loadingEffect: null,
       sync: false,
       controlType: 'right',
-      emptyType: 'NaN'
+      emptyType: 'NaN',
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true
+      }
     })
-
-    if (!isNull(props.inputClass)) {
-      warnOnce(
-        "[vexip-ui:NumberInput] 'input-class' prop has been deprecated, please " +
-          "use 'control-class' prop to replace it"
-      )
-    }
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)

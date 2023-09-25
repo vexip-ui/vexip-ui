@@ -1,7 +1,7 @@
 <template>
   <div
     :class="className"
-    :style="{ height: props.horizontal && isAlternate ? `${height}px` : undefined }"
+    :style="{ height: props.horizontal && props.alternate ? `${height}px` : undefined }"
   >
     <slot></slot>
   </div>
@@ -11,7 +11,7 @@
 import { computed, defineComponent, provide, reactive, toRef } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { debounceMinor, isNull, warnOnce } from '@vexip-ui/utils'
+import { debounceMinor, isNull } from '@vexip-ui/utils'
 import { timelineProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
@@ -24,7 +24,6 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('timeline', _props, {
       pending: false,
-      bothSides: null,
       dashed: false,
       lineColor: null,
       spacing: null,
@@ -33,24 +32,16 @@ export default defineComponent({
       alternate: false
     })
 
-    if (!isNull(props.bothSides)) {
-      warnOnce(
-        "[vexip-ui:Timeline] 'both-sides' prop has been deprecated, please " +
-          "use 'alternate' prop to replace it"
-      )
-    }
-
     const nh = useNameHelper('timeline')
     const itemStates = reactive(new Set<ItemState>())
 
-    const isAlternate = computed(() => props.bothSides || props.alternate)
     const className = computed(() => {
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('pending')]: props.pending,
-        [nh.bm('alternate')]: isAlternate.value,
+        [nh.bm('alternate')]: props.alternate,
         [nh.bm('flip')]: props.flip,
         [nh.bm('horizontal')]: props.horizontal
       }
@@ -76,7 +67,7 @@ export default defineComponent({
       dashed: toRef(props, 'dashed'),
       lineColor: toRef(props, 'lineColor'),
       spacing: toRef(props, 'spacing'),
-      alternate: isAlternate,
+      alternate: toRef(props, 'alternate'),
       horizontal: toRef(props, 'horizontal'),
       increaseItem,
       decreaseItem,
@@ -103,7 +94,6 @@ export default defineComponent({
       nh,
       props,
 
-      isAlternate,
       className,
       height,
       itemStates

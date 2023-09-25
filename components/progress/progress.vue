@@ -1,6 +1,7 @@
 <template>
   <div
     :class="className"
+    :style="style"
     role="progressbar"
     :aria-valuenow="percentValue"
     aria-valuemin="0"
@@ -8,30 +9,30 @@
   >
     <div :class="nh.be('track')" :style="trackStyle">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
-      <div v-if="props.infoType === 'inside'" :class="nh.be('info')" :style="infoStyle">
+      <div v-if="props.infoType === 'inside'" :class="nh.be('info')">
         <slot>
           <span :class="nh.be('percentage')">
             {{ `${percentValue}%` }}
           </span>
         </slot>
       </div>
-      <div v-else-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
-        <Bubble
-          inherit
-          :class="nh.be('bubble')"
-          :style="bubbleStyle"
-          :placement="bubbleType"
-          :content-class="nh.be('info')"
-        >
-          <slot>
-            <span :class="nh.be('percentage')">
-              {{ `${percentValue}%` }}
-            </span>
-          </slot>
-        </Bubble>
-      </div>
     </div>
-    <div v-if="props.infoType === 'outside'" :class="nh.be('info')">
+    <div v-if="useBubble" :class="nh.be('reference')">
+      <Bubble
+        inherit
+        :class="nh.be('bubble')"
+        :style="bubbleStyle"
+        :placement="bubbleType"
+        :content-class="nh.be('info')"
+      >
+        <slot>
+          <span :class="nh.be('percentage')">
+            {{ `${percentValue}%` }}
+          </span>
+        </slot>
+      </Bubble>
+    </div>
+    <div v-else-if="props.infoType === 'outside'" :class="nh.be('info')">
       <slot>
         <span :class="nh.be('percentage')">
           {{ `${percentValue}%` }}
@@ -101,6 +102,9 @@ export default defineComponent({
         }
       ]
     })
+    const style = computed(() => {
+      return { [nh.cv('percentage')]: props.percentage }
+    })
     const trackStyle = computed(() => {
       return {
         height: `${props.strokeWidth}px`,
@@ -109,8 +113,7 @@ export default defineComponent({
     })
     const fillerStyle = computed(() => {
       const style: CSSProperties = {
-        borderRadius: `${props.strokeWidth}px`,
-        transform: `translateX(${(props.percentage - 100) / 2}%) scaleX(${props.percentage / 100})`
+        borderRadius: `${props.strokeWidth}px`
       }
 
       let strokeColor = props.strokeColor
@@ -126,11 +129,6 @@ export default defineComponent({
       }
 
       return style
-    })
-    const infoStyle = computed(() => {
-      return {
-        transform: `translateX(${props.percentage - 100}%)`
-      }
     })
     const useBubble = computed(() => {
       return props.infoType.includes('bubble')
@@ -158,9 +156,9 @@ export default defineComponent({
       nh,
 
       className,
+      style,
       trackStyle,
       fillerStyle,
-      infoStyle,
       useBubble,
       bubbleType,
       bubbleStyle,

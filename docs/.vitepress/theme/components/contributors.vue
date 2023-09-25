@@ -8,11 +8,14 @@ import { useI18n } from 'vue-i18n'
 import { useData } from 'vitepress'
 
 interface Contributor {
-  name?: string,
   login: string,
-  avatarUrl: string,
-  url: string
+  name?: string,
+  email: string,
+  url: string,
+  avatarUrl: string
 }
+
+const users = (metaData as any)._users as Record<string, Contributor>
 
 const { page } = useData()
 const { t } = useI18n()
@@ -27,12 +30,21 @@ const contributors = computed(() => {
   if (!visible.value) return []
 
   const component = page.value.relativePath.match(componentRE)![1]
+  const loginList = (metaData as any as Record<string, string[]>)[component] || []
+  const contributors: { avatar: string, name: string, homepage: string }[] = []
 
-  return ((metaData as Record<string, Contributor[]>)[component] || []).map(item => ({
-    avatar: item.avatarUrl,
-    name: item.name || item.login,
-    homepage: item.url
-  }))
+  for (const login of loginList) {
+    const user = users[login]
+
+    user &&
+      contributors.push({
+        avatar: user.avatarUrl,
+        name: user.name || user.login,
+        homepage: user.url
+      })
+  }
+
+  return contributors
 })
 </script>
 

@@ -82,7 +82,17 @@
 
 ### 不同状态
 
-通过 `state` 可以设置不同的状态。
+通过 `state` 属性可以设置不同的状态。
+
+:::
+
+:::demo slider/trigger
+
+### 自定义手柄
+
+^[Since v2.2.3](!s)
+
+通过 `trigger` 插槽可以自定义手柄的内容。
 
 :::
 
@@ -91,6 +101,13 @@
 ### 预设类型
 
 ```ts
+interface SliderSlotParams {
+  value: number,
+  disabled: boolean,
+  loading: boolean,
+  sliding: boolean
+}
+
 interface SliderMarker {
   label?: string,
   class?: ClassType,
@@ -128,7 +145,8 @@ interface SliderMarker {
 
 ### Slider 插槽
 
-| 名称   | 说明               | 参数                                                          | 始于    |
-| ------ | ------------------ | ------------------------------------------------------------- | ------- |
-| tip    | 提示气泡的内容插槽 | `{ value: number }`                                           | -       |
-| marker | 标记点的内容插槽   | `{ marker: SliderMarker, percent: number, inRange: boolean }` | `2.0.0` |
+| 名称    | 说明               | 参数                                                        | 始于    |
+| ------- | ------------------ | ----------------------------------------------------------- | ------- |
+| trigger | 滑块手柄的内容插槽 | `SliderSlotParams`                                          | `2.2.3` |
+| tip     | 提示气泡的内容插槽 | `SliderSlotParams`                                          | -       |
+| marker  | 标记点的内容插槽   | `{ marker: SliderMarker, value: number, inRange: boolean }` | `2.0.0` |

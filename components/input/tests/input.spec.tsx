@@ -225,10 +225,10 @@ describe('Input', () => {
     emitInput(input, TEXT)
     emitInput(input, TEXT)
     emitInput(input, TEXT)
-    expect(onInput).toHaveBeenCalledTimes(0)
+    expect(onInput).toHaveBeenCalledTimes(1)
     vi.runAllTimers()
     await nextTick()
-    expect(onInput).toHaveBeenCalledTimes(1)
+    expect(onInput).toHaveBeenCalledTimes(2)
   })
 
   it('focus/blur event', async () => {
@@ -386,8 +386,8 @@ describe('Input', () => {
     expect(getValue(wrapper.find('input'))).toEqual(`${TEXT}1`)
   })
 
-  it('input class', () => {
-    const wrapper = mount(() => <Input input-class={'test'}></Input>)
+  it('control class', () => {
+    const wrapper = mount(() => <Input control-class={'test'}></Input>)
 
     expect(wrapper.find('input').classes()).toContain('test')
   })

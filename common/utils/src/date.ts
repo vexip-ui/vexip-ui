@@ -14,13 +14,13 @@ export const HOUR_ON_MILLS = HOUR_ON_SECONDS * SECOND_ON_MILLS
 export const DAY_ON_HOURS = 24
 export const DAY_ON_MINUTES = DAY_ON_HOURS * HOUR_ON_MINUTES
 export const DAY_ON_SECONDS = DAY_ON_MINUTES * MINUTE_ON_SECONDS
-export const DAY_ON_MILLIS = DAY_ON_SECONDS * SECOND_ON_MILLS
+export const DAY_ON_MILLS = DAY_ON_SECONDS * SECOND_ON_MILLS
 
 export const WEEK_ON_DAYS = 7
 export const WEEK_ON_HOURS = WEEK_ON_DAYS * DAY_ON_HOURS
 export const WEEK_ON_MINUTES = WEEK_ON_HOURS * HOUR_ON_MINUTES
 export const WEEK_ON_SECONDS = WEEK_ON_MINUTES * MINUTE_ON_SECONDS
-export const WEEK_ON_MILLIS = WEEK_ON_SECONDS * SECOND_ON_MILLS
+export const WEEK_ON_MILLS = WEEK_ON_SECONDS * SECOND_ON_MILLS
 
 export const QUARTER_ON_MONTHS = 3
 
@@ -585,7 +585,7 @@ export function differenceDays(left: Dateable, right: Dateable) {
   left = startOfDay(left)
   right = startOfDay(right)
 
-  return (right.getTime() - left.getTime()) / DAY_ON_MILLIS
+  return (right.getTime() - left.getTime()) / DAY_ON_MILLS
 }
 
 /**
@@ -599,7 +599,7 @@ export function differenceWeeks(left: Dateable, right: Dateable, weekStartOn = 0
   left = startOfWeek(left, weekStartOn)
   right = startOfWeek(right, weekStartOn)
 
-  return (right.getTime() - left.getTime()) / WEEK_ON_MILLIS
+  return (right.getTime() - left.getTime()) / WEEK_ON_MILLS
 }
 
 /**

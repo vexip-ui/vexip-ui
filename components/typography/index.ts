@@ -7,6 +7,8 @@ import { H1, H2, H3, H4, H5, H6 } from './h'
 import P from './p'
 import Strong from './strong'
 
+import type { ComponentPublicInstance } from 'vue'
+
 export { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong }
 
 export {
@@ -25,19 +27,19 @@ export {
   strongProps
 } from './props'
 
-export type TitleExposed = InstanceType<typeof Title>
-export type TextExposed = InstanceType<typeof Text>
-export type BlockquoteExposed = InstanceType<typeof Blockquote>
-export type OLExposed = InstanceType<typeof OL>
-export type ULExposed = InstanceType<typeof UL>
-export type H1Exposed = InstanceType<typeof H1>
-export type H2Exposed = InstanceType<typeof H2>
-export type H3Exposed = InstanceType<typeof H3>
-export type H4Exposed = InstanceType<typeof H4>
-export type H5Exposed = InstanceType<typeof H5>
-export type H6Exposed = InstanceType<typeof H6>
-export type PExposed = InstanceType<typeof P>
-export type StrongExposed = InstanceType<typeof Strong>
+export type TitleExposed = ComponentPublicInstance & InstanceType<typeof Title>
+export type TextExposed = ComponentPublicInstance & InstanceType<typeof Text>
+export type BlockquoteExposed = ComponentPublicInstance & InstanceType<typeof Blockquote>
+export type OLExposed = ComponentPublicInstance & InstanceType<typeof OL>
+export type ULExposed = ComponentPublicInstance & InstanceType<typeof UL>
+export type H1Exposed = ComponentPublicInstance & InstanceType<typeof H1>
+export type H2Exposed = ComponentPublicInstance & InstanceType<typeof H2>
+export type H3Exposed = ComponentPublicInstance & InstanceType<typeof H3>
+export type H4Exposed = ComponentPublicInstance & InstanceType<typeof H4>
+export type H5Exposed = ComponentPublicInstance & InstanceType<typeof H5>
+export type H6Exposed = ComponentPublicInstance & InstanceType<typeof H6>
+export type PExposed = ComponentPublicInstance & InstanceType<typeof P>
+export type StrongExposed = ComponentPublicInstance & InstanceType<typeof Strong>
 
 export type {
   TextProps,

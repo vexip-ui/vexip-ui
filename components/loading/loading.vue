@@ -1,5 +1,5 @@
 <template>
-  <transition :name="nh.ns('fade')" appear>
+  <Transition :name="nh.ns('fade')" appear>
     <div
       v-show="visible"
       :class="className"
@@ -11,13 +11,14 @@
     >
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { useRtl } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { LoadingOptions, LoadingPosition, LoadingState } from './symbol'
@@ -26,6 +27,7 @@ export default defineComponent({
   name: 'Loading',
   setup() {
     const nh = useNameHelper('loading')
+    const { isRtl } = useRtl()
     const visible = ref(false)
     const strokeWidth = ref(2)
     const state = ref<LoadingState>('default')
@@ -51,7 +53,9 @@ export default defineComponent({
 
     const fillerStyle = computed(() => {
       return {
-        transform: `translateX(${(percent.value - 100) / 2}%) scaleX(${percent.value / 100})`
+        transform: `translateX(${((isRtl.value ? -1 : 1) * (percent.value - 100)) / 2}%) scaleX(${
+          percent.value / 100
+        })`
       }
     })
 

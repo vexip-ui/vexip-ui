@@ -119,7 +119,7 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition :name="nh.ns('fade')" appear>
+      <Transition :name="nh.ns('fade')" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon v-bind="icons.clear"></Icon>
         </div>
@@ -130,14 +130,15 @@
             :icon="props.loadingIcon || icons.loading.icon"
           ></Icon>
         </div>
-      </transition>
+      </Transition>
     </div>
     <Popper
       ref="popper"
-      :class="[nh.be('popper'), nh.bs('vars')]"
+      :class="[nh.be('popper'), nh.ns('input-vars'), nh.bs('vars')]"
       :visible="currentVisible"
       :to="transferTo"
       :transition="props.transitionName"
+      :alive="props.popperAlive ?? !transferTo"
       @click.stop
       @enter="handlePanelsEnter"
     >
@@ -317,7 +318,8 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
-      transparent: false
+      transparent: false,
+      popperAlive: null
     })
 
     const icons = useIcons()
@@ -463,11 +465,11 @@ export default defineComponent({
         currentVisible.value = value
       }
     )
-    watch(currentVisible, value => {
+    watch(currentVisible, async value => {
       if (value) {
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
-        updatePopper()
+        await updatePopper()
         nextTick(() => {
           panelElList.value.at(-1)?.$el?.focus()
         })
@@ -551,6 +553,7 @@ export default defineComponent({
     watch(
       () => optionsList.value.length,
       () => {
+        updatePopper()
         nextTick(() => {
           const panel = panelElList.value.at(-1)
 

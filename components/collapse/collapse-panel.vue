@@ -1,6 +1,16 @@
 <template>
-  <section :class="className" :role="inGroup ? 'tab' : undefined" :aria-expanded="currentExpanded">
-    <div :class="nh.be('header')" @click="handleToggle">
+  <section :class="className">
+    <button
+      :id="tabId"
+      ref="tab"
+      :class="nh.be('header')"
+      type="button"
+      role="tab"
+      :aria-expanded="currentExpanded"
+      :aria-controls="bodyId"
+      :aria-describedby="bodyId"
+      @click="handleToggle()"
+    >
       <div :class="nh.be('arrow')">
         <Icon v-bind="icons.arrowRight"></Icon>
       </div>
@@ -10,9 +20,16 @@
         </div>
         {{ props.title }}
       </slot>
-    </div>
+    </button>
     <CollapseTransition>
-      <div v-if="currentExpanded" :class="nh.be('body')">
+      <div
+        v-if="currentExpanded"
+        :id="bodyId"
+        :class="nh.be('body')"
+        role="tabpanel"
+        tabindex="0"
+        :aria-labelledby="tabId"
+      >
         <div :class="nh.be('content')" :style="props.contentStyle">
           <slot></slot>
         </div>
@@ -25,14 +42,15 @@
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 
-import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { randomString } from '@vexip-ui/utils'
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
-import type { CollapseArrowType } from './symbol'
+import type { CollapseArrowType, PanelState } from './symbol'
+
+let idCount = 0
 
 export default defineComponent({
   name: 'CollapsePanel',
@@ -66,8 +84,14 @@ export default defineComponent({
     const nh = useNameHelper('collapse')
     const icons = useIcons()
     const currentExpanded = ref(props.expanded)
-    const currentLabel = ref<string | number>('')
+    const currentLabel = ref(props.label)
 
+    const tab = ref<HTMLElement>()
+
+    const id = idCount++
+
+    const tabId = computed(() => `${nh.be('tab')}-${id}`)
+    const bodyId = computed(() => `${nh.be('body')}-${id}`)
     const useCard = computed(() => {
       if (!collapseState) {
         return props.card
@@ -104,48 +128,40 @@ export default defineComponent({
       ]
     })
 
-    watch(
-      () => props.label,
-      value => {
-        const prevValue = currentLabel.value
-        currentLabel.value = value || value === 0 ? value : prevValue
+    if (collapseState) {
+      const state: PanelState = reactive({
+        tab,
+        label: currentLabel,
+        expanded: currentExpanded,
+        setExpanded
+      })
 
-        if (collapseState && prevValue !== currentLabel.value) {
-          collapseState.unregisterPanel(prevValue)
-          collapseState.registerPanel(currentLabel.value, {
-            expanded: currentExpanded,
-            setExpanded
-          })
+      watch(
+        () => props.label,
+        value => {
+          const prevValue = currentLabel.value
+          currentLabel.value = value || value === 0 ? value : prevValue
         }
-      }
-    )
+      )
 
-    if (!collapseState) {
+      // if (props.label || props.label === 0) {
+      //   currentLabel.value = props.label
+      // } else {
+      //   currentLabel.value = randomString()
+      // }
+
+      collapseState.registerPanel(state)
+
+      onBeforeUnmount(() => {
+        collapseState.unregisterPanel(state)
+      })
+    } else {
       watch(
         () => props.expanded,
         value => {
           currentExpanded.value = value
         }
       )
-    }
-
-    if (collapseState) {
-      onMounted(() => {
-        if (props.label || props.label === 0) {
-          currentLabel.value = props.label
-        } else {
-          currentLabel.value = randomString()
-        }
-
-        collapseState.registerPanel(currentLabel.value, {
-          expanded: currentExpanded,
-          setExpanded
-        })
-      })
-
-      onBeforeUnmount(() => {
-        collapseState.unregisterPanel(currentLabel.value)
-      })
     }
 
     function setExpanded(expanded: boolean) {
@@ -155,14 +171,14 @@ export default defineComponent({
       emitEvent(props.onToggle, expanded)
     }
 
-    function handleToggle() {
+    function handleToggle(expanded = !currentExpanded.value) {
       if (props.disabled) return
 
       if (collapseState) {
         // 由父级进行管理
-        collapseState.expandPanel(currentLabel.value, !currentExpanded.value)
+        collapseState.expandPanel(currentLabel.value, expanded)
       } else {
-        setExpanded(!currentExpanded.value)
+        setExpanded(expanded)
       }
     }
 
@@ -170,9 +186,12 @@ export default defineComponent({
       props,
       nh,
       icons,
-      inGroup: !!collapseState,
       currentExpanded,
 
+      tab,
+
+      tabId,
+      bodyId,
       className,
 
       handleToggle

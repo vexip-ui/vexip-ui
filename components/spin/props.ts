@@ -7,7 +7,6 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 export const spinProps = buildProps({
   active: booleanProp,
   icon: Object,
-  spin: booleanProp,
   inner: booleanProp,
   delay: {
     type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,

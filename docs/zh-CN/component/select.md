@@ -172,10 +172,11 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
-type SelectValue = string | number | null | (string | number)[]
+type SelectBaseValue = string | number | boolean
+type SelectValue = SelectBaseValue | SelectBaseValue[] | null
 
 interface SelectOptionState {
-  value: string | number,
+  value: SelectValue,
   label: string,
   disabled: boolean,
   divided: boolean,
@@ -188,7 +189,7 @@ interface SelectOptionState {
   data: SelectRawOption
 }
 
-type SelectFilter = (value: string | number, options: SelectOptionState) => boolean
+type SelectFilter = (value: string, options: SelectOptionState) => boolean
 ```
 
 ### Select 属性
@@ -201,7 +202,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | state           | `'default' \| 'success' \| 'error' \| 'warning'` | 选择器的状态                                                              | `'default'`    | -        |
 | disabled        | `boolean`                                        | 设置是否禁用选择器                                                        | `false`        | -        |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                                      | `false`        | -        |
-| placeholder     | `string`                                         | 同原生的 palceholder                                                      | `''`           | -        |
+| placeholder     | `string`                                         | 同原生的 placeholder                                                      | `''`           | -        |
 | prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                              | `null`         | -        |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                            | `''`           | -        |
 | suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                              | `null`         | -        |
@@ -223,7 +224,7 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | loading-icon    | `Record<string, any>`                            | 设置加载中的图标                                                          | `Spinner`      | `2.0.0`  |
 | loading-lock    | `boolean`                                        | 设置在加载中时是否为只读                                                  | `false`        | `2.0.0`  |
 | loading-effect  | `string`                                         | 设置加载中图标的效果动画                                                  | `false`        | `2.1.0`  |
-| filter          | `boolean \| SelectFilter`                        | 过滤 `options` 的方法，传入 `ture` 时会使用内置比较方法                   | `false`        | `2.0.0`  |
+| filter          | `boolean \| SelectFilter`                        | 过滤 `options` 的方法，传入 `true` 时会使用内置比较方法                   | `false`        | `2.0.0`  |
 | ignore-case     | `boolean`                                        | 在使用内置的过滤时，设置是否忽略大小写                                    | `false`        | `2.0.0`  |
 | creatable       | `boolean`                                        | 设置在开启了过滤选项功能后，是否支持动态创建选项                          | `false`        | `2.0.0`  |
 | transparent     | `boolean`                                        | 设置是否为透明模式                                                        | `false`        | `2.0.2`  |
@@ -234,18 +235,21 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | no-preview      | `boolean`                                        | 设置是否禁用选项标签动态预览功能                                          | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | 是否开启远程模式                                                          | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | 设置选项列表与选择器是否强制等宽，也可以传入一个数值指定选项列表的宽度    | `false`        | `2.1.23` |
+| name            | `string`                                         | 设置内部 `<input>` 的 `name` 属性，仅使用过滤时有效                       | `''`           | `2.2.2`  |
+| popper-alive    | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化        | `null`         | `2.2.3`  |
+| count-limit     | `number`                                         | 多选时限制最大的可选数量，为 `0` 时不限制                                 | `0`            | `2.2.3`  |
 
 ### Select 事件
 
 | 名称          | 说明                                                                 | 参数                                                               | 始于    |
 | ------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
 | toggle        | 当选项列表显示状态改变时触发，返回当前的状态                         | `(visible: boolean)`                                               | -       |
-| select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: string \| number, data: SelectRawOption)`                 | -       |
-| cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
+| cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
 | change        | 当被选值改变时触发，返回选项的值和标签，多选模式下为值数组和标签数组 | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
-| outside-click | 当点击选择器外部是触发，无返回值                                     | -                                                                  | -       |
-| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                           | -                                                                  | -       |
-| clear         | 当通过清除按钮清空值时触发，无返回值                                 | -                                                                  | -       |
+| outside-click | 当点击选择器外部是触发                                               | -                                                                  | -       |
+| outside-close | 当通过点击外部关闭选项列表时触发                                     | -                                                                  | -       |
+| clear         | 当通过清除按钮清空值时触发                                           | -                                                                  | -       |
 | focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
 | update:label  | 当选项值改变时触发，用于快速当前选项的标签值                         | `(label: string)`                                                  | `2.0.0` |

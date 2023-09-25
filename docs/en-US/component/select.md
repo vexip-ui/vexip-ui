@@ -176,10 +176,11 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
-type SelectValue = string | number | null | (string | number)[]
+type SelectBaseValue = string | number | boolean
+type SelectValue = SelectBaseValue | SelectBaseValue[] | null
 
 interface SelectOptionState {
-  value: string | number,
+  value: SelectBaseValue,
   label: string,
   disabled: boolean,
   divided: boolean,
@@ -192,7 +193,7 @@ interface SelectOptionState {
   data: SelectRawOption
 }
 
-type SelectFilter = (value: string | number, options: SelectOptionState) => boolean
+type SelectFilter = (value: string, options: SelectOptionState) => boolean
 ```
 
 ### Select Props
@@ -238,18 +239,21 @@ type SelectFilter = (value: string | number, options: SelectOptionState) => bool
 | no-preview      | `boolean`                                        | Set whether to disable the option label dynamic preview                                                                                                       | `false`        | `2.1.10` |
 | remote          | `boolean`                                        | Whether to enable remote mode                                                                                                                                 | `false`        | `2.1.12` |
 | fit-popper      | `boolean \| number`                              | Set whether the option list and the selector are forced to be of equal width, or you can pass in a value to specify the width of the option list              | `false`        | `2.1.23` |
+| name            | `string`                                         | set `name` attribute of internal `<input>`, only effect when using filter                                                                                     | `''`           | `2.2.2`  |
+| popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                    | `null`         | `2.2.3`  |
+| count-limit     | `number`                                         | Limit the maximum count of options for multiple selection, no limit when it is `0`                                                                            | `0`            | `2.2.3`  |
 
 ### Select Events
 
 | Name          | Description                                                                                                                              | Parameters                                                         | Since   |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
 | toggle        | Emitted when the option list display state changes, returns the current state                                                            | `(visible: boolean)`                                               | -       |
-| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: string \| number, data: SelectRawOption)`                 | -       |
-| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
+| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: SelectBaseValue, data: SelectRawOption)`                  | -       |
 | change        | Emitted when the selected value changes, returns the value and label of the option, the value array and label array in multi-select mode | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
-| outside-click | Emitted when clicking outside the selector, no return value                                                                              | -                                                                  | -       |
-| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                              | -                                                                  | -       |
-| clear         | Emitted when the value is cleared by the clear button, no return value                                                                   | -                                                                  | -       |
+| outside-click | Emitted when clicking outside the selector                                                                                               | -                                                                  | -       |
+| outside-close | Emitted when the option list is closed by clicking outside                                                                               | -                                                                  | -       |
+| clear         | Emitted when the value is cleared by the clear button                                                                                    | -                                                                  | -       |
 | focus         | Emitted when the control element is focused, returns the event object                                                                    | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | Emitted when the control element loses focus, returns the event object                                                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | update:label  | Emitted when option value changes, used to quickly get label of current option                                                           | `(label: string)`                                                  | `2.0.0` |

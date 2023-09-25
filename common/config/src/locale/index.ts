@@ -8,9 +8,12 @@ import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
 import type { MaybeRef } from '../types'
 
 export * from './helper'
-export * from './zh-CN'
+
 export * from './en-US'
 export * from './ta-IN'
+export * from './zh-CN'
+export * from './zh-HK'
+export * from './zh-TW'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())
@@ -108,4 +111,8 @@ export function getCountWordOnly(wordTemplate: string, count: number) {
 
 export function makeSentence(words: string, wordSpace = globalLocal.value.wordSpace ?? false) {
   return !wordSpace ? words.replace(/\s+/g, '') : words
+}
+
+export function getStepByWord(wordTemplate: string, step: number) {
+  return wordTemplate.replace(/{n}/g, `${step}`)
 }

@@ -42,8 +42,8 @@ $divider: map.merge(
     height: 14px;
     margin: 0 get-css-var('divider-h-margin');
     vertical-align: middle;
+    border-inline-start: get-css-var('divider-border');
     border-top: 0;
-    border-left: get-css-var('divider-border');
   }
 
   &--with-text {

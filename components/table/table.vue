@@ -86,6 +86,7 @@
         :scroll-x="bodyXScroll"
         @scroll="handleXScroll"
         @x-enabled-change="xScrollEnabled = $event"
+        @resize="handleResize"
       >
         <NativeScroll
           ref="yScroll"
@@ -258,8 +259,7 @@ import {
   nextFrameOnce,
   removeArrayItem,
   toNumber,
-  transformListToMap,
-  warnOnce
+  transformListToMap
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
@@ -320,7 +320,6 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      dataKey: null,
       width: null,
       height: null,
       rowClass: null,
@@ -355,7 +354,6 @@ export default defineComponent({
       },
       pageSize: 0,
       transparent: false,
-      emptyText: null,
       tooltipTheme: {
         default: 'dark',
         validator: value => ['light', 'dark'].includes(value)
@@ -418,40 +416,8 @@ export default defineComponent({
 
     let isMounted = false
 
-    if (isDefined(props.onBodyScroll)) {
-      warnOnce(
-        "[vexip-ui:Table] 'body-scroll' event has been deprecated, please " +
-          "using 'scroll' event to replace it"
-      )
-    }
-
-    const userLocale = computed(() => {
-      if (isDefined(props.emptyText)) {
-        warnOnce(
-          "[vexip-ui:Table] 'empty-text' prop has been deprecated, please " +
-            "using 'empty' option of 'locale' prop to instead it"
-        )
-
-        return { empty: props.emptyText, ...props.locale }
-      }
-
-      return props.locale
-    })
-
-    const locale = useLocale('table', userLocale)
+    const locale = useLocale('table', toRef(props, 'locale'))
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
-    const dataKey = computed(() => {
-      if (isDefined(props.dataKey)) {
-        warnOnce(
-          "[vexip-ui:Table] 'data-key' prop has been deprecated, please " +
-            "using 'id' option of 'key-config' prop to instead it"
-        )
-
-        return props.keyConfig.id ?? props.dataKey
-      }
-
-      return keyConfig.value.id
-    })
     const allColumns = computed(() => {
       return Array.from(tempColumns.value).concat(props.columns)
     })
@@ -463,7 +429,7 @@ export default defineComponent({
       columns: allColumns.value,
       summaries: allSummaries.value,
       data: props.data,
-      dataKey: dataKey.value,
+      dataKey: keyConfig.value.id,
       rowClass: props.rowClass,
       rowStyle: props.rowStyle,
       rowAttrs: props.rowAttrs,
@@ -647,7 +613,7 @@ export default defineComponent({
       },
       { deep: true }
     )
-    watch(dataKey, setDataKey)
+    watch(() => keyConfig.value.id, setDataKey)
     watch(
       () => props.data,
       value => {
@@ -836,8 +802,11 @@ export default defineComponent({
 
     function emitYScroll(client: number, percent: number) {
       nextFrameOnce(computeRenderRows)
-      emitEvent(props.onBodyScroll, { client, percent })
       emitEvent(props.onScroll, { type: 'vertical', client, percent })
+    }
+
+    function handleResize() {
+      isMounted && refresh()
     }
 
     function increaseColumn(column: TableColumnOptions) {
@@ -890,7 +859,7 @@ export default defineComponent({
           return {
             name: column.name,
             key: column.key,
-            metaData: column.metaData!,
+            meta: column.meta!,
             active: filters.get(key)!.active!
           }
         })
@@ -915,7 +884,7 @@ export default defineComponent({
           return {
             name: column.name,
             key: column.key,
-            metaData: column.metaData!,
+            meta: column.meta!,
             type: sorter.type!,
             order: sorter.order
           }
@@ -1232,7 +1201,7 @@ export default defineComponent({
       handleXScroll,
       handleXBarScroll,
       handleYBarScroll,
-      // syncVerticalScroll,
+      handleResize,
 
       clearSort,
       clearFilter,

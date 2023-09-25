@@ -1,5 +1,8 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * English locale config
+ */
 export function enUSLocale() {
   return defineLocaleConfig({
     locale: 'en-US',
@@ -152,6 +155,13 @@ export function enUSLocale() {
         end: 'End',
         select: 'Please select'
       }
+    },
+
+    tour: {
+      prev: 'Prev',
+      next: 'Next',
+      done: 'Done',
+      stepCount: 'Step {n}'
     },
 
     transfer: {

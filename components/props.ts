@@ -1,3 +1,4 @@
+import type { AffixCProps } from './affix'
 import type { AlertCProps } from './alert'
 import type { AnchorCProps } from './anchor'
 import type { AutoCompleteCProps } from './auto-complete'
@@ -82,6 +83,8 @@ import type { TimelineCProps } from './timeline'
 import type { TimelineItemCProps } from './timeline-item'
 import type { ToastCProps } from './toast'
 import type { TooltipCProps } from './tooltip'
+import type { TourCProps } from './tour'
+import type { TourStepCProps } from './tour-step'
 import type { TransferCProps } from './transfer'
 import type { TreeCProps } from './tree'
 import type { UploadCProps } from './upload'
@@ -119,6 +122,7 @@ interface SuggestedDefault {
 
 export interface PropsOptions {
   default?: SuggestedDefault & Record<string, any>,
+  affix?: AffixCProps,
   alert?: AlertCProps,
   anchor?: AnchorCProps,
   autoComplete?: AutoCompleteCProps,
@@ -203,6 +207,8 @@ export interface PropsOptions {
   timelineItem?: TimelineItemCProps,
   toast?: ToastCProps,
   tooltip?: TooltipCProps,
+  tour?: TourCProps,
+  tourStep?: TourStepCProps,
   transfer?: TransferCProps,
   tree?: TreeCProps,
   upload?: UploadCProps,

@@ -2,7 +2,9 @@
   <ol :class="className">
     <slot>
       <BreadcrumbItem v-for="option in normalizedOptions" :key="option.label" :label="option.label">
-        {{ option.name ? callIfFunc(option.name) : option.label }}
+        <slot name="item" :option="option">
+          {{ option.name ? callIfFunc(option.name) : option.label }}
+        </slot>
       </BreadcrumbItem>
     </slot>
   </ol>
@@ -18,9 +20,7 @@ import { callIfFunc, debounceMinor, isNull } from '@vexip-ui/utils'
 import { breadcrumbProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
-
-type SelectListener = (label: string | number) => void
+import type { BreadcrumbItemState, BreadcrumbOptions, BreadcrumbState, SelectEvent } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
@@ -36,7 +36,8 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      router: null
     })
 
     const nh = useNameHelper('breadcrumb')
@@ -51,6 +52,26 @@ export default defineComponent({
       }
     })
     const normalizedOptions = computed(() => {
+      if (props.router && !props.options?.length) {
+        const matched = props.router.currentRoute.value.matched
+        const options: BreadcrumbOptions[] = []
+
+        for (const route of matched) {
+          const meta = (route.meta || {}) as any
+
+          if (meta.menu === false) {
+            continue
+          }
+
+          options.push({
+            label: meta.label || route.path,
+            name: meta.name || route.name
+          })
+        }
+
+        return options
+      }
+
       return props.options.map(option => {
         if (typeof option === 'string') {
           return { label: option }
@@ -99,11 +120,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      emitEvent(props.onSelect as SelectListener, label)
+      emitEvent(props.onSelect as SelectEvent, label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emitEvent(props.onSeparatorClick as SelectListener, label)
+      emitEvent(props.onSeparatorClick as SelectEvent, label)
     }
 
     return {
