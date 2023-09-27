@@ -20,6 +20,7 @@ $tree: map.merge(
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
     label-radius: get-css-var('radius-base'),
+    label-gap: 6px,
     node-span: 6px,
     arrow-size: 22px,
     arrow-color: inherit,
@@ -105,8 +106,9 @@ $tree: map.merge(
   }
 
   &__label {
-    display: inline-block;
+    display: inline-flex;
     flex-grow: 1;
+    align-items: center;
     padding: 0 4px;
     color: get-css-var('tree-label-color');
     cursor: pointer;
@@ -155,13 +157,36 @@ $tree: map.merge(
     }
   }
 
+  &__text {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  &__prefix,
+  &__suffix {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__prefix {
+    margin-inline-end: get-css-var('tree-label-gap');
+  }
+
+  &__suffix {
+    margin-inline-start: get-css-var('tree-label-gap');
+  }
+
   &__arrow {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: get-css-var('tree-arrow-size');
     height: get-css-var('tree-arrow-size');
-    margin-inline-end: 3px;
+    margin-inline-end: 2px;
     color: get-css-var('tree-arrow-color');
     cursor: pointer;
     transition: get-css-var('transition-color');

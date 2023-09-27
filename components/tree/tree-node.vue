@@ -82,13 +82,29 @@
           }"
           @click="handleLabelClick()"
         >
-          <Renderer
-            v-if="renderer"
-            :renderer="renderer"
-            :data="{ node, depth: node.depth, data: node.data }"
-          ></Renderer>
-          <template v-else>
+          <div v-if="treeState.prefixRenderer || $slots.prefix" :class="nh.be('prefix')">
+            <Renderer
+              v-if="treeState.prefixRenderer"
+              :renderer="treeState.prefixRenderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
             <slot
+              v-else
+              name="prefix"
+              :data="node.data"
+              :node="node"
+              :depth="node.depth"
+              :focused="focused"
+            ></slot>
+          </div>
+          <div :class="nh.be('text')">
+            <Renderer
+              v-if="treeState.renderer"
+              :renderer="treeState.renderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
+            <slot
+              v-else
               name="label"
               :data="node.data"
               :node="node"
@@ -97,7 +113,22 @@
             >
               {{ node.data[treeState.labelKey] }}
             </slot>
-          </template>
+          </div>
+          <div v-if="treeState.suffixRenderer || $slots.suffix" :class="nh.be('suffix')">
+            <Renderer
+              v-if="treeState.suffixRenderer"
+              :renderer="treeState.suffixRenderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
+            <slot
+              v-else
+              name="suffix"
+              :data="node.data"
+              :node="node"
+              :depth="node.depth"
+              :focused="focused"
+            ></slot>
+          </div>
         </div>
         <Checkbox
           v-if="hasCheckbox && suffixCheckbox"
@@ -255,7 +286,7 @@ export default defineComponent({
 
       return isNull(checkbox) ? treeState.checkbox : checkbox
     })
-    const renderer = computed(() => treeState.renderer)
+    // const renderer = computed(() => treeState.renderer)
     const suffixCheckbox = computed(() => treeState.suffixCheckbox)
     const nodeState = reactive({
       el: wrapper,
@@ -430,7 +461,7 @@ export default defineComponent({
       className,
       hasArrow,
       hasCheckbox,
-      renderer,
+      // renderer,
       suffixCheckbox,
 
       wrapper,

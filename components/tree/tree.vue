@@ -44,6 +44,12 @@
             <template #label="payload">
               <slot name="label" v-bind="payload"></slot>
             </template>
+            <template v-if="$slots.prefix" #prefix="payload">
+              <slot name="prefix" v-bind="payload"></slot>
+            </template>
+            <template v-if="$slots.suffix" #suffix="payload">
+              <slot name="suffix" v-bind="payload"></slot>
+            </template>
           </TreeNode>
         </div>
       </CollapseTransition>
@@ -53,6 +59,12 @@
         </template>
         <template #label="payload">
           <slot name="label" v-bind="payload"></slot>
+        </template>
+        <template v-if="$slots.prefix" #prefix="payload">
+          <slot name="prefix" v-bind="payload"></slot>
+        </template>
+        <template v-if="$slots.suffix" #suffix="payload">
+          <slot name="suffix" v-bind="payload"></slot>
         </template>
       </TreeNode>
     </template>
@@ -76,7 +88,6 @@
 
 <script lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
-// import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 
 import {
@@ -144,7 +155,6 @@ export default defineComponent({
   name: 'Tree',
   components: {
     CollapseTransition,
-    // ResizeObserver,
     TreeNode,
     VirtualList
   },
@@ -167,6 +177,14 @@ export default defineComponent({
       checkbox: false,
       suffixCheckbox: false,
       renderer: {
+        default: null,
+        isFunc: true
+      },
+      prefixRenderer: {
+        default: null,
+        isFunc: true
+      },
+      suffixRenderer: {
         default: null,
         isFunc: true
       },
@@ -299,6 +317,8 @@ export default defineComponent({
         draggable: toRef(props, 'draggable'),
         floorSelect: toRef(props, 'floorSelect'),
         renderer: toRef(props, 'renderer'),
+        prefixRenderer: toRef(props, 'prefixRenderer'),
+        suffixRenderer: toRef(props, 'suffixRenderer'),
         dragging,
         boundAsyncLoad,
         nodeStates,

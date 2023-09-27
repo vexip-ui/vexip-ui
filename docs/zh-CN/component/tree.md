@@ -138,7 +138,21 @@
 
 ### 虚拟滚动
 
+^[Since v2.1.30](!s)
+
 添加 `virtual` 属性开启虚拟化，数据太多的时候，你应该会需要它。
+
+:::
+
+:::demo tree/external
+
+### 额外内容
+
+^[Since v2.2.5](!s)
+
+通过 `prefix` 和 `suffix` 插槽可以分别自定义节点标签的前置和后置内容。
+
+尽管只使用 `label` 插槽你也可以实现这个功能，但它们能帮助你更好地逻辑解耦。
 
 :::
 
@@ -194,7 +208,21 @@ type TreeNodeProps<D = Data> = {
 }
 
 type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
-type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
+type TreeNodeRenderFn<D = Data> = (params: { data: D, node: TreeNodeProps<D> }) => any
+
+interface TreeCommonSlotParams {
+  data: Data,
+  node: TreeNodeProps,
+  depth: number,
+  focused: boolean
+}
+
+interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  lineCount: number,
+  toggleCheck: (checked?: boolean) => void,
+  toggleExpand: (expanded?: boolean) => Promise<void>,
+  toggleSelect: (able?: boolean) => Promise<void>
+}
 ```
 
 ### Tree 属性
@@ -209,7 +237,9 @@ type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) =>
 | readonly        | `boolean`                                                              | 设置树是否为只读状态，若设置后，所有的树节点将为只读                                                                                                                    | `false`        | -        |
 | checkbox        | `boolean`                                                              | 设置是否开启节点的复选框                                                                                                                                                | `false`        | -        |
 | draggable       | `boolean`                                                              | 设置节点是否可拖拽                                                                                                                                                      | `false`        | -        |
-| renderer        | `TreeNodeRenderFn`                                                     | 使用 render 函数进行节点渲染数                                                                                                                                          | `null`         | -        |
+| renderer        | `TreeNodeRenderFn`                                                     | 使用 render 函数进行节点渲染                                                                                                                                            | `null`         | -        |
+| prefix-renderer | `TreeNodeRenderFn`                                                     | 使用 render 函数进行前置内容渲染                                                                                                                                        | `null`         | `2.2.5`  |
+| suffix-renderer | `TreeNodeRenderFn`                                                     | 使用 render 函数进行后置内容渲染                                                                                                                                        | `null`         | `2.2.5`  |
 | multiple        | `boolean`                                                              | 设置是否开启多选模式                                                                                                                                                    | `false`        | -        |
 | indent          | `string \| number`                                                     | 设置每层树节点的缩进距离                                                                                                                                                | `'16px'`       | -        |
 | accordion       | `boolean`                                                              | 设置是否开启手风琴模式                                                                                                                                                  | `false`        | -        |
@@ -249,11 +279,13 @@ type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) =>
 
 ### Tree 插槽
 
-| 名称  | 说明                                                                                                                                                                     | 参数                                                                                                                                                                                               | 始于 |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| label | 节点标签的插槽                                                                                                                                                           | `(data: Data, node: TreeNodeProps, depth: number)`                                                                                                                                                 | -    |
-| node  | 节点内容的插槽，使用该插槽将完全覆盖节点各元素，包括箭头、复选框等，插槽额外的三个方法 `toggleCheck`、`toggleExpand`、`toggleSelect`，分别用于触发节点的勾选、展开、选择 | `(data: Data, node: TreeNodeProps, depth: number, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void>, toggleSelect: (able?: boolean) => Promise<void>)` | -    |
-| empty | 当数据为空时的提示文字的插槽                                                                                                                                             | -                                                                                                                                                                                                  | -    |
+| 名称   | 说明                                                                                                                                                                     | 参数                   | 始于    |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- | ------- |
+| label  | 节点标签的插槽                                                                                                                                                           | `TreeCommonSlotParams` | -       |
+| node   | 节点内容的插槽，使用该插槽将完全覆盖节点各元素，包括箭头、复选框等，插槽额外的三个方法 `toggleCheck`、`toggleExpand`、`toggleSelect`，分别用于触发节点的勾选、展开、选择 | `TreeNodeSlotParams`   | -       |
+| empty  | 当数据为空时的提示文字的插槽                                                                                                                                             | -                      | -       |
+| prefix | 节点前置内容的插槽                                                                                                                                                       | `TreeCommonSlotParams` | `2.2.5` |
+| suffix | 节点后置内容的插槽                                                                                                                                                       | `TreeCommonSlotParams` | `2.2.5` |
 
 ### Tree 方法
 

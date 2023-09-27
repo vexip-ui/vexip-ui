@@ -526,4 +526,28 @@ describe('Tree', () => {
     const node = wrapper.find('.vxp-tree__node')
     expect(node.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--selected')
   })
+
+  it('label, prefix, suffix slots', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      }
+    ]
+    const wrapper = mount(() => (
+      <Tree data={data}>
+        {{
+          label: ({ data }: any) => <span class={'label'}>{data.label}</span>,
+          prefix: () => <span class={'prefix'}></span>,
+          suffix: () => <span class={'suffix'}></span>
+        }}
+      </Tree>
+    ))
+
+    await nextTick()
+    expect(wrapper.find('.label').exists()).toBe(true)
+    expect(wrapper.find('.label').text()).toEqual('n1')
+    expect(wrapper.find('.prefix').exists()).toBe(true)
+    expect(wrapper.find('.suffix').exists()).toBe(true)
+  })
 })

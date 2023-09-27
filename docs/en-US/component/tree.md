@@ -138,7 +138,21 @@ This can be useful, for example, when init info for nodes is not stored directly
 
 ### Virtual Scroll
 
+^[Since v2.1.30](!s)
+
 Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
+
+:::
+
+:::demo tree/external
+
+### External Content
+
+^[Since v2.2.5](!s)
+
+You can customize prefix and suffix content of node label respectively via the `prefix` and `suffix` slots.
+
+Although you can implement this feature just using `label` slot, they help you better to decouple the logic.
 
 :::
 
@@ -193,8 +207,19 @@ type TreeNodeProps<D = Data> = {
   data: Data
 }
 
-type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
-type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
+interface TreeCommonSlotParams {
+  data: Data,
+  node: TreeNodeProps,
+  depth: number,
+  focused: boolean
+}
+
+interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  lineCount: number,
+  toggleCheck: (checked?: boolean) => void,
+  toggleExpand: (expanded?: boolean) => Promise<void>,
+  toggleSelect: (able?: boolean) => Promise<void>
+}
 ```
 
 ### Tree Props
@@ -209,7 +234,9 @@ type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) =>
 | readonly        | `boolean`                                                              | Set whether the tree is read-only, if set, all tree nodes will be read-only                                                                                                                                                                      | `false`        | -        |
 | checkbox        | `boolean`                                                              | Set whether to enable the checkbox of the node                                                                                                                                                                                                   | `false`        | -        |
 | draggable       | `boolean`                                                              | Set whether the node is draggable                                                                                                                                                                                                                | `false`        | -        |
-| renderer        | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any`    | The number of nodes to render using the render function                                                                                                                                                                                          | `null`         | -        |
+| renderer        | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any`    | Set the render function to render node content                                                                                                                                                                                                   | `null`         | -        |
+| prefix-renderer | `TreeNodeRenderFn`                                                     | Set the render function to render prefix content                                                                                                                                                                                                 | `null`         | `2.2.5`  |
+| suffix-renderer | `TreeNodeRenderFn`                                                     | Set the render function to render suffix content                                                                                                                                                                                                 | `null`         | `2.2.5`  |
 | multiple        | `boolean`                                                              | Set whether to enable multiple selection mode                                                                                                                                                                                                    | `false`        | -        |
 | indent          | `string \| number`                                                     | Set the indent distance of each tree node                                                                                                                                                                                                        | `'16px'`       | -        |
 | accordion       | `boolean`                                                              | Set whether to enable accordion mode                                                                                                                                                                                                             | `false`        | -        |
@@ -249,11 +276,13 @@ type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) =>
 
 ### Tree Slots
 
-| Name  | Description                                                                                                                                                                                                                                                                  | Parameters                                                                                                                                                                                          | Since |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| label | Slot for node label                                                                                                                                                                                                                                                          | `(data: Data, node: TreeNodeProps, depth: number)`                                                                                                                                                  | -     |
-| node  | The slot of the node content, using this slot will completely cover the elements of the node, including arrows, check boxes, etc. The slot has three additional methods `toggleCheck`, `toggleExpand`, `toggleSelect`, which are used for Trigger node check, expand, select | `(data: Data, node: TreeNodeProps, depth: number, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void> , toggleSelect: (able?: boolean) => Promise<void>)` | -     |
-| empty | Slot for prompt text when data is empty                                                                                                                                                                                                                                      | -                                                                                                                                                                                                   | -     |
+| Name   | Description                                                                                                                                                                                                                                                           | Parameters             | Since   |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ------- |
+| label  | Slot for node label                                                                                                                                                                                                                                                   | `TreeCommonSlotParams` | -       |
+| node   | Slot for node content, using this slot will completely cover the elements of the node, including arrows, check boxes, etc. The slot has three additional methods `toggleCheck`, `toggleExpand`, `toggleSelect`, which are used for trigger node check, expand, select | `TreeNodeSlotParams`   | -       |
+| empty  | Slot for prompt text when data is empty                                                                                                                                                                                                                               | -                      | -       |
+| prefix | Slot for node prefix content                                                                                                                                                                                                                                          | `TreeCommonSlotParams` | `2.2.5` |
+| suffix | Slot for node suffix content                                                                                                                                                                                                                                          | `TreeCommonSlotParams` | `2.2.5` |
 
 ### Tree Methods
 

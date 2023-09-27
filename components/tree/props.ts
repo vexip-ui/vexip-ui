@@ -29,6 +29,8 @@ export const treeProps = buildProps({
   checkbox: booleanProp,
   suffixCheckbox: booleanProp,
   renderer: Function as PropType<TreeNodeRenderFn>,
+  prefixRenderer: Function as PropType<TreeNodeRenderFn>,
+  suffixRenderer: Function as PropType<TreeNodeRenderFn>,
   multiple: booleanProp,
   indent: [String, Number],
   accordion: booleanProp,
