@@ -57,7 +57,17 @@
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="node.loading" v-bind="icons.loading" label="loading"></Icon>
-          <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+          <slot
+            v-else
+            name="arrow"
+            :data="node.data"
+            :node="node"
+            :depth="node.depth"
+            :focused="focused"
+          >
+            <Icon v-if="treeState.arrowIcon" :icon="treeState.arrowIcon"></Icon>
+            <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+          </slot>
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"

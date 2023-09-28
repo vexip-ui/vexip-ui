@@ -123,6 +123,7 @@ export interface TreeState {
   renderer: TreeNodeRenderFn,
   prefixRenderer: TreeNodeRenderFn,
   suffixRenderer: TreeNodeRenderFn,
+  arrowIcon: Record<string, any>,
   dragging: boolean,
   boundAsyncLoad: boolean,
   nodeStates: Map<Key, TreeNodeState>,

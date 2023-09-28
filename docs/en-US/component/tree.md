@@ -50,6 +50,18 @@ The other options can respectively control the interaction disabled state of the
 
 :::
 
+:::demo tree/arrow-icon
+
+### Arrow Icon
+
+^[Since v2.2.5](!s)
+
+The icon at the arrow position can be changed via the `arrow-icon` prop.
+
+If you're not satisfied yet, you can customize it using the `arrow` slot.
+
+:::
+
 :::demo tree/filter
 
 ### Filter Nodes
@@ -257,6 +269,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | node-min-height | `number`                                                               | Set node min height, only use for virtual scroll, no applied style                                                                                                                                                                               | `28`           | `2.1.30` |
 | use-y-bar       | `boolean`                                                              | Set whether the table uses vertical scroll bar                                                                                                                                                                                                   | `false`        | `2.1.30` |
 | no-transition   | `boolean`                                                              | Whether disable transition of expanding or collapsing                                                                                                                                                                                            | `false`        | `2.1.30` |
+| arrow-icon      | `Record<string, any>`                                                  | Set the icon at the arrow position                                                                                                                                                                                                               | `null`         | `2.2.5`  |
 
 ### Tree Events
 
@@ -283,6 +296,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | empty  | Slot for prompt text when data is empty                                                                                                                                                                                                                               | -                      | -       |
 | prefix | Slot for node prefix content                                                                                                                                                                                                                                          | `TreeCommonSlotParams` | `2.2.5` |
 | suffix | Slot for node suffix content                                                                                                                                                                                                                                          | `TreeCommonSlotParams` | `2.2.5` |
+| arrow  | Slot for node arrow content                                                                                                                                                                                                                                           | `TreeCommonSlotParams` | `2.2.5` |
 
 ### Tree Methods
 

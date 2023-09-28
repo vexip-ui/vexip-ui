@@ -50,6 +50,18 @@
 
 :::
 
+:::demo tree/arrow-icon
+
+### 箭头图标
+
+^[Since v2.2.5](!s)
+
+通过 `arrow-icon` 属性可以替换箭头位置的图标。
+
+如果你觉得还不满足，可以使用 `arrow` 插槽进行自定义。
+
+:::
+
 :::demo tree/filter
 
 ### 过滤节点
@@ -260,6 +272,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | node-min-height | `number`                                                               | 设置节点最小高度，仅用于虚拟滚动计算，不会应用样式                                                                                                                      | `28`           | `2.1.30` |
 | use-y-bar       | `boolean`                                                              | 设置树是否使用纵向滚动条                                                                                                                                                | `false`        | `2.1.30` |
 | no-transition   | `boolean`                                                              | 是否禁用展开收起时的过渡效果                                                                                                                                            | `false`        | `2.1.30` |
+| arrow-icon      | `Record<string, any>`                                                  | 设置箭头位置的图标                                                                                                                                                      | `null`         | `2.2.5`  |
 
 ### Tree 事件
 
@@ -286,6 +299,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | empty  | 当数据为空时的提示文字的插槽                                                                                                                                             | -                      | -       |
 | prefix | 节点前置内容的插槽                                                                                                                                                       | `TreeCommonSlotParams` | `2.2.5` |
 | suffix | 节点后置内容的插槽                                                                                                                                                       | `TreeCommonSlotParams` | `2.2.5` |
+| arrow  | 节点箭头内容的插槽                                                                                                                                                       | `TreeCommonSlotParams` | `2.2.5` |
 
 ### Tree 方法
 

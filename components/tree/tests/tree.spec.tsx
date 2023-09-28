@@ -3,6 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Tree } from '..'
+import { User } from '@vexip-ui/icons'
 
 describe('Tree', () => {
   it('render', async () => {
@@ -549,5 +550,49 @@ describe('Tree', () => {
     expect(wrapper.find('.label').text()).toEqual('n1')
     expect(wrapper.find('.prefix').exists()).toBe(true)
     expect(wrapper.find('.suffix').exists()).toBe(true)
+  })
+
+  it('arrow icon', async () => {
+    it('arrow slot', async () => {
+      const data = [
+        {
+          id: 1,
+          label: 'n1'
+        },
+        {
+          id: 2,
+          label: 'n2',
+          parent: 1
+        }
+      ]
+      const wrapper = mount(() => <Tree data={data} arrow-icon={User}></Tree>)
+
+      await nextTick()
+      expect(wrapper.findComponent(User).exists()).toBe(true)
+    })
+  })
+
+  it('arrow slot', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => (
+      <Tree data={data}>
+        {{
+          arrow: () => <span class={'arrow'}></span>
+        }}
+      </Tree>
+    ))
+
+    await nextTick()
+    expect(wrapper.find('.arrow').exists()).toBe(true)
   })
 })

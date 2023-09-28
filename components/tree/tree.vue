@@ -41,6 +41,9 @@
             <template #default="payload">
               <slot name="node" v-bind="payload"></slot>
             </template>
+            <template v-if="$slots.arrow" #arrow="payload">
+              <slot name="arrow" v-bind="payload"></slot>
+            </template>
             <template #label="payload">
               <slot name="label" v-bind="payload"></slot>
             </template>
@@ -56,6 +59,9 @@
       <TreeNode v-else v-bind="getNodeProps(node.data, node)" :node="node">
         <template #default="payload">
           <slot name="node" v-bind="payload"></slot>
+        </template>
+        <template v-if="$slots.arrow" #arrow="payload">
+          <slot name="arrow" v-bind="payload"></slot>
         </template>
         <template #label="payload">
           <slot name="label" v-bind="payload"></slot>
@@ -216,7 +222,8 @@ export default defineComponent({
         validator: value => value > 0
       },
       useYBar: false,
-      noTransition: false
+      noTransition: false,
+      arrowIcon: null
     })
 
     const nh = useNameHelper('tree')
@@ -319,6 +326,7 @@ export default defineComponent({
         renderer: toRef(props, 'renderer'),
         prefixRenderer: toRef(props, 'prefixRenderer'),
         suffixRenderer: toRef(props, 'suffixRenderer'),
+        arrowIcon: toRef(props, 'arrowIcon'),
         dragging,
         boundAsyncLoad,
         nodeStates,

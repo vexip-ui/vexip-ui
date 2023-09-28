@@ -54,6 +54,7 @@ export const treeProps = buildProps({
   nodeMinHeight: Number,
   useYBar: booleanProp,
   noTransition: booleanProp,
+  arrowIcon: Object,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
