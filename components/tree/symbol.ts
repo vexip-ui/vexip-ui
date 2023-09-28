@@ -127,6 +127,7 @@ export interface TreeState {
   dragging: boolean,
   boundAsyncLoad: boolean,
   nodeStates: Map<Key, TreeNodeState>,
+  expanding: boolean,
   getParentNode(node: TreeNodeProps): TreeNodeProps | null,
   updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,

@@ -212,6 +212,8 @@ export default defineComponent({
       target: wrapper,
       passive: false,
       onKeyDown: (event, modifier) => {
+        if (treeState.expanding) return
+
         const prevent = () => {
           event.preventDefault()
           event.stopPropagation()

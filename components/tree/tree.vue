@@ -309,7 +309,7 @@ export default defineComponent({
       if (wrapper.value) {
         visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
       }
-    }, 500)
+    }, 300)
 
     provide(
       TREE_STATE,
@@ -330,6 +330,7 @@ export default defineComponent({
         dragging,
         boundAsyncLoad,
         nodeStates,
+        expanding,
         getParentNode,
         updateVisibleNodeEls,
         computeCheckedState,
@@ -438,6 +439,10 @@ export default defineComponent({
       { immediate: true }
     )
     watch(expandedNodeIds, (value, prev) => {
+      if (props.noTransition) {
+        updateVisibleNodeEls()
+      }
+
       if (props.noTransition || disableExpand || !wrapper.value) return
 
       let addedId: Key | undefined
@@ -1130,6 +1135,7 @@ export default defineComponent({
 
     function afterExpanded() {
       expanding.value = false
+      updateVisibleNodeEls()
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
