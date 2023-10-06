@@ -288,18 +288,20 @@ export default defineComponent({
     function handleInputInternal(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
 
-      currentVisible.value = !props.dropDisabled
-
-      if (select.value) {
-        select.value.currentVisible = currentVisible.value
-      }
-
       currentValue.value = value
       changed = true
       lastInput = value
 
       if (currentIndex.value !== -1) {
         currentIndex.value = 0
+      }
+
+      if (props.showEmpty) {
+        currentVisible.value = !props.dropDisabled
+
+        if (select.value) {
+          select.value.currentVisible = currentVisible.value
+        }
       }
 
       emitEvent(props.onInput, value)
@@ -339,6 +341,10 @@ export default defineComponent({
     function beforeClick() {
       beforeVisible = currentVisible.value
       inClickProcess = true
+
+      if (select.value) {
+        select.value.currentFilter = String(currentValue.value)
+      }
     }
 
     function handleClick() {
@@ -362,7 +368,7 @@ export default defineComponent({
 
       currentVisible.value = visible
 
-      testOptionCanDrop()
+      visible && testOptionCanDrop()
       beforeVisible = currentVisible.value
 
       if (currentVisible.value !== visible) {
@@ -375,12 +381,13 @@ export default defineComponent({
     }
 
     function testOptionCanDrop() {
-      if (props.dropDisabled || (!props.showEmpty && !filteredOptions.value.length)) {
-        currentVisible.value = false
+      currentVisible.value = !(
+        props.dropDisabled ||
+        (!props.showEmpty && !filteredOptions.value.length)
+      )
 
-        if (select.value) {
-          select.value.currentVisible = currentVisible.value
-        }
+      if (select.value) {
+        select.value.currentVisible = currentVisible.value
       }
     }
 
@@ -474,6 +481,7 @@ export default defineComponent({
 
       hasPrefix,
       hasSuffix,
+      filteredOptions,
 
       select,
       control,
