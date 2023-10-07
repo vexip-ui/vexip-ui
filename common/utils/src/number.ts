@@ -1,12 +1,25 @@
 import type { AnyCase } from './word-case'
 
 /**
+ * 检测给定的值是否可以通过 parseFlat 或 Number 方法转为数字
+ *
+ * @param value 需要检测的值
+ */
+export function isValidNumber(value: unknown) {
+  return !Number.isNaN(parseFloat(value as string)) || !Number.isNaN(Number(value))
+}
+
+/**
  * 将给定的值转成数字，NaN 的情况将会处理成 0
  *
  * @param value 需要转化的值
  */
 export function toNumber(value: unknown) {
-  const number = parseFloat(value as string)
+  let number = parseFloat(value as string)
+
+  if (Number.isNaN(number)) {
+    number = Number(value)
+  }
 
   return Number.isNaN(number) ? 0 : number
 }
