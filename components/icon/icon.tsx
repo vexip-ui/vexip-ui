@@ -1,6 +1,7 @@
 import { computed, defineComponent, h } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { toNumber } from '@vexip-ui/utils'
 import { iconProps } from './props'
 
 import type { CSSProperties } from 'vue'
@@ -12,6 +13,8 @@ const internalEffects = Object.freeze<IconPresetEffect[]>([
   'pulse-in',
   'pulse-out'
 ])
+
+const angleRE = /(^\s*[+-]?\d*\.?\d+\s*)(deg|grad|turn|rad)?\s*/i
 
 export default defineComponent({
   name: 'Icon',
@@ -31,7 +34,8 @@ export default defineComponent({
       },
       effect: null,
       size: null,
-      color: null
+      color: null,
+      rotate: null
     })
 
     const nh = useNameHelper('icon')
@@ -52,7 +56,24 @@ export default defineComponent({
       }
     })
     const computedScale = computed(() => {
-      return Number(props.scale) || 1
+      return toNumber(props.scale) || 1
+    })
+    const rotate = computed(() => {
+      if (typeof props.rotate === 'number') {
+        return `${(props.rotate % 4) / 4}turn`
+      }
+
+      const matched = props.rotate?.match(angleRE)
+
+      if (!matched) return null
+
+      const number = toNumber(matched[1])
+
+      if (!matched[2]) {
+        return `${(number % 4) / 4}turn`
+      }
+
+      return number ? `${number}${matched[2]}` : null
     })
     const style = computed(() => {
       const style: CSSProperties = {
@@ -63,6 +84,10 @@ export default defineComponent({
         style.fontSize = props.size
       } else if (computedScale.value !== 1) {
         style.fontSize = `${computedScale.value}em`
+      }
+
+      if (rotate.value) {
+        style[nh.cv('rotate')] = rotate.value
       }
 
       return style

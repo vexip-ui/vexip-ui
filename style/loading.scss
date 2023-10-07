@@ -37,7 +37,7 @@ $loading: map.merge(
 
   @each $type in $types {
     &--#{$type} &__filler {
-      @include define-css-var('loading-filler-bg-color', get-css-var('color', $type, 'base'));
+      @include define-css-var('loading-filler-bg-color', get-css-var('color' $type 'base'));
     }
   }
 }

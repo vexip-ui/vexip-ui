@@ -6,13 +6,14 @@ import type { IconEffect } from './symbol'
 
 export const iconProps = buildProps({
   icon: Object,
-  scale: [Number, String] as PropType<number | string>,
+  scale: [Number, String],
   title: String,
   label: String,
   flip: String as PropType<'horizontal' | 'vertical' | 'both'>,
   effect: String as PropType<IconEffect>,
   size: String,
-  color: String
+  color: String,
+  rotate: [Number, String]
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>

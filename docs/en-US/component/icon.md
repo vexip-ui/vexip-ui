@@ -70,6 +70,14 @@ The flip effect of the icon can be set via the `flip` prop.
 
 :::
 
+:::demo icon/rotate
+
+### Rotate
+
+A move command?
+
+:::
+
 :::demo icon/package
 
 ### Different Types
@@ -101,9 +109,10 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | Name   | Type                                   | Description                                         | Default | Since   |
 | ------ | -------------------------------------- | --------------------------------------------------- | ------- | ------- |
 | icon   | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0` |
-| scale  | `number`                               | Set the scaling of the icon                         | `1`     | -       |
+| scale  | `number \| string`                     | Set the scaling of the icon                         | `1`     | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
 | title  | `string`                               | Set the title prop of the icon                      | `''`    | -       |
 | effect | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |
 | size   | `string`                               | Set the size of the icon                            | `null`  | `2.2.5` |
 | color  | `string`                               | Set the color of the icon                           | `null`  | `2.2.5` |
+| rotate | `number \| string`                     | Set rotate angle of the icon                        | `null`  | `2.2.5` |

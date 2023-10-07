@@ -48,7 +48,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 :::demo icon/spin
 
-### 旋转效果
+### 回转效果
 
 设置 `effect` 属性为 `spin-in` 或 `spin-out` 可以让图标原地转圈。
 
@@ -67,6 +67,14 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 ### 翻转效果
 
 通过 `flip` 属性可以设置图标的翻转效果。
+
+:::
+
+:::demo icon/rotate
+
+### 旋转
+
+一个出招指令？
 
 :::
 
@@ -101,9 +109,10 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | 名称   | 类型                                   | 说明                               | 默认值 | 始于    |
 | ------ | -------------------------------------- | ---------------------------------- | ------ | ------- |
 | icon   | `Record<string, any>`                  | 图标 `<svg>` 组件                  | `null` | `2.0.0` |
-| scale  | `number`                               | 设置图标的缩放比例                 | `1`    | -       |
+| scale  | `number \| string`                     | 设置图标的缩放比例                 | `1`    | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -       |
 | title  | `string`                               | 设置图标的标题属性                 | `''`   | -       |
 | effect | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0` |
 | size   | `string`                               | 指定图标的大小                     | `null` | `2.2.5` |
 | color  | `string`                               | 设置图标的颜色                     | `null` | `2.2.5` |
+| rotate | `number \| string`                     | 设置图标的旋转角度                 | `null` | `2.2.5` |
