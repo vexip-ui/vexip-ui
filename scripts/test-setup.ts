@@ -1,6 +1,7 @@
 import { beforeEach, vi } from 'vitest'
 import { config } from '@vue/test-utils'
 
+import { Node } from 'happy-dom'
 import { ResizeObserver } from '@juggle/resize-observer'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -43,6 +44,7 @@ config.global.stubs = {
   }
 }
 
+vi.stubGlobal('Node', Node)
 vi.stubGlobal('ResizeObserver', ResizeObserver)
 vi.stubGlobal('IntersectionObserver', IntersectionObserver)
 
