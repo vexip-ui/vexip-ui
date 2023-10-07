@@ -223,7 +223,8 @@ export default defineComponent({
       },
       useYBar: false,
       noTransition: false,
-      arrowIcon: null
+      arrowIcon: null,
+      blockEffect: false
     })
 
     const nh = useNameHelper('tree')
@@ -327,6 +328,7 @@ export default defineComponent({
         prefixRenderer: toRef(props, 'prefixRenderer'),
         suffixRenderer: toRef(props, 'suffixRenderer'),
         arrowIcon: toRef(props, 'arrowIcon'),
+        blockEffect: toRef(props, 'blockEffect'),
         dragging,
         boundAsyncLoad,
         nodeStates,

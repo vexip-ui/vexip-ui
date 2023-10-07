@@ -1,20 +1,15 @@
 <template>
-  <RadioGroup
-    v-model:value="linkLine"
-    :options="options"
-    button
-    style="margin-bottom: 10px"
-  ></RadioGroup>
-  <Tree :data="data" :link-line="linkLine"></Tree>
+  <p>
+    Block Effect:
+    <Switch v-model:value="blockEffect"></Switch>
+  </p>
+  <Tree :data="data" :block-effect="blockEffect"></Tree>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { TreeLinkLine } from 'vexip-ui'
-
-const linkLine = ref<TreeLinkLine>('dashed')
-const options: TreeLinkLine[] = ['none', 'dashed', 'solid', 'dotted']
+const blockEffect = ref(true)
 
 const data = [
   {
@@ -69,8 +64,4 @@ const data = [
     parent: 2
   }
 ]
-
-for (const item of data) {
-  item.expanded = true
-}
 </script>

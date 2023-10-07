@@ -124,6 +124,7 @@ export interface TreeState {
   prefixRenderer: TreeNodeRenderFn,
   suffixRenderer: TreeNodeRenderFn,
   arrowIcon: Record<string, any>,
+  blockEffect: boolean,
   dragging: boolean,
   boundAsyncLoad: boolean,
   nodeStates: Map<Key, TreeNodeState>,

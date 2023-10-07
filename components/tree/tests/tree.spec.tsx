@@ -524,8 +524,7 @@ describe('Tree', () => {
     const wrapper = mount(() => <Tree data={data} post-create={postCreate}></Tree>)
 
     await nextTick()
-    const node = wrapper.find('.vxp-tree__node')
-    expect(node.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--selected')
+    expect(wrapper.find('.vxp-tree__node').classes()).toContain('vxp-tree__node--selected')
   })
 
   it('label, prefix, suffix slots', async () => {
@@ -553,23 +552,21 @@ describe('Tree', () => {
   })
 
   it('arrow icon', async () => {
-    it('arrow slot', async () => {
-      const data = [
-        {
-          id: 1,
-          label: 'n1'
-        },
-        {
-          id: 2,
-          label: 'n2',
-          parent: 1
-        }
-      ]
-      const wrapper = mount(() => <Tree data={data} arrow-icon={User}></Tree>)
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} arrow-icon={User}></Tree>)
 
-      await nextTick()
-      expect(wrapper.findComponent(User).exists()).toBe(true)
-    })
+    await nextTick()
+    expect(wrapper.findComponent(User).exists()).toBe(true)
   })
 
   it('arrow slot', async () => {
@@ -594,5 +591,30 @@ describe('Tree', () => {
 
     await nextTick()
     expect(wrapper.find('.arrow').exists()).toBe(true)
+  })
+
+  it('block effect', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(Tree, {
+      props: { data }
+    })
+
+    await nextTick()
+    expect(wrapper.find('.vxp-tree__content').classes()).not.toContain('vxp-tree__content--effect')
+    expect(wrapper.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--effect')
+
+    await wrapper.setProps({ blockEffect: true })
+    expect(wrapper.find('.vxp-tree__content').classes()).toContain('vxp-tree__content--effect')
+    expect(wrapper.find('.vxp-tree__label').classes()).not.toContain('vxp-tree__label--effect')
   })
 })

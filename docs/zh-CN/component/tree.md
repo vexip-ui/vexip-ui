@@ -168,6 +168,16 @@
 
 :::
 
+:::demo tree/block-effect
+
+### 块级效应
+
+^[Since v2.2.5](!s)
+
+添加 `block-effect` 属性可以使得节点的效应作用在整个节点块。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -273,6 +283,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | use-y-bar       | `boolean`                                                              | 设置树是否使用纵向滚动条                                                                                                                                                | `false`        | `2.1.30` |
 | no-transition   | `boolean`                                                              | 是否禁用展开收起时的过渡效果                                                                                                                                            | `false`        | `2.1.30` |
 | arrow-icon      | `Record<string, any>`                                                  | 设置箭头位置的图标                                                                                                                                                      | `null`         | `2.2.5`  |
+| block-effect    | `boolean`                                                              | 节点是否为块级效应                                                                                                                                                      | `false`        | `2.2.5`  |
 
 ### Tree 事件
 

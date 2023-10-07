@@ -44,7 +44,14 @@
           aria-hidden="true"
         ></div>
       </template>
-      <div :class="nh.be('content')">
+      <div
+        :class="{
+          [nh.be('content')]: true,
+          [nh.bem('content', 'effect')]: treeState.blockEffect,
+          [nh.bem('content', 'disabled')]:
+            treeState.blockEffect && (isDisabled || node.selectDisabled)
+        }"
+      >
         <span
           ref="arrowEl"
           :class="{
@@ -83,14 +90,11 @@
         <div
           :class="{
             [nh.be('label')]: true,
-            [nh.bem('label', 'focused')]: focused,
-            [nh.bem('label', 'selected')]: node.selected,
-            [nh.bem('label', 'disabled')]: isDisabled || node.selectDisabled,
-            [nh.bem('label', 'readonly')]: isReadonly,
-            [nh.bem('label', 'is-floor')]: treeState.floorSelect && node.children?.length,
-            [nh.bem('label', 'secondary')]: secondary
+            [nh.bem('label', 'effect')]: !treeState.blockEffect,
+            [nh.bem('label', 'disabled')]:
+              !treeState.blockEffect && (isDisabled || node.selectDisabled)
           }"
-          @click="handleLabelClick()"
+          @click="!treeState.blockEffect && handleLabelClick()"
         >
           <div v-if="treeState.prefixRenderer || $slots.prefix" :class="nh.be('prefix')">
             <Renderer
@@ -263,6 +267,7 @@ export default defineComponent({
       return {
         [nh.be('node')]: true,
         [nh.bem('node', 'last')]: props.node.last,
+        [nh.bem('node', 'focused')]: focused.value,
         [nh.bem('node', 'selected')]: props.node.selected,
         [nh.bem('node', 'expanded')]: props.node.expanded,
         [nh.bem('node', 'disabled')]: isDisabled.value,
@@ -271,7 +276,8 @@ export default defineComponent({
         [nh.bem('node', 'dragging')]: dragging.value,
         [nh.bem('node', 'drag-over')]: isDragOver.value,
         [nh.bem('node', 'link-line')]: hasLinkLine.value,
-        [nh.bem('node', 'no-arrow')]: !hasArrow.value
+        [nh.bem('node', 'no-arrow')]: !hasArrow.value,
+        [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length
       }
     })
     const hasArrow = computed(() => {
@@ -337,6 +343,10 @@ export default defineComponent({
 
     function handleClick() {
       treeState.handleNodeClick(props.node)
+
+      if (treeState.blockEffect) {
+        handleLabelClick()
+      }
     }
 
     function handleToggleCheck(able = !props.node.checked) {

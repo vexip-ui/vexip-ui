@@ -168,6 +168,16 @@ Although you can implement this feature just using `label` slot, they help you b
 
 :::
 
+:::demo tree/block-effect
+
+### Block Effect
+
+^[Since v2.2.5](!s)
+
+Adding the `block-effect` prop to make the effect apply to the entire block of the node.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -270,6 +280,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | use-y-bar       | `boolean`                                                              | Set whether the table uses vertical scroll bar                                                                                                                                                                                                   | `false`        | `2.1.30` |
 | no-transition   | `boolean`                                                              | Whether disable transition of expanding or collapsing                                                                                                                                                                                            | `false`        | `2.1.30` |
 | arrow-icon      | `Record<string, any>`                                                  | Set the icon at the arrow position                                                                                                                                                                                                               | `null`         | `2.2.5`  |
+| block-effect    | `boolean`                                                              | Whether the node is block effect                                                                                                                                                                                                                 | `false`        | `2.2.5`  |
 
 ### Tree Events
 
