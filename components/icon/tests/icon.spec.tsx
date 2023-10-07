@@ -105,4 +105,18 @@ describe('Icon', () => {
 
     expect(wrapper.classes()).toContain('effect')
   })
+
+  it('size', async () => {
+    const wrapper = mount(Icon, {
+      props: { icon: Spinner }
+    })
+
+    expect(wrapper.attributes('style')).toBeUndefined()
+
+    await wrapper.setProps({ size: '30px' })
+    expect(wrapper.attributes('style')).toContain('font-size: 30px;')
+
+    await wrapper.setProps({ scale: 2 })
+    expect(wrapper.attributes('style')).toContain('font-size: 30px;')
+  })
 })

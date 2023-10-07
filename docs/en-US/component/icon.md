@@ -32,6 +32,8 @@ You can drop the svg component to the `icon` prop, or you can put it directly un
 
 Set the `scale` prop to scale Icon.
 
+You can also directly specify the size of the icon by setting a legal CSS value through the `size` prop.
+
 :::
 
 :::demo icon/spin
@@ -85,3 +87,4 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
 | title  | `string`                               | Set the title prop of the icon                      | `''`    | -       |
 | effect | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |
+| size   | `string`                               | Specify the size of the icon                        | `null`  | `2.2.5` |

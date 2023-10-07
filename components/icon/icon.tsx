@@ -29,7 +29,8 @@ export default defineComponent({
         default: null,
         validator: value => ['horizontal', 'vertical', 'both'].includes(value)
       },
-      effect: null
+      effect: null,
+      size: null
     })
 
     const nh = useNameHelper('icon')
@@ -53,6 +54,10 @@ export default defineComponent({
       return Number(props.scale) || 1
     })
     const style = computed<CSSProperties>(() => {
+      if (props.size) {
+        return { fontSize: props.size }
+      }
+
       return computedScale.value === 1 ? {} : { fontSize: `${computedScale.value}em` }
     })
 

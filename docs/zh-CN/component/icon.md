@@ -32,6 +32,8 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 设置 `scale` 属性来进行缩放。
 
+也可以通过 `size` 属性设置一个合法的 CSS 值直接指定图标的大小。
+
 :::
 
 :::demo icon/spin
@@ -81,7 +83,8 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | 名称   | 类型                                   | 说明                               | 默认值 | 始于    |
 | ------ | -------------------------------------- | ---------------------------------- | ------ | ------- |
 | icon   | `Record<string, any>`                  | 图标 `<svg>` 组件                  | `null` | `2.0.0` |
-| scale  | `number`                               | 用于调整图标尺寸                   | `1`    | -       |
+| scale  | `number`                               | 设置图标的缩放比例                 | `1`    | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -       |
 | title  | `string`                               | 设置图标的标题属性                 | `''`   | -       |
 | effect | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0` |
+| size   | `string`                               | 指定图标的大小                     | `null` | `2.2.5` |
