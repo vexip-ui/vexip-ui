@@ -11,7 +11,8 @@ export const iconProps = buildProps({
   label: String,
   flip: String as PropType<'horizontal' | 'vertical' | 'both'>,
   effect: String as PropType<IconEffect>,
-  size: String
+  size: String,
+  color: String
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>

@@ -22,7 +22,17 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 基本使用
 
-你可以直接把 svg 组件丢给 `icon` 属性，也可以直接放默认插槽下。
+你可以直接把 SVG 组件丢给 `icon` 属性，也可以直接放默认插槽下。
+
+:::
+
+:::demo icon/color
+
+### 修改颜色
+
+^[Since v2.2.5](!s)
+
+通过 `color` 属性可以快速修改图标的颜色。
 
 :::
 
@@ -52,6 +62,14 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 :::
 
+:::demo icon/flip
+
+### 翻转效果
+
+通过 `flip` 属性可以设置图标的翻转效果。
+
+:::
+
 :::demo icon/package
 
 ### 不同类型
@@ -66,7 +84,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 自定义图标
 
-去外面随便找个 svg 图标丢进来，彩色也可以。
+去外面随便找个 SVG 图标丢进来，彩色也可以。
 
 :::
 
@@ -88,3 +106,4 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | title  | `string`                               | 设置图标的标题属性                 | `''`   | -       |
 | effect | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0` |
 | size   | `string`                               | 指定图标的大小                     | `null` | `2.2.5` |
+| color  | `string`                               | 设置图标的颜色                     | `null` | `2.2.5` |

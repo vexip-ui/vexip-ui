@@ -119,4 +119,10 @@ describe('Icon', () => {
     await wrapper.setProps({ scale: 2 })
     expect(wrapper.attributes('style')).toContain('font-size: 30px;')
   })
+
+  it('color', () => {
+    const wrapper = mount(() => <Icon icon={Spinner} color={'orange'}></Icon>)
+
+    expect(wrapper.find('.vxp-icon').attributes('style')).toContain('color: orange;')
+  })
 })

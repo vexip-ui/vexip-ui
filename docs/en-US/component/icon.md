@@ -22,7 +22,17 @@ Icon component name is transformed according to certain rules from the original 
 
 ### Basis Usage
 
-You can drop the svg component to the `icon` prop, or you can put it directly under the default slot.
+You can drop the SVG component to the `icon` prop, or you can put it directly under the default slot.
+
+:::
+
+:::demo icon/color
+
+### Change Color
+
+^[Since v2.2.5](!s)
+
+The color of the icon can be quickly modified via the `color` prop.
 
 :::
 
@@ -52,6 +62,14 @@ Set the `effect` prop to `pulse-in` or `pulse-out` to make the icon have a pulse
 
 :::
 
+:::demo icon/flip
+
+### Flip Effect
+
+The flip effect of the icon can be set via the `flip` prop.
+
+:::
+
 :::demo icon/package
 
 ### Different Types
@@ -66,7 +84,7 @@ If you want to use other icon sets, please refer to the description of the namin
 
 ### Custom Icon
 
-You can put any svg content under the icon default slot.
+You can put any SVG content under the icon default slot.
 
 :::
 
@@ -83,8 +101,9 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | Name   | Type                                   | Description                                         | Default | Since   |
 | ------ | -------------------------------------- | --------------------------------------------------- | ------- | ------- |
 | icon   | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0` |
-| scale  | `number`                               | Used to adjust icon size                            | `1`     | -       |
+| scale  | `number`                               | Set the scaling of the icon                         | `1`     | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
 | title  | `string`                               | Set the title prop of the icon                      | `''`    | -       |
 | effect | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |
-| size   | `string`                               | Specify the size of the icon                        | `null`  | `2.2.5` |
+| size   | `string`                               | Set the size of the icon                            | `null`  | `2.2.5` |
+| color  | `string`                               | Set the color of the icon                           | `null`  | `2.2.5` |
