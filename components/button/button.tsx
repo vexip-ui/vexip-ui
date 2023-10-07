@@ -83,126 +83,122 @@ export default defineComponent({
       }
     })
     const colorMap = computed(() => {
-      if (props.color) {
-        const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
-        const black = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-black')) || '#000')
-        const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
-        const baseColor = parseColorToRgba(props.color)
+      if (!props.color) return null
 
-        return {
-          base: baseColor.toString(),
-          light2: mixColor(white, baseColor, 0.2).toString(),
-          dark1: mixColor(black, baseColor, 0.1).toString(),
-          opacity1: adjustAlpha(baseColor, 0.9).toString(),
-          opacity3: adjustAlpha(baseColor, 0.7).toString(),
-          opacity4: adjustAlpha(baseColor, 0.6).toString(),
-          opacity7: adjustAlpha(baseColor, 0.3).toString(),
-          opacity8: adjustAlpha(baseColor, 0.2).toString(),
-          white8: adjustAlpha(white, 0.2).toString(),
-          white9: adjustAlpha(white, 0.1).toString()
-        }
+      const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
+      const black = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-black')) || '#000')
+      const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
+      const baseColor = parseColorToRgba(props.color)
+
+      return {
+        base: baseColor.toString(),
+        light2: mixColor(white, baseColor, 0.2).toString(),
+        dark1: mixColor(black, baseColor, 0.1).toString(),
+        opacity1: adjustAlpha(baseColor, 0.9).toString(),
+        opacity3: adjustAlpha(baseColor, 0.7).toString(),
+        opacity4: adjustAlpha(baseColor, 0.6).toString(),
+        opacity7: adjustAlpha(baseColor, 0.3).toString(),
+        opacity8: adjustAlpha(baseColor, 0.2).toString(),
+        white8: adjustAlpha(white, 0.2).toString(),
+        white9: adjustAlpha(white, 0.1).toString()
       }
-
-      return null
     })
-    const style = computed(() => {
-      if (colorMap.value) {
-        const {
-          base,
-          light2,
-          dark1,
-          opacity1,
-          opacity3,
-          opacity4,
-          opacity7,
-          opacity8,
-          white8,
-          white9
-        } = colorMap.value
-        const { cvm, gnv } = nh
+    const style = computed<Record<string, string>>(() => {
+      if (!colorMap.value) return {}
 
-        if (props.ghost) {
-          return cvm({
-            color: base,
-            'color-hover': base,
-            'color-focus': base,
-            'color-active': base,
-            'color-disabled': base,
-            'bg-color': 'transparent',
-            'bg-color-hover': white9,
-            'bg-color-focus': white9,
-            'bg-color-active': white8,
-            'bg-color-disabled': 'transparent',
-            'b-color': base,
-            'b-color-hover': light2,
-            'b-color-focus': light2,
-            'b-color-active': dark1,
-            'b-color-disabled': gnv('content-color-disabled'),
-            'pulse-s-color': dark1
-          })
-        }
+      const {
+        base,
+        light2,
+        dark1,
+        opacity1,
+        opacity3,
+        opacity4,
+        opacity7,
+        opacity8,
+        white8,
+        white9
+      } = colorMap.value
+      const { cvm, gnv } = nh
 
-        if (props.simple) {
-          return cvm({
-            color: base,
-            'color-hover': base,
-            'color-focus': gnv('color-white'),
-            'color-active': gnv('color-white'),
-            'color-disabled': gnv('content-color-disabled'),
-            'bg-color': opacity8,
-            'bg-color-hover': opacity7,
-            'bg-color-focus': opacity1,
-            'bg-color-active': opacity1,
-            'bg-color-disabled': gnv('fill-color-background'),
-            'b-color': opacity4,
-            'b-color-hover': opacity4,
-            'b-color-focus': opacity3,
-            'b-color-active': opacity3,
-            'b-color-disabled': gnv('border-color-light-1'),
-            'pulse-s-color': dark1
-          })
-        }
-
-        if (props.text || props.dashed) {
-          return cvm({
-            ...(props.dashed
-              ? {
-                  'b-color': base,
-                  'b-color-hover': light2,
-                  'b-color-focus': light2,
-                  'b-color-active': dark1,
-                  'pulse-s-color': dark1
-                }
-              : {}),
-            color: base,
-            'color-hover': light2,
-            'color-focus': light2,
-            'color-active': dark1,
-            'color-disabled': opacity4
-          })
-        }
-
+      if (props.ghost) {
         return cvm({
-          color: gnv('color-white'),
-          'color-hover': gnv('color-white'),
-          'color-focus': gnv('color-white'),
-          'color-active': gnv('color-white'),
-          'color-disabled': gnv('content-color-disabled'),
-          'bg-color': base,
-          'bg-color-hover': light2,
-          'bg-color-focus': light2,
-          'bg-color-active': dark1,
-          'bg-color-disabled': gnv('fill-color-background'),
+          color: base,
+          'color-hover': base,
+          'color-focus': base,
+          'color-active': base,
+          'color-disabled': base,
+          'bg-color': 'transparent',
+          'bg-color-hover': white9,
+          'bg-color-focus': white9,
+          'bg-color-active': white8,
+          'bg-color-disabled': 'transparent',
           'b-color': base,
           'b-color-hover': light2,
           'b-color-focus': light2,
           'b-color-active': dark1,
+          'b-color-disabled': gnv('content-color-disabled'),
+          'pulse-s-color': dark1
+        })
+      }
+
+      if (props.simple) {
+        return cvm({
+          color: base,
+          'color-hover': base,
+          'color-focus': gnv('color-white'),
+          'color-active': gnv('color-white'),
+          'color-disabled': gnv('content-color-disabled'),
+          'bg-color': opacity8,
+          'bg-color-hover': opacity7,
+          'bg-color-focus': opacity1,
+          'bg-color-active': opacity1,
+          'bg-color-disabled': gnv('fill-color-background'),
+          'b-color': opacity4,
+          'b-color-hover': opacity4,
+          'b-color-focus': opacity3,
+          'b-color-active': opacity3,
           'b-color-disabled': gnv('border-color-light-1'),
           'pulse-s-color': dark1
         })
       }
 
-      return {}
+      if (props.text || props.dashed) {
+        return cvm({
+          ...(props.dashed
+            ? {
+                'b-color': base,
+                'b-color-hover': light2,
+                'b-color-focus': light2,
+                'b-color-active': dark1,
+                'pulse-s-color': dark1
+              }
+            : {}),
+          color: base,
+          'color-hover': light2,
+          'color-focus': light2,
+          'color-active': dark1,
+          'color-disabled': opacity4
+        })
+      }
+
+      return cvm({
+        color: gnv('color-white'),
+        'color-hover': gnv('color-white'),
+        'color-focus': gnv('color-white'),
+        'color-active': gnv('color-white'),
+        'color-disabled': gnv('content-color-disabled'),
+        'bg-color': base,
+        'bg-color-hover': light2,
+        'bg-color-focus': light2,
+        'bg-color-active': dark1,
+        'bg-color-disabled': gnv('fill-color-background'),
+        'b-color': base,
+        'b-color-hover': light2,
+        'b-color-focus': light2,
+        'b-color-active': dark1,
+        'b-color-disabled': gnv('border-color-light-1'),
+        'pulse-s-color': dark1
+      })
     })
 
     if (groupState) {

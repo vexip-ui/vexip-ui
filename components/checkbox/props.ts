@@ -27,6 +27,8 @@ export const checkboxProps = buildProps({
   loading: booleanProp,
   loadingLock: booleanProp,
   name: String,
+  color: String,
+  stateColor: booleanProp,
   onChange: eventProp<(checked: boolean) => void>(),
   onClick: eventProp<(event: MouseEvent) => void>()
 })
@@ -55,6 +57,8 @@ export const checkboxGroupProps = buildProps({
   loading: booleanProp,
   loadingLock: booleanProp,
   control: booleanStringProp,
+  color: String,
+  stateColor: booleanProp,
   onChange: eventProp<(value: (string | number)[]) => void>()
 })
 

@@ -86,6 +86,18 @@
 
 :::
 
+:::demo checkbox/color
+
+### 自定义颜色
+
+^[Since v2.2.5](!s)
+
+通过 `color` 属性可以定制化复选框的主题色。
+
+同时添加 `state-color` 属性可以让该颜色作为状态色。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -118,6 +130,8 @@ type RawOption =
 | loading      | `boolean`                                        | 设置是否为加载中                                                       | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                               | `false`     | `2.0.0` |
 | name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                      | `''`        | `2.2.2` |
+| color        | `string`                                         | 设置复选框的主题色                                                     | `null`      | `2.2.5` |
+| state-color  | `boolean`                                        | 自定义主题色是否作为状态色                                             | `false`     | `2.2.5` |
 
 ### Checkbox 事件
 
@@ -139,6 +153,8 @@ type RawOption =
 | loading      | `boolean`                                        | 设置是否为加载中                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
 | locale       | `LocaleConfig['checkbox']`                       | 设置多语言配置                                                     | `null`      | `2.1.0` |
+| color        | `string`                                         | 设置复选框组的主题色                                               | `null`      | `2.2.5` |
+| state-color  | `boolean`                                        | 自定义主题色是否作为状态色                                         | `false`     | `2.2.5` |
 
 ### CheckboxGroup 事件
 

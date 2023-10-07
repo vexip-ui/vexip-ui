@@ -86,6 +86,18 @@ Different states can be set via `state`.
 
 :::
 
+:::demo button/color
+
+### Custom Color
+
+^[Since v2.2.5](!s)
+
+You can custom the major color through the `color` prop.
+
+Also add the `state-color` prop to make this color as state color.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -118,6 +130,8 @@ type RawOption =
 | loading      | `boolean`                                        | Set whether is loading                                                                                                       | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                     | `false`     | `2.0.0` |
 | name         | `string`                                         | set `name` attribute of internal `<input>`                                                                                   | `''`        | `2.2.2` |
+| color        | `string`                                         | Set the major color of the checkbox                                                                                          | `null`      | `2.2.5` |
+| state-color  | `boolean`                                        | Whether the custom major color is used as state color                                                                        | `false`     | `2.2.5` |
 
 ### Checkbox Events
 
@@ -139,6 +153,8 @@ type RawOption =
 | loading      | `boolean`                                        | Set whether is loading                                                                                                               | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                             | `false`     | `2.0.0` |
 | locale       | `LocaleConfig['checkbox']`                       | Set the locale config                                                                                                                | `null`      | `2.1.0` |
+| color        | `string`                                         | Set the major color of the checkbox group                                                                                            | `null`      | `2.2.5` |
+| state-color  | `boolean`                                        | Whether the custom major color is used as state color                                                                                | `false`     | `2.2.5` |
 
 ### CheckboxGroup Events
 

@@ -36,7 +36,14 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounceMinor, isClient, isDefined, isObject } from '@vexip-ui/utils'
+import {
+  adjustAlpha,
+  debounceMinor,
+  isClient,
+  isDefined,
+  isObject,
+  parseColorToRgba
+} from '@vexip-ui/utils'
 import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -71,7 +78,9 @@ export default defineComponent({
       },
       loading: () => loading.value,
       control: null,
-      loadingLock: false
+      loadingLock: false,
+      color: null,
+      stateColor: false
     })
 
     const nh = useNameHelper('checkbox-group')
@@ -98,6 +107,16 @@ export default defineComponent({
     })
     const controlLabel = computed(() => {
       return typeof props.control === 'string' ? props.control : locale.value.all
+    })
+    const colorMap = computed(() => {
+      if (!props.color) return null
+
+      const baseColor = parseColorToRgba(props.color)
+
+      return {
+        base: baseColor.toString(),
+        opacity6: adjustAlpha(baseColor, 0.4).toString()
+      }
     })
 
     const updateValue = debounceMinor(() => {
@@ -132,6 +151,8 @@ export default defineComponent({
         disabled: toRef(props, 'disabled'),
         loading: toRef(props, 'loading'),
         loadingLock: toRef(props, 'loadingLock'),
+        colorMap,
+        stateColor: toRef(props, 'stateColor'),
         increaseItem,
         decreaseItem,
         increaseControl,

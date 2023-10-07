@@ -13,6 +13,8 @@ export interface GroupState {
   disabled: boolean,
   loading: boolean,
   loadingLock: boolean,
+  colorMap: Record<string, string> | null,
+  stateColor: boolean,
   increaseItem(
     value: string | number,
     checked: boolean,
