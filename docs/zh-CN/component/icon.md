@@ -1,10 +1,10 @@
-# 图标 Icon
+# Icon 图标
 
-Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 svg 封装成了 vue 组件。
+Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 SVG 封装成了 Vue 组件。
 
 你可以直接在这个 [页面](https://fontawesome.com/search?m=free) 查询图标（他们给图标起名一直很奇怪）。
 
-当然你完全可以直接在 Icon 组件下放置任何 svg 内容。如果你想要更换组件内置的图标，请参考 [全局配置](/zh-CN/guide/global-config.html#内置图标)。
+当然你完全可以直接在 Icon 组件下放置任何 SVG 内容。如果你想要更换组件内置的图标，请参考 [全局配置](/zh-CN/guide/global-config.html#内置图标)。
 
 :::warning
 图标库内置的所有 Font Awesome 的图标默认都是 0.85x 倍缩放的，原始的图标着实有点大。
@@ -73,6 +73,8 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 :::demo icon/rotate
 
 ### 旋转
+
+^[Since v2.2.5](!s)
 
 一个出招指令？
 

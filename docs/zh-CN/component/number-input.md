@@ -1,4 +1,4 @@
-# 数字输入框 NumberInput
+# NumberInput 数字输入框
 
 通常用在需要以更友好的交互进行数字的输入的场合。
 

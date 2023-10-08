@@ -1,4 +1,4 @@
-# 折叠面板 Collapse
+# Collapse 折叠面板
 
 ## 代码示例
 
