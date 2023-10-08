@@ -52,7 +52,9 @@ Of course you can use `v-model:label` as in the example, but the component will 
 
 ### Custom Option
 
-In some cases, the display of options, the display of the selector label, and the value of options need to be different, which can be implemented by combining the `label` prop and default slot.
+In some cases, the display of options, the display of the selected label, and the value of options need to be different, which can be implemented by combining the `label` prop and default slot.
+
+You can also customize the display of selected label via the `selected` slot.
 
 :::
 
@@ -261,11 +263,12 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 
 ### Select Slots
 
-| Name    | Description                                                 | Parameters                                                        | Since   |
-| ------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| default | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
-| group   | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
-| prefix  | Slot to prepend icon content                                | -                                                                 | -       |
-| control | Slot for selector main control, should not normally be used | -                                                                 | -       |
-| suffix  | Slot for suffix icon content                                | -                                                                 | -       |
-| empty   | Slot for empty option prompt content                        | -                                                                 | -       |
+| Name     | Description                                                 | Parameters                                                        | Since   |
+| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| default  | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
+| group    | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
+| prefix   | Slot to prepend icon content                                | -                                                                 | -       |
+| control  | Slot for selector main control, should not normally be used | -                                                                 | -       |
+| suffix   | Slot for suffix icon content                                | -                                                                 | -       |
+| empty    | Slot for empty option prompt content                        | -                                                                 | -       |
+| selected | Slot for selected label content                             | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |

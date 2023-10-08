@@ -51,6 +51,17 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__empty').exists()).toBe(true)
   })
 
+  it('empty slot', async () => {
+    const wrapper = mount(Select, {
+      props: { visible: true, options: [] },
+      slots: {
+        empty: () => <span class={'empty'}></span>
+      }
+    })
+
+    expect(wrapper.find('.empty').exists()).toBe(true)
+  })
+
   it('transfer', async () => {
     const wrapper = mount(Select, {
       props: { visible: true, transfer: true, options: OPTIONS }
@@ -730,5 +741,19 @@ describe('Select', () => {
       200
     )
     widthMock.mockRestore()
+  })
+
+  it('selected slot', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        value: OPTIONS[0],
+        options: OPTIONS
+      },
+      slots: {
+        selected: ({ option }: any) => '1' + option.label
+      }
+    })
+
+    expect(wrapper.find('.vxp-select__control').text()).toEqual('1' + OPTIONS[0])
   })
 })
