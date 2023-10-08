@@ -1,3 +1,35 @@
+## [2.2.5](https://github.com/vexip-ui/vexip-ui/compare/v2.2.4...v2.2.5) (2023-10-08)
+
+
+### ✨ Features
+
+* **checkbox:** support custom major color ([0d08bfd](https://github.com/vexip-ui/vexip-ui/commit/0d08bfdd26d30573513ed7c581d3eb8d47a335a7))
+* **icon:** add color prop ([c912fb7](https://github.com/vexip-ui/vexip-ui/commit/c912fb74aed1690eef7143738e40ec6428505964))
+* **icon:** add rotate prop ([a049fa7](https://github.com/vexip-ui/vexip-ui/commit/a049fa7eda9e6509a72f685936834cf67ab9e6a6))
+* **icon:** add size prop ([7abd26f](https://github.com/vexip-ui/vexip-ui/commit/7abd26faf08051d79668217fb920ac0652b405b3))
+* **select:** support custom selected label ([c34df8d](https://github.com/vexip-ui/vexip-ui/commit/c34df8d7a01d23501781e7481dcab6b2cbcd37bf))
+* **tree:** add block-effect prop ([eb2a559](https://github.com/vexip-ui/vexip-ui/commit/eb2a55971d7b2d59c553397f4518bff88e41fa43))
+* **tree:** support custom arrow icon via prop or slot ([3ad3f02](https://github.com/vexip-ui/vexip-ui/commit/3ad3f02a312cdcbf6beac000ccd8ef8945d38f5b))
+* **tree:** support prefix and suffix slots ([12bbb3f](https://github.com/vexip-ui/vexip-ui/commit/12bbb3f05cdeb9b72c24d2de95c6ed1d4dd7de1c)), closes [#409](https://github.com/vexip-ui/vexip-ui/issues/409)
+* **utils:** add isValidNumber method ([6462cf1](https://github.com/vexip-ui/vexip-ui/commit/6462cf16cf916772fad22ec3a13d7f661655f964))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correct popper behavior with show-empty false ([49a7a04](https://github.com/vexip-ui/vexip-ui/commit/49a7a04fd1f2e3e2d5319f33d880a6cc06e4efbd)), closes [#411](https://github.com/vexip-ui/vexip-ui/issues/411)
+* **form:** improve top align label style ([cb2743c](https://github.com/vexip-ui/vexip-ui/commit/cb2743c55d88eefd9a416574641dc47b0f2f0f89))
+* **layout:** prioritize using customize primary color variable ([2ed6d2c](https://github.com/vexip-ui/vexip-ui/commit/2ed6d2cfc5947bce1dda2694d25869d9705d7ae2)), closes [#410](https://github.com/vexip-ui/vexip-ui/issues/410)
+* **tree:** correctly update visible nodes' element ([0a5e97a](https://github.com/vexip-ui/vexip-ui/commit/0a5e97a6c4cdbc3d0e82991b306a60ded7cb73e1))
+
+
+### ❌ Breaking Changes
+
+* **tree:** After this change, node effect class names no longer
+apply to the label element (except `disabled`). Also the effect style
+structure changed.
+
+
+
 ## [2.2.4](https://github.com/vexip-ui/vexip-ui/compare/v2.2.3...v2.2.4) (2023-09-22)
 
 
