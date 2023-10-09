@@ -336,6 +336,7 @@ export function useStore(options: StoreOptions) {
     setRenderRows,
     handleExpand,
     handleDrag,
+    collectUnderRows,
     handleTreeExpand,
     getParentRow,
     handleColumnResize,
