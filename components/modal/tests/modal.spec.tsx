@@ -294,4 +294,24 @@ describe('Modal', () => {
     expect(modal.attributes('style')).toContain('width: 100px;')
     expect(modal.attributes('style')).toContain('left: auto;')
   })
+
+  it('adjust buttons', () => {
+    const wrapper = mount(() => (
+      <Modal confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Modal>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Modal undivided>{TEXT}</Modal>)
+
+    expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--undivided')
+  })
 })

@@ -61,7 +61,8 @@ const props = useProps('modal', _props, {
   autoRemove: false,
   confirmType: 'primary',
   cancelType: 'default',
-  actionSize: createSizeProp('small')
+  actionSize: createSizeProp('small'),
+  undivided: false
 })
 
 const emit = defineEmits(['update:active'])
@@ -203,7 +204,8 @@ const className = computed(() => {
     {
       [nh.bm('inner')]: props.inner,
       [nh.bm('draggable')]: props.draggable,
-      [nh.bm('resizable')]: props.resizable
+      [nh.bm('resizable')]: props.resizable,
+      [nh.bm('undivided')]: props.undivided
     }
   ]
 })

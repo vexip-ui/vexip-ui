@@ -82,6 +82,16 @@ Add the `no-footer` prop to disable the modal's default bottom action bar.
 
 :::
 
+:::demo modal/undivided
+
+### Undivided
+
+^[Since v2.2.6](!s)
+
+Adding the `undivided` prop removes the dividing lines between parts of the modal.
+
+:::
+
 :::demo modal/position
 
 ### Custom Position
@@ -147,6 +157,7 @@ interface ModalSlotParams {
 | confirm-type    | `ButtonType`                      | Set the confirm button type                                                                                                                                                                                             | `'primary'`      | `2.2.6`  |
 | cancel-type     | `ButtonType`                      | Set the cancel button type                                                                                                                                                                                              | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'` | Set size of the confirm and cancel buttons                                                                                                                                                                              | `'small'`        | `2.2.6`  |
+| undivided       | `boolean`                         | Remove the dividing lines between parts of the modal                                                                                                                                                                    | `false`          | `2.2.6`  |
 
 ### Modal Events
 

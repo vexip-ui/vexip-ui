@@ -82,6 +82,16 @@
 
 :::
 
+:::demo modal/undivided
+
+### 无分割线
+
+^[Since v2.2.6](!s)
+
+添加 `undivided` 属性可以去除模态框各部分间的分割线。
+
+:::
+
 :::demo modal/position
 
 ### 自定义位置
@@ -147,6 +157,7 @@ interface ModalSlotParams {
 | confirm-type    | `ButtonType`                      | 设置确认按钮的类型                                                                                                    | `'primary'`      | `2.2.6`  |
 | cancel-type     | `ButtonType`                      | 设置取消按钮的类型                                                                                                    | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'` | 设置确认和取消按钮的大小                                                                                              | `'small'`        | `2.2.6`  |
+| undivided       | `boolean`                         | 去除模态框各部分的分割线                                                                                              | `false`          | `2.2.6`  |
 
 ### Modal 事件
 
