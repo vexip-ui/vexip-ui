@@ -1,5 +1,5 @@
 <template>
-  <Table :data="data" :width="1000" row-draggable>
+  <Table :data="data" :width="1000">
     <TableColumn id-key="selection" type="selection"></TableColumn>
     <TableColumn id-key="name" name="Name"></TableColumn>
     <TableColumn id-key="member" name="Member"></TableColumn>

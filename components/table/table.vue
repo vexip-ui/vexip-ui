@@ -592,7 +592,8 @@ export default defineComponent({
       refreshRowIndex,
       clearCheckAll,
       collectUnderRows,
-      getParentRow
+      getParentRow,
+      getCurrentData
     } = mutations
 
     watch(
@@ -1218,7 +1219,8 @@ export default defineComponent({
       clearFilter,
       clearSelected: clearCheckAll,
       refresh,
-      getSelected
+      getSelected,
+      getData: getCurrentData
     }
   }
 })
