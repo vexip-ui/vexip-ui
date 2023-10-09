@@ -5,7 +5,14 @@ import { Masker } from '@/components/masker'
 
 import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
 
-import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createSizeProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { debounce, isNull, isPromise } from '@vexip-ui/utils'
 import { modalProps, positionProp } from './props'
@@ -51,7 +58,10 @@ const props = useProps('modal', _props, {
   transitionName: () => nh.ns('ease'),
   confirmText: null,
   cancelText: null,
-  autoRemove: false
+  autoRemove: false,
+  confirmType: 'primary',
+  cancelType: 'default',
+  actionSize: createSizeProp('small')
 })
 
 const emit = defineEmits(['update:active'])
@@ -469,15 +479,16 @@ function handleMaskClose() {
             <Button
               inherit
               text
-              size="small"
+              :type="props.cancelType"
+              :size="props.actionSize"
               @click="handleCancel"
             >
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
               inherit
-              type="primary"
-              size="small"
+              :type="props.confirmType"
+              :size="props.actionSize"
               :loading="props.loading"
               @click="handleConfirm"
             >
