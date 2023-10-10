@@ -175,4 +175,10 @@ describe('Drawer', () => {
     expect(buttons[1].classes()).toContain('vxp-button--success')
     expect(buttons[1].classes()).toContain('vxp-button--large')
   })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Drawer undivided>{TEXT}</Drawer>)
+
+    expect(wrapper.find('.vxp-drawer').classes()).toContain('vxp-drawer--undivided')
+  })
 })

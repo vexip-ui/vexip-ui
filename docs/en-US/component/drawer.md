@@ -84,7 +84,28 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 
 :::
 
+:::demo drawer/undivided
+
+### Undivided
+
+^[Since v2.2.6](!s)
+
+Adding the `undivided` prop removes the dividing lines between parts of the drawer.
+
+:::
+
 ## API
+
+### Preset Types
+
+```ts
+interface DrawerSlotParams {
+  resizing: boolean,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm?: boolean) => Promise<void>
+}
+```
 
 ### Drawer Props
 
@@ -112,6 +133,7 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 | confirm-type    | `ButtonType`                                | Set the confirm button type                                                                                                                                          | `'primary'`      | `2.2.6`  |
 | cancel-type     | `ButtonType`                                | Set the cancel button type                                                                                                                                           | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'`           | Set size of the confirm and cancel buttons                                                                                                                           | `'small'`        | `2.2.6`  |
+| undivided       | `boolean`                                   | Remove the dividing lines between parts of the drawer                                                                                                                | `false`          | `2.2.6`  |
 
 ### Drawer Events
 
@@ -129,10 +151,11 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 
 ### Drawer Slots
 
-| Name    | Description                        | Parameters              | Since   |
-| ------- | ---------------------------------- | ----------------------- | ------- |
-| default | The content slot for drawer        | -                       | -       |
-| title   | The title slot for drawer          | -                       | -       |
-| close   | The close action slot for drawer   | -                       | -       |
-| handler | The resize handler slot for drawer | `{ resizing: boolean }` | -       |
-| footer  | The footer slot for drawer         | -                       | `2.0.0` |
+| Name    | Description                        | Parameters         | Since   |
+| ------- | ---------------------------------- | ------------------ | ------- |
+| default | The content slot for drawer        | `DrawerSlotParams` | -       |
+| title   | The title slot for drawer          | `DrawerSlotParams` | -       |
+| close   | The close action slot for drawer   | `DrawerSlotParams` | -       |
+| header  | The header slot for drawer         | `DrawerSlotParams` | -       |
+| handler | The resize handler slot for drawer | `DrawerSlotParams` | -       |
+| footer  | The footer slot for drawer         | `DrawerSlotParams` | `2.0.0` |

@@ -36,6 +36,7 @@ export const drawerProps = buildProps({
   confirmType: String as PropType<ButtonType>,
   cancelType: String as PropType<ButtonType>,
   actionSize: sizeProp,
+  undivided: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onShow: eventProp(),
