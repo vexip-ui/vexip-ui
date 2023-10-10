@@ -53,6 +53,7 @@
         <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
           <slot name="footer">
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'cancel')]"
               inherit
               text
               size="small"
@@ -61,6 +62,7 @@
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'confirm')]"
               inherit
               type="primary"
               size="small"

@@ -479,6 +479,7 @@ function handleMaskClose() {
         <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
           <slot name="footer" v-bind="slotParams">
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'cancel')]"
               inherit
               text
               :type="props.cancelType"
@@ -488,6 +489,7 @@ function handleMaskClose() {
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'confirm')]"
               inherit
               :type="props.confirmType"
               :size="props.actionSize"
