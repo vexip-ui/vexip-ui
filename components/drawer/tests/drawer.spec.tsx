@@ -154,4 +154,25 @@ describe('Drawer', () => {
     await nextTick()
     expect(drawer.classes()).not.toContain('vxp-drawer__wrapper--resizing')
   })
+
+  it('footer', () => {
+    const wrapper = mount(() => <Drawer footer></Drawer>)
+
+    expect(wrapper.find('.vxp-drawer__footer').exists()).toBe(true)
+    expect(wrapper.findAllComponents('.vxp-button').length).toBe(2)
+  })
+
+  it('render', () => {
+    const wrapper = mount(() => (
+      <Drawer footer confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Drawer>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
 })

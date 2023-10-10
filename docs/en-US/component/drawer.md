@@ -62,6 +62,18 @@ Add the `footer` prop to quickly add feet, or you can directly use the slot of t
 
 :::
 
+:::demo drawer/custom-action
+
+### Adjust Buttons
+
+^[Since v2.2.6](!s)
+
+The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
+
+The size of the confirm and cancel buttons can be modified via the `action-size` prop.
+
+:::
+
 :::demo drawer/resize
 
 ### Resizable
@@ -97,6 +109,9 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 | cancel-text     | `string`                                    | Cancel button content                                                                                                                                                | `locale.cancel`  | `2.0.0`  |
 | locale          | `LocaleConfig['drawer']`                    | Set the locale config                                                                                                                                                | `null`           | `2.1.0`  |
 | auto-remove     | `boolean`                                   | Set whether to automatically remove when not active                                                                                                                  | `false`          | `2.0.13` |
+| confirm-type    | `ButtonType`                                | Set the confirm button type                                                                                                                                          | `'primary'`      | `2.2.6`  |
+| cancel-type     | `ButtonType`                                | Set the cancel button type                                                                                                                                           | `'default'`      | `2.2.6`  |
+| action-size     | `'small' \| 'default' \| 'large'`           | Set size of the confirm and cancel buttons                                                                                                                           | `'small'`        | `2.2.6`  |
 
 ### Drawer Events
 

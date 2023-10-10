@@ -56,7 +56,8 @@
               :class="[nh.be('button'), nh.bem('button', 'cancel')]"
               inherit
               text
-              size="small"
+              :type="props.cancelType"
+              :size="props.actionSize"
               @click="handleCancel"
             >
               {{ props.cancelText || locale.cancel }}
@@ -64,8 +65,8 @@
             <Button
               :class="[nh.be('button'), nh.bem('button', 'confirm')]"
               inherit
-              type="primary"
-              size="small"
+              :type="props.confirmType"
+              :size="props.actionSize"
               :loading="props.loading"
               @click="handleConfirm"
             >
@@ -98,7 +99,14 @@ import { Masker } from '@/components/masker'
 
 import { computed, defineComponent, nextTick, ref, toRef, watch } from 'vue'
 
-import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createSizeProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
@@ -153,7 +161,10 @@ export default defineComponent({
       footer: false,
       confirmText: null,
       cancelText: null,
-      loading: false
+      loading: false,
+      confirmType: 'primary',
+      cancelType: 'default',
+      actionSize: createSizeProp('small')
     })
 
     const nh = useNameHelper('drawer')

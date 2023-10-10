@@ -62,6 +62,18 @@
 
 :::
 
+:::demo drawer/custom-action
+
+### 调整按钮
+
+^[Since v2.2.6](!s)
+
+通过 `confirm-type` 和 `cancel-type` 属性可以分别指定确认和取消按钮的类型。
+
+通过 `action-size` 属性可以修改确认和取消按钮的大小。
+
+:::
+
 :::demo drawer/resize
 
 ### 调整大小
@@ -97,6 +109,9 @@
 | cancel-text     | `string`                                    | 取消按钮的内容                                                                 | `locale.cancel`  | `2.0.0`  |
 | locale          | `LocaleConfig['drawer']`                    | 设置多语言配置                                                                 | `null`           | `2.1.0`  |
 | auto-remove     | `boolean`                                   | 设置不显示时是否自动移除                                                       | `false`          | `2.0.13` |
+| confirm-type    | `ButtonType`                                | 设置确认按钮的类型                                                             | `'primary'`      | `2.2.6`  |
+| cancel-type     | `ButtonType`                                | 设置取消按钮的类型                                                             | `'default'`      | `2.2.6`  |
+| action-size     | `'small' \| 'default' \| 'large'`           | 设置确认和取消按钮的大小                                                       | `'small'`        | `2.2.6`  |
 
 ### Drawer 事件
 

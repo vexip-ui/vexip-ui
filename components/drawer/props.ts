@@ -4,11 +4,13 @@ import {
   buildProps,
   classProp,
   eventProp,
-  localeProp
+  localeProp,
+  sizeProp
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ButtonType } from '@/components/button'
 import type { DrawerPlacement } from './symbol'
 
 export const drawerProps = buildProps({
@@ -31,6 +33,9 @@ export const drawerProps = buildProps({
   confirmText: String,
   cancelText: String,
   loading: booleanProp,
+  confirmType: String as PropType<ButtonType>,
+  cancelType: String as PropType<ButtonType>,
+  actionSize: sizeProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onShow: eventProp(),
