@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 
-import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
+import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
 import {
   createSizeProp,
@@ -282,12 +282,16 @@ defineExpose({
   handleClose
 })
 
-const slotParams = {
-  handleResize,
-  handleConfirm,
-  handleCancel,
-  handleClose
-}
+const slotParams = shallowReadonly(
+  reactive({
+    dragging,
+    resizing,
+    handleResize,
+    handleConfirm,
+    handleCancel,
+    handleClose
+  })
+)
 
 function setActive(active: boolean) {
   if (currentActive.value === active) return
@@ -380,7 +384,7 @@ function handleCancel() {
   emitEvent(props.onCancel)
 }
 
-async function handleClose(isConfirm: boolean) {
+async function handleClose(isConfirm = false) {
   let result: unknown = true
 
   if (typeof props.onBeforeClose === 'function') {

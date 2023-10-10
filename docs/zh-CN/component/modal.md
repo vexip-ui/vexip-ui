@@ -118,10 +118,12 @@ Modal 组件提供了一个静态的 `open` 方法，可以直接创建一个一
 
 ```ts
 interface ModalSlotParams {
+  dragging: boolean,
+  resizing: boolean,
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<void>
 }
 ```
 

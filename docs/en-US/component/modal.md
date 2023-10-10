@@ -118,10 +118,12 @@ Or you can directly import `useModal` and use it as in the example.
 
 ```ts
 interface ModalSlotParams {
+  dragging: boolean,
+  resizing: boolean,
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<void>
 }
 ```
 
