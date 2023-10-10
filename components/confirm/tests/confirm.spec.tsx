@@ -113,4 +113,20 @@ describe('Confirm', () => {
     expect(wrapper.find('.vxp-confirm__body').classes()).toContain('vxp-confirm__body--left')
     expect(wrapper.find('.vxp-confirm__footer').classes()).toContain('vxp-confirm__footer--right')
   })
+
+  it('cancelable false', async () => {
+    const wrapper = mount(Confirm)
+
+    await nextTick()
+    wrapper.vm.openConfirm({
+      content: 'content',
+      cancelable: false
+    })
+    await nextTick()
+    await nextTick()
+
+    const buttons = wrapper.findAll('.vxp-confirm__button')
+    expect(buttons.length).toBe(1)
+    expect(buttons[0].classes()).toContain('vxp-confirm__button--confirm')
+  })
 })

@@ -28,7 +28,8 @@ export const confirmProps = buildProps({
   closable: booleanProp,
   contentAlign: String as PropType<ConfirmAlign>,
   actionsAlign: String as PropType<ConfirmAlign>,
-  parseHtml: booleanProp
+  parseHtml: booleanProp,
+  cancelable: booleanProp
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>
