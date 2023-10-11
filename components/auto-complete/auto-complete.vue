@@ -412,7 +412,8 @@ export default defineComponent({
 
         const step = key === 'ArrowDown' ? 1 : -1
 
-        let index = (currentIndex.value + step) % length
+        // 初始状态时 currentIndex 为 -1，往上时会得到 -2 导致行为不按预期，需限制
+        let index = (Math.max(currentIndex.value + step, -1) + length) % length
         let option = options[index]
 
         for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
