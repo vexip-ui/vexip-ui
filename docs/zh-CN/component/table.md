@@ -144,6 +144,8 @@
 
 还可以通过设置 `row-indent` 属性来配置每一级的缩进距离。
 
+如果希望手动指定树形表格的缩进列，可以为某个 Column 添加 `indented` 属性。
+
 :::
 
 :::demo table/draggable
@@ -641,6 +643,7 @@ interface TableFootPayload {
 | cell-span        | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                                     | `null`      | `2.1.24` |
 | no-summary       | `boolean`                              | 是否禁用自动计算列值的总结数据                                               | `false`     | `2.1.24` |
 | summary-renderer | `ColumnSummaryRenderFn`                | 自定义尾部渲染函数                                                           | `null`      | `2.1.24` |
+| indented         | `boolean`                              | 指定为树形表格的缩进列                                                       | `false`     | `2.2.6`  |
 
 ### TableColumn 插槽
 

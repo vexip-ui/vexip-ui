@@ -91,7 +91,8 @@ export default defineComponent({
       },
       cellSpan: funcProp,
       noSummary: false,
-      summaryRenderer: funcProp
+      summaryRenderer: funcProp,
+      indented: false
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)

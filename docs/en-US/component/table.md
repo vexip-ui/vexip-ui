@@ -144,6 +144,8 @@ Can disable automatic parsing via adding `disabled-tree` prop, or specify a anot
 
 You can also configure the indent distance for each level by setting `row-indent` prop.
 
+If you want to manually specify the indented column of the tree table, you can add the `indented` prop to a Column.
+
 :::
 
 :::demo table/draggable
@@ -641,6 +643,7 @@ interface TableFootPayload {
 | cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                                                   | `null`      | `2.1.24` |
 | no-summary       | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                                                      | `false`     | `2.1.24` |
 | summary-renderer | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                                               | `null`      | `2.1.24` |
+| indented         | `boolean`                              | Specified as the indented column of the tree table                                                                                           | `false`     | `2.2.6`  |
 
 ### TableColumn Slots
 

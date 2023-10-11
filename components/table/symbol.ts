@@ -142,6 +142,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
+  indented?: boolean,
   accessor?: Accessor<D, Val>,
   cellSpan?: ColumnCellSpanFn<D>,
   renderer?: ColumnRenderFn<D, Val>,

@@ -244,6 +244,9 @@ export function useStore(options: StoreOptions) {
   })
   const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
   const bottomFixedHeights = computed(() => getSummariesHeights())
+  const indentedColumn = computed(() =>
+    state.columns.find(column => !column.type && column.indented)
+  )
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -268,7 +271,8 @@ export function useStore(options: StoreOptions) {
     expandColumn,
     summaryData,
     topFixedHeights,
-    bottomFixedHeights
+    bottomFixedHeights,
+    indentedColumn
   })
 
   const mutations = {

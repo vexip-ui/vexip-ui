@@ -83,18 +83,19 @@ function handleContentResize(entry: ResizeObserverEntry) {
       </Column>
     </ResizeObserver>
     <Column class="article__aside" flex="calc(var(--anchor-width) + 50px)" :style="contentStyle">
-      <Anchor
-        v-model:active="currentActive"
-        class="toc-anchor"
-        :offset="15"
-        bind-hash
-        viewer="window"
-        :style="{ visibility: !loading ? undefined : 'hidden' }"
-      >
-        <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
-          {{ item.name }}
-        </AnchorLink>
-      </Anchor>
+      <NativeScroll class="toc-anchor">
+        <Anchor
+          v-model:active="currentActive"
+          :offset="15"
+          bind-hash
+          viewer="window"
+          :style="{ visibility: !loading ? undefined : 'hidden' }"
+        >
+          <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
+            {{ item.name }}
+          </AnchorLink>
+        </Anchor>
+      </NativeScroll>
     </Column>
   </Row>
 </template>
@@ -135,11 +136,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
     inset-inline-end: 10px;
     display: none;
     width: var(--anchor-width);
+    height: 100%;
+    max-height: calc(100vh - 60px - var(--header-height));
 
     .vxp-anchor {
-      width: 100%;
-      font-size: 12px;
-
       &__link {
         width: 100%;
         overflow: hidden;
