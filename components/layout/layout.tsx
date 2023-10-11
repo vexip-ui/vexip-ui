@@ -141,11 +141,11 @@ export default defineComponent({
     })
     const menu = computed(() => aside.value?.menu || header.value?.menu)
     const isDark = ref(props.darkMode)
-    const viewHeight = ref(100)
+    const viewHeight = ref('100%')
 
     const style = computed(() => {
       return {
-        [nh.cv('view-height')]: props.fitWindow ? '100vh' : `${viewHeight.value}px`
+        [nh.cv('view-height')]: props.fitWindow ? '100vh' : viewHeight.value
       }
     })
 
@@ -249,7 +249,7 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)
+        viewHeight.value = `${scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)}px`
       }
 
       emitEvent(props.onContentResize)

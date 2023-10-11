@@ -2,6 +2,14 @@
 
 This is a progressive layout component with strong business logic that can be customized to varying degrees as needed.
 
+:::warning
+In production practice, multiple Layout should not be used in an application, and Layout should fill the window.
+:::
+
+Normally, the main content of the Layout is scrolled on the element corresponding to the `main` slot. If you want the scrolling to occur on the browser window, you can add the `fit-window` prop.
+
+If you want the main content to be a fixed area and want to add scrollable wrap element by yourself, you can add the `fix-main` prop (refer to the **Fixed Main** demo below).
+
 ## Demos
 
 :::demo layout/basis
