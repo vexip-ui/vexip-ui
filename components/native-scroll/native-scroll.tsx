@@ -255,7 +255,7 @@ export default defineComponent({
     const wrapperClass = computed(() => {
       return [props.scrollAttrs?.class, props.scrollClass, nh.be('wrapper')]
     })
-    const barFade = computed(() => !canAutoplay.value && props.barFade)
+    const barFade = computed(() => (canAutoplay.value ? 0 : props.barFade))
 
     const willMutate = ref(false)
 

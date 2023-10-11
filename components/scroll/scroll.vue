@@ -249,6 +249,12 @@ export default defineComponent({
         playSpeed = (wrapper[distance] / props.autoplay) * 16
       }
 
+      const precessScroll = () => {
+        computePercent()
+        triggerUpdate()
+        syncBarScroll()
+        emitScrollEvent(mode.value)
+      }
       const scroll = () => {
         prop.value -= playSpeed
 
@@ -256,22 +262,20 @@ export default defineComponent({
           prop.value = limit.value
           canPlay.value = false
 
-          computePercent()
-          triggerUpdate()
-          syncBarScroll()
+          precessScroll()
 
           endTimer = setTimeout(() => {
             scrollTo(0, 0, 500)
 
             startTimer = setTimeout(() => {
               canPlay.value = true
+
+              emitScrollEvent(mode.value)
               scroll()
             }, 500 + waiting)
           }, waiting)
         } else {
-          computePercent()
-          triggerUpdate()
-          syncBarScroll()
+          precessScroll()
 
           if (canPlay.value) {
             requestAnimationFrame(scroll)
