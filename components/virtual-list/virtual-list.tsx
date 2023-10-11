@@ -34,7 +34,8 @@ export default defineComponent({
       itemsTag: 'ul',
       itemsAttrs: null,
       hideBar: false,
-      lockItems: false
+      lockItems: false,
+      autoplay: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -140,6 +141,7 @@ export default defineComponent({
           class={[nh.b(), attrs.class]}
           use-y-bar={!props.hideBar}
           scroll-y={scrollOffset.value}
+          autoplay={props.autoplay}
           onScroll={onScroll}
           onResize={onResize}
         >

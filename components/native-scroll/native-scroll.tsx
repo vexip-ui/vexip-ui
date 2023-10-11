@@ -78,6 +78,8 @@ export default defineComponent({
     const xBar = ref<InstanceType<typeof Scrollbar>>()
     const yBar = ref<InstanceType<typeof Scrollbar>>()
 
+    let initialized = false
+
     const {
       contentElement,
 
@@ -113,10 +115,14 @@ export default defineComponent({
       onResize: entry => {
         emitEvent(props.onResize, entry)
       },
-      onBeforeRefresh: stopAutoplay,
+      // onBeforeRefresh: stopAutoplay,
       onAfterRefresh: () => {
         syncBarScroll()
-        startAutoplay()
+
+        if (!initialized) {
+          initialized = true
+          startAutoplay()
+        }
       }
     })
 
@@ -141,20 +147,10 @@ export default defineComponent({
       )
     })
 
-    watch(
-      () => props.autoplay,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
-    watch(
-      () => props.playWaiting,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
+    watch([() => props.autoplay, () => props.playWaiting, contentElement], () => {
+      stopAutoplay()
+      nextTick(startAutoplay)
+    })
 
     let playTimer: ReturnType<typeof setTimeout>
     let startTimer: ReturnType<typeof setTimeout>
@@ -163,9 +159,9 @@ export default defineComponent({
     onBeforeUnmount(stopAutoplay)
 
     function startAutoplay() {
-      if (!canAutoplay.value || !contentElement.value) return
-
       stopAutoplay()
+
+      if (!canAutoplay.value || !contentElement.value) return
 
       const mode = props.mode
       const distance = mode === 'horizontal' ? 'offsetWidth' : 'offsetHeight'
@@ -259,6 +255,7 @@ export default defineComponent({
     const wrapperClass = computed(() => {
       return [props.scrollAttrs?.class, props.scrollClass, nh.be('wrapper')]
     })
+    const barFade = computed(() => !canAutoplay.value && props.barFade)
 
     const willMutate = ref(false)
 
@@ -629,7 +626,7 @@ export default defineComponent({
               inherit
               placement={'bottom'}
               class={[nh.bem('bar', 'horizontal'), props.barClass]}
-              fade={props.barFade}
+              fade={barFade.value}
               bar-length={xBarLength.value}
               disabled={!enableXScroll.value}
               appear={props.appear}
@@ -646,7 +643,7 @@ export default defineComponent({
               inherit
               placement={'right'}
               class={[nh.bem('bar', 'vertical'), props.barClass]}
-              fade={props.barFade}
+              fade={barFade.value}
               bar-length={yBarLength.value}
               disabled={!enableYScroll.value}
               appear={props.appear}
