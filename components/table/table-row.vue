@@ -190,7 +190,10 @@ export default defineComponent({
         transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
       }
     })
-    const draggable = computed(() => !rowType.value && state.rowDraggable)
+    const cellDraggable = computed(() => {
+      return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
+    const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDraggable.value))
     const dragging = computed(() => state.dragging)
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
@@ -205,9 +208,6 @@ export default defineComponent({
             whiteSpace: 'nowrap'
           }
         : {}
-    })
-    const cellDraggable = computed(() => {
-      return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
     })
     const leftFixed = computed(() => {
       return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
@@ -359,7 +359,7 @@ export default defineComponent({
     }
 
     function shouldProcessDrag() {
-      return (draggable.value || cellDraggable.value) && dragging.value
+      return draggable.value && dragging.value
     }
 
     function handleDragOver(event: DragEvent) {
