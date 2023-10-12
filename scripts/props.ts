@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { cpus } from 'node:os'
 
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import {
   components,
@@ -93,7 +93,7 @@ async function main() {
 
   await writeFile(
     propsPath,
-    prettier.format(props, { ...prettierConfig, parser: 'typescript' }),
+    await format(props, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
 

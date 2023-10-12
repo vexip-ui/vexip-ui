@@ -83,7 +83,7 @@ async function serveComponent() {
 
   writeFileSync(
     resolve(devDir, 'router', `port-${port}.ts`),
-    format(router, { ...prettierConfig, parser: 'typescript' }),
+    await format(router, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
 
