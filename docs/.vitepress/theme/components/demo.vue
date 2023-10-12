@@ -442,7 +442,9 @@ function editOnPlayground() {
     margin-inline-end: -80px;
     white-space: nowrap;
     opacity: 0%;
-    transition: margin var(--vxp-transition-base), var(--vxp-transition-color),
+    transition:
+      margin var(--vxp-transition-base),
+      var(--vxp-transition-color),
       var(--vxp-transition-opacity);
   }
 

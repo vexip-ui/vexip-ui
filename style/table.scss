@@ -322,7 +322,9 @@ $table: map.merge(
     #{$head-cell},
     #{$foot-cell} {
       will-change: width, transform;
-      transition: width get-css-var('transition-base'), get-css-var('transition-background'),
+      transition:
+        width get-css-var('transition-base'),
+        get-css-var('transition-background'),
         get-css-var('transition-transform');
     }
   }

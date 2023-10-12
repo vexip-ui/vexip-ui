@@ -204,7 +204,7 @@ export default defineComponent({
     const props = useProps('uploadFile', _props, {
       locale: null,
       file: {
-        default: () => ({} as FileState),
+        default: () => ({}) as FileState,
         static: true
       },
       iconRenderer: {

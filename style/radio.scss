@@ -367,11 +367,13 @@ $radio: map.merge(
       }
 
       &:focus-within {
-        box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked'),
+        box-shadow:
+          -1px 0 0 0 get-css-var('radio-b-color-checked'),
           get-css-var('radio-shadow-focus');
 
         @include rtl {
-          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked'),
+          box-shadow:
+            1px 0 0 0 get-css-var('radio-b-color-checked'),
             get-css-var('radio-shadow-focus');
         }
 
@@ -380,8 +382,11 @@ $radio: map.merge(
           inset-inline-start: -3px;
           height: calc(100% + 6px);
           background-color: get-css-var('radio-s-color-focus');
-          transition: top get-css-var('transition-base'), left get-css-var('transition-base'),
-            height get-css-var('transition-base'), get-css-var('transition-background');
+          transition:
+            top get-css-var('transition-base'),
+            left get-css-var('transition-base'),
+            height get-css-var('transition-base'),
+            get-css-var('transition-background');
         }
       }
 

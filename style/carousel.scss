@@ -219,7 +219,9 @@ $carousel: map.merge(
       background-color: get-css-var('carousel-pointer-bg-color');
       border-radius: get-css-var('carousel-pointer-radius');
       opacity: get-css-var('carousel-pointer-opacity');
-      transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
+      transition:
+        width get-css-var('transition-base'),
+        get-css-var('transition-opacity');
     }
 
     &:hover &-inner {
@@ -256,7 +258,9 @@ $carousel: map.merge(
       width: get-css-var('carousel-pointer-height');
       height: get-css-var('carousel-pointer-width');
       margin: 0 2px 1px 0;
-      transition: height get-css-var('transition-base'), get-css-var('transition-opacity');
+      transition:
+        height get-css-var('transition-base'),
+        get-css-var('transition-opacity');
     }
 
     &--active .#{$namespace}-carousel__pointer-inner {

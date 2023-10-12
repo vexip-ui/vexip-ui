@@ -116,8 +116,8 @@ const fillerStyle = computed(() => {
           translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
           translateZ(0)
           scale${vertical ? 'Y' : 'X'}(${
-      Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
-    })
+            Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
+          })
         `,
     transformOrigin: `${vertical ? 50 : reverse ? 100 : 0}% ${vertical ? (reverse ? 100 : 0) : 50}%`
   }
@@ -480,10 +480,7 @@ function blur() {
             v-else
             v-bind="marker.attrs"
             :class="[nh.be('marker'), marker.class]"
-            :style="[
-              getMarkerStyle(value),
-              marker.style as any
-            ]"
+            :style="[getMarkerStyle(value), marker.style as any]"
           >
             <slot
               name="marker"
