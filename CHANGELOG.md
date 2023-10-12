@@ -1,3 +1,33 @@
+## [2.2.6](https://github.com/vexip-ui/vexip-ui/compare/v2.2.5...v2.2.6) (2023-10-12)
+
+
+### ✨ Features
+
+* **confirm:** support disbale cancel button ([34d0dea](https://github.com/vexip-ui/vexip-ui/commit/34d0dea4353a61cdd7263990d28696eb3ed57e46))
+* **drawer:** support custom type and size of action buttons ([df2d8cf](https://github.com/vexip-ui/vexip-ui/commit/df2d8cf2d530d5ea262f08706f5cae11bc5d642b))
+* **modal:** add undivided prop ([8269ea2](https://github.com/vexip-ui/vexip-ui/commit/8269ea2745850e8a060524c485c7c87442f1c631))
+* **modal:** support custom type and size of action buttons ([fd35dcd](https://github.com/vexip-ui/vexip-ui/commit/fd35dcd0c915ff198200367f85b5b32361197e1d))
+* **table:** add getData api method ([ef6b470](https://github.com/vexip-ui/vexip-ui/commit/ef6b4707e18bcd40f9480a3b944a3e04b0cc2251))
+* **table:** support specify indented column for tree ([ca08c37](https://github.com/vexip-ui/vexip-ui/commit/ca08c375cce39d8e41d5d7827d197675706027aa))
+* **virtual-list:** add autoplay prop ([8910727](https://github.com/vexip-ui/vexip-ui/commit/8910727077787a4a2cdc6039fa082599614a5e4e))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correct initial hitting behavior ([942a0c8](https://github.com/vexip-ui/vexip-ui/commit/942a0c8af105d3710fe937b328d900b48a8e9beb)), closes [#413](https://github.com/vexip-ui/vexip-ui/issues/413)
+* **layout:** improve height calculation in Nuxt ([5c91e98](https://github.com/vexip-ui/vexip-ui/commit/5c91e982a8f3b41c7e89922abd5f59ab6de66198))
+* **modal:** add dragging and resizing into slot params ([a81c4f7](https://github.com/vexip-ui/vexip-ui/commit/a81c4f70882cf6521a5b87f014ff31019bdf3a47))
+* **scroll:** ensure emit scroll event when auto scroll ([fa6b437](https://github.com/vexip-ui/vexip-ui/commit/fa6b437501b754ba229f0d052136a6cdd940e293))
+* **table:** correct precess for dragging row in tree table ([00550d7](https://github.com/vexip-ui/vexip-ui/commit/00550d7f2c08782432db6cb6a2e2c9f50454a240))
+* **table:** row disappear when drop to head via using dragger ([533184c](https://github.com/vexip-ui/vexip-ui/commit/533184c856cddeda2565d05b97c3a732b504f26e))
+
+
+### 🔨 Code Refactoring
+
+* **drawer:** add undivided prop ([e486c10](https://github.com/vexip-ui/vexip-ui/commit/e486c105514defa9734a2228f2d30aaeb2466809))
+
+
+
 ## [2.2.5](https://github.com/vexip-ui/vexip-ui/compare/v2.2.4...v2.2.5) (2023-10-08)
 
 
