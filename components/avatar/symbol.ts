@@ -10,3 +10,11 @@ export interface AvatarGroupState {
 }
 
 export const GROUP_STATE: InjectionKey<AvatarGroupState> = Symbol('GROUP_STATE')
+
+export const objectFitValues = Object.freeze<AvatarObjectFit[]>([
+  'fill',
+  'contain',
+  'cover',
+  'none',
+  'scale-down'
+])

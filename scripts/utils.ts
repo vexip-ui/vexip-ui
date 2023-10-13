@@ -177,7 +177,7 @@ export function fuzzyMatchComponent(
   if (matched.length) {
     return matched
   } else {
-    logger.withBothLn(() => logger.error(`Any component matches '${partialComponents}'!`))
+    logger.withBothLn(() => logger.error(`No component matches '${partialComponents}'!`))
     process.exit(1)
   }
 }

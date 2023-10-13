@@ -28,11 +28,21 @@ Add the `border` prop to enable border mode.
 
 :::
 
+:::demo breadcrumb/separator
+
+### Separator
+
+The separator can be customized for all Items via the `separator` slot.
+
+Of course, you can also choose to use the slot of the same name of the Item to customize the separator individually.
+
+:::
+
 :::demo breadcrumb/example
 
 ### File Navigation
 
-A use case similar to the breadcrumb navigation at the top of the Windows 10 file manager.
+A use case similar to the breadcrumb navigation at the top of the Windows system file manager.
 
 :::
 
@@ -79,11 +89,11 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb Slots
 
-| Name      | Description                              | Parameters                    | Since   |
-| --------- | ---------------------------------------- | ----------------------------- | ------- |
-| default   | child elements of the breadcrumb         | -                             | -       |
-| separator | Slot for custom separator content        | `(label: string \| number)`   | -       |
-| item      | Slot for each child element individually | `(option: BreadcrumbOptions)` | `2.2.0` |
+| Name      | Description                              | Parameters                                     | Since   |
+| --------- | ---------------------------------------- | ---------------------------------------------- | ------- |
+| default   | child elements of the breadcrumb         | -                                              | -       |
+| separator | Slot for custom separator content        | `{ label: string \| number }`                  | -       |
+| item      | Slot for each child element individually | `{ option: BreadcrumbOptions, index: number }` | `2.2.0` |
 
 ### BreadcrumbItem Props
 

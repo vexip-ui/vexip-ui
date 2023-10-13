@@ -28,11 +28,21 @@
 
 :::
 
+:::demo breadcrumb/separator
+
+### 分隔符
+
+通过 `separator` 插槽可以为所有 Item 自定义分隔符。
+
+当然你也可以选择使用 Item 的同名插槽单独自定义分隔符。
+
+:::
+
 :::demo breadcrumb/example
 
 ### 文件导航
 
-一个类似于 Windows 10 文件管理器顶部面包屑导航的用例。
+一个类似于 Windows 系统的文件管理器顶部面包屑导航的用例。
 
 :::
 
@@ -79,11 +89,11 @@ interface BreadcrumbOptions {
 
 ### Breadcrumb 插槽
 
-| 名称      | 说明                     | 参数                          | 始于    |
-| --------- | ------------------------ | ----------------------------- | ------- |
-| default   | 面包屑的子元素           | -                             | -       |
-| separator | 自定义分隔符内容的插槽   | `(label: string \| number)`   | -       |
-| item      | 单独定义每个子元素的插槽 | `(option: BreadcrumbOptions)` | `2.2.0` |
+| 名称      | 说明                     | 参数                                           | 始于    |
+| --------- | ------------------------ | ---------------------------------------------- | ------- |
+| default   | 面包屑的子元素           | -                                              | -       |
+| separator | 自定义分隔符内容的插槽   | `{ label: string \| number }`                  | -       |
+| item      | 单独定义每个子元素的插槽 | `{ option: BreadcrumbOptions, index: number }` | `2.2.0` |
 
 ### BreadcrumbItem 属性
 
