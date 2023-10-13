@@ -26,7 +26,7 @@ export const tooltipProps = buildProps({
   transfer: booleanStringProp,
   disabled: booleanProp,
   raw: booleanProp,
-  delay: Number,
+  delay: [Number, Array] as PropType<number | number[]>,
   tipAlive: booleanProp,
   reverse: booleanProp,
   width: [String, Number] as PropType<number | 'trigger' | 'auto'>,

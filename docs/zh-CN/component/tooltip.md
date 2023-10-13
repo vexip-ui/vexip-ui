@@ -20,6 +20,16 @@
 
 :::
 
+:::demo tooltip/delay
+
+### 延时
+
+当 `trigger` 属性为 `'hover'` 时，设置 `delay` 属性的值可以指定气泡出现和消失的延迟毫秒数。
+
+传入数组时可以分别控制出现和消失的延迟毫秒数。
+
+:::
+
 :::demo tooltip/placement
 
 ### 出现位置
@@ -109,6 +119,7 @@
 | tip-alive       | `boolean`                                                         | 设置在隐藏时是否不移除提示元素                                         | `false`      | `2.0.0` |
 | width           | `number \| 'trigger' \| 'auto'`                                   | 设置提示的宽度，设置为 `'trigger'` 时会使用触发器的宽度                | `'auto'`     | `2.0.0` |
 | virtual         | `{ $el: HTMLElement } \| HTMLElement \| { x: number, y: number }` | 设置虚拟参考系                                                         | `null`       | `2.0.0` |
+| delay           | `number \| number[]`                                              | 设置气泡出现和消失的延迟毫秒数                                         | `250`        | `2.2.7` |
 
 ### Tooltip 事件
 

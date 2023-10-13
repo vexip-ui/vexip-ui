@@ -94,8 +94,11 @@ export default defineComponent({
 
       return originalTrigger.value
     })
-    const trigger = computed(() => {
-      return isElement(reference.value) ? reference.value : null
+    const trigger = computed(() => (isElement(reference.value) ? reference.value : null))
+    const delay = computed(() => {
+      return typeof props.delay === 'number'
+        ? new Array<number>(2).fill(Math.max(props.delay, 0))
+        : props.delay.map(delay => Math.max(delay, 0))
     })
 
     const popper = ref<PopperExposed>()
@@ -190,7 +193,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           toggleVisible(true)
-        }, 250)
+        }, delay.value[0] ?? 250)
       }
 
       emitEvent(props.onTipEnter)
@@ -204,7 +207,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           toggleVisible(false)
-        }, 250)
+        }, delay.value[1] ?? 250)
       }
 
       emitEvent(props.onTipLeave)
