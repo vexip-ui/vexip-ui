@@ -77,7 +77,7 @@ export function decimalLength(number: number | string) {
  * Return decimal length of a number.
  *
  * @param number The input number
- * @deprecated
+ * @deprecated Using `decimalLength` to replace it
  */
 export function digitLength(number: number | string) {
   return decimalLength(number)
@@ -119,7 +119,7 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
 export function toFixed(number: number, decimal: number) {
   if (decimal === 0) return Math.round(number)
 
-  let snum = number.toFixed(digitLength(number))
+  let snum = number.toFixed(decimalLength(number))
 
   const pointPos = snum.indexOf('.')
 
@@ -164,7 +164,7 @@ export function round(number: number, criticalValue: number) {
 
   const ceilValue = Math.ceil(number)
 
-  if (number + criticalValue >= ceilValue) {
+  if (number + 1 - criticalValue >= ceilValue) {
     return ceilValue
   } else {
     return Math.floor(number)
@@ -200,7 +200,9 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
  * @param byte 需要计算的 Byte 数值
  * @param unit 格式化的单位
  */
-export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
+export function formatByteSize(byte: number, unit?: SizeUnitWithAuto): number
+export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, joinUtil?: true): number
+export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', joinUtil = false) {
   let upperUnit = unit.toUpperCase() as Uppercase<SizeUnitWithAuto>
   upperUnit = SIZE_UNIT_WITH_AUTO.includes(upperUnit) ? upperUnit : 'AUTO'
 
@@ -236,7 +238,9 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
     targetSize = byte / 1024 ** power
   }
 
-  return targetSize
+  return joinUtil
+    ? `${targetSize}${upperUnit === 'AUTO' ? SIZE_UNIT_WITH_AUTO[Math.min(power, 4)] : upperUnit}`
+    : targetSize
 }
 
 /**
@@ -258,7 +262,7 @@ function multipleInt(number: number | string) {
     return Number(snum.replace('.', ''))
   }
 
-  const dLength = digitLength(number)
+  const dLength = decimalLength(number)
 
   return dLength > 0 ? toPrecision(Number(number) * 10 ** dLength) : Number(number)
 }
@@ -288,7 +292,7 @@ function createOperation(operation: (n1: number | string, n2: number | string) =
 export const times = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)
   const int2 = multipleInt(number2)
-  const base = digitLength(number1) + digitLength(number2)
+  const base = decimalLength(number1) + decimalLength(number2)
   const int = int1 * int2
 
   return int / 10 ** base
@@ -300,7 +304,7 @@ export const times = createOperation((number1, number2) => {
  * @param numbers The numbers to add
  */
 export const plus = createOperation((number1, number2) => {
-  const base = 10 ** Math.max(digitLength(number1), digitLength(number2))
+  const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
 
   return (times(number1, base) + times(number2, base)) / base
 })
@@ -311,7 +315,7 @@ export const plus = createOperation((number1, number2) => {
  * @param numbers The numbers to subtract
  */
 export const minus = createOperation((number1, number2) => {
-  const base = 10 ** Math.max(digitLength(number1), digitLength(number2))
+  const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
 
   return (times(number1, base) - times(number2, base)) / base
 })
@@ -325,5 +329,5 @@ export const divide = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)
   const int2 = multipleInt(number2)
 
-  return times(int1 / int2, toPrecision(10 ** (digitLength(number2) - digitLength(number1))))
+  return times(int1 / int2, toPrecision(10 ** (decimalLength(number2) - decimalLength(number1))))
 })
