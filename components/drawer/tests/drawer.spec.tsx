@@ -181,4 +181,54 @@ describe('Drawer', () => {
 
     expect(wrapper.find('.vxp-drawer').classes()).toContain('vxp-drawer--undivided')
   })
+
+  it('mask close', async () => {
+    const onToggle = vi.fn()
+    const onClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: {
+        active: true,
+        onToggle,
+        onClose
+      }
+    })
+
+    await wrapper.find('.vxp-masker__mask').trigger('click')
+
+    expect(onToggle).toHaveBeenCalledWith(false)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('before close', async () => {
+    const onBeforeClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: { closable: true, onBeforeClose }
+    })
+
+    const openAndClose = async () => {
+      wrapper.vm.currentActive = true
+      await nextTick()
+      await wrapper.find('.vxp-masker__mask').trigger('click')
+      await nextTick()
+    }
+
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(false)
+    expect(onBeforeClose).toHaveBeenCalled()
+
+    onBeforeClose.mockReturnValue(false)
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+
+    onBeforeClose.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          nextTick(() => nextTick(() => resolve(true)))
+        })
+    )
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+    await nextTick()
+    expect(wrapper.vm.currentActive).toBe(false)
+  })
 })

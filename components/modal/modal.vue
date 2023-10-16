@@ -401,6 +401,8 @@ async function handleClose(isConfirm = false) {
       emitEvent(props.onClose)
     })
   }
+
+  return result
 }
 
 function handleShow() {

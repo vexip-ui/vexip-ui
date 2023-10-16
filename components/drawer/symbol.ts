@@ -4,7 +4,7 @@ export interface DrawerSlotParams {
   resizing: boolean,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm?: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 
 export type DrawerCommonSLot = (params: DrawerSlotParams) => any

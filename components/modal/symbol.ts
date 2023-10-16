@@ -14,7 +14,7 @@ export interface ModalSlotParams {
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm?: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 
 export type ModalCommonSLot = (params: ModalSlotParams) => any

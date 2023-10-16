@@ -123,7 +123,7 @@ interface ModalSlotParams {
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm?: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 ```
 
