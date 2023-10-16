@@ -1,4 +1,4 @@
-# 表格 Table
+# Table 表格
 
 用于展示结构化二维数据。
 
@@ -143,6 +143,8 @@
 可以添加 `disabled-tree` 属性来禁用自动解析，或者通过 `key-config` 指定另一个目标属性。
 
 还可以通过设置 `row-indent` 属性来配置每一级的缩进距离。
+
+如果希望手动指定树形表格的缩进列，可以为某个 Column 添加 `indented` 属性。
 
 :::
 
@@ -602,13 +604,14 @@ interface TableFootPayload {
 
 ### Table 方法
 
-| 名称          | 说明                                       | 签名                              | 始于 |
-| ------------- | ------------------------------------------ | --------------------------------- | ---- |
-| clearSort     | 清除表格当前激活的所有排序                 | `() => void`                      | -    |
-| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                      | -    |
-| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => void`                      | -    |
-| getSelected   | 获取所有被勾选的行数据                     | `() => Record<string, unknown>[]` | -    |
-| clearSelected | 清除所有被勾选的行数据                     | `() => void`                      | -    |
+| 名称          | 说明                                       | 签名           | 始于    |
+| ------------- | ------------------------------------------ | -------------- | ------- |
+| clearSort     | 清除表格当前激活的所有排序                 | `() => void`   | -       |
+| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`   | -       |
+| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => void`   | -       |
+| getSelected   | 获取所有被勾选的行数据                     | `() => Data[]` | -       |
+| clearSelected | 清除所有被勾选的行数据                     | `() => void`   | -       |
+| getData       | 获取表格的数据，通常用于获取拖拽后的数据   | `() => Data[]` | `2.2.6` |
 
 ### TableColumn 属性
 
@@ -640,6 +643,7 @@ interface TableFootPayload {
 | cell-span        | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                                     | `null`      | `2.1.24` |
 | no-summary       | `boolean`                              | 是否禁用自动计算列值的总结数据                                               | `false`     | `2.1.24` |
 | summary-renderer | `ColumnSummaryRenderFn`                | 自定义尾部渲染函数                                                           | `null`      | `2.1.24` |
+| indented         | `boolean`                              | 指定为树形表格的缩进列                                                       | `false`     | `2.2.6`  |
 
 ### TableColumn 插槽
 

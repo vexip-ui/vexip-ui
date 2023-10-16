@@ -47,7 +47,7 @@ Adding the `is-dot` prop and not using slot allows you to set the badge as a sta
 
 ### Badge Slots
 
-| Name    | Description                             | Parameters | Since |
-| ------- | --------------------------------------- | ---------- | ----- |
-| default | Content slot where logo needs to be set | -          | -     |
-| content | Content slot for logo                   | -          | -     |
+| Name    | Description                             | Parameters                      | Since |
+| ------- | --------------------------------------- | ------------------------------- | ----- |
+| default | Content slot where logo needs to be set | -                               | -     |
+| content | Content slot for logo                   | `{ content: number \| string }` | -     |

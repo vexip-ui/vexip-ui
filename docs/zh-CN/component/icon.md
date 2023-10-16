@@ -1,10 +1,10 @@
-# 图标 Icon
+# Icon 图标
 
-Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 svg 封装成了 vue 组件。
+Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 SVG 封装成了 Vue 组件。
 
 你可以直接在这个 [页面](https://fontawesome.com/search?m=free) 查询图标（他们给图标起名一直很奇怪）。
 
-当然你完全可以直接在 Icon 组件下放置任何 svg 内容。如果你想要更换组件内置的图标，请参考 [全局配置](/zh-CN/guide/global-config.html#内置图标)。
+当然你完全可以直接在 Icon 组件下放置任何 SVG 内容。如果你想要更换组件内置的图标，请参考 [全局配置](/zh-CN/guide/global-config.html#内置图标)。
 
 :::warning
 图标库内置的所有 Font Awesome 的图标默认都是 0.85x 倍缩放的，原始的图标着实有点大。
@@ -22,7 +22,17 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 基本使用
 
-你可以直接把 svg 组件丢给 `icon` 属性，也可以直接放默认插槽下。
+你可以直接把 SVG 组件丢给 `icon` 属性，也可以直接放默认插槽下。
+
+:::
+
+:::demo icon/color
+
+### 修改颜色
+
+^[Since v2.2.5](!s)
+
+通过 `color` 属性可以快速修改图标的颜色。
 
 :::
 
@@ -32,11 +42,13 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 设置 `scale` 属性来进行缩放。
 
+也可以通过 `size` 属性设置一个合法的 CSS 值直接指定图标的大小。
+
 :::
 
 :::demo icon/spin
 
-### 旋转效果
+### 回转效果
 
 设置 `effect` 属性为 `spin-in` 或 `spin-out` 可以让图标原地转圈。
 
@@ -47,6 +59,24 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 ### 脉冲效果
 
 设置 `effect` 属性为 `pulse-in` 或 `pulse-out` 可以让图标具有脉冲效果。
+
+:::
+
+:::demo icon/flip
+
+### 翻转效果
+
+通过 `flip` 属性可以设置图标的翻转效果。
+
+:::
+
+:::demo icon/rotate
+
+### 旋转
+
+^[Since v2.2.5](!s)
+
+一个出招指令？
 
 :::
 
@@ -64,7 +94,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 自定义图标
 
-去外面随便找个 svg 图标丢进来，彩色也可以。
+去外面随便找个 SVG 图标丢进来，彩色也可以。
 
 :::
 
@@ -81,7 +111,10 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | 名称   | 类型                                   | 说明                               | 默认值 | 始于    |
 | ------ | -------------------------------------- | ---------------------------------- | ------ | ------- |
 | icon   | `Record<string, any>`                  | 图标 `<svg>` 组件                  | `null` | `2.0.0` |
-| scale  | `number`                               | 用于调整图标尺寸                   | `1`    | -       |
+| scale  | `number \| string`                     | 设置图标的缩放比例                 | `1`    | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -       |
 | title  | `string`                               | 设置图标的标题属性                 | `''`   | -       |
 | effect | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0` |
+| size   | `string`                               | 指定图标的大小                     | `null` | `2.2.5` |
+| color  | `string`                               | 设置图标的颜色                     | `null` | `2.2.5` |
+| rotate | `number \| string`                     | 设置图标的旋转角度                 | `null` | `2.2.5` |

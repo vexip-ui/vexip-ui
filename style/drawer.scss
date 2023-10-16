@@ -116,6 +116,10 @@ $drawer: map.merge(
     border-bottom: get-css-var('border-shape') get-css-var('drawer-d-color');
   }
 
+  &--undivided &__header {
+    border-bottom: 0;
+  }
+
   &__title {
     flex: 1 0 0;
     font-size: get-css-var('drawer-title-font-size');
@@ -139,6 +143,10 @@ $drawer: map.merge(
     justify-content: flex-end;
     padding: get-css-var('drawer-footer-v-padding') get-css-var('drawer-footer-h-padding');
     border-top: get-css-var('border-shape') get-css-var('drawer-d-color');
+  }
+
+  &--undivided &__footer {
+    border-top: 0;
   }
 
   &__close {

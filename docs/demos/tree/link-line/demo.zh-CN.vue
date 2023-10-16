@@ -15,6 +15,7 @@ import type { TreeLinkLine } from 'vexip-ui'
 
 const linkLine = ref<TreeLinkLine>('dashed')
 const options: TreeLinkLine[] = ['none', 'dashed', 'solid', 'dotted']
+
 const data = [
   {
     id: 1,

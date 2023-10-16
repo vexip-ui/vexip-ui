@@ -5,11 +5,13 @@ import {
   classProp,
   eventProp,
   localeProp,
+  sizeProp,
   styleProp
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ButtonType } from '@/components/button'
 import type { PositionPayload, SizePayload } from './symbol'
 
 const positionType = [Number, String]
@@ -49,7 +51,11 @@ export const modalProps = buildProps({
   transitionName: String,
   confirmText: String,
   cancelText: String,
+  actionSize: sizeProp,
   autoRemove: booleanProp,
+  confirmType: String as PropType<ButtonType>,
+  cancelType: String as PropType<ButtonType>,
+  undivided: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onConfirm: eventProp(),
   onCancel: eventProp(),

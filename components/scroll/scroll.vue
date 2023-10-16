@@ -154,6 +154,8 @@ export default defineComponent({
     const xBar = ref<InstanceType<typeof Scrollbar>>()
     const yBar = ref<InstanceType<typeof Scrollbar>>()
 
+    let initialized = false
+
     const {
       wrapperElement,
       contentElement,
@@ -187,10 +189,14 @@ export default defineComponent({
       onResize: entry => {
         emitEvent(props.onResize, entry)
       },
-      onBeforeRefresh: stopAutoplay,
+      // onBeforeRefresh: stopAutoplay,
       onAfterRefresh: () => {
         syncBarScroll()
-        startAutoplay()
+
+        if (!initialized) {
+          initialized = true
+          startAutoplay()
+        }
       }
     })
 
@@ -215,20 +221,10 @@ export default defineComponent({
       )
     })
 
-    watch(
-      () => props.autoplay,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
-    watch(
-      () => props.playWaiting,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
+    watch([() => props.autoplay, () => props.playWaiting], () => {
+      stopAutoplay()
+      nextTick(startAutoplay)
+    })
 
     let playTimer: ReturnType<typeof setTimeout>
     let startTimer: ReturnType<typeof setTimeout>
@@ -253,6 +249,12 @@ export default defineComponent({
         playSpeed = (wrapper[distance] / props.autoplay) * 16
       }
 
+      const precessScroll = () => {
+        computePercent()
+        triggerUpdate()
+        syncBarScroll()
+        emitScrollEvent(mode.value)
+      }
       const scroll = () => {
         prop.value -= playSpeed
 
@@ -260,22 +262,20 @@ export default defineComponent({
           prop.value = limit.value
           canPlay.value = false
 
-          computePercent()
-          triggerUpdate()
-          syncBarScroll()
+          precessScroll()
 
           endTimer = setTimeout(() => {
             scrollTo(0, 0, 500)
 
             startTimer = setTimeout(() => {
               canPlay.value = true
+
+              emitScrollEvent(mode.value)
               scroll()
             }, 500 + waiting)
           }, waiting)
         } else {
-          computePercent()
-          triggerUpdate()
-          syncBarScroll()
+          precessScroll()
 
           if (canPlay.value) {
             requestAnimationFrame(scroll)

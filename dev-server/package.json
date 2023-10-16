@@ -6,11 +6,11 @@
   },
   "dependencies": {
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "unplugin-vue-components": "^0.25.1"
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "unplugin-vue-components": "^0.25.2"
   }
 }

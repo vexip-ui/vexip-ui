@@ -70,7 +70,7 @@ async function main() {
 
   await writeFile(
     resolve(rootDir, 'types', 'index.d.ts'),
-    format(types, { parser: 'typescript', semi: false, singleQuote: true }),
+    await format(types, { parser: 'typescript', semi: false, singleQuote: true }),
     'utf-8'
   )
 
@@ -117,7 +117,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
 
       await writeFile(
         resolve(outDir, `${fileName}.vue`),
-        format(vue, { parser: 'vue', semi: false, singleQuote: true }),
+        await format(vue, { parser: 'vue', semi: false, singleQuote: true }),
         'utf-8'
       )
 

@@ -44,7 +44,9 @@
                   @click.stop="toggleVisible"
                   @close="handleTagClose(item)"
                 >
-                  {{ currentLabels[index] }}
+                  <slot name="selected" :option="item">
+                    {{ currentLabels[index] }}
+                  </slot>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -82,7 +84,9 @@
                           :type="props.tagType"
                           @close="handleTagClose(item)"
                         >
-                          {{ currentLabels[index] }}
+                          <slot name="selected" :option="item">
+                            {{ currentLabels[index] }}
+                          </slot>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -128,7 +132,9 @@
                 :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
                 :placeholder="
-                  hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
+                  previewOption?.label ||
+                    currentLabels[0] ||
+                    (props.placeholder ?? locale.placeholder)
                 "
                 autocomplete="off"
                 tabindex="-1"
@@ -141,6 +147,13 @@
                 @blur="handleBlur($event)"
               />
             </template>
+            <slot
+              v-else-if="getOptionFromMap(currentValues[0])"
+              name="selected"
+              :option="getOptionFromMap(currentValues[0])"
+            >
+              {{ currentLabels[0] }}
+            </slot>
             <template v-else>
               {{ currentLabels[0] }}
             </template>
@@ -154,7 +167,17 @@
             "
             :class="nh.be('placeholder')"
           >
-            {{ hittingLabel ?? props.placeholder ?? locale.placeholder }}
+            <slot
+              v-if="previewOption"
+              name="selected"
+              :preview="true"
+              :option="previewOption"
+            >
+              {{ previewOption?.label ?? props.placeholder ?? locale.placeholder }}
+            </slot>
+            <template v-else>
+              {{ props.placeholder ?? locale.placeholder }}
+            </template>
           </span>
         </slot>
       </div>
@@ -493,9 +516,9 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
-    const cachedSelected = new Map<SelectBaseValue, SelectOptionState>()
+    const cachedSelected = reactive(new Map<SelectBaseValue, SelectOptionState>())
+    const optionValueMap = ref(new Map<SelectBaseValue, SelectOptionState>())
 
-    let optionValueMap = new Map<SelectBaseValue, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
@@ -527,7 +550,7 @@ export default defineComponent({
         group: groupKey,
         children: childrenKey
       } = keyConfig.value
-      const oldMap = optionValueMap
+      const oldMap = optionValueMap.value
       const map = new Map<string | number, SelectOptionState>()
       const states: SelectOptionState[] = []
       const loop = props.options
@@ -589,7 +612,7 @@ export default defineComponent({
         }
       }
 
-      optionValueMap = map
+      optionValueMap.value = map
       baseOptions.value = states
 
       initValueAndLabel(emittedValue)
@@ -708,8 +731,8 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
-    const hittingLabel = computed(() => {
-      return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
+    const previewOption = computed(() => {
+      return !props.noPreview && currentVisible.value ? hittingOption.value : undefined
     })
     const limited = computed(() => {
       return (
@@ -720,7 +743,7 @@ export default defineComponent({
     function getOptionFromMap(value?: SelectBaseValue | null) {
       if (isNull(value)) return null
 
-      return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
+      return optionValueMap.value.get(value) ?? cachedSelected.get(value) ?? null
     }
 
     function fitPopperWidth() {
@@ -978,7 +1001,7 @@ export default defineComponent({
       if (selected) {
         if (userOptions.value.find(item => item.value === value)) {
           removeArrayItem(userOptions.value, item => item.value === value)
-          optionValueMap.delete(value)
+          optionValueMap.value.delete(value)
         }
 
         cachedSelected.delete(value)
@@ -993,7 +1016,7 @@ export default defineComponent({
           const newOption = { ...dynamicOption }
 
           userOptions.value.push(newOption)
-          optionValueMap.set(value, newOption)
+          optionValueMap.value.set(value, newOption)
         }
 
         cachedSelected.set(option.value, option)
@@ -1082,7 +1105,7 @@ export default defineComponent({
     function handleClear() {
       if (props.clearable) {
         for (const option of userOptions.value) {
-          optionValueMap.delete(option.value)
+          optionValueMap.value.delete(option.value)
         }
 
         cachedSelected.clear()
@@ -1217,7 +1240,7 @@ export default defineComponent({
       showClear,
       normalOptions,
       optionParentMap,
-      hittingLabel,
+      previewOption,
       limited,
 
       wrapper,
@@ -1227,6 +1250,7 @@ export default defineComponent({
       device,
       virtualList,
 
+      getOptionFromMap,
       isSelected,
       filterOptions,
       updateHitting,

@@ -11,6 +11,7 @@
 
   & > g {
     display: flex;
+    transform: rotate(get-css-var('icon-rotate', 0));
   }
 
   svg {
@@ -22,15 +23,15 @@
   }
 
   &--flip-horizontal > g {
-    transform: scale(-1, 1);
+    transform: scale(-1, 1) rotate(get-css-var('icon-rotate', 0));
   }
 
   &--flip-vertical > g {
-    transform: scale(1, -1);
+    transform: scale(1, -1) rotate(get-css-var('icon-rotate', 0));
   }
 
   &--flip-both > g {
-    transform: scale(-1, -1);
+    transform: scale(-1, -1) rotate(get-css-var('icon-rotate', 0));
   }
 
   &--spin-in > g {

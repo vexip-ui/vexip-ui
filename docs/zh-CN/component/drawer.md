@@ -1,4 +1,4 @@
-# 抽屉 Drawer
+# Drawer 抽屉
 
 当你想要从屏幕的四边飞一些东西进来，抽屉是个不错的选择。
 
@@ -62,6 +62,18 @@
 
 :::
 
+:::demo drawer/custom-action
+
+### 调整按钮
+
+^[Since v2.2.6](!s)
+
+通过 `confirm-type` 和 `cancel-type` 属性可以分别指定确认和取消按钮的类型。
+
+通过 `action-size` 属性可以修改确认和取消按钮的大小。
+
+:::
+
 :::demo drawer/resize
 
 ### 调整大小
@@ -72,7 +84,28 @@
 
 :::
 
+:::demo drawer/undivided
+
+### 无分割线
+
+^[Since v2.2.6](!s)
+
+添加 `undivided` 属性可以去除抽屉各部分间的分割线。
+
+:::
+
 ## API
+
+### 预设类型
+
+```ts
+interface DrawerSlotParams {
+  resizing: boolean,
+  handleConfirm: () => void,
+  handleCancel: () => void,
+  handleClose: (isConfirm?: boolean) => Promise<unknown>
+}
+```
 
 ### Drawer 属性
 
@@ -97,6 +130,10 @@
 | cancel-text     | `string`                                    | 取消按钮的内容                                                                 | `locale.cancel`  | `2.0.0`  |
 | locale          | `LocaleConfig['drawer']`                    | 设置多语言配置                                                                 | `null`           | `2.1.0`  |
 | auto-remove     | `boolean`                                   | 设置不显示时是否自动移除                                                       | `false`          | `2.0.13` |
+| confirm-type    | `ButtonType`                                | 设置确认按钮的类型                                                             | `'primary'`      | `2.2.6`  |
+| cancel-type     | `ButtonType`                                | 设置取消按钮的类型                                                             | `'default'`      | `2.2.6`  |
+| action-size     | `'small' \| 'default' \| 'large'`           | 设置确认和取消按钮的大小                                                       | `'small'`        | `2.2.6`  |
+| undivided       | `boolean`                                   | 去除抽屉各部分的分割线                                                         | `false`          | `2.2.6`  |
 
 ### Drawer 事件
 
@@ -114,10 +151,11 @@
 
 ### Drawer 插槽
 
-| 名称    | 说明                   | 参数                    | 始于    |
-| ------- | ---------------------- | ----------------------- | ------- |
-| default | 抽屉的内容插槽         | -                       | -       |
-| title   | 抽屉的标题插槽         | -                       | -       |
-| close   | 抽屉的关闭按钮插槽     | -                       | -       |
-| handler | 抽屉调整大小手柄的插槽 | `{ resizing: boolean }` | -       |
-| footer  | 抽屉的底部插槽         | -                       | `2.0.0` |
+| 名称    | 说明                   | 参数               | 始于    |
+| ------- | ---------------------- | ------------------ | ------- |
+| default | 抽屉的内容插槽         | `DrawerSlotParams` | -       |
+| title   | 抽屉的标题插槽         | `DrawerSlotParams` | -       |
+| close   | 抽屉的关闭按钮插槽     | `DrawerSlotParams` | -       |
+| header  | 抽屉的头部插槽         | `DrawerSlotParams` | -       |
+| handler | 抽屉调整大小手柄的插槽 | `DrawerSlotParams` | -       |
+| footer  | 抽屉的底部插槽         | `DrawerSlotParams` | `2.0.0` |

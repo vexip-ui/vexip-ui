@@ -3,6 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Tree } from '..'
+import { User } from '@vexip-ui/icons'
 
 describe('Tree', () => {
   it('render', async () => {
@@ -523,7 +524,97 @@ describe('Tree', () => {
     const wrapper = mount(() => <Tree data={data} post-create={postCreate}></Tree>)
 
     await nextTick()
-    const node = wrapper.find('.vxp-tree__node')
-    expect(node.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--selected')
+    expect(wrapper.find('.vxp-tree__node').classes()).toContain('vxp-tree__node--selected')
+  })
+
+  it('label, prefix, suffix slots', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      }
+    ]
+    const wrapper = mount(() => (
+      <Tree data={data}>
+        {{
+          label: ({ data }: any) => <span class={'label'}>{data.label}</span>,
+          prefix: () => <span class={'prefix'}></span>,
+          suffix: () => <span class={'suffix'}></span>
+        }}
+      </Tree>
+    ))
+
+    await nextTick()
+    expect(wrapper.find('.label').exists()).toBe(true)
+    expect(wrapper.find('.label').text()).toEqual('n1')
+    expect(wrapper.find('.prefix').exists()).toBe(true)
+    expect(wrapper.find('.suffix').exists()).toBe(true)
+  })
+
+  it('arrow icon', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} arrow-icon={User}></Tree>)
+
+    await nextTick()
+    expect(wrapper.findComponent(User).exists()).toBe(true)
+  })
+
+  it('arrow slot', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => (
+      <Tree data={data}>
+        {{
+          arrow: () => <span class={'arrow'}></span>
+        }}
+      </Tree>
+    ))
+
+    await nextTick()
+    expect(wrapper.find('.arrow').exists()).toBe(true)
+  })
+
+  it('block effect', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(Tree, {
+      props: { data }
+    })
+
+    await nextTick()
+    expect(wrapper.find('.vxp-tree__content').classes()).not.toContain('vxp-tree__content--effect')
+    expect(wrapper.find('.vxp-tree__label').classes()).toContain('vxp-tree__label--effect')
+
+    await wrapper.setProps({ blockEffect: true })
+    expect(wrapper.find('.vxp-tree__content').classes()).toContain('vxp-tree__content--effect')
+    expect(wrapper.find('.vxp-tree__label').classes()).not.toContain('vxp-tree__label--effect')
   })
 })

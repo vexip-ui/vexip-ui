@@ -28,6 +28,18 @@ Can be used in combination with scroll component when the content is too long.
 
 :::
 
+:::demo modal/custom-action
+
+### Adjust Buttons
+
+^[Since v2.2.6](!s)
+
+The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
+
+The size of the confirm and cancel buttons can be modified via the `action-size` prop.
+
+:::
+
 :::demo modal/hide-mask
 
 ### Hide Mask
@@ -70,6 +82,16 @@ Add the `no-footer` prop to disable the modal's default bottom action bar.
 
 :::
 
+:::demo modal/undivided
+
+### Undivided
+
+^[Since v2.2.6](!s)
+
+Adding the `undivided` prop removes the dividing lines between parts of the modal.
+
+:::
+
 :::demo modal/position
 
 ### Custom Position
@@ -96,42 +118,48 @@ Or you can directly import `useModal` and use it as in the example.
 
 ```ts
 interface ModalSlotParams {
+  dragging: boolean,
+  resizing: boolean,
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm: boolean) => Promise<void>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 ```
 
 ### Modal Props
 
-| Name            | Type                          | Description                                                                                                                                                                                                             | Default          | Since    |
-| --------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | -------- |
-| active          | `boolean`                     | Set whether to display the modal, you can use `v-model` two-way binding                                                                                                                                                 | `false`          | -        |
-| width           | `number \| string`            | Set the initial width of the modal, will automatically calculate when it is `'auto'`                                                                                                                                    | `'auto'`         | -        |
-| height          | `number \| string`            | Set the initial height of the modal, will automatically calculate when it is `'auto'`                                                                                                                                   | `'auto'`         | -        |
-| top             | `number \| string`            | Set the initial distance from the top of the modal, will automatically calculate when it is `'auto'`                                                                                                                    | `'auto'`         | -        |
-| left            | `number \| string`            | Set the initial distance from the left side of the modal, will automatically calculate when it is `'auto'`                                                                                                              | `'auto'`         | -        |
-| bottom          | `number \| string`            | Set the initial distance from the bottom of the modal, will automatically calculate when it is `'auto'`                                                                                                                 | `'auto'`         | -        |
-| right           | `number \| string`            | Set the initial distance from the right side of the modal, will automatically calculate when it is `'auto'`                                                                                                             | `'auto'`         | -        |
-| title           | `string`                      | Set the title of the modal                                                                                                                                                                                              | `''`             | -        |
-| closable        | `boolean`                     | Set whether to display a close button                                                                                                                                                                                   | `true`           | -        |
-| mask-close      | `boolean`                     | Set whether the mask layer can be closed by clicking                                                                                                                                                                    | `true`           | -        |
-| inner           | `boolean`                     | Set whether it is an inline modal, after opening, the positioning will change from fixed to absolute                                                                                                                    | `false`          | -        |
-| modal-class     | `ClassType`                   | Custom class name of the modal                                                                                                                                                                                          | `null`           | -        |
-| no-footer       | `boolean`                     | Set whether to disable the bottom action buttons                                                                                                                                                                        | `false`          | -        |
-| hide-mask       | `boolean`                     | Set whether to hide the mask layer                                                                                                                                                                                      | `false`          | -        |
-| transfer        | `boolean \| string`           | Set the rendering position of the modal. When set to `true`, it will render to `<body>` by default                                                                                                                      | `false`          | -        |
-| on-before-close | `(isConfirm: boolean) => any` | Set the callback before the modal closes, receive a flag to distinguish whether to confirm or cancel the triggered close, supports asynchronous functions and Promise, the return value is `false` will prevent closing | `null`           | -        |
-| draggable       | `boolean`                     | Set whether the modal is draggable                                                                                                                                                                                      | `false`          | -        |
-| resizable       | `boolean`                     | Set whether the modal can be resized                                                                                                                                                                                    | `false`          | -        |
-| loading         | `boolean`                     | Set whether the confirm button of the modal is in the loading state                                                                                                                                                     | `false`          | -        |
-| min-width       | `number`                      | Set the minimum width of the modal, mainly used to set `resizable`                                                                                                                                                      | `150`            | -        |
-| min-height      | `number`                      | Set the minimum height of the modal, mainly used to set `resizable`                                                                                                                                                     | `120`            | -        |
-| confirm-text    | `string`                      | Confirm button content                                                                                                                                                                                                  | `locale.confirm` | -        |
-| cancel-text     | `string`                      | Cancel button content                                                                                                                                                                                                   | `locale.cancel`  | -        |
-| locale          | `LocaleConfig['modal']`       | Set the locale config                                                                                                                                                                                                   | `null`           | `2.1.0`  |
-| auto-remove     | `boolean`                     | Set whether to automatically remove when not active                                                                                                                                                                     | `false`          | `2.0.13` |
+| Name            | Type                              | Description                                                                                                                                                                                                             | Default          | Since    |
+| --------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | -------- |
+| active          | `boolean`                         | Set whether to display the modal, you can use `v-model` two-way binding                                                                                                                                                 | `false`          | -        |
+| width           | `number \| string`                | Set the initial width of the modal, will automatically calculate when it is `'auto'`                                                                                                                                    | `'auto'`         | -        |
+| height          | `number \| string`                | Set the initial height of the modal, will automatically calculate when it is `'auto'`                                                                                                                                   | `'auto'`         | -        |
+| top             | `number \| string`                | Set the initial distance from the top of the modal, will automatically calculate when it is `'auto'`                                                                                                                    | `'auto'`         | -        |
+| left            | `number \| string`                | Set the initial distance from the left side of the modal, will automatically calculate when it is `'auto'`                                                                                                              | `'auto'`         | -        |
+| bottom          | `number \| string`                | Set the initial distance from the bottom of the modal, will automatically calculate when it is `'auto'`                                                                                                                 | `'auto'`         | -        |
+| right           | `number \| string`                | Set the initial distance from the right side of the modal, will automatically calculate when it is `'auto'`                                                                                                             | `'auto'`         | -        |
+| title           | `string`                          | Set the title of the modal                                                                                                                                                                                              | `''`             | -        |
+| closable        | `boolean`                         | Set whether to display a close button                                                                                                                                                                                   | `true`           | -        |
+| mask-close      | `boolean`                         | Set whether the mask layer can be closed by clicking                                                                                                                                                                    | `true`           | -        |
+| inner           | `boolean`                         | Set whether it is an inline modal, after opening, the positioning will change from fixed to absolute                                                                                                                    | `false`          | -        |
+| modal-class     | `ClassType`                       | Custom class name of the modal                                                                                                                                                                                          | `null`           | -        |
+| no-footer       | `boolean`                         | Set whether to disable the bottom action buttons                                                                                                                                                                        | `false`          | -        |
+| hide-mask       | `boolean`                         | Set whether to hide the mask layer                                                                                                                                                                                      | `false`          | -        |
+| transfer        | `boolean \| string`               | Set the rendering position of the modal. When set to `true`, it will render to `<body>` by default                                                                                                                      | `false`          | -        |
+| on-before-close | `(isConfirm: boolean) => any`     | Set the callback before the modal closes, receive a flag to distinguish whether to confirm or cancel the triggered close, supports asynchronous functions and Promise, the return value is `false` will prevent closing | `null`           | -        |
+| draggable       | `boolean`                         | Set whether the modal is draggable                                                                                                                                                                                      | `false`          | -        |
+| resizable       | `boolean`                         | Set whether the modal can be resized                                                                                                                                                                                    | `false`          | -        |
+| loading         | `boolean`                         | Set whether the confirm button of the modal is in the loading state                                                                                                                                                     | `false`          | -        |
+| min-width       | `number`                          | Set the minimum width of the modal, mainly used to set `resizable`                                                                                                                                                      | `150`            | -        |
+| min-height      | `number`                          | Set the minimum height of the modal, mainly used to set `resizable`                                                                                                                                                     | `120`            | -        |
+| confirm-text    | `string`                          | Set text of the confirm button                                                                                                                                                                                          | `locale.confirm` | -        |
+| cancel-text     | `string`                          | Set text of the cancel button                                                                                                                                                                                           | `locale.cancel`  | -        |
+| locale          | `LocaleConfig['modal']`           | Set the locale config                                                                                                                                                                                                   | `null`           | `2.1.0`  |
+| auto-remove     | `boolean`                         | Set whether to automatically remove when not active                                                                                                                                                                     | `false`          | `2.0.13` |
+| confirm-type    | `ButtonType`                      | Set the confirm button type                                                                                                                                                                                             | `'primary'`      | `2.2.6`  |
+| cancel-type     | `ButtonType`                      | Set the cancel button type                                                                                                                                                                                              | `'default'`      | `2.2.6`  |
+| action-size     | `'small' \| 'default' \| 'large'` | Set size of the confirm and cancel buttons                                                                                                                                                                              | `'small'`        | `2.2.6`  |
+| undivided       | `boolean`                         | Remove the dividing lines between parts of the modal                                                                                                                                                                    | `false`          | `2.2.6`  |
 
 ### Modal Events
 

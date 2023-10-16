@@ -244,6 +244,9 @@ export function useStore(options: StoreOptions) {
   })
   const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
   const bottomFixedHeights = computed(() => getSummariesHeights())
+  const indentedColumn = computed(() =>
+    state.columns.find(column => !column.type && column.indented)
+  )
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -268,7 +271,8 @@ export function useStore(options: StoreOptions) {
     expandColumn,
     summaryData,
     topFixedHeights,
-    bottomFixedHeights
+    bottomFixedHeights,
+    indentedColumn
   })
 
   const mutations = {
@@ -336,10 +340,12 @@ export function useStore(options: StoreOptions) {
     setRenderRows,
     handleExpand,
     handleDrag,
+    collectUnderRows,
     handleTreeExpand,
     getParentRow,
     handleColumnResize,
-    updateCellSpan
+    updateCellSpan,
+    getCurrentData
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -611,7 +617,7 @@ export function useStore(options: StoreOptions) {
       }
     }
 
-    function parseRow(origin: Data[], result: TableRowState[], parent?: TableRowState) {
+    const parseRow = (origin: Data[], result: TableRowState[], parent?: TableRowState) => {
       for (let i = 0, len = origin.length; i < len; ++i) {
         const item = origin[i]
 
@@ -1515,6 +1521,28 @@ export function useStore(options: StoreOptions) {
     } else {
       cellSpanMap.set(masterKey, span)
     }
+  }
+
+  function getCurrentData() {
+    const { keyConfig, rowData } = state
+    const { children: childrenKey } = keyConfig
+    const data: Data[] = []
+
+    const buildData = (rows: TableRowState[], data: Data[]) => {
+      for (const row of rows) {
+        const item = { ...row.data }
+
+        data.push(item)
+        row.children?.length && buildData(row.children, (item[childrenKey] = []))
+      }
+    }
+
+    buildData(
+      rowData.filter(row => isNull(row.parent)),
+      data
+    )
+
+    return data
   }
 
   type Store = Readonly<{

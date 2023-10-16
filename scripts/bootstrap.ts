@@ -3,7 +3,7 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { existsSync, statSync } from 'node:fs'
 import { cpus } from 'node:os'
 
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import {
   components as allComponents,
@@ -149,26 +149,16 @@ async function main() {
   const metaDataPath = resolve(rootDir, 'meta-data.json')
   const demoPrefixPath = resolve(rootDir, 'docs/.vitepress/theme/common/demo-prefix.ts')
 
-  await writeFile(
-    indexPath,
-    prettier.format(index, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
-  await writeFile(
-    typesPath,
-    prettier.format(types, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
-  await writeFile(
-    metaDataPath,
-    prettier.format(metaData, { ...prettierConfig, parser: 'json' }),
-    'utf-8'
-  )
-  await writeFile(
-    demoPrefixPath,
-    prettier.format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
+  await Promise.all([
+    writeFile(indexPath, await format(index, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
+    writeFile(typesPath, await format(types, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
+    writeFile(metaDataPath, await format(metaData, { ...prettierConfig, parser: 'json' }), 'utf-8'),
+    writeFile(
+      demoPrefixPath,
+      await format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
+      'utf-8'
+    )
+  ])
 
   await ESLint.outputFixes(await eslint.lintFiles(indexPath))
   await ESLint.outputFixes(await eslint.lintFiles(typesPath))
@@ -192,7 +182,7 @@ async function main() {
 
   await writeFile(
     stylePath,
-    prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' }),
+    await format(styleIndex, { ...prettierConfig, parser: 'scss' }),
     'utf-8'
   )
 }

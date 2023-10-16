@@ -32,9 +32,21 @@ Set the `confirmType` and `cancelText` options to customize the content of the c
 
 ### Custom Icon
 
-Set the `icon` prop to change the icon of the confirm, and set it to `false` to disable the icon.
+Set the `icon` option to change the icon of the Confirm, and set it to `false` to disable the icon.
 
 When you need more fine-grained control of the icon, you can set `icon` as a function, it will as a custom rendering method.
+
+:::
+
+:::demo confirm/cancelable
+
+### Disable Cancel
+
+^[Since v2.2.6](!s)
+
+Set the `cancelable` option to `false` to disable the cancel button.
+
+After disabling the cancel button, the default icon of the Confirm will change, you can still make custom it.
 
 :::
 
@@ -109,3 +121,4 @@ type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, can
 | closable        | `boolean`                                       | Whether to have a close button                                                                               | `false`          | `2.0.15` |
 | contentAlign    | `ConfirmAlign`                                  | Alignment of content                                                                                         | `'center'`       | `2.0.15` |
 | actionsAlign    | `ConfirmAlign`                                  | Alignment of action buttons                                                                                  | `'center'`       | `2.0.15` |
+| cancelable      | `boolean`                                       | Whether can be canceled                                                                                      | `true`           | `2.2.6`  |

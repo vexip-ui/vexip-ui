@@ -1,7 +1,7 @@
 import path from 'node:path'
 
 import fs from 'fs-extra'
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
@@ -353,7 +353,7 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(filePath, prettier.format(source, { ...prettierConfig, parser: 'scss' }))
+        await fs.writeFile(filePath, await format(source, { ...prettierConfig, parser: 'scss' }))
         await stylelint.lint({
           cwd: rootDir,
           fix: true,
@@ -362,7 +362,7 @@ async function create(name: string) {
       } else if (filePath.endsWith('.md')) {
         await fs.writeFile(
           filePath,
-          prettier.format(
+          await format(
             source
               .split('\n')
               .map(line => line.trim())
@@ -373,7 +373,7 @@ async function create(name: string) {
       } else if (filePath.endsWith('.json')) {
         await fs.writeFile(
           filePath,
-          prettier.format(source, {
+          await format(source, {
             ...prettierConfig,
             parser: 'json'
           })
@@ -382,7 +382,7 @@ async function create(name: string) {
         if (filePath.endsWith('.vue')) {
           await fs.writeFile(
             filePath,
-            prettier.format(source, {
+            await format(source, {
               ...prettierConfig,
               parser: 'vue'
             })
@@ -390,7 +390,7 @@ async function create(name: string) {
         } else {
           await fs.writeFile(
             filePath,
-            prettier.format(source, {
+            await format(source, {
               ...prettierConfig,
               parser: 'typescript'
             })

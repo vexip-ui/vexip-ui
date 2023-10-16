@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.1...utils@2.1.0) (2023-10-08)
+
+
+### ✨ Features
+
+* **utils:** add isValidNumber method ([6462cf1](https://github.com/vexip-ui/vexip-ui/commit/6462cf16cf916772fad22ec3a13d7f661655f964))
+
+
+
 ## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.0...utils@2.0.1) (2023-09-07)
 
 

@@ -14,9 +14,19 @@ Simplest usage.
 
 :::demo tooltip/trigger
 
-### Trigger Method
+### Trigger Type
 
 Change the trigger method via the `trigger` prop.
+
+:::
+
+:::demo tooltip/delay
+
+### Delay
+
+When the `trigger` prop is `'hover'`, setting the value of the `delay` prop specifies the delay in milliseconds for the tip to appear and disappear.
+
+When passing in the array, you can control the delay milliseconds for appearing and disappearing respectively.
 
 :::
 
@@ -109,6 +119,7 @@ In this way, you need to manually control the visible of tooltip.
 | tip-alive       | `boolean`                                                         | Set whether the tip will not be removed when hidden                                           | `false`      | `2.0.0` |
 | width           | `number \| 'trigger' \| 'auto'`                                   | Set the width of the tip, can using trigger width when be set to `'trigger'`                  | `'auto'`     | `2.0.0` |
 | virtual         | `{ $el: HTMLElement } \| HTMLElement \| { x: number, y: number }` | Set the virtual reference                                                                     | `null`       | `2.0.0` |
+| delay           | `number \| number[]`                                              | Set the delay in milliseconds for tip to appear and disappear                                 | `250`        | `2.2.7` |
 
 ### Tooltip Events
 

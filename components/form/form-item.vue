@@ -31,21 +31,21 @@
       v-if="hasLabel"
       ref="labelEl"
       :class="nh.be('label')"
-      :style="{ width: `${computedLabelWidth}px` }"
+      :style="{ width: labelAlign !== 'top' ? `${computedLabelWidth}px` : undefined }"
       :for="props.htmlFor || props.prop"
       @click="handleLabelClick"
     >
+      <Tooltip v-if="props.help || $slots.help" transfer>
+        <template #trigger>
+          <Icon v-bind="icons.help" :class="nh.be('help')"></Icon>
+        </template>
+        <slot name="help">
+          <div :class="nh.be('help-tip')">
+            {{ props.help }}
+          </div>
+        </slot>
+      </Tooltip>
       <slot name="label">
-        <Tooltip v-if="props.help || $slots.help" transfer>
-          <template #trigger>
-            <Icon v-bind="icons.help" :class="nh.be('help')"></Icon>
-          </template>
-          <slot name="help">
-            <div :class="nh.be('help-tip')">
-              {{ props.help }}
-            </div>
-          </slot>
-        </Tooltip>
         {{ props.label + (labelSuffix || '') }}
       </slot>
     </label>
@@ -223,10 +223,11 @@ export default defineComponent({
       () => props.action || props.hideLabel === true || formProps.hideLabel
     )
     const hasLabel = computed(() => !(hideLabel.value || !(props.label || slots.label)))
+    const labelAlign = computed(() => formProps.labelAlign)
     const computedLabelWidth = computed(() => {
-      if (formProps.labelAlign) {
+      if (labelAlign.value) {
         return getLabelWidth(
-          formProps.labelAlign === 'top'
+          labelAlign.value === 'top'
             ? 0
             : hideLabel.value
               ? 0
@@ -245,17 +246,15 @@ export default defineComponent({
         [nh.bem('item', 'error')]: isError.value,
         [nh.bem('item', 'action')]: props.action,
         [nh.bem('item', 'padding')]:
-          formProps.inline && formProps.labelAlign === 'top' && !hasLabel.value
+          formProps.inline && labelAlign.value === 'top' && !hasLabel.value
       }
     })
     const controlStyle = computed(() => {
       return {
         width:
-          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedLabelWidth.value}px)`,
+          labelAlign.value === 'top' ? undefined : `calc(100% - ${computedLabelWidth.value}px)`,
         marginLeft:
-          hasLabel.value || formProps.labelAlign === 'top'
-            ? undefined
-            : `${computedLabelWidth.value}px`
+          hasLabel.value || labelAlign.value === 'top' ? undefined : `${computedLabelWidth.value}px`
       }
     })
     const inputValue = computed(() => {
@@ -454,6 +453,7 @@ export default defineComponent({
       inputValue,
       useAsterisk,
       hasLabel,
+      labelAlign,
       computedLabelWidth,
       controlStyle,
       columnFlex,

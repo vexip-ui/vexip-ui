@@ -3,9 +3,16 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 
-import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
+import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
-import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createSizeProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { debounce, isNull, isPromise } from '@vexip-ui/utils'
 import { modalProps, positionProp } from './props'
@@ -51,7 +58,11 @@ const props = useProps('modal', _props, {
   transitionName: () => nh.ns('ease'),
   confirmText: null,
   cancelText: null,
-  autoRemove: false
+  autoRemove: false,
+  confirmType: 'primary',
+  cancelType: 'default',
+  actionSize: createSizeProp('small'),
+  undivided: false
 })
 
 const emit = defineEmits(['update:active'])
@@ -193,7 +204,8 @@ const className = computed(() => {
     {
       [nh.bm('inner')]: props.inner,
       [nh.bm('draggable')]: props.draggable,
-      [nh.bm('resizable')]: props.resizable
+      [nh.bm('resizable')]: props.resizable,
+      [nh.bm('undivided')]: props.undivided
     }
   ]
 })
@@ -270,12 +282,16 @@ defineExpose({
   handleClose
 })
 
-const slotParams = {
-  handleResize,
-  handleConfirm,
-  handleCancel,
-  handleClose
-}
+const slotParams = shallowReadonly(
+  reactive({
+    dragging,
+    resizing,
+    handleResize,
+    handleConfirm,
+    handleCancel,
+    handleClose
+  })
+)
 
 function setActive(active: boolean) {
   if (currentActive.value === active) return
@@ -368,7 +384,7 @@ function handleCancel() {
   emitEvent(props.onCancel)
 }
 
-async function handleClose(isConfirm: boolean) {
+async function handleClose(isConfirm = false) {
   let result: unknown = true
 
   if (typeof props.onBeforeClose === 'function') {
@@ -385,6 +401,8 @@ async function handleClose(isConfirm: boolean) {
       emitEvent(props.onClose)
     })
   }
+
+  return result
 }
 
 function handleShow() {
@@ -467,17 +485,20 @@ function handleMaskClose() {
         <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
           <slot name="footer" v-bind="slotParams">
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'cancel')]"
               inherit
               text
-              size="small"
+              :type="props.cancelType"
+              :size="props.actionSize"
               @click="handleCancel"
             >
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
+              :class="[nh.be('button'), nh.bem('button', 'confirm')]"
               inherit
-              type="primary"
-              size="small"
+              :type="props.confirmType"
+              :size="props.actionSize"
               :loading="props.loading"
               @click="handleConfirm"
             >

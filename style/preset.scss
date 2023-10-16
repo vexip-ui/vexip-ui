@@ -25,7 +25,7 @@
   @each $name in map.keys($border-color-map) {
     @include define-css-var(
       ('border', $name),
-      get-css-var('border-shape') get-css-var('border-color', $name)
+      get-css-var('border-shape') get-css-var('border-color' $name)
     );
   }
 
@@ -46,7 +46,7 @@
   @each $name in map.keys($shadow-color-map) {
     @include define-css-var(
       ('shadow', $name),
-      get-css-var('shadow-shape') get-css-var('shadow-color', $name)
+      get-css-var('shadow-shape') get-css-var('shadow-color' $name)
     );
   }
 

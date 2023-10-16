@@ -53,7 +53,9 @@
       </template>
     </template>
     <template v-else>
-      <template v-if="usingTree && column.first">
+      <template
+        v-if="usingTree && (indentedColumn ? column.key === indentedColumn.key : column.first)"
+      >
         <span
           :class="nh.be('pad')"
           :style="{
@@ -410,6 +412,7 @@ export default defineComponent({
       disableExpandRows,
       disableDragRows,
       usingTree: toRef(getters, 'usingTree'),
+      indentedColumn: toRef(getters, 'indentedColumn'),
 
       isFunction,
       isSelectionColumn,

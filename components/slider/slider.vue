@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue'
 import SliderTrigger from './slider-trigger.vue'
 import { createStateProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
-import { digitLength, throttle, toFixed } from '@vexip-ui/utils'
+import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
 import type { SliderCommonSlot, SliderMarker } from './symbol'
@@ -92,7 +92,7 @@ const className = computed(() => {
     [nh.bm('with-marker')]: markerList.value.length
   }
 })
-const stepDigit = computed(() => digitLength(props.step))
+const stepDigit = computed(() => decimalLength(props.step))
 // 按每 step 为 1 算的最小值
 const stepOneMin = computed(() => Math.ceil(Math.min(props.min, props.max) / props.step))
 // 按每 step 为 1 算的最大值
@@ -480,10 +480,7 @@ function blur() {
             v-else
             v-bind="marker.attrs"
             :class="[nh.be('marker'), marker.class]"
-            :style="[
-              getMarkerStyle(value),
-              marker.style as any
-            ]"
+            :style="[getMarkerStyle(value), marker.style as any]"
           >
             <slot
               name="marker"
