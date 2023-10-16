@@ -58,7 +58,7 @@
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 
 import {
   createSizeProp,
@@ -162,10 +162,13 @@ export default defineComponent({
         let customResult: unknown
 
         if (typeof props.onBeforeTest === 'function') {
-          timer.testing = setTimeout(() => {
+          nextTick(() => {
             testLoading.value = true
-          }, 100)
+          })
           customResult = await props.onBeforeTest(currentLeft.value, matched)
+          nextTick(() => {
+            testLoading.value = false
+          })
         }
 
         if (currentLeft.value && (!matched || customResult === false)) {

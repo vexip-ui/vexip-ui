@@ -1,7 +1,17 @@
 import { Icon } from '@/components/icon'
+import { Spin } from '@/components/spin'
 import { useFieldStore } from '@/components/form'
 
-import { Transition, computed, defineComponent, onMounted, ref, renderSlot, watch } from 'vue'
+import {
+  Transition,
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  renderSlot,
+  shallowRef,
+  watch
+} from 'vue'
 
 import CaptchaSlider from './captcha-slider.vue'
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
@@ -13,7 +23,9 @@ export default defineComponent({
   props: captchaProps,
   emits: ['update:visible'],
   setup(_props, { slots, expose }) {
-    const { idFor, disabled, loading, validateField, setFieldValue } = useFieldStore<number>(focus)
+    const { idFor, disabled, loading, validateField, setFieldValue } = useFieldStore<
+      number | number[]
+    >(focus)
 
     const props = useProps('captcha', _props, {
       type: 'slide',
@@ -73,6 +85,7 @@ export default defineComponent({
     const tolerance = computed(() => props.tolerance ?? 1)
 
     const imageLoading = ref(false)
+    const imagePromise = shallowRef(Promise.resolve())
 
     let imageLoaded = false
     let image: HTMLImageElement | false
@@ -98,6 +111,7 @@ export default defineComponent({
     const canvasSize = computed(() => {
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
+    const actionLocked = computed(() => isSuccess.value || props.loading || imageLoading.value)
 
     watch(
       () => props.slideTarget,
@@ -108,18 +122,18 @@ export default defineComponent({
     watch(
       () => props.image,
       async () => {
-        await loadImage()
+        await (imagePromise.value = loadImage())
         drawImage()
       }
     )
     watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], drawImage)
 
-    expose({ dragging, reset })
-
     onMounted(async () => {
-      await loadImage()
+      await (imagePromise.value = loadImage())
       drawImage()
     })
+
+    expose({ dragging, imageLoading, imagePromise, reset })
 
     function loadImage() {
       return new Promise<void>(resolve => {
@@ -226,7 +240,7 @@ export default defineComponent({
     }
 
     function handleRefresh() {
-      !isSuccess.value && emitEvent(props.onRefresh)
+      !actionLocked.value && emitEvent(props.onRefresh)
     }
 
     return () => {
@@ -243,7 +257,7 @@ export default defineComponent({
               class={[
                 nh.be('action'),
                 nh.be('refresh'),
-                isSuccess.value && nh.bem('action', 'disabled')
+                actionLocked.value && nh.bem('action', 'disabled')
               ]}
               onClick={handleRefresh}
             >
@@ -259,31 +273,33 @@ export default defineComponent({
                   )}
             </button>
           </div>
-          {props.image && (
-            <div class={nh.be('image')}>
-              <canvas
-                ref={canvas}
-                class={nh.be('canvas')}
-                width={canvasSize.value[0]}
-                height={canvasSize.value[1]}
-              ></canvas>
-              <div ref={subImage} class={nh.be('sub-image')}>
+          <Spin active={slider.value?.isLoading}>
+            {props.image && (
+              <div class={nh.be('image')}>
                 <canvas
-                  ref={subCanvas}
-                  class={nh.be('sub-canvas')}
+                  ref={canvas}
+                  class={nh.be('canvas')}
+                  width={canvasSize.value[0]}
                   height={canvasSize.value[1]}
-                  style={subCanvasStyle.value}
                 ></canvas>
+                <div ref={subImage} class={nh.be('sub-image')}>
+                  <canvas
+                    ref={subCanvas}
+                    class={nh.be('sub-canvas')}
+                    height={canvasSize.value[1]}
+                    style={subCanvasStyle.value}
+                  ></canvas>
+                </div>
+                <Transition name={nh.ns('fade')}>
+                  {isSuccess.value && (
+                    <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
+                      {props.successTip ?? locale.value.success}
+                    </div>
+                  )}
+                </Transition>
               </div>
-              <Transition name={nh.ns('fade')}>
-                {isSuccess.value && (
-                  <div class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}>
-                    {props.successTip ?? locale.value.success}
-                  </div>
-                )}
-              </Transition>
-            </div>
-          )}
+            )}
+          </Spin>
           <CaptchaSlider
             ref={slider}
             class={nh.bem('slider', 'inner')}

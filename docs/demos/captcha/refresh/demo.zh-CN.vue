@@ -1,5 +1,6 @@
 <template>
   <Captcha
+    ref="captcha"
     :image="image"
     :slide-target="target"
     :loading="loading"
@@ -8,7 +9,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
+
+import type { CaptchaExposed } from 'vexip-ui'
 
 const images = [
   { url: 'https://www.vexipui.com/picture-2.jpg', target: 40 },
@@ -19,6 +22,8 @@ const image = ref(images[0].url)
 const target = ref(images[0].target)
 const loading = ref(false)
 
+const captcha = ref<CaptchaExposed>()
+
 async function queryImage() {
   if (loading.value) return
 
@@ -28,6 +33,12 @@ async function queryImage() {
   const imageData = image.value === images[0].url ? images[1] : images[0]
 
   image.value = imageData.url
+
+  if (captcha.value) {
+    await nextTick()
+    await captcha.value.imagePromise
+  }
+
   target.value = imageData.target
   loading.value = false
 }
