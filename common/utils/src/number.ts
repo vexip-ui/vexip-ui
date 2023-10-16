@@ -61,16 +61,26 @@ export function doubleDigits(number: number) {
 }
 
 /**
- * Return digits length of a number.
+ * Return decimal length of a number.
  *
  * @param number The input number
  */
-export function digitLength(number: number | string) {
+export function decimalLength(number: number | string) {
   // Get digit length of e
   const eSplit = number.toString().split(/[eE]/)
   const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0)
 
   return len > 0 ? len : 0
+}
+
+/**
+ * Return decimal length of a number.
+ *
+ * @param number The input number
+ * @deprecated
+ */
+export function digitLength(number: number | string) {
+  return decimalLength(number)
 }
 
 /**
