@@ -36,6 +36,10 @@ $notice: map.merge(
 
   @include basis;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   $title: #{&}__title;
   $icon: #{&}__icon;
   $close: #{&}__close;
