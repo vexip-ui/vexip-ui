@@ -66,10 +66,6 @@ html {
   &.rtl {
     direction: rtl;
   }
-
-  &.padding {
-    padding: 20px;
-  }
 }
 
 body {
@@ -87,6 +83,11 @@ body {
 
 #app {
   height: 100%;
+  overflow: auto;
+}
+
+.padding #app {
+  padding: 20px;
 }
 
 .setting {

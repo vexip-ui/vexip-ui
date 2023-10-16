@@ -293,7 +293,7 @@ export default defineComponent({
 
         instances.add(instance)
       },
-      unsync: (instance: any) => {
+      unSync: (instance: any) => {
         instances.delete(instance)
       }
     })
@@ -333,20 +333,20 @@ export default defineComponent({
       return width === 'auto' ? formActions?.getLabelWidth() || 80 : width
     }
 
-    let inited = false
+    let initialized = false
 
     function getValue(defaultValue?: unknown) {
       if (!formProps.model || !props.prop) return defaultValue
 
       try {
         const value = getValueByPath(formProps.model, props.prop, true)
-        inited = true
+        initialized = true
 
         return value
       } catch (e) {
-        if (!inited) {
+        if (!initialized) {
           setValueByPath(formProps.model, props.prop, defaultValue, false)
-          inited = true
+          initialized = true
         }
 
         return defaultValue
@@ -383,10 +383,6 @@ export default defineComponent({
         resetValue = Array.isArray(initValue.value) ? Array.from(initValue.value) : []
       } else {
         resetValue = isFunction(initValue.value) ? initValue.value() : initValue.value
-      }
-
-      if (resetValue !== value) {
-        disabledValidate.value = true
       }
 
       return setValueByPath(formProps.model, props.prop, resetValue, true)
