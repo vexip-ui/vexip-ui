@@ -1,11 +1,24 @@
 import type { AnyCase } from './word-case'
 
+const numberRE = /^\s*[+-]?\d*\.?\d+\s*$/
+
 /**
  * 检测给定的值是否可以通过 parseFlat 或 Number 方法转为数字
  *
+ * 开启严格模式则通过正则以更严格的方法判断
+ *
  * @param value 需要检测的值
+ * @param strict 是否为严格模式
  */
-export function isValidNumber(value: unknown) {
+export function isValidNumber(value: unknown, strict = false) {
+  if (typeof value === 'number') {
+    return !Number.isNaN(value)
+  }
+
+  if (strict) {
+    return numberRE.test(String(value))
+  }
+
   return !Number.isNaN(parseFloat(value as string)) || !Number.isNaN(Number(value))
 }
 
@@ -25,12 +38,26 @@ export function toNumber(value: unknown) {
 }
 
 /**
+ * 为给定的整数开头填充 0，直至满足指定的长度
+ *
+ * @param number 需要处理的整数
+ * @param length 填充至的长度
+ */
+export function padStartZeros(number: number, length: number) {
+  if (length <= 0) {
+    return number.toString()
+  }
+
+  return `${number < 0 ? '-' : ''}${String(Math.abs(Math.round(number))).padStart(length, '0')}`
+}
+
+/**
  * 将小于 10 整数 N 变成 `0N` 的字符串，方法不会对入参校验
  *
  * @param number 需要处理的整数
  */
 export function doubleDigits(number: number) {
-  return number < 10 ? `0${number}` : number.toString()
+  return padStartZeros(number, 2)
 }
 
 /**
