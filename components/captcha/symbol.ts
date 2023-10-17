@@ -2,10 +2,9 @@ import type { ComponentPublicInstance } from 'vue'
 
 export type CaptchaType = 'slide' | 'point'
 
-export interface CaptchaBeforeTest {
-  (percent: number, matched: boolean): unknown,
-  (positions: number[]): unknown
-}
+export type CaptchaBeforeTest =
+  | ((percent: number, matched: boolean) => unknown)
+  | ((positions: number[]) => unknown)
 
 export interface CaptchaExposed extends ComponentPublicInstance {
   dragging: boolean,

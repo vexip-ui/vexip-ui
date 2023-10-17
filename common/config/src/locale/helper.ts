@@ -34,6 +34,7 @@ export interface LocaleConfig {
     slideEnd: string,
     slide: string,
     success: string,
+    fail: string,
     doCaptcha: string,
     pointInOrder: string
   },

@@ -4,6 +4,7 @@ import { useFieldStore } from '@/components/form'
 
 import {
   Transition,
+  TransitionGroup,
   computed,
   defineComponent,
   nextTick,
@@ -18,7 +19,7 @@ import {
 import CaptchaSlider from './captcha-slider.vue'
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { createSlotRender } from '@vexip-ui/hooks'
-import { ensureArray, isClient, isNull, random } from '@vexip-ui/utils'
+import { ensureArray, isClient, isNull, random, randomHardColor } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 import type { SuccessEvent } from './symbol'
@@ -49,6 +50,7 @@ export default defineComponent({
       title: null,
       tip: null,
       successTip: null,
+      failTip: null,
       image: null,
       tolerance: {
         default: null,
@@ -65,8 +67,12 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      texts: () => [],
-      failLimit: 0
+      texts: {
+        default: () => [],
+        validator: value => !value.find(text => text.length > 1)
+      },
+      failLimit: 0,
+      remotePoint: false
     })
 
     const nh = useNameHelper('captcha')
@@ -78,6 +84,7 @@ export default defineComponent({
     const pointers = reactive<number[][]>([])
     const testLoading = ref(false)
     const success = ref(false)
+    const failed = ref(false)
 
     const wrapper = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
@@ -98,6 +105,10 @@ export default defineComponent({
 
     const imageLoading = ref(false)
     const imagePromise = shallowRef(Promise.resolve())
+
+    const pointerTargets: number[][] = []
+
+    const fontRate = 0.108
 
     let imageLoaded = false
     let image: HTMLImageElement | false
@@ -143,16 +154,28 @@ export default defineComponent({
     )
     watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], drawImage)
     watch(
-      () => props.type,
-      value => {
-        if (value !== 'slide' && typeof props.onBeforeTest !== 'function') {
+      [() => props.type, () => props.remotePoint],
+      () => {
+        if (
+          props.type !== 'slide' &&
+          props.remotePoint &&
+          typeof props.onBeforeTest !== 'function'
+        ) {
           console.warn(
             "[vexip-ui:Captcha] You should specify 'on-before-test' prop to valid the captcha " +
-              "if you are using a type other than 'slide'"
+              "if you are using the 'point' type in remote"
           )
         }
       },
       { immediate: true }
+    )
+    watch(
+      [() => props.type, () => props.texts, () => props.texts.length, () => props.remotePoint],
+      () => {
+        if (props.type === 'point' && props.texts.length && !props.remotePoint && image) {
+          drawImage()
+        }
+      }
     )
 
     onMounted(async () => {
@@ -186,6 +209,69 @@ export default defineComponent({
       })
     }
 
+    function drawImageWithTexts() {
+      const canvasEl = canvas.value
+      const ctx = canvasEl?.getContext('2d')
+
+      if (!image || !canvasEl || !ctx) return
+
+      const { width, height } = canvasEl
+
+      ctx.drawImage(image, 0, 0, width, height)
+
+      if (!props.texts.length || props.remotePoint) return
+
+      pointerTargets.length = 0
+
+      const fontSize = Math.max(width, height) * fontRate
+
+      ctx.textBaseline = 'middle'
+      ctx.textAlign = 'center'
+      ctx.font = `bold ${fontSize}px sans-serif`
+      ctx.lineWidth = 2
+      ctx.strokeStyle = '#fff'
+
+      const drawText = (
+        text: string,
+        x: number,
+        y: number,
+        radian = 0,
+        color = randomHardColor()
+      ) => {
+        ctx.save()
+        ctx.translate(x, y)
+        radian && ctx.rotate(radian * Math.PI)
+        ctx.fillStyle = color
+        ctx.fillText(text, 0, 0)
+        ctx.strokeText(text, 0, 0)
+        ctx.restore()
+      }
+
+      const metrics = ctx.measureText(props.texts[0])
+      const xLimit = Math.max(fontSize, metrics.width) * 1.2
+      const yLimit =
+        Math.max(fontSize, metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent) * 1.2
+
+      let prevX = -2 * fontSize
+      let prevY = -2 * fontSize
+
+      for (const text of props.texts) {
+        let x = prevX
+        let y = prevY
+
+        while (Math.abs(x - prevX) < xLimit && Math.abs(y - prevY) < yLimit) {
+          x = width * 0.1 + Math.random() * width * 0.8
+          y = height * 0.1 + Math.random() * height * 0.8
+        }
+
+        prevX = x
+        prevY = y
+
+        pointerTargets.push([(x / width) * 100, (y / height) * 100])
+        drawText(text, x, y, Math.random() * 2)
+      }
+    }
+
     function drawImage() {
       const canvasEl = canvas.value
       const ctx = canvasEl?.getContext('2d')
@@ -194,8 +280,8 @@ export default defineComponent({
 
       if (!image || !imageLoaded || !canvasEl || !ctx || !props.image) return
 
-      if (props.type !== 'slide') {
-        ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
+      if (props.type === 'point') {
+        drawImageWithTexts()
         return
       }
 
@@ -239,8 +325,13 @@ export default defineComponent({
     }
 
     function reset(target = props.slideTarget) {
+      success.value = false
+      failed.value = false
       currentTarget.value = parseTarget(target)
+      pointers.length = 0
+
       slider.value?.reset()
+      props.type === 'point' && drawImageWithTexts()
     }
 
     function parseTarget(target = props.slideTarget) {
@@ -270,9 +361,18 @@ export default defineComponent({
     }
 
     function handleSlideSuccess(percent: number) {
+      success.value = true
+      failed.value = false
+
       emitEvent(props.onSuccess as SuccessEvent, percent)
       setFieldValue(percent)
       validateField()
+    }
+
+    function handleSlideFail() {
+      failed.value = true
+
+      emitEvent(props.onFail)
     }
 
     function handleRefresh() {
@@ -288,25 +388,47 @@ export default defineComponent({
 
       pointers.length = props.texts.length
 
+      let result = props.remotePoint
       let customResult: unknown
+
+      if (!props.remotePoint && canvas.value) {
+        const { width, height } = canvas.value
+        const fontSize = Math.max(width, height) * fontRate
+        const xTolerance = (fontSize / width) * 50 + tolerance.value
+        const yTolerance = (fontSize / height) * 50 + tolerance.value
+
+        result = true
+
+        for (let i = 0, len = pointers.length; i < len; ++i) {
+          const [x, y] = pointers[i]
+          const [targetX, targetY] = pointerTargets[i]
+
+          if (Math.abs(x - targetX) > xTolerance || Math.abs(y - targetY) > yTolerance) {
+            result = false
+            break
+          }
+        }
+      }
 
       if (typeof props.onBeforeTest === 'function') {
         nextTick(() => {
           testLoading.value = true
         })
-        customResult = await props.onBeforeTest(pointers.flat())
+        customResult = await (props.onBeforeTest as any)(pointers.flat())
         nextTick(() => {
           testLoading.value = false
         })
       }
 
-      if (customResult === false) {
+      if (!result || customResult === false) {
         success.value = false
         pointers.length = 0
+        failed.value = true
 
         emitEvent(props.onFail)
       } else {
         success.value = true
+        failed.value = false
 
         emitEvent(props.onSuccess as SuccessEvent, pointers.flat())
       }
@@ -321,15 +443,26 @@ export default defineComponent({
       pointers.push([(offsetX / canvasWidth) * 100, (offsetY / canvasHeight) * 100])
 
       if (pointers.length >= props.texts.length) {
-        verifyPointers()
+        nextTick(verifyPointers)
       }
+    }
+
+    function cancelPointer(index: number, event: Event) {
+      event.stopPropagation()
+
+      if (actionLocked.value || index !== pointers.length - 1) return
+
+      pointers.pop()
     }
 
     function renderImage() {
       if (!props.image) return null
 
       return (
-        <div class={nh.be('image')} onClick={handleImageClick}>
+        <div
+          class={[nh.be('image'), actionLocked.value && nh.bem('image', 'locked')]}
+          onClick={handleImageClick}
+        >
           <div class={nh.be('image-inner')}>
             <canvas
               ref={canvas}
@@ -348,19 +481,32 @@ export default defineComponent({
               </div>
             )}
           </div>
-          {props.type === 'point' &&
-            pointers.map(([x, y], index) => (
-              <span key={index} class={nh.be('pointer')} style={{ top: `${y}%`, left: `${x}%` }}>
-                {index + 1}
-              </span>
-            ))}
+          {props.type === 'point' && (
+            <TransitionGroup name={nh.ns('fade')} appear>
+              {pointers.map(([x, y], index) => (
+                <span
+                  key={index}
+                  class={nh.be('pointer')}
+                  style={{ top: `${y}%`, left: `${x}%` }}
+                  onClick={cancelPointer.bind(null, index)}
+                >
+                  {index + 1}
+                </span>
+              ))}
+            </TransitionGroup>
+          )}
           <Transition name={nh.ns('fade')}>
-            {isSuccess.value && (
+            {(isSuccess.value || failed.value) && (
               <div
-                class={[nh.be('image-tip'), nh.bem('image-tip', 'success')]}
+                class={[
+                  nh.be('image-tip'),
+                  nh.bem('image-tip', isSuccess.value ? 'success' : 'fail')
+                ]}
                 onClick={stopPropagation}
               >
-                {props.successTip ?? locale.value.success}
+                {isSuccess.value
+                  ? props.successTip ?? locale.value.success
+                  : props.failTip ?? locale.value.fail}
               </div>
             )}
           </Transition>
@@ -381,7 +527,7 @@ export default defineComponent({
           loading-effect={props.loadingEffect}
           onBeforeTest={props.onBeforeTest}
           onSuccess={handleSlideSuccess}
-          onFail={() => emitEvent(props.onFail)}
+          onFail={handleSlideFail}
           onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}

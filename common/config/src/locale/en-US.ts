@@ -36,6 +36,7 @@ export function enUSLocale() {
       slideEnd: 'Please slide to the end',
       slide: 'Please slide to a suitable position',
       success: 'Test successful',
+      fail: 'Test failed, please retry',
       doCaptcha: 'Please complete the captcha below',
       pointInOrder: 'Please point in order'
     },
