@@ -2,8 +2,8 @@ import { booleanProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
-import type { ConfigurableProps } from '@vexip-ui/config'
-import type { CaptchaType } from './symbol'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type { CaptchaBeforeTest, CaptchaType, SuccessEvent } from './symbol'
 
 export const captchaProps = buildProps({
   type: String as PropType<CaptchaType>,
@@ -11,7 +11,7 @@ export const captchaProps = buildProps({
   title: String,
   tip: String,
   successTip: String,
-  image: String,
+  image: [String, Function] as PropType<string | (() => Promise<string>)>,
   tolerance: Number,
   canvasSize: Array as PropType<number[]>,
   refreshIcon: Object,
@@ -20,8 +20,10 @@ export const captchaProps = buildProps({
   loadingIcon: Object,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
-  onBeforeTest: Function as PropType<(percent: number, matched: boolean) => unknown>,
-  onSuccess: eventProp<(percent: number) => void>(),
+  onBeforeTest: Function as PropType<CaptchaBeforeTest>,
+  texts: Array as PropType<string[]>,
+  failLimit: Number,
+  onSuccess: eventProp<EventListener<SuccessEvent>>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),
   onDrag: eventProp<(percent: number) => void>(),

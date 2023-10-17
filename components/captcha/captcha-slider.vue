@@ -120,7 +120,7 @@ export default defineComponent({
 
     const track = ref<HTMLElement>()
 
-    const readonly = computed(() => props.disabled || (props.loading && props.loadingLock))
+    const readonly = computed(() => props.disabled || (loading.value && props.loadingLock))
 
     let widthLimit: number
 
@@ -199,7 +199,7 @@ export default defineComponent({
       }
     })
 
-    const isLoading = computed(() => props.loading || testLoading.value)
+    const isLoading = computed(() => loading.value || testLoading.value)
     const className = computed(() => {
       const baseCls = nh.be('slider')
 

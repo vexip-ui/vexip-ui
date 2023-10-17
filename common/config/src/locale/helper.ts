@@ -34,8 +34,8 @@ export interface LocaleConfig {
     slideEnd: string,
     slide: string,
     success: string,
-    fixImage: string,
-    pointImage: string
+    doCaptcha: string,
+    pointInOrder: string
   },
 
   checkbox: {

@@ -36,8 +36,8 @@ export function zhCNLocale() {
       slideEnd: '请滑动到最后',
       slide: '请滑动到适当的位置',
       success: '验证成功',
-      fixImage: '修复图片以完成验证',
-      pointImage: '点击图片中的文字'
+      doCaptcha: '请完成下面的验证',
+      pointInOrder: '请按顺序点击'
     },
 
     checkbox: {
