@@ -53,7 +53,7 @@ export interface FieldOptions {
   getValue: (defaultValue?: unknown) => unknown,
   setValue: (value: unknown, strict?: boolean) => void,
   sync: (instance: any) => void,
-  unsync: (instance: any) => void
+  unSync: (instance: any) => void
 }
 
 export interface FormActions {
