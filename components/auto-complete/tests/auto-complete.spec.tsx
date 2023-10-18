@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
+import { GithubB } from '@vexip-ui/icons'
 import { AutoComplete } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -102,5 +103,48 @@ describe('AutoComplete', () => {
 
     await wrapper.setProps({ transfer: true })
     expect(document.body.querySelector('.vxp-select__popper')).toBeDefined()
+  })
+
+  it('prefix slot', async () => {
+    const wrapper = mount(() => (
+      <AutoComplete prefix={GithubB}>
+        {{
+          prefix: () => <span class={'prefix'}></span>
+        }}
+      </AutoComplete>
+    ))
+
+    expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
+    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.find('.prefix').exists()).toBe(true)
+  })
+
+  it('suffix slot', async () => {
+    const wrapper = mount(() => (
+      <AutoComplete suffix={GithubB}>
+        {{
+          suffix: () => <span class={'suffix'}></span>
+        }}
+      </AutoComplete>
+    ))
+
+    expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
+    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.find('.suffix').exists()).toBe(true)
+  })
+
+  it('prepend and append slots', async () => {
+    const wrapper = mount(AutoComplete, {
+      props: {
+        options: OPTIONS
+      },
+      slots: {
+        prepend: () => <span class={'prepend'}></span>,
+        append: () => <span class={'append'}></span>
+      }
+    })
+
+    expect(wrapper.find('.prepend').exists()).toBe(true)
+    expect(wrapper.find('.append').exists()).toBe(true)
   })
 })
