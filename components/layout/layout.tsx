@@ -1,4 +1,3 @@
-import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
 
@@ -35,14 +34,6 @@ import type {
 
 export default defineComponent({
   name: 'Layout',
-  components: {
-    LayoutAside,
-    LayoutFooter,
-    LayoutHeader,
-    LayoutMain,
-    Menu,
-    NativeScroll
-  },
   props: layoutProps,
   emits: [
     'update:expanded',
@@ -82,12 +73,13 @@ export default defineComponent({
       darkMode: null,
       fixedMain: false,
       fitWindow: false,
-      innerClasses: () => ({})
+      innerClasses: () => ({}),
+      noHeader: false
     })
 
     const nh = useNameHelper('layout')
     const locked = ref(false)
-    const asideActive = ref(!props.noAside)
+    // const asideActive = ref(!props.noAside)
     const asideExpanded = ref(props.expanded)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
@@ -127,6 +119,7 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
+          [nh.bm('no-header')]: props.noHeader,
           [nh.bm('header-main')]: currentSignType.value === 'header',
           [nh.bm('locked')]: !isMounted.value || locked.value,
           [nh.bm('fit-window')]: props.fitWindow
@@ -177,12 +170,12 @@ export default defineComponent({
         asideReduced.value = value
       }
     )
-    watch(
-      () => props.noAside,
-      value => {
-        changeInLock(() => (asideActive.value = value))
-      }
-    )
+    // watch(
+    //   () => props.noAside,
+    //   value => {
+    //     changeInLock(() => (asideActive.value = value))
+    //   }
+    // )
     watch(currentSignType, value => {
       emit('update:sign-type', value)
       emitEvent(props.onNavChange, value)
@@ -300,6 +293,10 @@ export default defineComponent({
     }
 
     function renderHeader() {
+      if (props.noHeader) {
+        return null
+      }
+
       if (slots.header) {
         return renderSlot(slots, 'header', slotParams)
       }

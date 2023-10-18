@@ -216,6 +216,49 @@ describe('Layout', () => {
     expect(wrapper.find('.vxp-layout__header .vxp-menu').exists()).toBe(true)
   })
 
+  it('no header', async () => {
+    const menus = [
+      {
+        label: '1',
+        name: '菜单 1',
+        icon: GithubB,
+        children: [
+          { label: '1-1', name: '子菜单 1' },
+          { label: '1-2', name: '子菜单 2' },
+          { label: '1-3', name: '子菜单 3' }
+        ]
+      },
+      {
+        label: '2',
+        name: '菜单 2',
+        icon: City,
+        disabled: true
+      }
+    ]
+    const wrapper = mount(() => (
+      <Layout
+        logo={'logo.png'}
+        sign-name={'Vexip UI'}
+        user={{
+          name: 'VexipUI',
+          email: 'email@vexip-ui.com'
+        }}
+        menus={menus}
+        no-header
+      >
+        {{
+          main: () => <div class={'main'}></div>
+        }}
+      </Layout>
+    ))
+
+    await waitMounted()
+
+    expect(wrapper.find('.vxp-layout__header').exists()).toBe(false)
+    expect(wrapper.find('.vxp-layout__aside').exists()).toBe(true)
+    expect(wrapper.find('.vxp-layout__aside .vxp-menu').exists()).toBe(true)
+  })
+
   it('slots', async () => {
     const wrapper = mount(() => (
       <Layout footer>
