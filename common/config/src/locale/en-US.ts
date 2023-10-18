@@ -38,7 +38,9 @@ export function enUSLocale() {
       success: 'Test successful',
       fail: 'Test failed, please retry',
       doCaptcha: 'Please complete the captcha below',
-      pointInOrder: 'Please point in order'
+      pointInOrder: 'Please point in order',
+      trigger: 'Click to trigger captcha',
+      completed: 'Captcha completed'
     },
 
     checkbox: {

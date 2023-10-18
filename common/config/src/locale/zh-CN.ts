@@ -38,7 +38,9 @@ export function zhCNLocale() {
       success: '验证成功',
       fail: '验证失败，请重试',
       doCaptcha: '请完成下面的验证',
-      pointInOrder: '请按顺序点击'
+      pointInOrder: '请按顺序点击',
+      trigger: '点击进行验证',
+      completed: '已完成验证'
     },
 
     checkbox: {

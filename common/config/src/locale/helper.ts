@@ -36,7 +36,9 @@ export interface LocaleConfig {
     success: string,
     fail: string,
     doCaptcha: string,
-    pointInOrder: string
+    pointInOrder: string,
+    trigger: string,
+    completed: string
   },
 
   checkbox: {

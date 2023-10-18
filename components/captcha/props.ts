@@ -25,6 +25,7 @@ export const captchaProps = buildProps({
   texts: Array as PropType<string[]>,
   failLimit: Number,
   remotePoint: booleanProp,
+  useTrigger: booleanProp,
   onSuccess: eventProp<EventListener<SuccessEvent>>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),

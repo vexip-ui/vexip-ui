@@ -1,5 +1,7 @@
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Spin } from '@/components/spin'
+import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
 
 import {
@@ -18,7 +20,8 @@ import {
 
 import CaptchaSlider from './captcha-slider.vue'
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { createSlotRender } from '@vexip-ui/hooks'
+import { CircleCheckR } from '@vexip-ui/icons'
+import { createSlotRender, useSetTimeout } from '@vexip-ui/hooks'
 import { ensureArray, isClient, isNull, random, randomHardColor } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
@@ -72,12 +75,15 @@ export default defineComponent({
         validator: value => !value.find(text => text.length > 1)
       },
       failLimit: 0,
-      remotePoint: false
+      remotePoint: false,
+      useTrigger: false
     })
 
     const nh = useNameHelper('captcha')
     const locale = useLocale('captcha')
     const icons = useIcons()
+
+    const { timer } = useSetTimeout()
 
     const currentTarget = ref(parseTarget(props.slideTarget))
     const dragging = ref(false)
@@ -85,6 +91,7 @@ export default defineComponent({
     const testLoading = ref(false)
     const success = ref(false)
     const failed = ref(false)
+    const visible = ref(false)
 
     const wrapper = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
@@ -94,9 +101,7 @@ export default defineComponent({
 
     const track = computed(() => slider.value?.track)
 
-    const isSuccess = computed(() =>
-      props.type === 'slide' ? !!slider.value?.isSuccess : success.value
-    )
+    const isSuccess = computed(() => !!slider.value?.isSuccess || success.value)
     const currentLeft = computed(() => slider.value?.currentLeft || 0)
     const resetting = computed(() => slider.value?.resetting)
 
@@ -148,6 +153,7 @@ export default defineComponent({
     watch(
       () => props.image,
       async () => {
+        image = null!
         await (imagePromise.value = loadImage())
         drawImage()
       }
@@ -177,6 +183,21 @@ export default defineComponent({
         }
       }
     )
+    watch(visible, async value => {
+      if (value) {
+        await (imagePromise.value = loadImage())
+        drawImage()
+      }
+    })
+    watch(isSuccess, value => {
+      if (value && props.useTrigger && visible.value) {
+        clearTimeout(timer.hideTrigger)
+
+        timer.hideTrigger = setTimeout(() => {
+          visible.value = false
+        }, 3000)
+      }
+    })
 
     onMounted(async () => {
       await (imagePromise.value = loadImage())
@@ -186,6 +207,8 @@ export default defineComponent({
     expose({ dragging, imageLoading, imagePromise, reset })
 
     async function loadImage() {
+      if (image) return
+
       imageLoading.value = true
 
       const src = typeof props.image === 'function' ? await props.image() : props.image
@@ -455,6 +478,12 @@ export default defineComponent({
       pointers.pop()
     }
 
+    function handleTrigger() {
+      if (!isSuccess.value) {
+        visible.value = true
+      }
+    }
+
     function renderImage() {
       if (!props.image) return null
 
@@ -569,7 +598,7 @@ export default defineComponent({
       return null
     }
 
-    return () => {
+    function renderPanel() {
       return (
         <div ref={wrapper} id={idFor.value} class={className.value} tabindex={-1}>
           <div class={nh.be('header')}>
@@ -605,6 +634,36 @@ export default defineComponent({
           {renderFooter()}
         </div>
       )
+    }
+
+    function renderTrigger() {
+      return renderSlot(slots, 'trigger', { success: isSuccess.value }, () => [
+        <Button
+          key={0}
+          type={isSuccess.value ? 'success' : 'primary'}
+          block
+          loading={visible.value && !isSuccess.value}
+          icon={isSuccess.value ? CircleCheckR : null}
+          onClick={handleTrigger}
+        >
+          {locale.value.trigger}
+        </Button>
+      ])
+    }
+
+    return () => {
+      if (props.useTrigger) {
+        return (
+          <Tooltip visible={visible.value} raw trigger={'custom'}>
+            {{
+              trigger: renderTrigger,
+              default: renderPanel
+            }}
+          </Tooltip>
+        )
+      }
+
+      return renderPanel()
     }
   }
 })
