@@ -157,12 +157,12 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
 
   // Block the provided if there are dependencies between control components.
   // e.g. AutoComplete -> Select, ColorPicker -> Input
-  provide(FIELD_OPTIONS, null)
+  provide(FIELD_OPTIONS, null!)
   fieldOptions.sync(instance)
   onFocus && fieldOptions.emitter.on('focus', onFocus)
 
   onBeforeUnmount(() => {
-    fieldOptions.unsync(instance)
+    fieldOptions.unSync(instance)
     onFocus && fieldOptions.emitter.off('focus', onFocus)
   })
 

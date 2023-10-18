@@ -106,11 +106,13 @@
 
 :::
 
-:::demo select/prefix
+:::demo select/prefix-suffix
 
-### 前置图标
+### 前后置图标
 
-设置 `prefix` 属性或者使用同名插槽，可以为颜色选择器添加前置图标。
+通过 `prefix` 和 `suffix` 属性或同名插槽，可以为选择器添加前置或后置图标。
+
+添加 `static-suffix` 属性可以使后置图标静止，或添加 `no-suffix` 属性禁用后置图标。
 
 :::
 
@@ -155,6 +157,16 @@
 ### 透明模式
 
 添加 `transparent` 属性可以消除原有的样式，然后你可以包裹上你喜欢的样式。
+
+:::
+
+:::demo select/popper-extra
+
+### 列表额外内容
+
+^[Since v2.2.7](!s)
+
+通过 `prepend` 和 `append` 插槽可以分别为选项列表的前方和后方插入内容。
 
 :::
 
@@ -267,4 +279,6 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | control  | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                 | -       |
 | suffix   | 后缀图标内容的插槽                           | -                                                                 | -       |
 | empty    | 空选项提示内容的插槽                         | -                                                                 | -       |
-| selected | 已选选项的回显内容插槽                       | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
+| selected | 已选选项的回显内容的插槽                     | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
+| prepend  | 选项列表上方内容的插槽                       | -                                                                 | `2.2.7` |
+| append   | 选项列表下方内容的插槽                       | -                                                                 | `2.2.7` |

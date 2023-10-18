@@ -110,11 +110,13 @@ Add the `ignore-case` prop to ignore case when using built-in filter methods.
 
 :::
 
-:::demo select/prefix
+:::demo select/prefix-suffix
 
-### Prefix Icon
+### Prefix and Suffix
 
-Prefix icon can be added to select by setting the `prefix` prop or using the slot of the same name.
+Prefix or suffix icons can be added respectively through the `prefix` and `suffix` props or slots with the same name.
+
+Add the `static-suffix` prop to make the suffix icon static, or add the `no-suffix` prop to disable the suffix icon.
 
 :::
 
@@ -159,6 +161,16 @@ It should not be stuck if the options are `100` times more.
 ### Transparent
 
 Add the `transparent` prop to remove the original style, and then you can wrap the style you like.
+
+:::
+
+:::demo select/popper-extra
+
+### List Extra Content
+
+^[Since v2.2.7](!s)
+
+Any content can be added before and after the list via the `prepend` and `append` slots respectively.
 
 :::
 
@@ -272,3 +284,5 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | suffix   | Slot for suffix icon content                                | -                                                                 | -       |
 | empty    | Slot for empty option prompt content                        | -                                                                 | -       |
 | selected | Slot for selected label content                             | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
+| prepend  | Slot for before list content                                | -                                                                 | `2.2.7` |
+| append   | Slot for after list content                                 | -                                                                 | `2.2.7` |

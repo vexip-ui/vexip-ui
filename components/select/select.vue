@@ -228,74 +228,87 @@
       @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
-      <VirtualList
-        ref="virtualList"
-        inherit
-        :class="[nh.be('list'), props.listClass]"
-        :style="{
-          height: listHeight,
-          maxHeight: `${props.maxListHeight}px`
-        }"
-        :items="totalOptions"
-        :item-size="32"
-        use-y-bar
-        :height="'100%'"
-        id-key="value"
-        :items-attrs="{
-          class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-          role: 'listbox',
-          ariaLabel: 'options'
-        }"
+      <div
+        :class="[
+          nh.be('list'),
+          ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
+          props.listClass
+        ]"
       >
-        <template #default="{ item: option, index }">
-          <li
-            v-if="option.group"
-            :class="[nh.ns('option-vars'), nh.be('group')]"
-            :title="option.label"
-          >
-            <slot name="group" :option="option" :index="index">
-              <div
-                :class="[nh.be('label'), nh.bem('label', 'group')]"
-                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-              >
-                {{ option.label }}
-              </div>
-            </slot>
-          </li>
-          <Option
-            v-else
-            :label="option.label"
-            :value="option.value"
-            :disabled="option.disabled || (limited && !isSelected(option))"
-            :divided="option.divided"
-            :no-title="option.title"
-            :hitting="option.hitting"
-            :selected="isSelected(option)"
-            no-hover
-            @select="handleSelect(option)"
-            @mousemove="updateHitting(index, false)"
-          >
-            <slot :option="option" :index="index" :selected="isSelected(option)">
-              <span
-                :class="nh.be('label')"
-                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-              >
-                {{ option.label }}
-              </span>
-              <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                <Icon v-if="isSelected(option)" v-bind="icons.check" :class="nh.be('check')"></Icon>
-              </Transition>
-            </slot>
-          </Option>
-        </template>
-        <template #empty>
-          <div :class="nh.be('empty')">
-            <slot name="empty">
-              {{ props.emptyText ?? locale.empty }}
-            </slot>
-          </div>
-        </template>
-      </VirtualList>
+        <slot v-if="$slots.prepend" name="prepend"></slot>
+        <VirtualList
+          ref="virtualList"
+          inherit
+          :style="{
+            height: undefined,
+            maxHeight: `${props.maxListHeight}px`
+          }"
+          :items="totalOptions"
+          :item-size="32"
+          use-y-bar
+          :height="'100%'"
+          id-key="value"
+          :items-attrs="{
+            class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+            role: 'listbox',
+            ariaLabel: 'options'
+          }"
+        >
+          <template #default="{ item: option, index }">
+            <li
+              v-if="option.group"
+              :class="[nh.ns('option-vars'), nh.be('group')]"
+              :title="option.label"
+            >
+              <slot name="group" :option="option" :index="index">
+                <div
+                  :class="[nh.be('label'), nh.bem('label', 'group')]"
+                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                >
+                  {{ option.label }}
+                </div>
+              </slot>
+            </li>
+            <Option
+              v-else
+              :label="option.label"
+              :value="option.value"
+              :disabled="option.disabled || (limited && !isSelected(option))"
+              :divided="option.divided"
+              :no-title="option.title"
+              :hitting="option.hitting"
+              :selected="isSelected(option)"
+              no-hover
+              @select="handleSelect(option)"
+              @mousemove="updateHitting(index, false)"
+            >
+              <slot :option="option" :index="index" :selected="isSelected(option)">
+                <span
+                  :class="nh.be('label')"
+                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                >
+                  {{ option.label }}
+                </span>
+                <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                  <Icon
+                    v-if="isSelected(option)"
+                    v-bind="icons.check"
+                    :class="nh.be('check')"
+                  ></Icon>
+                </Transition>
+              </slot>
+            </Option>
+          </template>
+          <template #empty>
+            <div :class="nh.be('empty')">
+              <slot name="empty">
+                {{ props.emptyText ?? locale.empty }}
+              </slot>
+            </div>
+          </template>
+        </VirtualList>
+        <slot v-if="$slots.append" name="append"></slot>
+      </div>
     </Popper>
   </div>
 </template>
@@ -470,7 +483,7 @@ export default defineComponent({
     const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
-    const listHeight = ref<string>()
+    // const listHeight = ref<string>()
     const baseOptions = ref<SelectOptionState[]>([])
     const currentFilter = ref('')
     const anchorWidth = ref(0)
@@ -1223,7 +1236,7 @@ export default defineComponent({
       currentValues,
       currentLabels,
       transferTo,
-      listHeight,
+      // listHeight,
       optionStates,
       isHover,
       currentFilter,
