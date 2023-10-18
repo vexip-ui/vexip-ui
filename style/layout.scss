@@ -225,6 +225,10 @@ $layout: map.merge(
     top: get-css-var('layout-header-height');
   }
 
+  &--no-header &__scrollbar {
+    top: 0;
+  }
+
   &__main {
     position: relative;
     display: flex;

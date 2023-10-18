@@ -756,4 +756,20 @@ describe('Select', () => {
 
     expect(wrapper.find('.vxp-select__control').text()).toEqual('1' + OPTIONS[0])
   })
+
+  it('prepend and append slots', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        value: OPTIONS[0],
+        options: OPTIONS
+      },
+      slots: {
+        prepend: () => <span class={'prepend'}></span>,
+        append: () => <span class={'append'}></span>
+      }
+    })
+
+    expect(wrapper.find('.prepend').exists()).toBe(true)
+    expect(wrapper.find('.append').exists()).toBe(true)
+  })
 })

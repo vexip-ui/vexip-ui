@@ -103,7 +103,9 @@ const slots = defineSlots<{
   }) => any,
   suffix: () => any,
   default: (params: { option: AutoCompleteOptionState, index: number, selected: boolean }) => any,
-  group: (params: { option: AutoCompleteOptionState, index: number }) => any
+  group: (params: { option: AutoCompleteOptionState, index: number }) => any,
+  prepend: () => any,
+  append: () => any
 }>()
 
 const locale = useLocale('input', toRef(props, 'locale'))
@@ -494,6 +496,12 @@ function handleClear() {
     </template>
     <template v-if="$slots.group" #group="{ option, index }">
       <slot name="group" :option="option" :index="index"></slot>
+    </template>
+    <template v-if="$slots.prepend" #prepend>
+      <slot name="prepend"></slot>
+    </template>
+    <template v-if="$slots.append" #append>
+      <slot name="append"></slot>
     </template>
   </Select>
 </template>
