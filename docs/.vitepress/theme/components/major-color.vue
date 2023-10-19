@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { ArrowRotateLeft, Dice } from '@vexip-ui/icons'
-import { isClient, randomColor } from '@vexip-ui/utils'
+import { isClient, randomHardColor } from '@vexip-ui/utils'
 import { computeSeriesColors } from '../common/series-color'
 
 const emit = defineEmits(['change'])
@@ -29,7 +29,7 @@ watch(majorColor, value => {
 })
 
 function rollMajorColor() {
-  majorColor.value = randomColor()
+  majorColor.value = randomHardColor()
 }
 
 function resetMajorColor() {

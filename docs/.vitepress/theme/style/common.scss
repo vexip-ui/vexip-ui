@@ -62,7 +62,7 @@ ul {
 }
 
 code {
-  font-family: var(--vxp-font-family-mono);
+  font-family: var(--vxp-font-family-mono) !important;
   line-height: 2;
 }
 
@@ -98,7 +98,7 @@ p .vxp-linker {
 
   :not(pre) > code {
     padding: 3px 5px;
-    font-family: var(--vxp-font-family-mono);
+    font-family: var(--vxp-font-family-mono) !important;
     background-color: var(--vxp-fill-color-background);
     border-radius: var(--vxp-radius-small);
     transition: var(--vxp-transition-background);

@@ -101,7 +101,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
             v-if="child.tag"
             class="aside-menu__tag"
             simple
-            type="error"
+            :type="child.tagType"
           >
             {{ child.tag }}
           </Tag>
@@ -125,7 +125,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
           v-if="menu.tag"
           class="aside-menu__tag"
           simple
-          type="error"
+          :type="menu.tagType"
         >
           {{ menu.tag }}
         </Tag>

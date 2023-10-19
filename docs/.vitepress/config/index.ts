@@ -1,6 +1,7 @@
 import * as compiler from '@vue/compiler-sfc'
 
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
+import { compare } from 'compare-versions'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { getComponentConfig } from './component'
@@ -110,7 +111,23 @@ function queryLibVersion() {
 }
 
 function getAsideMenus(): ThemeConfig['asideMenus'] {
-  const versionPrefix = queryLibVersion().split('.').slice(0, 2).join('.') + '.'
+  const minorVersion = queryLibVersion().split('.').slice(0, 2).join('.') + '.x'
+
+  const getTagConfig = (since?: string) => {
+    if (!since) return ''
+
+    return compare(since, minorVersion, '=')
+      ? {
+          tag: 'New',
+          tagType: 'error' as const
+        }
+      : compare(since, minorVersion, '>')
+        ? {
+            tag: 'Coming',
+            tagType: 'warning' as const
+          }
+        : {}
+  }
 
   return {
     '/guide/': getGuideConfig().map(group => {
@@ -132,10 +149,10 @@ function getAsideMenus(): ThemeConfig['asideMenus'] {
         i18n: `group.${group.name}`,
         count: true,
         items: group.components.map(component => ({
+          ...getTagConfig(component.since),
           key: component.name,
           link: `/component/${toKebabCase(component.name)}`,
           text: component.name,
-          tag: component.since?.startsWith(versionPrefix) ? 'New' : '',
           subI18n: `component.${component.name}`,
           noSub: ['en-US']
         }))
