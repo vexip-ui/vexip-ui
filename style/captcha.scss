@@ -7,6 +7,7 @@ $captcha: () !default;
 $captcha: map.merge(
   (
     width: 320px,
+    bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-light-2'),
     radius: get-css-var('radius-base'),
     shadow: get-css-var('shadow-base'),
@@ -47,6 +48,10 @@ $captcha: map.merge(
 .#{$namespace}-captcha {
   &-vars {
     @include define-preset-values('captcha', $captcha);
+  }
+
+  &-wrapper {
+    @include basis;
   }
 
   @include basis;
@@ -361,5 +366,9 @@ $captcha: map.merge(
     margin-inline-start: 6px;
     font-size: 18px;
     font-weight: bold;
+  }
+
+  &__button--success {
+    pointer-events: none;
   }
 }

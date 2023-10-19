@@ -1,12 +1,11 @@
 <template>
+  <div style="max-width: 300px">
+    <Captcha ref="captcha" use-trigger image="/picture-2.jpg"></Captcha>
+  </div>
+  <br />
   <Button type="primary" @click="captcha?.reset()">
     Reset Captcha
   </Button>
-  <br />
-  <br />
-  <div style="max-width: 300px">
-    <Captcha ref="captcha" use-trigger image="/picture-3.jpg"></Captcha>
-  </div>
 </template>
 
 <script setup lang="ts">

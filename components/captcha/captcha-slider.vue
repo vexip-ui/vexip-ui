@@ -92,7 +92,7 @@ export default defineComponent({
       tip: null,
       successTip: null,
       tolerance: {
-        default: 0,
+        default: 1,
         validator: value => value >= 0
       },
       disabled: () => disabled.value,
@@ -120,7 +120,7 @@ export default defineComponent({
 
     const track = ref<HTMLElement>()
 
-    const readonly = computed(() => props.disabled || (loading.value && props.loadingLock))
+    const readonly = computed(() => props.disabled || (props.loading && props.loadingLock))
 
     let widthLimit: number
 
@@ -199,7 +199,7 @@ export default defineComponent({
       }
     })
 
-    const isLoading = computed(() => loading.value || testLoading.value)
+    const isLoading = computed(() => props.loading || testLoading.value)
     const className = computed(() => {
       const baseCls = nh.be('slider')
 

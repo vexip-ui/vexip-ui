@@ -10,7 +10,7 @@ export interface CaptchaExposed extends ComponentPublicInstance {
   dragging: boolean,
   imageLoading: boolean,
   imagePromise: Promise<void>,
-  reset: () => void
+  reset: (image?: string | (() => Promise<string>)) => void
 }
 
 export type SuccessEvent = (value: number | number[]) => void

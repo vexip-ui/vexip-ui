@@ -15,11 +15,19 @@ import {
   ref,
   renderSlot,
   shallowRef,
+  toRef,
   watch
 } from 'vue'
 
 import CaptchaSlider from './captcha-slider.vue'
-import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createSizeProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { CircleCheckR } from '@vexip-ui/icons'
 import { createSlotRender, useSetTimeout } from '@vexip-ui/hooks'
 import { ensureArray, isClient, isNull, random, randomHardColor } from '@vexip-ui/utils'
@@ -56,15 +64,14 @@ export default defineComponent({
       failTip: null,
       image: null,
       tolerance: {
-        default: null,
-        validator: value => isNull(value) || value >= 0
+        default: 1,
+        validator: value => value >= 0
       },
       canvasSize: () => [1000, 600],
       refreshIcon: null,
       disabled: () => disabled.value,
       loading: () => loading.value,
       loadingIcon: null,
-      loadingLock: false,
       loadingEffect: null,
       onBeforeTest: {
         default: null,
@@ -76,7 +83,14 @@ export default defineComponent({
       },
       failLimit: 0,
       remotePoint: false,
-      useTrigger: false
+      useTrigger: false,
+      triggerSize: createSizeProp(),
+      triggerText: null,
+      transfer: false,
+      hideDelay: {
+        default: 3000,
+        validator: value => value >= 0
+      }
     })
 
     const nh = useNameHelper('captcha')
@@ -91,6 +105,7 @@ export default defineComponent({
     const testLoading = ref(false)
     const success = ref(false)
     const failed = ref(false)
+    const failedCount = ref(0)
     const visible = ref(false)
 
     const wrapper = ref<HTMLElement>()
@@ -106,7 +121,6 @@ export default defineComponent({
     const resetting = computed(() => slider.value?.resetting)
 
     const usedTarget = computed(() => currentTarget.value[0])
-    const tolerance = computed(() => props.tolerance ?? 1)
 
     const imageLoading = ref(false)
     const imagePromise = shallowRef(Promise.resolve())
@@ -116,9 +130,9 @@ export default defineComponent({
     const fontRate = 0.108
 
     let imageLoaded = false
-    let image: HTMLImageElement | false
+    let image: HTMLImageElement | undefined
 
-    const isLoading = computed(() => loading.value || imageLoading.value || testLoading.value)
+    const isLoading = computed(() => props.loading || imageLoading.value || testLoading.value)
     const className = computed(() => {
       return [
         nh.b(),
@@ -140,9 +154,8 @@ export default defineComponent({
     const canvasSize = computed(() => {
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
-    const actionLocked = computed(() => {
-      return disabled.value || isSuccess.value || isLoading.value
-    })
+    const actionLocked = computed(() => props.disabled || isSuccess.value || isLoading.value)
+    const failLocked = computed(() => props.failLimit > 0 && failedCount.value >= props.failLimit)
 
     watch(
       () => props.slideTarget,
@@ -153,7 +166,7 @@ export default defineComponent({
     watch(
       () => props.image,
       async () => {
-        image = null!
+        image = undefined
         await (imagePromise.value = loadImage())
         drawImage()
       }
@@ -195,7 +208,7 @@ export default defineComponent({
 
         timer.hideTrigger = setTimeout(() => {
           visible.value = false
-        }, 3000)
+        }, props.hideDelay)
       }
     })
 
@@ -206,21 +219,25 @@ export default defineComponent({
 
     expose({ dragging, imageLoading, imagePromise, reset })
 
+    // 避免多次触发时发生竞态问题
+    let loadFlag: string
+
     async function loadImage() {
       if (image) return
 
       imageLoading.value = true
+      loadFlag = `${Date.now()}${Math.round(Math.random() * 10e6)}`
 
+      const flag = loadFlag
       const src = typeof props.image === 'function' ? await props.image() : props.image
 
       await new Promise<void>(resolve => {
-        image = isClient && new Image()
-
-        if (!image) {
+        if (!isClient || flag !== loadFlag) {
           resolve()
           return
         }
 
+        image = new Image()
         imageLoaded = false
         image.src = src
         image.onload = () => {
@@ -347,10 +364,17 @@ export default defineComponent({
       )
     }
 
-    function reset(target = props.slideTarget) {
+    async function reset(newImage?: string | (() => Promise<string>)) {
+      if (newImage) {
+        image = undefined
+        await (imagePromise.value = loadImage())
+        drawImage()
+      }
+
       success.value = false
       failed.value = false
-      currentTarget.value = parseTarget(target)
+      failedCount.value = 0
+      currentTarget.value = parseTarget()
       pointers.length = 0
 
       slider.value?.reset()
@@ -394,6 +418,7 @@ export default defineComponent({
 
     function handleSlideFail() {
       failed.value = true
+      ++failedCount.value
 
       emitEvent(props.onFail)
     }
@@ -417,8 +442,8 @@ export default defineComponent({
       if (!props.remotePoint && canvas.value) {
         const { width, height } = canvas.value
         const fontSize = Math.max(width, height) * fontRate
-        const xTolerance = (fontSize / width) * 50 + tolerance.value
-        const yTolerance = (fontSize / height) * 50 + tolerance.value
+        const xTolerance = (fontSize / width) * 50 + props.tolerance
+        const yTolerance = (fontSize / height) * 50 + props.tolerance
 
         result = true
 
@@ -447,6 +472,7 @@ export default defineComponent({
         success.value = false
         pointers.length = 0
         failed.value = true
+        ++failedCount.value
 
         emitEvent(props.onFail)
       } else {
@@ -485,31 +511,31 @@ export default defineComponent({
     }
 
     function renderImage() {
-      if (!props.image) return null
-
       return (
         <div
           class={[nh.be('image'), actionLocked.value && nh.bem('image', 'locked')]}
           onClick={handleImageClick}
         >
-          <div class={nh.be('image-inner')}>
-            <canvas
-              ref={canvas}
-              class={nh.be('canvas')}
-              width={canvasSize.value[0]}
-              height={canvasSize.value[1]}
-            ></canvas>
-            {props.type === 'slide' && (
-              <div ref={subImage} class={nh.be('sub-image')}>
-                <canvas
-                  ref={subCanvas}
-                  class={nh.be('sub-canvas')}
-                  height={canvasSize.value[1]}
-                  style={subCanvasStyle.value}
-                ></canvas>
-              </div>
-            )}
-          </div>
+          {props.image && (
+            <div class={nh.be('image-inner')}>
+              <canvas
+                ref={canvas}
+                class={nh.be('canvas')}
+                width={canvasSize.value[0]}
+                height={canvasSize.value[1]}
+              ></canvas>
+              {props.type === 'slide' && (
+                <div ref={subImage} class={nh.be('sub-image')}>
+                  <canvas
+                    ref={subCanvas}
+                    class={nh.be('sub-canvas')}
+                    height={canvasSize.value[1]}
+                    style={subCanvasStyle.value}
+                  ></canvas>
+                </div>
+              )}
+            </div>
+          )}
           {props.type === 'point' && (
             <TransitionGroup name={nh.ns('fade')} appear>
               {pointers.map(([x, y], index) => (
@@ -549,11 +575,12 @@ export default defineComponent({
           ref={slider}
           class={nh.bem('slider', 'inner')}
           target={usedTarget.value}
-          tolerance={tolerance.value}
+          tolerance={props.tolerance}
           loading={isLoading.value}
           loading-icon={props.loadingIcon}
-          loading-lock={props.loadingLock}
+          loading-lock
           loading-effect={props.loadingEffect}
+          disabled={disabled.value || failLocked.value}
           onBeforeTest={props.onBeforeTest}
           onSuccess={handleSlideSuccess}
           onFail={handleSlideFail}
@@ -580,7 +607,7 @@ export default defineComponent({
             ])}
           </div>
           <span>{':'}</span>
-          {renderSlot(slots, 'texts', undefined, () =>
+          {renderSlot(slots, 'texts', { texts: toRef(props, 'texts') }, () =>
             props.texts.map((text, index) => (
               <span key={index} class={nh.be('text')}>
                 {text}
@@ -625,7 +652,7 @@ export default defineComponent({
               ])}
             </button>
           </div>
-          <Spin active={isLoading.value || slider.value?.isLoading}>
+          <Spin active={isLoading.value || slider.value?.isLoading} delay={false}>
             {{
               default: renderImage,
               icon: createSlotRender(slots, ['loading-icon', 'loadingIcon'])
@@ -637,24 +664,38 @@ export default defineComponent({
     }
 
     function renderTrigger() {
-      return renderSlot(slots, 'trigger', { success: isSuccess.value }, () => [
-        <Button
-          key={0}
-          type={isSuccess.value ? 'success' : 'primary'}
-          block
-          loading={visible.value && !isSuccess.value}
-          icon={isSuccess.value ? CircleCheckR : null}
-          onClick={handleTrigger}
-        >
-          {locale.value.trigger}
-        </Button>
-      ])
+      return renderSlot(
+        slots,
+        'trigger',
+        { visible: visible.value, success: isSuccess.value },
+        () => [
+          <Button
+            key={0}
+            class={[nh.be('button'), isSuccess.value && nh.bem('button', 'success')]}
+            type={isSuccess.value ? 'success' : 'primary'}
+            size={props.triggerSize}
+            block
+            loading={visible.value && !isSuccess.value}
+            icon={isSuccess.value ? CircleCheckR : null}
+            onClick={handleTrigger}
+          >
+            {props.triggerText ?? (isSuccess.value ? locale.value.completed : locale.value.trigger)}
+          </Button>
+        ]
+      )
     }
 
     return () => {
       if (props.useTrigger) {
         return (
-          <Tooltip visible={visible.value} raw trigger={'custom'}>
+          <Tooltip
+            class={nh.bs('wrapper')}
+            visible={visible.value}
+            trigger={'custom'}
+            raw
+            wrapper
+            transfer={props.transfer}
+          >
             {{
               trigger: renderTrigger,
               default: renderPanel

@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -19,13 +19,16 @@ export const captchaProps = buildProps({
   disabled: booleanProp,
   loading: booleanProp,
   loadingIcon: Object,
-  loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   onBeforeTest: Function as PropType<CaptchaBeforeTest>,
   texts: Array as PropType<string[]>,
   failLimit: Number,
   remotePoint: booleanProp,
   useTrigger: booleanProp,
+  triggerSize: sizeProp,
+  triggerText: String,
+  transfer: booleanStringProp,
+  hideDelay: Number,
   onSuccess: eventProp<EventListener<SuccessEvent>>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),
