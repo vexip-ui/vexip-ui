@@ -44,3 +44,14 @@ export function toCapitalCase<T extends string>(value: T) {
     ''
   ) as CapitalCase<T>
 }
+
+/**
+ *  将命名转换为驼峰命名
+ *
+ * @param value 需要转换的命名
+ */
+export function toCamelCase(value: string) {
+  const capitalName = toCapitalCase(value)
+
+  return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
+}
