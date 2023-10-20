@@ -15,6 +15,7 @@
     @dragover="handleDragOver"
     @drop="handleDrop"
     @dragend="handleDragEnd"
+    @dragleave="handleDragLeave"
   >
     <div
       v-bind="attrs"
@@ -76,6 +77,7 @@ import {
 } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { useSetTimeout } from '@vexip-ui/hooks'
 import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
@@ -116,6 +118,10 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
 
+    const { timer } = useSetTimeout()
+    const dragging = ref(false)
+    const isDragOver = ref(false)
+
     const wrapper = ref<HTMLElement>()
     const rowElement = ref<HTMLElement>()
     const expandElement = ref<HTMLElement>()
@@ -143,7 +149,9 @@ export default defineComponent({
         {
           [nh.bem('row', 'hover')]: !rowType.value && state.highlight && props.row.hover,
           [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
-          [nh.bem('row', 'checked')]: props.row.checked
+          [nh.bem('row', 'checked')]: props.row.checked,
+          [nh.bem('row', 'dragging')]: dragging.value,
+          [nh.bem('row', 'drag-over')]: isDragOver.value
         },
         customClass
       ]
@@ -194,7 +202,6 @@ export default defineComponent({
       return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
     })
     const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDraggable.value))
-    const dragging = computed(() => state.dragging)
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
       const width =
@@ -352,29 +359,38 @@ export default defineComponent({
       }
     }
 
+    function shouldProcessDrag() {
+      return draggable.value && state.dragging
+    }
+
     function handleDragStart(event: DragEvent) {
       if (!draggable.value && !cellDraggable.value) return
 
+      dragging.value = true
       tableAction.handleRowDragStart(instance, event)
-    }
-
-    function shouldProcessDrag() {
-      return draggable.value && dragging.value
     }
 
     function handleDragOver(event: DragEvent) {
       if (!shouldProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
 
+      clearTimeout(timer.drag)
       event.stopPropagation()
       event.preventDefault()
+
+      isDragOver.value = true
+
       tableAction.handleRowDragOver(instance, event)
     }
 
     function handleDrop(event: DragEvent) {
       if (!shouldProcessDrag()) return
 
+      clearTimeout(timer.drag)
       event.stopPropagation()
       event.preventDefault()
+
+      isDragOver.value = false
+
       tableAction.handleRowDrop(instance, event)
       nextTick(() => mutations.handleDrag(rowKey.value, false))
     }
@@ -383,8 +399,21 @@ export default defineComponent({
       if (!shouldProcessDrag()) return
 
       event.stopPropagation()
+      dragging.value = true
+
       tableAction.handleRowDragEnd(event)
       nextTick(() => mutations.handleDrag(rowKey.value, false))
+    }
+
+    function handleDragLeave(event: DragEvent) {
+      if (!shouldProcessDrag()) return
+
+      clearTimeout(timer.drag)
+      event.preventDefault()
+
+      timer.drag = setTimeout(() => {
+        isDragOver.value = false
+      }, 100)
     }
 
     return {
@@ -406,6 +435,7 @@ export default defineComponent({
       expand: expandElement,
 
       isFunction,
+      computeRectHeight,
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
@@ -415,7 +445,7 @@ export default defineComponent({
       handleDragOver,
       handleDrop,
       handleDragEnd,
-      computeRectHeight
+      handleDragLeave
     }
   }
 })
