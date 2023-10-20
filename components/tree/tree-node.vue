@@ -329,7 +329,10 @@ export default defineComponent({
 
     treeState.nodeStates.set(props.node.id, nodeState)
 
+    let dragTimer: ReturnType<typeof setTimeout>
+
     onBeforeUnmount(() => {
+      clearTimeout(dragTimer)
       treeState.nodeStates.set(props.node.id, nodeState)
     })
 
@@ -429,25 +432,35 @@ export default defineComponent({
     function handleDragOver(event: DragEvent) {
       if (!treeState.draggable || !treeState.dragging) return
 
+      clearTimeout(dragTimer)
       event.stopPropagation()
       event.preventDefault()
+
       isDragOver.value = true
+
       treeState.handleNodeDragOver(getNodeState(), event)
     }
 
     function handleDragLeave(event: DragEvent) {
       if (!treeState.draggable) return
 
+      clearTimeout(dragTimer)
       event.preventDefault()
-      isDragOver.value = false
+
+      dragTimer = setTimeout(() => {
+        isDragOver.value = false
+      }, 100)
     }
 
     function handleDrop(event: DragEvent) {
       if (!treeState.draggable || !treeState.dragging) return
 
+      clearTimeout(dragTimer)
       event.stopPropagation()
       event.preventDefault()
+
       isDragOver.value = false
+
       treeState.handleNodeDrop(getNodeState())
     }
 
