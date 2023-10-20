@@ -218,7 +218,7 @@ export default defineComponent({
       },
       virtual: false,
       nodeMinHeight: {
-        default: 28,
+        default: 26,
         validator: value => value > 0
       },
       useYBar: false,
