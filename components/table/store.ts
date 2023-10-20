@@ -1400,8 +1400,8 @@ export function useStore(options: StoreOptions) {
     const { rowMap } = state
     const row = rowMap.get(key)
 
-    if (row?.parent) {
-      return rowMap.get(row.parent) ?? null
+    if (!isNull(row?.parent)) {
+      return rowMap.get(row!.parent) ?? null
     }
 
     return null

@@ -1003,16 +1003,21 @@ export default defineComponent({
       }
 
       if (dropType === DropType.INNER) {
-        if (!Array.isArray(willDropRow.children)) {
-          willDropRow.children = []
-        }
+        const children = !Array.isArray(willDropRow.children)
+          ? [draggingRow]
+          : [...willDropRow.children, draggingRow]
 
-        const children = Array.from(willDropRow.children)
-
-        children.push(draggingRow)
         willDropRow.children = children
         draggingRow.parent = willDropRow.key
         draggingRow.depth = willDropRow.depth + 1
+
+        if (willDropRow.treeExpanded) {
+          const index = rowData.findIndex(row => row.key === willDropRow.key)
+
+          if (~index) {
+            rowData.splice(index + children.length, 0, ...processRows)
+          }
+        }
       } else {
         currentKey = willDropRow.key
         parent = getParentRow(willDropRow.key)
