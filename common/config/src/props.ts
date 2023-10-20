@@ -339,5 +339,11 @@ export function localeProp<N extends LocaleNames>(_name: N) {
   return Object as PropType<Partial<LocaleConfig[N]>>
 }
 
-export const valueProp = [String, Number, Boolean]
-export const valuesProp = [String, Number, Boolean, Array]
+export const valueProp = {
+  type: [String, Number, Boolean],
+  default: null
+}
+export const valuesProp = {
+  type: [String, Number, Boolean, Array] as PropType<MaybeArray<string | number | boolean>>,
+  default: null
+}
