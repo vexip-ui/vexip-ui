@@ -1533,7 +1533,12 @@ export function useStore(options: StoreOptions) {
         const item = { ...row.data }
 
         data.push(item)
-        row.children?.length && buildData(row.children, (item[childrenKey] = []))
+
+        if (row.children?.length) {
+          buildData(row.children, (item[childrenKey] = []))
+        } else {
+          delete item[childrenKey]
+        }
       }
     }
 
