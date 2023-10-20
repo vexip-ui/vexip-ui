@@ -1,3 +1,37 @@
+## [2.2.7](https://github.com/vexip-ui/vexip-ui/compare/v2.2.6...v2.2.7) (2023-10-20)
+
+
+### ✨ Features
+
+* **auto-complete:** add prepend and append slots ([37543ce](https://github.com/vexip-ui/vexip-ui/commit/37543ce66e9506e5b1c9624f9785c5a8baae2765))
+* **layout:** add no-header prop ([7bb9822](https://github.com/vexip-ui/vexip-ui/commit/7bb9822dd65d865508162cee3fac5c9cbe3f8a86))
+* **select:** add prepend and append slots ([6eb864f](https://github.com/vexip-ui/vexip-ui/commit/6eb864fa863902b2d53b3cd48a27e18a4fb7dd7a))
+* **table:** add drag-over and dragging class names for rows ([bdfe133](https://github.com/vexip-ui/vexip-ui/commit/bdfe133946dcf95ecdb1f6114c03b795b9527277))
+* **tooltip:** support custom delay for hover trigger ([f46901c](https://github.com/vexip-ui/vexip-ui/commit/f46901c8d981a9ba643e805e1db3afbe2476a1f1))
+* **utils:** add methods to random prefer color ([1976c92](https://github.com/vexip-ui/vexip-ui/commit/1976c92e360776aa1a667a6ab0e5706fe85a6f6b))
+* **utils:** add padStartZeros method ([666bfcd](https://github.com/vexip-ui/vexip-ui/commit/666bfcd92b66c7f44741e3f9b31905f7dbbcdb30))
+
+
+### 🐞 Bug Fixes
+
+* **form:** ensure validate work after executing reset ([fdea9d5](https://github.com/vexip-ui/vexip-ui/commit/fdea9d5bdbc21c433d4eb99cb70458916721d910)), closes [#415](https://github.com/vexip-ui/vexip-ui/issues/415)
+* **popup:** ensure items' z-index effective ([01b71fb](https://github.com/vexip-ui/vexip-ui/commit/01b71fb68a003ef31c992d30644eedc4f7d11a79)), closes [#414](https://github.com/vexip-ui/vexip-ui/issues/414)
+* **table:** correctly process row data when drag tree ([7b6174f](https://github.com/vexip-ui/vexip-ui/commit/7b6174fa4b60fcad75716926b912f6475cdde767))
+* **tree:** improve toggling of drag-over class name ([35f98af](https://github.com/vexip-ui/vexip-ui/commit/35f98af5b698ff78ab30b7ad0e8e9f2e1d1fdf84))
+* **typography:** improve keyboard type text style ([93a8411](https://github.com/vexip-ui/vexip-ui/commit/93a8411a2078bca9961583951e0c8e6f9f8a6f33))
+* uncontrollable mask-close behavior of Drawer and Modal ([2285f9d](https://github.com/vexip-ui/vexip-ui/commit/2285f9d488f38cc21bd2410f3aac8340168a9c65))
+* **utils:** add unexpectedly removed toCamelCase ([b3a9e53](https://github.com/vexip-ui/vexip-ui/commit/b3a9e531b6fede4a1c5e1ea41f4ff59281f394bd))
+* **utils:** correct color methods returns type ([9cfe584](https://github.com/vexip-ui/vexip-ui/commit/9cfe5848ff070011930c1ba32e6a8d5c8be69df8))
+
+
+### 🔨 Code Refactoring
+
+* **dev:** adjust layout of devlopment page ([fa227ca](https://github.com/vexip-ui/vexip-ui/commit/fa227cab86c248393fe12c17607feeb6d0225784))
+* transfer some components to setup script ([84dca6d](https://github.com/vexip-ui/vexip-ui/commit/84dca6d8c6aac9f9518d2c48a78d3cb05a907b3b))
+* **utils:** rename digitLength to decimalLength ([8120e3f](https://github.com/vexip-ui/vexip-ui/commit/8120e3fc87230f86a69e24cc42cc340a30e66ab7))
+
+
+
 ## [2.2.6](https://github.com/vexip-ui/vexip-ui/compare/v2.2.5...v2.2.6) (2023-10-12)
 
 
