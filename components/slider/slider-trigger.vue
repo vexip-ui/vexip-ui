@@ -51,6 +51,10 @@ const props = defineProps({
   sliding: {
     type: Boolean,
     default: false
+  },
+  tipHover: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -150,6 +154,7 @@ function blur() {
       :tip-class="nh.be('tip')"
       :disabled="hideTip"
       :placement="vertical ? 'right' : 'top'"
+      :no-hover="!tipHover"
       @tip-enter="showTooltip"
       @tip-leave="hideTooltip"
     >

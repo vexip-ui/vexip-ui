@@ -126,8 +126,8 @@ interface SliderMarker {
 | max          | `number`                                           | The max value of the slider                                                                    | `100`     | -       |
 | step         | `number`                                           | The span of each value change of the sliding input bar                                         | `1`       | -       |
 | vertical     | `boolean`                                          | Set whether the sliding input bar is vertical, the parent element needs to have a valid height | `false`   | -       |
-| hide-tip     | `boolean`                                          | Set whether to disable Tooltip                                                                 | `false`   | -       |
-| tip-transfer | `boolean`                                          | Set Tooltip's `transfer` prop                                                                  | `false`   | -       |
+| hide-tip     | `boolean`                                          | Set whether to disable the Tooltip                                                             | `false`   | -       |
+| tip-transfer | `boolean`                                          | Set the Tooltip's `transfer` prop                                                              | `false`   | -       |
 | disabled     | `boolean`                                          | Set whether to disable                                                                         | `false`   | -       |
 | loading      | `boolean`                                          | Set whether is loading                                                                         | `false`   | `2.0.0` |
 | loading-lock | `boolean`                                          | Set whether to be read-only when loading                                                       | `false`   | `2.0.0` |
@@ -135,6 +135,7 @@ interface SliderMarker {
 | range        | `boolean`                                          | set whether to select range                                                                    | `false`   | `2.0.0` |
 | markers      | `Record<string \| number, string \| SliderMarker>` | Set markers                                                                                    | `{}`      | `2.0.0` |
 | marker-only  | `boolean`                                          | Set whether only marker value can be selected, `step` will not effective after set             | `false`   | `2.0.0` |
+| tip-hover    | `boolean`                                          | Set whether the Tooltip can be hovered                                                         | `false`   | `2.2.8` |
 
 ### Slider Events
 

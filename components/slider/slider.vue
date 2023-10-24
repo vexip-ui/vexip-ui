@@ -43,7 +43,8 @@ const props = useProps('slider', _props, {
   reverse: false,
   range: false,
   markers: () => ({}),
-  markerOnly: false
+  markerOnly: false,
+  tipHover: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -508,6 +509,7 @@ function blur() {
         :loading="props.loading"
         :reverse="props.reverse"
         :sliding="sliding[0]"
+        :tip-hover="props.tipHover"
         :style="startTriggerStyle"
         @key-plus="handlePlus(0, $event)"
         @key-minus="handleMinus(0, $event)"
@@ -533,6 +535,7 @@ function blur() {
         :loading="props.loading"
         :reverse="props.reverse"
         :sliding="sliding[1]"
+        :tip-hover="props.tipHover"
         :style="endTriggerStyle"
         @key-plus="handlePlus(1, $event)"
         @key-minus="handleMinus(1, $event)"

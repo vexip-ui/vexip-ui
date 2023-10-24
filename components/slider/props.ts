@@ -20,6 +20,7 @@ export const sliderProps = buildProps({
   range: booleanProp,
   markers: Object as PropType<Record<string | number, string | SliderMarker>>,
   markerOnly: booleanProp,
+  tipHover: booleanProp,
   onChange: eventProp<(value: number | number[]) => void>(),
   onInput: eventProp<(value: number | number[]) => void>()
 })

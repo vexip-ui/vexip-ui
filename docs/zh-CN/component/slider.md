@@ -135,6 +135,7 @@ interface SliderMarker {
 | range        | `boolean`                                          | 设置是否为范围选择                               | `false`   | `2.0.0` |
 | markers      | `Record<string \| number, string \| SliderMarker>` | 设置标记点                                       | `{}`      | `2.0.0` |
 | marker-only  | `boolean`                                          | 设置是否只可选择标记点的值，设置后 `step` 失效   | `false`   | `2.0.0` |
+| tip-hover    | `boolean`                                          | 设置 Tooltip 是否可以被悬停                      | `false`   | `2.2.8` |
 
 ### Slider 事件
 
