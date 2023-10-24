@@ -322,9 +322,9 @@ export default defineComponent({
             onTransitionend={syncRendering}
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
-              {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
               {renderSlot(slots, 'default', slotParams)}
             </div>
+            {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
           </Popper>
         )
       ]
