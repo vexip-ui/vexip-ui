@@ -129,7 +129,6 @@ body {
 .dev-panel {
   position: absolute;
   inset-inline-end: 20px;
-  top: 50px;
   bottom: 70px;
   z-index: 9999;
   padding: 4px 0;
@@ -141,7 +140,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    max-height: calc(100vh - 128px);
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
