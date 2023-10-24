@@ -17,7 +17,7 @@ const panelShow = ref(false)
     <component :is="Component"></component>
   </RouterView>
   <button
-    :class="['setting', panelShow && 'setting--active']"
+    :class="['dev-setting', panelShow && 'dev-setting--active']"
     type="button"
     tabindex="-1"
     @click="panelShow = !panelShow"
@@ -25,9 +25,9 @@ const panelShow = ref(false)
     <Gear></Gear>
   </button>
   <Transition name="vxp-fade">
-    <div v-show="panelShow" class="panel">
-      <div class="panel__container">
-        <div class="links">
+    <div v-show="panelShow" class="dev-panel">
+      <div class="dev-panel__container">
+        <div class="dev-links">
           <template v-for="route in router.options.routes">
             <RouterLink
               v-if="route.name"
@@ -40,7 +40,7 @@ const panelShow = ref(false)
             </RouterLink>
           </template>
         </div>
-        <div class="actions">
+        <div class="dev-actions">
           <TogglePadding></TogglePadding>
           <DirectionSwitch></DirectionSwitch>
           <ThemeSwitch></ThemeSwitch>
@@ -80,7 +80,7 @@ body {
   font-variant-numeric: tabular-nums;
   line-height: var(--vxp-line-height-base);
   color: var(--vxp-content-color-base);
-  background-color: var(--body-bg-color);
+  background-color: var(--bg-color);
   transition: var(--vxp-transition-background);
 }
 
@@ -93,7 +93,7 @@ body {
   padding: 20px;
 }
 
-.setting {
+.dev-setting {
   position: absolute;
   inset-inline-end: 20px;
   bottom: 20px;
@@ -126,7 +126,7 @@ body {
   }
 }
 
-.panel {
+.dev-panel {
   position: absolute;
   inset-inline-end: 20px;
   top: 50px;
@@ -159,34 +159,34 @@ body {
   }
 }
 
-.links {
+.dev-links {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 180px;
+
+  .router-link {
+    padding: 7px 10px 8px;
+    line-height: 1;
+    color: var(--vxp-color-primary-base);
+    text-decoration: none;
+    background-color: var(--vxp-bg-color-base);
+    border: 1px solid var(--vxp-color-primary-opacity-6);
+    border-radius: var(--vxp-radius-base);
+    transition: var(--vxp-transition-background);
+
+    &:hover {
+      background-color: var(--vxp-color-primary-opacity-9);
+    }
+
+    &-active,
+    &-active:hover {
+      background-color: var(--vxp-color-primary-opacity-8);
+    }
+  }
 }
 
-.router-link {
-  padding: 7px 10px 8px;
-  line-height: 1;
-  color: var(--vxp-color-primary-base);
-  text-decoration: none;
-  background-color: var(--vxp-bg-color-base);
-  border: 1px solid var(--vxp-color-primary-opacity-6);
-  border-radius: var(--vxp-radius-base);
-  transition: var(--vxp-transition-background);
-
-  &:hover {
-    background-color: var(--vxp-color-primary-opacity-9);
-  }
-
-  &-active,
-  &-active:hover {
-    background-color: var(--vxp-color-primary-opacity-8);
-  }
-}
-
-.actions {
+.dev-actions {
   display: flex;
   gap: 14px;
   align-items: center;
