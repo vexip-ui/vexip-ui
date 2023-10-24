@@ -448,102 +448,104 @@ function blur() {
     @pointerdown="handleTrackDown"
     @touchstart="disableEvent"
   >
-    <div ref="track" :class="nh.be('track')">
-      <div :class="nh.be('filler')" :style="fillerStyle"></div>
-    </div>
-    <template v-if="markerList.length">
-      <div :class="nh.be('points')">
-        <div
-          v-for="{ value } in markerList"
-          :key="value"
-          :class="[nh.be('point'), isValueInRange(value) && nh.bem('point', 'in-range')]"
-          :style="getPointStyle(value)"
-        ></div>
+    <div :class="nh.be('container')">
+      <div ref="track" :class="nh.be('track')">
+        <div :class="nh.be('filler')" :style="fillerStyle"></div>
       </div>
-      <div :class="nh.be('markers')">
-        <template v-for="{ value, marker } in markerList" :key="value">
+      <template v-if="markerList.length">
+        <div :class="nh.be('points')">
           <div
-            v-if="typeof marker === 'string'"
-            :class="nh.be('marker')"
-            :style="getMarkerStyle(value)"
-          >
-            <slot
-              name="marker"
-              :marker="{ label: marker }"
-              :value="value"
-              :in-range="isValueInRange(value)"
+            v-for="{ value } in markerList"
+            :key="value"
+            :class="[nh.be('point'), isValueInRange(value) && nh.bem('point', 'in-range')]"
+            :style="getPointStyle(value)"
+          ></div>
+        </div>
+        <div :class="nh.be('markers')">
+          <template v-for="{ value, marker } in markerList" :key="value">
+            <div
+              v-if="typeof marker === 'string'"
+              :class="nh.be('marker')"
+              :style="getMarkerStyle(value)"
             >
-              {{ marker }}
-            </slot>
-          </div>
-          <div
-            v-else
-            v-bind="marker.attrs"
-            :class="[nh.be('marker'), marker.class]"
-            :style="[getMarkerStyle(value), marker.style as any]"
-          >
-            <slot
-              name="marker"
-              :marker="marker"
-              :value="value"
-              :in-range="isValueInRange(value)"
+              <slot
+                name="marker"
+                :marker="{ label: marker }"
+                :value="value"
+                :in-range="isValueInRange(value)"
+              >
+                {{ marker }}
+              </slot>
+            </div>
+            <div
+              v-else
+              v-bind="marker.attrs"
+              :class="[nh.be('marker'), marker.class]"
+              :style="[getMarkerStyle(value), marker.style as any]"
             >
-              {{ marker.label }}
-            </slot>
-          </div>
+              <slot
+                name="marker"
+                :marker="marker"
+                :value="value"
+                :in-range="isValueInRange(value)"
+              >
+                {{ marker.label }}
+              </slot>
+            </div>
+          </template>
+        </div>
+      </template>
+      <SliderTrigger
+        v-if="props.range"
+        ref="startTrigger"
+        :value="truthValue[0]"
+        :tip-transfer="props.tipTransfer"
+        :hide-tip="props.hideTip"
+        :vertical="props.vertical"
+        :min="props.min"
+        :max="props.max"
+        :disabled="props.disabled"
+        :loading="props.loading"
+        :reverse="props.reverse"
+        :sliding="sliding[0]"
+        :style="startTriggerStyle"
+        @key-plus="handlePlus(0, $event)"
+        @key-minus="handleMinus(0, $event)"
+      >
+        <template #default="payload">
+          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
         </template>
-      </div>
-    </template>
-    <SliderTrigger
-      v-if="props.range"
-      ref="startTrigger"
-      :value="truthValue[0]"
-      :tip-transfer="props.tipTransfer"
-      :hide-tip="props.hideTip"
-      :vertical="props.vertical"
-      :min="props.min"
-      :max="props.max"
-      :disabled="props.disabled"
-      :loading="props.loading"
-      :reverse="props.reverse"
-      :sliding="sliding[0]"
-      :style="startTriggerStyle"
-      @key-plus="handlePlus(0, $event)"
-      @key-minus="handleMinus(0, $event)"
-    >
-      <template #default="payload">
-        <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-      </template>
-      <template #tip="payload">
-        <slot name="tip" v-bind="payload">
-          {{ payload.value.toFixed(stepDigit) }}
-        </slot>
-      </template>
-    </SliderTrigger>
-    <SliderTrigger
-      ref="endTrigger"
-      :value="truthValue[1]"
-      :tip-transfer="props.tipTransfer"
-      :hide-tip="props.hideTip"
-      :vertical="props.vertical"
-      :min="props.min"
-      :max="props.max"
-      :disabled="props.disabled"
-      :loading="props.loading"
-      :reverse="props.reverse"
-      :sliding="sliding[1]"
-      :style="endTriggerStyle"
-      @key-plus="handlePlus(1, $event)"
-      @key-minus="handleMinus(1, $event)"
-    >
-      <template #default="payload">
-        <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-      </template>
-      <template #tip="payload">
-        <slot name="tip" v-bind="payload">
-          {{ payload.value.toFixed(stepDigit) }}
-        </slot>
-      </template>
-    </SliderTrigger>
+        <template #tip="payload">
+          <slot name="tip" v-bind="payload">
+            {{ payload.value.toFixed(stepDigit) }}
+          </slot>
+        </template>
+      </SliderTrigger>
+      <SliderTrigger
+        ref="endTrigger"
+        :value="truthValue[1]"
+        :tip-transfer="props.tipTransfer"
+        :hide-tip="props.hideTip"
+        :vertical="props.vertical"
+        :min="props.min"
+        :max="props.max"
+        :disabled="props.disabled"
+        :loading="props.loading"
+        :reverse="props.reverse"
+        :sliding="sliding[1]"
+        :style="endTriggerStyle"
+        @key-plus="handlePlus(1, $event)"
+        @key-minus="handleMinus(1, $event)"
+      >
+        <template #default="payload">
+          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
+        </template>
+        <template #tip="payload">
+          <slot name="tip" v-bind="payload">
+            {{ payload.value.toFixed(stepDigit) }}
+          </slot>
+        </template>
+      </SliderTrigger>
+    </div>
   </div>
 </template>

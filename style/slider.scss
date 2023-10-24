@@ -47,21 +47,13 @@ $slider: map.merge(
   );
   $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
 
-  position: relative;
   display: flex;
-  flex-direction: column;
   width: 100%;
-  padding: $padding 0;
-  margin: 2px $margin;
   cursor: pointer;
 
   &--vertical {
     display: inline-flex;
-    flex-direction: row;
-    width: auto;
     height: 100%;
-    padding: 0 $padding;
-    margin: $margin 2px;
   }
 
   &--with-marker {
@@ -78,6 +70,24 @@ $slider: map.merge(
 
   &--disabled {
     cursor: not-allowed;
+  }
+
+  &__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - get-css-var('slider-handler-size') - 2px);
+    padding: $padding 0;
+    margin: 2px $margin;
+    cursor: pointer;
+  }
+
+  &--vertical &__container {
+    flex-direction: row;
+    width: auto;
+    height: calc(100% - get-css-var('slider-handler-size') - 2px);
+    padding: 0 $padding;
+    margin: $margin 2px;
   }
 
   &__track {
