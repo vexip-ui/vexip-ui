@@ -26,22 +26,25 @@ const panelShow = ref(false)
   </button>
   <Transition name="vxp-fade">
     <div v-show="panelShow" class="panel">
-      <div class="links">
-        <template v-for="route in router.options.routes">
-          <RouterLink
-            v-if="route.name"
-            :key="route.path"
-            class="router-link"
-            :to="route.path"
-          >
-            {{ route.name }}
-          </RouterLink>
-        </template>
-      </div>
-      <div class="actions">
-        <TogglePadding></TogglePadding>
-        <DirectionSwitch></DirectionSwitch>
-        <ThemeSwitch></ThemeSwitch>
+      <div class="panel__container">
+        <div class="links">
+          <template v-for="route in router.options.routes">
+            <RouterLink
+              v-if="route.name"
+              :key="route.path"
+              class="router-link"
+              :to="route.path"
+              @click="panelShow = false"
+            >
+              {{ route.name }}
+            </RouterLink>
+          </template>
+        </div>
+        <div class="actions">
+          <TogglePadding></TogglePadding>
+          <DirectionSwitch></DirectionSwitch>
+          <ThemeSwitch></ThemeSwitch>
+        </div>
       </div>
     </div>
   </Transition>
@@ -126,13 +129,34 @@ body {
 .panel {
   position: absolute;
   inset-inline-end: 20px;
+  top: 50px;
   bottom: 70px;
   z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  padding: 4px 0;
+  overflow: hidden;
   background-color: var(--vxp-fill-color-background);
   border-radius: var(--vxp-radius-base);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--vxp-color-primary-opacity-8) transparent;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--vxp-color-primary-opacity-8);
+      border-radius: 4px;
+    }
+  }
 }
 
 .links {
