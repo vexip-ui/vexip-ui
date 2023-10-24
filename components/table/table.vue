@@ -655,6 +655,9 @@ export default defineComponent({
         setData(props.data)
       }
     )
+    watch([() => props.rowHeight, () => props.rowMinHeight], () => {
+      refresh()
+    })
 
     const normalProps = [
       'rowClass',
@@ -1125,7 +1128,9 @@ export default defineComponent({
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
-        noTransition.value = false
+        setTimeout(() => {
+          noTransition.value = false
+        }, 120)
       }, 0)
     }
 

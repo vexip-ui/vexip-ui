@@ -1,6 +1,7 @@
 <template>
   <div
     v-bind="attrs"
+    ref="wrapper"
     :class="className"
     role="cell"
     :scope="column.first ? 'row' : undefined"
@@ -13,7 +14,11 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
-    <template v-if="isFunction(summary.renderer)">
+    <ResizeObserver
+      v-if="isFunction(summary.renderer)"
+      :disabled="!column.noEllipsis"
+      :on-resize="handleCellResize"
+    >
       <Ellipsis
         v-if="!column.noEllipsis"
         inherit
@@ -30,31 +35,43 @@
         :renderer="summary.renderer"
         :data="{ column, index: columnIndex, rows: data, meta: summaryData }"
       ></Renderer>
-    </template>
+    </ResizeObserver>
   </div>
 </template>
 
 <script lang="ts">
 import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, defineComponent, inject, toRef } from 'vue'
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ColumnWithKey, SummaryCellSpanFn, SummaryWithKey } from './symbol'
+import type {
+  ColumnWithKey,
+  SummaryCellSpanFn,
+  SummaryWithKey,
+  TableRowState,
+  TableTypeColumn
+} from './symbol'
 
 export default defineComponent({
   name: 'TableFootCell',
   components: {
     Ellipsis,
-    Renderer
+    Renderer,
+    ResizeObserver
   },
   props: {
+    row: {
+      type: Object as PropType<TableRowState>,
+      default: () => ({})
+    },
     column: {
       type: Object as PropType<ColumnWithKey>,
       default: () => ({})
@@ -87,6 +104,8 @@ export default defineComponent({
     const nh = useNameHelper('table')
     const { isRtl } = useRtl()
 
+    const wrapper = ref<HTMLElement>()
+
     // We use 'a' and 'b' to distinguish above and below
     const prefix = computed(() => (props.above ? 'af' : 'bf'))
     const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
@@ -107,10 +126,13 @@ export default defineComponent({
         customClass = state.footClass
       }
 
+      const typed = columnTypes.includes((props.column as TableTypeColumn).type)
+
       return [
         nh.be('foot-cell'),
         {
-          [nh.bem('foot-cell', 'center')]: props.column.textAlign === 'center',
+          [nh.bem('foot-cell', 'typed')]: typed,
+          [nh.bem('foot-cell', 'center')]: typed || props.column.textAlign === 'center',
           [nh.bem('foot-cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('foot-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('foot-cell', 'last')]: props.column.last
@@ -255,8 +277,23 @@ export default defineComponent({
       tableActions?.emitFootEvent('Contextmenu', buildEventPayload(event))
     }
 
+    function handleCellResize(entry: ResizeObserverEntry) {
+      if (!wrapper.value) return
+
+      const style = getComputedStyle(wrapper.value)
+      const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+
+      mutations.setCellHeight(
+        props.row.key,
+        props.column.key,
+        (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + borderHeight
+      )
+    }
+
     return {
       nh,
+
+      wrapper,
 
       className,
       cellSpan,
@@ -272,7 +309,8 @@ export default defineComponent({
       handleMouseLeave,
       handleClick,
       handleDblclick,
-      handleContextmenu
+      handleContextmenu,
+      handleCellResize
     }
   }
 })

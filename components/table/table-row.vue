@@ -147,6 +147,7 @@ export default defineComponent({
       return [
         nh.be('row'),
         {
+          [nh.bem('row', 'fixed')]: state.rowHeight && state.rowHeight > 0,
           [nh.bem('row', 'hover')]: !rowType.value && state.highlight && props.row.hover,
           [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
           [nh.bem('row', 'checked')]: props.row.checked,
@@ -156,6 +157,9 @@ export default defineComponent({
         customClass
       ]
     })
+    const maxHeight = computed(() =>
+      Math.max(...Object.values(props.row.cellHeights || {}), state.rowMinHeight)
+    )
     const style = computed(() => {
       let customStyle: any = ''
 
@@ -170,7 +174,7 @@ export default defineComponent({
       return [
         customStyle,
         {
-          minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+          minHeight: !state.rowHeight ? `${maxHeight.value}px` : undefined
         }
       ]
     })
@@ -293,7 +297,7 @@ export default defineComponent({
         nextTick(() => {
           if (!props.fixed) {
             if (rowElement.value) {
-              mutations.fixRowHeight(rowKey.value, rowElement.value.offsetHeight)
+              mutations.fixRowHeight(rowKey.value, maxHeight.value)
             }
           } else {
             setTimeout(() => {

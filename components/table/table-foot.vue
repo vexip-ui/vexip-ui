@@ -11,6 +11,7 @@
       <TableFootCell
         v-for="(column, columnIndex) in columns"
         :key="columnIndex"
+        :row="row"
         :column="column"
         :column-index="columnIndex"
         :summary="summary"

@@ -295,6 +295,7 @@ export interface TableRowState {
   partial: boolean,
   dragging: boolean,
   listIndex: number,
+  cellHeights: Record<Key, number>,
   data: Data
 }
 

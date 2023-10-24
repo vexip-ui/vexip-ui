@@ -300,6 +300,7 @@ export function useStore(options: StoreOptions) {
     setBorderHeight,
     setRowHeight,
     setRowMinHeight,
+    setCellHeight,
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
@@ -671,6 +672,7 @@ export function useStore(options: StoreOptions) {
             partial: false,
             dragging: false,
             listIndex: 0,
+            cellHeights: reactive({}),
             data: item
           }
 
@@ -829,6 +831,12 @@ export function useStore(options: StoreOptions) {
 
   function setRowMinHeight(height: number) {
     state.rowMinHeight = height
+  }
+
+  function setCellHeight(rowKey: Key, columnKey: Key, height: number) {
+    if (state.rowMap.has(rowKey)) {
+      state.rowMap.get(rowKey)!.cellHeights[columnKey] = height
+    }
   }
 
   function setRowDraggable(draggable: boolean) {

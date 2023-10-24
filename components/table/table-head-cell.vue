@@ -148,7 +148,7 @@
         </template>
       </Tooltip>
     </template>
-    <div v-if="resizable && !column.last" ref="resizer" :class="nh.be('resizer')"></div>
+    <div v-if="resizable && !typed && !column.last" ref="resizer" :class="nh.be('resizer')"></div>
   </div>
 </template>
 
@@ -164,7 +164,7 @@ import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useMoving, useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
+import { TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -174,8 +174,6 @@ import type {
   TableSelectionColumn,
   TableTypeColumn
 } from './symbol'
-
-const columnTypes = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableHeadCell',
@@ -275,6 +273,7 @@ export default defineComponent({
       }
     })
 
+    const typed = computed(() => columnTypes.includes((props.column as TableTypeColumn).type))
     const className = computed(() => {
       let customClass = null
 
@@ -287,9 +286,8 @@ export default defineComponent({
       return [
         nh.be('head-cell'),
         {
-          [nh.bem('head-cell', 'center')]:
-            columnTypes.includes((props.column as TableTypeColumn).type) ||
-            props.column.textAlign === 'center',
+          [nh.bem('head-cell', 'typed')]: typed.value,
+          [nh.bem('head-cell', 'center')]: typed.value || props.column.textAlign === 'center',
           [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('head-cell', 'last')]: props.column.last
@@ -490,6 +488,7 @@ export default defineComponent({
       partial: toRef(state, 'partial'),
       resizable,
 
+      typed,
       className,
       headSpan,
       style,
