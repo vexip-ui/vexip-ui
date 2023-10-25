@@ -138,12 +138,25 @@ function createResolvePlugin(): Plugin {
           name: `css/${name}`
         })
       }
+
+      this.emitFile({
+        type: 'chunk',
+        id: resolve('components', 'style.ts'),
+        name: 'style/index'
+      })
+      this.emitFile({
+        type: 'chunk',
+        id: resolve('components', 'css.ts'),
+        name: 'css/index'
+      })
     },
 
     renderChunk(code, chunk) {
       if (
         files.has(chunk.name.substring('style/'.length)) ||
-        files.has(chunk.name.substring('css/'.length))
+        files.has(chunk.name.substring('css/'.length)) ||
+        chunk.name === 'style/index' ||
+        chunk.name === 'css/index'
       ) {
         code = code.replace(rootRE, '../../')
 

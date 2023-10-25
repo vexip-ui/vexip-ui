@@ -173,15 +173,18 @@ async function main() {
     }
   })
 
+  const componentsStyle =
+    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const styleIndex =
-    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +
-    // allComponents.map(component => `@use './${component}.scss';`).join('\n') +
-    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') +
-    '\n'
-  const stylePath = resolve(rootDir, 'style/index.scss')
+    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" + componentsStyle
 
   await writeFile(
-    stylePath,
+    resolve(rootDir, 'style/components.scss'),
+    await format(componentsStyle, { ...prettierConfig, parser: 'scss' }),
+    'utf-8'
+  )
+  await writeFile(
+    resolve(rootDir, 'style/index.scss'),
     await format(styleIndex, { ...prettierConfig, parser: 'scss' }),
     'utf-8'
   )
