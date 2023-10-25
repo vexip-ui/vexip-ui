@@ -75,7 +75,16 @@ $table: map.merge(
   &__wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    height: 100%;
+    overflow: scroll;
+    vertical-align: top;
+    scrollbar-width: none;
+
+    @include clear-both;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .#{$namespace}-scroll__wrapper {
       min-width: 100%;

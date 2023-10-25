@@ -98,17 +98,21 @@ export function useScrollWrapper({
 
   function setScrollX(value: number) {
     x.value = boundRange(value, 0, xScrollLimit.value)
-
-    if (content.el) {
-      content.el.scrollLeft = isRtl.value ? -x.value : x.value
-    }
+    syncScroll()
   }
 
   function setScrollY(value: number) {
     y.value = boundRange(value, 0, yScrollLimit.value)
+    syncScroll()
+  }
 
+  function syncScroll() {
     if (content.el) {
-      content.el.scrollTop = y.value
+      content.el.scrollTo({
+        top: y.value,
+        left: isRtl.value ? -x.value : x.value,
+        behavior: 'instant'
+      })
     }
   }
 
