@@ -1,2 +1,8 @@
 import '@/components/preset/style'
+import '@/components/button/style'
+import '@/components/checkbox/style'
+import '@/components/ellipsis/style'
+import '@/components/native-scroll/style'
+import '@/components/scrollbar/style'
+import '@/components/tooltip/style'
 import '@/style/table.scss'
