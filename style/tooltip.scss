@@ -75,7 +75,7 @@ $tooltip: map.merge(
   // arrow size
   $size: get-css-var('tooltip-arrow-size');
   $s-pad: 6px;
-  $l-pad: calc(#{math.round($s-pad * 0.5)} + #{get-css-var('tooltip-arrow-size')});
+  $l-pad: calc(#{math.round($s-pad * 0.5)} + #{$size});
 
   &__popper {
     &[data-popper-placement^='top'] {

@@ -63,8 +63,8 @@ defineExpose({ wrapper, arrow })
         boxShadow: props.shadow ? `0 0 4px ${props.shadow}` : undefined
       }"
     >
-      <div ref="arrow" :class="nh.be('arrow')"></div>
       <slot></slot>
     </div>
+    <div ref="arrow" :class="nh.be('arrow')"></div>
   </div>
 </template>
