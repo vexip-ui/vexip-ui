@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 
-import { isNull, toKebabCase } from '@vexip-ui/utils'
+import { isNull, toKebabCase, warnOnce } from '@vexip-ui/utils'
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { compare } from 'compare-versions'
 
@@ -19,6 +19,12 @@ export interface VexipUIResolverOptions {
    * @default false
    */
   importDarkTheme?: boolean,
+  /**
+   * whether import all styles at once
+   *
+   * @default false
+   */
+  fullStyle?: boolean,
   /**
    * prefix for name of components
    *
@@ -51,6 +57,7 @@ function throwLoadError() {
 
 let version: string | undefined
 let lowerVersion = false
+let supportFullStyle = false
 
 function queryVersion() {
   try {
@@ -60,11 +67,13 @@ function queryVersion() {
         ?.version
 
     if ((lowerVersion = compare(version!, '2.1.10', '<'))) {
-      console.warn(
-        '[vexip-ui:plugins] style has been refactored in vexip-ui@2.1.10, you better ' +
-          'upgrade it to support import style via esm.'
+      warnOnce(
+        "[vexip-ui:plugins] style has been refactored in vexip-ui@2.1.10, you'd better " +
+          'upgrade vexip-ui to support import style via esm.'
       )
     }
+
+    supportFullStyle = compare(version!, '2.2.8', '>=')
   } catch (e) {
     console.error(e)
     throwLoadError()
@@ -96,9 +105,26 @@ function queryMetaData() {
 }
 
 function getSideEffects(name: string, options: VexipUIResolverOptions) {
-  const { importStyle, importDarkTheme } = options
+  const { importStyle, importDarkTheme, fullStyle } = options
 
   if (!importStyle) return
+
+  if (fullStyle) {
+    if (supportFullStyle) {
+      if (importStyle === 'sass') {
+        return [...(importDarkTheme ? ['vexip-ui/es/style/dark'] : []), 'vexip-ui/es/style/index']
+      } else if (importStyle === true || importStyle === 'css') {
+        return [...(importDarkTheme ? ['vexip-ui/es/css/dark'] : []), 'vexip-ui/es/css/index']
+      }
+
+      return
+    }
+
+    warnOnce(
+      "[vexip-ui:plugins] 'fullStyle' requires vexip-ui@2.2.8 or newer, you'd better " +
+        'upgrade vexip-ui to support the feature.'
+    )
+  }
 
   if (styleAlias && styleAlias[name]) {
     name = styleAlias[name]
@@ -120,6 +146,8 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
         `vexip-ui/css/${name}.css`
       ]
     }
+
+    return
   }
 
   if (importStyle === 'sass') {
