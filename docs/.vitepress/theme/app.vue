@@ -4,9 +4,11 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute } from 'vitepress'
+import { Message } from 'vexip-ui'
 import { Bars } from '@vexip-ui/icons'
 import { useBEM } from '@vexip-ui/bem-helper'
-import { boundRange, isClient, multipleFixed } from '@vexip-ui/utils'
+import { useListener } from '@vexip-ui/hooks'
+import { boundRange, isClient, multipleFixed, writeClipboard } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
 import { ensureStartingSlash } from '../shared'
 
@@ -124,7 +126,26 @@ onMounted(() => {
   if (!isClient) return
 
   computeBarLength()
-  window.addEventListener('scroll', handleScroll)
+
+  useListener(window, 'scroll', handleScroll)
+  useListener(window, 'click', async event => {
+    const target = event.target as HTMLElement
+
+    if (target.matches('div[class*="language-"] > button.copy')) {
+      if (target.classList.contains('copied')) return
+
+      const parent = target.parentElement
+      const code = parent?.querySelector('code')
+
+      if (!parent || !code) return
+
+      if (await writeClipboard((code.textContent ?? '').replace(/\n$/, ''))) {
+        Message.success(t('common.copySuccess'))
+      } else {
+        Message.error(t('common.copyFail'))
+      }
+    }
+  })
 })
 
 function computeBarLength() {

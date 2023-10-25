@@ -7,6 +7,7 @@ import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
 import { useBEM } from '@vexip-ui/bem-helper'
 import { useIntersection } from '@vexip-ui/hooks'
+import { writeClipboard } from '@vexip-ui/utils'
 import { highlight, languages } from 'prismjs'
 import { transformDemoCode } from '../common/demo-prefix'
 import { hashTarget } from '../common/hash-target'
@@ -122,30 +123,16 @@ function expandCodes() {
   codeExpanded.value = !codeExpanded.value
 }
 
-function copyCodes() {
-  let isSuccess = false
-
+async function copyCodes() {
   if (wrapper.value?.$el) {
-    const code = wrapper.value.$el.querySelector('pre code')
-    const textarea = document.createElement('textarea')
+    const codeEl = wrapper.value.$el.querySelector('pre code')
+    const code = codeEl?.textContent ?? ''
 
-    textarea.style.height = '0'
-    textarea.setAttribute('readonly', 'readonly')
-
-    textarea.value = code?.textContent ?? ''
-
-    document.body.appendChild(textarea)
-    textarea.select()
-
-    isSuccess = document.execCommand('copy')
-
-    document.body.removeChild(textarea)
-  }
-
-  if (isSuccess) {
-    Message.success(t('common.copySuccess'))
-  } else {
-    Message.error(t('common.copyFail'))
+    if (await writeClipboard(code)) {
+      Message.success(t('common.copySuccess'))
+    } else {
+      Message.error(t('common.copyFail'))
+    }
   }
 }
 
