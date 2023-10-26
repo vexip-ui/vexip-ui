@@ -7,11 +7,11 @@ export const enUS = defineI18n({
     slogan: 'Highly customizability, full TypeScript, performance pretty good',
     getStarted: 'Get started',
     getComponents: 'Components',
-    changePrefix: 'Change Component Name Prefix',
+    changePrefix: 'Change component name prefix',
     invalidPrefix: 'Prefix must starts with letter and only includes number and letter',
     apply: 'Apply',
     prefixChanged: 'Change the component name prefix successfully',
-    changeColor: 'Change Major Color',
+    changeColor: 'Change theme major color',
     rollColor: 'Roll a color, maybe strange',
     resetColor: 'Reset the color',
     guides: 'Guides',
@@ -33,7 +33,11 @@ export const enUS = defineI18n({
     thanksContribute: 'Thanks for all their contributions!',
     toggleDirection: 'Toggle text direction',
     toggleTheme: 'Toggle theme',
-    viewInGithub: 'View in GitHub'
+    viewInGithub: 'View in GitHub',
+    openSettings: 'Open setting panel',
+    adjustSettings: 'Adjust Setting',
+    changeOrder: 'Change SFC block order',
+    orderChanged: 'Change SFC block order successfully'
   },
   alert: {
     info: 'Tip',

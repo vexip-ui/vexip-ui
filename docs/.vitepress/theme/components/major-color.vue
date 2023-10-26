@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
+import { useBEM } from '@vexip-ui/bem-helper'
 import { ArrowRotateLeft, Dice } from '@vexip-ui/icons'
 import { isClient, randomHardColor } from '@vexip-ui/utils'
 import { computeSeriesColors } from '../common/series-color'
 
+defineProps({
+  hideList: {
+    type: Boolean,
+    default: false
+  },
+  showLabel: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const emit = defineEmits(['change'])
 const { t } = useI18n()
 
-const prefix = 'major-color'
+const nh = useBEM('major-color')
 
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
@@ -38,11 +49,11 @@ function resetMajorColor() {
 </script>
 
 <template>
-  <div :class="prefix">
-    <div :class="`${prefix}__picker`">
-      <Space :class="`${prefix}__tip`" :size="4">
+  <div :class="[nh.b(), hideList && nh.bm('hide-list')]">
+    <div :class="nh.be('picker')">
+      <Space :class="nh.be('tip')" :size="4">
         {{ t('common.changeColor') }}
-        <Tooltip>
+        <Tooltip reverse>
           <template #trigger>
             <Icon :scale="1.4" @click="rollMajorColor">
               <Dice></Dice>
@@ -50,7 +61,7 @@ function resetMajorColor() {
           </template>
           {{ t('common.rollColor') }}
         </Tooltip>
-        <Tooltip>
+        <Tooltip reverse>
           <template #trigger>
             <Icon :scale="1.2" @click="resetMajorColor">
               <ArrowRotateLeft></ArrowRotateLeft>
@@ -59,21 +70,23 @@ function resetMajorColor() {
           {{ t('common.resetColor') }}
         </Tooltip>
       </Space>
-      <ColorPicker v-model:value="majorColor" format="rgb"></ColorPicker>
+      <ColorPicker v-model:value="majorColor" format="rgb" :show-label="showLabel"></ColorPicker>
     </div>
-    <div v-for="(colors, name) in seriesColors" :key="name" :class="`${prefix}__series`">
-      <div v-for="(_, index) in colors" :key="index" :class="`${prefix}__series-item`">
-        <div
-          :class="`${prefix}__series-color`"
-          :style="{
-            backgroundColor: `var(--vxp-color-primary-${name}-${index + 1})`
-          }"
-        ></div>
-        <span :class="`${prefix}__series-name`">
-          {{ `${name}-${index + 1}` }}
-        </span>
+    <template v-if="!hideList">
+      <div v-for="(colors, name) in seriesColors" :key="name" :class="nh.be('series')">
+        <div v-for="(_, index) in colors" :key="index" :class="nh.be('series-item')">
+          <div
+            :class="nh.be('series-color')"
+            :style="{
+              backgroundColor: `var(--vxp-color-primary-${name}-${index + 1})`
+            }"
+          ></div>
+          <span :class="nh.be('series-name')">
+            {{ `${name}-${index + 1}` }}
+          </span>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -84,7 +97,6 @@ function resetMajorColor() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 80px;
   user-select: none;
 
   &__picker {
@@ -92,6 +104,10 @@ function resetMajorColor() {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+  }
+
+  &--hide-list &__picker {
+    margin-bottom: 0;
   }
 
   &__tip {

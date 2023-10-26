@@ -33,7 +33,11 @@ export const zhCN = defineI18n({
     thanksContribute: '感谢他们的所做的一切贡献！',
     toggleDirection: '切换文本方向',
     toggleTheme: '切换主题',
-    viewInGithub: '在 GitHub 查看'
+    viewInGithub: '在 GitHub 查看',
+    openSettings: '打开配置面板',
+    adjustSettings: '调整配置',
+    changeOrder: '换个 SFC 块顺序',
+    orderChanged: 'SFC 块顺序修改成功'
   },
   alert: {
     info: '提示',

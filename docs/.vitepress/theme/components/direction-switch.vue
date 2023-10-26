@@ -41,7 +41,12 @@ function toggleRtl(value: boolean) {
 </script>
 
 <template>
-  <div class="direction-switch" role="switch" @click="toggleRtl(!rtl)">
+  <div
+    class="direction-switch"
+    role="switch"
+    tabindex="0"
+    @click="toggleRtl(!rtl)"
+  >
     <Icon :icon="rtl ? AlignRight : AlignLeft" :scale="1.25"></Icon>
   </div>
 </template>
@@ -50,9 +55,11 @@ function toggleRtl(value: boolean) {
 .direction-switch {
   display: inline-flex;
   cursor: pointer;
+  outline: 0;
   transition: var(--vxp-transition-color);
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--vxp-color-primary-base);
   }
 }

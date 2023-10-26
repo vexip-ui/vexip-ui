@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
+import Settings from './settings.vue'
 import { useData, useRouter } from 'vitepress'
 import { GithubB, Language } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
@@ -15,7 +15,7 @@ import type { ThemeConfig } from '../types'
 
 const router = useRouter()
 
-const { site, page } = useData<ThemeConfig>()
+const { site, page, frontmatter } = useData<ThemeConfig>()
 const { t, locale, getLocaleMessage } = useI18n({ useScope: 'global' })
 
 const isRtl = ref(false)
@@ -85,15 +85,18 @@ function syncVitepressDir() {
         </DropdownList>
       </template>
     </Dropdown>
+
     <div class="rtl">
       <DirectionSwitch
         :title="t('common.toggleDirection')"
         @change="handleRtlChange"
       ></DirectionSwitch>
     </div>
+
     <div class="theme">
       <ThemeSwitch :title="t('common.toggleTheme')"></ThemeSwitch>
     </div>
+
     <Linker
       class="github-link"
       to="//github.com/vexip-ui/vexip-ui/"
@@ -103,6 +106,8 @@ function syncVitepressDir() {
         <GithubB></GithubB>
       </Icon>
     </Linker>
+
+    <Settings v-if="!frontmatter.homepage"></Settings>
   </div>
 </template>
 
@@ -110,12 +115,14 @@ function syncVitepressDir() {
 @use '../style/mixins.scss' as *;
 
 .header-suffix {
+  --item-span: 24px;
+
   display: flex;
   align-items: center;
 
   .language {
     display: inline-flex;
-    margin-inline-end: 24px;
+    margin-inline-end: var(--item-span);
     cursor: pointer;
 
     &__trigger {
@@ -129,15 +136,18 @@ function syncVitepressDir() {
   }
 
   .rtl,
-  .theme {
+  .theme,
+  .settings {
     display: flex;
     align-items: center;
-    margin-inline-end: 24px;
+    margin-inline-end: var(--item-span);
   }
 
   .github-link {
-    margin-inline-end: 24px;
+    margin-inline-end: var(--item-span);
+  }
 
+  & > :last-child {
     @include query-media('lg') {
       margin-inline-end: 40px;
     }

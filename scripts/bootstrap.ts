@@ -138,7 +138,7 @@ async function main() {
       isClient && localStorage.setItem(prefixKey, prefix.value)
     }
 
-    export function transformDemoCode(code: string) {
+    export function transformPrefix(code: string) {
       return code.replace(templateRE, s => s.replace(replaceRE, \`\${capitalPrefix.value}$1\`))
     }
   `

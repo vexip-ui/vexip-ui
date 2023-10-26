@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, markRaw, onMounted, ref, watch, watchEffect } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { Message } from 'vexip-ui'
@@ -9,7 +8,8 @@ import { useBEM } from '@vexip-ui/bem-helper'
 import { useIntersection } from '@vexip-ui/hooks'
 import { writeClipboard } from '@vexip-ui/utils'
 import { highlight, languages } from 'prismjs'
-import { transformDemoCode } from '../common/demo-prefix'
+import { transformPrefix } from '../common/demo-prefix'
+import { transformOrder } from '../common/demo-sfc-order'
 import { hashTarget } from '../common/hash-target'
 import { usePlayground } from '../common/playground'
 
@@ -78,9 +78,10 @@ if (!props.alive) {
 watchEffect(async () => {
   if (!codeRef.value) return
 
-  await internalInit()
+  console.log('a')
+  internalInit()
 
-  const formattedCode = transformDemoCode(code.value)
+  const formattedCode = transformCode(code.value)
   const lang = getCodeLang('vue')
 
   if (languages[lang]) {
@@ -97,7 +98,7 @@ onMounted(() => {
   })
 })
 
-async function internalInit() {
+function internalInit() {
   const basePath = `/demos/${props.src}/demo.${locale.value}.vue`
   const path = Object.keys(props.demos).find(path => path.endsWith(basePath))
 
@@ -105,6 +106,13 @@ async function internalInit() {
     demo.value = markRaw(props.demos[path] as any)
     code.value = props.codes[path]
   }
+}
+
+function transformCode(code: string) {
+  code = transformPrefix(code)
+  code = transformOrder(code)
+
+  return code
 }
 
 function toggleActive() {

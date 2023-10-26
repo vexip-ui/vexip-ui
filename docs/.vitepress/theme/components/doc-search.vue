@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watchEffect } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { useRoute, useRouter } from 'vitepress'

@@ -1,32 +1,23 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import DemoPrefix from './demo-prefix.vue'
+import DemoSfcOrder from './demo-sfc-order.vue'
 import MajorColor from './major-color.vue'
 import Wave from './wave.vue'
-import { Message } from 'vexip-ui'
 import { useRouter } from 'vitepress'
-import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
+import { useBEM } from '@vexip-ui/bem-helper'
 
-const prefix = 'homepage'
 const router = useRouter()
 const { t, locale } = useI18n({ useScope: 'global' })
+
+const nh = useBEM('homepage')
 
 const wave = ref<InstanceType<typeof Wave>>()
 const sign = ref<HTMLElement>()
 
 const waveTop = ref(494)
-
-const demoPrefix = ref(getDemoPrefix())
-const invalid = ref(false)
-const showError = computed(() => !!demoPrefix.value && invalid.value)
-
-const validRE = /^[a-zA-Z]([0-9a-zA-Z]+)?$/
-
-watch(demoPrefix, value => {
-  invalid.value = !validRE.test((value || '').trim())
-})
 
 function getStarted() {
   router.go(`/${locale.value}/guide/vexip-ui`)
@@ -39,38 +30,25 @@ function getComponents() {
 function refreshWave() {
   wave.value?.refresh()
 }
-
-// function handleResize() {
-//   if (!sign.value) return
-
-//   waveTop.value = Math.round(sign.value.getBoundingClientRect().height * 0.93)
-// }
-
-function handleSvaePrefix() {
-  if (showError.value) return
-
-  setDemoPrefix(demoPrefix.value)
-  Message.success(t('common.prefixChanged'))
-}
 </script>
 
 <template>
-  <section :class="prefix" :style="{ '--wave-top': `${waveTop}px` }">
+  <section :class="nh.b()" :style="{ '--wave-top': `${waveTop}px` }">
     <ClientOnly>
-      <div :class="`${prefix}__wave`">
-        <div :class="`${prefix}__wave-block`"></div>
+      <div :class="nh.be('wave')">
+        <div :class="nh.be('wave-block')"></div>
         <Wave ref="wave" style="position: relative"></Wave>
       </div>
     </ClientOnly>
-    <div ref="sign" :class="`${prefix}__sign`">
-      <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
-      <h1 :class="`${prefix}__title`">
+    <div ref="sign" :class="nh.be('sign')">
+      <img :class="nh.be('logo')" src="/vexip-ui.svg" alt="vexip-ui" />
+      <h1 :class="nh.be('title')">
         Vexip UI
       </h1>
-      <p :class="`${prefix}__description`">
+      <p :class="nh.be('description')">
         {{ t('common.slogan') }}
       </p>
-      <div :class="`${prefix}__actions`">
+      <div :class="nh.be('actions')">
         <Button type="primary" size="large" @click="getStarted">
           {{ t('common.getStarted') }}
         </Button>
@@ -79,22 +57,14 @@ function handleSvaePrefix() {
         </Button>
       </div>
     </div>
-    <P :type="showError ? 'error' : 'default'" style="margin: 0 0 16px; font-size: 15px">
-      {{ showError ? t('common.invalidPrefix') : t('common.changePrefix') }}
-    </P>
-    <Input
-      v-model:value="demoPrefix"
-      sync
-      :class="`${prefix}__prefix`"
-      placeholder="e.g. Vxp"
-    >
-      <template #after-action>
-        <Button type="primary" :disabled="showError" @click="handleSvaePrefix">
-          {{ t('common.apply') }}
-        </Button>
-      </template>
-    </Input>
-    <MajorColor :class="`${prefix}__colors`" @change="refreshWave"></MajorColor>
+    <DemoPrefix :input-class="nh.be('prefix')"></DemoPrefix>
+    <DemoSfcOrder :class="nh.be('sfc-order')"></DemoSfcOrder>
+    <MajorColor
+      :class="nh.be('colors')"
+      show-label
+      style="margin-bottom: 80px"
+      @change="refreshWave"
+    ></MajorColor>
   </section>
 </template>
 
@@ -166,6 +136,12 @@ function handleSvaePrefix() {
     .vxp-input__control {
       width: 100%;
     }
+  }
+
+  &__sfc-order {
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 20px;
   }
 
   &__colors {
