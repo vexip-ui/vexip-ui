@@ -78,7 +78,6 @@ if (!props.alive) {
 watchEffect(async () => {
   if (!codeRef.value) return
 
-  console.log('a')
   internalInit()
 
   const formattedCode = transformCode(code.value)
@@ -243,7 +242,11 @@ function editOnPlayground() {
       <CollapseTransition>
         <Column v-show="codeExpanded" :class="nh.be('code')">
           <div :class="`language-vue`">
-            <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
+            <pre
+              :class="`language-vue`"
+              :lang="'vue'"
+              tabindex="-1"
+            ><code ref="codeRef"></code></pre>
             <span v-if="codeLines > 0" class="code-line-numbers">
               <span v-for="n in codeLines" :key="n"></span>
             </span>

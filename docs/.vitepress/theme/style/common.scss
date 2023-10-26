@@ -67,6 +67,10 @@ code {
   line-height: calc(var(--vxp-font-size-base) * 2);
 }
 
+pre {
+  outline: 0;
+}
+
 article {
   h1 {
     margin: 0.6em 0 1em;
@@ -199,7 +203,8 @@ p .vxp-linker {
     transition: var(--vxp-transition-opacity);
   }
 
-  &:hover &__link {
+  &:hover &__link,
+  &__link:focus {
     opacity: 100%;
   }
 }

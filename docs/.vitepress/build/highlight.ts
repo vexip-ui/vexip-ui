@@ -39,7 +39,7 @@ function wrap(code: string, lang: string) {
   const lineUnits = Array.from({ length: lineCount }, () => '<span></span>').join('')
   const lineNumbers = `<span aria-hidden="true" class="code-line-numbers">${lineUnits}</span>`
 
-  return `<pre v-pre class="language-${lang}" lang="${lang}"><code>${code}</code>${lineNumbers}</pre>`
+  return `<pre v-pre class="language-${lang}" lang="${lang}" tabindex="-1"><code>${code}</code>${lineNumbers}</pre>`
 }
 
 function getLangCodeFromExtension(extension: string) {

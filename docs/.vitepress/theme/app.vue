@@ -146,6 +146,33 @@ onMounted(() => {
       }
     }
   })
+  useListener<KeyboardEvent>(window, 'keydown', event => {
+    const target = event.target as HTMLElement
+
+    if (
+      event.isTrusted &&
+      event.ctrlKey &&
+      event.code === 'KeyA' &&
+      target.matches('pre[class*="language-"]')
+    ) {
+      const code = target.querySelector('code')
+
+      if (!code) return
+
+      event.preventDefault()
+
+      const range = document.createRange()
+      const selection = document.getSelection()
+
+      range.setStart(code, 0)
+      range.setEnd(code, code.childNodes.length)
+
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+    }
+  })
 })
 
 function computeBarLength() {
