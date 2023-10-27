@@ -1,3 +1,13 @@
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.2.0...utils@2.3.0) (2023-10-27)
+
+
+### ✨ Features
+
+* **utils:** add forceInject option for flatTree method ([49e7b9a](https://github.com/vexip-ui/vexip-ui/commit/49e7b9aee2cca4884817293fb981d8935e7d53c0))
+* **utils:** add writeClipboard method ([41dce09](https://github.com/vexip-ui/vexip-ui/commit/41dce092828fec83bd00e4465a6aab2818ed2bde))
+
+
+
 # [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.1.0...utils@2.2.0) (2023-10-19)
 
 
