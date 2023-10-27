@@ -35,7 +35,7 @@ export const zhCN = defineI18n({
     toggleTheme: '切换主题',
     viewInGithub: '在 GitHub 查看',
     openSettings: '打开配置面板',
-    adjustSettings: '调整配置',
+    adjustSettings: '调整文档配置',
     changeOrder: '换个 SFC 块顺序',
     orderChanged: 'SFC 块顺序修改成功'
   },

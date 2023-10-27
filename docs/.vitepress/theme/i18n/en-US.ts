@@ -35,7 +35,7 @@ export const enUS = defineI18n({
     toggleTheme: 'Toggle theme',
     viewInGithub: 'View in GitHub',
     openSettings: 'Open setting panel',
-    adjustSettings: 'Adjust Setting',
+    adjustSettings: 'Adjust Document Setting',
     changeOrder: 'Change SFC block order',
     orderChanged: 'Change SFC block order successfully'
   },

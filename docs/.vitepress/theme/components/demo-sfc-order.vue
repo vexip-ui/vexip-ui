@@ -58,6 +58,7 @@ function handleSavePrefix(value: FirstSfcType) {
     justify-content: center;
     height: 32px;
     padding: 0;
+    color: var(--vxp-content-color-base);
     cursor: pointer;
     background-color: transparent;
     border: var(--vxp-border-base);
