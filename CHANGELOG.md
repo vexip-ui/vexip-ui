@@ -1,3 +1,34 @@
+## [2.2.8](https://github.com/vexip-ui/vexip-ui/compare/v2.2.7...v2.2.8) (2023-10-27)
+
+
+### ✨ Features
+
+* **plugins:** add fullStyle option for unplugin resolver ([c06e9b0](https://github.com/vexip-ui/vexip-ui/commit/c06e9b0318e29dd408584c5bd78c56d6da91c428))
+* **resize-observer:** add disabled prop ([fc80708](https://github.com/vexip-ui/vexip-ui/commit/fc8070850705bd17fc5989055555decec4225253))
+* **slider:** adjust tip default behavior and add tip-hover prop ([29d1766](https://github.com/vexip-ui/vexip-ui/commit/29d1766bd2b426e468148c8895b562e1fa439f85))
+* **utils:** add forceInject option for flatTree method ([49e7b9a](https://github.com/vexip-ui/vexip-ui/commit/49e7b9aee2cca4884817293fb981d8935e7d53c0))
+* **utils:** add writeClipboard method ([41dce09](https://github.com/vexip-ui/vexip-ui/commit/41dce092828fec83bd00e4465a6aab2818ed2bde))
+
+
+### 🐞 Bug Fixes
+
+* **bubble:** isolate style effect when nested itself ([0d8c88f](https://github.com/vexip-ui/vexip-ui/commit/0d8c88fe522e13b1401e89a3dd3aa5f1dec26176))
+* **config:** incorrect default value for value(s)Prop ([db750d3](https://github.com/vexip-ui/vexip-ui/commit/db750d3233b3399ef8edf680933f7e50794dce6b))
+* ensure track options change for Select, Cascader and Transfer ([f906701](https://github.com/vexip-ui/vexip-ui/commit/f906701036c02aaa42f0bfda6286759fb6286b0e))
+* **slider:** add container to improve scalability ([04b721e](https://github.com/vexip-ui/vexip-ui/commit/04b721e56e4edd0d5f911768c7f1ba9c4dac0120))
+* **table:** add missing style dependencies ([6229631](https://github.com/vexip-ui/vexip-ui/commit/62296312c8497e10e9f591de3ad20af645b477ca))
+* **table:** duplicate from `getData` after drag in tree ([3871bbd](https://github.com/vexip-ui/vexip-ui/commit/3871bbd38b1ab2dff3c0b9e4bcd78889d2281882))
+* **tooltip:** isolate style effect when nested itself ([5b566b3](https://github.com/vexip-ui/vexip-ui/commit/5b566b33ebb04c9d2af2fed7e91610af328564a9))
+* **tree:** add missing style dependencies ([0efb472](https://github.com/vexip-ui/vexip-ui/commit/0efb4724661b1198b6c9978e237c7eb5515c1eab))
+
+
+### 🔨 Code Refactoring
+
+* **radio:** add shape prop to replace border, button props ([6d3121d](https://github.com/vexip-ui/vexip-ui/commit/6d3121d123947c1a8961334a3f253724b1b642e2))
+* **table:** responsive cells and rows height ([94cc2eb](https://github.com/vexip-ui/vexip-ui/commit/94cc2ebaec82d6975ee57a93c87903dc5e6f1eb5))
+
+
+
 ## [2.2.7](https://github.com/vexip-ui/vexip-ui/compare/v2.2.6...v2.2.7) (2023-10-20)
 
 
