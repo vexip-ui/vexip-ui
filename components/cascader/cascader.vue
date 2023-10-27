@@ -343,6 +343,7 @@ export default defineComponent({
     let optionValueMap: Map<string, CascaderOptionState> = null!
     let outsideClosed = false
     let prevClosedId = -1
+    let flattedOptions: Record<any, any>[]
 
     const updateTrigger = ref(0)
 
@@ -350,13 +351,18 @@ export default defineComponent({
       /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
-      props.keyConfig.children
       props.keyConfig.disabled
       props.keyConfig.hasChild
       props.separator
-      props.options
       isAsyncLoad.value
       /* eslint-enable */
+
+      flattedOptions = flatTree(props.options as Record<any, any>[], {
+        keyField: ID_KEY,
+        parentField: PARENT_KEY,
+        childField: props.keyConfig.children ?? defaultKeyConfig.children,
+        forceInject: true
+      })
 
       updateTrigger.value++
     })
@@ -364,17 +370,10 @@ export default defineComponent({
     watch(updateTrigger, initOptionStates, { immediate: true })
 
     function initOptionStates() {
-      const childrenKey = props.keyConfig.children ?? defaultKeyConfig.children
-      const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
-        keyField: ID_KEY,
-        parentField: PARENT_KEY,
-        childField: childrenKey
-      })
-
       const separator = props.separator
       const isAsync = isAsyncLoad.value
 
-      optionList = createOptionStates(rawOptions)
+      optionList = createOptionStates(flattedOptions)
       optionIdMap = new Map()
       optionValueMap = new Map()
 

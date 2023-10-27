@@ -545,7 +545,12 @@ export default defineComponent({
       props.keyConfig.title
       props.keyConfig.group
       props.keyConfig.children
-      props.options
+
+      // If we only read the `props.options`, when user use Array native methods to
+      // change options, Vue will not trigger the watch callback
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++
