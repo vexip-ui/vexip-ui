@@ -22,7 +22,7 @@
 
 **English** | [中文 [含技术支持群]](./README.zh-CN.md)
 
-Vexip (pronounced `/ˈvesɪp/`) UI provides a series of out-of-box components.
+Vexip (pronounced `/ˈvesɪp/`) UI provides a series of out-of-the-box components.
 
 This library is written using **composition API**, and the components are designed and written in a traditional Vue way possible, with full **TypeScript** support.
 
@@ -38,7 +38,7 @@ Currently, there are **70+** components, some of which may be familiar to you, a
 - 📐 Intuitive, minimalistic Api design
 - 🔧 Configurable default value of props, quickly complete global/local modifications
 - ⚡ Composition Api, good performance base
-- 🔨 With TypeScript, fully types
+- 🔨 With TypeScript, fully typed
 - 💪 1000+ unit tests to provide good stability
 - 🎨 Support CSS variable, built-in dark theme
 - 🚩 Support i18n
