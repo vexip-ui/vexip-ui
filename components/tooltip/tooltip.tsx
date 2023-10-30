@@ -60,7 +60,8 @@ export default defineComponent({
       tipAlive: false,
       reverse: false,
       width: 'auto',
-      virtual: null
+      virtual: null,
+      shift: false
     })
 
     const placement = toRef(props, 'placement')
@@ -104,11 +105,23 @@ export default defineComponent({
     const popper = ref<PopperExposed>()
     const popperEl = computed(() => popper.value?.wrapper)
     const arrow = ref<HTMLElement>()
+    const shift = computed<{ mainAxis?: boolean, crossAxis?: boolean }>(() => {
+      if (!props.shift) {
+        return { mainAxis: false }
+      }
+
+      if (props.shift === true || props.shift === 'both') {
+        return { crossAxis: true }
+      }
+
+      return props.shift === 'horizontal' ? { mainAxis: false, crossAxis: true } : {}
+    })
     const { transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       arrow,
       reference,
+      shift,
       wrapper: originalTrigger,
       popper: popperEl
     })

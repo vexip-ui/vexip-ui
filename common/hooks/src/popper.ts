@@ -25,7 +25,7 @@ import type {
 import type { TransferNode } from '@vexip-ui/utils'
 import type { MaybeRef } from './shared/types'
 
-interface UsePopperOptions {
+export interface UsePopperOptions {
   /**
    * popper 元素出现的位置
    */
@@ -34,6 +34,9 @@ interface UsePopperOptions {
    * popper 元素需要迁移至的目标选择器，为 true 时会迁移至 body
    */
   transfer?: MaybeRef<boolean | string>,
+  /**
+   * 设置是否为从右向左的阅读方向
+   */
   isRtl?: MaybeRef<boolean>,
   /**
    * 包围元素，用于判断 clickoutside 事件
