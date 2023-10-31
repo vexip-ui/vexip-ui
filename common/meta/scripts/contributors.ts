@@ -1,7 +1,8 @@
 import { resolve } from 'node:path'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 
-import { components as allComponents, logger, outputDir } from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { components as allComponents, outputDir } from './utils'
 
 interface ContributorInfo {
   component: string,

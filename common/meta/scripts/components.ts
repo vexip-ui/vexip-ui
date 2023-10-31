@@ -2,7 +2,9 @@ import { resolve } from 'node:path'
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { existsSync, mkdirSync, statSync } from 'node:fs'
 
-import { components as allComponents, logger, outputDir, rootDir, toCapitalCase } from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { toCapitalCase } from '@vexip-ui/utils'
+import { components as allComponents, outputDir, rootDir } from './utils'
 
 async function main() {
   const startTime = Date.now()
