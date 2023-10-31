@@ -7,7 +7,7 @@ import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import { logger } from '@vexip-ui/scripts'
 import { runParallel, toCapitalCase } from '@vexip-ui/utils'
-import { components as allComponents, componentsDir, prettierConfig, rootDir } from './utils'
+import { components as allComponents, componentsDir, prettierConfig, rootDir } from './constant'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']

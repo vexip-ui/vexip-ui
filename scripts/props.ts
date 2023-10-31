@@ -7,7 +7,7 @@ import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import { logger } from '@vexip-ui/scripts'
 import { runParallel, toCamelCase, toCapitalCase } from '@vexip-ui/utils'
-import { components, componentsDir, prettierConfig } from './utils'
+import { components, componentsDir, prettierConfig } from './constant'
 
 async function main() {
   const ignores = ['config-provider', 'typography']

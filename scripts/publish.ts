@@ -2,7 +2,8 @@ import { resolve } from 'node:path'
 
 import minimist from 'minimist'
 import { logger, publish } from '@vexip-ui/scripts'
-import { getPackageName, rootDir } from './utils'
+import { rootDir } from './constant'
+import { getPackageName } from './utils'
 
 const args = minimist<{
   d?: boolean,

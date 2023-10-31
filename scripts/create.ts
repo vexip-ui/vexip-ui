@@ -8,7 +8,7 @@ import minimist from 'minimist'
 import prompts from 'prompts'
 import { logger } from '@vexip-ui/scripts'
 import { toCamelCase, toCapitalCase, toKebabCase } from '@vexip-ui/utils'
-import { components as allComponents, prettierConfig, rootDir } from './utils'
+import { components as allComponents, prettierConfig, rootDir } from './constant'
 import pkg from '../package.json'
 
 const args = minimist(process.argv.slice(2))
