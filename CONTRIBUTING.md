@@ -28,7 +28,7 @@ pnpm run build:common
 
 We use a Vite project in `dev-server` a development server.
 
-You can use the following command to start development server for specify component:
+You can use the following command to start development server for specific component:
 
 ```sh
 pnpm run serve [component]
