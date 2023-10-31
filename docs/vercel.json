@@ -1,7 +1,7 @@
 {
   "framework": "vite",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "buildCommand": "pnpm -w run build:common && pnpm -w run build && pnpm -w run build:meta && pnpm run build",
+  "buildCommand": "pnpm -w run build:common && pnpm -w run build:scripts && pnpm -w run build && pnpm -w run build:meta && pnpm run build",
   "outputDirectory": ".vitepress/dist",
   "github": {
     "silent": true
