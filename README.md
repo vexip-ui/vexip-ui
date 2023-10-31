@@ -30,7 +30,7 @@ Almost all **default property values** of each component can be easily customize
 
 Meanwhile, the component code pays great attention to reducing the threshold of **source code reading**, and the code layout is as close as possible to the habits of daily business code, avoiding fancy and showy code.
 
-Currently, there are **70+** components, some of which may be familiar to you, and even better, while others may bright your eyes.
+Currently, there are **70+** components, some of which may be familiar to you, and even better, while others may brighten your eyes.
 
 ## Features
 
