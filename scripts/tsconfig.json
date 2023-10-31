@@ -10,7 +10,11 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "useUnknownInCatchVariables": false,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@vexip-ui/*": ["../common/*/src"]
+    }
   },
   "include": ["*.ts"]
 }

@@ -6,15 +6,9 @@ import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import {
-  components as allComponents,
-  logger,
-  prettierConfig,
-  rootDir,
-  toCamelCase,
-  toCapitalCase,
-  toKebabCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { toCamelCase, toCapitalCase, toKebabCase } from '@vexip-ui/utils'
+import { components as allComponents, prettierConfig, rootDir } from './utils'
 import pkg from '../package.json'
 
 const args = minimist(process.argv.slice(2))
@@ -343,6 +337,8 @@ async function create(name: string) {
     ...(await getConvertCompTypeFiles())
   ]
 
+  const shouldLintFiles: string[] = []
+
   await Promise.all(
     generatedFiles.map(async ({ filePath, source, convert }) => {
       if (fs.existsSync(filePath) && !convert) {
@@ -397,12 +393,18 @@ async function create(name: string) {
           )
         }
 
-        await ESLint.outputFixes(await eslint.lintFiles(filePath))
+        shouldLintFiles.push(filePath)
       }
 
       logger.infoText(`generated ${filePath}`)
     })
   )
+
+  logger.withStartLn(() => logger.infoText('Linting files...'))
+
+  await ESLint.outputFixes(await eslint.lintFiles(shouldLintFiles))
+
+  logger.successText(`Create component '${kebabCaseName}' successful`)
 }
 
 async function getConvertCompTypeFiles(): Promise<

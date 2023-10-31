@@ -146,7 +146,7 @@ export async function release(options: ReleaseOptions) {
     if (isDryRun) {
       logger.success('Dry run finished - run git diff to see package changes')
     } else {
-      logger.success(options.successMessage || 'Release successfully')
+      logger.success(options.successMessage || `Release ${tag} successfully`)
     }
   })
 }

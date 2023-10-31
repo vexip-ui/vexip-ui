@@ -3,7 +3,8 @@ import { existsSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 
 import minimist from 'minimist'
 import { format } from 'prettier'
-import { logger, prettierConfig, queryIdlePort, rootDir, run, specifyComponent } from './utils'
+import { logger, queryIdlePort, run } from '@vexip-ui/scripts'
+import { prettierConfig, rootDir, specifyComponent } from './utils'
 
 const args = minimist<{
   s?: boolean,

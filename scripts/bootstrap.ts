@@ -5,15 +5,9 @@ import { cpus } from 'node:os'
 
 import { format } from 'prettier'
 import { ESLint } from 'eslint'
-import {
-  components as allComponents,
-  componentsDir,
-  logger,
-  prettierConfig,
-  rootDir,
-  runParallel,
-  toCapitalCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { runParallel, toCapitalCase } from '@vexip-ui/utils'
+import { components as allComponents, componentsDir, prettierConfig, rootDir } from './utils'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
@@ -160,10 +154,9 @@ async function main() {
     )
   ])
 
-  await ESLint.outputFixes(await eslint.lintFiles(indexPath))
-  await ESLint.outputFixes(await eslint.lintFiles(typesPath))
-  await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
-  await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
+  await ESLint.outputFixes(
+    await eslint.lintFiles([indexPath, typesPath, metaDataPath, demoPrefixPath])
+  )
 
   await runParallel(cpus().length, allComponents, async component => {
     const scssPath = resolve(rootDir, `style/${component}.scss`)

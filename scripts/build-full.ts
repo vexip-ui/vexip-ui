@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-import { logger, run } from './utils'
+import { logger, run } from '@vexip-ui/scripts'
 
 const args = minimist<{
   d?: boolean,

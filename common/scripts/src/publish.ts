@@ -35,10 +35,10 @@ export async function publish(options: PublishOptions) {
 
   try {
     await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
-    logger.successText(`Successfully published v${pkg.version}'`)
+    logger.successText(`Successfully published v${pkg.version}`)
   } catch (error) {
     if ((error as any).stderr?.match(/previously published/)) {
-      logger.errorText(`Skipping already published v'${pkg.version}'`)
+      logger.errorText(`Skipping already published v${pkg.version}`)
     } else {
       throw error
     }
