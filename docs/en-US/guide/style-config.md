@@ -65,7 +65,7 @@ The regular names of preset variables in components mostly follow rule `--[prefi
 - `s-color` is a variable for the shadow color
 - `state` optional, is a variable for a component or feature in a specific state
 
-There are also some variables that use on layout, which are inconsistent with this rule. Some of the remaining variables will also difference from this rule due to semantics.
+There are also some variables that are used on layout, which are inconsistent with this rule. Some of the remaining variables will also difference from this rule due to semantics.
 
 You can change these css variables by any way you like.
 
