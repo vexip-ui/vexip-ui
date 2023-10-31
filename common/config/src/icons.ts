@@ -62,6 +62,10 @@ import {
   TrashCanR,
   Upload,
   User,
+  VolumeHigh,
+  VolumeLow,
+  VolumeOff,
+  VolumeXmark,
   Xmark
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
@@ -149,7 +153,11 @@ export interface IconsConfig {
   zoonOut: IconConfig,
   fullScreen: IconConfig,
   resetScreen: IconConfig,
-  dragger: IconConfig
+  dragger: IconConfig,
+  volumeMute: IconConfig,
+  volumeOff: IconConfig,
+  volumeLow: IconConfig,
+  volumeHigh: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -219,7 +227,11 @@ const iconMap: IconsConfig = {
   zoonOut: Minus,
   fullScreen: Expand,
   resetScreen: Compress,
-  dragger: GripLinesVertical
+  dragger: GripLinesVertical,
+  volumeMute: VolumeXmark,
+  volumeOff: VolumeOff,
+  volumeLow: VolumeLow,
+  volumeHigh: VolumeHigh
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

@@ -1,0 +1,20 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$video: () !default;
+$video: map.merge((), $video);
+
+.#{$namespace}-video {
+  &-vars {
+    @include define-preset-values('video', $video);
+  }
+
+  @include basis;
+
+  &__player {
+    width: 100%;
+    height: 100%;
+  }
+}

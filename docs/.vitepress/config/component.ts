@@ -86,6 +86,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Timeline' },
         { name: 'Tooltip' },
         { name: 'Tree' },
+        { name: 'Video', since: '2.3.0' },
         { name: 'Viewer', since: '2.0.0' }
       ]
     },

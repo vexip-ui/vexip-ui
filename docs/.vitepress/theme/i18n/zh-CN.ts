@@ -129,6 +129,7 @@ export const zhCN = defineI18n({
     Wheel: '滚轮',
 
     // Data
+    Video: '视频',
     Avatar: '头像',
     Badge: '徽标',
     Bubble: '气泡框',

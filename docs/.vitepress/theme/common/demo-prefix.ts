@@ -110,6 +110,7 @@ const components = [
   'Upload',
   'UploadFile',
   'UploadList',
+  'Video',
   'Viewer',
   'VirtualList',
   'Wheel',

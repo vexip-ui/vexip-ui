@@ -105,6 +105,7 @@ declare module 'vue' {
     Upload: (typeof import('vexip-ui'))['Upload'],
     UploadFile: (typeof import('vexip-ui'))['UploadFile'],
     UploadList: (typeof import('vexip-ui'))['UploadList'],
+    Video: (typeof import('vexip-ui'))['Video'],
     Viewer: (typeof import('vexip-ui'))['Viewer'],
     VirtualList: (typeof import('vexip-ui'))['VirtualList'],
     Wheel: (typeof import('vexip-ui'))['Wheel'],
