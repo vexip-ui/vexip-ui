@@ -9,12 +9,22 @@ export type AnyCase<S> = string extends S
       ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
       : ''
 
+function allCapital(value: string) {
+  const matched = value.match(/[A-Z]+/)
+
+  return matched && matched[0] === value
+}
+
 /**
  * 将命名转换为短横线命名
  *
  * @param value 需要转换的命名
  */
 export function toKebabCase(value: string) {
+  if (allCapital(value)) {
+    return value.toLocaleLowerCase()
+  }
+
   return (
     value.charAt(0).toLowerCase() +
     value
