@@ -63,5 +63,9 @@ export function toCapitalCase<T extends string>(value: T) {
 export function toCamelCase(value: string) {
   const capitalName = toCapitalCase(value)
 
+  if (allCapital(capitalName)) {
+    return capitalName.toLocaleLowerCase()
+  }
+
   return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
 }
