@@ -78,7 +78,8 @@ export interface I18nConfig {
     issue: string,
     contribute: string,
     qqGroup?: string,
-    sponsor: string
+    sponsor: string,
+    releaseScripts: string
   },
   component: {
     // Basis

@@ -80,7 +80,8 @@ export const zhCN = defineI18n({
     issue: '议题',
     contribute: '参与贡献',
     qqGroup: '技术支持 Q 群',
-    sponsor: '赞助一杯喜茶'
+    sponsor: '赞助一杯喜茶',
+    releaseScripts: '发布脚本'
   },
   component: {
     // Basis

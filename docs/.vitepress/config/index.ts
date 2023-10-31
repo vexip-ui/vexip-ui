@@ -183,6 +183,11 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
           link: 'https://github.com/vexip-ui/create-vexip'
         },
         {
+          text: 'Vexip Scripts',
+          subI18n: t('releaseScripts'),
+          link: 'https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts'
+        },
+        {
           text: 'Grid Layout Plus',
           subI18n: t('gridLayout'),
           link: `https://grid-layout-plus.netlify.app/${lang === 'zh-CN' ? 'zh/' : ''}`

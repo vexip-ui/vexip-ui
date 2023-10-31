@@ -80,7 +80,8 @@ export const enUS = defineI18n({
     issue: 'Issue',
     contribute: 'Contribute',
     qqGroup: 'Support QQ Group',
-    sponsor: 'Buy a Cup of Coffee'
+    sponsor: 'Buy a Cup of Coffee',
+    releaseScripts: 'Release Scripts'
   },
   component: {
     // Basis

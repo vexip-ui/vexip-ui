@@ -15,7 +15,12 @@ export interface ReleaseOptions {
    */
   secondConfirm?: boolean,
   preId?: string,
-  skipUpdateVersion?: boolean,
+  /**
+   * If false, will use current package.json version as release version
+   *
+   * @default true
+   */
+  updateVersion?: boolean,
   /**
    * @default true
    */
@@ -31,11 +36,14 @@ export interface ReleaseOptions {
    */
   gitPush?: boolean,
   gitBranch?: string,
+  /**
+   * If true, will call publish after pushing to remote repository
+   */
   publish?: boolean,
   successMessage?: string,
-  runTest?: () => Promise<void>,
-  runBuild?: () => Promise<void>,
-  runChangelog?: () => Promise<void>
+  runTest?: false | (() => Promise<unknown>),
+  runBuild?: false | (() => Promise<unknown>),
+  runChangelog?: false | (() => Promise<unknown>)
 }
 
 const logStep = (msg: string) => logger.withStartLn(() => logger.infoText(msg))
@@ -46,17 +54,26 @@ export async function release(options: ReleaseOptions) {
   const runIfNotDry = isDryRun ? dryRun : run
   const { pkg, pkgPath } = getPkgInfo(options.pkgDir, true)
 
-  const prevVersion = pkg.version || '0.0.0'
-  const version = await selectNextVersion(prevVersion, {
-    preId: options.preId,
-    selectMessage: 'Select release type:'
-  })
+  if (isDryRun) {
+    logger.withBothLn(() => logger.infoText('Dry run release...'))
+  }
+
+  let version: string
+
+  if (options.updateVersion === false) {
+    version = pkg.version || '1.0.0'
+  } else {
+    version = await selectNextVersion(pkg.version || '0.0.0', {
+      preId: options.preId,
+      selectMessage: 'Select release type:'
+    })
+  }
 
   if (options.secondConfirm !== false) {
     const { confirm } = await prompts({
       type: 'confirm',
       name: 'confirm',
-      message: `Confirm release ${version} (from ${prevVersion})?`
+      message: `Confirm release ${version}?`
     })
 
     if (!confirm) return
@@ -72,11 +89,11 @@ export async function release(options: ReleaseOptions) {
 
   logStep('Updating version...')
 
-  if (options.skipUpdateVersion) {
-    logSkipped()
-  } else {
+  if (options.updateVersion !== false) {
     pkg.version = version
     await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
+  } else {
+    logSkipped()
   }
 
   logStep('Building package...')
