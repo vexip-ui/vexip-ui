@@ -52,6 +52,14 @@ In both-sides mode, if you don't want the component to automatically calculate t
 
 :::
 
+:::demo timeline/steps
+
+### Steps Bar
+
+You can use the slots and add a little style to make a simple steps bar.
+
+:::
+
 ## API
 
 ### Timeline Props

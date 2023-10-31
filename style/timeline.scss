@@ -37,25 +37,27 @@ $timeline: map.merge(
 
   @include basis;
 
+  $side-pad: calc(#{get-css-var('timeline-pointer-size')} * 0.5);
+
   display: inline-flex;
   flex-direction: column;
-  padding-inline-start: 6px;
+  padding-inline-start: $side-pad;
 
   &--horizontal {
     flex-direction: row;
     padding-inline-start: 0;
-    padding-top: 6px;
+    padding-top: $side-pad;
   }
 
   &--flip {
     padding-inline-start: 0;
-    padding-inline-end: 6px;
+    padding-inline-end: $side-pad;
   }
 
   &--horizontal#{&}--flip {
     padding-inline-end: 0;
     padding-top: 0;
-    padding-bottom: 6px;
+    padding-bottom: $side-pad;
   }
 
   &--alternate,
@@ -196,6 +198,7 @@ $timeline: map.merge(
       content: '';
       border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
       border-inline-start-width: $line-width;
+      transition: get-css-var('transition-border');
     }
   }
 
@@ -313,7 +316,7 @@ $timeline: map.merge(
     padding-inline-end: 0;
   }
 
-  &__item:last-child &__line {
+  &__item:last-child &__line::after {
     display: none;
   }
 
