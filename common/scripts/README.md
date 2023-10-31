@@ -36,7 +36,7 @@ release({
 Refer to Vexip UI [publish script](https://github.com/vexip-ui/vexip-ui/blob/main/scripts/publish.ts).
 
 ```ts
-import { logger, release } from '@vexip-ui/scripts'
+import { logger, publish } from '@vexip-ui/scripts'
 
 publish({
   pkgDir: 'Absolute package directory path'
