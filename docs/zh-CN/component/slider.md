@@ -68,6 +68,16 @@
 
 :::
 
+:::demo slider/trigger-fade
+
+### 隐藏手柄
+
+^[Since v2.2.9](!s)
+
+添加 `trigger-fade` 属性可以使手柄在无操作时隐藏。
+
+:::
+
 :::demo slider/loading
 
 ### 加载状态
@@ -101,41 +111,59 @@
 ### 预设类型
 
 ```ts
-interface SliderSlotParams {
-  value: number,
-  disabled: boolean,
-  loading: boolean,
-  sliding: boolean
-}
-
 interface SliderMarker {
   label?: string,
   class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>
 }
+
+type SliderRawMarkers =
+  | Record<string | number, string | SliderMarker>
+  | Array<number | (SliderMarker & { value: number })>
+
+interface SliderSlotParams {
+  disabled: boolean,
+  loading: boolean
+}
+
+interface SliderTriggerParams extends SliderSlotParams {
+  type: 'start' | 'end',
+  value: number,
+  sliding: boolean
+}
+
+interface SliderMarkerSlotParams extends SliderSlotParams {
+  values: number[],
+  sliding: boolean[],
+  markerValue: number,
+  marker: SliderMarker,
+  inRange: boolean
+}
 ```
 
 ### Slider 属性
 
-| 名称         | 类型                                               | 说明                                             | 默认值    | 始于    |
-| ------------ | -------------------------------------------------- | ------------------------------------------------ | --------- | ------- |
-| state        | `'default' \| 'success' \| 'error' \| 'warning'`   | 设置滑动输入条类型                               | `default` | `2.0.0` |
-| value        | `number \| number[]`                               | 滑动输入条的值，可以使用 `v-model` 双向绑定      | `0`       | -       |
-| min          | `number`                                           | 滑动输入条的最小值                               | `0`       | -       |
-| max          | `number`                                           | 滑动输入条的最大值                               | `100`     | -       |
-| step         | `number`                                           | 滑动输入条每次值变化的跨度                       | `1`       | -       |
-| vertical     | `boolean`                                          | 设置滑动输入条是否为纵向，需要父元素具有有效高度 | `false`   | -       |
-| hide-tip     | `boolean`                                          | 设置是否禁用 Tooltip                             | `false`   | -       |
-| tip-transfer | `boolean`                                          | 设置 Tooltip 的 `transfer` 属性                  | `false`   | -       |
-| disabled     | `boolean`                                          | 设置是否为禁用状态                               | `false`   | -       |
-| loading      | `boolean`                                          | 设置是否为加载中                                 | `false`   | `2.0.0` |
-| loading-lock | `boolean`                                          | 设置在加载中时是否为只读                         | `false`   | `2.0.0` |
-| reverse      | `boolean`                                          | 设置是否为反向操作                               | `false`   | `2.0.0` |
-| range        | `boolean`                                          | 设置是否为范围选择                               | `false`   | `2.0.0` |
-| markers      | `Record<string \| number, string \| SliderMarker>` | 设置标记点                                       | `{}`      | `2.0.0` |
-| marker-only  | `boolean`                                          | 设置是否只可选择标记点的值，设置后 `step` 失效   | `false`   | `2.0.0` |
-| tip-hover    | `boolean`                                          | 设置 Tooltip 是否可以被悬停                      | `false`   | `2.2.8` |
+| 名称         | 类型                                             | 说明                                             | 默认值    | 始于    |
+| ------------ | ------------------------------------------------ | ------------------------------------------------ | --------- | ------- |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | 设置滑动输入条类型                               | `default` | `2.0.0` |
+| value        | `number \| number[]`                             | 滑动输入条的值，可以使用 `v-model` 双向绑定      | `0`       | -       |
+| min          | `number`                                         | 滑动输入条的最小值                               | `0`       | -       |
+| max          | `number`                                         | 滑动输入条的最大值                               | `100`     | -       |
+| step         | `number`                                         | 滑动输入条每次值变化的跨度                       | `1`       | -       |
+| vertical     | `boolean`                                        | 设置滑动输入条是否为纵向，需要父元素具有有效高度 | `false`   | -       |
+| hide-tip     | `boolean`                                        | 设置是否禁用 Tooltip                             | `false`   | -       |
+| tip-transfer | `boolean`                                        | 设置 Tooltip 的 `transfer` 属性                  | `false`   | -       |
+| disabled     | `boolean`                                        | 设置是否为禁用状态                               | `false`   | -       |
+| loading      | `boolean`                                        | 设置是否为加载中                                 | `false`   | `2.0.0` |
+| loading-lock | `boolean`                                        | 设置在加载中时是否为只读                         | `false`   | `2.0.0` |
+| reverse      | `boolean`                                        | 设置是否为反向操作                               | `false`   | `2.0.0` |
+| range        | `boolean`                                        | 设置是否为范围选择                               | `false`   | `2.0.0` |
+| markers      | `SliderRawMarkers`                               | 设置标记点                                       | `null`    | `2.0.0` |
+| marker-only  | `boolean`                                        | 设置是否只可选择标记点的值，设置后 `step` 失效   | `false`   | `2.0.0` |
+| tip-hover    | `boolean`                                        | 设置 Tooltip 是否可以被悬停                      | `false`   | `2.2.8` |
+| flip-marker  | `boolean`                                        | 设置是否将标记点标签置于另一侧                   | `false`   | `2.2.9` |
+| trigger-fade | `boolean`                                        | 触发手柄是否会自动隐藏                           | `false`   | `2.2.9` |
 
 ### Slider 事件
 
@@ -146,8 +174,9 @@ interface SliderMarker {
 
 ### Slider 插槽
 
-| 名称    | 说明               | 参数                                                        | 始于    |
-| ------- | ------------------ | ----------------------------------------------------------- | ------- |
-| trigger | 滑块手柄的内容插槽 | `SliderSlotParams`                                          | `2.2.3` |
-| tip     | 提示气泡的内容插槽 | `SliderSlotParams`                                          | -       |
-| marker  | 标记点的内容插槽   | `{ marker: SliderMarker, value: number, inRange: boolean }` | `2.0.0` |
+| 名称    | 说明                 | 参数                     | 始于    |
+| ------- | -------------------- | ------------------------ | ------- |
+| trigger | 滑块手柄的内容插槽   | `SliderTriggerParams`    | `2.2.3` |
+| tip     | 提示气泡的内容插槽   | `SliderTriggerParams`    | -       |
+| marker  | 标记点标签的内容插槽 | `SliderMarkerSlotParams` | `2.0.0` |
+| point   | 标记点的内容插槽     | `SliderMarkerSlotParams` | `2.2.9` |

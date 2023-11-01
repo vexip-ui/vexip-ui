@@ -7,7 +7,6 @@ import { useNameHelper } from '@vexip-ui/config'
 import { useModifier, useSetTimeout } from '@vexip-ui/hooks'
 
 import type { TooltipExposed } from '@/components/tooltip'
-import type { SliderCommonSlot } from './symbol'
 
 defineOptions({ name: 'SliderTrigger' })
 
@@ -60,10 +59,7 @@ const props = defineProps({
 
 const emit = defineEmits(['key-minus', 'key-plus'])
 
-defineSlots<{
-  default: SliderCommonSlot,
-  tip: SliderCommonSlot
-}>()
+defineSlots<{ default: () => any, tip: () => any }>()
 
 const nh = useNameHelper('slider')
 
@@ -175,23 +171,12 @@ function blur() {
           @mouseenter="showTooltip"
           @mouseleave="hideTooltip"
         >
-          <slot
-            :value="value"
-            :disabled="disabled"
-            :loading="loading"
-            :sliding="sliding"
-          >
+          <slot>
             <div :class="nh.be('handler')"></div>
           </slot>
         </div>
       </template>
-      <slot
-        name="tip"
-        :value="value"
-        :disabled="disabled"
-        :loading="loading"
-        :sliding="sliding"
-      >
+      <slot name="tip">
         {{ value }}
       </slot>
     </Tooltip>

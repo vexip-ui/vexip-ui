@@ -2,7 +2,7 @@ import { booleanProp, booleanStringProp, buildProps, eventProp, stateProp } from
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { SliderMarker } from './symbol'
+import type { SliderRawMarkers } from './symbol'
 
 export const sliderProps = buildProps({
   state: stateProp,
@@ -18,9 +18,11 @@ export const sliderProps = buildProps({
   loadingLock: booleanProp,
   reverse: booleanProp,
   range: booleanProp,
-  markers: Object as PropType<Record<string | number, string | SliderMarker>>,
+  markers: [Object, Array] as PropType<SliderRawMarkers>,
   markerOnly: booleanProp,
   tipHover: booleanProp,
+  flipMarker: booleanProp,
+  triggerFade: booleanProp,
   onChange: eventProp<(value: number | number[]) => void>(),
   onInput: eventProp<(value: number | number[]) => void>()
 })

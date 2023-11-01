@@ -9,6 +9,7 @@ import {
   doubleDigits,
   formatByteSize,
   isValidNumber,
+  leaveNumber,
   minus,
   multipleFixed,
   padStartZeros,
@@ -114,25 +115,25 @@ describe('number', () => {
   })
 
   it('toFixed', () => {
-    expect(toFixed(1.255, 2)).toEqual(1.26)
-    expect(toFixed(1.3335, 3)).toEqual(1.334)
-    expect(toFixed(17.2745, 2)).toEqual(17.27)
-    expect(toFixed(1.09, 2)).toEqual(1.09)
-    expect(toFixed(1.009, 2)).toEqual(1.01)
-    expect(toFixed(10.999, 2)).toEqual(11)
-    expect(toFixed(15.5, 2)).toEqual(15.5)
-    expect(toFixed(15.555, 2)).toEqual(15.56)
-    expect(toFixed(1.34e-7, 7)).toEqual(1e-7)
-    expect(toFixed(1.35e-7, 8)).toEqual(1.4e-7)
+    expect(toFixed(1.255, 2)).toBe(1.26)
+    expect(toFixed(1.3335, 3)).toBe(1.334)
+    expect(toFixed(17.2745, 2)).toBe(17.27)
+    expect(toFixed(1.09, 2)).toBe(1.09)
+    expect(toFixed(1.009, 2)).toBe(1.01)
+    expect(toFixed(10.999, 2)).toBe(11)
+    expect(toFixed(15.5, 2)).toBe(15.5)
+    expect(toFixed(15.555, 2)).toBe(15.56)
+    expect(toFixed(1.34e-7, 7)).toBe(1e-7)
+    expect(toFixed(1.35e-7, 8)).toBe(1.4e-7)
   })
 
   it('multipleFixed', () => {
-    expect(multipleFixed(1.2255, 10, 2)).toEqual(12.26)
-    expect(multipleFixed(1.333335, 100, 3)).toEqual(133.334)
-    expect(multipleFixed(17.2745, 0.1, 2)).toEqual(1.73)
-    expect(multipleFixed(1.09, 1, 2)).toEqual(1.09)
-    expect(multipleFixed(1.34e-7, 100, 5)).toEqual(1e-5)
-    expect(multipleFixed(1.35e-7, 1000, 5)).toEqual(1.4e-4)
+    expect(multipleFixed(1.2255, 10, 2)).toBe(12.26)
+    expect(multipleFixed(1.333335, 100, 3)).toBe(133.334)
+    expect(multipleFixed(17.2745, 0.1, 2)).toBe(1.73)
+    expect(multipleFixed(1.09, 1, 2)).toBe(1.09)
+    expect(multipleFixed(1.34e-7, 100, 5)).toBe(1e-5)
+    expect(multipleFixed(1.35e-7, 1000, 5)).toBe(1.4e-4)
   })
 
   it('round', () => {
@@ -149,19 +150,33 @@ describe('number', () => {
     expect(boundRange(5, 1, 4)).toBe(4)
   })
 
+  it('leaveNumber', () => {
+    expect(leaveNumber(12345, 10)).toEqual([1, 2, 3, 4, 5])
+    expect(leaveNumber(10, 10)).toEqual([1, 0])
+    expect(leaveNumber(11, 10)).toEqual([1, 1])
+    expect(leaveNumber(9, 10)).toEqual([9])
+    expect(leaveNumber(0, 10)).toEqual([0])
+    expect(leaveNumber(123, 1)).toEqual([123])
+    expect(leaveNumber(12345, 10, 3)).toEqual([12, 3, 4, 5])
+    expect(leaveNumber(12, 10, 1)).toEqual([1, 2])
+  })
+
   it('formatByteSize', () => {
-    expect(formatByteSize(1024)).toEqual(1024)
-    expect(formatByteSize(2048)).toEqual(2)
-    expect(formatByteSize(2 * 1024 ** 3)).toEqual(2)
-    expect(formatByteSize(1024, 'KB')).toEqual(1)
-    expect(formatByteSize(1024 ** 2, 'MB')).toEqual(1)
-    expect(formatByteSize(1024 ** 3, 'GB')).toEqual(1)
-    expect(formatByteSize(1024 ** 4, 'TB')).toEqual(1)
+    expect(formatByteSize(1024)).toBe(1024)
+    expect(formatByteSize(2048)).toBe(2)
+    expect(formatByteSize(2 * 1024 ** 3)).toBe(2)
+    expect(formatByteSize(1024, 'KB')).toBe(1)
+    expect(formatByteSize(1024 ** 2, 'MB')).toBe(1)
+    expect(formatByteSize(1024 ** 3, 'GB')).toBe(1)
+    expect(formatByteSize(1024 ** 4, 'TB')).toBe(1)
     expect(formatByteSize(1024, 'KB', true)).toEqual('1KB')
     expect(formatByteSize(1024 ** 2, 'MB', true)).toEqual('1MB')
     expect(formatByteSize(1024 ** 3, 'GB', true)).toEqual('1GB')
     expect(formatByteSize(1024 ** 4, 'TB', true)).toEqual('1TB')
     expect(formatByteSize(1024 ** 4, 'AUTO', true)).toEqual('1024GB')
+    expect(formatByteSize(1111, 'AUTO')).toBe(1.08)
+    expect(formatByteSize(1111, 'AUTO', 3)).toBe(1.085)
+    expect(formatByteSize(1111, 'AUTO', true, 3)).toEqual('1.085KB')
   })
 
   it('toPrecision', () => {

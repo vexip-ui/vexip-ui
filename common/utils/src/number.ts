@@ -182,6 +182,34 @@ export function boundRange(number: number | string, min: number, max: number) {
   return Math.max(min, Math.min(max, parseFloat(number as string)))
 }
 
+/**
+ * 将给定一个被除数和除数，不断的取余直至达到次数限制或余数小于除数，返回系列余数
+ *
+ * @param number 被除数，需大于 0
+ * @param divideBy 除数，需大于 1
+ * @param limit 次数限制，小于 1 则不作限制
+ */
+export function leaveNumber(number: number, divideBy: number, limit = 0) {
+  if (number <= 0 || divideBy <= 1) return [number]
+
+  if (limit < 1) {
+    limit = Infinity
+  }
+
+  const remainders: number[] = []
+  let count = 0
+
+  while (number >= divideBy && count < limit) {
+    remainders.push(number % divideBy)
+    number = Math.floor(number / divideBy)
+    ++count
+  }
+
+  remainders.push(number)
+
+  return remainders.reverse()
+}
+
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
 export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
 
@@ -201,8 +229,29 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
  * @param unit 格式化的单位
  */
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto): number
+export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, precision?: number): number
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, joinUtil?: true): number
-export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', joinUtil = false) {
+export function formatByteSize(
+  byte: number,
+  unit?: SizeUnitWithAuto,
+  joinUtil?: true,
+  precision?: number
+): number
+export function formatByteSize(
+  byte: number,
+  unit: SizeUnitWithAuto = 'AUTO',
+  joinUtil: number | boolean = false,
+  precision?: number
+) {
+  if (typeof precision === 'undefined') {
+    if (typeof joinUtil === 'number') {
+      precision = joinUtil
+      joinUtil = false
+    } else {
+      precision = 2
+    }
+  }
+
   let upperUnit = unit.toUpperCase() as Uppercase<SizeUnitWithAuto>
   upperUnit = SIZE_UNIT_WITH_AUTO.includes(upperUnit) ? upperUnit : 'AUTO'
 
@@ -237,6 +286,8 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', jo
   } else {
     targetSize = byte / 1024 ** power
   }
+
+  targetSize = toFixed(targetSize, precision)
 
   return joinUtil
     ? `${targetSize}${upperUnit === 'AUTO' ? SIZE_UNIT_WITH_AUTO[Math.min(power, 4)] : upperUnit}`

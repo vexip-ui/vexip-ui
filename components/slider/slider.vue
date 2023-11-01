@@ -9,7 +9,7 @@ import { useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
-import type { SliderCommonSlot, SliderMarker } from './symbol'
+import type { SliderMarker, SliderMarkerSlot, SliderTriggerSlot } from './symbol'
 
 const enum TriggerType {
   START = 0,
@@ -42,43 +42,67 @@ const props = useProps('slider', _props, {
   loadingLock: false,
   reverse: false,
   range: false,
-  markers: () => ({}),
+  markers: null,
   markerOnly: false,
-  tipHover: false
+  tipHover: false,
+  flipMarker: false,
+  triggerFade: false
 })
 
 const emit = defineEmits(['update:value'])
 
 defineSlots<{
-  trigger: SliderCommonSlot,
-  tip: SliderCommonSlot,
-  marker: (params: { marker: SliderMarker, value: number, inRange: boolean }) => any
+  trigger: SliderTriggerSlot,
+  tip: SliderTriggerSlot,
+  point: SliderMarkerSlot,
+  marker: SliderMarkerSlot
 }>()
 
 const nh = useNameHelper('slider')
+
+const { timer } = useSetTimeout()
+
 const stepOneValue = ref([0, 0]) // 按每 step 为 1 的 value
 const sliding = ref([false, false])
 const triggerType = ref(TriggerType.END)
-
-const { timer } = useSetTimeout()
+const hovered = ref(false)
+const triggerShow = ref(false)
 
 const track = ref<HTMLElement>()
 const startTrigger = ref<InstanceType<typeof SliderTrigger>>()
 const endTrigger = ref<InstanceType<typeof SliderTrigger>>()
 
 const markerList = computed(() => {
-  const list: { value: number, marker: string | SliderMarker }[] = []
+  const markers = props.markers
+  const list: { value: number, marker: SliderMarker }[] = []
 
-  for (const value of Object.keys(props.markers)) {
-    const number = parseFloat(value)
+  if (!markers) return list
 
-    if (!Number.isNaN(number)) {
-      list.push({ value: number, marker: props.markers[value] })
+  if (Array.isArray(markers)) {
+    for (const raw of markers) {
+      const { value, ...marker } = typeof raw === 'number' ? { value: raw } : raw
+
+      if (!Number.isNaN(value)) {
+        list.push({ value, marker })
+      }
+    }
+  } else {
+    for (const value of Object.keys(markers)) {
+      const number = parseFloat(value)
+      const marker = markers[value]
+
+      if (!Number.isNaN(number)) {
+        list.push({
+          value: number,
+          marker: typeof marker === 'string' ? { label: marker } : marker
+        })
+      }
     }
   }
 
   return list.sort((prev, next) => prev.value - next.value)
 })
+const hasMarkerLabel = computed(() => !!markerList.value.find(({ marker }) => marker.label))
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -90,7 +114,9 @@ const className = computed(() => {
     [nh.bm('disabled')]: props.disabled,
     [nh.bm('loading')]: props.loading && props.loadingLock,
     [nh.bm('reverse')]: props.reverse,
-    [nh.bm('with-marker')]: markerList.value.length
+    [nh.bm('with-marker')]: hasMarkerLabel.value,
+    [nh.bm('flip-marker')]: props.flipMarker,
+    [nh.bm('hide-trigger')]: props.triggerFade && !triggerShow.value
   }
 })
 const stepDigit = computed(() => decimalLength(props.step))
@@ -114,12 +140,12 @@ const fillerStyle = computed(() => {
 
   return {
     transform: `
-          translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
-          translateZ(0)
-          scale${vertical ? 'Y' : 'X'}(${
-            Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
-          })
-        `,
+      translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
+      translateZ(0)
+      scale${vertical ? 'Y' : 'X'}(${
+        Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
+      })
+    `,
     transformOrigin: `${vertical ? 50 : reverse ? 100 : 0}% ${vertical ? (reverse ? 100 : 0) : 50}%`
   }
 })
@@ -221,6 +247,30 @@ function verifyValue() {
   })
 }
 
+function setTriggerFade() {
+  if (hovered.value || sliding.value[0] || sliding.value[1]) return
+
+  triggerShow.value = false
+}
+
+function handlePointerEnter() {
+  clearTimeout(timer.hover)
+
+  timer.hover = setTimeout(() => {
+    hovered.value = true
+    triggerShow.value = true
+  }, 250)
+}
+
+function handlePointerLeave() {
+  clearTimeout(timer.hover)
+
+  timer.hover = setTimeout(() => {
+    hovered.value = false
+    setTriggerFade()
+  }, 250)
+}
+
 function emitChange() {
   const [start, end] = truthValue.value
   const value = props.range ? (start > end ? [end, start] : [start, end]) : end
@@ -312,6 +362,7 @@ function handleTrackDown(event: PointerEvent) {
   }
 
   sliding.value[triggerType.value] = true
+  triggerShow.value = true
 
   computePointedValue(event)
   verifyValue()
@@ -334,6 +385,7 @@ function handleMoveEnd() {
 
   timer.sliding = setTimeout(() => {
     sliding.value[triggerType.value] = false
+    setTriggerFade()
   }, 250)
 }
 
@@ -447,6 +499,8 @@ function blur() {
     :class="className"
     tabindex="-1"
     @pointerdown="handleTrackDown"
+    @pointerenter="handlePointerEnter"
+    @pointerleave="handlePointerLeave"
     @touchstart="disableEvent"
   >
     <div :class="nh.be('container')">
@@ -456,39 +510,41 @@ function blur() {
       <template v-if="markerList.length">
         <div :class="nh.be('points')">
           <div
-            v-for="{ value } in markerList"
+            v-for="{ value, marker } in markerList"
             :key="value"
             :class="[nh.be('point'), isValueInRange(value) && nh.bem('point', 'in-range')]"
             :style="getPointStyle(value)"
-          ></div>
+          >
+            <slot
+              name="point"
+              :values="truthValue"
+              :sliding="sliding"
+              :marker="marker"
+              :marker-value="value"
+              :in-range="isValueInRange(value)"
+              :disabled="props.disabled"
+              :loading="props.loading"
+            >
+              <span :class="nh.be('dot')"></span>
+            </slot>
+          </div>
         </div>
         <div :class="nh.be('markers')">
           <template v-for="{ value, marker } in markerList" :key="value">
             <div
-              v-if="typeof marker === 'string'"
-              :class="nh.be('marker')"
-              :style="getMarkerStyle(value)"
-            >
-              <slot
-                name="marker"
-                :marker="{ label: marker }"
-                :value="value"
-                :in-range="isValueInRange(value)"
-              >
-                {{ marker }}
-              </slot>
-            </div>
-            <div
-              v-else
               v-bind="marker.attrs"
               :class="[nh.be('marker'), marker.class]"
               :style="[getMarkerStyle(value), marker.style as any]"
             >
               <slot
                 name="marker"
+                :values="truthValue"
+                :sliding="sliding"
                 :marker="marker"
-                :value="value"
+                :marker-value="value"
                 :in-range="isValueInRange(value)"
+                :disabled="props.disabled"
+                :loading="props.loading"
               >
                 {{ marker.label }}
               </slot>
@@ -514,12 +570,25 @@ function blur() {
         @key-plus="handlePlus(0, $event)"
         @key-minus="handleMinus(0, $event)"
       >
-        <template #default="payload">
-          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-        </template>
-        <template #tip="payload">
-          <slot name="tip" v-bind="payload">
-            {{ payload.value.toFixed(stepDigit) }}
+        <slot
+          v-if="$slots.trigger"
+          name="trigger"
+          type="start"
+          :value="truthValue[0]"
+          :sliding="sliding[0]"
+          :disabled="props.disabled"
+          :loading="props.loading"
+        ></slot>
+        <template #tip>
+          <slot
+            name="tip"
+            type="start"
+            :value="truthValue[0]"
+            :sliding="sliding[0]"
+            :disabled="props.disabled"
+            :loading="props.loading"
+          >
+            {{ truthValue[0] }}
           </slot>
         </template>
       </SliderTrigger>
@@ -540,12 +609,25 @@ function blur() {
         @key-plus="handlePlus(1, $event)"
         @key-minus="handleMinus(1, $event)"
       >
-        <template #default="payload">
-          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-        </template>
-        <template #tip="payload">
-          <slot name="tip" v-bind="payload">
-            {{ payload.value.toFixed(stepDigit) }}
+        <slot
+          v-if="$slots.trigger"
+          name="trigger"
+          type="end"
+          :value="truthValue[1]"
+          :sliding="sliding[1]"
+          :disabled="props.disabled"
+          :loading="props.loading"
+        ></slot>
+        <template #tip>
+          <slot
+            name="tip"
+            type="end"
+            :value="truthValue[1]"
+            :sliding="sliding[1]"
+            :disabled="props.disabled"
+            :loading="props.loading"
+          >
+            {{ truthValue[1] }}
           </slot>
         </template>
       </SliderTrigger>
