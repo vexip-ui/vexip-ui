@@ -68,6 +68,16 @@
 
 :::
 
+:::demo slider/trigger-fade
+
+### 隐藏手柄
+
+^[Since v2.2.9](!s)
+
+添加 `trigger-fade` 属性可以使手柄在无操作时隐藏。
+
+:::
+
 :::demo slider/loading
 
 ### 加载状态
@@ -153,6 +163,7 @@ interface SliderMarkerSlotParams extends SliderSlotParams {
 | marker-only  | `boolean`                                        | 设置是否只可选择标记点的值，设置后 `step` 失效   | `false`   | `2.0.0` |
 | tip-hover    | `boolean`                                        | 设置 Tooltip 是否可以被悬停                      | `false`   | `2.2.8` |
 | flip-marker  | `boolean`                                        | 设置是否将标记点标签置于另一侧                   | `false`   | `2.2.9` |
+| trigger-fade | `boolean`                                        | 触发手柄是否会自动隐藏                           | `false`   | `2.2.9` |
 
 ### Slider 事件
 

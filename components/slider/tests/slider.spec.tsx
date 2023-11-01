@@ -7,23 +7,35 @@ import { Slider } from '..'
 
 vi.useFakeTimers()
 
-async function toggleMove(el: HTMLElement, value = 40) {
+async function moveStart(el: HTMLElement, value = 40) {
   const downEvent = new CustomEvent('pointerdown') as any
   downEvent.button = 0
   downEvent.clientX = value
   downEvent.clientY = value
   el.dispatchEvent(downEvent)
   await nextTick()
+}
 
+async function move(value = 40) {
   const moveEvent = new CustomEvent('pointermove') as any
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
   vi.runAllTimers()
   await nextTick()
+}
 
+async function moveEnd() {
   const upEvent = new CustomEvent('pointerup') as any
   document.dispatchEvent(upEvent)
+  vi.runAllTimers()
+  await nextTick()
+}
+
+async function toggleMove(el: HTMLElement, value = 40) {
+  await moveStart(el, value)
+  await move(value)
+  await moveEnd()
 }
 
 describe('Slider', () => {
@@ -279,5 +291,35 @@ describe('Slider', () => {
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(30%)')
 
     trackMock.mockRestore()
+  })
+
+  it('trigger-fade', async () => {
+    const wrapper = mount(() => <Slider trigger-fade></Slider>)
+    const wrapperEl = wrapper.find('.vxp-slider').element as HTMLElement
+
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
+    await moveStart(wrapperEl, 30)
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+    await moveEnd()
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
+
+    wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+    await moveStart(wrapperEl, 30)
+    wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+
+    wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
+    vi.runAllTimers()
+    await nextTick()
+    await moveEnd()
+    wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
   })
 })

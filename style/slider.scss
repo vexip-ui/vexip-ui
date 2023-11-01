@@ -165,6 +165,7 @@ $slider: map.merge(
     justify-content: center;
     width: $handler-size;
     height: $handler-size;
+    transition: get-css-var('transition-opacity');
 
     .#{$namespace}-tooltip {
       line-height: 1;
@@ -179,6 +180,10 @@ $slider: map.merge(
     }
   }
 
+  &--hide-trigger &__trigger {
+    opacity: 0%;
+  }
+
   &__handler {
     @include round-border(get-css-var('slider-handler-b-color'));
 
@@ -190,7 +195,8 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-border'), get-css-var('transition-shadow');
+    transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
+      get-css-var('transition-transform');
 
     &::before {
       top: 2px;
@@ -199,6 +205,10 @@ $slider: map.merge(
       height: calc(100% - 4px);
       opacity: 0%;
     }
+  }
+
+  &--hide-trigger &__handler {
+    transform: scale(0);
   }
 
   $handler: #{&}__handler;
@@ -250,7 +260,6 @@ $slider: map.merge(
 
   &--disabled#{&}--sliding &__button &__handler {
     box-shadow: get-css-var('slider-handler-shadow-disabled');
-    transform: scale(1);
   }
 
   &__tip {

@@ -68,6 +68,16 @@ After setting markers, you can add `marker-only` prop to limit only the marked v
 
 :::
 
+:::demo slider/trigger-fade
+
+### Hide Trigger
+
+^[Since v2.2.9](!s)
+
+Add the `trigger-fade` prop to hide the trigger when there is no operation.
+
+:::
+
 :::demo slider/loading
 
 ### Loading
@@ -153,6 +163,7 @@ interface SliderMarkerSlotParams extends SliderSlotParams {
 | marker-only  | `boolean`                                        | Set whether only marker value can be selected, `step` will not effective after set             | `false`   | `2.0.0` |
 | tip-hover    | `boolean`                                        | Set whether the Tooltip can be hovered                                                         | `false`   | `2.2.8` |
 | flip-marker  | `boolean`                                        | Set whether to place the marker label on the other side                                        | `false`   | `2.2.9` |
+| trigger-fade | `boolean`                                        | Whether the trigger will be automatically hidden                                               | `false`   | `2.2.9` |
 
 ### Slider Events
 

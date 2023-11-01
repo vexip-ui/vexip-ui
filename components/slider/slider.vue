@@ -45,7 +45,8 @@ const props = useProps('slider', _props, {
   markers: null,
   markerOnly: false,
   tipHover: false,
-  flipMarker: false
+  flipMarker: false,
+  triggerFade: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -58,11 +59,14 @@ defineSlots<{
 }>()
 
 const nh = useNameHelper('slider')
+
+const { timer } = useSetTimeout()
+
 const stepOneValue = ref([0, 0]) // 按每 step 为 1 的 value
 const sliding = ref([false, false])
 const triggerType = ref(TriggerType.END)
-
-const { timer } = useSetTimeout()
+const hovered = ref(false)
+const triggerShow = ref(false)
 
 const track = ref<HTMLElement>()
 const startTrigger = ref<InstanceType<typeof SliderTrigger>>()
@@ -111,7 +115,8 @@ const className = computed(() => {
     [nh.bm('loading')]: props.loading && props.loadingLock,
     [nh.bm('reverse')]: props.reverse,
     [nh.bm('with-marker')]: hasMarkerLabel.value,
-    [nh.bm('flip-marker')]: props.flipMarker
+    [nh.bm('flip-marker')]: props.flipMarker,
+    [nh.bm('hide-trigger')]: props.triggerFade && !triggerShow.value
   }
 })
 const stepDigit = computed(() => decimalLength(props.step))
@@ -242,6 +247,30 @@ function verifyValue() {
   })
 }
 
+function setTriggerFade() {
+  if (hovered.value || sliding.value[0] || sliding.value[1]) return
+
+  triggerShow.value = false
+}
+
+function handlePointerEnter() {
+  clearTimeout(timer.hover)
+
+  timer.hover = setTimeout(() => {
+    hovered.value = true
+    triggerShow.value = true
+  }, 250)
+}
+
+function handlePointerLeave() {
+  clearTimeout(timer.hover)
+
+  timer.hover = setTimeout(() => {
+    hovered.value = false
+    setTriggerFade()
+  }, 250)
+}
+
 function emitChange() {
   const [start, end] = truthValue.value
   const value = props.range ? (start > end ? [end, start] : [start, end]) : end
@@ -333,6 +362,7 @@ function handleTrackDown(event: PointerEvent) {
   }
 
   sliding.value[triggerType.value] = true
+  triggerShow.value = true
 
   computePointedValue(event)
   verifyValue()
@@ -355,6 +385,7 @@ function handleMoveEnd() {
 
   timer.sliding = setTimeout(() => {
     sliding.value[triggerType.value] = false
+    setTriggerFade()
   }, 250)
 }
 
@@ -468,6 +499,8 @@ function blur() {
     :class="className"
     tabindex="-1"
     @pointerdown="handleTrackDown"
+    @pointerenter="handlePointerEnter"
+    @pointerleave="handlePointerLeave"
     @touchstart="disableEvent"
   >
     <div :class="nh.be('container')">
