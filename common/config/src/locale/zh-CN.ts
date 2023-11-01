@@ -175,6 +175,11 @@ export function zhCNLocale() {
       dragOrClick: '将文件拖到此处, 或点击上传'
     },
 
+    video: {
+      fullScreen: '进入全屏',
+      fullScreenExit: '推出全屏'
+    },
+
     viewer: {
       rotateRight: '向右旋转',
       rotateLeft: '向左旋转',
@@ -182,7 +187,7 @@ export function zhCNLocale() {
       flipVertical: '纵向翻转',
       zoomIn: '放大',
       zoomOut: '缩小',
-      fullScreen: '全屏',
+      fullScreen: '进入全屏',
       fullScreenExit: '退出全屏',
       reset: '重置'
     }

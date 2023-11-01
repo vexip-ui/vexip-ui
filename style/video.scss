@@ -6,10 +6,11 @@
 $video: () !default;
 $video: map.merge(
   (
-    volume-color: #fff,
-    volume-bg-color: rgba(#000, 60%),
-    volume-radius: get-css-var('radius-small'),
-    volume-shadow: get-css-var('shadow-shape') #000
+    control-color: #fff,
+    control-bg-color: rgba(#000, 60%),
+    control-radius: get-css-var('radius-small'),
+    control-shadow: get-css-var('shadow-shape') #000,
+    timer-radius: get-css-var('radius-small')
   ),
   $video
 );
@@ -67,37 +68,83 @@ $video: map.merge(
     justify-content: center;
     min-width: 32px;
     height: 100%;
-    padding: 0;
-    color: #fff;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    outline: 0;
-  }
+    line-height: 1;
+    color: get-css-var('video-control-color');
 
-  &__volume {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: get-css-var('video-volume-color');
+    &-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      color: get-css-var('video-control-color');
+      cursor: pointer;
+      background-color: transparent;
+      border: 0;
+      outline: 0;
+    }
 
+    &-tip,
     &-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin: 5px 0;
+      color: get-css-var('video-control-color');
+      background-color: get-css-var('video-control-bg-color');
+      border-radius: get-css-var('video-control-radius');
+      box-shadow: get-css-var('video-control-shadow');
+    }
+
+    &-tip {
+      padding: 6px 10px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+  }
+
+  &__timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+
+    &-input {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      overflow: hidden;
+      color: inherit;
+      background-color: rgba(#fff, 30%);
+      border-radius: get-css-var('video-timer-radius');
+
+      .#{$namespace}-input__control {
+        color: inherit;
+        text-align: center;
+        user-select: auto;
+        background-color: transparent;
+        border: 0;
+        outline: 0;
+      }
+    }
+
+    &-separator {
+      margin: 0 1px;
+    }
+  }
+
+  &__volume {
+    &-panel {
       width: 40px;
       height: 140px;
-      padding: 6px 0 4px;
-      margin: 5px 0;
-      background-color: get-css-var('video-volume-bg-color');
-      border-radius: get-css-var('video-volume-radius');
-      box-shadow: get-css-var('video-volume-shadow');
+      padding: 6px 0;
     }
 
     &-text {
       flex-shrink: 0;
-      color: get-css-var('video-volume-color');
     }
 
     &-slider {

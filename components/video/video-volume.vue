@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
 import { Slider } from '@/components/slider'
-import { Tooltip } from '@/components/tooltip'
 
 import { computed, ref, watch } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
+import VideoControl from './video-control.vue'
 
 defineOptions({ name: 'VideoVolume' })
 
@@ -22,7 +22,7 @@ const nh = useNameHelper('video')
 const icons = useIcons()
 const currentVolume = ref(props.volume)
 const muted = ref(false)
-const visible = ref(true)
+// const visible = ref(true)
 
 const volumeIcon = computed(() => (muted.value ? icons.value.volumeMute : icons.value.volume))
 
@@ -36,6 +36,7 @@ watch(
 let prevVolume = currentVolume.value
 
 function toggleMute() {
+  debugger
   if (muted.value) {
     currentVolume.value = prevVolume <= 0 ? 50 : prevVolume
   } else {
@@ -54,29 +55,25 @@ function handleSlide(value: number) {
 </script>
 
 <template>
-  <Tooltip
+  <VideoControl
     :class="nh.be('volume')"
-    raw
-    :tip-class="nh.be('volume-panel')"
-    wrapper="div"
-    trigger="custom"
-    :visible="visible"
+    popper-type="panel"
+    :popper-class="nh.be('volume-panel')"
+    @trigger="toggleMute"
   >
-    <template #trigger>
-      <button :class="nh.be('control')" type="button" @click="toggleMute">
-        <Icon :scale="1.4" v-bind="volumeIcon"></Icon>
-      </button>
+    <Icon :scale="1.4" v-bind="volumeIcon"></Icon>
+    <template #panel>
+      <div :class="nh.be('volume-text')">
+        {{ currentVolume }}
+      </div>
+      <Slider
+        :value="currentVolume"
+        :class="nh.be('volume-slider')"
+        vertical
+        hide-tip
+        reverse
+        @input="handleSlide"
+      ></Slider>
     </template>
-    <div :class="nh.be('volume-text')">
-      {{ currentVolume }}
-    </div>
-    <Slider
-      :value="currentVolume"
-      :class="nh.be('volume-slider')"
-      vertical
-      hide-tip
-      reverse
-      @input="handleSlide"
-    ></Slider>
-  </Tooltip>
+  </VideoControl>
 </template>

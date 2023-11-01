@@ -3,7 +3,9 @@ import { Icon } from '@/components/icon'
 
 import { computed, ref } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import VideoControl from './video-control.vue'
+import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
 import { videoProps } from './props'
 
@@ -16,6 +18,7 @@ const props = useProps('video', _props, {
 })
 
 const nh = useNameHelper('video')
+const locale = useLocale('video')
 const icons = useIcons()
 
 const volume = ref(100)
@@ -41,16 +44,17 @@ defineExpose({
     ></video>
     <div v-if="!props.noControls" :class="nh.be('controls')">
       <div :class="nh.be('controls-left')">
-        <button :class="nh.be('control')" type="button">
+        <VideoControl>
           <Icon :scale="1.4" v-bind="icons.play"></Icon>
-        </button>
+        </VideoControl>
+        <VideoTimer></VideoTimer>
       </div>
       <div :class="nh.be('controls-center')"></div>
       <div :class="nh.be('controls-right')">
         <VideoVolume v-model:volume="volume"></VideoVolume>
-        <button :class="nh.be('control')" type="button">
+        <VideoControl :name="locale.fullScreen">
           <Icon :scale="1.25" v-bind="icons.fullScreen"></Icon>
-        </button>
+        </VideoControl>
       </div>
     </div>
     <slot></slot>

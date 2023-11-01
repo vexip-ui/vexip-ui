@@ -173,6 +173,11 @@ export interface LocaleConfig {
     dragOrClick: string
   },
 
+  video: {
+    fullScreen: string,
+    fullScreenExit: string
+  },
+
   viewer: {
     rotateRight: string,
     rotateLeft: string,
