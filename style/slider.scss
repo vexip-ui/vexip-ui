@@ -248,21 +248,25 @@ $slider: map.merge(
 
   &__point {
     position: absolute;
+    display: flex;
+    pointer-events: none;
+  }
+
+  &__dot {
     width: $marker-size;
     height: $marker-size;
-    pointer-events: none;
     background-color: get-css-var('slider-handler-bg-color');
     border: get-css-var('slider-handler-b-width') solid
       get-css-var('slider-handler-b-color-disabled');
     border-radius: $marker-size;
     transition: get-css-var('transition-border');
-
-    &--in-range {
-      border-color: get-css-var('slider-handler-b-color');
-    }
   }
 
-  &--disabled &__point {
+  &__point--in-range &__dot {
+    border-color: get-css-var('slider-handler-b-color');
+  }
+
+  &--disabled &__point &__dot {
     border-color: get-css-var('slider-handler-b-color-disabled');
   }
 

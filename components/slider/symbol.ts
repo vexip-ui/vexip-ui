@@ -15,3 +15,7 @@ export interface SliderMarker {
   style?: StyleType,
   attrs?: Record<string, any>
 }
+
+export type SliderRawMarkers =
+  | Record<string | number, string | SliderMarker>
+  | Array<number | (SliderMarker & { value: number })>

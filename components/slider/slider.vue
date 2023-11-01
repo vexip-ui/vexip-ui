@@ -42,7 +42,7 @@ const props = useProps('slider', _props, {
   loadingLock: false,
   reverse: false,
   range: false,
-  markers: () => ({}),
+  markers: null,
   markerOnly: false,
   tipHover: false
 })
@@ -52,6 +52,7 @@ const emit = defineEmits(['update:value'])
 defineSlots<{
   trigger: SliderCommonSlot,
   tip: SliderCommonSlot,
+  point: (params: { marker: SliderMarker, value: number, inRange: boolean }) => any,
   marker: (params: { marker: SliderMarker, value: number, inRange: boolean }) => any
 }>()
 
@@ -67,13 +68,30 @@ const startTrigger = ref<InstanceType<typeof SliderTrigger>>()
 const endTrigger = ref<InstanceType<typeof SliderTrigger>>()
 
 const markerList = computed(() => {
-  const list: { value: number, marker: string | SliderMarker }[] = []
+  const markers = props.markers
+  const list: { value: number, marker: SliderMarker }[] = []
 
-  for (const value of Object.keys(props.markers)) {
-    const number = parseFloat(value)
+  if (!markers) return list
 
-    if (!Number.isNaN(number)) {
-      list.push({ value: number, marker: props.markers[value] })
+  if (Array.isArray(markers)) {
+    for (const raw of markers) {
+      const { value, ...marker } = typeof raw === 'number' ? { value: raw } : raw
+
+      if (!Number.isNaN(value)) {
+        list.push({ value, marker })
+      }
+    }
+  } else {
+    for (const value of Object.keys(markers)) {
+      const number = parseFloat(value)
+      const marker = markers[value]
+
+      if (!Number.isNaN(number)) {
+        list.push({
+          value: number,
+          marker: typeof marker === 'string' ? { label: marker } : marker
+        })
+      }
     }
   }
 
@@ -456,30 +474,24 @@ function blur() {
       <template v-if="markerList.length">
         <div :class="nh.be('points')">
           <div
-            v-for="{ value } in markerList"
+            v-for="{ value, marker } in markerList"
             :key="value"
             :class="[nh.be('point'), isValueInRange(value) && nh.bem('point', 'in-range')]"
             :style="getPointStyle(value)"
-          ></div>
+          >
+            <slot
+              name="point"
+              :marker="marker"
+              :value="value"
+              :in-range="isValueInRange(value)"
+            >
+              <span :class="nh.be('dot')"></span>
+            </slot>
+          </div>
         </div>
         <div :class="nh.be('markers')">
           <template v-for="{ value, marker } in markerList" :key="value">
             <div
-              v-if="typeof marker === 'string'"
-              :class="nh.be('marker')"
-              :style="getMarkerStyle(value)"
-            >
-              <slot
-                name="marker"
-                :marker="{ label: marker }"
-                :value="value"
-                :in-range="isValueInRange(value)"
-              >
-                {{ marker }}
-              </slot>
-            </div>
-            <div
-              v-else
               v-bind="marker.attrs"
               :class="[nh.be('marker'), marker.class]"
               :style="[getMarkerStyle(value), marker.style as any]"
