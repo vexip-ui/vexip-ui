@@ -54,6 +54,8 @@ import {
   Minus,
   Moon,
   Outdent,
+  Pause,
+  Play,
   Plus,
   Repeat,
   Retweet,
@@ -63,8 +65,6 @@ import {
   Upload,
   User,
   VolumeHigh,
-  VolumeLow,
-  VolumeOff,
   VolumeXmark,
   Xmark
 } from '@vexip-ui/icons'
@@ -154,10 +154,10 @@ export interface IconsConfig {
   fullScreen: IconConfig,
   resetScreen: IconConfig,
   dragger: IconConfig,
+  volume: IconConfig,
   volumeMute: IconConfig,
-  volumeOff: IconConfig,
-  volumeLow: IconConfig,
-  volumeHigh: IconConfig
+  play: IconConfig,
+  pause: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -228,10 +228,10 @@ const iconMap: IconsConfig = {
   fullScreen: Expand,
   resetScreen: Compress,
   dragger: GripLinesVertical,
+  volume: VolumeHigh,
   volumeMute: VolumeXmark,
-  volumeOff: VolumeOff,
-  volumeLow: VolumeLow,
-  volumeHigh: VolumeHigh
+  play: Play,
+  pause: Pause
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

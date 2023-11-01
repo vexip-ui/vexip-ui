@@ -4,7 +4,15 @@
 @use './design' as *;
 
 $video: () !default;
-$video: map.merge((), $video);
+$video: map.merge(
+  (
+    volume-color: #fff,
+    volume-bg-color: rgba(#000, 60%),
+    volume-radius: get-css-var('radius-small'),
+    volume-shadow: get-css-var('shadow-shape') #000
+  ),
+  $video
+);
 
 .#{$namespace}-video {
   &-vars {
@@ -13,8 +21,96 @@ $video: map.merge((), $video);
 
   @include basis;
 
+  position: relative;
+  width: 100%;
+  height: 100%;
+
   &__player {
     width: 100%;
     height: 100%;
+  }
+
+  &__controls {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    gap: 0 10px;
+    align-items: center;
+    height: 40px;
+    background-color: rgba(#000, 60%);
+
+    &-left,
+    &-center,
+    &-right {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      height: 100%;
+    }
+
+    &-left {
+      padding-inline-start: 10px;
+    }
+
+    &-center {
+      flex: auto;
+    }
+
+    &-right {
+      padding-inline-end: 10px;
+    }
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 100%;
+    padding: 0;
+    color: #fff;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+  }
+
+  &__volume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: get-css-var('video-volume-color');
+
+    &-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px;
+      height: 140px;
+      padding: 6px 0 4px;
+      margin: 5px 0;
+      background-color: get-css-var('video-volume-bg-color');
+      border-radius: get-css-var('video-volume-radius');
+      box-shadow: get-css-var('video-volume-shadow');
+    }
+
+    &-text {
+      flex-shrink: 0;
+      color: get-css-var('video-volume-color');
+    }
+
+    &-slider {
+      @include define-preset-values(
+        'slider',
+        (
+          handler-size: 14px,
+          handler-scale-hover: 1,
+          handler-scale-focus: 1
+        )
+      );
+
+      width: auto;
+    }
   }
 }

@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { Icon } from '@/components/icon'
+
 import { computed, ref } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import VideoVolume from './video-volume.vue'
 import { videoProps } from './props'
 
 defineOptions({ name: 'Video' })
@@ -13,6 +16,9 @@ const props = useProps('video', _props, {
 })
 
 const nh = useNameHelper('video')
+const icons = useIcons()
+
+const volume = ref(100)
 
 const video = ref<HTMLVideoElement>()
 
@@ -34,9 +40,18 @@ defineExpose({
       @canplay="emitEvent(props.onCanplay, $event)"
     ></video>
     <div v-if="!props.noControls" :class="nh.be('controls')">
-      <div :class="nh.be('control-left')"></div>
-      <div :class="nh.be('control-center')"></div>
-      <div :class="nh.be('control-right')"></div>
+      <div :class="nh.be('controls-left')">
+        <button :class="nh.be('control')" type="button">
+          <Icon :scale="1.4" v-bind="icons.play"></Icon>
+        </button>
+      </div>
+      <div :class="nh.be('controls-center')"></div>
+      <div :class="nh.be('controls-right')">
+        <VideoVolume v-model:volume="volume"></VideoVolume>
+        <button :class="nh.be('control')" type="button">
+          <Icon :scale="1.25" v-bind="icons.fullScreen"></Icon>
+        </button>
+      </div>
     </div>
     <slot></slot>
   </div>
