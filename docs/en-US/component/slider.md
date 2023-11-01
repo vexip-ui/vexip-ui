@@ -101,13 +101,6 @@ You can custom the trigger content via `trigger` slot.
 ### Preset Types
 
 ```ts
-interface SliderSlotParams {
-  value: number,
-  disabled: boolean,
-  loading: boolean,
-  sliding: boolean
-}
-
 interface SliderMarker {
   label?: string,
   class?: ClassType,
@@ -118,6 +111,25 @@ interface SliderMarker {
 type SliderRawMarkers =
   | Record<string | number, string | SliderMarker>
   | Array<number | (SliderMarker & { value: number })>
+
+interface SliderSlotParams {
+  disabled: boolean,
+  loading: boolean
+}
+
+interface SliderTriggerParams extends SliderSlotParams {
+  type: 'start' | 'end',
+  value: number,
+  sliding: boolean
+}
+
+interface SliderMarkerSlotParams extends SliderSlotParams {
+  values: number[],
+  sliding: boolean[],
+  markerValue: number,
+  marker: SliderMarker,
+  inRange: boolean
+}
 ```
 
 ### Slider Props
@@ -140,6 +152,7 @@ type SliderRawMarkers =
 | markers      | `SliderRawMarkers`                               | Set markers                                                                                    | `null`    | `2.0.0` |
 | marker-only  | `boolean`                                        | Set whether only marker value can be selected, `step` will not effective after set             | `false`   | `2.0.0` |
 | tip-hover    | `boolean`                                        | Set whether the Tooltip can be hovered                                                         | `false`   | `2.2.8` |
+| flip-marker  | `boolean`                                        | Set whether to place the marker label on the other side                                        | `false`   | `2.2.9` |
 
 ### Slider Events
 
@@ -150,8 +163,9 @@ type SliderRawMarkers =
 
 ### Slider Slots
 
-| Name    | Description              | Parameters                                                  | Since   |
-| ------- | ------------------------ | ----------------------------------------------------------- | ------- |
-| trigger | Slot for trigger content | `SliderSlotParams`                                          | `2.2.3` |
-| tip     | Slot for tip content     | `SliderSlotParams`                                          | -       |
-| marker  | Slot for marker content  | `{ marker: SliderMarker, value: number, inRange: boolean }` | `2.0.0` |
+| Name    | Description                   | Parameters               | Since   |
+| ------- | ----------------------------- | ------------------------ | ------- |
+| trigger | Slot for trigger content      | `SliderTriggerParams`    | `2.2.3` |
+| tip     | Slot for tip content          | `SliderTriggerParams`    | -       |
+| marker  | Slot for marker label content | `SliderMarkerSlotParams` | `2.0.0` |
+| point   | Slot for marker point content | `SliderMarkerSlotParams` | `2.2.9` |

@@ -9,7 +9,7 @@ import { useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
-import type { SliderCommonSlot, SliderMarker } from './symbol'
+import type { SliderMarker, SliderMarkerSlot, SliderTriggerSlot } from './symbol'
 
 const enum TriggerType {
   START = 0,
@@ -44,16 +44,17 @@ const props = useProps('slider', _props, {
   range: false,
   markers: null,
   markerOnly: false,
-  tipHover: false
+  tipHover: false,
+  flipMarker: false
 })
 
 const emit = defineEmits(['update:value'])
 
 defineSlots<{
-  trigger: SliderCommonSlot,
-  tip: SliderCommonSlot,
-  point: (params: { marker: SliderMarker, value: number, inRange: boolean }) => any,
-  marker: (params: { marker: SliderMarker, value: number, inRange: boolean }) => any
+  trigger: SliderTriggerSlot,
+  tip: SliderTriggerSlot,
+  point: SliderMarkerSlot,
+  marker: SliderMarkerSlot
 }>()
 
 const nh = useNameHelper('slider')
@@ -97,6 +98,7 @@ const markerList = computed(() => {
 
   return list.sort((prev, next) => prev.value - next.value)
 })
+const hasMarkerLabel = computed(() => !!markerList.value.find(({ marker }) => marker.label))
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -108,7 +110,8 @@ const className = computed(() => {
     [nh.bm('disabled')]: props.disabled,
     [nh.bm('loading')]: props.loading && props.loadingLock,
     [nh.bm('reverse')]: props.reverse,
-    [nh.bm('with-marker')]: markerList.value.length
+    [nh.bm('with-marker')]: hasMarkerLabel.value,
+    [nh.bm('flip-marker')]: props.flipMarker
   }
 })
 const stepDigit = computed(() => decimalLength(props.step))
@@ -132,12 +135,12 @@ const fillerStyle = computed(() => {
 
   return {
     transform: `
-          translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
-          translateZ(0)
-          scale${vertical ? 'Y' : 'X'}(${
-            Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
-          })
-        `,
+      translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
+      translateZ(0)
+      scale${vertical ? 'Y' : 'X'}(${
+        Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
+      })
+    `,
     transformOrigin: `${vertical ? 50 : reverse ? 100 : 0}% ${vertical ? (reverse ? 100 : 0) : 50}%`
   }
 })
@@ -481,9 +484,13 @@ function blur() {
           >
             <slot
               name="point"
+              :values="truthValue"
+              :sliding="sliding"
               :marker="marker"
-              :value="value"
+              :marker-value="value"
               :in-range="isValueInRange(value)"
+              :disabled="props.disabled"
+              :loading="props.loading"
             >
               <span :class="nh.be('dot')"></span>
             </slot>
@@ -498,9 +505,13 @@ function blur() {
             >
               <slot
                 name="marker"
+                :values="truthValue"
+                :sliding="sliding"
                 :marker="marker"
-                :value="value"
+                :marker-value="value"
                 :in-range="isValueInRange(value)"
+                :disabled="props.disabled"
+                :loading="props.loading"
               >
                 {{ marker.label }}
               </slot>
@@ -526,12 +537,25 @@ function blur() {
         @key-plus="handlePlus(0, $event)"
         @key-minus="handleMinus(0, $event)"
       >
-        <template #default="payload">
-          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-        </template>
-        <template #tip="payload">
-          <slot name="tip" v-bind="payload">
-            {{ payload.value.toFixed(stepDigit) }}
+        <slot
+          v-if="$slots.trigger"
+          name="trigger"
+          type="start"
+          :value="truthValue[0]"
+          :sliding="sliding[0]"
+          :disabled="props.disabled"
+          :loading="props.loading"
+        ></slot>
+        <template #tip>
+          <slot
+            name="tip"
+            type="start"
+            :value="truthValue[0]"
+            :sliding="sliding[0]"
+            :disabled="props.disabled"
+            :loading="props.loading"
+          >
+            {{ truthValue[0] }}
           </slot>
         </template>
       </SliderTrigger>
@@ -552,12 +576,25 @@ function blur() {
         @key-plus="handlePlus(1, $event)"
         @key-minus="handleMinus(1, $event)"
       >
-        <template #default="payload">
-          <slot v-if="$slots.trigger" name="trigger" v-bind="payload"></slot>
-        </template>
-        <template #tip="payload">
-          <slot name="tip" v-bind="payload">
-            {{ payload.value.toFixed(stepDigit) }}
+        <slot
+          v-if="$slots.trigger"
+          name="trigger"
+          type="end"
+          :value="truthValue[1]"
+          :sliding="sliding[1]"
+          :disabled="props.disabled"
+          :loading="props.loading"
+        ></slot>
+        <template #tip>
+          <slot
+            name="tip"
+            type="end"
+            :value="truthValue[1]"
+            :sliding="sliding[1]"
+            :disabled="props.disabled"
+            :loading="props.loading"
+          >
+            {{ truthValue[1] }}
           </slot>
         </template>
       </SliderTrigger>
