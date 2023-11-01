@@ -201,8 +201,29 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
  * @param unit 格式化的单位
  */
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto): number
+export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, precision?: number): number
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, joinUtil?: true): number
-export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', joinUtil = false) {
+export function formatByteSize(
+  byte: number,
+  unit?: SizeUnitWithAuto,
+  joinUtil?: true,
+  precision?: number
+): number
+export function formatByteSize(
+  byte: number,
+  unit: SizeUnitWithAuto = 'AUTO',
+  joinUtil: number | boolean = false,
+  precision?: number
+) {
+  if (typeof precision === 'undefined') {
+    if (typeof joinUtil === 'number') {
+      precision = joinUtil
+      joinUtil = false
+    } else {
+      precision = 2
+    }
+  }
+
   let upperUnit = unit.toUpperCase() as Uppercase<SizeUnitWithAuto>
   upperUnit = SIZE_UNIT_WITH_AUTO.includes(upperUnit) ? upperUnit : 'AUTO'
 
@@ -237,6 +258,8 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', jo
   } else {
     targetSize = byte / 1024 ** power
   }
+
+  targetSize = toFixed(targetSize, precision)
 
   return joinUtil
     ? `${targetSize}${upperUnit === 'AUTO' ? SIZE_UNIT_WITH_AUTO[Math.min(power, 4)] : upperUnit}`
