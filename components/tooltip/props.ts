@@ -13,7 +13,7 @@ import type { Placement } from '@vexip-ui/hooks'
 import type { TooltipShift, TooltipTrigger, TooltipVirtual } from './symbol'
 
 export const tooltipProps = buildProps({
-  trigger: String as PropType<TooltipTrigger>,
+  trigger: [String, Array] as PropType<TooltipTrigger>,
   wrapper: booleanStringProp,
   noArrow: booleanProp,
   transitionName: String,

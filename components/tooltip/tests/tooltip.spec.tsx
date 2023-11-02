@@ -75,6 +75,32 @@ describe('Tooltip', () => {
     expect(wrapper.find('.tip').text()).toEqual(TEXT)
   })
 
+  it('hover-focus trigger', async () => {
+    wrapper = createTooltip({ trigger: 'hover-focus' })
+
+    await wrapper.find('.trigger').trigger('mouseenter')
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+    expect(wrapper.find('.tip').exists()).toBe(true)
+    expect(wrapper.find('.tip').text()).toEqual(TEXT)
+
+    await wrapper.find('.trigger').trigger('focus')
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+
+    await wrapper.find('.trigger').trigger('mouseleave')
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+
+    await wrapper.find('.trigger').trigger('blur')
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
+  })
+
   it('custom trigger', async () => {
     wrapper = createTooltip({ trigger: 'custom' })
 

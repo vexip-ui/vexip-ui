@@ -102,7 +102,7 @@ In this way, you need to manually control the visible of tooltip.
 
 ```ts
 type TooltipTheme = 'light' | 'dark'
-type TooltipTrigger = 'hover' | 'click' | 'focus' | 'custom'
+type TooltipTrigger = 'hover' | 'click' | 'focus' | 'hover-focus' | 'custom'
 type TooltipShift = 'horizontal' | 'vertical' | 'both'
 
 type TooltipVirtual =
