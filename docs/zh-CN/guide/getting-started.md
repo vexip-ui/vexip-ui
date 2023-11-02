@@ -186,18 +186,18 @@ function handleClick() {
 不过在仅使用 Resolver 的时候，图标类组件的使用只能通过标签的形式使用，如果你想要通过变量来使用则需要一些额外的配置：
 
 ```ts
-export default defineConfig(async () => ({
+export default defineConfig(async ({ command }) => ({
   plugins: [
     vue(),
     Components({
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ]
     }),
     AutoImport({
       vueTemplate: true,
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ],
       imports: [
         {
@@ -237,6 +237,10 @@ createApp(App)
 :::
 
 借助 Babel 插件 [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) 可以更简洁地进行按需引入。
+
+:::warning
+如果你使用了 unplugin 则不再需要该插件。
+:::
 
 安装插件：
 

@@ -35,7 +35,7 @@ export default defineComponent({
 
     function renderLinks() {
       if (!props.links?.length) {
-        return null
+        return <div role={'none'} aria-hidden style={'display: none'}></div>
       }
 
       return (

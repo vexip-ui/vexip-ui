@@ -186,18 +186,18 @@ You can change the icon prefix via `iconPrefix` option of the resolver.
 However, when only resolver is used, the icon components can only be used via tag type. If you want to use it via variable, you need a little extra configuration:
 
 ```ts
-export default defineConfig(async () => ({
+export default defineConfig(async ({ command }) => ({
   plugins: [
     vue(),
     Components({
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ]
     }),
     AutoImport({
       vueTemplate: true,
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ],
       imports: [
         {
@@ -237,6 +237,10 @@ The content of using the unplugin above is also applicable to Webpack, you just 
 :::
 
 On demand import can more concise with the help of the Webpack plugin [babel-plugin-import](https://github.com/ant-design/babel-plugin-import).
+
+:::warning
+If you are using unplugin, this plugin is no longer needed.
+:::
 
 Install plugin:
 
