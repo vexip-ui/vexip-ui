@@ -294,7 +294,7 @@ export default defineComponent({
 
     function renderHeader() {
       if (props.noHeader) {
-        return null
+        return <header role={'none'} aria-hidden style={'display: none'}></header>
       }
 
       if (slots.header) {
@@ -341,7 +341,7 @@ export default defineComponent({
 
     function renderAside() {
       if (props.noAside) {
-        return null
+        return <div role={'none'} aria-hidden style={'display: none'}></div>
       }
 
       return (
