@@ -76,6 +76,7 @@ function refreshWave() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
   text-align: center;
   user-select: none;
 

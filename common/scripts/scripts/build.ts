@@ -12,6 +12,12 @@ async function main() {
   await execa(bin('tsup-node'), ['src/index.ts', '--dts', '--format', 'cjs,esm'], {
     stdio: 'inherit'
   })
+
+  console.log()
+
+  await execa(bin('tsup-node'), ['--entry.cli', 'src/cli/index.ts', '--dts', '--format', 'esm'], {
+    stdio: 'inherit'
+  })
 }
 
 main().catch(error => {

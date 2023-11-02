@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 
 const isDark = localStorage.getItem('vexip-docs-theme-prefer-dark')
 const isRtl = localStorage.getItem('vexip-docs-direction-prefer-rtl')
+const noPadding = localStorage.getItem('vexip-dev-prefer-no-padding')
 
 if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.classList.add('dark')
@@ -15,6 +16,10 @@ if (isRtl === 'true') {
   document.documentElement.dir = 'rtl'
 } else {
   document.documentElement.dir = 'ltr'
+}
+
+if (noPadding !== 'true') {
+  document.documentElement.classList.add('padding')
 }
 
 if (__THEME__) {

@@ -69,8 +69,15 @@ const outline = computed(() => {
   return undefined
 })
 
+const showLinks = computed(() => {
+  return !(
+    frontmatter.value.homepage ||
+    page.value.isNotFound ||
+    frontmatter.value.footer === false
+  )
+})
 const footerLinks = computed(() => {
-  if (frontmatter.value.footer === false) {
+  if (!showLinks.value) {
     return []
   }
 
@@ -245,7 +252,7 @@ function refreshScroll() {
     sign-type="header"
     fit-window
     :no-aside="frontmatter.homepage || page.isNotFound"
-    :footer="!(frontmatter.homepage || page.isNotFound || frontmatter.footer === false)"
+    :footer="!page.isNotFound"
     :links="footerLinks"
     :inner-classes="layoutClasses"
     :style="{

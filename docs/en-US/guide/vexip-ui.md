@@ -41,6 +41,8 @@ All components supported in modern browsers, support of nearly two or three vers
 
 > The version on the top-left is the version of the component library that the docs depends on when it is built, which may be inconsistent with the latest version.
 
+You can view the [Changelog](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) to learn about the update process.
+
 ## Install
 
 It is recommended to use pnpm or yarn to install:

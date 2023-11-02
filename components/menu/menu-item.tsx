@@ -89,7 +89,8 @@ const MenuItem = defineComponent({
       placement,
       transfer,
       wrapper,
-      popper: computed(() => popper.value?.wrapper)
+      popper: computed(() => popper.value?.wrapper),
+      shift: { crossAxis: true }
     })
 
     const isGroup = computed(() => !!(slots.group || props.children?.length))
@@ -388,6 +389,7 @@ const MenuItem = defineComponent({
         <Tooltip
           placement={isRtl.value ? 'left' : 'right'}
           reverse={tooltipReverse.value}
+          shift
           transfer
           disabled={tooltipDisabled.value}
         >
