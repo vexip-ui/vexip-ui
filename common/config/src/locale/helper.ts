@@ -174,6 +174,11 @@ export interface LocaleConfig {
   },
 
   video: {
+    playbackRate: string,
+    requestPip: string,
+    exitPip: string,
+    fullWindow: string,
+    fullWindowExit: string,
     fullScreen: string,
     fullScreenExit: string
   },

@@ -20,6 +20,7 @@ import {
   ArrowRotateLeft,
   ArrowRotateRight,
   ArrowsRotate,
+  ArrowsUpToLine,
   CalendarR,
   CaretDown,
   CaretLeft,
@@ -53,6 +54,7 @@ import {
   MagnifyingGlass,
   Minus,
   Moon,
+  ObjectGroupR,
   Outdent,
   Pause,
   Play,
@@ -157,7 +159,9 @@ export interface IconsConfig {
   volume: IconConfig,
   volumeMute: IconConfig,
   play: IconConfig,
-  pause: IconConfig
+  pause: IconConfig,
+  fullWindow: IconConfig,
+  pip: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -231,7 +235,9 @@ const iconMap: IconsConfig = {
   volume: VolumeHigh,
   volumeMute: VolumeXmark,
   play: Play,
-  pause: Pause
+  pause: Pause,
+  fullWindow: ObjectGroupR,
+  pip: ArrowsUpToLine
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

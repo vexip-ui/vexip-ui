@@ -36,7 +36,6 @@ watch(
 let prevVolume = currentVolume.value
 
 function toggleMute() {
-  debugger
   if (muted.value) {
     currentVolume.value = prevVolume <= 0 ? 50 : prevVolume
   } else {

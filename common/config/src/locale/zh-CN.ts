@@ -176,6 +176,11 @@ export function zhCNLocale() {
     },
 
     video: {
+      playbackRate: '倍速',
+      requestPip: '进入画中画',
+      exitPip: '退出画中画',
+      fullWindow: '进入网页全屏',
+      fullWindowExit: '推出网页全屏',
       fullScreen: '进入全屏',
       fullScreenExit: '推出全屏'
     },
