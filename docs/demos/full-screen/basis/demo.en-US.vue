@@ -1,7 +1,7 @@
 <template>
-  <FullScreen ref="fullScreen" v-slot="{ toggle }">
+  <FullScreen ref="fullScreen" v-slot="{ toggle, full }">
     <div class="container">
-      <span>I am FullScreen Content</span>
+      <span>I am FullScreen Content, current full state: {{ full }}</span>
       <br />
       <br />
       <div>
