@@ -82,6 +82,10 @@ createApp(App).use(install).mount('#app')
 
 借助 Vite 插件 [vite-plugin-style-import](https://github.com/anncwb/vite-plugin-style-import) 可以更简洁地进行按需引入。
 
+:::warning
+如果你使用了 unplugin 则不再需要该插件。
+:::
+
 安装插件：
 
 ```sh
@@ -264,7 +268,7 @@ module.exports = {
 
 ## 全局类型支持
 
-如果全局引入了组件库，在项目的 `tsconfig.json` 文件配置 `compilerOptions.types` 选项可以快速获得全局类型支持：
+如果全局引入了组件库，在项目的 `tsconfig.json` 配置 `compilerOptions.types` 选项可以快速获得全局类型支持：
 
 ```json
 {
@@ -274,6 +278,22 @@ module.exports = {
 }
 ```
 
+上述的配置在使用了 [组件名命名空间](/zh-CN/guide/global-config.html#组件名命名空间) 后将无法正常生效，为了处理这种情况，Vexip UI 提供了一组命令行用于生成带命名空间的类型文件。
+
+安装依赖：
+
+```sh
+pnpm i -D @vexip-ui/scripts
+```
+
+随后执行下面的命令，其中的 `[prefix]` 为你所用的命名空间：
+
+```sh
+npx vexip gen types --prefix [prefix]
+```
+
+等待执行完毕后，可以看到执行目录中生成了 `vexip-ui.d.ts` 文件，将该文件添加至 `tsconfig.json` 配置中的 `include` 选项即可。
+
 ## 完整组件列表
 
-你可以在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L120) 查看完整的组件列表。
+你可以在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts) 查看完整的组件列表。

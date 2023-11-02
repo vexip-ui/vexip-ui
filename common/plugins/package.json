@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@vexip-ui/utils": "workspace:*",
-    "compare-versions": "6.0.0",
-    "local-pkg": "^0.4.3"
+    "compare-versions": "^6.1.0",
+    "local-pkg": "^0.5.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.1",
