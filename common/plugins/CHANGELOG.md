@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.0...plugins@1.5.1) (2023-11-03)
+
+
+### ✨ Features
+
+* **cli:** support generate types.d.ts with custom prefix ([982ac80](https://github.com/vexip-ui/vexip-ui/commit/982ac80767350aca4eadfa413b1186c4fb01a43e))
+
+
+
 # [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.4.0...plugins@1.5.0) (2023-10-27)
 
 
