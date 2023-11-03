@@ -1,5 +1,13 @@
 export * from './components'
-export { registerLocale, zhCNLocale, enUSLocale, taINLocale } from '@vexip-ui/config'
+export {
+  registerLocale,
+  deDELocale,
+  enUSLocale,
+  taINLocale,
+  zhCNLocale,
+  zhHKLocale,
+  zhTWLocale
+} from '@vexip-ui/config'
 
 export type {
   ComponentSize,
