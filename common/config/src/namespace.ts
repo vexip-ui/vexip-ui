@@ -45,7 +45,7 @@ export function useNameHelper<B extends string, N extends string = Namespace>(
   block: B,
   namespace: MaybeRef<N> = useNamespace()
 ) {
-  return useBEM(block, () => unref(namespace))
+  return useBEM(block, isVar => (isVar ? 'vxp' : unref(namespace)))
 }
 
 export type NameHelper = ReturnType<typeof useNameHelper>

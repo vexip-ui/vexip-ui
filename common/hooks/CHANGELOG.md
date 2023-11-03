@@ -1,3 +1,13 @@
+# [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.2...hooks@2.1.0) (2023-11-03)
+
+
+### ✨ Features
+
+* **hooks:** add hook to observe current theme ([709c943](https://github.com/vexip-ui/vexip-ui/commit/709c9433cb55f9fce16b94f825a144d0fe0e18ff))
+* **tooltip:** support limit tip inside visible area ([a65ff70](https://github.com/vexip-ui/vexip-ui/commit/a65ff7024281078f0296695fe29f5d301340b530))
+
+
+
 ## [2.0.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.1...hooks@2.0.2) (2023-09-22)
 
 

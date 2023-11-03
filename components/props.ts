@@ -32,6 +32,7 @@ import type { FormCProps } from './form'
 import type { FormItemCProps } from './form-item'
 import type { FormResetCProps } from './form-reset'
 import type { FormSubmitCProps } from './form-submit'
+import type { FullScreenCProps } from './full-screen'
 import type { GridCProps } from './grid'
 import type { HighlightCProps } from './highlight'
 import type { IconCProps } from './icon'
@@ -156,6 +157,7 @@ export interface PropsOptions {
   formItem?: FormItemCProps,
   formReset?: FormResetCProps,
   formSubmit?: FormSubmitCProps,
+  fullScreen?: FullScreenCProps,
   grid?: GridCProps,
   highlight?: HighlightCProps,
   icon?: IconCProps,

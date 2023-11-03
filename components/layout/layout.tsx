@@ -15,7 +15,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { createSlotRender, useMounted } from '@vexip-ui/hooks'
-import { getXBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
+import { getYBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
 import LayoutFooter from './layout-footer'
@@ -242,7 +242,7 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = `${scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)}px`
+        viewHeight.value = `${scroll.value.$el.offsetHeight - getYBorder(scroll.value.$el)}px`
       }
 
       emitEvent(props.onContentResize)

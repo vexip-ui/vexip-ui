@@ -1,3 +1,20 @@
+# [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.3.0...utils@2.4.0) (2023-11-03)
+
+
+### ✨ Features
+
+* **utils:** add leaveNumber method ([2764872](https://github.com/vexip-ui/vexip-ui/commit/2764872e034802c256a2b80f576adac1f9b107b2))
+* **utils:** add runParallel method ([e7d20a5](https://github.com/vexip-ui/vexip-ui/commit/e7d20a59505e5d813472deb0c78bcffe7968b5ce))
+* **utils:** formatByteSize support specify precision ([e158702](https://github.com/vexip-ui/vexip-ui/commit/e158702b9e37364195fe5f09318c0c7f9f8b619b))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** improve toCamelCase logic for all capital case ([c5fa815](https://github.com/vexip-ui/vexip-ui/commit/c5fa815a837515921648e2db424f3516de95b525))
+* **utils:** improve toKebabCase logic for all capital case ([7347675](https://github.com/vexip-ui/vexip-ui/commit/7347675eb1d0e160d35685ef23c31da8416e54e2))
+
+
+
 # [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.2.0...utils@2.3.0) (2023-10-27)
 
 

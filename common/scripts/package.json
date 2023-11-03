@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/scripts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "private": false,
   "files": [
+    "bin",
     "dist"
   ],
   "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts#readme",
