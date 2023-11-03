@@ -136,17 +136,17 @@ const triggerPercent = computed(() => {
 })
 const fillerStyle = computed(() => {
   const { vertical, reverse } = props
-  const offset = props.range ? Math.min(triggerPercent.value[0], triggerPercent.value[1]) : 0
+  const offset = Math.max(triggerPercent.value[0], triggerPercent.value[1]) - 100
+  const afterOffset = Math.min(triggerPercent.value[0], triggerPercent.value[1]) - offset
 
   return {
+    [nh.cv('filler-after-transform')]: `translate${vertical ? 'Y' : 'X'}(${
+      reverse ? -afterOffset : afterOffset
+    }%) translateZ(0)`,
     transform: `
-      translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
+      translate${vertical ? 'Y' : 'X'}(${reverse ? -offset : offset}%)
       translateZ(0)
-      scale${vertical ? 'Y' : 'X'}(${
-        Math.abs(triggerPercent.value[0] - triggerPercent.value[1]) / 100
-      })
-    `,
-    transformOrigin: `${vertical ? 50 : reverse ? 100 : 0}% ${vertical ? (reverse ? 100 : 0) : 50}%`
+    `
   }
 })
 const startTriggerStyle = computed(() => {
