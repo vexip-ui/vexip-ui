@@ -6,7 +6,9 @@
 $video: () !default;
 $video: map.merge(
   (
-    control-color: #fff,
+    control-color: rgba(#fff, 85%),
+    control-color-active: #fff,
+    control-color-disabled: rgba(#fff, 50%),
     control-bg-color: rgba(#000, 60%),
     control-radius: get-css-var('radius-small'),
     control-shadow: get-css-var('shadow-shape') #000,
@@ -70,6 +72,16 @@ $video: map.merge(
     height: 100%;
     line-height: 1;
     color: get-css-var('video-control-color');
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus-within {
+      color: get-css-var('video-control-color-active');
+    }
+
+    &--disabled {
+      color: get-css-var('video-control-color-disabled');
+    }
 
     &-button {
       display: flex;
@@ -78,7 +90,7 @@ $video: map.merge(
       width: 100%;
       height: 100%;
       padding: 0;
-      color: get-css-var('video-control-color');
+      color: inherit;
       cursor: pointer;
       background-color: transparent;
       border: 0;

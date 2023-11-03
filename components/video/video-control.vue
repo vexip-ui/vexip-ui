@@ -20,6 +20,10 @@ const props = defineProps({
   popperClass: {
     type: [String, Array, Object],
     default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -29,10 +33,19 @@ const nh = useNameHelper('video')
 
 const { timer } = useSetTimeout()
 
-// const visible = ref(true)
 const hovered = ref(false)
 const focused = ref(false)
 
+const active = computed(() => {
+  return !props.disabled && (hovered.value || focused.value)
+})
+const className = computed(() => {
+  return {
+    [nh.be('control')]: true,
+    [nh.bem('control', 'active')]: active.value,
+    [nh.bem('control', 'disabled')]: props.disabled
+  }
+})
 const tipClass = computed(() => {
   return props.popperType === 'tip' ? nh.be('control-tip') : nh.be('control-panel')
 })
@@ -55,11 +68,7 @@ function handlePointerLeave() {
 </script>
 
 <template>
-  <div
-    :class="nh.be('control')"
-    @pointerenter="handlePointerEnter"
-    @pointerleave="handlePointerLeave"
-  >
+  <div :class="className" @pointerenter="handlePointerEnter" @pointerleave="handlePointerLeave">
     <Tooltip
       trigger="custom"
       :visible="hovered || focused"
