@@ -123,22 +123,26 @@ type SliderRawMarkers =
   | Array<number | (SliderMarker & { value: number })>
 
 interface SliderSlotParams {
+  values: number[],
+  sliding: boolean[],
+  percent: number[],
   disabled: boolean,
   loading: boolean
 }
 
-interface SliderTriggerParams extends SliderSlotParams {
-  type: 'start' | 'end',
-  value: number,
-  sliding: boolean
-}
-
 interface SliderMarkerSlotParams extends SliderSlotParams {
-  values: number[],
-  sliding: boolean[],
   markerValue: number,
   marker: SliderMarker,
   inRange: boolean
+}
+
+interface SliderTriggerParams {
+  type: 'start' | 'end',
+  value: number,
+  sliding: boolean,
+  percent: number,
+  disabled: boolean,
+  loading: boolean
 }
 ```
 
@@ -174,9 +178,10 @@ interface SliderMarkerSlotParams extends SliderSlotParams {
 
 ### Slider Slots
 
-| Name    | Description                   | Parameters               | Since   |
-| ------- | ----------------------------- | ------------------------ | ------- |
-| trigger | Slot for trigger content      | `SliderTriggerParams`    | `2.2.3` |
-| tip     | Slot for tip content          | `SliderTriggerParams`    | -       |
-| marker  | Slot for marker label content | `SliderMarkerSlotParams` | `2.0.0` |
-| point   | Slot for marker point content | `SliderMarkerSlotParams` | `2.2.9` |
+| Name    | Description                   | Parameters               | Since    |
+| ------- | ----------------------------- | ------------------------ | -------- |
+| trigger | Slot for trigger content      | `SliderTriggerParams`    | `2.2.3`  |
+| tip     | Slot for tip content          | `SliderTriggerParams`    | -        |
+| marker  | Slot for marker label content | `SliderMarkerSlotParams` | `2.0.0`  |
+| point   | Slot for marker point content | `SliderMarkerSlotParams` | `2.2.9`  |
+| filler  | Slot for track filler         | `SliderSlotParams`       | `2.2.10` |
