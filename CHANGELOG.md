@@ -1,3 +1,41 @@
+## [2.2.9](https://github.com/vexip-ui/vexip-ui/compare/v2.2.8...v2.2.9) (2023-11-03)
+
+
+### ✨ Features
+
+* add German locale config ([#406](https://github.com/vexip-ui/vexip-ui/issues/406)) ([e90ba63](https://github.com/vexip-ui/vexip-ui/commit/e90ba6385d69e727ca58386e7f183062b61924c4))
+* **bem-helper:** distinguished generating css variable methods ([17395bd](https://github.com/vexip-ui/vexip-ui/commit/17395bd87ed127cbdf25e1a38dea7ac000843cfe))
+* **cli:** support generate types.d.ts with custom prefix ([982ac80](https://github.com/vexip-ui/vexip-ui/commit/982ac80767350aca4eadfa413b1186c4fb01a43e))
+* **hooks:** add hook to observe current theme ([709c943](https://github.com/vexip-ui/vexip-ui/commit/709c9433cb55f9fce16b94f825a144d0fe0e18ff))
+* **slider:** add trigger-fade prop ([d91eb0b](https://github.com/vexip-ui/vexip-ui/commit/d91eb0bf04479a25ea3be44f5b8972b024630a92))
+* **slider:** support array type markers prop ([9ba017f](https://github.com/vexip-ui/vexip-ui/commit/9ba017f2b5b361a1afd729e49e8fee96e67cc8ec))
+* **tooltip:** add hover-focus trigger type ([08b71d8](https://github.com/vexip-ui/vexip-ui/commit/08b71d88cc135f05ec0e095c21183c3c9fb94c39))
+* **tooltip:** support limit tip inside visible area ([a65ff70](https://github.com/vexip-ui/vexip-ui/commit/a65ff7024281078f0296695fe29f5d301340b530))
+* **utils:** add leaveNumber method ([2764872](https://github.com/vexip-ui/vexip-ui/commit/2764872e034802c256a2b80f576adac1f9b107b2))
+* **utils:** add runParallel method ([e7d20a5](https://github.com/vexip-ui/vexip-ui/commit/e7d20a59505e5d813472deb0c78bcffe7968b5ce))
+* **utils:** formatByteSize support specify precision ([e158702](https://github.com/vexip-ui/vexip-ui/commit/e158702b9e37364195fe5f09318c0c7f9f8b619b))
+
+
+### 🐞 Bug Fixes
+
+* **config:** force vxp namespace for css variables ([814fd2c](https://github.com/vexip-ui/vexip-ui/commit/814fd2caaada47b3e7053ec69673b4b6bc881dd8))
+* export all locale configs in root package ([8f7c3d4](https://github.com/vexip-ui/vexip-ui/commit/8f7c3d4f2f63aa9120f1b3ffc8d52930f20ef2a1))
+* **layout:** improve footer hydrations in Nuxt ([cd1f126](https://github.com/vexip-ui/vexip-ui/commit/cd1f12637d195948e869465d07c421c871975247))
+* **layout:** improve hydrations in Nuxt ([8fd400c](https://github.com/vexip-ui/vexip-ui/commit/8fd400ce9aaf686e9d2427846749fea024520879))
+* **layout:** media query matched default false in SSR ([0cd3473](https://github.com/vexip-ui/vexip-ui/commit/0cd3473c50150e5e0cb00bf43cc88f8d496be6cf)), closes [#427](https://github.com/vexip-ui/vexip-ui/issues/427)
+* **menu:** ensure menu popper shifted ([972b4af](https://github.com/vexip-ui/vexip-ui/commit/972b4af0e8d0c108aec5a9dfe0139792037c04f1))
+* **timeline:** improve padding style ([0a3f224](https://github.com/vexip-ui/vexip-ui/commit/0a3f22420f64cc51413bec91d33eb425c4c298ec))
+* **utils:** improve toCamelCase logic for all capital case ([c5fa815](https://github.com/vexip-ui/vexip-ui/commit/c5fa815a837515921648e2db424f3516de95b525))
+* **utils:** improve toKebabCase logic for all capital case ([7347675](https://github.com/vexip-ui/vexip-ui/commit/7347675eb1d0e160d35685ef23c31da8416e54e2))
+
+
+### 🔨 Code Refactoring
+
+* **full-screen:** support custom tag and improve exposed state ([b1c361d](https://github.com/vexip-ui/vexip-ui/commit/b1c361ddfa8bc0ffbb868e6f57c9a2804f58f025))
+* **slider:** add flip-marker prop and improve slots ([07c24b8](https://github.com/vexip-ui/vexip-ui/commit/07c24b81ec3ef045c52c1e626d9963068f55f9b3))
+
+
+
 ## [2.2.8](https://github.com/vexip-ui/vexip-ui/compare/v2.2.7...v2.2.8) (2023-10-27)
 
 
