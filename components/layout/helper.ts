@@ -73,10 +73,14 @@ export function useLayoutState() {
 const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
 export function useMediaQuery(query: Ref<string | boolean>) {
-  const matched = ref(!isClient)
+  const matched = ref(false)
+  const updateTrigger = ref(0)
 
   const computedStyle = isClient && getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    updateTrigger.value
+
     if (breakPoints.includes(query.value as any)) {
       const usedQuery = query.value === 'xs' ? 'sm' : query.value
       const media =
@@ -120,6 +124,7 @@ export function useMediaQuery(query: Ref<string | boolean>) {
   })
 
   onMounted(() => {
+    ++updateTrigger.value
     isMounted = true
     update()
   })
