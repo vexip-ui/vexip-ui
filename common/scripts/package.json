@@ -25,6 +25,7 @@
   },
   "private": false,
   "files": [
+    "bin",
     "dist"
   ],
   "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts#readme",
