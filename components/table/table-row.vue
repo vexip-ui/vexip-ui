@@ -15,6 +15,7 @@
     @dragover="handleDragOver"
     @drop="handleDrop"
     @dragend="handleDragEnd"
+    @dragleave="handleDragLeave"
   >
     <div
       v-bind="attrs"
@@ -76,6 +77,7 @@ import {
 } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
+import { useSetTimeout } from '@vexip-ui/hooks'
 import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
@@ -116,6 +118,10 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
 
+    const { timer } = useSetTimeout()
+    const dragging = ref(false)
+    const isDragOver = ref(false)
+
     const wrapper = ref<HTMLElement>()
     const rowElement = ref<HTMLElement>()
     const expandElement = ref<HTMLElement>()
@@ -141,13 +147,19 @@ export default defineComponent({
       return [
         nh.be('row'),
         {
+          [nh.bem('row', 'fixed')]: state.rowHeight && state.rowHeight > 0,
           [nh.bem('row', 'hover')]: !rowType.value && state.highlight && props.row.hover,
           [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
-          [nh.bem('row', 'checked')]: props.row.checked
+          [nh.bem('row', 'checked')]: props.row.checked,
+          [nh.bem('row', 'dragging')]: dragging.value,
+          [nh.bem('row', 'drag-over')]: isDragOver.value
         },
         customClass
       ]
     })
+    const maxHeight = computed(() =>
+      Math.max(...Object.values(props.row.cellHeights || {}), state.rowMinHeight)
+    )
     const style = computed(() => {
       let customStyle: any = ''
 
@@ -162,7 +174,7 @@ export default defineComponent({
       return [
         customStyle,
         {
-          minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+          minHeight: !state.rowHeight ? `${maxHeight.value}px` : undefined
         }
       ]
     })
@@ -190,8 +202,10 @@ export default defineComponent({
         transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
       }
     })
-    const draggable = computed(() => !rowType.value && state.rowDraggable)
-    const dragging = computed(() => state.dragging)
+    const cellDraggable = computed(() => {
+      return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
+    })
+    const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDraggable.value))
     const expandRenderer = computed(() => state.expandRenderer)
     const expandStyle = computed<CSSProperties>(() => {
       const width =
@@ -205,9 +219,6 @@ export default defineComponent({
             whiteSpace: 'nowrap'
           }
         : {}
-    })
-    const cellDraggable = computed(() => {
-      return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
     })
     const leftFixed = computed(() => {
       return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
@@ -286,7 +297,7 @@ export default defineComponent({
         nextTick(() => {
           if (!props.fixed) {
             if (rowElement.value) {
-              mutations.fixRowHeight(rowKey.value, rowElement.value.offsetHeight)
+              mutations.fixRowHeight(rowKey.value, maxHeight.value)
             }
           } else {
             setTimeout(() => {
@@ -352,29 +363,38 @@ export default defineComponent({
       }
     }
 
+    function shouldProcessDrag() {
+      return draggable.value && state.dragging
+    }
+
     function handleDragStart(event: DragEvent) {
       if (!draggable.value && !cellDraggable.value) return
 
+      dragging.value = true
       tableAction.handleRowDragStart(instance, event)
-    }
-
-    function shouldProcessDrag() {
-      return (draggable.value || cellDraggable.value) && dragging.value
     }
 
     function handleDragOver(event: DragEvent) {
       if (!shouldProcessDrag() || (cellDraggable.value && !getters.rowDragging)) return
 
+      clearTimeout(timer.drag)
       event.stopPropagation()
       event.preventDefault()
+
+      isDragOver.value = true
+
       tableAction.handleRowDragOver(instance, event)
     }
 
     function handleDrop(event: DragEvent) {
       if (!shouldProcessDrag()) return
 
+      clearTimeout(timer.drag)
       event.stopPropagation()
       event.preventDefault()
+
+      isDragOver.value = false
+
       tableAction.handleRowDrop(instance, event)
       nextTick(() => mutations.handleDrag(rowKey.value, false))
     }
@@ -383,8 +403,21 @@ export default defineComponent({
       if (!shouldProcessDrag()) return
 
       event.stopPropagation()
+      dragging.value = true
+
       tableAction.handleRowDragEnd(event)
       nextTick(() => mutations.handleDrag(rowKey.value, false))
+    }
+
+    function handleDragLeave(event: DragEvent) {
+      if (!shouldProcessDrag()) return
+
+      clearTimeout(timer.drag)
+      event.preventDefault()
+
+      timer.drag = setTimeout(() => {
+        isDragOver.value = false
+      }, 100)
     }
 
     return {
@@ -406,6 +439,7 @@ export default defineComponent({
       expand: expandElement,
 
       isFunction,
+      computeRectHeight,
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
@@ -415,7 +449,7 @@ export default defineComponent({
       handleDragOver,
       handleDrop,
       handleDragEnd,
-      computeRectHeight
+      handleDragLeave
     }
   }
 })

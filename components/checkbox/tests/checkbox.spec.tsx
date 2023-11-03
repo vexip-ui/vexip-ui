@@ -5,6 +5,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Checkbox } from '..'
+import { parseColorToRgba } from '@vexip-ui/utils'
 
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
@@ -147,6 +148,26 @@ describe('Checkbox', () => {
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-checkbox--checked')
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('color', async () => {
+    const wrapper = mount(Checkbox, {
+      props: { color: 'orange' }
+    })
+    const rgbColor = parseColorToRgba('orange')
+
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
+      `--vxp-checkbox-b-color-hover: ${rgbColor};`
+    )
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).not.toContain(
+      `--vxp-checkbox-b-color: ${rgbColor};`
+    )
+
+    await wrapper.setProps({ stateColor: true })
+
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
+      `--vxp-checkbox-b-color: ${rgbColor};`
+    )
   })
 
   it('group', () => {
@@ -316,5 +337,28 @@ describe('Checkbox', () => {
     items.forEach(item => {
       expect(item.classes()).not.toContain('vxp-checkbox--checked')
     })
+  })
+
+  it('group color', async () => {
+    const wrapper = mount(CheckboxGroup, {
+      props: { color: 'orange' },
+      slots: {
+        default: () => <Checkbox></Checkbox>
+      }
+    })
+    const rgbColor = parseColorToRgba('orange')
+
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
+      `--vxp-checkbox-b-color-hover: ${rgbColor};`
+    )
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).not.toContain(
+      `--vxp-checkbox-b-color: ${rgbColor};`
+    )
+
+    await wrapper.setProps({ stateColor: true })
+
+    expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
+      `--vxp-checkbox-b-color: ${rgbColor};`
+    )
   })
 })

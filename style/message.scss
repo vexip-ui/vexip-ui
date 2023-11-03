@@ -33,14 +33,12 @@ $message: map.merge(
 
   @include basis;
 
-  $icon: #{&}__icon;
-  $close: #{&}__close;
-
-  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 0.875rem;
+
+  $icon: #{&}__icon;
+  $close: #{&}__close;
 
   &__wrapper {
     display: flex;

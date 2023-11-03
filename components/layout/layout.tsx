@@ -1,4 +1,3 @@
-import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
 
@@ -35,14 +34,6 @@ import type {
 
 export default defineComponent({
   name: 'Layout',
-  components: {
-    LayoutAside,
-    LayoutFooter,
-    LayoutHeader,
-    LayoutMain,
-    Menu,
-    NativeScroll
-  },
   props: layoutProps,
   emits: [
     'update:expanded',
@@ -82,12 +73,13 @@ export default defineComponent({
       darkMode: null,
       fixedMain: false,
       fitWindow: false,
-      innerClasses: () => ({})
+      innerClasses: () => ({}),
+      noHeader: false
     })
 
     const nh = useNameHelper('layout')
     const locked = ref(false)
-    const asideActive = ref(!props.noAside)
+    // const asideActive = ref(!props.noAside)
     const asideExpanded = ref(props.expanded)
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
@@ -127,6 +119,7 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
+          [nh.bm('no-header')]: props.noHeader,
           [nh.bm('header-main')]: currentSignType.value === 'header',
           [nh.bm('locked')]: !isMounted.value || locked.value,
           [nh.bm('fit-window')]: props.fitWindow
@@ -141,11 +134,11 @@ export default defineComponent({
     })
     const menu = computed(() => aside.value?.menu || header.value?.menu)
     const isDark = ref(props.darkMode)
-    const viewHeight = ref(100)
+    const viewHeight = ref('100%')
 
     const style = computed(() => {
       return {
-        [nh.cv('view-height')]: props.fitWindow ? '100vh' : `${viewHeight.value}px`
+        [nh.cv('view-height')]: props.fitWindow ? '100vh' : viewHeight.value
       }
     })
 
@@ -177,12 +170,12 @@ export default defineComponent({
         asideReduced.value = value
       }
     )
-    watch(
-      () => props.noAside,
-      value => {
-        changeInLock(() => (asideActive.value = value))
-      }
-    )
+    // watch(
+    //   () => props.noAside,
+    //   value => {
+    //     changeInLock(() => (asideActive.value = value))
+    //   }
+    // )
     watch(currentSignType, value => {
       emit('update:sign-type', value)
       emitEvent(props.onNavChange, value)
@@ -249,7 +242,7 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)
+        viewHeight.value = `${scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)}px`
       }
 
       emitEvent(props.onContentResize)
@@ -300,6 +293,10 @@ export default defineComponent({
     }
 
     function renderHeader() {
+      if (props.noHeader) {
+        return <header role={'none'} aria-hidden style={'display: none'}></header>
+      }
+
       if (slots.header) {
         return renderSlot(slots, 'header', slotParams)
       }
@@ -344,7 +341,7 @@ export default defineComponent({
 
     function renderAside() {
       if (props.noAside) {
-        return null
+        return <div role={'none'} aria-hidden style={'display: none'}></div>
       }
 
       return (

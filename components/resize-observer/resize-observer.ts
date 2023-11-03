@@ -1,4 +1,11 @@
-import { defineComponent, getCurrentInstance, onBeforeUnmount, onMounted, renderSlot } from 'vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  renderSlot,
+  watch
+} from 'vue'
 
 import { emitEvent, useProps } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
@@ -13,7 +20,8 @@ export default defineComponent({
       throttle: {
         default: false,
         validator: value => typeof value === 'boolean' || value > 0
-      }
+      },
+      disabled: false
     })
 
     const { observeResize, unobserveResize } = useResize()
@@ -28,17 +36,16 @@ export default defineComponent({
       ? throttle(handleResize, typeof props.throttle === 'boolean' ? 16 : props.throttle)
       : handleResize
 
+    const instance = getCurrentInstance()
+
     onMounted(() => {
-      const el = getCurrentInstance()?.proxy?.$el as Element | null
-
-      if (el?.nextElementSibling) {
-        if (el.nextElementSibling !== el.nextSibling && el.nodeType === 3 && el.nodeValue !== '') {
-          return
-        }
-
-        observeResize(el.nextElementSibling, throttleResize)
-        observed = true
-      }
+      watch(
+        () => props.disabled,
+        value => {
+          value ? unobserve() : observe()
+        },
+        { immediate: true, flush: 'post' }
+      )
     })
 
     onBeforeUnmount(() => {
@@ -50,6 +57,33 @@ export default defineComponent({
         }
       }
     })
+
+    function observe() {
+      if (observed) return
+
+      const el = instance?.proxy?.$el as Element | null
+
+      if (el?.nextElementSibling) {
+        if (el.nextElementSibling !== el.nextSibling && el.nodeType === 3 && el.nodeValue !== '') {
+          return
+        }
+
+        observeResize(el.nextElementSibling, throttleResize)
+        observed = true
+      }
+    }
+
+    function unobserve() {
+      if (observed) {
+        const el = instance?.proxy?.$el as Element | null
+
+        if (el?.nextElementSibling) {
+          unobserveResize(el.nextElementSibling)
+        }
+
+        observed = false
+      }
+    }
 
     return () => renderSlot(slots, 'default')
   }

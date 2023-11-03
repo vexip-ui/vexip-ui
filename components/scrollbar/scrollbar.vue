@@ -35,7 +35,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useManualRef, useRtl } from '@vexip-ui/hooks'
+import { useManualRef, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, isDefined, throttle } from '@vexip-ui/utils'
 import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
@@ -93,7 +93,7 @@ export default defineComponent({
     const bar = ref<HTMLElement>()
     const track = ref<HTMLElement>()
 
-    let fadeTimer: ReturnType<typeof setTimeout>
+    const { timer } = useSetTimeout()
 
     const type = computed(() => {
       return props.placement === 'right' || props.placement === 'left'
@@ -110,10 +110,10 @@ export default defineComponent({
       barLength: toRef(props, 'barLength'),
       disabled: toRef(props, 'disabled'),
       handleDown: scroll => {
-        clearTimeout(fadeTimer)
+        clearTimeout(timer.fade)
         emitEvent(props.onScrollStart, scroll)
       },
-      handleMove: () => clearTimeout(fadeTimer),
+      handleMove: () => clearTimeout(timer.fade),
       handleUp: scroll => {
         setScrollbarFade()
         triggerUpdate()
@@ -178,7 +178,7 @@ export default defineComponent({
 
     if (props.appear) {
       watch(currentScroll, () => {
-        clearInterval(fadeTimer)
+        clearTimeout(timer.fade)
         active.value = true
 
         if (!scrolling.value && !tracking.value) {
@@ -188,7 +188,7 @@ export default defineComponent({
     }
 
     const handleWrapperMouseMove = throttle(() => {
-      clearTimeout(fadeTimer)
+      clearTimeout(timer.fade)
 
       if (props.disabled) {
         active.value = false
@@ -233,7 +233,7 @@ export default defineComponent({
 
         if (!props.appear) {
           watch(currentScroll, () => {
-            clearInterval(fadeTimer)
+            clearInterval(timer.fade)
             active.value = true
             setScrollbarFade()
           })
@@ -247,7 +247,7 @@ export default defineComponent({
       }
 
       wrapperElement = null
-      clearTimeout(fadeTimer)
+      clearTimeout(timer.fade)
     })
 
     let length: number
@@ -280,7 +280,7 @@ export default defineComponent({
         cursorAt = event.clientX
       }
 
-      clearTimeout(fadeTimer)
+      clearTimeout(timer.fade)
 
       scrolling.value = true
       emitEvent(props.onScrollStart, currentScroll.value)
@@ -312,7 +312,7 @@ export default defineComponent({
         event.preventDefault()
       }
 
-      clearTimeout(fadeTimer)
+      clearTimeout(timer.fade)
 
       handleBarMove(event)
     }
@@ -335,7 +335,7 @@ export default defineComponent({
 
     function setScrollbarFade() {
       if (props.fade >= 300) {
-        fadeTimer = setTimeout(() => {
+        timer.fade = setTimeout(() => {
           active.value = false
         }, props.fade)
       }

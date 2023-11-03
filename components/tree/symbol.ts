@@ -67,13 +67,27 @@ export type TreeNodeProps<D = Data> = {
 }
 
 export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
-export type TreeNodeRenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
+export type TreeNodeRenderFn<D = Data> = (params: { data: D, node: TreeNodeProps<D> }) => any
 export type AsyncLoadFn<D = Data> = (
   data: D,
   node: Readonly<TreeNodeProps<D>>
 ) => void | boolean | Promise<any>
 export type FilterFn<D = Data> = (data: D, node: TreeNodeProps<D>) => boolean
 export type NodePropsFn<D = Data> = (data: D, node: TreeNodeProps<D>) => Data
+
+export interface TreeCommonSlotParams {
+  data: Data,
+  node: TreeNodeProps,
+  depth: number,
+  focused: boolean
+}
+
+export interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  lineCount: number,
+  toggleCheck: (checked?: boolean) => void,
+  toggleExpand: (expanded?: boolean) => Promise<void>,
+  toggleSelect: (able?: boolean) => Promise<void>
+}
 
 export interface TreeNodeInstance {
   el?: HTMLElement | null,
@@ -107,9 +121,14 @@ export interface TreeState {
   draggable: boolean,
   floorSelect: boolean,
   renderer: TreeNodeRenderFn,
+  prefixRenderer: TreeNodeRenderFn,
+  suffixRenderer: TreeNodeRenderFn,
+  arrowIcon: Record<string, any>,
+  blockEffect: boolean,
   dragging: boolean,
   boundAsyncLoad: boolean,
   nodeStates: Map<Key, TreeNodeState>,
+  expanding: boolean,
   getParentNode(node: TreeNodeProps): TreeNodeProps | null,
   updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,

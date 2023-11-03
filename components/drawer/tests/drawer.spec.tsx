@@ -154,4 +154,81 @@ describe('Drawer', () => {
     await nextTick()
     expect(drawer.classes()).not.toContain('vxp-drawer__wrapper--resizing')
   })
+
+  it('footer', () => {
+    const wrapper = mount(() => <Drawer footer></Drawer>)
+
+    expect(wrapper.find('.vxp-drawer__footer').exists()).toBe(true)
+    expect(wrapper.findAllComponents('.vxp-button').length).toBe(2)
+  })
+
+  it('render', () => {
+    const wrapper = mount(() => (
+      <Drawer footer confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Drawer>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Drawer undivided>{TEXT}</Drawer>)
+
+    expect(wrapper.find('.vxp-drawer').classes()).toContain('vxp-drawer--undivided')
+  })
+
+  it('mask close', async () => {
+    const onToggle = vi.fn()
+    const onClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: {
+        active: true,
+        onToggle,
+        onClose
+      }
+    })
+
+    await wrapper.find('.vxp-masker__mask').trigger('click')
+
+    expect(onToggle).toHaveBeenCalledWith(false)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('before close', async () => {
+    const onBeforeClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: { closable: true, onBeforeClose }
+    })
+
+    const openAndClose = async () => {
+      wrapper.vm.currentActive = true
+      await nextTick()
+      await wrapper.find('.vxp-masker__mask').trigger('click')
+      await nextTick()
+    }
+
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(false)
+    expect(onBeforeClose).toHaveBeenCalled()
+
+    onBeforeClose.mockReturnValue(false)
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+
+    onBeforeClose.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          nextTick(() => nextTick(() => resolve(true)))
+        })
+    )
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+    await nextTick()
+    expect(wrapper.vm.currentActive).toBe(false)
+  })
 })

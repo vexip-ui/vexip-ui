@@ -1,4 +1,4 @@
-# 进度条 Progress
+# Progress 进度条
 
 ## 代码示例
 

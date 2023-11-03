@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/vexip-ui/vexip-ui/compare/icons@1.2.0...icons@1.2.1) (2023-11-03)
+
+
+### ✨ Features
+
+* **cli:** support generate types.d.ts with custom prefix ([982ac80](https://github.com/vexip-ui/vexip-ui/commit/982ac80767350aca4eadfa413b1186c4fb01a43e))
+
+
+
 # [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/icons@1.1.0...icons@1.2.0) (2023-04-13)
 
 

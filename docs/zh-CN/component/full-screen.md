@@ -1,4 +1,4 @@
-# 全屏 FullScreen ^[Since v2.1.0](!s)
+# FullScreen 全屏 ^[Since v2.1.0](!s)
 
 这个组件将帮助你快速实现全屏展示一些内容。
 
@@ -30,16 +30,33 @@
 
 ## API
 
-## FullScreen 插槽
+### 预设类型
 
-| 名称    | 类型                                                                                                              | 参数                | 始于 |
-| ------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- | ---- |
-| default | 你可以得到 `enter`、 `exit` 或 `toggle` 三种方法, 请参阅 [FullScreen Methods](#fullscreen-methods) 来查看使用方法 | `{ full: boolean }` | -    |
+```ts
+interface FullScreenSlotParams {
+  full: false | FullScreenType,
+  enter: (type?: FullScreenType, zIndex?: number) => Promise<void>,
+  exit: () => Promise<void>,
+  toggle: (type?: FullScreenType, zIndex?: number) => Promise<void>
+}
+```
 
-## FullScreen 方法
+### FullScreen 属性
 
-| 名称   | 说明                            | 签名                                                      | 始于 |
-| ------ | ------------------------------- | --------------------------------------------------------- | ---- |
-| enter  | 进入全屏模式                    | `(mode?: 'window' \| 'browser', zIndex?: number) => void` | -    |
-| exit   | 退出全屏模式                    | `() => void`                                              | -    |
-| toggle | 自动在进入/退出全屏模式之间切换 | `(mode?: 'window' \| 'browser') => void`                  | -    |
+| 名称 | 类型     | 说明           | 默认值  | 始于    |
+| ---- | -------- | -------------- | ------- | ------- |
+| tag  | `string` | 设置渲染的标签 | `'div'` | `2.2.9` |
+
+### FullScreen 插槽
+
+| 名称    | 类型                   | 参数                   | 始于 |
+| ------- | ---------------------- | ---------------------- | ---- |
+| default | 需全屏展示的内容的插槽 | `FullScreenSlotParams` | -    |
+
+### FullScreen 方法
+
+| 名称   | 说明                            | 签名                                                        | 始于 |
+| ------ | ------------------------------- | ----------------------------------------------------------- | ---- |
+| enter  | 进入全屏模式                    | `(type?: FullScreenType, zIndex?: number) => Promise<void>` | -    |
+| exit   | 退出全屏模式                    | `() => Promise<void>`                                       | -    |
+| toggle | 自动在进入/退出全屏模式之间切换 | `(type?: FullScreenType, zIndex?: number) => Promise<void>` | -    |

@@ -2,6 +2,7 @@
   <label
     :id="idFor"
     :class="className"
+    :style="style"
     :aria-disabled="isDisabled"
     @click="handleClick"
   >
@@ -45,7 +46,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { isDefined, isFunction } from '@vexip-ui/utils'
+import { adjustAlpha, isDefined, isFunction, parseColorToRgba } from '@vexip-ui/utils'
 import { checkboxProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -80,7 +81,9 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      color: null,
+      stateColor: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -101,6 +104,7 @@ export default defineComponent({
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
     const isLoading = computed(() => groupState?.loading || props.loading)
     const isLoadingLock = computed(() => groupState?.loadingLock || props.loadingLock)
+    const stateColor = computed(() => groupState?.stateColor || props.stateColor)
     const className = computed(() => {
       return [
         nh.b(),
@@ -116,6 +120,30 @@ export default defineComponent({
           [nh.bm(computedState.value)]: computedState.value !== 'default'
         }
       ]
+    })
+    const colorMap = computed(() => {
+      if (!props.color) return groupState?.colorMap
+
+      const baseColor = parseColorToRgba(props.color)
+
+      return {
+        base: baseColor.toString(),
+        opacity6: adjustAlpha(baseColor, 0.4).toString()
+      }
+    })
+    const style = computed<Record<string, string>>(() => {
+      if (!colorMap.value) return {}
+
+      const { base, opacity6 } = colorMap.value
+
+      return nh.cvm({
+        'label-color-checked': base,
+        'b-color': stateColor.value ? base : undefined,
+        'b-color-hover': base,
+        'b-color-checked': base,
+        'signal-bg-color-checked': base,
+        's-color-focus': opacity6
+      })
     })
     const hasLabel = computed(() => {
       return isDefined(props.label) && props.label !== ''
@@ -236,6 +264,7 @@ export default defineComponent({
 
       isDisabled,
       className,
+      style,
       hasLabel,
       hasSlot,
       isLoading,

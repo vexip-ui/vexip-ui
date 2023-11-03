@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 
 @use './shared' as *;
 @use './design' as *;
@@ -56,16 +57,14 @@ $tooltip: map.merge(
   }
 
   &__arrow {
+    pointer-events: none;
+
     &,
     &::after {
       position: absolute;
       width: 0;
       height: 0;
-      border: {
-        width: 0;
-        color: transparent;
-        style: solid;
-      }
+      border: 0 solid transparent;
     }
 
     &::after {
@@ -75,13 +74,15 @@ $tooltip: map.merge(
 
   // arrow size
   $size: get-css-var('tooltip-arrow-size');
+  $s-pad: 6px;
+  $l-pad: calc(#{math.round($s-pad * 0.5)} + #{$size});
 
   &__popper {
     &[data-popper-placement^='top'] {
-      padding: 5px 0 10px;
+      padding: $s-pad 0 $l-pad;
 
-      #{$arrow} {
-        bottom: 0;
+      & > #{$arrow} {
+        bottom: $l-pad;
         border-width: $size $size 0;
         transform: translateY(100%);
 
@@ -102,10 +103,10 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='bottom'] {
-      padding: 10px 0 5px;
+      padding: $l-pad 0 $s-pad;
 
-      #{$arrow} {
-        top: 0;
+      & > #{$arrow} {
+        top: $l-pad;
         border-width: 0 $size $size;
         transform: translateY(-100%);
 
@@ -126,10 +127,10 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='left'] {
-      padding: 0 10px 0 5px;
+      padding: 0 $l-pad 0 $s-pad;
 
-      #{$arrow} {
-        right: 0;
+      & > #{$arrow} {
+        right: $l-pad;
         border-width: $size 0 $size $size;
         transform: translateX(100%);
 
@@ -151,10 +152,10 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='right'] {
-      padding: 0 5px 0 10px;
+      padding: 0 $s-pad 0 $l-pad;
 
-      #{$arrow} {
-        left: 0;
+      & > #{$arrow} {
+        left: $l-pad;
         border-width: $size $size $size 0;
         transform: translateX(-100%);
 
@@ -178,23 +179,23 @@ $tooltip: map.merge(
     &--no-arrow {
       &[data-popper-placement^='top'],
       &[data-popper-placement^='bottom'] {
-        padding: 5px 0;
+        padding: $s-pad 0;
       }
 
       &[data-popper-placement^='left'],
       &[data-popper-placement^='right'] {
-        padding: 0 5px;
+        padding: 0 $s-pad;
       }
     }
 
     $v-offset: get-css-var('tooltip-arrow-v-offset');
     $h-offset: get-css-var('tooltip-arrow-h-offset');
 
-    &[data-popper-placement='top'] #{$arrow} {
+    &[data-popper-placement='top'] > #{$arrow} {
       left: 50%;
     }
 
-    &[data-popper-placement='top-start'] #{$arrow} {
+    &[data-popper-placement='top-start'] > #{$arrow} {
       left: $h-offset;
 
       @include rtl {
@@ -202,7 +203,7 @@ $tooltip: map.merge(
       }
     }
 
-    &[data-popper-placement='top-end'] #{$arrow} {
+    &[data-popper-placement='top-end'] > #{$arrow} {
       left: calc(100% - #{$h-offset});
 
       @include rtl {
@@ -210,11 +211,11 @@ $tooltip: map.merge(
       }
     }
 
-    &[data-popper-placement='bottom'] #{$arrow} {
+    &[data-popper-placement='bottom'] > #{$arrow} {
       left: 50%;
     }
 
-    &[data-popper-placement='bottom-start'] #{$arrow} {
+    &[data-popper-placement='bottom-start'] > #{$arrow} {
       left: $h-offset;
 
       @include rtl {
@@ -222,7 +223,7 @@ $tooltip: map.merge(
       }
     }
 
-    &[data-popper-placement='bottom-end'] #{$arrow} {
+    &[data-popper-placement='bottom-end'] > #{$arrow} {
       left: calc(100% - #{$h-offset});
 
       @include rtl {
@@ -230,27 +231,27 @@ $tooltip: map.merge(
       }
     }
 
-    &[data-popper-placement='left'] #{$arrow} {
+    &[data-popper-placement='left'] > #{$arrow} {
       top: 50%;
     }
 
-    &[data-popper-placement='left-start'] #{$arrow} {
+    &[data-popper-placement='left-start'] > #{$arrow} {
       top: $v-offset;
     }
 
-    &[data-popper-placement='left-end'] #{$arrow} {
+    &[data-popper-placement='left-end'] > #{$arrow} {
       top: calc(100% - #{$v-offset});
     }
 
-    &[data-popper-placement='right'] #{$arrow} {
+    &[data-popper-placement='right'] > #{$arrow} {
       top: 50%;
     }
 
-    &[data-popper-placement='right-start'] #{$arrow} {
+    &[data-popper-placement='right-start'] > #{$arrow} {
       top: $v-offset;
     }
 
-    &[data-popper-placement='right-end'] #{$arrow} {
+    &[data-popper-placement='right-end'] > #{$arrow} {
       top: calc(100% - #{$v-offset});
     }
 
@@ -267,7 +268,7 @@ $tooltip: map.merge(
 
     &__popper--#{$name} {
       &[data-popper-placement^='top'] {
-        #{$arrow} {
+        & > #{$arrow} {
           border-top-color: $border-color;
 
           &::after {
@@ -277,9 +278,7 @@ $tooltip: map.merge(
       }
 
       &[data-popper-placement^='bottom'] {
-        padding: 10px 0 5px;
-
-        #{$arrow} {
+        & > #{$arrow} {
           border-bottom-color: $border-color;
 
           &::after {
@@ -289,7 +288,7 @@ $tooltip: map.merge(
       }
 
       &[data-popper-placement^='left'] {
-        #{$arrow} {
+        & > #{$arrow} {
           border-inline-start-color: $border-color;
 
           &::after {
@@ -299,7 +298,7 @@ $tooltip: map.merge(
       }
 
       &[data-popper-placement^='right'] {
-        #{$arrow} {
+        & > #{$arrow} {
           border-inline-end-color: $border-color;
 
           &::after {

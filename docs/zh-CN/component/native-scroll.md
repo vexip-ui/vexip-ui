@@ -1,4 +1,4 @@
-# 原生滚动 NativeScroll ^[Since v1.3.1](!s)
+# NativeScroll 原生滚动 ^[Since v1.3.1](!s)
 
 用于需要展示超出一个区域范围的内容，可以使用户滚动浏览，内部实现采用浏览器原生滚动以获得更好的兼容性与性能。
 
@@ -112,7 +112,7 @@ interface NativeScrollSlotParams {
 | use-y-bar     | `boolean`                              | 设置是否使用纵向滚动条                                                     | `false`      | -        |
 | bar-fade      | `number`                               | 设置触发滚动条渐隐的等待毫秒，若小于 `300` 则关闭渐隐效果                  | `1500`       | -        |
 | bar-class     | `ClassType`                            | 设置滚动条的自定义类名                                                     | `null`       | -        |
-| autoplay      | `boolean \| number`                    | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数           | `false`      | -        |
+| autoplay      | `boolean \| number`                    | 开启自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数                 | `false`      | -        |
 | play-waiting  | `number`                               | 当开启了自动滚动时，设置每次开始滚动前和结束滚动后的暂缓毫秒数             | `500`        | -        |
 | appear        | `boolean`                              | 设置滚动初始渲染时是否具有过渡效果，一般用于初始滚动位置为非 `0` 的场合    | `false`      | -        |
 | bar-duration  | `number`                               | 设置滚动条过渡效果的持续时间                                               | `null`       | -        |

@@ -1,3 +1,82 @@
+<script setup lang="ts">
+import { Avatar } from '@/components/avatar'
+import { Tooltip } from '@/components/tooltip'
+
+import { computed, provide, ref, watchEffect } from 'vue'
+
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { avatarGroupProps } from './props'
+import { GROUP_STATE } from './symbol'
+
+import type { ComponentSize } from '@vexip-ui/config'
+import type { AvatarOption } from './symbol'
+
+defineOptions({ name: 'AvatarGroup' })
+
+const _props = defineProps(avatarGroupProps)
+const props = useProps('avatarGroup', _props, {
+  size: 'default',
+  options: {
+    default: () => [],
+    static: true
+  },
+  circle: false,
+  max: null,
+  showTip: false,
+  tipTrigger: 'hover',
+  vertical: false,
+  offset: null,
+  restColor: null,
+  restBackground: null
+})
+
+defineSlots<{
+  default: (params: { option: AvatarOption, index: number }) => any,
+  rest: (params: { options: AvatarOption[], count: number }) => any,
+  tip: (params: { options: AvatarOption[], count: number }) => any
+}>()
+
+const nh = useNameHelper('avatar-group')
+
+const renderAvatars = ref<AvatarOption[]>([])
+const restAvatars = ref<AvatarOption[]>([])
+
+watchEffect(() => {
+  const size = props.options.length
+
+  if (props.max > 0 && size > props.max) {
+    renderAvatars.value = props.options.slice(0, props.max - 1)
+    restAvatars.value = props.options.slice(props.max - 1)
+  } else {
+    renderAvatars.value = Array.from(props.options)
+    restAvatars.value = []
+  }
+})
+
+provide(GROUP_STATE, props)
+
+const className = computed(() => {
+  return {
+    [nh.b()]: true,
+    [nh.ns('avatar-vars')]: true,
+    [nh.bm('inherit')]: props.inherit,
+    [nh.bm(props.size as ComponentSize)]:
+      typeof props.size !== 'number' && props.size !== 'default',
+    [nh.bm('circle')]: props.circle,
+    [nh.bm('vertical')]: props.vertical
+  }
+})
+const style = computed(() => {
+  const style: Record<string, string> = {}
+
+  if (typeof props.offset === 'number') {
+    style[nh.cv('offset')] = `${props.offset}px`
+  }
+
+  return style
+})
+</script>
+
 <template>
   <div :class="className" role="group" :style="style">
     <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
@@ -62,93 +141,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Avatar } from '@/components/avatar'
-import { Tooltip } from '@/components/tooltip'
-
-import { computed, defineComponent, provide, ref, watchEffect } from 'vue'
-
-import { useNameHelper, useProps } from '@vexip-ui/config'
-import { avatarGroupProps } from './props'
-import { GROUP_STATE } from './symbol'
-
-import type { ComponentSize } from '@vexip-ui/config'
-import type { AvatarOption } from './symbol'
-
-export default defineComponent({
-  name: 'AvatarGroup',
-  components: {
-    Avatar,
-    Tooltip
-  },
-  props: avatarGroupProps,
-  setup(_props) {
-    const props = useProps('avatarGroup', _props, {
-      size: 'default',
-      options: {
-        default: () => [],
-        static: true
-      },
-      circle: false,
-      max: null,
-      showTip: false,
-      tipTrigger: 'hover',
-      vertical: false,
-      offset: null,
-      restColor: null,
-      restBackground: null
-    })
-
-    const nh = useNameHelper('avatar-group')
-
-    const renderAvatars = ref<AvatarOption[]>([])
-    const restAvatars = ref<AvatarOption[]>([])
-
-    watchEffect(() => {
-      const size = props.options.length
-
-      if (props.max > 0 && size > props.max) {
-        renderAvatars.value = props.options.slice(0, props.max - 1)
-        restAvatars.value = props.options.slice(props.max - 1)
-      } else {
-        renderAvatars.value = Array.from(props.options)
-        restAvatars.value = []
-      }
-    })
-
-    provide(GROUP_STATE, props)
-
-    const className = computed(() => {
-      return {
-        [nh.b()]: true,
-        [nh.ns('avatar-vars')]: true,
-        [nh.bm('inherit')]: props.inherit,
-        [nh.bm(props.size as ComponentSize)]:
-          typeof props.size !== 'number' && props.size !== 'default',
-        [nh.bm('circle')]: props.circle,
-        [nh.bm('vertical')]: props.vertical
-      }
-    })
-    const style = computed(() => {
-      const style: Record<string, string> = {}
-
-      if (typeof props.offset === 'number') {
-        style[nh.cv('offset')] = `${props.offset}px`
-      }
-
-      return style
-    })
-
-    return {
-      props,
-      nh,
-      renderAvatars,
-      restAvatars,
-
-      className,
-      style
-    }
-  }
-})
-</script>

@@ -104,7 +104,10 @@ export default defineComponent({
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.disabled
-      props.options
+
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++

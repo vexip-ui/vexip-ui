@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, markRaw, onMounted, ref, watch, watchEffect } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { Message } from 'vexip-ui'
 import { ChevronUp, Code, PaperPlaneR, PasteR, PenToSquareR } from '@vexip-ui/icons'
 import { useBEM } from '@vexip-ui/bem-helper'
 import { useIntersection } from '@vexip-ui/hooks'
+import { writeClipboard } from '@vexip-ui/utils'
 import { highlight, languages } from 'prismjs'
-import { transformDemoCode } from '../common/demo-prefix'
+import { transformPrefix } from '../common/demo-prefix'
+import { transformOrder } from '../common/demo-sfc-order'
 import { hashTarget } from '../common/hash-target'
 import { usePlayground } from '../common/playground'
 
@@ -77,9 +78,9 @@ if (!props.alive) {
 watchEffect(async () => {
   if (!codeRef.value) return
 
-  await internalInit()
+  internalInit()
 
-  const formattedCode = transformDemoCode(code.value)
+  const formattedCode = transformCode(code.value)
   const lang = getCodeLang('vue')
 
   if (languages[lang]) {
@@ -96,7 +97,7 @@ onMounted(() => {
   })
 })
 
-async function internalInit() {
+function internalInit() {
   const basePath = `/demos/${props.src}/demo.${locale.value}.vue`
   const path = Object.keys(props.demos).find(path => path.endsWith(basePath))
 
@@ -104,6 +105,13 @@ async function internalInit() {
     demo.value = markRaw(props.demos[path] as any)
     code.value = props.codes[path]
   }
+}
+
+function transformCode(code: string) {
+  code = transformPrefix(code)
+  code = transformOrder(code)
+
+  return code
 }
 
 function toggleActive() {
@@ -122,30 +130,16 @@ function expandCodes() {
   codeExpanded.value = !codeExpanded.value
 }
 
-function copyCodes() {
-  let isSuccess = false
-
+async function copyCodes() {
   if (wrapper.value?.$el) {
-    const code = wrapper.value.$el.querySelector('pre code')
-    const textarea = document.createElement('textarea')
+    const codeEl = wrapper.value.$el.querySelector('pre code')
+    const code = codeEl?.textContent ?? ''
 
-    textarea.style.height = '0'
-    textarea.setAttribute('readonly', 'readonly')
-
-    textarea.value = code?.textContent ?? ''
-
-    document.body.appendChild(textarea)
-    textarea.select()
-
-    isSuccess = document.execCommand('copy')
-
-    document.body.removeChild(textarea)
-  }
-
-  if (isSuccess) {
-    Message.success(t('common.copySuccess'))
-  } else {
-    Message.error(t('common.copyFail'))
+    if (await writeClipboard(code)) {
+      Message.success(t('common.copySuccess'))
+    } else {
+      Message.error(t('common.copyFail'))
+    }
   }
 }
 
@@ -248,7 +242,11 @@ function editOnPlayground() {
       <CollapseTransition>
         <Column v-show="codeExpanded" :class="nh.be('code')">
           <div :class="`language-vue`">
-            <pre :class="`language-vue`" :lang="'vue'"><code ref="codeRef"></code></pre>
+            <pre
+              :class="`language-vue`"
+              :lang="'vue'"
+              tabindex="-1"
+            ><code ref="codeRef"></code></pre>
             <span v-if="codeLines > 0" class="code-line-numbers">
               <span v-for="n in codeLines" :key="n"></span>
             </span>
@@ -442,7 +440,9 @@ function editOnPlayground() {
     margin-inline-end: -80px;
     white-space: nowrap;
     opacity: 0%;
-    transition: margin var(--vxp-transition-base), var(--vxp-transition-color),
+    transition:
+      margin var(--vxp-transition-base),
+      var(--vxp-transition-color),
       var(--vxp-transition-opacity);
   }
 

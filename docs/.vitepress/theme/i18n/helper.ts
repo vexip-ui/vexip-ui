@@ -31,7 +31,11 @@ export interface I18nConfig {
     thanksContribute: string,
     toggleDirection: string,
     toggleTheme: string,
-    viewInGithub: string
+    viewInGithub: string,
+    openSettings: string,
+    adjustSettings: string,
+    changeOrder: string,
+    orderChanged: string
   },
   alert: {
     info: string,
@@ -74,7 +78,8 @@ export interface I18nConfig {
     issue: string,
     contribute: string,
     qqGroup?: string,
-    sponsor: string
+    sponsor: string,
+    releaseScripts: string
   },
   component: {
     // Basis

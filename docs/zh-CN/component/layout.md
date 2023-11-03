@@ -1,6 +1,14 @@
-# 布局 Layout ^[Since v2.0.0](!s)
+# Layout 布局 ^[Since v2.0.0](!s)
 
 这是一个渐进式的强业务逻辑布局组件，根据需要可以进行不同程度的定制化。
+
+:::warning
+在生产实践中，一个应用中不该使用多个 Layout 组件，并且 Layout 组件应该占满窗口。
+:::
+
+通常情况下，Layout 组件的主内容是在 `main` 插槽对应的元素上滚动的，如果你希望滚动是发生在浏览器窗口上的，可以添加 `fit-window` 属性。
+
+如果你希望主内容是一个固定的区域，并准备自行添加可滚动的包围元素，可以添加 `fix-main` 属性（参考下面 **固定主内容** 示例）。
 
 ## 代码示例
 
@@ -188,7 +196,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | footer           | `boolean`                | 设置是否使用页脚                                                                                            | `false`                                                              | -        |
 | tag              | `string`                 | 设置渲染的标签                                                                                              | `'section'`                                                          | -        |
 | menus            | `MenuOptions[]`          | 设置菜单选项                                                                                                | `[]`                                                                 | -        |
-| menu-props       | `LayoutMenuProps`        | 设置菜单属性                                                                                                | `null`                                                               | -        |
+| menu-props       | `LayoutMenuProps`        | 设置菜单属性，详见 [Menu 属性](/zh-CN/component/menu#menu-属性)                                             | `null`                                                               | -        |
 | logo             | `string`                 | 设置 Logo 图片地址                                                                                          | `''`                                                                 | -        |
 | sign-name        | `string`                 | 设置标语                                                                                                    | `''`                                                                 | -        |
 | config           | `LayoutConfig[]`         | 设置用户下拉面板具备的配置选项                                                                              | `['nav', 'theme', 'color']`                                          | -        |
@@ -211,6 +219,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | fixed-main       | `boolean`                | 设置主内容是否为固定的                                                                                      | `false`                                                              | `2.1.14` |
 | fit-window       | `boolean`                | 开启后将适应浏览器窗口并移除内置得滚动                                                                      | `false`                                                              | `2.1.24` |
 | inner-classes    | `LayoutInnerClass`       | 设置内部元素的自定义类名                                                                                    | `{}`                                                                 | `2.1.24` |
+| no-header        | `boolean`                | 设置是否禁用头部                                                                                            | `false`                                                              | `2.2.7`  |
 
 ### Layout 事件
 

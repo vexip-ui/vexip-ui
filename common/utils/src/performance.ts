@@ -172,3 +172,37 @@ export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...a
     requestAnimationFrame(flushFrameCallbacks)
   }
 }
+
+/**
+ * 按指定的并发数，并行地为系列源数据执行操作
+ *
+ * @param maxConcurrency 最大的并发数
+ * @param source 源数据
+ * @param iteratorFn 处理操作的异步函数
+ */
+export async function runParallel<T>(
+  maxConcurrency: number,
+  source: T[],
+  iteratorFn: (item: T, source: T[]) => Promise<any>
+) {
+  const ret: Array<Promise<any>> = []
+  const executing: Array<Promise<any>> = []
+
+  for (const item of source) {
+    const p = Promise.resolve().then(() => iteratorFn(item, source))
+
+    ret.push(p)
+
+    if (maxConcurrency <= source.length) {
+      const e: Promise<any> = p.then(() => executing.splice(executing.indexOf(e), 1))
+
+      executing.push(e)
+
+      if (executing.length >= maxConcurrency) {
+        await Promise.race(executing)
+      }
+    }
+  }
+
+  return Promise.all(ret)
+}

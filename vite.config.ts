@@ -9,9 +9,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import glob from 'fast-glob'
 import MagicString from 'magic-string'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { components } from './scripts/utils'
+import { components } from './scripts/constant'
 
-import type { LogLevel, Plugin } from 'vite'
+import type { LogLevel, Plugin, UserConfig } from 'vite'
 
 interface Manifest {
   dependencies?: Record<string, string>,
@@ -28,7 +28,7 @@ const externalPkgs = ['@vue'].concat(
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
-export default defineConfig(async () => {
+export default defineConfig(async (): Promise<UserConfig> => {
   const input = await glob('components/**/*.{ts,vue}', {
     cwd: __dirname,
     absolute: true,
@@ -138,12 +138,25 @@ function createResolvePlugin(): Plugin {
           name: `css/${name}`
         })
       }
+
+      this.emitFile({
+        type: 'chunk',
+        id: resolve('components', 'style.ts'),
+        name: 'style/index'
+      })
+      this.emitFile({
+        type: 'chunk',
+        id: resolve('components', 'css.ts'),
+        name: 'css/index'
+      })
     },
 
     renderChunk(code, chunk) {
       if (
         files.has(chunk.name.substring('style/'.length)) ||
-        files.has(chunk.name.substring('css/'.length))
+        files.has(chunk.name.substring('css/'.length)) ||
+        chunk.name === 'style/index' ||
+        chunk.name === 'css/index'
       ) {
         code = code.replace(rootRE, '../../')
 

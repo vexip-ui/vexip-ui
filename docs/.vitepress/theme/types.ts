@@ -1,3 +1,5 @@
+import type { TagType } from 'vexip-ui'
+
 export interface NavMenuItem extends Record<string, any> {
   key: string,
   link: string,
@@ -13,6 +15,7 @@ export interface AsideMenuItem {
   text?: string,
   i18n?: string,
   tag?: string,
+  tagType?: TagType,
   subtext?: string,
   subI18n?: string,
   noSub?: string[],

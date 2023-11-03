@@ -1,4 +1,4 @@
-# 颜色选择器 ColorPicker
+# ColorPicker 颜色选择器
 
 提供一个选择器可用于让用户快速灵活地选择颜色值。
 

@@ -41,8 +41,17 @@
             <template #default="payload">
               <slot name="node" v-bind="payload"></slot>
             </template>
+            <template v-if="$slots.arrow" #arrow="payload">
+              <slot name="arrow" v-bind="payload"></slot>
+            </template>
             <template #label="payload">
               <slot name="label" v-bind="payload"></slot>
+            </template>
+            <template v-if="$slots.prefix" #prefix="payload">
+              <slot name="prefix" v-bind="payload"></slot>
+            </template>
+            <template v-if="$slots.suffix" #suffix="payload">
+              <slot name="suffix" v-bind="payload"></slot>
             </template>
           </TreeNode>
         </div>
@@ -51,8 +60,17 @@
         <template #default="payload">
           <slot name="node" v-bind="payload"></slot>
         </template>
+        <template v-if="$slots.arrow" #arrow="payload">
+          <slot name="arrow" v-bind="payload"></slot>
+        </template>
         <template #label="payload">
           <slot name="label" v-bind="payload"></slot>
+        </template>
+        <template v-if="$slots.prefix" #prefix="payload">
+          <slot name="prefix" v-bind="payload"></slot>
+        </template>
+        <template v-if="$slots.suffix" #suffix="payload">
+          <slot name="suffix" v-bind="payload"></slot>
         </template>
       </TreeNode>
     </template>
@@ -76,7 +94,6 @@
 
 <script lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
-// import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 
 import {
@@ -144,7 +161,6 @@ export default defineComponent({
   name: 'Tree',
   components: {
     CollapseTransition,
-    // ResizeObserver,
     TreeNode,
     VirtualList
   },
@@ -167,6 +183,14 @@ export default defineComponent({
       checkbox: false,
       suffixCheckbox: false,
       renderer: {
+        default: null,
+        isFunc: true
+      },
+      prefixRenderer: {
+        default: null,
+        isFunc: true
+      },
+      suffixRenderer: {
         default: null,
         isFunc: true
       },
@@ -194,11 +218,13 @@ export default defineComponent({
       },
       virtual: false,
       nodeMinHeight: {
-        default: 28,
+        default: 26,
         validator: value => value > 0
       },
       useYBar: false,
-      noTransition: false
+      noTransition: false,
+      arrowIcon: null,
+      blockEffect: false
     })
 
     const nh = useNameHelper('tree')
@@ -284,7 +310,7 @@ export default defineComponent({
       if (wrapper.value) {
         visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
       }
-    }, 500)
+    }, 300)
 
     provide(
       TREE_STATE,
@@ -299,9 +325,14 @@ export default defineComponent({
         draggable: toRef(props, 'draggable'),
         floorSelect: toRef(props, 'floorSelect'),
         renderer: toRef(props, 'renderer'),
+        prefixRenderer: toRef(props, 'prefixRenderer'),
+        suffixRenderer: toRef(props, 'suffixRenderer'),
+        arrowIcon: toRef(props, 'arrowIcon'),
+        blockEffect: toRef(props, 'blockEffect'),
         dragging,
         boundAsyncLoad,
         nodeStates,
+        expanding,
         getParentNode,
         updateVisibleNodeEls,
         computeCheckedState,
@@ -410,6 +441,10 @@ export default defineComponent({
       { immediate: true }
     )
     watch(expandedNodeIds, (value, prev) => {
+      if (props.noTransition) {
+        updateVisibleNodeEls()
+      }
+
       if (props.noTransition || disableExpand || !wrapper.value) return
 
       let addedId: Key | undefined
@@ -1102,6 +1137,7 @@ export default defineComponent({
 
     function afterExpanded() {
       expanding.value = false
+      updateVisibleNodeEls()
     }
 
     function getCheckedNodes(): TreeNodeProps[] {

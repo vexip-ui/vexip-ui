@@ -1,20 +1,14 @@
 import path from 'node:path'
 
 import fs from 'fs-extra'
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import {
-  components as allComponents,
-  logger,
-  prettierConfig,
-  rootDir,
-  toCamelCase,
-  toCapitalCase,
-  toKebabCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { toCamelCase, toCapitalCase, toKebabCase } from '@vexip-ui/utils'
+import { components as allComponents, prettierConfig, rootDir } from './constant'
 import pkg from '../package.json'
 
 const args = minimist(process.argv.slice(2))
@@ -343,6 +337,8 @@ async function create(name: string) {
     ...(await getConvertCompTypeFiles())
   ]
 
+  const shouldLintFiles: string[] = []
+
   await Promise.all(
     generatedFiles.map(async ({ filePath, source, convert }) => {
       if (fs.existsSync(filePath) && !convert) {
@@ -353,7 +349,7 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(filePath, prettier.format(source, { ...prettierConfig, parser: 'scss' }))
+        await fs.writeFile(filePath, await format(source, { ...prettierConfig, parser: 'scss' }))
         await stylelint.lint({
           cwd: rootDir,
           fix: true,
@@ -362,7 +358,7 @@ async function create(name: string) {
       } else if (filePath.endsWith('.md')) {
         await fs.writeFile(
           filePath,
-          prettier.format(
+          await format(
             source
               .split('\n')
               .map(line => line.trim())
@@ -373,7 +369,7 @@ async function create(name: string) {
       } else if (filePath.endsWith('.json')) {
         await fs.writeFile(
           filePath,
-          prettier.format(source, {
+          await format(source, {
             ...prettierConfig,
             parser: 'json'
           })
@@ -382,7 +378,7 @@ async function create(name: string) {
         if (filePath.endsWith('.vue')) {
           await fs.writeFile(
             filePath,
-            prettier.format(source, {
+            await format(source, {
               ...prettierConfig,
               parser: 'vue'
             })
@@ -390,19 +386,25 @@ async function create(name: string) {
         } else {
           await fs.writeFile(
             filePath,
-            prettier.format(source, {
+            await format(source, {
               ...prettierConfig,
               parser: 'typescript'
             })
           )
         }
 
-        await ESLint.outputFixes(await eslint.lintFiles(filePath))
+        shouldLintFiles.push(filePath)
       }
 
       logger.infoText(`generated ${filePath}`)
     })
   )
+
+  logger.withStartLn(() => logger.infoText('Linting files...'))
+
+  await ESLint.outputFixes(await eslint.lintFiles(shouldLintFiles))
+
+  logger.successText(`Create component '${kebabCaseName}' successful`)
 }
 
 async function getConvertCompTypeFiles(): Promise<

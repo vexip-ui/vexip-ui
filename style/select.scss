@@ -148,14 +148,11 @@ $select: map.merge(
 
   &__popper {
     min-width: 98px;
-
-    .#{$namespace}-scroll__wrapper {
-      width: 100%;
-    }
   }
 
   &__list {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     user-select: none;
     background-color: get-css-var('select-list-bg-color');
@@ -165,6 +162,14 @@ $select: map.merge(
 
     .#{$namespace}-native-scroll__wrapper {
       padding: 5px 0;
+    }
+
+    &--with-extra {
+      padding: 5px 0;
+
+      .#{$namespace}-native-scroll__wrapper {
+        padding: 0;
+      }
     }
   }
 

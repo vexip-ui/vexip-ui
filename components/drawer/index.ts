@@ -8,4 +8,4 @@ export { drawerProps } from './props'
 export type DrawerExposed = ComponentPublicInstance & InstanceType<typeof Drawer>
 
 export type { DrawerProps, DrawerCProps } from './props'
-export type { DrawerPlacement } from './symbol'
+export type { DrawerPlacement, DrawerSlotParams } from './symbol'

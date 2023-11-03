@@ -1,3 +1,60 @@
+# [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.3.0...utils@2.4.0) (2023-11-03)
+
+
+### ✨ Features
+
+* **utils:** add leaveNumber method ([2764872](https://github.com/vexip-ui/vexip-ui/commit/2764872e034802c256a2b80f576adac1f9b107b2))
+* **utils:** add runParallel method ([e7d20a5](https://github.com/vexip-ui/vexip-ui/commit/e7d20a59505e5d813472deb0c78bcffe7968b5ce))
+* **utils:** formatByteSize support specify precision ([e158702](https://github.com/vexip-ui/vexip-ui/commit/e158702b9e37364195fe5f09318c0c7f9f8b619b))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** improve toCamelCase logic for all capital case ([c5fa815](https://github.com/vexip-ui/vexip-ui/commit/c5fa815a837515921648e2db424f3516de95b525))
+* **utils:** improve toKebabCase logic for all capital case ([7347675](https://github.com/vexip-ui/vexip-ui/commit/7347675eb1d0e160d35685ef23c31da8416e54e2))
+
+
+
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.2.0...utils@2.3.0) (2023-10-27)
+
+
+### ✨ Features
+
+* **utils:** add forceInject option for flatTree method ([49e7b9a](https://github.com/vexip-ui/vexip-ui/commit/49e7b9aee2cca4884817293fb981d8935e7d53c0))
+* **utils:** add writeClipboard method ([41dce09](https://github.com/vexip-ui/vexip-ui/commit/41dce092828fec83bd00e4465a6aab2818ed2bde))
+
+
+
+# [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.1.0...utils@2.2.0) (2023-10-19)
+
+
+### ✨ Features
+
+* **utils:** add methods to random prefer color ([1976c92](https://github.com/vexip-ui/vexip-ui/commit/1976c92e360776aa1a667a6ab0e5706fe85a6f6b))
+* **utils:** add padStartZeros method ([666bfcd](https://github.com/vexip-ui/vexip-ui/commit/666bfcd92b66c7f44741e3f9b31905f7dbbcdb30))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** add unexpectedly removed toCamelCase ([b3a9e53](https://github.com/vexip-ui/vexip-ui/commit/b3a9e531b6fede4a1c5e1ea41f4ff59281f394bd))
+* **utils:** correct color methods returns type ([9cfe584](https://github.com/vexip-ui/vexip-ui/commit/9cfe5848ff070011930c1ba32e6a8d5c8be69df8))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename digitLength to decimalLength ([8120e3f](https://github.com/vexip-ui/vexip-ui/commit/8120e3fc87230f86a69e24cc42cc340a30e66ab7))
+
+
+
+# [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.1...utils@2.1.0) (2023-10-08)
+
+
+### ✨ Features
+
+* **utils:** add isValidNumber method ([6462cf1](https://github.com/vexip-ui/vexip-ui/commit/6462cf16cf916772fad22ec3a13d7f661655f964))
+
+
+
 ## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.0...utils@2.0.1) (2023-09-07)
 
 

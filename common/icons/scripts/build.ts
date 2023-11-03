@@ -24,19 +24,19 @@ async function main() {
   await writeFile(resolve(rootDir, 'vue/index.ts'), exports, 'utf-8')
 
   console.log()
-  console.log(green('start building cjs and es packages...'))
+  console.log(green('Start building cjs and es packages...'))
   console.log()
 
   await execa('vite', ['build', '--config', 'vite.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(green('start building full package...'))
+  console.log(green('Start building full package...'))
   console.log()
 
   await execa('vite', ['build', '--config', 'vite.full.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(green('start generating types...'))
+  console.log(green('Start generating types...'))
 
   const types = `
     declare module '@vexip-ui/icons' {
@@ -70,12 +70,12 @@ async function main() {
 
   await writeFile(
     resolve(rootDir, 'types', 'index.d.ts'),
-    format(types, { parser: 'typescript', semi: false, singleQuote: true }),
+    await format(types, { parser: 'typescript', semi: false, singleQuote: true }),
     'utf-8'
   )
 
   console.log()
-  console.log(green('all builds completed successfully'))
+  console.log(green('All builds completed successfully'))
   console.log()
 }
 
@@ -117,7 +117,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
 
       await writeFile(
         resolve(outDir, `${fileName}.vue`),
-        format(vue, { parser: 'vue', semi: false, singleQuote: true }),
+        await format(vue, { parser: 'vue', semi: false, singleQuote: true }),
         'utf-8'
       )
 
@@ -126,7 +126,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
     })
   )
 
-  console.log(cyan(`generated icon vue components for: ${dir}`))
+  console.log(cyan(`Generated icon Vue components for: ${dir}`))
 
   return { exports, types }
 }

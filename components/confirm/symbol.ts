@@ -23,6 +23,7 @@ export interface ConfirmState {
   closable: boolean,
   contentAlign: ConfirmAlign,
   actionsAlign: ConfirmAlign,
+  cancelable: boolean,
   raw: Record<any, any>
 }
 
@@ -48,6 +49,7 @@ export interface ConfirmOptions extends Record<any, any> {
   parseHtml?: boolean,
   contentAlign?: ConfirmAlign,
   actionsAlign?: ConfirmAlign,
+  cancelable?: boolean,
   renderer?: ConfirmRenderFn,
   onBeforeConfirm?: () => unknown
 }

@@ -1,5 +1,5 @@
 <template>
-  <RadioGroup v-model:value="value" border>
+  <RadioGroup v-model:value="value" shape="border">
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>

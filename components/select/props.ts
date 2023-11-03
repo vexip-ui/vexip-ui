@@ -22,8 +22,7 @@ import type {
   SelectEvent,
   SelectFilter,
   SelectKeyConfig,
-  SelectRawOption,
-  SelectValue
+  SelectRawOption
 } from './symbol'
 
 type CustomChangeEvent =
@@ -52,7 +51,7 @@ export const selectProps = buildProps({
   suffix: Object,
   suffixColor: String,
   noSuffix: booleanProp,
-  value: valuesProp as PropType<SelectValue>,
+  value: valuesProp,
   multiple: booleanProp,
   clearable: booleanProp,
   maxListHeight: Number,

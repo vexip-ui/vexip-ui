@@ -14,9 +14,19 @@ Simplest usage.
 
 :::demo tooltip/trigger
 
-### Trigger Method
+### Trigger Type
 
 Change the trigger method via the `trigger` prop.
+
+:::
+
+:::demo tooltip/delay
+
+### Delay
+
+When the `trigger` prop is `'hover'`, setting the value of the `delay` prop specifies the delay in milliseconds for the tip to appear and disappear.
+
+When passing in the array, you can control the delay milliseconds for appearing and disappearing respectively.
 
 :::
 
@@ -88,27 +98,51 @@ In this way, you need to manually control the visible of tooltip.
 
 ## API
 
+### Preset Types
+
+```ts
+type TooltipTheme = 'light' | 'dark'
+type TooltipTrigger = 'hover' | 'click' | 'focus' | 'hover-focus' | 'custom'
+type TooltipShift = 'horizontal' | 'vertical' | 'both'
+
+type TooltipVirtual =
+  | {
+    getBoundingClientRect: () => DOMRect
+  }
+  | {
+    $el: {
+      getBoundingClientRect: () => DOMRect
+    }
+  }
+  | {
+    x: number,
+    y: number
+  }
+```
+
 ### Tooltip Props
 
-| Name            | Type                                                              | Description                                                                                   | Default      | Since   |
-| --------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------ | ------- |
-| visible         | `boolean`                                                         | The display state of the tip, you can use `v-model` two-way binding                           | `false`      | -       |
-| trigger         | `'hover' \| 'click' \| 'focus' \| 'custom'`                       | The trigger method of the tooltip, when it is `custom`, it need to manually control `visible` | `'hover'`    | -       |
-| placement       | `Placement`                                                       | The position where the tip appears, the optional value is the same as Popper.js               | `'top'`      | -       |
-| outside-close   | `boolean`                                                         | Set whether to close by clicking outside                                                      | `true`       | -       |
-| no-hover        | `boolean`                                                         | Set whether to make the tip unhoverable                                                       | `false`      | -       |
-| tip-class       | `ClassType`                                                       | Custom class name for the tip                                                                 | `null`       | -       |
-| tip-style       | `StyleType`                                                       | Custom styles for the tip                                                                     | `null`       | `2.0.0` |
-| disabled        | `boolean`                                                         | Set whether to disable                                                                        | `false`      | -       |
-| reverse         | `boolean`                                                         | Set whether to use reverse theme                                                              | `false`      | `2.0.0` |
-| transfer        | `boolean \| string`                                               | Set the rendering place of tip. When set to `true`, it will render to `<body>` by default     | `false`      | -       |
-| transition-name | `string`                                                          | Set the transition to show and hide the tip                                                   | `'vxp-fade'` | -       |
-| wrapper         | `boolean \| string`                                               | Set whether to render a wrappering element                                                    | `false`      | `2.0.0` |
-| no-arrow        | `boolean`                                                         | Set whether to disable arrow of tip                                                           | `false`      | `2.0.0` |
-| raw             | `boolean`                                                         | Set whether to render tip without internal styles                                             | `false`      | `2.0.0` |
-| tip-alive       | `boolean`                                                         | Set whether the tip will not be removed when hidden                                           | `false`      | `2.0.0` |
-| width           | `number \| 'trigger' \| 'auto'`                                   | Set the width of the tip, can using trigger width when be set to `'trigger'`                  | `'auto'`     | `2.0.0` |
-| virtual         | `{ $el: HTMLElement } \| HTMLElement \| { x: number, y: number }` | Set the virtual reference                                                                     | `null`       | `2.0.0` |
+| Name            | Type                            | Description                                                                                   | Default      | Since   |
+| --------------- | ------------------------------- | --------------------------------------------------------------------------------------------- | ------------ | ------- |
+| visible         | `boolean`                       | The display state of the tip, you can use `v-model` two-way binding                           | `false`      | -       |
+| trigger         | `TooltipTrigger`                | The trigger method of the tooltip, when it is `custom`, it need to manually control `visible` | `'hover'`    | -       |
+| placement       | `Placement`                     | The position where the tip appears, the optional value is the same as Popper.js               | `'top'`      | -       |
+| outside-close   | `boolean`                       | Set whether to close by clicking outside                                                      | `true`       | -       |
+| no-hover        | `boolean`                       | Set whether to make the tip unhoverable                                                       | `false`      | -       |
+| tip-class       | `ClassType`                     | Custom class name for the tip                                                                 | `null`       | -       |
+| tip-style       | `StyleType`                     | Custom styles for the tip                                                                     | `null`       | `2.0.0` |
+| disabled        | `boolean`                       | Set whether to disable                                                                        | `false`      | -       |
+| reverse         | `boolean`                       | Set whether to use reverse theme                                                              | `false`      | `2.0.0` |
+| transfer        | `boolean \| string`             | Set the rendering place of tip. When set to `true`, it will render to `<body>` by default     | `false`      | -       |
+| transition-name | `string`                        | Set the transition to show and hide the tip                                                   | `'vxp-fade'` | -       |
+| wrapper         | `boolean \| string`             | Set whether to render a wrapping element                                                      | `false`      | `2.0.0` |
+| no-arrow        | `boolean`                       | Set whether to disable arrow of tip                                                           | `false`      | `2.0.0` |
+| raw             | `boolean`                       | Set whether to render tip without internal styles                                             | `false`      | `2.0.0` |
+| tip-alive       | `boolean`                       | Set whether the tip will not be removed when hidden                                           | `false`      | `2.0.0` |
+| width           | `number \| 'trigger' \| 'auto'` | Set the width of the tip, can using trigger width when be set to `'trigger'`                  | `'auto'`     | `2.0.0` |
+| virtual         | `TooltipVirtual`                | Set the virtual reference                                                                     | `null`       | `2.0.0` |
+| delay           | `number \| number[]`            | Set the delay in milliseconds for tip to appear and disappear                                 | `250`        | `2.2.7` |
+| shift           | `TooltipShift`                  | Whether to limit tip inside the visible area                                                  | `false`      | `2.2.9` |
 
 ### Tooltip Events
 

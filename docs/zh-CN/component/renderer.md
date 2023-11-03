@@ -1,4 +1,4 @@
-# 渲染器 Renderer
+# Renderer 渲染器
 
 当你想要在 `<template>` 里使用渲染函数，你可能需要它。
 

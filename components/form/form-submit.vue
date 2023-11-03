@@ -46,6 +46,7 @@ import { FIELD_OPTIONS } from '@/components/form/symbol'
 import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { useSetTimeout } from '@vexip-ui/hooks'
 import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
 import { FORM_ACTIONS, FORM_PROPS } from './symbol'
@@ -86,6 +87,8 @@ export default defineComponent({
     const formProps = inject(FORM_PROPS, {})
     const actions = inject(FORM_ACTIONS, null)
 
+    const { timer } = useSetTimeout()
+
     const loading = ref(false)
 
     const submit = ref<HTMLElement>()
@@ -97,7 +100,7 @@ export default defineComponent({
     })
 
     async function handleSubmit() {
-      if (props.disabled || !actions) return
+      if (props.disabled || loading.value || !actions) return
 
       loading.value = true
 
@@ -125,7 +128,9 @@ export default defineComponent({
         }
       }
 
-      loading.value = false
+      timer.loading = setTimeout(() => {
+        loading.value = false
+      }, 300)
     }
 
     return {

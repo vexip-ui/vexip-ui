@@ -206,7 +206,8 @@ export function flatTree<T = any>(
     depthFirst?: boolean,
     injectId?: boolean,
     filter?: (item: T) => boolean,
-    cascaded?: boolean
+    cascaded?: boolean,
+    forceInject?: boolean
   } = {}
 ) {
   const {
@@ -217,7 +218,8 @@ export function flatTree<T = any>(
     depthFirst = false,
     injectId = true,
     filter = toTrue,
-    cascaded = false
+    cascaded = false,
+    forceInject = false
   } = options
 
   const hasRootId = isDefined(rootId) && rootId !== ''
@@ -232,7 +234,7 @@ export function flatTree<T = any>(
     const childrenValue = item[childField]
     const children: T[] = Array.isArray(childrenValue) && childrenValue.length ? childrenValue : []
 
-    if (injectId && !item[keyField]) {
+    if (injectId && (forceInject || !item[keyField])) {
       item[keyField] = idCount++ as any
     }
 

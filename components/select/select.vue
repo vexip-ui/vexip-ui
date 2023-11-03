@@ -44,7 +44,9 @@
                   @click.stop="toggleVisible"
                   @close="handleTagClose(item)"
                 >
-                  {{ currentLabels[index] }}
+                  <slot name="selected" :option="item">
+                    {{ currentLabels[index] }}
+                  </slot>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -82,7 +84,9 @@
                           :type="props.tagType"
                           @close="handleTagClose(item)"
                         >
-                          {{ currentLabels[index] }}
+                          <slot name="selected" :option="item">
+                            {{ currentLabels[index] }}
+                          </slot>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -128,7 +132,9 @@
                 :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
                 :placeholder="
-                  hittingLabel || currentLabels[0] || (props.placeholder ?? locale.placeholder)
+                  previewOption?.label ||
+                    currentLabels[0] ||
+                    (props.placeholder ?? locale.placeholder)
                 "
                 autocomplete="off"
                 tabindex="-1"
@@ -141,6 +147,13 @@
                 @blur="handleBlur($event)"
               />
             </template>
+            <slot
+              v-else-if="getOptionFromMap(currentValues[0])"
+              name="selected"
+              :option="getOptionFromMap(currentValues[0])"
+            >
+              {{ currentLabels[0] }}
+            </slot>
             <template v-else>
               {{ currentLabels[0] }}
             </template>
@@ -154,7 +167,17 @@
             "
             :class="nh.be('placeholder')"
           >
-            {{ hittingLabel ?? props.placeholder ?? locale.placeholder }}
+            <slot
+              v-if="previewOption"
+              name="selected"
+              :preview="true"
+              :option="previewOption"
+            >
+              {{ previewOption?.label ?? props.placeholder ?? locale.placeholder }}
+            </slot>
+            <template v-else>
+              {{ props.placeholder ?? locale.placeholder }}
+            </template>
           </span>
         </slot>
       </div>
@@ -205,74 +228,87 @@
       @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
-      <VirtualList
-        ref="virtualList"
-        inherit
-        :class="[nh.be('list'), props.listClass]"
-        :style="{
-          height: listHeight,
-          maxHeight: `${props.maxListHeight}px`
-        }"
-        :items="totalOptions"
-        :item-size="32"
-        use-y-bar
-        :height="'100%'"
-        id-key="value"
-        :items-attrs="{
-          class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-          role: 'listbox',
-          ariaLabel: 'options'
-        }"
+      <div
+        :class="[
+          nh.be('list'),
+          ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
+          props.listClass
+        ]"
       >
-        <template #default="{ item: option, index }">
-          <li
-            v-if="option.group"
-            :class="[nh.ns('option-vars'), nh.be('group')]"
-            :title="option.label"
-          >
-            <slot name="group" :option="option" :index="index">
-              <div
-                :class="[nh.be('label'), nh.bem('label', 'group')]"
-                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-              >
-                {{ option.label }}
-              </div>
-            </slot>
-          </li>
-          <Option
-            v-else
-            :label="option.label"
-            :value="option.value"
-            :disabled="option.disabled || (limited && !isSelected(option))"
-            :divided="option.divided"
-            :no-title="option.title"
-            :hitting="option.hitting"
-            :selected="isSelected(option)"
-            no-hover
-            @select="handleSelect(option)"
-            @mousemove="updateHitting(index, false)"
-          >
-            <slot :option="option" :index="index" :selected="isSelected(option)">
-              <span
-                :class="nh.be('label')"
-                :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-              >
-                {{ option.label }}
-              </span>
-              <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                <Icon v-if="isSelected(option)" v-bind="icons.check" :class="nh.be('check')"></Icon>
-              </Transition>
-            </slot>
-          </Option>
-        </template>
-        <template #empty>
-          <div :class="nh.be('empty')">
-            <slot name="empty">
-              {{ props.emptyText ?? locale.empty }}
-            </slot>
-          </div>
-        </template>
-      </VirtualList>
+        <slot v-if="$slots.prepend" name="prepend"></slot>
+        <VirtualList
+          ref="virtualList"
+          inherit
+          :style="{
+            height: undefined,
+            maxHeight: `${props.maxListHeight}px`
+          }"
+          :items="totalOptions"
+          :item-size="32"
+          use-y-bar
+          :height="'100%'"
+          id-key="value"
+          :items-attrs="{
+            class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+            role: 'listbox',
+            ariaLabel: 'options'
+          }"
+        >
+          <template #default="{ item: option, index }">
+            <li
+              v-if="option.group"
+              :class="[nh.ns('option-vars'), nh.be('group')]"
+              :title="option.label"
+            >
+              <slot name="group" :option="option" :index="index">
+                <div
+                  :class="[nh.be('label'), nh.bem('label', 'group')]"
+                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                >
+                  {{ option.label }}
+                </div>
+              </slot>
+            </li>
+            <Option
+              v-else
+              :label="option.label"
+              :value="option.value"
+              :disabled="option.disabled || (limited && !isSelected(option))"
+              :divided="option.divided"
+              :no-title="option.title"
+              :hitting="option.hitting"
+              :selected="isSelected(option)"
+              no-hover
+              @select="handleSelect(option)"
+              @mousemove="updateHitting(index, false)"
+            >
+              <slot :option="option" :index="index" :selected="isSelected(option)">
+                <span
+                  :class="nh.be('label')"
+                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                >
+                  {{ option.label }}
+                </span>
+                <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                  <Icon
+                    v-if="isSelected(option)"
+                    v-bind="icons.check"
+                    :class="nh.be('check')"
+                  ></Icon>
+                </Transition>
+              </slot>
+            </Option>
+          </template>
+          <template #empty>
+            <div :class="nh.be('empty')">
+              <slot name="empty">
+                {{ props.emptyText ?? locale.empty }}
+              </slot>
+            </div>
+          </template>
+        </VirtualList>
+        <slot v-if="$slots.append" name="append"></slot>
+      </div>
     </Popper>
   </div>
 </template>
@@ -447,7 +483,7 @@ export default defineComponent({
     const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
-    const listHeight = ref<string>()
+    // const listHeight = ref<string>()
     const baseOptions = ref<SelectOptionState[]>([])
     const currentFilter = ref('')
     const anchorWidth = ref(0)
@@ -493,9 +529,9 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
-    const cachedSelected = new Map<SelectBaseValue, SelectOptionState>()
+    const cachedSelected = reactive(new Map<SelectBaseValue, SelectOptionState>())
+    const optionValueMap = ref(new Map<SelectBaseValue, SelectOptionState>())
 
-    let optionValueMap = new Map<SelectBaseValue, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
@@ -509,7 +545,12 @@ export default defineComponent({
       props.keyConfig.title
       props.keyConfig.group
       props.keyConfig.children
-      props.options
+
+      // If we only read the `props.options`, when user use Array native methods to
+      // change options, Vue will not trigger the watch callback
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++
@@ -527,7 +568,7 @@ export default defineComponent({
         group: groupKey,
         children: childrenKey
       } = keyConfig.value
-      const oldMap = optionValueMap
+      const oldMap = optionValueMap.value
       const map = new Map<string | number, SelectOptionState>()
       const states: SelectOptionState[] = []
       const loop = props.options
@@ -589,7 +630,7 @@ export default defineComponent({
         }
       }
 
-      optionValueMap = map
+      optionValueMap.value = map
       baseOptions.value = states
 
       initValueAndLabel(emittedValue)
@@ -708,8 +749,8 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
-    const hittingLabel = computed(() => {
-      return !props.noPreview && currentVisible.value ? hittingOption.value?.label : undefined
+    const previewOption = computed(() => {
+      return !props.noPreview && currentVisible.value ? hittingOption.value : undefined
     })
     const limited = computed(() => {
       return (
@@ -720,7 +761,7 @@ export default defineComponent({
     function getOptionFromMap(value?: SelectBaseValue | null) {
       if (isNull(value)) return null
 
-      return optionValueMap.get(value) ?? cachedSelected.get(value) ?? null
+      return optionValueMap.value.get(value) ?? cachedSelected.get(value) ?? null
     }
 
     function fitPopperWidth() {
@@ -978,7 +1019,7 @@ export default defineComponent({
       if (selected) {
         if (userOptions.value.find(item => item.value === value)) {
           removeArrayItem(userOptions.value, item => item.value === value)
-          optionValueMap.delete(value)
+          optionValueMap.value.delete(value)
         }
 
         cachedSelected.delete(value)
@@ -993,7 +1034,7 @@ export default defineComponent({
           const newOption = { ...dynamicOption }
 
           userOptions.value.push(newOption)
-          optionValueMap.set(value, newOption)
+          optionValueMap.value.set(value, newOption)
         }
 
         cachedSelected.set(option.value, option)
@@ -1082,7 +1123,7 @@ export default defineComponent({
     function handleClear() {
       if (props.clearable) {
         for (const option of userOptions.value) {
-          optionValueMap.delete(option.value)
+          optionValueMap.value.delete(option.value)
         }
 
         cachedSelected.clear()
@@ -1200,7 +1241,7 @@ export default defineComponent({
       currentValues,
       currentLabels,
       transferTo,
-      listHeight,
+      // listHeight,
       optionStates,
       isHover,
       currentFilter,
@@ -1217,7 +1258,7 @@ export default defineComponent({
       showClear,
       normalOptions,
       optionParentMap,
-      hittingLabel,
+      previewOption,
       limited,
 
       wrapper,
@@ -1227,6 +1268,7 @@ export default defineComponent({
       device,
       virtualList,
 
+      getOptionFromMap,
       isSelected,
       filterOptions,
       updateHitting,

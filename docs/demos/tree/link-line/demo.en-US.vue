@@ -1,8 +1,21 @@
 <template>
-  <Tree :data="data" link-line></Tree>
+  <RadioGroup
+    v-model:value="linkLine"
+    :options="options"
+    button
+    style="margin-bottom: 10px"
+  ></RadioGroup>
+  <Tree :data="data" :link-line="linkLine"></Tree>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+import type { TreeLinkLine } from 'vexip-ui'
+
+const linkLine = ref<TreeLinkLine>('dashed')
+const options: TreeLinkLine[] = ['none', 'dashed', 'solid', 'dotted']
+
 const data = [
   {
     id: 1,

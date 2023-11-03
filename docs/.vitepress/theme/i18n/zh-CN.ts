@@ -33,7 +33,11 @@ export const zhCN = defineI18n({
     thanksContribute: '感谢他们的所做的一切贡献！',
     toggleDirection: '切换文本方向',
     toggleTheme: '切换主题',
-    viewInGithub: '在 GitHub 查看'
+    viewInGithub: '在 GitHub 查看',
+    openSettings: '打开配置面板',
+    adjustSettings: '调整文档配置',
+    changeOrder: '换个 SFC 块顺序',
+    orderChanged: 'SFC 块顺序修改成功'
   },
   alert: {
     info: '提示',
@@ -76,7 +80,8 @@ export const zhCN = defineI18n({
     issue: '议题',
     contribute: '参与贡献',
     qqGroup: '技术支持 Q 群',
-    sponsor: '赞助一杯喜茶'
+    sponsor: '赞助一杯喜茶',
+    releaseScripts: '发布脚本'
   },
   component: {
     // Basis

@@ -41,6 +41,8 @@ Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>
 
 > 左上方的版本为文档构建时依赖的组件库版本，可能与最新的不一致，因为文档的更新往往会落后一些。
 
+你可以查看 [更新日志](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) 以了解更新历程。
+
 ## 安装
 
 推荐使用 pnpm 或 yarn 的方式进行安装：

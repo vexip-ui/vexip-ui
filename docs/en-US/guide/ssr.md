@@ -10,7 +10,17 @@ All the operations that rely on the browser environment have compatible processi
 
 If you are using [Nuxt](https://nuxt.com/) as Server-Side Rendering framework, You can use [Vexip Nuxt Module](https://github.com/vexip-ui/nuxt) which contains automatically import components, plugins, directives, icons and their styles on demand.
 
-Add `@vexip-ui/nuxt` dependency to your project:
+You can use the following command to quickly create a Nuxt project that contains Vexip Nuxt Module:
+
+```sh
+# Using pnpm
+pnpm create vexip --template nuxt
+
+# Using yarn
+yarn create vexip --template nuxt
+```
+
+Or add `@vexip-ui/nuxt` dependency to your existed project:
 
 ```sh
 # Using pnpm

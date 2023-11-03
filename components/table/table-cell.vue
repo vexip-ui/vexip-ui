@@ -1,6 +1,7 @@
 <template>
   <div
     v-bind="attrs"
+    ref="wrapper"
     :class="className"
     role="cell"
     :scope="column.first ? 'row' : undefined"
@@ -52,55 +53,62 @@
         </button>
       </template>
     </template>
-    <template v-else>
-      <template v-if="usingTree && column.first">
-        <span
-          :class="nh.be('pad')"
-          :style="{
-            [nh.cv('row-depth')]: row.depth
-          }"
-        ></span>
-        <button
-          type="button"
-          :class="[nh.be('tree-expand'), !row.children?.length && nh.bem('tree-expand', 'hidden')]"
-          @click="handleExpandTree(row)"
+    <ResizeObserver v-else :disabled="!column.noEllipsis" :on-resize="handleCellResize">
+      <span :class="nh.be('content')">
+        <template
+          v-if="usingTree && (indentedColumn ? column.key === indentedColumn.key : column.first)"
         >
-          <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minus"></TableIcon>
-          <TableIcon v-else name="plus" :origin="icons.plus"></TableIcon>
-        </button>
-      </template>
-      <Ellipsis
-        v-if="!column.noEllipsis"
-        inherit
-        :tooltip-theme="tooltipTheme"
-        :tip-max-width="tooltipWidth"
-      >
-        <Renderer
-          v-if="isFunction(column.renderer)"
-          :renderer="column.renderer"
-          :data="{ row: row.data, rowIndex, column, columnIndex }"
-        ></Renderer>
-        <template v-else-if="isFunction(column.accessor)">
-          {{ column.accessor(row.data, rowIndex) }}
+          <span
+            :class="nh.be('pad')"
+            :style="{
+              [nh.cv('row-depth')]: row.depth
+            }"
+          ></span>
+          <button
+            type="button"
+            :class="[
+              nh.be('tree-expand'),
+              !row.children?.length && nh.bem('tree-expand', 'hidden')
+            ]"
+            @click="handleExpandTree(row)"
+          >
+            <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minus"></TableIcon>
+            <TableIcon v-else name="plus" :origin="icons.plus"></TableIcon>
+          </button>
         </template>
+        <Ellipsis
+          v-if="!column.noEllipsis"
+          inherit
+          :tooltip-theme="tooltipTheme"
+          :tip-max-width="tooltipWidth"
+        >
+          <Renderer
+            v-if="isFunction(column.renderer)"
+            :renderer="column.renderer"
+            :data="{ row: row.data, rowIndex, column, columnIndex }"
+          ></Renderer>
+          <template v-else-if="isFunction(column.accessor)">
+            {{ column.accessor(row.data, rowIndex) }}
+          </template>
+          <template v-else>
+            {{ row.data[column.key] }}
+          </template>
+        </Ellipsis>
         <template v-else>
-          {{ row.data[column.key] }}
+          <Renderer
+            v-if="isFunction(column.renderer)"
+            :renderer="column.renderer"
+            :data="{ row: row.data, rowIndex, column, columnIndex }"
+          ></Renderer>
+          <template v-else-if="isFunction(column.accessor)">
+            {{ column.accessor(row.data, rowIndex) }}
+          </template>
+          <template v-else>
+            {{ row.data[column.key] }}
+          </template>
         </template>
-      </Ellipsis>
-      <template v-else>
-        <Renderer
-          v-if="isFunction(column.renderer)"
-          :renderer="column.renderer"
-          :data="{ row: row.data, rowIndex, column, columnIndex }"
-        ></Renderer>
-        <template v-else-if="isFunction(column.accessor)">
-          {{ column.accessor(row.data, rowIndex) }}
-        </template>
-        <template v-else>
-          {{ row.data[column.key] }}
-        </template>
-      </template>
-    </template>
+      </span>
+    </ResizeObserver>
   </div>
 </template>
 
@@ -108,8 +116,9 @@
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, defineComponent, inject, toRef } from 'vue'
+import { computed, defineComponent, inject, ref, toRef } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
@@ -135,6 +144,7 @@ export default defineComponent({
     Checkbox,
     Ellipsis,
     Renderer,
+    ResizeObserver,
     TableIcon
   },
   props: {
@@ -165,6 +175,9 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const { isRtl } = useRtl()
+
+    const wrapper = ref<HTMLElement>()
+
     const disableCheckRows = toRef(getters, 'disableCheckRows')
     const disableExpandRows = toRef(getters, 'disableExpandRows')
     const disableDragRows = toRef(getters, 'disableDragRows')
@@ -183,12 +196,13 @@ export default defineComponent({
         customClass = state.cellClass
       }
 
+      const typed = columnTypes.includes((props.column as TableTypeColumn).type)
+
       return [
         nh.be('cell'),
         {
-          [nh.bem('cell', 'center')]:
-            columnTypes.includes((props.column as TableTypeColumn).type) ||
-            props.column.textAlign === 'center',
+          [nh.bem('cell', 'typed')]: typed,
+          [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
           [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
           [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
           [nh.bem('cell', 'last')]: props.column.last
@@ -396,9 +410,24 @@ export default defineComponent({
       mutations.handleTreeExpand(row.key, !row.treeExpanded)
     }
 
+    function handleCellResize(entry: ResizeObserverEntry) {
+      if (!wrapper.value) return
+
+      const style = getComputedStyle(wrapper.value)
+      const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+
+      mutations.setCellHeight(
+        props.row.key,
+        props.column.key,
+        (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + borderHeight
+      )
+    }
+
     return {
       nh,
       icons: useIcons(),
+
+      wrapper,
 
       className,
       cellSpan,
@@ -410,6 +439,7 @@ export default defineComponent({
       disableExpandRows,
       disableDragRows,
       usingTree: toRef(getters, 'usingTree'),
+      indentedColumn: toRef(getters, 'indentedColumn'),
 
       isFunction,
       isSelectionColumn,
@@ -425,7 +455,8 @@ export default defineComponent({
       handleCheckRow,
       handleExpandRow,
       handleDragRow,
-      handleExpandTree
+      handleExpandTree,
+      handleCellResize
     }
   }
 })

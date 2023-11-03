@@ -1,4 +1,4 @@
-# 省略 Ellipsis ^[Since v1.1.3](!s)
+# Ellipsis 省略 ^[Since v1.1.3](!s)
 
 当有一段长到放不下的文本时，可以派上用场。
 

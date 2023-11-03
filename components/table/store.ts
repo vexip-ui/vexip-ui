@@ -244,6 +244,9 @@ export function useStore(options: StoreOptions) {
   })
   const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
   const bottomFixedHeights = computed(() => getSummariesHeights())
+  const indentedColumn = computed(() =>
+    state.columns.find(column => !column.type && column.indented)
+  )
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -268,7 +271,8 @@ export function useStore(options: StoreOptions) {
     expandColumn,
     summaryData,
     topFixedHeights,
-    bottomFixedHeights
+    bottomFixedHeights,
+    indentedColumn
   })
 
   const mutations = {
@@ -296,6 +300,7 @@ export function useStore(options: StoreOptions) {
     setBorderHeight,
     setRowHeight,
     setRowMinHeight,
+    setCellHeight,
     setVirtual,
     setRowDraggable,
     setRowExpandHeight,
@@ -336,10 +341,12 @@ export function useStore(options: StoreOptions) {
     setRenderRows,
     handleExpand,
     handleDrag,
+    collectUnderRows,
     handleTreeExpand,
     getParentRow,
     handleColumnResize,
-    updateCellSpan
+    updateCellSpan,
+    getCurrentData
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -611,7 +618,7 @@ export function useStore(options: StoreOptions) {
       }
     }
 
-    function parseRow(origin: Data[], result: TableRowState[], parent?: TableRowState) {
+    const parseRow = (origin: Data[], result: TableRowState[], parent?: TableRowState) => {
       for (let i = 0, len = origin.length; i < len; ++i) {
         const item = origin[i]
 
@@ -665,6 +672,7 @@ export function useStore(options: StoreOptions) {
             partial: false,
             dragging: false,
             listIndex: 0,
+            cellHeights: reactive({}),
             data: item
           }
 
@@ -823,6 +831,12 @@ export function useStore(options: StoreOptions) {
 
   function setRowMinHeight(height: number) {
     state.rowMinHeight = height
+  }
+
+  function setCellHeight(rowKey: Key, columnKey: Key, height: number) {
+    if (state.rowMap.has(rowKey)) {
+      state.rowMap.get(rowKey)!.cellHeights[columnKey] = height
+    }
   }
 
   function setRowDraggable(draggable: boolean) {
@@ -1394,8 +1408,8 @@ export function useStore(options: StoreOptions) {
     const { rowMap } = state
     const row = rowMap.get(key)
 
-    if (row?.parent) {
-      return rowMap.get(row.parent) ?? null
+    if (!isNull(row?.parent)) {
+      return rowMap.get(row!.parent) ?? null
     }
 
     return null
@@ -1515,6 +1529,33 @@ export function useStore(options: StoreOptions) {
     } else {
       cellSpanMap.set(masterKey, span)
     }
+  }
+
+  function getCurrentData() {
+    const { keyConfig, rowData } = state
+    const { children: childrenKey } = keyConfig
+    const data: Data[] = []
+
+    const buildData = (rows: TableRowState[], data: Data[]) => {
+      for (const row of rows) {
+        const item = { ...row.data }
+
+        data.push(item)
+
+        if (row.children?.length) {
+          buildData(row.children, (item[childrenKey] = []))
+        } else {
+          delete item[childrenKey]
+        }
+      }
+    }
+
+    buildData(
+      rowData.filter(row => isNull(row.parent)),
+      data
+    )
+
+    return data
   }
 
   type Store = Readonly<{

@@ -75,7 +75,16 @@ $table: map.merge(
   &__wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    height: 100%;
+    overflow: scroll;
+    vertical-align: top;
+    scrollbar-width: none;
+
+    @include clear-both;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .#{$namespace}-scroll__wrapper {
       min-width: 100%;
@@ -170,7 +179,8 @@ $table: map.merge(
     display: flex;
     flex: 1 0 0;
     align-items: center;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -202,6 +212,19 @@ $table: map.merge(
     &[rowspan] {
       z-index: 1;
     }
+  }
+
+  &__cell:not(#{&}__cell--typed) {
+    padding: 0;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
+    word-break: break-all;
+    white-space: normal;
   }
 
   &__side-pad {
@@ -261,6 +284,7 @@ $table: map.merge(
   $cell: #{&}__cell;
   $head-cell: #{&}__head-cell;
   $foot-cell: #{&}__foot-cell;
+  $content: #{&}__content;
   $collapse: #{&}__collapse;
   $fixed-active: #{&}__fixed--active;
   $side-pad: #{&}__side-pad;
@@ -285,6 +309,15 @@ $table: map.merge(
 
   &__foot &__group {
     position: relative;
+  }
+
+  &__row--fixed {
+    #{$cell},
+    #{$head-cell},
+    #{$foot-cell},
+    #{$content} {
+      height: 100%;
+    }
   }
 
   &--below-foot &__body &__group:last-child {
@@ -322,13 +355,16 @@ $table: map.merge(
     #{$head-cell},
     #{$foot-cell} {
       will-change: width, transform;
-      transition: width get-css-var('transition-base'), get-css-var('transition-background'),
+      transition:
+        width get-css-var('transition-base'),
+        get-css-var('transition-background'),
         get-css-var('transition-transform');
     }
   }
 
   &--locked {
     #{$group},
+    #{$row},
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
@@ -530,13 +566,14 @@ $table: map.merge(
 
     &::after {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: 50%;
       inset-inline-end: 0;
-      width: 3px;
+      width: 1px;
+      height: 50%;
       content: '';
-      background-color: transparent;
+      background-color: get-css-var('table-b-color');
       transition: get-css-var('transition-background');
+      transform: translateY(-50%);
     }
 
     &:hover::after {

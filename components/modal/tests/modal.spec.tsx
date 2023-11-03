@@ -43,7 +43,7 @@ describe('Modal', () => {
     expect(wrapper.find('.vxp-modal__close').exists()).toBe(true)
   })
 
-  it('close', () => {
+  it('close slot', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
@@ -56,7 +56,7 @@ describe('Modal', () => {
     expect(wrapper.find('.close').exists()).toBe(true)
   })
 
-  it('header', () => {
+  it('header slot', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
@@ -134,8 +134,8 @@ describe('Modal', () => {
 
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
-    await nextTick()
-    expect(onToggle).toHaveBeenCalled()
+    // await nextTick()
+    expect(onToggle).toHaveBeenLastCalledWith(false)
     expect(onClose).toHaveBeenCalledTimes(1)
     expect(onCancel).toHaveBeenCalled()
 
@@ -293,5 +293,75 @@ describe('Modal', () => {
     expect(modal.attributes('style')).toContain('right: 10px;')
     expect(modal.attributes('style')).toContain('width: 100px;')
     expect(modal.attributes('style')).toContain('left: auto;')
+  })
+
+  it('adjust buttons', () => {
+    const wrapper = mount(() => (
+      <Modal confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Modal>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Modal undivided>{TEXT}</Modal>)
+
+    expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--undivided')
+  })
+
+  it('mask close', async () => {
+    const onToggle = vi.fn()
+    const onClose = vi.fn()
+    const wrapper = mount(Modal, {
+      props: {
+        active: true,
+        onToggle,
+        onClose
+      }
+    })
+
+    await wrapper.find('.vxp-masker__mask').trigger('click')
+
+    expect(onToggle).toHaveBeenCalledWith(false)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('before close', async () => {
+    const onBeforeClose = vi.fn()
+    const wrapper = mount(Modal, {
+      props: { closable: true, onBeforeClose }
+    })
+
+    const openAndClose = async () => {
+      wrapper.vm.currentActive = true
+      await nextTick()
+      await wrapper.find('.vxp-masker__mask').trigger('click')
+      await nextTick()
+    }
+
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(false)
+    expect(onBeforeClose).toHaveBeenCalled()
+
+    onBeforeClose.mockReturnValue(false)
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+
+    onBeforeClose.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          nextTick(() => nextTick(() => resolve(true)))
+        })
+    )
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+    await nextTick()
+    expect(wrapper.vm.currentActive).toBe(false)
   })
 })

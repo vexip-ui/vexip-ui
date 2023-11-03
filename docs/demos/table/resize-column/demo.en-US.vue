@@ -5,9 +5,11 @@
     :width="1000"
     col-resizable
   >
+    <TableColumn type="selection"></TableColumn>
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>
     <TableColumn name="Job" id-key="job"></TableColumn>
+    <TableColumn name="Email" id-key="email" no-ellipsis></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>

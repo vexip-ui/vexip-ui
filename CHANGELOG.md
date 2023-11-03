@@ -1,3 +1,146 @@
+## [2.2.8](https://github.com/vexip-ui/vexip-ui/compare/v2.2.7...v2.2.8) (2023-10-27)
+
+
+### ✨ Features
+
+* **plugins:** add fullStyle option for unplugin resolver ([c06e9b0](https://github.com/vexip-ui/vexip-ui/commit/c06e9b0318e29dd408584c5bd78c56d6da91c428))
+* **resize-observer:** add disabled prop ([fc80708](https://github.com/vexip-ui/vexip-ui/commit/fc8070850705bd17fc5989055555decec4225253))
+* **slider:** adjust tip default behavior and add tip-hover prop ([29d1766](https://github.com/vexip-ui/vexip-ui/commit/29d1766bd2b426e468148c8895b562e1fa439f85))
+* **utils:** add forceInject option for flatTree method ([49e7b9a](https://github.com/vexip-ui/vexip-ui/commit/49e7b9aee2cca4884817293fb981d8935e7d53c0))
+* **utils:** add writeClipboard method ([41dce09](https://github.com/vexip-ui/vexip-ui/commit/41dce092828fec83bd00e4465a6aab2818ed2bde))
+
+
+### 🐞 Bug Fixes
+
+* **bubble:** isolate style effect when nested itself ([0d8c88f](https://github.com/vexip-ui/vexip-ui/commit/0d8c88fe522e13b1401e89a3dd3aa5f1dec26176))
+* **config:** incorrect default value for value(s)Prop ([db750d3](https://github.com/vexip-ui/vexip-ui/commit/db750d3233b3399ef8edf680933f7e50794dce6b))
+* ensure track options change for Select, Cascader and Transfer ([f906701](https://github.com/vexip-ui/vexip-ui/commit/f906701036c02aaa42f0bfda6286759fb6286b0e))
+* **slider:** add container to improve scalability ([04b721e](https://github.com/vexip-ui/vexip-ui/commit/04b721e56e4edd0d5f911768c7f1ba9c4dac0120))
+* **table:** add missing style dependencies ([6229631](https://github.com/vexip-ui/vexip-ui/commit/62296312c8497e10e9f591de3ad20af645b477ca))
+* **table:** duplicate from `getData` after drag in tree ([3871bbd](https://github.com/vexip-ui/vexip-ui/commit/3871bbd38b1ab2dff3c0b9e4bcd78889d2281882))
+* **tooltip:** isolate style effect when nested itself ([5b566b3](https://github.com/vexip-ui/vexip-ui/commit/5b566b33ebb04c9d2af2fed7e91610af328564a9))
+* **tree:** add missing style dependencies ([0efb472](https://github.com/vexip-ui/vexip-ui/commit/0efb4724661b1198b6c9978e237c7eb5515c1eab))
+
+
+### 🔨 Code Refactoring
+
+* **radio:** add shape prop to replace border, button props ([6d3121d](https://github.com/vexip-ui/vexip-ui/commit/6d3121d123947c1a8961334a3f253724b1b642e2))
+* **table:** responsive cells and rows height ([94cc2eb](https://github.com/vexip-ui/vexip-ui/commit/94cc2ebaec82d6975ee57a93c87903dc5e6f1eb5))
+
+
+
+## [2.2.7](https://github.com/vexip-ui/vexip-ui/compare/v2.2.6...v2.2.7) (2023-10-20)
+
+
+### ✨ Features
+
+* **auto-complete:** add prepend and append slots ([37543ce](https://github.com/vexip-ui/vexip-ui/commit/37543ce66e9506e5b1c9624f9785c5a8baae2765))
+* **layout:** add no-header prop ([7bb9822](https://github.com/vexip-ui/vexip-ui/commit/7bb9822dd65d865508162cee3fac5c9cbe3f8a86))
+* **select:** add prepend and append slots ([6eb864f](https://github.com/vexip-ui/vexip-ui/commit/6eb864fa863902b2d53b3cd48a27e18a4fb7dd7a))
+* **table:** add drag-over and dragging class names for rows ([bdfe133](https://github.com/vexip-ui/vexip-ui/commit/bdfe133946dcf95ecdb1f6114c03b795b9527277))
+* **tooltip:** support custom delay for hover trigger ([f46901c](https://github.com/vexip-ui/vexip-ui/commit/f46901c8d981a9ba643e805e1db3afbe2476a1f1))
+* **utils:** add methods to random prefer color ([1976c92](https://github.com/vexip-ui/vexip-ui/commit/1976c92e360776aa1a667a6ab0e5706fe85a6f6b))
+* **utils:** add padStartZeros method ([666bfcd](https://github.com/vexip-ui/vexip-ui/commit/666bfcd92b66c7f44741e3f9b31905f7dbbcdb30))
+
+
+### 🐞 Bug Fixes
+
+* **form:** ensure validate work after executing reset ([fdea9d5](https://github.com/vexip-ui/vexip-ui/commit/fdea9d5bdbc21c433d4eb99cb70458916721d910)), closes [#415](https://github.com/vexip-ui/vexip-ui/issues/415)
+* **popup:** ensure items' z-index effective ([01b71fb](https://github.com/vexip-ui/vexip-ui/commit/01b71fb68a003ef31c992d30644eedc4f7d11a79)), closes [#414](https://github.com/vexip-ui/vexip-ui/issues/414)
+* **table:** correctly process row data when drag tree ([7b6174f](https://github.com/vexip-ui/vexip-ui/commit/7b6174fa4b60fcad75716926b912f6475cdde767))
+* **tree:** improve toggling of drag-over class name ([35f98af](https://github.com/vexip-ui/vexip-ui/commit/35f98af5b698ff78ab30b7ad0e8e9f2e1d1fdf84))
+* **typography:** improve keyboard type text style ([93a8411](https://github.com/vexip-ui/vexip-ui/commit/93a8411a2078bca9961583951e0c8e6f9f8a6f33))
+* uncontrollable mask-close behavior of Drawer and Modal ([2285f9d](https://github.com/vexip-ui/vexip-ui/commit/2285f9d488f38cc21bd2410f3aac8340168a9c65))
+* **utils:** add unexpectedly removed toCamelCase ([b3a9e53](https://github.com/vexip-ui/vexip-ui/commit/b3a9e531b6fede4a1c5e1ea41f4ff59281f394bd))
+* **utils:** correct color methods returns type ([9cfe584](https://github.com/vexip-ui/vexip-ui/commit/9cfe5848ff070011930c1ba32e6a8d5c8be69df8))
+
+
+### 🔨 Code Refactoring
+
+* **dev:** adjust layout of devlopment page ([fa227ca](https://github.com/vexip-ui/vexip-ui/commit/fa227cab86c248393fe12c17607feeb6d0225784))
+* transfer some components to setup script ([84dca6d](https://github.com/vexip-ui/vexip-ui/commit/84dca6d8c6aac9f9518d2c48a78d3cb05a907b3b))
+* **utils:** rename digitLength to decimalLength ([8120e3f](https://github.com/vexip-ui/vexip-ui/commit/8120e3fc87230f86a69e24cc42cc340a30e66ab7))
+
+
+
+## [2.2.6](https://github.com/vexip-ui/vexip-ui/compare/v2.2.5...v2.2.6) (2023-10-12)
+
+
+### ✨ Features
+
+* **confirm:** support disbale cancel button ([34d0dea](https://github.com/vexip-ui/vexip-ui/commit/34d0dea4353a61cdd7263990d28696eb3ed57e46))
+* **drawer:** support custom type and size of action buttons ([df2d8cf](https://github.com/vexip-ui/vexip-ui/commit/df2d8cf2d530d5ea262f08706f5cae11bc5d642b))
+* **modal:** add undivided prop ([8269ea2](https://github.com/vexip-ui/vexip-ui/commit/8269ea2745850e8a060524c485c7c87442f1c631))
+* **modal:** support custom type and size of action buttons ([fd35dcd](https://github.com/vexip-ui/vexip-ui/commit/fd35dcd0c915ff198200367f85b5b32361197e1d))
+* **table:** add getData api method ([ef6b470](https://github.com/vexip-ui/vexip-ui/commit/ef6b4707e18bcd40f9480a3b944a3e04b0cc2251))
+* **table:** support specify indented column for tree ([ca08c37](https://github.com/vexip-ui/vexip-ui/commit/ca08c375cce39d8e41d5d7827d197675706027aa))
+* **virtual-list:** add autoplay prop ([8910727](https://github.com/vexip-ui/vexip-ui/commit/8910727077787a4a2cdc6039fa082599614a5e4e))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correct initial hitting behavior ([942a0c8](https://github.com/vexip-ui/vexip-ui/commit/942a0c8af105d3710fe937b328d900b48a8e9beb)), closes [#413](https://github.com/vexip-ui/vexip-ui/issues/413)
+* **layout:** improve height calculation in Nuxt ([5c91e98](https://github.com/vexip-ui/vexip-ui/commit/5c91e982a8f3b41c7e89922abd5f59ab6de66198))
+* **modal:** add dragging and resizing into slot params ([a81c4f7](https://github.com/vexip-ui/vexip-ui/commit/a81c4f70882cf6521a5b87f014ff31019bdf3a47))
+* **scroll:** ensure emit scroll event when auto scroll ([fa6b437](https://github.com/vexip-ui/vexip-ui/commit/fa6b437501b754ba229f0d052136a6cdd940e293))
+* **table:** correct precess for dragging row in tree table ([00550d7](https://github.com/vexip-ui/vexip-ui/commit/00550d7f2c08782432db6cb6a2e2c9f50454a240))
+* **table:** row disappear when drop to head via using dragger ([533184c](https://github.com/vexip-ui/vexip-ui/commit/533184c856cddeda2565d05b97c3a732b504f26e))
+
+
+### 🔨 Code Refactoring
+
+* **drawer:** add undivided prop ([e486c10](https://github.com/vexip-ui/vexip-ui/commit/e486c105514defa9734a2228f2d30aaeb2466809))
+
+
+
+## [2.2.5](https://github.com/vexip-ui/vexip-ui/compare/v2.2.4...v2.2.5) (2023-10-08)
+
+
+### ✨ Features
+
+* **checkbox:** support custom major color ([0d08bfd](https://github.com/vexip-ui/vexip-ui/commit/0d08bfdd26d30573513ed7c581d3eb8d47a335a7))
+* **icon:** add color prop ([c912fb7](https://github.com/vexip-ui/vexip-ui/commit/c912fb74aed1690eef7143738e40ec6428505964))
+* **icon:** add rotate prop ([a049fa7](https://github.com/vexip-ui/vexip-ui/commit/a049fa7eda9e6509a72f685936834cf67ab9e6a6))
+* **icon:** add size prop ([7abd26f](https://github.com/vexip-ui/vexip-ui/commit/7abd26faf08051d79668217fb920ac0652b405b3))
+* **select:** support custom selected label ([c34df8d](https://github.com/vexip-ui/vexip-ui/commit/c34df8d7a01d23501781e7481dcab6b2cbcd37bf))
+* **tree:** add block-effect prop ([eb2a559](https://github.com/vexip-ui/vexip-ui/commit/eb2a55971d7b2d59c553397f4518bff88e41fa43))
+* **tree:** support custom arrow icon via prop or slot ([3ad3f02](https://github.com/vexip-ui/vexip-ui/commit/3ad3f02a312cdcbf6beac000ccd8ef8945d38f5b))
+* **tree:** support prefix and suffix slots ([12bbb3f](https://github.com/vexip-ui/vexip-ui/commit/12bbb3f05cdeb9b72c24d2de95c6ed1d4dd7de1c)), closes [#409](https://github.com/vexip-ui/vexip-ui/issues/409)
+* **utils:** add isValidNumber method ([6462cf1](https://github.com/vexip-ui/vexip-ui/commit/6462cf16cf916772fad22ec3a13d7f661655f964))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correct popper behavior with show-empty false ([49a7a04](https://github.com/vexip-ui/vexip-ui/commit/49a7a04fd1f2e3e2d5319f33d880a6cc06e4efbd)), closes [#411](https://github.com/vexip-ui/vexip-ui/issues/411)
+* **form:** improve top align label style ([cb2743c](https://github.com/vexip-ui/vexip-ui/commit/cb2743c55d88eefd9a416574641dc47b0f2f0f89))
+* **layout:** prioritize using customize primary color variable ([2ed6d2c](https://github.com/vexip-ui/vexip-ui/commit/2ed6d2cfc5947bce1dda2694d25869d9705d7ae2)), closes [#410](https://github.com/vexip-ui/vexip-ui/issues/410)
+* **tree:** correctly update visible nodes' element ([0a5e97a](https://github.com/vexip-ui/vexip-ui/commit/0a5e97a6c4cdbc3d0e82991b306a60ded7cb73e1))
+
+
+### ❌ Breaking Changes
+
+* **tree:** After this change, node effect class names no longer
+apply to the label element (except `disabled`). Also the effect style
+structure changed.
+
+
+
+## [2.2.4](https://github.com/vexip-ui/vexip-ui/compare/v2.2.3...v2.2.4) (2023-09-22)
+
+
+### ✨ Features
+
+* **color-picker:** support show and custom label ([7bbde77](https://github.com/vexip-ui/vexip-ui/commit/7bbde77561fdeedfe2f4e004549a45981c9e7032))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** missing header button type ([8dec9aa](https://github.com/vexip-ui/vexip-ui/commit/8dec9aa12582fa0dbfc5d0b5cf4cd7146353ccaf))
+* **hooks:** improve createSlotRender method ([70a0ce9](https://github.com/vexip-ui/vexip-ui/commit/70a0ce9d1ead1a590a2aa5849777cd7428e50ca3))
+* **menu:** ensure default slot display when includes valid content ([#408](https://github.com/vexip-ui/vexip-ui/issues/408)) ([e3466cb](https://github.com/vexip-ui/vexip-ui/commit/e3466cbd8429d174a72605387b317339db28afac))
+
+
+
 ## [2.2.3](https://github.com/vexip-ui/vexip-ui/compare/v2.2.2...v2.2.3) (2023-09-07)
 
 

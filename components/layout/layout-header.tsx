@@ -73,7 +73,7 @@ export default defineComponent({
       isMounted.value
       return isClient ? document.documentElement : null
     })
-    const currentColor = ref(props.color || props.colors?.[0] || getBaseColor())
+    const currentColor = ref(props.color || getBaseColor() || props.colors?.[0])
     const isDark = ref(false)
 
     const className = computed(() => {
@@ -129,12 +129,6 @@ export default defineComponent({
       }
     )
     watch(
-      () => props.color,
-      value => {
-        currentColor.value = value || props.colors?.[0] || getBaseColor()
-      }
-    )
-    watch(
       () => props.userDropped,
       value => {
         currentUserDropped.value = value
@@ -150,6 +144,14 @@ export default defineComponent({
     )
 
     onBeforeMount(() => {
+      watch(
+        () => props.color,
+        value => {
+          currentColor.value = value || getBaseColor() || props.colors?.[0]
+        },
+        { immediate: true }
+      )
+
       computeSeriesColors(currentColor.value)
     })
 

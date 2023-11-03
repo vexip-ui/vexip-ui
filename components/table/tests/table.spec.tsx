@@ -731,6 +731,37 @@ describe('Table', () => {
     expect(rows.length).toEqual(3)
   })
 
+  it('indented column', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      },
+      {
+        name: 'Indented',
+        key: 'indented',
+        indented: true
+      },
+      {
+        name: 'Indented1',
+        key: 'indented1',
+        indented: true
+      }
+    ]
+
+    const data = Array.from<any, any>({ length: 3 }, (_, i) => ({ label: `l${i}` }))
+    data[0].children = Array.from({ length: 3 }, (_, i) => ({ label: `l${3 + i}` }))
+
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    const cells = rows[0].findAll('.vxp-table__cell')
+
+    expect(cells[0].find('.vxp-table__tree-expand').exists()).toBe(false)
+    expect(cells[1].find('.vxp-table__tree-expand').exists()).toBe(true)
+    expect(cells[2].find('.vxp-table__tree-expand').exists()).toBe(false)
+  })
+
   it('col-resize', async () => {
     let currentWidth = -1
     const onStart = vi.fn(({ width }) => (currentWidth = width))

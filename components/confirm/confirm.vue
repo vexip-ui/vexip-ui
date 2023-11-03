@@ -64,7 +64,8 @@ const props = useProps('confirm', _props, {
   closable: false,
   parseHtml: false,
   contentAlign: 'left',
-  actionsAlign: 'right'
+  actionsAlign: 'right',
+  cancelable: true
 })
 
 const nh = useNameHelper('confirm')
@@ -89,6 +90,7 @@ const state = reactive<ConfirmState>({
   closable: props.closable,
   contentAlign: props.contentAlign,
   actionsAlign: props.actionsAlign,
+  cancelable: props.cancelable,
   raw: {}
 })
 
@@ -126,6 +128,8 @@ async function openConfirm(options: ConfirmOptions) {
     state.closable = options.closable ?? props.closable
     state.contentAlign = options.contentAlign ?? props.contentAlign
     state.actionsAlign = options.actionsAlign ?? props.actionsAlign
+    state.cancelable = options.cancelable ?? props.cancelable
+
     state.raw = options
 
     rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
@@ -201,6 +205,8 @@ function handleReset() {
   state.closable = props.closable
   state.contentAlign = props.contentAlign
   state.actionsAlign = props.actionsAlign
+  state.cancelable = props.cancelable
+
   state.raw = {}
 
   rendererR.value = props.renderer
@@ -254,8 +260,8 @@ function handleReset() {
           <Icon
             v-else
             :scale="2.2"
-            v-bind="{ ...icons.question, ...state.iconProps }"
-            :icon="icons.question.icon"
+            v-bind="{ ...(state.cancelable ? icons.question : icons.warning), ...state.iconProps }"
+            :icon="(state.cancelable ? icons.question : icons.warning).icon"
           ></Icon>
         </div>
         <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
@@ -265,7 +271,8 @@ function handleReset() {
       </div>
       <div :class="[nh.be('footer'), nh.bem('footer', state.actionsAlign)]">
         <Button
-          :class="nh.be('button')"
+          v-if="state.cancelable"
+          :class="[nh.be('button'), nh.bem('button', 'cancel')]"
           inherit
           no-pulse
           :type="state.cancelType"
@@ -274,7 +281,7 @@ function handleReset() {
           {{ state.cancelText || locale.cancel }}
         </Button>
         <Button
-          :class="nh.be('button')"
+          :class="[nh.be('button'), nh.bem('button', 'confirm')]"
           inherit
           no-pulse
           :type="state.confirmType"

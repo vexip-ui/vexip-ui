@@ -31,16 +31,6 @@ pre[class*='language-'] {
   padding-inline-start: 56px;
   margin: 0;
   overflow-x: auto;
-
-  &::before {
-    position: absolute;
-    top: 12px;
-    right: 20px;
-    z-index: 1;
-    font-size: 12px;
-    color: var(--vxp-content-color-disabled);
-    content: attr(lang);
-  }
 }
 
 .code-line-numbers {
@@ -49,7 +39,6 @@ pre[class*='language-'] {
   bottom: 12px;
   left: 0;
   width: 56px;
-  padding-top: 1.5px;
   text-align: center;
   letter-spacing: -0.5px;
   pointer-events: none;

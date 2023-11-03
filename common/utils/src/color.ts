@@ -1,6 +1,6 @@
 import { isDefined } from './common'
 
-interface RGB {
+interface RGB extends Record<any, any> {
   r: number,
   g: number,
   b: number,
@@ -34,7 +34,7 @@ export interface HEX8Color extends RGB {
   format?: 'name' | 'hex8'
 }
 
-interface HSL {
+interface HSL extends Record<any, any> {
   h: number,
   s: number,
   l: number,
@@ -51,7 +51,7 @@ export interface HSLAColor extends HSL {
   format?: 'name' | 'hsla'
 }
 
-interface HSV {
+interface HSV extends Record<any, any> {
   h: number,
   s: number,
   v: number,
@@ -82,6 +82,7 @@ export type Color =
   | HEX8Color
 
 export type ObjectColor = Exclude<Color, string>
+
 export interface ColorMeta {
   rgb: RGBColor,
   hsl: HSLColor,
@@ -95,6 +96,8 @@ export interface ColorMeta {
   gray: number,
   origin: Color
 }
+
+export type ColorType = 'hex' | 'rgb' | 'hsv' | 'hsl'
 
 const INTEGER_REG = '[-\\+]?\\d+%?'
 const NUMBER_REG = '[-\\+]?\\d*\\.\\d+%?'
@@ -315,11 +318,11 @@ export function isColor(value: string): boolean {
  *
  * @param color 原始颜色字符串
  */
-export function parseStringColor(color: string) {
+export function parseStringColor(color: string): ObjectColor | null {
   color = color.toString().trim().toLowerCase()
 
   if (color === 'transparent') {
-    return { r: 0, g: 0, b: 0, a: 0, format: 'name', toString: toRgbString } as ObjectColor
+    return { r: 0, g: 0, b: 0, a: 0, format: 'name', toString: toRgbString }
   }
 
   let named = false
@@ -340,7 +343,7 @@ export function parseStringColor(color: string) {
       b: b * 255,
       format: 'rgb',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   if ((match = RGBA_REG.exec(color))) {
@@ -353,13 +356,13 @@ export function parseStringColor(color: string) {
       a: normalizeAlpha(match[4]),
       format: 'rgba',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   if ((match = HSL_REG.exec(color))) {
     const { h, s, l } = normalizeHsl(match[0], match[1], match[3])
 
-    return { h: h * 360, s, l, format: 'hsl', toString: toHslString } as ObjectColor
+    return { h: h * 360, s, l, format: 'hsl', toString: toHslString }
   }
 
   if ((match = HSLA_REG.exec(color))) {
@@ -372,13 +375,13 @@ export function parseStringColor(color: string) {
       a: normalizeAlpha(match[4]),
       format: 'hsla',
       toString: toHslString
-    } as ObjectColor
+    }
   }
 
   if ((match = HSV_REG.exec(color))) {
     const { h, s, v } = normalizeHsv(match[0], match[1], match[3])
 
-    return { h: h * 360, s, v, format: 'hsv', toString: toHsvString } as ObjectColor
+    return { h: h * 360, s, v, format: 'hsv', toString: toHsvString }
   }
 
   if ((match = HSVA_REG.exec(color))) {
@@ -391,7 +394,7 @@ export function parseStringColor(color: string) {
       a: normalizeAlpha(match[4]),
       format: 'hsva',
       toString: toHsvString
-    } as ObjectColor
+    }
   }
 
   if ((match = HEX_REG_3.exec(color))) {
@@ -401,7 +404,7 @@ export function parseStringColor(color: string) {
       b: parseInt(`${match[3]}${match[3]}`, 16),
       format: named ? 'name' : 'hex3',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   if ((match = HEX_REG_4.exec(color))) {
@@ -412,7 +415,7 @@ export function parseStringColor(color: string) {
       a: convertHexToDecimal(`${match[4]}${match[4]}`),
       format: named ? 'name' : 'hex4',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   if ((match = HEX_REG_6.exec(color))) {
@@ -422,7 +425,7 @@ export function parseStringColor(color: string) {
       b: parseInt(match[3], 16),
       format: named ? 'name' : 'hex6',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   if ((match = HEX_REG_8.exec(color))) {
@@ -433,7 +436,7 @@ export function parseStringColor(color: string) {
       a: convertHexToDecimal(match[4]),
       format: named ? 'name' : 'hex8',
       toString: toRgbString
-    } as ObjectColor
+    }
   }
 
   return null
@@ -475,7 +478,7 @@ export function parseColor(color: Color): ColorMeta {
  *
  * @param originColor 原始颜色值
  */
-export function parseColorToRgba(originColor: Color) {
+export function parseColorToRgba(originColor: Color): RGBAColor {
   let rgb: RGBColor = { r: 0, g: 0, b: 0 }
   let a = 1
   let color: Color | null
@@ -504,7 +507,7 @@ export function parseColorToRgba(originColor: Color) {
     rgb = color as RGBColor
   }
 
-  return { ...rgb, a, format: 'rgba', toString: toRgbString } as RGBAColor
+  return { ...rgb, a, format: 'rgba', toString: toRgbString }
 }
 
 /**
@@ -561,7 +564,7 @@ export function normalizeAlpha(a: number | string) {
   return boundRange(isPercentage(a) ? parsePercentage(a) : a, 0, 1)
 }
 
-export function hslToRgb(h: number | string, s: number | string, l: number | string) {
+export function hslToRgb(h: number | string, s: number | string, l: number | string): RGBColor {
   let r, g, b
   ;({ h, s, l } = normalizeHsl(h, s, l))
 
@@ -580,10 +583,10 @@ export function hslToRgb(h: number | string, s: number | string, l: number | str
   g *= 255
   b *= 255
 
-  return { r, g, b, toString: toRgbString } as RGBColor
+  return { r, g, b, toString: toRgbString }
 }
 
-export function rgbToHsl(r: number | string, g: number | string, b: number | string) {
+export function rgbToHsl(r: number | string, g: number | string, b: number | string): HSLColor {
   ({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
@@ -620,30 +623,30 @@ export function rgbToHsl(r: number | string, g: number | string, b: number | str
     h *= 60
   }
 
-  return { h, s, l, toString: toHslString } as HSLColor
+  return { h, s, l, toString: toHslString }
 }
 
-export function hslToHsv(h: number | string, s: number | string, l: number | string) {
+export function hslToHsv(h: number | string, s: number | string, l: number | string): HSVColor {
   ({ h, s, l } = normalizeHsl(h, s, l))
 
   const v = 0.5 * (2 * l + s * (1 - Math.abs(2 * l - 1)))
 
   s = (2 * (v - l)) / v
 
-  return { h: h * 360, s, v, toString: toHsvString } as HSVColor
+  return { h: h * 360, s, v, toString: toHsvString }
 }
 
-export function hsvToHsl(h: number | string, s: number | string, v: number | string) {
+export function hsvToHsl(h: number | string, s: number | string, v: number | string): HSLColor {
   ({ h, s, v } = normalizeHsv(h, s, v))
 
   const l = 0.5 * v * (2 - s)
 
   s = (v * s) / (1 - Math.abs(2 * l - 1))
 
-  return { h: h * 360, s, l, toString: toHslString } as HSLColor
+  return { h: h * 360, s, l, toString: toHslString }
 }
 
-export function hsvToRgb(h: number | string, s: number | string, v: number | string) {
+export function hsvToRgb(h: number | string, s: number | string, v: number | string): RGBColor {
   ({ h, s, v } = normalizeHsv(h, s, v))
 
   h *= 6
@@ -663,10 +666,10 @@ export function hsvToRgb(h: number | string, s: number | string, v: number | str
   g *= 255
   b *= 255
 
-  return { r, g, b, toString: toRgbString } as RGBColor
+  return { r, g, b, toString: toRgbString }
 }
 
-export function rgbToHsv(r: number | string, g: number | string, b: number | string) {
+export function rgbToHsv(r: number | string, g: number | string, b: number | string): HSVColor {
   ({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
@@ -702,7 +705,7 @@ export function rgbToHsv(r: number | string, g: number | string, b: number | str
     h *= 60
   }
 
-  return { h, s, v, toString: toHsvString } as HSVColor
+  return { h, s, v, toString: toHsvString }
 }
 
 export function rgbToHex(
@@ -755,7 +758,7 @@ export function rgbaToHex(
   return '#' + hex.join('')
 }
 
-export function mixColor(color1: Color, color2: Color, weight = 0.5) {
+export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor {
   if (!color1 && !color2) return { r: 0, g: 0, b: 0, a: 1 }
   if (!color1) return parseColorToRgba(color2)
   if (!color2) return parseColorToRgba(color1)
@@ -781,7 +784,7 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5) {
     a: Math.round(rgba1.a * originalWeight + rgba2.a * (1 - originalWeight)),
     format: 'rgba',
     toString: toRgbString
-  } as RGBAColor
+  }
 }
 
 export function adjustAlpha(color: Color, alpha: number | string) {
@@ -792,7 +795,7 @@ export function adjustAlpha(color: Color, alpha: number | string) {
   return rgba
 }
 
-export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hsl' = 'hex') {
+export function randomColor(withAlpha = false, type: ColorType = 'hex') {
   const r = Math.round(Math.random() * 255)
   const g = Math.round(Math.random() * 255)
   const b = Math.round(Math.random() * 255)
@@ -808,7 +811,7 @@ export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hs
   } else if (type === 'hsv') {
     color = rgbToHsv(r, g, b)
   } else {
-    color = { r, g, b }
+    color = Object.create({ r, g, b, toString: toRgbString })
   }
 
   if (withAlpha) {
@@ -816,6 +819,48 @@ export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hs
   }
 
   return color.toString()
+}
+
+export function randomPreferColor(
+  prefer: 'hard' | 'soft',
+  withAlpha = false,
+  type: ColorType = 'hex'
+) {
+  const h = Math.round(Math.random() * 360)
+  const s = Math.round(prefer === 'hard' ? 80 + Math.random() * 20 : 20 + Math.random() * 70) / 100
+  const l = Math.round(prefer === 'hard' ? 40 + Math.random() * 20 : 80 + Math.random() * 15) / 100
+
+  if (type === 'hsl') {
+    return toHslString.bind({ h, s, l })()
+  }
+
+  let color!: ObjectColor
+
+  if (type === 'hex' || type === 'rgb') {
+    color = hslToRgb(h, s, l)
+
+    if (type === 'hex') {
+      const { r, g, b } = color
+
+      return withAlpha ? rgbaToHex(r, g, b, Math.random()) : rgbToHex(r, g, b)
+    }
+  } else if (type === 'hsv') {
+    color = hslToHsv(h, s, l)
+  }
+
+  if (withAlpha) {
+    (color as RGBAColor).a = Math.random()
+  }
+
+  return color.toString()
+}
+
+export function randomHardColor(withAlpha = false, type: ColorType = 'hex') {
+  return randomPreferColor('hard', withAlpha, type)
+}
+
+export function randomSoftColor(withAlpha = false, type: ColorType = 'hex') {
+  return randomPreferColor('soft', withAlpha, type)
 }
 
 export function toGrayScale(color: string) {
@@ -875,19 +920,25 @@ function toRgbString(this: RGB) {
 }
 
 function toHslString(this: HSL) {
+  const s = `${this.s * 100}%`
+  const l = `${this.l * 100}%`
+
   if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
-    return `hsla(${this.h}, ${this.s}, ${this.l}, ${this.a})`
+    return `hsla(${this.h}, ${s}, ${l}, ${this.a})`
   }
 
-  return `hsl(${this.h}, ${this.s}, ${this.l})`
+  return `hsl(${this.h}, ${s}, ${l})`
 }
 
 function toHsvString(this: HSV) {
+  const s = `${this.s * 100}%`
+  const v = `${this.v * 100}%`
+
   if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
-    return `hsva(${this.h}, ${this.s}, ${this.v}, ${this.a})`
+    return `hsva(${this.h}, ${s}, ${v}, ${this.a})`
   }
 
-  return `hsv(${this.h}, ${this.s}, ${this.v})`
+  return `hsv(${this.h}, ${s}, ${v})`
 }
 
 function rgbToGrayScale(rgb: RGB) {

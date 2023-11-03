@@ -1,4 +1,4 @@
-# 配置注入 ConfigProvider ^[Since v2.0.0](!s)
+# ConfigProvider 配置注入 ^[Since v2.0.0](!s)
 
 配置注入用于为其内部组件的提供各项配置。
 

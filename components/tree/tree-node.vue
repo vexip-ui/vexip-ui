@@ -44,7 +44,14 @@
           aria-hidden="true"
         ></div>
       </template>
-      <div :class="nh.be('content')">
+      <div
+        :class="{
+          [nh.be('content')]: true,
+          [nh.bem('content', 'effect')]: treeState.blockEffect,
+          [nh.bem('content', 'disabled')]:
+            treeState.blockEffect && (isDisabled || node.selectDisabled)
+        }"
+      >
         <span
           ref="arrowEl"
           :class="{
@@ -57,7 +64,17 @@
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="node.loading" v-bind="icons.loading" label="loading"></Icon>
-          <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+          <slot
+            v-else
+            name="arrow"
+            :data="node.data"
+            :node="node"
+            :depth="node.depth"
+            :focused="focused"
+          >
+            <Icon v-if="treeState.arrowIcon" :icon="treeState.arrowIcon"></Icon>
+            <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+          </slot>
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
@@ -73,22 +90,35 @@
         <div
           :class="{
             [nh.be('label')]: true,
-            [nh.bem('label', 'focused')]: focused,
-            [nh.bem('label', 'selected')]: node.selected,
-            [nh.bem('label', 'disabled')]: isDisabled || node.selectDisabled,
-            [nh.bem('label', 'readonly')]: isReadonly,
-            [nh.bem('label', 'is-floor')]: treeState.floorSelect && node.children?.length,
-            [nh.bem('label', 'secondary')]: secondary
+            [nh.bem('label', 'effect')]: !treeState.blockEffect,
+            [nh.bem('label', 'disabled')]:
+              !treeState.blockEffect && (isDisabled || node.selectDisabled)
           }"
-          @click="handleLabelClick()"
+          @click="!treeState.blockEffect && handleLabelClick()"
         >
-          <Renderer
-            v-if="renderer"
-            :renderer="renderer"
-            :data="{ node, depth: node.depth, data: node.data }"
-          ></Renderer>
-          <template v-else>
+          <div v-if="treeState.prefixRenderer || $slots.prefix" :class="nh.be('prefix')">
+            <Renderer
+              v-if="treeState.prefixRenderer"
+              :renderer="treeState.prefixRenderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
             <slot
+              v-else
+              name="prefix"
+              :data="node.data"
+              :node="node"
+              :depth="node.depth"
+              :focused="focused"
+            ></slot>
+          </div>
+          <div :class="nh.be('text')">
+            <Renderer
+              v-if="treeState.renderer"
+              :renderer="treeState.renderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
+            <slot
+              v-else
               name="label"
               :data="node.data"
               :node="node"
@@ -97,7 +127,22 @@
             >
               {{ node.data[treeState.labelKey] }}
             </slot>
-          </template>
+          </div>
+          <div v-if="treeState.suffixRenderer || $slots.suffix" :class="nh.be('suffix')">
+            <Renderer
+              v-if="treeState.suffixRenderer"
+              :renderer="treeState.suffixRenderer"
+              :data="{ node, depth: node.depth, data: node.data }"
+            ></Renderer>
+            <slot
+              v-else
+              name="suffix"
+              :data="node.data"
+              :node="node"
+              :depth="node.depth"
+              :focused="focused"
+            ></slot>
+          </div>
         </div>
         <Checkbox
           v-if="hasCheckbox && suffixCheckbox"
@@ -171,6 +216,8 @@ export default defineComponent({
       target: wrapper,
       passive: false,
       onKeyDown: (event, modifier) => {
+        if (treeState.expanding) return
+
         const prevent = () => {
           event.preventDefault()
           event.stopPropagation()
@@ -220,6 +267,7 @@ export default defineComponent({
       return {
         [nh.be('node')]: true,
         [nh.bem('node', 'last')]: props.node.last,
+        [nh.bem('node', 'focused')]: focused.value,
         [nh.bem('node', 'selected')]: props.node.selected,
         [nh.bem('node', 'expanded')]: props.node.expanded,
         [nh.bem('node', 'disabled')]: isDisabled.value,
@@ -228,7 +276,8 @@ export default defineComponent({
         [nh.bem('node', 'dragging')]: dragging.value,
         [nh.bem('node', 'drag-over')]: isDragOver.value,
         [nh.bem('node', 'link-line')]: hasLinkLine.value,
-        [nh.bem('node', 'no-arrow')]: !hasArrow.value
+        [nh.bem('node', 'no-arrow')]: !hasArrow.value,
+        [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length
       }
     })
     const hasArrow = computed(() => {
@@ -255,7 +304,7 @@ export default defineComponent({
 
       return isNull(checkbox) ? treeState.checkbox : checkbox
     })
-    const renderer = computed(() => treeState.renderer)
+    // const renderer = computed(() => treeState.renderer)
     const suffixCheckbox = computed(() => treeState.suffixCheckbox)
     const nodeState = reactive({
       el: wrapper,
@@ -280,7 +329,10 @@ export default defineComponent({
 
     treeState.nodeStates.set(props.node.id, nodeState)
 
+    let dragTimer: ReturnType<typeof setTimeout>
+
     onBeforeUnmount(() => {
+      clearTimeout(dragTimer)
       treeState.nodeStates.set(props.node.id, nodeState)
     })
 
@@ -294,6 +346,10 @@ export default defineComponent({
 
     function handleClick() {
       treeState.handleNodeClick(props.node)
+
+      if (treeState.blockEffect) {
+        handleLabelClick()
+      }
     }
 
     function handleToggleCheck(able = !props.node.checked) {
@@ -376,25 +432,35 @@ export default defineComponent({
     function handleDragOver(event: DragEvent) {
       if (!treeState.draggable || !treeState.dragging) return
 
+      clearTimeout(dragTimer)
       event.stopPropagation()
       event.preventDefault()
+
       isDragOver.value = true
+
       treeState.handleNodeDragOver(getNodeState(), event)
     }
 
     function handleDragLeave(event: DragEvent) {
       if (!treeState.draggable) return
 
+      clearTimeout(dragTimer)
       event.preventDefault()
-      isDragOver.value = false
+
+      dragTimer = setTimeout(() => {
+        isDragOver.value = false
+      }, 100)
     }
 
     function handleDrop(event: DragEvent) {
       if (!treeState.draggable || !treeState.dragging) return
 
+      clearTimeout(dragTimer)
       event.stopPropagation()
       event.preventDefault()
+
       isDragOver.value = false
+
       treeState.handleNodeDrop(getNodeState())
     }
 
@@ -430,7 +496,7 @@ export default defineComponent({
       className,
       hasArrow,
       hasCheckbox,
-      renderer,
+      // renderer,
       suffixCheckbox,
 
       wrapper,

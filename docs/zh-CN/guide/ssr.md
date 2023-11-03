@@ -10,7 +10,17 @@
 
 如果你使用 [Nuxt](https://nuxt.com/) 作为服务端渲染框架，可以使用 [Vexip Nuxt 模块](https://github.com/vexip-ui/nuxt)，里面包含了组件、插件、指令、图标以及它们的样式的自动按需引入。
 
-首先在你的项目中安装 `@vexip-ui/nuxt` 依赖：
+你可以使用下面的命令快速创建一个包含 Vexip Nuxt 模块 Nuxt 的项目：
+
+```sh
+# 使用 pnpm
+pnpm create vexip --template nuxt
+
+# 使用 yarn
+yarn create vexip --template nuxt
+```
+
+或者在你已有的项目中安装 `@vexip-ui/nuxt` 依赖：
 
 ```sh
 # 使用 pnpm

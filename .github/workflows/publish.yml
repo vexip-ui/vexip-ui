@@ -9,6 +9,7 @@ on:
       - icons*
       - hooks*
       - plugins*
+      - scripts*
       - utils*
 
 jobs:
@@ -40,6 +41,10 @@ jobs:
       - name: Build plugins
         if: startsWith(github.ref_name, 'plugins')
         run: pnpm run build:plugins
+
+      - name: Build scripts
+        if: startsWith(github.ref_name, 'scripts')
+        run: pnpm run build:scripts
 
       - name: Build meta
         if: startsWith(github.ref_name, 'v')

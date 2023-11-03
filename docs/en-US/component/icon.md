@@ -1,10 +1,10 @@
 # Icon
 
-Vexip UI uses `@vexip-ui/icons` as the icon library, which is based on the free icons of [Font Awesome](https://fontawesome.com/) 6.x and encapsulates its svg into vue components.
+Vexip UI uses `@vexip-ui/icons` as the icon library, which is based on the free icons of [Font Awesome](https://fontawesome.com/) 6.x and encapsulates its SVG into Vue components.
 
 You can look up the icons directly on this [page](https://fontawesome.com/search?m=free) (they have always named the icons weird).
 
-Of course you can place any svg content directly under the Icon component slot. If you want to change internal icons of components, please refer to [Global Config](/en-US/guide/global-config#internal-icons).
+Of course you can place any SVG content directly under the Icon component slot. If you want to change internal icons of components, please refer to [Global Config](/en-US/guide/global-config#internal-icons).
 
 :::warning
 All built-in icons of Font Awesome are scaled by 0.85x by default in this library, the original icons are a bit large.
@@ -22,7 +22,17 @@ Icon component name is transformed according to certain rules from the original 
 
 ### Basis Usage
 
-You can drop the svg component to the `icon` prop, or you can put it directly under the default slot.
+You can drop the SVG component to the `icon` prop, or you can put it directly under the default slot.
+
+:::
+
+:::demo icon/color
+
+### Change Color
+
+^[Since v2.2.5](!s)
+
+The color of the icon can be quickly modified via the `color` prop.
 
 :::
 
@@ -31,6 +41,8 @@ You can drop the svg component to the `icon` prop, or you can put it directly un
 ### Scale Icon
 
 Set the `scale` prop to scale Icon.
+
+You can also directly specify the size of the icon by setting a legal CSS value through the `size` prop.
 
 :::
 
@@ -50,6 +62,24 @@ Set the `effect` prop to `pulse-in` or `pulse-out` to make the icon have a pulse
 
 :::
 
+:::demo icon/flip
+
+### Flip Effect
+
+The flip effect of the icon can be set via the `flip` prop.
+
+:::
+
+:::demo icon/rotate
+
+### Rotate
+
+^[Since v2.2.5](!s)
+
+A move command?
+
+:::
+
 :::demo icon/package
 
 ### Different Types
@@ -64,7 +94,7 @@ If you want to use other icon sets, please refer to the description of the namin
 
 ### Custom Icon
 
-You can put any svg content under the icon default slot.
+You can put any SVG content under the icon default slot.
 
 :::
 
@@ -81,7 +111,10 @@ type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
 | Name   | Type                                   | Description                                         | Default | Since   |
 | ------ | -------------------------------------- | --------------------------------------------------- | ------- | ------- |
 | icon   | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0` |
-| scale  | `number`                               | Used to adjust icon size                            | `1`     | -       |
+| scale  | `number \| string`                     | Set the scaling of the icon                         | `1`     | -       |
 | flip   | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
 | title  | `string`                               | Set the title prop of the icon                      | `''`    | -       |
 | effect | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |
+| size   | `string`                               | Set the size of the icon                            | `null`  | `2.2.5` |
+| color  | `string`                               | Set the color of the icon                           | `null`  | `2.2.5` |
+| rotate | `number \| string`                     | Set rotate angle of the icon                        | `null`  | `2.2.5` |

@@ -1,11 +1,11 @@
 import { resolve } from 'node:path'
+import { existsSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 
-import fs from 'fs-extra'
 import minimist from 'minimist'
 import { format } from 'prettier'
-import { logger, prettierConfig, queryIdlePort, rootDir, run, specifyComponent } from './utils'
-
-const { readdirSync, statSync, existsSync, writeFileSync } = fs
+import { logger, queryIdlePort, run } from '@vexip-ui/scripts'
+import { prettierConfig, rootDir } from './constant'
+import { specifyComponent } from './utils'
 
 const args = minimist<{
   s?: boolean,
@@ -70,6 +70,11 @@ async function serveComponent() {
           })
           .join(',\n')},
         {
+          path: '/${demos.includes('play') ? '_' : ''}play',
+          name: 'playground',
+          component: () => import('../play.vue')
+        },
+        {
           path: '/:catchAll(.*)',
           redirect: '/'
         }
@@ -83,9 +88,28 @@ async function serveComponent() {
 
   writeFileSync(
     resolve(devDir, 'router', `port-${port}.ts`),
-    format(router, { ...prettierConfig, parser: 'typescript' }),
+    await format(router, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
+
+  const playPath = resolve(devDir, 'play.vue')
+
+  if (!existsSync(playPath)) {
+    writeFileSync(
+      playPath,
+      await format(
+        `<template>
+          <div></div>
+        </template>
+        
+        <script setup lang="ts">
+        // write something or copy from playground
+        </script>`,
+        { ...prettierConfig, parser: 'vue' }
+      ),
+      'utf-8'
+    )
+  }
 
   await run('pnpm', ['serve'], {
     cwd: devDir,

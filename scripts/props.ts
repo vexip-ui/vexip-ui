@@ -3,17 +3,11 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { cpus } from 'node:os'
 
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
-import {
-  components,
-  componentsDir,
-  logger,
-  prettierConfig,
-  runParallel,
-  toCamelCase,
-  toCapitalCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { runParallel, toCamelCase, toCapitalCase } from '@vexip-ui/utils'
+import { components, componentsDir, prettierConfig } from './constant'
 
 async function main() {
   const ignores = ['config-provider', 'typography']
@@ -93,7 +87,7 @@ async function main() {
 
   await writeFile(
     propsPath,
-    prettier.format(props, { ...prettierConfig, parser: 'typescript' }),
+    await format(props, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
 

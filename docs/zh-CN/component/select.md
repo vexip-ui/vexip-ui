@@ -1,4 +1,4 @@
-# 选择器 Select
+# Select 选择器
 
 下拉选择器，当有较多的选项供用户选择时使用，选项较少时或许 RadioGroup 或 CheckboxGroup 的效果会更好。
 
@@ -52,7 +52,9 @@
 
 ### 自定义选项
 
-有的场合，需要选项显示内容、选择器显示内容、选项值均不相同，可以结合 `label` 属性和插槽实现。
+有的场合，需要选项显示内容、已选选项显示内容、选项值均不相同，可以结合 `label` 属性和插槽实现。
+
+还可以通过 `selected` 插槽针对性地定制已选选项的显示内容。
 
 :::
 
@@ -104,11 +106,13 @@
 
 :::
 
-:::demo select/prefix
+:::demo select/prefix-suffix
 
-### 前置图标
+### 前后置图标
 
-设置 `prefix` 属性或者使用同名插槽，可以为颜色选择器添加前置图标。
+通过 `prefix` 和 `suffix` 属性或同名插槽，可以为选择器添加前置或后置图标。
+
+添加 `static-suffix` 属性可以使后置图标静止，或添加 `no-suffix` 属性禁用后置图标。
 
 :::
 
@@ -153,6 +157,16 @@
 ### 透明模式
 
 添加 `transparent` 属性可以消除原有的样式，然后你可以包裹上你喜欢的样式。
+
+:::
+
+:::demo select/popper-extra
+
+### 列表额外内容
+
+^[Since v2.2.7](!s)
+
+通过 `prepend` 和 `append` 插槽可以分别为选项列表的前方和后方插入内容。
 
 :::
 
@@ -252,16 +266,19 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | clear         | 当通过清除按钮清空值时触发                                           | -                                                                  | -       |
 | focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
-| update:label  | 当选项值改变时触发，用于快速当前选项的标签值                         | `(label: string)`                                                  | `2.0.0` |
+| update:label  | 当选项值改变时触发，用于快速获取当前选项的标签值                     | `(label: string)`                                                  | `2.0.0` |
 | filter-input  | 当搜索内容输入时触发，返回当前输入框的值                             | `(value: string)`                                                  | `2.1.4` |
 
 ### Select 插槽
 
-| 名称    | 说明                                         | 参数                                                              | 始于    |
-| ------- | -------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| default | 选项内容的插槽                               | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
-| group   | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
-| prefix  | 前置图标内容的插槽                           | -                                                                 | -       |
-| control | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                 | -       |
-| suffix  | 后缀图标内容的插槽                           | -                                                                 | -       |
-| empty   | 空选项提示内容的插槽                         | -                                                                 | -       |
+| 名称     | 说明                                         | 参数                                                              | 始于    |
+| -------- | -------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| default  | 选项内容的插槽                               | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
+| group    | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
+| prefix   | 前置图标内容的插槽                           | -                                                                 | -       |
+| control  | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                 | -       |
+| suffix   | 后缀图标内容的插槽                           | -                                                                 | -       |
+| empty    | 空选项提示内容的插槽                         | -                                                                 | -       |
+| selected | 已选选项的回显内容的插槽                     | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
+| prepend  | 选项列表上方内容的插槽                       | -                                                                 | `2.2.7` |
+| append   | 选项列表下方内容的插槽                       | -                                                                 | `2.2.7` |

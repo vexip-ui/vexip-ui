@@ -127,4 +127,4 @@ interface ToolbarAction {
 
 | Name    | Description                            | Parameters | Since |
 | ------- | -------------------------------------- | ---------- | ----- |
-| default | The slot of content which need to view | -          | -     |
+| default | The slot of content which needs to be viewed | -          | -     |

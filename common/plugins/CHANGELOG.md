@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.4.0...plugins@1.5.0) (2023-10-27)
+
+
+### ✨ Features
+
+* **plugins:** add fullStyle option for unplugin resolver ([c06e9b0](https://github.com/vexip-ui/vexip-ui/commit/c06e9b0318e29dd408584c5bd78c56d6da91c428))
+
+
+
 # [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.3.2...plugins@1.4.0) (2023-09-05)
 
 

@@ -2,6 +2,14 @@
 
 This is a progressive layout component with strong business logic that can be customized to varying degrees as needed.
 
+:::warning
+In production practice, multiple Layout should not be used in an application, and Layout should fill the window.
+:::
+
+Normally, the main content of the Layout is scrolled on the element corresponding to the `main` slot. If you want the scrolling to occur on the browser window, you can add the `fit-window` prop.
+
+If you want the main content to be a fixed area and want to add scrollable wrap element by yourself, you can add the `fix-main` prop (refer to the **Fixed Main** demo below).
+
 ## Demos
 
 :::demo layout/basis
@@ -184,11 +192,11 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 | Name             | Type                     | Description                                                                                                                                             | Default                                                              | Since    |
 | ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------- |
-| no-aside         | `boolean`                | Set whether to disable the sidebar                                                                                                                      | `false`                                                              | -        |
+| no-aside         | `boolean`                | Set whether to disable the aside                                                                                                                        | `false`                                                              | -        |
 | footer           | `boolean`                | Set whether to use footer                                                                                                                               | `false`                                                              | -        |
 | tag              | `string`                 | Set rendering tag                                                                                                                                       | `'section'`                                                          | -        |
 | menus            | `MenuOptions[]`          | Set menu options                                                                                                                                        | `[]`                                                                 | -        |
-| menu-props       | `AsideMenuProps`         | Set menu properties                                                                                                                                     | `null`                                                               | -        |
+| menu-props       | `AsideMenuProps`         | Set menu props, refer to [Menu Props](/en-US/component/menu#menu-props)                                                                                 | `null`                                                               | -        |
 | logo             | `string`                 | Set Logo image address                                                                                                                                  | `''`                                                                 | -        |
 | sign-name        | `string`                 | Set the sign                                                                                                                                            | `''`                                                                 | -        |
 | config           | `LayoutConfig[]`         | Set configuration options for user drop-down panels                                                                                                     | `['nav', 'theme', 'color']`                                          | -        |
@@ -211,6 +219,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | fixed-main       | `boolean`                | Set whether the main is fixed                                                                                                                           | `false`                                                              | `2.1.14` |
 | fit-window       | `boolean`                | When enabled, layout will fit the browser window and remove built-in scroll                                                                             | `false`                                                              | `2.1.24` |
 | inner-classes    | `LayoutInnerClass`       | Set custom class names for inner elements                                                                                                               | `{}`                                                                 | `2.1.24` |
+| no-header        | `boolean`                | Set whether to disable the header                                                                                                                       | `false`                                                              | `2.2.7`  |
 
 ### Layout Events
 

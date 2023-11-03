@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
@@ -101,7 +100,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
             v-if="child.tag"
             class="aside-menu__tag"
             simple
-            type="error"
+            :type="child.tagType"
           >
             {{ child.tag }}
           </Tag>
@@ -125,7 +124,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
           v-if="menu.tag"
           class="aside-menu__tag"
           simple
-          type="error"
+          :type="menu.tagType"
         >
           {{ menu.tag }}
         </Tag>

@@ -270,7 +270,6 @@ import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type { ScrollbarExposed } from '@/components/scrollbar'
 import type {
-  Key,
   MouseEventType,
   MoveEventType,
   TableCellPayload,
@@ -592,7 +591,9 @@ export default defineComponent({
       clearFilter,
       refreshRowIndex,
       clearCheckAll,
-      getParentRow
+      collectUnderRows,
+      getParentRow,
+      getCurrentData
     } = mutations
 
     watch(
@@ -654,6 +655,9 @@ export default defineComponent({
         setData(props.data)
       }
     )
+    watch([() => props.rowHeight, () => props.rowMinHeight], () => {
+      refresh()
+    })
 
     const normalProps = [
       'rowClass',
@@ -969,42 +973,57 @@ export default defineComponent({
       return false
     }
 
+    function refreshChildrenDepth(row: TableRowState) {
+      if (row.children?.length) {
+        for (const child of row.children) {
+          child.depth = row.depth + 1
+
+          refreshChildrenDepth(child)
+        }
+      }
+    }
+
     function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow, willDropRow, dropType } = dragState
       const { rowData } = state
 
-      if (!willDropRow || isLeftInsideRight(draggingRow, willDropRow)) return
+      if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
 
-      let currentKey: Key
-      let parent: TableRowState | null
+      let currentKey = draggingRow.key
+      let parent: TableRowState | null = getParentRow(draggingRow.key)
 
-      if (draggingRow) {
-        parent = getParentRow(draggingRow.key)
-        currentKey = draggingRow.key
+      const processRows = [draggingRow].concat(collectUnderRows(draggingRow))
+      rowData.splice(draggingRow.index, processRows.length)
 
-        if (parent) {
-          removeArrayItem(parent.children, row => row.key === currentKey)
+      if (parent) {
+        removeArrayItem(parent.children, row => row.key === currentKey)
+
+        if (!parent.children?.length) {
+          parent.treeExpanded = false
         }
-
-        removeArrayItem(rowData, row => row.key === currentKey)
       }
 
       if (dropType === DropType.INNER) {
-        if (!Array.isArray(willDropRow.children)) {
-          willDropRow.children = []
-        }
+        const children = !Array.isArray(willDropRow.children)
+          ? [draggingRow]
+          : [...willDropRow.children, draggingRow]
 
-        const children = Array.from(willDropRow.children)
-
-        children.push(draggingRow)
         willDropRow.children = children
         draggingRow.parent = willDropRow.key
         draggingRow.depth = willDropRow.depth + 1
+
+        if (willDropRow.treeExpanded) {
+          const index = rowData.findIndex(row => row.key === willDropRow.key)
+
+          if (~index) {
+            rowData.splice(index + children.length, 0, ...processRows)
+          }
+        }
       } else {
-        parent = getParentRow(willDropRow.key)
         currentKey = willDropRow.key
+        parent = getParentRow(willDropRow.key)
 
         if (parent) {
           const index = parent.children.findIndex(row => row.key === currentKey)
@@ -1023,10 +1042,11 @@ export default defineComponent({
         const index = rowData.findIndex(row => row.key === currentKey)
 
         if (~index) {
-          rowData.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
+          rowData.splice(+(dropType === DropType.AFTER) + index, 0, ...processRows)
         }
       }
 
+      refreshChildrenDepth(draggingRow)
       refreshRowIndex()
       emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
     }
@@ -1108,7 +1128,9 @@ export default defineComponent({
         computeBodyHeight()
         refreshPercentScroll()
         nextFrameOnce(computeRenderRows)
-        noTransition.value = false
+        setTimeout(() => {
+          noTransition.value = false
+        }, 120)
       }, 0)
     }
 
@@ -1207,7 +1229,8 @@ export default defineComponent({
       clearFilter,
       clearSelected: clearCheckAll,
       refresh,
-      getSelected
+      getSelected,
+      getData: getCurrentData
     }
   }
 })

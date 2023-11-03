@@ -85,6 +85,10 @@ $modal: map.merge(
     user-select: none;
   }
 
+  &--undivided &__header {
+    border-bottom: 0;
+  }
+
   &__title {
     flex: 1 0 0;
     font-size: get-css-var('modal-title-font-size');
@@ -109,6 +113,10 @@ $modal: map.merge(
     justify-content: flex-end;
     padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding');
     border-top: get-css-var('border-shape') get-css-var('modal-d-color');
+  }
+
+  &--undivided &__footer {
+    border-top: 0;
   }
 
   &__close {

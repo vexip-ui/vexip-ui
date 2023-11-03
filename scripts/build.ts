@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-import { logger, run } from './utils'
+import { logger, run } from '@vexip-ui/scripts'
 
 const args = minimist<{
   d?: boolean,
@@ -34,7 +34,7 @@ async function main() {
   logger.ln()
 
   if (!process.exitCode) {
-    logger.withEndLn(() => logger.success('all builds completed successfully'))
+    logger.withEndLn(() => logger.success('All builds completed successfully'))
   }
 }
 

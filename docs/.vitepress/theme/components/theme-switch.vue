@@ -5,7 +5,7 @@ import { Moon, Sun } from '@vexip-ui/icons'
 import { isClient } from '@vexip-ui/utils'
 
 const rootCls = isClient ? document.documentElement.classList : undefined
-const dark = ref<boolean>(false)
+const dark = ref(false)
 
 onMounted(() => {
   dark.value = !!rootCls && rootCls.contains('dark')

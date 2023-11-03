@@ -1,3 +1,4 @@
+export * from './clipboard'
 export * from './color'
 export * from './common'
 export * from './data'

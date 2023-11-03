@@ -1,7 +1,10 @@
 <template>
-  <Select v-model:value="value" :options="options">
+  <Select v-model:value="value" :options="options" clearable>
     <template #default="{ option, index }">
       {{ `${index + 1}、${option.label}` }}
+    </template>
+    <template #selected="{ option, preview }">
+      {{ `${preview ? 'Previewing' : 'Selected'}: ${option.label}` }}
     </template>
   </Select>
 </template>

@@ -1,8 +1,14 @@
 <template>
-  <Icon :scale="2">
+  <Icon>
     <Flag></Flag>
   </Icon>
-  <Icon :scale="2">
+  <Icon :scale="1.6">
+    <Flag></Flag>
+  </Icon>
+  <Icon>
+    <Cat></Cat>
+  </Icon>
+  <Icon size="32px">
     <Cat></Cat>
   </Icon>
 </template>

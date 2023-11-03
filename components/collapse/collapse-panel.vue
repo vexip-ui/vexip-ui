@@ -4,6 +4,7 @@
       :id="tabId"
       ref="tab"
       :class="nh.be('header')"
+      type="button"
       role="tab"
       :aria-expanded="currentExpanded"
       :aria-controls="bodyId"

@@ -3,17 +3,11 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { existsSync, statSync } from 'node:fs'
 import { cpus } from 'node:os'
 
-import prettier from 'prettier'
+import { format } from 'prettier'
 import { ESLint } from 'eslint'
-import {
-  components as allComponents,
-  componentsDir,
-  logger,
-  prettierConfig,
-  rootDir,
-  runParallel,
-  toCapitalCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { runParallel, toCapitalCase } from '@vexip-ui/utils'
+import { components as allComponents, componentsDir, prettierConfig, rootDir } from './constant'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
@@ -138,7 +132,7 @@ async function main() {
       isClient && localStorage.setItem(prefixKey, prefix.value)
     }
 
-    export function transformDemoCode(code: string) {
+    export function transformPrefix(code: string) {
       return code.replace(templateRE, s => s.replace(replaceRE, \`\${capitalPrefix.value}$1\`))
     }
   `
@@ -149,31 +143,20 @@ async function main() {
   const metaDataPath = resolve(rootDir, 'meta-data.json')
   const demoPrefixPath = resolve(rootDir, 'docs/.vitepress/theme/common/demo-prefix.ts')
 
-  await writeFile(
-    indexPath,
-    prettier.format(index, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
-  await writeFile(
-    typesPath,
-    prettier.format(types, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
-  await writeFile(
-    metaDataPath,
-    prettier.format(metaData, { ...prettierConfig, parser: 'json' }),
-    'utf-8'
-  )
-  await writeFile(
-    demoPrefixPath,
-    prettier.format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
-  )
+  await Promise.all([
+    writeFile(indexPath, await format(index, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
+    writeFile(typesPath, await format(types, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
+    writeFile(metaDataPath, await format(metaData, { ...prettierConfig, parser: 'json' }), 'utf-8'),
+    writeFile(
+      demoPrefixPath,
+      await format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
+      'utf-8'
+    )
+  ])
 
-  await ESLint.outputFixes(await eslint.lintFiles(indexPath))
-  await ESLint.outputFixes(await eslint.lintFiles(typesPath))
-  await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
-  await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
+  await ESLint.outputFixes(
+    await eslint.lintFiles([indexPath, typesPath, metaDataPath, demoPrefixPath])
+  )
 
   await runParallel(cpus().length, allComponents, async component => {
     const scssPath = resolve(rootDir, `style/${component}.scss`)
@@ -183,16 +166,19 @@ async function main() {
     }
   })
 
+  const componentsStyle =
+    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const styleIndex =
-    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +
-    // allComponents.map(component => `@use './${component}.scss';`).join('\n') +
-    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') +
-    '\n'
-  const stylePath = resolve(rootDir, 'style/index.scss')
+    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" + componentsStyle
 
   await writeFile(
-    stylePath,
-    prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' }),
+    resolve(rootDir, 'style/components.scss'),
+    await format(componentsStyle, { ...prettierConfig, parser: 'scss' }),
+    'utf-8'
+  )
+  await writeFile(
+    resolve(rootDir, 'style/index.scss'),
+    await format(styleIndex, { ...prettierConfig, parser: 'scss' }),
     'utf-8'
   )
 }
@@ -201,9 +187,7 @@ async function readDirectives() {
   const componentRE = /import \{ (.+) \} from '@\/components\/.+'/
   const directivesDir = resolve(rootDir, 'directives')
   const directives = await Promise.all(
-    (
-      await readdir(directivesDir)
-    )
+    (await readdir(directivesDir))
       .filter(f => statSync(resolve(directivesDir, f)).isDirectory())
       .map(async directive => {
         const content = await readFile(resolve(directivesDir, directive, 'index.ts'), 'utf-8')

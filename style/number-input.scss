@@ -82,8 +82,11 @@ $number-input: map.merge(
 
   &--control-fade {
     padding: $padding;
-    transition: padding get-css-var('transition-base'), get-css-var('transition-background'),
-      get-css-var('transition-border'), get-css-var('transition-shadow');
+    transition:
+      padding get-css-var('transition-base'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow');
 
     #{$plus},
     #{$minus} {

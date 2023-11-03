@@ -92,6 +92,8 @@ $form: map.merge(
 
   &--label-top &__label {
     justify-content: flex-start;
+    width: 100%;
+    padding-inline-end: 0;
     margin-bottom: 4px;
     text-align: left;
   }

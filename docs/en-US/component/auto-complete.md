@@ -38,7 +38,7 @@ Add the `clearable` prop to enable clearable functionality.
 
 ### Custom Option
 
-Custom option rendering can be implemented by using the Option component as a slot.
+Custom option rendering can be implemented by using default slot.
 
 :::
 
@@ -67,6 +67,16 @@ The content of the group label can be customized via the `group` slot.
 The loading state of the auto-complete can be controlled through the `loading` prop.
 
 If you want to be read-only when loading, you need to add the `loading-lock` prop.
+
+:::
+
+:::demo auto-complete/popper-extra
+
+### List Extra Content
+
+^[Since v2.2.7](!s)
+
+Any content can be added before and after the list via the `prepend` and `append` slots respectively.
 
 :::
 
@@ -147,9 +157,11 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 
 ### AutoComplete Slots
 
-| Name    | Description                                                                                                                                                                                      | Parameters                                                                                                                             | Since |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| default | The slot of the option list. Using the slot to pass in options will invalidate the built-in option filtering, key selection and other functions. These functions need to be implemented manually | -                                                                                                                                      | -     |
-| prefix  | Slot to prepend icon content                                                                                                                                                                     | -                                                                                                                                      | -     |
-| suffix  | Slot for suffix icon content                                                                                                                                                                     | -                                                                                                                                      | -     |
-| control | The slot of the input control, accepts 5 parameters, which are the current value and 4 event callback methods                                                                                    | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -     |
+| Name    | Description                                                                                                                                                                                      | Parameters                                                                                                                             | Since   |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| default | The slot of the option list. Using the slot to pass in options will invalidate the built-in option filtering, key selection and other functions. These functions need to be implemented manually | -                                                                                                                                      | -       |
+| prefix  | Slot to prepend icon content                                                                                                                                                                     | -                                                                                                                                      | -       |
+| suffix  | Slot for suffix icon content                                                                                                                                                                     | -                                                                                                                                      | -       |
+| control | The slot of the input control, accepts 5 parameters, which are the current value and 4 event callback methods                                                                                    | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -       |
+| prepend | Slot for before list content                                                                                                                                                                     | -                                                                                                                                      | `2.2.7` |
+| append  | Slot for after list content                                                                                                                                                                      | -                                                                                                                                      | `2.2.7` |

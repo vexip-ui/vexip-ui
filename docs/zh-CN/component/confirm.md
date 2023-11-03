@@ -1,4 +1,4 @@
-# 确认框 Confirm
+# Confirm 确认框
 
 通常用于一些重要操作的二次确认，以降低用户误操作的概率。
 
@@ -32,9 +32,21 @@
 
 ### 自定义图标
 
-设置 `icon` 属性可以修改确认框的图标，设置为 `false` 时将禁用图标。
+设置 `icon` 选项可以修改确认框的图标，设置为 `false` 时将禁用图标。
 
 当需要更细粒度地控制图标时，可以设置 `icon` 为函数，传函数时为自定义渲染方法。
+
+:::
+
+:::demo confirm/cancelable
+
+### 禁用取消
+
+^[Since v2.2.6](!s)
+
+设置 `cancelable` 选项为 `false` 可以禁用取消按钮。
+
+禁用取消按钮后确认框的默认图标将改变，你仍然可以自定义修改。
 
 :::
 
@@ -109,3 +121,4 @@ type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, can
 | closable        | `boolean`                                       | 是否具有关闭按钮                                                              | `false`          | `2.0.15` |
 | contentAlign    | `ConfirmAlign`                                  | 内容的对齐                                                                    | `'center'`       | `2.0.15` |
 | actionsAlign    | `ConfirmAlign`                                  | 操作按钮的对齐                                                                | `'center'`       | `2.0.15` |
+| cancelable      | `boolean`                                       | 是否可取消                                                                    | `true`           | `2.2.6`  |

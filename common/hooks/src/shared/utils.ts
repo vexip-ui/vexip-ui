@@ -1,20 +1,38 @@
 import { Comment, Fragment, createTextVNode, isVNode, renderSlot, unref } from 'vue'
 
-import { isClient } from '@vexip-ui/utils'
+import { ensureArray, isClient } from '@vexip-ui/utils'
 
-import type { ComponentPublicInstance, Slots, VNode, VNodeNormalizedChildren } from 'vue'
+import type {
+  ComponentPublicInstance,
+  Slots,
+  VNode,
+  VNodeChild,
+  VNodeNormalizedChildren
+} from 'vue'
 import type { MaybeElement, MaybeInstance, MaybeRef } from './types'
 
-export function createSlotRender(slots: Slots, names: string[]): ((params?: any) => any) | null
+export function createSlotRender(
+  slots: Slots,
+  names: string[]
+): ((params?: any) => VNodeChild) | null
 export function createSlotRender(
   slots: Slots,
   names: string[],
-  fallback: (params?: any) => any
-): (params?: any) => any
-export function createSlotRender(slots: Slots, names: string[], fallback?: (params?: any) => any) {
+  fallback: (params?: any) => VNodeChild
+): (params?: any) => VNodeChild
+export function createSlotRender(
+  slots: Slots,
+  names: string[],
+  fallback?: (params?: any) => VNodeChild
+) {
   for (const name of names) {
     if (slots[name]) {
-      return (params: any) => renderSlot(slots, name, params)
+      return (params: any) =>
+        renderSlot(slots, name, params, () => {
+          const vnodes = fallback?.(params)
+
+          return vnodes ? ensureArray(vnodes) : []
+        })
     }
   }
 
