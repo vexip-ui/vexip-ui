@@ -9,6 +9,7 @@ import type { MaybeRef } from '../types'
 
 export * from './helper'
 
+export * from './de-DE'
 export * from './en-US'
 export * from './ta-IN'
 export * from './zh-CN'
