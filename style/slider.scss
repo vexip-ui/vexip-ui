@@ -138,22 +138,36 @@ $slider: map.merge(
   }
 
   &__filler {
+    position: relative;
     width: 100%;
     height: 100%;
-    background-color: get-css-var('slider-filler-bg-color');
+    overflow: hidden;
     border-radius: get-css-var('slider-track-height');
-    transition: get-css-var('transition-background');
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      background-color: get-css-var('slider-filler-bg-color');
+      border-radius: get-css-var('slider-track-height');
+      transition: get-css-var('transition-background');
+      transform: get-css-var('slider-filler-after-transform');
+    }
   }
 
   &:hover &__filler,
   &--sliding &__filler {
-    background-color: get-css-var('slider-filler-bg-color-hover');
+    &::after {
+      background-color: get-css-var('slider-filler-bg-color-hover');
+    }
   }
 
   &--disabled &__filler,
   &--disabled:hover &__filler,
   &--disabled#{&}--sliding &__filler {
-    background-color: get-css-var('slider-filler-bg-color-disabled');
+    &::after {
+      background-color: get-css-var('slider-filler-bg-color-disabled');
+    }
   }
 
   $handler-size: get-css-var('slider-handler-size');
@@ -340,7 +354,8 @@ $slider: map.merge(
     &--#{$state} {
       @include define-slider-style(
         (
-          filler-bg-color: 'color' $state 'base',
+          filler-bg-color: 'color' $state 'opacity-2',
+          filler-bg-color-hover: 'color' $state 'base',
           handler-b-color: 'color' $state 'base',
           handler-s-color: 'color' $state 'light-6'
         )
