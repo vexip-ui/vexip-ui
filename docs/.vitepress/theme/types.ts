@@ -6,7 +6,7 @@ export interface NavMenuItem extends Record<string, any> {
   text?: string,
   i18n?: string,
   activeMatch?: string,
-  items?: Omit<NavMenuItem, 'items'>[]
+  items?: NavMenuItem[]
 }
 
 export interface AsideMenuItem {
