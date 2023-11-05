@@ -6,6 +6,7 @@ import { computed, ref } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import VideoControl from './video-control.vue'
+import VideoProgress from './video-progress.vue'
 import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
 import { useListener } from '@vexip-ui/hooks'
@@ -66,25 +67,30 @@ async function togglePip() {
       @canplay="emitEvent(props.onCanplay, $event)"
     ></video>
     <div v-if="!props.noControls" :class="nh.be('controls')">
-      <div :class="nh.be('controls-left')">
-        <VideoControl>
-          <Icon :scale="1.4" v-bind="icons.play"></Icon>
-        </VideoControl>
-        <VideoTimer></VideoTimer>
-      </div>
-      <div :class="nh.be('controls-center')"></div>
-      <div :class="nh.be('controls-right')">
-        <VideoVolume v-model:volume="volume"></VideoVolume>
-        <VideoControl v-if="pipEnabled" :name="locale.requestPip" @trigger="togglePip">
-          <Icon :scale="1.4" v-bind="icons.pip"></Icon>
-        </VideoControl>
-        <VideoControl :name="locale.fullWindow" @trigger="toggle('window')">
-          <Icon :scale="1.4" v-bind="icons.fullWindow"></Icon>
-        </VideoControl>
-        <VideoControl :name="locale.fullScreen" @trigger="toggle('browser')">
-          <Icon :scale="1.25" v-bind="icons.fullScreen"></Icon>
-        </VideoControl>
-      </div>
+      <section :class="nh.be('controls-top')">
+        <VideoProgress :time-points="[20, 30, 70]" :time="35" :duration="100"></VideoProgress>
+      </section>
+      <section :class="nh.be('controls-bottom')">
+        <div :class="nh.be('controls-left')">
+          <VideoControl>
+            <Icon :scale="1.4" v-bind="icons.play"></Icon>
+          </VideoControl>
+          <VideoTimer></VideoTimer>
+        </div>
+        <div :class="nh.be('controls-center')"></div>
+        <div :class="nh.be('controls-right')">
+          <VideoVolume v-model:volume="volume"></VideoVolume>
+          <VideoControl v-if="pipEnabled" :name="locale.requestPip" @trigger="togglePip">
+            <Icon :scale="1.4" v-bind="icons.pip"></Icon>
+          </VideoControl>
+          <VideoControl :name="locale.fullWindow" @trigger="toggle('window')">
+            <Icon :scale="1.4" v-bind="icons.fullWindow"></Icon>
+          </VideoControl>
+          <VideoControl :name="locale.fullScreen" @trigger="toggle('browser')">
+            <Icon :scale="1.25" v-bind="icons.fullScreen"></Icon>
+          </VideoControl>
+        </div>
+      </section>
     </div>
     <slot></slot>
   </FullScreen>
