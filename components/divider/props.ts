@@ -11,7 +11,8 @@ export const dividerProps = buildProps({
    * 字体增大加粗
    */
   primary: booleanProp,
-  dashed: booleanProp
+  dashed: booleanProp,
+  margin: [String, Number]
 })
 
 export type DividerProps = ExtractPropTypes<typeof dividerProps>
