@@ -30,13 +30,6 @@ const { t, locale } = useI18n({ useScope: 'global' })
 const route = useRoute()
 
 const nh = useBEM('docs-layout')
-const layoutClasses: LayoutInnerClass = {
-  section: nh.be('section'),
-  header: nh.be('header'),
-  sidebar: nh.be('sidebar'),
-  aside: nh.be('aside'),
-  footer: nh.be('footer')
-}
 
 const providedProps: PropsOptions = {
   default: { transfer: '#transfer-place' as any },
@@ -69,18 +62,28 @@ const outline = computed(() => {
   return undefined
 })
 
-const showLinks = computed(() => {
-  return !(
+const linkCenter = computed(() => {
+  return !!(
     frontmatter.value.homepage ||
     page.value.isNotFound ||
     frontmatter.value.footer === false
   )
 })
-const footerLinks = computed(() => {
-  if (!showLinks.value) {
-    return []
-  }
 
+const layoutClasses = computed(() => {
+  return {
+    section: nh.be('section'),
+    header: nh.be('header'),
+    sidebar: nh.be('sidebar'),
+    aside: nh.be('aside'),
+    footer: {
+      [nh.be('footer')]: true,
+      [nh.bem('footer', 'center')]: linkCenter.value
+    }
+  } as LayoutInnerClass
+})
+
+const footerLinks = computed(() => {
   return (theme.value.footerLinks || [])
     .filter(group => group.items.length && (group.text || group.i18n))
     .map(group => ({
@@ -403,6 +406,12 @@ function refreshScroll() {
       &__link-name--group {
         font-weight: bold;
       }
+    }
+  }
+
+  &__footer--center.vxp-layout__footer {
+    .vxp-layout__links-row {
+      justify-content: center;
     }
   }
 

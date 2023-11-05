@@ -9,7 +9,7 @@ import { useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
-import type { SliderMarker, SliderMarkerSlot, SliderTriggerSlot } from './symbol'
+import type { SliderCommonSlot, SliderMarker, SliderMarkerSlot, SliderTriggerSlot } from './symbol'
 
 const enum TriggerType {
   START = 0,
@@ -52,6 +52,7 @@ const props = useProps('slider', _props, {
 const emit = defineEmits(['update:value'])
 
 defineSlots<{
+  filler: SliderCommonSlot,
   trigger: SliderTriggerSlot,
   tip: SliderTriggerSlot,
   point: SliderMarkerSlot,
@@ -505,7 +506,16 @@ function blur() {
   >
     <div :class="nh.be('container')">
       <div ref="track" :class="nh.be('track')">
-        <div :class="nh.be('filler')" :style="fillerStyle"></div>
+        <slot
+          name="filler"
+          :values="truthValue"
+          :sliding="sliding"
+          :percent="triggerPercent"
+          :disabled="props.disabled"
+          :loading="props.loading"
+        >
+          <div :class="nh.be('filler')" :style="fillerStyle"></div>
+        </slot>
       </div>
       <template v-if="markerList.length">
         <div :class="nh.be('points')">
@@ -519,6 +529,7 @@ function blur() {
               name="point"
               :values="truthValue"
               :sliding="sliding"
+              :percent="triggerPercent"
               :marker="marker"
               :marker-value="value"
               :in-range="isValueInRange(value)"
@@ -540,6 +551,7 @@ function blur() {
                 name="marker"
                 :values="truthValue"
                 :sliding="sliding"
+                :percent="triggerPercent"
                 :marker="marker"
                 :marker-value="value"
                 :in-range="isValueInRange(value)"
@@ -576,6 +588,7 @@ function blur() {
           type="start"
           :value="truthValue[0]"
           :sliding="sliding[0]"
+          :percent="triggerPercent[0]"
           :disabled="props.disabled"
           :loading="props.loading"
         ></slot>
@@ -585,6 +598,7 @@ function blur() {
             type="start"
             :value="truthValue[0]"
             :sliding="sliding[0]"
+            :percent="triggerPercent[0]"
             :disabled="props.disabled"
             :loading="props.loading"
           >
@@ -615,6 +629,7 @@ function blur() {
           type="end"
           :value="truthValue[1]"
           :sliding="sliding[1]"
+          :percent="triggerPercent[1]"
           :disabled="props.disabled"
           :loading="props.loading"
         ></slot>
@@ -624,6 +639,7 @@ function blur() {
             type="end"
             :value="truthValue[1]"
             :sliding="sliding[1]"
+            :percent="triggerPercent[1]"
             :disabled="props.disabled"
             :loading="props.loading"
           >

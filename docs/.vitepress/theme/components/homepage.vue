@@ -30,6 +30,20 @@ function getComponents() {
 function refreshWave() {
   wave.value?.refresh()
 }
+
+const users: {
+  name: string,
+  slogan?: string,
+  logo: string,
+  link?: string
+}[] = [
+  {
+    name: 'Fantastic-admin',
+    slogan: '开箱即用的管理系统框架',
+    logo: '/fantastic-admin.png',
+    link: 'https://fantastic-admin.github.io/'
+  }
+]
 </script>
 
 <template>
@@ -65,6 +79,28 @@ function refreshWave() {
       style="margin-bottom: 80px"
       @change="refreshWave"
     ></MajorColor>
+    <P>
+      {{ t('common.shareExperience') }}
+    </P>
+    <Button
+      tag="a"
+      circle
+      href="mailto:544022268@qq.com"
+      target="_blank"
+      style="margin-bottom: 72px"
+    >
+      {{ t('common.tellUs') }}
+    </Button>
+    <div :class="nh.be('users')">
+      <Tooltip v-for="user in users" :key="user.name" reverse>
+        <template #trigger>
+          <a :class="nh.be('user')" :href="user.link" target="_blank">
+            <img :src="user.logo" />
+          </a>
+        </template>
+        {{ `${user.name}${user.slogan ? ` - ${user.slogan}` : ''}` }}
+      </Tooltip>
+    </div>
   </section>
 </template>
 
@@ -77,6 +113,7 @@ function refreshWave() {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  padding-bottom: 120px;
   text-align: center;
   user-select: none;
 
@@ -148,6 +185,26 @@ function refreshWave() {
   &__colors {
     position: relative;
     width: 100%;
+  }
+
+  &__users {
+    width: 100%;
+    max-width: 800px;
+    padding: 0 20px;
+  }
+
+  &__user {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 84px;
+    padding: 6px 0 24px;
+
+    img {
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
   }
 }
 </style>

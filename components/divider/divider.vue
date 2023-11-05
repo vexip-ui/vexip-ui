@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" role="separator">
+  <div :class="className" role="separator" :style="style">
     <span v-if="!props.vertical && hasText" :class="nh.be('text')">
       <slot></slot>
     </span>
@@ -10,6 +10,7 @@
 import { computed, defineComponent } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { toCssSize } from '@vexip-ui/utils'
 import { dividerProps } from './props'
 
 export default defineComponent({
@@ -23,7 +24,8 @@ export default defineComponent({
         validator: value => ['center', 'left', 'right'].includes(value)
       },
       primary: false,
-      dashed: false
+      dashed: false,
+      margin: null
     })
 
     const nh = useNameHelper('divider')
@@ -46,13 +48,28 @@ export default defineComponent({
         }
       ]
     })
+    const margin = computed(() => toCssSize(props.margin))
+    const style = computed(() => {
+      if (!margin.value) return {}
+
+      return props.vertical
+        ? {
+            marginRight: margin.value,
+            marginLeft: margin.value
+          }
+        : {
+            marginTop: margin.value,
+            marginBottom: margin.value
+          }
+    })
 
     return {
       props,
       nh,
 
       hasText,
-      className
+      className,
+      style
     }
   }
 })

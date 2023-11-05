@@ -1,3 +1,5 @@
+import { isValidNumber, toNumber } from './number'
+
 import type { TransferNode } from './dom-event'
 
 const TABABLE_SELECTOR = [
@@ -144,4 +146,8 @@ export function getRangeWidth(el: HTMLElement | null) {
   const xPadding = getXPadding(el)
 
   return rangeWidth + xPadding
+}
+
+export function toCssSize(value: number | string) {
+  return isValidNumber(value, true) ? `${toNumber(value)}px` : String(value).trim()
 }

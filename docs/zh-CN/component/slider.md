@@ -123,22 +123,26 @@ type SliderRawMarkers =
   | Array<number | (SliderMarker & { value: number })>
 
 interface SliderSlotParams {
+  values: number[],
+  sliding: boolean[],
+  percent: number[],
   disabled: boolean,
   loading: boolean
 }
 
-interface SliderTriggerParams extends SliderSlotParams {
-  type: 'start' | 'end',
-  value: number,
-  sliding: boolean
-}
-
 interface SliderMarkerSlotParams extends SliderSlotParams {
-  values: number[],
-  sliding: boolean[],
   markerValue: number,
   marker: SliderMarker,
   inRange: boolean
+}
+
+interface SliderTriggerParams {
+  type: 'start' | 'end',
+  value: number,
+  sliding: boolean,
+  percent: number,
+  disabled: boolean,
+  loading: boolean
 }
 ```
 
@@ -174,9 +178,10 @@ interface SliderMarkerSlotParams extends SliderSlotParams {
 
 ### Slider 插槽
 
-| 名称    | 说明                 | 参数                     | 始于    |
-| ------- | -------------------- | ------------------------ | ------- |
-| trigger | 滑块手柄的内容插槽   | `SliderTriggerParams`    | `2.2.3` |
-| tip     | 提示气泡的内容插槽   | `SliderTriggerParams`    | -       |
-| marker  | 标记点标签的内容插槽 | `SliderMarkerSlotParams` | `2.0.0` |
-| point   | 标记点的内容插槽     | `SliderMarkerSlotParams` | `2.2.9` |
+| 名称    | 说明                 | 参数                     | 始于     |
+| ------- | -------------------- | ------------------------ | -------- |
+| trigger | 滑块手柄的内容插槽   | `SliderTriggerParams`    | `2.2.3`  |
+| tip     | 提示气泡的内容插槽   | `SliderTriggerParams`    | -        |
+| marker  | 标记点标签的内容插槽 | `SliderMarkerSlotParams` | `2.0.0`  |
+| point   | 标记点的内容插槽     | `SliderMarkerSlotParams` | `2.2.9`  |
+| filler  | 轨道填充的插槽       | `SliderSlotParams`       | `2.2.10` |

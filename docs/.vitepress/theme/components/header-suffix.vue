@@ -119,14 +119,18 @@ function syncVitepressDir() {
 
   display: flex;
   align-items: center;
+  height: 100%;
 
   .language {
     display: inline-flex;
+    height: 100%;
     margin-inline-end: var(--item-span);
     cursor: pointer;
 
     &__trigger {
       display: flex;
+      align-items: center;
+      height: 100%;
       padding: 0;
       color: var(--vxp-content-color-base);
       cursor: pointer;

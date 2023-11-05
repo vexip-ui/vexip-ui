@@ -49,7 +49,50 @@ export default <UserConfig<ThemeConfig>>{
         link: '/component/button',
         activeMatch: '/component/'
       },
-      { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' }
+      { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' },
+      {
+        key: 'ecosystem',
+        i18n: 'common.ecosystem',
+        items: [
+          {
+            key: 'official',
+            i18n: 'common.official',
+            items: [
+              {
+                key: 'create-vexip',
+                text: 'Create Vexip',
+                link: 'https://github.com/vexip-ui/create-vexip'
+              },
+              {
+                key: 'nuxt-module',
+                text: 'Vexip Nuxt Module',
+                link: 'https://github.com/vexip-ui/nuxt'
+              },
+              {
+                key: 'lint-config',
+                text: 'Vexip Lint Config',
+                link: 'https://github.com/vexip-ui/lint-config'
+              }
+            ]
+          },
+          {
+            key: 'partnership',
+            i18n: 'common.partnership',
+            items: [
+              {
+                key: 'fantastic-admin',
+                text: 'Fantastic-admin',
+                link: 'https://fantastic-admin.gitee.io/'
+              },
+              {
+                key: 'become-partner',
+                i18n: 'common.becomePartner',
+                link: 'mailto:544022268@qq.com'
+              }
+            ]
+          }
+        ]
+      }
     ],
     outline: {
       '/guide/': 2,
@@ -169,6 +212,11 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
       i18n: t('resources'),
       items: [
         {
+          text: 'Create Vexip',
+          subI18n: t('createProject'),
+          link: 'https://github.com/vexip-ui/create-vexip'
+        },
+        {
           text: 'Vexip Nuxt Module',
           link: 'https://github.com/vexip-ui/nuxt'
         },
@@ -178,14 +226,13 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
           link: 'https://github.com/vexip-ui/lint-config'
         },
         {
-          text: 'Create Vexip',
-          subI18n: t('createProject'),
-          link: 'https://github.com/vexip-ui/create-vexip'
-        },
-        {
           text: 'Vexip Scripts',
           subI18n: t('releaseScripts'),
           link: 'https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts'
+        },
+        {
+          text: 'Vexip SFC Playground',
+          link: 'https://playground.vexipui.com/'
         },
         {
           text: 'Grid Layout Plus',
@@ -197,13 +244,14 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
           link: 'https://github.com/qmhc/vite-plugin-dts'
         },
         {
+          text: 'Fantastic-admin',
+          subI18n: t('fantasticAdmin'),
+          link: 'https://fantastic-admin.gitee.io/'
+        },
+        {
           text: 'vue-hooks-plus',
           subI18n: t('hooksLib'),
           link: `https://inhiblabcore.github.io/docs/hooks/${lang !== 'zh-CN' ? 'en/' : ''}`
-        },
-        {
-          text: 'Vexip SFC Playground',
-          link: 'https://playground.vexipui.com/'
         },
         {
           text: 'RedBlues-1980',

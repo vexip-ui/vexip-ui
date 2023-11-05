@@ -91,7 +91,6 @@ $menu: map.merge(
   $popper: #{&}__popper;
   $item: #{&}__item;
   $label: #{&}__label;
-  $list: #{&}__list;
 
   &__item {
     padding: 0;
@@ -116,6 +115,14 @@ $menu: map.merge(
       padding: 0;
       padding-inline: calc(#{get-css-var('menu-item-x-span')} * 0.5);
       margin-top: 0;
+    }
+
+    #{$popper} & {
+      padding: 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 
@@ -194,6 +201,10 @@ $menu: map.merge(
         &::after {
           opacity: 100%;
         }
+      }
+
+      #{$popper} & {
+        background-color: get-css-var('menu-bg-color-hover');
       }
 
       #{$item}--disabled &::after {
@@ -366,7 +377,8 @@ $menu: map.merge(
     @include clear-both;
 
     #{$popper} & {
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
       min-width: 70px;
       padding: 5px 0;
       user-select: none;
@@ -401,7 +413,8 @@ $menu: map.merge(
       list-style: none;
       user-select: none;
 
-      #{$self} > &:first-child {
+      #{$self} > &:first-child,
+      #{$popper} &:first-child {
         margin-top: 0;
       }
 
@@ -433,6 +446,10 @@ $menu: map.merge(
         #{$self}--horizontal & {
           display: none;
         }
+
+        #{$popper} & {
+          display: inline-block;
+        }
       }
 
       &__list {
@@ -445,6 +462,10 @@ $menu: map.merge(
         #{$self}--horizontal & {
           flex-direction: row;
           width: auto;
+        }
+
+        #{$popper} & {
+          flex-direction: column;
         }
       }
 
