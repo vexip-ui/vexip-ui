@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { Tooltip } from '@/components/tooltip'
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useModifier, useSetTimeout } from '@vexip-ui/hooks'
 
+import type { PropType } from 'vue'
 import type { TooltipExposed } from '@/components/tooltip'
+import type { SliderTipProps } from './symbol'
 
 defineOptions({ name: 'SliderTrigger' })
 
@@ -54,6 +56,10 @@ const props = defineProps({
   tipHover: {
     type: Boolean,
     default: false
+  },
+  tipProps: {
+    type: Object as PropType<SliderTipProps>,
+    default: () => ({})
   }
 })
 
@@ -91,6 +97,8 @@ const { target: wrapper } = useModifier({
     }
   }
 })
+
+const tipClass = computed(() => [nh.be('tip'), props.tipProps?.tipClass])
 
 defineExpose({ updateTooltip, focus, blur })
 
@@ -143,13 +151,13 @@ function blur() {
   >
     <Tooltip
       ref="tooltip"
-      theme="dark"
+      :placement="vertical ? 'right' : 'top'"
+      v-bind="tipProps"
       trigger="custom"
       :transfer="tipTransfer"
       :visible="isTipShow || sliding"
-      :tip-class="nh.be('tip')"
+      :tip-class="tipClass"
       :disabled="hideTip"
-      :placement="vertical ? 'right' : 'top'"
       :no-hover="!tipHover"
       @tip-enter="showTooltip"
       @tip-leave="hideTooltip"
