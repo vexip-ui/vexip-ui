@@ -1,4 +1,5 @@
 import type { ClassType, StyleType } from '@vexip-ui/config'
+import type { TooltipProps } from '@/components/tooltip'
 
 export interface SliderMarker {
   label?: string,
@@ -10,6 +11,11 @@ export interface SliderMarker {
 export type SliderRawMarkers =
   | Record<string | number, string | SliderMarker>
   | Array<number | (SliderMarker & { value: number })>
+
+export type SliderTipProps = Omit<
+  TooltipProps,
+  'trigger' | 'transfer' | 'visible' | 'disabled' | 'noHover'
+>
 
 export interface SliderSlotParams {
   values: number[],
