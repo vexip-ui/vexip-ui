@@ -1,3 +1,12 @@
+# [2.5.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.4.0...utils@2.5.0) (2023-11-06)
+
+
+### ✨ Features
+
+* **utils:** add toCssSize method ([79941f5](https://github.com/vexip-ui/vexip-ui/commit/79941f5f383caedbe83e0497407d67dae7a82bf1))
+
+
+
 # [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.3.0...utils@2.4.0) (2023-11-03)
 
 
