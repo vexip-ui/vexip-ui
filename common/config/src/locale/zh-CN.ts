@@ -176,6 +176,8 @@ export function zhCNLocale() {
     },
 
     video: {
+      play: '播放',
+      pause: '暂停',
       playbackRate: '倍速',
       requestPip: '进入画中画',
       exitPip: '退出画中画',

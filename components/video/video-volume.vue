@@ -56,9 +56,9 @@ function handleSlide(value: number) {
 <template>
   <VideoControl
     :class="nh.be('volume')"
-    popper-type="panel"
-    :popper-class="nh.be('volume-panel')"
-    @trigger="toggleMute"
+    type="panel"
+    :tip-class="nh.be('volume-panel')"
+    @click="toggleMute"
   >
     <Icon :scale="1.4" v-bind="volumeIcon"></Icon>
     <template #panel>
@@ -71,6 +71,7 @@ function handleSlide(value: number) {
         vertical
         hide-tip
         reverse
+        :range="false"
         @input="handleSlide"
       ></Slider>
     </template>

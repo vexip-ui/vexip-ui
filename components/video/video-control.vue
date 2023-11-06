@@ -3,31 +3,24 @@ import { Tooltip } from '@/components/tooltip'
 
 import { computed, ref } from 'vue'
 
-import { useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
+import { videoControlProps } from './props'
 
 defineOptions({ name: 'VideoControl' })
 
-const props = defineProps({
-  name: {
-    type: String,
+const _props = defineProps(videoControlProps)
+const props = useProps('videoControl', _props, {
+  name: '',
+  type: 'button',
+  tipClass: null,
+  disabled: false,
+  shortcut: {
+    static: true,
     default: ''
   },
-  popperType: {
-    type: String,
-    default: 'tip'
-  },
-  popperClass: {
-    type: [String, Array, Object],
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
+  hoverOnly: false
 })
-
-const emit = defineEmits(['trigger'])
 
 const nh = useNameHelper('video')
 
@@ -47,7 +40,7 @@ const className = computed(() => {
   }
 })
 const tipClass = computed(() => {
-  return props.popperType === 'tip' ? nh.be('control-tip') : nh.be('control-panel')
+  return props.type === 'button' ? nh.be('control-tip') : nh.be('control-panel')
 })
 
 function handlePointerEnter() {
@@ -55,7 +48,8 @@ function handlePointerEnter() {
 
   timer.hover = setTimeout(() => {
     hovered.value = true
-  }, 250)
+    emitEvent(props.onEnter)
+  }, 100)
 }
 
 function handlePointerLeave() {
@@ -63,7 +57,22 @@ function handlePointerLeave() {
 
   timer.hover = setTimeout(() => {
     hovered.value = false
-  }, 250)
+    emitEvent(props.onLeave)
+  }, 100)
+}
+
+function handleFocus(event: FocusEvent) {
+  if (props.hoverOnly) return
+
+  focused.value = true
+  emitEvent(props.onFocus, event)
+}
+
+function handleBlur(event: FocusEvent) {
+  if (props.hoverOnly) return
+
+  focused.value = false
+  emitEvent(props.onBlur, event)
 }
 </script>
 
@@ -74,22 +83,30 @@ function handlePointerLeave() {
       :visible="hovered || focused"
       raw
       :transfer="false"
-      :tip-class="[tipClass, props.popperClass]"
-      :disabled="props.popperType === 'tip' && !props.name"
+      :tip-class="[tipClass, props.tipClass]"
+      :no-hover="props.type === 'button'"
+      :disabled="props.type === 'button' ? !props.name : props.disabled"
     >
       <template #trigger>
         <button
           :class="nh.be('control-button')"
           type="button"
-          @focus="focused = true"
-          @blur="focused = false"
-          @click="emit('trigger')"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @click="emitEvent(props.onClick)"
         >
           <slot></slot>
         </button>
       </template>
-      <template v-if="props.popperType === 'tip'">
-        {{ props.name }}
+      <template v-if="props.type === 'button'">
+        <span :class="nh.be('control-name')">
+          <slot name="name">
+            {{ props.name }}
+            <span v-if="props.shortcut" :class="nh.be('control-shortcut')">
+              {{ `(${props.shortcut})` }}
+            </span>
+          </slot>
+        </span>
       </template>
       <slot v-else name="panel"></slot>
     </Tooltip>

@@ -4,7 +4,8 @@ import { Input } from '@/components/input'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
-import { doubleDigits, getRangeWidth, isValidNumber, leaveNumber, toNumber } from '@vexip-ui/utils'
+import { getRangeWidth, isValidNumber, toNumber } from '@vexip-ui/utils'
+import { formatTime } from './helper'
 
 defineOptions({ name: 'VideoTimer' })
 
@@ -49,18 +50,6 @@ onMounted(() => {
     { immediate: true }
   )
 })
-
-function formatTime(time: number) {
-  const remainders = leaveNumber(time / 1000, 60, 2)
-
-  if (remainders.length < 2) {
-    remainders.unshift(0)
-  }
-
-  return remainders.length < 3
-    ? remainders.map(doubleDigits).join(':')
-    : remainders.map((r, i) => (i ? doubleDigits(r) : r)).join(':')
-}
 
 function handleClick() {
   if (!editing.value) {

@@ -6,9 +6,16 @@
 $video: () !default;
 $video: map.merge(
   (
+    state-color: get-css-var('content-color-secondary'),
     progress-height: 3px,
+    progress-pad: 5px,
     progress-segment-bg-color: rgba(#fff, 20%),
-    filler-bg-color: get-css-var('color-primary-base'),
+    progress-filler-bg-color: get-css-var('color-primary-base'),
+    progress-trigger-radius: get-css-var('radius-base'),
+    progress-trigger-width: 14px,
+    progress-trigger-height: 10px,
+    progress-indicator-color: get-css-var('color-primary-base'),
+    progress-indicator-size: 4px,
     control-color: rgba(#fff, 85%),
     control-color-active: #fff,
     control-color-disabled: rgba(#fff, 50%),
@@ -36,12 +43,41 @@ $video: map.merge(
     height: 100%;
   }
 
+  &__state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: get-css-var('video-state-color');
+    transform: translate(-50%, -50%);
+  }
+
+  &-state-enter-active {
+    animation: #{$namespace}-video-state-effect 250ms;
+  }
+
+  &-state-leave-active {
+    animation: #{$namespace}-video-state-effect reverse 250ms;
+  }
+
+  @keyframes #{$namespace}-video-state-effect {
+    0% {
+      opacity: 0%;
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    100% {
+      opacity: 100%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
   &__controls {
     position: absolute;
     inset: auto 0 0;
     display: flex;
     flex-direction: column;
-    background-color: rgba(#000, 60%);
+    padding-top: 10px;
+    background-image: linear-gradient(to top, rgba(#000, 50%) 0%, transparent 100%);
 
     &-top,
     &-bottom {
@@ -78,10 +114,22 @@ $video: map.merge(
   }
 
   &__progress {
+    position: relative;
     width: 100%;
+    padding: 0 10px;
+
+    &--disabled {
+      pointer-events: none;
+    }
 
     &-segment {
+      height: 100%;
+      padding: get-css-var('video-progress-pad') 0;
+    }
+
+    &-track {
       position: relative;
+      width: 100%;
       height: 100%;
       overflow: hidden;
       background-color: get-css-var('video-progress-segment-bg-color');
@@ -93,7 +141,7 @@ $video: map.merge(
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: get-css-var('video-filler-bg-color');
+      background-color: get-css-var('video-progress-filler-bg-color');
       border-radius: get-css-var('video-progress-height');
       transition: get-css-var('transition-background');
     }
@@ -102,7 +150,8 @@ $video: map.merge(
       @include define-preset-values(
         'slider',
         (
-          track-height: get-css-var('video-progress-height'),
+          track-height:
+            calc(#{get-css-var('video-progress-height')} + #{get-css-var('video-progress-pad')} * 2),
           handler-size: 13px,
           handler-scale-hover: 1,
           handler-scale-focus: 1,
@@ -113,10 +162,119 @@ $video: map.merge(
       );
     }
 
+    &-trigger {
+      position: relative;
+      width: get-css-var('video-progress-trigger-width');
+      height: get-css-var('video-progress-trigger-height');
+      background-color: #fff;
+      border: 2px solid get-css-var('video-progress-filler-bg-color');
+      border-radius: get-css-var('video-progress-trigger-radius');
+    }
+
     .#{$namespace}-slider {
-      &__track {
-        gap: 0 3px;
+      padding: 0;
+      margin: 0;
+
+      &__container {
+        width: 100%;
+        padding: 0;
+        margin: 0;
       }
+
+      &__track {
+        gap: 0 2px;
+      }
+    }
+
+    &-indicator {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+      opacity: 0%;
+      transition: get-css-var('transition-opacity');
+
+      &--active {
+        opacity: 100%;
+      }
+
+      $size: get-css-var('video-progress-indicator-size');
+      $pos: calc(
+        100% - #{$size} * 0.5 - #{get-css-var('video-progress-pad')} + #{get-css-var(
+            'video-progress-trigger-height'
+          )} * 0.25
+      );
+      $color: get-css-var('video-progress-indicator-color');
+
+      &::before,
+      &::after {
+        position: absolute;
+        left: 50%;
+        content: '';
+        border: $size solid transparent;
+        transform: translateX(-50%);
+      }
+
+      &::before {
+        bottom: $pos;
+        border-top-color: $color;
+      }
+
+      &::after {
+        top: $pos;
+        border-bottom-color: $color;
+      }
+    }
+  }
+
+  &__preview {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: calc(5px + get-css-var('video-progress-pad'));
+    pointer-events: none;
+    opacity: 0%;
+    transition: get-css-var('transition-opacity');
+
+    &--active {
+      opacity: 100%;
+    }
+
+    &-image {
+      position: relative;
+      width: 60px;
+      padding-top: 100%;
+
+      @supports (aspect-ratio: 16 / 9) {
+        aspect-ratio: 16 / 9;
+        padding-top: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-time {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 6px;
+      color: get-css-var('video-control-color');
+      background-color: get-css-var('video-control-bg-color');
+      border-radius: get-css-var('video-control-radius');
+      box-shadow: get-css-var('video-control-shadow');
+    }
+
+    &--has-image &-time {
+      position: absolute;
+      bottom: 0;
     }
   }
 
@@ -158,7 +316,7 @@ $video: map.merge(
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 5px 0;
+      margin-bottom: calc(5px + get-css-var('video-progress-pad'));
       color: get-css-var('video-control-color');
       background-color: get-css-var('video-control-bg-color');
       border-radius: get-css-var('video-control-radius');
@@ -167,8 +325,18 @@ $video: map.merge(
 
     &-tip {
       padding: 6px 10px;
+    }
+
+    &-name,
+    &-shortcut {
+      display: inline-flex;
+      align-items: center;
       line-height: 1;
       white-space: nowrap;
+    }
+
+    &-shortcut {
+      margin-inline-start: 3px;
     }
   }
 
