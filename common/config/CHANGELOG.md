@@ -1,3 +1,18 @@
+# [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.1...config@1.2.0) (2023-11-06)
+
+
+### ✨ Features
+
+* add German locale config ([#406](https://github.com/vexip-ui/vexip-ui/issues/406)) ([e90ba63](https://github.com/vexip-ui/vexip-ui/commit/e90ba6385d69e727ca58386e7f183062b61924c4))
+
+
+### 🐞 Bug Fixes
+
+* **config:** force vxp namespace for css variables ([814fd2c](https://github.com/vexip-ui/vexip-ui/commit/814fd2caaada47b3e7053ec69673b4b6bc881dd8))
+* **config:** incorrect default value for value(s)Prop ([db750d3](https://github.com/vexip-ui/vexip-ui/commit/db750d3233b3399ef8edf680933f7e50794dce6b))
+
+
+
 ## [1.1.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.0...config@1.1.1) (2023-09-07)
 
 
