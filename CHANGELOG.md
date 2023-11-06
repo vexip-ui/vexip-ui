@@ -1,3 +1,20 @@
+## [2.2.10](https://github.com/vexip-ui/vexip-ui/compare/v2.2.9...v2.2.10) (2023-11-06)
+
+
+### ✨ Features
+
+* **divider:** add margin prop ([1fcc9cd](https://github.com/vexip-ui/vexip-ui/commit/1fcc9cd452f98480a0768dbf32252a2ed32eaa73))
+* **slider:** add filler slot ([3581c00](https://github.com/vexip-ui/vexip-ui/commit/3581c009d67be33d9efbc6b87c41a34e7f3ad117))
+* **utils:** add toCssSize method ([79941f5](https://github.com/vexip-ui/vexip-ui/commit/79941f5f383caedbe83e0497407d67dae7a82bf1))
+
+
+### 🐞 Bug Fixes
+
+* **menu:** incorrect horizontal inside popper style ([35523fa](https://github.com/vexip-ui/vexip-ui/commit/35523fa9a25b7e529baf5ec910762bc3cf3c6bed))
+* **slider:** improve filler radius style ([45cfb64](https://github.com/vexip-ui/vexip-ui/commit/45cfb64549e0b256a71268ed205a6398a517d5f8))
+
+
+
 ## [2.2.9](https://github.com/vexip-ui/vexip-ui/compare/v2.2.8...v2.2.9) (2023-11-03)
 
 
