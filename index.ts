@@ -1,5 +1,11 @@
 export * from './components'
 export {
+  configLocale,
+  configHoverDelay,
+  configIcons,
+  configNamespace,
+  configProps,
+  configZIndex,
   registerLocale,
   deDELocale,
   enUSLocale,
