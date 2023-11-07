@@ -6,10 +6,10 @@
 $video: () !default;
 $video: map.merge(
   (
-    state-color: get-css-var('content-color-secondary'),
+    state-color: get-css-var('content-color-third'),
     progress-height: 3px,
     progress-pad: 5px,
-    progress-segment-bg-color: rgba(#fff, 20%),
+    progress-segment-bg-color: rgba(#fff, 25%),
     progress-filler-bg-color: get-css-var('color-primary-base'),
     progress-trigger-radius: get-css-var('radius-base'),
     progress-trigger-width: 14px,
@@ -22,6 +22,8 @@ $video: map.merge(
     control-bg-color: rgba(#000, 60%),
     control-radius: get-css-var('radius-small'),
     control-shadow: get-css-var('shadow-shape') #000,
+    control-option-bg-color: rgba(#fff, 15%),
+    control-option-color-active: get-css-var('color-primary-base'),
     timer-radius: get-css-var('radius-small')
   ),
   $video
@@ -39,6 +41,12 @@ $video: map.merge(
   height: 100%;
 
   &__player {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__video {
     width: 100%;
     height: 100%;
   }
@@ -48,21 +56,22 @@ $video: map.merge(
     top: 50%;
     left: 50%;
     color: get-css-var('video-state-color');
+    pointer-events: none;
     transform: translate(-50%, -50%);
   }
 
-  &-state-enter-active {
+  &-state-effect-enter-active {
     animation: #{$namespace}-video-state-effect 250ms;
   }
 
-  &-state-leave-active {
+  &-state-effect-leave-active {
     animation: #{$namespace}-video-state-effect reverse 250ms;
   }
 
   @keyframes #{$namespace}-video-state-effect {
     0% {
       opacity: 0%;
-      transform: translate(-50%, -50%) scale(1.5);
+      transform: translate(-50%, -50%) scale(1.6);
     }
 
     100% {
@@ -76,7 +85,7 @@ $video: map.merge(
     inset: auto 0 0;
     display: flex;
     flex-direction: column;
-    padding-top: 10px;
+    padding: 16px 0 4px;
     background-image: linear-gradient(to top, rgba(#000, 50%) 0%, transparent 100%);
 
     &-top,
@@ -265,7 +274,8 @@ $video: map.merge(
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 6px;
+      padding: 6px;
+      line-height: 1;
       color: get-css-var('video-control-color');
       background-color: get-css-var('video-control-bg-color');
       border-radius: get-css-var('video-control-radius');
@@ -284,6 +294,7 @@ $video: map.merge(
     justify-content: center;
     min-width: 32px;
     height: 100%;
+    padding: 0 6px;
     line-height: 1;
     color: get-css-var('video-control-color');
     transition: get-css-var('transition-color');
@@ -304,6 +315,7 @@ $video: map.merge(
       width: 100%;
       height: 100%;
       padding: 0;
+      line-height: inherit;
       color: inherit;
       cursor: pointer;
       background-color: transparent;
@@ -324,7 +336,7 @@ $video: map.merge(
     }
 
     &-tip {
-      padding: 6px 10px;
+      padding: 6px;
     }
 
     &-name,
@@ -337,6 +349,29 @@ $video: map.merge(
 
     &-shortcut {
       margin-inline-start: 3px;
+    }
+
+    &-options {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 5px 0;
+      margin: 0;
+      user-select: none;
+    }
+
+    &-option {
+      justify-content: center;
+      color: inherit;
+      text-align: center;
+
+      &:hover {
+        background-color: get-css-var('video-control-option-bg-color');
+      }
+
+      &--selected {
+        color: get-css-var('video-control-option-color-active');
+      }
     }
   }
 
@@ -370,6 +405,10 @@ $video: map.merge(
     &-separator {
       margin: 0 1px;
     }
+  }
+
+  &__play-rate {
+    min-width: 44px;
   }
 
   &__volume {

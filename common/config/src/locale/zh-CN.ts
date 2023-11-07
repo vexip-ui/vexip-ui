@@ -178,7 +178,9 @@ export function zhCNLocale() {
     video: {
       play: '播放',
       pause: '暂停',
-      playbackRate: '倍速',
+      playPrev: '上一个',
+      playNext: '下一个',
+      refresh: '刷新',
       requestPip: '进入画中画',
       exitPip: '退出画中画',
       fullWindow: '进入网页全屏',

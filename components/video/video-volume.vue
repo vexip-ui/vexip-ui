@@ -60,7 +60,7 @@ function handleSlide(value: number) {
     :tip-class="nh.be('volume-panel')"
     @click="toggleMute"
   >
-    <Icon :scale="1.4" v-bind="volumeIcon"></Icon>
+    <Icon :scale="1.3" v-bind="volumeIcon"></Icon>
     <template #panel>
       <div :class="nh.be('volume-text')">
         {{ currentVolume }}

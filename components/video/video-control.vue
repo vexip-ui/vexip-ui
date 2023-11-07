@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { Option } from '@/components/option'
 import { Tooltip } from '@/components/tooltip'
 
 import { computed, ref } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
+import { transformListToMap } from '@vexip-ui/utils'
 import { videoControlProps } from './props'
+
+import type { VideoControlOption } from './symbol'
 
 defineOptions({ name: 'VideoControl' })
 
@@ -19,7 +23,9 @@ const props = useProps('videoControl', _props, {
     static: true,
     default: ''
   },
-  hoverOnly: false
+  hoverOnly: false,
+  value: null,
+  options: () => []
 })
 
 const nh = useNameHelper('video')
@@ -28,6 +34,7 @@ const { timer } = useSetTimeout()
 
 const hovered = ref(false)
 const focused = ref(false)
+const currentValue = ref(props.value)
 
 const active = computed(() => {
   return !props.disabled && (hovered.value || focused.value)
@@ -35,6 +42,7 @@ const active = computed(() => {
 const className = computed(() => {
   return {
     [nh.be('control')]: true,
+    [nh.bem('control', props.type)]: props.type !== 'button',
     [nh.bem('control', 'active')]: active.value,
     [nh.bem('control', 'disabled')]: props.disabled
   }
@@ -42,6 +50,13 @@ const className = computed(() => {
 const tipClass = computed(() => {
   return props.type === 'button' ? nh.be('control-tip') : nh.be('control-panel')
 })
+const objectOptions = computed(() => {
+  return props.options.map(option => {
+    return typeof option === 'string' ? { value: option } : option
+  })
+})
+const optionMap = computed(() => transformListToMap(objectOptions.value, 'value', undefined, true))
+const currentOption = computed(() => optionMap.value.get(currentValue.value))
 
 function handlePointerEnter() {
   clearTimeout(timer.hover)
@@ -74,6 +89,11 @@ function handleBlur(event: FocusEvent) {
   focused.value = false
   emitEvent(props.onBlur, event)
 }
+
+function handleSelect(option: VideoControlOption) {
+  currentValue.value = option.value
+  emitEvent(props.onSelect, option)
+}
 </script>
 
 <template>
@@ -95,7 +115,10 @@ function handleBlur(event: FocusEvent) {
           @blur="handleBlur"
           @click="emitEvent(props.onClick)"
         >
-          <slot></slot>
+          <slot v-if="currentOption" name="selected" :option="currentOption">
+            {{ currentOption.selectedLabel || currentOption.label || currentOption.value }}
+          </slot>
+          <slot v-else></slot>
         </button>
       </template>
       <template v-if="props.type === 'button'">
@@ -108,7 +131,34 @@ function handleBlur(event: FocusEvent) {
           </slot>
         </span>
       </template>
-      <slot v-else name="panel"></slot>
+      <slot v-else name="panel">
+        <ul v-if="props.type === 'select'" :class="nh.be('control-options')">
+          <Option
+            v-for="(option, index) in objectOptions"
+            :key="option.value"
+            :class="{
+              [nh.be('control-option')]: true,
+              [nh.bem('control-option', 'selected')]: option.value === currentValue
+            }"
+            :label="option.label"
+            :value="option.value"
+            :disabled="option.disabled"
+            :divided="option.disabled"
+            :title="option.title"
+            no-hover
+            @select="handleSelect(option)"
+          >
+            <slot
+              name="option"
+              :option="option"
+              :index="index"
+              :selected="option.value === currentValue"
+            >
+              {{ option.label || option.value }}
+            </slot>
+          </Option>
+        </ul>
+      </slot>
     </Tooltip>
   </div>
 </template>

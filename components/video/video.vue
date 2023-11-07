@@ -10,18 +10,32 @@ import VideoProgress from './video-progress.vue'
 import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
 import { useListener } from '@vexip-ui/hooks'
-import { isClient } from '@vexip-ui/utils'
+import { decimalLength, isClient, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
+import { videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed } from '@/components/full-screen'
+import type { VideoPlayRate } from './symbol'
 
 defineOptions({ name: 'Video' })
 
 const _props = defineProps(videoProps)
 const props = useProps('video', _props, {
   noControls: false,
-  videoAttrs: null
+  videoAttrs: null,
+  playRates: () => [0.5, 1, 1.25, 1.5, 2],
+  kernel: null,
+  controlLayout: () => videoDefaultControlLayout,
+  refreshable: false,
+  poster: '',
+  video: null
 })
+
+const slots = defineSlots<{
+  default: () => any,
+  player: () => any,
+  video: () => any
+}>()
 
 const nh = useNameHelper('video')
 const locale = useLocale('video')
@@ -35,15 +49,44 @@ const time = ref(0)
 const duration = ref(1e5)
 const playing = ref(false)
 const stateShow = ref(true)
+const currentRate = ref(1)
 
 const screen = ref<FullScreenExposed>()
 const wrapper = computed(() => screen.value?.wrapper)
 const video = ref<HTMLVideoElement>()
 
+const videoRef = computed(() => {
+  return typeof slots.player === 'function' ? props.video : video.value
+})
 const className = computed(() => {
   return [nh.b(), nh.bs('vars')]
 })
-const stateIcon = computed(() => (playing.value ? icons.value.pause : icons.value.play))
+const playIcon = computed(() => (playing.value ? icons.value.pause : icons.value.play))
+const stateIcon = computed(() => {
+  return playing.value ? icons.value.pauseState : icons.value.playState
+})
+const rateOptions = computed(() => {
+  const rates = props.playRates
+    .map(raw => {
+      const rate = typeof raw === 'number' ? { value: raw } : raw
+
+      rate.value = toNumber(rate.value)
+      rate.label =
+        rate.label || `${decimalLength(rate.value) ? rate.value : rate.value.toFixed(1)}x`
+
+      return rate
+    })
+    .filter(rate => rate.value > 0)
+    .sort((prev, next) => next.value - prev.value)
+
+  if (!rates.find(rate => rate.value === 1)) {
+    const index = rates.findIndex(rate => rate.value < 1)
+
+    rates.splice((index + rates.length) % rates.length, 0, { value: 1, label: '1.0x' })
+  }
+
+  return rates
+})
 
 watch(playing, value => {
   if (value) {
@@ -55,30 +98,37 @@ watch(playing, value => {
   }
 })
 
-useListener(video, 'enterpictureinpicture', () => {
+useListener(videoRef, 'enterpictureinpicture', () => {
   pip.value = true
 })
-useListener(video, 'leavepictureinpicture', () => {
+useListener(videoRef, 'leavepictureinpicture', () => {
   pip.value = false
 })
 
 defineExpose({
+  wrapper,
   video
 })
 
 async function togglePip() {
-  if (!pipEnabled || !video.value) return
+  if (!pipEnabled || !videoRef.value) return
 
   if (pip.value) {
     await document.exitPictureInPicture()
   } else {
-    await video.value.requestPictureInPicture()
+    await videoRef.value.requestPictureInPicture()
   }
 }
 
 function togglePlaying() {
   playing.value = !playing.value
+
   wrapper.value?.focus()
+  emitEvent(playing.value ? props.onPlay : props.onPause)
+}
+
+function changeRate(rate: VideoPlayRate) {
+  currentRate.value = rate.value
 }
 </script>
 
@@ -89,16 +139,16 @@ function togglePlaying() {
     :class="className"
     tabindex="-1"
   >
-    <video
-      v-bind="props.videoAttrs"
-      ref="video"
-      :class="nh.be('player')"
-      @click="togglePlaying"
-      @canplay="emitEvent(props.onCanplay, $event)"
-    ></video>
-    <Transition :name="nh.bs('state')">
+    <div :class="nh.be('player')" @click="togglePlaying">
+      <slot name="player">
+        <video v-bind="props.videoAttrs" ref="video" :class="nh.be('video')">
+          <slot name="video"></slot>
+        </video>
+      </slot>
+    </div>
+    <Transition :name="nh.bs('state-effect')">
       <div v-if="stateShow" :class="nh.be('state')">
-        <Icon v-bind="stateIcon" :scale="2.5"></Icon>
+        <Icon v-bind="stateIcon" :scale="4"></Icon>
       </div>
     </Transition>
     <div v-if="!props.noControls" :class="nh.be('controls')">
@@ -111,22 +161,38 @@ function togglePlaying() {
       </section>
       <section :class="nh.be('controls-bottom')">
         <div :class="nh.be('controls-left')">
+          <VideoControl :name="locale.playPrev" @click="togglePlaying">
+            <Icon v-bind="icons.playPrev" :scale="1.3"></Icon>
+          </VideoControl>
           <VideoControl :name="playing ? locale.pause : locale.play" @click="togglePlaying">
-            <Icon :scale="1.4" v-bind="stateIcon"></Icon>
+            <Icon v-bind="playIcon" :scale="1.5"></Icon>
+          </VideoControl>
+          <VideoControl :name="locale.playPrev" @click="togglePlaying">
+            <Icon v-bind="icons.playNext" :scale="1.3"></Icon>
+          </VideoControl>
+          <VideoControl v-if="props.refreshable" :name="locale.refresh" @click="togglePlaying">
+            <Icon v-bind="icons.refresh" :scale="1.15"></Icon>
           </VideoControl>
           <VideoTimer v-model:time="time" :duration="duration"></VideoTimer>
         </div>
         <div :class="nh.be('controls-center')"></div>
         <div :class="nh.be('controls-right')">
+          <VideoControl
+            :class="nh.be('play-rate')"
+            type="select"
+            :value="currentRate"
+            :options="rateOptions"
+            @select="changeRate"
+          ></VideoControl>
           <VideoVolume v-model:volume="volume"></VideoVolume>
-          <VideoControl v-if="pipEnabled" :name="locale.requestPip" @click="togglePip">
-            <Icon :scale="1.4" v-bind="icons.pip"></Icon>
+          <VideoControl v-if="pipEnabled && video" :name="locale.requestPip" @click="togglePip">
+            <Icon v-bind="icons.pip" :scale="1.3"></Icon>
           </VideoControl>
           <VideoControl :name="locale.fullWindow" @click="toggle('window')">
-            <Icon :scale="1.4" v-bind="icons.fullWindow"></Icon>
+            <Icon v-bind="icons.fullWindow" :scale="1.3"></Icon>
           </VideoControl>
           <VideoControl :name="locale.fullScreen" shortcut="F" @click="toggle('browser')">
-            <Icon :scale="1.25" v-bind="icons.fullScreen"></Icon>
+            <Icon v-bind="icons.fullScreen" :scale="1.15"></Icon>
           </VideoControl>
         </div>
       </section>

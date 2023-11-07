@@ -176,7 +176,9 @@ export interface LocaleConfig {
   video: {
     play: string,
     pause: string,
-    playbackRate: string,
+    playPrev: string,
+    playNext: string,
+    refresh: string,
     requestPip: string,
     exitPip: string,
     fullWindow: string,

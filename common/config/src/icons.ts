@@ -21,6 +21,7 @@ import {
   ArrowRotateRight,
   ArrowsRotate,
   ArrowsUpToLine,
+  BackwardStep,
   CalendarR,
   CaretDown,
   CaretLeft,
@@ -34,6 +35,8 @@ import {
   CircleCheck,
   CircleExclamation,
   CircleInfo,
+  CirclePause,
+  CirclePlay,
   CircleQuestion,
   CircleQuestionR,
   CircleXmark,
@@ -47,6 +50,7 @@ import {
   EyeSlashR,
   Filter,
   Flag,
+  ForwardStep,
   GripLinesVertical,
   ImageR,
   Indent,
@@ -161,7 +165,11 @@ export interface IconsConfig {
   play: IconConfig,
   pause: IconConfig,
   fullWindow: IconConfig,
-  pip: IconConfig
+  pip: IconConfig,
+  playState: IconConfig,
+  pauseState: IconConfig,
+  playPrev: IconConfig,
+  playNext: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
@@ -237,7 +245,11 @@ const iconMap: IconsConfig = {
   play: Play,
   pause: Pause,
   fullWindow: ObjectGroupR,
-  pip: ArrowsUpToLine
+  pip: ArrowsUpToLine,
+  playState: CirclePlay,
+  pauseState: CirclePause,
+  playPrev: BackwardStep,
+  playNext: ForwardStep
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])
