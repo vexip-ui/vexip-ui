@@ -38,3 +38,15 @@ Renders a list of `10000` elements with a fixed height.
 | hide-bar       | `boolean`                    | Set whether the scroll bar is hidden                                                                                              | `false` | `2.1.30` |
 | lock-items     | `boolean`                    | Disable elements resize callback, which is used to improve performance when elements change height in transition                  | `false` | `2.1.30` |
 | autoplay       | `boolean \| number`          | Enable automatically scroll, when a number is passed in, it will be used as the number of milliseconds required for a full scroll | `false` | -        |
+
+### NativeScroll Methods
+
+| Name              | Description                                                                         | Signature                                                              | Since |
+| ----------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----- |
+| refresh           | Refresh the virtual list, which will trigger the recalculation of the scroll height | `() => void`                                                           | -     |
+| scrollTo          | Scroll to the specified position                                                    | `(top: number, behavior?: ScrollBehavior) => void`                     | -     |
+| scrollBy          | Scroll the specified distance                                                       | `(delta: number, behavior?: ScrollBehavior) => void`                   | -     |
+| scrollToKey       | Scroll to the position of the element corresponding to the specified key            | `(key: number \| string \| symbol, behavior?: ScrollBehavior) => void` | -     |
+| scrollToIndex     | Scroll to the position of the element corresponding to the specified index          | `(index: number, behavior?: ScrollBehavior) => void`                   | -     |
+| ensureIndexInView | Ensure that the element corresponding to the provided key is in view of scroll      | `(index: number, behavior?: ScrollBehavior) => void`                   | -     |
+| ensureKeyInView   | Ensure that the element corresponding to the provided index is in view of scroll    | `(key: number \| string \| symbol, behavior?: ScrollBehavior) => void` | -     |

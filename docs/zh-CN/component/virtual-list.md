@@ -38,3 +38,15 @@
 | hide-bar       | `boolean`                    | 设置滚动条是否隐藏                                                           | `false` | `2.1.30` |
 | lock-items     | `boolean`                    | 禁用元素缩放回调，用于元素发生高度变化的过渡时减少不必要的性能开销           | `false` | `2.1.30` |
 | autoplay       | `boolean`                    | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数             | `false` | -        |
+
+### VirtualList 方法
+
+| 名称              | 说明                                     | 签名                                                                   | 始于 |
+| ----------------- | ---------------------------------------- | ---------------------------------------------------------------------- | ---- |
+| refresh           | 刷新虚拟列表，将会触发滚动高度的重新计算 | `() => void`                                                           | -    |
+| scrollTo          | 滚动到指定位置                           | `(top: number, behavior?: ScrollBehavior) => void`                     | -    |
+| scrollBy          | 滚动指定的距离                           | `(delta: number, behavior?: ScrollBehavior) => void`                   | -    |
+| scrollToKey       | 滚动到指定键值对应的元素所在的位置       | `(key: number \| string \| symbol, behavior?: ScrollBehavior) => void` | -    |
+| scrollToIndex     | 滚动到指定索引对应的元素所在的位置       | `(index: number, behavior?: ScrollBehavior) => void`                   | -    |
+| ensureIndexInView | 确保提供的键值对应的元素在滚动的可视区内 | `(index: number, behavior?: ScrollBehavior) => void`                   | -    |
+| ensureKeyInView   | 确保提供的索引对应的元素在滚动的可视区内 | `(key: number \| string \| symbol, behavior?: ScrollBehavior) => void` | -    |
