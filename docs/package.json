@@ -32,6 +32,7 @@
     "@vue/compiler-sfc": "^3.3.4",
     "autoprefixer": "^10.4.16",
     "compare-versions": "6.1.0",
+    "execa": "^8.0.1",
     "kolorist": "^1.8.0",
     "local-pkg": "^0.5.0",
     "markdown-it": "^13.0.2",

@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   conventional-changelog-angular@7.0.0:
     hash: mnuz4pbg7c37j4ofaayqrj5u6y
@@ -444,6 +440,9 @@ importers:
       compare-versions:
         specifier: 6.1.0
         version: 6.1.0
+      execa:
+        specifier: ^8.0.1
+        version: 8.0.1
       kolorist:
         specifier: ^1.8.0
         version: 1.8.0
@@ -10385,3 +10384,7 @@ packages:
     optionalDependencies:
       commander: 9.5.0
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

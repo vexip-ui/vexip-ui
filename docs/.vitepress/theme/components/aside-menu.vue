@@ -96,14 +96,17 @@ function selectMenu(label: string, meta: AsideMenuItem) {
           >
             {{ child.subtext || t(child.subI18n!) }}
           </span>
-          <Tag
-            v-if="child.tag"
-            class="aside-menu__tag"
-            simple
-            :type="child.tagType"
-          >
-            {{ child.tag }}
-          </Tag>
+          <template v-if="child.tags?.length">
+            <Tag
+              v-for="(tag, index) in child.tags"
+              :key="index"
+              class="aside-menu__tag"
+              simple
+              :type="tag.type"
+            >
+              {{ tag.text }}
+            </Tag>
+          </template>
         </MenuItem>
       </MenuGroup>
       <MenuItem
@@ -120,14 +123,17 @@ function selectMenu(label: string, meta: AsideMenuItem) {
         >
           {{ menu.subtext || t(menu.subI18n!) }}
         </span>
-        <Tag
-          v-if="menu.tag"
-          class="aside-menu__tag"
-          simple
-          :type="menu.tagType"
-        >
-          {{ menu.tag }}
-        </Tag>
+        <template v-if="menu.tags?.length">
+          <Tag
+            v-for="(tag, index) in menu.tags"
+            :key="index"
+            class="aside-menu__tag"
+            simple
+            :type="tag.type"
+          >
+            {{ tag.text }}
+          </Tag>
+        </template>
       </MenuItem>
     </template>
   </Menu>
