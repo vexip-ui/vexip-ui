@@ -1,6 +1,6 @@
 # Global Config
 
-Vexip UI provides some configurations to change components behavior when install, includes **props default value**, **component namespace**, **i18n** and **internal icons of components**.
+Vexip UI provides some configurations to change components behavior when install, includes **props default value**, **component namespace**, **i18n**, **internal icons of components** and so on.
 
 ## Props Default Value
 
@@ -201,3 +201,13 @@ Finally, let's take a look at an actual effect after configuration:
 <IconDemo></IconDemo>
 
 > The details code can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/docs/.vitepress/theme/components/icon-demo.vue).
+
+## Full Config
+
+| Name       | Type                                                                                                 | Description                                                                                                                                                                                                                      | Default        | Since    |
+| ---------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------- |
+| props      | [`PropsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/components/props.ts)                 | The component props configuration, the key value is the camel case name of the component, the value is the props configuration of the component, the injected values will override the component's original props default values | `null`         | -        |
+| locale     | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts) | The internationalization configuration                                                                                                                                                                                           | `zhCNLocale()` | -        |
+| icons      | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)          | The internal icons configuration                                                                                                                                                                                                 | `globalIcons`  | `2.1.9`  |
+| zIndex     | `number`                                                                                             | The number of base z-index                                                                                                                                                                                                       | `2000`         | `2.1.17` |
+| hoverDelay | `number`                                                                                             | The number of milliseconds of hover delay                                                                                                                                                                                        | `100`          | `2.2.11` |

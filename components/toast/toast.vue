@@ -171,7 +171,7 @@ export default defineComponent({
       state.visible = true
     }
 
-    function cloasToast() {
+    function closeToast() {
       state.visible = false
 
       if (isFunction(state.onClose)) {
@@ -201,13 +201,13 @@ export default defineComponent({
 
     function handleWrapperClick() {
       if (state.visible && state.closable) {
-        cloasToast()
+        closeToast()
       }
     }
 
     function handleMaskClick() {
       if (state.visible && state.maskClose) {
-        cloasToast()
+        closeToast()
       }
     }
 
@@ -221,7 +221,7 @@ export default defineComponent({
 
       isFunction,
       openToast,
-      cloasToast,
+      closeToast,
       handleReset,
       handleWrapperClick,
       handleMaskClick

@@ -276,7 +276,7 @@ export default defineComponent({
 
       hoverTimer = setTimeout(() => {
         !option.disabled && emit('hover', option)
-      }, 250)
+      }, 100)
     }
 
     function handleMouseLeave() {

@@ -99,7 +99,7 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import { useHover, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from '@vexip-ui/icons'
@@ -151,6 +151,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('carousel')
+    const hoverDelay = useHoverDelay()
     const { isRtl } = useRtl()
     const itemStates = ref(new Set<ItemState>())
     const currentActive = ref(0)
@@ -578,7 +579,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           clearInterval(timer.play)
-        }, 250)
+        }, hoverDelay.value)
       }
 
       if (props.arrowTrigger === 'hover' && props.arrow === 'inside') {
@@ -592,7 +593,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           setAutoplay()
-        }, 250)
+        }, hoverDelay.value)
       }
 
       if (props.arrowTrigger === 'hover') {

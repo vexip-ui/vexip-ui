@@ -62,7 +62,7 @@ import {
   useRtl,
   useSetTimeout
 } from '@vexip-ui/hooks'
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
 import { dropdownProps } from './props'
 import { useLabel } from './hooks'
@@ -110,6 +110,7 @@ export default defineComponent({
 
     const parentState = inject(DROPDOWN_STATE, null)
     const { isRtl } = useRtl()
+    const hoverDelay = useHoverDelay()
 
     const isNested = !!parentState
     const label = toRef(props, 'label')
@@ -230,7 +231,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           setVisible(true)
-        }, 250)
+        }, hoverDelay.value)
       }
     }
 
@@ -244,7 +245,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           setVisible(false)
-        }, 250)
+        }, hoverDelay.value)
       }
     }
 

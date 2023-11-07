@@ -19,7 +19,7 @@ if (isClient) {
   }
 }
 
-const globalZIndex = computed(() => initZIndex)
+export const globalZIndex = computed(() => initZIndex)
 
 function getOrDefault(num: number, def: number) {
   return isDefined(num) && !Number.isNaN(num) ? num : def
@@ -28,7 +28,7 @@ function getOrDefault(num: number, def: number) {
 /**
  * Provide a z-index config for under components.
  *
- * @param icons z-index config
+ * @param sourceZIndex z-index config
  * @param app the app of Vue, will use app.provide if specify
  */
 export function configZIndex(sourceZIndex: MaybeRef<number>, app?: App) {

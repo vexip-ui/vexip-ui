@@ -19,7 +19,7 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
@@ -67,6 +67,7 @@ const MenuItem = defineComponent({
 
     const nh = useNameHelper('menu')
     const icons = useIcons()
+    const hoverDelay = useHoverDelay()
 
     const { isRtl } = useRtl()
 
@@ -293,7 +294,7 @@ const MenuItem = defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleMouseLeave() {
@@ -311,7 +312,7 @@ const MenuItem = defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleClickOutside() {
