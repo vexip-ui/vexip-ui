@@ -359,7 +359,7 @@ function handleClose() {
                   <slot name="close" v-bind="slotParams">
                     <Icon
                       v-bind="icons.close"
-                      :scale="(icons.close.scale || 1) * 1.2"
+                      :scale="+(icons.close.scale || 1) * 1.2"
                       label="close"
                     ></Icon>
                   </slot>

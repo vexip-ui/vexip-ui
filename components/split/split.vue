@@ -21,7 +21,7 @@
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon v-bind="fullIcons[0]" :scale="(fullIcons[0].scale || 1) * 0.6"></Icon>
+            <Icon v-bind="fullIcons[0]" :scale="+(fullIcons[0].scale || 1) * 0.6"></Icon>
           </button>
           <button
             type="button"
@@ -32,7 +32,7 @@
             @pointerdown.stop
             @click.left="handleFull(1)"
           >
-            <Icon v-bind="fullIcons[1]" :scale="(fullIcons[1].scale || 1) * 0.6"></Icon>
+            <Icon v-bind="fullIcons[1]" :scale="+(fullIcons[1].scale || 1) * 0.6"></Icon>
           </button>
         </template>
         <template v-else>

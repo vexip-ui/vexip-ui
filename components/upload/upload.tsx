@@ -688,7 +688,7 @@ export default defineComponent({
             <Icon
               {...icons.value.cloud}
               class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-              scale={(icons.value.cloud.scale || 1) * 4}
+              scale={+(icons.value.cloud.scale || 1) * 4}
             />
             {slots.tip
               ? (
@@ -735,7 +735,7 @@ export default defineComponent({
                     <Icon
                       {...icons.value.plus}
                       class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-                      scale={(icons.value.plus.scale || 1) * 1.2}
+                      scale={+(icons.value.plus.scale || 1) * 1.2}
                       style={{ marginBottom: '6px' }}
                     />
                     )}

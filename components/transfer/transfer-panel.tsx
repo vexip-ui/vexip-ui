@@ -512,7 +512,7 @@ export default defineComponent({
                 >
                   <Icon
                     {...icons.value.retweet}
-                    scale={(icons.value.retweet.scale || 1) * 1.2}
+                    scale={+(icons.value.retweet.scale || 1) * 1.2}
                   ></Icon>
                 </div>
                 <div class={nh.be('counter')}>

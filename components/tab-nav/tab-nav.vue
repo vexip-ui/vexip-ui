@@ -34,7 +34,7 @@
         <div :class="nh.be('pad')"></div>
         <button type="button" :class="nh.be('add')" @click="handleAdd">
           <slot name="add">
-            <Icon v-bind="icons.plus" :scale="(icons.plus.scale || 1) * 1.2"></Icon>
+            <Icon v-bind="icons.plus" :scale="+(icons.plus.scale || 1) * 1.2"></Icon>
           </slot>
         </button>
       </li>
