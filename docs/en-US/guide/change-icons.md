@@ -31,6 +31,8 @@ Some more semantic names are used in the configuration, which is usually differe
 
 ## Replace with Iconify
 
+^[Since v2.2.11](!)
+
 Nowadays [Iconify](https://iconify.design/) is used generally, and people often ask how to replace the icons in the library with Iconify.
 
 The following example demonstrates how to render Iconify icons by modifying the default value of the Icon component's [`renderer` prop](/en-US/component/icon#icon-props). You can see that when the `name` attribute is passed in, let it render the `iconify-icon` element, otherwise the default rendering method is used.

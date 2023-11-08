@@ -13,17 +13,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
-const provideProps = ref({
+import type { PropsOptions } from 'vexip-ui'
+
+const provideProps = reactive({
   tag: {
     size: 'large',
     simple: true,
     closable: true
   }
-})
+}) as PropsOptions
 
-const locale = ref({
+const locale = reactive({
   input: {
     placeholder: 'Input something...'
   }

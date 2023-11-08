@@ -31,6 +31,8 @@ app.use(install, {
 
 ## 替换为 Iconify
 
+^[Since v2.2.11](!)
+
 如今 [Iconify](https://iconify.design/) 被越来越多的人使用，经常有人咨询如何将组件库的图标替换为 Iconify。
 
 下面这个示例演示了如何通过修改 Icon 组件的 [`renderer` 属性](/zh-CN/component/icon#icon-属性) 的默认值来渲染 Iconify 图标。可以看到当传入了 `name` 属性时，让其渲染 `iconify-icon` 元素，否则使用默认的渲染方法。
