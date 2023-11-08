@@ -114,7 +114,9 @@ export default defineComponent({
     const popup = ref<InstanceType<typeof Popup>>()
 
     async function add(options: Record<string, any>) {
-      return popup.value ? await popup.value.add(options) : null
+      if (popup.value) {
+        await popup.value.add(options)
+      }
     }
 
     async function remove(key: Key) {

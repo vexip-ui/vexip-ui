@@ -1,5 +1,7 @@
 # Message
 
+It is often used to globally display some lightweight interactive feedback information, such as operation success or failure, etc.
+
 ## Demos
 
 :::demo message/basis
@@ -76,6 +78,18 @@ Often it is better to use with `tsx`.
 
 :::
 
+:::demo message/live-on-enter
+
+### Live on Enter
+
+^[Since v2.2.11](!s)
+
+Setting the `liveOnEnter` option to `true` prevents the message automatically closing when it is hovered.
+
+The auto-shutdown timer will restart after the hover is over.
+
+:::
+
 ## API
 
 ### Message Methods
@@ -141,18 +155,19 @@ createApp().use(myMessage, { property: '$myMessage' })
 
 ### Message Options
 
-| Name       | Type                                          | Description                                                                                                | Default | Since    |
-| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | -------- |
-| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of message                                                                                        | `''`    | -        |
-| content    | `string`                                      | The content of the message                                                                                 | `''`    | -        |
-| key        | `number \| string`                            | The unique index of the message, if not set, the built-in index will be used                               | `''`    | -        |
-| className  | `string \| Record<string, unknown>`           | Custom class for the message                                                                               | `null`  | -        |
-| style      | `Record<string, any>`                         | Inline style for the message                                                                               | `null`  | -        |
-| duration   | `number`                                      | Message duration in milliseconds, set to less than `500` to not close automatically                        | `3000`  | -        |
-| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
-| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |
-| closable   | `boolean`                                     | Whether there is a close button to close                                                                   | `false` | -        |
-| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of message, rendered as render function when passed in function                            | `null`  | -        |
-| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
-| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
-| parseHtml  | `boolean`                                     | Whether to parse content as html                                                                           | `false` | `2.0.14` |
+| Name        | Type                                          | Description                                                                                                | Default | Since    |
+| ----------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| type        | `'info' \| 'success' \| 'warning' \| 'error'` | The type of message                                                                                        | `''`    | -        |
+| content     | `string`                                      | The content of the message                                                                                 | `''`    | -        |
+| key         | `number \| string`                            | The unique index of the message, if not set, the built-in index will be used                               | `''`    | -        |
+| className   | `string \| Record<string, unknown>`           | Custom class for the message                                                                               | `null`  | -        |
+| style       | `Record<string, any>`                         | Inline style for the message                                                                               | `null`  | -        |
+| duration    | `number`                                      | Message duration in milliseconds, set to less than `500` to not close automatically                        | `3000`  | -        |
+| background  | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
+| color       | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |
+| closable    | `boolean`                                     | Whether there is a close button to close                                                                   | `false` | -        |
+| icon        | `Record<string, any> \| (() => any)`          | The prefix icon of message, rendered as render function when passed in function                            | `null`  | -        |
+| iconColor   | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
+| renderer    | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
+| parseHtml   | `boolean`                                     | Whether to parse content as html                                                                           | `false` | `2.0.14` |
+| liveOnEnter | `boolean`                                     | Make the message not automatically closed when it is hovered                                               | `false` | `2.2.11` |

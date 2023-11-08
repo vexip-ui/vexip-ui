@@ -18,6 +18,7 @@ export interface MessageOptions extends Record<string, any> {
   color?: boolean | string,
   closable?: boolean,
   parseHtml?: boolean,
+  liveOnEnter?: boolean,
   renderer?: () => any
 }
 
