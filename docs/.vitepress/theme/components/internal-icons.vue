@@ -15,7 +15,7 @@ const nh = useBEM('internal-icons')
     >
       <div :class="nh.be('item')">
         <span :class="nh.be('icon')">
-          <Icon v-bind="icon" :scale="(icon.scale || 1) * 1.6" :label="name"></Icon>
+          <Icon v-bind="icon" :scale="+(icon.scale || 1) * 1.6" :label="name"></Icon>
         </span>
         <span :class="nh.be('name')">{{ name }}</span>
       </div>

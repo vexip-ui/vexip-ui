@@ -15,6 +15,7 @@
     "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*",
     "fflate": "^0.8.1",
+    "iconify-icon": "^1.0.8",
     "prismjs": "^1.29.0",
     "vexip-ui": "workspace:*",
     "vue": "^3.3.4",

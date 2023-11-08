@@ -33,7 +33,12 @@ export default async () => {
       config: markdownItSetup
     },
     vue: {
-      compiler: compiler as any
+      compiler: compiler as any,
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag === 'iconify-icon'
+        }
+      }
     },
     themeConfig: {
       asideMenus: {},

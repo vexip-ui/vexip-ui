@@ -194,7 +194,7 @@ You can also change internal icons of partial components with the `icons` prop o
 
 > The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90).
 
-All internal icons can be previewed refer to [Custom Internal Icons](/en-US/guide/custom-internal-icons#list-of-internal-icons) chapter.
+All internal icons can be previewed refer to [Change Icons](/en-US/guide/change-icons#list-of-internal-icons) chapter.
 
 Finally, let's take a look at an actual effect after configuration:
 

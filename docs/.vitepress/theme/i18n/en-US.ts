@@ -63,7 +63,7 @@ export const enUS = defineI18n({
     ssr: 'Server-Side Rendering',
     customFormControl: 'Custom Form Control',
     developmentGuide: 'Development Guide',
-    customInternalIcons: 'Custom Internal Icons'
+    changeIcons: 'Change Icons'
   },
   group: {
     basis: 'Basis',

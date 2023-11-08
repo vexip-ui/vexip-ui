@@ -74,14 +74,17 @@ export const PROVIDED_ICONS = '__vxp-provided-icons'
 
 export type IconValue = Record<string, any> | (() => any)
 
-export interface IconOptions {
-  effect?: string,
-  scale?: number,
-  label?: string,
-  title?: string,
-  flip?: 'horizontal' | 'vertical' | 'both',
+export interface IconOptions extends Record<string, any> {
   class?: ClassType,
-  style?: StyleType
+  style?: StyleType,
+  scale?: number | string,
+  title?: string,
+  label?: string,
+  flip?: 'horizontal' | 'vertical' | 'both',
+  effect?: string,
+  size?: string,
+  color?: string,
+  rotate?: number | string
 }
 
 export type IconArrayValue = [IconValue, IconOptions?]

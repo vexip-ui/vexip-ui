@@ -1,4 +1,4 @@
-import { computed, defineComponent, h } from 'vue'
+import { computed, defineComponent, h, renderSlot } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
@@ -35,7 +35,11 @@ export default defineComponent({
       effect: null,
       size: null,
       color: null,
-      rotate: null
+      rotate: null,
+      renderer: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('icon')
@@ -55,9 +59,7 @@ export default defineComponent({
         [effectCls]: effectCls
       }
     })
-    const computedScale = computed(() => {
-      return toNumber(props.scale) || 1
-    })
+    const computedScale = computed(() => toNumber(props.scale) || 1)
     const rotate = computed(() => {
       if (typeof props.rotate === 'number') {
         return `${(props.rotate % 4) / 4}turn`
@@ -93,7 +95,7 @@ export default defineComponent({
       return style
     })
 
-    return () => {
+    function renderDefault() {
       const iAttrs = {
         class: className.value,
         style: style.value,
@@ -106,7 +108,7 @@ export default defineComponent({
       if (slots.default) {
         return (
           <i {...iAttrs}>
-            <g>{slots.default()}</g>
+            <g>{renderSlot(slots, 'default')}</g>
           </i>
         )
       }
@@ -120,6 +122,14 @@ export default defineComponent({
       }
 
       return <i {...iAttrs}></i>
+    }
+
+    return () => {
+      if (typeof props.renderer === 'function') {
+        return props.renderer(props as any, attrs, renderDefault)
+      }
+
+      return renderDefault()
     }
   }
 })

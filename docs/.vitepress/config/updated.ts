@@ -17,16 +17,12 @@ export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<stri
       stdio: 'pipe'
     })
   ).stdout
-  const tag = versionsLog
-    .split('\n')
-    .at(-1)
-    ?.trim()
-    .match(/release:\s(v.+)/)?.[1]
+  const commit = versionsLog.split('\n').at(-1)?.trim().split(' ')[0]
 
-  if (!tag) return {}
+  if (!commit) return {}
 
   const commitLog = (
-    await execa('git', ['log', `${tag}..`, '--name-only', '--oneline'], { stdio: 'pipe' })
+    await execa('git', ['log', `${commit}..`, '--name-only', '--oneline'], { stdio: 'pipe' })
   ).stdout
 
   const grouped = groupByProps(

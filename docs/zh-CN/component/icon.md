@@ -98,23 +98,43 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 :::
 
+:::demo icon/renderer
+
+### 自定义渲染
+
+^[Since v2.2.11](!s)
+
+如果上面还不满足需求，你可以通过 `renderer` 属性指定自定义的渲染方法。
+
+注意，如果使用自定义渲染，你需要自行处理图标的所有特性。
+
+配合 [全局配置](/zh-CN/guide/global-config) 你甚至可以做到完全替换组件库内部图标的渲染逻辑。
+
+:::
+
 ## API
 
 ### 预设类型
 
 ```ts
 type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
+type IconRenderer = (
+  props: Omit<IconProps, 'renderer'>,
+  attrs: Record<string, any>,
+  renderDefault: () => any
+) => any
 ```
 
 ### Icon 属性
 
-| 名称   | 类型                                   | 说明                               | 默认值 | 始于    |
-| ------ | -------------------------------------- | ---------------------------------- | ------ | ------- |
-| icon   | `Record<string, any>`                  | 图标 `<svg>` 组件                  | `null` | `2.0.0` |
-| scale  | `number \| string`                     | 设置图标的缩放比例                 | `1`    | -       |
-| flip   | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -       |
-| title  | `string`                               | 设置图标的标题属性                 | `''`   | -       |
-| effect | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0` |
-| size   | `string`                               | 指定图标的大小                     | `null` | `2.2.5` |
-| color  | `string`                               | 设置图标的颜色                     | `null` | `2.2.5` |
-| rotate | `number \| string`                     | 设置图标的旋转角度                 | `null` | `2.2.5` |
+| 名称     | 类型                                   | 说明                               | 默认值 | 始于     |
+| -------- | -------------------------------------- | ---------------------------------- | ------ | -------- |
+| icon     | `Record<string, any>`                  | 图标 `<svg>` 组件                  | `null` | `2.0.0`  |
+| scale    | `number \| string`                     | 设置图标的缩放比例                 | `1`    | -        |
+| flip     | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -        |
+| title    | `string`                               | 设置图标的标题属性                 | `''`   | -        |
+| effect   | `IconEffect`                           | 设置效果动画名称或一个自定义类名称 | `null` | `2.1.0`  |
+| size     | `string`                               | 指定图标的大小                     | `null` | `2.2.5`  |
+| color    | `string`                               | 设置图标的颜色                     | `null` | `2.2.5`  |
+| rotate   | `number \| string`                     | 设置图标的旋转角度                 | `null` | `2.2.5`  |
+| renderer | `IconRenderer`                         | 自定义的渲染方法                   | `null` | `2.2.11` |

@@ -4,6 +4,7 @@ import IconDemo from './components/icon-demo.vue'
 import Contributors from './components/contributors.vue'
 import TipContainer from './components/tip-container.vue'
 import InternalIcons from './components/internal-icons.vue'
+import IconifyDemo from './components/iconify-demo.vue'
 
 import type { App, Component } from 'vue'
 
@@ -13,7 +14,8 @@ export const components: Record<string, Component> = {
   IconDemo,
   Contributors,
   TipContainer,
-  InternalIcons
+  InternalIcons,
+  IconifyDemo
 }
 
 export function installGlobals(app: App) {

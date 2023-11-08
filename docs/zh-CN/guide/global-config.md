@@ -195,7 +195,7 @@ app.use(install, {
 
 > 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90)。
 
-所有的内置图标预览可以参考 [自定义内置图标](/zh-CN/guide/custom-internal-icons#内部图标一览) 章节。
+所有的内置图标预览可以参考 [修改图标](/zh-CN/guide/change-icons#内部图标一览) 章节。
 
 最后，我们来看一个实际的效果替换后的效果：
 
