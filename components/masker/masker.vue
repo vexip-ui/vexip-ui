@@ -31,7 +31,7 @@
         ref="topTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none"
+        style="width: 0; height: 0; overflow: hidden; outline-color: transparent"
       ></span>
       <Transition
         v-if="props.transitionName"
@@ -45,7 +45,7 @@
         ref="bottomTrap"
         tabindex="0"
         aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none"
+        style="width: 0; height: 0; overflow: hidden; outline-color: transparent"
       ></span>
     </div>
   </Portal>
