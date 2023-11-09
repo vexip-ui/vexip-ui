@@ -44,7 +44,7 @@ $wheel: map.merge(
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  outline: 0;
+  outline-color: transparent;
 
   &--horizontal {
     flex-direction: row;

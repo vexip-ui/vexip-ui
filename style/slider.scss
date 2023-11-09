@@ -207,7 +207,7 @@ $slider: map.merge(
     background-color: get-css-var('slider-handler-bg-color');
     border: get-css-var('slider-handler-b-width') solid get-css-var('slider-handler-b-color');
     border-radius: $handler-size;
-    outline: 0;
+    outline-color: transparent;
     box-shadow: get-css-var('slider-handler-shadow');
     transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
       get-css-var('transition-transform');
@@ -231,7 +231,7 @@ $slider: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: 0;
+    outline-color: transparent;
     transition: get-css-var('transition-transform');
 
     &:hover {

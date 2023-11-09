@@ -73,7 +73,7 @@ $date-picker: map.merge(
   &__input {
     display: flex;
     align-items: center;
-    outline: 0;
+    outline-color: transparent;
 
     &--error {
       color: get-css-var('date-picker-color-error');
