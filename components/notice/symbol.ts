@@ -19,6 +19,7 @@ export interface NoticeOptions extends Record<string, any> {
   color?: boolean | string,
   closable?: boolean,
   parseHtml?: boolean,
+  liveOnEnter?: boolean,
   renderer?: () => any
 }
 
@@ -28,3 +29,6 @@ export interface NoticeInstance extends ComponentPublicInstance {
   remove: (key: string | number) => void,
   clear: () => void
 }
+
+export const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+export const assertiveTypes = Object.freeze(['success', 'warning', 'error'])
