@@ -46,8 +46,6 @@ To set the color of the title independently, set the `titleColor` option to a va
 
 Set the `closable` option to `true` to make notice can be manually closed.
 
-Also, this example shows how to use the Notice component in a composition Api.
-
 :::
 
 :::demo notice/duration

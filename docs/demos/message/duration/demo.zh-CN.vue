@@ -1,17 +1,21 @@
 <template>
-  <Button type="primary" @click="$message.info('一条消息')">
+  <Button type="primary" @click="Message.info('一条消息')">
     正常时长
   </Button>
   <Button
     type="primary"
-    @click="$message.info({ content: '一条持续 10 秒的消息', duration: 10000 })"
+    @click="Message.info({ content: '一条持续 10 秒的消息', duration: 10000 })"
   >
     持续10秒
   </Button>
   <Button
     type="primary"
-    @click="$message.info({ content: '一条不自动关闭的消息', duration: 0, closable: true })"
+    @click="Message.info({ content: '一条不自动关闭的消息', duration: 0, closable: true })"
   >
     一直持续
   </Button>
 </template>
+
+<script setup lang="ts">
+import { Message } from 'vexip-ui'
+</script>
