@@ -44,13 +44,19 @@ $modal: map.merge(
     overflow: hidden;
   }
 
+  &__transform {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   &__wrapper {
     position: absolute;
     top: 100px;
     display: flex;
     flex-direction: column;
     max-width: calc(100vw - 28px);
-    pointer-events: visible;
+    pointer-events: auto;
     background-color: get-css-var('modal-bg-color');
     border: 0;
     border-radius: get-css-var('modal-radius');

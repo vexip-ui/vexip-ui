@@ -13,8 +13,9 @@
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
     >
-      <ResizeObserver v-if="!props.disabled" @resize="handleResize">
+      <ResizeObserver @resize="handleResize">
         <Transition
+          v-if="!props.disabled"
           :appear="props.autoRemove"
           :name="props.maskTransition"
           @after-enter="afterOpen"
@@ -26,6 +27,12 @@
             </slot>
           </div>
         </Transition>
+        <div
+          v-else
+          :class="nh.be('placeholder')"
+          role="none"
+          aria-hidden
+        ></div>
       </ResizeObserver>
       <span
         ref="topTrap"

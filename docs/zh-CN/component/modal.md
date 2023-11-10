@@ -160,6 +160,8 @@ interface ModalSlotParams {
 | cancel-type     | `ButtonType`                      | 设置取消按钮的类型                                                                                                    | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'` | 设置确认和取消按钮的大小                                                                                              | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                         | 去除模态框各部分的分割线                                                                                              | `false`          | `2.2.6`  |
+| x-offset        | `number`                          | 设置模态框横向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
+| y-offset        | `number`                          | 设置模态框纵向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
 
 ### Modal 事件
 

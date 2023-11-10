@@ -56,6 +56,8 @@ export const modalProps = buildProps({
   confirmType: String as PropType<ButtonType>,
   cancelType: String as PropType<ButtonType>,
   undivided: booleanProp,
+  xOffset: [Number, String],
+  yOffset: [Number, String],
   onToggle: eventProp<(active: boolean) => void>(),
   onConfirm: eventProp(),
   onCancel: eventProp(),
