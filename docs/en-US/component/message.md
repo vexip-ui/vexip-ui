@@ -42,8 +42,6 @@ When the preset color does not meet the requirements, you can pass in a valid co
 
 Set the `closable` option to `true` to make open messages manually closed.
 
-Also, this example shows how to use the Message component in a composition API.
-
 :::
 
 :::demo message/duration

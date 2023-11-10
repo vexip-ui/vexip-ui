@@ -21,7 +21,7 @@ export interface PopupItemState extends Record<string, unknown> {
   style?: any,
   icon?: Record<string, any> | (() => any),
   iconColor?: string,
-  onOpen: () => void,
+  onOpen: (key: Key) => void,
   onClose: (result: boolean) => void,
   onEnter: () => void,
   onLeave: () => void

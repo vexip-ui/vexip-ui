@@ -1,5 +1,7 @@
 # Notice
 
+It is often used to globally display some heavyweight interactive feedback information, such as specific error information when an operation fails.
+
 ## Demos
 
 :::demo notice/basis
@@ -44,8 +46,6 @@ To set the color of the title independently, set the `titleColor` option to a va
 
 Set the `closable` option to `true` to make notice can be manually closed.
 
-Also, this example shows how to use the Notice component in a composition Api.
-
 :::
 
 :::demo notice/duration
@@ -85,6 +85,18 @@ A custom rendering method for notice can be set via the `renderer` option.
 The `placement` option can be configured via the `config` method to change where the notice appears.
 
 There are four optional positions, top-left, top-right, bottom-left and bottom-right.
+
+:::
+
+:::demo notice/live-on-enter
+
+### Live on Enter
+
+^[Since v2.2.11](!s)
+
+Setting the `liveOnEnter` option to `true` prevents the notice automatically closing when it is hovered.
+
+The auto-shutdown timer will restart after the hover is over.
 
 :::
 
@@ -154,21 +166,22 @@ createApp().use(myNotice, { property: '$myNotice' })
 
 ### Notice Options
 
-| Name       | Type                                          | Description                                                                                                | Default | Since    |
-| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | -------- |
-| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of notice                                                                                         | `''`    | -        |
-| title      | `string`                                      | The title of the notice                                                                                    | `''`    | -        |
-| content    | `string`                                      | The content of the notice                                                                                  | `''`    | -        |
-| key        | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -        |
-| className  | `ClassType`                                   | Custom class for the notice                                                                                | `null`  | -        |
-| style      | `StyleType`                                   | Inline style for the notice                                                                                | `null`  | -        |
-| duration   | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -        |
-| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
-| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |
-| titleColor | `string`                                      | Set the color of the notice title font individually                                                        | `''`    | -        |
-| closable   | `boolean`                                     | whether there is a close button to close                                                                   | `false` | -        |
-| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of the notice, rendered as the render function when passed to the function                 | `null`  | -        |
-| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
-| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
-| marker     | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -        |
-| parseHtml  | `boolean`                                     | Whether to parse title and content as html                                                                 | `false` | `2.0.14` |
+| Name        | Type                                          | Description                                                                                                | Default | Since    |
+| ----------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| type        | `'info' \| 'success' \| 'warning' \| 'error'` | The type of notice                                                                                         | `''`    | -        |
+| title       | `string`                                      | The title of the notice                                                                                    | `''`    | -        |
+| content     | `string`                                      | The content of the notice                                                                                  | `''`    | -        |
+| key         | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -        |
+| className   | `ClassType`                                   | Custom class for the notice                                                                                | `null`  | -        |
+| style       | `StyleType`                                   | Inline style for the notice                                                                                | `null`  | -        |
+| duration    | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -        |
+| background  | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
+| color       | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |
+| titleColor  | `string`                                      | Set the color of the notice title font individually                                                        | `''`    | -        |
+| closable    | `boolean`                                     | whether there is a close button to close                                                                   | `false` | -        |
+| icon        | `Record<string, any> \| (() => any)`          | The prefix icon of the notice, rendered as the render function when passed to the function                 | `null`  | -        |
+| iconColor   | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
+| renderer    | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
+| marker      | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -        |
+| parseHtml   | `boolean`                                     | Whether to parse title and content as html                                                                 | `false` | `2.0.14` |
+| liveOnEnter | `boolean`                                     | Make the notice not automatically closed when it is hovered                                                | `false` | `2.2.11` |

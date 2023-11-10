@@ -104,11 +104,11 @@ function getItemStyle(item: PopupItemState) {
 }
 
 function add(options: Record<string, any>) {
-  return new Promise<void>(resolve => {
+  return new Promise<Key>(resolve => {
     const onOpen = isFunction(options.onOpen) ? options.onOpen : noop
 
-    options.onOpen = () => {
-      resolve()
+    options.onOpen = (key: Key) => {
+      resolve(key)
       onOpen()
     }
 
@@ -204,7 +204,7 @@ function renderItem(options: Record<string, any>) {
   }
 
   // 使用 options 上的回调以防止重复 key 时指向不正确
-  isFunction(options.onOpen) && options.onOpen()
+  isFunction(options.onOpen) && options.onOpen(item.key)
 }
 
 function removeItem(key: Key) {
