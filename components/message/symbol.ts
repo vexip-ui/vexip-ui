@@ -22,9 +22,16 @@ export interface MessageOptions extends Record<string, any> {
   renderer?: () => any
 }
 
+export interface MessageConfig {
+  placement?: MessagePlacement
+}
+
 export interface MessageInstance extends ComponentPublicInstance {
-  placement: MessagePlacement,
   add: (options: MessageOptions) => void,
   remove: (key: string | number) => void,
-  clear: () => void
+  clear: () => void,
+  config: (config: MessageConfig) => void
 }
+
+export const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+export const assertiveTypes = Object.freeze(['success', 'warning', 'error'])

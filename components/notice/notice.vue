@@ -8,7 +8,7 @@ import { computed, ref, shallowReactive } from 'vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { assertiveTypes, effectiveTypes } from './symbol'
 
-import type { Key, NoticePlacement } from './symbol'
+import type { Key, NoticeConfig, NoticePlacement } from './symbol'
 
 defineOptions({ name: 'Notice' })
 
@@ -39,13 +39,17 @@ function clear() {
   popup.value && popup.value.clear()
 }
 
+function config(config: NoticeConfig) {
+  placement.value = config.placement || placement.value
+}
+
 defineExpose(
   shallowReactive({
-    placement,
     popup,
     add,
     remove,
-    clear
+    clear,
+    config
   })
 )
 </script>

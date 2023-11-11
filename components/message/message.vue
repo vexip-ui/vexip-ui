@@ -1,3 +1,61 @@
+<script setup lang="ts">
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+import { Popup } from '@/components/popup'
+
+import { computed, ref, shallowReactive } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { assertiveTypes, effectiveTypes } from './symbol'
+
+import type { Key, MessageConfig, MessagePlacement } from './symbol'
+
+defineOptions({ name: 'Message' })
+
+const nh = useNameHelper('message')
+const icons = useIcons()
+
+const predefinedIcons = computed(() => ({
+  info: icons.value.info,
+  success: icons.value.success,
+  warning: icons.value.warning,
+  error: icons.value.error
+}))
+
+const placement = ref<MessagePlacement>('top')
+const popup = ref<InstanceType<typeof Popup>>()
+
+const placementCenter = computed(() => `${placement.value}-center` as const)
+
+async function add(options: Record<string, any>) {
+  if (popup.value) {
+    await popup.value.add(options)
+  }
+}
+
+async function remove(key: Key) {
+  return !!popup.value && (await popup.value.remove(key))
+}
+
+function config(config: MessageConfig) {
+  placement.value = config.placement || placement.value
+}
+
+function clear() {
+  popup.value && popup.value.clear()
+}
+
+defineExpose(
+  shallowReactive({
+    popup,
+    add,
+    remove,
+    clear,
+    config
+  })
+)
+</script>
+
 <template>
   <!-- eslint-disable vue/no-v-html -->
   <Popup
@@ -78,73 +136,3 @@
     </template>
   </Popup>
 </template>
-
-<script lang="ts">
-import { Icon } from '@/components/icon'
-import { Renderer } from '@/components/renderer'
-import { Popup } from '@/components/popup'
-
-import { computed, defineComponent, ref } from 'vue'
-
-import { useIcons, useNameHelper } from '@vexip-ui/config'
-
-import type { Key, MessagePlacement } from './symbol'
-
-const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
-const assertiveTypes = Object.freeze(['success', 'warning', 'error'])
-
-export default defineComponent({
-  name: 'Message',
-  components: {
-    Icon,
-    Renderer,
-    Popup
-  },
-  setup() {
-    const icons = useIcons()
-
-    const predefinedIcons = computed(() => ({
-      info: icons.value.info,
-      success: icons.value.success,
-      warning: icons.value.warning,
-      error: icons.value.error
-    }))
-
-    const placement = ref<MessagePlacement>('top')
-    const popup = ref<InstanceType<typeof Popup>>()
-
-    async function add(options: Record<string, any>) {
-      if (popup.value) {
-        await popup.value.add(options)
-      }
-    }
-
-    async function remove(key: Key) {
-      return !!popup.value && (await popup.value.remove(key))
-    }
-
-    function clear() {
-      popup.value && popup.value.clear()
-    }
-
-    return {
-      nh: useNameHelper('message'),
-      icons,
-
-      effectiveTypes,
-      assertiveTypes,
-
-      placement,
-
-      predefinedIcons,
-      placementCenter: computed(() => `${placement.value}-center` as const),
-
-      popup,
-
-      add,
-      remove,
-      clear
-    }
-  }
-})
-</script>

@@ -4,7 +4,14 @@ import Component from './notice.vue'
 import { destroyObject, isClient, isNull, isObject, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, NoticeInstance, NoticeOptions, NoticePlacement, NoticeType } from './symbol'
+import type {
+  Key,
+  NoticeConfig,
+  NoticeInstance,
+  NoticeOptions,
+  NoticePlacement,
+  NoticeType
+} from './symbol'
 
 export type { NoticeType, NoticePlacement, NoticeOptions }
 
@@ -112,11 +119,11 @@ export class NoticeManager {
     }
   }
 
-  config({ placement, ...others }: { placement?: NoticePlacement, [x: string]: unknown }) {
+  config({ placement, ...others }: NoticeConfig & NoticeOptions) {
     if (placement) {
-      this._getInstance().placement = placementWhiteList.includes(placement)
-        ? placement
-        : placementWhiteList[0]
+      this._getInstance().config({
+        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+      })
     }
 
     this.defaults = { ...this.defaults, ...others }
