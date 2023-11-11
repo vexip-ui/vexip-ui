@@ -12,14 +12,6 @@ Simple usage, control the `active` prop through two-way binding to control the d
 
 :::
 
-:::demo drawer/inner
-
-### Inner Drawer
-
-Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a inner drawer.
-
-:::
-
 :::demo drawer/nesting
 
 ### Nesting Usage
@@ -81,6 +73,14 @@ The size of the confirm and cancel buttons can be modified via the `action-size`
 Add the `resizable` prop to enable resizing of the drawer.
 
 Move the mouse to the edge of the drawer and a handle will appear. The width of the drawer in the left and right directions can be adjusted, and the height of the drawer in the up and down direction can be adjusted.
+
+:::
+
+:::demo drawer/inner
+
+### Inner Drawer
+
+Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a inner drawer.
 
 :::
 

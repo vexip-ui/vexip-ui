@@ -12,14 +12,6 @@ The simplest usage is to control the `active` prop through two-way binding to co
 
 :::
 
-:::demo drawer/inner
-
-### Inner Drawer
-
-Adding the `inner` prop enables the modal to be positioned according to the nearest element with the positioned attribute, thus implementing a inner modal.
-
-:::
-
 :::demo modal/long-content
 
 ### Long Content
@@ -69,6 +61,14 @@ Add the `loading` prop to make the confirm button appear loading, usually used w
 ### Adjust Size
 
 Add the `resizable` prop to enable resizing of the modal box.
+
+:::
+
+:::demo modal/inner
+
+### Inner Drawer
+
+Adding the `inner` prop enables the modal to be positioned according to the nearest element with the positioned attribute, thus implementing a inner modal.
 
 :::
 

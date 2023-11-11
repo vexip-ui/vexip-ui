@@ -270,6 +270,8 @@ const transformOrigin = computed(() => {
         const height = maskerRect.height - top - bottom
 
         origin.y = `${top + 0.5 * height}px`
+      } else {
+        origin.y = `${parseFloat(rect.top) + 0.5 * modalRect.height}px`
       }
     }
 
@@ -285,6 +287,8 @@ const transformOrigin = computed(() => {
         const width = maskerRect.width - left - right
 
         origin.x = `${left + 0.5 * width}px`
+      } else {
+        origin.x = `${parseFloat(rect.left) + 0.5 * modalRect.width}px`
       }
     }
   }
