@@ -145,7 +145,7 @@ $cascader: map.merge(
     min-width: get-css-var('cascader-pane-min-width');
     max-width: get-css-var('cascader-pane-max-width');
     height: 100%;
-    outline: 0;
+    outline-color: transparent;
 
     &:not(:first-child) {
       border-inline-start: get-css-var('cascader-pane-border');
