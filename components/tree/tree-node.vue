@@ -73,7 +73,7 @@
             :focused="focused"
           >
             <Icon v-if="treeState.arrowIcon" :icon="treeState.arrowIcon"></Icon>
-            <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+            <Icon v-else v-bind="isRtl ? icons.angleLeft : icons.angleRight"></Icon>
           </slot>
         </span>
         <Checkbox

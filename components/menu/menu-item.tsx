@@ -437,7 +437,7 @@ const MenuItem = defineComponent({
                 </span>
                 {isGroup.value && (
                   <Icon
-                    {...icons.value.arrowDown}
+                    {...icons.value.angleDown}
                     class={{
                       [nh.be('arrow')]: true,
                       [nh.bem('arrow', 'visible')]: groupExpanded.value,

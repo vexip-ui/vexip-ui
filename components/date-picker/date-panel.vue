@@ -23,7 +23,7 @@
               :class="[nh.be('arrow'), nh.be('prev-month')]"
               @click="adjustCalendar('month', -1)"
             >
-              <Icon v-bind="isRtl ? icons.arrowRight : icons.angleLeft"></Icon>
+              <Icon v-bind="isRtl ? icons.angleRight : icons.angleLeft"></Icon>
             </div>
             <div :class="nh.be('year-month')">
               <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">

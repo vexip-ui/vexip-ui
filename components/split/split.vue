@@ -213,8 +213,8 @@ export default defineComponent({
     })
     const fullIcons = computed(() => {
       return props.vertical
-        ? [icons.value.arrowDown, icons.value.arrowUp]
-        : [icons.value.arrowRight, icons.value.arrowLeft]
+        ? [icons.value.angleDown, icons.value.angleUp]
+        : [icons.value.angleRight, icons.value.angleLeft]
     })
 
     watch(

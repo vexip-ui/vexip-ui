@@ -3,8 +3,11 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { noop } from '@vexip-ui/utils'
-import { ChevronDown, GithubB, Spinner } from '@vexip-ui/icons'
+import { GithubB } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
 import { ColorPicker } from '..'
+
+const icons = globalIcons.value
 
 vi.useFakeTimers()
 
@@ -181,10 +184,10 @@ describe('ColorPicker', () => {
     const wrapper = mount(ColorPicker)
 
     expect(wrapper.find('.vxp-color-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
     await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
   })
 
@@ -230,11 +233,11 @@ describe('ColorPicker', () => {
     const wrapper = mount(ColorPicker)
 
     expect(wrapper.find('.vxp-color-picker__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-color-picker__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -250,7 +253,7 @@ describe('ColorPicker', () => {
   it('loading icon', () => {
     const wrapper = mount(() => <ColorPicker loading loading-icon={GithubB}></ColorPicker>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
   })
 

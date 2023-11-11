@@ -70,8 +70,8 @@
               <Icon v-if="item.loading" v-bind="icons.loading"></Icon>
               <Icon v-else-if="item.error" v-bind="icons.refresh"></Icon>
               <template v-else-if="hasChildren(item)">
-                <Icon v-if="isRtl" v-bind="icons.arrowLeft"></Icon>
-                <Icon v-else v-bind="icons.arrowRight"></Icon>
+                <Icon v-if="isRtl" v-bind="icons.angleLeft"></Icon>
+                <Icon v-else v-bind="icons.angleRight"></Icon>
               </template>
               <Icon
                 v-else-if="!multiple && !noCascaded && checkIcon && values.includes(item.fullValue)"

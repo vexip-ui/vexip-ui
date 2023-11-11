@@ -70,7 +70,7 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon
-                {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                 style={{ color: item.iconColor || item.color }}
               ></Icon>
             </div>

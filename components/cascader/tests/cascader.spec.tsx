@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { ChevronDown, GithubB, Spinner } from '@vexip-ui/icons'
+import { GithubB } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
 import { Cascader } from '..'
 
 interface CascaderOption {
@@ -12,6 +13,7 @@ interface CascaderOption {
   children: CascaderOption[] | null
 }
 
+const icons = globalIcons.value
 const TEXT = 'Text'
 
 function createOptions(depth = 3, prefix = '', iterator = 1) {
@@ -275,10 +277,10 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
     await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
   })
 
@@ -324,11 +326,11 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -344,7 +346,7 @@ describe('Cascader', () => {
   it('loading icon', () => {
     const wrapper = mount(() => <Cascader loading loading-icon={GithubB}></Cascader>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
   })
 

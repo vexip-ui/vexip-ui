@@ -543,7 +543,7 @@ function blur() {
         </div>
         <div :class="nh.be('control')">
           <div :class="[nh.be('marker'), showLabel && nh.bem('marker', 'with-label')]">
-            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.cross"></Icon>
+            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.emptyCross"></Icon>
             <div
               v-else
               :style="{
@@ -583,7 +583,7 @@ function blur() {
                 [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
+            <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
           </slot>
         </div>
         <div
