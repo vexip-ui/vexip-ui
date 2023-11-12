@@ -136,7 +136,6 @@
     "@vexip-ui/bem-helper": "workspace:*",
     "@vexip-ui/config": "workspace:*",
     "@vexip-ui/hooks": "workspace:*",
-    "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
@@ -154,6 +153,7 @@
     "@types/semver": "^7.5.3",
     "@vexip-ui/commitlint-config": "^0.2.0",
     "@vexip-ui/eslint-config": "^0.8.1",
+    "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/prettier-config": "^0.2.0",
     "@vexip-ui/scripts": "workspace:*",
     "@vexip-ui/stylelint-config": "^0.5.2",

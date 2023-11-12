@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   conventional-changelog-angular@7.0.0:
     hash: mnuz4pbg7c37j4ofaayqrj5u6y
@@ -25,9 +21,6 @@ importers:
       '@vexip-ui/hooks':
         specifier: workspace:*
         version: link:common/hooks
-      '@vexip-ui/icons':
-        specifier: workspace:*
-        version: link:common/icons
       '@vexip-ui/utils':
         specifier: workspace:*
         version: link:common/utils
@@ -74,6 +67,9 @@ importers:
       '@vexip-ui/eslint-config':
         specifier: ^0.8.1
         version: 0.8.1(eslint@8.51.0)(typescript@5.2.2)
+      '@vexip-ui/icons':
+        specifier: workspace:*
+        version: link:common/icons
       '@vexip-ui/prettier-config':
         specifier: ^0.2.0
         version: 0.2.0(prettier@3.0.3)
@@ -10401,3 +10397,7 @@ packages:
     optionalDependencies:
       commander: 9.5.0
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
