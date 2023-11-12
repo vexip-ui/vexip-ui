@@ -40,6 +40,16 @@ import {
   Expand,
   EyeR,
   EyeSlashR,
+  FileAudioR,
+  FileCodeR,
+  FileExcelR,
+  FileImageR,
+  FileLinesR,
+  FilePdfR,
+  FileR,
+  FileVideoR,
+  FileWordR,
+  FileZipperR,
   Filter,
   Flag,
   GripLinesVertical,
@@ -144,13 +154,23 @@ export interface IconsConfig {
   zoonOut: IconConfig,
   fullScreen: IconConfig,
   resetScreen: IconConfig,
-  dragger: IconConfig
+  dragger: IconConfig,
+  file: IconConfig,
+  fileText: IconConfig,
+  filePdf: IconConfig,
+  fileCode: IconConfig,
+  fileWord: IconConfig,
+  fileExcel: IconConfig,
+  fileImage: IconConfig,
+  fileAudio: IconConfig,
+  fileVideo: IconConfig,
+  fileZip: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
 export type IconName = keyof IconsConfig
 
-type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
+export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
 
 const iconMap: IconsConfig = {
   loading: [Spinner, { effect: 'pulse-in' }],
@@ -210,7 +230,17 @@ const iconMap: IconsConfig = {
   zoonOut: Minus,
   fullScreen: Expand,
   resetScreen: Compress,
-  dragger: GripLinesVertical
+  dragger: GripLinesVertical,
+  file: FileR,
+  fileText: FileLinesR,
+  filePdf: FilePdfR,
+  fileCode: FileCodeR,
+  fileWord: FileWordR,
+  fileExcel: FileExcelR,
+  fileImage: FileImageR,
+  fileAudio: FileAudioR,
+  fileVideo: FileVideoR,
+  fileZip: FileZipperR
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

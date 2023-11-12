@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
-import type { SourceFile } from '../symbol'
+import type { UploadSourceFile } from '../symbol'
 
 const getMockFile = (element: Element, files: File[]) => {
   Object.defineProperty(element, 'files', {
@@ -87,7 +87,7 @@ export class FormData {
 export class FileReader {
   result = ''
 
-  readAsDataURL(source: SourceFile) {
+  readAsDataURL(source: UploadSourceFile) {
     this.result = `data:image/svg+xml;base64,${source.name}`
     nextTick(() => {
       this.onload()

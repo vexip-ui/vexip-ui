@@ -1,33 +1,13 @@
-import {
-  Css3AltB,
-  FileAudio,
-  FileCodeR,
-  FileCsv,
-  FileExcelR,
-  FileImageR,
-  FileLinesR,
-  FilePdfR,
-  FilePowerpointR,
-  FilePrescription,
-  FileR,
-  FileVideoR,
-  FileWordR,
-  FileZipperR,
-  Html5B,
-  JavaB,
-  JsB,
-  LessB,
-  PythonB,
-  SassB,
-  VuejsB
-} from '@vexip-ui/icons'
+import { computed } from 'vue'
 
-type Icon = Record<string, any>
+import { useIcons } from '@vexip-ui/config'
 
-const iconConfig = new Map<Icon, string[]>()
+import type { IconsConfig } from '@vexip-ui/config'
 
-iconConfig.set(FileWordR, ['doc', 'docx'])
-iconConfig.set(FileVideoR, [
+const iconConfig = new Map<keyof IconsConfig, string[]>()
+
+iconConfig.set('fileWord', ['doc', 'docx'])
+iconConfig.set('fileVideo', [
   'mp4',
   'flv',
   'mkv',
@@ -41,9 +21,8 @@ iconConfig.set(FileVideoR, [
   'amv',
   'dmv'
 ])
-iconConfig.set(FilePowerpointR, ['ppt', 'pptx', 'pptm'])
-iconConfig.set(FilePdfR, ['pdf'])
-iconConfig.set(FileImageR, [
+iconConfig.set('filePdf', ['pdf'])
+iconConfig.set('fileImage', [
   'bmp',
   'jpg',
   'jpeg',
@@ -66,34 +45,39 @@ iconConfig.set(FileImageR, [
   'wmf',
   'webp'
 ])
-iconConfig.set(FileExcelR, ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam'])
-iconConfig.set(FileCodeR, [
-  'json',
-  'xml',
-  'property',
-  'class',
-  'c',
-  'cpp',
-  'cc',
-  'cxx',
-  'h',
-  'hpp',
-  'hxx',
-  'cs',
-  'yml',
-  'yaml',
-  'ts',
-  'tsx'
-])
-iconConfig.set(JsB, ['js', 'jsx', 'mjs'])
-iconConfig.set(Css3AltB, ['css', 'styl', 'pcss'])
-iconConfig.set(SassB, ['sass', 'scss'])
-iconConfig.set(LessB, ['less'])
-iconConfig.set(JavaB, ['java', 'class', 'jsp'])
-iconConfig.set(VuejsB, ['vue'])
-iconConfig.set(Html5B, ['html', 'htm'])
-iconConfig.set(PythonB, ['py', 'pyc', 'pyw', 'pyo', 'pyd'])
-iconConfig.set(FileAudio, [
+iconConfig.set('fileExcel', ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'])
+iconConfig.set(
+  'fileCode',
+  [
+    [
+      'json',
+      'xml',
+      'property',
+      'class',
+      'c',
+      'cpp',
+      'cc',
+      'cxx',
+      'h',
+      'hpp',
+      'hxx',
+      'cs',
+      'yml',
+      'yaml',
+      'ts',
+      'tsx'
+    ],
+    ['js', 'jsx', 'mjs', 'cjs', 'ts', 'tsx', 'mts', 'cts'],
+    ['css', 'styl', 'pcss'],
+    ['sass', 'scss'],
+    ['less'],
+    ['java', 'class', 'jsp'],
+    ['vue'],
+    ['html', 'htm'],
+    ['py', 'pyc', 'pyw', 'pyo', 'pyd']
+  ].flat()
+)
+iconConfig.set('fileAudio', [
   'cd',
   'wave',
   'aiff',
@@ -111,7 +95,7 @@ iconConfig.set(FileAudio, [
   'flac',
   'aac'
 ])
-iconConfig.set(FileZipperR, [
+iconConfig.set('fileZip', [
   'rar',
   'zip',
   '7z',
@@ -126,30 +110,21 @@ iconConfig.set(FileZipperR, [
   'jar',
   'iso'
 ])
-iconConfig.set(FileLinesR, ['txt'])
-iconConfig.set(FileCsv, ['csv'])
-iconConfig.set(FilePrescription, [
-  'rvt',
-  'rfa',
-  'rte',
-  'rtf',
-  'dgn',
-  'dwf',
-  'dwg',
-  'ifc',
-  'sat',
-  'skp'
-])
-iconConfig.set(FileR, ['default'])
+iconConfig.set('fileText', ['txt', 'md'])
+iconConfig.set('file', ['default'])
 
-const iconMaps: Record<string, Icon> = {}
+export function useFileIcons(icons = useIcons()) {
+  return computed(() => {
+    const map: Record<string, Record<string, any>> = {}
 
-for (const [Icon, types] of iconConfig.entries()) {
-  if (types?.length) {
-    for (const type of types) {
-      iconMaps[type] = Icon
+    for (const [iconName, types] of iconConfig.entries()) {
+      if (types?.length) {
+        for (const type of types) {
+          map[type] = icons.value[iconName]
+        }
+      }
     }
-  }
-}
 
-export { iconMaps }
+    return map
+  })
+}

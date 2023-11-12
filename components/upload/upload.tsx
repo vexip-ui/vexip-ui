@@ -19,9 +19,15 @@ import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
-import type { DirectoryEntity, FileOptions, FileState, HttpError, SourceFile } from './symbol'
+import type {
+  DirectoryEntity,
+  UploadFileOptions,
+  UploadFileState,
+  UploadHttpError,
+  UploadSourceFile
+} from './symbol'
 
-function getDefaultFileState(): FileState {
+function getDefaultFileState(): UploadFileState {
   return {
     id: randomString(),
     name: '',
@@ -50,7 +56,7 @@ export default defineComponent({
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<FileOptions[]>(focus)
+      useFieldStore<UploadFileOptions[]>(focus)
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
@@ -110,6 +116,7 @@ export default defineComponent({
       loadingIcon: null,
       loadingLock: false,
       loadingEffect: null,
+      image: false,
       defaultFiles: () => [],
       // canPreview: don't set, using UploadFile default value
       listStyle: null,
@@ -122,7 +129,7 @@ export default defineComponent({
     const nh = useNameHelper('upload')
     const locale = useLocale('upload', toRef(props, 'locale'))
     const icons = useIcons()
-    const fileStates = ref([]) as Ref<FileState[]>
+    const fileStates = ref([]) as Ref<UploadFileState[]>
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement>()
@@ -162,9 +169,7 @@ export default defineComponent({
       }
     })
     const acceptString = computed(() => {
-      if (props.image) return 'image/*'
-
-      const accept = props.accept
+      const accept = props.image ? (props.accept?.length ? props.accept : 'image/*') : props.accept
 
       return accept && (typeof accept === 'string' ? accept : accept.join())
     })
@@ -178,8 +183,8 @@ export default defineComponent({
     watch(
       () => props.fileList,
       value => {
-        const idMap = new Map<string | number, FileState>()
-        const fileMap = new Map<SourceFile, FileState>()
+        const idMap = new Map<string | number, UploadFileState>()
+        const fileMap = new Map<UploadSourceFile, UploadFileState>()
 
         for (const state of fileStates.value) {
           if (isDefined(state.id)) {
@@ -241,8 +246,8 @@ export default defineComponent({
       }
     }
 
-    async function handleFilesChange(inputFiles: FileList | SourceFile[]) {
-      const originFiles = Array.from(inputFiles || []) as SourceFile[]
+    async function handleFilesChange(inputFiles: FileList | UploadSourceFile[]) {
+      const originFiles = Array.from(inputFiles || []) as UploadSourceFile[]
       const shouldAdd = props.selectToAdd
       const files = shouldAdd ? Array.from(fileStates.value) : []
 
@@ -310,7 +315,7 @@ export default defineComponent({
       validateField()
     }
 
-    function getFileStateBySource(file: SourceFile) {
+    function getFileStateBySource(file: UploadSourceFile) {
       const { name, size, type } = file
       const path = file.path || file.webkitRelativePath
 
@@ -325,7 +330,10 @@ export default defineComponent({
       })
     }
 
-    function createFileState(file: FileOptions, defaults = getDefaultFileState()): FileState {
+    function createFileState(
+      file: UploadFileOptions,
+      defaults = getDefaultFileState()
+    ): UploadFileState {
       const { id, name, size, type, base64, status, percentage, source, url, path } = file
 
       Object.assign(defaults, {
@@ -347,7 +355,7 @@ export default defineComponent({
       return defaults
     }
 
-    function getFileExtension(file: FileState) {
+    function getFileExtension(file: UploadFileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
     }
 
@@ -368,7 +376,7 @@ export default defineComponent({
       return await Promise.all(requests).then(responses => responses.filter(response => response))
     }
 
-    async function uploadFile(file: FileState) {
+    async function uploadFile(file: UploadFileState) {
       if (typeof props.onBeforeUpload === 'function') {
         let result = props.onBeforeUpload(
           file,
@@ -460,7 +468,7 @@ export default defineComponent({
       return true
     }
 
-    function handleDelete(file: FileState) {
+    function handleDelete(file: UploadFileState) {
       file.status = StatusType.DELETE
 
       if (file.xhr) {
@@ -472,7 +480,7 @@ export default defineComponent({
       emitChangeEvent()
     }
 
-    function handlePreview(file: FileState) {
+    function handlePreview(file: UploadFileState) {
       emitEvent(props.onPreview, file)
     }
 
@@ -491,7 +499,7 @@ export default defineComponent({
       }
     }
 
-    function handleProgress(percent: number, file: FileState) {
+    function handleProgress(percent: number, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.percentage = percent
@@ -500,7 +508,7 @@ export default defineComponent({
       emitChangeEvent()
     }
 
-    function handleSuccess(response: any, file: FileState) {
+    function handleSuccess(response: any, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.status = StatusType.SUCCESS
@@ -511,7 +519,7 @@ export default defineComponent({
       emitChangeEvent()
     }
 
-    function handleError(error: HttpError, file: FileState) {
+    function handleError(error: UploadHttpError, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.status = StatusType.FAIL
@@ -819,7 +827,7 @@ export default defineComponent({
   },
   methods: {
     execute: noop as () => Promise<false | any[]>,
-    handleDelete: noop as (file: FileState) => void,
+    handleDelete: noop as (file: UploadFileState) => void,
     focus: noop as (options?: FocusOptions) => void,
     blur: noop as () => void
   }

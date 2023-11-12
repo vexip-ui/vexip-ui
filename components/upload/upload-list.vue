@@ -1,3 +1,55 @@
+<script setup lang="ts">
+import { UploadFile } from '@/components/upload-file'
+
+import { computed } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { uploadListProps } from './props'
+import { uploadListTypes } from './symbol'
+
+import type { UploadFileState, UploadStatus } from './symbol'
+
+defineOptions({ name: 'UploadList' })
+
+const _props = defineProps(uploadListProps)
+const props = useProps('uploadList', _props, {
+  files: {
+    default: () => [],
+    static: true
+  },
+  selectToAdd: false,
+  iconRenderer: {
+    default: null,
+    isFunc: true
+  },
+  type: {
+    default: 'name',
+    validator: value => uploadListTypes.includes(value)
+  },
+  loadingText: null,
+  style: null,
+  precision: 2
+  // 'canPreview' using UploadFile default
+})
+
+defineSlots<{
+  item: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
+  icon: (params: { file: UploadFileState }) => any,
+  suffix: () => any
+}>()
+
+const nh = useNameHelper('upload')
+const transitionName = computed(() => nh.ns('fade'))
+
+function handleDelete(file: UploadFileState) {
+  emitEvent(props.onDelete, file)
+}
+
+function handlePreview(file: UploadFileState) {
+  emitEvent(props.onPreview, file)
+}
+</script>
+
 <template>
   <ul
     :class="[nh.be('files'), nh.bs('vars'), props.inherit && nh.bem('files', 'inherit')]"
@@ -37,65 +89,3 @@
     <slot name="suffix"></slot>
   </ul>
 </template>
-
-<script lang="ts">
-import { UploadFile } from '@/components/upload-file'
-
-import { computed, defineComponent } from 'vue'
-
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { uploadListProps } from './props'
-import { uploadListTypes } from './symbol'
-
-import type { FileState } from './symbol'
-
-export default defineComponent({
-  name: 'UploadList',
-  components: {
-    UploadFile
-  },
-  props: uploadListProps,
-  emits: [],
-  setup(_props) {
-    const props = useProps('uploadList', _props, {
-      files: {
-        default: () => [],
-        static: true
-      },
-      selectToAdd: false,
-      iconRenderer: {
-        default: null,
-        isFunc: true
-      },
-      type: {
-        default: 'name',
-        validator: value => uploadListTypes.includes(value)
-      },
-      loadingText: null,
-      style: null,
-      precision: 2
-      // 'canPreview' using UploadFile default
-    })
-
-    const nh = useNameHelper('upload')
-    const transitionName = computed(() => nh.ns('fade'))
-
-    function handleDelete(file: FileState) {
-      emitEvent(props.onDelete, file)
-    }
-
-    function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file)
-    }
-
-    return {
-      props,
-      nh,
-      transitionName,
-
-      handleDelete,
-      handlePreview
-    }
-  }
-})
-</script>

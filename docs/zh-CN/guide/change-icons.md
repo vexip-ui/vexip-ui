@@ -31,7 +31,7 @@ app.use(install, {
 
 ## 替换为 Iconify
 
-^[Since v2.2.11](!)
+^[Since v2.2.11](!s)
 
 如今 [Iconify](https://iconify.design/) 被越来越多的人使用，经常有人咨询如何将组件库的图标替换为 Iconify。
 
