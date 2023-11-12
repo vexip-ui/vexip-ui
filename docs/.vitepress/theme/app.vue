@@ -311,7 +311,7 @@ function refreshScroll() {
       <template v-else>
         <ConfigProvider :props="providedProps">
           <Article :anchor-level="outline">
-            <Content class="markdown"></Content>
+            <Content class="markdown" as="section"></Content>
           </Article>
         </ConfigProvider>
         <div id="transfer-place"></div>
