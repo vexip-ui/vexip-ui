@@ -65,9 +65,6 @@ function enhanceApp(app: App) {
       default: {
         transfer: true,
         autoRemove: true
-      },
-      confirm: {
-        top: 100
       }
     }
   })

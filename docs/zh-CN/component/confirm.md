@@ -94,10 +94,24 @@ interface ConfirmState {
   closable: boolean,
   contentAlign: ConfirmAlign,
   actionsAlign: ConfirmAlign,
+  cancelable: boolean,
+  width: number | string,
+  height: number | string,
+  top: number | string,
+  right: number | string,
+  bottom: number | string,
+  left: number | string,
+  xOffset: number | string,
+  yOffset: number | string,
   raw: Record<any, any>
 }
 
 type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
+
+interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>, Record<any, any> {
+  renderer?: ConfirmRenderFn,
+  onBeforeConfirm?: () => unknown
+}
 ```
 
 ### Confirm 选项
@@ -122,3 +136,11 @@ type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, can
 | contentAlign    | `ConfirmAlign`                                  | 内容的对齐                                                                    | `'center'`       | `2.0.15` |
 | actionsAlign    | `ConfirmAlign`                                  | 操作按钮的对齐                                                                | `'center'`       | `2.0.15` |
 | cancelable      | `boolean`                                       | 是否可取消                                                                    | `true`           | `2.2.6`  |
+| width           | `number \| string`                              | 设置确认框的初始宽度，为 `'auto'` 时自动计算                                  | `420`            | `2.2.12` |
+| height          | `number \| string`                              | 设置确认框的初始高度，为 `'auto'` 时自动计算                                  | `'auto'`         | `2.2.12` |
+| top             | `number \| string`                              | 设置确认框距离顶部的初始距离，为 `'auto'` 时自动计算                          | `'auto'`         | `2.2.12` |
+| right           | `number \| string`                              | 设置确认框距离左侧的初始距离，为 `'auto'` 时自动计算                          | `'auto'`         | `2.2.12` |
+| bottom          | `number \| string`                              | 设置确认框距离底部的初始距离，为 `'auto'` 时自动计算                          | `'auto'`         | `2.2.12` |
+| left            | `number \| string`                              | 设置确认框距离右侧的初始距离，为 `'auto'` 时自动计算                          | `'auto'`         | `2.2.12` |
+| xOffset         | `number \| string`                              | 设置确认框横向的偏移量，与定位属性互不影响                                    | `'auto'`         | `2.2.12` |
+| yOffset         | `number \| string`                              | 设置确认框纵向的偏移量，与定位属性互不影响                                    | `'auto'`         | `2.2.12` |
