@@ -158,26 +158,38 @@ function useTableWrapper(md: MarkdownIt) {
 }
 
 function useTag(md: MarkdownIt) {
-  const tagRE = /^\^\[([^\]]*)\](?:\(([^)]*)\))?/
-  const typeShortcuts: Record<string, string> = {
-    '!d': 'error', // deprecated
-    '!s': 'warning' // since
+  const tagRE = /^==(.*)==/
+  const shortcuts: Record<string, (raw: string) => [string, string]> = {
+    // deprecated
+    d: value => ['error', value || 'deprecated'],
+    // since
+    s: value => ['warning', `Since v${value}`]
   }
 
   md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
+    if (silent) return false
+
     const raw = state.src.slice(state.pos, state.posMax)
     const matched = raw.match(tagRE)
 
     if (!matched) return false
-    if (silent) return true
 
     const token = state.push('tag', 'tag', 0)
+    const units = matched[1].split('|')
 
-    token.content = matched[1].trim()
-    token.info = (matched[2] || '').trim()
+    if (units[0].startsWith('!')) {
+      const key = units[0].slice(1)
+
+      ;[token.info, token.content] = shortcuts[key]?.(units[1]) ?? units
+    } else if (units.length > 1) {
+      [token.info, token.content] = units
+    } else {
+      token.info = 'default'
+      token.content = raw
+    }
+
     token.level = state.level
-
-    state.pos += matched[0].length
+    state.pos = state.posMax
 
     return true
   })
@@ -186,8 +198,6 @@ function useTag(md: MarkdownIt) {
     const token = tokens[index]
     const { content, info } = token
 
-    const type = typeShortcuts[info] || info
-
-    return `<Tag class="docs-tag" type="${type}" simple>${content}</Tag>`
+    return `<ClientOnly><Tag class="docs-tag" type="${info}" simple>${content}</Tag></ClientOnly>`
   }
 }

@@ -1,4 +1,4 @@
-# VirtualList 虚拟列表 ^[Since v2.0.0](!s)
+# VirtualList 虚拟列表 ==!s|2.0.0==
 
 ## 代码示例
 

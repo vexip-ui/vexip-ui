@@ -16,7 +16,7 @@ For basic usage, you can use `v-model:value` for two-way binding.
 
 ### Format Value
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 Set the `value-format` prop to specify how to format the value, and get the formatted value via the `@update:formatted-value` event.
 

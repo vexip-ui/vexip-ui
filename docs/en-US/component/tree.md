@@ -54,7 +54,7 @@ The other options can respectively control the interaction disabled state of the
 
 ### Arrow Icon
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 The icon at the arrow position can be changed via the `arrow-icon` prop.
 
@@ -150,7 +150,7 @@ This can be useful, for example, when init info for nodes is not stored directly
 
 ### Virtual Scroll
 
-^[Since v2.1.30](!s)
+==!s|2.1.30==
 
 Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
 
@@ -160,7 +160,7 @@ Add the `virtual` prop to enable virtualization. You may need it when there is t
 
 ### External Content
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 You can customize prefix and suffix content of node label respectively via the `prefix` and `suffix` slots.
 
@@ -172,7 +172,7 @@ Although you can implement this feature just using `label` slot, they help you b
 
 ### Block Effect
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 Adding the `block-effect` prop to make the effect apply to the entire block of the node.
 

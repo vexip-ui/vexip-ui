@@ -90,7 +90,7 @@ Different states can be set via `state`.
 
 ### Custom Color
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 You can custom the major color through the `color` prop.
 

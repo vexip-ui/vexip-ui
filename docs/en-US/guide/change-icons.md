@@ -31,7 +31,7 @@ Some more semantic names are used in the configuration, which is usually differe
 
 ## Replace with Iconify
 
-^[Since v2.2.11](!s)
+==!s|2.2.11==
 
 Nowadays [Iconify](https://iconify.design/) is used generally, and people often ask how to replace the icons in the library with Iconify.
 

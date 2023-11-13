@@ -80,7 +80,7 @@ Often it is better to use with `tsx`.
 
 ### Live on Enter
 
-^[Since v2.2.11](!s)
+==!s|2.2.11==
 
 Setting the `liveOnEnter` option to `true` prevents the message automatically closing when it is hovered.
 

@@ -30,7 +30,7 @@ You can drop the SVG component to the `icon` prop, or you can put it directly un
 
 ### Change Color
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 The color of the icon can be quickly modified via the `color` prop.
 
@@ -74,7 +74,7 @@ The flip effect of the icon can be set via the `flip` prop.
 
 ### Rotate
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 A move command?
 
@@ -102,7 +102,7 @@ You can put any SVG content under the icon default slot.
 
 ### Custom Render
 
-^[Since v2.2.11](!s)
+==!s|2.2.11==
 
 If the above does not meet your needs, you can specify a custom renderer through the `renderer` prop.
 

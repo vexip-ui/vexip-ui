@@ -24,7 +24,7 @@ Can be used in combination with scroll component when the content is too long.
 
 ### Adjust Buttons
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
 
@@ -86,7 +86,7 @@ Add the `no-footer` prop to disable the modal's default bottom action bar.
 
 ### Undivided
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Adding the `undivided` prop removes the dividing lines between parts of the modal.
 

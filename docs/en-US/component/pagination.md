@@ -60,7 +60,7 @@ The order within the array determines where the plugin renders, with a null valu
 
 ### Custom Tags
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 The tag of the elements can be customized through the `list-tag` and `item-tag` props.
 

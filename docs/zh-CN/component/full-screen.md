@@ -1,4 +1,4 @@
-# FullScreen 全屏 ^[Since v2.1.0](!s)
+# FullScreen 全屏 ==!s|2.1.0==
 
 这个组件将帮助你快速实现全屏展示一些内容。
 

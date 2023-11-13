@@ -30,7 +30,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 修改颜色
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 通过 `color` 属性可以快速修改图标的颜色。
 
@@ -74,7 +74,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 旋转
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 一个出招指令？
 
@@ -102,7 +102,7 @@ Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awe
 
 ### 自定义渲染
 
-^[Since v2.2.11](!s)
+==!s|2.2.11==
 
 如果上面还不满足需求，你可以通过 `renderer` 属性指定自定义的渲染方法。
 

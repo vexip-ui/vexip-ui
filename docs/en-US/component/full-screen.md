@@ -1,4 +1,4 @@
-# FullScreen ^[Since v2.1.0](!s)
+# FullScreen ==!s|2.1.0==
 
 This component will help you quickly display some content in full screen.
 

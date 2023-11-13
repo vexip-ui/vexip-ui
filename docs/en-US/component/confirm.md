@@ -42,7 +42,7 @@ When you need more fine-grained control of the icon, you can set `icon` as a fun
 
 ### Disable Cancel
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Set the `cancelable` option to `false` to disable the cancel button.
 

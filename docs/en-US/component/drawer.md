@@ -58,7 +58,7 @@ Add the `footer` prop to quickly add feet, or you can directly use the slot of t
 
 ### Adjust Buttons
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
 
@@ -88,7 +88,7 @@ Adding the `inner` prop enables the drawer to be positioned according to the nea
 
 ### Undivided
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Adding the `undivided` prop removes the dividing lines between parts of the drawer.
 

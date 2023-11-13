@@ -16,7 +16,7 @@
 
 ### 格式化值
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 设置 `value-format` 属性可以指定如何格式化值，并通过 `@update:formatted-value` 事件获取格式化后的值。
 
