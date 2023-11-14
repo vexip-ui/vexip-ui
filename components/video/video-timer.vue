@@ -5,7 +5,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { getRangeWidth, isValidNumber, toNumber } from '@vexip-ui/utils'
-import { formatTime } from './helper'
+import { formatSeconds } from './helper'
 
 defineOptions({ name: 'VideoTimer' })
 
@@ -20,7 +20,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['update:time'])
+const emit = defineEmits(['change'])
 
 const nh = useNameHelper('video')
 
@@ -32,7 +32,7 @@ const inputTime = ref('')
 const input = ref<HTMLInputElement>()
 const durationEl = ref<HTMLElement>()
 
-const formattedTime = computed(() => formatTime(currentTime.value))
+const formattedTime = computed(() => formatSeconds(currentTime.value))
 
 watch(
   () => props.time,
@@ -68,13 +68,13 @@ function finishInput(confirm: boolean) {
     const units = inputTime.value.trim().split(':')
 
     if (units.every(unit => isValidNumber(unit))) {
-      currentTime.value =
-        units
-          .map(toNumber)
-          .reverse()
-          .slice(0, 3)
-          .reduce((seconds, unit, i) => seconds + 60 ** i * unit, 0) * 1000
+      currentTime.value = units
+        .map(toNumber)
+        .reverse()
+        .slice(0, 3)
+        .reduce((seconds, unit, i) => seconds + 60 ** i * unit, 0)
       currentTime.value = Math.min(currentTime.value, props.duration)
+      emit('change', currentTime.value)
     }
   }
 }
@@ -102,7 +102,7 @@ function finishInput(confirm: boolean) {
       </span>
       <span :class="nh.be('timer-separator')">/</span>
       <span ref="durationEl">
-        {{ formatTime(duration) }}
+        {{ formatSeconds(duration) }}
       </span>
     </template>
   </div>

@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['update:volume'])
+const emit = defineEmits(['change'])
 
 const nh = useNameHelper('video')
 const icons = useIcons()
@@ -44,12 +44,16 @@ function toggleMute() {
   }
 
   muted.value = !muted.value
+
+  emit('change', currentVolume.value)
 }
 
 function handleSlide(value: number) {
   prevVolume = value
   currentVolume.value = value
   muted.value = value <= 0
+
+  emit('change', currentVolume.value)
 }
 </script>
 

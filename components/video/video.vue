@@ -21,6 +21,7 @@ defineOptions({ name: 'Video' })
 
 const _props = defineProps(videoProps)
 const props = useProps('video', _props, {
+  src: '',
   noControls: false,
   videoAttrs: null,
   playRates: () => [0.5, 1, 1.25, 1.5, 2],
@@ -34,7 +35,8 @@ const props = useProps('video', _props, {
 const slots = defineSlots<{
   default: () => any,
   player: () => any,
-  video: () => any
+  poster: () => any,
+  extra: () => any
 }>()
 
 const nh = useNameHelper('video')
@@ -43,13 +45,14 @@ const icons = useIcons()
 
 const pipEnabled = isClient && document.pictureInPictureEnabled
 
+const playing = ref(false)
+const currentTime = ref(0)
+const duration = ref(1e5)
 const volume = ref(100)
 const pip = ref(false)
-const time = ref(0)
-const duration = ref(1e5)
-const playing = ref(false)
 const stateShow = ref(true)
 const currentRate = ref(1)
+const loadedData = ref(false)
 
 const screen = ref<FullScreenExposed>()
 const wrapper = computed(() => screen.value?.wrapper)
@@ -88,6 +91,7 @@ const rateOptions = computed(() => {
   return rates
 })
 
+watch(() => props.src, resetMetaState, { flush: 'pre' })
 watch(playing, value => {
   if (value) {
     requestAnimationFrame(() => {
@@ -98,6 +102,16 @@ watch(playing, value => {
   }
 })
 
+useListener(videoRef, 'canplay', () => {
+  duration.value = videoRef.value?.duration ?? 0
+})
+useListener(videoRef, 'timeupdate', () => {
+  currentTime.value = videoRef.value?.currentTime ?? 0
+})
+useListener(videoRef, 'ended', handleEnded)
+useListener(videoRef, 'loadeddata', () => {
+  loadedData.value = true
+})
 useListener(videoRef, 'enterpictureinpicture', () => {
   pip.value = true
 })
@@ -106,9 +120,28 @@ useListener(videoRef, 'leavepictureinpicture', () => {
 })
 
 defineExpose({
+  playing,
+  currentTime,
+  duration,
+  pip,
   wrapper,
   video
 })
+
+function togglePlaying() {
+  playing.value = !playing.value
+
+  playing.value ? videoRef.value?.play() : videoRef.value?.pause()
+  wrapper.value?.focus()
+  emitEvent(playing.value ? props.onPlay : props.onPause)
+}
+
+function handleEnded() {
+  playing.value = false
+
+  videoRef.value?.pause()
+  emitEvent(props.onEnded)
+}
 
 async function togglePip() {
   if (!pipEnabled || !videoRef.value) return
@@ -120,15 +153,38 @@ async function togglePip() {
   }
 }
 
-function togglePlaying() {
-  playing.value = !playing.value
-
-  wrapper.value?.focus()
-  emitEvent(playing.value ? props.onPlay : props.onPause)
-}
-
 function changeRate(rate: VideoPlayRate) {
   currentRate.value = rate.value
+
+  if (videoRef.value) {
+    videoRef.value.playbackRate = rate.value
+  }
+}
+
+function changeTime(time: number) {
+  currentTime.value = time
+
+  if (videoRef.value) {
+    videoRef.value.currentTime = time
+  }
+}
+
+function changeVolume(newVolume: number) {
+  volume.value = newVolume
+
+  if (videoRef.value) {
+    videoRef.value.volume = newVolume / 100
+  }
+}
+
+function resetMetaState() {
+  playing.value = false
+  currentTime.value = 0
+  duration.value = 0
+  loadedData.value = false
+  pip.value = false
+
+  videoRef.value?.pause()
 }
 </script>
 
@@ -141,9 +197,19 @@ function changeRate(rate: VideoPlayRate) {
   >
     <div :class="nh.be('player')" @click="togglePlaying">
       <slot name="player">
-        <video v-bind="props.videoAttrs" ref="video" :class="nh.be('video')">
-          <slot name="video"></slot>
+        <video
+          v-bind="props.videoAttrs"
+          ref="video"
+          :class="nh.be('video')"
+          :src="props.src || props.videoAttrs?.src"
+        >
+          <slot></slot>
         </video>
+      </slot>
+    </div>
+    <div v-if="!loadedData && (props.poster || $slots.poster)" :class="nh.be('poster')">
+      <slot name="poster">
+        <img :src="props.poster" />
       </slot>
     </div>
     <Transition :name="nh.bs('state-effect')">
@@ -154,9 +220,9 @@ function changeRate(rate: VideoPlayRate) {
     <div v-if="!props.noControls" :class="nh.be('controls')">
       <section :class="nh.be('controls-top')">
         <VideoProgress
-          v-model:time="time"
-          :time-points="[2e4, 3e4, 7e4]"
+          :time="currentTime"
           :duration="duration"
+          @change="changeTime"
         ></VideoProgress>
       </section>
       <section :class="nh.be('controls-bottom')">
@@ -173,7 +239,7 @@ function changeRate(rate: VideoPlayRate) {
           <VideoControl v-if="props.refreshable" :name="locale.refresh" @click="togglePlaying">
             <Icon v-bind="icons.refresh" :scale="1.15"></Icon>
           </VideoControl>
-          <VideoTimer v-model:time="time" :duration="duration"></VideoTimer>
+          <VideoTimer :time="currentTime" :duration="duration" @change="changeTime"></VideoTimer>
         </div>
         <div :class="nh.be('controls-center')"></div>
         <div :class="nh.be('controls-right')">
@@ -184,7 +250,7 @@ function changeRate(rate: VideoPlayRate) {
             :options="rateOptions"
             @select="changeRate"
           ></VideoControl>
-          <VideoVolume v-model:volume="volume"></VideoVolume>
+          <VideoVolume :volume="volume" @change="changeVolume"></VideoVolume>
           <VideoControl v-if="pipEnabled && video" :name="locale.requestPip" @click="togglePip">
             <Icon v-bind="icons.pip" :scale="1.3"></Icon>
           </VideoControl>
@@ -197,6 +263,6 @@ function changeRate(rate: VideoPlayRate) {
         </div>
       </section>
     </div>
-    <slot></slot>
+    <slot name="extra"></slot>
   </FullScreen>
 </template>

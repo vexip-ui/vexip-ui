@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 800px; max-height: 450px">
-    <Video></Video>
+    <Video src="/video-1.mp4"></Video>
   </div>
 </template>
 

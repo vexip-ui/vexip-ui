@@ -39,6 +39,7 @@ $video: map.merge(
   position: relative;
   width: 100%;
   height: 100%;
+  outline-color: transparent;
 
   &__player {
     display: flex;
@@ -49,6 +50,13 @@ $video: map.merge(
   &__video {
     width: 100%;
     height: 100%;
+    outline-color: transparent;
+  }
+
+  &__poster {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
   }
 
   &__state {

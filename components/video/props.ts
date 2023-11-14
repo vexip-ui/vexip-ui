@@ -11,6 +11,7 @@ import type {
 } from './symbol'
 
 export const videoProps = buildProps({
+  src: String,
   noControls: booleanProp,
   videoAttrs: Object,
   playRates: Array as PropType<(number | VideoPlayRate)[]>,
@@ -20,7 +21,8 @@ export const videoProps = buildProps({
   poster: String,
   video: Object as PropType<HTMLVideoElement>,
   onPlay: eventProp(),
-  onPause: eventProp()
+  onPause: eventProp(),
+  onEnded: eventProp()
 })
 
 export type VideoProps = ExtractPropTypes<typeof videoProps>

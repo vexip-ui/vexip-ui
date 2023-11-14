@@ -1,7 +1,7 @@
 import { doubleDigits, leaveNumber } from '@vexip-ui/utils'
 
-export function formatTime(time: number) {
-  const remainders = leaveNumber(time / 1000, 60, 2)
+export function formatSeconds(seconds: number) {
+  const remainders = leaveNumber(Math.ceil(seconds), 60, 2)
 
   if (remainders.length < 2) {
     remainders.unshift(0)

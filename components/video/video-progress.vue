@@ -7,7 +7,7 @@ import { computed, ref } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
 import { useListener, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, throttle } from '@vexip-ui/utils'
-import { formatTime } from './helper'
+import { formatSeconds } from './helper'
 
 import type { PropType } from 'vue'
 import type { SliderExposed } from '@/components/slider'
@@ -47,7 +47,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:time'])
+const emit = defineEmits(['change'])
 
 const nh = useNameHelper('video')
 
@@ -86,7 +86,7 @@ const points = computed<PointState[]>(() => {
 
   if (!times.length) times = [0, duration]
 
-  times = times.at(-1) === duration ? props.timePoints : [...times, duration]
+  times = times.at(-1) === duration ? times : [...times, duration]
   times = times[0] === 0 ? times : [0, ...times]
 
   const points: PointState[] = []
@@ -166,7 +166,7 @@ function onPreviewResize(entry: ResizeObserverEntry) {
 }
 
 function handleChange(permillage: number) {
-  emit('update:time', (permillage / 1000) * props.duration)
+  emit('change', (permillage / 1000) * props.duration)
 }
 
 const onSlideMove = throttle(processMoveOnTrack)
@@ -253,7 +253,7 @@ function onSlideEnd() {
             <img :src="previewSrc" />
           </div>
           <div :class="nh.be('preview-time')">
-            {{ formatTime(hoveredTime) }}
+            {{ formatSeconds(hoveredTime) }}
           </div>
         </slot>
       </div>
