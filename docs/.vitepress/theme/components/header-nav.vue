@@ -36,7 +36,7 @@ function selectMenu(_: string, meta: NavMenuItem) {
 
 <template>
   <div class="navigation">
-    <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
+    <Menu :active="currentMenu" horizontal @select="selectMenu">
       <template v-for="menu in menus" :key="menu.key">
         <HeaderNavLink v-if="isExternal(menu.link)" :menu="menu"></HeaderNavLink>
 
