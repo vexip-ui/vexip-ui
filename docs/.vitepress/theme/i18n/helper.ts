@@ -61,7 +61,7 @@ export interface I18nConfig {
     ssr: string,
     customFormControl: string,
     developmentGuide: string,
-    customInternalIcons: string
+    changeIcons: string
   },
   group: {
     basis: string,

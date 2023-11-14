@@ -72,7 +72,7 @@ After setting markers, you can add `marker-only` prop to limit only the marked v
 
 ### Hide Trigger
 
-^[Since v2.2.9](!s)
+==!s|2.2.9==
 
 Add the `trigger-fade` prop to hide the trigger when there is no operation.
 
@@ -100,7 +100,7 @@ Different states can be set via `state` prop.
 
 ### Custom Trigger
 
-^[Since v2.2.3](!s)
+==!s|2.2.3==
 
 You can custom the trigger content via `trigger` slot.
 

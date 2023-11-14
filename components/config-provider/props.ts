@@ -25,6 +25,10 @@ export const configProviderProps = wrapProps({
     // eslint-disable-next-line @typescript-eslint/ban-types
     type: String as PropType<'base' | 'dark' | (string & {})>,
     default: null
+  },
+  hoverDelay: {
+    type: Number,
+    default: null
   }
 })
 

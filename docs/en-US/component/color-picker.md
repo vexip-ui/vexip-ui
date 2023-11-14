@@ -24,7 +24,7 @@ Add the `alpha` prop to enable transparency selection.
 
 ### Color Label
 
-^[Since v2.2.4](!s)
+==!s|2.2.4==
 
 Add the `show-label` prop to show the color label, and use `label-format` prop to specify the format of the color label individually.
 

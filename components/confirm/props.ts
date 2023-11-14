@@ -9,9 +9,12 @@ const positionType = [Number, String]
 
 export const confirmProps = buildProps({
   locale: localeProp('confirm'),
+  width: positionType,
+  height: positionType,
   top: positionType,
   left: positionType,
-  width: positionType,
+  right: positionType,
+  bottom: positionType,
   maskClose: booleanProp,
   confirmType: String as PropType<ConfirmButtonType>,
   cancelType: String as PropType<ConfirmButtonType>,
@@ -29,7 +32,9 @@ export const confirmProps = buildProps({
   contentAlign: String as PropType<ConfirmAlign>,
   actionsAlign: String as PropType<ConfirmAlign>,
   parseHtml: booleanProp,
-  cancelable: booleanProp
+  cancelable: booleanProp,
+  xOffset: positionType,
+  yOffset: positionType
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>

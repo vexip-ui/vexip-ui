@@ -13,7 +13,7 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   placementWhileList,
   useClickOutside,
@@ -66,6 +66,7 @@ export default defineComponent({
       shift: false
     })
 
+    const hoverDelay = useHoverDelay()
     const { timer } = useSetTimeout()
 
     const placement = toRef(props, 'placement')
@@ -222,7 +223,7 @@ export default defineComponent({
         timer.hover = setTimeout(() => {
           hovered = true
           toggleVisible(getActiveState())
-        }, delay.value[0] ?? 250)
+        }, delay.value[0] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipEnter)
@@ -237,7 +238,7 @@ export default defineComponent({
         timer.hover = setTimeout(() => {
           hovered = false
           toggleVisible(getActiveState())
-        }, delay.value[1] ?? 250)
+        }, delay.value[1] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipLeave)

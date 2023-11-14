@@ -50,7 +50,7 @@ A use case similar to the breadcrumb navigation at the top of the Windows system
 
 ### Use Router
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 Passing a `vue-router` Router object through the `router` prop can quickly create breadcrumbs based on the routes.
 

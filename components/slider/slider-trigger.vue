@@ -3,7 +3,7 @@ import { Tooltip } from '@/components/tooltip'
 
 import { computed, ref } from 'vue'
 
-import { useNameHelper } from '@vexip-ui/config'
+import { useHoverDelay, useNameHelper } from '@vexip-ui/config'
 import { useModifier, useSetTimeout } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
@@ -68,6 +68,7 @@ const emit = defineEmits(['key-minus', 'key-plus'])
 defineSlots<{ default: () => any, tip: () => any }>()
 
 const nh = useNameHelper('slider')
+const hoverDelay = useHoverDelay()
 
 const isTipShow = ref(false)
 
@@ -108,7 +109,7 @@ function showTooltip() {
   if (!props.disabled) {
     timer.hover = setTimeout(() => {
       isTipShow.value = true
-    }, 250)
+    }, hoverDelay.value)
   }
 }
 
@@ -117,7 +118,7 @@ function hideTooltip() {
 
   timer.hover = setTimeout(() => {
     isTipShow.value = false
-  }, 250)
+  }, hoverDelay.value)
 }
 
 function disableEvent<E extends Event>(event: E) {

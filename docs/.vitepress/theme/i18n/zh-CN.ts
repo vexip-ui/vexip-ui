@@ -63,7 +63,7 @@ export const zhCN = defineI18n({
     ssr: '服务端渲染',
     customFormControl: '自定义表单控件',
     developmentGuide: '开发指南',
-    customInternalIcons: '自定义内部图标'
+    changeIcons: '修改图标'
   },
   group: {
     basis: '基础',

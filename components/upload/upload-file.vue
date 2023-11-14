@@ -1,3 +1,112 @@
+<script setup lang="ts">
+import { CollapseTransition } from '@/components/collapse-transition'
+import { Icon } from '@/components/icon'
+import { Progress } from '@/components/progress'
+import { Renderer } from '@/components/renderer'
+
+import { computed, toRef } from 'vue'
+
+import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { toFixed } from '@vexip-ui/utils'
+import { uploadFileProps } from './props'
+import { useFileIcons } from './file-icon'
+import { StatusType, uploadListTypes } from './symbol'
+
+import type { UploadFileState, UploadStatus } from './symbol'
+
+defineOptions({ name: 'UploadFile' })
+
+const imageExtRE = /\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico)$/i
+const imageBase64RE = /^data:image\//
+
+function isImage(file: UploadFileState) {
+  if (file.type) {
+    return file.type.startsWith('image/')
+  }
+
+  const { name, url, base64 } = file
+
+  return !!(
+    imageExtRE.test(name) ||
+    (url && (imageExtRE.test(url) || imageBase64RE.test(url))) ||
+    (base64 && imageBase64RE.test(base64))
+  )
+}
+
+const _props = defineProps(uploadFileProps)
+const props = useProps('uploadFile', _props, {
+  locale: null,
+  file: {
+    default: () => ({}) as UploadFileState,
+    static: true
+  },
+  iconRenderer: {
+    default: null,
+    isFunc: true
+  },
+  listType: {
+    default: 'name',
+    validator: value => uploadListTypes.includes(value)
+  },
+  loadingText: null,
+  selectToAdd: false,
+  precision: 2,
+  canPreview: {
+    default: isImage,
+    isFunc: true
+  }
+})
+
+defineSlots<{
+  default: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
+  icon: (params: { file: UploadFileState }) => any
+}>()
+
+const nh = useNameHelper('upload')
+const locale = useLocale('upload', toRef(props, 'locale'))
+const icons = useIcons()
+const fileIcons = useFileIcons(icons)
+
+const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
+const fileName = computed(() => props.file.path || props.file.name)
+const percentage = computed(() => toFixed(props.file.percentage, props.precision))
+const showThumb = computed(() => isImage(props.file) && (props.file.url || props.file.base64))
+
+function getFileExtension(file: UploadFileState) {
+  return file.name.split('.').pop()!.toLocaleLowerCase()
+}
+
+function getFileIcon(file: UploadFileState, scale = 1) {
+  const extension = getFileExtension(file)
+  const icon = extension
+    ? fileIcons.value[extension] || fileIcons.value.default
+    : fileIcons.value.default
+
+  return { ...icon, scale: +(icon.scale || 1) * scale }
+}
+
+function handleDelete(file: UploadFileState) {
+  emitEvent(props.onDelete, file)
+}
+
+function handlePreview(file: UploadFileState) {
+  emitEvent(props.onPreview, file)
+}
+
+function imageToBase64(file: UploadFileState) {
+  if (!file.source || !isImage(props.file)) return
+
+  const reader = new FileReader()
+
+  reader.readAsDataURL(file.source)
+  reader.onload = () => {
+    if (file.status !== StatusType.DELETE) {
+      file.base64 = reader.result?.toString() ?? null
+    }
+  }
+}
+</script>
+
 <template>
   <li
     :class="[
@@ -19,7 +128,7 @@
                 :renderer="props.iconRenderer"
                 :data="{ file: props.file }"
               ></Renderer>
-              <Icon v-else :icon="getFileIcon(props.file)"></Icon>
+              <Icon v-else v-bind="getFileIcon(props.file)"></Icon>
             </slot>
           </div>
           <span :class="nh.be('filename')">
@@ -86,7 +195,7 @@
               <Icon
                 v-else
                 v-bind="icons.loading"
-                :scale="(icons.loading.scale || 1) * 1.8"
+                :scale="+(icons.loading.scale || 1) * 1.8"
                 label="loading"
               ></Icon>
             </template>
@@ -104,7 +213,7 @@
                   :renderer="props.iconRenderer"
                   :data="{ file: props.file }"
                 ></Renderer>
-                <Icon v-else :icon="getFileIcon(props.file)" :scale="2.8"></Icon>
+                <Icon v-else v-bind="getFileIcon(props.file, 2.8)"></Icon>
               </slot>
             </template>
           </div>
@@ -141,14 +250,14 @@
               :disabled="!props.canPreview(props.file)"
               @click="handlePreview(props.file)"
             >
-              <Icon v-bind="icons.preview" :scale="(icons.preview.scale || 1) * 1.4"></Icon>
+              <Icon v-bind="icons.preview" :scale="+(icons.preview.scale || 1) * 1.4"></Icon>
             </button>
             <button
               type="button"
               :class="[nh.be('icon'), nh.be('action')]"
               @click="handleDelete(props.file)"
             >
-              <Icon v-bind="icons.delete" :scale="(icons.delete.scale || 1) * 1.4"></Icon>
+              <Icon v-bind="icons.delete" :scale="+(icons.delete.scale || 1) * 1.4"></Icon>
             </button>
           </div>
         </div>
@@ -156,132 +265,3 @@
     </slot>
   </li>
 </template>
-
-<script lang="ts">
-import { CollapseTransition } from '@/components/collapse-transition'
-import { Icon } from '@/components/icon'
-import { Progress } from '@/components/progress'
-import { Renderer } from '@/components/renderer'
-
-import { computed, defineComponent, toRef } from 'vue'
-
-import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { toFixed } from '@vexip-ui/utils'
-import { uploadFileProps } from './props'
-import { iconMaps } from './file-icon'
-import { StatusType, uploadListTypes } from './symbol'
-
-import type { FileState } from './symbol'
-
-const imageExtRE = /\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico)$/i
-const imageBase64RE = /^data:image\//
-
-function isImage(file: FileState) {
-  if (file.type) {
-    return file.type.startsWith('image/')
-  }
-
-  const { name, url, base64 } = file
-
-  return !!(
-    imageExtRE.test(name) ||
-    (url && (imageExtRE.test(url) || imageBase64RE.test(url))) ||
-    (base64 && imageBase64RE.test(base64))
-  )
-}
-
-export default defineComponent({
-  name: 'UploadFile',
-  components: {
-    CollapseTransition,
-    Icon,
-    Progress,
-    Renderer
-  },
-  props: uploadFileProps,
-  emits: [],
-  setup(_props) {
-    const props = useProps('uploadFile', _props, {
-      locale: null,
-      file: {
-        default: () => ({}) as FileState,
-        static: true
-      },
-      iconRenderer: {
-        default: null,
-        isFunc: true
-      },
-      listType: {
-        default: 'name',
-        validator: value => uploadListTypes.includes(value)
-      },
-      loadingText: null,
-      selectToAdd: false,
-      precision: 2,
-      canPreview: {
-        default: isImage,
-        isFunc: true
-      }
-    })
-
-    const nh = useNameHelper('upload')
-
-    const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
-    const fileName = computed(() => props.file.path || props.file.name)
-    const percentage = computed(() => toFixed(props.file.percentage, props.precision))
-    const showThumb = computed(() => isImage(props.file) && (props.file.url || props.file.base64))
-
-    function getFileExtension(file: FileState) {
-      return file.name.split('.').pop()!.toLocaleLowerCase()
-    }
-
-    function getFileIcon(file: FileState) {
-      const extension = getFileExtension(file)
-
-      if (extension) {
-        return iconMaps[extension] || iconMaps.default
-      }
-
-      return iconMaps.default
-    }
-
-    function handleDelete(file: FileState) {
-      emitEvent(props.onDelete, file)
-    }
-
-    function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file)
-    }
-
-    function imageToBase64(file: FileState) {
-      if (!file.source || !isImage(props.file)) return
-
-      const reader = new FileReader()
-
-      reader.readAsDataURL(file.source)
-      reader.onload = () => {
-        if (file.status !== StatusType.DELETE) {
-          file.base64 = reader.result?.toString() ?? null
-        }
-      }
-    }
-
-    return {
-      props,
-      nh,
-      locale: useLocale('upload', toRef(props, 'locale')),
-      icons: useIcons(),
-
-      useIconRenderer,
-      fileName,
-      percentage,
-      showThumb,
-
-      getFileIcon,
-      handleDelete,
-      handlePreview,
-      imageToBase64
-    }
-  }
-})
-</script>

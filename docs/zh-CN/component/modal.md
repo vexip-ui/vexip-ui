@@ -12,14 +12,6 @@
 
 :::
 
-:::demo modal/inner
-
-### 内置模态框
-
-添加 `inner` 属性可以使模态框根据最近的具有定位属性的元素进行定位，从而实现内置模态框。
-
-:::
-
 :::demo modal/long-content
 
 ### 长内容
@@ -32,7 +24,7 @@
 
 ### 调整按钮
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 通过 `confirm-type` 和 `cancel-type` 属性可以分别指定确认和取消按钮的类型。
 
@@ -72,6 +64,14 @@
 
 :::
 
+:::demo modal/inner
+
+### 内置模态框
+
+添加 `inner` 属性可以使模态框根据最近的具有定位属性的元素进行定位，从而实现内置模态框。
+
+:::
+
 :::demo modal/simple
 
 ### 简单模态框
@@ -86,7 +86,7 @@
 
 ### 无分割线
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 添加 `undivided` 属性可以去除模态框各部分间的分割线。
 
@@ -160,6 +160,8 @@ interface ModalSlotParams {
 | cancel-type     | `ButtonType`                      | 设置取消按钮的类型                                                                                                    | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'` | 设置确认和取消按钮的大小                                                                                              | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                         | 去除模态框各部分的分割线                                                                                              | `false`          | `2.2.6`  |
+| x-offset        | `number`                          | 设置模态框横向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
+| y-offset        | `number`                          | 设置模态框纵向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
 
 ### Modal 事件
 

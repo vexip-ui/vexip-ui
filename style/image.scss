@@ -76,7 +76,7 @@ $image: map.merge(
       cursor: pointer;
       background-color: transparent;
       border: 0;
-      outline: 0;
+      outline-color: transparent;
 
       $handler: #{&}-handler;
 

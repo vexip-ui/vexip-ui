@@ -1,4 +1,4 @@
-# Typography 排版 ^[Since v2.0.0](!s)
+# Typography 排版 ==!s|2.0.0==
 
 Vexip UI 提供了一些带有基本格式的文本组件。
 

@@ -19,12 +19,20 @@ export interface NoticeOptions extends Record<string, any> {
   color?: boolean | string,
   closable?: boolean,
   parseHtml?: boolean,
+  liveOnEnter?: boolean,
   renderer?: () => any
 }
 
+export interface NoticeConfig {
+  placement?: NoticePlacement
+}
+
 export interface NoticeInstance extends ComponentPublicInstance {
-  placement: NoticePlacement,
   add: (options: NoticeOptions) => void,
   remove: (key: string | number) => void,
-  clear: () => void
+  clear: () => void,
+  config: (config: NoticeConfig) => void
 }
+
+export const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+export const assertiveTypes = Object.freeze(['success', 'warning', 'error'])

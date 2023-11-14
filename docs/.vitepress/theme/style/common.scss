@@ -61,14 +61,14 @@ ul {
   padding: 0;
 }
 
-pre,
-code {
-  font-family: var(--vxp-font-family-mono) !important;
-  line-height: calc(var(--vxp-font-size-base) * 2);
-}
-
 pre {
   outline: 0;
+
+  &,
+  & > code {
+    font-family: var(--vxp-font-family-mono) !important;
+    line-height: calc(var(--vxp-font-size-base) * 2);
+  }
 }
 
 article {

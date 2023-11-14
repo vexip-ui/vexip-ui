@@ -512,7 +512,7 @@ export default defineComponent({
                 >
                   <Icon
                     {...icons.value.retweet}
-                    scale={(icons.value.retweet.scale || 1) * 1.2}
+                    scale={+(icons.value.retweet.scale || 1) * 1.2}
                   ></Icon>
                 </div>
                 <div class={nh.be('counter')}>
@@ -624,7 +624,7 @@ export default defineComponent({
             : (
               <div class={nh.be('pagination')}>
                 <Icon
-                  {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
+                  {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
                   class={[
                     nh.be('page-plus'),
                     currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
@@ -643,7 +643,7 @@ export default defineComponent({
                 <span style={'margin: 0 4px'}>{'/'}</span>
                 <span>{totalPages.value}</span>
                 <Icon
-                  {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                  {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                   class={[
                     nh.be('page-minus'),
                     currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')

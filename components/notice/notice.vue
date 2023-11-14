@@ -1,3 +1,59 @@
+<script setup lang="ts">
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+import { Popup } from '@/components/popup'
+
+import { computed, ref, shallowReactive } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { assertiveTypes, effectiveTypes } from './symbol'
+
+import type { Key, NoticeConfig, NoticePlacement } from './symbol'
+
+defineOptions({ name: 'Notice' })
+
+const nh = useNameHelper('notice')
+const icons = useIcons()
+
+const predefinedIcons = computed(() => ({
+  info: icons.value.info,
+  success: icons.value.success,
+  warning: icons.value.warning,
+  error: icons.value.error
+}))
+
+const placement = ref<NoticePlacement>('top-right')
+const popup = ref<InstanceType<typeof Popup>>()
+
+async function add(options: Record<string, any>) {
+  if (popup.value) {
+    await popup.value.add(options)
+  }
+}
+
+async function remove(key: Key) {
+  return !!popup.value && (await popup.value.remove(key))
+}
+
+function clear() {
+  popup.value && popup.value.clear()
+}
+
+function config(config: NoticeConfig) {
+  placement.value = config.placement || placement.value
+}
+
+defineExpose(
+  shallowReactive({
+    popup,
+    add,
+    remove,
+    clear,
+    config
+  })
+)
+</script>
+
 <template>
   <!-- eslint-disable vue/no-v-html -->
   <Popup
@@ -103,69 +159,3 @@
     </template>
   </Popup>
 </template>
-
-<script lang="ts">
-import { Icon } from '@/components/icon'
-import { Renderer } from '@/components/renderer'
-import { Popup } from '@/components/popup'
-
-import { computed, defineComponent, ref } from 'vue'
-
-import { useIcons, useNameHelper } from '@vexip-ui/config'
-
-import type { Key, NoticePlacement } from './symbol'
-
-const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
-const assertiveTypes = Object.freeze(['success', 'warning', 'error'])
-
-export default defineComponent({
-  name: 'Notice',
-  components: {
-    Icon,
-    Renderer,
-    Popup
-  },
-  setup() {
-    const icons = useIcons()
-
-    const predefinedIcons = computed(() => ({
-      info: icons.value.info,
-      success: icons.value.success,
-      warning: icons.value.warning,
-      error: icons.value.error
-    }))
-
-    const placement = ref<NoticePlacement>('top-right')
-    const popup = ref<InstanceType<typeof Popup>>()
-
-    async function add(options: Record<string, any>) {
-      return popup.value ? await popup.value.add(options) : null
-    }
-
-    async function remove(key: Key) {
-      return !!popup.value && (await popup.value.remove(key))
-    }
-
-    function clear() {
-      popup.value && popup.value.clear()
-    }
-
-    return {
-      nh: useNameHelper('notice'),
-      icons,
-
-      effectiveTypes,
-      assertiveTypes,
-
-      placement,
-      predefinedIcons,
-
-      popup,
-
-      add,
-      remove,
-      clear
-    }
-  }
-})
-</script>

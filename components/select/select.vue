@@ -197,7 +197,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
+          <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div

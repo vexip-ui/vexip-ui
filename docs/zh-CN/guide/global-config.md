@@ -1,6 +1,6 @@
 # 全局配置
 
-Vexip UI 在初始化时可以提供一个配置项以改变一些组件行为，包括组件**属性默认值**、**组件命名空间**、**国际化**以及**组件内置图标**。
+Vexip UI 在初始化时可以提供一个配置项以改变一些组件行为，包括组件**属性默认值**、**组件命名空间**、**国际化**、**组件内置图标**等等。
 
 ## 默认属性
 
@@ -195,10 +195,20 @@ app.use(install, {
 
 > 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90)。
 
-所有的内置图标预览可以参考 [自定义内置图标](/zh-CN/guide/custom-internal-icons#内部图标一览) 章节。
+所有的内置图标预览可以参考 [修改图标](/zh-CN/guide/change-icons#内部图标一览) 章节。
 
 最后，我们来看一个实际的效果替换后的效果：
 
 <IconDemo></IconDemo>
 
 > 具体的代码可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/docs/.vitepress/theme/components/icon-demo.vue)。
+
+## 完整配置
+
+| 名称       | 类型                                                                                                 | 说明                                                                                             | 默认值         | 始于     |
+| ---------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------- | -------- |
+| props      | [`PropsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/components/props.ts)                 | 组件属性配置，键值为组件的驼峰命名，值为对应组件的属性配置，注入的属性将覆盖组件原有的属性默认值 | `null`         | -        |
+| locale     | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts) | 国际化配置                                                                                       | `zhCNLocale()` | -        |
+| icons      | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)          | 内部图标配置                                                                                     | `globalIcons`  | `2.1.9`  |
+| zIndex     | `number`                                                                                             | 基础层级数                                                                                       | `2000`         | `2.1.17` |
+| hoverDelay | `number`                                                                                             | 悬停延迟毫秒数                                                                                   | `100`          | `2.2.11` |

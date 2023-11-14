@@ -168,7 +168,7 @@ Add the `transparent` prop to remove the original style, and then you can wrap t
 
 ### List Extra Content
 
-^[Since v2.2.7](!s)
+==!s|2.2.7==
 
 Any content can be added before and after the list via the `prepend` and `append` slots respectively.
 

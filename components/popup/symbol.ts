@@ -22,7 +22,24 @@ export interface PopupItemState extends Record<string, unknown> {
   icon?: Record<string, any> | (() => any),
   iconColor?: string,
   onOpen: (key: Key) => void,
-  onClose: (result: boolean) => void
+  onClose: (result: boolean) => void,
+  onEnter: () => void,
+  onLeave: () => void
 }
 
 export const DELETE_HANDLER: InjectionKey<(key: Key) => void> = Symbol('DELETE_HANDLER')
+
+export const popupPlacements = Object.freeze<PopupPlacement[]>([
+  'top-right',
+  'top-center',
+  'top-left',
+  'bottom-right',
+  'bottom-center',
+  'bottom-left'
+])
+
+let globalIndex = 0
+
+export function getIndex() {
+  return globalIndex++
+}

@@ -1,6 +1,6 @@
 # Confirm
 
-It is usually used for the secondary confirmation of some important operations to reduce the probability of user misoperation.
+It is usually used for the secondary confirmation of some important operations to reduce the probability of user mis-operation.
 
 ## Demos
 
@@ -42,7 +42,7 @@ When you need more fine-grained control of the icon, you can set `icon` as a fun
 
 ### Disable Cancel
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Set the `cancelable` option to `false` to disable the cancel button.
 
@@ -94,10 +94,24 @@ interface ConfirmState {
   closable: boolean,
   contentAlign: ConfirmAlign,
   actionsAlign: ConfirmAlign,
+  cancelable: boolean,
+  width: number | string,
+  height: number | string,
+  top: number | string,
+  right: number | string,
+  bottom: number | string,
+  left: number | string,
+  xOffset: number | string,
+  yOffset: number | string,
   raw: Record<any, any>
 }
 
 type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
+
+interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>, Record<any, any> {
+  renderer?: ConfirmRenderFn,
+  onBeforeConfirm?: () => unknown
+}
 ```
 
 ### Confirm Options
@@ -122,3 +136,11 @@ type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, can
 | contentAlign    | `ConfirmAlign`                                  | Alignment of content                                                                                         | `'center'`       | `2.0.15` |
 | actionsAlign    | `ConfirmAlign`                                  | Alignment of action buttons                                                                                  | `'center'`       | `2.0.15` |
 | cancelable      | `boolean`                                       | Whether can be canceled                                                                                      | `true`           | `2.2.6`  |
+| width           | `number \| string`                              | Set the initial width of the confirm, will automatically calculate when it is `'auto'`                       | `420`            | `2.2.12` |
+| height          | `number \| string`                              | Set the initial height of the confirm, will automatically calculate when it is `'auto'`                      | `'auto'`         | `2.2.12` |
+| top             | `number \| string`                              | Set the initial distance from the top of the confirm, will automatically calculate when it is `'auto'`       | `'auto'`         | `2.2.12` |
+| right           | `number \| string`                              | Set the initial distance from the left of the confirm, will automatically calculate when it is `'auto'`      | `'auto'`         | `2.2.12` |
+| bottom          | `number \| string`                              | Set the initial distance from the bottom of the confirm, will automatically calculate when it is `'auto'`    | `'auto'`         | `2.2.12` |
+| left            | `number \| string`                              | Set the initial distance from the right of the confirm, will automatically calculate when it is `'auto'`     | `'auto'`         | `2.2.12` |
+| xOffset         | `number \| string`                              | Set the horizontal offset of the confirm, which do not effect the position props                             | `'auto'`         | `2.2.12` |
+| yOffset         | `number \| string`                              | Set the vertical offset of the confirm, which do not effect the position props                               | `'auto'`         | `2.2.12` |

@@ -1,4 +1,4 @@
-# Transfer 穿梭框 ^[Since v2.0.0](!s)
+# Transfer 穿梭框 ==!s|2.0.0==
 
 ## 代码示例
 

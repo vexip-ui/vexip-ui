@@ -4,9 +4,16 @@ import Component from './message.vue'
 import { destroyObject, isClient, isNull, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, MessageInstance, MessageOptions, MessagePlacement, MessageType } from './symbol'
+import type {
+  Key,
+  MessageConfig,
+  MessageInstance,
+  MessageOptions,
+  MessagePlacement,
+  MessageType
+} from './symbol'
 
-export type { MessageType, MessagePlacement, MessageOptions }
+export type { MessageConfig, MessageType, MessagePlacement, MessageOptions }
 
 type FuzzyOptions = string | MessageOptions
 type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>
@@ -102,11 +109,11 @@ export class MessageManager {
     }
   }
 
-  config({ placement, ...others }: { placement?: MessagePlacement, [x: string]: unknown }) {
+  config({ placement, ...others }: MessageConfig & MessageOptions) {
     if (placement) {
-      this._getInstance().placement = placementWhiteList.includes(placement)
-        ? placement
-        : placementWhiteList[0]
+      this._getInstance().config({
+        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+      })
     }
 
     this.defaults = { ...this.defaults, ...others }
@@ -161,7 +168,7 @@ export class MessageManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.proxy as MessageInstance
+        this._instance = vnode.component!.exposed as MessageInstance
       }
 
       document.body.appendChild(this._container.firstElementChild!)
@@ -191,12 +198,37 @@ export class MessageManager {
       }
     }
 
+    const userEnterFn = options.onEnter
+    const onEnter = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+      }
+
+      if (typeof userEnterFn === 'function') {
+        return userEnterFn()
+      }
+    }
+
+    const userLeaveFn = options.onLeave
+    const onLeave = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+        setDelayClose()
+      }
+
+      if (typeof userLeaveFn === 'function') {
+        return userLeaveFn()
+      }
+    }
+
     const item: MessageOptions = {
       ...this.defaults,
       ...options,
       key,
       type,
-      onClose
+      onClose,
+      onEnter,
+      onLeave
     }
 
     if (item.icon && typeof item.icon !== 'function') {
@@ -204,13 +236,16 @@ export class MessageManager {
     }
 
     message.add(item)
+    setDelayClose()
 
-    const duration = typeof item.duration === 'number' ? item.duration : 3000
+    function setDelayClose() {
+      const duration = typeof item.duration === 'number' ? item.duration : 3000
 
-    if (duration >= 500) {
-      timer = setTimeout(() => {
-        message.remove(key)
-      }, duration)
+      if (duration >= 500) {
+        timer = setTimeout(() => {
+          message.remove(key)
+        }, duration)
+      }
     }
 
     return () => {

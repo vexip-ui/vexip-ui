@@ -12,14 +12,6 @@ Simple usage, control the `active` prop through two-way binding to control the d
 
 :::
 
-:::demo drawer/inner
-
-### Inner Drawer
-
-Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a inner drawer.
-
-:::
-
 :::demo drawer/nesting
 
 ### Nesting Usage
@@ -66,7 +58,7 @@ Add the `footer` prop to quickly add feet, or you can directly use the slot of t
 
 ### Adjust Buttons
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
 
@@ -84,11 +76,19 @@ Move the mouse to the edge of the drawer and a handle will appear. The width of 
 
 :::
 
+:::demo drawer/inner
+
+### Inner Drawer
+
+Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a inner drawer.
+
+:::
+
 :::demo drawer/undivided
 
 ### Undivided
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Adding the `undivided` prop removes the dividing lines between parts of the drawer.
 

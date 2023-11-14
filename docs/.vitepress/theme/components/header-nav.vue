@@ -3,7 +3,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
-import { isExternal } from '../../shared'
+import { isExternal, matchPath } from '../../shared'
 
 import HeaderNavLink from './header-nav-link.vue'
 
@@ -21,14 +21,14 @@ const menus = computed(() => theme.value.nav as NavMenuItem[])
 
 watchEffect(() => {
   const matchedMenu = menus.value.find(menu =>
-    route.path.startsWith(`/${locale.value}${menu.activeMatch || menu.link}`)
+    matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`)
   )
 
   currentMenu.value = matchedMenu ? matchedMenu.key : ''
 })
 
 function selectMenu(_: string, meta: NavMenuItem) {
-  if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
+  if (!matchPath(route.path, `/${locale.value}${meta.link}`)) {
     router.go(`/${locale.value}${meta.link}`)
   }
 }
@@ -36,7 +36,7 @@ function selectMenu(_: string, meta: NavMenuItem) {
 
 <template>
   <div class="navigation">
-    <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
+    <Menu :active="currentMenu" horizontal @select="selectMenu">
       <template v-for="menu in menus" :key="menu.key">
         <HeaderNavLink v-if="isExternal(menu.link)" :menu="menu"></HeaderNavLink>
 

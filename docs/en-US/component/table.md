@@ -188,7 +188,7 @@ At this time, you need to call the `refresh` method of the Table instance to rec
 
 ### Resize Column Width
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 Adding the `col-resizable` prop enables resize column width.
 
@@ -198,7 +198,7 @@ Adding the `col-resizable` prop enables resize column width.
 
 ### Merge Cells
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 Provide a callback function via the `cell-span` of column options to set the span of each cell.
 
@@ -210,7 +210,7 @@ If you want to merge the header, you need to set the `head-span` of column optio
 
 ### Table Summary
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 Similar to columns, you can define summaries via the `summaries` prop or the TableSummary component.
 
@@ -656,7 +656,7 @@ interface TableFootPayload {
 
 ### TableSummary Props
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 | Name          | Type                  | Description                                                                   | Default | Since |
 | ------------- | --------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
@@ -673,7 +673,7 @@ interface TableFootPayload {
 
 ### TableSummary Slots
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 | Name    | Description              | Parameters                    | Since |
 | ------- | ------------------------ | ----------------------------- | ----- |

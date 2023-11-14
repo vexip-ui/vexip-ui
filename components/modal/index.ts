@@ -1,7 +1,7 @@
 import { createApp, createVNode, getCurrentInstance, h, nextTick, ref, render } from 'vue'
 
 import Component from './modal.vue'
-import { isClient } from '@vexip-ui/utils'
+import { isClient, noop } from '@vexip-ui/utils'
 
 import type { App, AppContext, ComponentPublicInstance } from 'vue'
 import type { ModalProps } from './props'
@@ -34,8 +34,8 @@ export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'autoRemove'
   footerRenderer: ModalCommonSLot
 }
 
-export function useModal(options: Partial<ModalOptions> = {}) {
-  if (!isClient) return
+export function useModal(options: Partial<ModalOptions> = {}): () => Promise<void> {
+  if (!isClient) return noop
 
   const {
     appContext,

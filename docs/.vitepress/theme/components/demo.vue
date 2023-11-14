@@ -309,7 +309,7 @@ function editOnPlayground() {
 
     .anchor {
       width: 100%;
-      margin: 14px 0;
+      margin: 14px 0 20px;
       font-size: var(--vxp-font-size-primary);
       color: var(--vxp-content-color-base);
       white-space: nowrap;

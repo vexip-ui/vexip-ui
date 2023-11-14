@@ -3,8 +3,9 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
+import { useBEM } from '@vexip-ui/bem-helper'
 import { flatTree, toKebabCase } from '@vexip-ui/utils'
-import { ensureStartingSlash } from '../../shared'
+import { ensureStartingSlash, matchPath } from '../../shared'
 
 import type { AsideMenuItem } from '../types'
 
@@ -17,6 +18,7 @@ const route = useRoute()
 
 const { t, locale } = useI18n({ useScope: 'global' })
 
+const nh = useBEM('aside-menu')
 const currentMenu = ref('')
 
 const menus = computed<AsideMenuItem[]>(() => {
@@ -28,7 +30,7 @@ const menus = computed<AsideMenuItem[]>(() => {
   const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
-    if (path.startsWith(`/${locale.value}${key}`)) {
+    if (matchPath(path, `/${locale.value}${key}`)) {
       return config[key]
     }
   }
@@ -48,7 +50,7 @@ watch(
   () => route.path,
   value => {
     const activeMenu = flattedMenus.value.find(menu =>
-      value.startsWith(`/${locale.value}${menu.link}`)
+      matchPath(value, `/${locale.value}${menu.link}`)
     )
 
     if (activeMenu) {
@@ -59,7 +61,7 @@ watch(
 )
 
 function selectMenu(label: string, meta: AsideMenuItem) {
-  if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
+  if (!matchPath(route.path, `/${locale.value}${meta.link}`)) {
     router.go(`/${locale.value}${meta.link}`)
   }
 
@@ -69,9 +71,9 @@ function selectMenu(label: string, meta: AsideMenuItem) {
 
 <template>
   <Menu
-    v-model:active="currentMenu"
+    :active="currentMenu"
     marker-type="left"
-    class="aside-menu"
+    :class="nh.b()"
     :style="{ marginTop: hasGroup ? undefined : '40px' }"
     @select="selectMenu"
   >
@@ -92,18 +94,21 @@ function selectMenu(label: string, meta: AsideMenuItem) {
           {{ child.text || t(child.i18n || child.key) }}
           <span
             v-if="!child.noSub?.includes(locale as string) && (child.subtext || child.subI18n)"
-            class="aside-menu__sub-name"
+            :class="nh.be('sub-name')"
           >
             {{ child.subtext || t(child.subI18n!) }}
           </span>
-          <Tag
-            v-if="child.tag"
-            class="aside-menu__tag"
-            simple
-            :type="child.tagType"
-          >
-            {{ child.tag }}
-          </Tag>
+          <div v-if="child.tags?.length" :class="nh.be('tags')">
+            <Tag
+              v-for="(tag, index) in child.tags"
+              :key="index"
+              :class="nh.be('tag')"
+              simple
+              :type="tag.type"
+            >
+              {{ tag.text }}
+            </Tag>
+          </div>
         </MenuItem>
       </MenuGroup>
       <MenuItem
@@ -116,18 +121,21 @@ function selectMenu(label: string, meta: AsideMenuItem) {
         {{ menu.text || t(menu.i18n || menu.key) }}
         <span
           v-if="!menu.noSub?.includes(locale as string) && (menu.subtext || menu.subI18n)"
-          class="aside-menu__sub-name"
+          :class="nh.be('sub-name')"
         >
           {{ menu.subtext || t(menu.subI18n!) }}
         </span>
-        <Tag
-          v-if="menu.tag"
-          class="aside-menu__tag"
-          simple
-          :type="menu.tagType"
-        >
-          {{ menu.tag }}
-        </Tag>
+        <div v-if="menu.tags?.length" :class="nh.be('tags')">
+          <Tag
+            v-for="(tag, index) in menu.tags"
+            :key="index"
+            :class="nh.be('tag')"
+            simple
+            :type="tag.type"
+          >
+            {{ tag.text }}
+          </Tag>
+        </div>
       </MenuItem>
     </template>
   </Menu>
@@ -137,10 +145,15 @@ function selectMenu(label: string, meta: AsideMenuItem) {
 .aside-menu {
   padding-bottom: 126px;
 
+  &__tags {
+    display: flex;
+    margin-inline-start: 4px;
+    transform: translateX(-10%) scale(0.8);
+  }
+
   &__tag {
     margin-inline-start: 4px;
     font-size: 10px;
-    transform: scale(0.8);
   }
 
   &__sub-name {

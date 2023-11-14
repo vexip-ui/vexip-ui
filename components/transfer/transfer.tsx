@@ -343,7 +343,7 @@ export default defineComponent({
                   {{
                     icon: () => (
                       <Icon
-                        {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                        {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                         label={isRtl.value ? 'to left' : 'to right'}
                       ></Icon>
                     )
@@ -365,7 +365,7 @@ export default defineComponent({
                   {{
                     icon: () => (
                       <Icon
-                        {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
+                        {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
                         label={isRtl.value ? 'to right' : 'to left'}
                       ></Icon>
                     )

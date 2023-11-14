@@ -335,7 +335,7 @@ $button: map.merge(
         }
 
         &:last-child {
-          border-inline-start: $d-color;
+          border-inline-start-color: $d-color;
         }
 
         &:not(:first-child, :last-child) {
@@ -493,6 +493,10 @@ $button: map.merge(
 
         &:not(#{$self}--last) {
           margin-inline-end: -1px;
+        }
+
+        &--text {
+          border-color: transparent;
         }
       }
 

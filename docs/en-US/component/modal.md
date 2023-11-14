@@ -12,14 +12,6 @@ The simplest usage is to control the `active` prop through two-way binding to co
 
 :::
 
-:::demo drawer/inner
-
-### Inner Drawer
-
-Adding the `inner` prop enables the modal to be positioned according to the nearest element with the positioned attribute, thus implementing a inner modal.
-
-:::
-
 :::demo modal/long-content
 
 ### Long Content
@@ -32,7 +24,7 @@ Can be used in combination with scroll component when the content is too long.
 
 ### Adjust Buttons
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 The confirm and cancel button types can be specified via the `confirm-type` and `cancel-type` props respectively.
 
@@ -72,6 +64,14 @@ Add the `resizable` prop to enable resizing of the modal box.
 
 :::
 
+:::demo modal/inner
+
+### Inner Drawer
+
+Adding the `inner` prop enables the modal to be positioned according to the nearest element with the positioned attribute, thus implementing a inner modal.
+
+:::
+
 :::demo modal/simple
 
 ### Simple Modal
@@ -86,7 +86,7 @@ Add the `no-footer` prop to disable the modal's default bottom action bar.
 
 ### Undivided
 
-^[Since v2.2.6](!s)
+==!s|2.2.6==
 
 Adding the `undivided` prop removes the dividing lines between parts of the modal.
 
@@ -135,9 +135,9 @@ interface ModalSlotParams {
 | width           | `number \| string`                | Set the initial width of the modal, will automatically calculate when it is `'auto'`                                                                                                                                    | `'auto'`         | -        |
 | height          | `number \| string`                | Set the initial height of the modal, will automatically calculate when it is `'auto'`                                                                                                                                   | `'auto'`         | -        |
 | top             | `number \| string`                | Set the initial distance from the top of the modal, will automatically calculate when it is `'auto'`                                                                                                                    | `'auto'`         | -        |
-| left            | `number \| string`                | Set the initial distance from the left side of the modal, will automatically calculate when it is `'auto'`                                                                                                              | `'auto'`         | -        |
+| left            | `number \| string`                | Set the initial distance from the left of the modal, will automatically calculate when it is `'auto'`                                                                                                                   | `'auto'`         | -        |
 | bottom          | `number \| string`                | Set the initial distance from the bottom of the modal, will automatically calculate when it is `'auto'`                                                                                                                 | `'auto'`         | -        |
-| right           | `number \| string`                | Set the initial distance from the right side of the modal, will automatically calculate when it is `'auto'`                                                                                                             | `'auto'`         | -        |
+| right           | `number \| string`                | Set the initial distance from the right of the modal, will automatically calculate when it is `'auto'`                                                                                                                  | `'auto'`         | -        |
 | title           | `string`                          | Set the title of the modal                                                                                                                                                                                              | `''`             | -        |
 | closable        | `boolean`                         | Set whether to display a close button                                                                                                                                                                                   | `true`           | -        |
 | mask-close      | `boolean`                         | Set whether the mask layer can be closed by clicking                                                                                                                                                                    | `true`           | -        |
@@ -160,6 +160,8 @@ interface ModalSlotParams {
 | cancel-type     | `ButtonType`                      | Set the cancel button type                                                                                                                                                                                              | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'` | Set size of the confirm and cancel buttons                                                                                                                                                                              | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                         | Remove the dividing lines between parts of the modal                                                                                                                                                                    | `false`          | `2.2.6`  |
+| x-offset        | `number`                          | Set the horizontal offset of the modal, which do not effect the position props                                                                                                                                          | `0`              | `2.2.11` |
+| y-offset        | `number`                          | Set the vertical offset of the modal, which do not effect the position props                                                                                                                                            | `0`              | `2.2.11` |
 
 ### Modal Events
 

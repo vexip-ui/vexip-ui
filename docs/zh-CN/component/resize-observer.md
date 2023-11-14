@@ -1,4 +1,4 @@
-# ResizeObserver 缩放观察 ^[Since v2.0.0](!s)
+# ResizeObserver 缩放观察 ==!s|2.0.0==
 
 ## 代码示例
 

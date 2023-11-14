@@ -1,3 +1,29 @@
+## [2.2.11](https://github.com/vexip-ui/vexip-ui/compare/v2.2.10...v2.2.11) (2023-11-12)
+
+
+### ✨ Features
+
+* export all config api methods ([8b19a1c](https://github.com/vexip-ui/vexip-ui/commit/8b19a1c9d137afe1dec5fb48c15593398f13a6f7))
+* **icon:** support custom renderer ([ca8f54b](https://github.com/vexip-ui/vexip-ui/commit/ca8f54b7daa75ec9ede7e25924d53ccf69a30446))
+* **message:** add liveOnEnter option ([157626b](https://github.com/vexip-ui/vexip-ui/commit/157626b38812ef943f4e6a39efdafa3ebd82515e)), closes [#422](https://github.com/vexip-ui/vexip-ui/issues/422)
+* **notice:** add liveOnEnter option ([5958537](https://github.com/vexip-ui/vexip-ui/commit/595853786e3b12ab57de8686ce9174f46bb478a3))
+* **slider:** add tip-props prop to custom inner tooltip ([4b712c8](https://github.com/vexip-ui/vexip-ui/commit/4b712c8f604f399b9c36fd484d5ede608a3e47e4))
+
+
+### 🐞 Bug Fixes
+
+* improve outline for higher contrasts mode ([#430](https://github.com/vexip-ui/vexip-ui/issues/430)) ([214c972](https://github.com/vexip-ui/vexip-ui/commit/214c972872b5d0720da58ac22599b146d5ddf06c)), closes [#422](https://github.com/vexip-ui/vexip-ui/issues/422)
+
+
+### 🔨 Code Refactoring
+
+* **config:** remove arrow series icons and transfer to angle series ([d24e9bb](https://github.com/vexip-ui/vexip-ui/commit/d24e9bb85f88e7040a362b07ac27618b18c0fca4))
+* **modal:** add x-offset and y-offset props ([bdcf120](https://github.com/vexip-ui/vexip-ui/commit/bdcf1202302c3c945ce23e30919af39884c0686b))
+* support globally config hover delay, defaults to 100ms ([b409d01](https://github.com/vexip-ui/vexip-ui/commit/b409d011e01c0d44e8c84496faff36e8613fab8b))
+* **upload:** transfer file preset icons into config ([e3caf85](https://github.com/vexip-ui/vexip-ui/commit/e3caf85cb2da3549a046ca1f1eb2c84364f4fe1a))
+
+
+
 ## [2.2.10](https://github.com/vexip-ui/vexip-ui/compare/v2.2.9...v2.2.10) (2023-11-06)
 
 

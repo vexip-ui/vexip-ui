@@ -10,6 +10,14 @@ export type Namespace = 'vxp'
 export const PROVIDED_NAMESPACE = '__vxp-provided-namespace'
 export const globalNamespace = computed(() => 'vxp' as Namespace)
 
+/**
+ * Provide a namespace config for under components.
+ *
+ * You only should use this method when initialize application.
+ *
+ * @param sourceNamespace namespace config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configNamespace<N extends string = Namespace>(
   sourceNamespace: MaybeRef<N>,
   app?: App

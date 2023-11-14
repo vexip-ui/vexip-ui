@@ -6,7 +6,7 @@ import { useData, useRouter } from 'vitepress'
 import { ChevronLeft, ChevronRight } from '@vexip-ui/icons'
 import { useRtl } from '@vexip-ui/hooks'
 import { flatTree } from '@vexip-ui/utils'
-import { ensureStartingSlash, removeExt } from '../../shared'
+import { ensureStartingSlash, matchPath, removeExt } from '../../shared'
 
 import type { AsideMenuItem, ThemeConfig } from '../types'
 
@@ -22,7 +22,7 @@ const candidates = computed(() => {
   let menus
 
   for (const key of Object.keys(config)) {
-    if (path.value.startsWith(`/${locale.value}${key}`)) {
+    if (matchPath(path.value, `/${locale.value}${key}`)) {
       menus = config[key]
       break
     }
@@ -38,7 +38,7 @@ const candidates = computed(() => {
   })
 })
 const index = computed(() => {
-  return candidates.value.findIndex(item => path.value.startsWith(`/${locale.value}${item.link}`))
+  return candidates.value.findIndex(item => matchPath(path.value, `/${locale.value}${item.link}`))
 })
 const prev = computed(() => createLink(frontmatter.value.prev, candidates.value[index.value - 1]))
 const next = computed(() => createLink(frontmatter.value.next, candidates.value[index.value + 1]))

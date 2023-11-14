@@ -1,3 +1,28 @@
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.2.1...config@1.3.0) (2023-11-12)
+
+
+### 🔨 Code Refactoring
+
+* **config:** remove arrow series icons and transfer to angle series ([d24e9bb](https://github.com/vexip-ui/vexip-ui/commit/d24e9bb85f88e7040a362b07ac27618b18c0fca4))
+* **upload:** transfer file preset icons into config ([e3caf85](https://github.com/vexip-ui/vexip-ui/commit/e3caf85cb2da3549a046ca1f1eb2c84364f4fe1a))
+
+
+
+## [1.2.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.2.0...config@1.2.1) (2023-11-11)
+
+
+### ✨ Features
+
+* export all config api methods ([8b19a1c](https://github.com/vexip-ui/vexip-ui/commit/8b19a1c9d137afe1dec5fb48c15593398f13a6f7))
+* **icon:** support custom renderer ([ca8f54b](https://github.com/vexip-ui/vexip-ui/commit/ca8f54b7daa75ec9ede7e25924d53ccf69a30446))
+
+
+### 🔨 Code Refactoring
+
+* support globally config hover delay, defaults to 100ms ([b409d01](https://github.com/vexip-ui/vexip-ui/commit/b409d011e01c0d44e8c84496faff36e8613fab8b))
+
+
+
 # [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.1...config@1.2.0) (2023-11-06)
 
 

@@ -436,7 +436,7 @@ async function formatCodes() {
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline: 0;
+    outline-color: transparent;
   }
 
   .repo-name {
@@ -495,7 +495,7 @@ async function formatCodes() {
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline: 0;
+    outline-color: transparent;
 
     &:last-child {
       margin-inline-end: 0;

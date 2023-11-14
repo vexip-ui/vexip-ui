@@ -3,6 +3,7 @@
     :items="items"
     use-bar-track
     item-fixed
+    :item-size="36"
     style="height: 200px"
   >
     <template #default="{ item }">

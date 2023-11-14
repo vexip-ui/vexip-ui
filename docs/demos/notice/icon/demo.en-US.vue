@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <Button
-      type="warning"
-      @click="Notice.warning({ content: 'A notice with custom icon', icon: CircleQuestion })"
-    >
-      Custom Icon
-    </Button>
-    <Button
-      type="error"
-      @click="Notice.error({ content: 'A notice with custom icon color', iconColor: 'green' })"
-    >
-      Custom Icon Color
-    </Button>
-    <Button type="success" @click="sendCustomizedIconNotice">
-      Render Method
-    </Button>
-  </div>
+  <Button
+    type="warning"
+    @click="Notice.warning({ content: 'A notice with custom icon', icon: CircleQuestion })"
+  >
+    Custom Icon
+  </Button>
+  <Button
+    type="error"
+    @click="Notice.error({ content: 'A notice with custom icon color', iconColor: 'green' })"
+  >
+    Custom Icon Color
+  </Button>
+  <Button type="success" @click="sendCustomizedIconNotice">
+    Render Method
+  </Button>
 </template>
 
 <script setup lang="ts">

@@ -46,6 +46,13 @@ $masker: map.merge(
     position: absolute;
   }
 
+  &__placeholder {
+    @include fixed;
+
+    pointer-events: none;
+    visibility: hidden;
+  }
+
   &--disabled {
     pointer-events: none;
 

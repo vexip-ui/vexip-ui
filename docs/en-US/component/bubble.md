@@ -26,7 +26,7 @@ The position of the bubble can be set by `placement` prop.
 
 ### Bubble Types
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 Different types of bubbles can be created by setting the `type` prop to `primary`, `info`, `success`, `warning` and `error`.
 

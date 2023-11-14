@@ -74,7 +74,7 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 ### List Extra Content
 
-^[Since v2.2.7](!s)
+==!s|2.2.7==
 
 Any content can be added before and after the list via the `prepend` and `append` slots respectively.
 

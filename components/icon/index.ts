@@ -10,7 +10,7 @@ export { iconProps } from './props'
 export type IconExposed = ComponentPublicInstance & InstanceType<typeof Icon>
 
 export type { IconProps, IconCProps } from './props'
-export type { IconEffect } from './symbol'
+export type { IconEffect, IconBaseProps, IconRenderer } from './symbol'
 
 export type IconMinorProps = Omit<Partial<IconProps>, 'icon'> & {
   class?: ClassType,

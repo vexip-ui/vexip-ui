@@ -28,10 +28,6 @@ import {
   CaretRight,
   CaretUp,
   Check,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
   CircleCheck,
   CircleExclamation,
   CircleInfo,
@@ -48,6 +44,16 @@ import {
   Expand,
   EyeR,
   EyeSlashR,
+  FileAudioR,
+  FileCodeR,
+  FileExcelR,
+  FileImageR,
+  FileLinesR,
+  FilePdfR,
+  FileR,
+  FileVideoR,
+  FileWordR,
+  FileZipperR,
   Filter,
   Flag,
   ForwardStep,
@@ -84,14 +90,17 @@ export const PROVIDED_ICONS = '__vxp-provided-icons'
 
 export type IconValue = Record<string, any> | (() => any)
 
-export interface IconOptions {
-  effect?: string,
-  scale?: number,
-  label?: string,
-  title?: string,
-  flip?: 'horizontal' | 'vertical' | 'both',
+export interface IconOptions extends Record<string, any> {
   class?: ClassType,
-  style?: StyleType
+  style?: StyleType,
+  scale?: number | string,
+  title?: string,
+  label?: string,
+  flip?: 'horizontal' | 'vertical' | 'both',
+  effect?: string,
+  size?: string,
+  color?: string,
+  rotate?: number | string
 }
 
 export type IconArrayValue = [IconValue, IconOptions?]
@@ -99,13 +108,9 @@ export type IconConfig = IconValue | IconArrayValue
 
 export interface IconsConfig {
   loading: IconConfig,
-  arrowUp: IconConfig,
-  arrowRight: IconConfig,
-  arrowDown: IconConfig,
-  arrowLeft: IconConfig,
   clear: IconConfig,
   close: IconConfig,
-  cross: IconConfig,
+  emptyCross: IconConfig,
   calendar: IconConfig,
   clock: IconConfig,
   exchange: IconConfig,
@@ -169,23 +174,29 @@ export interface IconsConfig {
   playState: IconConfig,
   pauseState: IconConfig,
   playPrev: IconConfig,
-  playNext: IconConfig
+  playNext: IconConfig,
+  file: IconConfig,
+  fileText: IconConfig,
+  filePdf: IconConfig,
+  fileCode: IconConfig,
+  fileWord: IconConfig,
+  fileExcel: IconConfig,
+  fileImage: IconConfig,
+  fileAudio: IconConfig,
+  fileVideo: IconConfig,
+  fileZip: IconConfig
 }
 
 export type IconsOptions = Partial<IconsConfig>
 export type IconName = keyof IconsConfig
 
-type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
+export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
 
 const iconMap: IconsConfig = {
   loading: [Spinner, { effect: 'pulse-in' }],
-  arrowUp: ChevronUp,
-  arrowRight: ChevronRight,
-  arrowDown: ChevronDown,
-  arrowLeft: ChevronLeft,
   clear: CircleXmark,
   close: Xmark,
-  cross: Xmark,
+  emptyCross: Xmark,
   calendar: CalendarR,
   clock: ClockR,
   exchange: ArrowRightArrowLeft,
@@ -249,7 +260,17 @@ const iconMap: IconsConfig = {
   playState: CirclePlay,
   pauseState: CirclePause,
   playPrev: BackwardStep,
-  playNext: ForwardStep
+  playNext: ForwardStep,
+  file: FileR,
+  fileText: FileLinesR,
+  filePdf: FilePdfR,
+  fileCode: FileCodeR,
+  fileWord: FileWordR,
+  fileExcel: FileExcelR,
+  fileImage: FileImageR,
+  fileAudio: FileAudioR,
+  fileVideo: FileVideoR,
+  fileZip: FileZipperR
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

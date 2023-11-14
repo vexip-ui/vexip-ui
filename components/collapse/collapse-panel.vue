@@ -12,7 +12,7 @@
       @click="handleToggle()"
     >
       <div :class="nh.be('arrow')">
-        <Icon v-bind="icons.arrowRight"></Icon>
+        <Icon v-bind="icons.angleRight"></Icon>
       </div>
       <slot name="title">
         <div v-if="props.icon" :class="nh.be('icon')">

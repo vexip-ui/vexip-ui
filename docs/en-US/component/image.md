@@ -1,4 +1,4 @@
-# Image ^[Since v2.1.0](!s)
+# Image ==!s|2.1.0==
 
 It is used to quickly provide functions such as placeholder and lazy loading for image display.
 

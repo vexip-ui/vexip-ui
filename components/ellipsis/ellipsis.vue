@@ -32,7 +32,7 @@ import { Tooltip } from '@/components/tooltip'
 
 import { computed, defineComponent, ref } from 'vue'
 
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { ellipsisProps } from './props'
@@ -63,6 +63,7 @@ export default defineComponent({
       tipDisabled: false
     })
 
+    const hoverDelay = useHoverDelay()
     const visible = ref(false)
     const content = ref('')
 
@@ -112,7 +113,7 @@ export default defineComponent({
         }
 
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleTriggerLeave() {
@@ -122,7 +123,7 @@ export default defineComponent({
 
       timer.hover = setTimeout(() => {
         visible.value = false
-      }, 250)
+      }, hoverDelay.value)
     }
 
     return {

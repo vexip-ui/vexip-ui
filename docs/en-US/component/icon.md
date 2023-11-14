@@ -30,7 +30,7 @@ You can drop the SVG component to the `icon` prop, or you can put it directly un
 
 ### Change Color
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 The color of the icon can be quickly modified via the `color` prop.
 
@@ -74,7 +74,7 @@ The flip effect of the icon can be set via the `flip` prop.
 
 ### Rotate
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 A move command?
 
@@ -98,23 +98,43 @@ You can put any SVG content under the icon default slot.
 
 :::
 
+:::demo icon/renderer
+
+### Custom Render
+
+==!s|2.2.11==
+
+If the above does not meet your needs, you can specify a custom renderer through the `renderer` prop.
+
+Note that if you use renderer prop, you need to process all the features by yourself.
+
+Refer to [Global Config](/en-US/guide/global-config), you can even completely replace the rendering logic of the icons inside the library.
+
+:::
+
 ## API
 
 ### Preset Types
 
 ```ts
 type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
+type IconRenderer = (
+  props: Omit<IconProps, 'renderer'>,
+  attrs: Record<string, any>,
+  renderDefault: () => any
+) => any
 ```
 
 ### Icon Props
 
-| Name   | Type                                   | Description                                         | Default | Since   |
-| ------ | -------------------------------------- | --------------------------------------------------- | ------- | ------- |
-| icon   | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0` |
-| scale  | `number \| string`                     | Set the scaling of the icon                         | `1`     | -       |
-| flip   | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
-| title  | `string`                               | Set the title prop of the icon                      | `''`    | -       |
-| effect | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |
-| size   | `string`                               | Set the size of the icon                            | `null`  | `2.2.5` |
-| color  | `string`                               | Set the color of the icon                           | `null`  | `2.2.5` |
-| rotate | `number \| string`                     | Set rotate angle of the icon                        | `null`  | `2.2.5` |
+| Name     | Type                                   | Description                                         | Default | Since    |
+| -------- | -------------------------------------- | --------------------------------------------------- | ------- | -------- |
+| icon     | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0`  |
+| scale    | `number \| string`                     | Set the scaling of the icon                         | `1`     | -        |
+| flip     | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -        |
+| title    | `string`                               | Set the title prop of the icon                      | `''`    | -        |
+| effect   | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0`  |
+| size     | `string`                               | Set the size of the icon                            | `null`  | `2.2.5`  |
+| color    | `string`                               | Set the color of the icon                           | `null`  | `2.2.5`  |
+| rotate   | `number \| string`                     | Set rotate angle of the icon                        | `null`  | `2.2.5`  |
+| renderer | `IconRenderer`                         | Customized render method                            | `null`  | `2.2.11` |

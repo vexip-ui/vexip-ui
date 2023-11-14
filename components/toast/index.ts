@@ -84,7 +84,7 @@ export class ToastManager {
 
   close() {
     this._timer && clearTimeout(this._timer)
-    this._getInstance()?.cloasToast()
+    this._getInstance()?.closeToast()
   }
 
   config(options: Record<string, unknown>) {
@@ -183,13 +183,13 @@ export class ToastManager {
 
     if (duration >= 500) {
       this._timer = setTimeout(() => {
-        toast?.cloasToast()
+        toast?.closeToast()
       }, duration)
     }
 
     return () => {
       this._timer && clearTimeout(this._timer)
-      toast?.cloasToast()
+      toast?.closeToast()
     }
   }
 }

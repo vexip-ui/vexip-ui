@@ -1,6 +1,7 @@
 import { defineComponent, renderSlot, toRefs } from 'vue'
 
 import {
+  configHoverDelay,
   configIcons,
   configLocale,
   configProps,
@@ -13,7 +14,7 @@ export default defineComponent({
   name: 'ConfigProvider',
   props: configProviderProps,
   setup(_props, { slots }) {
-    const { props, locale, icons, zIndex, theme } = toRefs(_props)
+    const { props, locale, icons, zIndex, theme, hoverDelay } = toRefs(_props)
 
     const nh = useNameHelper('config-provider')
 
@@ -21,6 +22,7 @@ export default defineComponent({
     configLocale(locale)
     configIcons(icons)
     configZIndex(zIndex)
+    configHoverDelay(hoverDelay)
 
     return () => {
       if (theme.value) {

@@ -2,7 +2,8 @@
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { useData, useRoute } from 'vitepress'
-import { debounceFrame } from '@vexip-ui/utils'
+// import { contentUpdatedCallbacks } from 'vitepress/dist/client/app/utils'
+import { debounceFrame, isClient } from '@vexip-ui/utils'
 import { ussTocAnchor } from '../common/toc-anchor'
 
 import PageFooter from './page-footer.vue'
@@ -60,8 +61,27 @@ watch(currentActive, value => {
   emit('update:active', value)
 })
 watch([() => props.anchorLevel, () => frontmatter.value.anchor, () => route.path], refresh)
+watch(() => route.path, scrollToHashTarget)
 
-onMounted(refresh)
+onMounted(() => {
+  refresh()
+  scrollToHashTarget()
+})
+
+function scrollToHashTarget() {
+  if (!isClient) return
+
+  const anchorId = location.hash.slice(1)
+  const anchor = anchorId && document.querySelector<HTMLElement>(`#${decodeURIComponent(anchorId)}`)
+
+  if (!anchor) return
+
+  const targetTop = window.scrollY + anchor.getBoundingClientRect().top
+
+  setTimeout(() => {
+    window.scrollTo(0, targetTop)
+  }, 500)
+}
 
 function handleContentResize(entry: ResizeObserverEntry) {
   const box = entry.borderBoxSize?.[0]

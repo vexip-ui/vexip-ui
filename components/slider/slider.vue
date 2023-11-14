@@ -4,7 +4,13 @@ import { useFieldStore } from '@/components/form'
 import { computed, ref, watch } from 'vue'
 
 import SliderTrigger from './slider-trigger.vue'
-import { createStateProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createStateProp,
+  emitEvent,
+  useHoverDelay,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
@@ -61,6 +67,7 @@ defineSlots<{
 }>()
 
 const nh = useNameHelper('slider')
+const hoverDelay = useHoverDelay()
 
 const { timer } = useSetTimeout()
 
@@ -261,7 +268,7 @@ function handlePointerEnter() {
   timer.hover = setTimeout(() => {
     hovered.value = true
     triggerShow.value = true
-  }, 250)
+  }, hoverDelay.value)
 }
 
 function handlePointerLeave() {
@@ -270,7 +277,7 @@ function handlePointerLeave() {
   timer.hover = setTimeout(() => {
     hovered.value = false
     setTriggerFade()
-  }, 250)
+  }, hoverDelay.value)
 }
 
 function emitChange() {
