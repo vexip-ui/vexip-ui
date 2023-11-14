@@ -335,7 +335,7 @@ $button: map.merge(
         }
 
         &:last-child {
-          border-inline-start: $d-color;
+          border-inline-start-color: $d-color;
         }
 
         &:not(:first-child, :last-child) {
