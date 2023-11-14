@@ -53,7 +53,6 @@ watch(
       matchPath(value, `/${locale.value}${menu.link}`)
     )
 
-    console.info(activeMenu)
     if (activeMenu) {
       currentMenu.value = activeMenu.key
     }

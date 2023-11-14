@@ -233,7 +233,6 @@ export default defineComponent({
     }
 
     function handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw) {
-      console.info(currentActive.value, label)
       if (currentActive.value !== label) {
         currentActive.value = label
 
