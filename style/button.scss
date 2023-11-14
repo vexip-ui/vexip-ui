@@ -494,6 +494,10 @@ $button: map.merge(
         &:not(#{$self}--last) {
           margin-inline-end: -1px;
         }
+
+        &--text {
+          border-color: transparent;
+        }
       }
 
       &--circle {
