@@ -25,7 +25,8 @@ export default defineConfig(({ command }: ConfigEnv): any => {
   return <UserConfigExport>{
     define: {
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
-      __VERSION__: JSON.stringify(pkg.version || '')
+      __VERSION__: JSON.stringify(pkg.version || ''),
+      __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
     },
     resolve: {
       alias: [
@@ -55,7 +56,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       host: '0.0.0.0'
     },
     build: {
-      // sourcemap: false,
+      sourcemap: true,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 10 * 1024
     },
