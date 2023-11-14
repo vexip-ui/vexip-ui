@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
-import { isExternal } from '../../shared'
+import { isExternal, matchPath } from '../../shared'
 
 import HeaderNavLink from './header-nav-link.vue'
 
@@ -22,7 +22,7 @@ const menus = computed(() => theme.value.nav as NavMenuItem[])
 onMounted(() => {
   watchEffect(() => {
     const matchedMenu = menus.value.find(menu =>
-      route.path.startsWith(`/${locale.value}${menu.activeMatch || menu.link}`)
+      matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`)
     )
 
     console.info(matchedMenu)
@@ -31,7 +31,7 @@ onMounted(() => {
 })
 
 function selectMenu(_: string, meta: NavMenuItem) {
-  if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
+  if (!matchPath(route.path, `/${locale.value}${meta.link}`)) {
     router.go(`/${locale.value}${meta.link}`)
   }
 }

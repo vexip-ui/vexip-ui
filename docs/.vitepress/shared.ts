@@ -14,3 +14,7 @@ export function ensureStartingSlash(path: string) {
 export function removeExt(path: string, exts: string | string[] = ['md', 'html']) {
   return path.replace(new RegExp(`\\.(${ensureArray(exts).join('|')})`), '')
 }
+
+export function matchPath(path: string, match: string) {
+  return path.toLocaleLowerCase().startsWith(match.toLocaleLowerCase())
+}

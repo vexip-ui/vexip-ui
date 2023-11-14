@@ -7,6 +7,7 @@ import { MagnifyingGlass } from '@vexip-ui/icons'
 import { getComponentConfig } from '../../config/component'
 import { useListener } from '@vexip-ui/hooks'
 import { isClient, toKebabCase } from '@vexip-ui/utils'
+import { matchPath } from '../../shared'
 
 import type { AutoCompleteExposed } from 'vexip-ui'
 
@@ -39,7 +40,7 @@ const searchOptions = computed(() => {
 })
 
 watchEffect(() => {
-  placeholder.value = route.path.startsWith(`/${locale.value}/component/`)
+  placeholder.value = matchPath(route.path, `/${locale.value}/component/`)
     ? route.data.title
     : t('common.searchComponent')
 })
@@ -54,7 +55,7 @@ isClient &&
   })
 
 function toComponentDoc(fullName: string) {
-  if (!route.path.startsWith(`/${locale.value}/component/${fullName}`)) {
+  if (!matchPath(route.path, `/${locale.value}/component/${fullName}`)) {
     router.go(`/${locale.value}/component/${toKebabCase(fullName.split(' ').at(-1)!)}`)
   }
 

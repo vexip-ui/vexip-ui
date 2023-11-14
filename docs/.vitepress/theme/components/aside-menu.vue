@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { useData, useRoute, useRouter } from 'vitepress'
 import { useBEM } from '@vexip-ui/bem-helper'
 import { flatTree, toKebabCase } from '@vexip-ui/utils'
-import { ensureStartingSlash } from '../../shared'
+import { ensureStartingSlash, matchPath } from '../../shared'
 
 import type { AsideMenuItem } from '../types'
 
@@ -30,7 +30,7 @@ const menus = computed<AsideMenuItem[]>(() => {
   const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
-    if (path.startsWith(`/${locale.value}${key}`)) {
+    if (matchPath(path, `/${locale.value}${key}`)) {
       return config[key]
     }
   }
@@ -51,7 +51,7 @@ onMounted(() => {
     () => route.path,
     value => {
       const activeMenu = flattedMenus.value.find(menu =>
-        value.startsWith(`/${locale.value}${menu.link}`)
+        matchPath(value, `/${locale.value}${menu.link}`)
       )
 
       console.info(activeMenu)
@@ -64,7 +64,7 @@ onMounted(() => {
 })
 
 function selectMenu(label: string, meta: AsideMenuItem) {
-  if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
+  if (!matchPath(route.path, `/${locale.value}${meta.link}`)) {
     router.go(`/${locale.value}${meta.link}`)
   }
 
