@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
@@ -46,19 +46,22 @@ const flattedMenus = computed(() => {
 })
 const hasGroup = computed(() => !!menus.value.find(menu => menu.items?.length))
 
-watch(
-  () => route.path,
-  value => {
-    const activeMenu = flattedMenus.value.find(menu =>
-      value.startsWith(`/${locale.value}${menu.link}`)
-    )
+onMounted(() => {
+  watch(
+    () => route.path,
+    value => {
+      const activeMenu = flattedMenus.value.find(menu =>
+        value.startsWith(`/${locale.value}${menu.link}`)
+      )
 
-    if (activeMenu) {
-      currentMenu.value = activeMenu.key
-    }
-  },
-  { immediate: true }
-)
+      console.info(activeMenu)
+      if (activeMenu) {
+        currentMenu.value = activeMenu.key
+      }
+    },
+    { immediate: true }
+  )
+})
 
 function selectMenu(label: string, meta: AsideMenuItem) {
   if (!route.path.startsWith(`/${locale.value}${meta.link}`)) {
