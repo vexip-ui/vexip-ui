@@ -71,7 +71,7 @@ function selectMenu(label: string, meta: AsideMenuItem) {
 
 <template>
   <Menu
-    v-model:active="currentMenu"
+    :active="currentMenu"
     marker-type="left"
     :class="nh.b()"
     :style="{ marginTop: hasGroup ? undefined : '40px' }"
