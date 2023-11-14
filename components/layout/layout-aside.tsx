@@ -14,6 +14,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { useMounted } from '@vexip-ui/hooks'
 import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
@@ -41,6 +42,8 @@ export default defineComponent({
 
     const nh = useNameHelper('layout')
     const icons = useIcons()
+
+    const { isMounted } = useMounted()
     const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
     const currentExpanded = ref(props.expanded)
@@ -153,6 +156,8 @@ export default defineComponent({
     }
 
     return () => {
+      if (!isMounted.value) return null
+
       const CustomTag = (props.tag || 'aside') as any
 
       return (
