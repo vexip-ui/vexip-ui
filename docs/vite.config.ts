@@ -56,7 +56,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       host: '0.0.0.0'
     },
     build: {
-      sourcemap: true,
+      sourcemap: false,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 10 * 1024
     },
