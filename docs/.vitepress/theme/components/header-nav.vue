@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute, useRouter } from 'vitepress'
@@ -19,15 +19,12 @@ const currentMenu = ref('')
 
 const menus = computed(() => theme.value.nav as NavMenuItem[])
 
-onMounted(() => {
-  watchEffect(() => {
-    const matchedMenu = menus.value.find(menu =>
-      matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`)
-    )
+watchEffect(() => {
+  const matchedMenu = menus.value.find(menu =>
+    matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`)
+  )
 
-    console.info(matchedMenu)
-    currentMenu.value = matchedMenu ? matchedMenu.key : ''
-  })
+  currentMenu.value = matchedMenu ? matchedMenu.key : ''
 })
 
 function selectMenu(_: string, meta: NavMenuItem) {
