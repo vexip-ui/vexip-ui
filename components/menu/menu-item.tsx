@@ -10,7 +10,7 @@ import {
   inject,
   nextTick,
   onBeforeUnmount,
-  onMounted,
+  // onMounted,
   provide,
   reactive,
   ref,
@@ -194,19 +194,23 @@ const MenuItem = defineComponent({
 
     if (menuState) {
       watch(
-        () => [props.label, menuState.currentActive],
+        [() => props.label, () => menuState.currentActive],
         () => {
           selected.value = props.label === menuState.currentActive
         },
         { immediate: true }
       )
-    }
 
-    onMounted(() => {
-      if (typeof menuState?.increaseItem === 'function') {
+      if (typeof menuState.increaseItem === 'function') {
         menuState.increaseItem(itemState)
       }
-    })
+    }
+
+    // onMounted(() => {
+    //   if (typeof menuState?.increaseItem === 'function') {
+    //     menuState.increaseItem(itemState)
+    //   }
+    // })
 
     onBeforeUnmount(() => {
       if (typeof menuState?.decreaseItem === 'function') {

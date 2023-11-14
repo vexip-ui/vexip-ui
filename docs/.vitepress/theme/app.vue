@@ -10,7 +10,7 @@ import { useBEM } from '@vexip-ui/bem-helper'
 import { useListener } from '@vexip-ui/hooks'
 import { boundRange, isClient, multipleFixed, writeClipboard } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
-import { ensureStartingSlash } from '../shared'
+import { ensureStartingSlash, matchPath } from '../shared'
 
 import Homepage from './components/homepage.vue'
 import NotFound from './components/not-found.vue'
@@ -54,7 +54,7 @@ const outline = computed(() => {
   const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
-    if (path.startsWith(`/${locale.value}${key}`)) {
+    if (matchPath(path, `/${locale.value}${key}`)) {
       return config[key]
     }
   }

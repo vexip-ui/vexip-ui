@@ -104,8 +104,10 @@ function enhanceRouter(router: Router) {
   }
 
   function syncLocale(to: string) {
+    to = to.toLocaleLowerCase()
+
     for (const lang of langOptions) {
-      const path = withBase(`/${lang}`)
+      const path = withBase(`/${lang.toLocaleLowerCase()}`)
 
       if (to.startsWith(path)) {
         locale.value = lang
