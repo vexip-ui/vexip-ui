@@ -3,7 +3,7 @@ import { Portal } from '@/components/portal'
 
 import { computed, ref, watch } from 'vue'
 
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
 import { fullScreenProps } from './props'
 
@@ -26,8 +26,7 @@ const fullType = ref<FullScreenType>()
 
 const full = computed(() => isEntered.value && fullType.value!)
 const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: full.value }])
-
-const transferTo = computed(() => (isEntered.value ? 'body' : ''))
+const transferTo = computed(() => (fullType.value === 'window' ? 'body' : ''))
 
 const {
   enter: browserEnter,
@@ -42,28 +41,30 @@ watch(browserFull, value => {
     fullType.value = undefined
   }
 })
+watch(full, value => {
+  emitEvent(props.onToggle, value)
+})
 
 async function enter(type: FullScreenType = 'window', customZIndex?: number) {
   if (isEntered.value) {
     await exit()
   }
 
-  isEntered.value = true
-
   if (type !== 'window') {
-    browserEnter()
+    await browserEnter()
   }
 
+  isEntered.value = true
   zIndex.value = customZIndex
-  fullType.value = type
+  fullType.value = type !== 'window' ? 'browser' : 'window'
 }
 
 async function exit() {
+  await browserExit()
+
   zIndex.value = undefined
   isEntered.value = false
   fullType.value = undefined
-
-  await browserExit()
 }
 
 async function toggle(type: FullScreenType = 'window', zIndex?: number) {
