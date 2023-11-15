@@ -2,7 +2,16 @@ import { computed, getCurrentScope, onScopeDispose, ref } from 'vue'
 
 import { isClient, noop } from '@vexip-ui/utils'
 
-import type { Ref } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
+
+export interface UseFullScreenResult {
+  target: Ref<HTMLElement | null | undefined>,
+  supported: boolean,
+  full: ComputedRef<boolean>,
+  enter: (force?: boolean) => Promise<boolean>,
+  exit: (force?: boolean) => Promise<boolean>,
+  toggle: (force?: boolean) => Promise<boolean>
+}
 
 type FunctionMap = [
   'requestFullscreen',
@@ -71,6 +80,7 @@ if (isClient) {
 
 const supported = !!map
 const notSupportedResult = {
+  target: computed(() => null),
   supported,
   full: computed(() => false),
   enter: noop,
@@ -96,7 +106,9 @@ if (isClient && map) {
   )
 }
 
-export function useFullScreen(target: Ref<HTMLElement | null | undefined> = ref(null)) {
+export function useFullScreen(
+  target: Ref<HTMLElement | null | undefined> = ref(null)
+): UseFullScreenResult {
   if (!isClient || !supported) {
     return { ...notSupportedResult }
   }
@@ -111,19 +123,27 @@ export function useFullScreen(target: Ref<HTMLElement | null | undefined> = ref(
       if (force || !document[ELEMENT]) {
         await target.value[REQUEST]()
         full.value = true
+
+        return document[ELEMENT] === target.value
       }
     }
+
+    return false
   }
 
   async function exit(force = false) {
     if (force || (document[ELEMENT] && document[ELEMENT] === target.value)) {
       await document[EXIT]()
       full.value = false
+
+      return document[ELEMENT] !== target.value
     }
+
+    return false
   }
 
   async function toggle(force = false) {
-    full.value ? await exit(force) : await enter(force)
+    return full.value ? await exit(force) : await enter(force)
   }
 
   subscriptions.add(full)
