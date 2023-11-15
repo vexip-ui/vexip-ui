@@ -21,7 +21,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <Teleport :to="disabled ? undefined : to || undefined" :disabled="disabled">
+  <Teleport v-if="isMounted" :to="disabled ? undefined : to || undefined" :disabled="disabled">
     <slot></slot>
   </Teleport>
+  <slot v-else></slot>
 </template>
