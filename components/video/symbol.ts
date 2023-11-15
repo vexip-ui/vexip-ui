@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export type VideoPresetControl =
   | 'play'
   | 'play-prev'
@@ -55,3 +57,11 @@ for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {
 }
 
 export const videoDefaultControlLayout = Object.freeze(defaultLayout)
+
+let idIndex = 0
+
+export function getIdIndex() {
+  return idIndex++
+}
+
+export const ID_INDEX: InjectionKey<number> = Symbol('ID_INDEX')

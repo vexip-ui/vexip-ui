@@ -2,12 +2,13 @@
 import { Option } from '@/components/option'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { transformListToMap } from '@vexip-ui/utils'
 import { videoControlProps } from './props'
+import { ID_INDEX } from './symbol'
 
 import type { VideoControlOption } from './symbol'
 
@@ -30,6 +31,7 @@ const props = useProps('videoControl', _props, {
 
 const nh = useNameHelper('video')
 
+const idIndex = inject(ID_INDEX)!
 const { timer } = useSetTimeout()
 
 const hovered = ref(false)
@@ -102,7 +104,8 @@ function handleSelect(option: VideoControlOption) {
       trigger="custom"
       :visible="hovered || focused"
       raw
-      :transfer="false"
+      shift
+      :transfer="`#${nh.bs(`tooltip-place-${idIndex}`)}`"
       :tip-class="[tipClass, props.tipClass]"
       :no-hover="props.type === 'button'"
       :disabled="props.type === 'button' ? !props.name : props.disabled"

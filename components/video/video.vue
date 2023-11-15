@@ -2,17 +2,17 @@
 import { FullScreen } from '@/components/full-screen'
 import { Icon } from '@/components/icon'
 
-import { computed, ref, watch } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import VideoControl from './video-control.vue'
 import VideoProgress from './video-progress.vue'
 import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
-import { useListener } from '@vexip-ui/hooks'
+import { useListener, useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, isClient, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
-import { videoDefaultControlLayout } from './symbol'
+import { ID_INDEX, getIdIndex, videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed } from '@/components/full-screen'
 import type { VideoPlayRate } from './symbol'
@@ -43,6 +43,9 @@ const nh = useNameHelper('video')
 const locale = useLocale('video')
 const icons = useIcons()
 
+const { timer } = useSetTimeout()
+
+const idIndex = getIdIndex()
 const pipEnabled = isClient && document.pictureInPictureEnabled
 
 const playing = ref(false)
@@ -53,6 +56,8 @@ const pip = ref(false)
 const stateShow = ref(true)
 const currentRate = ref(1)
 const loadedData = ref(false)
+const interacting = ref(false)
+const hasPlayed = ref(false)
 
 const screen = ref<FullScreenExposed>()
 const wrapper = computed(() => screen.value?.wrapper)
@@ -102,6 +107,8 @@ watch(playing, value => {
   }
 })
 
+provide(ID_INDEX, idIndex)
+
 useListener(videoRef, 'canplay', () => {
   duration.value = videoRef.value?.duration ?? 0
 })
@@ -124,6 +131,7 @@ defineExpose({
   currentTime,
   duration,
   pip,
+  interacting,
   wrapper,
   video
 })
@@ -131,7 +139,13 @@ defineExpose({
 function togglePlaying() {
   playing.value = !playing.value
 
-  playing.value ? videoRef.value?.play() : videoRef.value?.pause()
+  if (playing.value) {
+    hasPlayed.value = true
+    videoRef.value?.play()
+  } else {
+    videoRef.value?.pause()
+  }
+
   wrapper.value?.focus()
   emitEvent(playing.value ? props.onPlay : props.onPause)
 }
@@ -183,8 +197,25 @@ function resetMetaState() {
   duration.value = 0
   loadedData.value = false
   pip.value = false
+  hasPlayed.value = false
 
   videoRef.value?.pause()
+}
+
+function handleInteract() {
+  clearTimeout(timer.interact)
+
+  interacting.value = true
+  timer.interact = setTimeout(() => {
+    interacting.value = false
+  }, 3000)
+}
+
+function handlePointerLeave() {
+  clearTimeout(timer.interact)
+  timer.interact = setTimeout(() => {
+    interacting.value = false
+  }, 500)
 }
 </script>
 
@@ -194,75 +225,87 @@ function resetMetaState() {
     ref="screen"
     :class="className"
     tabindex="-1"
+    @toggle="wrapper?.focus()"
+    @pointermove="handleInteract"
+    @pointerleave="handlePointerLeave"
   >
-    <div :class="nh.be('player')" @click="togglePlaying">
-      <slot name="player">
-        <video
-          v-bind="props.videoAttrs"
-          ref="video"
-          :class="nh.be('video')"
-          :src="props.src || props.videoAttrs?.src"
-        >
-          <slot></slot>
-        </video>
-      </slot>
-    </div>
-    <div v-if="!loadedData && (props.poster || $slots.poster)" :class="nh.be('poster')">
-      <slot name="poster">
-        <img :src="props.poster" />
-      </slot>
-    </div>
-    <Transition :name="nh.bs('state-effect')">
-      <div v-if="stateShow" :class="nh.be('state')">
-        <Icon v-bind="stateIcon" :scale="4"></Icon>
+    <div :class="nh.be('main')">
+      <div :class="nh.be('player')" @click="togglePlaying">
+        <slot name="player">
+          <video
+            v-bind="props.videoAttrs"
+            ref="video"
+            :class="nh.be('video')"
+            :src="props.src || props.videoAttrs?.src"
+          >
+            <slot></slot>
+          </video>
+        </slot>
       </div>
-    </Transition>
-    <div v-if="!props.noControls" :class="nh.be('controls')">
-      <section :class="nh.be('controls-top')">
-        <VideoProgress
-          :time="currentTime"
-          :duration="duration"
-          @change="changeTime"
-        ></VideoProgress>
-      </section>
-      <section :class="nh.be('controls-bottom')">
-        <div :class="nh.be('controls-left')">
-          <VideoControl :name="locale.playPrev" @click="togglePlaying">
-            <Icon v-bind="icons.playPrev" :scale="1.3"></Icon>
-          </VideoControl>
-          <VideoControl :name="playing ? locale.pause : locale.play" @click="togglePlaying">
-            <Icon v-bind="playIcon" :scale="1.5"></Icon>
-          </VideoControl>
-          <VideoControl :name="locale.playPrev" @click="togglePlaying">
-            <Icon v-bind="icons.playNext" :scale="1.3"></Icon>
-          </VideoControl>
-          <VideoControl v-if="props.refreshable" :name="locale.refresh" @click="togglePlaying">
-            <Icon v-bind="icons.refresh" :scale="1.15"></Icon>
-          </VideoControl>
-          <VideoTimer :time="currentTime" :duration="duration" @change="changeTime"></VideoTimer>
+      <div v-if="!loadedData && (props.poster || $slots.poster)" :class="nh.be('poster')">
+        <slot name="poster">
+          <img :src="props.poster" />
+        </slot>
+      </div>
+      <Transition :name="nh.bs('state-effect')">
+        <div v-if="stateShow" :class="nh.be('state')">
+          <Icon v-bind="stateIcon" :scale="4"></Icon>
         </div>
-        <div :class="nh.be('controls-center')"></div>
-        <div :class="nh.be('controls-right')">
-          <VideoControl
-            :class="nh.be('play-rate')"
-            type="select"
-            :value="currentRate"
-            :options="rateOptions"
-            @select="changeRate"
-          ></VideoControl>
-          <VideoVolume :volume="volume" @change="changeVolume"></VideoVolume>
-          <VideoControl v-if="pipEnabled && video" :name="locale.requestPip" @click="togglePip">
-            <Icon v-bind="icons.pip" :scale="1.3"></Icon>
-          </VideoControl>
-          <VideoControl :name="locale.fullWindow" @click="toggle('window')">
-            <Icon v-bind="icons.fullWindow" :scale="1.3"></Icon>
-          </VideoControl>
-          <VideoControl :name="locale.fullScreen" shortcut="F" @click="toggle('browser')">
-            <Icon v-bind="icons.fullScreen" :scale="1.15"></Icon>
-          </VideoControl>
-        </div>
-      </section>
+      </Transition>
+      <div
+        v-if="!props.noControls"
+        :class="{
+          [nh.be('controls')]: true,
+          [nh.bem('controls', 'collapsed')]: hasPlayed && !interacting
+        }"
+      >
+        <section :class="nh.be('controls-top')">
+          <VideoProgress
+            :time="currentTime"
+            :duration="duration"
+            @change="changeTime"
+          ></VideoProgress>
+        </section>
+        <section :class="nh.be('controls-bottom')">
+          <div :class="nh.be('controls-left')">
+            <VideoControl :name="locale.playPrev" @click="togglePlaying">
+              <Icon v-bind="icons.playPrev" :scale="1.3"></Icon>
+            </VideoControl>
+            <VideoControl :name="playing ? locale.pause : locale.play" @click="togglePlaying">
+              <Icon v-bind="playIcon" :scale="1.5"></Icon>
+            </VideoControl>
+            <VideoControl :name="locale.playPrev" @click="togglePlaying">
+              <Icon v-bind="icons.playNext" :scale="1.3"></Icon>
+            </VideoControl>
+            <VideoControl v-if="props.refreshable" :name="locale.refresh" @click="togglePlaying">
+              <Icon v-bind="icons.refresh" :scale="1.15"></Icon>
+            </VideoControl>
+            <VideoTimer :time="currentTime" :duration="duration" @change="changeTime"></VideoTimer>
+          </div>
+          <div :class="nh.be('controls-center')"></div>
+          <div :class="nh.be('controls-right')">
+            <VideoControl
+              :class="nh.be('play-rate')"
+              type="select"
+              :value="currentRate"
+              :options="rateOptions"
+              @select="changeRate"
+            ></VideoControl>
+            <VideoVolume :volume="volume" @change="changeVolume"></VideoVolume>
+            <VideoControl v-if="pipEnabled && video" :name="locale.requestPip" @click="togglePip">
+              <Icon v-bind="icons.pip" :scale="1.3"></Icon>
+            </VideoControl>
+            <VideoControl :name="locale.fullWindow" @click="toggle('window')">
+              <Icon v-bind="icons.fullWindow" :scale="1.3"></Icon>
+            </VideoControl>
+            <VideoControl :name="locale.fullScreen" shortcut="F" @click="toggle('browser')">
+              <Icon v-bind="icons.fullScreen" :scale="1.15"></Icon>
+            </VideoControl>
+          </div>
+        </section>
+      </div>
+      <slot name="extra"></slot>
     </div>
-    <slot name="extra"></slot>
+    <div :id="nh.bs(`tooltip-place-${idIndex}`)" :class="nh.be('tooltip-place')"></div>
   </FullScreen>
 </template>

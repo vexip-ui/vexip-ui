@@ -7,6 +7,6 @@ describe('Video', () => {
   it('render', () => {
     const wrapper = mount(Video)
 
-    expect(wrapper.classes()).toContain('vxp-video-vars')
+    expect(wrapper.find('.vxp-video').classes()).toContain('vxp-video-vars')
   })
 })

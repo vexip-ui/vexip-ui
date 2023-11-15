@@ -45,7 +45,9 @@ onMounted(() => {
   watch(
     () => props.duration,
     () => {
-      width.value = durationEl.value ? getRangeWidth(durationEl.value) * 2 + 20 : 84
+      nextTick(() => {
+        width.value = durationEl.value ? getRangeWidth(durationEl.value) * 2 + 20 : 84
+      })
     },
     { immediate: true }
   )
