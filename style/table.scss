@@ -220,7 +220,8 @@ $table: map.merge(
 
   &__content {
     display: flex;
-    align-items: center;
+    align-items: inherit;
+    justify-content: inherit;
     width: 100%;
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     word-break: break-all;

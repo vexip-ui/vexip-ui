@@ -1,6 +1,8 @@
 import { describe, expect, it, test } from 'vitest'
 import { mount } from '@vue/test-utils'
 
+import { nextTick } from 'vue'
+
 import { FullScreen } from '..'
 
 describe('FullScreen', () => {
@@ -35,26 +37,29 @@ describe('FullScreen', () => {
     expect(document.querySelector('.vxp-full-screen')!.className).toContain('vxp-full-screen--full')
 
     expect(document.querySelector('.exit')).toBeTruthy()
-    await (document.querySelector('.exit') as HTMLButtonElement).click()
-
+    ;(document.querySelector('.exit') as HTMLButtonElement).click()
+    await nextTick()
+    await nextTick()
     expect(wrapper.find('.vxp-full-screen').classes()).not.toContain('vxp-full-screen--full')
   })
 
   it('should work via exposed methods', async () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
-    const { enter, exit } = wrapper.findComponent(FullScreen).vm
+    const vm = wrapper.findComponent(FullScreen).vm
 
-    await enter()
+    await vm.enter()
     expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
-    await exit()
+    expect(vm.full).toEqual('window')
+    await vm.exit()
     expect(wrapper.find('.vxp-full-screen').classes()).not.toContain('vxp-full-screen--full')
+    expect(vm.full).toBe(false)
 
-    await enter('browser')
-    expect(document.querySelector('.vxp-full-screen')).toBeTruthy()
-    expect(document.querySelector('.vxp-full-screen')!.className).toContain('vxp-full-screen--full')
+    await vm.enter('browser')
+    expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(vm.full).toEqual('browser')
 
-    await exit()
+    await vm.exit()
     expect(wrapper.find('.vxp-full-screen').classes()).not.toContain('vxp-full-screen--full')
   })
 
@@ -86,13 +91,14 @@ describe('FullScreen', () => {
   test('should switch to another entered state when current state is entered.', async () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
-    const { toggle } = wrapper.findComponent(FullScreen).vm
+    const vm = wrapper.findComponent(FullScreen).vm
 
-    await toggle()
+    await vm.toggle()
     expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(vm.full).toBe('window')
 
-    await toggle('browser')
-    expect(document.querySelector('.vxp-full-screen')).toBeTruthy()
-    expect(document.querySelector('.vxp-full-screen')!.className).toContain('vxp-full-screen--full')
+    await vm.toggle('browser')
+    expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(vm.full).toBe('browser')
   })
 })

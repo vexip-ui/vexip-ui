@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 defineOptions({ name: 'Portal' })
 
-defineProps({
+const props = defineProps({
   to: {
     type: String,
     default: ''
@@ -11,6 +11,7 @@ defineProps({
 })
 
 const isMounted = ref(false)
+const disabled = computed(() => !isMounted.value || !props.to)
 
 onMounted(() => {
   nextTick(() => {
@@ -20,8 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Teleport v-if="isMounted && to" :to="to">
+  <Teleport :to="disabled ? undefined : to || undefined" :disabled="disabled">
     <slot></slot>
   </Teleport>
-  <slot v-else></slot>
 </template>

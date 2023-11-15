@@ -1,7 +1,7 @@
 <template>
   <FullScreen ref="fullScreen" v-slot="{ toggle, full }">
     <div class="container">
-      <span>我是全屏展示的元素，当前全屏状态状态 {{ full }}</span>
+      <span>我是全屏展示的元素，当前全屏状态状态：<strong>{{ full }}</strong></span>
       <br />
       <br />
       <div>

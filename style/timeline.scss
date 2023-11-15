@@ -238,12 +238,12 @@ $timeline: map.merge(
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
     top: 100%;
-    inset-block-start: 0;
+    inset-inline-start: 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
     top: 0;
-    inset-block-start: 0;
+    inset-inline-start: 0;
   }
 
   $content-pad: calc($pointer-size * 0.5 + 8px);
