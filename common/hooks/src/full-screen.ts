@@ -13,7 +13,7 @@ export interface UseFullScreenResult {
   toggle: (force?: boolean) => Promise<boolean>
 }
 
-type FunctionMap = [
+type PropertiesMap = [
   'requestFullscreen',
   'exitFullscreen',
   'fullscreenElement',
@@ -65,9 +65,9 @@ const functionsMap = [
     'MSFullscreenChange',
     'MSFullscreenError'
   ]
-] as FunctionMap[]
+] as PropertiesMap[]
 
-let map!: FunctionMap
+let map!: PropertiesMap
 
 if (isClient) {
   for (const m of functionsMap) {
@@ -80,7 +80,6 @@ if (isClient) {
 
 const supported = !!map
 const notSupportedResult = {
-  target: computed(() => null),
   supported,
   full: computed(() => false),
   enter: noop,
@@ -110,7 +109,7 @@ export function useFullScreen(
   target: Ref<HTMLElement | null | undefined> = ref(null)
 ): UseFullScreenResult {
   if (!isClient || !supported) {
-    return { ...notSupportedResult }
+    return { ...notSupportedResult, target }
   }
 
   const [REQUEST, EXIT, ELEMENT] = map
