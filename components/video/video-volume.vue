@@ -2,10 +2,12 @@
 import { Icon } from '@/components/icon'
 import { Slider } from '@/components/slider'
 
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import VideoControl from './video-control.vue'
+import { mergeIconScale } from './helper'
+import { VIDEO_STATE } from './symbol'
 
 defineOptions({ name: 'VideoVolume' })
 
@@ -20,6 +22,9 @@ const emit = defineEmits(['change'])
 
 const nh = useNameHelper('video')
 const icons = useIcons()
+
+const videoState = inject(VIDEO_STATE)!
+
 const currentVolume = ref(props.volume)
 const muted = ref(false)
 // const visible = ref(true)
@@ -64,7 +69,7 @@ function handleSlide(value: number) {
     :tip-class="nh.be('volume-panel')"
     @click="toggleMute"
   >
-    <Icon :scale="1.3" v-bind="volumeIcon"></Icon>
+    <Icon v-bind="mergeIconScale(videoState.iconScale, volumeIcon)"></Icon>
     <template #panel>
       <div :class="nh.be('volume-text')">
         {{ currentVolume }}

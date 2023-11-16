@@ -8,7 +8,7 @@ import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { transformListToMap } from '@vexip-ui/utils'
 import { videoControlProps } from './props'
-import { ID_INDEX } from './symbol'
+import { VIDEO_STATE } from './symbol'
 
 import type { VideoControlOption } from './symbol'
 
@@ -24,15 +24,19 @@ const props = useProps('videoControl', _props, {
     static: true,
     default: ''
   },
-  hoverOnly: false,
+  focusable: false,
   value: null,
   options: () => []
 })
 
 const nh = useNameHelper('video')
 
-const idIndex = inject(ID_INDEX)!
+const videoState = inject(VIDEO_STATE)
 const { timer } = useSetTimeout()
+
+if (!videoState) {
+  console.warn('[vexip-ui:Video] VideoControl must be used under Video')
+}
 
 const hovered = ref(false)
 const focused = ref(false)
@@ -79,14 +83,14 @@ function handlePointerLeave() {
 }
 
 function handleFocus(event: FocusEvent) {
-  if (props.hoverOnly) return
+  if (!props.focusable) return
 
   focused.value = true
   emitEvent(props.onFocus, event)
 }
 
 function handleBlur(event: FocusEvent) {
-  if (props.hoverOnly) return
+  if (!props.focusable) return
 
   focused.value = false
   emitEvent(props.onBlur, event)
@@ -105,10 +109,12 @@ function handleSelect(option: VideoControlOption) {
       :visible="hovered || focused"
       raw
       shift
-      :transfer="`#${nh.bs(`tooltip-place-${idIndex}`)}`"
+      :transfer="`#${nh.bs(`tooltip-place-${videoState?.idIndex}`)}`"
       :tip-class="[tipClass, props.tipClass]"
       :no-hover="props.type === 'button'"
-      :disabled="props.type === 'button' ? !props.name : props.disabled"
+      :disabled="!videoState || (props.type === 'button' ? !props.name : props.disabled)"
+      @tip-enter="handlePointerEnter"
+      @tip-leave="handlePointerLeave"
     >
       <template #trigger>
         <button

@@ -6,7 +6,7 @@ import type {
   VideoControlLayout,
   VideoControlOption,
   VideoControlType,
-  VideoKernel,
+  // VideoKernel,
   VideoPlayRate
 } from './symbol'
 
@@ -15,7 +15,7 @@ export const videoProps = buildProps({
   noControls: booleanProp,
   videoAttrs: Object,
   playRates: Array as PropType<(number | VideoPlayRate)[]>,
-  kernel: Object as PropType<VideoKernel>,
+  // kernel: Object as PropType<VideoKernel>,
   controlLayout: Object as PropType<VideoControlLayout>,
   refreshable: booleanProp,
   poster: String,
@@ -34,7 +34,7 @@ export const videoControlProps = buildProps({
   tipClass: [String, Array, Object] as PropType<ClassType>,
   disabled: booleanProp,
   shortcut: String,
-  hoverOnly: booleanProp,
+  focusable: booleanProp,
   value: [Number, String],
   options: Array as PropType<(string | VideoControlOption)[]>,
   onClick: eventProp(),

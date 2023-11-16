@@ -36,14 +36,19 @@ export interface VideoControlOption {
   title?: string
 }
 
-export interface VideoKernel {
-  play: () => void,
-  pause: () => void,
-  mute: () => void,
-  unmute: () => void,
-  prev: () => void,
-  next: () => void,
-  refresh: () => void | boolean
+// export interface VideoKernel {
+//   play: () => void,
+//   pause: () => void,
+//   mute: () => void,
+//   unmute: () => void,
+//   prev: () => void,
+//   next: () => void,
+//   refresh: () => void | boolean
+// }
+
+export interface VideoState {
+  idIndex: number,
+  iconScale: number
 }
 
 const defaultLayout: VideoControlLayout = {
@@ -64,4 +69,4 @@ export function getIdIndex() {
   return idIndex++
 }
 
-export const ID_INDEX: InjectionKey<number> = Symbol('ID_INDEX')
+export const VIDEO_STATE: InjectionKey<VideoState> = Symbol('VIDEO_STATE')

@@ -2,7 +2,7 @@
 import { FullScreen } from '@/components/full-screen'
 import { Icon } from '@/components/icon'
 
-import { computed, provide, ref, watch } from 'vue'
+import { computed, provide, reactive, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import VideoControl from './video-control.vue'
@@ -12,7 +12,8 @@ import VideoVolume from './video-volume.vue'
 import { useListener, useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, isClient, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
-import { ID_INDEX, getIdIndex, videoDefaultControlLayout } from './symbol'
+import { mergeIconScale } from './helper'
+import { VIDEO_STATE, getIdIndex, videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed } from '@/components/full-screen'
 import type { VideoPlayRate } from './symbol'
@@ -25,7 +26,7 @@ const props = useProps('video', _props, {
   noControls: false,
   videoAttrs: null,
   playRates: () => [0.5, 1, 1.25, 1.5, 2],
-  kernel: null,
+  // kernel: null,
   controlLayout: () => videoDefaultControlLayout,
   refreshable: false,
   poster: '',
@@ -59,6 +60,8 @@ const loadedData = ref(false)
 const interacting = ref(false)
 const hasPlayed = ref(false)
 
+const iconScale = ref(1.3)
+
 const screen = ref<FullScreenExposed>()
 const wrapper = computed(() => screen.value?.wrapper)
 const video = ref<HTMLVideoElement>()
@@ -69,7 +72,12 @@ const videoRef = computed(() => {
 const className = computed(() => {
   return [nh.b(), nh.bs('vars')]
 })
-const playIcon = computed(() => (playing.value ? icons.value.pause : icons.value.play))
+const playIcon = computed(() => {
+  return mergeIconScale(
+    iconScale.value * 1.16,
+    playing.value ? icons.value.pause : icons.value.play
+  )
+})
 const stateIcon = computed(() => {
   return playing.value ? icons.value.pauseState : icons.value.playState
 })
@@ -107,7 +115,13 @@ watch(playing, value => {
   }
 })
 
-provide(ID_INDEX, idIndex)
+provide(
+  VIDEO_STATE,
+  reactive({
+    idIndex,
+    iconScale
+  })
+)
 
 useListener(videoRef, 'canplay', () => {
   duration.value = videoRef.value?.duration ?? 0
@@ -269,16 +283,16 @@ function handlePointerLeave() {
         <section :class="nh.be('controls-bottom')">
           <div :class="nh.be('controls-left')">
             <VideoControl :name="locale.playPrev" @click="togglePlaying">
-              <Icon v-bind="icons.playPrev" :scale="1.3"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.playPrev)"></Icon>
             </VideoControl>
             <VideoControl :name="playing ? locale.pause : locale.play" @click="togglePlaying">
-              <Icon v-bind="playIcon" :scale="1.5"></Icon>
+              <Icon v-bind="playIcon"></Icon>
             </VideoControl>
             <VideoControl :name="locale.playPrev" @click="togglePlaying">
-              <Icon v-bind="icons.playNext" :scale="1.3"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.playNext)"></Icon>
             </VideoControl>
             <VideoControl v-if="props.refreshable" :name="locale.refresh" @click="togglePlaying">
-              <Icon v-bind="icons.refresh" :scale="1.15"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.refresh)"></Icon>
             </VideoControl>
             <VideoTimer :time="currentTime" :duration="duration" @change="changeTime"></VideoTimer>
           </div>
@@ -293,13 +307,13 @@ function handlePointerLeave() {
             ></VideoControl>
             <VideoVolume :volume="volume" @change="changeVolume"></VideoVolume>
             <VideoControl v-if="pipEnabled && video" :name="locale.requestPip" @click="togglePip">
-              <Icon v-bind="icons.pip" :scale="1.3"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.pip)"></Icon>
             </VideoControl>
             <VideoControl :name="locale.fullWindow" @click="toggle('window')">
-              <Icon v-bind="icons.fullWindow" :scale="1.3"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.fullWindow)"></Icon>
             </VideoControl>
             <VideoControl :name="locale.fullScreen" shortcut="F" @click="toggle('browser')">
-              <Icon v-bind="icons.fullScreen" :scale="1.15"></Icon>
+              <Icon v-bind="mergeIconScale(iconScale, icons.fullScreen)"></Icon>
             </VideoControl>
           </div>
         </section>
