@@ -199,7 +199,21 @@ export type ColumnWithKey<
   /** @internal */
   first?: boolean,
   /** @internal */
-  last?: boolean
+  last?: boolean,
+  rowSpan: number
+}
+
+export interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+export interface ColumnGroupWithKey extends TableColumnGroupOptions {
+  key: symbol,
+  headSpan: number,
+  rowSpan: number
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -300,7 +314,7 @@ export interface TableRowState {
 }
 
 export interface StoreOptions {
-  columns: TableColumnOptions[],
+  columns: (TableColumnGroupOptions | TableColumnOptions)[],
   summaries: TableSummaryOptions[],
   data: Data[],
   dataKey: string,
@@ -341,8 +355,12 @@ export interface StoreOptions {
   sidePadding: number[]
 }
 
+export type ColumnRawData = (TableColumnGroupOptions | TableColumnOptions)[]
+export type ColumnData = (ColumnGroupWithKey | ColumnWithKey)[]
+
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
+  allColumns: ColumnData[],
   summaries: SummaryWithKey[],
   rowData: TableRowState[],
   width: number,
@@ -415,8 +433,8 @@ export interface TableFootPayload {
 }
 
 export interface TableActions {
-  increaseColumn(column: TableColumnOptions): void,
-  decreaseColumn(column: TableColumnOptions): void,
+  increaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
+  decreaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
   increaseSummary(column: TableSummaryOptions): void,
   decreaseSummary(column: TableSummaryOptions): void,
   getTableElement(): HTMLElement | undefined,
@@ -440,6 +458,11 @@ export interface TableActions {
   renderTableSlot(payload: { name: string }): any
 }
 
+export interface ColumnGroupActions {
+  increaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
+  decreaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void
+}
+
 export const DEFAULT_KEY_FIELD = 'id'
 /**
  * 表格状态管理
@@ -450,7 +473,9 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  */
 export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
 export const TABLE_SLOTS: InjectionKey<Slots> = Symbol('TABLE_SLOTS')
-export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')
+export const TABLE_HEAD_PREFIX = '__vxp-table-head-'
 export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
+
+export const COLUMN_GROUP_ACTIONS: InjectionKey<ColumnGroupActions> = Symbol('COLUMN_GROUP_ACTIONS')
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']

@@ -26,6 +26,7 @@ import type {
   TableCellPayload,
   TableCellPropFn,
   TableCellSpanFn,
+  TableColumnGroupOptions,
   TableColumnOptions,
   TableColumnType,
   TableFilterOptions,
@@ -46,7 +47,7 @@ import type {
 
 export const tableProps = buildProps({
   locale: localeProp('table'),
-  columns: Array as PropType<TableColumnOptions<any, any>[]>,
+  columns: Array as PropType<(TableColumnGroupOptions | TableColumnOptions<any, any>)[]>,
   summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
   width: [Number, String],
@@ -204,6 +205,19 @@ export type TableColumnCProps = ConfigurableProps<
   | 'headSpan'
   | 'summaryRenderer'
 >
+
+export const tableColumnGroupProps = buildProps({
+  name: String,
+  fixed: {
+    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
+    default: null
+  },
+  order: Number,
+  renderer: Function as PropType<() => any>
+})
+
+export type TableColumnGroupProps = ExtractPropTypes<typeof tableColumnGroupProps>
+export type TableColumnGroupCProps = ConfigurableProps<TableColumnProps, 'name' | 'fixed' | 'order'>
 
 export const tableSummaryProps = buildProps({
   idKey: [Number, String],

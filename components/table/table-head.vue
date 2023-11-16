@@ -1,19 +1,24 @@
 <template>
   <div :class="nh.be('head')" role="rowgroup" :style="style">
     <TableRow
+      v-for="(rowColumns, rowIndex) in allColumns"
+      :key="rowIndex"
+      :index="rowIndex"
       is-head
       :fixed="fixed"
-      :row="headRow"
-      aria-rowindex="0"
+      :row="getRow(rowIndex)"
+      :aria-rowindex="rowIndex"
     >
-      <TableHeadCell
-        v-for="(column, index) in columns"
-        :key="index"
-        :column="column"
-        :index="index"
-        :fixed="fixed"
-        :aria-colindex="index"
-      ></TableHeadCell>
+      <template v-for="(column, index) in rowColumns" :key="index">
+        <TableHeadCell
+          v-if="column"
+          :column="column"
+          :index="index"
+          :row-index="rowIndex"
+          :fixed="fixed"
+          :aria-colindex="index"
+        ></TableHeadCell>
+      </template>
     </TableRow>
   </div>
 </template>
@@ -24,7 +29,7 @@ import { computed, defineComponent, inject } from 'vue'
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { TABLE_HEAD_KEY, TABLE_STORE } from './symbol'
+import { TABLE_HEAD_PREFIX, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TableRowState } from './symbol'
@@ -44,6 +49,7 @@ export default defineComponent({
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
+    const allColumns = computed(() => state.allColumns)
     const columns = computed(() => {
       return props.fixed === 'left'
         ? state.leftFixedColumns
@@ -65,16 +71,21 @@ export default defineComponent({
         minWidth: width && `${width + padLeft + padRight}px`
       }
     })
-    const headRow = computed(
-      () => state.rowMap.get(TABLE_HEAD_KEY) || ({ key: TABLE_HEAD_KEY } as TableRowState)
-    )
+
+    function getRow(index: number) {
+      const key = `${TABLE_HEAD_PREFIX}${index}`
+
+      return state.rowMap.get(key) || ({ key } as TableRowState)
+    }
 
     return {
       nh: useNameHelper('table'),
 
+      allColumns,
       columns,
       style,
-      headRow
+
+      getRow
     }
   }
 })

@@ -94,6 +94,7 @@ const components = [
   'TabPanel',
   'Table',
   'TableColumn',
+  'TableColumnGroup',
   'TableSummary',
   'Tabs',
   'Tag',

@@ -5,7 +5,8 @@
     :class="className"
     role="columnheader"
     scope="col"
-    :colspan="headSpan !== 1 ? headSpan : undefined"
+    :colspan="span.colSpan !== 1 ? span.colSpan : undefined"
+    :rowspan="span.rowSpan !== 1 ? span.rowSpan : undefined"
     :style="style"
     :aria-sort="
       sorter.able
@@ -164,7 +165,7 @@ import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useMoving, useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE, columnTypes } from './symbol'
+import { TABLE_ACTIONS, TABLE_HEAD_PREFIX, TABLE_SLOTS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -193,6 +194,10 @@ export default defineComponent({
       type: Number,
       default: -1
     },
+    rowIndex: {
+      type: Number,
+      default: 0
+    },
     fixed: {
       type: String as PropType<'left' | 'right' | undefined>,
       default: null
@@ -213,11 +218,11 @@ export default defineComponent({
 
     let currentWidth = 0
 
-    const headSpan = computed(() => {
+    const span = computed(() => {
       const fixed = props.fixed || 'default'
 
-      if (state.collapseMap.get(fixed)!.has(`-1,${props.index}`)) {
-        return 0
+      if (state.collapseMap.get(fixed)!.has(`${-props.rowIndex - 1},${props.index}`)) {
+        return { colSpan: 0, rowSpan: 0 }
       }
 
       const columns =
@@ -228,16 +233,17 @@ export default defineComponent({
             : state.columns
 
       const colSpan = boundRange(props.column.headSpan ?? 1, 0, columns.length - props.index)
+      const span = { colSpan, rowSpan: props.column.rowSpan }
 
-      mutations.updateCellSpan(-1, props.index, fixed, { colSpan, rowSpan: 1 })
+      mutations.updateCellSpan(-1, props.index, fixed, span)
 
-      return colSpan
+      return span
     })
 
     const { target: resizer } = useMoving({
       capture: false,
       onStart: (state, event) => {
-        if (!resizable.value || resizing.value || !headSpan.value) return false
+        if (!resizable.value || resizing.value) return false
 
         const table = tableActions.getTableElement()
 
@@ -266,7 +272,9 @@ export default defineComponent({
         const width = wrapper.value.getBoundingClientRect().width + (isRtl ? -1 : 1) * deltaX
 
         mutations.handleColumnResize(
-          state.columns.slice(props.index, props.index + headSpan.value).map(column => column.key),
+          state.columns
+            .slice(props.index, props.index + span.value.colSpan)
+            .map(column => column.key),
           width
         )
         tableActions.emitColResize('End', { ...buildEventPayload(event), width })
@@ -297,15 +305,25 @@ export default defineComponent({
       ]
     })
     const style = computed(() => {
-      const span = headSpan.value
+      const { colSpan, rowSpan } = span.value
       const totalWidths =
         props.fixed === 'left'
           ? getters.leftFixedWidths
           : props.fixed === 'right'
             ? getters.rightFixedWidths
             : getters.totalWidths
-      const width = totalWidths[props.index + span] - totalWidths[props.index]
+      const width = totalWidths[props.index + colSpan] - totalWidths[props.index]
       const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+
+      let height: number | undefined
+
+      if (rowSpan > 1) {
+        height = 0
+
+        for (let i = 0; i < rowSpan; ++i) {
+          height += state.rowMap.get(`${TABLE_HEAD_PREFIX}${i}`)?.height ?? 0
+        }
+      }
 
       let customStyle
 
@@ -319,11 +337,12 @@ export default defineComponent({
         props.column.style || '',
         customStyle,
         {
-          display: !span ? 'none' : undefined,
+          display: !colSpan ? 'none' : undefined,
           width: `${width}px`,
+          height: height ? `${height}px` : undefined,
           visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
           borderRightWidth:
-            !state.border && span > 1 && props.index + span >= totalWidths.length - 1
+            !state.border && colSpan > 1 && props.index + colSpan >= totalWidths.length - 1
               ? 0
               : undefined,
           transform: `translate3d(${isRtl.value ? '-' : ''}${
@@ -490,7 +509,7 @@ export default defineComponent({
 
       typed,
       className,
-      headSpan,
+      span,
       style,
       attrs,
       sorter,

@@ -243,6 +243,7 @@ import {
   onBeforeUnmount,
   onMounted,
   provide,
+  reactive,
   ref,
   renderSlot,
   toRef,
@@ -274,6 +275,7 @@ import type {
   MoveEventType,
   TableCellPayload,
   TableColResizePayload,
+  TableColumnGroupOptions,
   TableColumnOptions,
   TableFootPayload,
   TableHeadPayload,
@@ -394,8 +396,8 @@ export default defineComponent({
     const footHeight = ref(0)
     const indicatorShow = ref(false)
     const indicatorType = ref(DropType.BEFORE)
-    const tempColumns = ref(new Set<TableColumnOptions>())
-    const tempSummaries = ref(new Set<TableSummaryOptions>())
+    const tempColumns = reactive(new Set<TableColumnGroupOptions | TableColumnOptions>())
+    const tempSummaries = reactive(new Set<TableSummaryOptions>())
     const tableWidth = ref<number | string>()
     const hasDragColumn = ref(false)
     const noTransition = ref(true)
@@ -418,10 +420,10 @@ export default defineComponent({
     const locale = useLocale('table', toRef(props, 'locale'))
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
     const allColumns = computed(() => {
-      return Array.from(tempColumns.value).concat(props.columns)
+      return Array.from(tempColumns).concat(props.columns)
     })
     const allSummaries = computed(() => {
-      return Array.from(tempSummaries.value).concat(props.summaries)
+      return Array.from(tempSummaries).concat(props.summaries)
     })
 
     const store = useStore({
@@ -814,19 +816,19 @@ export default defineComponent({
     }
 
     function increaseColumn(column: TableColumnOptions) {
-      tempColumns.value.add(column)
+      tempColumns.add(column)
     }
 
     function decreaseColumn(column: TableColumnOptions) {
-      tempColumns.value.delete(column)
+      tempColumns.delete(column)
     }
 
     function increaseSummary(summary: TableSummaryOptions) {
-      tempSummaries.value.add(summary)
+      tempSummaries.add(summary)
     }
 
     function decreaseSummary(summary: TableSummaryOptions) {
-      tempSummaries.value.delete(summary)
+      tempSummaries.delete(summary)
     }
 
     function getTableElement() {
