@@ -113,7 +113,7 @@ $collapse: map.merge(
     cursor: pointer;
     background-color: get-css-var('collapse-header-bg-color');
     border: 0;
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-color');
 
     &:hover,

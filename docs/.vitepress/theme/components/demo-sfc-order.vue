@@ -63,7 +63,7 @@ function handleSavePrefix(value: FirstSfcType) {
     background-color: transparent;
     border: var(--vxp-border-base);
     border-radius: var(--vxp-radius-base);
-    outline-color: transparent;
+    outline: 0;
     transition: var(--vxp-transition-color), var(--vxp-transition-background),
       var(--vxp-transition-border);
 

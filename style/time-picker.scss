@@ -60,7 +60,7 @@ $time-picker: map.merge(
   &__input {
     display: flex;
     align-items: center;
-    outline-color: transparent;
+    outline: 0;
 
     &--error {
       color: get-css-var('time-picker-color-error');

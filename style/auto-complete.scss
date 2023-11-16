@@ -12,7 +12,7 @@
     background-color: transparent;
     border: 0;
     border-radius: get-css-var('input-radius');
-    outline-color: transparent;
+    outline: 0;
 
     &::placeholder {
       color: get-css-var('input-placeholder-color');

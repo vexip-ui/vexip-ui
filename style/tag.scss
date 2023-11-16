@@ -103,7 +103,7 @@ $tag: map.merge(
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline-color: transparent;
+    outline: 0;
     opacity: 60%;
     transition: get-css-var('transition-opacity');
 
