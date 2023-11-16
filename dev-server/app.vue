@@ -109,7 +109,7 @@ body {
   background-color: var(--vxp-fill-color-background);
   border: 0;
   border-radius: 50%;
-  outline-color: transparent;
+  outline: 0;
   box-shadow: var(--vxp-shadow-base);
   transition: var(--vxp-transition-color);
 

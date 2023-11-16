@@ -395,7 +395,7 @@ $table: map.merge(
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline-color: transparent;
+    outline: 0;
   }
 
   &__expand {

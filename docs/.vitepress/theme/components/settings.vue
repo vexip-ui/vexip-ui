@@ -48,7 +48,7 @@ const active = ref(false)
   cursor: pointer;
   background-color: transparent;
   border: 0;
-  outline-color: transparent;
+  outline: 0;
   transition: var(--vxp-transition-color);
 
   &:hover,

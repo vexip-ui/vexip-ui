@@ -42,7 +42,7 @@ $tab-nav: map.merge(
   display: flex;
   align-items: stretch;
   background-color: transparent;
-  outline-color: transparent;
+  outline: 0;
 
   &--right,
   &--left {
@@ -134,7 +134,7 @@ $tab-nav: map.merge(
     cursor: pointer;
     user-select: none;
     border: 0 solid get-css-var('tab-nav-d-color');
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-color');
 
     &:hover,
@@ -207,7 +207,7 @@ $tab-nav: map.merge(
     user-select: none;
     background-color: transparent;
     border: 0 solid get-css-var('tab-nav-d-color');
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-color');
 
     &:hover,
@@ -420,7 +420,7 @@ $tab-nav: map.merge(
     background-color: transparent;
     border: 0;
     border-radius: 50%;
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-background');
 
     &:hover,

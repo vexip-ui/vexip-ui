@@ -114,7 +114,7 @@ $upload: map.merge(
     border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
       get-css-var('upload-panel-b-color');
     border-radius: get-css-var('upload-file-radius');
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover,
@@ -166,7 +166,7 @@ $upload: map.merge(
     border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
       get-css-var('upload-panel-b-color');
     border-radius: get-css-var('upload-panel-radius');
-    outline-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
@@ -437,7 +437,7 @@ $upload: map.merge(
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline-color: transparent;
+    outline: 0;
 
     &--disabled {
       color: get-css-var('upload-action-color-disabled');
@@ -505,7 +505,7 @@ $upload: map.merge(
     cursor: pointer;
     background-color: transparent;
     border: 0;
-    outline-color: transparent;
+    outline: 0;
 
     &:hover,
     &:focus {
