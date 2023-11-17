@@ -30,7 +30,6 @@ import type {
   SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
-  TableColumnGroupOptions,
   TableColumnOptions,
   TableDragColumn,
   TableExpandColumn,
@@ -65,6 +64,7 @@ export function useStore(options: StoreOptions) {
   const state = reactive({
     ...options,
     columns: [],
+    normalColumns: [],
     allColumns: [],
     summaries: [],
     data: [],
@@ -201,6 +201,7 @@ export function useStore(options: StoreOptions) {
   })
   const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
   const totalWidths = computed(() => getColumnsWidths())
+  const normalWidths = computed(() => getColumnsWidths(state.normalColumns))
   const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
   const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
   const expandColumn = computed(() => {
@@ -271,6 +272,7 @@ export function useStore(options: StoreOptions) {
     hasDragColumn,
     rowDragging,
     totalWidths,
+    normalWidths,
     leftFixedWidths,
     rightFixedWidths,
     expandColumn,
@@ -287,6 +289,7 @@ export function useStore(options: StoreOptions) {
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
+    isGroupColumn,
     buildSummaryKey,
     setDataKey,
     setCurrentPage,
@@ -401,15 +404,20 @@ export function useStore(options: StoreOptions) {
     const allColumns: ColumnData[] = []
     const baseColumns: ColumnWithKey[] = []
 
+    const getFixedOrder = (fixed?: boolean | 'left' | 'right') => {
+      return fixed === true || fixed === 'left' ? -1 : fixed === 'right' ? 1 : 0
+    }
     const build = (
       _columns: ColumnRawData,
       fixed?: boolean | 'left' | 'right',
       row = 0,
       result: ColumnData[] = []
     ) => {
-      _columns = Array.from(_columns).sort((prev, next) => {
-        return (prev.order || 0) - (next.order || 0)
-      })
+      _columns = _columns
+        .filter(column => !('children' in column) || isGroupColumn(column))
+        .sort((prev, next) => (prev.order || 0) - (next.order || 0))
+        .sort((prev, next) => getFixedOrder(prev.fixed) - getFixedOrder(next.fixed))
+      fixed = fixed === true ? 'left' : fixed
 
       const columns = _columns as ColumnData
       const rowColumns = result[row] ?? (result[row] = [])
@@ -424,12 +432,7 @@ export function useStore(options: StoreOptions) {
         rowColumns[index] = column
 
         if (isGroupColumn(column)) {
-          const endIndex = build(
-            (column as TableColumnGroupOptions).children,
-            column.fixed,
-            row + 1,
-            result
-          )
+          const endIndex = build(column.children, column.fixed, row + 1, result)
 
           column.key = Symbol('TableColumnGroup')
           column.headSpan = endIndex - index
@@ -437,7 +440,7 @@ export function useStore(options: StoreOptions) {
         } else {
           let key = column.key
 
-          if (isNull(key)) {
+          if (!(column.type && columnTypes.includes(column.type)) && isNull(key)) {
             key = getIndexId()
 
             console.error('[vexip-ui:Table] Table column requires key prop, but missing')
@@ -445,7 +448,7 @@ export function useStore(options: StoreOptions) {
 
           column.key = key
           baseColumns.push(column)
-          index += column.headSpan || 1
+          index += 1
         }
       }
 
@@ -499,6 +502,7 @@ export function useStore(options: StoreOptions) {
 
       column.first = false
       column.last = false
+      column.index = i
 
       if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
@@ -581,6 +585,7 @@ export function useStore(options: StoreOptions) {
     }
 
     state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
+    state.normalColumns = normalColumns
     state.allColumns = allColumns
 
     if (state.columns.length) {

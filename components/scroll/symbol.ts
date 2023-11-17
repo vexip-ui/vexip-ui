@@ -1,7 +1,7 @@
 export type ScrollMode = 'horizontal' | 'horizontal-exact' | 'vertical' | 'both'
 
 export interface ScrollPayload {
-  type: ScrollMode,
+  type: Exclude<ScrollMode, 'horizontal-exact'>,
   clientX: number,
   clientY: number,
   percentX: number,

@@ -9,16 +9,16 @@
       :aria-rowindex="index"
     >
       <TableFootCell
-        v-for="(column, columnIndex) in columns"
-        :key="columnIndex"
+        v-for="(column, colIndex) in columns"
+        :key="colIndex"
         :row="row"
         :column="column"
-        :column-index="columnIndex"
+        :col-index="colIndex"
         :summary="summary"
         :summary-index="index"
         :fixed="fixed"
         :above="above"
-        :aria-colindex="columnIndex"
+        :aria-colindex="colIndex"
       ></TableFootCell>
     </TableRow>
   </div>
@@ -61,7 +61,7 @@ export default defineComponent({
         ? state.leftFixedColumns
         : props.fixed === 'right'
           ? state.rightFixedColumns
-          : state.columns
+          : state.normalColumns
     })
     const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
     const data = computed(() => {
@@ -82,7 +82,7 @@ export default defineComponent({
             ? getters.leftFixedWidths.at(-1)
             : props.fixed === 'right'
             ? getters.rightFixedWidths.at(-1)
-            : getters.totalWidths.at(-1)
+            : getters.normalWidths.at(-1)
         }px`
       }
     })

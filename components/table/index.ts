@@ -33,7 +33,7 @@ export type {
   TableExpandColumn,
   TableTypeColumn,
   TableColumnOptions,
-  TableColumnGroupOptions as TableColumnGroup,
+  TableColumnGroupOptions,
   TableCellPropFn,
   TableHeadPropFn,
   TableRowPayload,

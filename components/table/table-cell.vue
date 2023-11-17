@@ -85,7 +85,7 @@
           <Renderer
             v-if="isFunction(column.renderer)"
             :renderer="column.renderer"
-            :data="{ row: row.data, rowIndex, column, columnIndex }"
+            :data="{ row: row.data, rowIndex, column, columnIndex: column.index }"
           ></Renderer>
           <template v-else-if="isFunction(column.accessor)">
             {{ column.accessor(row.data, rowIndex) }}
@@ -98,7 +98,7 @@
           <Renderer
             v-if="isFunction(column.renderer)"
             :renderer="column.renderer"
-            :data="{ row: row.data, rowIndex, column, columnIndex }"
+            :data="{ row: row.data, rowIndex, column, columnIndex: column.index }"
           ></Renderer>
           <template v-else-if="isFunction(column.accessor)">
             {{ column.accessor(row.data, rowIndex) }}
@@ -160,7 +160,7 @@ export default defineComponent({
       type: Object as PropType<ColumnWithKey>,
       default: () => ({})
     },
-    columnIndex: {
+    colIndex: {
       type: Number,
       default: -1
     },
@@ -190,7 +190,7 @@ export default defineComponent({
           row: props.row.data,
           rowIndex: props.rowIndex,
           column: props.column,
-          columnIndex: props.columnIndex
+          columnIndex: props.column.index
         })
       } else {
         customClass = state.cellClass
@@ -214,7 +214,7 @@ export default defineComponent({
     const cellSpan = computed(() => {
       const fixed = props.fixed || 'default'
 
-      if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.columnIndex}`)) {
+      if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.column.index}`)) {
         return { colSpan: 0, rowSpan: 0 }
       }
 
@@ -223,7 +223,7 @@ export default defineComponent({
           ? state.leftFixedColumns
           : fixed === 'right'
             ? state.rightFixedColumns
-            : state.columns
+            : state.normalColumns
 
       let result: ReturnType<ColumnCellSpanFn>
 
@@ -238,7 +238,7 @@ export default defineComponent({
           row: props.row.data,
           rowIndex: props.rowIndex,
           column: props.column,
-          columnIndex: props.columnIndex,
+          columnIndex: props.column.index,
           fixed: props.fixed
         })
       }
@@ -246,10 +246,10 @@ export default defineComponent({
       const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
       const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
-      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
+      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
       span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
 
-      mutations.updateCellSpan(props.rowIndex, props.columnIndex, fixed, span)
+      mutations.updateCellSpan(props.rowIndex, props.column.index, fixed, span)
 
       return span
     })
@@ -259,9 +259,9 @@ export default defineComponent({
           ? getters.leftFixedWidths
           : props.fixed === 'right'
             ? getters.rightFixedWidths
-            : getters.totalWidths
+            : getters.normalWidths
       const { colSpan, rowSpan } = cellSpan.value
-      const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+      const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
       const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let height: number | undefined
@@ -279,7 +279,7 @@ export default defineComponent({
           row: props.row.data,
           rowIndex: props.rowIndex,
           column: props.column,
-          columnIndex: props.columnIndex
+          columnIndex: props.column.index
         })
       } else {
         customStyle = state.cellStyle
@@ -294,13 +294,13 @@ export default defineComponent({
           height: height ? `${height}px` : undefined,
           visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
           borderRightWidth:
-            !state.border && colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1
+            !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
               ? 0
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
           transform: `translate3d(${isRtl.value ? '-' : ''}${
-            padLeft + totalWidths[props.columnIndex]
+            padLeft + totalWidths[props.colIndex]
           }px, 0, 0)`
         }
       ]
@@ -313,7 +313,7 @@ export default defineComponent({
           row: props.row.data,
           rowIndex: props.rowIndex,
           column: props.column,
-          columnIndex: props.columnIndex
+          columnIndex: props.colIndex
         })
       } else {
         customAttrs = state.cellAttrs
@@ -353,7 +353,7 @@ export default defineComponent({
         key: props.row.key,
         rowIndex: props.rowIndex,
         column: props.column,
-        columnIndex: props.columnIndex,
+        columnIndex: props.colIndex,
         event
       }
     }

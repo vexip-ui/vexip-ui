@@ -30,6 +30,7 @@ const funcProp = {
 
 export default defineComponent({
   name: 'TableColumn',
+  inheritAttrs: false,
   props: tableColumnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {

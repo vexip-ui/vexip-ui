@@ -19,26 +19,26 @@
         :scroll-x="bodyXScroll"
         @scroll="handleXScroll"
       >
+        <div
+          v-if="leftFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'left')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
+          }"
+        >
+          <TableHead fixed="left"></TableHead>
+        </div>
         <TableHead></TableHead>
+        <div
+          v-if="rightFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'right')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
+          }"
+        >
+          <TableHead fixed="right"></TableHead>
+        </div>
       </NativeScroll>
-      <div
-        v-if="leftFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'left')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
-        }"
-      >
-        <TableHead fixed="left"></TableHead>
-      </div>
-      <div
-        v-if="rightFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'right')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
-        }"
-      >
-        <TableHead fixed="right"></TableHead>
-      </div>
     </div>
     <div
       v-if="aboveSummaries.length"
@@ -54,103 +54,78 @@
         :scroll-x="bodyXScroll"
         @scroll="handleXScroll"
       >
+        <div
+          v-if="leftFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'left')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
+          }"
+        >
+          <TableFoot fixed="left" above></TableFoot>
+        </div>
         <TableFoot above></TableFoot>
+        <div
+          v-if="rightFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'right')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
+          }"
+        >
+          <TableFoot fixed="right" above></TableFoot>
+        </div>
       </NativeScroll>
-      <div
-        v-if="leftFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'left')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
-        }"
-      >
-        <TableFoot fixed="left" above></TableFoot>
-      </div>
-      <div
-        v-if="rightFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'right')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
-        }"
-      >
-        <TableFoot fixed="right" above></TableFoot>
-      </div>
     </div>
-    <div :class="nh.be('wrapper')">
+    <div :class="nh.be('body-wrapper')">
       <NativeScroll
-        ref="xScroll"
+        ref="mainScroll"
         inherit
-        mode="horizontal"
+        mode="both"
         scroll-only
-        :class="props.scrollClass.horizontal"
+        observe-deep
+        :class="[nh.be('wrapper'), props.scrollClass.major]"
         :bar-class="nh.bem('bar', 'horizontal')"
+        :height="bodyScrollHeight"
         :scroll-x="bodyXScroll"
-        @scroll="handleXScroll"
+        :scroll-y="bodyYScroll"
+        @scroll="handleMainScroll"
         @x-enabled-change="xScrollEnabled = $event"
+        @y-enabled-change="yScrollEnabled = $event"
         @resize="handleResize"
       >
-        <NativeScroll
-          ref="yScroll"
-          inherit
-          observe-deep
-          scroll-only
-          :class="[nh.be('body-wrapper'), props.scrollClass.major]"
-          :height="bodyScrollHeight"
-          :scroll-y="bodyYScroll"
-          :style="{ minWidth: `${totalWidths}px` }"
-          @scroll="handleYScroll"
-          @y-enabled-change="yScrollEnabled = $event"
-        >
-          <TableBody>
-            <template #empty="{ isFixed }">
-              <slot name="empty" :is-fixed="isFixed"></slot>
-            </template>
-          </TableBody>
-        </NativeScroll>
-      </NativeScroll>
-      <div
-        v-if="leftFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'left')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
-        }"
-      >
-        <NativeScroll
-          inherit
-          observe-deep
-          scroll-only
-          :class="[nh.be('body-wrapper'), props.scrollClass.left]"
-          :height="bodyScrollHeight"
-          :scroll-y="bodyYScroll"
-          @scroll="handleYScroll"
+        <div
+          v-if="leftFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'left')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
+          }"
+          :style="{ minHeight: `${totalHeight}px` }"
         >
           <TableBody fixed="left">
             <template #empty="{ isFixed }">
               <slot name="empty" :is-fixed="isFixed"></slot>
             </template>
           </TableBody>
-        </NativeScroll>
-      </div>
-      <div
-        v-if="rightFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'right')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
-        }"
-      >
-        <NativeScroll
-          inherit
-          observe-deep
-          scroll-only
-          :class="[nh.be('body-wrapper'), props.scrollClass.right]"
-          :height="bodyScrollHeight"
-          :scroll-y="bodyYScroll"
-          @scroll="handleYScroll"
+        </div>
+        <TableBody>
+          <template #empty="{ isFixed }">
+            <slot name="empty" :is-fixed="isFixed"></slot>
+          </template>
+        </TableBody>
+        <div
+          v-if="rightFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'right')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
+          }"
+          :style="{ minHeight: `${totalHeight}px` }"
         >
           <TableBody fixed="right">
-            <slot></slot>
+            <template #empty="{ isFixed }">
+              <slot name="empty" :is-fixed="isFixed"></slot>
+            </template>
           </TableBody>
-        </NativeScroll>
-      </div>
+        </div>
+      </NativeScroll>
     </div>
     <div
       v-if="belowSummaries.length"
@@ -168,26 +143,26 @@
         :scroll-x="bodyXScroll"
         @scroll="handleXScroll"
       >
+        <div
+          v-if="leftFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'left')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
+          }"
+        >
+          <TableFoot fixed="left"></TableFoot>
+        </div>
         <TableFoot></TableFoot>
+        <div
+          v-if="rightFixedColumns.length"
+          :class="{
+            [nh.bem('fixed', 'right')]: true,
+            [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
+          }"
+        >
+          <TableFoot fixed="right"></TableFoot>
+        </div>
       </NativeScroll>
-      <div
-        v-if="leftFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'left')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
-        }"
-      >
-        <TableFoot fixed="left"></TableFoot>
-      </div>
-      <div
-        v-if="rightFixedColumns.length"
-        :class="{
-          [nh.bem('fixed', 'right')]: true,
-          [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
-        }"
-      >
-        <TableFoot fixed="right"></TableFoot>
-      </div>
     </div>
     <Scrollbar
       v-if="props.useXBar && useXScroll"
@@ -268,7 +243,7 @@ import { useStore } from './store'
 import { DropType, TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
 import type { StyleType } from '@vexip-ui/config'
-import type { NativeScrollExposed } from '@/components/native-scroll'
+import type { NativeScrollExposed, NativeScrollPayload } from '@/components/native-scroll'
 import type { ScrollbarExposed } from '@/components/scrollbar'
 import type {
   MouseEventType,
@@ -403,14 +378,14 @@ export default defineComponent({
     const noTransition = ref(true)
 
     const wrapper = ref<HTMLElement>()
-    const xScroll = ref<NativeScrollExposed>()
+    const mainScroll = ref<NativeScrollExposed>()
     const xHeadScroll = ref<NativeScrollExposed>()
     const xAboveScroll = ref<NativeScrollExposed>()
     const xBelowScroll = ref<NativeScrollExposed>()
     const thead = ref<HTMLElement>()
     const aboveTfoot = ref<HTMLElement>()
     const belowTfoot = ref<HTMLElement>()
-    const yScroll = ref<NativeScrollExposed>()
+    // const yScroll = ref<NativeScrollExposed>()
     const indicator = ref<HTMLElement>()
     const xScrollbar = ref<ScrollbarExposed>()
     const yScrollbar = ref<ScrollbarExposed>()
@@ -557,7 +532,7 @@ export default defineComponent({
 
       return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : bodyHeight.value
     })
-    const xBarLength = computed(() => xScroll.value?.xBarLength || 35)
+    const xBarLength = computed(() => mainScroll.value?.xBarLength || 35)
     const yBarLength = computed(() => {
       const { totalHeight } = state
 
@@ -717,8 +692,10 @@ export default defineComponent({
       refresh()
       window.addEventListener('resize', handlerResize)
 
-      xScrollEnabled.value = xScroll.value?.enableXScroll ?? false
-      yScrollEnabled.value = yScroll.value?.enableYScroll ?? false
+      if (mainScroll.value) {
+        xScrollEnabled.value = mainScroll.value.enableXScroll
+        yScrollEnabled.value = mainScroll.value.enableYScroll
+      }
     })
 
     onBeforeUnmount(() => {
@@ -739,7 +716,7 @@ export default defineComponent({
       }
 
       nextTick(() => {
-        xScroll.value?.content && setTableWidth(xScroll.value.content.offsetWidth)
+        mainScroll.value?.content && setTableWidth(mainScroll.value.content.offsetWidth)
         refreshXScroll()
       })
     }
@@ -773,6 +750,16 @@ export default defineComponent({
       }
     }
 
+    function handleMainScroll(payload: NativeScrollPayload) {
+      if (payload.type !== 'vertical') {
+        handleXScroll(payload)
+      }
+
+      if (payload.type !== 'horizontal') {
+        handleYScroll(payload)
+      }
+    }
+
     function handleXScroll({ clientX, percentX }: { clientX: number, percentX: number }) {
       xScrollPercent.value = percentX
       setBodyXScroll(clientX)
@@ -788,9 +775,9 @@ export default defineComponent({
     }
 
     function handleXBarScroll(percent: number) {
-      if (!xScroll.value) return
+      if (!mainScroll.value) return
 
-      const client = (xScroll.value.xScrollLimit * percent) / 100
+      const client = (mainScroll.value.xScrollLimit * percent) / 100
 
       xScrollPercent.value = percent
       setBodyXScroll(client)
@@ -836,7 +823,7 @@ export default defineComponent({
     }
 
     function refreshXScroll() {
-      xScroll.value?.refresh()
+      mainScroll.value?.refresh()
       xHeadScroll.value?.refresh()
       xAboveScroll.value?.refresh()
       xBelowScroll.value?.refresh()
@@ -1209,8 +1196,7 @@ export default defineComponent({
       store,
 
       wrapper,
-      xScroll,
-      yScroll,
+      mainScroll,
       xHeadScroll,
       xAboveScroll,
       xBelowScroll,
@@ -1221,6 +1207,7 @@ export default defineComponent({
       xScrollbar,
       yScrollbar,
 
+      handleMainScroll,
       handleYScroll,
       handleXScroll,
       handleXBarScroll,

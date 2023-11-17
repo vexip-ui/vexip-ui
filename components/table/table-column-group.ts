@@ -21,7 +21,8 @@ const propKeys = Object.keys(tableColumnGroupProps) as GroupPropKey[]
 const ignoredProps: GroupPropKey[] = ['renderer']
 
 export default defineComponent({
-  name: 'TableColumn',
+  name: 'TableColumnGroup',
+  inheritAttrs: false,
   props: tableColumnGroupProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
@@ -95,8 +96,8 @@ export default defineComponent({
 
     function setRenderer() {
       options.renderer = () => {
-        if (typeof slots.default === 'function') {
-          return renderSlot(slots, 'default')
+        if (typeof slots.head === 'function') {
+          return renderSlot(slots, 'head')
         }
 
         if (typeof props.renderer === 'function') {

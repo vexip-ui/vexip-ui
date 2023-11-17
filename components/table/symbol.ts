@@ -200,6 +200,7 @@ export type ColumnWithKey<
   first?: boolean,
   /** @internal */
   last?: boolean,
+  index: number,
   rowSpan: number
 }
 
@@ -360,6 +361,7 @@ export type ColumnData = (ColumnGroupWithKey | ColumnWithKey)[]
 
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
+  normalColumns: ColumnWithKey[],
   allColumns: ColumnData[],
   summaries: SummaryWithKey[],
   rowData: TableRowState[],

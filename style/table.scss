@@ -74,6 +74,7 @@ $table: map.merge(
 
   &__wrapper {
     position: relative;
+    display: flex;
     width: 100%;
     height: 100%;
     overflow: scroll;
@@ -123,9 +124,9 @@ $table: map.merge(
   }
 
   &__body-wrapper {
-    display: inline-block;
-    width: 100%;
-    vertical-align: top;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
   }
 
   &__foot-wrapper {
@@ -588,9 +589,9 @@ $table: map.merge(
 
   &__fixed--right,
   &__fixed--left {
-    position: absolute;
+    position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     transition: get-css-var('transition-shadow');
 
     #{$collapse} * {

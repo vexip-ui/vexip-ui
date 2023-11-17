@@ -10,14 +10,14 @@
         :aria-rowindex="row.index"
       >
         <TableCell
-          v-for="(column, columnIndex) in columns"
-          :key="columnIndex"
+          v-for="(column, colIndex) in columns"
+          :key="colIndex"
           :row="row"
           :row-index="row.listIndex"
           :column="column"
-          :column-index="columnIndex"
+          :col-index="colIndex"
           :fixed="fixed"
-          :aria-colindex="columnIndex"
+          :aria-colindex="colIndex"
         ></TableCell>
       </TableRow>
     </template>
@@ -61,7 +61,7 @@ export default defineComponent({
         ? state.leftFixedColumns
         : props.fixed === 'right'
           ? state.rightFixedColumns
-          : state.columns
+          : state.normalColumns
     })
     const data = computed(() => (state.virtual ? state.virtualData : getters.processedData))
     const style = computed(() => {
@@ -70,7 +70,7 @@ export default defineComponent({
           ? getters.leftFixedWidths.at(-1)
           : props.fixed === 'right'
             ? getters.rightFixedWidths.at(-1)
-            : getters.totalWidths.at(-1)
+            : getters.normalWidths.at(-1)
       const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
       const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
 

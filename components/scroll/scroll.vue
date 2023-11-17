@@ -590,7 +590,7 @@ export default defineComponent({
       emitScrollEvent('vertical')
     }
 
-    function emitScrollEvent(type: ScrollMode) {
+    function emitScrollEvent(type: Exclude<ScrollMode, 'horizontal-exact'>) {
       emitEvent(props.onScroll, {
         ...getCommonPayload(),
         type

@@ -27,13 +27,13 @@
       >
         <Renderer
           :renderer="summary.renderer"
-          :data="{ column, index: columnIndex, rows: data, meta: summaryData }"
+          :data="{ column, index: column.index, rows: data, meta: summaryData }"
         ></Renderer>
       </Ellipsis>
       <Renderer
         v-else
         :renderer="summary.renderer"
-        :data="{ column, index: columnIndex, rows: data, meta: summaryData }"
+        :data="{ column, index: column.index, rows: data, meta: summaryData }"
       ></Renderer>
     </ResizeObserver>
   </div>
@@ -76,7 +76,7 @@ export default defineComponent({
       type: Object as PropType<ColumnWithKey>,
       default: () => ({})
     },
-    columnIndex: {
+    colIndex: {
       type: Number,
       default: -1
     },
@@ -118,7 +118,7 @@ export default defineComponent({
       if (typeof state.footClass === 'function') {
         customClass = state.footClass({
           column: props.column,
-          columnIndex: props.columnIndex,
+          columnIndex: props.column.index,
           summary: props.summary,
           summaryIndex: props.summaryIndex
         })
@@ -147,7 +147,7 @@ export default defineComponent({
       if (
         state.collapseMap
           .get(fixed)!
-          .has(`${prefix.value}${props.summaryIndex},${props.columnIndex}`)
+          .has(`${prefix.value}${props.summaryIndex},${props.column.index}`)
       ) {
         return { colSpan: 0, rowSpan: 0 }
       }
@@ -157,14 +157,14 @@ export default defineComponent({
           ? state.leftFixedColumns
           : fixed === 'right'
             ? state.rightFixedColumns
-            : state.columns
+            : state.normalColumns
 
       let result: ReturnType<SummaryCellSpanFn>
 
       if (typeof props.summary.cellSpan === 'function') {
         result = props.summary.cellSpan({
           column: props.column,
-          index: props.columnIndex,
+          index: props.column.index,
           fixed: props.fixed
         })
       }
@@ -172,10 +172,10 @@ export default defineComponent({
       const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
       const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
-      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.columnIndex)
+      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
       span.rowSpan = boundRange(span.rowSpan, 0, summaries.value.length - props.summaryIndex)
 
-      mutations.updateCellSpan(props.summaryIndex, props.columnIndex, fixed, span, prefix.value)
+      mutations.updateCellSpan(props.summaryIndex, props.column.index, fixed, span, prefix.value)
 
       return span
     })
@@ -185,9 +185,9 @@ export default defineComponent({
           ? getters.leftFixedWidths
           : props.fixed === 'right'
             ? getters.rightFixedWidths
-            : getters.totalWidths
+            : getters.normalWidths
       const { colSpan, rowSpan } = cellSpan.value
-      const width = totalWidths[props.columnIndex + colSpan] - totalWidths[props.columnIndex]
+      const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
       const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
       let height: number | undefined
@@ -201,7 +201,7 @@ export default defineComponent({
       if (typeof state.footStyle === 'function') {
         customStyle = state.footStyle({
           column: props.column,
-          columnIndex: props.columnIndex,
+          columnIndex: props.column.index,
           summary: props.summary,
           summaryIndex: props.summaryIndex
         })
@@ -218,13 +218,13 @@ export default defineComponent({
           height: height ? `${height}px` : undefined,
           visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
           borderRightWidth:
-            !state.border && colSpan > 1 && props.columnIndex + colSpan >= totalWidths.length - 1
+            !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
               ? 0
               : undefined,
           borderBottomWidth:
             rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
           transform: `translate3d(${isRtl.value ? '-' : ''}${
-            padLeft + totalWidths[props.columnIndex]
+            padLeft + totalWidths[props.colIndex]
           }px, 0, 0)`
         }
       ]
@@ -235,7 +235,7 @@ export default defineComponent({
       if (typeof state.footAttrs === 'function') {
         customAttrs = state.footAttrs({
           column: props.column,
-          columnIndex: props.columnIndex,
+          columnIndex: props.column.index,
           summary: props.summary,
           summaryIndex: props.summaryIndex
         })
@@ -250,7 +250,7 @@ export default defineComponent({
     function buildEventPayload(event: Event) {
       return {
         column: props.column,
-        columnIndex: props.columnIndex,
+        columnIndex: props.column.index,
         summary: props.summary,
         summaryIndex: props.summaryIndex,
         event

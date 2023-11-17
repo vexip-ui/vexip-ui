@@ -12,7 +12,7 @@
       <template v-for="(column, index) in rowColumns" :key="index">
         <TableHeadCell
           v-if="column"
-          :column="column"
+          :column="column as any"
           :index="index"
           :row-index="rowIndex"
           :fixed="fixed"
@@ -49,13 +49,18 @@ export default defineComponent({
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 
-    const allColumns = computed(() => state.allColumns)
-    const columns = computed(() => {
-      return props.fixed === 'left'
-        ? state.leftFixedColumns
-        : props.fixed === 'right'
-          ? state.rightFixedColumns
-          : state.columns
+    const nh = useNameHelper('table')
+    const allColumns = computed(() => {
+      const left = state.leftFixedColumns.length
+      const right = state.allColumns[0].length - state.rightFixedColumns.length
+
+      if (props.fixed === 'left') {
+        return state.allColumns.map(columns => columns.slice(0, left))
+      } else if (props.fixed === 'right') {
+        return state.allColumns.map(columns => columns.slice(right, state.allColumns[0].length))
+      }
+
+      return state.allColumns.map(columns => columns.slice(left, right))
     })
     const style = computed(() => {
       const width =
@@ -63,7 +68,7 @@ export default defineComponent({
           ? getters.leftFixedWidths.at(-1)
           : props.fixed === 'right'
             ? getters.rightFixedWidths.at(-1)
-            : getters.totalWidths.at(-1)
+            : getters.normalWidths.at(-1)
       const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
       const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
 
@@ -79,10 +84,9 @@ export default defineComponent({
     }
 
     return {
-      nh: useNameHelper('table'),
+      nh,
 
       allColumns,
-      columns,
       style,
 
       getRow

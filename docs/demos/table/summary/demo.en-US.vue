@@ -24,6 +24,13 @@
       :name="month"
       text-align="center"
     ></TableColumn>
+    <TableColumn
+      id-key="year"
+      name="Year"
+      fixed="right"
+      text-align="center"
+      :accessor="sum"
+    ></TableColumn>
 
     <TableSummary
       v-slot="{ meta }"
@@ -86,6 +93,16 @@ const data = ref(
     }
   })
 )
+
+function sum(item: (typeof data.value)[0]) {
+  let total = 0
+
+  for (let i = 1; i < 13; ++i) {
+    total += item[`m${i}` as Exclude<keyof typeof item, 'name' | 'index'>]
+  }
+
+  return total
+}
 
 function footCellSpan({ index }: { index: number }) {
   if (index === 0) {
