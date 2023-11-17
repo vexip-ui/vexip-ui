@@ -141,8 +141,8 @@ const style = computed(() => {
         ? getters.rightFixedWidths
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
-  const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
   const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+  const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined
 
@@ -170,7 +170,7 @@ const style = computed(() => {
     customStyle,
     {
       display: !colSpan || !rowSpan ? 'none' : undefined,
-      width: `${width}px`,
+      width: `${(props.column.index ? 0 : padLeft) + width}px`,
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
@@ -180,7 +180,7 @@ const style = computed(() => {
       borderBottomWidth:
         rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
-        padLeft + totalWidths[props.colIndex]
+        (props.column.index ? padLeft : 0) + totalWidths[props.colIndex]
       }px, 0, 0)`
     }
   ]
@@ -320,6 +320,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
+    <div
+      v-if="column.index === 0"
+      :class="nh.be('side-pad')"
+      role="none"
+      aria-hidden
+    ></div>
     <template v-if="isTableTypeColumn(column)">
       <Checkbox
         v-if="isSelectionColumn(column)"

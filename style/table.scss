@@ -230,13 +230,9 @@ $table: map.merge(
   }
 
   &__side-pad {
-    position: absolute;
     inset-inline-start: 0;
-    flex: 1 0 0;
     width: get-css-var('table-side-pad-left');
     height: 100%;
-    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
-    transition: get-css-var('transition-background');
 
     &--right {
       inset-inline-start: auto;

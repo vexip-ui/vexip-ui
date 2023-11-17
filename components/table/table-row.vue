@@ -368,12 +368,12 @@ function handleDragLeave(event: DragEvent) {
       :class="className"
       :style="style"
     >
-      <div
+      <!-- <div
         v-if="fixed !== 'right'"
         :class="nh.be('side-pad')"
         role="none"
         aria-hidden
-      ></div>
+      ></div> -->
       <slot></slot>
       <div
         v-if="fixed !== 'left'"

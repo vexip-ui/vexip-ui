@@ -495,7 +495,7 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns: ColumnWithKey[] = []
     const leftFixedColumns: ColumnWithKey[] = []
 
-    let first = false
+    let firstSet = false
 
     for (let i = 0, len = baseColumns.length; i < len; ++i) {
       const column = baseColumns[i]
@@ -551,9 +551,9 @@ export function useStore(options: StoreOptions) {
         if (!column.key) {
           column.key = `__vxp_${column.type}-${i}`
         }
-      } else if (!first) {
+      } else if (!firstSet) {
         column.first = true
-        first = true
+        firstSet = true
       }
 
       // 独立属性解析时注意隔断同对象引用
