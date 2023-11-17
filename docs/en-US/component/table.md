@@ -200,9 +200,23 @@ Adding the `col-resizable` prop enables resize column width.
 
 ==!s|2.1.24==
 
-Provide a callback function via the `cell-span` of column options to set the span of each cell.
+Provide a callback function via the `cell-span` prop of column options to set the span of each cell.
 
 If you want to merge the header, you need to set the `head-span` of column options.
+
+:::
+
+:::demo table/column-group
+
+### Head Grouping
+
+==!s|2.2.12==
+
+This example uses the TableColumnGroup component to group table columns.
+
+If the `columns` prop is used, it will be parsed into grouping options when the `children` prop is specified.
+
+Note that after using grouping, only the `fixed` prop of the top-level option will take effect, and other which like the age column in the example will be invalid.
 
 :::
 

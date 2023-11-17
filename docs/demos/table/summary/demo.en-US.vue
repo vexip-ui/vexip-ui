@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 const months = [
   'January',
@@ -73,7 +73,7 @@ const months = [
 ]
 const random = () => Math.round(100 * Math.random())
 
-const data = ref(
+const data = reactive(
   Array.from({ length: 20 }, (_, index) => {
     return {
       index,
@@ -94,7 +94,7 @@ const data = ref(
   })
 )
 
-function sum(item: (typeof data.value)[0]) {
+function sum(item: (typeof data)[0]) {
   let total = 0
 
   for (let i = 1; i < 13; ++i) {

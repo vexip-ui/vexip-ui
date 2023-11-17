@@ -24,8 +24,8 @@
       <TableColumnGroup name="Work">
         <TableColumn name="Company" id-key="company" :width="180"></TableColumn>
         <TableColumn name="Job" id-key="job" :width="180"></TableColumn>
-        <TableColumn name="Email" id-key="email" :width="280"></TableColumn>
       </TableColumnGroup>
+      <TableColumn name="Email" id-key="email" :width="280"></TableColumn>
     </TableColumnGroup>
     <TableColumn
       name="Action"
