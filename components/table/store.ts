@@ -16,9 +16,8 @@ import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   CellSpanResult,
-  ColumnData,
   ColumnGroupWithKey,
-  ColumnRawData,
+  ColumnRawWithKey,
   ColumnWithKey,
   Data,
   ExpandRenderFn,
@@ -31,6 +30,7 @@ import type {
   TableCellPropFn,
   TableCellSpanFn,
   TableColumnOptions,
+  TableColumnRawOptions,
   TableDragColumn,
   TableExpandColumn,
   TableFilterOptions,
@@ -400,18 +400,18 @@ export function useStore(options: StoreOptions) {
     return !!column.children?.length
   }
 
-  function buildColumns(columns: ColumnRawData) {
-    const allColumns: ColumnData[] = []
+  function buildColumns(columns: TableColumnRawOptions[]) {
+    const allColumns: ColumnRawWithKey[][] = []
     const baseColumns: ColumnWithKey[] = []
 
     const getFixedOrder = (fixed?: boolean | 'left' | 'right') => {
       return fixed === true || fixed === 'left' ? -1 : fixed === 'right' ? 1 : 0
     }
     const build = (
-      _columns: ColumnRawData,
+      _columns: TableColumnRawOptions[],
       fixed?: boolean | 'left' | 'right',
       row = 0,
-      result: ColumnData[] = []
+      result: ColumnRawWithKey[][] = []
     ) => {
       _columns = _columns
         .filter(column => !('children' in column) || isGroupColumn(column))
@@ -419,7 +419,7 @@ export function useStore(options: StoreOptions) {
         .sort((prev, next) => getFixedOrder(prev.fixed) - getFixedOrder(next.fixed))
       fixed = fixed === true ? 'left' : fixed
 
-      const columns = _columns as ColumnData
+      const columns = _columns as ColumnRawWithKey[]
       const rowColumns = result[row] ?? (result[row] = [])
 
       let index = row > 0 ? result[row - 1].length - 1 : 0
@@ -485,7 +485,7 @@ export function useStore(options: StoreOptions) {
     return { allColumns, baseColumns }
   }
 
-  function setColumns(columns: ColumnRawData) {
+  function setColumns(columns: TableColumnRawOptions[]) {
     resetCellSpan()
 
     const { widths, sorters, filters } = state

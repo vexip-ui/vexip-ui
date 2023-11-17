@@ -26,8 +26,7 @@ import type {
   TableCellPayload,
   TableCellPropFn,
   TableCellSpanFn,
-  TableColumnGroupOptions,
-  TableColumnOptions,
+  TableColumnRawOptions,
   TableColumnType,
   TableFilterOptions,
   TableFilterProfile,
@@ -47,7 +46,7 @@ import type {
 
 export const tableProps = buildProps({
   locale: localeProp('table'),
-  columns: Array as PropType<(TableColumnGroupOptions | TableColumnOptions<any, any>)[]>,
+  columns: Array as PropType<TableColumnRawOptions[]>,
   summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
   width: [Number, String],

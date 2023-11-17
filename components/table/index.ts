@@ -34,6 +34,7 @@ export type {
   TableTypeColumn,
   TableColumnOptions,
   TableColumnGroupOptions,
+  TableColumnRawOptions,
   TableCellPropFn,
   TableHeadPropFn,
   TableRowPayload,

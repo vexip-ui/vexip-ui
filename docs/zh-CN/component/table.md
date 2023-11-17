@@ -406,6 +406,16 @@ type ColumnWithKey<
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
 
+interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+
+type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
+
 type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
   rowIndex: number,
@@ -521,7 +531,7 @@ interface TableFootPayload {
 
 | 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于     |
 | --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | -------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
+| columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                 | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
 | data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -        |
@@ -667,6 +677,26 @@ interface TableFootPayload {
 | head    | 列头内容的插槽 | `Parameters<HeadRenderFn>`          | -        |
 | filter  | 列过滤器的插槽 | `Parameters<FilterRenderFn>`        | `2.1.18` |
 | summary | 列尾内容的插槽 | `Parameters<ColumnSummaryRenderFn>` | `2.1.24` |
+
+### TableColumnGroup 属性
+
+==!s|2.2.12==
+
+| 名称     | 类型                           | 说明                                                                                  | 默认值  | 始于 |
+| -------- | ------------------------------ | ------------------------------------------------------------------------------------- | ------- | ---- |
+| name     | `string`                       | 列分组的名称                                                                          | `''`    | -    |
+| fixed    | `boolean \| 'left' \| 'right'` | 是否为固定列分组，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false` | -    |
+| order    | `number`                       | 列分组的渲染顺序，与列的 `order` 属性共同作用，每一层级、每个分组之间的排序均是独立的 | `0`     | -    |
+| renderer | `() => any`                    | 自定义头部渲染函数                                                                    | `null`  | -    |
+
+### TableColumnGroup 插槽
+
+==!s|2.2.12==
+
+| 名称    | 说明                      | 参数 | 始于 |
+| ------- | ------------------------- | ---- | ---- |
+| default | 用于定义 TableColumn 组件 | -    | -    |
+| head    | 列头内容的插槽            | -    | -    |
 
 ### TableSummary 属性
 

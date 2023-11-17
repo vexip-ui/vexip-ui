@@ -1208,7 +1208,6 @@ export default defineComponent({
       yScrollbar,
 
       handleMainScroll,
-      handleYScroll,
       handleXScroll,
       handleXBarScroll,
       handleYBarScroll,

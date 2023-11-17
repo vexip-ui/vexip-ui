@@ -315,7 +315,7 @@ export interface TableRowState {
 }
 
 export interface StoreOptions {
-  columns: (TableColumnGroupOptions | TableColumnOptions)[],
+  columns: TableColumnRawOptions[],
   summaries: TableSummaryOptions[],
   data: Data[],
   dataKey: string,
@@ -356,13 +356,13 @@ export interface StoreOptions {
   sidePadding: number[]
 }
 
-export type ColumnRawData = (TableColumnGroupOptions | TableColumnOptions)[]
-export type ColumnData = (ColumnGroupWithKey | ColumnWithKey)[]
+export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
+export type ColumnRawWithKey = ColumnGroupWithKey | ColumnWithKey
 
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
   normalColumns: ColumnWithKey[],
-  allColumns: ColumnData[],
+  allColumns: ColumnRawWithKey[][],
   summaries: SummaryWithKey[],
   rowData: TableRowState[],
   width: number,
@@ -435,8 +435,8 @@ export interface TableFootPayload {
 }
 
 export interface TableActions {
-  increaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
-  decreaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
+  increaseColumn(column: TableColumnRawOptions): void,
+  decreaseColumn(column: TableColumnRawOptions): void,
   increaseSummary(column: TableSummaryOptions): void,
   decreaseSummary(column: TableSummaryOptions): void,
   getTableElement(): HTMLElement | undefined,
@@ -461,8 +461,8 @@ export interface TableActions {
 }
 
 export interface ColumnGroupActions {
-  increaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void,
-  decreaseColumn(column: TableColumnOptions | TableColumnGroupOptions): void
+  increaseColumn(column: TableColumnRawOptions): void,
+  decreaseColumn(column: TableColumnRawOptions): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

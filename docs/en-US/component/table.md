@@ -406,6 +406,16 @@ type ColumnWithKey<
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
 
+interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+
+type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
+
 type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
   rowIndex: number,
@@ -521,7 +531,7 @@ interface TableFootPayload {
 
 | Name            | Type                                                          | Description                                                                                                                                           | Default        | Since    |
 | --------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | Table columns configuration, refer to TableColumn props below                                                                                         | `[]`           | -        |
+| columns         | `TableColumnRawOptions[]`                                     | Table columns configuration, refer to TableColumn props below                                                                                         | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | Table summaries configuration, refer to TableSummary props below                                                                                      | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | Table data source                                                                                                                                     | `[]`           | -        |
 | data-key        | `string`                                                      | The index field of the data source, the value of this field needs to be unique in the data source                                                     | `'id'`         | -        |
@@ -634,7 +644,7 @@ interface TableFootPayload {
 | name             | `string`                               | The name of the column                                                                                                                       | `''`        | -        |
 | key \| id-key    | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                                                  | `''`        | -        |
 | accessor         | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -        |
-| fixed            | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -        |
+| fixed            | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, the optional values ​​are `left`, `right`, when set to `true`, it is fixed to the left                         | `false`     | -        |
 | class            | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | `2.1.19` |
 | style            | `StyleType`                            | Custom style for the cell in this column                                                                                                     | `null`      | `2.0.1`  |
 | attrs            | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                                                | `null`      | `2.0.1`  |
@@ -667,6 +677,26 @@ interface TableFootPayload {
 | head    | Slot for column head content | `Parameters<HeadRenderFn>`          | -        |
 | filter  | Slot for column filter       | `Parameters<FilterRenderFn>`        | `2.1.18` |
 | summary | Slot for column summary      | `Parameters<ColumnSummaryRenderFn>` | `2.1.24` |
+
+### TableColumnGroup Props
+
+==!s|2.2.12==
+
+| Name     | Type                           | Description                                                                                                                                       | Default | Since |
+| -------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| name     | `string`                       | The name of the column group                                                                                                                      | `''`    | -     |
+| fixed    | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false` | -     |
+| order    | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`     | -     |
+| renderer | `() => any`                    | Custom header render function                                                                                                                     | `null`  | -     |
+
+### TableColumnGroup Slots
+
+==!s|2.2.12==
+
+| Name    | Description                               | Parameters | Since |
+| ------- | ----------------------------------------- | ---------- | ----- |
+| default | Used to define the TableColumn components | -          | -     |
+| head    | Slot for column head content              | -          | -     |
 
 ### TableSummary Props
 
