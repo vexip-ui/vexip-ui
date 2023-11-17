@@ -6,6 +6,7 @@
     :width="1000"
     use-x-bar
     use-y-bar
+    :side-padding="10"
   >
     <TableColumnGroup name="Useless">
       <!-- Will be ignored if no children -->
@@ -31,6 +32,7 @@
       name="Action"
       id-key="action"
       fixed="right"
+      text-align="center"
       :width="120"
     >
       <a href="javascript:void 0">Action</a>

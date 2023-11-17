@@ -236,6 +236,8 @@
 
 ### 预设类型
 
+Table 组件的类型定义非常之多，如果你想充分了解它们之间的关系，建议从 [源码](https://github.com/vexip-ui/vexip-ui/blob/main/components/table/symbol.ts) 入手。
+
 ```ts
 type Key = string | number | symbol
 type Data = any

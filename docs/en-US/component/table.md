@@ -236,6 +236,8 @@ You can also define the summary content of a column independently via the `summa
 
 ### Preset Types
 
+There are many type declarations of Table component. If you want to fully understand the relationship between them, it is recommended to get started from [source code](https://github.com/vexip-ui/vexip-ui/blob/main/components/table/symbol.ts).
+
 ```ts
 type Key = string | number | symbol
 type Data = any

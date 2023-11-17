@@ -5,6 +5,7 @@
     :data="data"
     :width="1000"
     highlight
+    :side-padding="10"
   >
     <TableColumn name="First Name" id-key="firstName" :cell-span="fistNameCellSpan"></TableColumn>
     <TableColumn

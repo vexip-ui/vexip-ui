@@ -24,7 +24,7 @@ import type { TableCellPropFn, TableHeadPropFn } from 'vexip-ui'
 
 type ItemType<D> = D extends (infer I)[] ? I : Record<string, any>
 
-const data = Array.from({ length: 10 }, (_, index) => {
+const data = Array.from({ length: 5 }, (_, index) => {
   return {
     id: index + 1,
     firstName: `First ${index}`,

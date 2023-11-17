@@ -1,3 +1,309 @@
+<script setup lang="ts">
+import { Checkbox } from '@/components/checkbox'
+import { Ellipsis } from '@/components/ellipsis'
+import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
+
+import { computed, inject, ref, toRef } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import TableIcon from './table-icon.vue'
+import { useRtl } from '@vexip-ui/hooks'
+import { boundRange, isFunction } from '@vexip-ui/utils'
+import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
+
+import type { PropType } from 'vue'
+import type {
+  ColumnCellSpanFn,
+  ColumnWithKey,
+  TableDragColumn,
+  TableExpandColumn,
+  TableOrderColumn,
+  TableRowState,
+  TableSelectionColumn,
+  TableTypeColumn
+} from './symbol'
+
+defineOptions({ name: 'TableCell' })
+
+const props = defineProps({
+  row: {
+    type: Object as PropType<TableRowState>,
+    default: () => ({})
+  },
+  rowIndex: {
+    type: Number,
+    default: -1
+  },
+  column: {
+    type: Object as PropType<ColumnWithKey>,
+    default: () => ({})
+  },
+  colIndex: {
+    type: Number,
+    default: -1
+  },
+  fixed: {
+    type: String as PropType<'left' | 'right' | undefined>,
+    default: null
+  }
+})
+
+const { state, getters, mutations } = inject(TABLE_STORE)!
+const tableActions = inject(TABLE_ACTIONS)!
+
+const nh = useNameHelper('table')
+const icons = useIcons()
+const { isRtl } = useRtl()
+
+const wrapper = ref<HTMLElement>()
+
+const disableCheckRows = toRef(getters, 'disableCheckRows')
+const disableExpandRows = toRef(getters, 'disableExpandRows')
+const disableDragRows = toRef(getters, 'disableDragRows')
+
+const className = computed(() => {
+  let customClass = null
+
+  if (typeof state.cellClass === 'function') {
+    customClass = state.cellClass({
+      row: props.row.data,
+      rowIndex: props.rowIndex,
+      column: props.column,
+      columnIndex: props.column.index
+    })
+  } else {
+    customClass = state.cellClass
+  }
+
+  const typed = columnTypes.includes((props.column as TableTypeColumn).type)
+
+  return [
+    nh.be('cell'),
+    {
+      [nh.bem('cell', 'typed')]: typed,
+      [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
+      [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
+      [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
+      [nh.bem('cell', 'last')]: props.column.last
+    },
+    props.column.class,
+    customClass
+  ]
+})
+const cellSpan = computed(() => {
+  const fixed = props.fixed || 'default'
+
+  if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.column.index}`)) {
+    return { colSpan: 0, rowSpan: 0 }
+  }
+
+  const columns =
+    fixed === 'left'
+      ? state.leftFixedColumns
+      : fixed === 'right'
+        ? state.rightFixedColumns
+        : state.normalColumns
+
+  let result: ReturnType<ColumnCellSpanFn>
+
+  if (typeof props.column.cellSpan === 'function') {
+    result = props.column.cellSpan({
+      row: props.row.data,
+      index: props.rowIndex,
+      fixed: props.fixed
+    })
+  } else if (typeof state.cellSpan === 'function') {
+    result = state.cellSpan({
+      row: props.row.data,
+      rowIndex: props.rowIndex,
+      column: props.column,
+      columnIndex: props.column.index,
+      fixed: props.fixed
+    })
+  }
+
+  const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
+  const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
+
+  span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
+  span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
+
+  mutations.updateCellSpan(props.rowIndex, props.column.index, fixed, span)
+
+  return span
+})
+const style = computed(() => {
+  const totalWidths =
+    props.fixed === 'left'
+      ? getters.leftFixedWidths
+      : props.fixed === 'right'
+        ? getters.rightFixedWidths
+        : getters.normalWidths
+  const { colSpan, rowSpan } = cellSpan.value
+  const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
+  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+
+  let height: number | undefined
+
+  if (rowSpan > 1 && state.heightBITree) {
+    height =
+      state.heightBITree.sum(props.row.listIndex + rowSpan) -
+      state.heightBITree.sum(props.row.listIndex)
+  }
+
+  let customStyle
+
+  if (typeof state.cellStyle === 'function') {
+    customStyle = state.cellStyle({
+      row: props.row.data,
+      rowIndex: props.rowIndex,
+      column: props.column,
+      columnIndex: props.column.index
+    })
+  } else {
+    customStyle = state.cellStyle
+  }
+
+  return [
+    props.column.style || '',
+    customStyle,
+    {
+      display: !colSpan || !rowSpan ? 'none' : undefined,
+      width: `${width}px`,
+      height: height ? `${height}px` : undefined,
+      visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
+      borderRightWidth:
+        !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
+          ? 0
+          : undefined,
+      borderBottomWidth:
+        rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
+      transform: `translate3d(${isRtl.value ? '-' : ''}${
+        padLeft + totalWidths[props.colIndex]
+      }px, 0, 0)`
+    }
+  ]
+})
+const attrs = computed(() => {
+  let customAttrs: Record<string, any>
+
+  if (typeof state.cellAttrs === 'function') {
+    customAttrs = state.cellAttrs({
+      row: props.row.data,
+      rowIndex: props.rowIndex,
+      column: props.column,
+      columnIndex: props.colIndex
+    })
+  } else {
+    customAttrs = state.cellAttrs
+  }
+
+  return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
+})
+
+function isSelectionColumn(column: unknown): column is TableSelectionColumn {
+  return (column as TableTypeColumn).type === 'selection'
+}
+
+function isOrderColumn(column: unknown): column is TableOrderColumn {
+  return (column as TableTypeColumn).type === 'order'
+}
+
+function isExpandColumn(column: unknown): column is TableExpandColumn {
+  return (column as TableTypeColumn).type === 'expand'
+}
+
+function isDragColumn(column: unknown): column is TableDragColumn {
+  return (column as TableTypeColumn).type === 'drag'
+}
+
+function isTableTypeColumn(column: unknown): column is TableTypeColumn {
+  return (
+    isSelectionColumn(column) ||
+    isOrderColumn(column) ||
+    isExpandColumn(column) ||
+    isDragColumn(column)
+  )
+}
+
+function buildEventPayload(event: Event) {
+  return {
+    row: props.row.data,
+    key: props.row.key,
+    rowIndex: props.rowIndex,
+    column: props.column,
+    columnIndex: props.colIndex,
+    event
+  }
+}
+
+function handleMouseEnter(event: MouseEvent) {
+  tableActions?.emitCellEvent('Enter', buildEventPayload(event))
+}
+
+function handleMouseLeave(event: MouseEvent) {
+  tableActions?.emitCellEvent('Leave', buildEventPayload(event))
+}
+
+function handleClick(event: MouseEvent) {
+  tableActions?.emitCellEvent('Click', buildEventPayload(event))
+}
+
+function handleDblclick(event: MouseEvent) {
+  tableActions?.emitCellEvent('Dblclick', buildEventPayload(event))
+}
+
+function handleContextmenu(event: MouseEvent) {
+  tableActions?.emitCellEvent('Contextmenu', buildEventPayload(event))
+}
+
+function handleCheckRow(row: TableRowState, event: MouseEvent) {
+  if (!disableCheckRows.value.has(row.key)) {
+    const checked = !row.checked
+    const { data, key, index } = row
+
+    mutations.handleCheck(key, checked)
+    tableActions.emitRowCheck({ row: data, key, index, event, checked })
+  }
+}
+
+function handleExpandRow(row: TableRowState, event: MouseEvent) {
+  if (!disableExpandRows.value.has(row.key)) {
+    const expanded = !row.expanded
+    const { data, key, index } = row
+
+    mutations.handleExpand(key, expanded)
+    tableActions.emitRowExpand({ row: data, key, index, event, expanded })
+  }
+}
+
+function handleDragRow(row: TableRowState) {
+  if (!disableDragRows.value.has(row.key)) {
+    mutations.handleDrag(row.key, true)
+  }
+}
+
+function handleExpandTree(row: TableRowState) {
+  if (!row.children?.length) return
+
+  mutations.handleTreeExpand(row.key, !row.treeExpanded)
+}
+
+function handleCellResize(entry: ResizeObserverEntry) {
+  if (!wrapper.value) return
+
+  const style = getComputedStyle(wrapper.value)
+  const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+
+  mutations.setCellHeight(
+    props.row.key,
+    props.column.key,
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + borderHeight
+  )
+}
+</script>
+
 <template>
   <div
     v-bind="attrs"
@@ -56,7 +362,10 @@
     <ResizeObserver v-else :disabled="!column.noEllipsis" :on-resize="handleCellResize">
       <span :class="nh.be('content')">
         <template
-          v-if="usingTree && (indentedColumn ? column.key === indentedColumn.key : column.first)"
+          v-if="
+            getters.usingTree &&
+              (getters.indentedColumn ? column.key === getters.indentedColumn.key : column.first)
+          "
         >
           <span
             :class="nh.be('pad')"
@@ -79,8 +388,8 @@
         <Ellipsis
           v-if="!column.noEllipsis"
           inherit
-          :tooltip-theme="tooltipTheme"
-          :tip-max-width="tooltipWidth"
+          :tooltip-theme="state.tooltipTheme"
+          :tip-max-width="state.tooltipWidth"
         >
           <Renderer
             v-if="isFunction(column.renderer)"
@@ -111,353 +420,3 @@
     </ResizeObserver>
   </div>
 </template>
-
-<script lang="ts">
-import { Checkbox } from '@/components/checkbox'
-import { Ellipsis } from '@/components/ellipsis'
-import { Renderer } from '@/components/renderer'
-import { ResizeObserver } from '@/components/resize-observer'
-
-import { computed, defineComponent, inject, ref, toRef } from 'vue'
-
-import { useIcons, useNameHelper } from '@vexip-ui/config'
-import TableIcon from './table-icon.vue'
-import { useRtl } from '@vexip-ui/hooks'
-import { boundRange, isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
-
-import type { PropType } from 'vue'
-import type {
-  ColumnCellSpanFn,
-  ColumnWithKey,
-  TableDragColumn,
-  TableExpandColumn,
-  TableOrderColumn,
-  TableRowState,
-  TableSelectionColumn,
-  TableTypeColumn
-} from './symbol'
-
-export default defineComponent({
-  name: 'TableCell',
-  components: {
-    Checkbox,
-    Ellipsis,
-    Renderer,
-    ResizeObserver,
-    TableIcon
-  },
-  props: {
-    row: {
-      type: Object as PropType<TableRowState>,
-      default: () => ({})
-    },
-    rowIndex: {
-      type: Number,
-      default: -1
-    },
-    column: {
-      type: Object as PropType<ColumnWithKey>,
-      default: () => ({})
-    },
-    colIndex: {
-      type: Number,
-      default: -1
-    },
-    fixed: {
-      type: String as PropType<'left' | 'right' | undefined>,
-      default: null
-    }
-  },
-  setup(props) {
-    const { state, getters, mutations } = inject(TABLE_STORE)!
-    const tableActions = inject(TABLE_ACTIONS)!
-
-    const nh = useNameHelper('table')
-    const { isRtl } = useRtl()
-
-    const wrapper = ref<HTMLElement>()
-
-    const disableCheckRows = toRef(getters, 'disableCheckRows')
-    const disableExpandRows = toRef(getters, 'disableExpandRows')
-    const disableDragRows = toRef(getters, 'disableDragRows')
-
-    const className = computed(() => {
-      let customClass = null
-
-      if (typeof state.cellClass === 'function') {
-        customClass = state.cellClass({
-          row: props.row.data,
-          rowIndex: props.rowIndex,
-          column: props.column,
-          columnIndex: props.column.index
-        })
-      } else {
-        customClass = state.cellClass
-      }
-
-      const typed = columnTypes.includes((props.column as TableTypeColumn).type)
-
-      return [
-        nh.be('cell'),
-        {
-          [nh.bem('cell', 'typed')]: typed,
-          [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
-          [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
-          [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
-          [nh.bem('cell', 'last')]: props.column.last
-        },
-        props.column.class,
-        customClass
-      ]
-    })
-    const cellSpan = computed(() => {
-      const fixed = props.fixed || 'default'
-
-      if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.column.index}`)) {
-        return { colSpan: 0, rowSpan: 0 }
-      }
-
-      const columns =
-        fixed === 'left'
-          ? state.leftFixedColumns
-          : fixed === 'right'
-            ? state.rightFixedColumns
-            : state.normalColumns
-
-      let result: ReturnType<ColumnCellSpanFn>
-
-      if (typeof props.column.cellSpan === 'function') {
-        result = props.column.cellSpan({
-          row: props.row.data,
-          index: props.rowIndex,
-          fixed: props.fixed
-        })
-      } else if (typeof state.cellSpan === 'function') {
-        result = state.cellSpan({
-          row: props.row.data,
-          rowIndex: props.rowIndex,
-          column: props.column,
-          columnIndex: props.column.index,
-          fixed: props.fixed
-        })
-      }
-
-      const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
-      const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
-
-      span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
-      span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
-
-      mutations.updateCellSpan(props.rowIndex, props.column.index, fixed, span)
-
-      return span
-    })
-    const style = computed(() => {
-      const totalWidths =
-        props.fixed === 'left'
-          ? getters.leftFixedWidths
-          : props.fixed === 'right'
-            ? getters.rightFixedWidths
-            : getters.normalWidths
-      const { colSpan, rowSpan } = cellSpan.value
-      const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
-      const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
-
-      let height: number | undefined
-
-      if (rowSpan > 1 && state.heightBITree) {
-        height =
-          state.heightBITree.sum(props.row.listIndex + rowSpan) -
-          state.heightBITree.sum(props.row.listIndex)
-      }
-
-      let customStyle
-
-      if (typeof state.cellStyle === 'function') {
-        customStyle = state.cellStyle({
-          row: props.row.data,
-          rowIndex: props.rowIndex,
-          column: props.column,
-          columnIndex: props.column.index
-        })
-      } else {
-        customStyle = state.cellStyle
-      }
-
-      return [
-        props.column.style || '',
-        customStyle,
-        {
-          display: !colSpan || !rowSpan ? 'none' : undefined,
-          width: `${width}px`,
-          height: height ? `${height}px` : undefined,
-          visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
-          borderRightWidth:
-            !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
-              ? 0
-              : undefined,
-          borderBottomWidth:
-            rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
-          transform: `translate3d(${isRtl.value ? '-' : ''}${
-            padLeft + totalWidths[props.colIndex]
-          }px, 0, 0)`
-        }
-      ]
-    })
-    const attrs = computed(() => {
-      let customAttrs: Record<string, any>
-
-      if (typeof state.cellAttrs === 'function') {
-        customAttrs = state.cellAttrs({
-          row: props.row.data,
-          rowIndex: props.rowIndex,
-          column: props.column,
-          columnIndex: props.colIndex
-        })
-      } else {
-        customAttrs = state.cellAttrs
-      }
-
-      return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
-    })
-
-    function isSelectionColumn(column: unknown): column is TableSelectionColumn {
-      return (column as TableTypeColumn).type === 'selection'
-    }
-
-    function isOrderColumn(column: unknown): column is TableOrderColumn {
-      return (column as TableTypeColumn).type === 'order'
-    }
-
-    function isExpandColumn(column: unknown): column is TableExpandColumn {
-      return (column as TableTypeColumn).type === 'expand'
-    }
-
-    function isDragColumn(column: unknown): column is TableDragColumn {
-      return (column as TableTypeColumn).type === 'drag'
-    }
-
-    function isTableTypeColumn(column: unknown): column is TableTypeColumn {
-      return (
-        isSelectionColumn(column) ||
-        isOrderColumn(column) ||
-        isExpandColumn(column) ||
-        isDragColumn(column)
-      )
-    }
-
-    function buildEventPayload(event: Event) {
-      return {
-        row: props.row.data,
-        key: props.row.key,
-        rowIndex: props.rowIndex,
-        column: props.column,
-        columnIndex: props.colIndex,
-        event
-      }
-    }
-
-    function handleMouseEnter(event: MouseEvent) {
-      tableActions?.emitCellEvent('Enter', buildEventPayload(event))
-    }
-
-    function handleMouseLeave(event: MouseEvent) {
-      tableActions?.emitCellEvent('Leave', buildEventPayload(event))
-    }
-
-    function handleClick(event: MouseEvent) {
-      tableActions?.emitCellEvent('Click', buildEventPayload(event))
-    }
-
-    function handleDblclick(event: MouseEvent) {
-      tableActions?.emitCellEvent('Dblclick', buildEventPayload(event))
-    }
-
-    function handleContextmenu(event: MouseEvent) {
-      tableActions?.emitCellEvent('Contextmenu', buildEventPayload(event))
-    }
-
-    function handleCheckRow(row: TableRowState, event: MouseEvent) {
-      if (!disableCheckRows.value.has(row.key)) {
-        const checked = !row.checked
-        const { data, key, index } = row
-
-        mutations.handleCheck(key, checked)
-        tableActions.emitRowCheck({ row: data, key, index, event, checked })
-      }
-    }
-
-    function handleExpandRow(row: TableRowState, event: MouseEvent) {
-      if (!disableExpandRows.value.has(row.key)) {
-        const expanded = !row.expanded
-        const { data, key, index } = row
-
-        mutations.handleExpand(key, expanded)
-        tableActions.emitRowExpand({ row: data, key, index, event, expanded })
-      }
-    }
-
-    function handleDragRow(row: TableRowState) {
-      if (!disableDragRows.value.has(row.key)) {
-        mutations.handleDrag(row.key, true)
-      }
-    }
-
-    function handleExpandTree(row: TableRowState) {
-      if (!row.children?.length) return
-
-      mutations.handleTreeExpand(row.key, !row.treeExpanded)
-    }
-
-    function handleCellResize(entry: ResizeObserverEntry) {
-      if (!wrapper.value) return
-
-      const style = getComputedStyle(wrapper.value)
-      const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
-
-      mutations.setCellHeight(
-        props.row.key,
-        props.column.key,
-        (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + borderHeight
-      )
-    }
-
-    return {
-      nh,
-      icons: useIcons(),
-
-      wrapper,
-
-      className,
-      cellSpan,
-      style,
-      attrs,
-      tooltipTheme: toRef(state, 'tooltipTheme'),
-      tooltipWidth: toRef(state, 'tooltipWidth'),
-      disableCheckRows,
-      disableExpandRows,
-      disableDragRows,
-      usingTree: toRef(getters, 'usingTree'),
-      indentedColumn: toRef(getters, 'indentedColumn'),
-
-      isFunction,
-      isSelectionColumn,
-      isOrderColumn,
-      isExpandColumn,
-      isDragColumn,
-      isTableTypeColumn,
-      handleMouseEnter,
-      handleMouseLeave,
-      handleClick,
-      handleDblclick,
-      handleContextmenu,
-      handleCheckRow,
-      handleExpandRow,
-      handleDragRow,
-      handleExpandTree,
-      handleCellResize
-    }
-  }
-})
-</script>
