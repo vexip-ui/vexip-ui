@@ -39,6 +39,7 @@ export default defineComponent({
         static: true
       },
       noEllipsis: false,
+      textAlign: 'center',
       renderer: {
         default: null,
         isFunc: true,

@@ -151,8 +151,7 @@ const className = computed(() => {
     {
       [nh.bem('head-cell', 'group')]: isGroup.value,
       [nh.bem('head-cell', 'typed')]: typed.value,
-      [nh.bem('head-cell', 'center')]:
-        isGroup.value || typed.value || props.column.textAlign === 'center',
+      [nh.bem('head-cell', 'center')]: typed.value || props.column.textAlign === 'center',
       [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
       [nh.bem('head-cell', 'last')]: inLast.value

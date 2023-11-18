@@ -213,6 +213,7 @@ export const tableColumnGroupProps = buildProps({
   },
   order: Number,
   noEllipsis: booleanProp,
+  textAlign: String as PropType<TableTextAlign>,
   renderer: Function as PropType<() => any>
 })
 

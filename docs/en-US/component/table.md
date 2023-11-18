@@ -664,7 +664,7 @@ interface TableFootPayload {
 | truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
 | order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
 | meta             | `any`                                  | Set the column metadata                                                                                                                      | `null`      | `2.1.24` |
-| text-align       | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
+| text-align       | `TableTextAlign`                       | Set the horizontal alignment of the column                                                                                                   | `'left'`    | `2.1.19` |
 | head-span        | `number`                               | Set the head span                                                                                                                            | `1`         | `2.1.24` |
 | cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                                                   | `null`      | `2.1.24` |
 | no-summary       | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                                                      | `false`     | `2.1.24` |
@@ -684,13 +684,14 @@ interface TableFootPayload {
 
 ==!s|2.2.12==
 
-| Name        | Type                           | Description                                                                                                                                       | Default | Since |
-| ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| name        | `string`                       | The name of the column group                                                                                                                      | `''`    | -     |
-| fixed       | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false` | -     |
-| order       | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`     | -     |
-| no-ellipsis | `boolean`                      | Whether to disable the ellipsis component of the head cell                                                                                        | `false` | -     |
-| renderer    | `() => any`                    | Custom header render function                                                                                                                     | `null`  | -     |
+| Name        | Type                           | Description                                                                                                                                       | Default    | Since |
+| ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
+| name        | `string`                       | The name of the column group                                                                                                                      | `''`       | -     |
+| fixed       | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false`    | -     |
+| order       | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`        | -     |
+| no-ellipsis | `boolean`                      | Whether to disable the ellipsis component of the head cell                                                                                        | `false`    | -     |
+| text-align  | `TableTextAlign`               | Set the horizontal alignment of head cell                                                                                                         | `'center'` | -     |
+| renderer    | `() => any`                    | Custom header render function                                                                                                                     | `null`     | -     |
 
 ### TableColumnGroup Slots
 
