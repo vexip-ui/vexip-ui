@@ -212,6 +212,7 @@ export const tableColumnGroupProps = buildProps({
     default: null
   },
   order: Number,
+  noEllipsis: booleanProp,
   renderer: Function as PropType<() => any>
 })
 

@@ -38,6 +38,7 @@ export default defineComponent({
         default: 0,
         static: true
       },
+      noEllipsis: false,
       renderer: {
         default: null,
         isFunc: true,

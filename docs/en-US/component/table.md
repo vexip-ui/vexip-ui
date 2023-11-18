@@ -684,12 +684,13 @@ interface TableFootPayload {
 
 ==!s|2.2.12==
 
-| Name     | Type                           | Description                                                                                                                                       | Default | Since |
-| -------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| name     | `string`                       | The name of the column group                                                                                                                      | `''`    | -     |
-| fixed    | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false` | -     |
-| order    | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`     | -     |
-| renderer | `() => any`                    | Custom header render function                                                                                                                     | `null`  | -     |
+| Name        | Type                           | Description                                                                                                                                       | Default | Since |
+| ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| name        | `string`                       | The name of the column group                                                                                                                      | `''`    | -     |
+| fixed       | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false` | -     |
+| order       | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`     | -     |
+| no-ellipsis | `boolean`                      | Whether to disable the ellipsis component of the head cell                                                                                        | `false` | -     |
+| renderer    | `() => any`                    | Custom header render function                                                                                                                     | `null`  | -     |
 
 ### TableColumnGroup Slots
 
