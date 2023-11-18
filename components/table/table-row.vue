@@ -368,19 +368,7 @@ function handleDragLeave(event: DragEvent) {
       :class="className"
       :style="style"
     >
-      <!-- <div
-        v-if="fixed !== 'right'"
-        :class="nh.be('side-pad')"
-        role="none"
-        aria-hidden
-      ></div> -->
       <slot></slot>
-      <div
-        v-if="fixed !== 'left'"
-        :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
-        role="none"
-        aria-hidden
-      ></div>
     </div>
     <CollapseTransition
       v-if="!!getters.expandColumn"

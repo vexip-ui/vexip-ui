@@ -21,6 +21,7 @@ const table = ref<TableExposed>()
 const data = Array.from({ length: 5 }, (_, index) => {
   return {
     id: index + 1,
+    checked: false,
     firstName: `First ${index}`,
     lastName: `Last ${index}`,
     company: `Company ${index}`,
@@ -30,6 +31,8 @@ const data = Array.from({ length: 5 }, (_, index) => {
     address: `Address ${index}`
   }
 })
+
+data[1].checked = true
 
 function getSelectedRows() {
   console.info(table.value?.getSelected() ?? [])

@@ -37,8 +37,8 @@ const style = computed(() => {
       : props.fixed === 'right'
         ? getters.rightFixedWidths.at(-1)
         : getters.normalWidths.at(-1)
-  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
-  const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
   return {
     minWidth: width && `${width + padLeft + padRight}px`,

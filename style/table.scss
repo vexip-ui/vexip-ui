@@ -189,7 +189,7 @@ $table: map.merge(
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
     transition: get-css-var('transition-background');
 
-    &:last-child,
+    // &:last-child,
     &--last {
       border-inline-end-width: 0;
     }
@@ -225,8 +225,13 @@ $table: map.merge(
     justify-content: inherit;
     width: 100%;
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
+    color: inherit;
     word-break: break-all;
     white-space: normal;
+  }
+
+  &__ellipsis {
+    color: inherit;
   }
 
   &__side-pad {
@@ -241,8 +246,7 @@ $table: map.merge(
     }
   }
 
-  &__head-cell,
-  &__head &__side-pad {
+  &__head-cell {
     background-color: get-css-var('table-head-bg-color');
   }
 
@@ -250,13 +254,11 @@ $table: map.merge(
     background-color: get-css-var('table-row-bg-color');
   }
 
-  &__row--stripe &__cell,
-  &__row--stripe &__side-pad {
+  &__row--stripe &__cell {
     background-color: get-css-var('table-row-bg-color-stripe');
   }
 
-  &__row--hover &__cell,
-  &__row--hover &__side-pad {
+  &__row--hover &__cell {
     background-color: get-css-var('table-row-bg-color-hover');
   }
 
@@ -298,8 +300,7 @@ $table: map.merge(
       #{$cell},
       #{$head-cell},
       #{$foot-cell},
-      #{$collapse},
-      #{$side-pad} {
+      #{$collapse} {
         border-bottom-color: transparent;
       }
     }

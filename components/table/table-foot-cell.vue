@@ -60,6 +60,16 @@ const { isRtl } = useRtl()
 
 const wrapper = ref<HTMLElement>()
 
+const inLast = computed(() => {
+  return props.column.index + cellSpan.value.colSpan >= state.columns.length
+})
+const columns = computed(() => {
+  return props.fixed === 'left'
+    ? state.leftFixedColumns
+    : props.fixed === 'right'
+      ? state.rightFixedColumns
+      : state.normalColumns
+})
 // We use 'a' and 'b' to distinguish above and below
 const prefix = computed(() => (props.above ? 'af' : 'bf'))
 const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
@@ -87,7 +97,7 @@ const className = computed(() => {
       [nh.bem('foot-cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('foot-cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('foot-cell', 'wrap')]: props.column.noEllipsis,
-      [nh.bem('foot-cell', 'last')]: props.column.last
+      [nh.bem('foot-cell', 'last')]: inLast.value
     },
     props.column.class,
     customClass
@@ -102,13 +112,6 @@ const cellSpan = computed(() => {
     return { colSpan: 0, rowSpan: 0 }
   }
 
-  const columns =
-    fixed === 'left'
-      ? state.leftFixedColumns
-      : fixed === 'right'
-        ? state.rightFixedColumns
-        : state.normalColumns
-
   let result: ReturnType<SummaryCellSpanFn>
 
   if (typeof props.summary.cellSpan === 'function') {
@@ -122,12 +125,24 @@ const cellSpan = computed(() => {
   const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
   const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
-  span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
+  span.colSpan = boundRange(span.colSpan, 0, columns.value.length - props.colIndex)
   span.rowSpan = boundRange(span.rowSpan, 0, summaries.value.length - props.summaryIndex)
 
   mutations.updateCellSpan(props.summaryIndex, props.column.index, fixed, span, prefix.value)
 
   return span
+})
+const customStyle = computed(() => {
+  if (typeof state.footStyle === 'function') {
+    return state.footStyle({
+      column: props.column,
+      columnIndex: props.column.index,
+      summary: props.summary,
+      summaryIndex: props.summaryIndex
+    })
+  }
+
+  return state.cellStyle
 })
 const style = computed(() => {
   const totalWidths =
@@ -137,8 +152,9 @@ const style = computed(() => {
         ? getters.rightFixedWidths
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
-  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
   let height: number | undefined
 
@@ -146,25 +162,12 @@ const style = computed(() => {
     height = heights.value[props.summaryIndex + rowSpan] - heights.value[props.summaryIndex]
   }
 
-  let customStyle
-
-  if (typeof state.footStyle === 'function') {
-    customStyle = state.footStyle({
-      column: props.column,
-      columnIndex: props.column.index,
-      summary: props.summary,
-      summaryIndex: props.summaryIndex
-    })
-  } else {
-    customStyle = state.cellStyle
-  }
-
   return [
     props.column.style || '',
-    customStyle,
+    customStyle.value,
     {
       display: !colSpan || !rowSpan ? 'none' : undefined,
-      width: `${width}px`,
+      width: `${(props.column.index ? 0 : padLeft) + (inLast.value ? padRight : 0) + width}px`,
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
@@ -174,7 +177,7 @@ const style = computed(() => {
       borderBottomWidth:
         rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
-        padLeft + totalWidths[props.colIndex]
+        (props.column.index ? padLeft : 0) + totalWidths[props.colIndex]
       }px, 0, 0)`
     }
   ]
@@ -257,6 +260,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
+    <div
+      v-if="column.index === 0"
+      :class="nh.be('side-pad')"
+      role="none"
+      aria-hidden
+    ></div>
     <ResizeObserver
       v-if="isFunction(summary.renderer)"
       :disabled="!column.noEllipsis"
@@ -265,6 +274,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
       <Ellipsis
         v-if="!column.noEllipsis"
         inherit
+        :class="nh.be('ellipsis')"
         :tooltip-theme="state.tooltipTheme"
         :tip-max-width="state.tooltipWidth"
       >
@@ -279,5 +289,11 @@ function handleCellResize(entry: ResizeObserverEntry) {
         :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
       ></Renderer>
     </ResizeObserver>
+    <div
+      v-if="inLast"
+      :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+      role="none"
+      aria-hidden
+    ></div>
   </div>
 </template>

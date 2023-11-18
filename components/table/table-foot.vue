@@ -46,14 +46,17 @@ const className = computed(() => {
   return [nh.be('foot'), nh.bem('foot', props.above ? 'above' : 'below')]
 })
 const style = computed(() => {
-  return {
-    minWidth: `${
-      props.fixed === 'left'
-        ? getters.leftFixedWidths.at(-1)
-        : props.fixed === 'right'
+  const width =
+    props.fixed === 'left'
+      ? getters.leftFixedWidths.at(-1)
+      : props.fixed === 'right'
         ? getters.rightFixedWidths.at(-1)
         : getters.normalWidths.at(-1)
-    }px`
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+
+  return {
+    minWidth: width && `${width + padLeft + padRight}px`
   }
 })
 </script>

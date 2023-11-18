@@ -250,9 +250,12 @@ export function useStore(options: StoreOptions) {
   })
   const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
   const bottomFixedHeights = computed(() => getSummariesHeights())
-  const indentedColumn = computed(() =>
-    state.columns.find(column => !column.type && column.indented)
-  )
+  const indentedColumn = computed(() => {
+    return state.columns.find(column => !column.type && column.indented)
+  })
+  const hasFixedColumn = computed(() => {
+    return !!(state.leftFixedColumns.length || state.rightFixedColumns.length)
+  })
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -279,7 +282,8 @@ export function useStore(options: StoreOptions) {
     summaryData,
     topFixedHeights,
     bottomFixedHeights,
-    indentedColumn
+    indentedColumn,
+    hasFixedColumn
   })
 
   const mutations = {
@@ -464,6 +468,12 @@ export function useStore(options: StoreOptions) {
     }
 
     for (const rowColumns of allColumns) {
+      const lastColumn = rowColumns.findLast(column => column)
+
+      if (lastColumn) {
+        lastColumn.last = true
+      }
+
       rowColumns.length = length
     }
 

@@ -62,6 +62,9 @@ const disableCheckRows = toRef(getters, 'disableCheckRows')
 const disableExpandRows = toRef(getters, 'disableExpandRows')
 const disableDragRows = toRef(getters, 'disableDragRows')
 
+const inLast = computed(() => {
+  return props.column.index + cellSpan.value.colSpan >= state.columns.length
+})
 const className = computed(() => {
   let customClass = null
 
@@ -85,11 +88,18 @@ const className = computed(() => {
       [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
-      [nh.bem('cell', 'last')]: props.column.last
+      [nh.bem('cell', 'last')]: inLast.value
     },
     props.column.class,
     customClass
   ]
+})
+const columns = computed(() => {
+  return props.fixed === 'left'
+    ? state.leftFixedColumns
+    : props.fixed === 'right'
+      ? state.rightFixedColumns
+      : state.normalColumns
 })
 const cellSpan = computed(() => {
   const fixed = props.fixed || 'default'
@@ -97,13 +107,6 @@ const cellSpan = computed(() => {
   if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.column.index}`)) {
     return { colSpan: 0, rowSpan: 0 }
   }
-
-  const columns =
-    fixed === 'left'
-      ? state.leftFixedColumns
-      : fixed === 'right'
-        ? state.rightFixedColumns
-        : state.normalColumns
 
   let result: ReturnType<ColumnCellSpanFn>
 
@@ -126,12 +129,24 @@ const cellSpan = computed(() => {
   const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
   const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
 
-  span.colSpan = boundRange(span.colSpan, 0, columns.length - props.colIndex)
+  span.colSpan = boundRange(span.colSpan, 0, columns.value.length - props.colIndex)
   span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
 
   mutations.updateCellSpan(props.rowIndex, props.column.index, fixed, span)
 
   return span
+})
+const customStyle = computed(() => {
+  if (typeof state.cellStyle === 'function') {
+    return state.cellStyle({
+      row: props.row.data,
+      rowIndex: props.rowIndex,
+      column: props.column,
+      columnIndex: props.column.index
+    })
+  }
+
+  return state.cellStyle
 })
 const style = computed(() => {
   const totalWidths =
@@ -141,7 +156,10 @@ const style = computed(() => {
         ? getters.rightFixedWidths
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
-  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
+  const noFixed = !getters.hasFixedColumn
+  const padLeft = noFixed || columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight =
+    noFixed || columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined
@@ -152,25 +170,12 @@ const style = computed(() => {
       state.heightBITree.sum(props.row.listIndex)
   }
 
-  let customStyle
-
-  if (typeof state.cellStyle === 'function') {
-    customStyle = state.cellStyle({
-      row: props.row.data,
-      rowIndex: props.rowIndex,
-      column: props.column,
-      columnIndex: props.column.index
-    })
-  } else {
-    customStyle = state.cellStyle
-  }
-
   return [
     props.column.style || '',
-    customStyle,
+    customStyle.value,
     {
       display: !colSpan || !rowSpan ? 'none' : undefined,
-      width: `${(props.column.index ? 0 : padLeft) + width}px`,
+      width: `${(props.column.index ? 0 : padLeft) + (inLast.value ? padRight : 0) + width}px`,
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
@@ -394,6 +399,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
         <Ellipsis
           v-if="!column.noEllipsis"
           inherit
+          :class="nh.be('ellipsis')"
           :tooltip-theme="state.tooltipTheme"
           :tip-max-width="state.tooltipWidth"
         >
@@ -424,5 +430,11 @@ function handleCellResize(entry: ResizeObserverEntry) {
         </template>
       </span>
     </ResizeObserver>
+    <div
+      v-if="inLast"
+      :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+      role="none"
+      aria-hidden
+    ></div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@/components/button'
 import { Checkbox } from '@/components/checkbox'
+import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 
@@ -60,7 +61,19 @@ const wrapper = ref<HTMLElement>()
 let currentWidth = 0
 
 const isGroup = computed(() => mutations.isGroupColumn(props.column))
-const span = computed(() => {
+const inLast = computed(() => {
+  return isGroup.value
+    ? props.column.last
+    : props.column.index + cellSpan.value.colSpan >= state.columns.length
+})
+const columns = computed(() => {
+  return props.fixed === 'left'
+    ? state.leftFixedColumns
+    : props.fixed === 'right'
+      ? state.rightFixedColumns
+      : state.normalColumns
+})
+const cellSpan = computed(() => {
   const fixed = props.fixed || 'default'
 
   if (state.collapseMap.get(fixed)!.has(`h${props.rowIndex},${props.index}`)) {
@@ -114,7 +127,9 @@ const { target: resizer } = useMoving({
     const width = wrapper.value.getBoundingClientRect().width + (isRtl ? -1 : 1) * deltaX
 
     mutations.handleColumnResize(
-      state.columns.slice(props.index, props.index + span.value.colSpan).map(column => column.key),
+      state.columns
+        .slice(props.index, props.index + cellSpan.value.colSpan)
+        .map(column => column.key),
       width
     )
     tableActions.emitColResize('End', { ...buildEventPayload(event), width })
@@ -140,22 +155,32 @@ const className = computed(() => {
         isGroup.value || typed.value || props.column.textAlign === 'center',
       [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
-      [nh.bem('head-cell', 'last')]: props.column.last
+      [nh.bem('head-cell', 'last')]: inLast.value
     },
     props.column.class,
     customClass
   ]
 })
+const customStyle = computed(() => {
+  if (typeof state.headStyle === 'function') {
+    return state.headStyle({ column: props.column, index: props.index })
+  }
+
+  return state.headStyle
+})
 const style = computed(() => {
-  const { colSpan, rowSpan } = span.value
   const totalWidths =
     props.fixed === 'left'
       ? getters.leftFixedWidths
       : props.fixed === 'right'
         ? getters.rightFixedWidths
         : getters.normalWidths
+  const { colSpan, rowSpan } = cellSpan.value
+  const noFixed = !getters.hasFixedColumn
+  const padLeft = noFixed || columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight =
+    noFixed || columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.index + colSpan] - totalWidths[props.index]
-  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
 
   let height: number | undefined
 
@@ -167,20 +192,12 @@ const style = computed(() => {
     }
   }
 
-  let customStyle
-
-  if (typeof state.headStyle === 'function') {
-    customStyle = state.headStyle({ column: props.column, index: props.index })
-  } else {
-    customStyle = state.headStyle
-  }
-
   return [
     props.column.style || '',
-    customStyle,
+    customStyle.value,
     {
       display: !colSpan ? 'none' : undefined,
-      width: `${width}px`,
+      width: `${(props.column.index ? 0 : padLeft) + (inLast.value ? padRight : 0) + width}px`,
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
@@ -188,7 +205,7 @@ const style = computed(() => {
           ? 0
           : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
-        padLeft + totalWidths[props.index]
+        (props.column.index ? padLeft : 0) + totalWidths[props.index]
       }px, 0, 0)`
     }
   ]
@@ -349,8 +366,8 @@ function handleCheckAllRow() {
     :class="className"
     role="columnheader"
     scope="col"
-    :colspan="span.colSpan !== 1 ? span.colSpan : undefined"
-    :rowspan="span.rowSpan !== 1 ? span.rowSpan : undefined"
+    :colspan="cellSpan.colSpan !== 1 ? cellSpan.colSpan : undefined"
+    :rowspan="cellSpan.rowSpan !== 1 ? cellSpan.rowSpan : undefined"
     :style="style"
     :aria-sort="
       !isGroup && sorter.able
@@ -368,6 +385,12 @@ function handleCheckAllRow() {
     @contextmenu="handleContextmenu"
     @transitionend="refreshXScroll"
   >
+    <div
+      v-if="column.index === 0"
+      :class="nh.be('side-pad')"
+      role="none"
+      aria-hidden
+    ></div>
     <Checkbox
       v-if="isSelection(column)"
       inherit
@@ -380,17 +403,39 @@ function handleCheckAllRow() {
       @click.prevent="handleCheckAllRow"
     ></Checkbox>
     <template v-else>
-      <Renderer
-        v-if="isGroup && isFunction((column as any).renderer)"
-        :renderer="(column as any).renderer"
-      ></Renderer>
-      <Renderer
-        v-else-if="isFunction(column.headRenderer)"
-        :renderer="column.headRenderer"
-        :data="{ column, index }"
-      ></Renderer>
+      <Ellipsis
+        v-if="!column.noEllipsis"
+        inherit
+        :class="nh.be('ellipsis')"
+        :tooltip-theme="state.tooltipTheme"
+        :tip-max-width="state.tooltipWidth"
+      >
+        <Renderer
+          v-if="isGroup && isFunction((column as any).renderer)"
+          :renderer="(column as any).renderer"
+        ></Renderer>
+        <Renderer
+          v-else-if="isFunction(column.headRenderer)"
+          :renderer="column.headRenderer"
+          :data="{ column, index }"
+        ></Renderer>
+        <template v-else>
+          {{ column.name }}
+        </template>
+      </Ellipsis>
       <template v-else>
-        {{ column.name }}
+        <Renderer
+          v-if="isGroup && isFunction((column as any).renderer)"
+          :renderer="(column as any).renderer"
+        ></Renderer>
+        <Renderer
+          v-else-if="isFunction(column.headRenderer)"
+          :renderer="column.headRenderer"
+          :data="{ column, index }"
+        ></Renderer>
+        <template v-else>
+          {{ column.name }}
+        </template>
       </template>
     </template>
     <template v-if="!isGroup">
@@ -503,6 +548,12 @@ function handleCheckAllRow() {
       v-if="!isGroup && resizable && !typed && !column.last"
       ref="resizer"
       :class="nh.be('resizer')"
+    ></div>
+    <div
+      v-if="inLast"
+      :class="[nh.be('side-pad'), nh.bem('side-pad', 'right')]"
+      role="none"
+      aria-hidden
     ></div>
   </div>
 </template>

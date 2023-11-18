@@ -44,6 +44,7 @@ const data = reactive(
   Array.from({ length: 5 }, (_, index) => {
     return {
       id: index + 1,
+      expanded: false,
       firstName: `First ${index}`,
       lastName: `Last ${index}`,
       company: `Company ${index}`,
@@ -54,6 +55,8 @@ const data = reactive(
     }
   })
 )
+
+data[1].expanded = true
 
 function handleExpand({ row, expanded }: TableRowPayload) {
   console.info(row, expanded!)

@@ -1,10 +1,5 @@
 <template>
-  <Table
-    :columns="columns"
-    :data="data"
-    :width="1000"
-    :side-padding="[10, 5]"
-  ></Table>
+  <Table :columns="columns" :data="data" :width="1000"></Table>
 </template>
 
 <script setup lang="ts">

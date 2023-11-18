@@ -5,6 +5,7 @@
     :data="data"
     :width="1000"
     :height="420"
+    :side-padding="10"
   >
     <TableColumn
       id-key="name"

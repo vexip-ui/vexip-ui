@@ -214,7 +214,9 @@ export interface TableColumnGroupOptions {
 export interface ColumnGroupWithKey extends TableColumnGroupOptions {
   key: symbol,
   headSpan: number,
-  rowSpan: number
+  rowSpan: number,
+  /** @internal */
+  last?: boolean
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {

@@ -1,7 +1,7 @@
 <template>
   <Table
     :data="data"
-    :row-class="rowClass"
+    row-class="demo-row-class"
     :width="1000"
     :head-class="headClass"
     :head-style="headStyle"
@@ -37,8 +37,6 @@ const data = Array.from({ length: 5 }, (_, index) => {
   }
 })
 
-const rowClass = 'demo-row-class'
-
 const headClass: TableHeadPropFn = ({ index }) => `head-${index}`
 
 const headStyle: TableHeadPropFn = ({ index }) => ({
@@ -55,10 +53,10 @@ const cellClass: TableCellPropFn<ItemType<typeof data>> = ({ rowIndex, columnInd
 
 <style scoped>
 :deep(.demo-row-class) {
-  color: #339af0;
+  color: var(--vxp-color-primary-opacity-3);
 }
 
 :deep(.demo-column-class) {
-  background-color: #fab005;
+  background-color: var(--vxp-color-warning-opacity-6);
 }
 </style>
