@@ -128,10 +128,9 @@ describe('Tooltip', () => {
   })
 
   it('transfer', async () => {
-    wrapper = createTooltip({ transfer: true })
+    wrapper = createTooltip({ visible: true, transfer: true })
 
-    await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    await nextTick()
     await nextTick()
     expect(document.querySelector('.vxp-tooltip__popper')).not.toBeNull()
     expect(document.querySelector('.tip')).not.toBeNull()
