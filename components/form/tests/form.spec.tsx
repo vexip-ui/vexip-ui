@@ -221,6 +221,9 @@ describe('Form', () => {
     await item.find('.vxp-form__help').trigger('mouseenter')
     vi.runAllTimers()
     await nextTick()
+    await nextTick()
+    vi.runAllTimers()
+    await nextTick()
 
     expect(document.querySelector('.vxp-form__help-tip')).toBeTruthy()
     expect(document.querySelector('.vxp-form__help-tip')!.textContent).toEqual('help')
@@ -242,6 +245,9 @@ describe('Form', () => {
     expect(item.find('.vxp-form__help').exists()).toBe(true)
 
     await item.find('.vxp-form__help').trigger('mouseenter')
+    vi.runAllTimers()
+    await nextTick()
+    await nextTick()
     vi.runAllTimers()
     await nextTick()
 
