@@ -109,13 +109,13 @@ $table: map.merge(
     user-select: none;
   }
 
-  &__body {
-    transition: min-height get-css-var('transition-base');
-  }
+  // &__body {
+  //   transition: min-height get-css-var('transition-base');
+  // }
 
-  &--locked &__body {
-    transition-duration: 0ms;
-  }
+  // &--locked &__body {
+  //   transition-duration: 0ms;
+  // }
 
   &__head-wrapper {
     position: relative;
@@ -250,16 +250,35 @@ $table: map.merge(
     background-color: get-css-var('table-head-bg-color');
   }
 
+  &__cell {
+    background-color: get-css-var('table-cell-bg-color');
+  }
+
   &__row &__cell {
-    background-color: get-css-var('table-row-bg-color');
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color')
+      )
+    );
   }
 
   &__row--stripe &__cell {
-    background-color: get-css-var('table-row-bg-color-stripe');
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color-stripe')
+      )
+    );
   }
 
   &__row--hover &__cell {
-    background-color: get-css-var('table-row-bg-color-hover');
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color-hover')
+      )
+    );
   }
 
   &__collapse {
@@ -368,6 +387,16 @@ $table: map.merge(
     #{$head-cell},
     #{$foot-cell} {
       transition-duration: 0ms;
+    }
+  }
+
+  &--using-bar {
+    #{$group},
+    #{$row},
+    #{$cell},
+    #{$head-cell},
+    #{$foot-cell} {
+      pointer-events: none;
     }
   }
 

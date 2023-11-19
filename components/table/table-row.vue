@@ -98,8 +98,8 @@ const style = computed(() => {
   return [
     customStyle,
     {
-      height: state.rowHeight ? `${state.rowHeight}px` : undefined,
-      minHeight: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowMinHeight}px`
+      // height: state.rowHeight ? `${state.rowHeight}px` : undefined,
+      height: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowHeight}px`
     }
   ]
 })
@@ -150,23 +150,19 @@ const rightFixed = computed(() => {
   return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
 })
 
-// function getRowHeight(row: TableRowState) {
-//   if (!row) return 0
+function setExpandHeight() {
+  if (props.row.expanded && expandEl.value) {
+    mutations.setRowExpandHeight(rowKey.value, expandEl.value.scrollHeight)
+  } else {
+    mutations.setRowExpandHeight(rowKey.value, 0)
+  }
 
-//   return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
-// }
-
-function computeRectHeight() {
-  // if (!Object.keys(props.row).length || props.row.hidden) return
-  // computeBorderHeight()
-  // computeRowHeight()
-  // !rowType.value && updateTotalHeight()
+  updateTotalHeight()
 }
 
 function updateTotalHeight() {
   if (state.heightBITree && !props.fixed) {
-    // nextTick(() => {
-    const height = props.row.height
+    const height = props.row.height + props.row.expandHeight
     const tree = state.heightBITree
     const prev = tree.get(props.index)
 
@@ -174,22 +170,9 @@ function updateTotalHeight() {
       tree.add(props.index, height - prev)
       mutations.updateTotalHeight()
     }
-    // })
   }
 }
 
-// watch(
-//   () => props.row.hidden,
-//   value => {
-//     !value && computeRectHeight()
-//   }
-// )
-// watch(
-//   () => props.row,
-//   () => {
-//     computeRectHeight()
-//   }
-// )
 watch(maxHeight, value => {
   if (state.rowHeight) return
 
@@ -198,56 +181,9 @@ watch(maxHeight, value => {
 })
 
 onMounted(() => {
-  // computeRectHeight()
   mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
-  !rowType.value && updateTotalHeight()
+  !rowType.value && setExpandHeight()
 })
-
-// onUpdated(() => {
-//   if (!state.rowHeight) {
-//     computeRectHeight()
-//   } else if (!props.row.hidden) {
-//     computeBorderHeight()
-//     updateTotalHeight()
-//   }
-// })
-
-// function computeRowHeight() {
-//   if (state.rowHeight) {
-//     mutations.fixRowHeight(rowKey.value, state.rowHeight)
-
-//     nextTick(() => {
-//       if (rowEl.value) {
-//         rowEl.value.style.height = `${state.rowHeight}px`
-//         rowEl.value.style.maxHeight = `${state.rowHeight}px`
-//       }
-//     })
-//   } else {
-//     nextTick(() => {
-//       if (!props.fixed) {
-//         if (rowEl.value) {
-//           mutations.fixRowHeight(rowKey.value, maxHeight.value)
-//         }
-//       } else {
-//         setTimeout(() => {
-//           if (rowEl.value) {
-//             rowEl.value.style.height = `${props.row.height}px`
-//           }
-//         }, 0)
-//       }
-//     })
-//   }
-// }
-
-// function computeBorderHeight() {
-//   if (wrapper.value) {
-//     const style = getComputedStyle(wrapper.value)
-//     const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
-
-//     mutations.setBorderHeight(rowKey.value, borderHeight)
-//     mutations.setRowExpandHeight(rowKey.value, expandEl.value?.scrollHeight || 0)
-//   }
-// }
 
 function buildEventPayload(event: Event) {
   return {
@@ -379,8 +315,8 @@ function handleDragLeave(event: DragEvent) {
     </div>
     <CollapseTransition
       v-if="!!getters.expandColumn"
-      @enter="computeRectHeight"
-      @leave="computeRectHeight"
+      @enter="setExpandHeight"
+      @leave="setExpandHeight"
     >
       <div
         v-if="row.expanded"

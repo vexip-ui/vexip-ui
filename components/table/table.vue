@@ -162,6 +162,7 @@ const tempSummaries = reactive(new Set<TableSummaryOptions>())
 const tableWidth = ref<number | string>()
 const hasDragColumn = ref(false)
 const noTransition = ref(true)
+const usingScrollbar = ref(false)
 
 const wrapper = ref<HTMLElement>()
 const mainScroll = ref<NativeScrollExposed>()
@@ -276,7 +277,8 @@ const className = computed(() => {
     [nh.bm('col-resizing')]: state.colResizing,
     [nh.bm('locked')]: noTransition.value,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
-    [nh.bm('below-foot')]: state.belowSummaries.length
+    [nh.bm('below-foot')]: state.belowSummaries.length,
+    [nh.bm('using-bar')]: usingScrollbar.value
   }
 })
 const style = computed(() => {
@@ -312,11 +314,11 @@ const useXScroll = computed(() => {
 const bodyScrollHeight = computed(() => {
   const { totalHeight } = state
 
-  if (Number.isNaN(totalHeight)) {
-    return bodyHeight.value
-  }
+  // if (Number.isNaN(totalHeight)) {
+  //   return bodyHeight.value
+  // }
 
-  return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : bodyHeight.value
+  return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : undefined
 })
 const xBarLength = computed(() => mainScroll.value?.xBarLength || 35)
 const yBarLength = computed(() => {
@@ -570,6 +572,8 @@ function computeBodyHeight() {
 }
 
 function handleMainScroll(payload: NativeScrollPayload) {
+  if (usingScrollbar.value) return
+
   if (payload.type !== 'vertical') {
     handleXScroll(payload)
   }
@@ -580,6 +584,8 @@ function handleMainScroll(payload: NativeScrollPayload) {
 }
 
 function handleXScroll({ clientX, percentX }: { clientX: number, percentX: number }) {
+  if (usingScrollbar.value) return
+
   xScrollPercent.value = percentX
   setBodyXScroll(clientX)
   syncBarScroll()
@@ -587,6 +593,8 @@ function handleXScroll({ clientX, percentX }: { clientX: number, percentX: numbe
 }
 
 function handleYScroll({ clientY, percentY }: { clientY: number, percentY: number }) {
+  if (usingScrollbar.value) return
+
   yScrollPercent.value = percentY
   setBodyYScroll(clientY)
   syncBarScroll()
@@ -938,7 +946,7 @@ function refresh() {
     nextFrameOnce(computeRenderRows)
     setTimeout(() => {
       noTransition.value = false
-    }, 120)
+    }, 300)
   }, 0)
 }
 
@@ -1059,13 +1067,22 @@ function renderTableSlot({ name }: { name: string }) {
         </div>
       </NativeScroll>
     </div>
-    <div :class="nh.be('body-wrapper')">
+    <div
+      :class="nh.be('body-wrapper')"
+      :style="
+        !bodyScrollHeight && state.totalHeight
+          ? {
+            height: `${state.totalHeight}px`,
+            transition: noTransition ? undefined : `height ${nh.gnv('transition-base')}`
+          }
+          : undefined
+      "
+    >
       <NativeScroll
         ref="mainScroll"
         inherit
         mode="both"
         scroll-only
-        observe-deep
         :class="[nh.be('wrapper'), props.scrollClass.major]"
         :bar-class="nh.bem('bar', 'horizontal')"
         :height="bodyScrollHeight"
@@ -1158,7 +1175,9 @@ function renderTableSlot({ name }: { name: string }) {
       :disabled="!xScrollEnabled"
       :bar-length="xBarLength"
       :style="{ bottom: `${footHeight}px` }"
+      @scroll-start="usingScrollbar = true"
       @scroll="handleXBarScroll"
+      @scroll-end="usingScrollbar = false"
     ></Scrollbar>
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
@@ -1170,7 +1189,9 @@ function renderTableSlot({ name }: { name: string }) {
       :disabled="!yScrollEnabled"
       :bar-length="yBarLength"
       :style="{ top: `${headHeight}px`, bottom: `${footHeight}px` }"
+      @scroll-start="usingScrollbar = true"
       @scroll="handleYBarScroll"
+      @scroll-end="usingScrollbar = false"
     ></Scrollbar>
     <div
       v-if="props.rowDraggable || hasDragColumn"

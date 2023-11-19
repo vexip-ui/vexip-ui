@@ -1,5 +1,6 @@
 <template>
   <Table
+    use-x-bar
     use-y-bar
     virtual
     stripe
@@ -64,7 +65,7 @@ import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
 
 const data = ref(
-  Array.from({ length: 15000 }, (_, index) => {
+  Array.from({ length: 1500 }, (_, index) => {
     return {
       index,
       name: `Name ${index}`,
