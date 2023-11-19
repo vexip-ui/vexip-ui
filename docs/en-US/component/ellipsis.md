@@ -37,3 +37,4 @@ The max lines to be displayed can be set via the `max-lines` prop. The multi-lin
 | max-lines       | `number`            | Set the max displayed lines, The multi-line mode will be enabled when passing an integer greater then `0`. It is powered by `-webkit-line-clamp` | `null`       | -        |
 | tip-max-width   | `number \| string`  | Set the maximum width of the tooltip                                                                                                             | `500`        | `2.0.13` |
 | tip-disabled    | `boolean`           | Whether to disable tooltip                                                                                                                       | `false`      | `2.1.18` |
+| shift           | `TooltipShift`      | Whether to limit tip inside the visible area                                                                                                     | `false`      | `2.2.12` |
