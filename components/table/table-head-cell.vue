@@ -128,7 +128,7 @@ const { target: resizer } = useMoving({
 
     mutations.handleColumnResize(
       state.columns
-        .slice(props.index, props.index + cellSpan.value.colSpan)
+        .slice(props.column.index, props.column.index + cellSpan.value.colSpan)
         .map(column => column.key),
       width
     )

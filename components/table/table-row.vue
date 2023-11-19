@@ -2,7 +2,7 @@
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
 
-import { computed, inject, nextTick, onMounted, onUpdated, reactive, ref, toRef, watch } from 'vue'
+import { computed, inject, nextTick, onMounted, reactive, ref, toRef, watch } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
@@ -98,7 +98,8 @@ const style = computed(() => {
   return [
     customStyle,
     {
-      minHeight: !state.rowHeight ? `${maxHeight.value}px` : undefined
+      height: state.rowHeight ? `${state.rowHeight}px` : undefined,
+      minHeight: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowMinHeight}px`
     }
   ]
 })
@@ -149,98 +150,104 @@ const rightFixed = computed(() => {
   return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
 })
 
-function getRowHeight(row: TableRowState) {
-  if (!row) return 0
+// function getRowHeight(row: TableRowState) {
+//   if (!row) return 0
 
-  return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
-}
+//   return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+// }
 
 function computeRectHeight() {
-  if (!Object.keys(props.row).length || props.row.hidden) return
-
-  computeBorderHeight()
-  computeRowHeight()
-  !rowType.value && updateTotalHeight()
+  // if (!Object.keys(props.row).length || props.row.hidden) return
+  // computeBorderHeight()
+  // computeRowHeight()
+  // !rowType.value && updateTotalHeight()
 }
 
 function updateTotalHeight() {
   if (state.heightBITree && !props.fixed) {
-    nextTick(() => {
-      const height = getRowHeight(props.row)
-      const tree = state.heightBITree
-      const prev = tree.get(props.index)
+    // nextTick(() => {
+    const height = props.row.height
+    const tree = state.heightBITree
+    const prev = tree.get(props.index)
 
-      if (height !== prev) {
-        tree.add(props.index, height - prev)
-        mutations.updateTotalHeight()
-      }
-    })
+    if (height !== prev) {
+      tree.add(props.index, height - prev)
+      mutations.updateTotalHeight()
+    }
+    // })
   }
 }
 
-watch(
-  () => props.row.hidden,
-  value => {
-    !value && computeRectHeight()
-  }
-)
-watch(
-  () => props.row,
-  () => {
-    computeRectHeight()
-  }
-)
+// watch(
+//   () => props.row.hidden,
+//   value => {
+//     !value && computeRectHeight()
+//   }
+// )
+// watch(
+//   () => props.row,
+//   () => {
+//     computeRectHeight()
+//   }
+// )
+watch(maxHeight, value => {
+  if (state.rowHeight) return
+
+  mutations.fixRowHeight(rowKey.value, value)
+  !rowType.value && updateTotalHeight()
+})
 
 onMounted(() => {
-  computeRectHeight()
-  mutations.updateTotalHeight()
+  // computeRectHeight()
+  mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
+  !rowType.value && updateTotalHeight()
 })
 
-onUpdated(() => {
-  if (!state.rowHeight) {
-    computeRectHeight()
-  } else if (!props.row.hidden) {
-    computeBorderHeight()
-    updateTotalHeight()
-  }
-})
+// onUpdated(() => {
+//   if (!state.rowHeight) {
+//     computeRectHeight()
+//   } else if (!props.row.hidden) {
+//     computeBorderHeight()
+//     updateTotalHeight()
+//   }
+// })
 
-function computeRowHeight() {
-  if (state.rowHeight) {
-    mutations.fixRowHeight(rowKey.value, state.rowHeight)
+// function computeRowHeight() {
+//   if (state.rowHeight) {
+//     mutations.fixRowHeight(rowKey.value, state.rowHeight)
 
-    nextTick(() => {
-      if (rowEl.value) {
-        rowEl.value.style.height = `${state.rowHeight}px`
-        rowEl.value.style.maxHeight = `${state.rowHeight}px`
-      }
-    })
-  } else {
-    nextTick(() => {
-      if (!props.fixed) {
-        if (rowEl.value) {
-          mutations.fixRowHeight(rowKey.value, maxHeight.value)
-        }
-      } else {
-        setTimeout(() => {
-          if (rowEl.value) {
-            rowEl.value.style.height = `${props.row.height}px`
-          }
-        }, 0)
-      }
-    })
-  }
-}
+//     nextTick(() => {
+//       if (rowEl.value) {
+//         rowEl.value.style.height = `${state.rowHeight}px`
+//         rowEl.value.style.maxHeight = `${state.rowHeight}px`
+//       }
+//     })
+//   } else {
+//     nextTick(() => {
+//       if (!props.fixed) {
+//         if (rowEl.value) {
+//           mutations.fixRowHeight(rowKey.value, maxHeight.value)
+//         }
+//       } else {
+//         setTimeout(() => {
+//           if (rowEl.value) {
+//             rowEl.value.style.height = `${props.row.height}px`
+//           }
+//         }, 0)
+//       }
+//     })
+//   }
+// }
 
-function computeBorderHeight() {
-  if (wrapper.value) {
-    const style = getComputedStyle(wrapper.value)
-    const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+// function computeBorderHeight() {
+//   if (wrapper.value) {
+//     const style = getComputedStyle(wrapper.value)
+//     const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
 
-    mutations.setBorderHeight(rowKey.value, borderHeight)
-    mutations.setRowExpandHeight(rowKey.value, expandEl.value?.scrollHeight || 0)
-  }
-}
+//     mutations.setBorderHeight(rowKey.value, borderHeight)
+//     mutations.setRowExpandHeight(rowKey.value, expandEl.value?.scrollHeight || 0)
+//   }
+// }
 
 function buildEventPayload(event: Event) {
   return {

@@ -346,7 +346,7 @@ export function useStore(options: StoreOptions) {
     clearFilter,
     toggleFilterItemActive,
     refreshRowIndex,
-    updateTotalHeight: debounceMinor(updateTotalHeight),
+    updateTotalHeight,
     handleCheck,
     handleCheckAll,
     clearCheckAll,
@@ -867,6 +867,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setTableWidth(width: number) {
+    if (state.resized.size) return
+
     width = toNumber(width)
 
     const { columns, widths, resized, sidePadding } = state

@@ -7,6 +7,7 @@
     :width="1000"
     :height="320"
     :row-height="40"
+    col-resizable
   >
     <TableColumn type="drag" fixed></TableColumn>
     <TableColumn type="expand" id-key="expand" fixed>
