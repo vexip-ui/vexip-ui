@@ -18,6 +18,8 @@ export type TooltipVirtual =
     y: number
   }
 export interface TooltipExposed extends ComponentPublicInstance {
+  rendering: boolean,
+  trigger: HTMLElement | undefined | null,
   toggleVisible: (visible: boolean) => void,
   updatePopper: () => void
 }

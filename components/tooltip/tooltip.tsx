@@ -187,7 +187,7 @@ export default defineComponent({
       }
     )
 
-    expose({ trigger: triggerEl, toggleVisible, updatePopper })
+    expose({ rendering, trigger: triggerEl, toggleVisible, updatePopper })
 
     function toggleVisible(visible = !currentVisible.value) {
       if (currentVisible.value === visible) return
@@ -333,7 +333,7 @@ export default defineComponent({
             : (
               <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
               )),
-        !props.disabled && (
+        !props.disabled && (props.tipAlive || rendering.value) && (
           <Popper
             ref={popper}
             class={{
