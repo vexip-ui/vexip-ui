@@ -62,7 +62,7 @@ import { ref } from 'vue'
 import { defineColumns, defineFilter } from 'vexip-ui'
 import { Filter } from '@vexip-ui/icons'
 
-import type { Table, TableFilterProfile } from 'vexip-ui'
+import type { TableExposed, TableFilterProfile } from 'vexip-ui'
 
 interface RowData {
   id: string,
@@ -73,7 +73,7 @@ interface RowData {
   age: string
 }
 
-const table = ref<InstanceType<typeof Table>>()
+const table = ref<TableExposed>()
 
 const columns = defineColumns([
   { type: 'selection' },

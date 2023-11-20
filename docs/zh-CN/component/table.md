@@ -18,7 +18,7 @@
 
 使用 TableColumn 组件可以以模版的形式配置表格列。
 
-模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，是推荐的使用方式。
+模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，而无需编写渲染函数，是更推荐的使用方式。
 
 :::
 
@@ -200,9 +200,23 @@
 
 ==!s|2.1.24==
 
-在列选项通过 `cell-span` 属性提供一个回调函数，可以设置各个单元格的跨度。
+通过列选项的 `cell-span` 属性提供一个回调函数，可以设置各个单元格的跨度。
 
 如果想要合并头部，则需要在列选项设置 `head-span` 属性。
+
+:::
+
+:::demo table/column-group
+
+### 表头分组
+
+==!s|2.2.12==
+
+示例中使用了 TableColumnGroup 组件对表格列进行分组。
+
+如果使用 `columns` 属性，当在选项中指定了 `children` 属性后就会被解析为列分组选项。
+
+注意，在使用列分组后，仅有第一层选项的 `fixed` 属性会生效，其他的像是示例中的年龄列的 `fixed` 属性则是无效的。
 
 :::
 
@@ -221,6 +235,8 @@
 ## API
 
 ### 预设类型
+
+Table 组件的类型定义非常之多，如果你想充分了解它们之间的关系，建议从 [源码](https://github.com/vexip-ui/vexip-ui/blob/main/components/table/symbol.ts) 入手。
 
 ```ts
 type Key = string | number | symbol
@@ -339,7 +355,9 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -391,6 +409,18 @@ type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
+
+interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+
+type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
 
 type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
@@ -507,7 +537,7 @@ interface TableFootPayload {
 
 | 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于     |
 | --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | -------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
+| columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                 | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
 | data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -        |
@@ -555,6 +585,7 @@ interface TableFootPayload {
 | cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
+| border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
 
 ### Table 事件
 
@@ -632,7 +663,8 @@ interface TableFootPayload {
 | renderer         | `ColumnRenderFn`                       | 自定义渲染函数，若 `type` 为 `'expand'` 时则为 `ExpandRenderFn`              | `null`      | -        |
 | head-renderer    | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`      | -        |
 | filter-renderer  | `FilterRenderFn`                       | 自定义过滤器渲染函数                                                         | `null`      | `2.1.18` |
-| no-ellipsis      | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -        |
+| ~~no-ellipsis~~  | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -        |
+| ellipsis         | `boolean`                              | 是否为单元格内容使用省略组件                                                 | `false`     | `2.2.12` |
 | checkbox-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                                  | `'default'` | -        |
 | disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -        |
 | truth-index      | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
@@ -653,6 +685,28 @@ interface TableFootPayload {
 | head    | 列头内容的插槽 | `Parameters<HeadRenderFn>`          | -        |
 | filter  | 列过滤器的插槽 | `Parameters<FilterRenderFn>`        | `2.1.18` |
 | summary | 列尾内容的插槽 | `Parameters<ColumnSummaryRenderFn>` | `2.1.24` |
+
+### TableColumnGroup 属性
+
+==!s|2.2.12==
+
+| 名称       | 类型                           | 说明                                                                                  | 默认值     | 始于 |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------- | ---------- | ---- |
+| name       | `string`                       | 列分组的名称                                                                          | `''`       | -    |
+| fixed      | `boolean \| 'left' \| 'right'` | 是否为固定列分组，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false`    | -    |
+| order      | `number`                       | 列分组的渲染顺序，与列的 `order` 属性共同作用，每一层级、每个分组之间的排序均是独立的 | `0`        | -    |
+| ellipsis   | `boolean`                      | 是否为表头单元格内容使用省略组件                                                      | `false`    | -    |
+| text-align | `TableTextAlign`               | 设置表头单元格的横向对其方式                                                          | `'center'` | -    |
+| renderer   | `() => any`                    | 自定义头部渲染函数                                                                    | `null`     | -    |
+
+### TableColumnGroup 插槽
+
+==!s|2.2.12==
+
+| 名称    | 说明                      | 参数 | 始于 |
+| ------- | ------------------------- | ---- | ---- |
+| default | 用于定义 TableColumn 组件 | -    | -    |
+| head    | 列头内容的插槽            | -    | -    |
 
 ### TableSummary 属性
 

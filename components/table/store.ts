@@ -10,12 +10,14 @@ import {
   toFixed,
   toNumber
 } from '@vexip-ui/utils'
-import { DEFAULT_KEY_FIELD, TABLE_FOOT_PREFIX, TABLE_HEAD_KEY, columnTypes } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_FOOT_PREFIX, TABLE_HEAD_PREFIX, columnTypes } from './symbol'
 
 import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   CellSpanResult,
+  ColumnGroupWithKey,
+  ColumnRawWithKey,
   ColumnWithKey,
   Data,
   ExpandRenderFn,
@@ -28,6 +30,7 @@ import type {
   TableCellPropFn,
   TableCellSpanFn,
   TableColumnOptions,
+  TableColumnRawOptions,
   TableDragColumn,
   TableExpandColumn,
   TableFilterOptions,
@@ -61,6 +64,8 @@ export function useStore(options: StoreOptions) {
   const state = reactive({
     ...options,
     columns: [],
+    normalColumns: [],
+    allColumns: [],
     summaries: [],
     data: [],
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
@@ -93,7 +98,8 @@ export function useStore(options: StoreOptions) {
     resizeLeft: 0,
     cellSpanMap: new Map(),
     collapseMap: new Map(),
-    sidePadding: options.sidePadding || [0, 0]
+    sidePadding: options.sidePadding || [0, 0],
+    barScrolling: false
   }) as StoreState
 
   setColumns(options.columns)
@@ -196,6 +202,7 @@ export function useStore(options: StoreOptions) {
   })
   const rowDragging = computed(() => !!processedData.value.find(row => row.dragging))
   const totalWidths = computed(() => getColumnsWidths())
+  const normalWidths = computed(() => getColumnsWidths(state.normalColumns))
   const leftFixedWidths = computed(() => getColumnsWidths(state.leftFixedColumns))
   const rightFixedWidths = computed(() => getColumnsWidths(state.rightFixedColumns))
   const expandColumn = computed(() => {
@@ -244,9 +251,12 @@ export function useStore(options: StoreOptions) {
   })
   const topFixedHeights = computed(() => getSummariesHeights(state.aboveSummaries))
   const bottomFixedHeights = computed(() => getSummariesHeights())
-  const indentedColumn = computed(() =>
-    state.columns.find(column => !column.type && column.indented)
-  )
+  const indentedColumn = computed(() => {
+    return state.columns.find(column => !column.type && column.indented)
+  })
+  const hasFixedColumn = computed(() => {
+    return !!(state.leftFixedColumns.length || state.rightFixedColumns.length)
+  })
 
   watchEffect(() => {
     state.heightBITree = markRaw(
@@ -266,13 +276,15 @@ export function useStore(options: StoreOptions) {
     hasDragColumn,
     rowDragging,
     totalWidths,
+    normalWidths,
     leftFixedWidths,
     rightFixedWidths,
     expandColumn,
     summaryData,
     topFixedHeights,
     bottomFixedHeights,
-    indentedColumn
+    indentedColumn,
+    hasFixedColumn
   })
 
   const mutations = {
@@ -282,6 +294,7 @@ export function useStore(options: StoreOptions) {
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
+    isGroupColumn,
     buildSummaryKey,
     setDataKey,
     setCurrentPage,
@@ -327,6 +340,8 @@ export function useStore(options: StoreOptions) {
     setExpandRenderer,
     setCellSpan,
     setSidePadding,
+    setBorderWidth,
+    setBarScrolling,
 
     handleSort,
     clearSort,
@@ -334,7 +349,7 @@ export function useStore(options: StoreOptions) {
     clearFilter,
     toggleFilterItemActive,
     refreshRowIndex,
-    updateTotalHeight: debounceMinor(updateTotalHeight),
+    updateTotalHeight,
     handleCheck,
     handleCheckAll,
     clearCheckAll,
@@ -346,7 +361,8 @@ export function useStore(options: StoreOptions) {
     getParentRow,
     handleColumnResize,
     updateCellSpan,
-    getCurrentData
+    getCurrentData,
+    createMinRowState
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -388,26 +404,123 @@ export function useStore(options: StoreOptions) {
     return heights
   }
 
-  function setColumns(columns: TableColumnOptions[]) {
+  function createMinRowState(key: Key) {
+    return { key, cellHeights: {} } as TableRowState
+  }
+
+  function isGroupColumn(column: any): column is ColumnGroupWithKey {
+    return !!column.children?.length
+  }
+
+  function buildColumns(columns: TableColumnRawOptions[]) {
+    const allColumns: ColumnRawWithKey[][] = []
+    const baseColumns: ColumnWithKey[] = []
+
+    const getFixedOrder = (fixed?: boolean | 'left' | 'right') => {
+      return fixed === true || fixed === 'left' ? -1 : fixed === 'right' ? 1 : 0
+    }
+    const build = (
+      _columns: TableColumnRawOptions[],
+      fixed?: boolean | 'left' | 'right',
+      row = 0,
+      result: ColumnRawWithKey[][] = []
+    ) => {
+      _columns = _columns
+        .filter(column => !('children' in column) || isGroupColumn(column))
+        .sort((prev, next) => (prev.order || 0) - (next.order || 0))
+        .sort((prev, next) => getFixedOrder(prev.fixed) - getFixedOrder(next.fixed))
+      fixed = fixed === true ? 'left' : fixed
+
+      const columns = _columns as ColumnRawWithKey[]
+      const rowColumns = result[row] ?? (result[row] = [])
+
+      let index = row > 0 ? result[row - 1].length - 1 : 0
+
+      for (const { ...column } of columns) {
+        if (!isNull(fixed)) {
+          column.fixed = fixed
+        }
+
+        rowColumns[index] = column
+
+        if (isGroupColumn(column)) {
+          const endIndex = build(column.children, column.fixed, row + 1, result)
+
+          column.key = Symbol('TableColumnGroup')
+          column.headSpan = endIndex - index
+          index = endIndex
+        } else {
+          let key = column.key
+
+          if (!(column.type && columnTypes.includes(column.type)) && isNull(key)) {
+            key = getIndexId()
+
+            console.error('[vexip-ui:Table] Table column requires key prop, but missing')
+          }
+
+          column.key = key
+          baseColumns.push(column)
+          index += 1
+        }
+      }
+
+      return index
+    }
+
+    build(columns, undefined, 0, allColumns)
+
+    let length = 0
+
+    for (const rowColumns of allColumns) {
+      length = Math.max(rowColumns.length, length)
+    }
+
+    for (const rowColumns of allColumns) {
+      const lastColumn = rowColumns.findLast(column => column)
+
+      if (lastColumn) {
+        lastColumn.last = true
+      }
+
+      rowColumns.length = length
+    }
+
+    for (let i = 0, rowCount = allColumns.length; i < length; ++i) {
+      let span = 1
+
+      for (let j = rowCount - 1; j >= 0; --j) {
+        const column = allColumns[j][i]
+
+        if (column) {
+          column.rowSpan = span
+          span = 1
+        } else {
+          ++span
+        }
+      }
+    }
+
+    return { allColumns, baseColumns }
+  }
+
+  function setColumns(columns: TableColumnRawOptions[]) {
     resetCellSpan()
 
-    columns = Array.from(columns).sort((prev, next) => {
-      return (prev.order || 0) - (next.order || 0)
-    })
-
     const { widths, sorters, filters } = state
+    const { allColumns, baseColumns } = buildColumns(columns)
 
     const normalColumns: ColumnWithKey[] = []
     const rightFixedColumns: ColumnWithKey[] = []
     const leftFixedColumns: ColumnWithKey[] = []
 
-    let first = false
+    let firstSet = false
 
-    for (let i = 0, len = columns.length; i < len; ++i) {
-      const column = { ...columns[i] } as ColumnWithKey
+    for (let i = 0, len = baseColumns.length; i < len; ++i) {
+      const column = baseColumns[i]
 
       column.first = false
       column.last = false
+      column.index = i
 
       if (column.type && columnTypes.includes(column.type)) {
         switch (column.type) {
@@ -454,27 +567,17 @@ export function useStore(options: StoreOptions) {
         }
 
         if (!column.key) {
-          column.key = `__vxp_${column.type}`
+          column.key = `__vxp_${column.type}-${i}`
         }
-      } else if (!first) {
+      } else if (!firstSet) {
         column.first = true
-        first = true
-      }
-
-      let key = column.key
-
-      if (isNull(key)) {
-        key = getIndexId()
-
-        console.error('[vexip-ui:Table] Table column requires key prop, but missing')
+        firstSet = true
       }
 
       // 独立属性解析时注意隔断同对象引用
-      widths.set(key, column.width || 100)
-      sorters.set(key, parseSorter(column.sorter))
-      filters.set(key, parseFilter(column.filter))
-
-      column.key = key
+      widths.set(column.key, column.width || 100)
+      sorters.set(column.key, parseSorter(column.sorter))
+      filters.set(column.key, parseFilter(column.filter))
 
       const fixed = column.fixed
 
@@ -487,7 +590,21 @@ export function useStore(options: StoreOptions) {
       }
     }
 
+    if (state.allColumns.length > allColumns.length) {
+      for (let i = allColumns.length - 1, len = state.allColumns.length; i < len; ++i) {
+        state.rowMap.delete(`${TABLE_HEAD_PREFIX}${i}`)
+      }
+    }
+
+    for (let i = 0, len = allColumns.length; i < len; ++i) {
+      const rowKey = `${TABLE_HEAD_PREFIX}${i}`
+
+      state.rowMap.set(rowKey, createMinRowState(rowKey))
+    }
+
     state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
+    state.normalColumns = normalColumns
+    state.allColumns = allColumns
 
     if (state.columns.length) {
       state.columns.at(-1)!.last = true
@@ -532,7 +649,7 @@ export function useStore(options: StoreOptions) {
       if (!prevKeys.has(summary.key)) {
         const rowKey = buildSummaryKey(summary.key)
 
-        state.rowMap.set(rowKey, { key: rowKey } as TableRowState)
+        state.rowMap.set(rowKey, createMinRowState(rowKey))
       }
 
       prevKeys.delete(summary.key)
@@ -590,7 +707,7 @@ export function useStore(options: StoreOptions) {
   function setData(data: Data[]) {
     const clonedData: TableRowState[] = []
     const rowMap = new Map<Key, TableRowState>()
-    const { dataKey, keyConfig, idMaps, disabledTree } = state
+    const { allColumns, dataKey, keyConfig, idMaps, disabledTree } = state
     const oldDataMap = state.rowMap
     const hidden = !!state.virtual
 
@@ -602,20 +719,16 @@ export function useStore(options: StoreOptions) {
       treeExpanded: treeExpandedKey
     } = keyConfig
 
-    rowMap.set(
-      TABLE_HEAD_KEY,
-      oldDataMap.get(TABLE_HEAD_KEY) ||
-        ({
-          key: TABLE_HEAD_KEY
-        } as TableRowState)
-    )
+    for (let i = 0, len = allColumns.length; i < len; ++i) {
+      const key = `${TABLE_HEAD_PREFIX}${i}`
+
+      rowMap.set(key, oldDataMap.get(key) || createMinRowState(key))
+    }
 
     for (const summary of state.summaries) {
       const key = buildSummaryKey(summary.key)
 
-      if (oldDataMap.has(key)) {
-        rowMap.set(key, oldDataMap.get(key)!)
-      }
+      rowMap.set(key, oldDataMap.get(key) || createMinRowState(key))
     }
 
     const parseRow = (origin: Data[], result: TableRowState[], parent?: TableRowState) => {
@@ -760,6 +873,8 @@ export function useStore(options: StoreOptions) {
   }
 
   function setTableWidth(width: number) {
+    if (state.resized.size) return
+
     width = toNumber(width)
 
     const { columns, widths, resized, sidePadding } = state
@@ -946,6 +1061,14 @@ export function useStore(options: StoreOptions) {
 
   function setSidePadding(padding: number | number[]) {
     state.sidePadding = Array.isArray(padding) ? padding : [padding, padding]
+  }
+
+  function setBorderWidth(width: number) {
+    state.borderWidth = Math.max(width, 0)
+  }
+
+  function setBarScrolling(scrolling: boolean) {
+    state.barScrolling = scrolling
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

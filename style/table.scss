@@ -18,6 +18,7 @@ $table: map.merge(
     b-style: get-css-var('border-style'),
     s-color: get-css-var('shadow-color-base'),
     head-bg-color: get-css-var('fill-color-humble'),
+    head-action-span: 3px,
     row-bg-color: transparent,
     row-bg-color-hover: get-css-var('color-primary-opacity-9'),
     row-bg-color-stripe: get-css-var('fill-color-background'),
@@ -74,6 +75,7 @@ $table: map.merge(
 
   &__wrapper {
     position: relative;
+    display: flex;
     width: 100%;
     height: 100%;
     overflow: scroll;
@@ -108,13 +110,13 @@ $table: map.merge(
     user-select: none;
   }
 
-  &__body {
-    transition: min-height get-css-var('transition-base');
-  }
+  // &__body {
+  //   transition: min-height get-css-var('transition-base');
+  // }
 
-  &--locked &__body {
-    transition-duration: 0ms;
-  }
+  // &--locked &__body {
+  //   transition-duration: 0ms;
+  // }
 
   &__head-wrapper {
     position: relative;
@@ -123,9 +125,9 @@ $table: map.merge(
   }
 
   &__body-wrapper {
-    display: inline-block;
-    width: 100%;
-    vertical-align: top;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
   }
 
   &__foot-wrapper {
@@ -181,14 +183,14 @@ $table: map.merge(
     align-items: center;
     height: auto;
     min-height: 100%;
-    padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
+    padding: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
     border-inline-end: $border-a transparent;
     border-bottom: $border-a get-css-var('table-row-b-color-bottom');
     transition: get-css-var('transition-background');
 
-    &:last-child,
+    // &:last-child,
     &--last {
       border-inline-end-width: 0;
     }
@@ -203,19 +205,10 @@ $table: map.merge(
       text-align: right;
     }
 
-    &--wrap {
-      word-break: break-all;
-      white-space: pre-wrap;
-    }
-
     &[colspan],
     &[rowspan] {
       z-index: 1;
     }
-  }
-
-  &__cell:not(#{&}__cell--typed) {
-    padding: 0;
   }
 
   &__content {
@@ -224,18 +217,19 @@ $table: map.merge(
     justify-content: inherit;
     width: 100%;
     padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
+    color: inherit;
     word-break: break-all;
     white-space: normal;
   }
 
+  &__ellipsis {
+    color: inherit;
+  }
+
   &__side-pad {
-    position: absolute;
     inset-inline-start: 0;
-    flex: 1 0 0;
     width: get-css-var('table-side-pad-left');
     height: 100%;
-    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
-    transition: get-css-var('transition-background');
 
     &--right {
       inset-inline-start: auto;
@@ -244,23 +238,39 @@ $table: map.merge(
     }
   }
 
-  &__head-cell,
-  &__head &__side-pad {
+  &__head-cell {
     background-color: get-css-var('table-head-bg-color');
   }
 
+  &__cell {
+    background-color: get-css-var('table-cell-bg-color');
+  }
+
   &__row &__cell {
-    background-color: get-css-var('table-row-bg-color');
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color')
+      )
+    );
   }
 
-  &__row--stripe &__cell,
-  &__row--stripe &__side-pad {
-    background-color: get-css-var('table-row-bg-color-stripe');
+  &__row--stripe &__cell {
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color-stripe')
+      )
+    );
   }
 
-  &__row--hover &__cell,
-  &__row--hover &__side-pad {
-    background-color: get-css-var('table-row-bg-color-hover');
+  &__row--hover &__cell {
+    @include define-preset-values(
+      'table',
+      (
+        cell-bg-color: get-css-var('table-row-bg-color-hover')
+      )
+    );
   }
 
   &__collapse {
@@ -301,8 +311,7 @@ $table: map.merge(
       #{$cell},
       #{$head-cell},
       #{$foot-cell},
-      #{$collapse},
-      #{$side-pad} {
+      #{$collapse} {
         border-bottom-color: transparent;
       }
     }
@@ -370,6 +379,16 @@ $table: map.merge(
     #{$head-cell},
     #{$foot-cell} {
       transition-duration: 0ms;
+    }
+  }
+
+  &--using-bar {
+    #{$group},
+    #{$row},
+    #{$cell},
+    #{$head-cell},
+    #{$foot-cell} {
+      pointer-events: none;
     }
   }
 
@@ -443,7 +462,7 @@ $table: map.merge(
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin-inline-start: 3px;
+    margin-inline-start: get-css-var('table-head-action-span');
 
     &--asc,
     &--desc {
@@ -463,6 +482,7 @@ $table: map.merge(
 
     &--asc {
       height: 8px;
+      margin-top: 1px;
     }
 
     &--active {
@@ -478,7 +498,7 @@ $table: map.merge(
     align-items: center;
     justify-content: center;
     height: 15px;
-    margin-inline-start: 3px;
+    margin-inline-start: get-css-var('table-head-action-span');
     color: get-css-var('table-filter-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -588,9 +608,9 @@ $table: map.merge(
 
   &__fixed--right,
   &__fixed--left {
-    position: absolute;
+    position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     transition: get-css-var('transition-shadow');
 
     #{$collapse} * {

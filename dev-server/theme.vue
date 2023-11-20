@@ -405,7 +405,6 @@
             name="Age"
             id-key="age"
             :order="2"
-            no-ellipsis
             :width="300"
           ></TableColumn>
           <TableColumn name="Long Text" id-key="longText" :width="300">

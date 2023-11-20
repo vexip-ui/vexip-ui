@@ -12,58 +12,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
-const data = ref([
-  {
-    id: 1,
-    job: 'Cashier',
-    email: 'Angelique_Walsh2268@twace.org',
-    firstName: 'Angelique',
-    lastName: 'Walsh',
-    age: '58'
-  },
-  {
-    id: 2,
-    job: 'Stockbroker',
-    email: 'Aeris_Drake5867@gmail.com',
-    firstName: 'Aeris',
-    lastName: 'Drake',
-    age: '40'
-  },
-  {
-    id: 3,
-    job: 'Machine Operator',
-    email: 'Elisabeth_Rogers7566@sheye.org',
-    firstName: 'Elisabeth',
-    lastName: 'Rogers',
-    age: '56'
-  },
-  {
-    id: 4,
-    job: 'Audiologist',
-    email: 'Sharon_Tanner5855@nickia.com',
-    firstName: 'Sharon',
-    lastName: 'Tanner',
-    age: '58'
-  },
-  {
-    id: 5,
-    job: 'Cashier',
-    email: 'Evie_Farmer6650@typill.biz',
-    firstName: 'Evie',
-    lastName: 'Farmer',
-    age: '26'
+const data = reactive(Array.from({ length: 5 }, (_, index) => create(index)))
+
+function create(index: number) {
+  return {
+    id: index + 1,
+    firstName: `First ${index}`,
+    lastName: `Last ${index}`,
+    company: `Company ${index}`,
+    job: `Job ${index}`,
+    age: 20 + index,
+    email: `email${index}@vexip.ui`,
+    address: `Address ${index}`
   }
-])
+}
 
 function addRow() {
-  const index = Math.round((data.value.length - 1) * Math.random())
-  const id = data.value.at(-1)!.id + 1
-
-  data.value.push({
-    ...data.value[index],
-    id
-  })
+  data.push(create(data.at(-1)!.id + 1))
 }
 </script>
