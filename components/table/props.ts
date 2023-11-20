@@ -110,6 +110,7 @@ export const tableProps = buildProps({
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
   icons: Object as PropType<TableIcons>,
+  borderWidth: Number,
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void

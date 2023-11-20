@@ -18,7 +18,7 @@ Simple data table.
 
 Use the TableColumn component to configure table columns.
 
-The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations, which is the recommended way to use them.
+The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations without writing render functions, which is the more recommended way of use.
 
 :::
 
@@ -581,6 +581,7 @@ interface TableFootPayload {
 | cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |
+| border-width    | `number`                                                      | Set the border width of the table                                                                                                                     | `1`            | `2.2.12` |
 
 ### Table Events
 

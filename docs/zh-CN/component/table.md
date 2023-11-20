@@ -18,7 +18,7 @@
 
 使用 TableColumn 组件可以以模版的形式配置表格列。
 
-模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，是推荐的使用方式。
+模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，而无需编写渲染函数，是更推荐的使用方式。
 
 :::
 
@@ -581,6 +581,7 @@ interface TableFootPayload {
 | cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
+| border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
 
 ### Table 事件
 

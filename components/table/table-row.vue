@@ -128,6 +128,7 @@ const groupStyle = computed(() => {
 const cellDraggable = computed(() => {
   return getters.hasDragColumn && !getters.disableDragRows.has(rowKey.value)
 })
+const rowDraggable = computed(() => !rowType.value && state.rowDraggable)
 const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDraggable.value))
 const expandRenderer = computed(() => state.expandRenderer)
 const expandStyle = computed<CSSProperties>(() => {
@@ -151,6 +152,8 @@ const rightFixed = computed(() => {
 })
 
 function setExpandHeight() {
+  if (props.fixed) return
+
   if (props.row.expanded && expandEl.value) {
     mutations.setRowExpandHeight(rowKey.value, expandEl.value.scrollHeight)
   } else {
@@ -181,8 +184,12 @@ watch(maxHeight, value => {
 })
 
 onMounted(() => {
-  mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
-  !rowType.value && setExpandHeight()
+  nextTick(() => {
+    nextTick(() => {
+      mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
+      !rowType.value && setExpandHeight()
+    })
+  })
 })
 
 function buildEventPayload(event: Event) {
@@ -292,7 +299,7 @@ function handleDragLeave(event: DragEvent) {
     ref="wrapper"
     :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
     role="row"
-    :draggable="draggable || row.dragging"
+    :draggable="rowDraggable || row.dragging"
     :style="groupStyle"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"

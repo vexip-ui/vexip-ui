@@ -355,7 +355,8 @@ export interface StoreOptions {
   colResizable: boolean,
   expandRenderer: ExpandRenderFn | null,
   cellSpan: TableCellSpanFn | null,
-  sidePadding: number[]
+  sidePadding: number[],
+  borderWidth: number
 }
 
 export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions

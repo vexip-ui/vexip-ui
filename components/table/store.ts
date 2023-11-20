@@ -339,6 +339,7 @@ export function useStore(options: StoreOptions) {
     setExpandRenderer,
     setCellSpan,
     setSidePadding,
+    setBorderWidth,
 
     handleSort,
     clearSort,
@@ -1055,6 +1056,10 @@ export function useStore(options: StoreOptions) {
 
   function setSidePadding(padding: number | number[]) {
     state.sidePadding = Array.isArray(padding) ? padding : [padding, padding]
+  }
+
+  function setBorderWidth(width: number) {
+    state.borderWidth = Math.max(width, 0)
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

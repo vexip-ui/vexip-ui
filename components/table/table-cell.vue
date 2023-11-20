@@ -296,15 +296,10 @@ function handleExpandTree(row: TableRowState) {
 }
 
 function handleCellResize(entry: ResizeObserverEntry) {
-  if (!wrapper.value) return
-
-  // const style = getComputedStyle(wrapper.value)
-  // const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
-
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + 1
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
   )
 }
 </script>

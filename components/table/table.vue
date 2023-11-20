@@ -89,7 +89,10 @@ const props = useProps('table', _props, {
   useYBar: false,
   barFade: 1500,
   rowDraggable: false,
-  rowHeight: null,
+  rowHeight: {
+    default: null,
+    validator: value => value > 0
+  },
   rowMinHeight: {
     default: 36,
     validator: value => value > 0
@@ -139,7 +142,8 @@ const props = useProps('table', _props, {
     isFunc: true
   },
   sidePadding: 0,
-  icons: () => ({})
+  icons: () => ({}),
+  borderWidth: 1
 })
 
 const slots = defineSlots<{
@@ -229,7 +233,8 @@ const store = useStore({
   cellSpan: props.cellSpan,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
-    : [props.sidePadding, props.sidePadding]
+    : [props.sidePadding, props.sidePadding],
+  borderWidth: props.borderWidth
 })
 
 provide(TABLE_STORE, store)
@@ -284,7 +289,8 @@ const className = computed(() => {
 const style = computed(() => {
   const style: StyleType = {
     [nh.cv('row-indent-width')]:
-      typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent
+      typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
+    [nh.cv('b-width')]: `${props.borderWidth}px`
   }
   const width = tableWidth.value ?? props.width
   const [padLeft, padRight] = state.sidePadding
@@ -452,7 +458,8 @@ const normalProps = [
   'colResizable',
   'expandRenderer',
   'cellSpan',
-  'sidePadding'
+  'sidePadding',
+  'borderWidth'
 ] as const
 
 for (const prop of normalProps) {
@@ -564,6 +571,7 @@ function computeBodyHeight() {
 
       bodyHeight.value = height - headHeight.value - footHeight.value
     } else {
+      // one row as head placeholder
       bodyHeight.value = height - (props.rowHeight || props.rowMinHeight)
     }
   } else {
