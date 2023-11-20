@@ -5,7 +5,6 @@ import { useFieldStore } from '@/components/form'
 
 import { computed, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
-import { placementWhileList } from '@vexip-ui/hooks'
 import {
   createSizeProp,
   createStateProp,
@@ -14,6 +13,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
+import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
@@ -110,6 +110,8 @@ const slots = defineSlots<{
 
 const locale = useLocale('input', toRef(props, 'locale'))
 
+const { timer } = useSetTimeout()
+
 const currentValue = ref(props.value)
 const currentIndex = ref(-1)
 const currentVisible = ref(false)
@@ -196,14 +198,28 @@ function computeHitting() {
   }
 }
 
+let focused = false
+
 function handleFocus(event: FocusEvent) {
   control.value?.focus()
-  emitEvent(props.onFocus, event)
+
+  if (!focused) {
+    focused = true
+    emitEvent(props.onFocus, event)
+  }
 }
 
 function handleBlur(event: FocusEvent) {
   control.value?.blur()
-  emitEvent(props.onBlur, event)
+
+  if (focused) {
+    focused = false
+
+    timer.focus = setTimeout(() => {
+      emitEvent(props.onBlur, event)
+      handleChange()
+    }, 120)
+  }
 }
 
 function handleSelect(value: string | number, data: AutoCompleteRawOption) {
@@ -260,6 +276,12 @@ function handleChange(valid = true) {
   lastInput = String(lastValue)
 
   const option = optionStates.value.find(option => option.value === lastValue)
+
+  if (select.value) {
+    select.value.currentValues.length = 0
+    ;(currentValue.value || currentValue.value === 0) &&
+      select.value.currentValues.push(currentValue.value)
+  }
 
   emit('update:value', currentValue.value)
   setFieldValue(currentValue.value)
@@ -338,7 +360,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
   const key = event.code || event.key
 
-  if (key === 'Enter') {
+  if (key === 'Enter' || key === 'NumpadEnter') {
     handleEnter(event)
   } else if (key === 'ArrowDown' || key === 'ArrowUp') {
     event.preventDefault()
@@ -379,7 +401,7 @@ function handleEnter(event: KeyboardEvent) {
 
   if (composing.value) return
 
-  if (filteredOptions.value.length) {
+  if (currentIndex.value >= 0 && filteredOptions.value.length) {
     const option = filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value]
 
     handleSelect(option.value, option.data)
