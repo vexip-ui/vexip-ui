@@ -3,6 +3,7 @@ import { Button } from '@/components/button'
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 import { Tooltip } from '@/components/tooltip'
 
 import { computed, inject, ref, toRef } from 'vue'
@@ -18,6 +19,7 @@ import type {
   ColumnWithKey,
   ParsedFilterOptions,
   ParsedTableSorterOptions,
+  TableRowState,
   TableSelectionColumn,
   TableTypeColumn
 } from './symbol'
@@ -32,6 +34,10 @@ const props = defineProps({
   index: {
     type: Number,
     default: -1
+  },
+  row: {
+    type: Object as PropType<TableRowState>,
+    default: () => ({})
   },
   rowIndex: {
     type: Number,
@@ -153,7 +159,6 @@ const className = computed(() => {
       [nh.bem('head-cell', 'typed')]: typed.value,
       [nh.bem('head-cell', 'center')]: typed.value || props.column.textAlign === 'center',
       [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('head-cell', 'wrap')]: props.column.noEllipsis,
       [nh.bem('head-cell', 'last')]: inLast.value
     },
     props.column.class,
@@ -356,6 +361,14 @@ function handleCheckAllRow() {
   mutations.handleCheckAll()
   tableActions.emitAllRowCheck(state.checkedAll, state.partial)
 }
+
+function handleCellResize(entry: ResizeObserverEntry) {
+  mutations.setCellHeight(
+    props.row.key,
+    props.column.key,
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
+  )
+}
 </script>
 
 <template>
@@ -390,159 +403,162 @@ function handleCheckAllRow() {
       role="none"
       aria-hidden
     ></div>
-    <Checkbox
-      v-if="isSelection(column)"
-      inherit
-      control
-      :class="nh.be('selection')"
-      :checked="state.checkedAll"
-      :partial="state.partial"
-      :disabled="checkboxDisabled"
-      :size="column.checkboxSize || 'default'"
-      @click.prevent="handleCheckAllRow"
-    ></Checkbox>
-    <template v-else>
-      <Ellipsis
-        v-if="!column.noEllipsis"
+    <div v-if="isSelection(column)" :class="nh.be('content')">
+      <Checkbox
         inherit
-        :class="nh.be('ellipsis')"
-        :tooltip-theme="state.tooltipTheme"
-        :tip-max-width="state.tooltipWidth"
-      >
-        <Renderer
-          v-if="isGroup && isFunction((column as any).renderer)"
-          :renderer="(column as any).renderer"
-        ></Renderer>
-        <Renderer
-          v-else-if="isFunction(column.headRenderer)"
-          :renderer="column.headRenderer"
-          :data="{ column, index }"
-        ></Renderer>
+        control
+        :class="nh.be('selection')"
+        :checked="state.checkedAll"
+        :partial="state.partial"
+        :disabled="checkboxDisabled"
+        :size="column.checkboxSize || 'default'"
+        @click.prevent="handleCheckAllRow"
+      ></Checkbox>
+    </div>
+    <ResizeObserver v-else :disabled="column.ellipsis" :on-resize="handleCellResize">
+      <span :class="nh.be('content')">
+        <Ellipsis
+          v-if="column.ellipsis"
+          inherit
+          :class="nh.be('ellipsis')"
+          :tooltip-theme="state.tooltipTheme"
+          :tip-max-width="state.tooltipWidth"
+        >
+          <Renderer
+            v-if="isGroup && isFunction((column as any).renderer)"
+            :renderer="(column as any).renderer"
+          ></Renderer>
+          <Renderer
+            v-else-if="isFunction(column.headRenderer)"
+            :renderer="column.headRenderer"
+            :data="{ column, index }"
+          ></Renderer>
+          <template v-else>
+            {{ column.name }}
+          </template>
+        </Ellipsis>
         <template v-else>
-          {{ column.name }}
+          <Renderer
+            v-if="isGroup && isFunction((column as any).renderer)"
+            :renderer="(column as any).renderer"
+          ></Renderer>
+          <Renderer
+            v-else-if="isFunction(column.headRenderer)"
+            :renderer="column.headRenderer"
+            :data="{ column, index }"
+          ></Renderer>
+          <template v-else>
+            {{ column.name }}
+          </template>
         </template>
-      </Ellipsis>
-      <template v-else>
-        <Renderer
-          v-if="isGroup && isFunction((column as any).renderer)"
-          :renderer="(column as any).renderer"
-        ></Renderer>
-        <Renderer
-          v-else-if="isFunction(column.headRenderer)"
-          :renderer="column.headRenderer"
-          :data="{ column, index }"
-        ></Renderer>
-        <template v-else>
-          {{ column.name }}
+        <template v-if="!isGroup">
+          <div v-if="sorter.able" :class="nh.be('sorter')">
+            <span
+              :class="{
+                [nh.bem('sorter', 'asc')]: true,
+                [nh.bem('sorter', 'active')]: sorter.type === 'asc'
+              }"
+              @click="handleSortAsc()"
+            >
+              <TableIcon name="asc" :origin="icons.caretUp"></TableIcon>
+            </span>
+            <span
+              :class="{
+                [nh.bem('sorter', 'desc')]: true,
+                [nh.bem('sorter', 'active')]: sorter.type === 'desc'
+              }"
+              @click="handleSortDesc()"
+            >
+              <TableIcon name="desc" :origin="icons.caretDown"></TableIcon>
+            </span>
+          </div>
+          <template v-if="filter.able">
+            <Renderer
+              v-if="isFunction(column.filterRenderer)"
+              :renderer="column.filterRenderer"
+              :data="{ column, index, filter, handleFilter }"
+            ></Renderer>
+            <Tooltip
+              v-else
+              v-model:visible="filterVisible"
+              transfer
+              placement="bottom"
+              trigger="click"
+              :class="{
+                [nh.be('filter')]: true,
+                [nh.bem('filter', 'visible')]: filterVisible,
+                [nh.bem('filter', 'active')]: filter.active
+              }"
+              :tip-class="{
+                [nh.be('filter-wrapper')]: true,
+                [nh.bs('vars')]: true,
+                [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
+              }"
+            >
+              <template #trigger>
+                <div :class="nh.be('filter-trigger')">
+                  <TableIcon name="filter" :origin="icons.filter"></TableIcon>
+                </div>
+              </template>
+              <template v-if="filter.multiple" #default>
+                <div vertical :class="nh.be('filter-group')">
+                  <Checkbox
+                    v-for="item in filter.options"
+                    :key="item.value"
+                    inherit
+                    :checked="item.active"
+                    :label="item.label"
+                    :value="item.value"
+                    @change="handleFilterCheck(item.value, $event)"
+                  ></Checkbox>
+                </div>
+                <div :class="nh.be('filter-actions')">
+                  <Button
+                    inherit
+                    text
+                    size="small"
+                    :disabled="!hasFilterActive"
+                    @click="handleFilterMultiple()"
+                  >
+                    {{ locale.filterConfirm }}
+                  </Button>
+                  <Button
+                    inherit
+                    text
+                    size="small"
+                    @click="handleResetFilter"
+                  >
+                    {{ locale.filterReset }}
+                  </Button>
+                </div>
+              </template>
+              <template v-else #default>
+                <div
+                  :class="{
+                    [nh.be('filter-item')]: true,
+                    [nh.bem('filter-item', 'active')]: !filter.active
+                  }"
+                  @click="handleResetFilter"
+                >
+                  {{ locale.filterAll }}
+                </div>
+                <div
+                  v-for="item in filter.options"
+                  :key="item.value"
+                  :class="{
+                    [nh.be('filter-item')]: true,
+                    [nh.bem('filter-item', 'active')]: item.active
+                  }"
+                  @click="handleFilterItemSelect(item.value, !item.active)"
+                >
+                  {{ item.label }}
+                </div>
+              </template>
+            </Tooltip>
+          </template>
         </template>
-      </template>
-    </template>
-    <template v-if="!isGroup">
-      <div v-if="sorter.able" :class="nh.be('sorter')">
-        <span
-          :class="{
-            [nh.bem('sorter', 'asc')]: true,
-            [nh.bem('sorter', 'active')]: sorter.type === 'asc'
-          }"
-          @click="handleSortAsc()"
-        >
-          <TableIcon name="asc" :origin="icons.caretUp"></TableIcon>
-        </span>
-        <span
-          :class="{
-            [nh.bem('sorter', 'desc')]: true,
-            [nh.bem('sorter', 'active')]: sorter.type === 'desc'
-          }"
-          @click="handleSortDesc()"
-        >
-          <TableIcon name="desc" :origin="icons.caretDown"></TableIcon>
-        </span>
-      </div>
-      <template v-if="filter.able">
-        <Renderer
-          v-if="isFunction(column.filterRenderer)"
-          :renderer="column.filterRenderer"
-          :data="{ column, index, filter, handleFilter }"
-        ></Renderer>
-        <Tooltip
-          v-else
-          v-model:visible="filterVisible"
-          transfer
-          placement="bottom"
-          trigger="click"
-          :class="{
-            [nh.be('filter')]: true,
-            [nh.bem('filter', 'visible')]: filterVisible,
-            [nh.bem('filter', 'active')]: filter.active
-          }"
-          :tip-class="{
-            [nh.be('filter-wrapper')]: true,
-            [nh.bs('vars')]: true,
-            [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
-          }"
-        >
-          <template #trigger>
-            <div :class="nh.be('filter-trigger')">
-              <TableIcon name="filter" :origin="icons.filter"></TableIcon>
-            </div>
-          </template>
-          <template v-if="filter.multiple" #default>
-            <div vertical :class="nh.be('filter-group')">
-              <Checkbox
-                v-for="item in filter.options"
-                :key="item.value"
-                inherit
-                :checked="item.active"
-                :label="item.label"
-                :value="item.value"
-                @change="handleFilterCheck(item.value, $event)"
-              ></Checkbox>
-            </div>
-            <div :class="nh.be('filter-actions')">
-              <Button
-                inherit
-                text
-                size="small"
-                :disabled="!hasFilterActive"
-                @click="handleFilterMultiple()"
-              >
-                {{ locale.filterConfirm }}
-              </Button>
-              <Button
-                inherit
-                text
-                size="small"
-                @click="handleResetFilter"
-              >
-                {{ locale.filterReset }}
-              </Button>
-            </div>
-          </template>
-          <template v-else #default>
-            <div
-              :class="{
-                [nh.be('filter-item')]: true,
-                [nh.bem('filter-item', 'active')]: !filter.active
-              }"
-              @click="handleResetFilter"
-            >
-              {{ locale.filterAll }}
-            </div>
-            <div
-              v-for="item in filter.options"
-              :key="item.value"
-              :class="{
-                [nh.be('filter-item')]: true,
-                [nh.bem('filter-item', 'active')]: item.active
-              }"
-              @click="handleFilterItemSelect(item.value, !item.active)"
-            >
-              {{ item.label }}
-            </div>
-          </template>
-        </Tooltip>
-      </template>
-    </template>
+      </span>
+    </ResizeObserver>
     <div
       v-if="!isGroup && resizable && !typed && !column.last"
       ref="resizer"

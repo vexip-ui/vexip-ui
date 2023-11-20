@@ -4,7 +4,7 @@ import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, inject, ref, toRef } from 'vue'
+import { computed, inject, ref } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
@@ -58,10 +58,6 @@ const { isRtl } = useRtl()
 
 const wrapper = ref<HTMLElement>()
 
-const disableCheckRows = toRef(getters, 'disableCheckRows')
-const disableExpandRows = toRef(getters, 'disableExpandRows')
-const disableDragRows = toRef(getters, 'disableDragRows')
-
 const inLast = computed(() => {
   return props.column.index + cellSpan.value.colSpan >= state.columns.length
 })
@@ -87,7 +83,6 @@ const className = computed(() => {
       [nh.bem('cell', 'typed')]: typed,
       [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('cell', 'wrap')]: props.column.noEllipsis,
       [nh.bem('cell', 'last')]: inLast.value
     },
     props.column.class,
@@ -264,7 +259,7 @@ function handleContextmenu(event: MouseEvent) {
 }
 
 function handleCheckRow(row: TableRowState, event: MouseEvent) {
-  if (!disableCheckRows.value.has(row.key)) {
+  if (!getters.disableCheckRows.has(row.key)) {
     const checked = !row.checked
     const { data, key, index } = row
 
@@ -274,7 +269,7 @@ function handleCheckRow(row: TableRowState, event: MouseEvent) {
 }
 
 function handleExpandRow(row: TableRowState, event: MouseEvent) {
-  if (!disableExpandRows.value.has(row.key)) {
+  if (!getters.disableExpandRows.has(row.key)) {
     const expanded = !row.expanded
     const { data, key, index } = row
 
@@ -284,7 +279,7 @@ function handleExpandRow(row: TableRowState, event: MouseEvent) {
 }
 
 function handleDragRow(row: TableRowState) {
-  if (!disableDragRows.value.has(row.key)) {
+  if (!getters.disableDragRows.has(row.key)) {
     mutations.handleDrag(row.key, true)
   }
 }
@@ -326,14 +321,14 @@ function handleCellResize(entry: ResizeObserverEntry) {
       role="none"
       aria-hidden
     ></div>
-    <template v-if="isTableTypeColumn(column)">
+    <div v-if="isTableTypeColumn(column)" :class="nh.be('content')">
       <Checkbox
         v-if="isSelectionColumn(column)"
         inherit
         :class="nh.be('selection')"
         :checked="row.checked"
         :size="column.checkboxSize || 'default'"
-        :disabled="disableCheckRows.has(row.key)"
+        :disabled="getters.disableCheckRows.has(row.key)"
         :partial="row.partial"
         :control="!!row.children?.length"
         @click.prevent.stop="handleCheckRow(row, $event)"
@@ -343,7 +338,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
       </span>
       <template v-else-if="isExpandColumn(column)">
         <button
-          v-if="!disableExpandRows.has(row.key)"
+          v-if="!getters.disableExpandRows.has(row.key)"
           type="button"
           :class="{
             [nh.be('expand')]: true,
@@ -356,7 +351,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
       </template>
       <template v-else-if="isDragColumn(column)">
         <button
-          v-if="!disableDragRows.has(row.key)"
+          v-if="!getters.disableDragRows.has(row.key)"
           type="button"
           :class="nh.be('dragger')"
           @mousedown="handleDragRow(row)"
@@ -364,8 +359,8 @@ function handleCellResize(entry: ResizeObserverEntry) {
           <TableIcon name="dragger" :origin="icons.dragger"></TableIcon>
         </button>
       </template>
-    </template>
-    <ResizeObserver v-else :disabled="!column.noEllipsis" :on-resize="handleCellResize">
+    </div>
+    <ResizeObserver v-else :disabled="column.ellipsis" :on-resize="handleCellResize">
       <span :class="nh.be('content')">
         <template
           v-if="
@@ -392,9 +387,10 @@ function handleCellResize(entry: ResizeObserverEntry) {
           </button>
         </template>
         <Ellipsis
-          v-if="!column.noEllipsis"
+          v-if="column.ellipsis"
           inherit
           :class="nh.be('ellipsis')"
+          :tip-disabled="state.barScrolling"
           :tooltip-theme="state.tooltipTheme"
           :tip-max-width="state.tooltipWidth"
         >

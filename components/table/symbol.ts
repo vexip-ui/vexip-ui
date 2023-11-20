@@ -138,7 +138,9 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated please use `ellipsis` option to replace it */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -208,6 +210,8 @@ export interface TableColumnGroupOptions {
   name?: string,
   fixed?: boolean | 'left' | 'right',
   order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
   renderer?: () => any,
   children: TableColumnOptions<any, any>[]
 }
@@ -393,7 +397,8 @@ export interface StoreState extends StoreOptions {
   colResizing: boolean,
   resizeLeft: number,
   cellSpanMap: Map<'left' | 'default' | 'right', Map<string, Required<CellSpanResult>>>,
-  collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>
+  collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
+  barScrolling: boolean
 }
 
 export interface TableRowInstance {

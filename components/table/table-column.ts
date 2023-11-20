@@ -1,7 +1,7 @@
 import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes } from './symbol'
 
@@ -70,7 +70,8 @@ export default defineComponent({
         default: 0,
         static: true
       },
-      noEllipsis: false,
+      noEllipsis: null,
+      ellipsis: false,
       checkboxSize: createSizeProp(),
       disableRow: {
         default: null,
@@ -118,6 +119,19 @@ export default defineComponent({
             }
           },
           { immediate: true }
+        )
+      } else if (key === 'noEllipsis') {
+        const cancel = watch(
+          () => props[key],
+          value => {
+            if (!isNull(value)) {
+              warnOnce(
+                "[vexip-ui:TableColumn] 'no-ellipsis' prop has been deprecated, please use" +
+                  "'ellipsis' prop to replace it"
+              )
+              cancel()
+            }
+          }
         )
       } else {
         watch(

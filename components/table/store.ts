@@ -98,7 +98,8 @@ export function useStore(options: StoreOptions) {
     resizeLeft: 0,
     cellSpanMap: new Map(),
     collapseMap: new Map(),
-    sidePadding: options.sidePadding || [0, 0]
+    sidePadding: options.sidePadding || [0, 0],
+    barScrolling: false
   }) as StoreState
 
   setColumns(options.columns)
@@ -340,6 +341,7 @@ export function useStore(options: StoreOptions) {
     setCellSpan,
     setSidePadding,
     setBorderWidth,
+    setBarScrolling,
 
     handleSort,
     clearSort,
@@ -359,7 +361,8 @@ export function useStore(options: StoreOptions) {
     getParentRow,
     handleColumnResize,
     updateCellSpan,
-    getCurrentData
+    getCurrentData,
+    createMinRowState
   }
 
   function getColumnsWidths(columns = state.columns) {
@@ -399,6 +402,10 @@ export function useStore(options: StoreOptions) {
     }
 
     return heights
+  }
+
+  function createMinRowState(key: Key) {
+    return { key, cellHeights: {} } as TableRowState
   }
 
   function isGroupColumn(column: any): column is ColumnGroupWithKey {
@@ -592,7 +599,7 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = allColumns.length; i < len; ++i) {
       const rowKey = `${TABLE_HEAD_PREFIX}${i}`
 
-      state.rowMap.set(rowKey, { key: rowKey } as TableRowState)
+      state.rowMap.set(rowKey, createMinRowState(rowKey))
     }
 
     state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
@@ -642,7 +649,7 @@ export function useStore(options: StoreOptions) {
       if (!prevKeys.has(summary.key)) {
         const rowKey = buildSummaryKey(summary.key)
 
-        state.rowMap.set(rowKey, { key: rowKey } as TableRowState)
+        state.rowMap.set(rowKey, createMinRowState(rowKey))
       }
 
       prevKeys.delete(summary.key)
@@ -715,15 +722,13 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = allColumns.length; i < len; ++i) {
       const key = `${TABLE_HEAD_PREFIX}${i}`
 
-      rowMap.set(key, oldDataMap.get(key) || ({ key } as TableRowState))
+      rowMap.set(key, oldDataMap.get(key) || createMinRowState(key))
     }
 
     for (const summary of state.summaries) {
       const key = buildSummaryKey(summary.key)
 
-      if (oldDataMap.has(key)) {
-        rowMap.set(key, oldDataMap.get(key)!)
-      }
+      rowMap.set(key, oldDataMap.get(key) || createMinRowState(key))
     }
 
     const parseRow = (origin: Data[], result: TableRowState[], parent?: TableRowState) => {
@@ -1060,6 +1065,10 @@ export function useStore(options: StoreOptions) {
 
   function setBorderWidth(width: number) {
     state.borderWidth = Math.max(width, 0)
+  }
+
+  function setBarScrolling(scrolling: boolean) {
+    state.barScrolling = scrolling
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

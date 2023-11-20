@@ -18,6 +18,7 @@ $table: map.merge(
     b-style: get-css-var('border-style'),
     s-color: get-css-var('shadow-color-base'),
     head-bg-color: get-css-var('fill-color-humble'),
+    head-action-span: 3px,
     row-bg-color: transparent,
     row-bg-color-hover: get-css-var('color-primary-opacity-9'),
     row-bg-color-stripe: get-css-var('fill-color-background'),
@@ -182,7 +183,7 @@ $table: map.merge(
     align-items: center;
     height: auto;
     min-height: 100%;
-    padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
+    padding: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
     border-inline-end: $border-a transparent;
@@ -204,19 +205,10 @@ $table: map.merge(
       text-align: right;
     }
 
-    &--wrap {
-      word-break: break-all;
-      white-space: pre-wrap;
-    }
-
     &[colspan],
     &[rowspan] {
       z-index: 1;
     }
-  }
-
-  &__cell:not(#{&}__cell--typed) {
-    padding: 0;
   }
 
   &__content {
@@ -470,7 +462,7 @@ $table: map.merge(
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin-inline-start: 3px;
+    margin-inline-start: get-css-var('table-head-action-span');
 
     &--asc,
     &--desc {
@@ -490,6 +482,7 @@ $table: map.merge(
 
     &--asc {
       height: 8px;
+      margin-top: 1px;
     }
 
     &--active {
@@ -505,7 +498,7 @@ $table: map.merge(
     align-items: center;
     justify-content: center;
     height: 15px;
-    margin-inline-start: 3px;
+    margin-inline-start: get-css-var('table-head-action-span');
     color: get-css-var('table-filter-color');
     cursor: pointer;
     transition: get-css-var('transition-color');

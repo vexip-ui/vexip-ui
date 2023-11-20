@@ -355,7 +355,9 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -412,6 +414,8 @@ interface TableColumnGroupOptions {
   name?: string,
   fixed?: boolean | 'left' | 'right',
   order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
   renderer?: () => any,
   children: TableColumnOptions<any, any>[]
 }
@@ -659,7 +663,8 @@ interface TableFootPayload {
 | renderer         | `ColumnRenderFn`                       | 自定义渲染函数，若 `type` 为 `'expand'` 时则为 `ExpandRenderFn`              | `null`      | -        |
 | head-renderer    | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`      | -        |
 | filter-renderer  | `FilterRenderFn`                       | 自定义过滤器渲染函数                                                         | `null`      | `2.1.18` |
-| no-ellipsis      | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -        |
+| ~~no-ellipsis~~  | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -        |
+| ellipsis         | `boolean`                              | 是否为单元格内容使用省略组件                                                 | `false`     | `2.2.12` |
 | checkbox-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                                  | `'default'` | -        |
 | disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -        |
 | truth-index      | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -        |
@@ -685,14 +690,14 @@ interface TableFootPayload {
 
 ==!s|2.2.12==
 
-| 名称        | 类型                           | 说明                                                                                  | 默认值     | 始于 |
-| ----------- | ------------------------------ | ------------------------------------------------------------------------------------- | ---------- | ---- |
-| name        | `string`                       | 列分组的名称                                                                          | `''`       | -    |
-| fixed       | `boolean \| 'left' \| 'right'` | 是否为固定列分组，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false`    | -    |
-| order       | `number`                       | 列分组的渲染顺序，与列的 `order` 属性共同作用，每一层级、每个分组之间的排序均是独立的 | `0`        | -    |
-| no-ellipsis | `boolean`                      | 是否禁用表头单元格的省略组件                                                          | `false`    | -    |
-| text-align  | `TableTextAlign`               | 设置表头单元格的横向对其方式                                                          | `'center'` | -    |
-| renderer    | `() => any`                    | 自定义头部渲染函数                                                                    | `null`     | -    |
+| 名称       | 类型                           | 说明                                                                                  | 默认值     | 始于 |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------- | ---------- | ---- |
+| name       | `string`                       | 列分组的名称                                                                          | `''`       | -    |
+| fixed      | `boolean \| 'left' \| 'right'` | 是否为固定列分组，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false`    | -    |
+| order      | `number`                       | 列分组的渲染顺序，与列的 `order` 属性共同作用，每一层级、每个分组之间的排序均是独立的 | `0`        | -    |
+| ellipsis   | `boolean`                      | 是否为表头单元格内容使用省略组件                                                      | `false`    | -    |
+| text-align | `TableTextAlign`               | 设置表头单元格的横向对其方式                                                          | `'center'` | -    |
+| renderer   | `() => any`                    | 自定义头部渲染函数                                                                    | `null`     | -    |
 
 ### TableColumnGroup 插槽
 

@@ -166,7 +166,6 @@ const tempSummaries = reactive(new Set<TableSummaryOptions>())
 const tableWidth = ref<number | string>()
 const hasDragColumn = ref(false)
 const noTransition = ref(true)
-const usingScrollbar = ref(false)
 
 const wrapper = ref<HTMLElement>()
 const mainScroll = ref<NativeScrollExposed>()
@@ -283,7 +282,7 @@ const className = computed(() => {
     [nh.bm('locked')]: noTransition.value,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
     [nh.bm('below-foot')]: state.belowSummaries.length,
-    [nh.bm('using-bar')]: usingScrollbar.value
+    [nh.bm('using-bar')]: state.barScrolling
   }
 })
 const style = computed(() => {
@@ -358,6 +357,7 @@ const {
   setDragging,
   setKeyConfig,
   setDisabledTree,
+  setBarScrolling,
   clearSort,
   clearFilter,
   refreshRowIndex,
@@ -580,7 +580,7 @@ function computeBodyHeight() {
 }
 
 function handleMainScroll(payload: NativeScrollPayload) {
-  if (usingScrollbar.value) return
+  if (state.barScrolling) return
 
   if (payload.type !== 'vertical') {
     handleXScroll(payload)
@@ -592,7 +592,7 @@ function handleMainScroll(payload: NativeScrollPayload) {
 }
 
 function handleXScroll({ clientX, percentX }: { clientX: number, percentX: number }) {
-  if (usingScrollbar.value) return
+  if (state.barScrolling) return
 
   xScrollPercent.value = percentX
   setBodyXScroll(clientX)
@@ -601,7 +601,7 @@ function handleXScroll({ clientX, percentX }: { clientX: number, percentX: numbe
 }
 
 function handleYScroll({ clientY, percentY }: { clientY: number, percentY: number }) {
-  if (usingScrollbar.value) return
+  if (state.barScrolling) return
 
   yScrollPercent.value = percentY
   setBodyYScroll(clientY)
@@ -1183,9 +1183,9 @@ function renderTableSlot({ name }: { name: string }) {
       :disabled="!xScrollEnabled"
       :bar-length="xBarLength"
       :style="{ bottom: `${footHeight}px` }"
-      @scroll-start="usingScrollbar = true"
+      @scroll-start="setBarScrolling(true)"
       @scroll="handleXBarScroll"
-      @scroll-end="usingScrollbar = false"
+      @scroll-end="setBarScrolling(false)"
     ></Scrollbar>
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
@@ -1197,9 +1197,9 @@ function renderTableSlot({ name }: { name: string }) {
       :disabled="!yScrollEnabled"
       :bar-length="yBarLength"
       :style="{ top: `${headHeight}px`, bottom: `${footHeight}px` }"
-      @scroll-start="usingScrollbar = true"
+      @scroll-start="setBarScrolling(true)"
       @scroll="handleYBarScroll"
-      @scroll-end="usingScrollbar = false"
+      @scroll-end="setBarScrolling(false)"
     ></Scrollbar>
     <div
       v-if="props.rowDraggable || hasDragColumn"

@@ -96,7 +96,6 @@ const className = computed(() => {
       [nh.bem('foot-cell', 'typed')]: typed,
       [nh.bem('foot-cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('foot-cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('foot-cell', 'wrap')]: props.column.noEllipsis,
       [nh.bem('foot-cell', 'last')]: inLast.value
     },
     props.column.class,
@@ -231,15 +230,10 @@ function handleContextmenu(event: MouseEvent) {
 }
 
 function handleCellResize(entry: ResizeObserverEntry) {
-  if (!wrapper.value) return
-
-  const style = getComputedStyle(wrapper.value)
-  const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
-
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + borderHeight
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
   )
 }
 </script>
@@ -268,26 +262,28 @@ function handleCellResize(entry: ResizeObserverEntry) {
     ></div>
     <ResizeObserver
       v-if="isFunction(summary.renderer)"
-      :disabled="!column.noEllipsis"
+      :disabled="column.ellipsis"
       :on-resize="handleCellResize"
     >
-      <Ellipsis
-        v-if="!column.noEllipsis"
-        inherit
-        :class="nh.be('ellipsis')"
-        :tooltip-theme="state.tooltipTheme"
-        :tip-max-width="state.tooltipWidth"
-      >
+      <span :class="nh.be('content')">
+        <Ellipsis
+          v-if="column.ellipsis"
+          inherit
+          :class="nh.be('ellipsis')"
+          :tooltip-theme="state.tooltipTheme"
+          :tip-max-width="state.tooltipWidth"
+        >
+          <Renderer
+            :renderer="summary.renderer"
+            :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
+          ></Renderer>
+        </Ellipsis>
         <Renderer
+          v-else
           :renderer="summary.renderer"
           :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
         ></Renderer>
-      </Ellipsis>
-      <Renderer
-        v-else
-        :renderer="summary.renderer"
-        :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
-      ></Renderer>
+      </span>
     </ResizeObserver>
     <div
       v-if="inLast"

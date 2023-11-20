@@ -9,7 +9,7 @@
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>
     <TableColumn name="Job" id-key="job"></TableColumn>
-    <TableColumn name="Desc" id-key="desc" no-ellipsis></TableColumn>
+    <TableColumn name="Desc" id-key="desc"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>

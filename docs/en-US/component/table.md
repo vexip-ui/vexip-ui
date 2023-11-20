@@ -355,7 +355,9 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -412,6 +414,8 @@ interface TableColumnGroupOptions {
   name?: string,
   fixed?: boolean | 'left' | 'right',
   order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
   renderer?: () => any,
   children: TableColumnOptions<any, any>[]
 }
@@ -659,7 +663,8 @@ interface TableFootPayload {
 | renderer         | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                                                          | `null`      | -        |
 | head-renderer    | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -        |
 | filter-renderer  | `FilterRenderFn`                       | Custom filter render function                                                                                                                | `null`      | `2.1.18` |
-| no-ellipsis      | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -        |
+| ~~no-ellipsis~~  | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -        |
+| ellipsis         | `boolean`                              | Whether to use Ellipsis component for cell content                                                                                           | `false`     | `2.2.12` |
 | checkbox-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                                           | `'default'` | -        |
 | disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -        |
 | truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
@@ -685,14 +690,14 @@ interface TableFootPayload {
 
 ==!s|2.2.12==
 
-| Name        | Type                           | Description                                                                                                                                       | Default    | Since |
-| ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
-| name        | `string`                       | The name of the column group                                                                                                                      | `''`       | -     |
-| fixed       | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false`    | -     |
-| order       | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`        | -     |
-| no-ellipsis | `boolean`                      | Whether to disable the ellipsis component of the head cell                                                                                        | `false`    | -     |
-| text-align  | `TableTextAlign`               | Set the horizontal alignment of head cell                                                                                                         | `'center'` | -     |
-| renderer    | `() => any`                    | Custom header render function                                                                                                                     | `null`     | -     |
+| Name       | Type                           | Description                                                                                                                                       | Default    | Since |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
+| name       | `string`                       | The name of the column group                                                                                                                      | `''`       | -     |
+| fixed      | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false`    | -     |
+| order      | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`        | -     |
+| ellipsis   | `boolean`                      | Whether to use Ellipsis component for head cell content                                                                                           | `false`    | -     |
+| text-align | `TableTextAlign`               | Set the horizontal alignment of head cell                                                                                                         | `'center'` | -     |
+| renderer   | `() => any`                    | Custom header render function                                                                                                                     | `null`     | -     |
 
 ### TableColumnGroup Slots
 

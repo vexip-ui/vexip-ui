@@ -7,7 +7,6 @@ import { useNameHelper } from '@vexip-ui/config'
 import { TABLE_HEAD_PREFIX, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableRowState } from './symbol'
 
 defineOptions({ name: 'TableHead' })
 
@@ -18,7 +17,7 @@ const props = defineProps({
   }
 })
 
-const { state, getters } = inject(TABLE_STORE)!
+const { state, getters, mutations } = inject(TABLE_STORE)!
 
 const nh = useNameHelper('table')
 const allColumns = computed(() => {
@@ -58,7 +57,7 @@ const style = computed(() => {
 function getRow(index: number) {
   const key = `${TABLE_HEAD_PREFIX}${index}`
 
-  return state.rowMap.get(key) || ({ key } as TableRowState)
+  return state.rowMap.get(key) || mutations.createMinRowState(key)
 }
 </script>
 
@@ -78,6 +77,7 @@ function getRow(index: number) {
           v-if="column"
           :column="column"
           :index="index"
+          :row="getRow(rowIndex)"
           :row-index="rowIndex"
           :fixed="fixed"
           :aria-colindex="index"

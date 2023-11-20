@@ -38,7 +38,7 @@ export default defineComponent({
         default: 0,
         static: true
       },
-      noEllipsis: false,
+      ellipsis: false,
       textAlign: 'center',
       renderer: {
         default: null,
