@@ -1,3 +1,41 @@
+## [2.2.12](https://github.com/vexip-ui/vexip-ui/compare/v2.2.11...v2.2.12) (2023-11-20)
+
+
+### ⚡ Performance Improvements
+
+* **tooltip:** dynamically render popper element ([478c857](https://github.com/vexip-ui/vexip-ui/commit/478c857b2c9125becf5aa667f565a2f68a44b21b))
+
+
+### ✨ Features
+
+* **confirm:** support customize position to appear ([bd33ef1](https://github.com/vexip-ui/vexip-ui/commit/bd33ef188c2a1e3a9b1eb27b9972bf09a4249cc7))
+* **ellipsis:** add tip-shift prop ([1eac0c0](https://github.com/vexip-ui/vexip-ui/commit/1eac0c0661bd2a37df150e1a5d4b5a43608fe6f0))
+* **full-screen:** add onToggle event ([8c89cde](https://github.com/vexip-ui/vexip-ui/commit/8c89cde57358217266af3f29f5cd928fa65d126e))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correct behavior when directly input ([7b47c9b](https://github.com/vexip-ui/vexip-ui/commit/7b47c9bb65c0d5952f74806d05f90e865afa5965)), closes [#434](https://github.com/vexip-ui/vexip-ui/issues/434)
+* **button:** correct border style of last button in group ([c3b6b79](https://github.com/vexip-ui/vexip-ui/commit/c3b6b799625e250a976719e3e1a92bbcabba4ae1))
+* **button:** ensure border hidden when using text button in group ([0cf7e8d](https://github.com/vexip-ui/vexip-ui/commit/0cf7e8da309170932dde1d518aaaed444d4365cb))
+* **hooks:** improve useFullScreen methods return ([20cec1b](https://github.com/vexip-ui/vexip-ui/commit/20cec1b002f7e54322a697f3352db756596a787e))
+* **menu:** correctly watch active label change ([34bac23](https://github.com/vexip-ui/vexip-ui/commit/34bac23feef15817cc050a7cdb78f61946886f48))
+* **portal:** implement via original teleport props ([baa8f2a](https://github.com/vexip-ui/vexip-ui/commit/baa8f2aeddfbf7a2722896270d2c8b16e66b70fa))
+* **table:** corrent cell content alignment ([11e17e1](https://github.com/vexip-ui/vexip-ui/commit/11e17e12b5870c213851fab2354c68b995fa6ed9))
+* **timeline:** correct line inset style ([69be52d](https://github.com/vexip-ui/vexip-ui/commit/69be52d8a67da4debd68171de127d3d65c0aacd0))
+
+
+### 💔 Reverts
+
+*  re-adjust outline-color to outline ([ce8ab94](https://github.com/vexip-ui/vexip-ui/commit/ce8ab94c2233ba5a6be7ecd10ef3f4983c376af9)), closes [#433](https://github.com/vexip-ui/vexip-ui/issues/433)
+
+
+### 🔨 Code Refactoring
+
+* **table:** improve fixed columns implement and support column group ([#435](https://github.com/vexip-ui/vexip-ui/issues/435)) ([b69227c](https://github.com/vexip-ui/vexip-ui/commit/b69227c46ccd9908e92541c02651f2adcb51af5d))
+
+
+
 ## [2.2.11](https://github.com/vexip-ui/vexip-ui/compare/v2.2.10...v2.2.11) (2023-11-12)
 
 
