@@ -1,3 +1,22 @@
+## [2.1.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.0...hooks@2.1.1) (2023-11-20)
+
+
+### ✨ Features
+
+* **full-screen:** add onToggle event ([8c89cde](https://github.com/vexip-ui/vexip-ui/commit/8c89cde57358217266af3f29f5cd928fa65d126e))
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** improve useFullScreen methods return ([20cec1b](https://github.com/vexip-ui/vexip-ui/commit/20cec1b002f7e54322a697f3352db756596a787e))
+
+
+### 🔨 Code Refactoring
+
+* support globally config hover delay, defaults to 100ms ([b409d01](https://github.com/vexip-ui/vexip-ui/commit/b409d011e01c0d44e8c84496faff36e8613fab8b))
+
+
+
 # [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.2...hooks@2.1.0) (2023-11-03)
 
 
