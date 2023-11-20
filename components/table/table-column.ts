@@ -1,9 +1,9 @@
 import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
-import { TABLE_ACTIONS, columnTypes } from './symbol'
+import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes } from './symbol'
 
 import type { ColumnWithKey, Data, TableRowState, TableTextAlign } from './symbol'
 
@@ -30,6 +30,7 @@ const funcProp = {
 
 export default defineComponent({
   name: 'TableColumn',
+  inheritAttrs: false,
   props: tableColumnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
@@ -69,7 +70,8 @@ export default defineComponent({
         default: 0,
         static: true
       },
-      noEllipsis: false,
+      noEllipsis: null,
+      ellipsis: false,
       checkboxSize: createSizeProp(),
       disableRow: {
         default: null,
@@ -96,6 +98,7 @@ export default defineComponent({
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
+    const parentActions = inject(COLUMN_GROUP_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
 
     for (const key of propKeys) {
@@ -116,6 +119,19 @@ export default defineComponent({
             }
           },
           { immediate: true }
+        )
+      } else if (key === 'noEllipsis') {
+        const cancel = watch(
+          () => props[key],
+          value => {
+            if (!isNull(value)) {
+              warnOnce(
+                "[vexip-ui:TableColumn] 'no-ellipsis' prop has been deprecated, please use" +
+                  "'ellipsis' prop to replace it"
+              )
+              cancel()
+            }
+          }
         )
       } else {
         watch(
@@ -138,18 +154,26 @@ export default defineComponent({
     setFilterRenderer()
     setSummaryRenderer()
 
-    tableAction?.increaseColumn(options)
+    if (parentActions) {
+      parentActions.increaseColumn(options)
+
+      onBeforeUnmount(() => {
+        parentActions.decreaseColumn(options)
+      })
+    } else {
+      tableAction?.increaseColumn(options)
+
+      onBeforeUnmount(() => {
+        tableAction?.decreaseColumn(options)
+      })
+    }
 
     // TODO: 在动态列时会触发无限 watch，初步估计是重置单元格合并状态导致的
     // onBeforeUpdate(() => {
     //   setRenderer()
     //   setHeadRenderer()
     //   setFilterRenderer()
-    // })
-
-    onBeforeUnmount(() => {
-      tableAction?.decreaseColumn(options)
-    })
+    // }
 
     function setRenderer() {
       if (options.type && options.type !== 'expand') {

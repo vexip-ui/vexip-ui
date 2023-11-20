@@ -89,6 +89,7 @@ declare module 'vue' {
     TabPanel: (typeof import('vexip-ui'))['TabPanel'],
     Table: (typeof import('vexip-ui'))['Table'],
     TableColumn: (typeof import('vexip-ui'))['TableColumn'],
+    TableColumnGroup: (typeof import('vexip-ui'))['TableColumnGroup'],
     TableSummary: (typeof import('vexip-ui'))['TableSummary'],
     Tabs: (typeof import('vexip-ui'))['Tabs'],
     Tag: (typeof import('vexip-ui'))['Tag'],

@@ -4,7 +4,7 @@ import type { EventHandler } from '@vexip-ui/utils'
 
 export type NativeScrollMode = Exclude<ScrollMode, 'horizontal-exact'>
 
-export interface ScrollPayload {
+export interface NativeScrollPayload {
   type: NativeScrollMode,
   clientX: number,
   clientY: number,
@@ -12,13 +12,13 @@ export interface ScrollPayload {
   percentY: number
 }
 
-export interface BarScrollPayload {
-  type: 'vertical' | 'horizontal',
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
+// export interface BarScrollPayload {
+//   type: 'vertical' | 'horizontal',
+//   clientX: number,
+//   clientY: number,
+//   percentX: number,
+//   percentY: number
+// }
 
 export interface NativeScrollState {
   scrollX: number,

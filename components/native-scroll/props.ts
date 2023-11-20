@@ -9,7 +9,8 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { BarScrollPayload, NativeScrollMode, ScrollPayload } from './symbol'
+import type { BarScrollPayload } from '@/components/scroll'
+import type { NativeScrollMode, NativeScrollPayload } from './symbol'
 
 export const nativeScrollProps = buildProps({
   scrollClass: classProp,
@@ -38,9 +39,9 @@ export const nativeScrollProps = buildProps({
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),
   onWheel: eventProp<(event: WheelEvent, type: 'vertical' | 'horizontal') => void>(),
-  onScrollStart: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
-  onScroll: eventProp<(payload: ScrollPayload) => void>(),
-  onScrollEnd: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
+  onScrollStart: eventProp<(payload: Omit<NativeScrollPayload, 'type'>) => void>(),
+  onScroll: eventProp<(payload: NativeScrollPayload) => void>(),
+  onScrollEnd: eventProp<(payload: Omit<NativeScrollPayload, 'type'>) => void>(),
   onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>()

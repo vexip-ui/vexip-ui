@@ -1,5 +1,6 @@
 <template>
   <Table
+    use-x-bar
     use-y-bar
     virtual
     stripe
@@ -7,9 +8,10 @@
     :width="1000"
     :height="320"
     :row-height="40"
+    col-resizable
   >
-    <TableColumn type="drag"></TableColumn>
-    <TableColumn type="expand" id-key="expand">
+    <TableColumn type="drag" fixed></TableColumn>
+    <TableColumn type="expand" id-key="expand" fixed>
       <template #default="{ row, leftFixed, rightFixed }">
         <div
           :style="{
@@ -21,15 +23,39 @@
         </div>
       </template>
     </TableColumn>
-    <TableColumn id-key="selection" type="selection"></TableColumn>
-    <TableColumn id-key="order" type="order"></TableColumn>
-    <TableColumn id-key="name" name="Name"></TableColumn>
+    <TableColumn id-key="selection" type="selection" fixed></TableColumn>
+    <TableColumn
+      id-key="order"
+      type="order"
+      name="#"
+      fixed
+    ></TableColumn>
+    <TableColumn
+      id-key="name"
+      name="Name"
+      fixed
+      :width="120"
+    ></TableColumn>
     <TableColumn
       id-key="value"
       name="Value"
       sorter
       :filter="filter"
+      :width="140"
     ></TableColumn>
+    <TableColumn id-key="company" name="Company" :width="180"></TableColumn>
+    <TableColumn id-key="job" name="Job" :width="120"></TableColumn>
+    <TableColumn id-key="address" name="Address" :width="200"></TableColumn>
+    <TableColumn id-key="email" name="Email" :width="280"></TableColumn>
+    <TableColumn
+      name="Action"
+      id-key="action"
+      fixed="right"
+      text-align="center"
+      :width="120"
+    >
+      <a href="javascript:void 0">Action</a>
+    </TableColumn>
   </Table>
 </template>
 
@@ -39,11 +65,15 @@ import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
 
 const data = ref(
-  Array.from({ length: 15000 }, (_, index) => {
+  Array.from({ length: 1500 }, (_, index) => {
     return {
       index,
-      name: `Row ${index}`,
-      value: String(Math.round(1000 * Math.random()))
+      name: `Name ${index}`,
+      company: `Company ${index}`,
+      job: `Job ${index}`,
+      value: String(Math.round(1000 * Math.random())),
+      email: `email${index}@vexip.ui`,
+      address: `Address ${index}`
     }
   })
 )

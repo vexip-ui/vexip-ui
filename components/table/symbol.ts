@@ -138,7 +138,9 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated please use `ellipsis` option to replace it */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -198,6 +200,25 @@ export type ColumnWithKey<
   key: Key,
   /** @internal */
   first?: boolean,
+  /** @internal */
+  last?: boolean,
+  index: number,
+  rowSpan: number
+}
+
+export interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+export interface ColumnGroupWithKey extends TableColumnGroupOptions {
+  key: symbol,
+  headSpan: number,
+  rowSpan: number,
   /** @internal */
   last?: boolean
 }
@@ -300,7 +321,7 @@ export interface TableRowState {
 }
 
 export interface StoreOptions {
-  columns: TableColumnOptions[],
+  columns: TableColumnRawOptions[],
   summaries: TableSummaryOptions[],
   data: Data[],
   dataKey: string,
@@ -338,11 +359,17 @@ export interface StoreOptions {
   colResizable: boolean,
   expandRenderer: ExpandRenderFn | null,
   cellSpan: TableCellSpanFn | null,
-  sidePadding: number[]
+  sidePadding: number[],
+  borderWidth: number
 }
+
+export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
+export type ColumnRawWithKey = ColumnGroupWithKey | ColumnWithKey
 
 export interface StoreState extends StoreOptions {
   columns: ColumnWithKey[],
+  normalColumns: ColumnWithKey[],
+  allColumns: ColumnRawWithKey[][],
   summaries: SummaryWithKey[],
   rowData: TableRowState[],
   width: number,
@@ -370,7 +397,8 @@ export interface StoreState extends StoreOptions {
   colResizing: boolean,
   resizeLeft: number,
   cellSpanMap: Map<'left' | 'default' | 'right', Map<string, Required<CellSpanResult>>>,
-  collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>
+  collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
+  barScrolling: boolean
 }
 
 export interface TableRowInstance {
@@ -415,8 +443,8 @@ export interface TableFootPayload {
 }
 
 export interface TableActions {
-  increaseColumn(column: TableColumnOptions): void,
-  decreaseColumn(column: TableColumnOptions): void,
+  increaseColumn(column: TableColumnRawOptions): void,
+  decreaseColumn(column: TableColumnRawOptions): void,
   increaseSummary(column: TableSummaryOptions): void,
   decreaseSummary(column: TableSummaryOptions): void,
   getTableElement(): HTMLElement | undefined,
@@ -440,6 +468,11 @@ export interface TableActions {
   renderTableSlot(payload: { name: string }): any
 }
 
+export interface ColumnGroupActions {
+  increaseColumn(column: TableColumnRawOptions): void,
+  decreaseColumn(column: TableColumnRawOptions): void
+}
+
 export const DEFAULT_KEY_FIELD = 'id'
 /**
  * 表格状态管理
@@ -450,7 +483,9 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  */
 export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
 export const TABLE_SLOTS: InjectionKey<Slots> = Symbol('TABLE_SLOTS')
-export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')
+export const TABLE_HEAD_PREFIX = '__vxp-table-head-'
 export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
+
+export const COLUMN_GROUP_ACTIONS: InjectionKey<ColumnGroupActions> = Symbol('COLUMN_GROUP_ACTIONS')
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']

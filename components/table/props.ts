@@ -26,7 +26,7 @@ import type {
   TableCellPayload,
   TableCellPropFn,
   TableCellSpanFn,
-  TableColumnOptions,
+  TableColumnRawOptions,
   TableColumnType,
   TableFilterOptions,
   TableFilterProfile,
@@ -46,7 +46,7 @@ import type {
 
 export const tableProps = buildProps({
   locale: localeProp('table'),
-  columns: Array as PropType<TableColumnOptions<any, any>[]>,
+  columns: Array as PropType<TableColumnRawOptions[]>,
   summaries: Array as PropType<TableSummaryOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
   width: [Number, String],
@@ -110,6 +110,7 @@ export const tableProps = buildProps({
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
   icons: Object as PropType<TableIcons>,
+  borderWidth: Number,
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void
@@ -176,7 +177,9 @@ export const tableColumnProps = buildProps({
   headRenderer: Function as PropType<HeadRenderFn>,
   filterRenderer: Function as PropType<FilterRenderFn>,
   order: Number,
+  /** @deprecated please use `ellipsis` option to replace it */
   noEllipsis: booleanProp,
+  ellipsis: booleanProp,
   checkboxSize: sizeProp,
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
@@ -204,6 +207,21 @@ export type TableColumnCProps = ConfigurableProps<
   | 'headSpan'
   | 'summaryRenderer'
 >
+
+export const tableColumnGroupProps = buildProps({
+  name: String,
+  fixed: {
+    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
+    default: null
+  },
+  order: Number,
+  ellipsis: booleanProp,
+  textAlign: String as PropType<TableTextAlign>,
+  renderer: Function as PropType<() => any>
+})
+
+export type TableColumnGroupProps = ExtractPropTypes<typeof tableColumnGroupProps>
+export type TableColumnGroupCProps = ConfigurableProps<TableColumnProps, 'name' | 'fixed' | 'order'>
 
 export const tableSummaryProps = buildProps({
   idKey: [Number, String],
