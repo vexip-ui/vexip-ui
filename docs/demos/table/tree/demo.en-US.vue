@@ -4,6 +4,7 @@
     :width="1000"
     :height="300"
     virtual
+    use-y-bar
   >
     <TableColumn id-key="selection" type="selection"></TableColumn>
     <TableColumn id-key="name" name="Name"></TableColumn>

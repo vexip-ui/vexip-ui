@@ -396,17 +396,7 @@ watch(
   { deep: true }
 )
 watch(() => keyConfig.value.id, setDataKey)
-watch(
-  () => props.data,
-  value => {
-    runWithoutTransition(() => {
-      setData(value)
-      nextTick(() => computeRenderRows(true))
-      refreshPercentScroll()
-    })
-  },
-  { deep: true }
-)
+watch(() => props.data, forceRefreshData, { deep: true })
 watch(() => props.width, computeTableWidth)
 watch(
   () => props.height,
@@ -543,6 +533,14 @@ defineExpose({
   getSelected,
   getData: getCurrentData
 })
+
+function forceRefreshData(data = props.data) {
+  return runWithoutTransition(() => {
+    setData(data)
+    nextTick(() => computeRenderRows(true))
+    refreshPercentScroll()
+  })
+}
 
 function computeTableWidth() {
   const width = props.width
@@ -1113,7 +1111,6 @@ function renderTableSlot({ name }: { name: string }) {
         inherit
         mode="both"
         scroll-only
-        observe-deep
         :class="[nh.be('wrapper'), props.scrollClass.major]"
         :bar-class="nh.bem('bar', 'horizontal')"
         :height="bodyScrollHeight"
