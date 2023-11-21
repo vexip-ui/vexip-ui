@@ -4,7 +4,10 @@
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
   "type": "module",
   "main": "dist/index.cjs",
