@@ -192,7 +192,7 @@ const style = computed(() => {
     height = 0
 
     for (let i = 0; i < rowSpan; ++i) {
-      height += state.rowMap.get(`${TABLE_HEAD_PREFIX}${i}`)?.height ?? 0
+      height += state.rowMap.get(`${TABLE_HEAD_PREFIX}${props.rowIndex + i}`)?.height ?? 0
     }
   }
 
