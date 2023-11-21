@@ -1,5 +1,10 @@
 <template>
-  <Table :data="data" :width="1000">
+  <Table
+    :data="data"
+    :width="1000"
+    :height="300"
+    virtual
+  >
     <TableColumn id-key="selection" type="selection"></TableColumn>
     <TableColumn id-key="name" name="Name"></TableColumn>
     <TableColumn id-key="member" name="Member"></TableColumn>
@@ -21,21 +26,26 @@ interface RowData {
   children?: RowData[]
 }
 
-const data = reactive(mockData())
+let idStart = 0
 
-data[0].children = mockData(5, 3)
+const data = reactive(mockData(20))
+
+data[0].children = mockData(3)
 data[0].treeExpanded = true
-data[0].children[1].children = mockData(8, 2)
+data[0].children[1].children = mockData(5)
+data[0].children[1].children[2].children = mockData(3)
 
-data[2].children = mockData(10, 2)
+data[2].children = mockData(3)
+data[2].children[0].children = mockData(2)
+data[3].children = mockData(10)
 
-function mockData(idStart = 0, size = 5) {
+function mockData(size = 5) {
   const data: RowData[] = []
 
   for (let i = 0; i < size; ++i) {
     data.push({
-      id: idStart + i,
-      name: `Name ${idStart + i + 1}`,
+      id: idStart++,
+      name: `Name ${idStart}`,
       member: 3 + Math.round(Math.random() * 7),
       found: randomDate(),
       progress: 10 + Math.round(Math.random() * 90)

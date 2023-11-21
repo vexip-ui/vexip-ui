@@ -134,20 +134,6 @@ Link the data between Pagination and Table components can be easily done via the
 
 :::
 
-:::demo table/tree
-
-### Tree Data
-
-When the row data contains a valid `children` option, tree data parsing will be automatically enabled.
-
-Can disable automatic parsing via adding `disabled-tree` prop, or specify a another target option via `key-config`.
-
-You can also configure the indent distance for each level by setting `row-indent` prop.
-
-If you want to manually specify the indented column of the tree table, you can add the `indented` prop to a Column.
-
-:::
-
 :::demo table/draggable
 
 ### Row Draggable
@@ -163,6 +149,20 @@ However, this way will disable other interactions of rows. You can instead add a
 ### Virtual Scroll
 
 Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
+
+:::
+
+:::demo table/tree
+
+### Tree Data
+
+When the row data contains a valid `children` option, tree data parsing will be automatically enabled.
+
+Can disable automatic parsing via adding `disabled-tree` prop, or specify a another target option via `key-config`.
+
+You can also configure the indent distance for each level by setting `row-indent` prop.
+
+If you want to manually specify the indented column of the tree table, you can add the `indented` prop to a Column.
 
 :::
 

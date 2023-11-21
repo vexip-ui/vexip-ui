@@ -1091,6 +1091,7 @@ function renderTableSlot({ name }: { name: string }) {
         inherit
         mode="both"
         scroll-only
+        observe-deep
         :class="[nh.be('wrapper'), props.scrollClass.major]"
         :bar-class="nh.bem('bar', 'horizontal')"
         :height="bodyScrollHeight"
