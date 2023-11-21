@@ -13,6 +13,7 @@
       id-key="job"
       :accessor="jobAccessor"
       :order="3"
+      :formatter="jobFormatter"
     ></TableColumn>
     <TableColumn
       name="Age"
@@ -61,6 +62,10 @@ const data = reactive(
 
 function jobAccessor(row: RowData) {
   return row.job
+}
+
+function jobFormatter(job: string) {
+  return `Good ${job}`
 }
 
 function handleAgeClick() {

@@ -10,7 +10,7 @@ import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useRtl } from '@vexip-ui/hooks'
 import { boundRange, isFunction } from '@vexip-ui/utils'
-import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
+import { TABLE_ACTIONS, TABLE_STORE, columnTypes, noopFormatter } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -201,6 +201,9 @@ const attrs = computed(() => {
 
   return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
 })
+const formatter = computed(() => {
+  return isFunction(props.column.formatter) ? props.column.formatter : noopFormatter
+})
 
 function isSelectionColumn(column: unknown): column is TableSelectionColumn {
   return (column as TableTypeColumn).type === 'selection'
@@ -287,7 +290,7 @@ function handleDragRow(row: TableRowState) {
 function handleExpandTree(row: TableRowState) {
   if (!row.children?.length) return
 
-  mutations.handleTreeExpand(row.key, !row.treeExpanded)
+  mutations.setTreeExpanded(row.key, !row.treeExpanded)
 }
 
 function handleCellResize(entry: ResizeObserverEntry) {
@@ -400,10 +403,10 @@ function handleCellResize(entry: ResizeObserverEntry) {
             :data="{ row: row.data, rowIndex, column, columnIndex: column.index }"
           ></Renderer>
           <template v-else-if="isFunction(column.accessor)">
-            {{ column.accessor(row.data, rowIndex) }}
+            {{ formatter(column.accessor(row.data, rowIndex)) }}
           </template>
           <template v-else>
-            {{ row.data[column.key] }}
+            {{ formatter(row.data[column.key]) }}
           </template>
         </Ellipsis>
         <template v-else>
@@ -413,10 +416,10 @@ function handleCellResize(entry: ResizeObserverEntry) {
             :data="{ row: row.data, rowIndex, column, columnIndex: column.index }"
           ></Renderer>
           <template v-else-if="isFunction(column.accessor)">
-            {{ column.accessor(row.data, rowIndex) }}
+            {{ formatter(column.accessor(row.data, rowIndex)) }}
           </template>
           <template v-else>
-            {{ row.data[column.key] }}
+            {{ formatter(row.data[column.key]) }}
           </template>
         </template>
       </span>

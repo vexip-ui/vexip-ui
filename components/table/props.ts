@@ -190,7 +190,8 @@ export const tableColumnProps = buildProps({
   cellSpan: Function as PropType<ColumnCellSpanFn>,
   noSummary: booleanProp,
   summaryRenderer: Function as PropType<ColumnSummaryRenderFn>,
-  indented: booleanProp
+  indented: booleanProp,
+  formatter: Function as PropType<(value: any) => unknown>
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>

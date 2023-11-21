@@ -3,7 +3,7 @@ import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch }
 import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
-import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes } from './symbol'
+import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes, noopFormatter } from './symbol'
 
 import type { ColumnWithKey, Data, TableRowState, TableTextAlign } from './symbol'
 
@@ -94,7 +94,11 @@ export default defineComponent({
       cellSpan: funcProp,
       noSummary: false,
       summaryRenderer: funcProp,
-      indented: false
+      indented: false,
+      formatter: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
@@ -110,7 +114,7 @@ export default defineComponent({
 
       if (key === 'idKey') {
         watch(
-          () => props[key],
+          () => props.idKey,
           value => {
             if (isNull(value) && props.type) {
               (options[aliasKey] as any) = value = `__vxp_${props.type}`
@@ -122,7 +126,7 @@ export default defineComponent({
         )
       } else if (key === 'noEllipsis') {
         const cancel = watch(
-          () => props[key],
+          () => props.noEllipsis,
           value => {
             if (!isNull(value)) {
               warnOnce(
@@ -196,14 +200,14 @@ export default defineComponent({
 
         const row = data.row
         const rowIndex = data.rowIndex as number
+        const formatter =
+          typeof options.formatter === 'function' ? options.formatter : noopFormatter
 
-        if (typeof props.accessor === 'function') {
-          const result = props.accessor(row as Data, rowIndex)
-
-          return isNull(result) ? '' : String(result)
-        }
-
-        const result = (row as TableRowState)[options.key as unknown as keyof TableRowState]
+        const result = formatter(
+          typeof props.accessor === 'function'
+            ? props.accessor(row as Data, rowIndex)
+            : (row as TableRowState)[options.key as unknown as keyof TableRowState]
+        )
 
         return isNull(result) ? '' : String(result)
       }

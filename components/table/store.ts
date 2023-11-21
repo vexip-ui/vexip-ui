@@ -357,7 +357,7 @@ export function useStore(options: StoreOptions) {
     handleExpand,
     handleDrag,
     collectUnderRows,
-    handleTreeExpand,
+    setTreeExpanded,
     getParentRow,
     handleColumnResize,
     updateCellSpan,
@@ -1326,10 +1326,10 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleTreeExpand(key: Key, expanded: boolean) {
+  function setTreeExpanded(key: Key, expanded: boolean) {
     if (!usingTree.value) return
 
-    const { rowMap, rowData } = state
+    const { rowMap, rowData, virtual } = state
     const row = rowMap.get(key)
 
     if (!row?.children?.length) return
@@ -1345,7 +1345,7 @@ export function useStore(options: StoreOptions) {
     row.treeExpanded = !!expanded
 
     refreshRowIndex()
-    setRenderRows(state.startRow, state.endRow, true)
+    virtual && setRenderRows(state.startRow, state.endRow, true)
   }
 
   function toggleFilterItemActive(options: {

@@ -16,6 +16,7 @@ import type { TableRowState } from '../symbol'
 vi.useFakeTimers()
 
 async function runScrollTimers() {
+  await nextTick()
   vi.runAllTimers()
   await nextTick()
   vi.runAllTimers()
@@ -52,6 +53,51 @@ describe('Table', () => {
       expect(row.find('.vxp-table__cell').exists()).toBe(true)
       expect(row.find('.vxp-table__cell').text()).toEqual(data[i].name)
     })
+  })
+
+  it('accessor', async () => {
+    const columns = [
+      {
+        name: 'Value',
+        key: 'value',
+        accessor: (item: any) => item.value
+      }
+    ]
+    const data = [{ value: 100 }]
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const body = wrapper.find('.vxp-table__body')
+    const row = body.find('.vxp-table__row')
+
+    expect(row.find('.vxp-table__cell').text()).toEqual(String(data[0].value))
+  })
+
+  it('formatter', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name',
+        formatter: (n: string) => `Name: ${n}`
+      },
+      {
+        name: 'Value',
+        key: 'value',
+        accessor: (item: any) => item.value,
+        formatter: (v: number) => v + 1
+      }
+    ]
+    const data = [{ name: 'n', value: 100 }]
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const body = wrapper.find('.vxp-table__body')
+    const row = body.find('.vxp-table__row')
+
+    expect(row.findAll('.vxp-table__cell')[0].text()).toEqual(`Name: ${data[0].name}`)
+    expect(row.findAll('.vxp-table__cell')[1].text()).toEqual(String(data[0].value + 1))
   })
 
   it('set a new data', async () => {
@@ -704,6 +750,9 @@ describe('Table', () => {
       </Table>
     ))
 
+    await runScrollTimers()
+    // await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+
     let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
 
     expect(rows.length).toEqual(6)
@@ -720,6 +769,7 @@ describe('Table', () => {
     )
 
     await rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    await runScrollTimers()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(9)
     expect(rows[2].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
@@ -727,6 +777,7 @@ describe('Table', () => {
     )
 
     await rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    await runScrollTimers()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(3)
   })
