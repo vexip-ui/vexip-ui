@@ -1345,6 +1345,7 @@ export function useStore(options: StoreOptions) {
     row.treeExpanded = !!expanded
 
     refreshRowIndex()
+    setRenderRows(state.startRow, state.endRow, true)
   }
 
   function toggleFilterItemActive(options: {

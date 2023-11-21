@@ -185,8 +185,9 @@ watch(maxHeight, value => {
 
 onMounted(() => {
   nextTick(() => {
+    mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
+
     nextTick(() => {
-      mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
       !rowType.value && setExpandHeight()
     })
   })
