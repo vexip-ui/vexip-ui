@@ -146,6 +146,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   noSummary?: boolean,
   indented?: boolean,
   accessor?: Accessor<D, Val>,
+  formatter?: (value: Val) => unknown,
   cellSpan?: ColumnCellSpanFn<D>,
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
@@ -489,3 +490,5 @@ export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
 export const COLUMN_GROUP_ACTIONS: InjectionKey<ColumnGroupActions> = Symbol('COLUMN_GROUP_ACTIONS')
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']
+
+export const noopFormatter = (v: any) => v

@@ -8,6 +8,8 @@ import { reactive } from 'vue'
 // Helper functions can be used to infer type deduction
 import { defineColumns } from 'vexip-ui'
 
+const currentYear = new Date().getFullYear()
+
 const columns = reactive(
   defineColumns([
     {
@@ -21,13 +23,13 @@ const columns = reactive(
     {
       name: 'Job',
       key: 'job',
-      accessor(row) {
-        return row.job
-      }
+      accessor: row => row.job,
+      formatter: job => `Good ${job}`
     },
     {
       name: 'Age',
-      key: 'age'
+      key: 'age',
+      formatter: age => `${age} (${currentYear - age})`
     }
   ])
 )
