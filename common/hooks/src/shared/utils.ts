@@ -1,6 +1,16 @@
-import { Comment, Fragment, createTextVNode, isVNode, renderSlot, unref } from 'vue'
+import {
+  Comment,
+  Fragment,
+  createTextVNode,
+  isVNode,
+  readonly,
+  ref,
+  renderSlot,
+  unref,
+  watch
+} from 'vue'
 
-import { ensureArray, isClient } from '@vexip-ui/utils'
+import { ensureArray, isClient, noop } from '@vexip-ui/utils'
 
 import type {
   ComponentPublicInstance,
@@ -96,4 +106,32 @@ export function proxyExposed<T>(vnode: VNode): T {
       )
     }
   }) as T
+}
+
+export function watchPauseable(...args: Parameters<typeof watch>) {
+  const active = ref(true)
+  const handle = args[1] || noop
+
+  function pause() {
+    active.value = false
+  }
+
+  function resume() {
+    active.value = true
+  }
+
+  const stop = watch(
+    args[0],
+    (...callbackArgs) =>
+      new Promise<void>((resolve, reject) => {
+        if (active.value) {
+          Promise.resolve(handle(...callbackArgs))
+            .then(resolve)
+            .catch(reject)
+        }
+      }),
+    args[2]
+  )
+
+  return { active: readonly(active), pause, resume, stop }
 }
