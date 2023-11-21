@@ -115,16 +115,16 @@ let beforeConfirmR: (() => unknown) | null = null
 let onConfirm: (() => void) | null = null
 let onCancel: (() => void) | null = null
 
-const mounted = new Promise<void>(resolve => {
+const mountedPromise = new Promise<void>(resolve => {
   onMounted(() => {
     nextTick(resolve)
   })
 })
 
-defineExpose({ openConfirm, handleReset })
+defineExpose({ state, openConfirm, handleReset })
 
 async function openConfirm(options: ConfirmOptions) {
-  await mounted
+  await mountedPromise
 
   return await new Promise<boolean>(resolve => {
     for (const prop of commonProps) {

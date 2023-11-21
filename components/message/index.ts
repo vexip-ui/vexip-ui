@@ -1,6 +1,7 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './message.vue'
+import { proxyExposed } from '@vexip-ui/hooks'
 import { destroyObject, isClient, isNull, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
@@ -168,7 +169,7 @@ export class MessageManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.exposed as MessageInstance
+        this._instance = proxyExposed<MessageInstance>(vnode)
       }
 
       document.body.appendChild(this._container.firstElementChild!)
