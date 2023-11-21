@@ -1,3 +1,18 @@
+## [2.2.13](https://github.com/vexip-ui/vexip-ui/compare/v2.2.12...v2.2.13) (2023-11-21)
+
+
+### ✨ Features
+
+* **table:** add formatter prop for column ([c804a1a](https://github.com/vexip-ui/vexip-ui/commit/c804a1a8d0061dda93646df3a5885c5b0e30bcf9))
+
+
+### 🐞 Bug Fixes
+
+* **select:** correct composition behavior for filter input ([2f951b4](https://github.com/vexip-ui/vexip-ui/commit/2f951b4d5a8229beeef637ef6d8c29811252f85d))
+* **table:** ensure tree table work with virtual ([94755a5](https://github.com/vexip-ui/vexip-ui/commit/94755a5f4951800c63249fd1bde7ce5b1383b86f))
+
+
+
 ## [2.2.12](https://github.com/vexip-ui/vexip-ui/compare/v2.2.11...v2.2.12) (2023-11-20)
 
 
