@@ -119,6 +119,8 @@
                 @keydown="handleFilterKeyDown"
                 @focus="handleFocus($event)"
                 @blur="handleBlur($event)"
+                @compositionstart="composing = true"
+                @compositionend="handleCompositionEnd"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -145,6 +147,8 @@
                 @input="handleFilterInput"
                 @focus="handleFocus($event)"
                 @blur="handleBlur($event)"
+                @compositionstart="composing = true"
+                @compositionend="handleCompositionEnd"
               />
             </template>
             <slot
@@ -490,6 +494,7 @@ export default defineComponent({
     const userOptions = ref<SelectOptionState[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
+    const composing = ref(false)
 
     const { isMounted } = useMounted()
 
@@ -640,6 +645,11 @@ export default defineComponent({
       target: wrapper,
       passive: false,
       onKeyDown: (event, modifier) => {
+        if (composing.value) {
+          event.stopPropagation()
+          return
+        }
+
         if (!currentVisible.value) {
           if (modifier.space || modifier.enter) {
             event.preventDefault()
@@ -1167,7 +1177,7 @@ export default defineComponent({
     }
 
     function handleFilterInput() {
-      if (!input.value) return
+      if (!input.value || composing.value) return
 
       let hittingIndex: number
 
@@ -1203,6 +1213,13 @@ export default defineComponent({
       })
 
       emitEvent(props.onFilterInput, currentFilter.value)
+    }
+
+    function handleCompositionEnd() {
+      if (!composing.value) return
+
+      composing.value = false
+      handleFilterInput()
     }
 
     function handleFilterKeyDown(event: KeyboardEvent) {
@@ -1248,6 +1265,7 @@ export default defineComponent({
       anchorWidth,
       restTagCount,
       restTipShow,
+      composing,
 
       className,
       selectorClass,
@@ -1279,6 +1297,7 @@ export default defineComponent({
       handleFocus,
       handleBlur,
       handleFilterInput,
+      handleCompositionEnd,
       handleFilterKeyDown,
       toggleShowRestTip,
 
