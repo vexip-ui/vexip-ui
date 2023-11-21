@@ -760,7 +760,7 @@ export function useStore(options: StoreOptions) {
           row.checked = !isNull(checked) ? !!checked : row.checked
           row.height = !isNull(height) ? toNumber(height) : row.height
           row.expanded = !isNull(expanded) ? !!expanded : row.expanded
-          row.treeExpanded = isNull(treeExpanded) ? !!treeExpanded : row.treeExpanded
+          row.treeExpanded = !isNull(treeExpanded) ? !!treeExpanded : row.treeExpanded
         } else {
           const {
             [checkedKey]: checked,
