@@ -25,3 +25,5 @@ export interface ToastInstance extends ComponentPublicInstance {
   openToast: (options: ToastOptions) => Promise<void>,
   closeToast: () => void
 }
+
+export const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])

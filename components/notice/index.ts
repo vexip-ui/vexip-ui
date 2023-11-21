@@ -1,6 +1,7 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './notice.vue'
+import { proxyExposed } from '@vexip-ui/hooks'
 import { destroyObject, isClient, isNull, isObject, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
@@ -178,7 +179,7 @@ export class NoticeManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.exposed as NoticeInstance
+        this._instance = proxyExposed<NoticeInstance>(vnode)
       }
 
       document.body.appendChild(this._container.firstElementChild!)

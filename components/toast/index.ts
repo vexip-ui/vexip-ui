@@ -1,6 +1,7 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './toast.vue'
+import { proxyExposed } from '@vexip-ui/hooks'
 import { destroyObject, isClient, noop, toNumber } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
@@ -136,7 +137,7 @@ export class ToastManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.proxy as ToastInstance
+        this._instance = proxyExposed<ToastInstance>(vnode)
       }
 
       document.body.appendChild(this._container.firstElementChild!)
