@@ -405,7 +405,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function createMinRowState(key: Key) {
-    return { key, cellHeights: {} } as TableRowState
+    return { key, cellHeights: {}, height: state.rowHeight ?? state.rowMinHeight } as TableRowState
   }
 
   function isGroupColumn(column: any): column is ColumnGroupWithKey {

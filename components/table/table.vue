@@ -22,7 +22,9 @@ import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
   isDefined,
+  isValidNumber,
   nextFrameOnce,
+  noop,
   removeArrayItem,
   toNumber,
   transformListToMap
@@ -303,18 +305,22 @@ const style = computed(() => {
   }
 
   if (isDefined(width)) {
-    if (typeof width === 'string' && parseFloat(width).toString() !== width) {
-      style.width = width
-    } else {
+    if (typeof width === 'number' || isValidNumber(width, true)) {
       style.width = `${width}px`
       style.minWidth = `${width}px`
+    } else {
+      style.width = width
     }
   }
 
   return style
 })
 const useXScroll = computed(() => {
-  return !!(props.width && (state.leftFixedColumns.length || state.rightFixedColumns.length))
+  return !!(
+    isDefined(props.width) ||
+    state.leftFixedColumns.length ||
+    state.rightFixedColumns.length
+  )
 })
 const bodyScrollHeight = computed(() => {
   const { totalHeight } = state
@@ -370,10 +376,12 @@ const {
 watch(
   allColumns,
   value => {
-    setColumns(value)
-    isMounted && computeTableWidth()
-    nextTick(() => {
-      hasDragColumn.value = getters.hasDragColumn
+    runWithoutTransition(() => {
+      setColumns(value)
+      isMounted && computeTableWidth()
+      nextTick(() => {
+        hasDragColumn.value = getters.hasDragColumn
+      })
     })
   },
   { immediate: true, deep: true }
@@ -381,7 +389,9 @@ watch(
 watch(
   allSummaries,
   value => {
-    setSummaries(value)
+    runWithoutTransition(() => {
+      setSummaries(value)
+    })
   },
   { deep: true }
 )
@@ -389,9 +399,11 @@ watch(() => keyConfig.value.id, setDataKey)
 watch(
   () => props.data,
   value => {
-    setData(value)
-    nextTick(() => computeRenderRows(true))
-    refreshPercentScroll()
+    runWithoutTransition(() => {
+      setData(value)
+      nextTick(() => computeRenderRows(true))
+      refreshPercentScroll()
+    })
   },
   { deep: true }
 )
@@ -946,16 +958,26 @@ function computeRenderRows(force = false) {
 }
 
 function refresh() {
+  return runWithoutTransition(() => {
+    nextTick(computeTableWidth)
+    setTimeout(() => {
+      computeBodyHeight()
+      refreshPercentScroll()
+      nextFrameOnce(computeRenderRows)
+    }, 0)
+  })
+}
+
+async function runWithoutTransition(handler = noop, delay = 300) {
   noTransition.value = true
-  nextTick(computeTableWidth)
-  setTimeout(() => {
-    computeBodyHeight()
-    refreshPercentScroll()
-    nextFrameOnce(computeRenderRows)
+  await handler()
+
+  return new Promise<void>(resolve => {
     setTimeout(() => {
       noTransition.value = false
-    }, 300)
-  }, 0)
+      resolve()
+    }, delay)
+  })
 }
 
 const { timer } = useSetTimeout()
