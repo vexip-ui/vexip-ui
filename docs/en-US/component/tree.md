@@ -10,6 +10,18 @@ It is used to quickly generate a multi-level structure list. It is usually used 
 
 Use the `data` prop to pass in a list of data to generate the corresponding tree.
 
+The data needs to contain the necessary information to build the tree, namely unique key and parent key.
+
+:::
+
+:::demo tree/tree-data
+
+### Tree Data
+
+By default the `data` prop receives flattened list data.
+
+After adding the `no-build-tree` prop, the data passed in the `data` prop will be parsed according to the tree structure.
+
 :::
 
 :::demo tree/checkbox

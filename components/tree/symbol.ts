@@ -36,7 +36,7 @@ export const enum DropType {
 
 export type TreeNodeProps<D = Data> = {
   id: Key,
-  parent: Key,
+  parent?: Key,
   children: TreeNodeProps[],
   visible: boolean,
   selected: boolean,
@@ -174,4 +174,10 @@ export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   expandDisabled: 'expandDisabled',
   checkDisabled: 'checkDisabled',
   isLeaf: 'isLeaf'
+}
+
+let idIndex = 1
+
+export function getIndexId() {
+  return `__vxp-tree-key-${idIndex++}`
 }
