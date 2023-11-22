@@ -116,7 +116,11 @@ function handleBlur(event: FocusEvent) {
 function handleChange(event: Event) {
   const type = event.type as 'change' | 'input'
 
-  if (type === 'input' && composing.value) return
+  if (composing.value) {
+    if (type === 'input') return
+
+    composing.value = false
+  }
 
   const value = (event.target as HTMLTextAreaElement).value
 
