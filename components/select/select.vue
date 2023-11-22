@@ -1219,7 +1219,10 @@ export default defineComponent({
       if (!composing.value) return
 
       composing.value = false
-      handleFilterInput()
+
+      if (input.value) {
+        input.value.dispatchEvent(new Event('input'))
+      }
     }
 
     function handleFilterKeyDown(event: KeyboardEvent) {
