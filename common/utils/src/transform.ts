@@ -194,6 +194,8 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
   return tree
 }
 
+let idCount = 1
+
 /**
  * Transform the given tree to flatted list
  *
@@ -205,8 +207,11 @@ export function flatTree<T = any>(
   options: TreeOptions<keyof T> & {
     depthFirst?: boolean,
     injectId?: boolean,
+    buildId?: (index: number) => any,
     filter?: (item: T) => boolean,
+    /** Whether the filter result effect the children */
     cascaded?: boolean,
+    /** Force inject id */
     forceInject?: boolean
   } = {}
 ) {
@@ -217,6 +222,7 @@ export function flatTree<T = any>(
     rootId = null,
     depthFirst = false,
     injectId = true,
+    buildId = i => i,
     filter = toTrue,
     cascaded = false,
     forceInject = false
@@ -226,8 +232,6 @@ export function flatTree<T = any>(
   const list: T[] = []
   const loop = [...tree]
 
-  let idCount = 1
-
   while (loop.length) {
     const item = loop.shift()!
 
@@ -235,7 +239,7 @@ export function flatTree<T = any>(
     const children: T[] = Array.isArray(childrenValue) && childrenValue.length ? childrenValue : []
 
     if (injectId && (forceInject || !item[keyField])) {
-      item[keyField] = idCount++ as any
+      item[keyField] = buildId(idCount++)
     }
 
     const id = item[keyField]
