@@ -1203,6 +1203,7 @@ function toggleAllExpanded(expanded: boolean) {
   <VirtualList
     ref="virtualList"
     :class="[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]"
+    :inherit="props.inherit"
     :items="renderedNodes"
     :item-size="props.nodeMinHeight"
     items-tag="ul"

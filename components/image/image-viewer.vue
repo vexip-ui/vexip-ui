@@ -101,7 +101,7 @@ export default defineComponent({
     const viewer = ref<InstanceType<typeof Viewer>>()
 
     const className = computed(() => {
-      return [nh.b(), nh.ns('image-vars')]
+      return [nh.b(), nh.ns('image-vars'), props.inherit && nh.bm('inherit')]
     })
     const srcList = computed(() => (Array.isArray(props.srcs) ? props.srcs : [props.srcs]))
     const prevDisabled = computed(() => currentIndex.value <= 0)

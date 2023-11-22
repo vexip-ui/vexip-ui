@@ -4,6 +4,7 @@
     v-else
     v-bind="$attrs"
     :class="className"
+    :inherit="props.inherit"
     role="group"
     tag="div"
     :span="props.span"

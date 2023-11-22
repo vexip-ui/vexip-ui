@@ -437,7 +437,7 @@ function handleClear() {
     :id="idFor"
     ref="select"
     v-model:visible="currentVisible"
-    :class="nh.b()"
+    :class="[nh.b(), props.inherit && nh.bm('inherit')]"
     :inherit="props.inherit"
     :list-class="nh.be('list')"
     :value="currentValue"
