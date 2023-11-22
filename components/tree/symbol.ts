@@ -1,7 +1,7 @@
 import type { InjectionKey } from 'vue'
 // import type { BITree } from '@vexip-ui/utils'
 
-export type Key = string | number
+export type Key = string | number | symbol
 export type Data = any
 export type TreeNodeDropType = 'before' | 'inner' | 'after'
 export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
@@ -149,3 +149,23 @@ export interface TreeState {
 
 export const TREE_STATE: InjectionKey<TreeState> = Symbol('TREE_STATE')
 export const TREE_NODE_STATE: InjectionKey<TreeNodeState> = Symbol('TREE_NODE_STATE')
+
+export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
+  id: 'id',
+  parent: 'parent',
+  label: 'label',
+  children: 'children',
+  visible: 'visible',
+  selected: 'selected',
+  expanded: 'expanded',
+  disabled: 'disabled',
+  checked: 'checked',
+  loading: 'loading',
+  loaded: 'loaded',
+  readonly: 'readonly',
+  arrow: 'arrow',
+  checkbox: 'checkbox',
+  selectDisabled: 'selectDisabled',
+  expandDisabled: 'expandDisabled',
+  checkDisabled: 'checkDisabled'
+}

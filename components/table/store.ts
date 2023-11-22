@@ -1,3 +1,5 @@
+import { useCascadedChecked } from '@/components/tree/hooks'
+
 import { computed, markRaw, reactive, watchEffect } from 'vue'
 
 import {
@@ -1133,61 +1135,10 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function updateCheckedUpward(key: Key) {
-    const { rowMap } = state
-
-    if (!rowMap.has(key)) return
-
-    let row = rowMap.get(key)!
-
-    while (!isNull(row.parent)) {
-      const parentKey = row.parent
-
-      if (!rowMap.has(parentKey)) break
-
-      const parent = rowMap.get(parentKey)!
-
-      if (row.checked === parent.checked && row.partial === parent.partial) break
-
-      if (row.checked) {
-        parent.checked = parent.children.every(child => child.checked)
-        parent.partial = !parent.checked
-      } else {
-        parent.checked = false
-        parent.partial = parent.children.some(child => child.checked || child.partial)
-      }
-
-      row = parent
-    }
-  }
-
-  function updateCheckedDown(key: Key) {
-    const { rowMap } = state
-    const { disableCheckRows } = getters
-
-    if (!rowMap.has(key)) return
-
-    const row = rowMap.get(key)!
-    const checked = row.checked
-    const partial = row.partial
-
-    const loop = Array.from(row.children)
-
-    let currentRow
-
-    while (loop.length) {
-      currentRow = loop.shift()!
-
-      if (disableCheckRows.has(currentRow.key)) continue
-
-      currentRow.checked = checked
-      currentRow.partial = partial
-
-      if (currentRow.children?.length) {
-        loop.push(...currentRow.children)
-      }
-    }
-  }
+  const { updateCheckedUpward, updateCheckedDown } = useCascadedChecked({
+    getNode: key => state.rowMap.get(key),
+    disableNode: row => disableCheckRows.value.has(row.key)
+  })
 
   function computeChecked(key: Key) {
     const { rowMap, rowData } = state
@@ -1468,7 +1419,7 @@ export function useStore(options: StoreOptions) {
     isSingle: boolean
   ) {
     const usedFilter: ParsedFilterOptions[] = []
-    const filterData: TableRowState[] = []
+    const usedData: TableRowState[] = []
 
     for (const filter of filters.values()) {
       const { able, active, method } = filter
@@ -1498,11 +1449,11 @@ export function useStore(options: StoreOptions) {
       }
 
       if (isFilter) {
-        filterData.push(row)
+        usedData.push(row)
       }
     }
 
-    return filterData
+    return usedData
   }
 
   function sortData(
