@@ -467,10 +467,11 @@ export default defineComponent({
         <NativeScroll
           ref={scroll}
           class={className.value}
-          style={style.value}
+          inherit={props.inherit}
           use-y-bar
           observe-deep
           bar-class={[nh.be('scrollbar'), props.innerClasses.scrollbar]}
+          style={style.value}
           onResize={handleResize}
         >
           {renderWrapper()}

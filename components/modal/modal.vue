@@ -206,6 +206,7 @@ const className = computed(() => {
     nh.b(),
     nh.bs('vars'),
     {
+      [nh.bm('inherit')]: props.inherit,
       [nh.bm('inner')]: props.inner,
       [nh.bm('draggable')]: props.draggable,
       [nh.bm('resizable')]: props.resizable,

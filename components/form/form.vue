@@ -2,6 +2,7 @@
   <Row
     v-bind="$attrs"
     :class="className"
+    :inherit="props.inherit"
     tag="form"
     :method="props.action && props.method"
     :action="props.action"

@@ -137,8 +137,8 @@ export default defineComponent({
         <NativeScroll
           {...attrs}
           ref={scroll}
+          class={[nh.b(), props.inherit && nh.bm('inherit'), attrs.class]}
           inherit={props.inherit}
-          class={[nh.b(), attrs.class]}
           use-y-bar={!props.hideBar}
           scroll-y={scrollOffset.value}
           autoplay={props.autoplay}
