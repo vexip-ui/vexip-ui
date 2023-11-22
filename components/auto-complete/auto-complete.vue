@@ -430,6 +430,16 @@ function handleClear() {
     nextTick(clearField)
   }
 }
+
+function handleCompositionEnd() {
+  if (composing.value) {
+    composing.value = false
+
+    if (control.value) {
+      control.value.dispatchEvent(new Event('input'))
+    }
+  }
+}
 </script>
 
 <template>
@@ -504,7 +514,7 @@ function handleClear() {
           @focus="props.filter && handleFocus($event)"
           @blur="props.filter && handleBlur($event)"
           @compositionstart="composing = true"
-          @compositionend="composing = false"
+          @compositionend="handleCompositionEnd"
         />
       </slot>
     </template>

@@ -103,6 +103,7 @@ export default defineComponent({
     const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
+    const composing = ref(false)
 
     const inputControl = ref<HTMLInputElement>()
 
@@ -195,6 +196,11 @@ export default defineComponent({
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      focused,
+      currentValue,
+      showPassword,
+      currentLength,
+      composing,
       input: inputControl,
       copyValue,
       focus: (options?: FocusOptions) => {
@@ -228,8 +234,9 @@ export default defineComponent({
     function handleChange(event: Event) {
       const type = event.type as InputEventType
 
-      currentValue.value = (event.target as HTMLInputElement).value
+      if (type === 'input' && composing.value) return
 
+      currentValue.value = (event.target as HTMLInputElement).value
       limitValueLength()
 
       const value = currentValue.value
@@ -343,10 +350,19 @@ export default defineComponent({
     }
 
     function handleCompositionStart(event: CompositionEvent) {
+      composing.value = true
       emitEvent(props.onCompositionStart, event)
     }
 
     function handleCompositionEnd(event: CompositionEvent) {
+      if (composing.value) {
+        composing.value = false
+
+        if (inputControl.value) {
+          inputControl.value.dispatchEvent(new Event('input'))
+        }
+      }
+
       emitEvent(props.onCompositionStart, event)
     }
 

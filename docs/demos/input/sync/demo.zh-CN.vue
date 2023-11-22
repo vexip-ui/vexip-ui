@@ -1,11 +1,11 @@
 <template>
+  <p>Input Value: {{ value }}</p>
   <Input
     v-model:value="value"
     sync
-    clearable=""
+    clearable
     style="max-width: 300px"
   ></Input>
-  <p>Input Value: {{ value }}</p>
 </template>
 
 <script setup lang="ts">
