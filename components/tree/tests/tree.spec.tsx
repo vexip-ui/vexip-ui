@@ -459,13 +459,53 @@ describe('Tree', () => {
         parent: 1
       }
     ]
-    const wrapper = mount(() => <Tree data={data} filter={'2'}></Tree>)
+    const wrapper = mount(Tree, {
+      props: { data, filter: '2' }
+    })
 
     await nextTick()
-    const nodes = wrapper.findAll('.vxp-tree__node')
+    let nodes = wrapper.findAll('.vxp-tree__node')
     expect(nodes.length).toEqual(2)
     expect(nodes[0].find('.vxp-tree__label').text()).toEqual('n1')
     expect(nodes[1].find('.vxp-tree__label').text()).toEqual('n2')
+
+    await wrapper.setProps({ filter: '1' })
+    await nextTick()
+    nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(3)
+  })
+
+  it('filter leaf', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+        parent: 0,
+        expanded: true
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      },
+      {
+        id: 3,
+        label: 'n3',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(Tree, {
+      props: { data, filterLeaf: true, filter: '1' }
+    })
+
+    await nextTick()
+    let nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(0)
+
+    await wrapper.setProps({ filter: '2' })
+    await nextTick()
+    nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(2)
   })
 
   it('async load', async () => {

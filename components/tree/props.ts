@@ -56,6 +56,7 @@ export const treeProps = buildProps({
   noTransition: booleanProp,
   arrowIcon: Object,
   blockEffect: booleanProp,
+  filterLeaf: booleanProp,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),

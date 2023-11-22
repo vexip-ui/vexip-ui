@@ -1,12 +1,17 @@
 <template>
   <Input v-model:value="filter" clearable></Input>
-  <Tree :data="data" :filter="filter"></Tree>
+  <p>
+    Only filter leaf nodes:
+    <Switch v-model:value="filterLeaf"></Switch>
+  </p>
+  <Tree :data="data" :filter="filter" :filter-leaf="filterLeaf"></Tree>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
 const filter = ref('')
+const filterLeaf = ref(false)
 const data = [
   {
     id: 1,

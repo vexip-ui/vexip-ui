@@ -102,7 +102,8 @@ const props = useProps('tree', _props, {
   useYBar: false,
   noTransition: false,
   arrowIcon: null,
-  blockEffect: false
+  blockEffect: false,
+  filterLeaf: false
 })
 
 const nh = useNameHelper('tree')
@@ -113,7 +114,6 @@ const treeNodes = ref<TreeNodeProps[]>([])
 const flattedNodes = ref<TreeNodeProps[]>([])
 const dragging = ref(false)
 const indicatorShow = ref(false)
-const anyMatched = ref(false)
 const keyConfig = reactive({ ...defaultKeyConfig })
 const nodeStates = reactive(new Map<Key, TreeNodeState>())
 const expanding = ref(false)
@@ -137,18 +137,18 @@ const defaultNodeProperties = {
   checked: false,
   loading: false,
   loaded: false,
+  loadFail: false,
   readonly: false,
   arrow: 'auto' as boolean | 'auto',
   // will follow checkbox prop of tree when not set (be null)
   checkbox: null! as boolean,
   selectDisabled: false,
   expandDisabled: false,
-  checkDisabled: false
+  checkDisabled: false,
+  isLeaf: 'auto' as boolean | 'auto'
 }
 
-const boundAsyncLoad = computed(() => {
-  return typeof props.onAsyncLoad === 'function'
-})
+const boundAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 const linkLine = computed(() => {
   return props.linkLine === true ? 'dashed' : props.linkLine === 'none' ? false : props.linkLine
 })
@@ -265,28 +265,34 @@ watchEffect(() => {
       node.childMatched = false
       node.upperMatched = false
     }
-
-    anyMatched.value = true
   } else {
     const filter =
       typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
-
-    anyMatched.value = false
+    const leafOnly = props.filterLeaf
 
     for (let i = 0, len = nodes.length; i < len; ++i) {
       const node = nodes[i]
+
+      if (leafOnly && !isLeafNode(node)) {
+        node.matched = false
+        node.childMatched = false
+        node.upperMatched = false
+
+        continue
+      }
+
       const parent = nodeMap.get(node.parent)
 
       node.matched = filter(node.data, node)
       node.childMatched = false
       node.upperMatched = !!parent && (parent.matched || parent.upperMatched)
-      anyMatched.value = anyMatched.value || node.matched
 
       if (node.matched) {
         let upper = parent
 
         while (upper && !upper.childMatched) {
           upper.childMatched = true
+          upper.expanded = true
           upper = nodeMap.get(upper.parent)
         }
       }
@@ -414,6 +420,7 @@ defineExpose({
   indicator,
 
   refreshScroll,
+  isLeafNode,
   parseAndTransformData,
   forceUpdateData,
   syncNodeStateIntoData,
@@ -442,6 +449,22 @@ const { updateCheckedUpward, updateCheckedDown } = useCascadedChecked({
   getNode: key => nodeMap.get(key),
   disableNode: node => node.disabled
 })
+
+function isLeafNode(node: TreeNodeProps) {
+  const isLeaf = node.isLeaf
+
+  let leafSign: boolean | 'auto' = 'auto'
+  let asyncLoad = false
+
+  if (isNull(isLeaf) || isLeaf === 'auto') {
+    leafSign = 'auto'
+    asyncLoad = boundAsyncLoad.value
+  } else {
+    leafSign = isLeaf
+  }
+
+  return leafSign === 'auto' ? !(node.children?.length || (asyncLoad && !node.loaded)) : !!leafSign
+}
 
 function flatNodes(nodes: TreeNodeProps[], expandedIds?: Set<Key>) {
   const rootNodes = new Set(nodes)
@@ -680,12 +703,14 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     checked: checkedKey,
     loading: loadingKey,
     loaded: loadedKey,
+    loadFail: loadFailKey,
     readonly: readonlyKey,
     arrow: arrowKey,
     checkbox: checkboxKey,
     selectDisabled: selectDisabledKey,
     expandDisabled: expandDisabledKey,
-    checkDisabled: checkDisabledKey
+    checkDisabled: checkDisabledKey,
+    isLeaf: isLeafKey
   } = keyConfig
 
   const {
@@ -696,12 +721,14 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     [checkedKey]: checked = defaults.checked,
     [loadingKey]: loading = defaults.loading,
     [loadedKey]: loaded = defaults.loaded,
+    [loadFailKey]: loadFail = defaults.loadFail,
     [readonlyKey]: readonly = defaults.readonly,
     [arrowKey]: arrow = defaults.arrow,
     [checkboxKey]: checkbox = defaults.checkbox,
     [selectDisabledKey]: selectDisabled = defaults.selectDisabled,
     [expandDisabledKey]: expandDisabled = defaults.expandDisabled,
-    [checkDisabledKey]: checkDisabled = defaults.checkDisabled
+    [checkDisabledKey]: checkDisabled = defaults.checkDisabled,
+    [isLeafKey]: isLeaf = defaults.isLeaf
   } = data
   const id = data[idKey]
   const parent = data[parentKey]
@@ -717,12 +744,14 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     checked,
     loading,
     loaded,
+    loadFail,
     readonly,
     arrow,
     checkbox,
     selectDisabled,
     expandDisabled,
-    checkDisabled
+    checkDisabled,
+    isLeaf
   }
 
   if (typeof props.postCreate === 'function') {

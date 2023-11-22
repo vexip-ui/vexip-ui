@@ -284,6 +284,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | no-transition   | `boolean`                                                              | 是否禁用展开收起时的过渡效果                                                                                                                                            | `false`        | `2.1.30` |
 | arrow-icon      | `Record<string, any>`                                                  | 设置箭头位置的图标                                                                                                                                                      | `null`         | `2.2.5`  |
 | block-effect    | `boolean`                                                              | 节点是否为块级效应                                                                                                                                                      | `false`        | `2.2.5`  |
+| filter-leaf     | `boolean`                                                              | 是否仅过滤叶子节点                                                                                                                                                      | `false`        | `2.2.14` |
 
 ### Tree 事件
 
@@ -314,41 +315,44 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 
 ### Tree 方法
 
-| 名称                    | 说明                                                                                                                                        | 签名                                                                        | 始于 |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---- |
-| parseAndTransformData   | 触发组件内部重新进行数据的解析和转换                                                                                                        | `() => void`                                                                | -    |
-| forceUpdateData         | 强制更新数据，一般在手动更改了数据源后更新树使用                                                                                            | `() => void`                                                                | -    |
-| syncNodeStateIntoData   | 讲 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                                                                | -    |
-| getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `() => TreeNodeProps[]`                                                     | -    |
-| getCheckedNodeData      | 获取所有复选框被勾选的节点数据                                                                                                              | `() => Data[]`                                                              | -    |
-| getSelectedNodes        | 获取所有被选择的节点对象                                                                                                                    | `() => TreeNodeProps[]`                                                     | -    |
-| getSelectedNodeData     | 获取所有被选择的节点数据                                                                                                                    | `() => Data[]`                                                              | -    |
-| getExpandedNodes        | 获取所有展开的节点对象                                                                                                                      | `() => TreeNodeProps[]`                                                     | -    |
-| getDisabledNodes        | 获取所有被禁用的节点对象                                                                                                                    | `() => TreeNodeProps[]`                                                     | -    |
-| getNodeChildren         | 获取节点对象的子节点对象                                                                                                                    | `(node: TreeNodeProps) => TreeNodeProps[]`                                  | -    |
-| getParentNode           | 根据节点对象获取其父节点对象，不存在则返回 `null`                                                                                           | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -    |
-| getSiblingNodes         | 根据节点对象获取所有兄弟节点对象，默认不包含自身                                                                                            | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]`            | -    |
-| getPrevSiblingNode      | 根据节点对象获取上一个兄弟节点对象，不存在则返回 `null`                                                                                     | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -    |
-| getNextSiblingNode      | 根据节点对象获取下一个兄弟节点对象，不存在则返回 `null`                                                                                     | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -    |
-| getNodeByData           | 根据数据获取节点对象                                                                                                                        | `<T extends Data>(data: T) => TreeNodeProps \| null`                        | -    |
-| expandNodeByData        | 根据数据更改节点的展开状态                                                                                                                  | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void` | -    |
-| selectNodeByData        | 根据数据更改节点的选择状态                                                                                                                  | `<T extends Data>(data: T, selected?: boolean) => void`                     | -    |
-| checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked?: boolean) => void`                      | -    |
-| toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading?: boolean) => void`                      | -    |
+| 名称                    | 说明                                                                                                                                        | 签名                                                                        | 始于     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------- |
+| parseAndTransformData   | 触发组件内部重新进行数据的解析和转换                                                                                                        | `() => void`                                                                | -        |
+| forceUpdateData         | 强制更新数据，一般在手动更改了数据源后更新树使用                                                                                            | `() => void`                                                                | -        |
+| syncNodeStateIntoData   | 讲 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                                                                | -        |
+| getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `() => TreeNodeProps[]`                                                     | -        |
+| getCheckedNodeData      | 获取所有复选框被勾选的节点数据                                                                                                              | `() => Data[]`                                                              | -        |
+| getSelectedNodes        | 获取所有被选择的节点对象                                                                                                                    | `() => TreeNodeProps[]`                                                     | -        |
+| getSelectedNodeData     | 获取所有被选择的节点数据                                                                                                                    | `() => Data[]`                                                              | -        |
+| getExpandedNodes        | 获取所有展开的节点对象                                                                                                                      | `() => TreeNodeProps[]`                                                     | -        |
+| getDisabledNodes        | 获取所有被禁用的节点对象                                                                                                                    | `() => TreeNodeProps[]`                                                     | -        |
+| getNodeChildren         | 获取节点对象的子节点对象                                                                                                                    | `(node: TreeNodeProps) => TreeNodeProps[]`                                  | -        |
+| getParentNode           | 根据节点对象获取其父节点对象，不存在则返回 `null`                                                                                           | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getSiblingNodes         | 根据节点对象获取所有兄弟节点对象，默认不包含自身                                                                                            | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]`            | -        |
+| getPrevSiblingNode      | 根据节点对象获取上一个兄弟节点对象，不存在则返回 `null`                                                                                     | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getNextSiblingNode      | 根据节点对象获取下一个兄弟节点对象，不存在则返回 `null`                                                                                     | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getNodeByData           | 根据数据获取节点对象                                                                                                                        | `<T extends Data>(data: T) => TreeNodeProps \| null`                        | -        |
+| expandNodeByData        | 根据数据更改节点的展开状态                                                                                                                  | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void` | -        |
+| selectNodeByData        | 根据数据更改节点的选择状态                                                                                                                  | `<T extends Data>(data: T, selected?: boolean) => void`                     | -        |
+| checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked?: boolean) => void`                      | -        |
+| toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading?: boolean) => void`                      | -        |
+| isLeafNode              | 判断节点是否为叶子节点                                                                                                                      | `(node: TreeNodeProps) => boolean`                                          | `2.2.14` |
 
 ### TreeNode 属性
 
 > 以下属性在节点初始化时会从 data 的同名属性中获取初始值，若未定义则使用默认值，注意节点的刷新会触发该节点重新初始化。
 
-| 名称     | 类型                | 说明                                                                                               | 默认值   | 始于 |
-| -------- | ------------------- | -------------------------------------------------------------------------------------------------- | -------- | ---- |
-| label    | `string`            | 节点显示的标签内容                                                                                 | `''`     | -    |
-| selected | `boolean`           | 设置节点的选择状态                                                                                 | `false`  | -    |
-| expanded | `boolean`           | 设置节点的展开状态                                                                                 | `false`  | -    |
-| disabled | `boolean`           | 设置节点的禁用状态，不设置时会使用 Tree 的同名状态                                                 | `false`  | -    |
-| readonly | `boolean`           | 设置节点的只读状态，不设置时会使用 Tree 的同名状态                                                 | `false`  | -    |
-| checkbox | `boolean`           | 设置节点是否具有复选框，不设置时会使用 Tree 的状态                                                 | `false`  | -    |
-| arrow    | `'auto' \| boolean` | 设置节点是否带有箭头指示，设置为 'auto' 时会根据是否有下级自动显示隐藏，不设置时会使用 Tree 的状态 | `'auto'` | -    |
-| checked  | `boolean`           | 设置节点的复选框被选状态                                                                           | `false`  | -    |
-| loading  | `boolean`           | 设置节点是否处于加载中状态                                                                         | `false`  | -    |
-| loaded   | `boolean`           | 设置节点是否已加载                                                                                 | `false`  | -    |
+| 名称     | 类型                | 说明                                                                                                 | 默认值   | 始于     |
+| -------- | ------------------- | ---------------------------------------------------------------------------------------------------- | -------- | -------- |
+| label    | `string`            | 节点显示的标签内容                                                                                   | `''`     | -        |
+| selected | `boolean`           | 设置节点的选择状态                                                                                   | `false`  | -        |
+| expanded | `boolean`           | 设置节点的展开状态                                                                                   | `false`  | -        |
+| disabled | `boolean`           | 设置节点的禁用状态，不设置时会使用 Tree 的同名状态                                                   | `false`  | -        |
+| readonly | `boolean`           | 设置节点的只读状态，不设置时会使用 Tree 的同名状态                                                   | `false`  | -        |
+| checkbox | `boolean`           | 设置节点是否具有复选框，不设置时会使用 Tree 的状态                                                   | `false`  | -        |
+| arrow    | `'auto' \| boolean` | 设置节点是否带有箭头指示，设置为 `'auto'` 时会根据是否有子级自动显示隐藏，不设置时会使用 Tree 的状态 | `'auto'` | -        |
+| checked  | `boolean`           | 设置节点的复选框被选状态                                                                             | `false`  | -        |
+| loading  | `boolean`           | 设置节点是否处于加载中状态                                                                           | `false`  | -        |
+| loaded   | `boolean`           | 设置节点是否已加载                                                                                   | `false`  | -        |
+| loadFail | `boolean`           | 设置节点是否加载失败                                                                                 | `false`  | `2.2.14` |
+| isLeaf   | `'auto' \| boolean` | 强制指定节点是否为叶子节点，设置为 `'auto'` 时会根据是否有子级进行判断                               | `'auto'` | `2.2.14` |
