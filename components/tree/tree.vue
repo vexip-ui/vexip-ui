@@ -29,7 +29,7 @@ import {
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { useCascadedChecked } from './hooks'
-import { DropType, TREE_NODE_STATE, TREE_STATE, defaultKeyConfig } from './symbol'
+import { DropType, TREE_NODE_STATE, TREE_STATE, defaultKeyConfig, getIndexId } from './symbol'
 
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
@@ -110,6 +110,7 @@ const nh = useNameHelper('tree')
 const locale = useLocale('tree', toRef(props, 'locale'))
 
 const nodeMap = new Map<Key, TreeNodeProps>()
+const nodeDataMap = new Map<Data, TreeNodeProps>()
 const treeNodes = ref<TreeNodeProps[]>([])
 const flattedNodes = ref<TreeNodeProps[]>([])
 const dragging = ref(false)
@@ -281,7 +282,7 @@ watchEffect(() => {
         continue
       }
 
-      const parent = nodeMap.get(node.parent)
+      const parent = node.parent ? nodeMap.get(node.parent) : undefined
 
       node.matched = filter(node.data, node)
       node.childMatched = false
@@ -293,7 +294,7 @@ watchEffect(() => {
         while (upper && !upper.childMatched) {
           upper.childMatched = true
           upper.expanded = true
-          upper = nodeMap.get(upper.parent)
+          upper = upper.parent ? nodeMap.get(upper.parent) : undefined
         }
       }
     }
@@ -496,15 +497,6 @@ function isCollapse(node: any): node is TreeCollapseProps {
   return node.collapse
 }
 
-function getTreeOptions() {
-  return {
-    keyField: keyConfig.id,
-    childField: keyConfig.children,
-    parentField: keyConfig.parent,
-    rootId: props.rootId
-  }
-}
-
 function refreshNodesDepth() {
   const linkLine = props.linkLine
 
@@ -521,7 +513,7 @@ function refreshNodesDepth() {
           node.inLastCount = parent.inLastCount + (parent.last ? 1 : 0)
         } else {
           let current = parent
-          let upper = nodeMap.get(current.parent)
+          let upper = current.parent && nodeMap.get(current.parent)
           let count = 0
 
           while (upper) {
@@ -530,7 +522,7 @@ function refreshNodesDepth() {
             }
 
             current = upper
-            upper = nodeMap.get(current.parent)
+            upper = current.parent && nodeMap.get(current.parent)
           }
 
           node.inLastCount = count
@@ -553,30 +545,49 @@ function buildTreeNodes(nodes: TreeNodeProps[]) {
 
 function parseAndTransformData() {
   const idKey = keyConfig.id
-  const parentKey = keyConfig.parent
   const oldDataMap = new Map<Data, TreeNodeProps>()
-  const oldIpMap = new Map<any, TreeNodeProps>()
+  const oldIdMap = new Map<any, TreeNodeProps>()
 
   for (const node of nodeMap.values()) {
     oldDataMap.set(node.data, node)
-    oldIpMap.set(node.data[idKey], node)
+    oldIdMap.set(node.data[idKey], node)
   }
 
   nodeMap.clear()
 
   const nodes: TreeNodeProps[] = []
-  const data = props.noBuildTree ? flatTree(props.data, getTreeOptions()) : props.data
 
-  for (let i = 0, len = data.length; i < len; ++i) {
-    const item = data[i]
-    const oldNode = oldDataMap.get(item) ?? oldIpMap.get(item[idKey])
-    const node = props.cacheNode ? oldNode ?? createNodeItem(item) : createNodeItem(item, oldNode)
+  if (props.noBuildTree) {
+    walkTree(
+      props.data,
+      (item, _, parent) => {
+        const oldNode = oldDataMap.get(item)
+        const id = oldNode?.id ?? getIndexId()
+        const node = props.cacheNode
+          ? oldNode ?? createNodeItem(item)
+          : createNodeItem(item, oldNode)
 
-    node.parent = item[parentKey]
-    node.data = item
+        node.id = id
+        node.parent = parent ? nodeDataMap.get(parent)?.id : undefined
 
-    nodeMap.set(node.id, node)
-    nodes.push(node)
+        nodeMap.set(node.id, node)
+        nodes.push(node)
+        nodeDataMap.set(item, node)
+      },
+      { childField: keyConfig.children, depthFirst: true }
+    )
+  } else {
+    const data = props.data
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      const item = data[i]
+      const oldNode = oldDataMap.get(item) ?? oldIdMap.get(item[idKey])
+      const node = props.cacheNode ? oldNode ?? createNodeItem(item) : createNodeItem(item, oldNode)
+
+      nodeMap.set(node.id, node)
+      nodes.push(node)
+      nodeDataMap.set(item, node)
+    }
   }
 
   buildTreeNodes(nodes)
@@ -604,8 +615,7 @@ function parseAndTransformData() {
 }
 
 function forceUpdateData() {
-  const nodes = []
-  const data = props.noBuildTree ? flatTree(props.data, getTreeOptions()) : props.data
+  const nodes: TreeNodeProps[] = []
 
   const {
     id: idKey,
@@ -616,58 +626,91 @@ function forceUpdateData() {
     checked: checkedKey,
     loading: loadingKey,
     loaded: loadedKey,
+    loadFail: loadFailKey,
     readonly: readonlyKey,
     arrow: arrowKey,
     checkbox: checkboxKey,
     selectDisabled: selectDisabledKey,
     expandDisabled: expandDisabledKey,
-    checkDisabled: checkDisabledKey
+    checkDisabled: checkDisabledKey,
+    isLeaf: isLeafKey
   } = keyConfig
 
-  for (let i = 0, len = data.length; i < len; ++i) {
-    const item = data[i]
-    const id = item[idKey] as Key
+  const refresh = (node: TreeNodeProps, item: Data) => {
+    const {
+      [visibleKey]: visible = node.visible,
+      [selectedKey]: selected = node.selected,
+      [expandedKey]: expanded = node.expanded,
+      [disabledKey]: disabled = node.disabled,
+      [checkedKey]: checked = node.checked,
+      [loadingKey]: loading = node.loading,
+      [loadedKey]: loaded = node.loaded,
+      [loadFailKey]: loadFail = node.loadFail,
+      [readonlyKey]: readonly = node.readonly,
+      [arrowKey]: arrow = node.arrow,
+      [checkboxKey]: checkbox = node.checkbox,
+      [selectDisabledKey]: selectDisabled = node.selectDisabled,
+      [expandDisabledKey]: expandDisabled = node.expandDisabled,
+      [checkDisabledKey]: checkDisabled = node.checkDisabled,
+      [isLeafKey]: isLeaf = node.isLeaf
+    } = item
 
-    let node: TreeNodeProps
+    node.visible = visible
+    node.selected = selected
+    node.expanded = expanded
+    node.disabled = disabled
+    node.checked = checked
+    node.loading = loading
+    node.loaded = loaded
+    node.loadFail = loadFail
+    node.readonly = readonly
+    node.arrow = arrow
+    node.checkbox = checkbox
+    node.selectDisabled = selectDisabled
+    node.expandDisabled = expandDisabled
+    node.checkDisabled = checkDisabled
+    node.isLeaf = isLeaf
+  }
 
-    if (nodeMap.has(id)) {
-      node = nodeMap.get(id)!
+  if (props.noBuildTree) {
+    walkTree(
+      props.data,
+      (item, _, parent) => {
+        let node = nodeDataMap.get(item)
 
-      const {
-        [visibleKey]: visible = node.visible,
-        [selectedKey]: selected = node.selected,
-        [expandedKey]: expanded = node.expanded,
-        [disabledKey]: disabled = node.disabled,
-        [checkedKey]: checked = node.checked,
-        [loadingKey]: loading = node.loading,
-        [loadedKey]: loaded = node.loaded,
-        [readonlyKey]: readonly = node.readonly,
-        [arrowKey]: arrow = node.arrow,
-        [checkboxKey]: checkbox = node.checkbox,
-        [selectDisabledKey]: selectDisabled = node.selectDisabled,
-        [expandDisabledKey]: expandDisabled = node.expandDisabled,
-        [checkDisabledKey]: checkDisabled = node.checkDisabled
-      } = item
+        if (node) {
+          refresh(node, item)
+        } else {
+          node = createNodeItem(item)
+          node.id = getIndexId()
+          node.parent = parent ? nodeDataMap.get(parent)?.id : undefined
 
-      node.visible = visible
-      node.selected = selected
-      node.expanded = expanded
-      node.disabled = disabled
-      node.checked = checked
-      node.loading = loading
-      node.loaded = loaded
-      node.readonly = readonly
-      node.arrow = arrow
-      node.checkbox = checkbox
-      node.selectDisabled = selectDisabled
-      node.expandDisabled = expandDisabled
-      node.checkDisabled = checkDisabled
-    } else {
-      node = createNodeItem(item)
-      nodeMap.set(id, node)
+          nodeMap.set(node.id, node)
+          nodeDataMap.set(item, node)
+        }
+
+        nodes.push(node)
+      },
+      { childField: keyConfig.children, depthFirst: true }
+    )
+  } else {
+    const data = props.data
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      const item = data[i]
+      const id = item[idKey] as Key
+
+      let node = nodeMap.get(id)
+
+      if (node) {
+        refresh(node, item)
+      } else {
+        node = createNodeItem(item)
+        nodeMap.set(id, node)
+      }
+
+      nodes.push(node)
     }
-
-    nodes.push(node)
   }
 
   buildTreeNodes(nodes)
@@ -730,8 +773,8 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     [checkDisabledKey]: checkDisabled = defaults.checkDisabled,
     [isLeafKey]: isLeaf = defaults.isLeaf
   } = data
-  const id = data[idKey]
-  const parent = data[parentKey]
+  const id = props.noBuildTree ? null : data[idKey]
+  const parent = props.noBuildTree ? null : data[parentKey]
 
   const node = {
     id,

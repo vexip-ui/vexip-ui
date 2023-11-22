@@ -33,7 +33,7 @@ const wrapper = ref<HTMLElement>()
 const arrowEl = ref<HTMLElement>()
 
 const parentState = computed(() => {
-  return treeState.nodeStates.get(props.node.parent)
+  return props.node.parent ? treeState.nodeStates.get(props.node.parent) : undefined
 })
 
 useModifier({
