@@ -121,6 +121,7 @@
                 @blur="handleBlur($event)"
                 @compositionstart="composing = true"
                 @compositionend="handleCompositionEnd"
+                @change="handleCompositionEnd"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -149,6 +150,7 @@
                 @blur="handleBlur($event)"
                 @compositionstart="composing = true"
                 @compositionend="handleCompositionEnd"
+                @change="handleCompositionEnd"
               />
             </template>
             <slot

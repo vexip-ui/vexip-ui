@@ -515,6 +515,7 @@ function handleCompositionEnd() {
           @blur="props.filter && handleBlur($event)"
           @compositionstart="composing = true"
           @compositionend="handleCompositionEnd"
+          @change="handleCompositionEnd"
         />
       </slot>
     </template>

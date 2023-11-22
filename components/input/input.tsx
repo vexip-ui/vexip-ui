@@ -234,7 +234,11 @@ export default defineComponent({
     function handleChange(event: Event) {
       const type = event.type as InputEventType
 
-      if (type === 'input' && composing.value) return
+      if (composing.value) {
+        if (type === 'input') return
+
+        composing.value = false
+      }
 
       currentValue.value = (event.target as HTMLInputElement).value
       limitValueLength()
