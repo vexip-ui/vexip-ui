@@ -18,12 +18,14 @@ export interface TreeNodeKeyConfig {
   checked?: string,
   loading?: string,
   loaded?: string,
+  loadFail?: string,
   readonly?: string,
   arrow?: string,
   checkbox?: string,
   selectDisabled?: string,
   expandDisabled?: string,
-  checkDisabled?: string
+  checkDisabled?: string,
+  isLeaf?: string
 }
 
 export const enum DropType {
@@ -43,12 +45,14 @@ export type TreeNodeProps<D = Data> = {
   checked: boolean,
   loading: boolean,
   loaded: boolean,
+  loadFail: boolean,
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
   selectDisabled: boolean,
   expandDisabled: boolean,
   checkDisabled: boolean,
+  isLeaf: boolean | 'auto',
   data: D,
   /** @internal */
   partial: boolean,
@@ -162,10 +166,12 @@ export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   checked: 'checked',
   loading: 'loading',
   loaded: 'loaded',
+  loadFail: 'loadFail',
   readonly: 'readonly',
   arrow: 'arrow',
   checkbox: 'checkbox',
   selectDisabled: 'selectDisabled',
   expandDisabled: 'expandDisabled',
-  checkDisabled: 'checkDisabled'
+  checkDisabled: 'checkDisabled',
+  isLeaf: 'isLeaf'
 }

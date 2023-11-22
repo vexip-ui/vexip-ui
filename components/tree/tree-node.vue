@@ -59,7 +59,7 @@ useModifier({
       } else if (modifier.left && (!props.node.expanded || !hasChild)) {
         treeState.handleNodeHitting(parentState.value?.el)
       } else {
-        handleToggleExpand(modifier.right)
+        toggleExpanded(modifier.right)
       }
     } else if (hasCheckbox.value && modifier.space) {
       prevent()
@@ -71,7 +71,8 @@ useModifier({
   }
 })
 
-const loaded = ref(props.node.loaded)
+const loaded = ref(!treeState.boundAsyncLoad || props.node.loaded)
+const loadFail = ref(!treeState.boundAsyncLoad || props.node.loadFail)
 const dragging = ref(false)
 const isDragOver = ref(false)
 const focused = ref(false)
@@ -101,27 +102,34 @@ const className = computed(() => {
     [nh.bem('node', 'drag-over')]: isDragOver.value,
     [nh.bem('node', 'link-line')]: hasLinkLine.value,
     [nh.bem('node', 'no-arrow')]: !hasArrow.value,
-    [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length
+    [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length,
+    [nh.bem('node', 'loaded')]: loaded.value,
+    [nh.bem('node', 'load-fail')]: loadFail.value
   }
 })
-const hasArrow = computed(() => {
-  const arrow = props.node.arrow
+const isLeaf = computed(() => {
+  const isLeaf = props.node.isLeaf
 
-  let arrowSign: boolean | 'auto' = 'auto'
+  let leafSign: boolean | 'auto' = 'auto'
   let asyncLoad = false
 
-  if (isNull(arrow) || arrow === 'auto') {
-    if (treeState) {
-      arrowSign = treeState.arrow
-      asyncLoad = treeState.boundAsyncLoad
-    }
+  if (isNull(isLeaf) || isLeaf === 'auto') {
+    leafSign = 'auto'
+    asyncLoad = treeState.boundAsyncLoad
   } else {
-    arrowSign = arrow
+    leafSign = isLeaf
   }
 
-  return arrowSign === 'auto'
-    ? !!props.node.children?.length || (!loaded.value && asyncLoad)
-    : !!arrowSign
+  return leafSign === 'auto'
+    ? !(props.node.children?.length || (asyncLoad && !loaded.value))
+    : !!leafSign
+})
+const hasArrow = computed(() => {
+  return isNull(props.node.arrow) || props.node.arrow === 'auto'
+    ? treeState.arrow === 'auto'
+      ? !isLeaf.value
+      : treeState.arrow
+    : props.node.arrow
 })
 const hasCheckbox = computed(() => {
   const checkbox = props.node.checkbox
@@ -137,12 +145,12 @@ const nodeState = reactive({
   readonly: isReadonly
 })
 
-watch(
-  () => props.node.loaded,
-  value => {
-    loaded.value = value
-  }
-)
+watch([() => treeState.boundAsyncLoad, () => props.node.loaded], values => {
+  loaded.value = !values[0] || values[1]
+})
+watch([() => treeState.boundAsyncLoad, () => props.node.loadFail], values => {
+  loadFail.value = !values[0] || values[1]
+})
 watch(
   () => props.node.id,
   (value, prev) => {
@@ -187,8 +195,8 @@ function handleToggleCheck(able = !props.node.checked) {
   })
 }
 
-async function handleToggleExpand(able = !props.node.expanded) {
-  if (props.node.loading || isDisabled.value || props.node.expandDisabled) return
+async function toggleExpanded(able = !props.node.expanded) {
+  if (props.node.loading || isDisabled.value || props.node.expandDisabled || isLeaf.value) return
 
   if (able && treeState.boundAsyncLoad && !loaded.value) {
     setValue('loading', true)
@@ -211,7 +219,7 @@ function handleToggleSelect(able = !props.node.selected) {
   if (isDisabled.value || props.node.selectDisabled) return
 
   if (treeState.floorSelect) {
-    return handleToggleExpand()
+    return toggleExpanded()
   }
 
   setValue('selected', !isReadonly.value && able)
@@ -233,8 +241,11 @@ function asyncLoadCallback(success = true) {
   setValue('expanded', success !== false)
 
   if (success) {
-    loaded.value = true
+    setValue('loaded', true)
+    setValue('loadFail', false)
     treeState.handleNodeExpand(props.node)
+  } else {
+    setValue('loadFail', true)
   }
 }
 
@@ -323,7 +334,7 @@ function handleDragEnd(event: DragEvent) {
       :focused="focused"
       :line-count="node.depth - node.inLastCount"
       :toggle-check="handleToggleCheck"
-      :toggle-expand="handleToggleExpand"
+      :toggle-expand="toggleExpanded"
       :toggle-select="handleToggleSelect"
     >
       <template v-if="hasLinkLine">
@@ -360,7 +371,7 @@ function handleDragEnd(event: DragEvent) {
             [nh.bem('arrow', 'disabled')]: isDisabled || node.expandDisabled
           }"
           :aria-hidden="!node.loading && !hasArrow"
-          @click.stop="handleToggleExpand()"
+          @click.stop="toggleExpanded()"
         >
           <Icon v-if="node.loading" v-bind="icons.loading" label="loading"></Icon>
           <slot
