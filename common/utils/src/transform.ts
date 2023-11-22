@@ -285,23 +285,25 @@ export function flatTree<T = any>(
  */
 export function walkTree<T = any>(
   tree: T[],
-  cb: (item: T, depth: number) => void,
+  cb: (item: T, depth: number, parent: T | null) => void,
   options: {
     depthFirst?: boolean,
     childField?: keyof T
   } = {}
 ) {
   const { childField = 'children' as keyof T, depthFirst = false } = options
-  const loop = [...tree.map(item => ({ item, depth: 0 }))]
+  const loop = [...tree.map(item => ({ item, depth: 0, parent: null as T | null }))]
 
   while (loop.length) {
-    const { item, depth } = loop.shift()!
+    const { item, depth, parent } = loop.shift()!
     const children = item[childField] as T[]
 
-    cb(item, depth)
+    cb(item, depth, parent)
 
     if (children?.length) {
-      loop[depthFirst ? 'unshift' : 'push'](...children.map(item => ({ item, depth: depth + 1 })))
+      loop[depthFirst ? 'unshift' : 'push'](
+        ...children.map(child => ({ item: child, depth: depth + 1, parent: item }))
+      )
     }
   }
 }
