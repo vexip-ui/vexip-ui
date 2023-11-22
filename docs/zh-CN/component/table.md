@@ -114,6 +114,8 @@
 
 通过 TableColumn 组件的 `filter` 插槽你还可以自定义过滤器的渲染。
 
+同时你也可以借助 Table 组件的 `data-filter` 属性定义额外的数据过滤方法。
+
 :::
 
 :::demo table/fixed
@@ -589,6 +591,7 @@ interface TableFootPayload {
 | side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
 | border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
+| data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                       | `null`         | `2.2.14` |
 
 ### Table 事件
 

@@ -1,10 +1,20 @@
 <template>
+  <div style="display: flex; justify-content: end; width: 1000px; margin-bottom: 10px">
+    <Input
+      v-model:value="jobSearch"
+      sync
+      clearable
+      placeholder="Search Job"
+      style="max-width: 200px"
+    ></Input>
+  </div>
   <Table
     ref="table"
     :columns="columns"
     :data="data"
     :width="1000"
     :row-height="40"
+    :data-filter="extraFilter"
     @row-filter="handleRowFilter"
   >
     <TableColumn
@@ -22,9 +32,9 @@
           </template>
           <template #default="{ toggleVisible }">
             <Space vertical>
-              Min:
+              最小值：
               <NumberInput v-model:value="filter.meta.values[0]" sync></NumberInput>
-              Max:
+              最大值：
               <NumberInput v-model:value="filter.meta.values[1]" sync></NumberInput>
               <div style="margin: 3px 0">
                 <Button
@@ -35,14 +45,14 @@
                   "
                   @click="handleFilter(filter.meta.values), toggleVisible(false)"
                 >
-                  Filter
+                  筛选
                 </Button>
                 <Button
                   text
                   size="small"
                   @click="resetAgeFilter(), handleFilter(null), toggleVisible(false)"
                 >
-                  Reset
+                  重置
                 </Button>
               </div>
             </Space>
@@ -52,7 +62,7 @@
     </TableColumn>
   </Table>
   <Button style="margin-top: 10px" @click="clearFilter">
-    Clear Filter
+    清除过滤
   </Button>
 </template>
 
@@ -72,6 +82,8 @@ interface RowData {
   lastName: string,
   age: string
 }
+
+const jobSearch = ref('')
 
 const table = ref<TableExposed>()
 
@@ -175,6 +187,10 @@ const data = ref([
     age: '26'
   }
 ])
+
+function extraFilter(data: RowData) {
+  return data.job.includes(jobSearch.value)
+}
 
 function handleRowFilter(profiles: TableFilterProfile[]) {
   console.info(profiles)
