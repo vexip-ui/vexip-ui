@@ -361,7 +361,8 @@ export interface StoreOptions {
   expandRenderer: ExpandRenderFn | null,
   cellSpan: TableCellSpanFn | null,
   sidePadding: number[],
-  borderWidth: number
+  borderWidth: number,
+  dataFilter: (data: Data) => boolean
 }
 
 export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions

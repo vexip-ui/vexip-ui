@@ -111,6 +111,7 @@ export const tableProps = buildProps({
   sidePadding: [Number, Array] as PropType<number | number[]>,
   icons: Object as PropType<TableIcons>,
   borderWidth: Number,
+  dataFilter: Function as PropType<(data: Data) => boolean>,
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void

@@ -2,7 +2,7 @@ import { TableColumn } from '@/components/table-column'
 import { TableSummary } from '@/components/table-summary'
 
 import { describe, expect, it, vi } from 'vitest'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { User } from '@vexip-ui/icons'
@@ -589,6 +589,37 @@ describe('Table', () => {
     await nextTick()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(2)
+  })
+
+  it('data filter', async () => {
+    const search = ref('A')
+    const filter = (item: { name: string, label: string }) => item.name.includes(search.value)
+    const data = [
+      { name: 'Angelique', label: 'Walsh' },
+      { name: 'Aeris', label: 'Drake' },
+      { name: 'Elisabeth', label: 'Rogers' },
+      { name: 'Sharon', label: 'Tanner' },
+      { name: 'Evie', label: 'Farmer' }
+    ]
+    const wrapper = mount(() => (
+      <Table data={data} data-filter={filter}>
+        <TableColumn id-key={'name'} name={'Name'}></TableColumn>
+        <TableColumn id-key={'label'} name={'Label'}></TableColumn>
+      </Table>
+    ))
+
+    await runScrollTimers()
+
+    let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toBe(2)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual('Angelique')
+    expect(rows[1].find('.vxp-table__cell').text()).toEqual('Aeris')
+
+    search.value = 'S'
+    await nextTick()
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toBe(1)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual('Sharon')
   })
 
   it('selection column', async () => {

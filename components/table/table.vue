@@ -40,6 +40,7 @@ import type { ScrollbarExposed } from '@/components/scrollbar'
 import type {
   MouseEventType,
   MoveEventType,
+  StoreOptions,
   TableCellPayload,
   TableColResizePayload,
   TableColumnGroupOptions,
@@ -145,7 +146,11 @@ const props = useProps('table', _props, {
   },
   sidePadding: 0,
   icons: () => ({}),
-  borderWidth: 1
+  borderWidth: 1,
+  dataFilter: {
+    default: null,
+    isFunc: true
+  }
 })
 
 const slots = defineSlots<{
@@ -193,49 +198,58 @@ const allSummaries = computed(() => {
   return Array.from(tempSummaries).concat(props.summaries)
 })
 
+const syncToStoreProps = [
+  'rowClass',
+  'rowStyle',
+  'rowAttrs',
+  'cellClass',
+  'cellStyle',
+  'cellAttrs',
+  'headClass',
+  'headStyle',
+  'headAttrs',
+  'footClass',
+  'footStyle',
+  'footAttrs',
+  'border',
+  'stripe',
+  'highlight',
+  'currentPage',
+  'pageSize',
+  'rowHeight',
+  'rowMinHeight',
+  'rowDraggable',
+  'tooltipTheme',
+  'tooltipWidth',
+  'singleSorter',
+  'singleFilter',
+  'customSorter',
+  'customFilter',
+  'noCascaded',
+  'colResizable',
+  'expandRenderer',
+  'cellSpan',
+  'sidePadding',
+  'borderWidth',
+  'dataFilter'
+] as const
+
 const store = useStore({
+  ...(syncToStoreProps.reduce(
+    (prev, current) => ((prev[current] = props[current]), prev),
+    {} as any
+  ) as StoreOptions),
   columns: allColumns.value,
   summaries: allSummaries.value,
   data: props.data,
   dataKey: keyConfig.value.id,
-  rowClass: props.rowClass,
-  rowStyle: props.rowStyle,
-  rowAttrs: props.rowAttrs,
-  cellClass: props.cellClass,
-  cellStyle: props.cellStyle,
-  cellAttrs: props.cellAttrs,
-  headClass: props.headClass,
-  headStyle: props.headStyle,
-  headAttrs: props.headAttrs,
-  footClass: props.footClass,
-  footStyle: props.footStyle,
-  footAttrs: props.footAttrs,
-  border: props.border,
-  stripe: props.stripe,
-  highlight: props.highlight,
-  currentPage: props.currentPage,
-  pageSize: props.pageSize,
-  rowHeight: props.rowHeight,
-  rowMinHeight: props.rowMinHeight,
   virtual: props.virtual,
-  rowDraggable: props.rowDraggable,
   locale: locale.value,
-  tooltipTheme: props.tooltipTheme,
-  tooltipWidth: props.tooltipWidth,
-  singleSorter: props.singleSorter,
-  singleFilter: props.singleFilter,
-  customSorter: props.customSorter,
-  customFilter: props.customFilter,
   keyConfig: keyConfig.value,
   disabledTree: props.disabledTree,
-  noCascaded: props.noCascaded,
-  colResizable: props.colResizable,
-  expandRenderer: props.expandRenderer,
-  cellSpan: props.cellSpan,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
-    : [props.sidePadding, props.sidePadding],
-  borderWidth: props.borderWidth
+    : [props.sidePadding, props.sidePadding]
 })
 
 provide(TABLE_STORE, store)
@@ -432,39 +446,7 @@ watch([() => props.rowHeight, () => props.rowMinHeight], () => {
   refresh()
 })
 
-const normalProps = [
-  'rowClass',
-  'rowStyle',
-  'rowAttrs',
-  'cellClass',
-  'cellStyle',
-  'cellAttrs',
-  'headClass',
-  'headStyle',
-  'headAttrs',
-  'border',
-  'stripe',
-  'highlight',
-  'currentPage',
-  'pageSize',
-  'rowHeight',
-  'rowMinHeight',
-  'rowDraggable',
-  'tooltipTheme',
-  'tooltipWidth',
-  'singleSorter',
-  'singleFilter',
-  'customSorter',
-  'customFilter',
-  'noCascaded',
-  'colResizable',
-  'expandRenderer',
-  'cellSpan',
-  'sidePadding',
-  'borderWidth'
-] as const
-
-for (const prop of normalProps) {
+for (const prop of syncToStoreProps) {
   const watchCallback =
     mutations[
       `set${prop.charAt(0).toLocaleUpperCase()}${prop.slice(1)}` as `set${Capitalize<typeof prop>}`

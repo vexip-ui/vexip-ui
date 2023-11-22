@@ -114,6 +114,8 @@ If you want to only the filter events will be emitted (e.g. remote filter), you 
 
 Also you can custom the renderer of filter via `filter` slot of TableColumn component.
 
+Or you can define additional filter method via `data-filter` prop of the Table component.
+
 :::
 
 :::demo table/fixed
@@ -589,6 +591,7 @@ interface TableFootPayload {
 | side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |
 | border-width    | `number`                                                      | Set the border width of the table                                                                                                                     | `1`            | `2.2.12` |
+| data-filter     | `(data: Data) => boolean`                                     | Set the extra filter method for the data                                                                                                              | `null`         | `2.2.14` |
 
 ### Table Events
 

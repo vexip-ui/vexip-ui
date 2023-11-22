@@ -1,10 +1,20 @@
 <template>
+  <div style="display: flex; justify-content: end; width: 1000px; margin-bottom: 10px">
+    <Input
+      v-model:value="jobSearch"
+      sync
+      clearable
+      placeholder="Search Job"
+      style="max-width: 200px"
+    ></Input>
+  </div>
   <Table
     ref="table"
     :columns="columns"
     :data="data"
     :width="1000"
     :row-height="40"
+    :data-filter="extraFilter"
     @row-filter="handleRowFilter"
   >
     <TableColumn
@@ -72,6 +82,8 @@ interface RowData {
   lastName: string,
   age: string
 }
+
+const jobSearch = ref('')
 
 const table = ref<TableExposed>()
 
@@ -175,6 +187,10 @@ const data = ref([
     age: '26'
   }
 ])
+
+function extraFilter(data: RowData) {
+  return data.job.includes(jobSearch.value)
+}
 
 function handleRowFilter(profiles: TableFilterProfile[]) {
   console.info(profiles)

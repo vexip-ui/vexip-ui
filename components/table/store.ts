@@ -34,6 +34,7 @@ import type {
   TableDragColumn,
   TableExpandColumn,
   TableFilterOptions,
+  TableFootPropFn,
   TableHeadPropFn,
   TableKeyConfig,
   TableRowPropFn,
@@ -106,19 +107,20 @@ export function useStore(options: StoreOptions) {
   setSummaries(options.summaries)
   setData(options.data)
 
+  const userData = computed(() => {
+    return typeof state.dataFilter === 'function'
+      ? state.rowData.filter(row => state.dataFilter(row.data))
+      : state.rowData
+  })
   const filteredData = computed(() => {
     return state.customFilter
-      ? state.rowData
-      : filterData(state.filters, state.rowData, state.singleFilter)
+      ? userData.value
+      : filterData(state.filters, userData.value, state.singleFilter)
   })
   const sortedData = computed(() => {
     const data = state.customSorter
       ? filteredData.value
       : sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
-
-    // for (let i = 0, len = data.length; i < len; ++i) {
-    //   data[i].listIndex = i
-    // }
 
     return data
   })
@@ -308,6 +310,9 @@ export function useStore(options: StoreOptions) {
     setHeadClass,
     setHeadStyle,
     setHeadAttrs,
+    setFootClass,
+    setFootStyle,
+    setFootAttrs,
     setTableWidth,
     fixRowHeight,
     setBorderHeight,
@@ -341,6 +346,7 @@ export function useStore(options: StoreOptions) {
     setCellSpan,
     setSidePadding,
     setBorderWidth,
+    setDataFilter,
     setBarScrolling,
 
     handleSort,
@@ -872,6 +878,18 @@ export function useStore(options: StoreOptions) {
     state.headAttrs = headAttrs ?? null!
   }
 
+  function setFootClass(footClass: ClassType | TableFootPropFn<ClassType>) {
+    state.footClass = footClass ?? ''
+  }
+
+  function setFootStyle(footStyle: StyleType | TableFootPropFn<StyleType>) {
+    state.footStyle = footStyle ?? ''
+  }
+
+  function setFootAttrs(footAttrs: Record<string, any> | TableFootPropFn<Record<string, any>>) {
+    state.footAttrs = footAttrs ?? null!
+  }
+
   function setTableWidth(width: number) {
     if (state.resized.size) return
 
@@ -1065,6 +1083,10 @@ export function useStore(options: StoreOptions) {
 
   function setBorderWidth(width: number) {
     state.borderWidth = Math.max(width, 0)
+  }
+
+  function setDataFilter(filter: (data: Data) => boolean) {
+    state.dataFilter = filter
   }
 
   function setBarScrolling(scrolling: boolean) {
