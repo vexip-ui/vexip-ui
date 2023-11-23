@@ -1,3 +1,33 @@
+## [2.2.14](https://github.com/vexip-ui/vexip-ui/compare/v2.2.13...v2.2.14) (2023-11-23)
+
+
+### ✨ Features
+
+* **hooks:** add watchPauseable util method ([183eb73](https://github.com/vexip-ui/vexip-ui/commit/183eb73c8c70fbc8e5d331e8607c90acfacd857c))
+* **table:** add data-filter prop ([6d8f9a3](https://github.com/vexip-ui/vexip-ui/commit/6d8f9a34ccfd3d0e5222310b1e7c470abeee66dd))
+* **table:** add refreshData api method ([27360d6](https://github.com/vexip-ui/vexip-ui/commit/27360d65c0553dd4f444d3ab2f85293cc6404b10))
+* **tree:** add getTreeData and getFlattedData api methods ([df9f28c](https://github.com/vexip-ui/vexip-ui/commit/df9f28c316ed1edf394d7f24406a95636f545909))
+* **tree:** support only filter leaf nodes ([17612c2](https://github.com/vexip-ui/vexip-ui/commit/17612c230be3a0594b8c7b69010765021f155908))
+* **utils:** add filterTree method ([77954c8](https://github.com/vexip-ui/vexip-ui/commit/77954c84d2b33920f45118d1d07279cff7aa8bfc))
+* **utils:** add isIterable and mapTree methods ([2582af3](https://github.com/vexip-ui/vexip-ui/commit/2582af35a18c71f97907a98ceaa89719232520ac))
+* **utils:** flatTree add buildId option ([8ecbf1c](https://github.com/vexip-ui/vexip-ui/commit/8ecbf1c720f2f1431dddc9866918d52a1e99db90))
+* **utils:** walkTree callabck add parent parameter ([b4962bf](https://github.com/vexip-ui/vexip-ui/commit/b4962bf5dde77e26ad21d6aa9fa01df4b5667182))
+
+
+### 🐞 Bug Fixes
+
+* normalize component inherit class name ([1d9f29c](https://github.com/vexip-ui/vexip-ui/commit/1d9f29cb47d49d9425e42eae3dcefc6fa665d117))
+* normalize input-base components composition events ([0839421](https://github.com/vexip-ui/vexip-ui/commit/0839421230796d8de084f2194f64ded36d2908bf))
+* **table:** ensure correct row span for head cell when refresh ([4fb0180](https://github.com/vexip-ui/vexip-ui/commit/4fb018057a0d287300c1604d14e05b2e1a402f06))
+* **table:** incorrect treeExpanded initialization of rows ([811ca10](https://github.com/vexip-ui/vexip-ui/commit/811ca102642c661ea24eb750a45ef03dfcd51f44))
+
+
+### 🔨 Code Refactoring
+
+* **tree:** avoid invade data when parsing by tree structure ([3319ae9](https://github.com/vexip-ui/vexip-ui/commit/3319ae9d1d4ae0a3395edafe91ba540c364fcf95))
+
+
+
 ## [2.2.13](https://github.com/vexip-ui/vexip-ui/compare/v2.2.12...v2.2.13) (2023-11-21)
 
 
