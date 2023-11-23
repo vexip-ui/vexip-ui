@@ -1,3 +1,15 @@
+# [2.6.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.5.0...utils@2.6.0) (2023-11-23)
+
+
+### ✨ Features
+
+* **utils:** add filterTree method ([77954c8](https://github.com/vexip-ui/vexip-ui/commit/77954c84d2b33920f45118d1d07279cff7aa8bfc))
+* **utils:** add isIterable and mapTree methods ([2582af3](https://github.com/vexip-ui/vexip-ui/commit/2582af35a18c71f97907a98ceaa89719232520ac))
+* **utils:** flatTree add buildId option ([8ecbf1c](https://github.com/vexip-ui/vexip-ui/commit/8ecbf1c720f2f1431dddc9866918d52a1e99db90))
+* **utils:** walkTree callabck add parent parameter ([b4962bf](https://github.com/vexip-ui/vexip-ui/commit/b4962bf5dde77e26ad21d6aa9fa01df4b5667182))
+
+
+
 # [2.5.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.4.0...utils@2.5.0) (2023-11-06)
 
 
