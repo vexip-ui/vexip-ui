@@ -331,9 +331,9 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------- |
 | parseAndTransformData   | 触发组件内部重新进行数据的解析和转换                                                                                                        | `() => void`                                                                | -        |
 | forceUpdateData         | 强制更新数据，一般在手动更改了数据源后更新树使用                                                                                            | `() => void`                                                                | -        |
-| syncNodeStateIntoData   | 讲 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                                                                | -        |
-| getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `() => TreeNodeProps[]`                                                     | -        |
-| getCheckedNodeData      | 获取所有复选框被勾选的节点数据                                                                                                              | `() => Data[]`                                                              | -        |
+| syncNodeStateIntoData   | 将 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                                                                | -        |
+| getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `(includePartial?: boolean) => TreeNodeProps[]`                             | -        |
+| getCheckedNodeData      | 获取所有复选框被勾选的节点数据                                                                                                              | `(includePartial?: boolean) => Data[]`                                      | -        |
 | getSelectedNodes        | 获取所有被选择的节点对象                                                                                                                    | `() => TreeNodeProps[]`                                                     | -        |
 | getSelectedNodeData     | 获取所有被选择的节点数据                                                                                                                    | `() => Data[]`                                                              | -        |
 | getExpandedNodes        | 获取所有展开的节点对象                                                                                                                      | `() => TreeNodeProps[]`                                                     | -        |
@@ -349,6 +349,9 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked?: boolean) => void`                      | -        |
 | toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading?: boolean) => void`                      | -        |
 | isLeafNode              | 判断节点是否为叶子节点                                                                                                                      | `(node: TreeNodeProps) => boolean`                                          | `2.2.14` |
+| getTreeData             | 获取树形的原始数据                                                                                                                          | `(withFilter?: boolean) => Data[]`                                          | `2.2.14` |
+| getFlattedData          | 获取展平的原始数据                                                                                                                          | `(withFilter?: boolean) => Data[]`                                          | `2.2.14` |
+| updateVisibleNodeEls    | 触发更新可访问的节点元素（用于处理键盘操作）                                                                                                | `() => void`                                                                | `2.2.14` |
 
 ### TreeNode 属性
 

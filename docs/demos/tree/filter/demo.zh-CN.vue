@@ -4,11 +4,23 @@
     仅过滤叶子节点：
     <Switch v-model:value="filterLeaf"></Switch>
   </p>
-  <Tree :data="data" :filter="filter" :filter-leaf="filterLeaf"></Tree>
+  <Button style="margin-bottom: 10px" @click="getData">
+    获取数据
+  </Button>
+  <Tree
+    ref="tree"
+    :data="data"
+    :filter="filter"
+    :filter-leaf="filterLeaf"
+  ></Tree>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+import type { TreeExposed } from 'vexip-ui'
+
+const tree = ref<TreeExposed>()
 
 const filter = ref('')
 const filterLeaf = ref(false)
@@ -65,6 +77,10 @@ const data = [
     parent: 2
   }
 ]
+
+function getData() {
+  console.info(tree.value?.getTreeData(true))
+}
 </script>
 
 <style scoped>

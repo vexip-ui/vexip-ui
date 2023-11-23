@@ -1,8 +1,22 @@
 <template>
-  <Tree checkbox draggable :data="data"></Tree>
+  <Button style="margin-bottom: 10px" @click="getData">
+    获取数据
+  </Button>
+  <Tree
+    ref="tree"
+    checkbox
+    draggable
+    :data="data"
+  ></Tree>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+import type { TreeExposed } from 'vexip-ui'
+
+const tree = ref<TreeExposed>()
+
 const data = [
   {
     id: 1,
@@ -56,4 +70,8 @@ const data = [
     parent: 2
   }
 ]
+
+function getData() {
+  console.info(tree.value?.getTreeData())
+}
 </script>
