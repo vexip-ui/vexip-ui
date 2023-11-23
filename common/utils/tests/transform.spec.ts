@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  filterTree,
   flatTree,
   mapTree,
   normalizePath,
@@ -303,5 +304,38 @@ describe('transform', () => {
         { depthFirst: true }
       )
     ).toMatchObject(mapData)
+  })
+
+  it('filterTree', () => {
+    const data = [
+      {
+        name: '1',
+        children: [
+          { name: '2' },
+          { name: '3' },
+          {
+            name: '4',
+            children: [{ name: '5' }, { name: '6' }]
+          },
+          { name: '7' }
+        ]
+      },
+      {
+        name: '8'
+      }
+    ]
+
+    expect(filterTree(data, item => item.name === '4')).toMatchObject([
+      {
+        name: '1',
+        children: [
+          {
+            name: '4',
+            children: [{ name: '5' }, { name: '6' }]
+          }
+        ]
+      }
+    ])
+    expect(filterTree(data, item => item.name === '4', { leafOnly: true })).toMatchObject([])
   })
 })

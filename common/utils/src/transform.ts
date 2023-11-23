@@ -279,7 +279,7 @@ export function flatTree<T = any>(
 }
 
 /**
- * Walk the given tree value and call the callback for each node
+ * Walk the given tree and call the callback for each node
  *
  * @param tree the tree to walk
  * @param cb the callback function
@@ -311,7 +311,7 @@ export function walkTree<T = any>(
 }
 
 /**
- * Walk the given tree value and call the callback for each node and returns a tree that contains the results
+ * Walk the given tree and call the callback for each node and returns a tree that contains the results
  *
  * @param tree the tree to walk
  * @param cb the callback function
@@ -354,6 +354,66 @@ export function mapTree<T = any, R = any>(
   }
 
   return result
+}
+
+/**
+ * Filter the given tree and return nodes that meet the condition specified in the callback
+ *
+ * @param tree the tree to walk
+ * @param cb the callback function
+ * @param options the config for walk
+ */
+export function filterTree<T = any>(
+  tree: T[],
+  cb: (item: T, depth: number, parent: T | null) => boolean,
+  options: {
+    isLeaf?: (item: T) => boolean,
+    leafOnly?: boolean,
+    childField?: keyof T
+  } = {}
+) {
+  const {
+    childField = 'children' as keyof T,
+    leafOnly = false,
+    isLeaf = item => !isIterable(item[childField])
+  } = options
+
+  const filter = (data: T[], depth: number, parent: T | null): T[] => {
+    return data
+      .map(item => ({ ...item }))
+      .filter(item => {
+        const children = item[childField] as T[]
+        const leaf = isLeaf(item)
+        const items = isIterable(children) && Array.from(children)
+
+        if (leafOnly && !leaf) {
+          if (items && items.length) {
+            const matched = filter(items, depth + 1, item)
+            item[childField] = matched as any
+
+            return !!matched.length
+          }
+
+          return false
+        }
+
+        const result = cb(item, depth, parent)
+
+        if (leaf) return result
+        if (!leafOnly && result) return true
+
+        if (items && items.length) {
+          const matched = filter(items, depth + 1, item)
+          item[childField] = matched as any
+
+          return !!matched.length
+        }
+
+        return result
+      })
+  }
+
+  return filter(tree, 0, null)
 }
 
 export interface SortOptions<T = string> {
