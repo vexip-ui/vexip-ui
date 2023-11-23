@@ -410,7 +410,7 @@ function handleDragEnd(event: DragEvent) {
             <Renderer
               v-if="treeState.prefixRenderer"
               :renderer="treeState.prefixRenderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else
@@ -425,7 +425,7 @@ function handleDragEnd(event: DragEvent) {
             <Renderer
               v-if="treeState.renderer"
               :renderer="treeState.renderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else
@@ -442,7 +442,7 @@ function handleDragEnd(event: DragEvent) {
             <Renderer
               v-if="treeState.suffixRenderer"
               :renderer="treeState.suffixRenderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else

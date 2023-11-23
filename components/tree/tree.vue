@@ -19,9 +19,11 @@ import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import {
   debounce,
+  filterTree,
   flatTree,
   isNull,
   isPromise,
+  mapTree,
   queryAll,
   removeArrayItem,
   transformTree,
@@ -299,6 +301,8 @@ watchEffect(() => {
       }
     }
   }
+
+  isMounted.value && updateVisibleNodeEls()
 })
 watchEffect(() => {
   Object.assign(keyConfig, props.keyConfig)
@@ -414,6 +418,8 @@ watch(expandedNodeIds, (value, prev) => {
 
 defineExpose({
   treeNodes,
+  flattedNodes,
+  dragging,
   expanding,
 
   virtualList,
@@ -441,7 +447,10 @@ defineExpose({
   selectNodeByData,
   checkNodeByData,
   toggleNodeLoadingByData,
-  toggleAllExpanded
+  toggleAllExpanded,
+  getTreeData,
+  getFlattedData,
+  updateVisibleNodeEls
 })
 
 onMounted(updateVisibleNodeEls)
@@ -554,6 +563,7 @@ function parseAndTransformData() {
   }
 
   nodeMap.clear()
+  nodeDataMap.clear()
 
   const nodes: TreeNodeProps[] = []
 
@@ -1080,12 +1090,12 @@ function afterExpanded() {
   updateVisibleNodeEls()
 }
 
-function getCheckedNodes(): TreeNodeProps[] {
-  return flattedNodes.value.filter(item => item.checked)
+function getCheckedNodes(includePartial = false): TreeNodeProps[] {
+  return flattedNodes.value.filter(item => item.checked || (includePartial && item.partial))
 }
 
-function getCheckedNodeData() {
-  return getCheckedNodes().map(node => node.data)
+function getCheckedNodeData(includePartial = false) {
+  return getCheckedNodes(includePartial).map(node => node.data)
 }
 
 function getSelectedNodes(): TreeNodeProps[] {
@@ -1174,9 +1184,17 @@ function getNextSiblingNode(node: TreeNodeProps): TreeNodeProps | null {
 }
 
 function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
+  if (props.noBuildTree) {
+    return flattedNodes.value.find(item => item.data === data) ?? null
+  }
+
   const idKey = keyConfig.id
 
-  return flattedNodes.value.find(item => item.data[idKey] === data[idKey as keyof T]) ?? null
+  return (
+    flattedNodes.value.find(
+      item => item.data === data || item.data[idKey] === data[idKey as keyof T]
+    ) ?? null
+  )
 }
 
 function expandNodeByData<T extends Data>(data: T, expanded?: boolean, upstream = false) {
@@ -1239,6 +1257,27 @@ function toggleAllExpanded(expanded: boolean) {
       node.expanded = expanded
     }
   }
+}
+
+function getTreeData(withFilter = false) {
+  return mapTree(
+    withFilter
+      ? filterTree(treeNodes.value, node => node.matched, {
+        childField: 'children',
+        leafOnly: props.filterLeaf,
+        isLeaf: isLeafNode
+      })
+      : treeNodes.value,
+    node => ({ ...node.data })
+  )
+}
+
+function getFlattedData(withFilter = false) {
+  return (
+    withFilter
+      ? flattedNodes.value.filter(node => node.matched || node.childMatched || node.upperMatched)
+      : flattedNodes.value
+  ).map(node => ({ ...node.data }))
 }
 </script>
 
