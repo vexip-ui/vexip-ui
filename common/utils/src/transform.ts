@@ -1,4 +1,4 @@
-import { isDefined, isFunction, isObject, toTrue } from './common'
+import { isDefined, isFunction, isIterable, isObject, toTrue } from './common'
 import { deepClone } from './deep-clone'
 
 export function ensureArray<T>(value: T | T[]) {
@@ -194,7 +194,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
   return tree
 }
 
-let idCount = 1
+export { transformTree as buildTree }
 
 /**
  * Transform the given tree to flatted list
@@ -227,6 +227,8 @@ export function flatTree<T = any>(
     cascaded = false,
     forceInject = false
   } = options
+
+  let idCount = 1
 
   const hasRootId = isDefined(rootId) && rootId !== ''
   const list: T[] = []
@@ -300,12 +302,58 @@ export function walkTree<T = any>(
 
     cb(item, depth, parent)
 
-    if (children?.length) {
+    if (isIterable(children)) {
       loop[depthFirst ? 'unshift' : 'push'](
-        ...children.map(child => ({ item: child, depth: depth + 1, parent: item }))
+        ...Array.from(children).map(child => ({ item: child, depth: depth + 1, parent: item }))
       )
     }
   }
+}
+
+/**
+ * Walk the given tree value and call the callback for each node and returns a tree that contains the results
+ *
+ * @param tree the tree to walk
+ * @param cb the callback function
+ * @param options the config for walk
+ */
+export function mapTree<T = any, R = any>(
+  tree: T[],
+  cb: (item: T, depth: number, parent: T | null) => R,
+  options: {
+    depthFirst?: boolean,
+    childField?: keyof T
+  } = {}
+) {
+  const { childField = 'children' as keyof T, depthFirst = false } = options
+  const result: R[] = []
+  const loop = [...tree.map(item => ({ item, depth: 0, parent: null as T | null, result }))]
+
+  while (loop.length) {
+    const { item, depth, parent, result } = loop.shift()!
+    const children = item[childField] as T[]
+    const newItem = cb(item, depth, parent) ?? ({} as any)
+
+    result.push(newItem)
+
+    if (isIterable(children)) {
+      const items = Array.from(children)
+
+      if (items.length) {
+        newItem[childField] = []
+        loop[depthFirst ? 'unshift' : 'push'](
+          ...Array.from(children).map(child => ({
+            item: child,
+            depth: depth + 1,
+            parent: item,
+            result: newItem[childField]
+          }))
+        )
+      }
+    }
+  }
+
+  return result
 }
 
 export interface SortOptions<T = string> {

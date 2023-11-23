@@ -109,10 +109,14 @@ export function isEmpty(value: unknown) {
   return false
 }
 
-export function isElement(value: unknown): value is Element {
-  if (!isClient) return false
+export function isElement(value: unknown, ssr = false): value is Element {
+  if (!ssr && !isClient) return false
 
   return !!(value && 'nodeType' in (value as any))
+}
+
+export function isIterable(value: unknown) {
+  return isDefined(value) && typeof (value as any)[Symbol.iterator] === 'function'
 }
 
 export function noop(...args: any[]): any
