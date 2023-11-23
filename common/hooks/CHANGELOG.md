@@ -1,3 +1,12 @@
+# [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.1...hooks@2.2.0) (2023-11-23)
+
+
+### ✨ Features
+
+* **hooks:** add watchPauseable util method ([183eb73](https://github.com/vexip-ui/vexip-ui/commit/183eb73c8c70fbc8e5d331e8607c90acfacd857c))
+
+
+
 ## [2.1.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.0...hooks@2.1.1) (2023-11-20)
 
 
