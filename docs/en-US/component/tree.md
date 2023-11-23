@@ -195,7 +195,7 @@ Adding the `block-effect` prop to make the effect apply to the entire block of t
 ### Preset Types
 
 ```ts
-type Key = string | number
+type Key = string | number | symbol
 type Data = Record<string, any>
 
 type TreeNodeDropType = 'before' | 'inner' | 'after'
@@ -213,17 +213,19 @@ interface TreeNodeKeyConfig {
   checked?: string,
   loading?: string,
   loaded?: string,
+  loadFail?: string,
   readonly?: string,
   arrow?: string,
   checkbox?: string,
   selectDisabled?: string,
   expandDisabled?: string,
-  checkDisabled?: string
+  checkDisabled?: string,
+  isLeaf?: string
 }
 
 type TreeNodeProps<D = Data> = {
   id: Key,
-  parent: Key,
+  parent?: Key,
   children: TreeNodeProps[],
   visible: boolean,
   selected: boolean,
@@ -232,14 +234,19 @@ type TreeNodeProps<D = Data> = {
   checked: boolean,
   loading: boolean,
   loaded: boolean,
+  loadFail: boolean,
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
   selectDisabled: boolean,
   expandDisabled: boolean,
   checkDisabled: boolean,
-  data: Data
+  isLeaf: boolean | 'auto',
+  data: D
 }
+
+type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
+type TreeNodeRenderFn<D = Data> = (params: { data: D, node: TreeNodeProps<D> }) => any
 
 interface TreeCommonSlotParams {
   data: Data,
