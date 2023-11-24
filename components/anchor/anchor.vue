@@ -14,6 +14,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { proxyExposed } from '@vexip-ui/hooks'
 import { isClient, isElement } from '@vexip-ui/utils'
 import { anchorProps } from './props'
 import { animateScrollTo } from './helper'
@@ -157,15 +158,7 @@ function updateContainer() {
           const name = _container.type?.name
 
           if (name === 'Scroll' || name === 'NativeScroll') {
-            const { exposeProxy, exposed, proxy } = _container
-
-            scroller = new Proxy({} as any, {
-              get(_, key) {
-                return (
-                  (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
-                )
-              }
-            })
+            scroller = proxyExposed({ component: _container } as any)
 
             break
           }
@@ -330,11 +323,11 @@ function handleActive(link: string) {
     const [min, max] = scroller.getYScrollLimit()
     const clientY = Math.max(Math.min(elementTop - props.offset, max), min)
 
-    scroller.scrollTo(0, clientY, duration)
-
-    timer = setTimeout(() => {
-      animating.value = false
-    }, duration + 10)
+    scroller.scrollTo(0, clientY, duration).then(() => {
+      timer = setTimeout(() => {
+        animating.value = false
+      }, duration + 10)
+    })
 
     computeCurrentLink(clientY)
     computeMarkerPosition()

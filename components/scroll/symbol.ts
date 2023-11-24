@@ -1,3 +1,5 @@
+import { USE_TOUCH } from '@vexip-ui/utils'
+
 export type ScrollMode = 'horizontal' | 'horizontal-exact' | 'vertical' | 'both'
 
 export interface ScrollPayload {
@@ -33,3 +35,13 @@ export interface ScrollSlotParams {
   scrollToElement: (el: string | Element, duration?: number, offset?: number) => void,
   ensureInView: (el: string | Element, duration?: number, offset?: number) => void
 }
+
+export const scrollModes = Object.freeze<ScrollMode[]>([
+  'horizontal',
+  'horizontal-exact',
+  'vertical',
+  'both'
+])
+
+export const MOVE_EVENT = USE_TOUCH ? 'touchmove' : 'mousemove'
+export const UP_EVENT = USE_TOUCH ? 'touchend' : 'mouseup'
