@@ -29,19 +29,19 @@ export function useScrollWrapper({
 }) {
   const { manualRef, triggerUpdate } = useManualRef()
 
-  const wrapperElement = ref<HTMLElement>()
-  const contentElement = ref<HTMLElement>()
+  const wrapperEl = ref<HTMLElement>()
+  const contentEl = ref<HTMLElement>()
 
   // 容器长宽
   const wrapper = reactive({
-    el: wrapperElement,
+    el: wrapperEl,
     width: toNumber(width.value),
     height: toNumber(height.value)
   })
 
   // 内容长宽
   const content = reactive({
-    el: contentElement,
+    el: contentEl,
     width: 0,
     height: 0
   })
@@ -97,10 +97,10 @@ export function useScrollWrapper({
     return 35
   })
 
-  watch(wrapperElement, () => {
+  watch(wrapperEl, () => {
     refreshWrapper()
   })
-  watch(contentElement, () => {
+  watch(contentEl, () => {
     computeContentSize()
   })
   watch(scrollX, value => {
@@ -114,16 +114,14 @@ export function useScrollWrapper({
     verifyScroll()
   })
   watch(width, () => {
-    refreshWrapper()
-    verifyScroll()
+    refreshWrapper().then(verifyScroll)
   })
   watch(height, () => {
-    refreshWrapper()
-    verifyScroll()
+    refreshWrapper().then(verifyScroll)
   })
 
   function computeWrapperSize(sizeType: 'width' | 'height') {
-    nextTick(() => {
+    return nextTick(() => {
       if (!wrapper.el) return
 
       const size = sizeType === 'width' ? width.value : height.value
@@ -143,14 +141,18 @@ export function useScrollWrapper({
     })
   }
 
-  function refreshWrapper() {
+  async function refreshWrapper() {
+    const promises: Promise<void>[] = []
+
     if (mode.value !== 'vertical') {
-      computeWrapperSize('width')
+      promises.push(computeWrapperSize('width'))
     }
 
     if (mode.value !== 'horizontal') {
-      computeWrapperSize('height')
+      promises.push(computeWrapperSize('height'))
     }
+
+    await Promise.all(promises)
   }
 
   let timer: ReturnType<typeof setTimeout>
@@ -158,40 +160,46 @@ export function useScrollWrapper({
   function computeContentSize() {
     clearTimeout(timer)
 
-    timer = setTimeout(() => {
-      if (!content.el) return
+    return new Promise<void>(resolve => {
+      timer = setTimeout(() => {
+        if (!content.el) {
+          resolve()
+          return
+        }
 
-      if (mode.value !== 'vertical') {
-        content.width = content.el.offsetWidth
+        if (mode.value !== 'vertical') {
+          content.width = content.el.offsetWidth
 
-        if (wrapper.width >= content.width) {
-          x.value = 0
-        } else {
-          if (x.value === 0) {
-            x.value = -scrollX.value
+          if (wrapper.width >= content.width) {
+            x.value = 0
+          } else {
+            if (x.value === 0) {
+              x.value = -scrollX.value
+            }
           }
         }
-      }
 
-      if (mode.value !== 'horizontal') {
-        content.height = content.el.offsetHeight
+        if (mode.value !== 'horizontal') {
+          content.height = content.el.offsetHeight
 
-        if (wrapper.height >= content.height) {
-          y.value = 0
-        } else {
-          if (y.value === 0) {
-            y.value = -scrollY.value
+          if (wrapper.height >= content.height) {
+            y.value = 0
+          } else {
+            if (y.value === 0) {
+              y.value = -scrollY.value
+            }
           }
         }
-      }
 
-      isReady.value = false
+        isReady.value = false
 
-      setTimeout(() => {
-        isReady.value = true
-        verifyScroll()
-      }, 1)
-    }, 0)
+        setTimeout(() => {
+          isReady.value = true
+          verifyScroll()
+          resolve()
+        }, 1)
+      }, 0)
+    })
   }
 
   /**
@@ -242,29 +250,29 @@ export function useScrollWrapper({
     isMounted = true
   })
 
-  function refresh() {
+  async function refresh() {
     if (typeof onBeforeRefresh === 'function') {
       onBeforeRefresh()
     }
 
     refreshWrapper()
-    computeContentSize()
+    await computeContentSize().then(() => {
+      setTimeout(
+        () => {
+          verifyScroll()
 
-    setTimeout(
-      () => {
-        verifyScroll()
-
-        if (typeof onAfterRefresh === 'function') {
-          onAfterRefresh()
-        }
-      },
-      isMounted ? 20 : 100
-    )
+          if (typeof onAfterRefresh === 'function') {
+            onAfterRefresh()
+          }
+        },
+        isMounted ? 20 : 100
+      )
+    })
   }
 
   return {
-    wrapperElement,
-    contentElement,
+    wrapperEl,
+    contentEl,
 
     wrapper,
     content,
