@@ -1,3 +1,7 @@
+## [1.1.2](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.1...scripts@1.1.2) (2023-11-24)
+
+
+
 ## [1.1.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.0...scripts@1.1.1) (2023-11-03)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/scripts",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -14,12 +14,12 @@
     "vxp-cli": "bin/vexip-cli.js"
   },
   "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
