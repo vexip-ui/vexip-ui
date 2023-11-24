@@ -1,3 +1,11 @@
+import { isClient } from './common'
+
+const raf = isClient
+  ? requestAnimationFrame
+  : (cb: FrameRequestCallback) => {
+      setTimeout(cb, 16)
+    }
+
 /**
  * 将一个函数或方法进行节流
  *
@@ -63,18 +71,22 @@ export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
 
   let called = false
   let lastArgs: Parameters<T>
+  let promise: Promise<Awaited<ReturnType<T>>>
 
   return function (...args: Parameters<T>) {
     lastArgs = args
 
     if (!called) {
       called = true
-
-      Promise.resolve().then(() => {
-        method(...lastArgs)
+      promise = Promise.resolve().then(() => {
         called = false
+        promise = undefined!
+
+        return method(...lastArgs)
       })
     }
+
+    return promise
   }
 }
 
@@ -90,18 +102,24 @@ export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
 
   let called = false
   let lastArgs: Parameters<T>
+  let promise: Promise<Awaited<ReturnType<T>>>
 
   return function (...args: Parameters<T>) {
     lastArgs = args
 
     if (!called) {
       called = true
+      promise = new Promise(resolve =>
+        raf(() => {
+          called = false
+          promise = undefined!
 
-      requestAnimationFrame(() => {
-        method(...lastArgs)
-        called = false
-      })
+          resolve(method(...lastArgs))
+        })
+      )
     }
+
+    return promise
   }
 }
 
@@ -169,7 +187,7 @@ export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...a
   frameCallbacks.add(method)
 
   if (frameCallbacks.size === 1) {
-    requestAnimationFrame(flushFrameCallbacks)
+    raf(flushFrameCallbacks)
   }
 }
 
