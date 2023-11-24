@@ -31,11 +31,12 @@ export function useScrollWrapper({
   const { manualRef, triggerUpdate } = useManualRef()
 
   const { isRtl } = useRtl()
+  const syncing = ref(false)
 
-  const contentElement = ref<HTMLElement>()
+  const contentEl = ref<HTMLElement>()
 
   const content = reactive({
-    el: contentElement,
+    el: contentEl,
     scrollWidth: 0,
     offsetWidth: 0,
     scrollHeight: 0,
@@ -86,7 +87,7 @@ export function useScrollWrapper({
     return 35
   })
 
-  watch(contentElement, () => {
+  watch(contentEl, () => {
     computeContentSize()
   })
   watch(scrollX, value => {
@@ -107,6 +108,8 @@ export function useScrollWrapper({
   }
 
   function syncScroll() {
+    syncing.value = true
+
     if (content.el) {
       content.el.scrollTo({
         top: y.value,
@@ -114,6 +117,10 @@ export function useScrollWrapper({
         behavior: 'instant'
       })
     }
+
+    setTimeout(() => {
+      syncing.value = false
+    }, 0)
   }
 
   const { isMounted } = useMounted()
@@ -232,8 +239,9 @@ export function useScrollWrapper({
   }
 
   return {
-    contentElement,
+    contentEl,
 
+    syncing,
     content,
     x,
     y,
