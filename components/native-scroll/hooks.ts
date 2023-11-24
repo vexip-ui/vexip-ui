@@ -161,16 +161,20 @@ export function useScrollWrapper({
   })
 
   const refresh = debounceMinor(() => {
-    if (typeof onBeforeRefresh === 'function') {
-      onBeforeRefresh()
-    }
-
-    computeContentSize()
-    setTimeout(() => {
-      if (typeof onAfterRefresh === 'function') {
-        onAfterRefresh()
+    return new Promise<void>(resolve => {
+      if (typeof onBeforeRefresh === 'function') {
+        onBeforeRefresh()
       }
-    }, 0)
+
+      computeContentSize()
+      setTimeout(() => {
+        if (typeof onAfterRefresh === 'function') {
+          onAfterRefresh()
+        }
+
+        resolve()
+      }, 0)
+    })
   })
 
   function scrollTo(clientX: number, clientY: number, duration = 500) {
