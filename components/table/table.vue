@@ -298,7 +298,7 @@ const className = computed(() => {
     [nh.bm('virtual')]: props.virtual,
     [nh.bm('col-resizable')]: props.colResizable,
     [nh.bm('col-resizing')]: state.colResizing,
-    [nh.bm('locked')]: props.noTransition || locked.value,
+    [nh.bm('locked')]: props.noTransition || locked.value || state.barScrolling,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
     [nh.bm('below-foot')]: state.belowSummaries.length,
     [nh.bm('using-bar')]: state.barScrolling
