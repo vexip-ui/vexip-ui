@@ -121,6 +121,7 @@ const keyConfig = reactive({ ...defaultKeyConfig })
 const nodeStates = reactive(new Map<Key, TreeNodeState>())
 const expanding = ref(false)
 const expandingNodes = ref<TreeNodeProps[]>([])
+const expandedNodeIds = ref(new Set<Key>())
 
 const { isMounted } = useMounted()
 
@@ -162,15 +163,6 @@ const style = computed(() => {
   }
 })
 const visibleNodes = computed(() => flatNodes(treeNodes.value))
-const expandedNodeIds = computed(() => {
-  const ids = new Set<Key>()
-
-  for (const node of flattedNodes.value) {
-    node.expanded && ids.add(node.id)
-  }
-
-  return ids
-})
 const renderedNodes = computed(() => {
   return expanding.value ? expandingNodes.value : visibleNodes.value
 })
@@ -302,7 +294,7 @@ watchEffect(() => {
     }
   }
 
-  isMounted.value && updateVisibleNodeEls()
+  resetExpanded()
 })
 watchEffect(() => {
   Object.assign(keyConfig, props.keyConfig)
@@ -330,6 +322,30 @@ watch(
       injectId: false,
       depthFirst: true
     })
+  },
+  { immediate: true }
+)
+watch(
+  flattedNodes,
+  value => {
+    const oldIds = expandedNodeIds.value
+    const ids = new Set<Key>()
+
+    let changed = false
+
+    for (const node of value) {
+      if (node.expanded) {
+        ids.add(node.id)
+
+        if (!changed && !oldIds.has(node.id)) {
+          changed = true
+        }
+      }
+    }
+
+    if (changed || ids.size !== oldIds.size) {
+      expandedNodeIds.value = ids
+    }
   },
   { immediate: true }
 )
@@ -621,7 +637,7 @@ function parseAndTransformData() {
     }
   }
 
-  isMounted.value && updateVisibleNodeEls()
+  resetExpanded()
 }
 
 function forceUpdateData() {
@@ -724,7 +740,7 @@ function forceUpdateData() {
   }
 
   buildTreeNodes(nodes)
-  isMounted.value && updateVisibleNodeEls()
+  resetExpanded()
 }
 
 function syncNodeStateIntoData() {
@@ -742,7 +758,7 @@ function syncNodeStateIntoData() {
     data.readonly = readonly
   })
 
-  isMounted.value && updateVisibleNodeEls()
+  resetExpanded()
 }
 
 function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeProps {
@@ -1085,9 +1101,9 @@ function refreshScroll() {
   virtualList.value?.refresh()
 }
 
-function afterExpanded() {
+function resetExpanded() {
   expanding.value = false
-  updateVisibleNodeEls()
+  isMounted.value && updateVisibleNodeEls()
 }
 
 function getCheckedNodes(includePartial = false): TreeNodeProps[] {
@@ -1313,7 +1329,7 @@ function getFlattedData(withFilter = false) {
         v-if="isCollapse(node)"
         appear
         :reverse="node.type === 'reduce'"
-        @after-enter="afterExpanded"
+        @after-enter="resetExpanded"
       >
         <div :class="nh.be('collapse')" :style="{ height: `${node.height}px` }">
           <TreeNode
