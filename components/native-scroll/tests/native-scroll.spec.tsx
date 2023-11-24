@@ -82,6 +82,8 @@ describe('NativeScroll', () => {
     ;(scroll.vm as any).refresh()
     vi.runAllTimers()
     await nextTick()
+    vi.runAllTimers()
+    await nextTick()
 
     return scroll
   }
