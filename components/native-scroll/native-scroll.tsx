@@ -515,13 +515,13 @@ export default defineComponent({
     }
 
     function ensureInView(el: string | Element, duration?: number, offset = 0) {
-      if (!wrapper.value) return
+      if (!wrapper.value) return Promise.resolve()
 
       if (typeof el === 'string') {
         el = wrapper.value.querySelector(el)!
       }
 
-      if (!isElement(el)) return
+      if (!isElement(el)) return Promise.resolve()
 
       const wrapperRect = wrapper.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
@@ -545,7 +545,7 @@ export default defineComponent({
         }
       }
 
-      scrollBy(clientX, clientY, duration)
+      return scrollBy(clientX, clientY, duration)
     }
 
     function addScrollListener(listener: EventHandler) {
