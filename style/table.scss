@@ -110,14 +110,6 @@ $table: map.merge(
     user-select: none;
   }
 
-  // &__body {
-  //   transition: min-height get-css-var('transition-base');
-  // }
-
-  // &--locked &__body {
-  //   transition-duration: 0ms;
-  // }
-
   &__head-wrapper {
     position: relative;
     z-index: 1;
