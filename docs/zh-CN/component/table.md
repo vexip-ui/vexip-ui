@@ -592,6 +592,7 @@ interface TableFootPayload {
 | icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
 | border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
 | data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                       | `null`         | `2.2.14` |
+| no-transition   | `boolean`                                                     | 是否禁用表格的过渡效果                                       | `false`        | `2.2.14` |
 
 ### Table 事件
 

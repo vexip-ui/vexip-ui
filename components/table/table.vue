@@ -150,7 +150,8 @@ const props = useProps('table', _props, {
   dataFilter: {
     default: null,
     isFunc: true
-  }
+  },
+  noTransition: false
 })
 
 const slots = defineSlots<{
@@ -159,6 +160,8 @@ const slots = defineSlots<{
 }>()
 
 const nh = useNameHelper('table')
+const { timer } = useSetTimeout()
+
 const bodyHeight = ref<number | undefined>(props.height)
 const xScrollEnabled = ref(false)
 const yScrollEnabled = ref(false)
@@ -172,7 +175,7 @@ const tempColumns = reactive(new Set<TableColumnGroupOptions | TableColumnOption
 const tempSummaries = reactive(new Set<TableSummaryOptions>())
 const tableWidth = ref<number | string>()
 const hasDragColumn = ref(false)
-const noTransition = ref(true)
+const locked = ref(true)
 
 const wrapper = ref<HTMLElement>()
 const mainScroll = ref<NativeScrollExposed>()
@@ -295,7 +298,7 @@ const className = computed(() => {
     [nh.bm('virtual')]: props.virtual,
     [nh.bm('col-resizable')]: props.colResizable,
     [nh.bm('col-resizing')]: state.colResizing,
-    [nh.bm('locked')]: noTransition.value,
+    [nh.bm('locked')]: props.noTransition || locked.value,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
     [nh.bm('below-foot')]: state.belowSummaries.length,
     [nh.bm('using-bar')]: state.barScrolling
@@ -390,7 +393,7 @@ const {
 watch(
   allColumns,
   value => {
-    runWithoutTransition(() => {
+    runInLocked(() => {
       setColumns(value)
       isMounted && computeTableWidth()
       nextTick(() => {
@@ -403,7 +406,7 @@ watch(
 watch(
   allSummaries,
   value => {
-    runWithoutTransition(() => {
+    runInLocked(() => {
       setSummaries(value)
     })
   },
@@ -517,7 +520,7 @@ defineExpose({
 })
 
 function forceRefreshData(data = props.data) {
-  return runWithoutTransition(() => {
+  return runInLocked(() => {
     setData(data)
     nextTick(() => computeRenderRows(true))
     refreshPercentScroll()
@@ -938,7 +941,7 @@ function computeRenderRows(force = false) {
 }
 
 function refresh() {
-  return runWithoutTransition(() => {
+  return runInLocked(() => {
     nextTick(computeTableWidth)
     setTimeout(() => {
       computeBodyHeight()
@@ -948,19 +951,19 @@ function refresh() {
   })
 }
 
-async function runWithoutTransition(handler = noop, delay = 300) {
-  noTransition.value = true
+async function runInLocked(handler = noop, delay = 300) {
+  clearTimeout(timer.locked)
+
+  locked.value = true
   await handler()
 
   return new Promise<void>(resolve => {
-    setTimeout(() => {
-      noTransition.value = false
+    timer.locked = setTimeout(() => {
+      locked.value = false
       resolve()
     }, delay)
   })
 }
-
-const { timer } = useSetTimeout()
 
 function refreshPercentScroll() {
   clearTimeout(timer.scroll)
@@ -1083,7 +1086,8 @@ function renderTableSlot({ name }: { name: string }) {
         !bodyScrollHeight && state.totalHeight
           ? {
             height: `${state.totalHeight}px`,
-            transition: noTransition ? undefined : `height ${nh.gnv('transition-base')}`
+            transition:
+              props.noTransition || locked ? undefined : `height ${nh.gnv('transition-base')}`
           }
           : undefined
       "

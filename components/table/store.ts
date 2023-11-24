@@ -521,8 +521,6 @@ export function useStore(options: StoreOptions) {
     const rightFixedColumns: ColumnWithKey[] = []
     const leftFixedColumns: ColumnWithKey[] = []
 
-    let firstSet = false
-
     for (let i = 0, len = baseColumns.length; i < len; ++i) {
       const column = baseColumns[i]
 
@@ -577,9 +575,8 @@ export function useStore(options: StoreOptions) {
         if (!column.key) {
           column.key = `__vxp_${column.type}-${i}`
         }
-      } else if (!firstSet) {
-        column.first = true
-        firstSet = true
+      } else {
+        column.type = undefined
       }
 
       // 独立属性解析时注意隔断同对象引用
@@ -615,6 +612,13 @@ export function useStore(options: StoreOptions) {
     state.allColumns = allColumns
 
     if (state.columns.length) {
+      for (const column of state.columns) {
+        if (!column.type) {
+          column.first = true
+          break
+        }
+      }
+
       state.columns.at(-1)!.last = true
     }
 

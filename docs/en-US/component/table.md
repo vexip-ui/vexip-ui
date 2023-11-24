@@ -592,6 +592,7 @@ interface TableFootPayload {
 | icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |
 | border-width    | `number`                                                      | Set the border width of the table                                                                                                                     | `1`            | `2.2.12` |
 | data-filter     | `(data: Data) => boolean`                                     | Set the extra filter method for the data                                                                                                              | `null`         | `2.2.14` |
+| no-transition   | `boolean`                                                     | Whether to disable transition for table                                                                                                               | `false`        | `2.2.14` |
 
 ### Table Events
 
