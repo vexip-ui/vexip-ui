@@ -19,7 +19,7 @@ $table: map.merge(
     s-color: get-css-var('shadow-color-base'),
     head-bg-color: get-css-var('fill-color-humble'),
     head-action-span: 3px,
-    row-bg-color: transparent,
+    row-bg-color: get-css-var('bg-color-base'),
     row-bg-color-hover: get-css-var('color-primary-opacity-9'),
     row-bg-color-stripe: get-css-var('fill-color-background'),
     row-b-color-bottom: get-css-var('border-color-light-1'),

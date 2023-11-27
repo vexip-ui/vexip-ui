@@ -314,7 +314,6 @@ export function useStore(options: StoreOptions) {
     setFootAttrs,
     setTableWidth,
     fixRowHeight,
-    setBorderHeight,
     setRowHeight,
     setRowMinHeight,
     setCellHeight,
@@ -408,7 +407,7 @@ export function useStore(options: StoreOptions) {
       const row = rowMap.get(key)
 
       if (row) {
-        height += (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+        height += row.height || 0
       }
 
       heights.push(height)
@@ -792,7 +791,7 @@ export function useStore(options: StoreOptions) {
             hidden,
             checked: !!checked,
             height: toNumber(height),
-            borderHeight: 0,
+            // borderHeight: 0,
             expanded: !!expanded,
             hover: false,
             expandHeight: 0,
@@ -804,6 +803,7 @@ export function useStore(options: StoreOptions) {
             dragging: false,
             listIndex: 0,
             cellHeights: reactive({}),
+            last: false,
             data: item
           }
 
@@ -958,15 +958,10 @@ export function useStore(options: StoreOptions) {
   function fixRowHeight(key: Key, height: number) {
     const { rowMap } = state
     const row = rowMap.get(key)
+    if (row && row.key === '__vxp-table-key-47') debugger
 
     if (row && row.height !== height) {
       row.height = height
-    }
-  }
-
-  function setBorderHeight(key: Key, height: number) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.borderHeight = height
     }
   }
 

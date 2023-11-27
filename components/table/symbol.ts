@@ -316,7 +316,7 @@ export interface TableRowState {
   hover: boolean,
   checked: boolean,
   height: number,
-  borderHeight: number,
+  // borderHeight: number,
   expanded: boolean,
   expandHeight: number,
   parent?: Key,
