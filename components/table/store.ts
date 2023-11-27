@@ -3,6 +3,7 @@ import { useCascadedChecked } from '@/components/tree/hooks'
 import { computed, markRaw, reactive, watchEffect } from 'vue'
 
 import {
+  boundRange,
   createBITree,
   debounceMinor,
   deepClone,
@@ -18,6 +19,7 @@ import type { ClassType, LocaleConfig, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   CellSpanResult,
+  ColumnCellSpanFn,
   ColumnGroupWithKey,
   ColumnRawWithKey,
   ColumnWithKey,
@@ -28,6 +30,7 @@ import type {
   ParsedTableSorterOptions,
   StoreOptions,
   StoreState,
+  SummaryCellSpanFn,
   SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
@@ -262,13 +265,6 @@ export function useStore(options: StoreOptions) {
     return !!(state.leftFixedColumns.length || state.rightFixedColumns.length)
   })
 
-  watchEffect(() => {
-    state.heightBITree = markRaw(
-      createBITree(filteredData.value.length, state.rowHeight || state.rowMinHeight)
-    )
-    updateTotalHeight()
-  })
-
   const getters = reactive({
     filteredData,
     sortedData,
@@ -368,10 +364,18 @@ export function useStore(options: StoreOptions) {
     setTreeExpanded,
     getParentRow,
     handleColumnResize,
-    updateCellSpan,
     getCurrentData,
     createMinRowState
   }
+
+  watchEffect(() => {
+    state.heightBITree = markRaw(
+      createBITree(filteredData.value.length, state.rowHeight || state.rowMinHeight)
+    )
+
+    updateTotalHeight()
+  })
+  watchEffect(computeCellSpan)
 
   function getColumnsWidths(columns = state.columns) {
     const widths = state.widths
@@ -500,6 +504,7 @@ export function useStore(options: StoreOptions) {
         const column = allColumns[j][i]
 
         if (column) {
+          column.colIndex = i
           column.rowSpan = span
           span = 1
         } else {
@@ -512,7 +517,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumns(columns: TableColumnRawOptions[]) {
-    resetCellSpan()
+    // resetCellSpan()
 
     const { widths, sorters, filters } = state
     const { allColumns, baseColumns } = buildColumns(columns)
@@ -1080,7 +1085,7 @@ export function useStore(options: StoreOptions) {
 
   function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
-    resetCellSpan()
+    // resetCellSpan()
   }
 
   function setSidePadding(padding: number | number[]) {
@@ -1560,75 +1565,183 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function resetCellSpan() {
+  function computeCellSpan() {
+    const {
+      normalColumns,
+      leftFixedColumns,
+      rightFixedColumns,
+      aboveSummaries,
+      belowSummaries,
+      rowData,
+      cellSpanMap,
+      collapseMap
+    } = state
+    const { processedData } = getters
+
     for (const type of ['left', 'default', 'right'] as const) {
-      state.cellSpanMap.set(type, new Map())
-      state.collapseMap.set(type, new Map())
-    }
-  }
-
-  function updateCellSpan(
-    rowIndex: number,
-    columnIndex: number,
-    fixed: 'left' | 'default' | 'right',
-    span: Required<CellSpanResult>,
-    prefix = ''
-  ) {
-    const { colSpan, rowSpan } = span
-    const cellSpanMap = state.cellSpanMap.get(fixed)!
-    const collapseMap = state.collapseMap.get(fixed)!
-
-    const masterKey = `${prefix}${rowIndex},${columnIndex}`
-    const prevSpan = cellSpanMap.get(masterKey)
-
-    let colLen = colSpan
-    let rowLen = rowSpan
-    let prevColSpan = 0
-    let prevRowSpan = 0
-
-    if (prevSpan) {
-      prevColSpan = prevSpan.colSpan
-      prevRowSpan = prevSpan.rowSpan
-      colLen = Math.max(colLen, prevColSpan)
-      rowLen = Math.max(rowLen, prevRowSpan)
+      cellSpanMap.set(type, new Map())
+      collapseMap.set(type, new Map())
     }
 
-    for (let i = 0; i < colLen; ++i) {
-      for (let j = 0; j < rowLen; ++j) {
-        if ((!i && !j) || (i < colSpan && i < prevColSpan && j < rowSpan && j < prevRowSpan)) {
-          continue
-        }
+    function setCellSpan(
+      rowIndex: number,
+      columnIndex: number,
+      fixed: 'left' | 'default' | 'right',
+      getSpan: () => Required<CellSpanResult>,
+      prefix = ''
+    ) {
+      const masterKey = `${prefix}${rowIndex},${columnIndex}`
+      const collapsed = collapseMap.get(fixed)!
 
-        const key = `${prefix}${rowIndex + j},${columnIndex + i}`
-        let masterSet = collapseMap.get(key)
+      if (collapsed.has(masterKey)) {
+        cellSpanMap.get(fixed)!.set(masterKey, { colSpan: 0, rowSpan: 0 })
+        return
+      }
 
-        if (i < prevColSpan && j < prevRowSpan) {
-          if (masterSet) {
-            masterSet.delete(masterKey)
+      const span = getSpan()
+      const { colSpan, rowSpan } = span
 
-            if (!masterSet.size) {
-              collapseMap.delete(key)
-            }
-          }
-        }
+      for (let i = 0; i < colSpan; ++i) {
+        for (let j = 0; j < rowSpan; ++j) {
+          if (!i && !j) continue
 
-        if (i < colSpan && j < rowSpan) {
+          const key = `${prefix}${rowIndex + j},${columnIndex + i}`
+
+          let masterSet = collapsed.get(key)
+
           if (!masterSet) {
             masterSet = new Set()
-            collapseMap.set(key, masterSet)
+            collapsed.set(key, masterSet)
           }
 
           masterSet.add(masterKey)
         }
       }
+
+      cellSpanMap.get(fixed)!.set(masterKey, span)
     }
 
-    collapseMap.delete(masterKey)
+    for (const columns of [normalColumns, leftFixedColumns, rightFixedColumns]) {
+      if (!columns.length) continue
 
-    if (span.colSpan === 1 && span.rowSpan === 1) {
-      cellSpanMap.delete(masterKey)
-    } else {
-      cellSpanMap.set(masterKey, span)
+      const fixed = columns[0].fixed === true ? 'left' : columns[0].fixed || 'default'
+      const columnFixed = columns[0].fixed === true ? 'left' : columns[0].fixed || undefined
+
+      const left = state.leftFixedColumns.length
+      const right = state.allColumns[0].length - state.rightFixedColumns.length
+
+      let allColumns: ColumnRawWithKey[][]
+
+      if (fixed === 'left') {
+        allColumns = state.allColumns.map(columns => columns.slice(0, left))
+      } else if (fixed === 'right') {
+        allColumns = state.allColumns.map(columns =>
+          columns.slice(right, state.allColumns[0].length)
+        )
+      } else {
+        allColumns = state.allColumns.map(columns => columns.slice(left, right))
+      }
+
+      for (let i = 0, len1 = allColumns.length; i < len1; ++i) {
+        const rowColumns = allColumns[i]
+
+        for (let j = 0, len2 = rowColumns.length; j < len2; ++j) {
+          const column = rowColumns[j]
+
+          if (!column) continue
+
+          const fixed = column.fixed === true ? 'left' : column.fixed || 'default'
+
+          setCellSpan(
+            i,
+            j,
+            fixed,
+            () => {
+              const columns =
+                fixed === 'left'
+                  ? leftFixedColumns
+                  : fixed === 'right'
+                    ? rightFixedColumns
+                    : normalColumns
+              const colSpan = boundRange(column.headSpan ?? 1, 0, columns.length - j)
+              const span = { colSpan, rowSpan: column.rowSpan }
+
+              return span
+            },
+            'h'
+          )
+        }
+      }
+
+      for (let colIndex = 0, len = columns.length; colIndex < len; ++colIndex) {
+        const column = columns[colIndex]
+
+        for (const row of rowData) {
+          setCellSpan(row.index, column.index, fixed, () => {
+            let result: ReturnType<ColumnCellSpanFn>
+
+            if (typeof column.cellSpan === 'function') {
+              result = column.cellSpan({
+                row: row.data,
+                index: row.index,
+                fixed: columnFixed
+              })
+            } else if (typeof state.cellSpan === 'function') {
+              result = state.cellSpan({
+                row: row.data,
+                rowIndex: row.index,
+                column,
+                columnIndex: column.index,
+                fixed: columnFixed
+              })
+            }
+
+            result = result! || { colSpan: 1, rowSpan: 1 }
+
+            const span = { colSpan: result.colSpan ?? 1, rowSpan: result.rowSpan ?? 1 }
+
+            span.colSpan = boundRange(span.colSpan, 0, columns.length - colIndex)
+            span.rowSpan = boundRange(span.rowSpan, 0, processedData.length - row.listIndex)
+
+            return span
+          })
+        }
+
+        for (const { prefix, summaries } of [
+          { prefix: 'af', summaries: aboveSummaries },
+          { prefix: 'bf', summaries: belowSummaries }
+        ]) {
+          for (let i = 0, len = summaries.length; i < len; ++i) {
+            const summary = summaries[i]
+
+            setCellSpan(
+              i,
+              column.index,
+              fixed,
+              () => {
+                let result: ReturnType<SummaryCellSpanFn>
+
+                if (typeof summary.cellSpan === 'function') {
+                  result = summary.cellSpan({
+                    column,
+                    index: column.index,
+                    fixed: columnFixed
+                  })
+                }
+
+                const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
+                const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
+
+                span.colSpan = boundRange(span.colSpan, 0, columns.length - colIndex)
+                span.rowSpan = boundRange(span.rowSpan, 0, summaries.length - i)
+
+                return span
+              },
+              prefix
+            )
+          }
+        }
+      }
     }
   }
 

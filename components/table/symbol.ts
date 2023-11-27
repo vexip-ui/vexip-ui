@@ -199,12 +199,15 @@ export type ColumnWithKey<
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & {
   key: Key,
+  rowSpan: number,
+  /** @internal */
+  index: number,
+  /** @internal */
+  colIndex: number,
   /** @internal */
   first?: boolean,
   /** @internal */
-  last?: boolean,
-  index: number,
-  rowSpan: number
+  last?: boolean
 }
 
 export interface TableColumnGroupOptions {
@@ -220,6 +223,8 @@ export interface ColumnGroupWithKey extends TableColumnGroupOptions {
   key: symbol,
   headSpan: number,
   rowSpan: number,
+  /** @internal */
+  colIndex: number,
   /** @internal */
   last?: boolean
 }
@@ -255,7 +260,11 @@ export type TableCellPropFn<D = Data, P = any> = (data: {
   column: ColumnWithKey,
   columnIndex: number
 }) => P
-export type TableHeadPropFn<P = any> = (data: { column: ColumnWithKey, index: number }) => P
+export type TableHeadPropFn<P = any> = (data: {
+  column: ColumnWithKey,
+  index: number,
+  rowIndex: number
+}) => P
 export type TableFootPropFn<P = any> = (data: {
   column: ColumnWithKey,
   columnIndex: number,
