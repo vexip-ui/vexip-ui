@@ -182,6 +182,7 @@ watch(maxHeight, value => {
   mutations.fixRowHeight(rowKey.value, value)
   !rowType.value && updateTotalHeight()
 })
+watch(() => state.heightBITree, updateTotalHeight)
 
 onMounted(() => {
   nextTick(() => {

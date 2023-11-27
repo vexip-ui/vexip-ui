@@ -9,12 +9,11 @@ import { computed, inject, ref } from 'vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useRtl } from '@vexip-ui/hooks'
-import { boundRange, isFunction } from '@vexip-ui/utils'
+import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes, noopFormatter } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
-  ColumnCellSpanFn,
   ColumnWithKey,
   TableDragColumn,
   TableExpandColumn,
@@ -97,39 +96,11 @@ const columns = computed(() => {
       : state.normalColumns
 })
 const cellSpan = computed(() => {
-  const fixed = props.fixed || 'default'
-
-  if (state.collapseMap.get(fixed)!.has(`${props.rowIndex},${props.column.index}`)) {
-    return { colSpan: 0, rowSpan: 0 }
-  }
-
-  let result: ReturnType<ColumnCellSpanFn>
-
-  if (typeof props.column.cellSpan === 'function') {
-    result = props.column.cellSpan({
-      row: props.row.data,
-      index: props.rowIndex,
-      fixed: props.fixed
-    })
-  } else if (typeof state.cellSpan === 'function') {
-    result = state.cellSpan({
-      row: props.row.data,
-      rowIndex: props.rowIndex,
-      column: props.column,
-      columnIndex: props.column.index,
-      fixed: props.fixed
-    })
-  }
-
-  const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
-  const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
-
-  span.colSpan = boundRange(span.colSpan, 0, columns.value.length - props.colIndex)
-  span.rowSpan = boundRange(span.rowSpan, 0, getters.processedData.length - props.rowIndex)
-
-  mutations.updateCellSpan(props.rowIndex, props.column.index, fixed, span)
-
-  return span
+  return (
+    state.cellSpanMap
+      .get(props.fixed || 'default')!
+      .get(`${props.row.index},${props.column.index}`) || { colSpan: 1, rowSpan: 1 }
+  )
 })
 const customStyle = computed(() => {
   if (typeof state.cellStyle === 'function') {

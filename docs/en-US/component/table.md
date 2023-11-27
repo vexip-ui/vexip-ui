@@ -499,7 +499,7 @@ interface TableSummaryOptions<D = Data, Val extends string | number = string | n
 type SummaryWithKey<
   D = Data,
   Val extends string | number = string | number
-> = TableSummaryOptions<D, Val> & { key: Key }
+> = TableSummaryOptions<D, Val> & { key: Key, rowSpan: number }
 
 interface TableRowPayload {
   row: Data,

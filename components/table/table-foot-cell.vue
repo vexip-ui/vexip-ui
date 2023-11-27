@@ -7,17 +7,11 @@ import { computed, inject, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useRtl } from '@vexip-ui/hooks'
-import { boundRange, isFunction } from '@vexip-ui/utils'
+import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
-import type {
-  ColumnWithKey,
-  SummaryCellSpanFn,
-  SummaryWithKey,
-  TableRowState,
-  TableTypeColumn
-} from './symbol'
+import type { ColumnWithKey, SummaryWithKey, TableRowState, TableTypeColumn } from './symbol'
 
 defineOptions({ name: 'TableFootCell' })
 
@@ -103,33 +97,14 @@ const className = computed(() => {
   ]
 })
 const cellSpan = computed(() => {
-  const fixed = props.fixed || 'default'
-
-  if (
-    state.collapseMap.get(fixed)!.has(`${prefix.value}${props.summaryIndex},${props.column.index}`)
-  ) {
-    return { colSpan: 0, rowSpan: 0 }
-  }
-
-  let result: ReturnType<SummaryCellSpanFn>
-
-  if (typeof props.summary.cellSpan === 'function') {
-    result = props.summary.cellSpan({
-      column: props.column,
-      index: props.column.index,
-      fixed: props.fixed
-    })
-  }
-
-  const { colSpan, rowSpan } = result! || { colSpan: 1, rowSpan: 1 }
-  const span = { colSpan: colSpan ?? 1, rowSpan: rowSpan ?? 1 }
-
-  span.colSpan = boundRange(span.colSpan, 0, columns.value.length - props.colIndex)
-  span.rowSpan = boundRange(span.rowSpan, 0, summaries.value.length - props.summaryIndex)
-
-  mutations.updateCellSpan(props.summaryIndex, props.column.index, fixed, span, prefix.value)
-
-  return span
+  return (
+    state.cellSpanMap
+      .get(props.fixed || 'default')!
+      .get(`${prefix.value}${props.summaryIndex},${props.column.index}`) || {
+      colSpan: 1,
+      rowSpan: 1
+    }
+  )
 })
 const customStyle = computed(() => {
   if (typeof state.footStyle === 'function') {

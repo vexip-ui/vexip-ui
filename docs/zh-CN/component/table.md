@@ -413,7 +413,7 @@ type TableColumnOptions<D = Data, Val extends string | number = string | number>
 type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
-> = TableColumnOptions<D, Val> & { key: Key }
+> = TableColumnOptions<D, Val> & { key: Key, rowSpan: number }
 
 interface TableColumnGroupOptions {
   name?: string,

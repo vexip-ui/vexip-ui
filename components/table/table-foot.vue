@@ -7,7 +7,6 @@ import { useNameHelper } from '@vexip-ui/config'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableRowState } from './symbol'
 
 defineOptions({ name: 'TableFoot' })
 
@@ -34,10 +33,10 @@ const columns = computed(() => {
       : state.normalColumns
 })
 const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
-const data = computed(() => {
+const summaryData = computed(() => {
   return summaries.value.map(summary => {
     const key = mutations.buildSummaryKey(summary.key)
-    const row = state.rowMap.get(key) || ({ key } as TableRowState)
+    const row = state.rowMap.get(key) || mutations.createMinRowState(key)
 
     return { summary, row }
   })
@@ -64,7 +63,7 @@ const style = computed(() => {
 <template>
   <div :class="className" role="rowgroup" :style="style">
     <TableRow
-      v-for="({ row, summary }, index) in data"
+      v-for="({ row, summary }, index) in summaryData"
       :key="row.key"
       is-foot
       :fixed="fixed"

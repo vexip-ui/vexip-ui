@@ -11,7 +11,7 @@ import { computed, inject, ref, toRef } from 'vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useMoving, useRtl } from '@vexip-ui/hooks'
-import { boundRange, isFunction, nextFrameOnce } from '@vexip-ui/utils'
+import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_HEAD_PREFIX, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -67,11 +67,6 @@ const wrapper = ref<HTMLElement>()
 let currentWidth = 0
 
 const isGroup = computed(() => mutations.isGroupColumn(props.column))
-const inLast = computed(() => {
-  return isGroup.value
-    ? props.column.last
-    : props.column.index + cellSpan.value.colSpan >= state.columns.length
-})
 const columns = computed(() => {
   return props.fixed === 'left'
     ? state.leftFixedColumns
@@ -80,25 +75,17 @@ const columns = computed(() => {
       : state.normalColumns
 })
 const cellSpan = computed(() => {
-  const fixed = props.fixed || 'default'
-
-  if (state.collapseMap.get(fixed)!.has(`h${props.rowIndex},${props.index}`)) {
-    return { colSpan: 0, rowSpan: 0 }
-  }
-
-  const columns =
-    fixed === 'left'
-      ? state.leftFixedColumns
-      : fixed === 'right'
-        ? state.rightFixedColumns
-        : state.normalColumns
-
-  const colSpan = boundRange(props.column.headSpan ?? 1, 0, columns.length - props.index)
-  const span = { colSpan, rowSpan: props.column.rowSpan }
-
-  mutations.updateCellSpan(props.rowIndex, props.index, fixed, span, 'h')
-
-  return span
+  return (
+    state.cellSpanMap.get(props.fixed || 'default')!.get(`h${props.rowIndex},${props.index}`) || {
+      colSpan: 1,
+      rowSpan: 1
+    }
+  )
+})
+const inLast = computed(() => {
+  return isGroup.value
+    ? props.column.last
+    : props.column.index + cellSpan.value.colSpan >= state.columns.length
 })
 
 const { target: resizer } = useMoving({
@@ -147,7 +134,11 @@ const className = computed(() => {
   let customClass = null
 
   if (typeof state.headClass === 'function') {
-    customClass = state.headClass({ column: props.column, index: props.index })
+    customClass = state.headClass({
+      column: props.column,
+      index: props.column.colIndex,
+      rowIndex: props.rowIndex
+    })
   } else {
     customClass = state.headClass
   }
@@ -167,7 +158,11 @@ const className = computed(() => {
 })
 const customStyle = computed(() => {
   if (typeof state.headStyle === 'function') {
-    return state.headStyle({ column: props.column, index: props.index })
+    return state.headStyle({
+      column: props.column,
+      index: props.column.colIndex,
+      rowIndex: props.rowIndex
+    })
   }
 
   return state.headStyle
@@ -218,7 +213,11 @@ const attrs = computed(() => {
   let customAttrs: Record<string, any>
 
   if (typeof state.headAttrs === 'function') {
-    customAttrs = state.headAttrs({ column: props.column, index: props.index })
+    customAttrs = state.headAttrs({
+      column: props.column,
+      index: props.column.colIndex,
+      rowIndex: props.rowIndex
+    })
   } else {
     customAttrs = state.headAttrs
   }
@@ -264,7 +263,7 @@ function isSelection(column: unknown): column is TableSelectionColumn {
 function buildEventPayload(event: Event) {
   return {
     column: props.column,
-    index: props.index,
+    index: props.column.colIndex,
     event
   }
 }
