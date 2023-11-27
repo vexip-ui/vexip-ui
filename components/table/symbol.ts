@@ -308,7 +308,7 @@ export type SummaryWithKey<
   Val extends string | number = string | number
 > = TableSummaryOptions<D, Val> & { key: Key }
 
-/* @internal */
+/** @internal */
 export interface TableRowState {
   key: Key,
   index: number,
@@ -327,6 +327,7 @@ export interface TableRowState {
   dragging: boolean,
   listIndex: number,
   cellHeights: Record<Key, number>,
+  last: boolean,
   data: Data
 }
 

@@ -134,6 +134,7 @@ export function useStore(options: StoreOptions) {
 
     for (let i = 0, len = data.length; i < len; ++i) {
       data[i].listIndex = i
+      data[i].last = i === len - 1
     }
 
     return data
@@ -1270,24 +1271,47 @@ export function useStore(options: StoreOptions) {
     if (!force && start === startRow && end === endRow) return
 
     const { processedData } = getters
-    virtualData.length = 0
 
-    if (processedData[0]) {
-      let i = processedData.length
-
-      while (i--) {
-        const data = processedData[i]
-
-        data.hidden = !(i >= start && i < end)
-        !data.hidden && virtualData.push(data)
-      }
-
-      virtualData.reverse()
-
-      state.padTop = heightBITree?.sum(start) ?? 0
-      state.startRow = start
-      state.endRow = end
+    if (!processedData.length) {
+      virtualData.length = 0
+      return
     }
+
+    const prevData = new Set([...virtualData])
+    const added: TableRowState[] = []
+    const removed: TableRowState[] = []
+
+    for (let i = 0, len = processedData.length; i < len; ++i) {
+      const data = processedData[i]
+
+      data.hidden = !(i >= start && i < end)
+
+      if (data.hidden) {
+        data.hover = false
+
+        if (prevData.has(data)) {
+          removed.push(data)
+        }
+      } else if (!prevData.has(data)) {
+        added.push(data)
+      }
+    }
+
+    const length = Math.min(added.length, removed.length)
+
+    for (let i = 0; i < length; ++i) {
+      virtualData[virtualData.indexOf(removed[i])] = added[i]
+    }
+
+    if (added.length > removed.length) {
+      virtualData.push(...added.slice(length))
+    } else if (added.length < removed.length) {
+      state.virtualData = virtualData.filter(data => !removed.includes(data))
+    }
+
+    state.padTop = heightBITree?.sum(start) ?? 0
+    state.startRow = start
+    state.endRow = end
   }
 
   function handleExpand(key: Key, expanded: boolean) {

@@ -285,6 +285,7 @@ provide(TABLE_SLOTS, slots)
 
 const { state, getters, mutations } = store
 
+const mergedLocked = computed(() => props.noTransition || locked.value || state.barScrolling)
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -298,7 +299,7 @@ const className = computed(() => {
     [nh.bm('virtual')]: props.virtual,
     [nh.bm('col-resizable')]: props.colResizable,
     [nh.bm('col-resizing')]: state.colResizing,
-    [nh.bm('locked')]: props.noTransition || locked.value || state.barScrolling,
+    [nh.bm('locked')]: mergedLocked.value,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
     [nh.bm('below-foot')]: state.belowSummaries.length,
     [nh.bm('using-bar')]: state.barScrolling
@@ -496,6 +497,7 @@ defineExpose({
   bodyScrollHeight,
   totalWidths,
   totalHeight: computed(() => state.totalHeight),
+  locked: mergedLocked,
 
   store,
 
@@ -624,6 +626,7 @@ function handleYBarScroll(percent: number) {
 }
 
 function emitYScroll(client: number, percent: number) {
+  runInLocked()
   nextFrameOnce(computeRenderRows)
   emitEvent(props.onScroll, { type: 'vertical', client, percent })
 }
@@ -951,7 +954,7 @@ function refresh() {
   })
 }
 
-async function runInLocked(handler = noop, delay = 300) {
+async function runInLocked(handler = noop, delay = 250) {
   clearTimeout(timer.locked)
 
   locked.value = true
@@ -979,6 +982,7 @@ function refreshPercentScroll() {
     nextTick(() => {
       computeBodyHeight()
     })
+    runInLocked()
     nextFrameOnce(computeRenderRows)
   }, 10)
 }

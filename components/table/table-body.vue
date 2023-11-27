@@ -58,8 +58,8 @@ const emptyStyle = computed(() => {
   <div :class="nh.be('body')" role="rowgroup" :style="style">
     <template v-if="data.length">
       <TableRow
-        v-for="row in data"
-        :key="row.index"
+        v-for="(row, index) in data"
+        :key="index"
         :row="row"
         :index="row.listIndex"
         :fixed="fixed"
