@@ -41,6 +41,8 @@ const style = computed(() => {
   const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
   return {
+    [nh.cv('expanded-fix-width')]:
+      props.fixed === 'right' && width ? `${width + padLeft + padRight}px` : '0px',
     minWidth: width && `${width + padLeft + padRight}px`,
     minHeight: `${state.totalHeight}px`
   }

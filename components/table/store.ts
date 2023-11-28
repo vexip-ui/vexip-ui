@@ -105,6 +105,7 @@ export function useStore(options: StoreOptions) {
     cellSpanMap: new Map(),
     collapseMap: new Map(),
     sidePadding: options.sidePadding || [0, 0],
+    locked: false,
     barScrolling: false
   }) as StoreState
 
@@ -313,19 +314,17 @@ export function useStore(options: StoreOptions) {
     setFootStyle,
     setFootAttrs,
     setTableWidth,
-    fixRowHeight,
     setRowHeight,
     setRowMinHeight,
     setCellHeight,
     setVirtual,
     setRowDraggable,
-    setRowExpandHeight,
     setBodyYScroll,
     setBodyXScroll,
     setBorder,
     setStripe,
     setHighlight,
-    setRowHover,
+    setRowProp,
     setLocale,
     setTooltipTheme,
     setTooltipWidth,
@@ -345,6 +344,7 @@ export function useStore(options: StoreOptions) {
     setSidePadding,
     setBorderWidth,
     setDataFilter,
+    setLocked,
     setBarScrolling,
 
     handleSort,
@@ -804,6 +804,7 @@ export function useStore(options: StoreOptions) {
             listIndex: 0,
             cellHeights: reactive({}),
             last: false,
+            expandAnimate: false,
             data: item
           }
 
@@ -955,15 +956,13 @@ export function useStore(options: StoreOptions) {
     state.width = width
   }
 
-  function fixRowHeight(key: Key, height: number) {
-    const { rowMap } = state
-    const row = rowMap.get(key)
-    if (row && row.key === '__vxp-table-key-47') debugger
+  // function fixRowHeight(key: Key, height: number) {
+  //   const row = state.rowMap.get(key)
 
-    if (row && row.height !== height) {
-      row.height = height
-    }
-  }
+  //   if (row && row.height !== height) {
+  //     row.height = height
+  //   }
+  // }
 
   function setRowHeight(height: number) {
     state.rowHeight = height
@@ -983,11 +982,11 @@ export function useStore(options: StoreOptions) {
     state.rowDraggable = !!draggable
   }
 
-  function setRowExpandHeight(key: Key, height: number) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.expandHeight = height
-    }
-  }
+  // function setRowExpandHeight(key: Key, height: number) {
+  //   if (state.rowMap.has(key)) {
+  //     state.rowMap.get(key)!.expandHeight = height
+  //   }
+  // }
 
   function setBodyYScroll(scroll: number) {
     state.bodyYScroll = scroll
@@ -1013,9 +1012,17 @@ export function useStore(options: StoreOptions) {
     state.virtual = !!virtual
   }
 
-  function setRowHover(key: Key, hover: boolean) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.hover = hover
+  // function setRowHover(key: Key, hover: boolean) {
+  //   if (state.rowMap.has(key)) {
+  //     state.rowMap.get(key)!.hover = hover
+  //   }
+  // }
+
+  function setRowProp(key: Key, prop: Exclude<keyof TableRowState, 'key'>, value: any) {
+    const row = state.rowMap.get(key)
+
+    if (row && row[prop] !== value) {
+      (row as any)[prop] = value
     }
   }
 
@@ -1094,6 +1101,10 @@ export function useStore(options: StoreOptions) {
 
   function setDataFilter(filter: (data: Data) => boolean) {
     state.dataFilter = filter
+  }
+
+  function setLocked(locked: boolean) {
+    state.locked = locked
   }
 
   function setBarScrolling(scrolling: boolean) {

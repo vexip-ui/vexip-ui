@@ -175,7 +175,7 @@ const tempColumns = reactive(new Set<TableColumnGroupOptions | TableColumnOption
 const tempSummaries = reactive(new Set<TableSummaryOptions>())
 const tableWidth = ref<number | string>()
 const hasDragColumn = ref(false)
-const locked = ref(true)
+const bodyWidth = ref(0)
 
 const wrapper = ref<HTMLElement>()
 const mainScroll = ref<NativeScrollExposed>()
@@ -285,7 +285,7 @@ provide(TABLE_SLOTS, slots)
 
 const { state, getters, mutations } = store
 
-const mergedLocked = computed(() => props.noTransition || locked.value || state.barScrolling)
+const mergedLocked = computed(() => props.noTransition || state.locked || state.barScrolling)
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -309,7 +309,8 @@ const style = computed(() => {
   const style: StyleType = {
     [nh.cv('row-indent-width')]:
       typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
-    [nh.cv('b-width')]: `${props.borderWidth}px`
+    [nh.cv('b-width')]: `${props.borderWidth}px`,
+    [nh.cv('expanded-width')]: `${bodyWidth.value}px`
   }
   const width = tableWidth.value ?? props.width
   const [padLeft, padRight] = state.sidePadding
@@ -381,6 +382,7 @@ const {
   setDragging,
   setKeyConfig,
   setDisabledTree,
+  setLocked,
   setBarScrolling,
   clearSort,
   clearFilter,
@@ -631,7 +633,8 @@ function emitYScroll(client: number, percent: number) {
   emitEvent(props.onScroll, { type: 'vertical', client, percent })
 }
 
-function handleResize() {
+function handleResize(entry: ResizeObserverEntry) {
+  bodyWidth.value = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width
   isMounted && refresh()
 }
 
@@ -957,12 +960,12 @@ function refresh() {
 async function runInLocked(handler = noop, delay = 250) {
   clearTimeout(timer.locked)
 
-  locked.value = true
+  setLocked(true)
   await handler()
 
   return new Promise<void>(resolve => {
     timer.locked = setTimeout(() => {
-      locked.value = false
+      setLocked(false)
       resolve()
     }, delay)
   })
@@ -1091,7 +1094,9 @@ function renderTableSlot({ name }: { name: string }) {
           ? {
             height: `${state.totalHeight}px`,
             transition:
-              props.noTransition || locked ? undefined : `height ${nh.gnv('transition-base')}`
+              props.noTransition || state.locked
+                ? undefined
+                : `height ${nh.gnv('transition-base')}`
           }
           : undefined
       "

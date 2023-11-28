@@ -6,13 +6,8 @@
     @row-expand="handleExpand"
   >
     <TableColumn type="expand" id-key="expand" fixed>
-      <template #default="{ row, leftFixed, rightFixed }">
-        <Grid
-          :style="{
-            padding: `20px ${rightFixed + 10}px 20px ${leftFixed + 10}px`,
-            backgroundColor: 'var(--bg-color)'
-          }"
-        >
+      <template #default="{ row }">
+        <Grid>
           <Cell :width="12">
             Full Name: {{ `${row.firstName} ${row.lastName}` }}
           </Cell>

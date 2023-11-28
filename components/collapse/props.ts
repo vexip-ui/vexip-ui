@@ -47,6 +47,7 @@ export const collapseTransitionProps = buildProps({
    * @internal
    */
   reverse: booleanProp,
+  disabled: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),
   onAfterEnter: eventProp<(el: Element) => void>(),

@@ -43,7 +43,9 @@ export type Accessor<D = Data, Val extends string | number = string | number> = 
   index: number
 ) => Val
 export type ExpandRenderFn<D = Data> = (data: {
+  /** @deprecated */
   leftFixed: number,
+  /** @deprecated */
   rightFixed: number,
   row: D,
   rowIndex: number
@@ -328,6 +330,7 @@ export interface TableRowState {
   listIndex: number,
   cellHeights: Record<Key, number>,
   last: boolean,
+  expandAnimate: boolean,
   data: Data
 }
 
@@ -410,6 +413,7 @@ export interface StoreState extends StoreOptions {
   resizeLeft: number,
   cellSpanMap: Map<'left' | 'default' | 'right', Map<string, Required<CellSpanResult>>>,
   collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
+  locked: boolean,
   barScrolling: boolean
 }
 

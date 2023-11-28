@@ -50,7 +50,9 @@ $table: map.merge(
     filter-item-bg-color-active: get-css-var('table-filter-item-bg-color-hover'),
     indicator-color: get-css-var('color-primary-opacity-6'),
     empty-color: get-css-var('content-color-placeholder'),
-    resizer-color: get-css-var('color-primary-opacity-6')
+    resizer-color: get-css-var('color-primary-opacity-6'),
+    expanded-padding: 14px,
+    expanded-bg-color: get-css-var('bg-color-base')
   ),
   $table
 );
@@ -265,9 +267,19 @@ $table: map.merge(
     );
   }
 
-  &__collapse {
+  &__expanded {
     position: relative;
+    z-index: 1;
+    width: get-css-var('table-expanded-width');
+    min-width: 100%;
     will-change: height;
+    background-color: get-css-var('table-expanded-bg-color');
+
+    &--fixed {
+      transform: translateX(
+        calc(-1 * #{get-css-var('table-expanded-width')} + get-css-var('table-expanded-fix-width'))
+      );
+    }
 
     &::after {
       position: absolute;
@@ -277,6 +289,11 @@ $table: map.merge(
       height: 0;
       content: '';
       border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+    }
+
+    &-wrapper {
+      width: 100%;
+      padding: get-css-var('table-expanded-padding');
     }
   }
 
@@ -288,7 +305,7 @@ $table: map.merge(
   $head-cell: #{&}__head-cell;
   $foot-cell: #{&}__foot-cell;
   $content: #{&}__content;
-  $collapse: #{&}__collapse;
+  $expanded: #{&}__expanded;
   $fixed-active: #{&}__fixed--active;
   $side-pad: #{&}__side-pad;
 
@@ -296,21 +313,27 @@ $table: map.merge(
   &__foot &__group {
     position: absolute;
     transition: get-css-var('transition-transform');
+  }
 
-    &:last-child {
-      margin-bottom: -1px;
+  &__body &__group--last {
+    margin-bottom: -1px;
 
-      #{$cell},
-      #{$head-cell},
-      #{$foot-cell},
-      #{$collapse} {
-        border-bottom-color: transparent;
-      }
+    #{$cell},
+    #{$expanded} {
+      border-bottom-color: transparent;
     }
   }
 
   &__foot &__group {
     position: relative;
+
+    &:last-child {
+      margin-bottom: -1px;
+
+      #{$foot-cell} {
+        border-bottom-color: transparent;
+      }
+    }
   }
 
   &__row--fixed {
@@ -602,12 +625,8 @@ $table: map.merge(
   &__fixed--left {
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     transition: get-css-var('transition-shadow');
-
-    #{$collapse} * {
-      visibility: hidden;
-    }
   }
 
   &__fixed--right {

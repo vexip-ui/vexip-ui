@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, inject, nextTick, reactive, ref, toRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  inject,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
@@ -134,10 +145,10 @@ const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDr
 const expandRenderer = computed(() => state.expandRenderer)
 const hasExpand = computed(() => {
   if (props.isHead || props.isFoot || !getters.expandColumn) return false
+  if (state.rightFixedColumns.length) return props.fixed === 'right'
   if (state.leftFixedColumns.length) return props.fixed === 'left'
-  if (state.normalColumns.length) return !props.fixed
 
-  return !!state.rightFixedColumns.length && props.fixed === 'right'
+  return !!(state.normalColumns.length && props.fixed)
 })
 
 function setExpandHeight() {
@@ -150,7 +161,7 @@ function setExpandHeight() {
   }
 
   if (targetHeight !== props.row.expandHeight) {
-    mutations.setRowExpandHeight(rowKey.value, targetHeight)
+    mutations.setRowProp(rowKey.value, 'expandHeight', targetHeight)
     updateTotalHeight(true)
   }
 }
@@ -171,15 +182,23 @@ function updateTotalHeight(force = false) {
 watch([maxHeight, () => state.heightBITree], () => {
   if (state.rowHeight) return
 
-  mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
+  mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   !rowType.value && updateTotalHeight()
 })
 
 watchEffect(() => {
-  mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
-
+  mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   nextTick(() => {
     !rowType.value && setExpandHeight()
+  })
+})
+
+onMounted(() => {
+  nextTick(() => {
+    mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
+    nextTick(() => {
+      !rowType.value && setExpandHeight()
+    })
   })
 })
 
@@ -193,7 +212,7 @@ function buildEventPayload(event: Event) {
 }
 
 function handleMouseEnter(event: MouseEvent) {
-  mutations.setRowHover(rowKey.value, true)
+  mutations.setRowProp(rowKey.value, 'hover', true)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Enter', buildEventPayload(event))
@@ -201,7 +220,7 @@ function handleMouseEnter(event: MouseEvent) {
 }
 
 function handleMouseLeave(event: MouseEvent) {
-  mutations.setRowHover(rowKey.value, false)
+  mutations.setRowProp(rowKey.value, 'hover', false)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Leave', buildEventPayload(event))
@@ -282,13 +301,21 @@ function handleDragLeave(event: DragEvent) {
     isDragOver.value = false
   }, 100)
 }
+
+function afterExpand() {
+  mutations.setRowProp(rowKey.value, 'expandAnimate', false)
+}
 </script>
 
 <template>
   <div
     v-if="!row.hidden"
     ref="wrapper"
-    :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
+    :class="{
+      [nh.be('group')]: true,
+      [nh.bem('group', 'checked')]: row.checked,
+      [nh.bem('group', 'last')]: row.last
+    }"
     role="row"
     :draggable="rowDraggable || row.dragging"
     :style="groupStyle"
@@ -311,18 +338,33 @@ function handleDragLeave(event: DragEvent) {
     >
       <slot></slot>
     </div>
-    <CollapseTransition v-if="hasExpand" @enter="setExpandHeight" @leave="setExpandHeight">
-      <div v-if="row.expanded" ref="expandEl" :class="nh.be('collapse')">
-        <Renderer
-          v-if="isFunction(getters.expandColumn!.renderer)"
-          :renderer="getters.expandColumn!.renderer"
-          :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
-        ></Renderer>
-        <Renderer
-          v-else-if="isFunction(expandRenderer)"
-          :renderer="expandRenderer"
-          :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
-        ></Renderer>
+    <CollapseTransition
+      v-if="hasExpand"
+      :disabled="!row.expandAnimate"
+      @enter="setExpandHeight"
+      @leave="setExpandHeight"
+      @after-enter="afterExpand"
+      @after-leave="afterExpand"
+    >
+      <div
+        v-if="row.expanded"
+        ref="expandEl"
+        :class="[nh.be('expanded'), fixed === 'right' && nh.bem('expanded', 'fixed')]"
+      >
+        <ResizeObserver :disabled="row.expandAnimate" :on-resize="setExpandHeight">
+          <div :class="nh.be('expanded-wrapper')">
+            <Renderer
+              v-if="isFunction(getters.expandColumn!.renderer)"
+              :renderer="getters.expandColumn!.renderer"
+              :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
+            ></Renderer>
+            <Renderer
+              v-else-if="isFunction(expandRenderer)"
+              :renderer="expandRenderer"
+              :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
+            ></Renderer>
+          </div>
+        </ResizeObserver>
       </div>
     </CollapseTransition>
   </div>

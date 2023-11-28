@@ -13,14 +13,7 @@
     <TableColumn type="drag" fixed></TableColumn>
     <TableColumn type="expand" id-key="expand" fixed>
       <template #default="{ row }">
-        <div
-          :style="{
-            padding: '20px',
-            backgroundColor: 'var(--bg-color)'
-          }"
-        >
-          The {{ row.name }} expanded content
-        </div>
+        <div>The {{ row.name }} expanded content</div>
       </template>
     </TableColumn>
     <TableColumn id-key="selection" type="selection" fixed></TableColumn>
