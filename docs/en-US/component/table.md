@@ -130,11 +130,25 @@ Set the `width` prop for a Column to specify the width of the column, and set th
 
 :::demo table/pagination
 
-### Page Table
+### Paged Table
 
 Combined with the Pagination component, table pagination can be implemented, which is generally used when there is a lot of data and it is not convenient to display on one page.
 
 Link the data between Pagination and Table components can be easily done via the `current-page` and `page-size` prop.
+
+:::
+
+:::demo table/tree
+
+### Tree Data
+
+When the row data contains a valid `children` option, tree data parsing will be automatically enabled.
+
+Can disable automatic parsing via adding `disabled-tree` prop, or specify a another target option via `key-config`.
+
+You can also configure the indent distance for each level by setting `row-indent` prop.
+
+If you want to manually specify the indented column of the tree table, you can add the `indented` prop to a Column.
 
 :::
 
@@ -153,20 +167,6 @@ However, this way will disable other interactions of rows. You can instead add a
 ### Virtual Scroll
 
 Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
-
-:::
-
-:::demo table/tree
-
-### Tree Data
-
-When the row data contains a valid `children` option, tree data parsing will be automatically enabled.
-
-Can disable automatic parsing via adding `disabled-tree` prop, or specify a another target option via `key-config`.
-
-You can also configure the indent distance for each level by setting `row-indent` prop.
-
-If you want to manually specify the indented column of the tree table, you can add the `indented` prop to a Column.
 
 :::
 

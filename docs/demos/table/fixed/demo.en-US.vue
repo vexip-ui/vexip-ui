@@ -4,7 +4,7 @@
     use-y-bar
     :columns="columns"
     :data="data"
-    :width="800"
+    :width="1000"
     :height="260"
   ></Table>
 </template>
@@ -25,17 +25,22 @@ const columns = reactive(
     {
       name: 'First Name',
       key: 'firstName',
-      width: 220
+      width: 160
     },
     {
       name: 'Last Name',
       key: 'lastName',
-      width: 220
+      width: 160
+    },
+    {
+      name: 'Company',
+      key: 'company',
+      width: 180
     },
     {
       name: 'Job',
       key: 'job',
-      width: 160
+      width: 120
     },
     {
       name: 'Age',
@@ -43,6 +48,11 @@ const columns = reactive(
       width: 60,
       textAlign: 'center',
       fixed: 'right'
+    },
+    {
+      name: 'Address',
+      key: 'address',
+      width: 200
     },
     {
       name: 'Email',

@@ -75,8 +75,9 @@ export function useStore(options: StoreOptions) {
     summaries: [],
     data: [],
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
-    width: 0,
     rowData: [],
+    treeRowData: [],
+    width: 0,
     rightFixedColumns: [],
     leftFixedColumns: [],
     aboveSummaries: [],
@@ -365,7 +366,8 @@ export function useStore(options: StoreOptions) {
     getParentRow,
     handleColumnResize,
     getCurrentData,
-    createMinRowState
+    createMinRowState,
+    flatTreeRows
   }
 
   watchEffect(() => {
@@ -827,16 +829,10 @@ export function useStore(options: StoreOptions) {
     parseRow(data, clonedData)
 
     state.rowMap = rowMap
+    state.treeRowData = clonedData
 
     if (!disabledTree) {
-      const rowData: TableRowState[] = []
-
-      for (const row of clonedData) {
-        rowData.push(row)
-        collectUnderRows(row, rowData)
-      }
-
-      state.rowData = rowData
+      flatTreeRows()
     } else {
       state.rowData = clonedData
     }
@@ -845,6 +841,19 @@ export function useStore(options: StoreOptions) {
 
     refreshRowIndex()
     computePartial()
+  }
+
+  function flatTreeRows() {
+    if (state.disabledTree) return
+
+    const rowData: TableRowState[] = []
+
+    for (const row of state.treeRowData) {
+      rowData.push(row)
+      collectUnderRows(row, rowData)
+    }
+
+    state.rowData = rowData
   }
 
   function setCurrentPage(currentPage: number) {

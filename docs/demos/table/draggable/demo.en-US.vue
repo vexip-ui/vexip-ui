@@ -6,7 +6,12 @@
     :width="1000"
   ></Table>
   <br />
-  <Table :columns="columns" :data="data" :width="1000">
+  <Table
+    :columns="columns"
+    :data="data"
+    :width="1000"
+    disabled-tree
+  >
     <TableColumn type="drag"></TableColumn>
   </Table>
 </template>
