@@ -6,19 +6,22 @@ import { computed, ref, watch } from 'vue'
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
 import { fullScreenProps } from './props'
+import { getIndexId } from './symbol'
 
 import type { FullScreenSlotParams, FullScreenType } from './symbol'
 
 defineOptions({ name: 'FullScreen' })
 
-defineSlots<{ default: (params: FullScreenSlotParams) => any }>()
-
-const nh = useNameHelper('full-screen')
-
 const _props = defineProps(fullScreenProps)
 const props = useProps('fullScreen', _props, {
   tag: 'div'
 })
+
+defineSlots<{ default: (params: FullScreenSlotParams) => any }>()
+
+const nh = useNameHelper('full-screen')
+
+const placeId = getIndexId()
 
 const isEntered = ref(false)
 const zIndex = ref<number>()
@@ -81,6 +84,7 @@ async function toggle(type: FullScreenType = 'window', zIndex?: number) {
 
 defineExpose({
   full,
+  placeId,
   wrapper,
   enter,
   exit,
@@ -99,10 +103,12 @@ defineExpose({
     >
       <slot
         :full="full"
+        :place-id="placeId"
         :enter="enter"
         :exit="exit"
         :toggle="toggle"
       ></slot>
+      <div :id="placeId" :class="nh.be('place')" role="none"></div>
     </component>
   </Portal>
 </template>
