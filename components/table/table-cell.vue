@@ -4,7 +4,7 @@ import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, inject, ref } from 'vue'
+import { computed, inject, nextTick, ref } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
@@ -247,8 +247,11 @@ function handleExpandRow(row: TableRowState, event: MouseEvent) {
     const expanded = !row.expanded
     const { data, key, index } = row
 
-    mutations.handleExpand(key, expanded)
-    tableActions.emitRowExpand({ row: data, key, index, event, expanded })
+    mutations.setRowProp(key, 'expandAnimate', true)
+    nextTick(() => {
+      mutations.handleExpand(key, expanded)
+      tableActions.emitRowExpand({ row: data, key, index, event, expanded })
+    })
   }
 }
 

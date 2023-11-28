@@ -41,6 +41,8 @@ const style = computed(() => {
   const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
   return {
+    [nh.cv('expanded-fix-width')]:
+      props.fixed === 'right' && width ? `${width + padLeft + padRight}px` : '0px',
     minWidth: width && `${width + padLeft + padRight}px`,
     minHeight: `${state.totalHeight}px`
   }
@@ -58,8 +60,8 @@ const emptyStyle = computed(() => {
   <div :class="nh.be('body')" role="rowgroup" :style="style">
     <template v-if="data.length">
       <TableRow
-        v-for="row in data"
-        :key="row.index"
+        v-for="(row, index) in data"
+        :key="index"
         :row="row"
         :index="row.listIndex"
         :fixed="fixed"
