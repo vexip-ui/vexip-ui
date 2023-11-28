@@ -15,6 +15,9 @@ import {
   watch
 } from 'vue'
 
+import TableColumn from './table-column'
+import TableColumnGroup from './table-column-group'
+import TableSummary from './table-summary'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import TableFoot from './table-foot.vue'
@@ -187,7 +190,6 @@ const xBelowScroll = ref<NativeScrollExposed>()
 const thead = ref<HTMLElement>()
 const aboveTfoot = ref<HTMLElement>()
 const belowTfoot = ref<HTMLElement>()
-// const yScroll = ref<NativeScrollExposed>()
 const indicator = ref<HTMLElement>()
 const xScrollbar = ref<ScrollbarExposed>()
 const yScrollbar = ref<ScrollbarExposed>()
@@ -196,12 +198,8 @@ let isMounted = false
 
 const locale = useLocale('table', toRef(props, 'locale'))
 const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
-const allColumns = computed(() => {
-  return Array.from(tempColumns).concat(props.columns)
-})
-const allSummaries = computed(() => {
-  return Array.from(tempSummaries).concat(props.summaries)
-})
+const allColumns = computed(() => Array.from(tempColumns))
+const allSummaries = computed(() => Array.from(tempSummaries))
 
 const syncToStoreProps = [
   'rowClass',
@@ -1013,6 +1011,19 @@ function renderTableSlot({ name }: { name: string }) {
   >
     <div v-show="false" role="none">
       <slot></slot>
+      <template
+        v-for="(column, index) in props.columns"
+        :key="column.key ?? `__inner-column-${index}`"
+      >
+        <TableColumnGroup v-if="'children' in column" v-bind="column"></TableColumnGroup>
+        <TableColumn v-else v-bind="column" :id-key="column.key"></TableColumn>
+      </template>
+      <TableSummary
+        v-for="({ key, ...others }, index) in props.summaries"
+        v-bind="others"
+        :key="`__inner-summary-${index}`"
+        :id-key="key"
+      ></TableSummary>
     </div>
     <div ref="thead" :class="nh.be('head-wrapper')">
       <NativeScroll

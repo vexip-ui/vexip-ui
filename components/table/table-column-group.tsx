@@ -9,6 +9,7 @@ import {
   watch
 } from 'vue'
 
+import TableColumn from './table-column'
 import { useProps } from '@vexip-ui/config'
 import { tableColumnGroupProps } from './props'
 import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS } from './symbol'
@@ -18,9 +19,9 @@ import type { ColumnGroupWithKey, TableColumnOptions } from './symbol'
 type GroupPropKey = keyof typeof tableColumnGroupProps
 
 const propKeys = Object.keys(tableColumnGroupProps) as GroupPropKey[]
-const ignoredProps: GroupPropKey[] = ['renderer']
+const ignoredProps: GroupPropKey[] = ['renderer', 'children']
 
-export default defineComponent({
+const TableColumnGroup = defineComponent({
   name: 'TableColumnGroup',
   inheritAttrs: false,
   props: tableColumnGroupProps,
@@ -43,6 +44,10 @@ export default defineComponent({
       renderer: {
         default: null,
         isFunc: true,
+        static: true
+      },
+      children: {
+        default: () => [],
         static: true
       }
     })
@@ -110,6 +115,20 @@ export default defineComponent({
       }
     }
 
-    return () => renderSlot(slots, 'default')
+    function renderChildren() {
+      return props.children.map((child, index) => {
+        if ('children' in child) {
+          return <TableColumnGroup {...child} key={`__inner-column-${index}`}></TableColumnGroup>
+        }
+
+        const { key, ...others } = child
+
+        return <TableColumn {...others} key={`__inner-column-${index}`} id-key={key}></TableColumn>
+      })
+    }
+
+    return () => [renderSlot(slots, 'default'), ...renderChildren()]
   }
 })
+
+export default TableColumnGroup

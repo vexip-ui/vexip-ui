@@ -220,7 +220,8 @@ export const tableColumnGroupProps = buildProps({
   order: Number,
   ellipsis: booleanProp,
   textAlign: String as PropType<TableTextAlign>,
-  renderer: Function as PropType<() => any>
+  renderer: Function as PropType<() => any>,
+  children: Array as PropType<TableColumnRawOptions[]>
 })
 
 export type TableColumnGroupProps = ExtractPropTypes<typeof tableColumnGroupProps>

@@ -519,8 +519,6 @@ export function useStore(options: StoreOptions) {
   }
 
   function setColumns(columns: TableColumnRawOptions[]) {
-    // resetCellSpan()
-
     const { widths, sorters, filters } = state
     const { allColumns, baseColumns } = buildColumns(columns)
 
