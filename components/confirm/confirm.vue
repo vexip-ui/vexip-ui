@@ -29,6 +29,8 @@ const confirmButtonTypes = Object.freeze<ConfirmButtonType[]>([
   'error'
 ])
 
+defineOptions({ name: 'Confirm' })
+
 const _props = defineProps(confirmProps)
 const props = useProps('confirm', _props, {
   locale: null,
@@ -210,91 +212,100 @@ function handleReset() {
 
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <Modal
-    no-footer
-    :closable="false"
-    :auto-remove="false"
-    :active="state.visible"
-    :class="[nh.b(), nh.bs('vars')]"
-    :modal-class="state.className"
-    :modal-style="state.style"
-    :width="state.width"
-    :height="state.height"
-    :top="state.top"
-    :left="state.left"
-    :right="state.right"
-    :bottom="state.bottom"
-    :x-offset="state.xOffset"
-    :y-offset="state.yOffset"
-    :mask-close="state.maskClose"
-    @hide="handleReset"
-  >
-    <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
-    <template v-else>
-      <div v-if="state.title" :class="nh.be('header')">
-        <div :class="nh.be('title')">
-          {{ state.title }}
+  <div :class="[nh.b(), nh.bs('vars')]">
+    <Modal
+      no-footer
+      :auto-remove="false"
+      :transfer="false"
+      :closable="false"
+      :active="state.visible"
+      :modal-class="state.className"
+      :modal-style="state.style"
+      :width="state.width"
+      :height="state.height"
+      :top="state.top"
+      :left="state.left"
+      :right="state.right"
+      :bottom="state.bottom"
+      :x-offset="state.xOffset"
+      :y-offset="state.yOffset"
+      :mask-close="state.maskClose"
+      @hide="handleReset"
+    >
+      <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
+      <template v-else>
+        <div v-if="state.title" :class="nh.be('header')">
+          <div :class="nh.be('title')">
+            {{ state.title }}
+          </div>
+          <button
+            v-if="state.closable"
+            type="button"
+            :class="nh.be('close')"
+            @mousedown.stop
+            @click="handleCancel"
+          >
+            <slot name="close">
+              <Icon
+                v-bind="icons.close"
+                :scale="+(icons.close.scale || 1) * 1.2"
+                label="close"
+              ></Icon>
+            </slot>
+          </button>
         </div>
-        <button
-          v-if="state.closable"
-          type="button"
-          :class="nh.be('close')"
-          @mousedown.stop
-          @click="handleCancel"
+        <div
+          :class="[
+            nh.be('body'),
+            nh.bem('body', state.contentAlign),
+            !state.title && nh.bem('body', 'no-title')
+          ]"
         >
-          <slot name="close">
+          <div v-if="state.icon !== false" :class="nh.be('icon')">
+            <Renderer v-if="isFunction(state.icon)" :renderer="state.icon"></Renderer>
             <Icon
-              v-bind="icons.close"
-              :scale="+(icons.close.scale || 1) * 1.2"
-              label="close"
+              v-else-if="isObject(state.icon)"
+              v-bind="state.iconProps"
+              :icon="state.icon"
             ></Icon>
-          </slot>
-        </button>
-      </div>
-      <div
-        :class="[
-          nh.be('body'),
-          nh.bem('body', state.contentAlign),
-          !state.title && nh.bem('body', 'no-title')
-        ]"
-      >
-        <div v-if="state.icon !== false" :class="nh.be('icon')">
-          <Renderer v-if="isFunction(state.icon)" :renderer="state.icon"></Renderer>
-          <Icon v-else-if="isObject(state.icon)" v-bind="state.iconProps" :icon="state.icon"></Icon>
-          <Icon
-            v-else
-            :scale="2.2"
-            v-bind="{ ...(state.cancelable ? icons.question : icons.warning), ...state.iconProps }"
-            :icon="(state.cancelable ? icons.question : icons.warning).icon"
-          ></Icon>
+            <Icon
+              v-else
+              :scale="2.2"
+              v-bind="{
+                ...(state.cancelable ? icons.question : icons.warning),
+                ...state.iconProps
+              }"
+              :icon="(state.cancelable ? icons.question : icons.warning).icon"
+            ></Icon>
+          </div>
+          <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
+          <div v-else :class="nh.be('content')">
+            {{ state.content }}
+          </div>
         </div>
-        <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
-        <div v-else :class="nh.be('content')">
-          {{ state.content }}
+        <div :class="[nh.be('footer'), nh.bem('footer', state.actionsAlign)]">
+          <Button
+            v-if="state.cancelable"
+            :class="[nh.be('button'), nh.bem('button', 'cancel')]"
+            inherit
+            no-pulse
+            :type="state.cancelType"
+            @click="handleCancel"
+          >
+            {{ state.cancelText || locale.cancel }}
+          </Button>
+          <Button
+            :class="[nh.be('button'), nh.bem('button', 'confirm')]"
+            inherit
+            no-pulse
+            :type="state.confirmType"
+            :loading="state.loading"
+            @click="handleConfirm"
+          >
+            {{ state.confirmText || locale.confirm }}
+          </Button>
         </div>
-      </div>
-      <div :class="[nh.be('footer'), nh.bem('footer', state.actionsAlign)]">
-        <Button
-          v-if="state.cancelable"
-          :class="[nh.be('button'), nh.bem('button', 'cancel')]"
-          inherit
-          no-pulse
-          :type="state.cancelType"
-          @click="handleCancel"
-        >
-          {{ state.cancelText || locale.cancel }}
-        </Button>
-        <Button
-          :class="[nh.be('button'), nh.bem('button', 'confirm')]"
-          inherit
-          no-pulse
-          :type="state.confirmType"
-          :loading="state.loading"
-          @click="handleConfirm"
-        >
-          {{ state.confirmText || locale.confirm }}
-        </Button>
-      </div>
-    </template>
-  </Modal>
+      </template>
+    </Modal>
+  </div>
 </template>
