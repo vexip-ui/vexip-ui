@@ -148,7 +148,7 @@ const hasExpand = computed(() => {
   if (state.rightFixedColumns.length) return props.fixed === 'right'
   if (state.leftFixedColumns.length) return props.fixed === 'left'
 
-  return !!(state.normalColumns.length && props.fixed)
+  return !!state.normalColumns.length && !props.fixed
 })
 
 function setExpandHeight() {

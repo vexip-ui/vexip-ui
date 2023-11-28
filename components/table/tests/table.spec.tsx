@@ -721,11 +721,11 @@ describe('Table', () => {
     })
 
     await rowGroups[0].find('.vxp-table__expand').trigger('click')
-    expect(rowGroups[0].find('.vxp-table__collapse').exists()).toBe(true)
+    expect(rowGroups[0].find('.vxp-table__expanded').exists()).toBe(true)
     expect(rowGroups[0].find('.expand').exists()).toBe(true)
 
     await rowGroups[0].find('.vxp-table__expand').trigger('click')
-    expect(rowGroups[0].find('.vxp-table__collapse').exists()).not.toBe(true)
+    expect(rowGroups[0].find('.vxp-table__expanded').exists()).not.toBe(true)
     expect(rowGroups[0].find('.expand').exists()).not.toBe(true)
   })
 

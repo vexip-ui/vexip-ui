@@ -2,10 +2,10 @@
   <Table
     use-x-bar
     :data="data"
-    :width="800"
+    :width="1000"
     @row-expand="handleExpand"
   >
-    <TableColumn type="expand" id-key="expand" fixed>
+    <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Grid>
           <Cell :width="12">
@@ -23,10 +23,10 @@
         </Grid>
       </template>
     </TableColumn>
-    <TableColumn name="First Name" id-key="firstName" fixed></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName" :width="300"></TableColumn>
-    <TableColumn name="Job" id-key="job" :width="300"></TableColumn>
-    <TableColumn name="Age" id-key="age" :width="300"></TableColumn>
+    <TableColumn name="First Name" id-key="firstName"></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName"></TableColumn>
+    <TableColumn name="Job" id-key="job"></TableColumn>
+    <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>
 
