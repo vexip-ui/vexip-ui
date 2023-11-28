@@ -35,6 +35,7 @@ If you want to use components with `transfer` prop like Tooltip, Modal, etc., yo
 ```ts
 interface FullScreenSlotParams {
   full: false | FullScreenType,
+  placeId: string,
   enter: (type?: FullScreenType, zIndex?: number) => Promise<void>,
   exit: () => Promise<void>,
   toggle: (type?: FullScreenType, zIndex?: number) => Promise<void>

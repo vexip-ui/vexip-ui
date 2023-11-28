@@ -1,5 +1,5 @@
 <template>
-  <FullScreen ref="fullScreen" v-slot="{ toggle }">
+  <FullScreen ref="fullScreen" v-slot="{ placeId, toggle }">
     <div class="container">
       <Button type="primary" @click="toggle('window')">
         网页全屏
@@ -7,7 +7,7 @@
       <Button type="primary" @click="toggle('browser')">
         浏览器全屏
       </Button>
-      <Tooltip transfer="#full-screen-tooltips">
+      <Tooltip :transfer="`#${placeId}`">
         <template #trigger>
           <Button> 全屏后可见 </Button>
         </template>
@@ -20,7 +20,6 @@
         全屏后不可见
       </Tooltip>
     </div>
-    <div id="full-screen-tooltips"></div>
   </FullScreen>
 </template>
 
