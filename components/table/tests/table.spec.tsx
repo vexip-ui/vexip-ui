@@ -390,6 +390,7 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
+        order: -1,
         sorter: {
           able: true,
           method: sortMethod
@@ -427,7 +428,7 @@ describe('Table', () => {
       renderRows = body.vm.data
     }
 
-    await clickSorter(headCells[1], 'asc')
+    await clickSorter(headCells[0], 'asc')
     expect(renderRows.map(row => row.data.name)).toEqual([
       'n0',
       'n0',
@@ -442,7 +443,7 @@ describe('Table', () => {
     ])
     expect(sortMethod).toHaveBeenCalled()
 
-    await clickSorter(headCells[1], 'desc')
+    await clickSorter(headCells[0], 'desc')
     expect(renderRows.map(row => row.data.name)).toEqual([
       'n4',
       'n4',
@@ -456,7 +457,7 @@ describe('Table', () => {
       'n0'
     ])
 
-    await clickSorter(headCells[0], 'desc')
+    await clickSorter(headCells[1], 'desc')
     expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l1n4',
       'l0n4',
@@ -470,7 +471,7 @@ describe('Table', () => {
       'l0n0'
     ])
 
-    await clickSorter(headCells[0], 'asc')
+    await clickSorter(headCells[1], 'asc')
     expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l0n4',
       'l1n4',
@@ -835,6 +836,7 @@ describe('Table', () => {
     data[0].children = Array.from({ length: 3 }, (_, i) => ({ label: `l${3 + i}` }))
 
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+    await nextTick()
 
     const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     const cells = rows[0].findAll('.vxp-table__cell')

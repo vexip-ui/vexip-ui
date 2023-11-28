@@ -34,6 +34,13 @@ const columns = reactive(
       key: 'job'
     },
     {
+      name: 'Value',
+      key: 'value',
+      sorter: {
+        type: 'desc'
+      }
+    },
+    {
       name: 'Age',
       key: 'age',
       sorter: {
@@ -51,6 +58,7 @@ const data = Array.from({ length: 5 }, (_, index) => {
     company: `Company ${index}`,
     job: `Job ${index}`,
     age: 20 + Math.round(40 * Math.random()),
+    value: index % 2,
     email: `email${index}@vexip.ui`,
     address: `Address ${index}`
   }
