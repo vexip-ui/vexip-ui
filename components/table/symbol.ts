@@ -387,6 +387,7 @@ export interface StoreState extends StoreOptions {
   allColumns: ColumnRawWithKey[][],
   summaries: SummaryWithKey[],
   rowData: TableRowState[],
+  treeRowData: TableRowState[],
   width: number,
   rightFixedColumns: ColumnWithKey[],
   leftFixedColumns: ColumnWithKey[],

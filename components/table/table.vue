@@ -27,7 +27,8 @@ import {
   noop,
   removeArrayItem,
   toNumber,
-  transformListToMap
+  transformListToMap,
+  walkTree
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
@@ -38,6 +39,7 @@ import type { StyleType } from '@vexip-ui/config'
 import type { NativeScrollExposed, NativeScrollPayload } from '@/components/native-scroll'
 import type { ScrollbarExposed } from '@/components/scrollbar'
 import type {
+  Key,
   MouseEventType,
   MoveEventType,
   StoreOptions,
@@ -388,9 +390,9 @@ const {
   clearFilter,
   refreshRowIndex,
   clearCheckAll,
-  collectUnderRows,
   getParentRow,
-  getCurrentData
+  getCurrentData,
+  flatTreeRows
 } = mutations
 
 watch(
@@ -751,8 +753,8 @@ function handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent) {
 
   const dropRowRect = rowInstance.el.getBoundingClientRect()
   const tableRect = dragState.tableRect
-  const prevPercent = 0.25
-  const nextPercent = 0.75
+  const prevPercent = state.disabledTree ? 0.5 : 0.25
+  const nextPercent = state.disabledTree ? 0.5 : 0.75
   const distance = event.clientY - dropRowRect.top
   const dropRowHeight = dropRowRect.height
 
@@ -763,7 +765,7 @@ function handleRowDragOver(rowInstance: TableRowInstance, event: DragEvent) {
   if (distance < dropRowHeight * prevPercent) {
     dropType = DropType.BEFORE
     indicatorTop = dropRowRect.top - tableRect.top
-  } else if (distance > dropRowHeight * nextPercent) {
+  } else if (distance >= dropRowHeight * nextPercent) {
     dropType = DropType.AFTER
     indicatorTop = dropRowRect.bottom - tableRect.top
   } else {
@@ -798,32 +800,33 @@ function isLeftInsideRight(left: TableRowState, right: TableRowState) {
   return false
 }
 
-function refreshChildrenDepth(row: TableRowState) {
-  if (row.children?.length) {
-    for (const child of row.children) {
-      child.depth = row.depth + 1
-
-      refreshChildrenDepth(child)
-    }
-  }
+function refreshChildrenDepth() {
+  walkTree(state.treeRowData, (row, depth) => {
+    row.depth = depth
+  })
 }
 
 function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
   if (!dragState) return
 
   const { draggingRow, willDropRow, dropType } = dragState
-  const { rowData } = state
 
   if (!willDropRow || isLeftInsideRight(willDropRow, draggingRow)) return
 
-  let currentKey = draggingRow.key
-  let parent: TableRowState | null = getParentRow(draggingRow.key)
+  let currentKey: Key
+  let parent: TableRowState | null
 
-  const processRows = [draggingRow].concat(collectUnderRows(draggingRow))
-  rowData.splice(draggingRow.index, processRows.length)
+  if (draggingRow) {
+    parent = getParentRow(draggingRow.key)
 
-  if (parent) {
-    removeArrayItem(parent.children, row => row.key === currentKey)
+    if (!parent) {
+      parent = {
+        children: state.treeRowData
+      } as TableRowState
+    }
+
+    currentKey = draggingRow.key
+    removeArrayItem(parent.children, item => item.key === currentKey)
 
     if (!parent.children?.length) {
       parent.treeExpanded = false
@@ -831,47 +834,37 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
   }
 
   if (dropType === DropType.INNER) {
-    const children = !Array.isArray(willDropRow.children)
-      ? [draggingRow]
-      : [...willDropRow.children, draggingRow]
+    if (!Array.isArray(willDropRow.children)) {
+      willDropRow.children = []
+    }
+
+    const children = Array.from(willDropRow.children)
+
+    children.push(draggingRow)
 
     willDropRow.children = children
     draggingRow.parent = willDropRow.key
-    draggingRow.depth = willDropRow.depth + 1
-
-    if (willDropRow.treeExpanded) {
-      const index = rowData.findIndex(row => row.key === willDropRow.key)
-
-      if (~index) {
-        rowData.splice(index + children.length, 0, ...processRows)
-      }
-    }
   } else {
     currentKey = willDropRow.key
     parent = getParentRow(willDropRow.key)
 
-    if (parent) {
-      const index = parent.children.findIndex(row => row.key === currentKey)
-
-      if (~index) {
-        parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
-
-        draggingRow.parent = parent.key
-        draggingRow.depth = parent.depth + 1
-      }
-    } else {
-      draggingRow.parent = undefined
-      draggingRow.depth = 0
+    if (!parent) {
+      parent = {
+        children: state.treeRowData
+      } as TableRowState
     }
 
-    const index = rowData.findIndex(row => row.key === currentKey)
+    const index = parent.children.findIndex(row => row.key === currentKey)
 
     if (~index) {
-      rowData.splice(+(dropType === DropType.AFTER) + index, 0, ...processRows)
+      parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
+
+      draggingRow.parent = parent.key
     }
   }
 
-  refreshChildrenDepth(draggingRow)
+  refreshChildrenDepth()
+  flatTreeRows()
   refreshRowIndex()
   emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
 }
