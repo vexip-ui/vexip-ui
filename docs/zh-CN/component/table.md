@@ -270,7 +270,9 @@ type Accessor<D = Data, Val extends string | number = string | number> = (
   index: number
 ) => Val
 type ExpandRenderFn<D = Data> = (data: {
+  /** @deprecated */
   leftFixed: number,
+  /** @deprecated */
   rightFixed: number,
   row: D,
   rowIndex: number

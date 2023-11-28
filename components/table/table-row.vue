@@ -1,15 +1,26 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, inject, nextTick, onMounted, reactive, ref, toRef, watch } from 'vue'
+import {
+  computed,
+  inject,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE } from './symbol'
 
-import type { CSSProperties, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { TableRowState } from './symbol'
 
 defineOptions({ name: 'TableRow' })
@@ -98,7 +109,6 @@ const style = computed(() => {
   return [
     customStyle,
     {
-      // height: state.rowHeight ? `${state.rowHeight}px` : undefined,
       height: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowHeight}px`
     }
   ]
@@ -115,6 +125,8 @@ const attrs = computed(() => {
   return null
 })
 const groupStyle = computed(() => {
+  if (props.isHead || props.isFoot) return undefined
+
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   state.totalHeight
 
@@ -131,40 +143,31 @@ const cellDraggable = computed(() => {
 const rowDraggable = computed(() => !rowType.value && state.rowDraggable)
 const draggable = computed(() => !rowType.value && (state.rowDraggable || cellDraggable.value))
 const expandRenderer = computed(() => state.expandRenderer)
-const expandStyle = computed<CSSProperties>(() => {
-  const width =
-    props.fixed === 'right' ? getters.rightFixedWidths.at(-1) : getters.leftFixedWidths.at(-1)
-  const padLeft = props.fixed !== 'right' ? state.sidePadding[0] || 0 : 0
-  const padRight = props.fixed !== 'left' ? state.sidePadding[1] || 0 : 0
+const hasExpand = computed(() => {
+  if (props.isHead || props.isFoot || !getters.expandColumn) return false
+  if (state.rightFixedColumns.length) return props.fixed === 'right'
+  if (state.leftFixedColumns.length) return props.fixed === 'left'
 
-  return props.fixed
-    ? {
-        width: width && `${width + padLeft + padRight}px`,
-        whiteSpace: 'nowrap'
-      }
-    : {}
-})
-const leftFixed = computed(() => {
-  return (getters.leftFixedWidths.at(-1) || 0) + (state.sidePadding[0] || 0)
-})
-const rightFixed = computed(() => {
-  return (getters.rightFixedWidths.at(-1) || 0) + (state.sidePadding[1] || 0)
+  return !!state.normalColumns.length && !props.fixed
 })
 
 function setExpandHeight() {
-  if (props.fixed) return
+  let targetHeight: number
 
   if (props.row.expanded && expandEl.value) {
-    mutations.setRowExpandHeight(rowKey.value, expandEl.value.scrollHeight)
+    targetHeight = expandEl.value.scrollHeight
   } else {
-    mutations.setRowExpandHeight(rowKey.value, 0)
+    targetHeight = 0
   }
 
-  updateTotalHeight()
+  if (targetHeight !== props.row.expandHeight) {
+    mutations.setRowProp(rowKey.value, 'expandHeight', targetHeight)
+    updateTotalHeight(true)
+  }
 }
 
-function updateTotalHeight() {
-  if (state.heightBITree && !props.fixed) {
+function updateTotalHeight(force = false) {
+  if (state.heightBITree && (force || !props.fixed)) {
     const height = props.row.height + props.row.expandHeight
     const tree = state.heightBITree
     const prev = tree.get(props.index)
@@ -176,18 +179,23 @@ function updateTotalHeight() {
   }
 }
 
-watch(maxHeight, value => {
+watch([maxHeight, () => state.heightBITree], () => {
   if (state.rowHeight) return
 
-  mutations.fixRowHeight(rowKey.value, value)
+  mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   !rowType.value && updateTotalHeight()
 })
-watch(() => state.heightBITree, updateTotalHeight)
+
+watchEffect(() => {
+  mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
+  nextTick(() => {
+    !rowType.value && setExpandHeight()
+  })
+})
 
 onMounted(() => {
   nextTick(() => {
-    mutations.fixRowHeight(rowKey.value, state.rowHeight || maxHeight.value)
-
+    mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
     nextTick(() => {
       !rowType.value && setExpandHeight()
     })
@@ -204,7 +212,7 @@ function buildEventPayload(event: Event) {
 }
 
 function handleMouseEnter(event: MouseEvent) {
-  mutations.setRowHover(rowKey.value, true)
+  mutations.setRowProp(rowKey.value, 'hover', true)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Enter', buildEventPayload(event))
@@ -212,7 +220,7 @@ function handleMouseEnter(event: MouseEvent) {
 }
 
 function handleMouseLeave(event: MouseEvent) {
-  mutations.setRowHover(rowKey.value, false)
+  mutations.setRowProp(rowKey.value, 'hover', false)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Leave', buildEventPayload(event))
@@ -293,13 +301,21 @@ function handleDragLeave(event: DragEvent) {
     isDragOver.value = false
   }, 100)
 }
+
+function afterExpand() {
+  mutations.setRowProp(rowKey.value, 'expandAnimate', false)
+}
 </script>
 
 <template>
   <div
     v-if="!row.hidden"
     ref="wrapper"
-    :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
+    :class="{
+      [nh.be('group')]: true,
+      [nh.bem('group', 'checked')]: row.checked,
+      [nh.bem('group', 'last')]: row.last
+    }"
     role="row"
     :draggable="rowDraggable || row.dragging"
     :style="groupStyle"
@@ -323,26 +339,32 @@ function handleDragLeave(event: DragEvent) {
       <slot></slot>
     </div>
     <CollapseTransition
-      v-if="!!getters.expandColumn"
+      v-if="hasExpand"
+      :disabled="!row.expandAnimate"
       @enter="setExpandHeight"
       @leave="setExpandHeight"
+      @after-enter="afterExpand"
+      @after-leave="afterExpand"
     >
       <div
         v-if="row.expanded"
         ref="expandEl"
-        :class="nh.be('collapse')"
-        :style="expandStyle"
+        :class="[nh.be('expanded'), fixed === 'right' && nh.bem('expanded', 'fixed')]"
       >
-        <Renderer
-          v-if="isFunction(getters.expandColumn.renderer)"
-          :renderer="getters.expandColumn.renderer"
-          :data="{ leftFixed, rightFixed, row: row.data, rowIndex: index }"
-        ></Renderer>
-        <Renderer
-          v-else-if="isFunction(expandRenderer)"
-          :renderer="expandRenderer"
-          :data="{ leftFixed, rightFixed, row: row.data, rowIndex: index }"
-        ></Renderer>
+        <ResizeObserver :disabled="row.expandAnimate" :on-resize="setExpandHeight">
+          <div :class="nh.be('expanded-wrapper')">
+            <Renderer
+              v-if="isFunction(getters.expandColumn!.renderer)"
+              :renderer="getters.expandColumn!.renderer"
+              :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
+            ></Renderer>
+            <Renderer
+              v-else-if="isFunction(expandRenderer)"
+              :renderer="expandRenderer"
+              :data="{ leftFixed: 0, rightFixed: 0, row: row.data, rowIndex: index }"
+            ></Renderer>
+          </div>
+        </ResizeObserver>
       </div>
     </CollapseTransition>
   </div>

@@ -105,6 +105,7 @@ export function useStore(options: StoreOptions) {
     cellSpanMap: new Map(),
     collapseMap: new Map(),
     sidePadding: options.sidePadding || [0, 0],
+    locked: false,
     barScrolling: false
   }) as StoreState
 
@@ -134,6 +135,7 @@ export function useStore(options: StoreOptions) {
 
     for (let i = 0, len = data.length; i < len; ++i) {
       data[i].listIndex = i
+      data[i].last = i === len - 1
     }
 
     return data
@@ -312,20 +314,17 @@ export function useStore(options: StoreOptions) {
     setFootStyle,
     setFootAttrs,
     setTableWidth,
-    fixRowHeight,
-    setBorderHeight,
     setRowHeight,
     setRowMinHeight,
     setCellHeight,
     setVirtual,
     setRowDraggable,
-    setRowExpandHeight,
     setBodyYScroll,
     setBodyXScroll,
     setBorder,
     setStripe,
     setHighlight,
-    setRowHover,
+    setRowProp,
     setLocale,
     setTooltipTheme,
     setTooltipWidth,
@@ -345,6 +344,7 @@ export function useStore(options: StoreOptions) {
     setSidePadding,
     setBorderWidth,
     setDataFilter,
+    setLocked,
     setBarScrolling,
 
     handleSort,
@@ -407,7 +407,7 @@ export function useStore(options: StoreOptions) {
       const row = rowMap.get(key)
 
       if (row) {
-        height += (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+        height += row.height || 0
       }
 
       heights.push(height)
@@ -791,7 +791,7 @@ export function useStore(options: StoreOptions) {
             hidden,
             checked: !!checked,
             height: toNumber(height),
-            borderHeight: 0,
+            // borderHeight: 0,
             expanded: !!expanded,
             hover: false,
             expandHeight: 0,
@@ -803,6 +803,8 @@ export function useStore(options: StoreOptions) {
             dragging: false,
             listIndex: 0,
             cellHeights: reactive({}),
+            last: false,
+            expandAnimate: false,
             data: item
           }
 
@@ -954,20 +956,13 @@ export function useStore(options: StoreOptions) {
     state.width = width
   }
 
-  function fixRowHeight(key: Key, height: number) {
-    const { rowMap } = state
-    const row = rowMap.get(key)
+  // function fixRowHeight(key: Key, height: number) {
+  //   const row = state.rowMap.get(key)
 
-    if (row && row.height !== height) {
-      row.height = height
-    }
-  }
-
-  function setBorderHeight(key: Key, height: number) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.borderHeight = height
-    }
-  }
+  //   if (row && row.height !== height) {
+  //     row.height = height
+  //   }
+  // }
 
   function setRowHeight(height: number) {
     state.rowHeight = height
@@ -987,11 +982,11 @@ export function useStore(options: StoreOptions) {
     state.rowDraggable = !!draggable
   }
 
-  function setRowExpandHeight(key: Key, height: number) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.expandHeight = height
-    }
-  }
+  // function setRowExpandHeight(key: Key, height: number) {
+  //   if (state.rowMap.has(key)) {
+  //     state.rowMap.get(key)!.expandHeight = height
+  //   }
+  // }
 
   function setBodyYScroll(scroll: number) {
     state.bodyYScroll = scroll
@@ -1017,9 +1012,17 @@ export function useStore(options: StoreOptions) {
     state.virtual = !!virtual
   }
 
-  function setRowHover(key: Key, hover: boolean) {
-    if (state.rowMap.has(key)) {
-      state.rowMap.get(key)!.hover = hover
+  // function setRowHover(key: Key, hover: boolean) {
+  //   if (state.rowMap.has(key)) {
+  //     state.rowMap.get(key)!.hover = hover
+  //   }
+  // }
+
+  function setRowProp(key: Key, prop: Exclude<keyof TableRowState, 'key'>, value: any) {
+    const row = state.rowMap.get(key)
+
+    if (row && row[prop] !== value) {
+      (row as any)[prop] = value
     }
   }
 
@@ -1098,6 +1101,10 @@ export function useStore(options: StoreOptions) {
 
   function setDataFilter(filter: (data: Data) => boolean) {
     state.dataFilter = filter
+  }
+
+  function setLocked(locked: boolean) {
+    state.locked = locked
   }
 
   function setBarScrolling(scrolling: boolean) {
@@ -1270,24 +1277,47 @@ export function useStore(options: StoreOptions) {
     if (!force && start === startRow && end === endRow) return
 
     const { processedData } = getters
-    virtualData.length = 0
 
-    if (processedData[0]) {
-      let i = processedData.length
-
-      while (i--) {
-        const data = processedData[i]
-
-        data.hidden = !(i >= start && i < end)
-        !data.hidden && virtualData.push(data)
-      }
-
-      virtualData.reverse()
-
-      state.padTop = heightBITree?.sum(start) ?? 0
-      state.startRow = start
-      state.endRow = end
+    if (!processedData.length) {
+      virtualData.length = 0
+      return
     }
+
+    const prevData = new Set([...virtualData])
+    const added: TableRowState[] = []
+    const removed: TableRowState[] = []
+
+    for (let i = 0, len = processedData.length; i < len; ++i) {
+      const data = processedData[i]
+
+      data.hidden = !(i >= start && i < end)
+
+      if (data.hidden) {
+        data.hover = false
+
+        if (prevData.has(data)) {
+          removed.push(data)
+        }
+      } else if (!prevData.has(data)) {
+        added.push(data)
+      }
+    }
+
+    const length = Math.min(added.length, removed.length)
+
+    for (let i = 0; i < length; ++i) {
+      virtualData[virtualData.indexOf(removed[i])] = added[i]
+    }
+
+    if (added.length > removed.length) {
+      virtualData.push(...added.slice(length))
+    } else if (added.length < removed.length) {
+      state.virtualData = virtualData.filter(data => !removed.includes(data))
+    }
+
+    state.padTop = heightBITree?.sum(start) ?? 0
+    state.startRow = start
+    state.endRow = end
   }
 
   function handleExpand(key: Key, expanded: boolean) {

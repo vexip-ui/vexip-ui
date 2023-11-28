@@ -8,18 +8,12 @@
     :width="1000"
     :height="320"
     :row-height="40"
+    col-resizable
   >
     <TableColumn type="drag" fixed></TableColumn>
     <TableColumn type="expand" id-key="expand" fixed>
-      <template #default="{ row, leftFixed, rightFixed }">
-        <div
-          :style="{
-            padding: `20px ${rightFixed + 10}px 20px ${leftFixed + 10}px`,
-            backgroundColor: 'var(--bg-color)'
-          }"
-        >
-          The {{ row.name }} expanded content
-        </div>
+      <template #default="{ row }">
+        <div>The {{ row.name }} expanded content</div>
       </template>
     </TableColumn>
     <TableColumn id-key="selection" type="selection" fixed></TableColumn>
