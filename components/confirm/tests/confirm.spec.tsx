@@ -6,8 +6,12 @@ import { GithubB } from '@vexip-ui/icons'
 import Confirm from '../confirm.vue'
 
 describe('Confirm', () => {
-  it('render', () => {
+  it('render', async () => {
     const wrapper = mount(Confirm)
+    await nextTick()
+    wrapper.vm.openConfirm('content')
+    await nextTick()
+    await nextTick()
 
     expect(wrapper.find('.vxp-confirm').classes()).toContain('vxp-confirm-vars')
     expect(wrapper.find('.vxp-confirm__body').exists()).toBe(true)
@@ -18,9 +22,8 @@ describe('Confirm', () => {
 
   it('open', async () => {
     const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
-
     await nextTick()
+
     wrapper.vm.openConfirm({
       content: 'content',
       icon: GithubB,
@@ -29,6 +32,7 @@ describe('Confirm', () => {
     })
     await nextTick()
     await nextTick()
+    const buttons = wrapper.findAll('.vxp-confirm__button')
     expect(wrapper.find('.vxp-confirm__content').text()).toEqual('content')
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
     expect(buttons[0].text()).toEqual('no')
@@ -37,8 +41,6 @@ describe('Confirm', () => {
 
   it('cancel', async () => {
     const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
-
     await nextTick()
     const promise = wrapper.vm.openConfirm({
       content: 'content',
@@ -48,6 +50,7 @@ describe('Confirm', () => {
     })
     await nextTick()
     await nextTick()
+    const buttons = wrapper.findAll('.vxp-confirm__button')
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
     await expect(promise).resolves.toEqual(false)
@@ -55,8 +58,6 @@ describe('Confirm', () => {
 
   it('confirm', async () => {
     const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
-
     await nextTick()
     const promise = wrapper.vm.openConfirm({
       content: 'content',
@@ -66,6 +67,7 @@ describe('Confirm', () => {
     })
     await nextTick()
     await nextTick()
+    const buttons = wrapper.findAll('.vxp-confirm__button')
     ;(buttons[1].element as HTMLButtonElement).click()
     await nextTick()
     await expect(promise).resolves.toEqual(true)
