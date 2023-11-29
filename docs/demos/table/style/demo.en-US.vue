@@ -20,10 +20,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-import { defineColumns } from 'vexip-ui'
+import { defineTableColumns } from 'vexip-ui'
 
 const columns = reactive(
-  defineColumns([
+  defineTableColumns([
     {
       name: 'First Name',
       key: 'firstName'

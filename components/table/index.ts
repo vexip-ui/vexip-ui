@@ -5,6 +5,14 @@ import type { ComponentPublicInstance } from 'vue'
 export { Table }
 export { tableProps } from './props'
 export {
+  defineTableFilter,
+  defineTableSorter,
+  defineTableColumn,
+  defineTableColumns,
+  defineTableSummary,
+  defineTableSummaries,
+
+  // legacies
   defineFilter,
   defineSorter,
   defineColumn,

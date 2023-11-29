@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { defineFilter } from 'vexip-ui'
+import { defineTableFilter } from 'vexip-ui'
 
 const data = ref(
   Array.from({ length: 1500 }, (_, index) => {
@@ -71,7 +71,7 @@ const data = ref(
   })
 )
 
-const filter = defineFilter({
+const filter = defineTableFilter({
   options: Array.from({ length: 5 }, (_, index) => ({
     label: `Includes ${index * 2}`,
     value: `${index * 2}`
