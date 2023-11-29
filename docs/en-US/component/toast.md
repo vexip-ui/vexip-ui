@@ -90,22 +90,22 @@ Often it is better to use with `tsx`.
 
 There are 5 basic methods to open the toast within a component instance:
 
-- `this.$toast.open(content[, duration] | options)`
-- `this.$toast.info(content[, duration] | options)`
-- `this.$toast.success(content[, duration] | options)`
-- `this.$toast.warning(content[, duration] | options)`
-- `this.$toast.error(content[, duration] | options)`
+- `Toast.open(content[, duration] | options)`
+- `Toast.info(content[, duration] | options)`
+- `Toast.success(content[, duration] | options)`
+- `Toast.warning(content[, duration] | options)`
+- `Toast.error(content[, duration] | options)`
 
 > Use `Toast.open(...)` after `import { Toast } from 'vexip-ui'` when using composition api.
 
 In addition, there is also a method to manually close the toast:
 
-- `this.$toast.close()`
+- `Toast.close()`
 
 A function is returned after the method call to open the toast, which can also be used to manually close the toast:
 
 ```ts
-const cancel = this.$toast.open(options)
+const cancel = Toast.open(options)
 
 // Immediately close the toast
 cancel()
@@ -114,14 +114,14 @@ cancel()
 When you need to modify the default value of toast options, you can do this:
 
 ```ts
-this.$toast.config(options)
+Toast.config(options)
 ```
 
 Sometimes it is necessary to create multiple toast managers to manage various toast:
 
 ```ts
 // This is a new toast manager
-const topToast = this.$toast.clone()
+const topToast = Toast.clone()
 
 topToast.config({ position: 'top' })
 ```
@@ -136,6 +136,15 @@ const topToast = Toast.clone()
 
 topToast.config({ position: 'top' })
 createApp().use(topToast, { property: '$topToast' })
+```
+
+In some cases, toast needs to be displayed on full-screen elements. The rendering position of the component can be moved by:
+
+```ts
+Toast.transferTo('#a-new-place')
+
+// re-transfer to body
+Toast.transferTo(document.body)
 ```
 
 ### Toast Options
