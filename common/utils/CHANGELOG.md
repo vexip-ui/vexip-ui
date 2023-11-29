@@ -1,3 +1,12 @@
+# [2.7.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.6.0...utils@2.7.0) (2023-11-29)
+
+
+### ✨ Features
+
+* **utils:** async debounceMinor and debounceFrame ([1e53baf](https://github.com/vexip-ui/vexip-ui/commit/1e53bafe176920f55b628d2f2401aa05683eb573))
+
+
+
 # [2.6.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.5.0...utils@2.6.0) (2023-11-23)
 
 
