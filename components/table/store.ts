@@ -1315,7 +1315,11 @@ export function useStore(options: StoreOptions) {
       } else if (!prevData.has(data)) {
         added.push(data)
       }
+
+      prevData.delete(data)
     }
+
+    removed.push(...prevData)
 
     const length = Math.min(added.length, removed.length)
 
@@ -1355,23 +1359,21 @@ export function useStore(options: StoreOptions) {
   function setTreeExpanded(key: Key, expanded: boolean) {
     if (!usingTree.value) return
 
-    const { rowMap, virtual } = state
+    const { rowMap, rowData, virtual } = state
     const row = rowMap.get(key)
 
     if (!row?.children?.length) return
 
-    // const underRows = collectUnderRows({ ...row, treeExpanded: true })
+    const underRows = collectUnderRows({ ...row, treeExpanded: true })
 
-    // if (expanded) {
-    //   rowData.splice(row.index + 1, 0, ...underRows)
-    // } else {
-    //   rowData.splice(row.index + 1, underRows.length)
-    // }
+    if (expanded) {
+      rowData.splice(row.index + 1, 0, ...underRows)
+    } else {
+      rowData.splice(row.index + 1, underRows.length)
+    }
 
-    // state.rowData = Array.from(rowData)
     row.treeExpanded = !!expanded
 
-    flatTreeRows()
     refreshRowIndex()
     virtual && setRenderRows(state.startRow, state.endRow, true)
   }
