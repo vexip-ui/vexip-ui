@@ -94,29 +94,29 @@ The auto-shutdown timer will restart after the hover is over.
 
 There are 5 basic methods of opening a message within a component instance:
 
-- `this.$message.open(content[, duration] | options)`
-- `this.$message.info(content[, duration] | options)`
-- `this.$message.success(content[, duration] | options)`
-- `this.$message.warning(content[, duration] | options)`
-- `this.$message.error(content[, duration] | options)`
+- `Message.open(content[, duration] | options)`
+- `Message.info(content[, duration] | options)`
+- `Message.success(content[, duration] | options)`
+- `Message.warning(content[, duration] | options)`
+- `Message.error(content[, duration] | options)`
 
 And a composite method of opening the message:
 
-- `this.$message.judge(state, successContent | successOptions, errorContent | errorOptions[, duration])`
+- `Message.judge(state, successContent | successOptions, errorContent | errorOptions[, duration])`
 
 > `Message.open(...)` is required after `import { Message } from 'vexip-ui'` when using the composition api.
 
 In addition, two methods to manually close the message are provided:
 
-- `this.$message.close(key)`
-- `this.$message.clear()`
+- `Message.close(key)`
+- `Message.clear()`
 
-> When `this.$message.close()` is called directly without passing a key, it has the same effect as `this.$message.clear()`.
+> When `Message.close()` is called directly without passing a key, it has the same effect as `Message.clear()`.
 
 After the method call to open the message will return a function that can be used to manually close the message that was just opened:
 
-```js
-const cancel = this.$message.open(options)
+```ts
+const cancel = Message.open(options)
 
 // close the message immediately
 cancel()
@@ -124,24 +124,24 @@ cancel()
 
 When you need to modify the default value of options, you can do this:
 
-```js
+```ts
 // In addition to the option value, you can also modify placement
 // to 'top' | 'bottom' to change the position of the message
-this.$message.config({ placement, ...options })
+Message.config({ placement, ...options })
 ```
 
 Sometimes it is necessary to create multiple message managers to manage various types of messages:
 
-```js
+```ts
 // This is a new message manager
-const myMessage = this.$message.clone()
+const myMessage = Message.clone()
 
 myMessage.config({ placement: 'bottom' })
 ```
 
 Or clone when importing the component:
 
-```js
+```ts
 import { createApp } from 'vue'
 import { Message } from 'vexip-ui'
 
@@ -149,6 +149,15 @@ const myMessage = Message.clone()
 
 myMessage.config({ placement: 'bottom' })
 createApp().use(myMessage, { property: '$myMessage' })
+```
+
+In some cases, messages need to be displayed on full-screen elements. The rendering position of the component can be moved by:
+
+```ts
+Message.transferTo('#a-new-place')
+
+// re-transfer to body
+Message.transferTo(document.body)
 ```
 
 ### Message Options
