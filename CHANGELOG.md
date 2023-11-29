@@ -1,3 +1,46 @@
+## [2.2.15](https://github.com/vexip-ui/vexip-ui/compare/v2.2.14...v2.2.15) (2023-11-29)
+
+
+### ⚡ Performance Improvements
+
+* **scrollbar:** remove overused throttle for move process ([9a80bb5](https://github.com/vexip-ui/vexip-ui/commit/9a80bb56e5bf1228617133179ee9b6d0aa989ef7))
+* **table:** improve performance of virtual scrolling ([#436](https://github.com/vexip-ui/vexip-ui/issues/436)) ([9b1b8f5](https://github.com/vexip-ui/vexip-ui/commit/9b1b8f53126072ccd5ba8c8a4fca4a0aaa7aa730))
+* **table:** improve table cell span computation ([2ccfd45](https://github.com/vexip-ui/vexip-ui/commit/2ccfd45782b22ba3a8f8bd40ec6915947df907d5))
+
+
+### ✨ Features
+
+* **confirm:** add transferTo method ([539849a](https://github.com/vexip-ui/vexip-ui/commit/539849acd367c605fc980bad23dd787e8827b736))
+* **contextmenu:** support target option ([be31fb9](https://github.com/vexip-ui/vexip-ui/commit/be31fb978557aab1aacf895cc60378dedec730b1))
+* **full-screen:** provide inner place for transfer elements ([205ac2e](https://github.com/vexip-ui/vexip-ui/commit/205ac2e6fe040ce747b945b4ef0e86f7ed621a93))
+* **loading:** add transferTo method ([be7ae92](https://github.com/vexip-ui/vexip-ui/commit/be7ae92675502502ce84b8f40717830bccc0d877))
+* **message:** add transferTo method ([a0ff8c3](https://github.com/vexip-ui/vexip-ui/commit/a0ff8c3c6803a799409da32b1a2241c2f397f402))
+* **native-scroll:** async refresh and ensureInView methods ([a4971c9](https://github.com/vexip-ui/vexip-ui/commit/a4971c91634376d817000822b34cf2a261c2907b))
+* **notice:** add transferTo method ([7352daf](https://github.com/vexip-ui/vexip-ui/commit/7352daf3d1388bc7a81b27ee1db5f6bd77117df3))
+* **scroll:** async api methods ([55f45ee](https://github.com/vexip-ui/vexip-ui/commit/55f45eedda453b0bdd423b01ab9c713e2172e8ec))
+* **table:** add no-transition prop ([33d9124](https://github.com/vexip-ui/vexip-ui/commit/33d91245d5cc8063daa9385aeda53b470455b2f6))
+* **table:** support inherit provided config when using columns and summaries props ([bb7ecc5](https://github.com/vexip-ui/vexip-ui/commit/bb7ecc57a223f40d664f2d98e14ba36dfbddb753))
+* **toast:** add transferTo method ([68e9736](https://github.com/vexip-ui/vexip-ui/commit/68e9736b3ab03dad72ab054bc170056b0eee7e97))
+* **utils:** async debounceMinor and debounceFrame ([1e53baf](https://github.com/vexip-ui/vexip-ui/commit/1e53bafe176920f55b628d2f2401aa05683eb573))
+
+
+### 🐞 Bug Fixes
+
+* **confirm:** ensure api method work ([c181d7d](https://github.com/vexip-ui/vexip-ui/commit/c181d7deee06e55b9bebd1a7a7fa5ec8d422132a))
+* **hooks:** useVirtual support wrapper changed ([6ab1558](https://github.com/vexip-ui/vexip-ui/commit/6ab1558adcdb2dfe61b5c2047067ae81c1cecf87))
+* **native-scroll:** no emit event when sync scroll position ([5ecab8b](https://github.com/vexip-ui/vexip-ui/commit/5ecab8b2d141838765495e0e6668a23e1f7a3c85))
+* **table:** correct flatted structure after drop ([9ee20bf](https://github.com/vexip-ui/vexip-ui/commit/9ee20bfe1a8f2f4e2cfea2edc985840be1375215))
+* **tree:** rename empty-tip prop to empty-text ([7f8615e](https://github.com/vexip-ui/vexip-ui/commit/7f8615eda066a4d1a7ccae512ff9aa43b26f3edf))
+* **tree:** unexcepted expanding state changed ([a483857](https://github.com/vexip-ui/vexip-ui/commit/a48385702cf3c6f3ac42381fa758c657b40d8e20))
+
+
+### 👓 Types
+
+* normalize MaybeRef type ([8ac0762](https://github.com/vexip-ui/vexip-ui/commit/8ac07623268844cecc0e7d8674d321614bc08edf))
+* normalize transfer prop type for default config ([e36cb9a](https://github.com/vexip-ui/vexip-ui/commit/e36cb9ae5c762b5781219414c3872155dc93a3cc))
+
+
+
 ## [2.2.14](https://github.com/vexip-ui/vexip-ui/compare/v2.2.13...v2.2.14) (2023-11-23)
 
 
