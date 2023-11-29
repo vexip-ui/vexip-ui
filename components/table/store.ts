@@ -11,7 +11,8 @@ import {
   sortByProps,
   toFalse,
   toFixed,
-  toNumber
+  toNumber,
+  walkTree
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_FOOT_PREFIX, TABLE_HEAD_PREFIX, columnTypes } from './symbol'
 
@@ -367,7 +368,8 @@ export function useStore(options: StoreOptions) {
     handleColumnResize,
     getCurrentData,
     createMinRowState,
-    flatTreeRows
+    flatTreeRows,
+    refreshRowDepth
   }
 
   watchEffect(() => {
@@ -851,6 +853,12 @@ export function useStore(options: StoreOptions) {
     }
 
     state.rowData = rowData
+  }
+
+  function refreshRowDepth() {
+    walkTree(state.treeRowData, (row, depth) => {
+      row.depth = depth
+    })
   }
 
   function setCurrentPage(currentPage: number) {
@@ -1347,21 +1355,23 @@ export function useStore(options: StoreOptions) {
   function setTreeExpanded(key: Key, expanded: boolean) {
     if (!usingTree.value) return
 
-    const { rowMap, rowData, virtual } = state
+    const { rowMap, virtual } = state
     const row = rowMap.get(key)
 
     if (!row?.children?.length) return
 
-    const underRows = collectUnderRows({ ...row, treeExpanded: true })
+    // const underRows = collectUnderRows({ ...row, treeExpanded: true })
 
-    if (expanded) {
-      rowData.splice(row.index + 1, 0, ...underRows)
-    } else {
-      rowData.splice(row.index + 1, underRows.length)
-    }
+    // if (expanded) {
+    //   rowData.splice(row.index + 1, 0, ...underRows)
+    // } else {
+    //   rowData.splice(row.index + 1, underRows.length)
+    // }
 
+    // state.rowData = Array.from(rowData)
     row.treeExpanded = !!expanded
 
+    flatTreeRows()
     refreshRowIndex()
     virtual && setRenderRows(state.startRow, state.endRow, true)
   }

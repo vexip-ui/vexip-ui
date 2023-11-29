@@ -482,7 +482,8 @@ export interface TableActions {
   emitColResize(type: MoveEventType, payload: TableColResizePayload): void,
   hasIcon(name: TableIconName): boolean,
   getIcon(name: TableIconName): TableIcons[TableIconName],
-  renderTableSlot(payload: { name: string }): any
+  renderTableSlot(payload: { name: string }): any,
+  runInLocked(handler?: (...args: any[]) => any, delay?: number): Promise<void>
 }
 
 export interface ColumnGroupActions {
