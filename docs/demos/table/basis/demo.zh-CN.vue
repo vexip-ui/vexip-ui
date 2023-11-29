@@ -6,12 +6,12 @@
 import { reactive } from 'vue'
 
 // 在 typescript 时可以使用辅助函数来帮助类型推导
-import { defineColumns } from 'vexip-ui'
+import { defineTableColumns } from 'vexip-ui'
 
 const currentYear = new Date().getFullYear()
 
 const columns = reactive(
-  defineColumns([
+  defineTableColumns([
     {
       name: 'First Name',
       key: 'firstName'

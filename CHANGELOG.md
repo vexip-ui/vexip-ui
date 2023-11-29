@@ -1,3 +1,18 @@
+## [2.2.16](https://github.com/vexip-ui/vexip-ui/compare/v2.2.15...v2.2.16) (2023-11-29)
+
+
+### ✨ Features
+
+* **table:** add ellipsis prop ([64cb716](https://github.com/vexip-ui/vexip-ui/commit/64cb716817d08841fc2a399fbda332d6ca4db339))
+
+
+### 🐞 Bug Fixes
+
+* **table:** correct tree render when using virtual ([#437](https://github.com/vexip-ui/vexip-ui/issues/437)) ([3ad7781](https://github.com/vexip-ui/vexip-ui/commit/3ad7781d6ab3d6952d0a4ada53c505be4f87cdfd))
+* **table:** rename helper methods by more accurate names ([df36191](https://github.com/vexip-ui/vexip-ui/commit/df36191130532d8e4b0c4117c6f37031b3d8996a))
+
+
+
 ## [2.2.15](https://github.com/vexip-ui/vexip-ui/compare/v2.2.14...v2.2.15) (2023-11-29)
 
 

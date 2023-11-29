@@ -5,13 +5,13 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-// Helper functions can be used to infer type deduction
-import { defineColumns } from 'vexip-ui'
+// Helper functions can be used to infer types
+import { defineTableColumns } from 'vexip-ui'
 
 const currentYear = new Date().getFullYear()
 
 const columns = reactive(
-  defineColumns([
+  defineTableColumns([
     {
       name: 'First Name',
       key: 'firstName'

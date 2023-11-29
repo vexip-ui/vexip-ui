@@ -1210,4 +1210,39 @@ describe('Table', () => {
         .exists()
     ).toBe(true)
   })
+
+  it('ellipsis', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name',
+        ellipsis: true
+      },
+      {
+        name: 'Value',
+        key: 'value'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, value: i }))
+    const wrapper = mount(Table, {
+      props: { columns, data }
+    })
+
+    await runScrollTimers()
+
+    const headCells = wrapper.findAll('.vxp-table__head .vxp-table__head-cell')
+    const bodyCells = wrapper.findAll('.vxp-table__body .vxp-table__cell')
+
+    expect(headCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(headCells[1].find('.vxp-ellipsis').exists()).toBe(false)
+    expect(bodyCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[1].find('.vxp-ellipsis').exists()).toBe(false)
+
+    await wrapper.setProps({ ellipsis: true })
+
+    expect(headCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(headCells[1].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[1].find('.vxp-ellipsis').exists()).toBe(true)
+  })
 })
