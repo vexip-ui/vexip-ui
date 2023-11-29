@@ -13,7 +13,7 @@ import {
 import { useRtl } from './rtl'
 import { isClient } from '@vexip-ui/utils'
 
-import type { Ref } from 'vue'
+import type { MaybeRef, Ref } from 'vue'
 import type {
   ComputePositionConfig,
   Middleware,
@@ -23,7 +23,6 @@ import type {
   VirtualElement
 } from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
-import type { MaybeRef } from './shared/types'
 
 export interface UsePopperOptions {
   /**

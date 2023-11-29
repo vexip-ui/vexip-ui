@@ -14,12 +14,13 @@ import { ensureArray, isClient, noop } from '@vexip-ui/utils'
 
 import type {
   ComponentPublicInstance,
+  MaybeRef,
   Slots,
   VNode,
   VNodeChild,
   VNodeNormalizedChildren
 } from 'vue'
-import type { MaybeElement, MaybeInstance, MaybeRef } from './types'
+import type { MaybeElement, MaybeInstance } from './types'
 
 export function createSlotRender(
   slots: Slots,
@@ -82,7 +83,7 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
   return result
 }
 
-export function unrefElement<T extends string | MaybeInstance>(
+export function unrefElement<T extends string | MaybeInstance = string | MaybeInstance>(
   ref: MaybeRef<T>
 ): T extends string | ComponentPublicInstance ? MaybeElement : T {
   const plain = unref(ref)
