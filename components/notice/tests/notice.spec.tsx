@@ -139,4 +139,13 @@ describe('Notice', () => {
     expect(document.querySelector('.test1')).toBeTruthy()
     expect(document.querySelector('.test2')).toBeTruthy()
   })
+
+  it('transferTo', async () => {
+    const Notice = createNotice()
+    const el = document.createElement('div')
+    Notice.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-notice')).toBeTruthy()
+  })
 })
