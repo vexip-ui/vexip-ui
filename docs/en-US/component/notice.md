@@ -106,29 +106,29 @@ The auto-shutdown timer will restart after the hover is over.
 
 There are 5 basic methods of opening a notice within a component instance:
 
-- `this.$notice.open(title[, content][, duration] | options)`
-- `this.$notice.info(title[, content][, duration] | options)`
-- `this.$notice.success(title[, content][, duration] | options)`
-- `this.$notice.warning(title[, content][, duration] | options)`
-- `this.$notice.error(title[, content][, duration] | options)`
+- `Notice.open(title[, content][, duration] | options)`
+- `Notice.info(title[, content][, duration] | options)`
+- `Notice.success(title[, content][, duration] | options)`
+- `Notice.warning(title[, content][, duration] | options)`
+- `Notice.error(title[, content][, duration] | options)`
 
 And a composite method of opening the notice:
 
-- `this.$notice.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
+- `Notice.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
 
 > `Notice.open(...)` is required after `import { Message } from 'vexip-ui'` when using the composition api.
 
 In addition, two methods to manually close the notice are provided:
 
-- `this.$notice.close(key)`
-- `this.$notice.clear()`
+- `Notice.close(key)`
+- `Notice.clear()`
 
-> When `this.$notice.close()` is called directly without passing a key, it has the same effect as `this.$notice.clear()`.
+> When `Notice.close()` is called directly without passing a key, it has the same effect as `Notice.clear()`.
 
 After the method call to open the message will return a function that can be used to manually close the message that was just opened:
 
-```js
-const cancel = this.$notice.open(options)
+```ts
+const cancel = Notice.open(options)
 
 // close the notice immediately
 cancel()
@@ -136,25 +136,25 @@ cancel()
 
 When you need to modify the default value of options, you can do this:
 
-```js
+```ts
 // In addition to the option value, you can also modify placement to
 // 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' to change
 // the position of the message
-this.$notice.config({ placement, ...options })
+Notice.config({ placement, ...options })
 ```
 
 Sometimes it is necessary to create multiple notice managers to manage various types of messages:
 
-```js
+```ts
 // This is a new notice manager
-const myNotice = this.$notice.clone()
+const myNotice = Notice.clone()
 
 myNotice.config({ placement: 'bottom-right' })
 ```
 
 Or clone when importing the component:
 
-```js
+```ts
 import { createApp } from 'vue'
 import { Notice } from 'vexip-ui'
 
@@ -162,6 +162,15 @@ const myNotice = Notice.clone()
 
 myNotice.config({ placement: 'bottom-right' })
 createApp().use(myNotice, { property: '$myNotice' })
+```
+
+In some cases, notices need to be displayed on full-screen elements. The rendering position of the component can be moved by:
+
+```ts
+Notice.transferTo('#a-new-place')
+
+// re-transfer to body
+Notice.transferTo(document.body)
 ```
 
 ### Notice Options

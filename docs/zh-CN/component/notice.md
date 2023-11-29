@@ -106,29 +106,29 @@
 
 组件实例内提供了 5 种基础的打开提示的方法：
 
-- `this.$notice.open(title[, content][, duration] | options)`
-- `this.$notice.info(title[, content][, duration] | options)`
-- `this.$notice.success(title[, content][, duration] | options)`
-- `this.$notice.warning(title[, content][, duration] | options)`
-- `this.$notice.error(title[, content][, duration] | options)`
+- `Notice.open(title[, content][, duration] | options)`
+- `Notice.info(title[, content][, duration] | options)`
+- `Notice.success(title[, content][, duration] | options)`
+- `Notice.warning(title[, content][, duration] | options)`
+- `Notice.error(title[, content][, duration] | options)`
 
 以及 1 个复合的打开消息的方法：
 
-- `this.$message.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
+- `Notice.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
 
 > 在使用组合式 api 时需要 `import { Notice } from 'vexip-ui'` 后使用 `Notice.open(...)`。
 
 此外，还提供了两个手动关闭提示的方法：
 
-- `this.$notice.close(key)`
-- `this.$notice.clear()`
+- `Notice.close(key)`
+- `Notice.clear()`
 
-> 当直接调用 `this.$notice.close()` 而不传入 key 时和 `this.$notice.clear()` 效果相同。
+> 当直接调用 `Notice.close()` 而不传入 key 时和 `Notice.clear()` 效果相同。
 
 在打开提示的方法调用后会返回一个函数，该函数可以用于手动关闭刚刚打开的提示：
 
-```js
-const cancel = this.$notice.open(options)
+```ts
+const cancel = Notice.open(options)
 
 // 立即关闭该提示
 cancel()
@@ -136,23 +136,23 @@ cancel()
 
 需要修改组件的默认属性值时，可以这样做：
 
-```js
+```ts
 // 除了选项值以外，还可以修改 placement 为 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' 来改变提示的位置
-this.$notice.config({ placement, ...options })
+Notice.config({ placement, ...options })
 ```
 
 有时需要创建多个提示管理器以便于管理各类提示：
 
-```js
+```ts
 // 这是一个全新的提示组件
-const myNotice = this.$notice.clone()
+const myNotice = Notice.clone()
 
 myNotice.config({ placement: 'bottom-right' })
 ```
 
 或者在按需引入组件时进行克隆：
 
-```js
+```ts
 import { createApp } from 'vue'
 import { Notice } from 'vexip-ui'
 
@@ -160,6 +160,15 @@ const myNotice = Notice.clone()
 
 myNotice.config({ placement: 'bottom-right' })
 createApp().use(myNotice, { property: '$myNotice' })
+```
+
+某些场景下，需要在全屏元素上显示提示，此时可以将组件的渲染位置迁移：
+
+```ts
+Notice.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Notice.transferTo(document.body)
 ```
 
 ### Notice 选项
