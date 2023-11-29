@@ -27,7 +27,8 @@ import {
   queryAll,
   removeArrayItem,
   transformTree,
-  walkTree
+  walkTree,
+  warnOnce
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { useCascadedChecked } from './hooks'
@@ -58,6 +59,7 @@ const props = useProps('tree', _props, {
   },
   noBuildTree: false,
   emptyTip: null,
+  emptyText: null,
   disabled: false,
   readonly: false,
   checkbox: false,
@@ -107,6 +109,19 @@ const props = useProps('tree', _props, {
   blockEffect: false,
   filterLeaf: false
 })
+
+const cancelWatch = watch(
+  () => props.emptyText,
+  value => {
+    if (!isNull(value)) {
+      warnOnce(
+        "[vexip-ui:Tree] 'empty-tip' prop has been deprecated, " +
+          "please use 'empty-text' prop to replace it"
+      )
+      cancelWatch()
+    }
+  }
+)
 
 const nh = useNameHelper('tree')
 const locale = useLocale('tree', toRef(props, 'locale'))
@@ -189,54 +204,6 @@ const updateVisibleNodeEls = debounce(() => {
   }
 }, 300)
 
-provide(
-  TREE_STATE,
-  reactive({
-    arrow: toRef(props, 'arrow'),
-    checkbox: toRef(props, 'checkbox'),
-    suffixCheckbox: toRef(props, 'suffixCheckbox'),
-    noCascaded: toRef(props, 'noCascaded'),
-    linkLine,
-    virtual: toRef(props, 'virtual'),
-    labelKey: toRef(keyConfig, 'label'),
-    draggable: toRef(props, 'draggable'),
-    floorSelect: toRef(props, 'floorSelect'),
-    renderer: toRef(props, 'renderer'),
-    prefixRenderer: toRef(props, 'prefixRenderer'),
-    suffixRenderer: toRef(props, 'suffixRenderer'),
-    arrowIcon: toRef(props, 'arrowIcon'),
-    blockEffect: toRef(props, 'blockEffect'),
-    dragging,
-    boundAsyncLoad,
-    nodeStates,
-    expanding,
-    getParentNode,
-    updateVisibleNodeEls,
-    computeCheckedState,
-    handleNodeClick,
-    handleNodeSelect,
-    handleNodeCancel,
-    handleNodeExpand,
-    handleNodeReduce,
-    handleAsyncLoad,
-    handleNodeDragStart,
-    handleNodeDragOver,
-    handleNodeDrop,
-    handleNodeDragEnd,
-    handleHittingChange,
-    handleNodeHitting,
-    handleLabelClick
-  })
-)
-provide(
-  TREE_NODE_STATE,
-  reactive({
-    depth: -1,
-    disabled: toRef(props, 'disabled'),
-    readonly: toRef(props, 'readonly')
-  })
-)
-
 let disableExpand = false
 
 function disableExpandTick() {
@@ -246,7 +213,6 @@ function disableExpandTick() {
     disableExpand = false
   })
 }
-
 watchEffect(() => {
   const nodes = flattedNodes.value
 
@@ -431,6 +397,54 @@ watch(expandedNodeIds, (value, prev) => {
 
   expandingNodes.value = baseNodes
 })
+
+provide(
+  TREE_STATE,
+  reactive({
+    arrow: toRef(props, 'arrow'),
+    checkbox: toRef(props, 'checkbox'),
+    suffixCheckbox: toRef(props, 'suffixCheckbox'),
+    noCascaded: toRef(props, 'noCascaded'),
+    linkLine,
+    virtual: toRef(props, 'virtual'),
+    labelKey: toRef(keyConfig, 'label'),
+    draggable: toRef(props, 'draggable'),
+    floorSelect: toRef(props, 'floorSelect'),
+    renderer: toRef(props, 'renderer'),
+    prefixRenderer: toRef(props, 'prefixRenderer'),
+    suffixRenderer: toRef(props, 'suffixRenderer'),
+    arrowIcon: toRef(props, 'arrowIcon'),
+    blockEffect: toRef(props, 'blockEffect'),
+    dragging,
+    boundAsyncLoad,
+    nodeStates,
+    expanding,
+    getParentNode,
+    updateVisibleNodeEls,
+    computeCheckedState,
+    handleNodeClick,
+    handleNodeSelect,
+    handleNodeCancel,
+    handleNodeExpand,
+    handleNodeReduce,
+    handleAsyncLoad,
+    handleNodeDragStart,
+    handleNodeDragOver,
+    handleNodeDrop,
+    handleNodeDragEnd,
+    handleHittingChange,
+    handleNodeHitting,
+    handleLabelClick
+  })
+)
+provide(
+  TREE_NODE_STATE,
+  reactive({
+    depth: -1,
+    disabled: toRef(props, 'disabled'),
+    readonly: toRef(props, 'readonly')
+  })
+)
 
 defineExpose({
   treeNodes,
@@ -1377,7 +1391,7 @@ function getFlattedData(withFilter = false) {
     <template #empty>
       <div :class="nh.be('empty-tip')">
         <slot name="empty">
-          {{ props.emptyTip ?? locale.empty }}
+          {{ props.emptyText ?? props.emptyTip ?? locale.empty }}
         </slot>
       </div>
     </template>
