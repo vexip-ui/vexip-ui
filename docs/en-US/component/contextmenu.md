@@ -36,12 +36,13 @@ This use case shows how to set custom colors, how to set custom icons, how to di
 
 ### Contextmenu Options
 
-| Name    | Type           | Description                                                                                                                            | Default | Since |
-| ------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| clientX | `number`       | Set the horizontal x position where the menu appears                                                                                   | `0`     | -     |
-| clientY | `number`       | Set the vertical y position where the menu appears                                                                                     | `0`     | -     |
-| appear  | `boolean`      | Same as the appear property of vue native transition, set whether the menu has a transition effect when the menu is initially rendered | `false` | -     |
-| configs | `MenuConfig[]` | Set menu options, see Contextmenu configuration items below for specific properties                                                    | `[]`    | -     |
+| Name    | Type                              | Description                                                                                                                            | Default         | Since    |
+| ------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------- | -------- |
+| clientX | `number`                          | Set the horizontal x position where the menu appears                                                                                   | `0`             | -        |
+| clientY | `number`                          | Set the vertical y position where the menu appears                                                                                     | `0`             | -        |
+| appear  | `boolean`                         | Same as the appear property of vue native transition, set whether the menu has a transition effect when the menu is initially rendered | `false`         | -        |
+| configs | `MenuConfig[]`                    | Set menu options, see Contextmenu configuration items below for specific properties                                                    | `[]`            | -        |
+| target  | `MaybeRef<string \| HTMLElement>` | Set the target element for the menu rendering                                                                                          | `document.body` | `2.2.15` |
 
 ### Contextmenu Config
 

@@ -1,9 +1,27 @@
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { GithubB } from '@vexip-ui/icons'
 import Contextmenu from '../contextmenu.vue'
+import { ContextmenuManager } from '..'
+
+function createContextmenu() {
+  const Contextmenu = new ContextmenuManager()
+
+  mount({
+    setup() {
+      const instance = getCurrentInstance()
+      const app = instance?.appContext.app
+
+      app?.use(Contextmenu)
+
+      return () => <div></div>
+    }
+  })
+
+  return Contextmenu
+}
 
 describe('Contextmenu', () => {
   it('render', () => {
@@ -14,46 +32,58 @@ describe('Contextmenu', () => {
 
   it('open menu', async () => {
     const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
-    const wrapper = mount(Contextmenu)
+    const Contextmenu = createContextmenu()
 
-    wrapper.vm.openContextmenu({
+    Contextmenu.open({
       clientX: 10,
       clientY: 5,
       configs: menus
     })
     await nextTick()
-    const items = wrapper.findAll('.vxp-contextmenu__item')
+    const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
+    expect(wrapper).toBeTruthy()
+    const items = wrapper.querySelectorAll<HTMLElement>('.vxp-contextmenu__item')
 
-    expect(wrapper.attributes('style')).toContain('top: 5px; left: 10px;')
+    expect(wrapper.style.cssText).toContain('top: 5px; left: 10px;')
     expect(items.length).toEqual(3)
-    expect(items[0].text()).toEqual('1')
-    expect(items[2].text()).toEqual('3')
+    expect(items[0].textContent).toEqual('1')
+    expect(items[2].textContent).toEqual('3')
   })
 
   it('select menu', async () => {
     const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
-    const wrapper = mount(Contextmenu)
+    const Contextmenu = createContextmenu()
 
-    const promise = wrapper.vm.openContextmenu({
+    const promise = Contextmenu.open({
+      clientX: 10,
+      clientY: 5,
       configs: menus
     })
     await nextTick()
-    const items = wrapper.findAll('.vxp-contextmenu__item')
+    const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
+    expect(wrapper).toBeTruthy()
+    const items = wrapper.querySelectorAll<HTMLElement>('.vxp-contextmenu__item')
 
-    await items[1].trigger('click')
+    items[1].dispatchEvent(new Event('click'))
+    await nextTick()
     await expect(promise).resolves.toEqual(['2'])
   })
 
   it('cancel menu', async () => {
     const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
-    const wrapper = mount(Contextmenu)
+    const Contextmenu = createContextmenu()
 
-    const promise = wrapper.vm.openContextmenu({
+    const promise = Contextmenu.open({
+      clientX: 10,
+      clientY: 5,
       configs: menus
     })
     await nextTick()
 
-    await wrapper.trigger('clickoutside')
+    const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
+    expect(wrapper).toBeTruthy()
+    wrapper.dispatchEvent(new Event('clickoutside'))
+    await nextTick()
     await expect(promise).resolves.toEqual(null)
   })
 
@@ -67,19 +97,43 @@ describe('Contextmenu', () => {
         shortcut: 'shortcut'
       }
     ]
-    const wrapper = mount(Contextmenu)
+    const Contextmenu = createContextmenu()
 
-    wrapper.vm.openContextmenu({
+    Contextmenu.open({
+      clientX: 10,
+      clientY: 5,
       configs: menus
     })
     await nextTick()
 
-    const item = wrapper.find('.vxp-contextmenu__item')
+    const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
+    expect(wrapper).toBeTruthy()
+    const item = wrapper.querySelector<HTMLElement>('.vxp-contextmenu__item')!
 
-    expect(item.find('.vxp-contextmenu__label').text()).toEqual('label')
-    expect(item.find('.vxp-contextmenu__label').attributes('style')).toContain('color: red;')
-    expect(item.find('.vxp-contextmenu__shortcut').text()).toEqual('shortcut')
-    expect(item.find('.vxp-contextmenu__icon').exists()).toBe(true)
-    expect(item.findComponent(GithubB).exists()).toBe(true)
+    expect(item).toBeTruthy()
+    expect(item.querySelector<HTMLElement>('.vxp-contextmenu__label')!.textContent).toEqual('label')
+    expect(item.querySelector<HTMLElement>('.vxp-contextmenu__label')!.style.cssText).toContain(
+      'color: red;'
+    )
+    expect(item.querySelector<HTMLElement>('.vxp-contextmenu__shortcut')!.textContent).toEqual(
+      'shortcut'
+    )
+    expect(item.querySelector<HTMLElement>('.vxp-contextmenu__icon')).toBeTruthy()
+    expect(item.querySelector('svg')).toBeTruthy()
+  })
+
+  it('transferTo', async () => {
+    const menus = [{ key: '1' }, { key: '2' }, { key: '3' }]
+    const Contextmenu = createContextmenu()
+    const el = document.createElement('div')
+
+    Contextmenu.open({
+      clientX: 10,
+      clientY: 5,
+      configs: menus,
+      target: el
+    })
+    await nextTick()
+    expect(el.querySelector('.vxp-contextmenu')).toBeTruthy()
   })
 })
