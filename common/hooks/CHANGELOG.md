@@ -1,3 +1,17 @@
+## [2.2.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.0...hooks@2.2.1) (2023-11-29)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useVirtual support wrapper changed ([6ab1558](https://github.com/vexip-ui/vexip-ui/commit/6ab1558adcdb2dfe61b5c2047067ae81c1cecf87))
+
+
+### 👓 Types
+
+* normalize MaybeRef type ([8ac0762](https://github.com/vexip-ui/vexip-ui/commit/8ac07623268844cecc0e7d8674d321614bc08edf))
+
+
+
 # [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.1...hooks@2.2.0) (2023-11-23)
 
 
