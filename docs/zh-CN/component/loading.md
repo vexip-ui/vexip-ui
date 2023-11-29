@@ -40,6 +40,15 @@
 
 ## API
 
+某些场景下，需要在全屏元素上显示消息，此时可以将组件的渲染位置迁移：
+
+```ts
+Loading.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Loading.transferTo(document.body)
+```
+
 ### Loading 选项
 
 | 名称        | 类型                                             | 说明                                                                                             | 默认值      | 始于 |

@@ -40,6 +40,15 @@ Also, this example shows how to use the Loading component in a composition API.
 
 ## API
 
+In some cases, the component needs to be displayed on full-screen elements. The rendering position of the component can be moved by:
+
+```ts
+Loading.transferTo('#a-new-place')
+
+// re-transfer to body
+Loading.transferTo(document.body)
+```
+
 ### Loading Options
 
 | Name        | Type                                             | Description                                                                                                                                                                                     | Default     | Since |
