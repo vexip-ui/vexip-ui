@@ -94,29 +94,29 @@
 
 组件实例内提供了 5 种基础的打开消息的方法：
 
-- `this.$message.open(content[, duration] | options)`
-- `this.$message.info(content[, duration] | options)`
-- `this.$message.success(content[, duration] | options)`
-- `this.$message.warning(content[, duration] | options)`
-- `this.$message.error(content[, duration] | options)`
+- `Message.open(content[, duration] | options)`
+- `Message.info(content[, duration] | options)`
+- `Message.success(content[, duration] | options)`
+- `Message.warning(content[, duration] | options)`
+- `Message.error(content[, duration] | options)`
 
 以及 1 个复合的打开消息的方法：
 
-- `this.$message.judge(state, successContent | successOptions, errorContent | errorOptions[, duration])`
+- `Message.judge(state, successContent | successOptions, errorContent | errorOptions[, duration])`
 
 > 在使用组合式 api 时需要 `import { Message } from 'vexip-ui'` 后使用 `Message.open(...)`。
 
 此外，还提供了两个手动关闭消息的方法：
 
-- `this.$message.close(key)`
-- `this.$message.clear()`
+- `Message.close(key)`
+- `Message.clear()`
 
-> 当直接调用 `this.$message.close()` 而不传入 key 时和 `this.$message.clear()` 效果相同。
+> 当直接调用 `Message.close()` 而不传入 key 时和 `Message.clear()` 效果相同。
 
 在打开消息的方法调用后会返回一个函数，该函数可以用于手动关闭刚刚打开的消息：
 
-```js
-const cancel = this.$message.open(options)
+```ts
+const cancel = Message.open(options)
 
 // 立即关闭该消息
 cancel()
@@ -124,23 +124,23 @@ cancel()
 
 需要修改组件的默认属性值时，可以这样做：
 
-```js
+```ts
 // 除了选项值以外，还可以修改 placement 为 'top' | 'bottom' 来改变消息的位置
-this.$message.config({ placement, ...options })
+Message.config({ placement, ...options })
 ```
 
 有时需要创建多个消息管理器以便于管理各类消息：
 
-```js
+```ts
 // 这是一个全新的消息组件
-const myMessage = this.$message.clone()
+const myMessage = Message.clone()
 
 myMessage.config({ placement: 'bottom' })
 ```
 
 或者在引入组件时进行克隆：
 
-```js
+```ts
 import { createApp } from 'vue'
 import { Message } from 'vexip-ui'
 
@@ -148,6 +148,15 @@ const myMessage = Message.clone()
 
 myMessage.config({ placement: 'bottom' })
 createApp().use(myMessage, { property: '$myMessage' })
+```
+
+某些场景下，需要在全屏元素上显示消息，此时可以将组件的渲染位置迁移：
+
+```ts
+Message.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Message.transferTo(document.body)
 ```
 
 ### Message 选项

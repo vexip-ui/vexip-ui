@@ -1,10 +1,11 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './message.vue'
-import { proxyExposed } from '@vexip-ui/hooks'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
 import { destroyObject, isClient, isNull, noop, toNumber } from '@vexip-ui/utils'
 
-import type { App } from 'vue'
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
 import type {
   Key,
   MessageConfig,
@@ -48,6 +49,8 @@ export class MessageManager {
   private _instance: MessageInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
@@ -59,6 +62,8 @@ export class MessageManager {
     this._instance = null
     this._innerApp = null
     this._container = null
+    this._wrapper = null
+    this._mountedEl = null
     this.name = 'Message'
     this.defaults = {}
 
@@ -106,13 +111,13 @@ export class MessageManager {
     if (isNull(key)) {
       this.clear()
     } else {
-      this._getInstance().remove(key)
+      this._getInstance()?.remove(key)
     }
   }
 
   config({ placement, ...others }: MessageConfig & MessageOptions) {
     if (placement) {
-      this._getInstance().config({
+      this._getInstance()?.config({
         placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
       })
     }
@@ -129,7 +134,7 @@ export class MessageManager {
   }
 
   clear() {
-    this._getInstance().clear()
+    this._getInstance()?.clear()
   }
 
   destroy() {
@@ -153,8 +158,24 @@ export class MessageManager {
     }
   }
 
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
+  }
+
   private _getInstance() {
-    if (!this._instance) {
+    if (!this._instance && isClient) {
       if (!this._mountedApp) {
         console.warn('[vexip-ui:Message]: App missing, the plugin maybe not installed.')
 
@@ -172,7 +193,8 @@ export class MessageManager {
         this._instance = proxyExposed<MessageInstance>(vnode)
       }
 
-      document.body.appendChild(this._container.firstElementChild!)
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance
@@ -186,7 +208,7 @@ export class MessageManager {
     const options = typeof content === 'string' ? { content, duration: _duration } : content
 
     const key = options.key ?? getKey()
-    const message = this._getInstance()
+    const message = this._getInstance()!
 
     let timer: ReturnType<typeof setTimeout>
 

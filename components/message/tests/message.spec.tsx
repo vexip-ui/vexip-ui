@@ -117,4 +117,13 @@ describe('Message', () => {
     await messageOpened()
     expect(document.querySelector('.test')).toBeTruthy()
   })
+
+  it('transferTo', async () => {
+    const Message = createMessage()
+    const el = document.createElement('div')
+    Message.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-message')).toBeTruthy()
+  })
 })
