@@ -30,8 +30,7 @@ import {
   noop,
   removeArrayItem,
   toNumber,
-  transformListToMap,
-  walkTree
+  transformListToMap
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
@@ -279,7 +278,8 @@ provide(TABLE_ACTIONS, {
   emitFootEvent,
   hasIcon: name => !!props.icons[name],
   getIcon: name => props.icons[name],
-  renderTableSlot
+  renderTableSlot,
+  runInLocked
 })
 provide(TABLE_SLOTS, slots)
 
@@ -390,7 +390,8 @@ const {
   clearCheckAll,
   getParentRow,
   getCurrentData,
-  flatTreeRows
+  flatTreeRows,
+  refreshRowDepth
 } = mutations
 
 watch(
@@ -798,12 +799,6 @@ function isLeftInsideRight(left: TableRowState, right: TableRowState) {
   return false
 }
 
-function refreshChildrenDepth() {
-  walkTree(state.treeRowData, (row, depth) => {
-    row.depth = depth
-  })
-}
-
 function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
   if (!dragState) return
 
@@ -861,7 +856,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     }
   }
 
-  refreshChildrenDepth()
+  refreshRowDepth()
   flatTreeRows()
   refreshRowIndex()
   emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
@@ -1110,6 +1105,7 @@ function renderTableSlot({ name }: { name: string }) {
         inherit
         mode="both"
         scroll-only
+        observe-deep
         :class="[nh.be('wrapper'), props.scrollClass.major]"
         :bar-class="nh.bem('bar', 'horizontal')"
         :height="bodyScrollHeight"
