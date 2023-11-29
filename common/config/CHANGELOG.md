@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.0...config@1.3.1) (2023-11-29)
+
+
+### 👓 Types
+
+* normalize MaybeRef type ([8ac0762](https://github.com/vexip-ui/vexip-ui/commit/8ac07623268844cecc0e7d8674d321614bc08edf))
+
+
+
 # [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.2.1...config@1.3.0) (2023-11-12)
 
 
