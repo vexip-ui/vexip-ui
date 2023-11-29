@@ -39,7 +39,7 @@ const TableColumnGroup = defineComponent({
         default: 0,
         static: true
       },
-      ellipsis: false,
+      ellipsis: null,
       textAlign: 'center',
       renderer: {
         default: null,

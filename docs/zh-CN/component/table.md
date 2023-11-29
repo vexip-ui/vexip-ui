@@ -594,6 +594,7 @@ interface TableFootPayload {
 | border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
 | data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                       | `null`         | `2.2.14` |
 | no-transition   | `boolean`                                                     | 是否禁用表格的过渡效果                                       | `false`        | `2.2.14` |
+| ellipsis        | `boolean`                                                     | 是否为单元格内容使用省略组件                                 | `false`        | `2.2.16` |
 
 ### Table 事件
 

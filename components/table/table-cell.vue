@@ -338,7 +338,11 @@ function handleCellResize(entry: ResizeObserverEntry) {
         </button>
       </template>
     </div>
-    <ResizeObserver v-else :disabled="column.ellipsis" :on-resize="handleCellResize">
+    <ResizeObserver
+      v-else
+      :disabled="column.ellipsis ?? state.ellipsis"
+      :on-resize="handleCellResize"
+    >
       <span :class="nh.be('content')">
         <template
           v-if="
@@ -365,7 +369,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
           </button>
         </template>
         <Ellipsis
-          v-if="column.ellipsis"
+          v-if="column.ellipsis ?? state.ellipsis"
           inherit
           :class="nh.be('ellipsis')"
           :tip-disabled="state.barScrolling"

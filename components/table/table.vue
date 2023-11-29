@@ -155,7 +155,8 @@ const props = useProps('table', _props, {
     default: null,
     isFunc: true
   },
-  noTransition: false
+  noTransition: false,
+  ellipsis: false
 })
 
 const slots = defineSlots<{
@@ -233,7 +234,8 @@ const syncToStoreProps = [
   'cellSpan',
   'sidePadding',
   'borderWidth',
-  'dataFilter'
+  'dataFilter',
+  'ellipsis'
 ] as const
 
 const store = useStore({

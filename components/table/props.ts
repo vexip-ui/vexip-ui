@@ -113,6 +113,7 @@ export const tableProps = buildProps({
   borderWidth: Number,
   dataFilter: Function as PropType<(data: Data) => boolean>,
   noTransition: booleanProp,
+  ellipsis: booleanProp,
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void

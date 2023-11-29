@@ -142,7 +142,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   order?: number,
   /** @deprecated please use `ellipsis` option to replace it */
   noEllipsis?: boolean,
-  ellipsis?: boolean,
+  ellipsis?: boolean | null,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
@@ -375,7 +375,8 @@ export interface StoreOptions {
   cellSpan: TableCellSpanFn | null,
   sidePadding: number[],
   borderWidth: number,
-  dataFilter: (data: Data) => boolean
+  dataFilter: (data: Data) => boolean,
+  ellipsis: boolean
 }
 
 export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions

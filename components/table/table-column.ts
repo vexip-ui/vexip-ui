@@ -71,7 +71,7 @@ export default defineComponent({
         static: true
       },
       noEllipsis: null,
-      ellipsis: false,
+      ellipsis: null,
       checkboxSize: createSizeProp(),
       disableRow: {
         default: null,
