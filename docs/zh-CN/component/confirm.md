@@ -70,6 +70,15 @@
 
 ## API
 
+某些场景下，需要在全屏元素上显示确认框，此时可以将组件的渲染位置迁移：
+
+```ts
+Confirm.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Confirm.transferTo(document.body)
+```
+
 ### 预设类型
 
 ```ts

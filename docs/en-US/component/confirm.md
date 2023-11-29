@@ -70,6 +70,15 @@ For a advanced usage, you can set a general rendering method via [Props Config](
 
 ## API
 
+In some cases, confirm needs to be displayed on full-screen elements. The rendering position of the component can be moved by:
+
+```ts
+Confirm.transferTo('#a-new-place')
+
+// re-transfer to body
+Confirm.transferTo(document.body)
+```
+
 ### Preset Types
 
 ```ts
