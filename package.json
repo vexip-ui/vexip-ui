@@ -8,6 +8,7 @@
   "packageManager": "pnpm@8.2.0",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
+    "deploy:docs": "tsx scripts/deploy-docs.ts",
     "props": "tsx scripts/props.ts",
     "serve": "tsx scripts/serve.ts",
     "serve:docs": "pnpm -C docs serve",
