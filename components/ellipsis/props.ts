@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, classProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, classProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -7,10 +7,7 @@ import type { TooltipShift, TooltipTheme } from '@/components/tooltip'
 
 export const ellipsisProps = buildProps({
   placement: String as PropType<Placement>,
-  transfer: {
-    type: [String, Boolean],
-    default: null
-  },
+  transfer: booleanStringProp,
   noHover: booleanProp,
   transitionName: String,
   tooltipTheme: String as PropType<TooltipTheme>,

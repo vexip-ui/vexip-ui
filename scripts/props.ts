@@ -69,7 +69,7 @@ async function main() {
     interface SuggestedDefault {
       size?: ComponentSize,
       state?: ComponentState,
-      transfer?: boolean,
+      transfer?: boolean | string,
       disabled?: boolean,
       loading?: boolean,
       clearable?: boolean
