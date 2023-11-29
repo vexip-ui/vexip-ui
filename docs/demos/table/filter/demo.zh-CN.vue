@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { defineColumns, defineFilter } from 'vexip-ui'
+import { defineFilter, defineTableColumns } from 'vexip-ui'
 import { Filter } from '@vexip-ui/icons'
 
 import type { TableExposed, TableFilterProfile } from 'vexip-ui'
@@ -87,7 +87,7 @@ const jobSearch = ref('')
 
 const table = ref<TableExposed>()
 
-const columns = defineColumns([
+const columns = defineTableColumns([
   { type: 'selection' },
   {
     type: 'order',
@@ -96,7 +96,7 @@ const columns = defineColumns([
   {
     name: 'First Name',
     key: 'firstName',
-    filter: defineFilter({
+    filter: defineTableFilter({
       options: [
         { label: 'Starts with A', value: 'A' },
         { label: 'Starts with E', value: 'E' }
@@ -109,7 +109,7 @@ const columns = defineColumns([
   {
     name: 'Last Name',
     key: 'lastName',
-    filter: defineFilter({
+    filter: defineTableFilter({
       options: [
         { label: 'Starts with D', value: 'D' },
         { label: 'Starts with F', value: 'F' },
@@ -134,7 +134,7 @@ const columns = defineColumns([
   }
 ])
 
-const ageFilter = defineFilter({
+const ageFilter = defineTableFilter({
   custom: true,
   meta: {
     values: [NaN, NaN]
