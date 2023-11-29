@@ -264,6 +264,7 @@ function handleDragRow(row: TableRowState) {
 function handleExpandTree(row: TableRowState) {
   if (!row.children?.length) return
 
+  tableActions.runInLocked()
   mutations.setTreeExpanded(row.key, !row.treeExpanded)
 }
 
