@@ -153,4 +153,13 @@ describe('Toast', () => {
     await toastOpened()
     expect(document.querySelector('.test')).toBeTruthy()
   })
+
+  it('transferTo', async () => {
+    const Toast = createToast()
+    const el = document.createElement('div')
+    Toast.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-toast')).toBeTruthy()
+  })
 })

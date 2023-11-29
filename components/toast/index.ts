@@ -1,10 +1,11 @@
 import { createApp, createVNode, markRaw, render } from 'vue'
 
 import Component from './toast.vue'
-import { proxyExposed } from '@vexip-ui/hooks'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
 import { destroyObject, isClient, noop, toNumber } from '@vexip-ui/utils'
 
-import type { App } from 'vue'
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
 import type { ToastInstance, ToastOptions, ToastType } from './symbol'
 
 export { toastProps } from './props'
@@ -45,6 +46,8 @@ export class ToastManager {
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
   private _timer: ReturnType<typeof setTimeout> | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
 
   constructor(options: Partial<ToastOptions> = {}) {
     options = {
@@ -57,6 +60,8 @@ export class ToastManager {
     this._innerApp = null
     this._container = null
     this._timer = null
+    this._wrapper = null
+    this._mountedEl = null
     this.name = 'Toast'
     this.defaults = {}
 
@@ -121,8 +126,24 @@ export class ToastManager {
     }
   }
 
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
+  }
+
   private _getInstance() {
-    if (!this._instance) {
+    if (!this._instance && isClient) {
       if (!this._mountedApp) {
         console.warn('[vexip-ui:Toast]: App missing, the plugin maybe not installed.')
 
@@ -140,7 +161,8 @@ export class ToastManager {
         this._instance = proxyExposed<ToastInstance>(vnode)
       }
 
-      document.body.appendChild(this._container.firstElementChild!)
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance
@@ -165,7 +187,7 @@ export class ToastManager {
       }
     }
 
-    const toast = this._getInstance()
+    const toast = this._getInstance()!
     const item: ToastOptions = {
       ...this.defaults,
       ...convenienceOptions,
@@ -178,19 +200,19 @@ export class ToastManager {
       item.icon = markRaw(item.icon)
     }
 
-    toast?.openToast(item)
+    toast.openToast(item)
 
     const duration = typeof item.duration === 'number' ? item.duration : 2000
 
     if (duration >= 500) {
       this._timer = setTimeout(() => {
-        toast?.closeToast()
+        toast.closeToast()
       }, duration)
     }
 
     return () => {
       this._timer && clearTimeout(this._timer)
-      toast?.closeToast()
+      toast.closeToast()
     }
   }
 }
