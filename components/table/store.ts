@@ -791,7 +791,6 @@ export function useStore(options: StoreOptions) {
             hidden,
             checked: !!checked,
             height: toNumber(height),
-            // borderHeight: 0,
             expanded: !!expanded,
             hover: false,
             expandHeight: 0,
