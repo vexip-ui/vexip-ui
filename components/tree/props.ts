@@ -23,7 +23,9 @@ export const treeProps = buildProps({
   },
   data: Array as PropType<Data[]>,
   noBuildTree: booleanProp,
+  /** @deprecated */
   emptyTip: String,
+  emptyText: String,
   disabled: booleanProp,
   readonly: booleanProp,
   checkbox: booleanProp,
