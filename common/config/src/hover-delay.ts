@@ -2,8 +2,7 @@ import { computed, getCurrentInstance, inject, provide, unref } from 'vue'
 
 import { isDefined } from '@vexip-ui/utils'
 
-import type { App, ComputedRef } from 'vue'
-import type { MaybeRef } from './types'
+import type { App, ComputedRef, MaybeRef } from 'vue'
 
 export const PROVIDED_HOVER_DELAY = '___vxp-provided-hover-delay'
 export const globalDelay = computed(() => 100)

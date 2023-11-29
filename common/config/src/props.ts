@@ -2,16 +2,16 @@ import { computed, inject, provide, reactive, unref, watch } from 'vue'
 
 import { has, isFunction, isNull, isObject, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, CSSProperties, ComponentObjectPropsOptions, ComputedRef, PropType } from 'vue'
-import type { LocaleConfig, LocaleNames } from './locale'
 import type {
-  AnyFunction,
-  EnsureValue,
-  Expand,
-  MaybeFunction,
+  App,
+  CSSProperties,
+  ComponentObjectPropsOptions,
+  ComputedRef,
   MaybeRef,
-  VoidFunction
-} from './types'
+  PropType
+} from 'vue'
+import type { LocaleConfig, LocaleNames } from './locale'
+import type { AnyFunction, EnsureValue, Expand, MaybeFunction, VoidFunction } from './types'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 

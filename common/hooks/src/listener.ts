@@ -2,7 +2,7 @@ import { getCurrentScope, onScopeDispose, unref, watch } from 'vue'
 
 import { noop } from '@vexip-ui/utils'
 
-import type { MaybeRef } from './shared/types'
+import type { MaybeRef } from 'vue'
 
 export function useListener<E = Event>(
   target: MaybeRef<EventTarget | null | undefined>,

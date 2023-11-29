@@ -10,11 +10,9 @@ import {
 } from '@vexip-ui/config'
 import { isEmpty, toCapitalCase } from '@vexip-ui/utils'
 
-import type { App, Ref } from 'vue'
+import type { App, MaybeRef } from 'vue'
 import type { IconsOptions, LocaleConfig, LocaleOptions } from '@vexip-ui/config'
 import type { PropsOptions } from './props'
-
-type MaybeRef<T> = T | Ref<T>
 
 export interface InstallOptions {
   prefix?: string,

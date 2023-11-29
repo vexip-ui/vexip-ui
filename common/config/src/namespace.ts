@@ -2,8 +2,7 @@ import { computed, inject, provide, unref } from 'vue'
 
 import { useBEM } from '@vexip-ui/bem-helper'
 
-import type { App, ComputedRef } from 'vue'
-import type { MaybeRef } from './types'
+import type { App, ComputedRef, MaybeRef } from 'vue'
 
 export type Namespace = 'vxp'
 

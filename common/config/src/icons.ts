@@ -82,9 +82,8 @@ import {
 } from '@vexip-ui/icons'
 import { ensureArray } from '@vexip-ui/utils'
 
-import type { App, ComputedRef } from 'vue'
+import type { App, ComputedRef, MaybeRef } from 'vue'
 import type { ClassType, StyleType } from './props'
-import type { MaybeRef } from './types'
 
 export const PROVIDED_ICONS = '__vxp-provided-icons'
 
