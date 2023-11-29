@@ -237,12 +237,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
     ></div>
     <ResizeObserver
       v-if="isFunction(summary.renderer)"
-      :disabled="column.ellipsis"
+      :disabled="column.ellipsis ?? state.ellipsis"
       :on-resize="handleCellResize"
     >
       <span :class="nh.be('content')">
         <Ellipsis
-          v-if="column.ellipsis"
+          v-if="column.ellipsis ?? state.ellipsis"
           inherit
           :class="nh.be('ellipsis')"
           :tooltip-theme="state.tooltipTheme"

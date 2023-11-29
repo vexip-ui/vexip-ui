@@ -346,6 +346,7 @@ export function useStore(options: StoreOptions) {
     setSidePadding,
     setBorderWidth,
     setDataFilter,
+    setEllipsis,
     setLocked,
     setBarScrolling,
 
@@ -970,14 +971,6 @@ export function useStore(options: StoreOptions) {
     state.width = width
   }
 
-  // function fixRowHeight(key: Key, height: number) {
-  //   const row = state.rowMap.get(key)
-
-  //   if (row && row.height !== height) {
-  //     row.height = height
-  //   }
-  // }
-
   function setRowHeight(height: number) {
     state.rowHeight = height
   }
@@ -995,12 +988,6 @@ export function useStore(options: StoreOptions) {
   function setRowDraggable(draggable: boolean) {
     state.rowDraggable = !!draggable
   }
-
-  // function setRowExpandHeight(key: Key, height: number) {
-  //   if (state.rowMap.has(key)) {
-  //     state.rowMap.get(key)!.expandHeight = height
-  //   }
-  // }
 
   function setBodyYScroll(scroll: number) {
     state.bodyYScroll = scroll
@@ -1025,12 +1012,6 @@ export function useStore(options: StoreOptions) {
   function setVirtual(virtual: boolean) {
     state.virtual = !!virtual
   }
-
-  // function setRowHover(key: Key, hover: boolean) {
-  //   if (state.rowMap.has(key)) {
-  //     state.rowMap.get(key)!.hover = hover
-  //   }
-  // }
 
   function setRowProp(key: Key, prop: Exclude<keyof TableRowState, 'key'>, value: any) {
     const row = state.rowMap.get(key)
@@ -1102,7 +1083,6 @@ export function useStore(options: StoreOptions) {
 
   function setCellSpan(spanFn: TableCellSpanFn | null) {
     state.cellSpan = spanFn
-    // resetCellSpan()
   }
 
   function setSidePadding(padding: number | number[]) {
@@ -1115,6 +1095,10 @@ export function useStore(options: StoreOptions) {
 
   function setDataFilter(filter: (data: Data) => boolean) {
     state.dataFilter = filter
+  }
+
+  function setEllipsis(ellipsis: boolean) {
+    state.ellipsis = ellipsis
   }
 
   function setLocked(locked: boolean) {

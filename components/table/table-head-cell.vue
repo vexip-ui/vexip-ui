@@ -414,10 +414,14 @@ function handleCellResize(entry: ResizeObserverEntry) {
         @click.prevent="handleCheckAllRow"
       ></Checkbox>
     </div>
-    <ResizeObserver v-else :disabled="column.ellipsis" :on-resize="handleCellResize">
+    <ResizeObserver
+      v-else
+      :disabled="column.ellipsis ?? state.ellipsis"
+      :on-resize="handleCellResize"
+    >
       <span :class="nh.be('content')">
         <Ellipsis
-          v-if="column.ellipsis"
+          v-if="column.ellipsis ?? state.ellipsis"
           inherit
           :class="nh.be('ellipsis')"
           :tooltip-theme="state.tooltipTheme"

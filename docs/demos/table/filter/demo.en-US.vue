@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { defineFilter, defineTableColumns } from 'vexip-ui'
+import { defineTableColumns, defineTableFilter } from 'vexip-ui'
 import { Filter } from '@vexip-ui/icons'
 
 import type { TableExposed, TableFilterProfile } from 'vexip-ui'
