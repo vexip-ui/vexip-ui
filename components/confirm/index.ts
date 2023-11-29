@@ -79,6 +79,7 @@ export class ConfirmManager {
   }
 
   destroy() {
+    this._mountedEl && this._wrapper?.removeChild(this._mountedEl)
     this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
