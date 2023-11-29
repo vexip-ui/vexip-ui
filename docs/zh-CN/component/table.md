@@ -547,7 +547,6 @@ interface TableFootPayload {
 | columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                 | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
-| data-key        | `string`                                                      | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -        |
 | width           | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -        |
 | height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -        |
 | row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -        |
