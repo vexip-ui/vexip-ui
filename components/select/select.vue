@@ -101,6 +101,22 @@
                   </Tooltip>
                 </span>
               </template>
+              <!-- <template v-if="!limited && previewOption" #suffix>
+                <Tag
+                  inherit
+                  :class="[
+                    nh.be('tag'),
+                    nh.bem('tag', 'preview'),
+                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
+                  ]"
+                  :type="props.tagType"
+                  closable
+                >
+                  <slot name="selected" :preview="true" :option="previewOption">
+                    {{ previewOption.label }}
+                  </slot>
+                </Tag>
+              </template> -->
             </Overflow>
             <div
               v-if="props.filter"
@@ -137,57 +153,48 @@
             </div>
           </template>
           <template v-else>
-            <template v-if="props.filter">
-              <input
-                ref="input"
-                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
-                :disabled="props.disabled"
-                :placeholder="
-                  previewOption?.label ||
-                    currentLabels[0] ||
-                    (props.placeholder ?? locale.placeholder)
-                "
-                autocomplete="off"
-                tabindex="-1"
-                role="combobox"
-                aria-autocomplete="list"
-                :name="props.name"
-                @submit.prevent
-                @input="handleFilterInput"
-                @focus="handleFocus($event)"
-                @blur="handleBlur($event)"
-                @compositionstart="composing = true"
-                @compositionend="handleCompositionEnd"
-                @change="handleCompositionEnd"
-              />
-            </template>
-            <slot
-              v-else-if="getOptionFromMap(currentValues[0])"
-              name="selected"
-              :option="getOptionFromMap(currentValues[0])"
-            >
-              {{ currentLabels[0] }}
-            </slot>
-            <template v-else>
-              {{ currentLabels[0] }}
-            </template>
+            <input
+              v-if="props.filter"
+              ref="input"
+              :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
+              :disabled="props.disabled"
+              autocomplete="off"
+              tabindex="-1"
+              role="combobox"
+              aria-autocomplete="list"
+              :name="props.name"
+              :style="{
+                opacity: currentVisible ? undefined : '0%'
+              }"
+              @submit.prevent
+              @input="handleFilterInput"
+              @focus="handleFocus($event)"
+              @blur="handleBlur($event)"
+              @compositionstart="composing = true"
+              @compositionend="handleCompositionEnd"
+              @change="handleCompositionEnd"
+            />
+            <span v-if="!currentVisible && hasValue" :class="[nh.be('selected')]">
+              <slot
+                v-if="getOptionFromMap(currentValues[0])"
+                name="selected"
+                :option="getOptionFromMap(currentValues[0])"
+              >
+                {{ currentLabels[0] }}
+              </slot>
+              <template v-else>
+                {{ currentLabels[0] }}
+              </template>
+            </span>
           </template>
-          <span
-            v-if="
-              (props.multiple || !props.filter) &&
-                (!currentVisible || !currentFilter) &&
-                (props.placeholder ?? locale.placeholder) &&
-                !hasValue
-            "
-            :class="nh.be('placeholder')"
-          >
+          <span v-if="showPlaceholder" :class="nh.be('placeholder')">
             <slot
               v-if="previewOption"
               name="selected"
               :preview="true"
               :option="previewOption"
             >
-              {{ previewOption?.label ?? props.placeholder ?? locale.placeholder }}
+              {{ previewOption.label }}
             </slot>
             <template v-else>
               {{ props.placeholder ?? locale.placeholder }}
@@ -782,6 +789,17 @@ export default defineComponent({
         props.multiple && props.countLimit > 0 && currentValues.value.length >= props.countLimit
       )
     })
+    const showPlaceholder = computed(() => {
+      // 采用反推，出现下列情况时不显示：
+      // 1. 有值且 未开预览/多选模式/未打开列表
+      // 2. 没有预览选项且没有合法的占位值
+      // 3. 打开列表且输入了过滤值
+      return (
+        !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
+        !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
+        !(currentVisible.value && currentFilter.value)
+      )
+    })
 
     function getOptionFromMap(value?: SelectBaseValue | null) {
       if (isNull(value)) return null
@@ -1067,7 +1085,7 @@ export default defineComponent({
         currentFilter.value = ''
 
         syncInputValue()
-        updatePopper()
+        requestAnimationFrame(updatePopper)
       } else {
         setVisible(false)
       }
@@ -1289,6 +1307,7 @@ export default defineComponent({
       optionParentMap,
       previewOption,
       limited,
+      showPlaceholder,
 
       wrapper,
       reference,

@@ -86,6 +86,7 @@ describe('Select', () => {
       }
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-select__control').text()).toEqual(OPTIONS[0])
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
 
@@ -603,9 +604,9 @@ describe('Select', () => {
     })
 
     await wrapper.setProps({ value: [OPTIONS[0], OPTIONS[1]] })
-    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(2)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toBe(2)
     await wrapper.find('input').trigger('keydown', { key: 'Backspace' })
-    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(1)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toBe(1)
   })
 
   it('hitting option', async () => {
@@ -632,7 +633,7 @@ describe('Select', () => {
     expect(options[2].classes()).toContain('vxp-option--hitting')
   })
 
-  it('key config', () => {
+  it('key config', async () => {
     const wrapper = mount(Select, {
       props: {
         visible: true,
@@ -650,6 +651,7 @@ describe('Select', () => {
       }
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-select__control').text()).toEqual('l')
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
   })
