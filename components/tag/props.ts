@@ -18,6 +18,7 @@ export const tagProps = buildProps({
   suffix: [String, Number],
   suffixBg: String,
   suffixColor: String,
+  disabled: booleanProp,
   onClose: eventProp()
 })
 
