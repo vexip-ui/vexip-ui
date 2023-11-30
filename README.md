@@ -47,6 +47,8 @@ Currently, there are **70+** components, some of which may be familiar to you, a
 - 🩹 Good a11n
 - 👀 Close to business code arrangement, low source code reading threshold
 
+> The design tokens are base on Open Color, and have some adjustments.
+
 ## Install
 
 It is recommended to use pnpm or yarn to install:
@@ -62,6 +64,8 @@ yarn add vexip-ui
 ## Document
 
 [Here](https://www.vexipui.com) you can view the online document.
+
+> Author is poor in English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Help
 

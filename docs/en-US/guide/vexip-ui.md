@@ -25,6 +25,8 @@ There are currently **70+** components, many you see everywhere are here and are
 - 🩹 Good a11n
 - 👀 Close to business code arrangement, low threshold for source code reading
 
+> The design tokens are base on Open Color, and have some adjustments.
+
 ## Environment
 
 All components supported in modern browsers, support of nearly two or three versions.
@@ -74,6 +76,8 @@ WeChat:
 Alipay:
 
 <img src="/sponsor-alipay.webp" alt="Alipay payment" style="width: 240px;" />
+
+> Author is poor in English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Contributors
 
