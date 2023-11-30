@@ -11,7 +11,8 @@ jobs:
     if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -20,6 +21,7 @@ jobs:
         with:
           node-version: 18.x
 
-      - run: npx changelogithub
+      - name: Changelog
+        run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
