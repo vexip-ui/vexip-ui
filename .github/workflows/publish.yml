@@ -18,7 +18,8 @@ jobs:
     if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -61,8 +62,3 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_OPTIONS: --max-old-space-size=4096
-
-      - name: Deploy docs
-        run: pnpm run deploy:docs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

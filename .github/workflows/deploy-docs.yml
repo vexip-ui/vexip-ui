@@ -1,0 +1,36 @@
+name: Deploy Docs
+
+on:
+  workflow_run:
+    workflows: ['Publish Package']
+    types: [completed]
+    branches:
+      - main
+
+jobs:
+  deploy-docs:
+    if: github.repository == 'vexip-ui/vexip-ui' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          registry-url: https://registry.npmjs.org/
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Deploy
+        run: pnpm run deploy:docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
