@@ -1,15 +1,13 @@
 name: Deploy Docs
 
 on:
-  workflow_run:
-    workflows: ['Publish Package']
-    types: [completed]
-    branches:
-      - main
+  push:
+    tags:
+      - v*
 
 jobs:
   deploy-docs:
-    if: github.repository == 'vexip-ui/vexip-ui' && github.event.workflow_run.conclusion == 'success'
+    if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
