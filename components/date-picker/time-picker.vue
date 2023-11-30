@@ -374,13 +374,15 @@ export default defineComponent({
         }
       ]
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--readonly`]: readonly.value,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--focused`]: focused.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -397,7 +399,9 @@ export default defineComponent({
       return props.range ? values : values[0]
     })
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && isHover.value && !!lastValue.value
+      )
     })
     const startError = computed(() => {
       const { hour, minute, second } = startState.timeValue
@@ -479,22 +483,11 @@ export default defineComponent({
         }
       }
     )
-    watch(
-      () => props.loading,
-      value => {
-        if (value && props.loadingLock) {
-          setVisible(false)
-        }
+    watch(readonly, value => {
+      if (value) {
+        setVisible(false)
       }
-    )
-    watch(
-      () => props.loadingLock,
-      value => {
-        if (props.loading && value) {
-          setVisible(false)
-        }
-      }
-    )
+    })
 
     function createTimeState() {
       const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
@@ -644,7 +637,7 @@ export default defineComponent({
     }
 
     function showPanel(event: Event) {
-      if (props.disabled || (props.loading && props.loadingLock)) return
+      if (props.disabled || readonly.value) return
 
       const target = event.target as Node
 
@@ -670,6 +663,8 @@ export default defineComponent({
     }
 
     function handleClear(finish = true) {
+      if (props.disabled || readonly.value) return
+
       if (props.clearable) {
         nextTick(() => {
           const emitValue = props.range ? ([] as string[]) : ''

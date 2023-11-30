@@ -227,6 +227,7 @@ export default defineComponent({
         (toNumber(currentValue.value) > props.max || toNumber(currentValue.value) < props.min)
       )
     })
+    const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const className = computed(() => {
       const [display, fade] = (props.controlType || 'right').split('-')
 
@@ -238,7 +239,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('focused')]: inputting.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock,
+          [nh.bm('readonly')]: isReadonly.value,
+          [nh.bm('loading')]: props.loading,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm(`control-${display}`)]: display !== 'right',
@@ -273,7 +275,9 @@ export default defineComponent({
     })
     const hasValue = computed(() => !!(currentValue.value || currentValue.value === 0))
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && hasValue.value
+      return (
+        !props.disabled && !isReadonly.value && props.clearable && isHover.value && hasValue.value
+      )
     })
     const inputValue = computed(() => {
       if (Number.isNaN(currentValue.value)) {
@@ -282,7 +286,6 @@ export default defineComponent({
 
       return inputting.value ? preciseNumber.value : formattedValue.value
     })
-    const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const controlFade = computed(() => props.controlType?.endsWith('fade'))
 
     watch(
@@ -354,9 +357,7 @@ export default defineComponent({
     }
 
     function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt') {
-      if (props.disabled || (props.loading && props.loadingLock)) {
-        return
-      }
+      if (props.disabled || isReadonly.value) return
 
       let value = currentValue.value || 0
       let step!: number
@@ -485,6 +486,8 @@ export default defineComponent({
     }
 
     function handleClear() {
+      if (props.disabled || isReadonly.value) return
+
       setValue(NaN, 'change', false)
       emitEvent(props.onClear)
       clearField()

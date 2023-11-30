@@ -75,6 +75,7 @@ const shape = computed(() => {
 
   return groupState?.shape || (props.shape ?? (props.border ? 'border' : 'default'))
 })
+const readonly = computed(() => isLoading.value && isLoadingLock.value)
 const className = computed(() => {
   return [
     nh.b(),
@@ -83,7 +84,8 @@ const className = computed(() => {
       [nh.bm('inherit')]: props.inherit,
       [nh.bm('checked')]: currentValue.value === props.label,
       [nh.bm('disabled')]: isDisabled.value,
-      [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
+      [nh.bm('readonly')]: readonly.value,
+      [nh.bm('loading')]: isLoading.value,
       [nh.bm(size.value)]: size.value !== 'default',
       // [nh.bm('border')]: isBorder.value,
       [nh.bm(state.value)]: state.value !== 'default',
@@ -126,7 +128,7 @@ function emitChange(value: string | number | boolean) {
 }
 
 function handleChange() {
-  if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+  if (isDisabled.value || readonly.value) {
     return
   }
 
@@ -145,7 +147,7 @@ function handleChange() {
       type="radio"
       :class="nh.be('input')"
       :checked="currentValue === props.label"
-      :disabled="isDisabled || (isLoading && isLoadingLock)"
+      :disabled="isDisabled || readonly"
       :tabindex="props.tabIndex"
       :name="props.name"
       @submit.prevent

@@ -187,12 +187,13 @@ describe('Radio', () => {
     const items = wrapper.findAllComponents(Radio)
 
     items.forEach(item => {
-      expect(item.classes()).not.toContain('vxp-radio--loading')
+      expect(item.classes()).not.toContain('vxp-radio--readonly')
     })
 
     await wrapper.setProps({ loading: true, loadingLock: true })
     items.forEach(item => {
       expect(item.classes()).toContain('vxp-radio--loading')
+      expect(item.classes()).toContain('vxp-radio--readonly')
     })
 
     await wrapper.find('input[type="radio"]').trigger('change')

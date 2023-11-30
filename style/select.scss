@@ -39,6 +39,10 @@ $select: map.merge(
     cursor: inherit;
   }
 
+  &--disabled {
+    cursor: not-allowed;
+  }
+
   &--multiple &__selector {
     @include define-css-var('input-v-padding', 2px);
 
@@ -80,6 +84,10 @@ $select: map.merge(
     margin-inline-start: 0;
     pointer-events: auto;
     cursor: pointer;
+  }
+
+  &--disabled &__tag {
+    cursor: not-allowed;
   }
 
   &__selector--small &__tag {

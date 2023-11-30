@@ -72,6 +72,7 @@ const shape = computed(() => {
     (isDefined(props.border) ? 'border' : isDefined(props.button) ? 'button-group' : 'default')
   )
 })
+const readonly = computed(() => props.loading && props.loadingLock)
 const className = computed(() => {
   return [
     nh.b(),
@@ -80,6 +81,8 @@ const className = computed(() => {
       [nh.bm('inherit')]: props.inherit,
       [nh.bm('vertical')]: props.vertical,
       [nh.bm('disabled')]: props.disabled,
+      [nh.bm('readonly')]: readonly.value,
+      [nh.bm('loading')]: props.loading,
       [nh.bm(props.size)]: props.size !== 'default',
       [nh.bm(props.state)]: props.state !== 'default',
       [nh.bm(shape.value)]: shape.value !== 'default'
