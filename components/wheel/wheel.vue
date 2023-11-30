@@ -194,6 +194,7 @@ export default defineComponent({
     const itemList = computed(() => {
       return Array.from(items.value)
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -203,7 +204,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -422,7 +424,7 @@ export default defineComponent({
     }
 
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
-      if (props.disabled || (props.loading && props.loadingLock)) return false
+      if (props.disabled || readonly.value) return false
 
       const sign = props.horizontal ? signX : signY
 

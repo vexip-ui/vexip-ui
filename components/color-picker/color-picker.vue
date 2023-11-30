@@ -172,13 +172,15 @@ const className = computed(() => {
     [nh.bm(props.state)]: props.state !== 'default'
   }
 })
+const readonly = computed(() => props.loading && props.loadingLock)
 const selectorClass = computed(() => {
   const baseCls = nh.be('selector')
 
   return {
     [baseCls]: true,
     [`${baseCls}--disabled`]: props.disabled,
-    [`${baseCls}--loading`]: props.loading && props.loadingLock,
+    [`${baseCls}--readonly`]: readonly.value,
+    [`${baseCls}--loading`]: props.loading,
     [`${baseCls}--${props.size}`]: props.size !== 'default',
     [`${baseCls}--focused`]: currentVisible.value,
     [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -212,7 +214,7 @@ const shortcutList = computed(() => {
 })
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
 const showClear = computed(() => {
-  return !props.disabled && props.clearable && isHover.value && !isEmpty.value
+  return !props.disabled && !readonly.value && props.clearable && isHover.value && !isEmpty.value
 })
 const formattedColor = computed(() => getFormattedColor(props.format))
 const labelColor = computed(() => {
@@ -343,12 +345,14 @@ function handleClickOutside() {
 }
 
 function toggleVisible() {
-  if (props.disabled || (props.loading && props.loadingLock)) return
+  if (props.disabled || readonly.value) return
 
   setVisible(!currentVisible.value)
 }
 
 function handleClear() {
+  if (props.disabled || readonly.value) return
+
   if (props.clearable) {
     setVisible(false)
     emit('update:value', '')
@@ -363,6 +367,8 @@ function handleClear() {
 }
 
 function handleConfirm() {
+  if (props.disabled || readonly.value) return
+
   lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
   isEmpty.value = false
   setVisible(false)

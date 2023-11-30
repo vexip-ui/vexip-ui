@@ -126,6 +126,7 @@ export default defineComponent({
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })
+    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const className = computed(() => {
       return [
         nh.b(),
@@ -134,11 +135,11 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
-          [nh.bm('loading')]: props.loading,
           [nh.bm('transparent')]: props.transparent,
           [nh.bm('plain-password')]: props.plainPassword
         }
@@ -179,9 +180,10 @@ export default defineComponent({
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
-    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && hasValue.value && isHover.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && hasValue.value && isHover.value
+      )
     })
 
     watch(
@@ -319,6 +321,8 @@ export default defineComponent({
     }
 
     function handleClear(event: MouseEvent) {
+      if (props.disabled || readonly.value) return
+
       event.stopPropagation()
       setValue('', 'change', false)
       emitEvent(props.onClear)

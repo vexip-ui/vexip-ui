@@ -37,6 +37,7 @@
                 :class="nh.be('tag')"
                 :type="props.tagType"
                 closable
+                :disabled="props.disabled"
                 @click.stop="toggleVisible()"
                 @close="handleTipClose(item)"
               >
@@ -49,6 +50,7 @@
                 inherit
                 :class="[nh.be('tag'), nh.be('counter')]"
                 :type="props.tagType"
+                :disabled="props.disabled"
               >
                 {{ `+${count}` }}
               </Tag>
@@ -63,7 +65,12 @@
                   @click.stop="toggleShowRestTip"
                 >
                   <template #trigger>
-                    <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                    <Tag
+                      inherit
+                      :class="[nh.be('tag'), nh.be('counter')]"
+                      :type="props.tagType"
+                      :disabled="props.disabled"
+                    >
                       {{ `+${count}` }}
                     </Tag>
                   </template>
@@ -75,6 +82,7 @@
                         :class="nh.be('tag')"
                         closable
                         :type="props.tagType"
+                        :disabled="props.disabled"
                         @close="handleTipClose(item)"
                       >
                         {{ templateLabels[index] }}
@@ -427,6 +435,7 @@ export default defineComponent({
         [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
@@ -434,7 +443,8 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--readonly`]: readonly.value,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -455,7 +465,9 @@ export default defineComponent({
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && hasValue.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && isHover.value && hasValue.value
+      )
     })
 
     watch(
@@ -572,22 +584,11 @@ export default defineComponent({
         }
       }
     )
-    watch(
-      () => props.loading,
-      value => {
-        if (value && props.loadingLock) {
-          setVisible(false)
-        }
+    watch(readonly, value => {
+      if (value) {
+        setVisible(false)
       }
-    )
-    watch(
-      () => props.loadingLock,
-      value => {
-        if (props.loading && value) {
-          setVisible(false)
-        }
-      }
-    )
+    })
 
     onBeforeUpdate(() => {
       panelElList.value.length = 0
@@ -1092,7 +1093,7 @@ export default defineComponent({
     }
 
     function toggleVisible(visible = !currentVisible.value) {
-      if (props.disabled || (props.loading && props.loadingLock)) return
+      if (props.disabled || readonly.value) return
 
       setVisible(visible)
     }
@@ -1109,6 +1110,8 @@ export default defineComponent({
     }
 
     function handleClear() {
+      if (props.disabled || readonly.value) return
+
       if (props.clearable) {
         const prev = emittedValue.value
 
@@ -1144,6 +1147,8 @@ export default defineComponent({
     }
 
     function handleTipClose(fullValue: string) {
+      if (props.disabled || readonly.value) return
+
       if (props.multiple) {
         handleOptionCheck(optionValueMap.get(fullValue)!)
       } else {
