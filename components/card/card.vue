@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { cardProps } from './props'
+
+import type { CardShadowType } from './symbol'
+
+defineOptions({ name: 'Card' })
+
+const _props = defineProps(cardProps)
+const props = useProps('card', _props, {
+  title: '',
+  shadow: {
+    default: 'always' as CardShadowType,
+    validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value)
+  },
+  contentStyle: () => ({})
+})
+
+const slots = defineSlots<{
+  default: () => any,
+  header: () => any,
+  title: () => any,
+  extra: () => any
+}>()
+
+const nh = useNameHelper('card')
+
+const className = computed(() => {
+  return [
+    nh.b(),
+    nh.bs('vars'),
+    nh.bm(`shadow-${props.shadow}`),
+    {
+      [nh.bm('inherit')]: props.inherit
+    }
+  ]
+})
+const hasTitle = computed(() => !!slots.title || props.title)
+const hasExtra = computed(() => !!slots.extra)
+const hasHeader = computed(() => !!slots.header || hasTitle.value || hasExtra.value)
+</script>
+
 <template>
   <article :class="className">
     <div v-if="hasHeader" :class="nh.be('header')">
@@ -17,59 +61,3 @@
     </div>
   </article>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-
-import { useNameHelper, useProps } from '@vexip-ui/config'
-import { cardProps } from './props'
-
-export type CardShadowType = 'always' | 'hover' | 'never'
-
-export default defineComponent({
-  name: 'Card',
-  props: cardProps,
-  setup(_props, { slots }) {
-    const props = useProps('card', _props, {
-      title: '',
-      shadow: {
-        default: 'always' as CardShadowType,
-        validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value)
-      },
-      contentStyle: () => ({})
-    })
-
-    const nh = useNameHelper('card')
-
-    const className = computed(() => {
-      return [
-        nh.b(),
-        nh.bs('vars'),
-        nh.bm(`shadow-${props.shadow}`),
-        {
-          [nh.bm('inherit')]: props.inherit
-        }
-      ]
-    })
-    const hasTitle = computed(() => {
-      return slots.title || props.title
-    })
-    const hasExtra = computed(() => {
-      return slots.extra
-    })
-    const hasHeader = computed(() => {
-      return slots.header || hasTitle.value || hasExtra.value
-    })
-
-    return {
-      props,
-      nh,
-
-      className,
-      hasTitle,
-      hasExtra,
-      hasHeader
-    }
-  }
-})
-</script>
