@@ -3,17 +3,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
-import {
-  computed,
-  inject,
-  nextTick,
-  onMounted,
-  reactive,
-  ref,
-  toRef,
-  watch,
-  watchEffect
-} from 'vue'
+import { computed, inject, nextTick, onMounted, reactive, ref, toRef, watchEffect } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
@@ -109,7 +99,9 @@ const style = computed(() => {
   return [
     customStyle,
     {
-      height: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowHeight}px`
+      height: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowHeight}px`,
+      minHeight: state.rowHeight ? undefined : `${state.rowMinHeight}px`,
+      border: '0'
     }
   ]
 })
@@ -179,15 +171,17 @@ function updateTotalHeight(force = false) {
   }
 }
 
-watch([maxHeight, () => state.heightBITree], () => {
-  if (state.rowHeight) return
+function handleResize(entry: ResizeObserverEntry) {
+  const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
+  mutations.setRowProp(rowKey.value, 'height', height)
+  !rowType.value && updateTotalHeight()
+}
+
+watchEffect(() => {
+  if (props.isHead || props.isFoot) return
 
   mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   !rowType.value && updateTotalHeight()
-})
-
-watchEffect(() => {
-  mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   nextTick(() => {
     !rowType.value && setExpandHeight()
   })
@@ -330,14 +324,16 @@ function afterExpand() {
     @dragend="handleDragEnd"
     @dragleave="handleDragLeave"
   >
-    <div
-      v-bind="attrs"
-      ref="rowEl"
-      :class="className"
-      :style="style"
-    >
-      <slot></slot>
-    </div>
+    <ResizeObserver :on-resize="handleResize">
+      <div
+        v-bind="attrs"
+        ref="rowEl"
+        :class="className"
+        :style="style"
+      >
+        <slot></slot>
+      </div>
+    </ResizeObserver>
     <CollapseTransition
       v-if="hasExpand"
       :disabled="!row.expandAnimate"
