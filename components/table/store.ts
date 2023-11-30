@@ -298,6 +298,9 @@ export function useStore(options: StoreOptions) {
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
+    // 这个方法被大量的 watch 回调，需要防抖
+    updateTotalHeight: debounceMinor(updateTotalHeight),
+
     isGroupColumn,
     buildSummaryKey,
     setDataKey,
@@ -356,7 +359,6 @@ export function useStore(options: StoreOptions) {
     clearFilter,
     toggleFilterItemActive,
     refreshRowIndex,
-    updateTotalHeight,
     handleCheck,
     handleCheckAll,
     clearCheckAll,
@@ -980,7 +982,7 @@ export function useStore(options: StoreOptions) {
   }
 
   function setCellHeight(rowKey: Key, columnKey: Key, height: number) {
-    if (state.rowMap.has(rowKey)) {
+    if (!isNull(height) && state.rowMap.has(rowKey)) {
       state.rowMap.get(rowKey)!.cellHeights[columnKey] = height
     }
   }

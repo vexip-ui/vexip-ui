@@ -4,7 +4,7 @@ import { Ellipsis } from '@/components/ellipsis'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, inject, nextTick, ref } from 'vue'
+import { computed, inject, nextTick, ref, watchEffect } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
@@ -54,6 +54,8 @@ const tableActions = inject(TABLE_ACTIONS)!
 const nh = useNameHelper('table')
 const icons = useIcons()
 const { isRtl } = useRtl()
+
+const contentHeight = ref(0)
 
 const wrapper = ref<HTMLElement>()
 
@@ -176,6 +178,12 @@ const formatter = computed(() => {
   return isFunction(props.column.formatter) ? props.column.formatter : noopFormatter
 })
 
+watchEffect(() => {
+  if (isTableTypeColumn(props.column)) return
+
+  mutations.setCellHeight(props.row.key, props.column.key, contentHeight.value)
+})
+
 function isSelectionColumn(column: unknown): column is TableSelectionColumn {
   return (column as TableTypeColumn).type === 'selection'
 }
@@ -269,11 +277,14 @@ function handleExpandTree(row: TableRowState) {
 }
 
 function handleCellResize(entry: ResizeObserverEntry) {
-  mutations.setCellHeight(
-    props.row.key,
-    props.column.key,
+  contentHeight.value =
     (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
-  )
+
+  // mutations.setCellHeight(
+  //   props.row.key,
+  //   props.column.key,
+  //   prevHeight
+  // )
 }
 </script>
 
@@ -338,11 +349,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
         </button>
       </template>
     </div>
-    <ResizeObserver
-      v-else
-      :disabled="column.ellipsis ?? state.ellipsis"
-      :on-resize="handleCellResize"
-    >
+    <ResizeObserver v-else :on-resize="handleCellResize">
       <span :class="nh.be('content')">
         <template
           v-if="
