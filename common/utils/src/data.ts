@@ -1,4 +1,5 @@
 export interface BITree {
+  tree: number[],
   add(index: number, num: number): void,
   sum(index?: number): number,
   get(index: number): number,
@@ -10,7 +11,7 @@ function lowBit(num: number) {
 }
 
 export function createBITree(length: number, min = 0): BITree {
-  const tree = new Array(length + 1).fill(0)
+  const tree: number[] = new Array(length + 1).fill(0)
 
   /**
    * 为第 index 个元素增/减值
@@ -78,5 +79,5 @@ export function createBITree(length: number, min = 0): BITree {
     return left
   }
 
-  return { add, sum, get, boundIndex }
+  return { tree, add, sum, get, boundIndex }
 }
