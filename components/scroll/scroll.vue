@@ -21,6 +21,7 @@ import { scrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 import { MOVE_EVENT, UP_EVENT, scrollModes } from './symbol'
 
+import type { ScrollbarExposed } from '@/components/scrollbar'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from './symbol'
 
@@ -77,10 +78,10 @@ const scrolling = ref(false)
 const transitionDuration = ref<number>(0)
 const mode = computed(() => (props.mode === 'horizontal-exact' ? 'horizontal' : props.mode))
 
-let waitDelay = 140
+let waitDelay = 180
 
-const xBar = ref<InstanceType<typeof Scrollbar>>()
-const yBar = ref<InstanceType<typeof Scrollbar>>()
+const xBar = ref<ScrollbarExposed>()
+const yBar = ref<ScrollbarExposed>()
 
 let initialized = false
 
@@ -90,7 +91,6 @@ const {
 
   wrapper,
   isReady,
-  // currentScroll,
   x,
   y,
   percentX,

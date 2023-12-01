@@ -9,6 +9,13 @@ export type WheelRawOption =
     disabled?: boolean
   }
 
+export interface WheelOption {
+  value: string | number,
+  label: string,
+  disabled: boolean,
+  meta: WheelRawOption
+}
+
 export interface ItemState {
   width: number,
   height: number,
