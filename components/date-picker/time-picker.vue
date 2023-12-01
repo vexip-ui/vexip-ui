@@ -127,6 +127,7 @@ const lastValue = ref('')
 const startState = createTimeState()
 const endState = createTimeState()
 const currentState = ref<'start' | 'end'>('start')
+const staticWheel = ref(false)
 
 const { timer } = useSetTimeout()
 
@@ -246,11 +247,9 @@ watch(
     currentVisible.value = value
   }
 )
-const wheel = ref()
 watch(currentVisible, value => {
   if (value) {
     updatePopper()
-    // wheel.value?.refreshWheel()
   }
 })
 watch(focused, value => {
@@ -816,6 +815,10 @@ function handleClickOutside() {
       :transition="props.transitionName"
       :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
+      @before-enter="staticWheel = true"
+      @before-leave="staticWheel = true"
+      @after-enter="staticWheel = false"
+      @after-leave="staticWheel = false"
     >
       <div :class="nh.be('panel')">
         <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
@@ -832,7 +835,6 @@ function handleClickOutside() {
         <div :class="nh.be('list')">
           <div :class="nh.be('wheels')">
             <TimeWheel
-              ref="wheel"
               v-model:hour="startState.timeValue.hour"
               v-model:minute="startState.timeValue.minute"
               v-model:second="startState.timeValue.second"
@@ -841,6 +843,7 @@ function handleClickOutside() {
               :steps="props.steps"
               :pointer="props.pointer"
               :disabled-time="isTimeDisabled"
+              :no-transition="staticWheel"
               @change="handleWheelChange"
               @toggle-col="toggleCurrentState('start')"
             ></TimeWheel>
@@ -854,6 +857,7 @@ function handleClickOutside() {
               :steps="props.steps"
               :pointer="props.pointer"
               :disabled-time="isTimeDisabled"
+              :no-transition="staticWheel"
               @change="handleWheelChange"
               @toggle-col="toggleCurrentState('end')"
             ></TimeWheel>

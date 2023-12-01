@@ -69,7 +69,7 @@
 ### 预设类型
 
 ```ts
-type RawOption =
+type WheelRawOption =
   | string
   | number
   | {
@@ -81,19 +81,20 @@ type RawOption =
 
 ### Wheel 属性
 
-| 名称          | 类型                                                    | 说明                                             | 默认值        | 始于     |
-| ------------- | ------------------------------------------------------- | ------------------------------------------------ | ------------- | -------- |
-| state         | `'default' \| 'success' \| 'error' \| 'warning'`        | 设置滚轮的状态                                   | `'default'`   | `2.0.0`  |
-| options       | `RawOption[]`                                           | 设置滚轮的选项                                   | `[]`          | `2.0.0`  |
-| horizontal    | `boolean`                                               | 设置滚轮的是否为横向模式                         | `false`       | -        |
-| value         | `string \| number`                                      | 当前激活元素的索引，可以使用 `v-model` 双向绑定  | `0`           | -        |
-| candidate     | `number`                                                | 设置滚轮上下的候选个数，可选范围为 0 ~ 3         | `2`           | -        |
-| arrow         | `boolean`                                               | 设置是否使用滚轮的箭头指示器                     | `false`       | -        |
-| insert-empty  | `boolean \| string`                                     | 设置是否插入空值，传入字符串可以指定空值的显示值 | `false`       | `2.0.0`  |
-| disabled      | `boolean`                                               | 设置是否禁用滚轮                                 | `false`       | `2.0.0`  |
-| loading       | `boolean`                                               | 设置是否为加载中                                 | `false`       | `2.0.0`  |
-| loading-lock  | `boolean`                                               | 设置在加载中时是否为只读                         | `false`       | `2.0.0`  |
-| disabled-item | `(value: string \| number, data: RawOption) => boolean` | 设置禁用的元素                                   | `() => false` | `2.0.14` |
+| 名称          | 类型                                                         | 说明                                             | 默认值        | 始于     |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------ | ------------- | -------- |
+| state         | `'default' \| 'success' \| 'error' \| 'warning'`             | 设置滚轮的状态                                   | `'default'`   | `2.0.0`  |
+| options       | `WheelRawOption[]`                                           | 设置滚轮的选项                                   | `[]`          | `2.0.0`  |
+| horizontal    | `boolean`                                                    | 设置滚轮的是否为横向模式                         | `false`       | -        |
+| value         | `string \| number`                                           | 当前激活元素的索引，可以使用 `v-model` 双向绑定  | `0`           | -        |
+| candidate     | `number`                                                     | 设置滚轮上下的候选个数，可选范围为 0 ~ 3         | `2`           | -        |
+| arrow         | `boolean`                                                    | 设置是否使用滚轮的箭头指示器                     | `false`       | -        |
+| insert-empty  | `boolean \| string`                                          | 设置是否插入空值，传入字符串可以指定空值的显示值 | `false`       | `2.0.0`  |
+| disabled      | `boolean`                                                    | 设置是否禁用滚轮                                 | `false`       | `2.0.0`  |
+| loading       | `boolean`                                                    | 设置是否为加载中                                 | `false`       | `2.0.0`  |
+| loading-lock  | `boolean`                                                    | 设置在加载中时是否为只读                         | `false`       | `2.0.0`  |
+| disabled-item | `(value: string \| number, data: WheelRawOption) => boolean` | 设置禁用的元素                                   | `() => false` | `2.0.14` |
+| no-transition | `boolean`                                                    | 是否禁用滚动过渡效果                             | `false`       | `2.2.17` |
 
 ### Wheel 事件
 
