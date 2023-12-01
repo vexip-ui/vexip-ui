@@ -5,7 +5,6 @@ import { Tooltip } from '@/components/tooltip'
 import { computed, inject, ref } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/hooks'
 import { transformListToMap } from '@vexip-ui/utils'
 import { videoControlProps } from './props'
 import { VIDEO_STATE } from './symbol'
@@ -31,25 +30,14 @@ const props = useProps('videoControl', _props, {
 
 const nh = useNameHelper('video')
 
-const videoState = inject(VIDEO_STATE)
-const { timer } = useSetTimeout()
+const videoState = inject(VIDEO_STATE)!
 
-if (!videoState) {
-  console.warn('[vexip-ui:Video] VideoControl must be used under Video')
-}
-
-const hovered = ref(false)
-const focused = ref(false)
 const currentValue = ref(props.value)
 
-const active = computed(() => {
-  return !props.disabled && (hovered.value || focused.value)
-})
 const className = computed(() => {
   return {
     [nh.be('control')]: true,
     [nh.bem('control', props.type)]: props.type !== 'button',
-    [nh.bem('control', 'active')]: active.value,
     [nh.bem('control', 'disabled')]: props.disabled
   }
 })
@@ -64,38 +52,6 @@ const objectOptions = computed(() => {
 const optionMap = computed(() => transformListToMap(objectOptions.value, 'value', undefined, true))
 const currentOption = computed(() => optionMap.value.get(currentValue.value))
 
-function handlePointerEnter() {
-  clearTimeout(timer.hover)
-
-  timer.hover = setTimeout(() => {
-    hovered.value = true
-    emitEvent(props.onEnter)
-  }, 100)
-}
-
-function handlePointerLeave() {
-  clearTimeout(timer.hover)
-
-  timer.hover = setTimeout(() => {
-    hovered.value = false
-    emitEvent(props.onLeave)
-  }, 100)
-}
-
-function handleFocus(event: FocusEvent) {
-  if (!props.focusable) return
-
-  focused.value = true
-  emitEvent(props.onFocus, event)
-}
-
-function handleBlur(event: FocusEvent) {
-  if (!props.focusable) return
-
-  focused.value = false
-  emitEvent(props.onBlur, event)
-}
-
 function handleSelect(option: VideoControlOption) {
   currentValue.value = option.value
   emitEvent(props.onSelect, option)
@@ -103,25 +59,24 @@ function handleSelect(option: VideoControlOption) {
 </script>
 
 <template>
-  <div :class="className" @pointerenter="handlePointerEnter" @pointerleave="handlePointerLeave">
+  <div :class="className">
     <Tooltip
-      trigger="custom"
-      :visible="hovered || focused"
+      :trigger="props.focusable ? 'hover-focus' : 'hover'"
       raw
       shift
-      :transfer="`#${nh.bs(`tooltip-place-${videoState?.idIndex}`)}`"
+      :transfer="videoState.placeId && `#${videoState.placeId}`"
       :tip-class="[tipClass, props.tipClass]"
       :no-hover="props.type === 'button'"
-      :disabled="!videoState || (props.type === 'button' ? !props.name : props.disabled)"
-      @tip-enter="handlePointerEnter"
-      @tip-leave="handlePointerLeave"
+      :disabled="props.type === 'button' ? !props.name : props.disabled"
+      @tip-enter="emitEvent(props.onEnter)"
+      @tip-leave="emitEvent(props.onLeave)"
     >
       <template #trigger>
         <button
           :class="nh.be('control-button')"
           type="button"
-          @focus="handleFocus"
-          @blur="handleBlur"
+          @focus="emitEvent(props.onFocus, $event)"
+          @blur="emitEvent(props.onBlur, $event)"
           @click="emitEvent(props.onClick)"
         >
           <slot v-if="currentOption" name="selected" :option="currentOption">

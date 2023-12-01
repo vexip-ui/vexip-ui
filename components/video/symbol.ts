@@ -47,11 +47,11 @@ export interface VideoControlOption {
 // }
 
 export interface VideoState {
-  idIndex: number,
+  placeId?: string,
   iconScale: number
 }
 
-const defaultLayout: VideoControlLayout = {
+const defaultLayout: Required<VideoControlLayout> = {
   left: ['play-prev', 'play', 'play-next', 'refresh', 'timer'],
   center: [],
   right: ['play-rate', 'volume', 'pip', 'full-window', 'full-browser']
@@ -62,11 +62,5 @@ for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {
 }
 
 export const videoDefaultControlLayout = Object.freeze(defaultLayout)
-
-let idIndex = 0
-
-export function getIdIndex() {
-  return idIndex++
-}
 
 export const VIDEO_STATE: InjectionKey<VideoState> = Symbol('VIDEO_STATE')

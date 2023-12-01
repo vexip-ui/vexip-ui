@@ -17,7 +17,6 @@ export const videoProps = buildProps({
   playRates: Array as PropType<(number | VideoPlayRate)[]>,
   // kernel: Object as PropType<VideoKernel>,
   controlLayout: Object as PropType<VideoControlLayout>,
-  refreshable: booleanProp,
   poster: String,
   video: Object as PropType<HTMLVideoElement>,
   onPlay: eventProp(),

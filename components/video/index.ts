@@ -1,4 +1,4 @@
-import Video from './video.vue'
+import Video from './video'
 
 import type { ComponentPublicInstance } from 'vue'
 
