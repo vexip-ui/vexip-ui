@@ -44,7 +44,8 @@ const props = useProps('wheel', _props, {
   disabledItem: {
     default: toFalse,
     isFunc: true
-  }
+  },
+  noTransition: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -447,6 +448,7 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
         :delta-x="targetWidth"
         :delta-y="targetHeight"
         :on-before-scroll="beforeScroll"
+        :no-transition="props.noTransition"
         @wheel="handleWheel"
         @scroll-end="handleScrollEnd"
       >

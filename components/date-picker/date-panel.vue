@@ -110,6 +110,10 @@ const props = defineProps({
   weekStart: {
     type: Number,
     default: null
+  },
+  staticWheel: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -604,6 +608,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
               :candidate="3"
               :steps="steps"
               :disabled-time="disabledTime"
+              :no-transition="staticWheel"
               @change="handleStartTimeChange"
             ></TimeWheel>
             <TimeWheel
@@ -614,6 +619,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
               :candidate="3"
               :steps="steps"
               :disabled-time="disabledTime"
+              :no-transition="staticWheel"
               @change="handleEndTimeChange"
             ></TimeWheel>
           </div>

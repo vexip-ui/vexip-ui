@@ -148,6 +148,7 @@ const currentState = ref<'start' | 'end'>('start')
 const lastValue = ref('')
 const firstSelected = ref<number[] | undefined>()
 const hoveredDate = ref(new Date())
+const staticWheel = ref(false)
 
 const { timer } = useSetTimeout()
 
@@ -1314,6 +1315,10 @@ function handleClickOutside() {
       :transition="props.transitionName"
       :alive="props.popperAlive ?? !transferTo"
       @click.stop="handleFocused"
+      @before-enter="staticWheel = true"
+      @before-leave="staticWheel = true"
+      @after-enter="staticWheel = false"
+      @after-leave="staticWheel = false"
     >
       <DatePanel
         ref="panel"
@@ -1338,6 +1343,7 @@ function handleClickOutside() {
         :selecting-type="hoveredLarge ? 'end' : 'start'"
         :locale="mergedLocale"
         :week-start="props.weekStart"
+        :static-wheel="staticWheel"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

@@ -60,6 +60,10 @@ const props = defineProps({
   disabledTime: {
     type: Object as PropType<DisabledTime>,
     default: () => ({})
+  },
+  noTransition: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -160,6 +164,7 @@ function refreshWheel() {
       :candidate="candidate"
       :options="hourRange"
       tabindex="-1"
+      :no-transition="noTransition"
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
       @keydown.stop
@@ -185,6 +190,7 @@ function refreshWheel() {
       :candidate="candidate"
       :options="minuteRange"
       tabindex="-1"
+      :no-transition="noTransition"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
       @keydown.stop
@@ -210,6 +216,7 @@ function refreshWheel() {
       :candidate="candidate"
       :options="secondRange"
       tabindex="-1"
+      :no-transition="noTransition"
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
       @keydown.stop
