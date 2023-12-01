@@ -41,6 +41,7 @@
                   :class="nh.be('tag')"
                   :type="props.tagType"
                   closable
+                  :disabled="props.disabled"
                   @click.stop="toggleVisible"
                   @close="handleTagClose(item)"
                 >
@@ -55,6 +56,7 @@
                   inherit
                   :class="[nh.be('tag'), nh.be('counter')]"
                   :type="props.tagType"
+                  :disabled="props.disabled"
                   @click.stop="toggleVisible"
                 >
                   {{ `+${count}` }}
@@ -70,7 +72,12 @@
                     @click.stop="toggleShowRestTip"
                   >
                     <template #trigger>
-                      <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                      <Tag
+                        inherit
+                        :class="[nh.be('tag'), nh.be('counter')]"
+                        :type="props.tagType"
+                        :disabled="props.disabled"
+                      >
                         {{ `+${count}` }}
                       </Tag>
                     </template>
@@ -82,6 +89,7 @@
                           :class="nh.be('tag')"
                           closable
                           :type="props.tagType"
+                          :disabled="props.disabled"
                           @close="handleTagClose(item)"
                         >
                           <slot name="selected" :option="item">
@@ -93,6 +101,22 @@
                   </Tooltip>
                 </span>
               </template>
+              <!-- <template v-if="!limited && previewOption" #suffix>
+                <Tag
+                  inherit
+                  :class="[
+                    nh.be('tag'),
+                    nh.bem('tag', 'preview'),
+                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
+                  ]"
+                  :type="props.tagType"
+                  closable
+                >
+                  <slot name="selected" :preview="true" :option="previewOption">
+                    {{ previewOption.label }}
+                  </slot>
+                </Tag>
+              </template> -->
             </Overflow>
             <div
               v-if="props.filter"
@@ -129,57 +153,48 @@
             </div>
           </template>
           <template v-else>
-            <template v-if="props.filter">
-              <input
-                ref="input"
-                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
-                :disabled="props.disabled"
-                :placeholder="
-                  previewOption?.label ||
-                    currentLabels[0] ||
-                    (props.placeholder ?? locale.placeholder)
-                "
-                autocomplete="off"
-                tabindex="-1"
-                role="combobox"
-                aria-autocomplete="list"
-                :name="props.name"
-                @submit.prevent
-                @input="handleFilterInput"
-                @focus="handleFocus($event)"
-                @blur="handleBlur($event)"
-                @compositionstart="composing = true"
-                @compositionend="handleCompositionEnd"
-                @change="handleCompositionEnd"
-              />
-            </template>
-            <slot
-              v-else-if="getOptionFromMap(currentValues[0])"
-              name="selected"
-              :option="getOptionFromMap(currentValues[0])"
-            >
-              {{ currentLabels[0] }}
-            </slot>
-            <template v-else>
-              {{ currentLabels[0] }}
-            </template>
+            <input
+              v-if="props.filter"
+              ref="input"
+              :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
+              :disabled="props.disabled"
+              autocomplete="off"
+              tabindex="-1"
+              role="combobox"
+              aria-autocomplete="list"
+              :name="props.name"
+              :style="{
+                opacity: currentVisible ? undefined : '0%'
+              }"
+              @submit.prevent
+              @input="handleFilterInput"
+              @focus="handleFocus($event)"
+              @blur="handleBlur($event)"
+              @compositionstart="composing = true"
+              @compositionend="handleCompositionEnd"
+              @change="handleCompositionEnd"
+            />
+            <span v-if="!currentVisible && hasValue" :class="[nh.be('selected')]">
+              <slot
+                v-if="getOptionFromMap(currentValues[0])"
+                name="selected"
+                :option="getOptionFromMap(currentValues[0])"
+              >
+                {{ currentLabels[0] }}
+              </slot>
+              <template v-else>
+                {{ currentLabels[0] }}
+              </template>
+            </span>
           </template>
-          <span
-            v-if="
-              (props.multiple || !props.filter) &&
-                (!currentVisible || !currentFilter) &&
-                (props.placeholder ?? locale.placeholder) &&
-                !hasValue
-            "
-            :class="nh.be('placeholder')"
-          >
+          <span v-if="showPlaceholder" :class="nh.be('placeholder')">
             <slot
               v-if="previewOption"
               name="selected"
               :preview="true"
               :option="previewOption"
             >
-              {{ previewOption?.label ?? props.placeholder ?? locale.placeholder }}
+              {{ previewOption.label }}
             </slot>
             <template v-else>
               {{ props.placeholder ?? locale.placeholder }}
@@ -712,9 +727,11 @@ export default defineComponent({
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('filter')]: props.filter,
-        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
+        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0,
+        [nh.bm('disabled')]: props.disabled
       }
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
@@ -722,7 +739,8 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--readonly`]: readonly.value,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -759,7 +777,9 @@ export default defineComponent({
       return map
     })
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && hasValue.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && isHover.value && hasValue.value
+      )
     })
     const previewOption = computed(() => {
       return !props.noPreview && currentVisible.value ? hittingOption.value : undefined
@@ -767,6 +787,17 @@ export default defineComponent({
     const limited = computed(() => {
       return (
         props.multiple && props.countLimit > 0 && currentValues.value.length >= props.countLimit
+      )
+    })
+    const showPlaceholder = computed(() => {
+      // 采用反推，出现下列情况时不显示：
+      // 1. 有值且 未开预览/多选模式/未打开列表
+      // 2. 没有预览选项且没有合法的占位值
+      // 3. 打开列表且输入了过滤值
+      return (
+        !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
+        !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
+        !(currentVisible.value && currentFilter.value)
       )
     })
 
@@ -825,22 +856,11 @@ export default defineComponent({
         }
       }
     )
-    watch(
-      () => props.loading,
-      value => {
-        if (value && props.loadingLock) {
-          setVisible(false)
-        }
+    watch(readonly, value => {
+      if (value) {
+        setVisible(false)
       }
-    )
-    watch(
-      () => props.loadingLock,
-      value => {
-        if (props.loading && value) {
-          setVisible(false)
-        }
-      }
-    )
+    })
     watch(currentFilter, value => {
       dynamicOption.value = value
       dynamicOption.label = value
@@ -1019,6 +1039,8 @@ export default defineComponent({
     }
 
     function handleTagClose(value?: SelectBaseValue | null) {
+      if (props.disabled || readonly.value) return
+
       !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
@@ -1063,7 +1085,7 @@ export default defineComponent({
         currentFilter.value = ''
 
         syncInputValue()
-        updatePopper()
+        requestAnimationFrame(updatePopper)
       } else {
         setVisible(false)
       }
@@ -1117,7 +1139,7 @@ export default defineComponent({
     }
 
     function toggleVisible() {
-      if (props.disabled || (props.loading && props.loadingLock)) return
+      if (props.disabled || readonly.value) return
 
       setVisible(!currentVisible.value)
     }
@@ -1133,6 +1155,8 @@ export default defineComponent({
     }
 
     function handleClear() {
+      if (props.disabled || readonly.value) return
+
       if (props.clearable) {
         for (const option of userOptions.value) {
           optionValueMap.value.delete(option.value)
@@ -1283,6 +1307,7 @@ export default defineComponent({
       optionParentMap,
       previewOption,
       limited,
+      showPlaceholder,
 
       wrapper,
       reference,

@@ -122,7 +122,7 @@ export default defineComponent({
 
           restCount.value = 0
         } else {
-          restCount.value = childCount - 1 - props.maxCount
+          restCount.value = childCount - 1 - props.maxCount - (slots.suffix ? 1 : 0)
           overflow = restCount.value > 0
         }
 

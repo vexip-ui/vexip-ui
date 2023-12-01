@@ -118,6 +118,8 @@ interface ScrollSlotParams {
 | on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`     | Set the callback before scrolling, **does not support** asynchronous functions and `Promise`, the return value is `false` will prevent scrolling | `null`       | -        |
 | use-bar-track    | `boolean`                                                    | Set whether the scrollbar enables track interaction                                                                                              | `false`      | -        |
 | scroll-tag       | `string`                                                     | Custom tag for scroll content wrapping element                                                                                                   | `'div'`      | `2.0.13` |
+| no-buffer        | `boolean`                                                    | Whether to disable resilience buffer effect                                                                                                      | `false`      | -        |
+| no-transition    | `boolean`                                                    | Whether to disable transition effect                                                                                                             | `false`      | -        |
 
 ### Scroll Events
 

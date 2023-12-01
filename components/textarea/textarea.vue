@@ -67,6 +67,9 @@ const textarea = ref<HTMLTextAreaElement>()
 
 let lastValue = props.value
 
+const isReadonly = computed(() => {
+  return (props.loading && props.loadingLock) || props.readonly
+})
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -75,13 +78,11 @@ const className = computed(() => {
     [nh.bm('inherit')]: props.inherit,
     [nh.bm('focused')]: focused.value,
     [nh.bm('disabled')]: props.disabled,
-    [nh.bm('loading')]: props.loading && props.loadingLock,
+    [nh.bm('readonly')]: isReadonly.value,
+    [nh.bm('loading')]: props.loading,
     [nh.bm('no-resize')]: props.noResize,
     [nh.bm(props.state)]: props.state !== 'default'
   }
-})
-const isReadonly = computed(() => {
-  return (props.loading && props.loadingLock) || props.readonly
 })
 
 watch(
@@ -97,6 +98,7 @@ defineExpose({
   currentValue,
   currentLength,
   composing,
+  isReadonly,
   textarea,
   copyValue,
   focus: (options?: FocusOptions) => textarea.value?.focus(options),

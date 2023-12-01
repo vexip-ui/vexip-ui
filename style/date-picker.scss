@@ -63,11 +63,14 @@ $date-picker: map.merge(
     cursor: pointer;
   }
 
+  &--disabled &__selector {
+    cursor: not-allowed;
+  }
+
   &__control {
     position: relative;
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__input {

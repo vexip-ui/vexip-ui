@@ -39,6 +39,10 @@ $select: map.merge(
     cursor: inherit;
   }
 
+  &--disabled {
+    cursor: not-allowed;
+  }
+
   &--multiple &__selector {
     @include define-css-var('input-v-padding', 2px);
 
@@ -80,6 +84,19 @@ $select: map.merge(
     margin-inline-start: 0;
     pointer-events: auto;
     cursor: pointer;
+
+    // &--preview {
+    //   pointer-events: none;
+    //   opacity: 50%;
+    // }
+
+    // &--deleted {
+    //   text-decoration: line-through;
+    // }
+  }
+
+  &--disabled &__tag {
+    cursor: not-allowed;
   }
 
   &__selector--small &__tag {
@@ -136,14 +153,20 @@ $select: map.merge(
     opacity: 0%;
   }
 
+  &__selected,
   &__placeholder {
     position: absolute;
+    max-width: 100%;
     overflow: hidden;
-    color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
+  }
+
+  &__selected--placeholder,
+  &__placeholder {
+    color: get-css-var('input-placeholder-color');
   }
 
   &__popper {

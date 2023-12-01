@@ -105,6 +105,10 @@ $slider: map.merge(
     margin: $margin 0;
   }
 
+  &--disabled &__container {
+    cursor: not-allowed;
+  }
+
   &__track {
     display: flex;
     align-items: flex-start;

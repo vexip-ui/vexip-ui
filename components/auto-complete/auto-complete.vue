@@ -121,6 +121,7 @@ let changed = false
 let lastValue = props.value
 let lastInput = String(lastValue)
 
+const isReadonly = computed(() => props.loading && props.loadingLock)
 const optionStates = computed(() => select.value?.optionStates || [])
 const filteredOptions = computed(() => select.value?.visibleOptions || [])
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
@@ -300,6 +301,8 @@ let beforeVisible = false
 let inClickProcess = false
 
 function beforeClick() {
+  if (props.disabled || isReadonly.value) return
+
   beforeVisible = currentVisible.value
   inClickProcess = true
 
@@ -309,6 +312,8 @@ function beforeClick() {
 }
 
 function handleClick() {
+  if (props.disabled || isReadonly.value) return
+
   inClickProcess = false
 
   if (!select.value) return
@@ -325,7 +330,7 @@ function handleClick() {
 }
 
 function handleToggle(visible: boolean) {
-  if (inClickProcess) return
+  if (props.disabled || isReadonly.value || inClickProcess) return
 
   currentVisible.value = visible
 
@@ -502,7 +507,7 @@ function handleCompositionEnd() {
           :spellcheck="props.spellcheck"
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
-          :readonly="props.loading && props.loadingLock"
+          :readonly="isReadonly"
           :name="props.name"
           autocomplete="off"
           tabindex="-1"

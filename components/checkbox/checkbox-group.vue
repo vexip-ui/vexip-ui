@@ -90,6 +90,7 @@ export default defineComponent({
     const controlSet = new Set<ControlState>()
     const currentValues = ref<(string | number)[]>(props.value || [])
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -98,7 +99,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm(props.state)]: props.state !== 'default'

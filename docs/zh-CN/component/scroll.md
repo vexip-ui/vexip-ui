@@ -118,6 +118,8 @@ interface ScrollSlotParams {
 | on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`     | 设置滚动前的回调，**不支持**异步函数和 `Promise`，返回值为 `false` 会阻止滚动 | `null`       | -        |
 | use-bar-track    | `boolean`                                                    | 设置滚动条是否启用轨道交互                                                    | `false`      | -        |
 | scroll-tag       | `string`                                                     | 滚动内容包围元素渲染的标签                                                    | `'div'`      | `2.0.13` |
+| no-buffer        | `boolean`                                                    | 是否禁用回弹缓冲效果                                                          | `false`      | -        |
+| no-transition    | `boolean`                                                    | 是否禁用过渡效果                                                              | `false`      | -        |
 
 ### Scroll 事件
 

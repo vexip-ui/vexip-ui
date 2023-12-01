@@ -112,6 +112,7 @@ const markerList = computed(() => {
   return list.sort((prev, next) => prev.value - next.value)
 })
 const hasMarkerLabel = computed(() => !!markerList.value.find(({ marker }) => marker.label))
+const readonly = computed(() => props.loading && props.loadingLock)
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -121,7 +122,8 @@ const className = computed(() => {
     [nh.bm('vertical')]: props.vertical,
     [nh.bm('sliding')]: sliding.value[1] || sliding.value[0],
     [nh.bm('disabled')]: props.disabled,
-    [nh.bm('loading')]: props.loading && props.loadingLock,
+    [nh.bm('readonly')]: readonly.value,
+    [nh.bm('loading')]: props.loading,
     [nh.bm('reverse')]: props.reverse,
     [nh.bm('with-marker')]: hasMarkerLabel.value,
     [nh.bm('flip-marker')]: props.flipMarker,
@@ -178,7 +180,7 @@ const endTriggerStyle = computed(() => {
     transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
   }
 })
-const readOnly = computed(() => props.disabled || (props.loading && props.loadingLock))
+const isDisabled = computed(() => props.disabled || readonly.value)
 
 parseValue(props.value)
 verifyValue()
@@ -343,7 +345,7 @@ const throttleMove = throttle((event: PointerEvent) => {
 })
 
 function handleTrackDown(event: PointerEvent) {
-  if (!track.value || readOnly.value) return
+  if (!track.value || isDisabled.value) return
 
   clearTimeout(timer.sliding)
   event.stopPropagation()
@@ -450,7 +452,7 @@ function adjustValue(type: TriggerType, delta: number, emitEvent = false) {
 }
 
 function handlePlus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
-  if (readOnly.value) return
+  if (isDisabled.value) return
 
   if (props.markerOnly || extra === 'alt') {
     if (!markerList.value.length) return
@@ -471,7 +473,7 @@ function handlePlus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
 }
 
 function handleMinus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
-  if (readOnly.value) return
+  if (isDisabled.value) return
 
   if (props.markerOnly || extra === 'alt') {
     if (!markerList.value.length) return

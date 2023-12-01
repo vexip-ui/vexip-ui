@@ -49,7 +49,8 @@ export default defineComponent({
       prefixColor: '',
       suffix: '',
       suffixBg: '',
-      suffixColor: ''
+      suffixColor: '',
+      disabled: false
     })
 
     const nh = useNameHelper('tag')
@@ -65,7 +66,8 @@ export default defineComponent({
         [nh.bm('border')]: props.border,
         [nh.bm('simple')]: props.simple,
         [nh.bm('circle')]: props.circle,
-        [nh.bm('closable')]: props.closable
+        [nh.bm('closable')]: props.closable,
+        [nh.bm('disabled')]: props.disabled
       }
     })
     const style = computed(() => {
@@ -99,7 +101,7 @@ export default defineComponent({
     })
 
     function handleClose(event: MouseEvent) {
-      if (!props.closable || event.button > 0) {
+      if (!props.closable || props.disabled || event.button > 0) {
         return false
       }
 

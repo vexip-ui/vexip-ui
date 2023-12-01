@@ -136,6 +136,7 @@ export default defineComponent({
     const button = ref<InstanceType<typeof Button>>()
     const panel = ref<HTMLElement>()
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -150,7 +151,9 @@ export default defineComponent({
           [nh.bm('block')]: props.block,
           [nh.bm('drag-only')]: props.disabledClick,
           [nh.bm('image')]: props.image,
-          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length
+          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -227,6 +230,8 @@ export default defineComponent({
     }
 
     function handleClick() {
+      if (props.disabled || readonly.value) return
+
       !props.disabledClick && input.value?.click()
     }
 
@@ -536,7 +541,7 @@ export default defineComponent({
     })
 
     async function handleDrop(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       clearTimeout(dragTimer)
       event.preventDefault()
@@ -551,7 +556,7 @@ export default defineComponent({
     }
 
     function handleDragEnter(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       clearTimeout(dragTimer)
       event.preventDefault()
@@ -560,7 +565,7 @@ export default defineComponent({
     }
 
     function handleDragLeave(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       event.preventDefault()
 

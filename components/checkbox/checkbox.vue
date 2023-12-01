@@ -11,7 +11,7 @@
       type="checkbox"
       :class="nh.be('input')"
       :checked="currentChecked"
-      :disabled="isDisabled"
+      :disabled="isDisabled || readonly"
       :tabindex="props.tabIndex"
       :name="props.name"
       @submit.prevent
@@ -105,6 +105,7 @@ export default defineComponent({
     const isLoading = computed(() => groupState?.loading || props.loading)
     const isLoadingLock = computed(() => groupState?.loadingLock || props.loadingLock)
     const stateColor = computed(() => groupState?.stateColor || props.stateColor)
+    const readonly = computed(() => isLoading.value && isLoadingLock.value)
     const className = computed(() => {
       return [
         nh.b(),
@@ -113,7 +114,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('checked')]: currentChecked.value,
           [nh.bm('disabled')]: isDisabled.value,
-          [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: isLoading.value,
           [nh.bm(computedSize.value)]: computedSize.value !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm('partial')]: props.control && currentPartial.value,
@@ -236,7 +238,7 @@ export default defineComponent({
     }
 
     function handleChange(checked: boolean) {
-      if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+      if (isDisabled.value || readonly.value) {
         return
       }
 
@@ -262,6 +264,7 @@ export default defineComponent({
       idFor,
       currentChecked,
 
+      readonly,
       isDisabled,
       className,
       style,

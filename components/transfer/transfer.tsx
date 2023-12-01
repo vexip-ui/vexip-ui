@@ -169,13 +169,16 @@ export default defineComponent({
       currentValue.value = new Set(emittedValue)
     }
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -334,7 +337,7 @@ export default defineComponent({
                   type={actionType.value}
                   size={'small'}
                   disabled={props.disabled || !toTargetEnabled.value}
-                  loading={props.loading && props.loadingLock}
+                  loading={readonly.value}
                   loading-icon={props.loadingIcon}
                   loading-effect={props.loadingEffect}
                   style={{ marginBottom: '6px' }}
@@ -356,7 +359,7 @@ export default defineComponent({
                   type={actionType.value}
                   size={'small'}
                   disabled={props.disabled || !toSourceEnabled.value}
-                  loading={props.loading && props.loadingLock}
+                  loading={readonly.value}
                   loading-icon={props.loadingIcon}
                   loading-effect={props.loadingEffect}
                   style={{ margin: '0' }}
