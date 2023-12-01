@@ -1,3 +1,7 @@
+## [2.7.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.0...utils@2.7.1) (2023-12-01)
+
+
+
 # [2.7.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.6.0...utils@2.7.0) (2023-11-29)
 
 
