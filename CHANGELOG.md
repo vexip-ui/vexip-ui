@@ -1,3 +1,21 @@
+## [2.2.17](https://github.com/vexip-ui/vexip-ui/compare/v2.2.16...v2.2.17) (2023-12-01)
+
+
+### ✨ Features
+
+* **tag:** add disabled prop ([7dccbd7](https://github.com/vexip-ui/vexip-ui/commit/7dccbd7c032e0eea219a1c18747a064d6f37d634))
+* **wheel:** add no-transition prop ([c27b9c7](https://github.com/vexip-ui/vexip-ui/commit/c27b9c70d7c05ebf0ed53bacc20861194c4c9f12))
+
+
+### 🐞 Bug Fixes
+
+* correct disabled and readonly of form control components ([0ef5c2a](https://github.com/vexip-ui/vexip-ui/commit/0ef5c2a2fad004da05362e3e008db1a0e42aef0f)), closes [#438](https://github.com/vexip-ui/vexip-ui/issues/438)
+* **overflow:** correct rest count when using suffix ([d68750b](https://github.com/vexip-ui/vexip-ui/commit/d68750b85fe5fd27e87f9cdf19ae1e8dd0ace1ee))
+* **select:** ensure selected slot work with filter ([70de365](https://github.com/vexip-ui/vexip-ui/commit/70de3659f34b23712a8e062a1c1061e1316ae3a3)), closes [#439](https://github.com/vexip-ui/vexip-ui/issues/439)
+* **table:** correct compute and refresh cell height when using tree ([7cb363f](https://github.com/vexip-ui/vexip-ui/commit/7cb363f5a268dc8a84813a7ba56f1cc14b9c4161))
+
+
+
 ## [2.2.16](https://github.com/vexip-ui/vexip-ui/compare/v2.2.15...v2.2.16) (2023-11-29)
 
 
