@@ -50,3 +50,8 @@ export const datePickerTypes = Object.freeze<DatePickerType[]>([
   'year',
   'month'
 ])
+
+export const invalidDate = new Date('')
+
+// export const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
+export const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/

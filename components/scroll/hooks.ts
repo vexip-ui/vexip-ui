@@ -46,16 +46,10 @@ export function useScrollWrapper({
     height: 0
   })
 
-  const x = manualRef(0)
-  const y = manualRef(0)
+  const x = manualRef(-scrollX.value)
+  const y = manualRef(-scrollY.value)
 
   const isReady = ref(false)
-
-  // 当前滚动位置
-  // const currentScroll = reactive({
-  //   x: -scrollX.value,
-  //   y: -scrollY.value
-  // })
 
   const percentX = manualRef(0)
   const percentY = manualRef(0)
@@ -104,12 +98,10 @@ export function useScrollWrapper({
     computeContentSize()
   })
   watch(scrollX, value => {
-    // x.value = -value
     x.value = -value
     verifyScroll()
   })
   watch(scrollY, value => {
-    // y.value = -value
     y.value = -value
     verifyScroll()
   })
@@ -161,6 +153,8 @@ export function useScrollWrapper({
     clearTimeout(timer)
 
     return new Promise<void>(resolve => {
+      isReady.value = false
+
       timer = setTimeout(() => {
         if (!content.el) {
           resolve()
@@ -190,8 +184,6 @@ export function useScrollWrapper({
             }
           }
         }
-
-        isReady.value = false
 
         setTimeout(() => {
           isReady.value = true
@@ -279,7 +271,6 @@ export function useScrollWrapper({
     isReady,
     x,
     y,
-    // currentScroll,
     percentX,
     percentY,
     xScrollLimit,

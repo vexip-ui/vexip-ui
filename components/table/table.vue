@@ -907,7 +907,7 @@ function computeRenderRows(force = false) {
   const rowCount = processedData.length
 
   if (!props.virtual) {
-    setRenderRows(0, rowCount)
+    setRenderRows(0, rowCount, force)
 
     return
   }
@@ -915,7 +915,7 @@ function computeRenderRows(force = false) {
   const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
 
   if (!viewHeight) {
-    setRenderRows(0, 0)
+    setRenderRows(0, 0, force)
   }
 
   let viewStart = bodyYScroll
