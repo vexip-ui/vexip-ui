@@ -627,11 +627,11 @@ function parseFormat() {
     state.enabled.minute = false
     state.enabled.second = false
 
-    if (isDatetime && props.format.length) {
-      const length = props.format.length
+    if (isDatetime && props.format) {
+      // to ignore 'H', 'm' and 's'
       let inQuotation = false
 
-      for (let i = 0; i < length; ++i) {
+      for (let i = 0, len = props.format.length; i < len; ++i) {
         const char = props.format.charAt(i)
 
         if (char === "'") {
@@ -717,14 +717,22 @@ function emitChange() {
 
     const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
     const emitValues: number[] = []
-    const formattedValues: Dateable[] = []
+    const formattedValues: unknown[] = []
 
     const valueFormat = props.valueFormat
     const formatValue: DatePickerFormatFn =
       typeof valueFormat === 'function'
         ? valueFormat
         : valueFormat
-          ? timestamp => format(timestamp, valueFormat)
+          ? (timestamp, type) =>
+              format(
+                timestamp,
+                !Array.isArray(valueFormat)
+                  ? valueFormat
+                  : type === 'start'
+                    ? valueFormat[0]
+                    : valueFormat[1]
+              )
           : timestamp => timestamp
 
     for (let i = 0; i < 2; ++i) {
@@ -739,7 +747,7 @@ function emitChange() {
         emitValues[i] = new Date(values[i]).getTime()
       }
 
-      formattedValues[i] = formatValue(emitValues[i])
+      formattedValues[i] = formatValue(emitValues[i], i === 0 ? 'start' : 'end')
 
       if (!props.range) break
     }

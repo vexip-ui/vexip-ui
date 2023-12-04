@@ -129,7 +129,7 @@ type TimeType = 'hour' | 'minute' | 'second'
 type DateTimeType = DateType | TimeType
 type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
 
-type DatePickerFormatFn = (timestamp: number) => Dateable
+type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => unknown
 
 interface DateShortcut {
   name: string,
@@ -182,7 +182,7 @@ interface DateShortcut {
 | placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                               | `null`                  | `2.1.1`  |
 | unit-readonly   | `boolean`                                                 | Set whether the input control is read-only                                                                                                    | `false`                 | `2.1.2`  |
 | week-start      | `number`                                                  | Set the first day of the week in date selection panel, the optional value is 0 ~ 7, where 0 is Sunday                                         | `null`                  | `2.1.9`  |
-| value-format    | `string \| DatePickerFormatFn`                            | Specify how to format the value                                                                                                               | `null`                  | `2.2.0`  |
+| value-format    | `string \| string[] \| DatePickerFormatFn`                | Specify how to format the value                                                                                                               | `null`                  | `2.2.0`  |
 | popper-alive    | `boolean`                                                 | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                    | `null`                  | `2.2.3`  |
 
 ### DatePicker Events

@@ -40,7 +40,7 @@ export const datePickerProps = buildProps({
   transfer: booleanStringProp,
   value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
   format: String,
-  valueFormat: [String, Function] as PropType<string | DatePickerFormatFn>,
+  valueFormat: [String, Array, Function] as PropType<string | string[] | DatePickerFormatFn>,
   filler: String,
   clearable: booleanProp,
   noAction: booleanProp,
