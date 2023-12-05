@@ -66,7 +66,6 @@ $contextmenu: map.merge(
   }
 
   &__arrow {
-    inset-inline-end: 6px;
-    inset-inline-start: auto;
+    inset-inline: auto 6px;
   }
 }

@@ -15,12 +15,18 @@
   ],
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "require": "./lib/index.js",
-      "import": "./es/index.mjs",
-      "types": "./types/index.d.ts"
+      "import": "./es/index.mjs"
     },
-    "./es": "./es/index.mjs",
-    "./lib": "./lib/index.js",
+    "./es": {
+      "types": "./types/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./lib": {
+      "types": "./types/index.d.ts",
+      "require": "./lib/index.js"
+    },
     "./es/*.mjs": "./es/*.mjs",
     "./es/*": "./es/*.mjs",
     "./lib/*.js": "./lib/*.js",
@@ -42,13 +48,13 @@
     "directory": "common/icons"
   },
   "devDependencies": {
-    "@types/node": "^20.8.4",
+    "@types/node": "^20.10.3",
     "execa": "^8.0.1",
-    "fast-glob": "^3.3.1",
-    "fs-extra": "^11.1.1",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
     "kolorist": "^1.8.0",
-    "prettier": "^3.0.3",
-    "vue": "^3.3.4"
+    "prettier": "^3.1.0",
+    "vue": "^3.3.10"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

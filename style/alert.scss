@@ -83,9 +83,9 @@ $alert: map.merge(
 
   &__icon {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     display: flex;
     align-items: center;
     justify-content: center;

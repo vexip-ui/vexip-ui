@@ -17,9 +17,9 @@ vi.useFakeTimers()
 
 async function runScrollTimers() {
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -903,7 +903,7 @@ describe('Table', () => {
     const moveEvent = new CustomEvent('pointermove') as any
     moveEvent.clientX = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onMove).toHaveBeenCalled()
     expect(currentWidth).toEqual(140)
 

@@ -170,9 +170,9 @@ $title: map.merge(
 
     &::before {
       position: absolute;
+      inset-inline-start: calc(get-css-var('title-marker-offset') * -1);
       top: 0;
       bottom: 0;
-      inset-inline-start: calc(get-css-var('title-marker-offset') * -1);
       width: get-css-var('title-marker-width');
       content: '';
       background-color: get-css-var('title-marker-color');

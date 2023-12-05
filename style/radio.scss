@@ -347,9 +347,9 @@ $radio: map.merge(
 
       &::after {
         position: absolute;
+        inset-inline-start: $rbw;
         top: 0;
         bottom: 0;
-        inset-inline-start: $rbw;
         display: block;
         width: $bw;
         content: '';
@@ -413,8 +413,8 @@ $radio: map.merge(
         }
 
         &::after {
-          top: -3px;
           inset-inline-start: -3px;
+          top: -3px;
           bottom: -3px;
           background-color: get-css-var('radio-s-color-focus');
           opacity: 50%;

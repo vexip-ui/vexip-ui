@@ -42,14 +42,14 @@ describe('Spin', () => {
     await wrapper.setProps({ active: true })
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(false)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
 
     await wrapper.setProps({ active: false })
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(false)
   })

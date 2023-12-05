@@ -118,8 +118,7 @@ $number-input: map.merge(
 
     #{$plus},
     #{$minus} {
-      inset-inline-end: auto;
-      inset-inline-start: 0;
+      inset-inline: 0 auto;
       border-inline-width: 0 get-css-var('border-width');
     }
   }

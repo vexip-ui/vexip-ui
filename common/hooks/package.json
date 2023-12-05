@@ -15,9 +15,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
   "private": false,
@@ -31,12 +31,12 @@
     "directory": "common/hooks"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.1",
+    "@floating-ui/dom": "^1.5.3",
     "@juggle/resize-observer": "^3.4.0",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.3.10"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

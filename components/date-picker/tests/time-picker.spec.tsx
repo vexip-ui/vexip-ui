@@ -10,9 +10,9 @@ import { format } from '@vexip-ui/utils'
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -92,6 +92,8 @@ describe('TimePicker', () => {
   })
 
   it('key toggle visible', async () => {
+    vi.useRealTimers()
+
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(TimePicker, {
@@ -122,6 +124,8 @@ describe('TimePicker', () => {
     await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
+
+    vi.useFakeTimers()
   })
 
   it('popper show', async () => {
@@ -329,7 +333,7 @@ describe('TimePicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <TimePicker state={state}></TimePicker>)
 
       expect(wrapper.find('.vxp-time-picker__selector').classes()).toContain(

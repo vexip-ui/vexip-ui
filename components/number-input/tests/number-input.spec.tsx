@@ -132,7 +132,7 @@ describe('NumberInput', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <NumberInput state={state}></NumberInput>)
 
       expect(wrapper.find('.vxp-number-input').classes()).toContain(`vxp-number-input--${state}`)
@@ -189,7 +189,7 @@ describe('NumberInput', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -207,7 +207,7 @@ describe('NumberInput', () => {
     emitInput(input, NUMBER)
     emitInput(input, NUMBER)
     expect(onInput).toHaveBeenCalledTimes(1)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledTimes(2)
   })
@@ -227,7 +227,7 @@ describe('NumberInput', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await input.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-number-input--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -418,13 +418,13 @@ describe('NumberInput', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
 
     emitChange(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onChange).toHaveBeenCalledWith(NUMBER)
   })
@@ -445,7 +445,7 @@ describe('NumberInput', () => {
     expect(onChange).toHaveBeenLastCalledWith(5)
 
     emitInput(input, 11)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-number-input').classes()).toContain('vxp-number-input--out-of-range')
   })
