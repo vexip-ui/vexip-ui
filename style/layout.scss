@@ -50,9 +50,9 @@ $layout: map.merge(
 
   &__sidebar {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     z-index: get-css-var('layout-aside-z-index');
     display: flex;
     pointer-events: none;
@@ -171,8 +171,8 @@ $layout: map.merge(
     @include basis;
 
     position: sticky;
-    top: 0;
     inset-inline-start: 0;
+    top: 0;
     z-index: get-css-var('layout-header-z-index');
     display: flex;
     align-items: center;
@@ -324,8 +324,8 @@ $layout: map.merge(
 
   &__expand-handler {
     position: absolute;
-    bottom: 47px;
     inset-inline-start: 100%;
+    bottom: 47px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,8 +368,8 @@ $layout: map.merge(
 
       &::after {
         position: absolute;
-        bottom: calc(-5px - 0.5px);
         inset-inline-start: 0;
+        bottom: calc(-5px - 0.5px);
         display: block;
         width: 100%;
         height: 0;
@@ -402,8 +402,8 @@ $layout: map.merge(
 
     &::after {
       position: absolute;
-      bottom: calc(-5px - 0.5px);
       inset-inline-start: 0;
+      bottom: calc(-5px - 0.5px);
       display: block;
       width: 100%;
       height: 0;
@@ -445,9 +445,9 @@ $layout: map.merge(
 
     &::before {
       position: absolute;
+      inset-block-start: 0;
       top: 0;
       bottom: 0;
-      inset-block-start: 0;
       width: 30%;
       content: '';
       background-color: get-css-var('content-color-reverse');

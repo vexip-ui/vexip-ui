@@ -226,8 +226,7 @@ $table: map.merge(
     height: 100%;
 
     &--right {
-      inset-inline-start: auto;
-      inset-inline-end: 0;
+      inset-inline: auto 0;
       width: get-css-var('table-side-pad-right');
     }
   }
@@ -593,8 +592,8 @@ $table: map.merge(
 
   &__resizer {
     position: absolute;
-    top: 0;
     inset-inline-end: 0;
+    top: 0;
     bottom: 0;
     z-index: 1;
     width: 6px;
@@ -602,8 +601,8 @@ $table: map.merge(
 
     &::after {
       position: absolute;
-      top: 50%;
       inset-inline-end: 0;
+      top: 50%;
       width: 1px;
       height: 50%;
       content: '';

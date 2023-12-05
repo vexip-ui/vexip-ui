@@ -112,9 +112,9 @@ $progress: map.merge(
 
   &--info-inside &__info {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     justify-content: flex-end;
     width: 100%;
     padding-inline-end: 8px;
@@ -149,9 +149,9 @@ $progress: map.merge(
 
   &__reference {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     width: 100%;
     pointer-events: none;
     transition: get-css-var('transition-transform');

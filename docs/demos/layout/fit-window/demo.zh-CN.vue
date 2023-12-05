@@ -1,6 +1,6 @@
 <template>
   <!-- 假设这个 div 是 document -->
-  <div style="height: 500px; overflow-x: hidden; overflow-y: auto">
+  <div style="height: 500px; overflow: hidden auto">
     <!-- 开启 fit-window 后，--vxp-layout-view-height 将为 100vh，此处因需模拟将其强制设置为 500px -->
     <Layout
       logo="https://www.vexipui.com/vexip-ui.svg"

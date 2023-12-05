@@ -1,6 +1,6 @@
 <template>
   <!-- Assuming this div is document -->
-  <div style="height: 500px; overflow-x: hidden; overflow-y: auto">
+  <div style="height: 500px; overflow: hidden auto">
     <!-- After add fit-window, --vxp-layout-view-height will be 100vh -->
     <!-- Here it is forced to set to 500px for simulation -->
     <Layout
