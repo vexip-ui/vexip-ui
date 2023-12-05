@@ -28,7 +28,7 @@ $tree: map.merge(
     indicator-color: get-css-var('color-primary-base'),
     indent-width: 16px,
     depth: -1,
-    link-line-index: -1,
+    // link-line-index: -1,
     link-line-type: 'dashed',
     link-line-color: get-css-var('border-color-base')
   ),

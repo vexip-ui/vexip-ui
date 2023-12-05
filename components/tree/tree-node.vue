@@ -72,7 +72,7 @@ useModifier({
 })
 
 const loaded = ref(!treeState.boundAsyncLoad || props.node.loaded)
-const loadFail = ref(!treeState.boundAsyncLoad || props.node.loadFail)
+const loadFail = ref(treeState.boundAsyncLoad && props.node.loadFail)
 const dragging = ref(false)
 const isDragOver = ref(false)
 const focused = ref(false)
@@ -173,7 +173,7 @@ onBeforeUnmount(() => {
 // }
 
 function setValue<T = unknown>(key: keyof TreeNodeProps, value: T) {
-  (props.node as any)[key] = value
+  ;(props.node as any)[key] = value
 }
 
 function handleClick() {
@@ -196,7 +196,13 @@ function handleToggleCheck(able = !props.node.checked) {
 }
 
 async function toggleExpanded(able = !props.node.expanded) {
-  if (props.node.loading || isDisabled.value || props.node.expandDisabled || isLeaf.value) return
+  if (
+    treeState.expanding ||
+    props.node.loading ||
+    isDisabled.value ||
+    props.node.expandDisabled ||
+    isLeaf.value
+  ) { return }
 
   if (able && treeState.boundAsyncLoad && !loaded.value) {
     setValue('loading', true)

@@ -18,7 +18,7 @@
     "iconify-icon": "^1.0.8",
     "prismjs": "^1.29.0",
     "vexip-ui": "workspace:*",
-    "vue": "^3.3.10",
+    "vue": "3.3.4",
     "vue-i18n": "^9.8.0",
     "vue-router": "^4.2.5"
   },
@@ -30,7 +30,7 @@
     "@types/prismjs": "^1.26.3",
     "@vitejs/plugin-vue": "^4.5.1",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
-    "@vue/compiler-sfc": "^3.3.9",
+    "@vue/compiler-sfc": "3.3.4",
     "autoprefixer": "^10.4.16",
     "compare-versions": "6.1.0",
     "execa": "^8.0.1",
