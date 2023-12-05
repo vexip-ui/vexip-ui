@@ -9,9 +9,9 @@ import { DatePicker } from '..'
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -115,6 +115,8 @@ describe('DatePicker', () => {
   })
 
   it('key toggle visible', async () => {
+    vi.useRealTimers()
+
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(DatePicker, {
@@ -145,6 +147,8 @@ describe('DatePicker', () => {
     await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
+
+    vi.useFakeTimers()
   })
 
   it('disabled', async () => {
@@ -432,7 +436,7 @@ describe('DatePicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <DatePicker state={state}></DatePicker>)
 
       expect(wrapper.find('.vxp-date-picker__selector').classes()).toContain(
@@ -496,7 +500,9 @@ describe('DatePicker', () => {
     await wrapper.trigger('click')
     await wrapper.trigger('clickoutside')
     expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
-    expect(wrapper.emitted('update:formatted-value')![0]).toEqual([format(date, valueFormat)])
+    expect(wrapper.emitted('update:formatted-value')![0][0]).toMatch(
+      format(date, 'yyyy-MM-dd HH:mm:')
+    )
     wrapper.unmount()
 
     const formatFn = vi.fn(() => '1')

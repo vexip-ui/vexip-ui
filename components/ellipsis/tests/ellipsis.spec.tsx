@@ -47,7 +47,7 @@ describe('Ellipsis', () => {
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
     wrapper.find('.vxp-ellipsis').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(true)
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(true)
@@ -55,7 +55,7 @@ describe('Ellipsis', () => {
     expect(wrapper.find('.vxp-tooltip__popper').text()).toBe(TEXT)
 
     wrapper.find('.vxp-ellipsis').trigger('mouseleave')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
@@ -68,7 +68,7 @@ describe('Ellipsis', () => {
     expect(wrapper.find('.vxp-ellipsis').classes()).toContain('vxp-ellipsis--multiple')
 
     wrapper.find('.vxp-ellipsis').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
@@ -78,7 +78,7 @@ describe('Ellipsis', () => {
     })
 
     wrapper.find('.vxp-ellipsis').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(true)
   })

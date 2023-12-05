@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
 
-import { computed, ref, shallowReactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { assertiveTypes, effectiveTypes } from './symbol'
@@ -44,7 +44,7 @@ function config(config: NoticeConfig) {
 }
 
 defineExpose(
-  shallowReactive({
+  reactive({
     popup,
     add,
     remove,

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-import type { LogLevel } from 'vite'
+import type { LogLevel, UserConfig } from 'vite'
 
 const logLevel = process.env.LOG_LEVEL
 
@@ -16,7 +16,7 @@ const externalPkgs = ['@vue'].concat(
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
-export default defineConfig(async () => {
+export default defineConfig(async (): Promise<UserConfig> => {
   return {
     logLevel: (logLevel || 'info') as LogLevel,
     build: {

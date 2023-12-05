@@ -18,9 +18,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.js"
     }
   },
   "private": false,
@@ -46,11 +46,11 @@
   },
   "devDependencies": {
     "@pnpm/types": "^9.4.0",
-    "@types/minimist": "^1.2.3",
-    "@types/node": "^20.8.4",
-    "@types/prompts": "^2.4.6",
-    "@types/semver": "^7.5.3",
-    "@types/yargs": "^17.0.29",
-    "tsup": "^7.2.0"
+    "@types/minimist": "^1.2.5",
+    "@types/node": "^20.10.3",
+    "@types/prompts": "^2.4.9",
+    "@types/semver": "^7.5.6",
+    "@types/yargs": "^17.0.32",
+    "tsup": "^8.0.1"
   }
 }
