@@ -159,6 +159,9 @@ const props = useProps('table', _props, {
   ellipsis: false
 })
 
+// only for dnd end payload
+const emit = defineEmits(['update:data'])
+
 const slots = defineSlots<{
   default: () => any,
   empty: (params: { isFixed: boolean }) => any
@@ -873,8 +876,11 @@ function handleRowDragEnd(event: DragEvent) {
   dragState = null
   indicatorShow.value = false
 
+  const allDataPayload = dropped ? getCurrentData() : state.data
+
   setDragging(false)
-  emitEvent(props.onRowDragEnd, draggingRow.data, dropped ? getCurrentData() : state.data, event)
+  dropped && emit('update:data', allDataPayload)
+  emitEvent(props.onRowDragEnd, draggingRow.data, allDataPayload, event)
 }
 
 function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {

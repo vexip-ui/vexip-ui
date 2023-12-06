@@ -160,6 +160,12 @@ Adding the `row-draggable` prop enables row dragging.
 
 However, this way will disable other interactions of rows. You can instead add a column which `type` prop is `'drag'` to create a separate drag handler.
 
+After dragging, you can get the latest data in any of the following ways:
+
+- Call the `getData` method of the component to obtain
+- Obtain via the second parameter of the `row-drag-end` event callback
+- Obtain via `update:data` event callback (meaning you can use `v-model:data`)
+
 :::
 
 :::demo table/virtual
@@ -634,6 +640,7 @@ interface TableFootPayload {
 | foot-click       | Emitted when a foot cell is clicked, returns column data and column index                                                            | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-dblclick    | Emitted when a foot cell is double-clicked, returns column data and column index                                                     | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-contextmenu | Emitted when a foot cell is right-clicked, returns column data and column index                                                      | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| update:data      | Emitted when a row ends dragging and the data structure changed, returning the latest structured data                                | `(data: Data[])`                                                                        | `2.2.18` |
 
 ### Table Slots
 

@@ -160,6 +160,12 @@
 
 不过这种方式会使得整个行只能进行拖拽交互，可以改为添加一个 `type` 属性为 `'drag'` 的列，创建一个单独的拖拽把手。
 
+拖拽后，你可以通过下面的任意一种方式获取最新的数据：
+
+- 调用组件的 `getData` 方法获取
+- 通过 `row-drag-end` 事件回调的第二个参数获取
+- 通过 `update:data` 事件回调获取（意味着你可以使用 `v-model:data`）
+
 :::
 
 :::demo table/virtual
@@ -634,6 +640,7 @@ interface TableFootPayload {
 | foot-click       | 当点击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-dblclick    | 当双击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-contextmenu | 当右击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| update:data      | 当行结束拖拽并且数据结构发生变化时触发，返回最新结构的数据                   | `(data: Data[])`                                                                        | `2.2.18` |
 
 ### Table 插槽
 
