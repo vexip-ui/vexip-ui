@@ -202,7 +202,9 @@ async function toggleExpanded(able = !props.node.expanded) {
     isDisabled.value ||
     props.node.expandDisabled ||
     isLeaf.value
-  ) { return }
+  ) {
+    return
+  }
 
   if (able && treeState.boundAsyncLoad && !loaded.value) {
     setValue('loading', true)
@@ -338,23 +340,25 @@ function handleDragEnd(event: DragEvent) {
       :node="node"
       :depth="node.depth"
       :focused="focused"
-      :line-count="node.depth - node.inLastCount"
+      :line-count="0"
+      :line-indexes="node.lineIndexes"
       :toggle-check="handleToggleCheck"
       :toggle-expand="toggleExpanded"
       :toggle-select="handleToggleSelect"
     >
       <template v-if="hasLinkLine">
         <div
-          v-for="n in node.depth - node.inLastCount"
-          :key="n"
+          v-for="(lineIndex, index) in node.lineIndexes"
+          :key="index"
           :class="[
             nh.be('link-line'),
             nh.bem('link-line', 'vertical'),
-            n === 1 && nh.bem('link-line', 'first')
+            !index && nh.bem('link-line', 'first')
           ]"
-          :style="{ [nh.cv('link-line-index')]: n - 1 }"
+          :style="{ [nh.cv('link-line-index')]: lineIndex }"
           aria-hidden="true"
         ></div>
+
         <div
           :class="[nh.be('link-line'), nh.bem('link-line', 'horizontal')]"
           aria-hidden="true"

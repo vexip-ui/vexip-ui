@@ -535,35 +535,23 @@ function isCollapse(node: any): node is TreeCollapseProps {
 }
 
 function refreshNodesDepth() {
-  const linkLine = props.linkLine
-
   walkTree(treeNodes.value, (node, depth) => {
     node.depth = depth
+    node.lineIndexes = [0]
 
     if (node.parent && nodeMap.has(node.parent)) {
       const parent = nodeMap.get(node.parent)!
 
       node.last = parent.children.at(-1) === node
+      node.upstreamLast = [parent.last, ...parent.upstreamLast]
+    } else {
+      node.last = treeNodes.value.at(-1) === node
+      node.upstreamLast = []
+    }
 
-      if (linkLine) {
-        if (parent.inLastCount) {
-          node.inLastCount = parent.inLastCount + (parent.last ? 1 : 0)
-        } else {
-          let current = parent
-          let upper = current.parent && nodeMap.get(current.parent)
-          let count = 0
-
-          while (upper) {
-            if (upper.children.at(-1) === current) {
-              ++count
-            }
-
-            current = upper
-            upper = current.parent && nodeMap.get(current.parent)
-          }
-
-          node.inLastCount = count
-        }
+    for (let i = 1; i < depth; ++i) {
+      if (!node.upstreamLast[i - 1]) {
+        node.lineIndexes.push(i)
       }
     }
   })
@@ -850,7 +838,9 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     upperMatched: false,
     depth: -1,
     last: false,
-    inLastCount: 0
+    // inLastCount: 0,
+    upstreamLast: [],
+    lineIndexes: []
   })
 }
 
