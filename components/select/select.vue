@@ -35,7 +35,7 @@
               }"
               @rest-change="restTagCount = $event"
             >
-              <template #default="{ item, index }">
+              <template #default="{ item: value, index }">
                 <Tag
                   inherit
                   :class="nh.be('tag')"
@@ -43,10 +43,10 @@
                   closable
                   :disabled="props.disabled"
                   @click.stop="toggleVisible"
-                  @close="handleTagClose(item)"
+                  @close="handleTagClose(value)"
                 >
                   <span :class="nh.be('label')">
-                    <slot name="selected" :option="item">
+                    <slot name="selected" :option="getOptionFromMap(value)">
                       {{ currentLabels[index] }}
                     </slot>
                   </span>
@@ -84,7 +84,7 @@
                       </Tag>
                     </template>
                     <NativeScroll inherit use-y-bar>
-                      <template v-for="(item, index) in currentValues" :key="index">
+                      <template v-for="(value, index) in currentValues" :key="index">
                         <Tag
                           v-if="index >= currentValues.length - restTagCount"
                           inherit
@@ -92,10 +92,10 @@
                           closable
                           :type="props.tagType"
                           :disabled="props.disabled"
-                          @close="handleTagClose(item)"
+                          @close="handleTagClose(value)"
                         >
                           <span :class="nh.be('label')">
-                            <slot name="selected" :option="item">
+                            <slot name="selected" :option="getOptionFromMap(value)">
                               {{ currentLabels[index] }}
                             </slot>
                           </span>
