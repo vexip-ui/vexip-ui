@@ -250,6 +250,7 @@ type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+type TableColResizeType = 'lazy' | 'responsive'
 
 type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
@@ -587,7 +588,7 @@ interface TableFootPayload {
 | disabled-tree   | `boolean`                                                     | Set whether to disable automatic parsing tree data                                                                                                    | `false`        | `2.1.6`  |
 | row-indent      | `string \| number`                                            | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6`  |
 | no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6`  |
-| col-resizable   | `boolean`                                                     | Set whether the width of columns can be resized                                                                                                       | `false`        | `2.1.23` |
+| col-resizable   | `boolean \| TableColResizeType`                               | Set whether the width of columns can be resized, set to `true` is same to `'lazy'`                                                                    | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |

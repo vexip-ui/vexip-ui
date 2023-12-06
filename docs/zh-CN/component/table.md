@@ -250,6 +250,7 @@ type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+type TableColResizeType = 'lazy' | 'responsive'
 
 type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
@@ -542,59 +543,59 @@ interface TableFootPayload {
 
 ### Table 属性
 
-| 名称            | 类型                                                          | 说明                                                         | 默认值         | 始于     |
-| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | -------------- | -------- |
-| columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -        |
-| summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                 | `[]`           | `2.1.24` |
-| data            | `Data[]`                                                      | 表格的数据源                                                 | `[]`           | -        |
-| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                 | `null`         | -        |
-| height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -        |
-| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                               | `null`         | -        |
-| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                               | `null`         | `2.0.1`  |
-| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                               | `null`         | `2.0.1`  |
-| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                           | `null`         | `2.0.1`  |
-| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                           | `null`         | `2.0.1`  |
-| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                           | `null`         | `2.0.1`  |
-| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                       | `null`         | `2.0.1`  |
-| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                       | `null`         | `2.0.1`  |
-| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                       | `null`         | `2.0.1`  |
-| foot-class      | `ClassType \| TableFootPropFn<ClassType>`                     | 表尾单元格的自定义类名                                       | `null`         | `2.1.24` |
-| foot-style      | `StyleType \| TableFootPropFn<StyleType>`                     | 表尾单元格的自定义样式                                       | `null`         | `2.1.24` |
-| foot-attrs      | `Record<string, any> \| TableFootPropFn<Record<string, any>>` | 表尾单元格的自定义属性                                       | `null`         | `2.1.24` |
-| stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                       | `false`        | -        |
-| border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                             | `false`        | -        |
-| highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                               | `false`        | -        |
-| use-x-bar       | `boolean`                                                     | 设置表格是否使用横向滚动条                                   | `false`        | `2.1.25` |
-| use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                   | `false`        | -        |
-| bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果            | `1500`         | -        |
-| scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                   | `20`           | -        |
-| row-draggable   | `boolean`                                                     | 设置表格行是否可以拖拽排序                                   | `false`        | -        |
-| row-height      | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                 | `null`         | -        |
-| render-count    | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高 | `null`         | -        |
-| scroll-class    | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                               | `{}`           | -        |
-| expand-renderer | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                     | `null`         | -        |
-| current-page    | `number`                                                      | 设置表格当前显示的数据页                                     | `1`            | -        |
-| page-size       | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                  | `0`            | -        |
-| transparent     | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性         | `false`        | -        |
-| empty-text      | `string`                                                      | 设置表格空数据时的提示语                                     | `locale.empty` | -        |
-| single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                           | `false`        | -        |
-| single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                           | `false`        | -        |
-| virtual         | `boolean`                                                     | 是否开启虚拟滚动                                             | `false`        | -        |
-| locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                               | `null`         | `2.1.0`  |
-| custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序     | `false`        | `2.1.4`  |
-| custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤     | `false`        | `2.1.4`  |
-| key-config      | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                             | `{}`           | `2.1.6`  |
-| disabled-tree   | `boolean`                                                     | 设置是否禁用自动解析树形数据                                 | `false`        | `2.1.6`  |
-| row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                 | `'16px'`       | `2.1.6`  |
-| no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                           | `false`        | `2.1.6`  |
-| col-resizable   | `boolean`                                                     | 设置表格列的宽度是否可以调整                                 | `false`        | `2.1.23` |
-| cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                     | `null`         | `2.1.24` |
-| side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                         | `0`            | `2.1.28` |
-| icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                       | `{}`           | `2.1.28` |
-| border-width    | `number`                                                      | 设置表格的边框宽度                                           | `1`            | `2.2.12` |
-| data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                       | `null`         | `2.2.14` |
-| no-transition   | `boolean`                                                     | 是否禁用表格的过渡效果                                       | `false`        | `2.2.14` |
-| ellipsis        | `boolean`                                                     | 是否为单元格内容使用省略组件                                 | `false`        | `2.2.16` |
+| 名称            | 类型                                                          | 说明                                                          | 默认值         | 始于     |
+| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------- | -------------- | -------- |
+| columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                     | `[]`           | -        |
+| summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                  | `[]`           | `2.1.24` |
+| data            | `Data[]`                                                      | 表格的数据源                                                  | `[]`           | -        |
+| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                  | `null`         | -        |
+| height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                    | `null`         | -        |
+| row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                                | `null`         | -        |
+| row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                                | `null`         | `2.0.1`  |
+| row-attrs       | `Record<string, any> \| TableRowPropFn<Record<string, any>>`  | 行的自定义属性                                                | `null`         | `2.0.1`  |
+| cell-class      | `ClassType \| TableCellPropFn<ClassType>`                     | 单元格的自定义类名                                            | `null`         | `2.0.1`  |
+| cell-style      | `StyleType \| TableCellPropFn<StyleType>`                     | 单元格的自定义样式                                            | `null`         | `2.0.1`  |
+| cell-attrs      | `Record<string, any> \| TableCellPropFn<Record<string, any>>` | 单元格的自定义属性                                            | `null`         | `2.0.1`  |
+| head-class      | `ClassType \| TableHeadPropFn<ClassType>`                     | 表头单元格的自定义类名                                        | `null`         | `2.0.1`  |
+| head-style      | `StyleType \| TableHeadPropFn<StyleType>`                     | 表头单元格的自定义样式                                        | `null`         | `2.0.1`  |
+| head-attrs      | `Record<string, any> \| TableHeadPropFn<Record<string, any>>` | 表头单元格的自定义属性                                        | `null`         | `2.0.1`  |
+| foot-class      | `ClassType \| TableFootPropFn<ClassType>`                     | 表尾单元格的自定义类名                                        | `null`         | `2.1.24` |
+| foot-style      | `StyleType \| TableFootPropFn<StyleType>`                     | 表尾单元格的自定义样式                                        | `null`         | `2.1.24` |
+| foot-attrs      | `Record<string, any> \| TableFootPropFn<Record<string, any>>` | 表尾单元格的自定义属性                                        | `null`         | `2.1.24` |
+| stripe          | `boolean`                                                     | 设置表格是否应用斑马纹                                        | `false`        | -        |
+| border          | `boolean`                                                     | 设置表格是否具有外边框和纵向边框                              | `false`        | -        |
+| highlight       | `boolean`                                                     | 设置表格行是否在鼠标移入时高亮                                | `false`        | -        |
+| use-x-bar       | `boolean`                                                     | 设置表格是否使用横向滚动条                                    | `false`        | `2.1.25` |
+| use-y-bar       | `boolean`                                                     | 设置表格是否使用纵向滚动条                                    | `false`        | -        |
+| bar-fade        | `number`                                                      | 设置滚动条的渐隐时间，若小于 `300` 则关闭渐隐效果             | `1500`         | -        |
+| scroll-delta-y  | `number`                                                      | 设置表格纵向每次滚动的距离                                    | `20`           | -        |
+| row-draggable   | `boolean`                                                     | 设置表格行是否可以拖拽排序                                    | `false`        | -        |
+| row-height      | `number`                                                      | 设置表格的行高，未设置时表格行高将会动态计算                  | `null`         | -        |
+| render-count    | `number`                                                      | 设置表格的最大渲染行数，通常用于大量数据渲染，需设置固定行高  | `null`         | -        |
+| scroll-class    | `ScrollClass`                                                 | 设置表格各滚动组件的自定义类型                                | `{}`           | -        |
+| expand-renderer | `ExpandRenderFn`                                              | 设置行拓展内容的渲染方法                                      | `null`         | -        |
+| current-page    | `number`                                                      | 设置表格当前显示的数据页                                      | `1`            | -        |
+| page-size       | `number`                                                      | 设置表格每页的数据量，当为 `0` 时则禁用分页                   | `0`            | -        |
+| transparent     | `boolean`                                                     | 设置是否为透明表格，该属性优先级低于其他内置样式属性          | `false`        | -        |
+| empty-text      | `string`                                                      | 设置表格空数据时的提示语                                      | `locale.empty` | -        |
+| single-sorter   | `boolean`                                                     | 设置后将限制表格只能有一列开启排序                            | `false`        | -        |
+| single-filter   | `boolean`                                                     | 设置后将限制表格只能有一列开启过滤                            | `false`        | -        |
+| virtual         | `boolean`                                                     | 是否开启虚拟滚动                                              | `false`        | -        |
+| locale          | `LocaleConfig['table']`                                       | 设置多语言配置                                                | `null`         | `2.1.0`  |
+| custom-sorter   | `boolean`                                                     | 设置是否为自定义排序，开启后仅派发事件而不会进行内部排序      | `false`        | `2.1.4`  |
+| custom-filter   | `boolean`                                                     | 设置是否为自定义过滤，开启后仅派发事件而不会进行内部过滤      | `false`        | `2.1.4`  |
+| key-config      | `TableKeyConfig`                                              | 设置数据解析 `data` 时的各项键名                              | `{}`           | `2.1.6`  |
+| disabled-tree   | `boolean`                                                     | 设置是否禁用自动解析树形数据                                  | `false`        | `2.1.6`  |
+| row-indent      | `string \| number`                                            | 设置树形表格每一级的缩进距离                                  | `'16px'`       | `2.1.6`  |
+| no-cascaded     | `boolean`                                                     | 在树形表格中使父子节点能被独立勾选                            | `false`        | `2.1.6`  |
+| col-resizable   | `boolean \| TableColResizeType`                               | 设置表格列的宽度是否可以调整，设置为 `true` 时等同于 `'lazy'` | `false`        | `2.1.23` |
+| cell-span       | `TableCellSpanFn`                                             | 设置单元格跨度的回调函数                                      | `null`         | `2.1.24` |
+| side-padding    | `number \| number[]`                                          | 设置表格两侧的内边距                                          | `0`            | `2.1.28` |
+| icons           | `TableIcons`                                                  | 用于设置表格的各种图标                                        | `{}`           | `2.1.28` |
+| border-width    | `number`                                                      | 设置表格的边框宽度                                            | `1`            | `2.2.12` |
+| data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                        | `null`         | `2.2.14` |
+| no-transition   | `boolean`                                                     | 是否禁用表格的过渡效果                                        | `false`        | `2.2.14` |
+| ellipsis        | `boolean`                                                     | 是否为单元格内容使用省略组件                                  | `false`        | `2.2.16` |
 
 ### Table 事件
 

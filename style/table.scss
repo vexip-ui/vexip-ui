@@ -408,6 +408,13 @@ $table: map.merge(
 
   &--col-resizing {
     cursor: col-resize;
+
+    #{$group},
+    #{$cell},
+    #{$head-cell},
+    #{$foot-cell} {
+      transition-duration: 0ms;
+    }
   }
 
   &__column {

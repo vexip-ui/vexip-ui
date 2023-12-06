@@ -35,6 +35,7 @@ import type {
   SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
+  TableColResizeType,
   TableColumnOptions,
   TableColumnRawOptions,
   TableDragColumn,
@@ -1019,7 +1020,7 @@ export function useStore(options: StoreOptions) {
     const row = state.rowMap.get(key)
 
     if (row && row[prop] !== value) {
-      (row as any)[prop] = value
+      ;(row as any)[prop] = value
     }
   }
 
@@ -1059,8 +1060,8 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
-  function setColResizable(resizable: boolean) {
-    state.colResizable = !!resizable
+  function setColResizable(resizable: boolean | TableColResizeType) {
+    state.colResizable = resizable === true ? 'lazy' : resizable
   }
 
   function setCustomSorter(able: boolean) {

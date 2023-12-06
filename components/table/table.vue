@@ -251,6 +251,7 @@ const store = useStore({
   locale: locale.value,
   keyConfig: keyConfig.value,
   disabledTree: props.disabledTree,
+  colResizable: props.colResizable === true ? 'lazy' : props.colResizable,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
     : [props.sidePadding, props.sidePadding]
@@ -345,10 +346,6 @@ const useXScroll = computed(() => {
 })
 const bodyScrollHeight = computed(() => {
   const { totalHeight } = state
-
-  // if (Number.isNaN(totalHeight)) {
-  //   return bodyHeight.value
-  // }
 
   return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : undefined
 })
@@ -1229,7 +1226,7 @@ function renderTableSlot({ name }: { name: string }) {
       ]"
     ></div>
     <div
-      v-if="props.colResizable"
+      v-if="state.colResizable === 'lazy'"
       v-show="state.colResizing"
       :class="nh.be('resize-indicator')"
       :style="{ left: `${state.resizeLeft}px` }"

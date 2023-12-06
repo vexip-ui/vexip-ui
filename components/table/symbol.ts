@@ -15,6 +15,7 @@ export type TableRowPropFn<P = any> = (data: Data, index: number) => P
 export type TableRowDropType = 'before' | 'after' | 'inner'
 export type TableTextAlign = 'left' | 'center' | 'right'
 export type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+export type TableColResizeType = 'lazy' | 'responsive'
 
 export type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
@@ -370,7 +371,7 @@ export interface StoreOptions {
   keyConfig: Required<TableKeyConfig>,
   disabledTree: boolean,
   noCascaded: boolean,
-  colResizable: boolean,
+  colResizable: false | TableColResizeType,
   expandRenderer: ExpandRenderFn | null,
   cellSpan: TableCellSpanFn | null,
   sidePadding: number[],
