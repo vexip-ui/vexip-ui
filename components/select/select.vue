@@ -45,9 +45,11 @@
                   @click.stop="toggleVisible"
                   @close="handleTagClose(item)"
                 >
-                  <slot name="selected" :option="item">
-                    {{ currentLabels[index] }}
-                  </slot>
+                  <span :class="nh.be('label')">
+                    <slot name="selected" :option="item">
+                      {{ currentLabels[index] }}
+                    </slot>
+                  </span>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -92,9 +94,11 @@
                           :disabled="props.disabled"
                           @close="handleTagClose(item)"
                         >
-                          <slot name="selected" :option="item">
-                            {{ currentLabels[index] }}
-                          </slot>
+                          <span :class="nh.be('label')">
+                            <slot name="selected" :option="item">
+                              {{ currentLabels[index] }}
+                            </slot>
+                          </span>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -1271,7 +1275,7 @@ export default defineComponent({
 
     function focus(options?: FocusOptions) {
       if (currentVisible.value) {
-        (input.value || reference.value)?.focus(options)
+        ;(input.value || reference.value)?.focus(options)
       } else {
         reference.value?.focus(options)
       }
