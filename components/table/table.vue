@@ -731,7 +731,8 @@ let dragState: {
   draggingRow: TableRowState,
   tableRect: DOMRect,
   willDropRow: TableRowState | null,
-  dropType: DropType
+  dropType: DropType,
+  dropped: boolean
 } | null
 
 function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
@@ -739,7 +740,8 @@ function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
     draggingRow: rowInstance.row,
     tableRect: wrapper.value!.getBoundingClientRect(),
     willDropRow: null,
-    dropType: DropType.BEFORE
+    dropType: DropType.BEFORE,
+    dropped: false
   }
 
   setDragging(true)
@@ -855,6 +857,8 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     }
   }
 
+  dragState.dropped = true
+
   refreshRowDepth()
   flatTreeRows()
   refreshRowIndex()
@@ -864,18 +868,13 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
 function handleRowDragEnd(event: DragEvent) {
   if (!dragState) return
 
-  const { draggingRow } = dragState
+  const { draggingRow, dropped } = dragState
 
   dragState = null
   indicatorShow.value = false
 
   setDragging(false)
-  emitEvent(
-    props.onRowDragEnd,
-    draggingRow.data,
-    state.rowData.map(row => row.data),
-    event
-  )
+  emitEvent(props.onRowDragEnd, draggingRow.data, dropped ? getCurrentData() : state.data, event)
 }
 
 function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {

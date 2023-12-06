@@ -8,6 +8,7 @@ import {
   debounceMinor,
   deepClone,
   isNull,
+  mapTree,
   sortByProps,
   toFalse,
   toFixed,
@@ -821,8 +822,10 @@ export function useStore(options: StoreOptions) {
           row.depth = parent.depth + 1
         }
 
+        row.children = []
+
         const children = row.data[childrenKey]
-        children?.length && parseRow(children, (row.children = []), row)
+        children?.length && parseRow(children, row.children, row)
 
         result.push(row)
         rowMap.set(key, row)
@@ -1781,30 +1784,9 @@ export function useStore(options: StoreOptions) {
   }
 
   function getCurrentData() {
-    const { keyConfig, rowData } = state
-    const { children: childrenKey } = keyConfig
-    const data: Data[] = []
-
-    const buildData = (rows: TableRowState[], data: Data[]) => {
-      for (const row of rows) {
-        const item = { ...row.data }
-
-        data.push(item)
-
-        if (row.children?.length) {
-          buildData(row.children, (item[childrenKey] = []))
-        } else {
-          delete item[childrenKey]
-        }
-      }
-    }
-
-    buildData(
-      rowData.filter(row => isNull(row.parent)),
-      data
-    )
-
-    return data
+    return mapTree(state.treeRowData, row => ({ ...row.data }), {
+      childField: state.keyConfig.children as 'children'
+    })
   }
 
   type Store = Readonly<{
