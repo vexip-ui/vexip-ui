@@ -122,7 +122,8 @@ const props = useProps('datePicker', _props, {
   placeholder: null,
   unitReadonly: false,
   weekStart: null,
-  popperAlive: null
+  popperAlive: null,
+  shortcutsPlacement: 'left'
 })
 
 const emit = defineEmits(['update:value', 'update:formatted-value', 'update:visible'])
@@ -662,7 +663,7 @@ function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
     : [startState, endState]
 
   states.forEach(state => {
-    (Object.keys(state.activated) as DateTimeType[]).forEach(type => {
+    ;(Object.keys(state.activated) as DateTimeType[]).forEach(type => {
       state.activated[type] = value
     })
   })
@@ -1352,6 +1353,7 @@ function handleClickOutside() {
         :locale="mergedLocale"
         :week-start="props.weekStart"
         :static-wheel="staticWheel"
+        :shortcuts-placement="props.shortcutsPlacement"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

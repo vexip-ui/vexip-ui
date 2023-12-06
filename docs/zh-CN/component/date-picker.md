@@ -92,6 +92,8 @@
 
 通过 `shortcuts` 属性可以添加快捷日期。
 
+通过 `shortcuts-placement` 属性可以设置快捷日期的位置。
+
 :::
 
 :::demo date-picker/no-action
@@ -128,6 +130,7 @@ type DateType = 'year' | 'month' | 'date'
 type TimeType = 'hour' | 'minute' | 'second'
 type DateTimeType = DateType | TimeType
 type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+type DateShortcutsPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => unknown
 
@@ -139,51 +142,52 @@ interface DateShortcut {
 
 ### DatePicker 属性
 
-| 名称            | 类型                                                      | 说明                                                                    | 默认值                  | 始于     |
-| --------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------- | -------- |
-| type            | `'date' \| 'datetime' \| 'year' \| 'month'`               | 日期选择器的类型                                                        | `'date'`                | -        |
-| value           | `Dateable \| Dateable[]`                                  | 日期选择器的值，可以使用 `v-model` 双向绑定                             | `new Date()`            | -        |
-| size            | `'small' \| 'default' \| 'large'`                         | 输入框的大小                                                            | `'default'`             | -        |
-| state           | `'default' \| 'success' \| 'error' \| 'warning'`          | 输入框的状态                                                            | `'default'`             | -        |
-| visible         | `boolean`                                                 | 设置日期选择面板的初始打开状态，可以使用 `v-model` 双向绑定             | `false`                 | -        |
-| placement       | `Placement`                                               | 日期选择面板的出现位置，可选值同 Popper.js                              | `'bottom'`              | -        |
-| transfer        | `boolean \| string`                                       | 设置日期选择面板的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>` | `false`                 | -        |
-| format          | `string`                                                  | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏     | `'yyyy-MM-dd HH:mm:ss'` | -        |
-| filler          | `string`                                                  | 日期未选择时的填充符，长度固定为 1                                      | `'-'`                   | -        |
-| clearable       | `boolean`                                                 | 是否允许清空值                                                          | `false`                 | -        |
-| no-action       | `boolean`                                                 | 是否禁用日期选择面板的底部操作栏并改变选择模式                          | `false`                 | -        |
-| labels          | `Partial<Record<DateTimeType, string>>`                   | 设置在每个日期或时间单元后面的标签                                      | `{}`                    | -        |
-| date-separator  | `string`                                                  | 日期部分的连接符                                                        | `'/'`                   | -        |
-| time-separator  | `string`                                                  | 时间部分的连接符                                                        | `':'`                   | -        |
-| shortcuts       | `{ name: string, value: Dateable \| (() => Dateable) }[]` | 设置日期快捷选择的候选列表                                              | `[]`                    | -        |
-| disabled-date   | `(date: Date) => boolean`                                 | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用                  | `() => false`           | -        |
-| steps           | `number[]`                                                | 分别设置时间选择器每个滚轮的滚动跨度                                    | `[1, 1, 1]`             | -        |
-| ctrl-steps      | `number[]`                                                | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                        | `[5, 5, 5]`             | -        |
-| prefix          | `Record<string, any>`                                     | 前缀图标，使用前缀插槽时无效                                            | `null`                  | -        |
-| prefix-color    | `string`                                                  | 前缀内容的颜色，会影响前缀插槽                                          | `''`                    | -        |
-| suffix          | `Record<string, any>`                                     | 后缀图标，使用后缀插槽时无效                                            | `null`                  | -        |
-| suffix-color    | `string`                                                  | 后缀内容的颜色，会影响后缀插槽                                          | `''`                    | -        |
-| no-suffix       | `boolean`                                                 | 设置是否禁用后缀图标                                                    | `false`                 | -        |
-| disabled        | `boolean`                                                 | 设置是否禁用日期选择器                                                  | `false`                 | -        |
-| transition-name | `string`                                                  | 设置日期选择面板的显示隐藏过渡效果                                      | `'vxp-drop'`            | -        |
-| confirm-text    | `string`                                                  | 日期选择面板确认按钮的文本内容                                          | `locale.confirm`        | -        |
-| cancel-text     | `string`                                                  | 日期选择面板取消按钮的文本内容                                          | `locale.cancel`         | -        |
-| today           | `Dateable`                                                | 设置作为今天的日期，这主要会影响日期选择面板中日历的一些表现            | `new Date()`            | -        |
-| loading         | `boolean`                                                 | 设置是否为加载中                                                        | `false`                 | `2.0.0`  |
-| loading-icon    | `Record<string, any>`                                     | 设置加载中的图标                                                        | `Spinner`               | `2.0.0`  |
-| loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                | `false`                 | `2.0.0`  |
-| loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                | `false`                 | `2.1.0`  |
-| min             | `Dateable`                                                | 设置可选的最小日期                                                      | `null`                  | `2.0.14` |
-| max             | `Dateable`                                                | 设置可选的最大日期                                                      | `null`                  | `2.0.14` |
-| outside-close   | `boolean`                                                 | 设置是否可以通过点击组件外部进行关闭                                    | `true`                  | `2.0.20` |
-| outside-cancel  | `boolean`                                                 | 设置点击组件外部进行关闭是否为取消操作                                  | `false`                 | `2.0.20` |
-| locale          | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']`   | 设置多语言配置                                                          | `null`                  | `2.1.0`  |
-| range           | `boolean`                                                 | 设置是否开启范围选择模式                                                | `false`                 | `2.1.1`  |
-| placeholder     | `string \| string[]`                                      | 设置日期选择器的占位符                                                  | `null`                  | `2.1.1`  |
-| unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                  | `false`                 | `2.1.2`  |
-| week-start      | `number`                                                  | 设置日期选择面板中每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天       | `null`                  | `2.1.9`  |
-| value-format    | `string \| string[] \| DatePickerFormatFn`                | 指定如何格式化值                                                        | `null`                  | `2.2.0`  |
-| popper-alive    | `boolean`                                                 | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化      | `null`                  | `2.2.3`  |
+| 名称                | 类型                                                    | 说明                                                                    | 默认值                  | 始于     |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------- | -------- |
+| type                | `DatePickerType`                                        | 日期选择器的类型                                                        | `'date'`                | -        |
+| value               | `Dateable \| Dateable[]`                                | 日期选择器的值，可以使用 `v-model` 双向绑定                             | `new Date()`            | -        |
+| size                | `'small' \| 'default' \| 'large'`                       | 输入框的大小                                                            | `'default'`             | -        |
+| state               | `'default' \| 'success' \| 'error' \| 'warning'`        | 输入框的状态                                                            | `'default'`             | -        |
+| visible             | `boolean`                                               | 设置日期选择面板的初始打开状态，可以使用 `v-model` 双向绑定             | `false`                 | -        |
+| placement           | `Placement`                                             | 日期选择面板的出现位置，可选值同 Popper.js                              | `'bottom'`              | -        |
+| transfer            | `boolean \| string`                                     | 设置日期选择面板的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>` | `false`                 | -        |
+| format              | `string`                                                | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏     | `'yyyy-MM-dd HH:mm:ss'` | -        |
+| filler              | `string`                                                | 日期未选择时的填充符，长度固定为 1                                      | `'-'`                   | -        |
+| clearable           | `boolean`                                               | 是否允许清空值                                                          | `false`                 | -        |
+| no-action           | `boolean`                                               | 是否禁用日期选择面板的底部操作栏并改变选择模式                          | `false`                 | -        |
+| labels              | `Partial<Record<DateTimeType, string>>`                 | 设置在每个日期或时间单元后面的标签                                      | `{}`                    | -        |
+| date-separator      | `string`                                                | 日期部分的连接符                                                        | `'/'`                   | -        |
+| time-separator      | `string`                                                | 时间部分的连接符                                                        | `':'`                   | -        |
+| shortcuts           | `DateShortcut[]`                                        | 设置日期快捷选择的候选列表                                              | `[]`                    | -        |
+| disabled-date       | `(date: Date) => boolean`                               | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用                  | `() => false`           | -        |
+| steps               | `number[]`                                              | 分别设置时间选择器每个滚轮的滚动跨度                                    | `[1, 1, 1]`             | -        |
+| ctrl-steps          | `number[]`                                              | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                        | `[5, 5, 5]`             | -        |
+| prefix              | `Record<string, any>`                                   | 前缀图标，使用前缀插槽时无效                                            | `null`                  | -        |
+| prefix-color        | `string`                                                | 前缀内容的颜色，会影响前缀插槽                                          | `''`                    | -        |
+| suffix              | `Record<string, any>`                                   | 后缀图标，使用后缀插槽时无效                                            | `null`                  | -        |
+| suffix-color        | `string`                                                | 后缀内容的颜色，会影响后缀插槽                                          | `''`                    | -        |
+| no-suffix           | `boolean`                                               | 设置是否禁用后缀图标                                                    | `false`                 | -        |
+| disabled            | `boolean`                                               | 设置是否禁用日期选择器                                                  | `false`                 | -        |
+| transition-name     | `string`                                                | 设置日期选择面板的显示隐藏过渡效果                                      | `'vxp-drop'`            | -        |
+| confirm-text        | `string`                                                | 日期选择面板确认按钮的文本内容                                          | `locale.confirm`        | -        |
+| cancel-text         | `string`                                                | 日期选择面板取消按钮的文本内容                                          | `locale.cancel`         | -        |
+| today               | `Dateable`                                              | 设置作为今天的日期，这主要会影响日期选择面板中日历的一些表现            | `new Date()`            | -        |
+| loading             | `boolean`                                               | 设置是否为加载中                                                        | `false`                 | `2.0.0`  |
+| loading-icon        | `Record<string, any>`                                   | 设置加载中的图标                                                        | `Spinner`               | `2.0.0`  |
+| loading-lock        | `boolean`                                               | 设置在加载中时是否为只读                                                | `false`                 | `2.0.0`  |
+| loading-lock        | `boolean`                                               | 设置在加载中时是否为只读                                                | `false`                 | `2.1.0`  |
+| min                 | `Dateable`                                              | 设置可选的最小日期                                                      | `null`                  | `2.0.14` |
+| max                 | `Dateable`                                              | 设置可选的最大日期                                                      | `null`                  | `2.0.14` |
+| outside-close       | `boolean`                                               | 设置是否可以通过点击组件外部进行关闭                                    | `true`                  | `2.0.20` |
+| outside-cancel      | `boolean`                                               | 设置点击组件外部进行关闭是否为取消操作                                  | `false`                 | `2.0.20` |
+| locale              | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']` | 设置多语言配置                                                          | `null`                  | `2.1.0`  |
+| range               | `boolean`                                               | 设置是否开启范围选择模式                                                | `false`                 | `2.1.1`  |
+| placeholder         | `string \| string[]`                                    | 设置日期选择器的占位符                                                  | `null`                  | `2.1.1`  |
+| unit-readonly       | `boolean`                                               | 设置输入框控件是否只读                                                  | `false`                 | `2.1.2`  |
+| week-start          | `number`                                                | 设置日期选择面板中每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天       | `null`                  | `2.1.9`  |
+| value-format        | `string \| string[] \| DatePickerFormatFn`              | 指定如何格式化值                                                        | `null`                  | `2.2.0`  |
+| popper-alive        | `boolean`                                               | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化      | `null`                  | `2.2.3`  |
+| shortcuts-placement | `DateShortcutsPlacement`                                | 设置快捷选择的位置                                                      | `'left'`                | `2.2.18` |
 
 ### DatePicker 事件
 

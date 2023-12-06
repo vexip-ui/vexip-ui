@@ -562,7 +562,7 @@ describe('TimePicker', () => {
     expect(units[2].text()).toEqual('51')
   })
 
-  it('shortcut', async () => {
+  it('shortcuts', async () => {
     const fnValue = vi.fn(() => '12:00:00')
     const onShortcut = vi.fn()
     const shortcuts = [
@@ -595,6 +595,20 @@ describe('TimePicker', () => {
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('12:00:00')
+  })
+
+  it('shortcuts placement', () => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const shortcuts = [{ name: 'morning', value: '08:00:00' }]
+      const wrapper = mount(TimePicker, {
+        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+      })
+
+      expect(wrapper.find('.vxp-time-picker__shortcuts').exists()).toBe(true)
+      expect(wrapper.find('.vxp-time-picker__shortcuts').classes()).toContain(
+        `vxp-time-picker__shortcuts--${placement}`
+      )
+    })
   })
 
   it('range select', async () => {

@@ -5,6 +5,8 @@ export type TimeType = 'hour' | 'minute' | 'second'
 export type DateTimeType = DateType | TimeType
 
 export type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+export type DateShortcutsPlacement = 'top' | 'right' | 'bottom' | 'left'
+export type TimeShortcutsPlacement = DateShortcutsPlacement
 
 export type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => unknown
 

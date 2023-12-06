@@ -104,7 +104,8 @@ const props = useProps('timePicker', _props, {
   outsideCancel: false,
   placeholder: null,
   unitReadonly: false,
-  popperAlive: null
+  popperAlive: null,
+  shortcutsPlacement: 'left'
 })
 
 const emit = defineEmits(['update:value', 'update:visible'])
@@ -385,7 +386,7 @@ function parseValue<T extends string | null>(value: T | T[]) {
 }
 
 function parseFormat() {
-  [startState, endState].forEach(state => {
+  ;[startState, endState].forEach(state => {
     state.enabled.hour = props.format.includes('H')
     state.enabled.minute = props.format.includes('m')
     state.enabled.second = props.format.includes('s')
@@ -400,7 +401,7 @@ function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
     : [startState, endState]
 
   states.forEach(state => {
-    (Object.keys(state.activated) as TimeType[]).forEach(type => {
+    ;(Object.keys(state.activated) as TimeType[]).forEach(type => {
       state.activated[type] = value
     })
   })
@@ -666,7 +667,7 @@ function handleEndInput(type: TimeType) {
 }
 
 function exchangeValue() {
-  (Object.keys(startState.timeValue) as TimeType[]).forEach(type => {
+  ;(Object.keys(startState.timeValue) as TimeType[]).forEach(type => {
     const temp = endState.timeValue[type]
     endState.timeValue[type] = startState.timeValue[type]
     startState.timeValue[type] = temp
@@ -820,8 +821,23 @@ function handleClickOutside() {
       @after-enter="staticWheel = false"
       @after-leave="staticWheel = false"
     >
-      <div :class="nh.be('panel')">
-        <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
+      <div
+        :class="{
+          [nh.be('panel')]: true,
+          [nh.bem('panel', 'vertical')]:
+            props.shortcuts.length &&
+            (props.shortcutsPlacement === 'top' || props.shortcutsPlacement === 'bottom')
+        }"
+      >
+        <div
+          v-if="props.shortcuts.length"
+          :class="[
+            nh.be('list'),
+            nh.bem('list', 'sub'),
+            nh.be('shortcuts'),
+            nh.bem('shortcuts', props.shortcutsPlacement)
+          ]"
+        >
           <div
             v-for="(item, index) in props.shortcuts"
             :key="index"

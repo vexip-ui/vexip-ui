@@ -676,7 +676,7 @@ describe('DatePicker', () => {
     expect(units[2].text()).toEqual('31')
   })
 
-  it('shortcut', async () => {
+  it('shortcuts', async () => {
     const fnValue = vi.fn(() => '2022-06-01')
     const onShortcut = vi.fn()
     const shortcuts = [
@@ -709,6 +709,20 @@ describe('DatePicker', () => {
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('2022/06/01')
+  })
+
+  it('shortcuts placement', () => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const shortcuts = [{ name: 'Labor Day', value: '2022-05-01' }]
+      const wrapper = mount(DatePicker, {
+        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+      })
+
+      expect(wrapper.find('.vxp-date-picker__shortcuts').exists()).toBe(true)
+      expect(wrapper.find('.vxp-date-picker__shortcuts').classes()).toContain(
+        `vxp-date-picker__shortcuts--${placement}`
+      )
+    })
   })
 
   it('range select', async () => {
