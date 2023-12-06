@@ -1784,8 +1784,14 @@ export function useStore(options: StoreOptions) {
   }
 
   function getCurrentData() {
-    return mapTree(state.treeRowData, row => ({ ...row.data }), {
-      childField: state.keyConfig.children as 'children'
+    const { treeRowData, disabledTree, keyConfig } = state
+
+    if (disabledTree) {
+      return treeRowData.map(row => ({ ...row.data }))
+    }
+
+    return mapTree(treeRowData, row => ({ ...row.data }), {
+      childField: keyConfig.children as 'children'
     })
   }
 

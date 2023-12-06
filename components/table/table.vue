@@ -840,6 +840,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     children.push(draggingRow)
 
     willDropRow.children = children
+    willDropRow.treeExpanded = true
     draggingRow.parent = willDropRow.key
   } else {
     currentKey = willDropRow.key
@@ -876,11 +877,13 @@ function handleRowDragEnd(event: DragEvent) {
   dragState = null
   indicatorShow.value = false
 
-  const allDataPayload = dropped ? getCurrentData() : state.data
+  nextTick(() => {
+    const allDataPayload = dropped ? getCurrentData() : state.data
 
-  setDragging(false)
-  dropped && emit('update:data', allDataPayload)
-  emitEvent(props.onRowDragEnd, draggingRow.data, allDataPayload, event)
+    setDragging(false)
+    dropped && emit('update:data', allDataPayload)
+    emitEvent(props.onRowDragEnd, draggingRow.data, allDataPayload, event)
+  })
 }
 
 function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {
