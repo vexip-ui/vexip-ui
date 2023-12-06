@@ -61,7 +61,7 @@ pnpm add vexip-ui
 yarn add vexip-ui
 ```
 
-## Document
+## Documentation
 
 [Here](https://www.vexipui.com) you can view the online document.
 
