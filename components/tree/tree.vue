@@ -1328,7 +1328,6 @@ const transferring = ref(false)
     :items-attrs="{ class: nh.be('list') }"
     :hide-bar="!props.useYBar"
     :ignore-resize="transferring"
-    strict-key
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"
