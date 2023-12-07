@@ -1,10 +1,38 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { debounceFrame, debounceMinor } from '../src/performance'
+import { debounce, debounceFrame, debounceMinor, throttle } from '../src/performance'
 
 vi.useFakeTimers()
 
 describe('performance', () => {
+  it('throttle', () => {
+    const fn = vi.fn()
+    const tfn = throttle(fn)
+
+    tfn()
+    tfn()
+    tfn()
+    tfn()
+    tfn()
+    expect(fn).toHaveBeenCalledTimes(1)
+    vi.runAllTimers()
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('debounce', () => {
+    const fn = vi.fn()
+    const dfn = debounce(fn)
+
+    dfn()
+    dfn()
+    dfn()
+    dfn()
+    dfn()
+    expect(fn).toHaveBeenCalledTimes(0)
+    vi.runAllTimers()
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+
   it('debounceMinor', async () => {
     const fn = vi.fn()
     const dfn = debounceMinor(fn)
