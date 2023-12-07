@@ -10,6 +10,10 @@ Used to select or input a date.
 
 For basic usage, you can use `v-model:value` for two-way binding.
 
+Note that the input of the `value` prop can be any value that can be instantiated into a `Date`, but the output is always the number of milliseconds.
+
+However, it is also more recommended to use milliseconds as the input, which can avoid many problems related to time zone or format.
+
 :::
 
 :::demo date-picker/value-format
@@ -31,8 +35,6 @@ You can also specify `value-format` as a function for custom formatting.
 ### Control Type
 
 Setting the value of the `type` prop toggles the selection type of the date picker.
-
-When the selection type is `'year'`, the return value of the date picker will become the year of type number.
 
 :::
 

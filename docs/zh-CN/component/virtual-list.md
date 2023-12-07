@@ -38,6 +38,7 @@
 | hide-bar       | `boolean`                    | 设置滚动条是否隐藏                                                           | `false` | `2.1.30` |
 | lock-items     | `boolean`                    | 禁用元素缩放回调，用于元素发生高度变化的过渡时减少不必要的性能开销           | `false` | `2.1.30` |
 | autoplay       | `boolean`                    | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数             | `false` | -        |
+| ignore-resize  | `boolean`                    | 是否忽略元素缩放                                                             | `false` | `2.2.18` |
 
 ### VirtualList 方法
 

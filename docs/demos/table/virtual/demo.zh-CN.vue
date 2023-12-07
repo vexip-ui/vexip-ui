@@ -9,6 +9,7 @@
     :height="320"
     :row-height="40"
     col-resizable
+    :side-padding="[5, 5]"
   >
     <TableColumn type="drag" fixed></TableColumn>
     <TableColumn type="expand" id-key="expand" fixed>

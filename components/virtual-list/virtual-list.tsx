@@ -36,8 +36,7 @@ export default defineComponent({
       hideBar: false,
       lockItems: false,
       autoplay: false,
-      ignoreResize: false,
-      strictKey: false
+      ignoreResize: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -123,7 +122,6 @@ export default defineComponent({
     return () => {
       const keyField = props.idKey
       const itemFixed = props.itemFixed
-      const strictKey = props.strictKey
       const keyIndexMap = indexMap.value
       const { class: itemsClass, style: itemsOtherStyle, ...itemsAttrs } = props.itemsAttrs || {}
 
@@ -159,14 +157,13 @@ export default defineComponent({
                     style={[itemsStyle.value, itemsOtherStyle]}
                   >
                     {slots.default && props.items.length
-                      ? renderingItems.map((item, listIndex) => {
+                      ? renderingItems.map(item => {
                         const key = item[keyField]
                         const index = keyIndexMap.get(key)
-                        // const vnode = itemSlot({ item, index, listIndex })[0]
                         const vnode = renderSlot(slots, 'default', { item, index })
 
                         if (itemFixed) {
-                          vnode.key = strictKey ? key : listIndex
+                          vnode.key = key
 
                           return vnode
                         }
@@ -174,7 +171,7 @@ export default defineComponent({
                         const onResize = onItemResize.bind(null, key)
 
                         return (
-                          <ResizeObserver key={strictKey ? key : listIndex} onResize={onResize}>
+                          <ResizeObserver key={key} onResize={onResize}>
                             {() => vnode}
                           </ResizeObserver>
                         )

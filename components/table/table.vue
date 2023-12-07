@@ -312,14 +312,15 @@ const className = computed(() => {
   }
 })
 const style = computed(() => {
+  const width = tableWidth.value ?? props.width
+  const [padLeft, padRight] = state.sidePadding
+
   const style: StyleType = {
     [nh.cv('row-indent-width')]:
       typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
     [nh.cv('b-width')]: `${props.borderWidth}px`,
     [nh.cv('expanded-width')]: `${bodyWidth.value}px`
   }
-  const width = tableWidth.value ?? props.width
-  const [padLeft, padRight] = state.sidePadding
 
   if (padLeft) {
     style[nh.cv('side-pad-left')] = `${padLeft}px`
@@ -636,8 +637,11 @@ function emitYScroll(client: number, percent: number) {
   emitEvent(props.onScroll, { type: 'vertical', client, percent })
 }
 
-function handleResize(entry: ResizeObserverEntry) {
-  bodyWidth.value = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width
+function handleResize() {
+  if (mainScroll.value?.content) {
+    bodyWidth.value = mainScroll.value.content.offsetWidth
+  }
+
   isMounted && refresh()
 }
 
@@ -1011,7 +1015,7 @@ function renderTableSlot({ name }: { name: string }) {
     :style="style"
     :aria-rowcount="props.data.length"
   >
-    <div v-show="false" role="none">
+    <div v-show="false" role="none" aria-hidden>
       <slot></slot>
       <template
         v-for="(column, index) in props.columns"

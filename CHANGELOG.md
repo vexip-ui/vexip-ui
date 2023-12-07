@@ -1,3 +1,12 @@
+## [2.2.19](https://github.com/vexip-ui/vexip-ui/compare/v2.2.18...v2.2.19) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **table:** correctly set expand height with virtual ([eb53003](https://github.com/vexip-ui/vexip-ui/commit/eb53003abab038b245856d07c0dc7a95f9b4e8ed))
+
+
+
 ## [2.2.18](https://github.com/vexip-ui/vexip-ui/compare/v2.2.17...v2.2.18) (2023-12-07)
 
 
