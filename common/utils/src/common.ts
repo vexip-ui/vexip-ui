@@ -55,17 +55,17 @@ export function isBigInt(value: unknown): value is bigint {
   return typeof value === 'bigint'
 }
 
-export function isArray(value: unknown): value is any[] {
+export function isArray<T = any>(value: unknown): value is T[] {
   return Array.isArray(value)
 }
 
-export function isObject<T extends Record<string, any> = Record<string, any>>(
+export function isObject<T extends Record<any, any> = Record<any, any>>(
   value: unknown
 ): value is T {
   return is(value, 'Object')
 }
 
-export function isPromise(value: unknown): value is Promise<any> {
+export function isPromise<T = any>(value: unknown): value is Promise<T> {
   return (
     !!value &&
     typeof (value as any).then === 'function' &&
@@ -77,11 +77,11 @@ export function isFunction(value: unknown): value is (...any: any[]) => any {
   return typeof value === 'function'
 }
 
-export function isSet(value: unknown): value is Set<any> {
+export function isSet<T = any>(value: unknown): value is Set<T> {
   return is(value, 'Set')
 }
 
-export function isMap(value: unknown): value is Map<any, any> {
+export function isMap<K = any, V = any>(value: unknown): value is Map<K, V> {
   return is(value, 'Map')
 }
 
@@ -109,7 +109,7 @@ export function isEmpty(value: unknown) {
   return false
 }
 
-export function isElement(value: unknown, ssr = false): value is Element {
+export function isElement<T extends Element = Element>(value: unknown, ssr = false): value is T {
   if (!ssr && !isClient) return false
 
   return !!(value && 'nodeType' in (value as any))
@@ -120,7 +120,7 @@ export function isIterable(value: unknown) {
 }
 
 export function noop(...args: any[]): any
-/* eslint-disable-next-line @typescript-eslint/no-empty-function */
+
 export function noop() {}
 
 export function toTrue(...args: any[]): true
