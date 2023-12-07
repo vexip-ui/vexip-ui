@@ -795,10 +795,12 @@ export default defineComponent({
     })
     const showPlaceholder = computed(() => {
       // 采用反推，出现下列情况时不显示：
-      // 1. 有值且 未开预览/多选模式/未打开列表
-      // 2. 没有预览选项且没有合法的占位值
-      // 3. 打开列表且输入了过滤值
+      // 1. 开始组合（如输入了任意拼音）
+      // 2. 有值且 未开预览/多选模式/未打开列表
+      // 3. 没有预览选项且没有合法的占位值
+      // 4. 打开列表且输入了过滤值
       return (
+        !composing.value &&
         !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
         !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
         !(currentVisible.value && currentFilter.value)
