@@ -21,7 +21,7 @@ export function throttle<T extends (...args: any[]) => any>(
   }
 
   const invoke = (...args: Parameters<T>) => {
-    method(args)
+    method(...args)
   }
 
   if (interval <= 0) {
@@ -67,7 +67,7 @@ export function debounce<T extends (...args: any[]) => any>(
   }
 
   const invoke = (...args: Parameters<T>) => {
-    method(args)
+    method(...args)
   }
 
   if (delay <= 0) {
