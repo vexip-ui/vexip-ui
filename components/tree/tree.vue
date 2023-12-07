@@ -16,7 +16,7 @@ import {
 
 import TreeNode from './tree-node.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { useMounted } from '@vexip-ui/hooks'
+import { useMounted, useSetTimeout } from '@vexip-ui/hooks'
 import {
   debounce,
   filterTree,
@@ -138,6 +138,7 @@ const expanding = ref(false)
 const expandingNodes = ref<TreeNodeProps[]>([])
 const expandedNodeIds = ref(new Set<Key>())
 
+const { timer } = useSetTimeout()
 const { isMounted } = useMounted()
 
 const virtualList = ref<VirtualListExposed>()
@@ -262,8 +263,26 @@ watchEffect(() => {
 
   resetExpanded()
 })
+watchEffect(() => Object.assign(keyConfig, props.keyConfig))
 watchEffect(() => {
-  Object.assign(keyConfig, props.keyConfig)
+  const oldIds = expandedNodeIds.value
+  const ids = new Set<Key>()
+
+  let changed = false
+
+  for (const node of flattedNodes.value) {
+    if (node.expanded) {
+      ids.add(node.id)
+
+      if (!changed && !oldIds.has(node.id)) {
+        changed = true
+      }
+    }
+  }
+
+  if (changed || ids.size !== oldIds.size) {
+    expandedNodeIds.value = ids
+  }
 })
 watch(
   [
@@ -288,30 +307,6 @@ watch(
       injectId: false,
       depthFirst: true
     })
-  },
-  { immediate: true }
-)
-watch(
-  flattedNodes,
-  value => {
-    const oldIds = expandedNodeIds.value
-    const ids = new Set<Key>()
-
-    let changed = false
-
-    for (const node of value) {
-      if (node.expanded) {
-        ids.add(node.id)
-
-        if (!changed && !oldIds.has(node.id)) {
-          changed = true
-        }
-      }
-    }
-
-    if (changed || ids.size !== oldIds.size) {
-      expandedNodeIds.value = ids
-    }
   },
   { immediate: true }
 )
@@ -343,6 +338,9 @@ watch(expandedNodeIds, (value, prev) => {
 
   if (addedId == null && removedId == null) return
 
+  clearTimeout(timer.expand)
+
+  transferring.value = false
   expanding.value = true
 
   let baseExpandedIds: Set<Key> | undefined
@@ -537,35 +535,23 @@ function isCollapse(node: any): node is TreeCollapseProps {
 }
 
 function refreshNodesDepth() {
-  const linkLine = props.linkLine
-
   walkTree(treeNodes.value, (node, depth) => {
     node.depth = depth
+    node.lineIndexes = [0]
 
     if (node.parent && nodeMap.has(node.parent)) {
       const parent = nodeMap.get(node.parent)!
 
       node.last = parent.children.at(-1) === node
+      node.upstreamLast = [parent.last, ...parent.upstreamLast]
+    } else {
+      node.last = treeNodes.value.at(-1) === node
+      node.upstreamLast = []
+    }
 
-      if (linkLine) {
-        if (parent.inLastCount) {
-          node.inLastCount = parent.inLastCount + (parent.last ? 1 : 0)
-        } else {
-          let current = parent
-          let upper = current.parent && nodeMap.get(current.parent)
-          let count = 0
-
-          while (upper) {
-            if (upper.children.at(-1) === current) {
-              ++count
-            }
-
-            current = upper
-            upper = current.parent && nodeMap.get(current.parent)
-          }
-
-          node.inLastCount = count
-        }
+    for (let i = 1; i < depth; ++i) {
+      if (!node.upstreamLast[i - 1]) {
+        node.lineIndexes.push(i)
       }
     }
   })
@@ -852,7 +838,9 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     upperMatched: false,
     depth: -1,
     last: false,
-    inLastCount: 0
+    // inLastCount: 0,
+    upstreamLast: [],
+    lineIndexes: []
   })
 }
 
@@ -1120,6 +1108,22 @@ function resetExpanded() {
   isMounted.value && updateVisibleNodeEls()
 }
 
+function afterExpand() {
+  if (props.virtual) {
+    resetExpanded()
+    return
+  }
+
+  transferring.value = true
+
+  requestAnimationFrame(() => {
+    resetExpanded()
+    timer.expand = setTimeout(() => {
+      transferring.value = false
+    }, 300)
+  })
+}
+
 function getCheckedNodes(includePartial = false): TreeNodeProps[] {
   return flattedNodes.value.filter(item => item.checked || (includePartial && item.partial))
 }
@@ -1309,6 +1313,8 @@ function getFlattedData(withFilter = false) {
       : flattedNodes.value
   ).map(node => ({ ...node.data }))
 }
+
+const transferring = ref(false)
 </script>
 
 <template>
@@ -1321,7 +1327,8 @@ function getFlattedData(withFilter = false) {
     items-tag="ul"
     :items-attrs="{ class: nh.be('list') }"
     :hide-bar="!props.useYBar"
-    :ignore-resize="expanding"
+    :ignore-resize="transferring"
+    strict-key
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"
@@ -1343,7 +1350,7 @@ function getFlattedData(withFilter = false) {
         v-if="isCollapse(node)"
         appear
         :reverse="node.type === 'reduce'"
-        @after-enter="resetExpanded"
+        @after-enter="afterExpand"
       >
         <div :class="nh.be('collapse')" :style="{ height: `${node.height}px` }">
           <TreeNode

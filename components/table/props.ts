@@ -26,6 +26,7 @@ import type {
   TableCellPayload,
   TableCellPropFn,
   TableCellSpanFn,
+  TableColResizeType,
   TableColumnRawOptions,
   TableColumnType,
   TableFilterOptions,
@@ -106,7 +107,10 @@ export const tableProps = buildProps({
   disabledTree: booleanProp,
   rowIndent: [String, Number],
   noCascaded: booleanProp,
-  colResizable: booleanProp,
+  colResizable: {
+    type: [Boolean, String] as PropType<boolean | TableColResizeType>,
+    default: null
+  },
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
   icons: Object as PropType<TableIcons>,

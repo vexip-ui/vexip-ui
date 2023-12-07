@@ -56,9 +56,9 @@ $linker: map.merge(
   &--underline {
     &::after {
       position: absolute;
+      inset-inline-start: 0;
       right: 0;
       bottom: 0;
-      inset-inline-start: 0;
       height: get-css-var('linker-underline-height');
       content: '';
       background-color: get-css-var('linker-color-hover');

@@ -19,7 +19,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
 
 import Monaco from '@vue/repl/monaco-editor'
-import Header from './components/header.vue'
+import Header from './header.vue'
 import { useReplStore } from './store'
 import { prettierCode } from './format'
 

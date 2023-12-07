@@ -142,8 +142,7 @@ body {
     width: 100%;
     max-height: calc(100vh - 128px);
     padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     scrollbar-width: thin;
     scrollbar-color: var(--vxp-color-primary-opacity-8) transparent;
 

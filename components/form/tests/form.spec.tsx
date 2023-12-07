@@ -130,7 +130,7 @@ describe('Form', () => {
   })
 
   it('label align', () => {
-    (['right', 'top', 'left'] as const).forEach(align => {
+    ;(['right', 'top', 'left'] as const).forEach(align => {
       const wrapper = mount(() => (
         <Form label-align={align}>
           <FormItem label={'input'} prop={'input'}>
@@ -219,10 +219,10 @@ describe('Form', () => {
     expect(item.find('.vxp-form__help').exists()).toBe(true)
 
     await item.find('.vxp-form__help').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     await nextTick()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     expect(document.querySelector('.vxp-form__help-tip')).toBeTruthy()
@@ -245,10 +245,10 @@ describe('Form', () => {
     expect(item.find('.vxp-form__help').exists()).toBe(true)
 
     await item.find('.vxp-form__help').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     await nextTick()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     expect(document.querySelector('.help')).toBeTruthy()

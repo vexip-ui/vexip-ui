@@ -256,7 +256,9 @@ interface TreeCommonSlotParams {
 }
 
 interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  /** @deprecated */
   lineCount: number,
+  lineIndexes: number[],
   toggleCheck: (checked?: boolean) => void,
   toggleExpand: (expanded?: boolean) => Promise<void>,
   toggleSelect: (able?: boolean) => Promise<void>

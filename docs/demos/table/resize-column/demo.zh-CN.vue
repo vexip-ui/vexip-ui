@@ -1,9 +1,13 @@
 <template>
+  <p>
+    即时变化：
+    <Switch v-model:value="responsive"></Switch>
+  </p>
   <Table
-    use-y-bar
+    use-x-bar
     :data="data"
     :width="1000"
-    col-resizable
+    :col-resizable="responsive ? 'responsive' : 'lazy'"
   >
     <TableColumn type="selection"></TableColumn>
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
@@ -15,6 +19,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const responsive = ref(false)
+
 const data = Array.from({ length: 5 }, (_, index) => {
   return {
     id: index + 1,

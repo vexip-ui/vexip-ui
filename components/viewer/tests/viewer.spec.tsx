@@ -19,7 +19,7 @@ async function toggleMove(el: HTMLElement, value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 
   const upEvent = new CustomEvent('pointerup') as any
@@ -50,7 +50,7 @@ describe('Viewer', () => {
   })
 
   it('toolbar placement', () => {
-    (
+    ;(
       [
         'top',
         'top-start',

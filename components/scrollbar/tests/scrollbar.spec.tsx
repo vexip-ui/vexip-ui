@@ -114,7 +114,7 @@ describe('Scrollbar', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onScroll).toHaveBeenCalled()
     expect(onScroll).toHaveBeenCalledWith(50)
 
@@ -128,6 +128,8 @@ describe('Scrollbar', () => {
   })
 
   it('track', async () => {
+    vi.useRealTimers()
+
     const onScrollStart = vi.fn()
     const onScroll = vi.fn()
     const onScrollEnd = vi.fn()
@@ -198,5 +200,6 @@ describe('Scrollbar', () => {
 
     trackMock.mockRestore()
     barMock.mockRestore()
+    vi.useFakeTimers()
   })
 })

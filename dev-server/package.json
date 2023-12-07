@@ -1,16 +1,17 @@
 {
   "name": "@vexip-ui/dev-server",
+  "type": "module",
   "private": true,
   "scripts": {
     "serve": "vite"
   },
   "dependencies": {
-    "vue": "^3.3.4",
+    "vue": "^3.3.10",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "unplugin-vue-components": "^0.25.2"
+    "postcss": "^8.4.32",
+    "unplugin-vue-components": "^0.26.0"
   }
 }

@@ -154,13 +154,13 @@ import {
   ShareNodes,
   Sun
 } from '@vexip-ui/icons'
-import { cdnTemplates, getCdn, setCdn } from '../cdn'
-import { locale } from '../locale'
-import { downloadProject } from '../download/download'
-import { prettierCode } from '../format'
+import { cdnTemplates, getCdn, setCdn } from './cdn'
+import { locale } from './locale'
+import { downloadProject } from './download/download'
+import { prettierCode } from './format'
 
 import type { PropType } from 'vue'
-import type { ReplStore } from '../store'
+import type { ReplStore } from './store'
 
 interface RepoMeta {
   owner: string,

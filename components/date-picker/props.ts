@@ -18,9 +18,11 @@ import type {
   DatePickerFormatFn,
   DatePickerType,
   DateShortcut,
+  DateShortcutsPlacement,
   DateTimeType,
   TimePickerChangeEvent,
   TimeShortcut,
+  TimeShortcutsPlacement,
   TimeType
 } from './symbol'
 
@@ -40,7 +42,7 @@ export const datePickerProps = buildProps({
   transfer: booleanStringProp,
   value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
   format: String,
-  valueFormat: [String, Function] as PropType<string | DatePickerFormatFn>,
+  valueFormat: [String, Array, Function] as PropType<string | string[] | DatePickerFormatFn>,
   filler: String,
   clearable: booleanProp,
   noAction: booleanProp,
@@ -74,6 +76,7 @@ export const datePickerProps = buildProps({
   unitReadonly: booleanProp,
   weekStart: Number,
   popperAlive: booleanProp,
+  shortcutsPlacement: String as PropType<DateShortcutsPlacement>,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
@@ -140,6 +143,7 @@ export const timePickerProps = buildProps({
   outsideCancel: booleanProp,
   unitReadonly: booleanProp,
   popperAlive: booleanProp,
+  shortcutsPlacement: String as PropType<TimeShortcutsPlacement>,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),

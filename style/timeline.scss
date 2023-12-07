@@ -50,8 +50,7 @@ $timeline: map.merge(
   }
 
   &--flip {
-    padding-inline-start: 0;
-    padding-inline-end: $side-pad;
+    padding-inline: 0 $side-pad;
   }
 
   &--horizontal#{&}--flip {
@@ -120,8 +119,8 @@ $timeline: map.merge(
 
   &__signal {
     position: absolute;
-    top: 0;
     inset-inline-start: calc($pointer-size * -0.5);
+    top: 0;
     z-index: 1;
     display: inline-flex;
     align-items: center;
@@ -131,8 +130,8 @@ $timeline: map.merge(
   }
 
   &--horizontal &__signal {
-    top: calc($pointer-size * -0.5);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5);
   }
 
   &--flip &__signal {
@@ -140,8 +139,8 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--flip &__signal {
-    top: calc($pointer-size * -0.5 + 100%);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5 + 100%);
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
@@ -153,13 +152,13 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {
-    top: calc($pointer-size * -0.5 + 100%);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5 + 100%);
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__signal {
-    top: calc($pointer-size * -0.5);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5);
   }
 
   &--signal-click &__signal {
@@ -183,9 +182,9 @@ $timeline: map.merge(
 
   &__line {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -208,8 +207,8 @@ $timeline: map.merge(
     width: 100%;
     height: 0;
     padding: 0;
-    padding-inline-start: calc($pointer-size + get-css-var('timeline-line-inset-start'));
-    padding-inline-end: get-css-var('timeline-line-inset-end');
+    padding-inline: calc($pointer-size + get-css-var('timeline-line-inset-start'))
+      get-css-var('timeline-line-inset-end');
 
     &::after {
       width: 100%;
@@ -224,8 +223,8 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--flip &__line {
-    top: 100%;
     inset-inline-start: 0;
+    top: 100%;
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__line {
@@ -237,13 +236,13 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
-    top: 100%;
     inset-inline-start: 0;
+    top: 100%;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
-    top: 0;
     inset-inline-start: 0;
+    top: 0;
   }
 
   $content-pad: calc($pointer-size * 0.5 + 8px);

@@ -128,7 +128,7 @@ describe('Input', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Input state={state}></Input>)
 
       expect(wrapper.find('.vxp-input').classes()).toContain(`vxp-input--${state}`)
@@ -185,7 +185,7 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -203,8 +203,8 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, '2')
-    vi.runAllTimers()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledWith(2)
 
@@ -226,7 +226,7 @@ describe('Input', () => {
     emitInput(input, TEXT)
     emitInput(input, TEXT)
     expect(onInput).toHaveBeenCalledTimes(1)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledTimes(2)
   })
@@ -246,7 +246,7 @@ describe('Input', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await input.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-input--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -399,7 +399,7 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])

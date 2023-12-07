@@ -87,7 +87,7 @@ describe('AutoComplete', () => {
     const value = OPTIONS[0]
 
     emitInput(input, value.toLocaleUpperCase())
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     const selectPopperEl = wrapper.find('.vxp-select__popper')

@@ -3,14 +3,15 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { CalendarR, GithubB, Spinner } from '@vexip-ui/icons'
+import { format } from '@vexip-ui/utils'
 import { DatePicker } from '..'
 
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -114,6 +115,8 @@ describe('DatePicker', () => {
   })
 
   it('key toggle visible', async () => {
+    vi.useRealTimers()
+
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(DatePicker, {
@@ -144,6 +147,8 @@ describe('DatePicker', () => {
     await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
+
+    vi.useFakeTimers()
   })
 
   it('disabled', async () => {
@@ -431,7 +436,7 @@ describe('DatePicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <DatePicker state={state}></DatePicker>)
 
       expect(wrapper.find('.vxp-date-picker__selector').classes()).toContain(
@@ -483,6 +488,42 @@ describe('DatePicker', () => {
     expect(onChange).toHaveBeenLastCalledWith(
       new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
     )
+  })
+
+  it('value format', async () => {
+    const date = new Date()
+    vi.setSystemTime(date)
+
+    const valueFormat = 'yyyy-MM-dd HH:mm:ss'
+    let wrapper = mount(DatePicker, { props: { valueFormat } })
+
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
+    expect(wrapper.emitted('update:formatted-value')![0][0]).toMatch(
+      format(date, 'yyyy-MM-dd HH:mm:')
+    )
+    wrapper.unmount()
+
+    const formatFn = vi.fn(() => '1')
+    wrapper = mount(DatePicker, { props: { valueFormat: formatFn } })
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(formatFn).toHaveBeenCalled()
+    expect(formatFn).toHaveBeenLastCalledWith(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
+      'start'
+    )
+    expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
+    expect(wrapper.emitted('update:formatted-value')![0]).toEqual(['1'])
+    wrapper.unmount()
+
+    wrapper = mount(DatePicker, {
+      props: { range: true, valueFormat: formatFn }
+    })
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(wrapper.emitted('update:formatted-value')![0]).toEqual([['1', '1']])
   })
 
   it('clearable', async () => {
@@ -635,7 +676,7 @@ describe('DatePicker', () => {
     expect(units[2].text()).toEqual('31')
   })
 
-  it('shortcut', async () => {
+  it('shortcuts', async () => {
     const fnValue = vi.fn(() => '2022-06-01')
     const onShortcut = vi.fn()
     const shortcuts = [
@@ -668,6 +709,20 @@ describe('DatePicker', () => {
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('2022/06/01')
+  })
+
+  it('shortcuts placement', () => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const shortcuts = [{ name: 'Labor Day', value: '2022-05-01' }]
+      const wrapper = mount(DatePicker, {
+        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+      })
+
+      expect(wrapper.find('.vxp-date-picker__shortcuts').exists()).toBe(true)
+      expect(wrapper.find('.vxp-date-picker__shortcuts').classes()).toContain(
+        `vxp-date-picker__shortcuts--${placement}`
+      )
+    })
   })
 
   it('range select', async () => {

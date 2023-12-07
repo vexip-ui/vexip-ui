@@ -1,10 +1,38 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { debounceFrame, debounceMinor } from '../src/performance'
+import { debounce, debounceFrame, debounceMinor, throttle } from '../src/performance'
 
 vi.useFakeTimers()
 
 describe('performance', () => {
+  it('throttle', () => {
+    const fn = vi.fn()
+    const tfn = throttle(fn)
+
+    tfn()
+    tfn()
+    tfn()
+    tfn()
+    tfn()
+    expect(fn).toHaveBeenCalledTimes(1)
+    vi.runAllTimers()
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('debounce', () => {
+    const fn = vi.fn()
+    const dfn = debounce(fn)
+
+    dfn()
+    dfn()
+    dfn()
+    dfn()
+    dfn()
+    expect(fn).toHaveBeenCalledTimes(0)
+    vi.runAllTimers()
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+
   it('debounceMinor', async () => {
     const fn = vi.fn()
     const dfn = debounceMinor(fn)
@@ -31,7 +59,7 @@ describe('performance', () => {
     expect(fn).toHaveBeenCalledTimes(1)
     expect(i).toBe(1)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     const r3 = dfn()
     expect(fn).toHaveBeenCalledTimes(1)
     expect(r2 === r3).toBe(false)
@@ -41,7 +69,7 @@ describe('performance', () => {
     await r1
     expect(i).toBe(2)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await r3
     expect(i).toBe(3)
   })
@@ -54,7 +82,7 @@ describe('performance', () => {
     dfn()
     dfn()
     expect(fn).toHaveBeenCalledTimes(0)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(fn).toHaveBeenCalledTimes(1)
   })
 
@@ -70,7 +98,7 @@ describe('performance', () => {
     const r2 = dfn()
     expect(fn).toHaveBeenCalledTimes(0)
     expect(r1 === r2).toBe(true)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(fn).toHaveBeenCalledTimes(1)
     expect(i).toBe(1)
 
@@ -82,10 +110,10 @@ describe('performance', () => {
     expect(fn).toHaveBeenCalledTimes(1)
     expect(r2 === r3).toBe(false)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(fn).toHaveBeenCalledTimes(2)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await r3
     expect(i).toBe(3)
   })

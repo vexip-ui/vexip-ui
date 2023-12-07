@@ -9,9 +9,9 @@ vi.useFakeTimers()
 const OPTIONS = Array.from({ length: 20 }, (_, i) => `Option ${i + 1}`)
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 

@@ -63,7 +63,7 @@ describe('Toast', () => {
     await toastOpened()
     expect(document.querySelector('.vxp-toast__wrapper')).toBeTruthy()
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(document.querySelector('.vxp-toast__wrapper')).toBeFalsy()
   })
@@ -99,7 +99,7 @@ describe('Toast', () => {
       document.querySelector('.vxp-toast__wrapper')?.classList.contains('vxp-toast__wrapper--top')
     ).toBe(true)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     Toast.open({
       content: TEXT,

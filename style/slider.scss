@@ -73,8 +73,7 @@ $slider: map.merge(
   }
 
   &--vertical#{&}--flip-marker {
-    margin-inline-start: get-css-var('slider-marker-pad');
-    margin-inline-end: 0;
+    margin-inline: get-css-var('slider-marker-pad') 0;
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -217,8 +216,8 @@ $slider: map.merge(
       get-css-var('transition-transform');
 
     &::before {
-      top: 2px;
       inset-inline-start: 2px;
+      top: 2px;
       width: calc(100% - 4px);
       height: calc(100% - 4px);
       opacity: 0%;
@@ -326,16 +325,15 @@ $slider: map.merge(
   }
 
   &--vertical &__markers {
-    top: auto;
     inset-inline-start: $markers-pos;
+    top: auto;
     width: auto;
     height: 100%;
   }
 
   &--vertical#{&}--flip-marker &__markers {
+    inset-inline: auto $markers-pos;
     bottom: auto;
-    inset-inline-start: auto;
-    inset-inline-end: $markers-pos;
   }
 
   &__marker {

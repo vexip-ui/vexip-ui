@@ -35,7 +35,7 @@
               }"
               @rest-change="restTagCount = $event"
             >
-              <template #default="{ item, index }">
+              <template #default="{ item: value, index }">
                 <Tag
                   inherit
                   :class="nh.be('tag')"
@@ -43,11 +43,13 @@
                   closable
                   :disabled="props.disabled"
                   @click.stop="toggleVisible"
-                  @close="handleTagClose(item)"
+                  @close="handleTagClose(value)"
                 >
-                  <slot name="selected" :option="item">
-                    {{ currentLabels[index] }}
-                  </slot>
+                  <span :class="nh.be('label')">
+                    <slot name="selected" :option="getOptionFromMap(value)">
+                      {{ currentLabels[index] }}
+                    </slot>
+                  </span>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -82,7 +84,7 @@
                       </Tag>
                     </template>
                     <NativeScroll inherit use-y-bar>
-                      <template v-for="(item, index) in currentValues" :key="index">
+                      <template v-for="(value, index) in currentValues" :key="index">
                         <Tag
                           v-if="index >= currentValues.length - restTagCount"
                           inherit
@@ -90,11 +92,13 @@
                           closable
                           :type="props.tagType"
                           :disabled="props.disabled"
-                          @close="handleTagClose(item)"
+                          @close="handleTagClose(value)"
                         >
-                          <slot name="selected" :option="item">
-                            {{ currentLabels[index] }}
-                          </slot>
+                          <span :class="nh.be('label')">
+                            <slot name="selected" :option="getOptionFromMap(value)">
+                              {{ currentLabels[index] }}
+                            </slot>
+                          </span>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -791,10 +795,12 @@ export default defineComponent({
     })
     const showPlaceholder = computed(() => {
       // 采用反推，出现下列情况时不显示：
-      // 1. 有值且 未开预览/多选模式/未打开列表
-      // 2. 没有预览选项且没有合法的占位值
-      // 3. 打开列表且输入了过滤值
+      // 1. 开始组合（如输入了任意拼音）
+      // 2. 有值且 未开预览/多选模式/未打开列表
+      // 3. 没有预览选项且没有合法的占位值
+      // 4. 打开列表且输入了过滤值
       return (
+        !composing.value &&
         !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
         !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
         !(currentVisible.value && currentFilter.value)
@@ -1271,7 +1277,7 @@ export default defineComponent({
 
     function focus(options?: FocusOptions) {
       if (currentVisible.value) {
-        (input.value || reference.value)?.focus(options)
+        ;(input.value || reference.value)?.focus(options)
       } else {
         reference.value?.focus(options)
       }

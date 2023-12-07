@@ -26,6 +26,7 @@ function openLink() {
       target="_blank"
       role="menuitem"
       tabindex="0"
+      style="text-decoration: none"
       @keydown.space.stop.prevent="openLink"
     >
       <span class="vxp-menu__title">

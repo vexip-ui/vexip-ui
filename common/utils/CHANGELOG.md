@@ -1,3 +1,27 @@
+## [2.7.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.2...utils@2.7.3) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** throttle and debounce incorrect parameters passed ([305467d](https://github.com/vexip-ui/vexip-ui/commit/305467d479ab5156ba4cad9c1476df091deeb8ee))
+
+
+
+## [2.7.2](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.1...utils@2.7.2) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** mapTree may clear children field by default ([965103f](https://github.com/vexip-ui/vexip-ui/commit/965103fc7887e04ac407e2caf4e1c9ac6d35fe5f))
+* **utils:** throttle and debounce adapt delay 0 ([a6046e5](https://github.com/vexip-ui/vexip-ui/commit/a6046e5fc30318558528a973a12ae62fe2228dd5))
+
+
+### 👓 Types
+
+* **utils:** improve generics for is... methods ([4302ca5](https://github.com/vexip-ui/vexip-ui/commit/4302ca5dbdbd2873212a4d4aced2b4479a48a2a4))
+
+
+
 ## [2.7.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.0...utils@2.7.1) (2023-12-01)
 
 

@@ -91,7 +91,7 @@ describe('Drawer', () => {
   })
 
   it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => <Drawer placement={placement}></Drawer>)
 
       expect(wrapper.find('.vxp-drawer__wrapper').classes()).toContain(
@@ -140,7 +140,7 @@ describe('Drawer', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onResizeMove).toHaveBeenCalled()
     expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 160 }))
     await nextTick()

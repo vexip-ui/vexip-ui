@@ -66,6 +66,8 @@
 
 通过 `shortcuts` 属性可以添加快捷时间。
 
+通过 `shortcuts-placement` 属性可以设置快捷时间的位置。
+
 :::
 
 :::demo time-picker/loading
@@ -80,47 +82,60 @@
 
 ## API
 
+### 预设类型
+
+```ts
+type TimeType = 'hour' | 'minute' | 'second'
+type TimeShortcutsPlacement = 'top' | 'right' | 'bottom' | 'left'
+
+interface TimeShortcut {
+  name: string,
+  value: string | string[] | (() => string | string[])
+}
+```
+
 ### TimePicker 属性
 
-| 名称            | 类型                                                      | 说明                                                                               | 默认值           | 始于     |
-| --------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------- | -------- |
-| value           | `string \| string[]`                                      | 时间选择器的值，可以使用 `v-model` 双向绑定                                        | `'00:00:00'`     | -        |
-| visible         | `boolean`                                                 | 设置时间选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                        | `false`          | -        |
-| placement       | `Placement`                                               | 时间选择窗口出现的位置，可选值同 Popper.js                                         | `'bottom-start'` | -        |
-| transfer        | `boolean \| string`                                       | 设置时间选择窗口的渲染位置，设置为 `true` 时默认渲染至 `<body>`                    | `false`          | -        |
-| format          | `string`                                                  | 根据是否具有 Hms 来控制时间选择列的显示隐藏                                        | `'HH:mm:ss'`     | -        |
-| separator       | `string`                                                  | 时间的连接符                                                                       | `':'`            | -        |
-| filler          | `string`                                                  | 时间未选择时的填充符，长度固定为 1                                                 | `'-'`            | -        |
-| clearable       | `boolean`                                                 | 是否允许清空值                                                                     | `false`          | -        |
-| no-action       | `boolean`                                                 | 是否禁用时间选择窗口的底部操作栏                                                   | `false`          | -        |
-| no-arrow        | `boolean`                                                 | 是否禁用滚轮选择器的箭头指示器                                                     | `false`          | -        |
-| candidate       | `number`                                                  | 设置滚轮选择器上下的候选个数，可选范围为 0 ~ 3                                     | `3`              | -        |
-| labels          | `Partial<Record<'hour' \| 'minute' \| 'second', string>>` | 设置在每个时间单元后面的标签                                                       | `{}`             | -        |
-| shortcuts       | `{ name: string, value: string \| (() => string) }[]`     | 设置日期快捷选择的候选列表，元素为 `{ name, value }` 的对象，其中 value 可以是函数 | `[]`             | -        |
-| steps           | `number[]`                                                | 分别设置时间选择器每个滚轮的滚动跨度                                               | `[1, 1, 1]`      | -        |
-| ctrl-steps      | `number[]`                                                | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                   | `[5, 5, 5]`      | -        |
-| prefix          | `Record<string, any>`                                     | 前缀图标，使用前缀插槽时无效                                                       | `null`           | -        |
-| prefix-color    | `string`                                                  | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | -        |
-| suffix          | `Record<string, any>`                                     | 后缀图标，使用后缀插槽时无效                                                       | `null`           | -        |
-| suffix-color    | `string`                                                  | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | -        |
-| no-suffix       | `boolean`                                                 | 设置是否禁用后缀图标                                                               | `false`          | -        |
-| disabled        | `boolean`                                                 | 设置是否禁用日期选择框                                                             | `false`          | -        |
-| transition-name | `string`                                                  | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | -        |
-| ok-text         | `string`                                                  | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm` | -        |
-| cancel-text     | `string`                                                  | 时间选择窗口取消按钮的文本内容                                                     | `locale.cancel`  | -        |
-| loading         | `boolean`                                                 | 设置是否为加载中                                                                   | `false`          | `2.0.0`  |
-| loading-icon    | `Record<string, any>`                                     | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
-| loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                           | `false`          | `2.0.0`  |
-| loading-effect  | `string`                                                  | 设置加载中图标的效果动画                                                           | `false`          | `2.1.0`  |
-| min             | `string`                                                  | 设置可选的最小时间                                                                 | `null`           | `2.0.14` |
-| max             | `string`                                                  | 设置可选的最大时间                                                                 | `null`           | `2.0.14` |
-| outside-close   | `boolean`                                                 | 设置是否可以通过点击组件外部进行关闭                                               | `true`           | `2.0.20` |
-| outside-cancel  | `boolean`                                                 | 设置点击组件外部进行关闭是否为取消操作                                             | `false`          | `2.0.20` |
-| locale          | `LocaleConfig['timePicker']`                              | 设置多语言配置                                                                     | `null`           | `2.1.0`  |
-| range           | `boolean`                                                 | 设置是否开启范围选择模式                                                           | `false`          | `2.1.1`  |
-| placeholder     | `string \| string[]`                                      | 设置时间选择器的占位符                                                             | `null`           | `2.1.1`  |
-| unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                             | `false`          | `2.1.2`  |
-| popper-alive    | `boolean`                                                 | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                 | `null`           | `2.2.3`  |
+| 名称                | 类型                                | 说明                                                                               | 默认值           | 始于     |
+| ------------------- | ----------------------------------- | ---------------------------------------------------------------------------------- | ---------------- | -------- |
+| value               | `string \| string[]`                | 时间选择器的值，可以使用 `v-model` 双向绑定                                        | `'00:00:00'`     | -        |
+| visible             | `boolean`                           | 设置时间选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                        | `false`          | -        |
+| placement           | `Placement`                         | 时间选择窗口出现的位置，可选值同 Popper.js                                         | `'bottom-start'` | -        |
+| transfer            | `boolean \| string`                 | 设置时间选择窗口的渲染位置，设置为 `true` 时默认渲染至 `<body>`                    | `false`          | -        |
+| format              | `string`                            | 根据是否具有 Hms 来控制时间选择列的显示隐藏                                        | `'HH:mm:ss'`     | -        |
+| separator           | `string`                            | 时间的连接符                                                                       | `':'`            | -        |
+| filler              | `string`                            | 时间未选择时的填充符，长度固定为 1                                                 | `'-'`            | -        |
+| clearable           | `boolean`                           | 是否允许清空值                                                                     | `false`          | -        |
+| no-action           | `boolean`                           | 是否禁用时间选择窗口的底部操作栏                                                   | `false`          | -        |
+| no-arrow            | `boolean`                           | 是否禁用滚轮选择器的箭头指示器                                                     | `false`          | -        |
+| candidate           | `number`                            | 设置滚轮选择器上下的候选个数，可选范围为 0 ~ 3                                     | `3`              | -        |
+| labels              | `Partial<Record<TimeType, string>>` | 设置在每个时间单元后面的标签                                                       | `{}`             | -        |
+| shortcuts           | `TimeShortcut[]`                    | 设置日期快捷选择的候选列表，元素为 `{ name, value }` 的对象，其中 value 可以是函数 | `[]`             | -        |
+| steps               | `number[]`                          | 分别设置时间选择器每个滚轮的滚动跨度                                               | `[1, 1, 1]`      | -        |
+| ctrl-steps          | `number[]`                          | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                   | `[5, 5, 5]`      | -        |
+| prefix              | `Record<string, any>`               | 前缀图标，使用前缀插槽时无效                                                       | `null`           | -        |
+| prefix-color        | `string`                            | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | -        |
+| suffix              | `Record<string, any>`               | 后缀图标，使用后缀插槽时无效                                                       | `null`           | -        |
+| suffix-color        | `string`                            | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | -        |
+| no-suffix           | `boolean`                           | 设置是否禁用后缀图标                                                               | `false`          | -        |
+| disabled            | `boolean`                           | 设置是否禁用日期选择框                                                             | `false`          | -        |
+| transition-name     | `string`                            | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | -        |
+| ok-text             | `string`                            | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm` | -        |
+| cancel-text         | `string`                            | 时间选择窗口取消按钮的文本内容                                                     | `locale.cancel`  | -        |
+| loading             | `boolean`                           | 设置是否为加载中                                                                   | `false`          | `2.0.0`  |
+| loading-icon        | `Record<string, any>`               | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
+| loading-lock        | `boolean`                           | 设置在加载中时是否为只读                                                           | `false`          | `2.0.0`  |
+| loading-effect      | `string`                            | 设置加载中图标的效果动画                                                           | `false`          | `2.1.0`  |
+| min                 | `string`                            | 设置可选的最小时间                                                                 | `null`           | `2.0.14` |
+| max                 | `string`                            | 设置可选的最大时间                                                                 | `null`           | `2.0.14` |
+| outside-close       | `boolean`                           | 设置是否可以通过点击组件外部进行关闭                                               | `true`           | `2.0.20` |
+| outside-cancel      | `boolean`                           | 设置点击组件外部进行关闭是否为取消操作                                             | `false`          | `2.0.20` |
+| locale              | `LocaleConfig['timePicker']`        | 设置多语言配置                                                                     | `null`           | `2.1.0`  |
+| range               | `boolean`                           | 设置是否开启范围选择模式                                                           | `false`          | `2.1.1`  |
+| placeholder         | `string \| string[]`                | 设置时间选择器的占位符                                                             | `null`           | `2.1.1`  |
+| unit-readonly       | `boolean`                           | 设置输入框控件是否只读                                                             | `false`          | `2.1.2`  |
+| popper-alive        | `boolean`                           | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                 | `null`           | `2.2.3`  |
+| shortcuts-placement | `TimeShortcutsPlacement`            | 设置快捷选择的位置                                                                 | `'left'`         | `2.2.18` |
 
 ### TimePicker 事件
 

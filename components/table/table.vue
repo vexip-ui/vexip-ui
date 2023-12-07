@@ -159,6 +159,9 @@ const props = useProps('table', _props, {
   ellipsis: false
 })
 
+// only for dnd end payload
+const emit = defineEmits(['update:data'])
+
 const slots = defineSlots<{
   default: () => any,
   empty: (params: { isFixed: boolean }) => any
@@ -251,6 +254,7 @@ const store = useStore({
   locale: locale.value,
   keyConfig: keyConfig.value,
   disabledTree: props.disabledTree,
+  colResizable: props.colResizable === true ? 'lazy' : props.colResizable,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
     : [props.sidePadding, props.sidePadding]
@@ -345,10 +349,6 @@ const useXScroll = computed(() => {
 })
 const bodyScrollHeight = computed(() => {
   const { totalHeight } = state
-
-  // if (Number.isNaN(totalHeight)) {
-  //   return bodyHeight.value
-  // }
 
   return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : undefined
 })
@@ -734,7 +734,8 @@ let dragState: {
   draggingRow: TableRowState,
   tableRect: DOMRect,
   willDropRow: TableRowState | null,
-  dropType: DropType
+  dropType: DropType,
+  dropped: boolean
 } | null
 
 function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
@@ -742,7 +743,8 @@ function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
     draggingRow: rowInstance.row,
     tableRect: wrapper.value!.getBoundingClientRect(),
     willDropRow: null,
-    dropType: DropType.BEFORE
+    dropType: DropType.BEFORE,
+    dropped: false
   }
 
   setDragging(true)
@@ -838,6 +840,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     children.push(draggingRow)
 
     willDropRow.children = children
+    willDropRow.treeExpanded = true
     draggingRow.parent = willDropRow.key
   } else {
     currentKey = willDropRow.key
@@ -858,6 +861,8 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     }
   }
 
+  dragState.dropped = true
+
   refreshRowDepth()
   flatTreeRows()
   refreshRowIndex()
@@ -867,18 +872,18 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
 function handleRowDragEnd(event: DragEvent) {
   if (!dragState) return
 
-  const { draggingRow } = dragState
+  const { draggingRow, dropped } = dragState
 
   dragState = null
   indicatorShow.value = false
 
-  setDragging(false)
-  emitEvent(
-    props.onRowDragEnd,
-    draggingRow.data,
-    state.rowData.map(row => row.data),
-    event
-  )
+  nextTick(() => {
+    const allDataPayload = dropped ? getCurrentData() : state.data
+
+    setDragging(false)
+    dropped && emit('update:data', allDataPayload)
+    emitEvent(props.onRowDragEnd, draggingRow.data, allDataPayload, event)
+  })
 }
 
 function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {
@@ -1229,7 +1234,7 @@ function renderTableSlot({ name }: { name: string }) {
       ]"
     ></div>
     <div
-      v-if="props.colResizable"
+      v-if="state.colResizable === 'lazy'"
       v-show="state.colResizing"
       :class="nh.be('resize-indicator')"
       :style="{ left: `${state.resizeLeft}px` }"

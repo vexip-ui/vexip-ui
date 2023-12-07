@@ -35,7 +35,9 @@ export default defineComponent({
       itemsAttrs: null,
       hideBar: false,
       lockItems: false,
-      autoplay: false
+      autoplay: false,
+      ignoreResize: false,
+      strictKey: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -102,12 +104,14 @@ export default defineComponent({
     }
 
     function onResize(entry: ResizeObserverEntry) {
+      if (props.ignoreResize) return
+
       handleResize(entry)
       emitEvent(props.onResize, entry)
     }
 
     function onItemResize(key: number | string | symbol, entry: ResizeObserverEntry) {
-      if (!props.lockItems) {
+      if (!props.lockItems && !props.ignoreResize) {
         handleItemResize(key, entry)
       }
     }
@@ -119,6 +123,7 @@ export default defineComponent({
     return () => {
       const keyField = props.idKey
       const itemFixed = props.itemFixed
+      const strictKey = props.strictKey
       const keyIndexMap = indexMap.value
       const { class: itemsClass, style: itemsOtherStyle, ...itemsAttrs } = props.itemsAttrs || {}
 
@@ -146,7 +151,7 @@ export default defineComponent({
         >
           {{
             default: () => (
-              <ResizeObserver throttle onResize={refresh}>
+              <ResizeObserver onResize={refresh}>
                 <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
                   <ItemsTag
                     {...itemsAttrs}
@@ -161,7 +166,7 @@ export default defineComponent({
                         const vnode = renderSlot(slots, 'default', { item, index })
 
                         if (itemFixed) {
-                          vnode.key = listIndex
+                          vnode.key = strictKey ? key : listIndex
 
                           return vnode
                         }
@@ -169,7 +174,7 @@ export default defineComponent({
                         const onResize = onItemResize.bind(null, key)
 
                         return (
-                          <ResizeObserver key={listIndex} throttle onResize={onResize}>
+                          <ResizeObserver key={strictKey ? key : listIndex} onResize={onResize}>
                             {() => vnode}
                           </ResizeObserver>
                         )

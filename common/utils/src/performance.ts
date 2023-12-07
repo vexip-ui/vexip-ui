@@ -1,4 +1,4 @@
-import { isClient } from './common'
+import { isClient, noop } from './common'
 
 const raf = isClient
   ? requestAnimationFrame
@@ -10,29 +10,44 @@ const raf = isClient
  * 将一个函数或方法进行节流
  *
  * @param method 需要节流的方法，需自行绑定 this
- * @param delay 节流后的触发间隔，默认 16 ms (1 帧/秒)
+ * @param interval 节流后的触发间隔，默认 16 ms (1 帧)
  */
-export function throttle<T extends (...args: any[]) => any>(method: T, delay = 16) {
+export function throttle<T extends (...args: any[]) => any>(
+  method: T,
+  interval = 16
+): (...args: Parameters<T>) => void {
   if (typeof method !== 'function') {
-    return method
+    return noop
   }
 
-  let start = Date.now() - delay
+  const invoke = (...args: Parameters<T>) => {
+    method(...args)
+  }
+
+  if (interval <= 0) {
+    return debounceMinor(invoke)
+  }
+
+  let lastCall = 0
   let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     const current = Date.now()
-    const remaining = start + delay - current
+    const elapsed = current - lastCall
 
     clearTimeout(timer)
 
-    if (remaining <= 0) {
-      method(...args)
-      start = current
+    if (elapsed >= interval) {
+      lastCall = current
+      invoke(...args)
     } else {
-      timer = setTimeout(() => {
-        method(...args)
-      }, delay)
+      timer = setTimeout(
+        () => {
+          lastCall = Date.now()
+          invoke(...args)
+        },
+        Math.max(0, interval - elapsed)
+      )
     }
   }
 }
@@ -43,9 +58,20 @@ export function throttle<T extends (...args: any[]) => any>(method: T, delay = 1
  * @param method 需要防抖的方法，需自行绑定 this
  * @param delay 防抖的限制时间，默认 100ms
  */
-export function debounce<T extends (...args: any[]) => any>(method: T, delay = 100) {
+export function debounce<T extends (...args: any[]) => any>(
+  method: T,
+  delay = 100
+): (...args: Parameters<T>) => void {
   if (typeof method !== 'function') {
-    return method
+    return noop
+  }
+
+  const invoke = (...args: Parameters<T>) => {
+    method(...args)
+  }
+
+  if (delay <= 0) {
+    return debounceMinor(invoke)
   }
 
   let timer: ReturnType<typeof setTimeout>
@@ -54,7 +80,7 @@ export function debounce<T extends (...args: any[]) => any>(method: T, delay = 1
     clearTimeout(timer)
 
     timer = setTimeout(() => {
-      method(...args)
+      invoke(...args)
     }, delay)
   }
 }

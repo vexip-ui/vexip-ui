@@ -295,9 +295,15 @@ function editOnPlayground() {
   &__description {
     padding: 0 14px 14px;
 
-    p {
+    p,
+    blockquote {
       padding: 0 14px;
       margin-bottom: 6px;
+    }
+
+    ul:not([class*='vxp-']),
+    ol:not([class*='vxp-']) {
+      padding-inline: 18px 14px;
     }
 
     blockquote {

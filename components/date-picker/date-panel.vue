@@ -18,6 +18,7 @@ import type { Dateable } from '@vexip-ui/utils'
 import type {
   DatePickerType,
   DateShortcut,
+  DateShortcutsPlacement,
   DateTimeType,
   DateType,
   DisabledTime,
@@ -114,6 +115,10 @@ const props = defineProps({
   staticWheel: {
     type: Boolean,
     default: false
+  },
+  shortcutsPlacement: {
+    type: String as PropType<DateShortcutsPlacement>,
+    default: 'left'
   }
 })
 
@@ -468,8 +473,23 @@ function refreshCalendar(valueType: 'start' | 'end') {
 </script>
 
 <template>
-  <div :class="nh.be('panel')" @click="handleClick">
-    <div v-if="shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
+  <div
+    :class="{
+      [nh.be('panel')]: true,
+      [nh.bem('panel', 'vertical')]:
+        shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
+    }"
+    @click="handleClick"
+  >
+    <div
+      v-if="shortcuts.length"
+      :class="[
+        nh.be('list'),
+        nh.bem('list', 'sub'),
+        nh.be('shortcuts'),
+        nh.bem('shortcuts', shortcutsPlacement)
+      ]"
+    >
       <div
         v-for="(item, index) in shortcuts"
         :key="index"

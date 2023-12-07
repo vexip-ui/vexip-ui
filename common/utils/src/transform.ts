@@ -172,9 +172,9 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
     }
 
     if (record.has(id)) {
-      (item as any)[childField] = record.get(id)!
+      ;(item as any)[childField] = record.get(id)!
     } else {
-      (item as any)[childField] = []
+      ;(item as any)[childField] = []
       record.set(id, (item as any)[childField])
     }
 
@@ -251,7 +251,7 @@ export function flatTree<T = any>(
       parentField &&
       (hasRootId ? item[parentField] === rootId : !item[parentField])
     ) {
-      (item as any)[parentField] = rootId
+      ;(item as any)[parentField] = rootId
     }
 
     const filterResult = filter(item)
@@ -322,10 +322,11 @@ export function mapTree<T = any, R = any>(
   cb: (item: T, depth: number, parent: T | null) => R,
   options: {
     depthFirst?: boolean,
-    childField?: keyof T
+    childField?: keyof T,
+    clearChildren?: boolean
   } = {}
 ) {
-  const { childField = 'children' as keyof T, depthFirst = false } = options
+  const { childField = 'children' as keyof T, depthFirst = false, clearChildren = true } = options
   const result: R[] = []
   const loop = [...tree.map(item => ({ item, depth: 0, parent: null as T | null, result }))]
 
@@ -333,6 +334,10 @@ export function mapTree<T = any, R = any>(
     const { item, depth, parent, result } = loop.shift()!
     const children = item[childField] as T[]
     const newItem = cb(item, depth, parent) ?? ({} as any)
+
+    if (clearChildren) {
+      newItem[childField] = []
+    }
 
     result.push(newItem)
 
