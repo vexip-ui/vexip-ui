@@ -1,3 +1,12 @@
+## [2.7.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.2...utils@2.7.3) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** throttle and debounce incorrect parameters passed ([305467d](https://github.com/vexip-ui/vexip-ui/commit/305467d479ab5156ba4cad9c1476df091deeb8ee))
+
+
+
 ## [2.7.2](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.1...utils@2.7.2) (2023-12-07)
 
 
