@@ -51,7 +51,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     const values: string[] = []
 
     let text = ''
-    const lastChar = ''
+    let lastChar = ''
     let bracket = 0
 
     for (let i = 0, len = value.length; i < len; ++i) {
@@ -66,6 +66,8 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
         values.push(text.trim())
         text = ''
       }
+
+      lastChar = char
     }
 
     if ((text = text.trim())) {
