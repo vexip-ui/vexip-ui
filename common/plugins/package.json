@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.3",
+    "postcss": "^8.4.32",
     "tsup": "^8.0.1",
     "unplugin-vue-components": "^0.26.0"
   }
