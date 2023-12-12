@@ -118,6 +118,8 @@ describe('Select', () => {
   })
 
   it('focus and blur', async () => {
+    vi.useFakeTimers()
+
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Select, {
@@ -131,7 +133,10 @@ describe('Select', () => {
 
     await selector.trigger('blur')
     expect(onFocus).toHaveBeenCalledTimes(1)
+    await vi.runOnlyPendingTimersAsync()
     expect(onBlur).toHaveBeenCalledTimes(1)
+
+    vi.useRealTimers()
   })
 
   it('key toggle visible', async () => {
@@ -321,7 +326,7 @@ describe('Select', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Select state={state}></Select>)
 
       expect(wrapper.find('.vxp-select__selector').classes()).toContain(
