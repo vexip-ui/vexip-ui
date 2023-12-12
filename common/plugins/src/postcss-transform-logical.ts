@@ -79,11 +79,16 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
 
   const insert = !replace && !rtl
 
-  function processDecl(decl: Declaration, prop: string, value?: string) {
-    if (insert) {
-      decl.cloneBefore(value ? { prop, value } : { prop })
-    } else {
-      decl.replaceWith(decl.clone(value ? { prop, value } : { prop }))
+  function processDecl(decl: Declaration, props: string[], values: string[] = []) {
+    for (let i = 0, len = props.length; i < len; ++i) {
+      const prop = props[i]
+      const value = values[i]
+
+      if (insert || i < len - 1) {
+        decl.cloneBefore(value ? { prop, value } : { prop })
+      } else {
+        decl.replaceWith(decl.clone(value ? { prop, value } : { prop }))
+      }
     }
   }
 
@@ -102,7 +107,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     const minmax = matched[2] as 'min' | 'max' | undefined
     const boxType = matched[3] as 'inline' | 'block'
 
-    processDecl(decl, minmax ? `${minmax}-${sizeProp[boxType]}` : sizeProp[boxType], decl.value)
+    processDecl(decl, [minmax ? `${minmax}-${sizeProp[boxType]}` : sizeProp[boxType]], [decl.value])
   })
 
   const normalProcess = (
@@ -118,10 +123,13 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     if (!type) {
       const [start, end] = splitValue(decl.value)
 
-      processDecl(decl, `${usedPrefix}${prop.start}`, start)
-      processDecl(decl, `${usedPrefix}${prop.end}`, end || start)
+      processDecl(
+        decl,
+        [`${usedPrefix}${prop.start}`, `${usedPrefix}${prop.end}`],
+        [start, end || start]
+      )
     } else {
-      processDecl(decl, `${usedPrefix}${prop[type]}`)
+      processDecl(decl, [`${usedPrefix}${prop[type]}`])
     }
   }
 
@@ -136,15 +144,13 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     const prop = boxType === 'inline' ? inlineBaseProp : blockBaseProp
 
     if (!type && !unitType) {
-      processDecl(decl, `border-${prop.start}`)
-      processDecl(decl, `border-${prop.end}`)
+      processDecl(decl, [`border-${prop.start}`, `border-${prop.end}`])
     } else if (type && unitType) {
-      processDecl(decl, `border-${prop[type]}-${unitType}`)
+      processDecl(decl, [`border-${prop[type]}-${unitType}`])
     } else if (type) {
-      processDecl(decl, `border-${prop[type]}`)
+      processDecl(decl, [`border-${prop[type]}`])
     } else {
-      processDecl(decl, `border-${prop.start}-${unitType}`)
-      processDecl(decl, `border-${prop.end}-${unitType}`)
+      processDecl(decl, [`border-${prop.start}-${unitType}`, `border-${prop.end}-${unitType}`])
     }
   })
 
@@ -165,7 +171,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   const processRadius = createProcess(radiusRE, (matched, decl) => {
     const type = matched[1] as 'start-start' | 'start-end' | 'end-end' | 'end-start'
 
-    processDecl(decl, `border-${radiusProp[type]}-radius`)
+    processDecl(decl, [`border-${radiusProp[type]}-radius`])
   })
 
   const logicalValue = {
@@ -185,8 +191,8 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   const processValue = createProcess(valueRE, (_, decl) => {
     processDecl(
       decl,
-      decl.prop,
-      logicalValue[decl.value.trim() as keyof typeof logicalValue] || decl.value
+      [decl.prop],
+      [logicalValue[decl.value.trim() as keyof typeof logicalValue] || decl.value]
     )
   })
 
@@ -212,7 +218,6 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   }
 }
 
-const plugin = transformLogical as import('postcss').PluginCreator<TransformLogicalOptions>
-plugin.postcss = true
+transformLogical.postcss = true
 
-export { plugin as transformLogical }
+export { transformLogical }

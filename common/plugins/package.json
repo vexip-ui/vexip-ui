@@ -4,7 +4,10 @@
   "license": "MIT",
   "anchor": "qmhc",
   "scripts": {
-    "build": "tsx scripts/build.ts"
+    "build": "tsx scripts/build.ts",
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
   "type": "module",
   "main": "dist/index.cjs",
