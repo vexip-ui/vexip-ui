@@ -10,8 +10,6 @@ describe('postcss-transform-logical', () => {
     return [`a { ${origin} }`, replace ? `a { ${insert} }` : `a { ${insert}; ${origin} }`] as const
   }
 
-  // let count = 1
-
   async function checkBase(processor: Processor, input: string, output: string) {
     it(input, async () => {
       const result = await processor.process(input, { from: undefined })
@@ -75,6 +73,11 @@ describe('postcss-transform-logical', () => {
     check(...buildStyle('border-start-end-radius: 10px', 'border-top-right-radius: 10px'))
     check(...buildStyle('border-end-end-radius: 10px', 'border-bottom-right-radius: 10px'))
     check(...buildStyle('border-end-start-radius: 10px', 'border-bottom-left-radius: 10px'))
+
+    check(...buildStyle('caption-side: block-start', 'caption-side: top'))
+    check(...buildStyle('float: inline-start', 'float: left'))
+    check(...buildStyle('clear: inline-start', 'clear: left'))
+    check(...buildStyle('text-align: inline-start', 'text-align: left'))
   })
 
   describe('replace: true', () => {
@@ -133,6 +136,11 @@ describe('postcss-transform-logical', () => {
     check(...style('border-start-end-radius: 10px', 'border-top-right-radius: 10px'))
     check(...style('border-end-end-radius: 10px', 'border-bottom-right-radius: 10px'))
     check(...style('border-end-start-radius: 10px', 'border-bottom-left-radius: 10px'))
+
+    check(...style('caption-side: block-start', 'caption-side: top'))
+    check(...style('float: inline-start', 'float: left'))
+    check(...style('clear: inline-start', 'clear: left'))
+    check(...style('text-align: inline-start', 'text-align: left'))
   })
 
   describe('rtl: true', () => {
@@ -191,5 +199,37 @@ describe('postcss-transform-logical', () => {
     check(...style('border-start-end-radius: 10px', 'border-top-left-radius: 10px'))
     check(...style('border-end-end-radius: 10px', 'border-bottom-left-radius: 10px'))
     check(...style('border-end-start-radius: 10px', 'border-bottom-right-radius: 10px'))
+
+    check(...style('caption-side: block-start', 'caption-side: top'))
+    check(...style('float: inline-start', 'float: right'))
+    check(...style('clear: inline-start', 'clear: right'))
+    check(...style('text-align: inline-start', 'text-align: right'))
+  })
+
+  describe('parse complex value', () => {
+    const check = checkBase.bind(null, postcss([transformLogical()]))
+
+    // cannot parse `10px 5px` variable value to `10px` and `5px`
+    check(...buildStyle('inset-inline: var(--offset)', 'left: var(--offset); right: var(--offset)'))
+    check(
+      ...buildStyle(
+        'inset-inline: calc(1px + 2px)',
+        'left: calc(1px + 2px); right: calc(1px + 2px)'
+      )
+    )
+    check(...buildStyle('inset-inline: calc(1px + 2px) 3px', 'left: calc(1px + 2px); right: 3px'))
+    check(...buildStyle('inset-inline: 1px calc(2 * 2px)', 'left: 1px; right: calc(2 * 2px)'))
+    check(
+      ...buildStyle(
+        'inset-inline: calc(1px + 2px) calc(2 * 2px)',
+        'left: calc(1px + 2px); right: calc(2 * 2px)'
+      )
+    )
+    check(
+      ...buildStyle(
+        'inset-inline: calc(1px + var(--offset)) 3px',
+        'left: calc(1px + var(--offset)); right: 3px'
+      )
+    )
   })
 })
