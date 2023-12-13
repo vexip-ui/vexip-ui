@@ -15,19 +15,60 @@ export interface TransformLogicalOptions {
   replace?: boolean
 }
 
+const FLOW_BASE = '((?:inline|block))(-((?:start|end)))?'
+
+const sizeRE = /(((?:min|max))-)?((?:inline|block))-size/i
+const insetRE = new RegExp(`inset-${FLOW_BASE}`, 'i')
+const paddingRE = new RegExp(`padding-${FLOW_BASE}`, 'i')
+const marginRE = new RegExp(`margin-${FLOW_BASE}`, 'i')
+const borderRE = new RegExp(`border-${FLOW_BASE}(-((?:width|style|color)))?`, 'i')
+const radiusRE = /border-((?:start|end)-(?:start|end))-radius/i
+
+const valueRE = /(?:caption-side|float|clear|text-align)/i
+
+function splitValue(value: string) {
+  const values: string[] = []
+
+  let text = ''
+  let lastChar = ''
+  let bracket = 0
+
+  for (let i = 0, len = value.length; i < len; ++i) {
+    const char = value.charAt(i)
+    text += char
+
+    if (char === '(') {
+      ++bracket
+    } else if (char === ')' && bracket > 0) {
+      --bracket
+    } else if (char === ' ' && lastChar !== ' ' && !bracket) {
+      values.push(text.trim())
+      text = ''
+    }
+
+    lastChar = char
+  }
+
+  if ((text = text.trim())) {
+    values.push(text)
+  }
+
+  return values
+}
+
+function createProcess(
+  regexp: RegExp,
+  process: (matched: RegExpMatchArray, decl: Declaration) => void
+) {
+  return (decl: Declaration) => {
+    const matched = decl.prop.match(regexp)
+
+    return !!matched && (process(matched, decl), true)
+  }
+}
+
 function transformLogical(options: TransformLogicalOptions = {}): import('postcss').Plugin {
   const { rtl = false, replace = false } = options
-
-  const FLOW_BASE = '((?:inline|block))(-((?:start|end)))?'
-
-  const sizeRE = /(((?:min|max))-)?((?:inline|block))-size/i
-  const insetRE = new RegExp(`inset-${FLOW_BASE}`, 'i')
-  const paddingRE = new RegExp(`padding-${FLOW_BASE}`, 'i')
-  const marginRE = new RegExp(`margin-${FLOW_BASE}`, 'i')
-  const borderRE = new RegExp(`border-${FLOW_BASE}(-((?:width|style|color)))?`, 'i')
-  const radiusRE = /border-((?:start|end)-(?:start|end))-radius/i
-
-  const valueRE = /(?:caption-side|float|clear|text-align)/i
 
   const sizeProp = {
     inline: 'width',
@@ -47,36 +88,6 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     end: 'bottom'
   }
 
-  function splitValue(value: string) {
-    const values: string[] = []
-
-    let text = ''
-    let lastChar = ''
-    let bracket = 0
-
-    for (let i = 0, len = value.length; i < len; ++i) {
-      const char = value.charAt(i)
-      text += char
-
-      if (char === '(') {
-        ++bracket
-      } else if (char === ')' && bracket > 0) {
-        --bracket
-      } else if (char === ' ' && lastChar !== ' ' && !bracket) {
-        values.push(text.trim())
-        text = ''
-      }
-
-      lastChar = char
-    }
-
-    if ((text = text.trim())) {
-      values.push(text)
-    }
-
-    return values
-  }
-
   const insert = !replace && !rtl
 
   function processDecl(decl: Declaration, props: string[], values: string[] = []) {
@@ -89,17 +100,6 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
       } else {
         decl.replaceWith(decl.clone(value ? { prop, value } : { prop }))
       }
-    }
-  }
-
-  function createProcess(
-    regexp: RegExp,
-    process: (matched: RegExpMatchArray, decl: Declaration) => void
-  ) {
-    return (decl: Declaration) => {
-      const matched = decl.prop.match(regexp)
-
-      return !!matched && (process(matched, decl), true)
     }
   }
 
