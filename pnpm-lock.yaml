@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 patchedDependencies:
   conventional-changelog-angular@7.0.0:
     hash: mnuz4pbg7c37j4ofaayqrj5u6y
@@ -291,6 +295,9 @@ importers:
       '@types/node':
         specifier: ^20.10.3
         version: 20.10.3
+      postcss:
+        specifier: ^8.4.32
+        version: 8.4.32
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(postcss@8.4.32)(typescript@5.2.2)
@@ -11317,7 +11324,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

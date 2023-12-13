@@ -4,7 +4,10 @@
   "license": "MIT",
   "anchor": "qmhc",
   "scripts": {
-    "build": "tsx scripts/build.ts"
+    "build": "tsx scripts/build.ts",
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,6 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.3",
+    "postcss": "^8.4.32",
     "tsup": "^8.0.1",
     "unplugin-vue-components": "^0.26.0"
   }
