@@ -8,10 +8,10 @@
   },
   "type": "module",
   "bin": {
-    "vexip": "bin/vexip-cli.js",
-    "vxp": "bin/vexip-cli.js",
-    "vexip-cli": "bin/vexip-cli.js",
-    "vxp-cli": "bin/vexip-cli.js"
+    "vexip": "bin/vexip.js",
+    "vxp": "bin/vexip.js",
+    "vexip-cli": "bin/vexip.js",
+    "vxp-cli": "bin/vexip.js"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
