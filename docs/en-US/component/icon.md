@@ -1,6 +1,10 @@
 # Icon
 
-Vexip UI uses `@vexip-ui/icons` as the icon library, which is based on the free icons of [Font Awesome](https://fontawesome.com/) 6.x and encapsulates its SVG into Vue components.
+:::info
+Since `v2.3`, Vexip UI uses [lucide](https://lucide.dev/) to provide components' internal icons.
+:::
+
+Vexip UI provides `@vexip-ui/icons` as the icon library, which is based on the free icons of [Font Awesome](https://fontawesome.com/) 6.x and encapsulates its SVG into Vue components.
 
 You can look up the icons directly on this [page](https://fontawesome.com/search?m=free) (they have always named the icons weird).
 
@@ -129,7 +133,7 @@ type IconRenderer = (
 
 | Name     | Type                                   | Description                                         | Default | Since    |
 | -------- | -------------------------------------- | --------------------------------------------------- | ------- | -------- |
-| icon     | `Record<string, any>`                  | Set `<svg>` vue component                           | `null`  | `2.0.0`  |
+| icon     | `Record<string, any> \| (() => any)`   | Set `<svg>` vue component                           | `null`  | `2.0.0`  |
 | scale    | `number \| string`                     | Set the scaling of the icon                         | `1`     | -        |
 | flip     | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -        |
 | title    | `string`                               | Set the title prop of the icon                      | `''`    | -        |
