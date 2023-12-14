@@ -474,7 +474,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
               }"
               @click="handleSortAsc()"
             >
-              <TableIcon name="asc" :origin="icons.caretUp"></TableIcon>
+              <TableIcon name="asc" :origin="icons.angleUp"></TableIcon>
             </span>
             <span
               :class="{
@@ -483,7 +483,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
               }"
               @click="handleSortDesc()"
             >
-              <TableIcon name="desc" :origin="icons.caretDown"></TableIcon>
+              <TableIcon name="desc" :origin="icons.angleDown"></TableIcon>
             </span>
           </div>
           <template v-if="filter.able">

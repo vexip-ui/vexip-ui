@@ -46,3 +46,11 @@ As you can see, the replaced icons will be rendered as Iconify icons, while the 
 <IconifyDemo></IconifyDemo>
 
 The above example partially replaces the icons through ConfigProvider. In a real project, you can handle this by library initializing.
+
+## Prev Internal Icons
+
+<InternalPrevIcons></InternalPrevIcons>
+
+You can use prev internal icons via the following config:
+
+<<< @/.vitepress/theme/components/internal-prev-icons.vue#snippet{ts}

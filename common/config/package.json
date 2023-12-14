@@ -30,7 +30,8 @@
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
     "@vexip-ui/icons": "workspace:*",
-    "@vexip-ui/utils": "workspace:*"
+    "@vexip-ui/utils": "workspace:*",
+    "lucide-vue-next": "^0.295.0"
   },
   "devDependencies": {
     "vue": "^3.3.10"

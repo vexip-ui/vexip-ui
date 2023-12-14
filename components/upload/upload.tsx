@@ -699,9 +699,9 @@ export default defineComponent({
             tabindex={0}
           >
             <Icon
-              {...icons.value.cloud}
+              {...icons.value.uploadCloud}
               class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-              scale={+(icons.value.cloud.scale || 1) * 4}
+              scale={+(icons.value.uploadCloud.scale || 1) * 4}
             />
             {slots.tip
               ? (
