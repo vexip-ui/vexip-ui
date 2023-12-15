@@ -163,7 +163,7 @@ export default defineComponent({
                         const vnode = renderSlot(slots, 'default', { item, index })
 
                         if (itemFixed) {
-                          vnode.key = listIndex
+                          vnode.key = key
 
                           return vnode
                         }

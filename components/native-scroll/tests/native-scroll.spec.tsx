@@ -84,8 +84,6 @@ describe('NativeScroll', () => {
     await nextTick()
     vi.runOnlyPendingTimers()
     await nextTick()
-    vi.runAllTimers()
-    await nextTick()
 
     return scroll
   }
