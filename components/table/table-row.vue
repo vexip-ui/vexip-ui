@@ -183,7 +183,7 @@ watchEffect(() => {
   mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
   !rowType.value && updateTotalHeight()
   nextTick(() => {
-    !rowType.value && setExpandHeight()
+    hasExpand.value && setExpandHeight()
   })
 })
 
@@ -191,7 +191,7 @@ onMounted(() => {
   nextTick(() => {
     mutations.setRowProp(rowKey.value, 'height', state.rowHeight || maxHeight.value)
     nextTick(() => {
-      !rowType.value && setExpandHeight()
+      hasExpand.value && setExpandHeight()
     })
   })
 })

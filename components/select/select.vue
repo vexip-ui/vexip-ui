@@ -10,7 +10,7 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus=";(!props.filter || !currentVisible) && handleFocus($event)"
+      @focus="handleFocus"
       @blur=";(!props.filter || !currentVisible) && handleBlur($event)"
     >
       <div
@@ -35,7 +35,7 @@
               }"
               @rest-change="restTagCount = $event"
             >
-              <template #default="{ item, index }">
+              <template #default="{ item: value, index }">
                 <Tag
                   inherit
                   :class="nh.be('tag')"
@@ -43,11 +43,13 @@
                   closable
                   :disabled="props.disabled"
                   @click.stop="toggleVisible"
-                  @close="handleTagClose(item)"
+                  @close="handleTagClose(value)"
                 >
-                  <slot name="selected" :option="item">
-                    {{ currentLabels[index] }}
-                  </slot>
+                  <span :class="nh.be('label')">
+                    <slot name="selected" :option="getOptionFromMap(value)">
+                      {{ currentLabels[index] }}
+                    </slot>
+                  </span>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -63,6 +65,7 @@
                 </Tag>
                 <span v-else>
                   <Tooltip
+                    ref="restTip"
                     inherit
                     :transfer="false"
                     :visible="restTipShow"
@@ -82,7 +85,7 @@
                       </Tag>
                     </template>
                     <NativeScroll inherit use-y-bar>
-                      <template v-for="(item, index) in currentValues" :key="index">
+                      <template v-for="(value, index) in currentValues" :key="index">
                         <Tag
                           v-if="index >= currentValues.length - restTagCount"
                           inherit
@@ -90,11 +93,13 @@
                           closable
                           :type="props.tagType"
                           :disabled="props.disabled"
-                          @close="handleTagClose(item)"
+                          @close="handleRestTagClose(value)"
                         >
-                          <slot name="selected" :option="item">
-                            {{ currentLabels[index] }}
-                          </slot>
+                          <span :class="nh.be('label')">
+                            <slot name="selected" :option="getOptionFromMap(value)">
+                              {{ currentLabels[index] }}
+                            </slot>
+                          </span>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -174,7 +179,13 @@
               @compositionend="handleCompositionEnd"
               @change="handleCompositionEnd"
             />
-            <span v-if="!currentVisible && hasValue" :class="[nh.be('selected')]">
+            <span
+              v-if="(props.noPreview || !currentVisible) && hasValue && !currentFilter"
+              :class="{
+                [nh.be('selected')]: true,
+                [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
+              }"
+            >
               <slot
                 v-if="getOptionFromMap(currentValues[0])"
                 name="selected"
@@ -345,7 +356,17 @@ import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, onMounted, reactive, ref, toRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import {
   placementWhileList,
@@ -368,6 +389,7 @@ import { getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
+import type { TooltipExposed } from '@/components/tooltip'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
   ChangeEvent,
@@ -486,7 +508,7 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false,
+      noPreview: true,
       remote: false,
       fitPopper: false,
       name: {
@@ -541,6 +563,7 @@ export default defineComponent({
     const device = ref<HTMLElement>()
     const virtualList = ref<VirtualListExposed>()
     const popper = ref<PopperExposed>()
+    const restTip = ref<TooltipExposed>()
 
     const { reference, transferTo, updatePopper } = usePopper({
       placement,
@@ -791,10 +814,12 @@ export default defineComponent({
     })
     const showPlaceholder = computed(() => {
       // 采用反推，出现下列情况时不显示：
-      // 1. 有值且 未开预览/多选模式/未打开列表
-      // 2. 没有预览选项且没有合法的占位值
-      // 3. 打开列表且输入了过滤值
+      // 1. 开始组合（如输入了任意拼音）
+      // 2. 有值且 未开预览/多选模式/未打开列表
+      // 3. 没有预览选项且没有合法的占位值
+      // 4. 打开列表且输入了过滤值
       return (
+        !composing.value &&
         !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
         !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
         !(currentVisible.value && currentFilter.value)
@@ -1044,6 +1069,14 @@ export default defineComponent({
       !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
+    function handleRestTagClose(value?: SelectBaseValue | null) {
+      handleTagClose(value)
+
+      if (restTipShow.value) {
+        restTip.value?.updatePopper()
+      }
+    }
+
     function handleSelect(option?: SelectOptionState | null) {
       if (!option) return
 
@@ -1180,12 +1213,25 @@ export default defineComponent({
       }
     }
 
+    let focused = false
+
     function handleFocus(event: FocusEvent) {
-      emitEvent(props.onFocus, event)
+      if (!focused) {
+        focused = true
+        emitEvent(props.onFocus, event)
+      }
     }
 
     function handleBlur(event: FocusEvent) {
-      emitEvent(props.onBlur, event)
+      if (focused) {
+        focused = false
+
+        setTimeout(() => {
+          if (!focused) {
+            emitEvent(props.onBlur, event)
+          }
+        }, 120)
+      }
     }
 
     function syncInputValue() {
@@ -1263,6 +1309,12 @@ export default defineComponent({
     function toggleShowRestTip() {
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
+
+        if (restTipShow.value) {
+          nextTick(() => {
+            restTip.value?.updatePopper()
+          })
+        }
       } else {
         toggleVisible()
         restTipShow.value = false
@@ -1271,7 +1323,7 @@ export default defineComponent({
 
     function focus(options?: FocusOptions) {
       if (currentVisible.value) {
-        (input.value || reference.value)?.focus(options)
+        ;(input.value || reference.value)?.focus(options)
       } else {
         reference.value?.focus(options)
       }
@@ -1315,12 +1367,14 @@ export default defineComponent({
       input,
       device,
       virtualList,
+      restTip,
 
       getOptionFromMap,
       isSelected,
       filterOptions,
       updateHitting,
       handleTagClose,
+      handleRestTagClose,
       handleSelect,
       toggleVisible,
       handleClear,

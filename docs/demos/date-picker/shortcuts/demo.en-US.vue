@@ -1,12 +1,36 @@
 <template>
-  <DatePicker type="datetime" :shortcuts="singleShortcuts" style="max-width: 300px"></DatePicker>
+  <p>
+    Shortcuts Placement:
+    <RadioGroup
+      v-model:value="placement"
+      :options="options"
+      button
+      style="margin-bottom: 10px"
+    ></RadioGroup>
+  </p>
+  <DatePicker
+    type="datetime"
+    :shortcuts="singleShortcuts"
+    :shortcuts-placement="placement"
+    style="max-width: 300px"
+  ></DatePicker>
   <br />
   <br />
-  <DatePicker :shortcuts="multipleShortcuts" range style="max-width: 300px"></DatePicker>
+  <DatePicker
+    :shortcuts="multipleShortcuts"
+    :shortcuts-placement="placement"
+    range
+    style="max-width: 300px"
+  ></DatePicker>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import { addDays } from '@vexip-ui/utils'
+
+const options = ['top', 'right', 'bottom', 'left'] as const
+const placement = ref(options[3])
 
 const singleShortcuts = [
   { name: 'Today', value: Date.now() },

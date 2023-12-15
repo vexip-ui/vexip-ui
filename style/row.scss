@@ -24,8 +24,7 @@ $row: map.merge(
   display: flex;
   flex-flow: row wrap;
   row-gap: get-css-var('row-v-gap');
-  margin-inline-start: calc(-0.5 * get-css-var('row-h-gap'));
-  margin-inline-end: calc(-0.5 * get-css-var('row-h-gap'));
+  margin-inline: calc(-0.5 * get-css-var('row-h-gap')) calc(-0.5 * get-css-var('row-h-gap'));
 
   &--start {
     justify-content: flex-start;

@@ -78,6 +78,7 @@ $tag: map.merge(
   &__unit {
     display: flex;
     align-items: center;
+    max-width: 100%;
     padding: get-css-var('tag-v-padding') get-css-var('tag-h-padding');
     background-color: get-css-var('tag-bg-color');
     border: get-css-var('border-shape') get-css-var('tag-b-color');

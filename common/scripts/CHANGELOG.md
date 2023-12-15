@@ -1,3 +1,12 @@
+## [1.1.3](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.2...scripts@1.1.3) (2023-12-14)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** incorrect bin file name ([1787579](https://github.com/vexip-ui/vexip-ui/commit/178757942b3da009946e479c6d9ce8c3e36d5e46))
+
+
+
 ## [1.1.2](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.1...scripts@1.1.2) (2023-11-24)
 
 

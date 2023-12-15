@@ -75,7 +75,7 @@ describe('Dropdown', () => {
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
@@ -83,7 +83,7 @@ describe('Dropdown', () => {
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
     await wrapper.find('.vxp-dropdown').trigger('mouseleave')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
@@ -161,7 +161,7 @@ describe('Dropdown', () => {
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown__trigger').trigger('click')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
@@ -169,7 +169,7 @@ describe('Dropdown', () => {
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
     await wrapper.find('.vxp-dropdown__trigger').trigger('click')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
     expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
@@ -207,7 +207,7 @@ describe('Dropdown', () => {
     expect(innerDropdown.exists()).toBe(true)
 
     await innerDropdown.trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(innerDropdown.classes()).toContain('vxp-dropdown--visible')
     expect(onSelect).not.toHaveBeenCalled()

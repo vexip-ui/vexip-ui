@@ -35,7 +35,7 @@ async function toggleMove(el: HTMLElement, value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 
   const upEvent = new CustomEvent('pointerup') as any
@@ -220,7 +220,7 @@ describe('ColorPicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <ColorPicker state={state}></ColorPicker>)
 
       expect(wrapper.find('.vxp-color-picker__selector').classes()).toContain(

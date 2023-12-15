@@ -10,6 +10,10 @@ Used to select or input a date.
 
 For basic usage, you can use `v-model:value` for two-way binding.
 
+Note that the input of the `value` prop can be any value that can be instantiated into a `Date`, but the output is always the number of milliseconds.
+
+However, it is also more recommended to use milliseconds as the input, which can avoid many problems related to time zone or format.
+
 :::
 
 :::demo date-picker/value-format
@@ -31,8 +35,6 @@ You can also specify `value-format` as a function for custom formatting.
 ### Control Type
 
 Setting the value of the `type` prop toggles the selection type of the date picker.
-
-When the selection type is `'year'`, the return value of the date picker will become the year of type number.
 
 :::
 
@@ -92,6 +94,8 @@ If they do not meet your needs, you should use the `disabled-date` prop.
 
 Date shortcuts can be added via the `shortcuts` prop.
 
+The placement of shortcuts can be set via the `shortcuts-placement` prop.
+
 :::
 
 :::demo date-picker/no-action
@@ -128,8 +132,9 @@ type DateType = 'year' | 'month' | 'date'
 type TimeType = 'hour' | 'minute' | 'second'
 type DateTimeType = DateType | TimeType
 type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+type DateShortcutsPlacement = 'top' | 'right' | 'bottom' | 'left'
 
-type DatePickerFormatFn = (timestamp: number) => Dateable
+type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => unknown
 
 interface DateShortcut {
   name: string,
@@ -139,51 +144,52 @@ interface DateShortcut {
 
 ### DatePicker Props
 
-| Name            | Type                                                      | Description                                                                                                                                   | Default                 | Since    |
-| --------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------- |
-| type            | `'date' \| 'datetime' \| 'year' \| 'month'`               | The type of date picker                                                                                                                       | `'date'`                | -        |
-| value           | `Dateable \| Dateable[]`                                  | The value of the date selector, can use `v-model` two-way binding                                                                             | `new Date()`            | -        |
-| size            | `'small' \| 'default' \| 'large'`                         | The size of input                                                                                                                             | `'default'`             | -        |
-| state           | `'default' \| 'success' \| 'error' \| 'warning'`          | The state of the input                                                                                                                        | `'default'`             | -        |
-| visible         | `boolean`                                                 | Set the initial open state of the date selection panel, you can use `v-model` two-way binding                                                 | `false`                 | -        |
-| placement       | `Placement`                                               | The position where the date selection panel appears, the optional value is the same as Popper.js                                              | `'bottom'`              | -        |
-| transfer        | `boolean \| string`                                       | Set the rendering position of the date selection panel. When enabled but no valid selector is specified, the default rendering is to `<body>` | `false`                 | -        |
-| format          | `string`                                                  | In `datetime` type, it will control the display and hide of the time selection column according to whether it has `Hms`                       | `'yyyy-MM-dd HH:mm:ss'` | -        |
-| filler          | `string`                                                  | Filler when the date is not selected, the length is fixed to 1                                                                                | `'-'`                   | -        |
-| clearable       | `boolean`                                                 | Whether to allow clearing of values                                                                                                           | `false`                 | -        |
-| no-action       | `boolean`                                                 | Whether to disable the bottom actions of the date selection panel and change the selection mode                                               | `false`                 | -        |
-| labels          | `Partial<Record<DateTimeType, string>>`                   | set at each date or time unit tag following                                                                                                   | `{}`                    | -        |
-| date-separator  | `string`                                                  | The separator for date part                                                                                                                   | `'/'`                   | -        |
-| time-separator  | `string`                                                  | The separator for time part                                                                                                                   | `':'`                   | -        |
-| shortcuts       | `{ name: string, value: Dateable \| (() => Dateable) }[]` | Set the candidate list of date shortcuts                                                                                                      | `[]`                    | -        |
-| disabled-date   | `(date: Date) => boolean`                                 | Determine whether the date is disabled, accept a date parameter, return `true` to disable                                                     | `() => false`           | -        |
-| steps           | `number[]`                                                | Set the scroll span of each wheel of the date picker separately                                                                               | `[1, 1, 1]`             | -        |
-| ctrl-steps      | `number[]`                                                | Set the scroll span of each wheel of the date picker when Ctrl is held down                                                                   | `[5, 5, 5]`             | -        |
-| prefix          | `Record<string, any>`                                     | The prefix icon, invalid when using prefix slot                                                                                               | `null`                  | -        |
-| prefix-color    | `string`                                                  | The color of the prefix content, affects the prefix slot                                                                                      | `''`                    | -        |
-| suffix          | `Record<string, any>`                                     | The suffix icon, invalid when using suffix slot                                                                                               | `null`                  | -        |
-| suffix-color    | `string`                                                  | The color of the suffix content, which affects the suffix slot                                                                                | `''`                    | -        |
-| no-suffix       | `boolean`                                                 | Set whether to disable suffix icon                                                                                                            | `false`                 | -        |
-| disabled        | `boolean`                                                 | Set whether to disable the date picker                                                                                                        | `false`                 | -        |
-| transition-name | `string`                                                  | Set the transition between show and hide of the date selection panel                                                                          | `'vxp-drop'`            | -        |
-| confirm-text    | `string`                                                  | The text content of the date selection panel confirm button                                                                                   | `locale.confirm`        | -        |
-| cancel-text     | `string`                                                  | The text content of the cancel button of the date selection panel                                                                             | `locale.cancel`         | -        |
-| today           | `Dateable`                                                | Set as today's date, which mainly affects some of the performance of the calendar in the date selection panel                                 | `new Date()`            | -        |
-| loading         | `boolean`                                                 | Set whether is loading                                                                                                                        | `false`                 | `2.0.0`  |
-| loading-icon    | `Record<string, any>`                                     | Set the loading icon                                                                                                                          | `Spinner`               | `2.0.0`  |
-| loading-lock    | `boolean`                                                 | Set whether to be read-only when loading                                                                                                      | `false`                 | `2.0.0`  |
-| loading-effect  | `string`                                                  | Set the effect animation for the loading icon                                                                                                 | `false`                 | `2.1.0`  |
-| min             | `Dateable`                                                | Set the minimum date that can be selected                                                                                                     | `null`                  | `2.0.14` |
-| max             | `Dateable`                                                | Set the maximum date that can be selected                                                                                                     | `null`                  | `2.0.14` |
-| outside-close   | `boolean`                                                 | Set whether the component can be closed by clicking outside                                                                                   | `true`                  | `2.0.20` |
-| outside-cancel  | `boolean`                                                 | Set whether clicking outside the component to close is a cancel operation                                                                     | `false`                 | `2.0.20` |
-| locale          | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']`   | Set the locale config                                                                                                                         | `null`                  | `2.1.0`  |
-| range           | `boolean`                                                 | Set whether to enable range selection mode                                                                                                    | `false`                 | `2.1.1`  |
-| placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                               | `null`                  | `2.1.1`  |
-| unit-readonly   | `boolean`                                                 | Set whether the input control is read-only                                                                                                    | `false`                 | `2.1.2`  |
-| week-start      | `number`                                                  | Set the first day of the week in date selection panel, the optional value is 0 ~ 7, where 0 is Sunday                                         | `null`                  | `2.1.9`  |
-| value-format    | `string \| DatePickerFormatFn`                            | Specify how to format the value                                                                                                               | `null`                  | `2.2.0`  |
-| popper-alive    | `boolean`                                                 | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                    | `null`                  | `2.2.3`  |
+| Name                | Type                                                    | Description                                                                                                                                   | Default                 | Since    |
+| ------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------- |
+| type                | `DatePickerType`                                        | The type of date picker                                                                                                                       | `'date'`                | -        |
+| value               | `Dateable \| Dateable[]`                                | The value of the date selector, can use `v-model` two-way binding                                                                             | `new Date()`            | -        |
+| size                | `'small' \| 'default' \| 'large'`                       | The size of input                                                                                                                             | `'default'`             | -        |
+| state               | `'default' \| 'success' \| 'error' \| 'warning'`        | The state of the input                                                                                                                        | `'default'`             | -        |
+| visible             | `boolean`                                               | Set the initial open state of the date selection panel, you can use `v-model` two-way binding                                                 | `false`                 | -        |
+| placement           | `Placement`                                             | The position where the date selection panel appears, the optional value is the same as Popper.js                                              | `'bottom'`              | -        |
+| transfer            | `boolean \| string`                                     | Set the rendering position of the date selection panel. When enabled but no valid selector is specified, the default rendering is to `<body>` | `false`                 | -        |
+| format              | `string`                                                | In `datetime` type, it will control the display and hide of the time selection column according to whether it has `Hms`                       | `'yyyy-MM-dd HH:mm:ss'` | -        |
+| filler              | `string`                                                | Filler when the date is not selected, the length is fixed to 1                                                                                | `'-'`                   | -        |
+| clearable           | `boolean`                                               | Whether to allow clearing of values                                                                                                           | `false`                 | -        |
+| no-action           | `boolean`                                               | Whether to disable the bottom actions of the date selection panel and change the selection mode                                               | `false`                 | -        |
+| labels              | `Partial<Record<DateTimeType, string>>`                 | set at each date or time unit tag following                                                                                                   | `{}`                    | -        |
+| date-separator      | `string`                                                | The separator for date part                                                                                                                   | `'/'`                   | -        |
+| time-separator      | `string`                                                | The separator for time part                                                                                                                   | `':'`                   | -        |
+| shortcuts           | `DateShortcut[]`                                        | Set the candidate list of date shortcuts                                                                                                      | `[]`                    | -        |
+| disabled-date       | `(date: Date) => boolean`                               | Determine whether the date is disabled, accept a date parameter, return `true` to disable                                                     | `() => false`           | -        |
+| steps               | `number[]`                                              | Set the scroll span of each wheel of the date picker separately                                                                               | `[1, 1, 1]`             | -        |
+| ctrl-steps          | `number[]`                                              | Set the scroll span of each wheel of the date picker when Ctrl is held down                                                                   | `[5, 5, 5]`             | -        |
+| prefix              | `Record<string, any>`                                   | The prefix icon, invalid when using prefix slot                                                                                               | `null`                  | -        |
+| prefix-color        | `string`                                                | The color of the prefix content, affects the prefix slot                                                                                      | `''`                    | -        |
+| suffix              | `Record<string, any>`                                   | The suffix icon, invalid when using suffix slot                                                                                               | `null`                  | -        |
+| suffix-color        | `string`                                                | The color of the suffix content, which affects the suffix slot                                                                                | `''`                    | -        |
+| no-suffix           | `boolean`                                               | Set whether to disable suffix icon                                                                                                            | `false`                 | -        |
+| disabled            | `boolean`                                               | Set whether to disable the date picker                                                                                                        | `false`                 | -        |
+| transition-name     | `string`                                                | Set the transition between show and hide of the date selection panel                                                                          | `'vxp-drop'`            | -        |
+| confirm-text        | `string`                                                | The text content of the date selection panel confirm button                                                                                   | `locale.confirm`        | -        |
+| cancel-text         | `string`                                                | The text content of the cancel button of the date selection panel                                                                             | `locale.cancel`         | -        |
+| today               | `Dateable`                                              | Set as today's date, which mainly affects some of the performance of the calendar in the date selection panel                                 | `new Date()`            | -        |
+| loading             | `boolean`                                               | Set whether is loading                                                                                                                        | `false`                 | `2.0.0`  |
+| loading-icon        | `Record<string, any>`                                   | Set the loading icon                                                                                                                          | `Spinner`               | `2.0.0`  |
+| loading-lock        | `boolean`                                               | Set whether to be read-only when loading                                                                                                      | `false`                 | `2.0.0`  |
+| loading-effect      | `string`                                                | Set the effect animation for the loading icon                                                                                                 | `false`                 | `2.1.0`  |
+| min                 | `Dateable`                                              | Set the minimum date that can be selected                                                                                                     | `null`                  | `2.0.14` |
+| max                 | `Dateable`                                              | Set the maximum date that can be selected                                                                                                     | `null`                  | `2.0.14` |
+| outside-close       | `boolean`                                               | Set whether the component can be closed by clicking outside                                                                                   | `true`                  | `2.0.20` |
+| outside-cancel      | `boolean`                                               | Set whether clicking outside the component to close is a cancel operation                                                                     | `false`                 | `2.0.20` |
+| locale              | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']` | Set the locale config                                                                                                                         | `null`                  | `2.1.0`  |
+| range               | `boolean`                                               | Set whether to enable range selection mode                                                                                                    | `false`                 | `2.1.1`  |
+| placeholder         | `string \| string[]`                                    | Set placeholder for date picker                                                                                                               | `null`                  | `2.1.1`  |
+| unit-readonly       | `boolean`                                               | Set whether the input control is read-only                                                                                                    | `false`                 | `2.1.2`  |
+| week-start          | `number`                                                | Set the first day of the week in date selection panel, the optional value is 0 ~ 7, where 0 is Sunday                                         | `null`                  | `2.1.9`  |
+| value-format        | `string \| string[] \| DatePickerFormatFn`              | Specify how to format the value                                                                                                               | `null`                  | `2.2.0`  |
+| popper-alive        | `boolean`                                               | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                    | `null`                  | `2.2.3`  |
+| shortcuts-placement | `DateShortcutsPlacement`                                | Set the placement of shortcuts                                                                                                                | `'left'`                | `2.2.18` |
 
 ### DatePicker Events
 

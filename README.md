@@ -14,6 +14,9 @@
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
     <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="NPM version"/>
   </a>
+  <a href="https://github.com/vexip-ui/vexip-ui/commits/main" target="_blank">
+    <img src="https://img.shields.io/github/commit-activity/w/vexip-ui/vexip-ui" alt="commits pre week"/>
+  </a>
 </p>
 
 <p align="center">
@@ -61,7 +64,7 @@ pnpm add vexip-ui
 yarn add vexip-ui
 ```
 
-## Document
+## Documentation
 
 [Here](https://www.vexipui.com) you can view the online document.
 

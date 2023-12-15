@@ -147,8 +147,8 @@ $menu: map.merge(
 
     &::after {
       position: absolute;
-      top: 0;
       inset-inline-start: -1px;
+      top: 0;
       bottom: 0;
       display: block;
       width: 3px;
@@ -163,8 +163,7 @@ $menu: map.merge(
     }
 
     &--marker-left::after {
-      inset-inline-end: auto;
-      inset-inline-start: 0;
+      inset-inline: 0 auto;
     }
 
     #{$self}--horizontal & {
@@ -280,8 +279,7 @@ $menu: map.merge(
     }
 
     #{$popper} & {
-      margin-inline-start: -2px;
-      margin-inline-end: 6px;
+      margin-inline: -2px 6px;
     }
   }
 
@@ -350,8 +348,7 @@ $menu: map.merge(
     #{$self}--horizontal & {
       position: relative;
       inset-inline-end: auto;
-      margin-inline-start: 6px;
-      margin-inline-end: 0;
+      margin-inline: 6px 0;
       transform: rotate(0);
 
       &--visible {
@@ -425,8 +422,8 @@ $menu: map.merge(
 
         &::before {
           position: absolute;
-          top: 50%;
           inset-inline-start: 50%;
+          top: 50%;
           width: 24px;
           height: 1px;
           content: '';

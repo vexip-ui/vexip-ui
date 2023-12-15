@@ -12,7 +12,8 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
+  watchEffect
 } from 'vue'
 
 import TableColumn from './table-column'
@@ -159,6 +160,9 @@ const props = useProps('table', _props, {
   ellipsis: false
 })
 
+// only for dnd end payload
+const emit = defineEmits(['update:data'])
+
 const slots = defineSlots<{
   default: () => any,
   empty: (params: { isFixed: boolean }) => any
@@ -251,6 +255,7 @@ const store = useStore({
   locale: locale.value,
   keyConfig: keyConfig.value,
   disabledTree: props.disabledTree,
+  colResizable: props.colResizable === true ? 'lazy' : props.colResizable,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
     : [props.sidePadding, props.sidePadding]
@@ -308,14 +313,15 @@ const className = computed(() => {
   }
 })
 const style = computed(() => {
+  const width = tableWidth.value ?? props.width
+  const [padLeft, padRight] = state.sidePadding
+
   const style: StyleType = {
     [nh.cv('row-indent-width')]:
       typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
     [nh.cv('b-width')]: `${props.borderWidth}px`,
     [nh.cv('expanded-width')]: `${bodyWidth.value}px`
   }
-  const width = tableWidth.value ?? props.width
-  const [padLeft, padRight] = state.sidePadding
 
   if (padLeft) {
     style[nh.cv('side-pad-left')] = `${padLeft}px`
@@ -345,10 +351,6 @@ const useXScroll = computed(() => {
 })
 const bodyScrollHeight = computed(() => {
   const { totalHeight } = state
-
-  // if (Number.isNaN(totalHeight)) {
-  //   return bodyHeight.value
-  // }
 
   return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : undefined
 })
@@ -396,28 +398,47 @@ const {
   refreshRowDepth
 } = mutations
 
+const columnsUpdateTrigger = ref(0)
+const summariesUpdateTrigger = ref(0)
+
+watchEffect(() => {
+  for (const column of allColumns.value) {
+    for (const key of Object.keys(column) as Array<keyof typeof column>) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      column[key]
+    }
+  }
+
+  columnsUpdateTrigger.value++
+})
+watchEffect(() => {
+  for (const summary of allSummaries.value) {
+    for (const key of Object.keys(summary) as Array<keyof typeof summary>) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      summary[key]
+    }
+  }
+
+  summariesUpdateTrigger.value++
+})
 watch(
-  allColumns,
-  value => {
+  columnsUpdateTrigger,
+  () => {
     runInLocked(() => {
-      setColumns(value)
+      setColumns(allColumns.value)
       isMounted && computeTableWidth()
       nextTick(() => {
         hasDragColumn.value = getters.hasDragColumn
       })
     })
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
-watch(
-  allSummaries,
-  value => {
-    runInLocked(() => {
-      setSummaries(value)
-    })
-  },
-  { deep: true }
-)
+watch(summariesUpdateTrigger, () => {
+  runInLocked(() => {
+    setSummaries(allSummaries.value)
+  })
+})
 watch(() => keyConfig.value.id, setDataKey)
 watch(() => props.data, forceRefreshData, { deep: true })
 watch(() => props.width, computeTableWidth)
@@ -636,8 +657,11 @@ function emitYScroll(client: number, percent: number) {
   emitEvent(props.onScroll, { type: 'vertical', client, percent })
 }
 
-function handleResize(entry: ResizeObserverEntry) {
-  bodyWidth.value = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width
+function handleResize() {
+  if (mainScroll.value?.content) {
+    bodyWidth.value = mainScroll.value.content.offsetWidth
+  }
+
   isMounted && refresh()
 }
 
@@ -734,7 +758,8 @@ let dragState: {
   draggingRow: TableRowState,
   tableRect: DOMRect,
   willDropRow: TableRowState | null,
-  dropType: DropType
+  dropType: DropType,
+  dropped: boolean
 } | null
 
 function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
@@ -742,7 +767,8 @@ function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
     draggingRow: rowInstance.row,
     tableRect: wrapper.value!.getBoundingClientRect(),
     willDropRow: null,
-    dropType: DropType.BEFORE
+    dropType: DropType.BEFORE,
+    dropped: false
   }
 
   setDragging(true)
@@ -838,6 +864,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     children.push(draggingRow)
 
     willDropRow.children = children
+    willDropRow.treeExpanded = true
     draggingRow.parent = willDropRow.key
   } else {
     currentKey = willDropRow.key
@@ -858,6 +885,8 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     }
   }
 
+  dragState.dropped = true
+
   refreshRowDepth()
   flatTreeRows()
   refreshRowIndex()
@@ -867,18 +896,18 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
 function handleRowDragEnd(event: DragEvent) {
   if (!dragState) return
 
-  const { draggingRow } = dragState
+  const { draggingRow, dropped } = dragState
 
   dragState = null
   indicatorShow.value = false
 
-  setDragging(false)
-  emitEvent(
-    props.onRowDragEnd,
-    draggingRow.data,
-    state.rowData.map(row => row.data),
-    event
-  )
+  nextTick(() => {
+    const allDataPayload = dropped ? getCurrentData() : state.data
+
+    setDragging(false)
+    dropped && emit('update:data', allDataPayload)
+    emitEvent(props.onRowDragEnd, draggingRow.data, allDataPayload, event)
+  })
 }
 
 function emitRowEvent(type: MouseEventType, payload: TableRowPayload) {
@@ -1006,7 +1035,7 @@ function renderTableSlot({ name }: { name: string }) {
     :style="style"
     :aria-rowcount="props.data.length"
   >
-    <div v-show="false" role="none">
+    <div v-show="false" role="none" aria-hidden>
       <slot></slot>
       <template
         v-for="(column, index) in props.columns"
@@ -1229,7 +1258,7 @@ function renderTableSlot({ name }: { name: string }) {
       ]"
     ></div>
     <div
-      v-if="props.colResizable"
+      v-if="state.colResizable === 'lazy'"
       v-show="state.colResizing"
       :class="nh.be('resize-indicator')"
       :style="{ left: `${state.resizeLeft}px` }"

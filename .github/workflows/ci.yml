@@ -76,5 +76,8 @@ jobs:
       - name: Test utils
         run: pnpm -C common/utils test
 
+      - name: Test plugins
+        run: pnpm -C common/plugins test
+
       - name: Test
         run: pnpm run test

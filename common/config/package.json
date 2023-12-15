@@ -33,7 +33,7 @@
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.3.10"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

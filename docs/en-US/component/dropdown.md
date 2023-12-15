@@ -1,6 +1,6 @@
 # Dropdown
 
-展示一组折叠的下拉菜单。
+Show a set of collapsed drop-down menus.
 
 ## Demos
 

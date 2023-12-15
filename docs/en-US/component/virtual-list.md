@@ -38,6 +38,7 @@ Renders a list of `10000` elements with a fixed height.
 | hide-bar       | `boolean`                    | Set whether the scroll bar is hidden                                                                                              | `false` | `2.1.30` |
 | lock-items     | `boolean`                    | Disable elements resize callback, which is used to improve performance when elements change height in transition                  | `false` | `2.1.30` |
 | autoplay       | `boolean \| number`          | Enable automatically scroll, when a number is passed in, it will be used as the number of milliseconds required for a full scroll | `false` | -        |
+| ignore-resize  | `boolean`                    | Whether to ignore elements resize                                                                                                 | `false` | `2.2.18` |
 
 ### NativeScroll Methods
 

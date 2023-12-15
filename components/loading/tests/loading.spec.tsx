@@ -7,10 +7,6 @@ import { LoadingManager } from '..'
 
 vi.useFakeTimers()
 
-function nextFrame() {
-  return new Promise(resolve => requestAnimationFrame(resolve))
-}
-
 function createLoading() {
   const Loading = new LoadingManager()
 
@@ -40,16 +36,13 @@ describe('Loading', () => {
     const Loading = createLoading()
 
     Loading.open({ percent: 0 })
-    await nextFrame()
-    await nextFrame()
-    vi.runOnlyPendingTimers()
-    await nextFrame()
+    await vi.runOnlyPendingTimersAsync()
     const wrapper = document.querySelector('.vxp-loading')!
     expect(wrapper).toBeTruthy()
     const filter = wrapper.querySelector('.vxp-loading__filler') as HTMLElement
     expect(filter.style.cssText).toMatch(/translateX\(.+\)/)
     expect(filter.style.cssText).toMatch(/scaleX\(.+\)/)
-    expect(filter.style.cssText).not.toContain('translateX(0%)')
+    expect(filter.style.cssText).not.toContain('translateX(-50%)')
     expect(filter.style.cssText).not.toContain('scaleX(0)')
   })
 
@@ -57,10 +50,7 @@ describe('Loading', () => {
     const Loading = createLoading()
 
     Loading.open({ percent: 0, maxPercent: 50 })
-    await nextFrame()
-    await nextFrame()
-    vi.runAllTimers()
-    await nextFrame()
+    await vi.runAllTimersAsync()
     const wrapper = document.querySelector('.vxp-loading')!
     expect(wrapper).toBeTruthy()
     const filter = wrapper.querySelector('.vxp-loading__filler') as HTMLElement
@@ -72,20 +62,14 @@ describe('Loading', () => {
     let wrapper = mount(Loading)
 
     wrapper.vm.startLoading({ percent: 0, position: 'top' })
-    await nextFrame()
-    await nextFrame()
-    vi.runAllTimers()
-    await nextFrame()
+    await vi.runAllTimersAsync()
     expect(wrapper.find('.vxp-loading').attributes('style')).toContain('top: 0px;')
 
     wrapper.unmount()
     wrapper = mount(Loading)
 
     wrapper.vm.startLoading({ percent: 0, position: 'bottom' })
-    await nextFrame()
-    await nextFrame()
-    vi.runAllTimers()
-    await nextFrame()
+    await vi.runAllTimersAsync()
     expect(wrapper.find('.vxp-loading').attributes('style')).toContain('bottom: 0px;')
   })
 
@@ -93,10 +77,7 @@ describe('Loading', () => {
     const wrapper = mount(Loading)
 
     wrapper.vm.startLoading({ percent: 0, strokeWidth: 5 })
-    await nextFrame()
-    await nextFrame()
-    vi.runAllTimers()
-    await nextFrame()
+    await vi.runAllTimersAsync()
     expect(wrapper.find('.vxp-loading').attributes('style')).toContain('height: 5px;')
   })
 
@@ -106,10 +87,7 @@ describe('Loading', () => {
         const wrapper = mount(Loading)
 
         wrapper.vm.startLoading({ percent: 0, state })
-        await nextFrame()
-        await nextFrame()
-        vi.runAllTimers()
-        await nextFrame()
+        await vi.runAllTimersAsync()
 
         if (state === 'default') {
           expect(wrapper.find('.vxp-loading').classes()).not.toContain(`vxp-loading--${state}`)

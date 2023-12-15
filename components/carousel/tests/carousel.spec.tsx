@@ -14,7 +14,7 @@ async function doTransition(wrapper: VueWrapper<any>) {
   await nextTick()
   wrapper.vm.handleAfterMove()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 

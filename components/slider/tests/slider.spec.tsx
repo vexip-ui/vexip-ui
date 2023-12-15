@@ -21,14 +21,14 @@ async function move(value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
 async function moveEnd() {
   const upEvent = new CustomEvent('pointerup') as any
   document.dispatchEvent(upEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -151,7 +151,7 @@ describe('Slider', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Slider state={state}></Slider>)
 
       expect(wrapper.find('.vxp-slider').classes()).toContain(`vxp-slider--${state}`)
@@ -329,21 +329,21 @@ describe('Slider', () => {
     expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
 
     wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
     await moveStart(wrapperEl, 30)
     wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
 
     wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     await moveEnd()
     wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
   })

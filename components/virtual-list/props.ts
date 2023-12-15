@@ -17,6 +17,7 @@ export const virtualListProps = buildProps({
   lockItems: booleanProp,
   itemsAttrs: Object as PropType<Record<string, any>>,
   autoplay: booleanProp,
+  ignoreResize: booleanProp,
   onScroll: eventProp<(payload: ScrollPayload) => void>(),
   onResize: eventProp<(entry: ResizeObserverEntry) => void>()
 })

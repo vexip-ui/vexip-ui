@@ -8,6 +8,7 @@ import {
   debounceMinor,
   deepClone,
   isNull,
+  mapTree,
   sortByProps,
   toFalse,
   toFixed,
@@ -35,6 +36,7 @@ import type {
   SummaryWithKey,
   TableCellPropFn,
   TableCellSpanFn,
+  TableColResizeType,
   TableColumnOptions,
   TableColumnRawOptions,
   TableDragColumn,
@@ -295,6 +297,7 @@ export function useStore(options: StoreOptions) {
     // 这几个个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
     setColumns: debounceMinor(setColumns),
+    // setColumns,
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
@@ -820,8 +823,10 @@ export function useStore(options: StoreOptions) {
           row.depth = parent.depth + 1
         }
 
+        row.children = []
+
         const children = row.data[childrenKey]
-        children?.length && parseRow(children, (row.children = []), row)
+        children?.length && parseRow(children, row.children, row)
 
         result.push(row)
         rowMap.set(key, row)
@@ -1019,7 +1024,7 @@ export function useStore(options: StoreOptions) {
     const row = state.rowMap.get(key)
 
     if (row && row[prop] !== value) {
-      (row as any)[prop] = value
+      ;(row as any)[prop] = value
     }
   }
 
@@ -1059,8 +1064,8 @@ export function useStore(options: StoreOptions) {
     state.noCascaded = !!noCascaded
   }
 
-  function setColResizable(resizable: boolean) {
-    state.colResizable = !!resizable
+  function setColResizable(resizable: boolean | TableColResizeType) {
+    state.colResizable = resizable === true ? 'lazy' : resizable
   }
 
   function setCustomSorter(able: boolean) {
@@ -1780,30 +1785,15 @@ export function useStore(options: StoreOptions) {
   }
 
   function getCurrentData() {
-    const { keyConfig, rowData } = state
-    const { children: childrenKey } = keyConfig
-    const data: Data[] = []
+    const { treeRowData, disabledTree, keyConfig } = state
 
-    const buildData = (rows: TableRowState[], data: Data[]) => {
-      for (const row of rows) {
-        const item = { ...row.data }
-
-        data.push(item)
-
-        if (row.children?.length) {
-          buildData(row.children, (item[childrenKey] = []))
-        } else {
-          delete item[childrenKey]
-        }
-      }
+    if (disabledTree) {
+      return treeRowData.map(row => ({ ...row.data }))
     }
 
-    buildData(
-      rowData.filter(row => isNull(row.parent)),
-      data
-    )
-
-    return data
+    return mapTree(treeRowData, row => ({ ...row.data }), {
+      childField: keyConfig.children as 'children'
+    })
   }
 
   type Store = Readonly<{

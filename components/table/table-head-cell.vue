@@ -15,6 +15,7 @@ import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_HEAD_PREFIX, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
+import type { MovingState } from '@vexip-ui/hooks'
 import type {
   ColumnWithKey,
   ParsedFilterOptions,
@@ -64,8 +65,6 @@ const resizing = computed(() => state.colResizing)
 
 const wrapper = ref<HTMLElement>()
 
-let currentWidth = 0
-
 const isGroup = computed(() => mutations.isGroupColumn(props.column))
 const columns = computed(() => {
   return props.fixed === 'left'
@@ -88,44 +87,56 @@ const inLast = computed(() => {
     : props.column.index + cellSpan.value.colSpan >= state.columns.length
 })
 
-const { target: resizer } = useMoving({
-  capture: false,
-  onStart: (state, event) => {
-    if (!resizable.value || resizing.value || isGroup.value) return false
+const minWidth = 10
 
-    const table = tableActions.getTableElement()
+let currentWidth = 0
 
-    if (!table || !wrapper.value) return false
+function processColResize(payload: MovingState, lazy = false) {
+  const width = Math.max(currentWidth + (payload.isRtl ? -1 : 1) * payload.deltaX, minWidth)
 
-    state.xStart = state.clientX - table.getBoundingClientRect().left
-    state.isRtl = isRtl.value
-    currentWidth = wrapper.value.getBoundingClientRect().width
-
-    mutations.setColumnResizing(true)
-    mutations.setResizeLeft(state.xStart)
-    tableActions.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
-  },
-  onMove: (state, event) => {
-    mutations.setResizeLeft(state.xEnd)
-    tableActions.emitColResize('Move', {
-      ...buildEventPayload(event),
-      width: currentWidth + state.deltaX
-    })
-  },
-  onEnd: ({ deltaX, isRtl }, event) => {
-    mutations.setColumnResizing(false)
-
-    if (!wrapper.value) return
-
-    const width = wrapper.value.getBoundingClientRect().width + (isRtl ? -1 : 1) * deltaX
-
+  !lazy &&
     mutations.handleColumnResize(
       state.columns
         .slice(props.column.index, props.column.index + cellSpan.value.colSpan)
         .map(column => column.key),
       width
     )
-    tableActions.emitColResize('End', { ...buildEventPayload(event), width })
+
+  return width
+}
+
+const { target: resizer } = useMoving({
+  capture: false,
+  onStart: (payload, event) => {
+    if (!resizable.value || resizing.value || isGroup.value) return false
+
+    const table = tableActions.getTableElement()
+
+    if (!table || !wrapper.value) return false
+
+    payload.xStart = payload.clientX - table.getBoundingClientRect().left
+    payload.isRtl = isRtl.value
+    currentWidth = wrapper.value.getBoundingClientRect().width
+
+    mutations.setColumnResizing(true)
+    mutations.setResizeLeft(payload.xStart)
+    tableActions.emitColResize('Start', { ...buildEventPayload(event), width: currentWidth })
+  },
+  onMove: (payload, event) => {
+    payload.xEnd = Math.max(payload.xStart - currentWidth + minWidth, payload.xEnd)
+
+    mutations.setResizeLeft(payload.xEnd)
+    tableActions.emitColResize('Move', {
+      ...buildEventPayload(event),
+      width: processColResize(payload, state.colResizable !== 'responsive')
+    })
+  },
+  onEnd: (payload, event) => {
+    mutations.setColumnResizing(false)
+    tableActions.emitColResize('End', {
+      ...buildEventPayload(event),
+      width: processColResize(payload)
+    })
   }
 })
 

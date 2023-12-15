@@ -44,8 +44,8 @@ const typography = [
   'Strong'
 ]
 
-export default defineConfig(() => {
-  return <UserConfig>{
+export default defineConfig((): UserConfig => {
+  return {
     publicDir: '../docs/public',
     define: {
       __TARGET__: JSON.stringify(target),

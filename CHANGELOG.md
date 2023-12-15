@@ -1,3 +1,44 @@
+## [2.2.19](https://github.com/vexip-ui/vexip-ui/compare/v2.2.18...v2.2.19) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **table:** correctly set expand height with virtual ([eb53003](https://github.com/vexip-ui/vexip-ui/commit/eb53003abab038b245856d07c0dc7a95f9b4e8ed))
+
+
+
+## [2.2.18](https://github.com/vexip-ui/vexip-ui/compare/v2.2.17...v2.2.18) (2023-12-07)
+
+
+### ✨ Features
+
+* **date-picker:** add shortcuts-placement prop ([1af3924](https://github.com/vexip-ui/vexip-ui/commit/1af39242aa46dac8dc8eceb893e73e34fbc33c02))
+* **date-picker:** support format start and end value respectively ([311d358](https://github.com/vexip-ui/vexip-ui/commit/311d3580825978e0e6d5d87b1b4e44ee75ad7f02))
+* **table:** add update:data event to retrun data after dragging ([c187f91](https://github.com/vexip-ui/vexip-ui/commit/c187f915d688baee6193acf1a00529e012ab2aca))
+* **table:** support responsively resize column ([b2b3683](https://github.com/vexip-ui/vexip-ui/commit/b2b3683361ede862a9e9c314cb62255937d783a3))
+
+
+### 🐞 Bug Fixes
+
+* **number-input:** stop propagation when action keys down ([8c4f7dc](https://github.com/vexip-ui/vexip-ui/commit/8c4f7dc388a49003bdf01760716d843c95272846))
+* **select:** ensure long label don't overflow ([3db5f3d](https://github.com/vexip-ui/vexip-ui/commit/3db5f3dd0b2317756a37e702252d6de89a0ac948)), closes [#443](https://github.com/vexip-ui/vexip-ui/issues/443)
+* **select:** hide placeholder when composing filter input ([4baca9b](https://github.com/vexip-ui/vexip-ui/commit/4baca9baaa6c5e7887bc6a5a2849c01a347a0b54))
+* **select:** wrong parameters of `selected` slot ([0f55ec7](https://github.com/vexip-ui/vexip-ui/commit/0f55ec75624f054c65e0d19515f4c4163fc434b4)), closes [#445](https://github.com/vexip-ui/vexip-ui/issues/445)
+* **table:** correct row-drag-end allData payload ([e71ddf2](https://github.com/vexip-ui/vexip-ui/commit/e71ddf28e738eb1550a58630aafc417444cee88c))
+* **table:** should not flat tree data if disable tree ([248244d](https://github.com/vexip-ui/vexip-ui/commit/248244da9f83635799d8328cc5e2905469422db0))
+* **tree:** correct computation for link line index ([281d45e](https://github.com/vexip-ui/vexip-ui/commit/281d45e298f7e6b60a3cea0c9fb7cdbe16fc3c31)), closes [#442](https://github.com/vexip-ui/vexip-ui/issues/442)
+* **tree:** improve expand and reduce process logic ([f42161a](https://github.com/vexip-ui/vexip-ui/commit/f42161ab9060b16ef442a8de25f739f709ea66d7))
+* **utils:** mapTree may clear children field by default ([965103f](https://github.com/vexip-ui/vexip-ui/commit/965103fc7887e04ac407e2caf4e1c9ac6d35fe5f))
+* **utils:** throttle and debounce adapt delay 0 ([a6046e5](https://github.com/vexip-ui/vexip-ui/commit/a6046e5fc30318558528a973a12ae62fe2228dd5))
+* **utils:** throttle and debounce incorrect parameters passed ([305467d](https://github.com/vexip-ui/vexip-ui/commit/305467d479ab5156ba4cad9c1476df091deeb8ee))
+
+
+### 👓 Types
+
+* **utils:** improve generics for is... methods ([4302ca5](https://github.com/vexip-ui/vexip-ui/commit/4302ca5dbdbd2873212a4d4aced2b4479a48a2a4))
+
+
+
 ## [2.2.17](https://github.com/vexip-ui/vexip-ui/compare/v2.2.16...v2.2.17) (2023-12-01)
 
 

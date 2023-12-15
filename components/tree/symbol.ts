@@ -67,7 +67,9 @@ export type TreeNodeProps<D = Data> = {
   /** @internal */
   last: boolean,
   /** @internal */
-  inLastCount: number
+  upstreamLast: boolean[],
+  /** @internal */
+  lineIndexes: number[]
 }
 
 export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
@@ -87,7 +89,9 @@ export interface TreeCommonSlotParams {
 }
 
 export interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  /** @deprecated */
   lineCount: number,
+  lineIndexes: number[],
   toggleCheck: (checked?: boolean) => void,
   toggleExpand: (expanded?: boolean) => Promise<void>,
   toggleSelect: (able?: boolean) => Promise<void>
