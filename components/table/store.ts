@@ -297,6 +297,7 @@ export function useStore(options: StoreOptions) {
     // 这几个个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
     setColumns: debounceMinor(setColumns),
+    // setColumns,
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 

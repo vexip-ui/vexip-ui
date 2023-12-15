@@ -12,7 +12,8 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
+  watchEffect
 } from 'vue'
 
 import TableColumn from './table-column'
@@ -397,28 +398,47 @@ const {
   refreshRowDepth
 } = mutations
 
+const columnsUpdateTrigger = ref(0)
+const summariesUpdateTrigger = ref(0)
+
+watchEffect(() => {
+  for (const column of allColumns.value) {
+    for (const key of Object.keys(column) as Array<keyof typeof column>) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      column[key]
+    }
+  }
+
+  columnsUpdateTrigger.value++
+})
+watchEffect(() => {
+  for (const summary of allSummaries.value) {
+    for (const key of Object.keys(summary) as Array<keyof typeof summary>) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      summary[key]
+    }
+  }
+
+  summariesUpdateTrigger.value++
+})
 watch(
-  allColumns,
-  value => {
+  columnsUpdateTrigger,
+  () => {
     runInLocked(() => {
-      setColumns(value)
+      setColumns(allColumns.value)
       isMounted && computeTableWidth()
       nextTick(() => {
         hasDragColumn.value = getters.hasDragColumn
       })
     })
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
-watch(
-  allSummaries,
-  value => {
-    runInLocked(() => {
-      setSummaries(value)
-    })
-  },
-  { deep: true }
-)
+watch(summariesUpdateTrigger, () => {
+  runInLocked(() => {
+    setSummaries(allSummaries.value)
+  })
+})
 watch(() => keyConfig.value.id, setDataKey)
 watch(() => props.data, forceRefreshData, { deep: true })
 watch(() => props.width, computeTableWidth)
