@@ -29,7 +29,13 @@ const currentVolume = ref(props.volume)
 const muted = ref(false)
 // const visible = ref(true)
 
-const volumeIcon = computed(() => (muted.value ? icons.value.volumeMute : icons.value.volume))
+const volumeIcon = computed(() => {
+  return muted.value
+    ? icons.value.volumeMute
+    : currentVolume.value < 50
+      ? icons.value.volumeLow
+      : icons.value.volume
+})
 
 watch(
   () => props.volume,

@@ -4,13 +4,14 @@ import { Slider } from '@/components/slider'
 
 import { computed, ref } from 'vue'
 
-import { useNameHelper } from '@vexip-ui/config'
+import { getStepByWord, useLocale, useNameHelper } from '@vexip-ui/config'
 import { useListener, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, throttle } from '@vexip-ui/utils'
 import { formatSeconds } from './helper'
 
 import type { PropType } from 'vue'
 import type { SliderExposed } from '@/components/slider'
+import type { VideoSegment } from './symbol'
 
 interface PointState {
   start: number,
@@ -33,8 +34,8 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  timePoints: {
-    type: Array as PropType<number[]>,
+  segments: {
+    type: Array as PropType<VideoSegment[]>,
     default: () => []
   },
   noPreview: {
@@ -50,6 +51,7 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 
 const nh = useNameHelper('video')
+const locale = useLocale('video')
 
 const { timer } = useSetTimeout()
 
@@ -82,7 +84,7 @@ const className = computed(() => {
 const points = computed<PointState[]>(() => {
   const duration = Math.max(1, props.duration)
 
-  let times = props.timePoints.filter(time => time >= 0 && time <= duration)
+  let times = props.segments.map(segment => segment.time)
 
   if (!times.length) times = [0, duration]
 
@@ -108,6 +110,31 @@ const points = computed<PointState[]>(() => {
   }
 
   return points
+})
+const segmentLabel = computed(() => {
+  const time = hoveredTime.value
+  const segments = props.segments
+
+  let index = -1
+
+  if (time <= 0) {
+    index = 0
+  } else {
+    for (let i = 1, len = segments.length; i < len; ++i) {
+      if (segments[i].time > time) {
+        index = i - 1
+        break
+      }
+    }
+  }
+
+  if (index < 0) {
+    index = segments.length - 1
+  }
+
+  const title = segments[index].title || getStepByWord(locale.value.chapterCount, index + 1)
+
+  return title && ` (${title})`
 })
 
 useListener(sliderEl, 'pointerenter', () => {
@@ -253,7 +280,7 @@ function onSlideEnd() {
             <img :src="previewSrc" />
           </div>
           <div :class="nh.be('preview-time')">
-            {{ formatSeconds(hoveredTime) }}
+            {{ formatSeconds(hoveredTime) + segmentLabel }}
           </div>
         </slot>
       </div>

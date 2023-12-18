@@ -7,7 +7,8 @@ import type {
   VideoControlOption,
   VideoControlType,
   // VideoKernel,
-  VideoPlayRate
+  VideoPlayRate,
+  VideoSegment
 } from './symbol'
 
 export const videoProps = buildProps({
@@ -19,6 +20,7 @@ export const videoProps = buildProps({
   controlLayout: Object as PropType<VideoControlLayout>,
   poster: String,
   video: Object as PropType<HTMLVideoElement>,
+  segments: Array as PropType<(number | VideoSegment)[]>,
   onPlay: eventProp(),
   onPause: eventProp(),
   onEnded: eventProp()

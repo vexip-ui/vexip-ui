@@ -181,12 +181,14 @@ export function zhCNLocale() {
       playPrev: '上一个',
       playNext: '下一个',
       refresh: '刷新',
+      flip: '镜像翻转',
       requestPip: '进入画中画',
       exitPip: '退出画中画',
       fullWindow: '进入网页全屏',
       fullWindowExit: '推出网页全屏',
       fullScreen: '进入全屏',
-      fullScreenExit: '推出全屏'
+      fullScreenExit: '推出全屏',
+      chapterCount: '第 {n} 章'
     },
 
     viewer: {

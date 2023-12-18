@@ -23,7 +23,7 @@ import { videoProps } from './props'
 import { VIDEO_STATE, videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed } from '@/components/full-screen'
-import type { VideoControlName, VideoPlayRate } from './symbol'
+import type { VideoControlConfig, VideoPlayRate } from './symbol'
 
 export default defineComponent({
   name: 'Video',
@@ -37,7 +37,8 @@ export default defineComponent({
       // kernel: null,
       controlLayout: () => videoDefaultControlLayout,
       poster: '',
-      video: null
+      video: null,
+      segments: () => []
     })
 
     const nh = useNameHelper('video')
@@ -59,6 +60,7 @@ export default defineComponent({
     const loadedData = ref(false)
     const interacting = ref(false)
     const hasPlayed = ref(false)
+    const flipped = ref(false)
     const iconScale = ref(1.3)
 
     const screen = ref<FullScreenExposed>()
@@ -97,6 +99,12 @@ export default defineComponent({
       }
 
       return rates
+    })
+    const segments = computed(() => {
+      return props.segments
+        .map(segment => (typeof segment === 'number' ? { time: segment } : segment))
+        .filter(segment => segment.time >= 0 && segment.time <= duration.value)
+        .sort((prev, next) => prev.time - next.time)
     })
 
     watch(() => props.src, resetMetaState, { flush: 'pre' })
@@ -192,6 +200,10 @@ export default defineComponent({
       if (videoRef.value) {
         videoRef.value.volume = newVolume / 100
       }
+    }
+
+    function toggleFlip() {
+      flipped.value = !flipped.value
     }
 
     function resetMetaState() {
@@ -294,6 +306,17 @@ export default defineComponent({
       return <VideoVolume volume={volume.value} onChange={changeVolume}></VideoVolume>
     }
 
+    function renderFlip() {
+      return (
+        <VideoControl name={locale.value.flip} onClick={toggleFlip}>
+          <Icon
+            {...icons.value.flipX}
+            scale={+(icons.value.flipX.scale || 1) * iconScale.value}
+          ></Icon>
+        </VideoControl>
+      )
+    }
+
     function renderPip() {
       if (!pipEnabled || !video.value) return null
 
@@ -330,7 +353,7 @@ export default defineComponent({
       )
     }
 
-    function renderControl(name: VideoControlName) {
+    function renderControl(name: VideoControlConfig) {
       switch (name) {
         case 'play-prev':
           return renderPlayPrev()
@@ -346,6 +369,8 @@ export default defineComponent({
           return renderPlayRate()
         case 'volume':
           return renderVolume()
+        case 'flip':
+          return renderFlip()
         case 'pip':
           return renderPip()
         case 'full-window':
@@ -371,6 +396,7 @@ export default defineComponent({
             <VideoProgress
               time={currentTime.value}
               duration={duration.value}
+              segments={segments.value}
               onChange={changeTime}
             ></VideoProgress>
           </section>
@@ -392,7 +418,10 @@ export default defineComponent({
     function renderMain() {
       return (
         <div class={nh.be('main')}>
-          <div class={nh.be('player')} onClick={togglePlaying}>
+          <div
+            class={[nh.be('player'), flipped.value && nh.bem('player', 'flipped')]}
+            onClick={togglePlaying}
+          >
             {renderSlot(slots, 'player', {}, () => [
               <video
                 {...props.videoAttrs}

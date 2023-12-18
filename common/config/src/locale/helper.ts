@@ -179,12 +179,14 @@ export interface LocaleConfig {
     playPrev: string,
     playNext: string,
     refresh: string,
+    flip: string,
     requestPip: string,
     exitPip: string,
     fullWindow: string,
     fullWindowExit: string,
     fullScreen: string,
-    fullScreenExit: string
+    fullScreenExit: string,
+    chapterCount: string
   },
 
   viewer: {

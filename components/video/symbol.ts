@@ -7,17 +7,19 @@ export type VideoPresetControl =
   | 'refresh'
   | 'timer'
   | 'play-rate'
+  | 'flip'
   | 'volume'
   | 'pip'
   | 'full-window'
   | 'full-browser'
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type VideoControlName = VideoPresetControl | (string & {})
+export type VideoControlConfig = VideoControlName | [VideoControlName, any]
 
 export interface VideoControlLayout {
-  left?: VideoControlName[],
-  center?: VideoControlName[],
-  right?: VideoControlName[]
+  left?: VideoControlConfig[],
+  center?: VideoControlConfig[],
+  right?: VideoControlConfig[]
 }
 
 export interface VideoPlayRate {
@@ -33,6 +35,11 @@ export interface VideoControlOption {
   selectedLabel?: string,
   disabled?: boolean,
   divided?: boolean,
+  title?: string
+}
+
+export interface VideoSegment {
+  time: number,
   title?: string
 }
 
@@ -54,7 +61,7 @@ export interface VideoState {
 const defaultLayout: Required<VideoControlLayout> = {
   left: ['play-prev', 'play', 'play-next', 'refresh', 'timer'],
   center: [],
-  right: ['play-rate', 'volume', 'pip', 'full-window', 'full-browser']
+  right: ['play-rate', 'volume', 'flip', 'pip', 'full-window', 'full-browser']
 }
 
 for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {
