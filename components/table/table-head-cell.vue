@@ -11,7 +11,7 @@ import { computed, inject, ref, toRef } from 'vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useMoving, useRtl } from '@vexip-ui/hooks'
-import { isFunction, nextFrameOnce } from '@vexip-ui/utils'
+import { getLast, isFunction, nextFrameOnce } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_HEAD_PREFIX, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -189,7 +189,7 @@ const style = computed(() => {
   const noFixed = !getters.hasFixedColumn
   const padLeft = noFixed || columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
   const padRight =
-    noFixed || columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+    noFixed || getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.index + colSpan] - totalWidths[props.index]
 
   let height: number | undefined

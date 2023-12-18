@@ -61,7 +61,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 
 import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
-import { isPromise, queryTabables } from '@vexip-ui/utils'
+import { getLast, isPromise, queryTabables } from '@vexip-ui/utils'
 import { maskerProps } from './props'
 
 export default defineComponent({
@@ -243,7 +243,7 @@ export default defineComponent({
       }
 
       if (topTrap.value === target) {
-        tabables.at(-1)!.focus()
+        getLast(tabables)!.focus()
       } else if (bottomTrap.value === target) {
         tabables[0].focus()
       }

@@ -226,7 +226,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
-import { flatTree, isNull, isPromise, transformTree } from '@vexip-ui/utils'
+import { flatTree, getLast, isNull, isPromise, transformTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -480,9 +480,10 @@ export default defineComponent({
       if (value) {
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
+
         await updatePopper()
         nextTick(() => {
-          panelElList.value.at(-1)?.$el?.focus()
+          getLast(panelElList.value)?.$el?.focus()
         })
       } else {
         isPopperShow.value = false
@@ -566,12 +567,7 @@ export default defineComponent({
       () => {
         updatePopper()
         nextTick(() => {
-          const panel = panelElList.value.at(-1)
-
-          if (panel?.$el) {
-            panel.$el.focus()
-          }
-
+          getLast(panelElList.value)?.$el?.focus()
           prevClosedId = -1
         })
       }
@@ -869,7 +865,7 @@ export default defineComponent({
 
       openedIds.value.push(option.id)
       requestAnimationFrame(() => {
-        panelElList.value.at(-1)?.$el?.focus()
+        getLast(panelElList.value)?.$el?.focus()
       })
     }
 
@@ -1160,7 +1156,7 @@ export default defineComponent({
       handlePanelOpen(option, depth)
 
       requestAnimationFrame(() => {
-        const panel = panelElList.value.at(-1)
+        const panel = getLast(panelElList.value)
 
         if (panel && panel.currentHitting < 0) {
           panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)

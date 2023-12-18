@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vitepress'
 import { MagnifyingGlass } from '@vexip-ui/icons'
 import { getComponentConfig } from '../../config/component'
 import { useListener } from '@vexip-ui/hooks'
-import { isClient, toKebabCase } from '@vexip-ui/utils'
+import { getLast, isClient, toKebabCase } from '@vexip-ui/utils'
 import { matchPath } from '../../shared'
 
 import type { AutoCompleteExposed } from 'vexip-ui'
@@ -56,7 +56,7 @@ isClient &&
 
 function toComponentDoc(fullName: string) {
   if (!matchPath(route.path, `/${locale.value}/component/${fullName}`)) {
-    router.go(`/${locale.value}/component/${toKebabCase(fullName.split(' ').at(-1)!)}`)
+    router.go(`/${locale.value}/component/${toKebabCase(getLast(fullName.split(' '))!)}`)
   }
 
   nextTick(() => {

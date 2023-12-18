@@ -7,6 +7,7 @@ import {
   createBITree,
   debounceMinor,
   deepClone,
+  getLast,
   isNull,
   mapTree,
   sortByProps,
@@ -498,10 +499,8 @@ export function useStore(options: StoreOptions) {
     }
 
     for (const rowColumns of allColumns) {
-      const lastColumn = rowColumns.findLast(column => column)
-
-      if (lastColumn) {
-        lastColumn.last = true
+      if (rowColumns.length) {
+        getLast(rowColumns)!.last = true
       }
 
       rowColumns.length = length
@@ -632,7 +631,7 @@ export function useStore(options: StoreOptions) {
         }
       }
 
-      state.columns.at(-1)!.last = true
+      getLast(state.columns)!.last = true
     }
 
     if (leftFixedColumns.length) {
@@ -972,7 +971,7 @@ export function useStore(options: StoreOptions) {
     }
 
     if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
-      widths.set(flexColumns.at(-1)!.key, flexWidth - usedWidth)
+      widths.set(getLast(flexColumns)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
@@ -1569,7 +1568,7 @@ export function useStore(options: StoreOptions) {
     if (!columns.length || !length) return
 
     const deltaWidth = newWidth / length
-    const lastKey = columns.at(-1)!.key
+    const lastKey = getLast(columns)!.key
 
     for (let i = 0; i < length; ++i) {
       const key = keys[i]

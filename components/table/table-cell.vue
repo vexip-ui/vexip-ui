@@ -9,7 +9,7 @@ import { computed, inject, nextTick, ref, watchEffect } from 'vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useRtl } from '@vexip-ui/hooks'
-import { isFunction } from '@vexip-ui/utils'
+import { getLast, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes, noopFormatter } from './symbol'
 
 import type { PropType } from 'vue'
@@ -127,7 +127,7 @@ const style = computed(() => {
   const noFixed = !getters.hasFixedColumn
   const padLeft = noFixed || columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
   const padRight =
-    noFixed || columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+    noFixed || getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined

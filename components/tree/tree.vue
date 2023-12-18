@@ -21,6 +21,7 @@ import {
   debounce,
   filterTree,
   flatTree,
+  getLast,
   isNull,
   isPromise,
   mapTree,
@@ -542,10 +543,10 @@ function refreshNodesDepth() {
     if (node.parent && nodeMap.has(node.parent)) {
       const parent = nodeMap.get(node.parent)!
 
-      node.last = parent.children.at(-1) === node
+      node.last = getLast(parent.children) === node
       node.upstreamLast = [parent.last, ...parent.upstreamLast]
     } else {
-      node.last = treeNodes.value.at(-1) === node
+      node.last = getLast(treeNodes.value) === node
       node.upstreamLast = []
     }
 
@@ -1070,7 +1071,9 @@ function handleHittingChange(type: 'up' | 'down') {
   const index = visibleNodeEls.findIndex(nodeEl => nodeEl === activeEl)
 
   if (~index) {
-    visibleNodeEls.at((index + (type === 'up' ? -1 : 1)) % visibleNodeEls.length)?.focus()
+    visibleNodeEls[
+      (index + (type === 'up' ? -1 : 1) + visibleNodeEls.length) % visibleNodeEls.length
+    ]?.focus()
   }
 }
 

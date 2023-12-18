@@ -25,6 +25,7 @@ import TableFoot from './table-foot.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
+  getLast,
   isDefined,
   isValidNumber,
   nextFrameOnce,
@@ -366,7 +367,7 @@ const yBarLength = computed(() => {
 })
 const totalWidths = computed(() => {
   return (
-    (getters.totalWidths.at(-1) || 0) + (state.sidePadding[0] || 0) + (state.sidePadding[1] || 0)
+    (getLast(getters.totalWidths) || 0) + (state.sidePadding[0] || 0) + (state.sidePadding[1] || 0)
   )
 })
 const leftFixedActive = computed(() => xScrollEnabled.value && xScrollPercent.value > 0)

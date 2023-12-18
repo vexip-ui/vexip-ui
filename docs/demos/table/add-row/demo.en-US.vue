@@ -30,6 +30,6 @@ function create(index: number) {
 }
 
 function addRow() {
-  data.push(create(data.at(-1)!.id + 1))
+  data.push(create(data[data.length - 1].id + 1))
 }
 </script>
