@@ -5,7 +5,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 import type { IconEffect, IconRenderer } from './symbol'
 
 export const iconProps = buildProps({
-  icon: Object,
+  icon: [Object, Function],
   scale: [Number, String],
   title: String,
   label: String,

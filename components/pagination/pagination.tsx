@@ -469,7 +469,7 @@ export default defineComponent({
                 renderSlot(slots, 'prev', { disabled })
               )
             : (
-              <Icon {...arrow} scale={+(arrow.scale || 1) * 0.8}></Icon>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
               )}
         </Tag>
       )
@@ -501,7 +501,7 @@ export default defineComponent({
                 renderSlot(slots, 'next', { disabled })
               )
             : (
-              <Icon {...arrow} scale={+(arrow.scale || 1) * 0.8}></Icon>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
               )}
         </Tag>
       )
@@ -537,12 +537,12 @@ export default defineComponent({
               <Transition name={nh.ns('fade')}>
                 {!disabled && inPrevEllipsis.value
                   ? (
-                    <Icon {...arrow} scale={+(arrow.scale || 1) * 0.8}></Icon>
+                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
                     )
                   : (
                     <Icon
                       {...icons.value.ellipsis}
-                      scale={+(icons.value.ellipsis.scale || 1) * 0.8}
+                      scale={+(icons.value.ellipsis.scale || 1)}
                       style={'position: absolute'}
                     ></Icon>
                     )}
@@ -583,12 +583,12 @@ export default defineComponent({
               <Transition name={nh.ns('fade')}>
                 {!disabled && inNextEllipsis.value
                   ? (
-                    <Icon {...arrow} scale={+(arrow.scale || 1) * 0.8}></Icon>
+                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
                     )
                   : (
                     <Icon
                       {...icons.value.ellipsis}
-                      scale={+(icons.value.ellipsis.scale || 1) * 0.8}
+                      scale={+(icons.value.ellipsis.scale || 1)}
                       style={'position: absolute'}
                     ></Icon>
                     )}

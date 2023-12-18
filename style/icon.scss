@@ -20,6 +20,11 @@
     line-height: 1;
     vertical-align: -0.125em;
     fill: currentcolor;
+
+    &.lucide {
+      fill: none;
+      stroke: currentcolor;
+    }
   }
 
   &--flip-horizontal > g {

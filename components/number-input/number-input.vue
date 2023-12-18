@@ -514,10 +514,10 @@ defineExpose({
     </Transition>
     <template v-if="props.controlType !== 'none'">
       <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretUp" :scale="+(icons.caretUp.scale || 1) * 0.8"></Icon>
+        <Icon v-bind="icons.angleUp" :scale="+(icons.angleUp.scale || 1) * 0.8"></Icon>
       </div>
       <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-        <Icon v-bind="icons.caretDown" :scale="+(icons.caretDown.scale || 1) * 0.8"></Icon>
+        <Icon v-bind="icons.angleDown" :scale="+(icons.angleDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>
   </div>

@@ -39,9 +39,9 @@ const getIndex = useZIndex()
 const icons = useIcons()
 
 const predefinedIcons = computed(() => ({
-  success: icons.value.plainSuccess,
-  warning: icons.value.plainWarning,
-  error: icons.value.plainError,
+  success: icons.value.success,
+  warning: icons.value.warning,
+  error: icons.value.error,
   loading: icons.value.loading
 }))
 

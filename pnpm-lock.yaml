@@ -223,6 +223,9 @@ importers:
       '@vexip-ui/utils':
         specifier: workspace:*
         version: link:../utils
+      lucide-vue-next:
+        specifier: ^0.295.0
+        version: 0.295.0(vue@3.3.10)
     devDependencies:
       vue:
         specifier: ^3.3.10
@@ -7412,6 +7415,17 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+
+  /lucide-vue-next@0.295.0(vue@3.3.10):
+    resolution: {integrity: sha512-FmC7plt4n7HuOoine7o8pq+Pg08BaCY/PjMLmo8JVDudC3Ij/Y7S99RiLGtIVSEtvdiVXlFuQG1rithxUu3tMw==}
+    peerDependencies:
+      vue: '>=3.0.1'
+    peerDependenciesMeta:
+      vue:
+        optional: true
+    dependencies:
+      vue: 3.3.10(typescript@5.2.2)
+    dev: false
 
   /magic-string@0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
