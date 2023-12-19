@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.1...plugins@1.6.0) (2023-12-13)
+
+
+### ✨ Features
+
+* **plugins:** add transformLogical postcss plugin ([#447](https://github.com/vexip-ui/vexip-ui/issues/447)) ([de86901](https://github.com/vexip-ui/vexip-ui/commit/de869019f9427bedaf017f7b5c6698c3a714d7cf))
+
+
+
 ## [1.5.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.0...plugins@1.5.1) (2023-11-03)
 
 

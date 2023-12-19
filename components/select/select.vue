@@ -10,7 +10,7 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus=";(!props.filter || !currentVisible) && handleFocus($event)"
+      @focus="handleFocus"
       @blur=";(!props.filter || !currentVisible) && handleBlur($event)"
     >
       <div
@@ -65,6 +65,7 @@
                 </Tag>
                 <span v-else>
                   <Tooltip
+                    ref="restTip"
                     inherit
                     :transfer="false"
                     :visible="restTipShow"
@@ -92,7 +93,7 @@
                           closable
                           :type="props.tagType"
                           :disabled="props.disabled"
-                          @close="handleTagClose(value)"
+                          @close="handleRestTagClose(value)"
                         >
                           <span :class="nh.be('label')">
                             <slot name="selected" :option="getOptionFromMap(value)">
@@ -105,22 +106,6 @@
                   </Tooltip>
                 </span>
               </template>
-              <!-- <template v-if="!limited && previewOption" #suffix>
-                <Tag
-                  inherit
-                  :class="[
-                    nh.be('tag'),
-                    nh.bem('tag', 'preview'),
-                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
-                  ]"
-                  :type="props.tagType"
-                  closable
-                >
-                  <slot name="selected" :preview="true" :option="previewOption">
-                    {{ previewOption.label }}
-                  </slot>
-                </Tag>
-              </template> -->
             </Overflow>
             <div
               v-if="props.filter"
@@ -178,7 +163,13 @@
               @compositionend="handleCompositionEnd"
               @change="handleCompositionEnd"
             />
-            <span v-if="!currentVisible && hasValue" :class="[nh.be('selected')]">
+            <span
+              v-if="(props.noPreview || !currentVisible) && hasValue && !currentFilter"
+              :class="{
+                [nh.be('selected')]: true,
+                [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
+              }"
+            >
               <slot
                 v-if="getOptionFromMap(currentValues[0])"
                 name="selected"
@@ -349,7 +340,17 @@ import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, onMounted, reactive, ref, toRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import {
   placementWhileList,
@@ -368,10 +369,11 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import { getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
+import type { TooltipExposed } from '@/components/tooltip'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
   ChangeEvent,
@@ -490,7 +492,7 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false,
+      noPreview: true,
       remote: false,
       fitPopper: false,
       name: {
@@ -545,6 +547,7 @@ export default defineComponent({
     const device = ref<HTMLElement>()
     const virtualList = ref<VirtualListExposed>()
     const popper = ref<PopperExposed>()
+    const restTip = ref<TooltipExposed>()
 
     const { reference, transferTo, updatePopper } = usePopper({
       placement,
@@ -1050,6 +1053,14 @@ export default defineComponent({
       !isNull(value) && handleSelect(getOptionFromMap(value))
     }
 
+    function handleRestTagClose(value?: SelectBaseValue | null) {
+      handleTagClose(value)
+
+      if (restTipShow.value) {
+        restTip.value?.updatePopper()
+      }
+    }
+
     function handleSelect(option?: SelectOptionState | null) {
       if (!option) return
 
@@ -1186,12 +1197,25 @@ export default defineComponent({
       }
     }
 
+    let focused = false
+
     function handleFocus(event: FocusEvent) {
-      emitEvent(props.onFocus, event)
+      if (!focused) {
+        focused = true
+        emitEvent(props.onFocus, event)
+      }
     }
 
     function handleBlur(event: FocusEvent) {
-      emitEvent(props.onBlur, event)
+      if (focused) {
+        focused = false
+
+        setTimeout(() => {
+          if (!focused) {
+            emitEvent(props.onBlur, event)
+          }
+        }, 120)
+      }
     }
 
     function syncInputValue() {
@@ -1260,15 +1284,25 @@ export default defineComponent({
     function handleFilterKeyDown(event: KeyboardEvent) {
       if (!input.value) return
 
-      if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
+      if (
+        event.key === 'Backspace' &&
+        !input.value.value &&
+        !isNull(getLast(currentValues.value))
+      ) {
         event.stopPropagation()
-        handleTagClose(currentValues.value.at(-1))
+        handleTagClose(getLast(currentValues.value))
       }
     }
 
     function toggleShowRestTip() {
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
+
+        if (restTipShow.value) {
+          nextTick(() => {
+            restTip.value?.updatePopper()
+          })
+        }
       } else {
         toggleVisible()
         restTipShow.value = false
@@ -1321,12 +1355,14 @@ export default defineComponent({
       input,
       device,
       virtualList,
+      restTip,
 
       getOptionFromMap,
       isSelected,
       filterOptions,
       updateHitting,
       handleTagClose,
+      handleRestTagClose,
       handleSelect,
       toggleVisible,
       handleClear,

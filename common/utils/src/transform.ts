@@ -13,6 +13,12 @@ export function normalizePath(path: string) {
   return path.replace(/[\\/]+/g, '/')
 }
 
+export function getLast(value: string): string | undefined
+export function getLast<T>(value: T[]): T | undefined
+export function getLast(value: string | any[]) {
+  return value[value.length - 1]
+}
+
 /**
  * 根据数组元素中某个或多个属性的值转换为映射
  *
