@@ -1,3 +1,24 @@
+## [2.2.20](https://github.com/vexip-ui/vexip-ui/compare/v2.2.19...v2.2.20) (2023-12-19)
+
+
+### ✨ Features
+
+* **plugins:** add transformLogical postcss plugin ([#447](https://github.com/vexip-ui/vexip-ui/issues/447)) ([de86901](https://github.com/vexip-ui/vexip-ui/commit/de869019f9427bedaf017f7b5c6698c3a714d7cf))
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** incorrect bin file name ([1787579](https://github.com/vexip-ui/vexip-ui/commit/178757942b3da009946e479c6d9ce8c3e36d5e46))
+* **select:** should spread control width and has control min-width ([556f05f](https://github.com/vexip-ui/vexip-ui/commit/556f05fa13319bbd5604a67e0a80e6bc5d7deb97))
+* **table:** shallower watch columns and summaries changes ([c3b736f](https://github.com/vexip-ui/vexip-ui/commit/c3b736fb49fb5cc4f8976a59f312ed6ee759358f))
+
+
+### 🔨 Code Refactoring
+
+* compatibility for lower version browsers ([8b4949f](https://github.com/vexip-ui/vexip-ui/commit/8b4949f6726ad4ac5078ce6ad665dd3bcea8d23b))
+
+
+
 ## [2.2.19](https://github.com/vexip-ui/vexip-ui/compare/v2.2.18...v2.2.19) (2023-12-07)
 
 
