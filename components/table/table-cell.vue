@@ -179,7 +179,7 @@ const formatter = computed(() => {
 })
 
 watchEffect(() => {
-  if (isTableTypeColumn(props.column)) return
+  if (isTypeColumn(props.column)) return
 
   mutations.setCellHeight(props.row.key, props.column.key, contentHeight.value)
 })
@@ -200,7 +200,7 @@ function isDragColumn(column: unknown): column is TableDragColumn {
   return (column as TableTypeColumn).type === 'drag'
 }
 
-function isTableTypeColumn(column: unknown): column is TableTypeColumn {
+function isTypeColumn(column: unknown): column is TableTypeColumn {
   return (
     isSelectionColumn(column) ||
     isOrderColumn(column) ||
@@ -279,12 +279,6 @@ function handleExpandTree(row: TableRowState) {
 function handleCellResize(entry: ResizeObserverEntry) {
   contentHeight.value =
     (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
-
-  // mutations.setCellHeight(
-  //   props.row.key,
-  //   props.column.key,
-  //   prevHeight
-  // )
 }
 </script>
 
@@ -310,7 +304,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
       role="none"
       aria-hidden
     ></div>
-    <div v-if="isTableTypeColumn(column)" :class="nh.be('content')">
+    <div v-if="isTypeColumn(column)" :class="nh.be('content')">
       <Checkbox
         v-if="isSelectionColumn(column)"
         inherit

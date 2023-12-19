@@ -392,6 +392,7 @@ $table: map.merge(
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
+      overflow: hidden;
       transition-duration: 0ms;
     }
   }

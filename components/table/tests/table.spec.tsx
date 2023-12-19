@@ -837,6 +837,7 @@ describe('Table', () => {
 
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
     await nextTick()
+    await nextTick()
 
     const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     const cells = rows[0].findAll('.vxp-table__cell')
@@ -869,6 +870,7 @@ describe('Table', () => {
         onColResizeEnd={onEnd}
       ></Table>
     ))
+    await nextTick()
     await nextTick()
 
     const heads = wrapper.findAll('.vxp-table__head-cell')
