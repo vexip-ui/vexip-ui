@@ -485,6 +485,8 @@ export function useStore(options: StoreOptions) {
           column.fixed = fixed
         }
 
+        rowColumns[index] = column
+
         if (isGroupColumn(column)) {
           const endIndex = build(column.children, column.fixed, row + 1, result)
 
@@ -516,7 +518,6 @@ export function useStore(options: StoreOptions) {
 
           column.key = key
           baseColumns.push(column)
-          rowColumns[index] = column
           index += 1
         }
 

@@ -1,3 +1,12 @@
+## [2.2.22](https://github.com/vexip-ui/vexip-ui/compare/v2.2.21...v2.2.22) (2023-12-20)
+
+
+### 🐞 Bug Fixes
+
+* **table:** unexpected column group index error ([d61276d](https://github.com/vexip-ui/vexip-ui/commit/d61276d456a682b9e4b8c234c8faa33a6e24ec5d))
+
+
+
 ## [2.2.21](https://github.com/vexip-ui/vexip-ui/compare/v2.2.20...v2.2.21) (2023-12-20)
 
 
