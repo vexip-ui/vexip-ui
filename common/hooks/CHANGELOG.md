@@ -1,3 +1,13 @@
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.3...hooks@2.3.0) (2023-12-20)
+
+
+### ✨ Features
+
+* **hooks:** add useRaf method ([fac1427](https://github.com/vexip-ui/vexip-ui/commit/fac14270e091c8ecb47726b1816deca6f75affb7))
+* **hooks:** add useTimerRecord method ([7e6667f](https://github.com/vexip-ui/vexip-ui/commit/7e6667f7eaaa0e07459f7b474be4b922203c0d37))
+
+
+
 ## [2.2.3](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.2...hooks@2.2.3) (2023-12-07)
 
 

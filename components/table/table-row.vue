@@ -120,7 +120,7 @@ const groupStyle = computed(() => {
   if (props.isHead || props.isFoot) return undefined
 
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  state.totalHeight
+  state.heightTrigger
 
   const offset =
     state.heightBITree && !rowType.value && props.index ? state.heightBITree.sum(props.index) : 0
@@ -159,7 +159,7 @@ function setExpandHeight() {
 }
 
 function updateTotalHeight(force = false) {
-  if (state.heightBITree && (force || !props.fixed)) {
+  if (state.heightBITree && getters.visibleKeys.has(rowKey.value) && (force || !props.fixed)) {
     const height = props.row.height + props.row.expandHeight
     const tree = state.heightBITree
     const prev = tree.get(props.index)
@@ -167,6 +167,7 @@ function updateTotalHeight(force = false) {
     if (height !== prev) {
       tree.add(props.index, height - prev)
       mutations.updateTotalHeight()
+      mutations.triggerHeightChange()
     }
   }
 }

@@ -12,8 +12,7 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch,
-  watchEffect
+  watch
 } from 'vue'
 
 import TableColumn from './table-column'
@@ -25,6 +24,7 @@ import TableFoot from './table-foot.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
+  debounceMinor,
   getLast,
   isDefined,
   isValidNumber,
@@ -287,7 +287,11 @@ provide(TABLE_ACTIONS, {
   hasIcon: name => !!props.icons[name],
   getIcon: name => props.icons[name],
   renderTableSlot,
-  runInLocked
+  runInLocked,
+  updateColumns: () => debounceMinor(updateColumns),
+  setColumnProp,
+  updateSummaries: () => debounceMinor(updateSummaries),
+  setSummaryProp
 })
 provide(TABLE_SLOTS, slots)
 
@@ -399,56 +403,14 @@ const {
   refreshRowDepth
 } = mutations
 
-const columnsUpdateTrigger = ref(0)
-const summariesUpdateTrigger = ref(0)
-
-watchEffect(() => {
-  for (const column of allColumns.value) {
-    for (const key of Object.keys(column) as Array<keyof typeof column>) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      column[key]
-    }
-  }
-
-  columnsUpdateTrigger.value++
-})
-watchEffect(() => {
-  for (const summary of allSummaries.value) {
-    for (const key of Object.keys(summary) as Array<keyof typeof summary>) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      summary[key]
-    }
-  }
-
-  summariesUpdateTrigger.value++
-})
-watch(
-  columnsUpdateTrigger,
-  () => {
-    runInLocked(() => {
-      setColumns(allColumns.value)
-      isMounted && computeTableWidth()
-      nextTick(() => {
-        hasDragColumn.value = getters.hasDragColumn
-      })
-    })
-  },
-  { immediate: true }
-)
-watch(summariesUpdateTrigger, () => {
-  runInLocked(() => {
-    setSummaries(allSummaries.value)
-  })
-})
+watch(allColumns, updateColumns)
+watch(allSummaries, updateSummaries)
 watch(() => keyConfig.value.id, setDataKey)
 watch(() => props.data, forceRefreshData, { deep: true })
 watch(() => props.width, computeTableWidth)
-watch(
-  () => props.height,
-  () => {
-    nextTick(computeBodyHeight)
-  }
-)
+watch([() => props.height, () => props.borderWidth], () => {
+  nextTick(computeBodyHeight)
+})
 watch(locale, setLocale, { deep: true })
 watch(
   () => props.virtual,
@@ -499,6 +461,9 @@ onMounted(() => {
   watch(bodyScrollHeight, refreshPercentScroll)
   refresh()
   window.addEventListener('resize', handlerResize)
+  nextTick(() => {
+    hasDragColumn.value = getters.hasDragColumn
+  })
 
   if (mainScroll.value) {
     xScrollEnabled.value = mainScroll.value.enableXScroll
@@ -575,6 +540,7 @@ function computeTableWidth() {
 
 function computeBodyHeight() {
   const height = props.height
+  const borderWidth = props.borderWidth
 
   if (isDefined(height)) {
     headHeight.value = 0
@@ -593,10 +559,10 @@ function computeBodyHeight() {
         footHeight.value = belowTfoot.value.offsetHeight
       }
 
-      bodyHeight.value = height - headHeight.value - footHeight.value
+      bodyHeight.value = height - headHeight.value - footHeight.value - 2 * borderWidth
     } else {
       // one row as head placeholder
-      bodyHeight.value = height - (props.rowHeight || props.rowMinHeight)
+      bodyHeight.value = height - (props.rowHeight || props.rowMinHeight) - 2 * borderWidth
     }
   } else {
     bodyHeight.value = undefined
@@ -680,6 +646,30 @@ function increaseSummary(summary: TableSummaryOptions) {
 
 function decreaseSummary(summary: TableSummaryOptions) {
   tempSummaries.delete(summary)
+}
+
+function updateColumns() {
+  runInLocked(() => {
+    setColumns(allColumns.value)
+    isMounted && computeTableWidth()
+    nextTick(() => {
+      hasDragColumn.value = getters.hasDragColumn
+    })
+  })
+}
+
+function setColumnProp(key: Key, prop: string, value: any) {
+  mutations.setColumnProp(key, prop, value)
+}
+
+function updateSummaries() {
+  runInLocked(() => {
+    setSummaries(allSummaries.value)
+  })
+}
+
+function setSummaryProp(key: Key, prop: string, value: any) {
+  mutations.setSummaryProp(key, prop, value)
 }
 
 function getTableElement() {

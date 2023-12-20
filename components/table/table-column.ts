@@ -1,4 +1,12 @@
-import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  reactive,
+  renderSlot,
+  watch
+} from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
 import { isNull, warnOnce } from '@vexip-ui/utils'
@@ -13,12 +21,23 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'meta']
 const ignoredProps: ColumnPropKey[] = [
   'renderer',
   'headRenderer',
   'filterRenderer',
   'summaryRenderer'
+]
+const triggerProps: ColumnPropKey[] = [
+  'idKey',
+  'fixed',
+  'type',
+  'width',
+  'sorter',
+  'order',
+  'orderLabel',
+  'disableRow',
+  'headSpan',
+  'cellSpan'
 ]
 const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
@@ -113,16 +132,21 @@ export default defineComponent({
       ;(options[aliasKey] as any) = props[key]
 
       if (key === 'idKey') {
+        const update = (value: string | number) => {
+          if (isNull(value) && props.type) {
+            ;(options[aliasKey] as any) = value = `__vxp_${props.type}`
+          } else {
+            ;(options[aliasKey] as any) = value
+          }
+        }
+
+        update(props.idKey)
         watch(
           () => props.idKey,
           value => {
-            if (isNull(value) && props.type) {
-              (options[aliasKey] as any) = value = `__vxp_${props.type}`
-            } else {
-              (options[aliasKey] as any) = value
-            }
-          },
-          { immediate: true }
+            update(value)
+            tableAction?.updateColumns()
+          }
         )
       } else if (key === 'noEllipsis') {
         const cancel = watch(
@@ -137,13 +161,35 @@ export default defineComponent({
             }
           }
         )
+      } else if (key === 'filter') {
+        const filterWithoutMeta = computed(() => {
+          if (props.filter) {
+            const { meta, ...filter } = props.filter
+            return filter
+          }
+
+          return props.filter
+        })
+
+        watch(
+          filterWithoutMeta,
+          () => {
+            options.filter = props.filter
+            tableAction?.updateColumns()
+          },
+          { deep: true }
+        )
       } else {
+        const trigger = triggerProps.includes(key)
+
         watch(
           () => props[key],
           value => {
-            (options[aliasKey] as any) = value
-          },
-          { deep: deepProps.includes(key) }
+            ;(options[aliasKey] as any) = value
+            trigger
+              ? tableAction?.updateColumns()
+              : tableAction?.setColumnProp(options.key, key, value)
+          }
         )
       }
     }
@@ -181,7 +227,7 @@ export default defineComponent({
 
     function setRenderer() {
       if (options.type && options.type !== 'expand') {
-        (options as any).renderer = undefined
+        ;(options as any).renderer = undefined
         return
       }
 
@@ -215,7 +261,7 @@ export default defineComponent({
 
     function setHeadRenderer() {
       if (options.type === 'selection') {
-        (options as any).renderer = undefined
+        ;(options as any).renderer = undefined
         return
       }
 

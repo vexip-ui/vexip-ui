@@ -13,8 +13,8 @@ const propKeys = Object.keys(tableSummaryProps) as SummaryPropKey[]
 const aliases: Partial<Record<SummaryPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: SummaryPropKey[] = ['class', 'style', 'attrs', 'meta']
 const ignoredProps: SummaryPropKey[] = ['renderer']
+const triggerProps: SummaryPropKey[] = ['idKey', 'cellSpan', 'order', 'above']
 
 const funcProp = {
   default: null,
@@ -55,15 +55,18 @@ export default defineComponent({
       if (ignoredProps.includes(key)) continue
 
       const aliasKey = (aliases[key] || key) as keyof SummaryWithKey
+      const trigger = triggerProps.includes(key)
 
       ;(options[aliasKey] as any) = props[key]
 
       watch(
         () => props[key],
         value => {
-          (options[aliasKey] as any) = value
-        },
-        { deep: deepProps.includes(key) }
+          ;(options[aliasKey] as any) = value
+          trigger
+            ? tableAction?.updateSummaries()
+            : tableAction?.setSummaryProp(options.key, key, value)
+        }
       )
     }
 

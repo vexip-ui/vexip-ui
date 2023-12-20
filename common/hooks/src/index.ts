@@ -13,7 +13,7 @@ export * from './popper'
 export * from './resize'
 export * from './rtl'
 export * from './theme'
-export * from './timer'
+export * from './timer-record'
 export * from './trigger-handler'
 export * from './virtual'
 

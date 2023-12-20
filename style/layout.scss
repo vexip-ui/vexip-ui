@@ -29,6 +29,7 @@ $layout: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   width: 100%;
   height: 100%;
@@ -60,6 +61,7 @@ $layout: map.merge(
 
   &__aside {
     @include basis;
+    @include inherit-color;
 
     position: sticky;
     top: 0;
@@ -169,6 +171,7 @@ $layout: map.merge(
 
   &__header {
     @include basis;
+    @include inherit-color;
 
     position: sticky;
     inset-inline-start: 0;
@@ -250,6 +253,7 @@ $layout: map.merge(
 
   &__footer {
     @include basis;
+    @include inherit-color;
 
     display: flex;
     flex-direction: column;

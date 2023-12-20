@@ -27,6 +27,7 @@ $dropdown: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: inline-block;
 

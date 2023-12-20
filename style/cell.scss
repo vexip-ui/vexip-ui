@@ -3,6 +3,7 @@
 
 .#{$namespace}-cell {
   @include basis;
+  @include inherit-color;
 
   &--flex {
     display: flex;

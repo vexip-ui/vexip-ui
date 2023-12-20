@@ -395,7 +395,9 @@ export interface StoreState extends StoreOptions {
   leftFixedColumns: ColumnWithKey[],
   aboveSummaries: SummaryWithKey[],
   belowSummaries: SummaryWithKey[],
+  columnMap: Map<Key, ColumnRawWithKey>,
   rowMap: Map<Key, TableRowState>,
+  summaryMap: Map<Key, SummaryWithKey>,
   idMaps: WeakMap<Data, Key>,
   checkedAll: boolean,
   partial: boolean,
@@ -417,7 +419,8 @@ export interface StoreState extends StoreOptions {
   cellSpanMap: Map<'left' | 'default' | 'right', Map<string, Required<CellSpanResult>>>,
   collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
   locked: boolean,
-  barScrolling: boolean
+  barScrolling: boolean,
+  heightTrigger: number
 }
 
 export interface TableRowInstance {
@@ -485,7 +488,11 @@ export interface TableActions {
   hasIcon(name: TableIconName): boolean,
   getIcon(name: TableIconName): TableIcons[TableIconName],
   renderTableSlot(payload: { name: string }): any,
-  runInLocked(handler?: (...args: any[]) => any, delay?: number): Promise<void>
+  runInLocked(handler?: (...args: any[]) => any, delay?: number): Promise<void>,
+  updateColumns(): void,
+  setColumnProp(key: Key, prop: string, value: any): void,
+  updateSummaries(): void,
+  setSummaryProp(key: Key, prop: string, value: any): void
 }
 
 export interface ColumnGroupActions {

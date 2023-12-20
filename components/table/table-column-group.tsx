@@ -20,6 +20,7 @@ type GroupPropKey = keyof typeof tableColumnGroupProps
 
 const propKeys = Object.keys(tableColumnGroupProps) as GroupPropKey[]
 const ignoredProps: GroupPropKey[] = ['renderer', 'children']
+const triggerProps: GroupPropKey[] = ['fixed', 'order']
 
 const TableColumnGroup = defineComponent({
   name: 'TableColumnGroup',
@@ -62,13 +63,18 @@ const TableColumnGroup = defineComponent({
 
     for (const key of propKeys) {
       if (ignoredProps.includes(key)) continue
+      ;(options[key as keyof ColumnGroupWithKey] as any) = props[key]
+
+      const trigger = triggerProps.includes(key)
 
       watch(
         () => props[key],
         value => {
-          (options[key as keyof ColumnGroupWithKey] as any) = value
-        },
-        { immediate: true }
+          ;(options[key as keyof ColumnGroupWithKey] as any) = value
+          trigger
+            ? tableAction?.updateColumns()
+            : tableAction?.setColumnProp(options.key, key, value)
+        }
       )
     }
 
@@ -116,14 +122,14 @@ const TableColumnGroup = defineComponent({
     }
 
     function renderChildren() {
-      return props.children.map((child, index) => {
+      return props.children.map(child => {
         if ('children' in child) {
-          return <TableColumnGroup {...child} key={`__inner-column-${index}`}></TableColumnGroup>
+          return <TableColumnGroup {...child}></TableColumnGroup>
         }
 
         const { key, ...others } = child
 
-        return <TableColumn {...others} key={`__inner-column-${index}`} id-key={key}></TableColumn>
+        return <TableColumn {...others} id-key={key}></TableColumn>
       })
     }
 

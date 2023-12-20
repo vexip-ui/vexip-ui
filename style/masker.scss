@@ -19,6 +19,7 @@ $masker: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
   @include fixed;
 
   z-index: get-css-var('masker-z-index');
