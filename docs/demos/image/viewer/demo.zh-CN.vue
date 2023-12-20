@@ -9,7 +9,7 @@
   <ImageViewer
     v-model:active="viewerActive"
     v-model:index="viewIndex"
-    :srcs="srcList"
+    :src-list="srcList"
   ></ImageViewer>
 </template>
 
@@ -20,10 +20,10 @@ const viewerActive = ref(false)
 const viewIndex = ref(0)
 const srcList = ref<string[]>([])
 
-function handlePreview(src: string, srcs?: string[]) {
-  if (srcs?.length) {
-    viewIndex.value = srcs.findIndex(s => s === src)
-    srcList.value = srcs
+function handlePreview(src: string, allSrc?: string[]) {
+  if (allSrc?.length) {
+    viewIndex.value = allSrc.findIndex(s => s === src)
+    srcList.value = allSrc
   } else {
     viewIndex.value = 0
     srcList.value = [src]

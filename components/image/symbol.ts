@@ -26,3 +26,11 @@ export interface GroupState {
 }
 
 export const GROUP_STATE: InjectionKey<GroupState> = Symbol('IMAGE_GROUP_STATE')
+
+export const objectFitValues = Object.freeze<ImageObjectFit[]>([
+  'fill',
+  'contain',
+  'cover',
+  'none',
+  'scale-down'
+])
