@@ -35,6 +35,7 @@ $modal: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
   @include fixed;
 
   z-index: get-css-var('modal-z-index');

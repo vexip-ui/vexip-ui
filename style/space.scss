@@ -18,6 +18,7 @@ $space: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: flex;
   flex-wrap: wrap;

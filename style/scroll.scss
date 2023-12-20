@@ -18,6 +18,7 @@ $scroll: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
   overflow: hidden;

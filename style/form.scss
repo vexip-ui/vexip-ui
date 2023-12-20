@@ -21,6 +21,7 @@ $form: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
 

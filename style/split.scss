@@ -26,6 +26,7 @@ $split: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   $pane: #{&}__panel;
   $trigger: #{&}__trigger;

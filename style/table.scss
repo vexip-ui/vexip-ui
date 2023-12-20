@@ -65,6 +65,7 @@ $table: map.merge(
   $border-a: get-css-var('table-b-width') get-css-var('table-b-style');
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
   display: flex;
@@ -214,10 +215,6 @@ $table: map.merge(
     color: inherit;
     word-break: break-all;
     white-space: normal;
-  }
-
-  &__ellipsis {
-    color: inherit;
   }
 
   &__side-pad {
@@ -392,7 +389,6 @@ $table: map.merge(
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
-      overflow: hidden;
       transition-duration: 0ms;
     }
   }

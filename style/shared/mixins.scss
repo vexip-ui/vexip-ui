@@ -32,6 +32,12 @@
   }
 }
 
+@mixin inherit-color {
+  &--inherit {
+    color: inherit;
+  }
+}
+
 @mixin fixed {
   position: fixed;
   inset: 0;
