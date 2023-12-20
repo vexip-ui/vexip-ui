@@ -1,3 +1,24 @@
+## [2.2.21](https://github.com/vexip-ui/vexip-ui/compare/v2.2.20...v2.2.21) (2023-12-20)
+
+
+### ✨ Features
+
+* **hooks:** add useRaf method ([fac1427](https://github.com/vexip-ui/vexip-ui/commit/fac14270e091c8ecb47726b1816deca6f75affb7))
+* **hooks:** add useTimerRecord method ([7e6667f](https://github.com/vexip-ui/vexip-ui/commit/7e6667f7eaaa0e07459f7b474be4b922203c0d37))
+
+
+### 🐞 Bug Fixes
+
+* not self colorful components should inherit its color ([e928f65](https://github.com/vexip-ui/vexip-ui/commit/e928f65e3cedfddd946ec4f4c3ed983cb764ab27))
+* **table:** correct row height computation when paged ([0756d7b](https://github.com/vexip-ui/vexip-ui/commit/0756d7b5ab38fa417b4a962179dc71a25286cd58))
+
+
+### 🔨 Code Refactoring
+
+* **image:** rename srcs prop to src-list for viewer ([620d0a7](https://github.com/vexip-ui/vexip-ui/commit/620d0a77c1a4b4bcd5ea0600f16f581c4f168cdc))
+
+
+
 ## [2.2.20](https://github.com/vexip-ui/vexip-ui/compare/v2.2.19...v2.2.20) (2023-12-19)
 
 
