@@ -1,9 +1,9 @@
-import { onBeforeUnmount } from 'vue'
+import { onScopeDispose } from 'vue'
 
 export function useSetTimeout() {
-  const timer: Record<string, any> = {}
+  const timer: Record<string, ReturnType<typeof setTimeout>> = {}
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     Object.keys(timer).forEach(key => {
       clearTimeout(timer[key])
     })
@@ -13,11 +13,23 @@ export function useSetTimeout() {
 }
 
 export function useSetInterval() {
-  const timer: Record<string, any> = {}
+  const timer: Record<string, ReturnType<typeof setInterval>> = {}
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     Object.keys(timer).forEach(key => {
       clearInterval(timer[key])
+    })
+  })
+
+  return { timer }
+}
+
+export function useRaf() {
+  const timer: Record<string, ReturnType<typeof requestAnimationFrame>> = {}
+
+  onScopeDispose(() => {
+    Object.keys(timer).forEach(key => {
+      cancelAnimationFrame(timer[key])
     })
   })
 
