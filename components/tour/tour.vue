@@ -72,7 +72,7 @@ const icons = useIcons()
 
 const currentActive = ref(props.active)
 const currentIndex = ref(props.index)
-const tempSteps = reactive(new Set<TourStepOptions>())
+const tempSteps: Set<TourStepOptions> = reactive(new Set<any>())
 const currentRect = ref<number[]>()
 const sideRects = ref<(number | string)[][]>()
 
