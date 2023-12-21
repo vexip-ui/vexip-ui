@@ -421,6 +421,7 @@ function handleClear() {
   setValue(NaN, 'change', false)
   emitEvent(props.onClear)
   clearField()
+  focus()
 }
 
 function handleEnter() {

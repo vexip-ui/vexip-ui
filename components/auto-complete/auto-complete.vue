@@ -202,8 +202,6 @@ function computeHitting() {
 let focused = false
 
 function handleFocus(event: FocusEvent) {
-  control.value?.focus()
-
   if (!focused) {
     focused = true
     emitEvent(props.onFocus, event)
@@ -211,14 +209,14 @@ function handleFocus(event: FocusEvent) {
 }
 
 function handleBlur(event: FocusEvent) {
-  control.value?.blur()
-
   if (focused) {
     focused = false
 
     timer.focus = setTimeout(() => {
-      emitEvent(props.onBlur, event)
-      handleChange()
+      if (!focused) {
+        emitEvent(props.onBlur, event)
+        handleChange()
+      }
     }, 120)
   }
 }
@@ -293,7 +291,6 @@ function handleChange(valid = true) {
 
   if (control.value) {
     control.value.value = String(lastValue)
-    control.value.blur()
   }
 }
 
@@ -415,7 +412,6 @@ function handleEnter(event: KeyboardEvent) {
   }
 
   emitEvent(props.onEnter as EnterEvent, currentValue.value)
-  control.value?.blur()
   currentVisible.value = false
 }
 
@@ -433,6 +429,7 @@ function handleClear() {
     handleChange(false)
     emitEvent(props.onClear)
     nextTick(clearField)
+    control.value?.focus()
   }
 }
 
@@ -480,8 +477,7 @@ function handleCompositionEnd() {
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
-    @focus="handleFocus"
-    @blur="handleBlur"
+    @focus="control?.focus()"
     @outside-close="handleChange"
     @click="handleClick"
     @click.capture="beforeClick"
@@ -516,8 +512,8 @@ function handleCompositionEnd() {
           @submit.prevent
           @input="handleInput"
           @keydown="handleKeyDown"
-          @focus="props.filter && handleFocus($event)"
-          @blur="props.filter && handleBlur($event)"
+          @focus="handleFocus($event)"
+          @blur="handleBlur($event)"
           @compositionstart="composing = true"
           @compositionend="handleCompositionEnd"
           @change="handleCompositionEnd"
