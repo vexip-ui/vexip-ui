@@ -60,6 +60,14 @@
 
 :::
 
+:::demo alert/custom
+
+### 自定义颜色
+
+通过 `color` 属性可以定制化警告的主题色。
+
+:::
+
 :::demo alert/scroll
 
 ### 自动滚动
@@ -80,19 +88,20 @@
 
 ### Alert 属性
 
-| 名称          | 类型                                          | 说明                                                 | 默认值   | 始于    |
-| ------------- | --------------------------------------------- | ---------------------------------------------------- | -------- | ------- |
-| type          | `'info' \| 'success' \| 'warning' \| 'error'` | 警告提示的类型                                       | `'info'` | -       |
-| title         | `string`                                      | 设置警告提示标题，使用同名插槽后失效                 | `''`     | -       |
-| colorful-text | `boolean`                                     | 设置字体是否具有和类型一致的颜色                     | `false`  | -       |
-| icon          | `boolean \| Record<string, any>`              | 设置是否显示图标，可以直接传入图标进行显示           | `false`  | -       |
-| closable      | `boolean`                                     | 设置警告提示是否可以被关闭                           | `false`  | -       |
-| icon-color    | `string`                                      | 设置警告提示图标的颜色                               | `''`     | -       |
-| no-border     | `boolean`                                     | 设置是否禁用警告提示的边框                           | `false`  | -       |
-| banner        | `boolean`                                     | 设置是否作为顶部通告的形式，开启后样式会有相应的调整 | `false`  | -       |
-| manual        | `boolean`                                     | 设置在关闭警告时不自动收起                           | `false`  | `2.0.0` |
-| scroll        | `boolean`                                     | 设置警告内容是否滚动                                 | `false`  | `2.0.4` |
-| scroll-speed  | `number`                                      | 设置警告内容滚动的速度                               | `1`      | `2.0.4` |
+| 名称          | 类型                                          | 说明                                                 | 默认值   | 始于     |
+| ------------- | --------------------------------------------- | ---------------------------------------------------- | -------- | -------- |
+| type          | `'info' \| 'success' \| 'warning' \| 'error'` | 警告提示的类型                                       | `'info'` | -        |
+| title         | `string`                                      | 设置警告提示标题，使用同名插槽后失效                 | `''`     | -        |
+| colorful-text | `boolean`                                     | 设置字体是否具有和类型一致的颜色                     | `false`  | -        |
+| icon          | `boolean \| Record<string, any>`              | 设置是否显示图标，可以直接传入图标进行显示           | `false`  | -        |
+| closable      | `boolean`                                     | 设置警告提示是否可以被关闭                           | `false`  | -        |
+| icon-color    | `string`                                      | 设置警告提示图标的颜色                               | `''`     | -        |
+| no-border     | `boolean`                                     | 设置是否禁用警告提示的边框                           | `false`  | -        |
+| banner        | `boolean`                                     | 设置是否作为顶部通告的形式，开启后样式会有相应的调整 | `false`  | -        |
+| manual        | `boolean`                                     | 设置在关闭警告时不自动收起                           | `false`  | `2.0.0`  |
+| scroll        | `boolean`                                     | 设置警告内容是否滚动                                 | `false`  | `2.0.4`  |
+| scroll-speed  | `number`                                      | 设置警告内容滚动的速度                               | `1`      | `2.0.4`  |
+| color         | `string`                                      | 设置警告的主题色                                     | `null`   | `2.2.23` |
 
 ### Alert 事件
 

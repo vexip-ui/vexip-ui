@@ -42,6 +42,7 @@ export default defineComponent({
       },
       border: false,
       closable: false,
+      color: null,
       simple: false,
       circle: false,
       prefix: '',
@@ -71,33 +72,31 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      if (props.color) {
-        const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
-        const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
-        const baseColor = parseColorToRgba(props.color)
-        const base = baseColor.toString()
+      if (!props.color) return undefined
 
-        return nh.cvm({
-          color: 'var(--vxp-color-white)',
-          'bg-color': base,
-          'b-color': base,
-          'close-color': 'var(--vxp-color-white)',
-          'd-color': mixColor(white, baseColor, 0.3).toString(),
-          ...(props.simple || props.border
-            ? {
-                color: base,
-                'close-color': base
-              }
-            : {}),
-          ...(props.simple
-            ? {
-                'bg-color': adjustAlpha(baseColor, 0.2).toString()
-              }
-            : {})
-        })
-      }
+      const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
+      const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
+      const baseColor = parseColorToRgba(props.color)
+      const base = baseColor.toString()
 
-      return {}
+      return nh.cvm({
+        color: 'var(--vxp-color-white)',
+        'bg-color': base,
+        'b-color': base,
+        'close-color': 'var(--vxp-color-white)',
+        'd-color': mixColor(white, baseColor, 0.3).toString(),
+        ...(props.simple || props.border
+          ? {
+              color: base,
+              'close-color': base
+            }
+          : {}),
+        ...(props.simple
+          ? {
+              'bg-color': adjustAlpha(baseColor, 0.2).toString()
+            }
+          : {})
+      })
     })
 
     function handleClose(event: MouseEvent) {

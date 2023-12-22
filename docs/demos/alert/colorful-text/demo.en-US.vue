@@ -3,13 +3,13 @@
     <Alert colorful-text>
       Some content to alert
     </Alert>
-    <Alert type="success" colorful-text>
+    <Alert type="success" title="Alert Title" colorful-text>
       Some content to alert
     </Alert>
-    <Alert type="warning" colorful-text>
+    <Alert type="warning" icon colorful-text>
       Some content to alert
     </Alert>
-    <Alert type="error" colorful-text>
+    <Alert type="error" title="Alert Title" colorful-text>
       Some content to alert
     </Alert>
   </div>
