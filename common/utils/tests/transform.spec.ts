@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest'
 import {
   filterTree,
   flatTree,
+  listToMap,
   mapTree,
   normalizePath,
   sortByProps,
-  transformListToMap,
   transformTree
 } from '../src/transform'
 import { walkTree } from '../dist'
@@ -23,23 +23,23 @@ describe('transform', () => {
   })
 
   it('transformListToMap', () => {
-    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id')).toMatchObject({
+    expect(listToMap([{ id: '1' }, { id: '2' }], 'id')).toMatchObject({
       1: { id: '1' },
       2: { id: '2' }
     })
-    expect(transformListToMap([{ id: '1' }, { id: '2' }], i => i.id)).toMatchObject({
+    expect(listToMap([{ id: '1' }, { id: '2' }], i => i.id)).toMatchObject({
       1: { id: '1' },
       2: { id: '2' }
     })
-    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id', i => i.id)).toMatchObject({
+    expect(listToMap([{ id: '1' }, { id: '2' }], 'id', i => i.id)).toMatchObject({
       1: '1',
       2: '2'
     })
-    expect(transformListToMap([{ id: '1' }, { id: '2' }], 'id', undefined, true)).toMatchObject(
+    expect(listToMap([{ id: '1' }, { id: '2' }], 'id', undefined, true)).toMatchObject(
       new Map().set('1', { id: '1' }).set('2', { id: '2' })
     )
     expect(
-      transformListToMap(
+      listToMap(
         [{ id: '1' }, { id: '2' }],
         i => i.id,
         i => i.id,
