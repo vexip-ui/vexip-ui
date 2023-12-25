@@ -14,6 +14,7 @@ export * from './ta-IN'
 export * from './zh-CN'
 export * from './zh-HK'
 export * from './zh-TW'
+export * from './ar-EG'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())
