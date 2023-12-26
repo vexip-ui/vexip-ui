@@ -17,6 +17,10 @@ const props = defineProps({
   duration: {
     type: Number,
     default: 0
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -40,6 +44,14 @@ watch(
     currentTime.value = value
   }
 )
+watch(
+  () => props.disabled,
+  value => {
+    if (value) {
+      editing.value = false
+    }
+  }
+)
 
 onMounted(() => {
   watch(
@@ -54,7 +66,7 @@ onMounted(() => {
 })
 
 function handleClick() {
-  if (!editing.value) {
+  if (!props.disabled && !editing.value) {
     editing.value = true
     inputTime.value = formattedTime.value
     nextTick(() => {
@@ -84,7 +96,7 @@ function finishInput(confirm: boolean) {
 
 <template>
   <div
-    :class="[nh.be('control'), nh.be('timer')]"
+    :class="[nh.be('control'), nh.be('timer'), props.disabled && nh.bem('control', 'disabled')]"
     :style="{ width: `${width}px` }"
     @click="handleClick"
   >

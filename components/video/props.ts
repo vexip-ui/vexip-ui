@@ -1,6 +1,8 @@
 import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
+import type { FullScreenType } from '@/components/full-screen'
+import type { IconEffect } from '@/components/icon'
 import type { ClassType, ConfigurableProps } from '@vexip-ui/config'
 import type {
   VideoControlLayout,
@@ -13,17 +15,33 @@ import type {
 
 export const videoProps = buildProps({
   src: String,
+  srcList: Array as PropType<string[]>,
   noControls: booleanProp,
   videoAttrs: Object,
+  time: Number,
+  volume: Number,
+  playRate: Number,
   playRates: Array as PropType<(number | VideoPlayRate)[]>,
   // kernel: Object as PropType<VideoKernel>,
   controlLayout: Object as PropType<VideoControlLayout>,
   poster: String,
   video: Object as PropType<HTMLVideoElement>,
   segments: Array as PropType<(number | VideoSegment)[]>,
+  loading: booleanProp,
+  loadingIcon: Object,
+  loadingEffect: String as PropType<IconEffect>,
   onPlay: eventProp(),
   onPause: eventProp(),
-  onEnded: eventProp()
+  onEnded: eventProp(),
+  onTimeChange: eventProp<(time: number) => void>(),
+  onRateChange: eventProp<(rate: number) => void>(),
+  onVolumeChange: eventProp<(volume: number) => void>(),
+  onToggleFlip: eventProp<(flip: boolean) => void>(),
+  onTogglePip: eventProp<(pip: boolean) => void>(),
+  onToggleFull: eventProp<(full: false | FullScreenType) => void>(),
+  onPrev: eventProp(),
+  onNext: eventProp(),
+  onRefresh: eventProp()
 })
 
 export type VideoProps = ExtractPropTypes<typeof videoProps>

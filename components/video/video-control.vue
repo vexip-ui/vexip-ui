@@ -53,6 +53,8 @@ const optionMap = computed(() => transformListToMap(objectOptions.value, 'value'
 const currentOption = computed(() => optionMap.value.get(currentValue.value))
 
 function handleSelect(option: VideoControlOption) {
+  if (props.disabled || option.disabled) return
+
   currentValue.value = option.value
   emitEvent(props.onSelect, option)
 }
@@ -77,7 +79,7 @@ function handleSelect(option: VideoControlOption) {
           type="button"
           @focus="emitEvent(props.onFocus, $event)"
           @blur="emitEvent(props.onBlur, $event)"
-          @click="emitEvent(props.onClick)"
+          @click="!props.disabled && emitEvent(props.onClick)"
         >
           <slot v-if="currentOption" name="selected" :option="currentOption">
             {{ currentOption.selectedLabel || currentOption.label || currentOption.value }}

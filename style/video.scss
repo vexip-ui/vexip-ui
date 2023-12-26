@@ -8,6 +8,7 @@ $video: map.merge(
   (
     bg-color: #111,
     state-color: get-css-var('content-color-third'),
+    loading-color: get-css-var('content-color-third'),
     controls-bg-color: unset,
     controls-bg-image: linear-gradient(to top, rgba(#111, 75%) 0%, transparent 100%),
     progress-height: 3px,
@@ -22,7 +23,7 @@ $video: map.merge(
     control-color: rgba(#fff, 85%),
     control-color-active: #fff,
     control-color-disabled: rgba(#fff, 50%),
-    control-bg-color: rgba(#000, 60%),
+    control-bg-color: rgba(#000, 75%),
     control-radius: get-css-var('radius-small'),
     control-shadow: get-css-var('shadow-shape') #000,
     control-option-bg-color-hover: rgba(#fff, 15%),
@@ -72,7 +73,16 @@ $video: map.merge(
   &__poster {
     position: absolute;
     inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     pointer-events: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__state {
@@ -80,6 +90,15 @@ $video: map.merge(
     top: 50%;
     left: 50%;
     color: get-css-var('video-state-color');
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  &__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: get-css-var('video-loading-color');
     pointer-events: none;
     transform: translate(-50%, -50%);
   }
@@ -163,6 +182,7 @@ $video: map.merge(
 
     &-center {
       flex: auto;
+      justify-content: center;
     }
 
     &-right {
@@ -347,7 +367,6 @@ $video: map.merge(
     justify-content: center;
     min-width: 32px;
     height: 100%;
-    padding: 0 6px;
     line-height: 1;
     color: get-css-var('video-control-color');
     transition: get-css-var('transition-color');
@@ -358,7 +377,12 @@ $video: map.merge(
     }
 
     &--disabled {
-      color: get-css-var('video-control-color-disabled');
+      &,
+      &:hover,
+      &:focus-within {
+        color: get-css-var('video-control-color-disabled');
+        cursor: not-allowed;
+      }
     }
 
     &-button {
@@ -367,13 +391,17 @@ $video: map.merge(
       justify-content: center;
       width: 100%;
       height: 100%;
-      padding: 0;
+      padding: 0 6px;
       line-height: inherit;
       color: inherit;
       cursor: pointer;
       background-color: transparent;
       border: 0;
       outline: 0;
+    }
+
+    &--disabled &-button {
+      cursor: not-allowed;
     }
 
     &-tip,
@@ -499,5 +527,11 @@ $video: map.merge(
 
       width: auto;
     }
+  }
+
+  &__progress-line {
+    position: absolute;
+    inset: auto 0 0;
+    pointer-events: none;
   }
 }

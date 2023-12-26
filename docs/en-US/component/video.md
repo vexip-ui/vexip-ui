@@ -1,4 +1,4 @@
-# Video ^[Since v2.3.0](!s)
+# Video ==!s|2.3.0==
 
 <!-- Please remove this comment and describe what scenes to be used of the component -->
 

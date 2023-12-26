@@ -14,7 +14,7 @@ defineOptions({ name: 'VideoVolume' })
 const props = defineProps({
   volume: {
     type: Number,
-    default: 100
+    default: 1
   }
 })
 
@@ -32,7 +32,7 @@ const muted = ref(false)
 const volumeIcon = computed(() => {
   return muted.value
     ? icons.value.volumeMute
-    : currentVolume.value < 50
+    : currentVolume.value < 0.5
       ? icons.value.volumeLow
       : icons.value.volume
 })
@@ -48,7 +48,7 @@ let prevVolume = currentVolume.value
 
 function toggleMute() {
   if (muted.value) {
-    currentVolume.value = prevVolume <= 0 ? 50 : prevVolume
+    currentVolume.value = prevVolume <= 0 ? 0.5 : prevVolume
   } else {
     prevVolume = currentVolume.value
     currentVolume.value = 0
@@ -60,6 +60,7 @@ function toggleMute() {
 }
 
 function handleSlide(value: number) {
+  value /= 100
   prevVolume = value
   currentVolume.value = value
   muted.value = value <= 0
@@ -78,11 +79,13 @@ function handleSlide(value: number) {
     <Icon v-bind="mergeIconScale(videoState.iconScale, volumeIcon)"></Icon>
     <template #panel>
       <div :class="nh.be('volume-text')">
-        {{ currentVolume }}
+        {{ (currentVolume * 100).toFixed() }}
       </div>
       <Slider
-        :value="currentVolume"
+        :value="currentVolume * 100"
         :class="nh.be('volume-slider')"
+        :min="0"
+        :max="100"
         vertical
         hide-tip
         reverse

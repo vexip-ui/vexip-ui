@@ -115,6 +115,8 @@ const segmentLabel = computed(() => {
   const time = hoveredTime.value
   const segments = props.segments
 
+  if (!segments.length) return ''
+
   let index = -1
 
   if (time <= 0) {
@@ -132,7 +134,7 @@ const segmentLabel = computed(() => {
     index = segments.length - 1
   }
 
-  const title = segments[index].title || getStepByWord(locale.value.chapterCount, index + 1)
+  const title = segments[index]?.title || getStepByWord(locale.value.chapterCount, index + 1)
 
   return title && ` (${title})`
 })
