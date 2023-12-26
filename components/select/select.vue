@@ -385,7 +385,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import { getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -1300,9 +1300,13 @@ export default defineComponent({
     function handleFilterKeyDown(event: KeyboardEvent) {
       if (!input.value) return
 
-      if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
+      if (
+        event.key === 'Backspace' &&
+        !input.value.value &&
+        !isNull(getLast(currentValues.value))
+      ) {
         event.stopPropagation()
-        handleTagClose(currentValues.value.at(-1))
+        handleTagClose(getLast(currentValues.value))
       }
     }
 

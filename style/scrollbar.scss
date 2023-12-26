@@ -21,6 +21,7 @@ $scrollbar: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   $bar: #{&}__bar;
 

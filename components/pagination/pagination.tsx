@@ -152,7 +152,7 @@ export default defineComponent({
     const itemCount = computed(() => {
       if (!isNull(props.maxCount)) {
         warnOnce(
-          "[vexip-ui:Pagination] 'max-count' props" +
+          "[vexip-ui:Pagination] 'max-count' prop" +
             " have been deprecated, please use 'item-count' prop to replace it"
         )
       }

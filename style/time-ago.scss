@@ -3,6 +3,7 @@
 
 .#{$namespace}-time-ago {
   @include basis;
+  @include inherit-color;
 
   display: inline-block;
 }

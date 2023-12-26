@@ -28,9 +28,6 @@ function toNotNullString(value: any) {
 
 export default defineComponent({
   name: 'Input',
-  components: {
-    Icon
-  },
   props: inputProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
@@ -327,6 +324,7 @@ export default defineComponent({
       setValue('', 'change', false)
       emitEvent(props.onClear)
       nextTick(clearField)
+      inputControl.value?.focus()
     }
 
     function handleEnter() {

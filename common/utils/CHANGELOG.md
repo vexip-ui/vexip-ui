@@ -1,3 +1,12 @@
+# [2.8.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.3...utils@2.8.0) (2023-12-19)
+
+
+### 🔨 Code Refactoring
+
+* compatibility for lower version browsers ([8b4949f](https://github.com/vexip-ui/vexip-ui/commit/8b4949f6726ad4ac5078ce6ad665dd3bcea8d23b))
+
+
+
 ## [2.7.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.2...utils@2.7.3) (2023-12-07)
 
 

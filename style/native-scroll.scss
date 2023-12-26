@@ -3,6 +3,7 @@
 
 .#{$namespace}-native-scroll {
   @include basis;
+  @include inherit-color;
 
   position: relative;
   overflow: hidden;

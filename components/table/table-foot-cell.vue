@@ -7,7 +7,7 @@ import { computed, inject, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
 import { useRtl } from '@vexip-ui/hooks'
-import { isFunction } from '@vexip-ui/utils'
+import { getLast, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -127,7 +127,7 @@ const style = computed(() => {
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
   const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
-  const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined

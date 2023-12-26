@@ -203,6 +203,11 @@ const inputValue = computed(() => {
   return inputting.value ? preciseNumber.value : formattedValue.value
 })
 
+const delay = toNumber(props.delay)
+const handleInput = props.debounce
+  ? debounce(handleChange, delay || 100)
+  : throttle(handleChange, delay || 16)
+
 watch(
   () => props.value,
   value => {
@@ -212,6 +217,20 @@ watch(
   },
   { immediate: true }
 )
+
+defineExpose({
+  idFor,
+  focused,
+  isHover,
+  outOfRange,
+  preciseNumber,
+  formattedValue,
+  isReadonly,
+  wrapper,
+  input: control,
+  focus,
+  blur: () => control.value?.blur()
+})
 
 function boundValueRange(value: number) {
   return boundRange(value, props.min, props.max)
@@ -402,6 +421,7 @@ function handleClear() {
   setValue(NaN, 'change', false)
   emitEvent(props.onClear)
   clearField()
+  focus()
 }
 
 function handleEnter() {
@@ -419,25 +439,6 @@ function handleSuffixClick(event: MouseEvent) {
 function handleKeyPress(event: KeyboardEvent) {
   emitEvent(props.onKeyPress, event)
 }
-
-const delay = toNumber(props.delay)
-const handleInput = props.debounce
-  ? debounce(handleChange, delay || 100)
-  : throttle(handleChange, delay || 16)
-
-defineExpose({
-  idFor,
-  focused,
-  isHover,
-  outOfRange,
-  preciseNumber,
-  formattedValue,
-  isReadonly,
-  wrapper,
-  input: control,
-  focus,
-  blur: () => control.value?.blur()
-})
 </script>
 
 <template>

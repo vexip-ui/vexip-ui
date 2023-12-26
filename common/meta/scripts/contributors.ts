@@ -170,13 +170,20 @@ async function main() {
   const startTime = Date.now()
 
   if (process.env.DEV) {
-    (await import('dotenv')).config()
+    ;(await import('dotenv')).config()
   }
 
   if (!process.env.GITHUB_TOKEN) {
-    logger.error('Need GITHUB_TOKEN To Generate Contributors')
-    logger.ln()
-    process.exit(1)
+    if (process.env.DEV) {
+      writeFileSync(resolve(outputDir, 'contributors.json'), '{}\n', 'utf-8')
+      logger.success('Generated empty contributors meta data for development or offline build')
+
+      return
+    } else {
+      logger.error('Need GITHUB_TOKEN To Generate Contributors')
+      logger.ln()
+      process.exit(1)
+    }
   }
 
   if (!existsSync(outputDir)) {
@@ -221,9 +228,9 @@ async function main() {
     logger.infoText(`Fetched: ${[...new Set(paths.map(({ component }) => component))].join(', ')}`)
   }
 
-  (contributors as any)._users = users
+  ;(contributors as any)._users = users
 
-  writeFileSync(resolve(outputDir, 'contributors.json'), JSON.stringify(contributors))
+  writeFileSync(resolve(outputDir, 'contributors.json'), JSON.stringify(contributors), 'utf-8')
 
   logger.success(`Generated contributors meta data in ${Date.now() - startTime}ms`)
 }

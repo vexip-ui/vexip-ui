@@ -32,6 +32,7 @@ $collapse: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   $header: #{&}__header;
   $arrow: #{&}__arrow;
@@ -51,6 +52,7 @@ $collapse: map.merge(
   @at-root {
     &__panel {
       @include basis;
+      @include inherit-color;
 
       padding: 0;
       margin: 0;

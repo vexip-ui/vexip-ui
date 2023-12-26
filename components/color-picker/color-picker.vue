@@ -21,6 +21,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import {
+  getLast,
   hsvToHsl,
   hsvToRgb,
   isClient,
@@ -442,11 +443,11 @@ function handleTabDown(event: KeyboardEvent) {
     let maybeEl: any
 
     if (!~index) {
-      maybeEl = elList.at(shift ? -1 : 0)
+      maybeEl = shift ? getLast(elList) : elList[0]
     } else if (shift ? !index : index === elList.length - 1) {
       maybeEl = reference.value
     } else {
-      maybeEl = elList.at(index + (shift ? -1 : 1))
+      maybeEl = elList[index + (shift ? -1 : 1)]
     }
 
     if (maybeEl) {
@@ -482,7 +483,7 @@ function handleShortcutsKeydown(event: KeyboardEvent) {
     case 'Enter':
     case 'Space':
     case ' ': {
-      const color = shortcutList.value.at(shortcutHitting.value)
+      const color = shortcutList.value[shortcutHitting.value]
 
       color && handleShortcutClick(color)
       break

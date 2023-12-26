@@ -3,6 +3,7 @@
 
 .#{$namespace}-grid {
   @include basis;
+  @include inherit-color;
 
   position: relative;
   display: grid;
