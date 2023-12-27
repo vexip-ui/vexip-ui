@@ -47,6 +47,29 @@ describe('NumberInput', () => {
     expect(getValue(wrapper.find('input'))).toEqual('')
   })
 
+  it('invalid value', async () => {
+    const wrapper = mount(NumberInput, {
+      props: { value: NUMBER }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
+
+    await wrapper.setProps({ value: 'abc' })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
+  it('scientific notation', async () => {
+    const value = 1.1641532182693484e-10
+    const wrapper = mount(NumberInput, {
+      props: { value }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(value))
+
+    await wrapper.setProps({ value: null })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
   it('disabled', async () => {
     const wrapper = mount(NumberInput)
     const input = wrapper.find('input').element
