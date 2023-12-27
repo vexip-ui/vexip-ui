@@ -5,8 +5,8 @@ export function ensureArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : [value]
 }
 
-export function callIfFunc<T>(value: T | (() => T)) {
-  return isFunction(value) ? value() : value
+export function callIfFunc<T, P extends any[] = any[]>(value: T | ((...args: P) => T), ...args: P) {
+  return isFunction(value) ? value(...args) : value
 }
 
 export function normalizePath(path: string) {
@@ -27,25 +27,25 @@ export function getLast(value: string | any[]) {
  * @param accessor 映射的值的读取方法，默认返回元素本身
  * @param isMap 是否使用 Map 对象储存结果
  */
-export function transformListToMap<T = any, O = T>(
+export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
   accessor?: (item: T) => O,
   isMap?: false
 ): Record<string, O>
-export function transformListToMap<T = any, O = T, K extends keyof T = keyof T>(
+export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
   accessor?: (item: T) => O,
   isMap?: true
 ): Map<T[K], O>
-export function transformListToMap<T = any, O = T, K = any>(
+export function listToMap<T = any, O = T, K = any>(
   list: T[],
   prop: (item: T) => K,
   accessor?: (item: T) => O,
   isMap?: true
 ): Map<K extends keyof T ? T[K] : unknown, O>
-export function transformListToMap<T = any, O = T>(
+export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
   accessor: (item: T) => O = v => v as any,
@@ -69,6 +69,11 @@ export function transformListToMap<T = any, O = T>(
   })
 
   return map
+}
+
+export {
+  /** @deprecated please use listToMap to replace it */
+  listToMap as transformListToMap
 }
 
 /**

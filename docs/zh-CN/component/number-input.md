@@ -156,6 +156,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | empty-type     | `NumberInputEmptyType`                           | 设置空值的类型                                                                               | `'NaN'`     | `2.1.8`  |
 | control-attrs  | `Record<string, any>`                            | 设置输入框控件元素的属性                                                                     | `null`      | `2.2.2`  |
 | name           | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
+| sync-step      | `boolean`                                        | 仅为增减操作开启同步模式（包括键盘触发）                                                     | `false`     | `2.2.23` |
 
 ### NumberInput 事件
 

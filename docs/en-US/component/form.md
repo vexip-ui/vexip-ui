@@ -233,12 +233,12 @@ interface Rule<T = any> {
 
 ### FormItem Slots
 
-| Name    | Description                     | Parameters      | Since   |
-| ------- | ------------------------------- | --------------- | ------- |
-| default | Slot for field content          | -               | -       |
-| label   | Slot for field label content    | -               | -       |
-| help    | Slot for field help information | -               | `2.0.0` |
-| error   | Slot for error content tip      | `(tip: string)` | -       |
+| Name    | Description                     | Parameters        | Since   |
+| ------- | ------------------------------- | ----------------- | ------- |
+| default | Slot for field content          | -                 | -       |
+| label   | Slot for field label content    | -                 | -       |
+| help    | Slot for field help information | -                 | `2.0.0` |
+| error   | Slot for error content tip      | `{ tip: string }` | -       |
 
 ### FormSubmit Props
 

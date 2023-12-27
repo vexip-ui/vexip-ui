@@ -19,6 +19,7 @@ export const alertProps = buildProps({
   manual: booleanProp,
   scroll: booleanProp,
   scrollSpeed: Number,
+  color: String,
   onClose: eventProp(),
   onHide: eventProp(),
   onScrollEnd: eventProp()

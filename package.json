@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.2.22",
+  "version": "2.2.23",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
@@ -19,6 +19,7 @@
     "build:common": "run-s build:utils build:bem build:hooks build:icons build:config",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:docs": "pnpm -C docs build",
+    "build:docs-offline": "pnpm -C common/meta dev && pnpm -C docs build",
     "build:full": "tsx scripts/build-full.ts",
     "build:hooks": "pnpm -C common/hooks build && pnpm i",
     "build:icons": "pnpm -C common/icons build && pnpm i",
