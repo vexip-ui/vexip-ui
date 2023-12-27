@@ -86,6 +86,7 @@ const props = useProps('numberInput', _props, {
   loadingLock: false,
   loadingEffect: null,
   sync: false,
+  syncStep: false,
   controlType: 'right',
   emptyType: 'NaN',
   controlAttrs: null,
@@ -318,7 +319,7 @@ function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt')
     value = minus(value, step)
   }
 
-  setValue(value, 'input')
+  setValue(value, props.syncStep && !props.sync ? 'change' : 'input')
 }
 
 function handleChange(event: Event) {
