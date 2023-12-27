@@ -68,7 +68,7 @@ yarn add vexip-ui
 
 [Here](https://www.vexipui.com) you can view the online document.
 
-> Author is poor in English. If you have any advice to improve the English document, you can create an issue or a PR.
+> Author is not good at English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Help
 
