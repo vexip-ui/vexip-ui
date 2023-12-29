@@ -21,7 +21,7 @@ import VideoControl from './video-control.vue'
 import VideoProgress from './video-progress.vue'
 import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
-import { createSlotRender, useListener, useSetTimeout } from '@vexip-ui/hooks'
+import { createSlotRender, useListener, useModifier, useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, isClient, toCapitalCase, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
 import { VIDEO_STATE, videoDefaultControlLayout } from './symbol'
@@ -98,7 +98,20 @@ export default defineComponent({
     const video = ref<HTMLVideoElement>()
 
     const placeId = computed(() => screen.value?.placeId)
+    const full = computed<false | FullScreenType>(() => screen.value?.full ?? false)
     const videoRef = computed<HTMLVideoElement | undefined>(() => video.value || props.video)
+
+    useModifier({
+      target: wrapper,
+      passive: false,
+      onKeyDown: (_, modifier) => {
+        if (modifier.f) {
+          toggleFull('browser')
+          modifier.resetAll()
+        }
+      }
+    })
+
     const className = computed(() => {
       return [nh.b(), nh.bs('vars')]
     })
@@ -421,7 +434,7 @@ export default defineComponent({
     function renderPlayNext() {
       return (
         <VideoControl
-          name={locale.value.playPrev}
+          name={locale.value.playNext}
           disabled={!!props.srcList && srcIndex.value === srcFullList.value.length - 1}
           onClick={playNext}
         >
@@ -486,7 +499,11 @@ export default defineComponent({
       if (!pipEnabled || !video.value) return null
 
       return (
-        <VideoControl name={locale.value.requestPip} disabled={!canPlay.value} onClick={togglePip}>
+        <VideoControl
+          name={pip.value ? locale.value.exitPip : locale.value.requestPip}
+          disabled={!canPlay.value}
+          onClick={togglePip}
+        >
           <Icon {...icons.value.pip} scale={+(icons.value.pip.scale || 1) * iconScale.value}></Icon>
         </VideoControl>
       )
@@ -494,7 +511,10 @@ export default defineComponent({
 
     function renderFullWindow() {
       return (
-        <VideoControl name={locale.value.fullWindow} onClick={() => toggleFull('window')}>
+        <VideoControl
+          name={full.value === 'window' ? locale.value.fullWindowExit : locale.value.fullWindow}
+          onClick={() => toggleFull('window')}
+        >
           <Icon
             {...icons.value.fullWindow}
             scale={+(icons.value.fullWindow.scale || 1) * iconScale.value}
@@ -506,7 +526,7 @@ export default defineComponent({
     function renderFullBrowser() {
       return (
         <VideoControl
-          name={locale.value.fullScreen}
+          name={full.value === 'browser' ? locale.value.fullScreenExit : locale.value.fullScreen}
           shortcut={'F'}
           onClick={() => toggleFull('browser')}
         >

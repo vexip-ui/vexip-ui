@@ -38,15 +38,17 @@
 
 通过 `control-layout` 属性可以配置控件布局，其中分为了 `left`、`right` 和 `center` 三个部分，每个部分接收一个控件名称的数组。
 
-控件名称分为了预设控件和自定义控件两种，`VideoPresetControl` 类型定义了预设控件的名称，自定义控件的名称则是由用户决定。
+控件分为了预设控件和自定义控件两种，`VideoPresetControl` 类型定义了预设控件的名称，自定义控件的名称则是由用户决定。
 
 在配置了自定义控件后，需要通过 `control-[name]` 插槽自行定义控件的内容，其中 `[name]` 为控件名称。
+
+借助 VideoControl 组件可以更便捷地创建自定义控件。
 
 :::
 
 :::demo video/segments
 
-### 视频分段
+### 分段视频
 
 通过 `segments` 属性可以为视频配置一组分段信息。
 
@@ -81,7 +83,47 @@
 ### 预设类型
 
 ```ts
+type VideoPresetControl =
+  | 'play'
+  | 'play-prev'
+  | 'play-next'
+  | 'refresh'
+  | 'timer'
+  | 'play-rate'
+  | 'flip'
+  | 'volume'
+  | 'pip'
+  | 'full-window'
+  | 'full-browser'
+type VideoControlName = VideoPresetControl | (string & {})
+type VideoControlConfig = VideoControlName | [VideoControlName, any]
 
+interface VideoControlLayout {
+  left?: VideoControlConfig[],
+  center?: VideoControlConfig[],
+  right?: VideoControlConfig[]
+}
+
+interface VideoPlayRate {
+  label?: string,
+  value: number
+}
+
+type VideoControlType = 'button' | 'select' | 'panel'
+
+interface VideoControlOption {
+  value: string | number,
+  label?: string,
+  selectedLabel?: string,
+  disabled?: boolean,
+  divided?: boolean,
+  title?: string
+}
+
+interface VideoSegment {
+  time: number,
+  title?: string
+}
 ```
 
 ### Video 属性

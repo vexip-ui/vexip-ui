@@ -175,6 +175,22 @@ export function enUSLocale() {
       dragOrClick: 'Drag files here, or click to upload'
     },
 
+    video: {
+      play: 'Play',
+      pause: 'Pause',
+      playPrev: 'Prev',
+      playNext: 'Next',
+      refresh: 'Refresh',
+      flip: 'Flip',
+      requestPip: 'Enter PIP',
+      exitPip: 'Exit PIP',
+      fullWindow: 'Full window',
+      fullWindowExit: 'Full window exit',
+      fullScreen: 'Full screen',
+      fullScreenExit: 'Full screen exit',
+      chapterCount: 'Chapter {n}'
+    },
+
     viewer: {
       rotateRight: 'Rotate right',
       rotateLeft: 'Rotate left',
