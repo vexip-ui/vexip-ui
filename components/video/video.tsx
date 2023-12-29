@@ -22,12 +22,24 @@ import VideoProgress from './video-progress.vue'
 import VideoTimer from './video-timer.vue'
 import VideoVolume from './video-volume.vue'
 import { createSlotRender, useListener, useModifier, useSetTimeout } from '@vexip-ui/hooks'
-import { decimalLength, isClient, toCapitalCase, toNumber } from '@vexip-ui/utils'
+import { decide, decimalLength, isClient, noop, toCapitalCase, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
 import { VIDEO_STATE, videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed, FullScreenType } from '@/components/full-screen'
-import type { VideoControlConfig, VideoPlayRate } from './symbol'
+import type { VideoControlConfig, VideoPlayRate, VideoShortcutOptions } from './symbol'
+
+const defaultShortcuts: VideoShortcutOptions = {
+  play: 'Space',
+  'play-prev': 'PageUp',
+  'play-next': 'PageDown',
+  refresh: 'R',
+  flip: 'C',
+  volume: 'M',
+  pip: 'P',
+  'full-window': 'G',
+  'full-browser': 'F'
+}
 
 export default defineComponent({
   name: 'Video',
@@ -62,7 +74,8 @@ export default defineComponent({
       segments: () => [],
       loading: false,
       loadingIcon: null,
-      loadingEffect: null
+      loadingEffect: null,
+      shortcuts: () => ({})
     })
 
     const nh = useNameHelper('video')
@@ -71,7 +84,6 @@ export default defineComponent({
 
     const { timer } = useSetTimeout()
 
-    // const idIndex = getIdIndex()
     const pipEnabled = isClient && document.pictureInPictureEnabled
 
     const currentSrc = ref(
@@ -94,21 +106,59 @@ export default defineComponent({
     const iconScale = ref(1.3)
 
     const screen = ref<FullScreenExposed>()
-    const wrapper = computed(() => screen.value?.wrapper)
+    const wrapper = computed(() => screen.value?.wrapper as HTMLElement | undefined)
     const video = ref<HTMLVideoElement>()
+    const volumeRef = ref<InstanceType<typeof VideoVolume>>()
 
     const placeId = computed(() => screen.value?.placeId)
     const full = computed<false | FullScreenType>(() => screen.value?.full ?? false)
     const videoRef = computed<HTMLVideoElement | undefined>(() => video.value || props.video)
 
+    const shortcutRecord = reactive({} as Record<string, () => void>)
+    const shortcuts = computed(() => ({ ...defaultShortcuts, ...props.shortcuts }))
+
+    function addShortcut(key: string, cb: () => void) {
+      if (shortcutRecord[key]) {
+        console.warn(`[vexip-ui:Video] duplicate shortcut key '${key}' and it will be ignored`)
+
+        return noop
+      }
+
+      shortcutRecord[key] = cb
+
+      return () => {
+        delete shortcutRecord[key]
+      }
+    }
+
     useModifier({
       target: wrapper,
       passive: false,
-      onKeyDown: (_, modifier) => {
-        if (modifier.f) {
-          toggleFull('browser')
-          modifier.resetAll()
-        }
+      onKeyDown: (event, modifier) => {
+        if (event.ctrlKey || event.shiftKey || event.altKey || event.metaKey) return
+
+        decide(
+          [
+            [
+              () => modifier.up,
+              () => (currentVolume.value = Math.min(1, currentVolume.value + 0.05))
+            ],
+            [
+              () => modifier.down,
+              () => (currentVolume.value = Math.max(0, currentVolume.value - 0.05))
+            ],
+            [
+              () => modifier.right,
+              () => (currentTime.value = Math.min(duration.value, currentTime.value + 5))
+            ],
+            [() => modifier.left, () => (currentTime.value = Math.max(0, currentTime.value - 5))],
+            [() => modifier[shortcuts.value.volume || 'M'], () => volumeRef.value?.toggleMute()],
+            ...Object.keys(shortcutRecord).map(key => {
+              return [() => modifier[key], shortcutRecord[key]] as [() => boolean, () => void]
+            })
+          ],
+          { afterMatchAny: modifier.resetAll }
+        )
       }
     })
 
@@ -233,7 +283,7 @@ export default defineComponent({
       })
     })
 
-    provide(VIDEO_STATE, reactive({ placeId, iconScale }))
+    provide(VIDEO_STATE, reactive({ placeId, iconScale, addShortcut }))
 
     useListener(videoRef, 'canplay', () => {
       canPlay.value = true
@@ -343,11 +393,14 @@ export default defineComponent({
 
     function toggleFlip() {
       flipped.value = !flipped.value
+      emitEvent(props.onToggleFlip, flipped.value)
     }
 
     function onFullChange(full: false | FullScreenType) {
-      wrapper.value?.focus()
-      emitEvent(props.onToggleFull, full)
+      nextTick(() => {
+        wrapper.value?.focus()
+        emitEvent(props.onToggleFull, full)
+      })
     }
 
     function resetMetaState() {
@@ -401,10 +454,15 @@ export default defineComponent({
       screen.value?.toggle(type)
     }
 
+    function handleRefresh() {
+      emitEvent(props.onRefresh)
+    }
+
     function renderPlayPrev() {
       return (
         <VideoControl
-          name={locale.value.playPrev}
+          label={locale.value.playPrev}
+          shortcut={shortcuts.value['play-prev']}
           disabled={!!props.srcList && !srcIndex.value}
           onClick={playPrev}
         >
@@ -419,7 +477,8 @@ export default defineComponent({
     function renderPlay() {
       return (
         <VideoControl
-          name={playing.value ? locale.value.pause : locale.value.play}
+          label={playing.value ? locale.value.pause : locale.value.play}
+          shortcut={shortcuts.value.play}
           disabled={!canPlay.value}
           onClick={togglePlaying}
         >
@@ -434,7 +493,8 @@ export default defineComponent({
     function renderPlayNext() {
       return (
         <VideoControl
-          name={locale.value.playNext}
+          label={locale.value.playNext}
+          shortcut={shortcuts.value['play-next']}
           disabled={!!props.srcList && srcIndex.value === srcFullList.value.length - 1}
           onClick={playNext}
         >
@@ -448,7 +508,11 @@ export default defineComponent({
 
     function renderRefresh() {
       return (
-        <VideoControl name={locale.value.refresh} onClick={() => emitEvent(props.onRefresh)}>
+        <VideoControl
+          label={locale.value.refresh}
+          shortcut={shortcuts.value.refresh}
+          onClick={handleRefresh}
+        >
           <Icon
             {...icons.value.refresh}
             scale={+(icons.value.refresh.scale || 1) * iconScale.value}
@@ -481,12 +545,22 @@ export default defineComponent({
     }
 
     function renderVolume() {
-      return <VideoVolume volume={currentVolume.value} onChange={changeVolume}></VideoVolume>
+      return (
+        <VideoVolume
+          ref={volumeRef}
+          volume={currentVolume.value}
+          onChange={changeVolume}
+        ></VideoVolume>
+      )
     }
 
     function renderFlip() {
       return (
-        <VideoControl name={locale.value.flip} onClick={toggleFlip}>
+        <VideoControl
+          label={locale.value.flip}
+          shortcut={shortcuts.value.flip}
+          onClick={toggleFlip}
+        >
           <Icon
             {...icons.value.flipX}
             scale={+(icons.value.flipX.scale || 1) * iconScale.value}
@@ -500,7 +574,8 @@ export default defineComponent({
 
       return (
         <VideoControl
-          name={pip.value ? locale.value.exitPip : locale.value.requestPip}
+          label={pip.value ? locale.value.exitPip : locale.value.requestPip}
+          shortcut={shortcuts.value.pip}
           disabled={!canPlay.value}
           onClick={togglePip}
         >
@@ -512,7 +587,8 @@ export default defineComponent({
     function renderFullWindow() {
       return (
         <VideoControl
-          name={full.value === 'window' ? locale.value.fullWindowExit : locale.value.fullWindow}
+          label={full.value === 'window' ? locale.value.fullWindowExit : locale.value.fullWindow}
+          shortcut={shortcuts.value['full-window']}
           onClick={() => toggleFull('window')}
         >
           <Icon
@@ -526,8 +602,8 @@ export default defineComponent({
     function renderFullBrowser() {
       return (
         <VideoControl
-          name={full.value === 'browser' ? locale.value.fullScreenExit : locale.value.fullScreen}
-          shortcut={'F'}
+          label={full.value === 'browser' ? locale.value.fullScreenExit : locale.value.fullScreen}
+          shortcut={shortcuts.value['full-browser']}
           onClick={() => toggleFull('browser')}
         >
           <Icon

@@ -95,6 +95,7 @@ type VideoPresetControl =
   | 'pip'
   | 'full-window'
   | 'full-browser'
+type VideoShortcutOptions = Partial<Record<VideoPresetControl, string>>
 type VideoControlName = VideoPresetControl | (string & {})
 type VideoControlConfig = VideoControlName | [VideoControlName, any]
 
@@ -145,6 +146,7 @@ interface VideoSegment {
 | loading        | `boolean`                     | 设置视频是否为加载状态                                                | `false`                     | -    |
 | loading-icon   | `Record<string, any>`         | 设置加载中的图标                                                      | `null`                      | -    |
 | loading-effect | `string`                      | 设置加载中图标的效果动画                                              | `null`                      | -    |
+| shortcuts      | `VideoShortcutOptions`        | 配置预设控件的快捷键                                                  | `{}`                        | -    |
 
 ### Video 事件
 
@@ -174,3 +176,16 @@ interface VideoSegment {
 | state          | 视频状态标志的插槽                                                                   | `{ active: boolean }` | -    |
 | loading        | 视频加载图标的插槽                                                                   | -                     | -    |
 | extra          | 额外内容的插槽，将被添加在包围元素的最后                                             | -                     | -    |
+
+### VideoControl 属性
+
+| 名称      | 类型                               | 说明                               | 默认值     | 始于 |
+| --------- | ---------------------------------- | ---------------------------------- | ---------- | ---- |
+| type      | `VideoControlType`                 | 设置控件的类型                     | `'button'` | -    |
+| label     | `string`                           | 类型为 `'button'` 时设置控件的标签 | `''`       | -    |
+| tipClass  | `ClassType`                        | 设置弹出气泡的自定义类名           | `null`     | -    |
+| disabled  | `boolean`                          | 设置是否为禁用状态                 | `false`    | -    |
+| shortcut  | `string`                           | 设置控件的快捷键                   | `''`       | -    |
+| focusable | `boolean`                          |                                    | `false`    | -    |
+| value     | `number \| string`                 |                                    | `null`     | -    |
+| options   | `(string \| VideoControlOption)[]` |                                    | `[]`       | -    |

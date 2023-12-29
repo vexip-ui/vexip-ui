@@ -10,7 +10,8 @@ import type {
   VideoControlType,
   // VideoKernel,
   VideoPlayRate,
-  VideoSegment
+  VideoSegment,
+  VideoShortcutOptions
 } from './symbol'
 
 export const videoProps = buildProps({
@@ -30,6 +31,7 @@ export const videoProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingEffect: String as PropType<IconEffect>,
+  shortcuts: Object as PropType<VideoShortcutOptions>,
   onPlay: eventProp(),
   onPause: eventProp(),
   onEnded: eventProp(),
@@ -48,8 +50,8 @@ export type VideoProps = ExtractPropTypes<typeof videoProps>
 export type VideoCProps = ConfigurableProps<ExtractPropTypes<typeof videoProps>>
 
 export const videoControlProps = buildProps({
-  name: String,
   type: String as PropType<VideoControlType>,
+  label: String,
   tipClass: [String, Array, Object] as PropType<ClassType>,
   disabled: booleanProp,
   shortcut: String,

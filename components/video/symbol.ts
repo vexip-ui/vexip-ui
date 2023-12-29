@@ -12,6 +12,7 @@ export type VideoPresetControl =
   | 'pip'
   | 'full-window'
   | 'full-browser'
+export type VideoShortcutOptions = Partial<Record<VideoPresetControl, string>>
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type VideoControlName = VideoPresetControl | (string & {})
 export type VideoControlConfig = VideoControlName | [VideoControlName, any]
@@ -55,7 +56,8 @@ export interface VideoSegment {
 
 export interface VideoState {
   placeId?: string,
-  iconScale: number
+  iconScale: number,
+  addShortcut: (key: string, cb: () => void) => () => void
 }
 
 const defaultLayout: Required<VideoControlLayout> = {

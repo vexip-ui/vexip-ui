@@ -2,10 +2,10 @@
 import { Option } from '@/components/option'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, inject, ref } from 'vue'
+import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { transformListToMap } from '@vexip-ui/utils'
+import { listToMap } from '@vexip-ui/utils'
 import { videoControlProps } from './props'
 import { VIDEO_STATE } from './symbol'
 
@@ -15,8 +15,11 @@ defineOptions({ name: 'VideoControl' })
 
 const _props = defineProps(videoControlProps)
 const props = useProps('videoControl', _props, {
-  name: '',
   type: 'button',
+  label: {
+    static: true,
+    default: ''
+  },
   tipClass: null,
   disabled: false,
   shortcut: {
@@ -49,8 +52,28 @@ const objectOptions = computed(() => {
     return typeof option === 'string' ? { value: option } : option
   })
 })
-const optionMap = computed(() => transformListToMap(objectOptions.value, 'value', undefined, true))
+const optionMap = computed(() => listToMap(objectOptions.value, 'value', undefined, true))
 const currentOption = computed(() => optionMap.value.get(currentValue.value))
+
+let removeShortcut: (() => void) | undefined
+
+watch(
+  () => props.shortcut,
+  value => {
+    removeShortcut?.()
+
+    if (value) {
+      removeShortcut = videoState.addShortcut(value, handleClick)
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(() => removeShortcut?.())
+
+function handleClick() {
+  !props.disabled && emitEvent(props.onClick)
+}
 
 function handleSelect(option: VideoControlOption) {
   if (props.disabled || option.disabled) return
@@ -69,7 +92,7 @@ function handleSelect(option: VideoControlOption) {
       :transfer="videoState.placeId && `#${videoState.placeId}`"
       :tip-class="[tipClass, props.tipClass]"
       :no-hover="props.type === 'button'"
-      :disabled="props.type === 'button' ? !props.name : props.disabled"
+      :disabled="props.type === 'button' ? !props.label : props.disabled"
       @tip-enter="emitEvent(props.onEnter)"
       @tip-leave="emitEvent(props.onLeave)"
     >
@@ -79,7 +102,7 @@ function handleSelect(option: VideoControlOption) {
           type="button"
           @focus="emitEvent(props.onFocus, $event)"
           @blur="emitEvent(props.onBlur, $event)"
-          @click="!props.disabled && emitEvent(props.onClick)"
+          @click="handleClick"
         >
           <slot v-if="currentOption" name="selected" :option="currentOption">
             {{ currentOption.selectedLabel || currentOption.label || currentOption.value }}
@@ -89,8 +112,8 @@ function handleSelect(option: VideoControlOption) {
       </template>
       <template v-if="props.type === 'button'">
         <span :class="nh.be('control-name')">
-          <slot name="name">
-            {{ props.name }}
+          <slot name="label">
+            {{ props.label }}
             <span v-if="props.shortcut" :class="nh.be('control-shortcut')">
               {{ `(${props.shortcut})` }}
             </span>

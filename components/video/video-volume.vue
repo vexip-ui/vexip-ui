@@ -44,6 +44,8 @@ watch(
   }
 )
 
+defineExpose({ toggleMute })
+
 let prevVolume = currentVolume.value
 
 function toggleMute() {

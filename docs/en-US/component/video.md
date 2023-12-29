@@ -95,6 +95,7 @@ type VideoPresetControl =
   | 'pip'
   | 'full-window'
   | 'full-browser'
+type VideoShortcutOptions = Partial<Record<VideoPresetControl, string>>
 type VideoControlName = VideoPresetControl | (string & {})
 type VideoControlConfig = VideoControlName | [VideoControlName, any]
 
@@ -145,6 +146,7 @@ interface VideoSegment {
 | loading        | `boolean`                     | Set whether the video is loading                                                                             | `false`                     | -     |
 | loading-icon   | `Record<string, any>`         | Set the loading icon                                                                                         | `null`                      | -     |
 | loading-effect | `string`                      | Set the effect animation of the loading icon                                                                 | `null`                      | -     |
+| shortcuts      | `VideoShortcutOptions`        | Configure shortcut keys for preset controls                                                                  | `{}`                        | -     |
 
 ### Video Events
 
