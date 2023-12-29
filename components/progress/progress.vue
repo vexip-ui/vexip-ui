@@ -47,8 +47,8 @@ import { Bubble } from '@/components/bubble'
 
 import { computed, defineComponent } from 'vue'
 
-import { useNameHelper, useProps } from '@vexip-ui/config'
-import { toFixed } from '@vexip-ui/utils'
+import { createStateProp, useNameHelper, useProps } from '@vexip-ui/config'
+import { callIfFunc, toFixed } from '@vexip-ui/utils'
 import { progressProps } from './props'
 
 import type { CSSProperties } from 'vue'
@@ -76,6 +76,7 @@ export default defineComponent({
         validator: value => value >= 0 && value <= 100,
         static: true
       },
+      state: createStateProp(),
       strokeWidth: 8,
       infoType: {
         default: 'outside',
@@ -98,6 +99,7 @@ export default defineComponent({
         nh.bm(`info-${props.infoType}`),
         {
           [nh.bm('inherit')]: props.inherit,
+          [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('activated')]: props.activated
         }
       ]
@@ -116,11 +118,7 @@ export default defineComponent({
         borderRadius: `${props.strokeWidth}px`
       }
 
-      let strokeColor = props.strokeColor
-
-      if (typeof strokeColor === 'function') {
-        strokeColor = strokeColor(props.percentage)
-      }
+      const strokeColor = callIfFunc(props.strokeColor, props.percentage)
 
       if (typeof strokeColor === 'string') {
         style.backgroundColor = strokeColor

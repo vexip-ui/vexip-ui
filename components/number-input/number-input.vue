@@ -18,6 +18,7 @@ import {
   boundRange,
   debounce,
   isNull,
+  isValidNumber,
   minus,
   plus,
   throttle,
@@ -25,7 +26,6 @@ import {
   toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
-import { numberRE } from './symbol'
 
 type InputEventType = 'input' | 'change'
 
@@ -86,6 +86,7 @@ const props = useProps('numberInput', _props, {
   loadingLock: false,
   loadingEffect: null,
   sync: false,
+  syncStep: false,
   controlType: 'right',
   emptyType: 'NaN',
   controlAttrs: null,
@@ -238,7 +239,7 @@ function boundValueRange(value: number) {
 
 function parseValue() {
   let value = props.value
-  value = inputting.value ? value : numberRE.test(String(value)) ? toNumber(value) : getEmptyValue()
+  value = inputting.value ? value : isValidNumber(value, true) ? toNumber(value) : getEmptyValue()
 
   if (props.precision >= 0 && !isNullOrNaN(value)) {
     value = toFixed(boundValueRange(value), props.precision)
@@ -318,7 +319,7 @@ function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt')
     value = minus(value, step)
   }
 
-  setValue(value, 'input')
+  setValue(value, props.syncStep && !props.sync ? 'change' : 'input')
 }
 
 function handleChange(event: Event) {
@@ -327,7 +328,8 @@ function handleChange(event: Event) {
 
   let value = stringValue.trim()
 
-  if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
+  // to rollback invalid value to empty in `<input>` when change
+  if (type === 'change' && stringValue && !isValidNumber(stringValue, true)) {
     const floatValue = parseFloat(stringValue)
 
     if (Number.isNaN(floatValue)) {

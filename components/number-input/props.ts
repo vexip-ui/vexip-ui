@@ -48,6 +48,7 @@ export const numberInputProps = buildProps({
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
+  syncStep: booleanProp,
   controlType: String as PropType<NumberInputControlType>,
   emptyType: String as PropType<NumberInputEmptyType>,
   controlAttrs: Object as PropType<Record<string, any>>,
