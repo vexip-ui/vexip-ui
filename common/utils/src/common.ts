@@ -59,12 +59,18 @@ export function isArray<T = any>(value: unknown): value is T[] {
   return Array.isArray(value)
 }
 
+/**
+ * 注意，`null` 与原生的特殊对象不被包含
+ */
 export function isObject<T extends Record<any, any> = Record<any, any>>(
   value: unknown
 ): value is T {
   return is(value, 'Object')
 }
 
+/**
+ * 如果一个对象包含 `then` 和 `catch` 方法，则被认为是一个 `Promise`
+ */
 export function isPromise<T = any>(value: unknown): value is Promise<T> {
   return (
     !!value &&
@@ -106,7 +112,11 @@ export function isEmpty(value: unknown) {
     return Object.keys(value).length === 0
   }
 
-  return false
+  if (typeof value === 'number') {
+    return isNaN(value)
+  }
+
+  return isNull(value)
 }
 
 export function isElement<T extends Element = Element>(value: unknown, ssr = false): value is T {
@@ -175,4 +185,36 @@ export function randomString(length = 16) {
   }
 
   return string
+}
+
+/**
+ * 根据一系列判断条件，执行第一个为 `true` 的条件所对应的回调函数
+ *
+ * @param conditions 判断条件及回调函数
+ * @param options 额外的选项
+ */
+export async function decide(
+  conditions: [boolean | (() => boolean), () => void | Promise<void>][],
+  options: {
+    /**
+     * 当匹配任意一个条件时，会在该条件对应的回调函数执行完后执行
+     */
+    afterMatchAny?: () => void | Promise<void>
+  } = {}
+) {
+  if (conditions.length) {
+    for (const [condition, callback] of conditions) {
+      if (typeof condition === 'function' ? condition() : condition) {
+        await callback()
+
+        if (typeof options.afterMatchAny === 'function') {
+          await options.afterMatchAny()
+        }
+
+        return true
+      }
+    }
+  }
+
+  return false
 }

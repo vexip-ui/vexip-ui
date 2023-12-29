@@ -39,7 +39,7 @@ module.exports = defineConfig({
     {
       files: ['**/*.spec.tsx'],
       rules: {
-        'react/jsx-key': 'off'
+        'prefer-regex-literals': 'off'
       }
     },
     {
