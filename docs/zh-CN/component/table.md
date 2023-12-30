@@ -644,11 +644,11 @@ interface TableFootPayload {
 
 ### Table 插槽
 
-| 名称        | 说明                                                         | 参数                 | 始于     |
-| ----------- | ------------------------------------------------------------ | -------------------- | -------- |
-| default     | 用于定义 TableColumn 和 TableSummary 组件                    | -                    | -        |
-| empty       | 空数据提示内容的插槽                                         | `(isFixed: boolean)` | -        |
-| icon-[name] | 表格图标的插槽，其中 `[name]` 的可选值请参考 `TableIconName` | -                    | `2.1.28` |
+| 名称        | 说明                                                         | 参数                   | 始于     |
+| ----------- | ------------------------------------------------------------ | ---------------------- | -------- |
+| default     | 用于定义 TableColumn 和 TableSummary 组件                    | -                      | -        |
+| empty       | 空数据提示内容的插槽                                         | `{ isFixed: boolean }` | -        |
+| icon-[name] | 表格图标的插槽，其中 `[name]` 的可选值请参考 `TableIconName` | -                      | `2.1.28` |
 
 ### Table 方法
 

@@ -330,12 +330,12 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### LayoutAside Slots
 
-| Name    | Description                                 | Parameters           | Since |
-| ------- | ------------------------------------------- | -------------------- | ----- |
-| top     | Slot for the top of aside                   | `LayoutSlotParams }` | -     |
-| default | Slot for the center of aside                | `LayoutSlotParams }` | -     |
-| bottom  | Slot for the bottom of aside                | `LayoutSlotParams }` | -     |
-| expand  | Slot of handler that trigger aside expanded | `LayoutSlotParams }` | -     |
+| Name    | Description                                 | Parameters         | Since |
+| ------- | ------------------------------------------- | ------------------ | ----- |
+| top     | Slot for the top of aside                   | `LayoutSlotParams` | -     |
+| default | Slot for the center of aside                | `LayoutSlotParams` | -     |
+| bottom  | Slot for the bottom of aside                | `LayoutSlotParams` | -     |
+| expand  | Slot of handler that trigger aside expanded | `LayoutSlotParams` | -     |
 
 ### LayoutMain Props
 
