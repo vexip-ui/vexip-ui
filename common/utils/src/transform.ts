@@ -5,8 +5,8 @@ export function ensureArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : [value]
 }
 
-export function callIfFunc<T>(value: T | (() => T)) {
-  return isFunction(value) ? value() : value
+export function callIfFunc<T, P extends any[] = any[]>(value: T | ((...args: P) => T), ...args: P) {
+  return isFunction(value) ? value(...args) : value
 }
 
 export function normalizePath(path: string) {

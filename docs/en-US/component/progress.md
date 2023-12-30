@@ -18,11 +18,19 @@ Setting the value of the `info-type` prop can make progress indicators into bubb
 
 :::
 
+:::demo progress/state
+
+### Different States
+
+Different states can be set via `state`.
+
+:::
+
 :::demo progress/color
 
 ### Progress Bar Color
 
-The color of the progress bar can be changed via the `stroke-color` prop.
+The color of the progress bar can be changed via the `stroke-color` prop, and it will cover the original state color.
 
 This prop supports passing in a valid color value, an array of colors, or a function that returns the first two values.
 
@@ -46,15 +54,33 @@ Adding the `activated` prop makes the progress bar activated.
 
 ## API
 
+### Preset Types
+
+```ts
+type ProgressInfoType =
+  | 'outside'
+  | 'inside'
+  | 'bubble'
+  | 'bubble-top'
+  | 'bubble-bottom'
+  | 'none'
+
+type ProgressStrokeColor =
+  | string
+  | [string, string]
+  | ((percentage: number) => string | [string, string])
+```
+
 ### Progress Props
 
-| Name         | Type                                                                                 | Description                                                                                 | Default      | Since   |
-| ------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------ | ------- |
-| percentage   | `number`                                                                             | The current percentage of progress, ranging from `0` ~ `100`                                | `0`          | -       |
-| stroke-width | `number`                                                                             | The stroke width of the progress bar                                                        | `8`          | -       |
-| info-type    | `'outside' \| 'inside' \| 'bubble' \| 'bubble-top' \| 'bubble-bottom' \| 'none'`     | The type of progress bar info                                                               | `'outside' ` | -       |
-| stroke-color | `string \| [string, string] \| ((percentage: number) => string \| [string, string])` | The fill color of the progress bar, a linear gradient will be used when passing in an array | `null`       | -       |
-| activated    | `boolean`                                                                            | Set whether the progress bar is active                                                      | `false`      | `2.0.0` |
+| Name         | Type                                             | Description                                                                                 | Default     | Since    |
+| ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------- | ----------- | -------- |
+| percentage   | `number`                                         | The current percentage of progress, ranging from `0` ~ `100`                                | `0`         | -        |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of progress                                                                       | `'default'` | `2.2.23` |
+| stroke-width | `number`                                         | The stroke width of the progress bar                                                        | `8`         | -        |
+| info-type    | `ProgressInfoType`                               | The type of progress bar info                                                               | `'outside'` | -        |
+| stroke-color | `ProgressStrokeColor`                            | The fill color of the progress bar, a linear gradient will be used when passing in an array | `null`      | -        |
+| activated    | `boolean`                                        | Set whether the progress bar is active                                                      | `false`     | `2.0.0`  |
 
 ### Progress Slots
 

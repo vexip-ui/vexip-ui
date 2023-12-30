@@ -1,4 +1,4 @@
-import { booleanProp, buildProps } from '@vexip-ui/config'
+import { booleanProp, buildProps, stateProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -6,6 +6,7 @@ import type { ProgressInfoType, ProgressStrokeColor } from './symbol'
 
 export const progressProps = buildProps({
   percentage: Number,
+  state: stateProp,
   strokeWidth: Number,
   infoType: String as PropType<ProgressInfoType>,
   precision: Number,

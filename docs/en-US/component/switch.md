@@ -99,9 +99,9 @@ Different states can be set via `state` prop.
 
 ### Switch Slots
 
-| Name    | Description                                         | Parameters         | Since |
-| ------- | --------------------------------------------------- | ------------------ | ----- |
-| loading | Slot for icon when loading                          | -                  | -     |
-| icon    | Non-loading icon slot                               | `(value: boolean)` | -     |
-| open    | Slot filled with content when open                  | -                  | -     |
-| close   | The slot to fill the state when the state is closed | -                  | -     |
+| Name    | Description                                         | Parameters           | Since |
+| ------- | --------------------------------------------------- | -------------------- | ----- |
+| loading | Slot for icon when loading                          | -                    | -     |
+| icon    | Non-loading icon slot                               | `{ value: boolean }` | -     |
+| open    | Slot filled with content when open                  | -                    | -     |
+| close   | The slot to fill the state when the state is closed | -                    | -     |
