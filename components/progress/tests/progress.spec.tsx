@@ -33,7 +33,7 @@ describe('Progress', () => {
   })
 
   it('info type', () => {
-    (['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'] as const).forEach(
+    ;(['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'] as const).forEach(
       type => {
         const wrapper = mount(() => <Progress info-type={type}></Progress>)
 
@@ -84,5 +84,13 @@ describe('Progress', () => {
     const wrapper = mount(() => <Progress activated></Progress>)
 
     expect(wrapper.find('.vxp-progress').classes()).toContain('vxp-progress--activated')
+  })
+
+  it('state', () => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
+      const wrapper = mount(() => <Progress state={state}></Progress>)
+
+      expect(wrapper.find('.vxp-progress').classes()).toContain(`vxp-progress--${state}`)
+    })
   })
 })
