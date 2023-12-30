@@ -1,3 +1,32 @@
+## [2.2.23](https://github.com/vexip-ui/vexip-ui/compare/v2.2.22...v2.2.23) (2023-12-27)
+
+
+### ⚡ Performance Improvements
+
+* **config:** improve size and state props definition ([9e31d91](https://github.com/vexip-ui/vexip-ui/commit/9e31d91bbe7ea3f406dec1c3d0a47a21f485a754))
+
+
+### ✨ Features
+
+* **alert:** support custom color ([8bf1b1e](https://github.com/vexip-ui/vexip-ui/commit/8bf1b1e8076b4ee4da1d2c46d2535faa263ae77d)), closes [#449](https://github.com/vexip-ui/vexip-ui/issues/449)
+* **number-input:** add sync-step prop ([c526a5a](https://github.com/vexip-ui/vexip-ui/commit/c526a5a76536d8feab8119dcc16e47af556f5f35))
+* **progress:** add state prop ([d0b2d9a](https://github.com/vexip-ui/vexip-ui/commit/d0b2d9ae7c83311da381f4fc41da8c5f23ec64f5))
+* **utils:** callIfFunc support provide extra function parameters ([6653ff7](https://github.com/vexip-ui/vexip-ui/commit/6653ff7b12cfe24032383c762ea474eb30933df0))
+
+
+### 🐞 Bug Fixes
+
+* **input:** should keep focus after click clear button ([2e684d0](https://github.com/vexip-ui/vexip-ui/commit/2e684d09c8af4f3362f7abeafe8a32486d8d76e3))
+* **number-input:** should support scientific notation ([8112c1a](https://github.com/vexip-ui/vexip-ui/commit/8112c1aded63601394a2d6bbb0cb8bb12c992cdf))
+* **utils:** isValidNumber should consider scientific notation ([72edf02](https://github.com/vexip-ui/vexip-ui/commit/72edf025c5d555f30bc67d7facd720a34bc1f4ff))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename transformListToMap to listToMap ([cc40220](https://github.com/vexip-ui/vexip-ui/commit/cc4022075fce035a3eaa45be8fafddb771ecbc1f))
+
+
+
 ## [2.2.22](https://github.com/vexip-ui/vexip-ui/compare/v2.2.21...v2.2.22) (2023-12-20)
 
 

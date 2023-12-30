@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.1...config@1.3.2) (2023-12-27)
+
+
+### ⚡ Performance Improvements
+
+* **config:** improve size and state props definition ([9e31d91](https://github.com/vexip-ui/vexip-ui/commit/9e31d91bbe7ea3f406dec1c3d0a47a21f485a754))
+
+
+
 ## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.0...config@1.3.1) (2023-11-29)
 
 
