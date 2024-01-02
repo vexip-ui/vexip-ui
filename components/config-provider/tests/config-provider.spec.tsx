@@ -15,7 +15,7 @@ describe('ConfigProvider', () => {
   })
 
   it('provide props', () => {
-    const props = {
+    const props: any = {
       input: {
         size: 'large'
       }

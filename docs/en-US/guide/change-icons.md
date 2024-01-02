@@ -9,9 +9,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // can be a function that returns a component
-    clear: () => CircleXmark,
-
     // can be an array, and set parameters in second item
     loading: [
       Spinner,

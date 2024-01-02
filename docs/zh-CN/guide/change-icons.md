@@ -9,9 +9,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // 可以传入一个函数，并返回一个组件
-    clear: () => CircleXmark,
-
     // 可以传入一个数组，并在第二个参数配置自定义参数
     loading: [
       Spinner,

@@ -153,11 +153,10 @@ export interface IconsOptions {
 }
 
 export type IconName = keyof IconsOptions
-
 export type IconsConfig = {
-  [K in keyof IconsOptions]-?: Record<string, any> | [Record<string, any>, IconOptions?]
+  [K in keyof IconsOptions]-?: IconConfig
 }
-export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: Record<string, any> }>
+export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
 
 const iconMap: IconsConfig = {
   loading: [Loader2, { effect: 'spin-in' }],
@@ -256,10 +255,7 @@ export function configIcons(icons: MaybeRef<IconsOptions>, app?: App) {
         normalizedIcons[name] = upstreamIcons?.value[name] || globalIcons.value[name]
       } else {
         const [icon, options = {}] = ensureArray(config) as IconArrayValue
-        const normalizedIcon =
-          typeof icon === 'function'
-            ? defineAsyncComponent(async () => markRaw(await icon()))
-            : markRaw(icon)
+        const normalizedIcon = typeof icon === 'function' ? icon : markRaw(icon)
 
         normalizedIcons[name] = { ...options, icon: normalizedIcon }
       }
