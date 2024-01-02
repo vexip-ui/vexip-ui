@@ -25,6 +25,7 @@ $image: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: inline-flex;
   flex-shrink: 0;

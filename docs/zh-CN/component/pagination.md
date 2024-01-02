@@ -111,10 +111,10 @@
 
 ### Pagination 插槽
 
-| 名称      | 说明               | 参数                                                 | 始于    |
-| --------- | ------------------ | ---------------------------------------------------- | ------- |
-| prev      | 向前翻页按钮的插槽 | `(disabled: boolean)`                                | -       |
-| next      | 向后翻页按钮的插槽 | `(disabled: boolean)`                                | -       |
-| item      | 页码显示内容的插槽 | `(page: number, disabled: boolean, active: boolean)` | -       |
-| prev-jump | 向前跳页按钮的插槽 | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
-| next-jump | 向后跳页按钮的插槽 | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
+| 名称      | 说明               | 参数                                                   | 始于    |
+| --------- | ------------------ | ------------------------------------------------------ | ------- |
+| prev      | 向前翻页按钮的插槽 | `{ disabled: boolean }`                                | -       |
+| next      | 向后翻页按钮的插槽 | `{ disabled: boolean }`                                | -       |
+| item      | 页码显示内容的插槽 | `{ page: number, disabled: boolean, active: boolean }` | -       |
+| prev-jump | 向前跳页按钮的插槽 | `{ disabled: boolean, entered: boolean }`              | `2.2.0` |
+| next-jump | 向后跳页按钮的插槽 | `{ disabled: boolean, entered: boolean }`              | `2.2.0` |

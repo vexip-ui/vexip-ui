@@ -18,6 +18,7 @@ $highlight: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   &__key-word {
     padding: 0 1px;

@@ -19,6 +19,7 @@ $full-screen: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   &--full {
     position: fixed !important;

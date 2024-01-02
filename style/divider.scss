@@ -25,6 +25,7 @@ $divider: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: flex;
   padding: 0;

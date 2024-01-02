@@ -1,6 +1,6 @@
 import type { AnyCase } from './word-case'
 
-const numberRE = /^\s*[+-]?\d*\.?\d+\s*$/
+export const numberRE = /^\s*[+-]?\d*\.?\d+(?:[eE][+-]?\d+)?\s*$/
 
 /**
  * 检测给定的值是否可以通过 parseFlat 或 Number 方法转为数字

@@ -19,6 +19,7 @@ $row: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
   display: flex;

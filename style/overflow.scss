@@ -12,6 +12,7 @@ $overflow: map.merge((), $overflow);
   }
 
   @include basis;
+  @include inherit-color;
 
   display: flex;
   width: 100%;

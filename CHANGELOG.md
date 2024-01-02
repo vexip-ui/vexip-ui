@@ -1,3 +1,83 @@
+## [2.2.23](https://github.com/vexip-ui/vexip-ui/compare/v2.2.22...v2.2.23) (2023-12-27)
+
+
+### ⚡ Performance Improvements
+
+* **config:** improve size and state props definition ([9e31d91](https://github.com/vexip-ui/vexip-ui/commit/9e31d91bbe7ea3f406dec1c3d0a47a21f485a754))
+
+
+### ✨ Features
+
+* **alert:** support custom color ([8bf1b1e](https://github.com/vexip-ui/vexip-ui/commit/8bf1b1e8076b4ee4da1d2c46d2535faa263ae77d)), closes [#449](https://github.com/vexip-ui/vexip-ui/issues/449)
+* **number-input:** add sync-step prop ([c526a5a](https://github.com/vexip-ui/vexip-ui/commit/c526a5a76536d8feab8119dcc16e47af556f5f35))
+* **progress:** add state prop ([d0b2d9a](https://github.com/vexip-ui/vexip-ui/commit/d0b2d9ae7c83311da381f4fc41da8c5f23ec64f5))
+* **utils:** callIfFunc support provide extra function parameters ([6653ff7](https://github.com/vexip-ui/vexip-ui/commit/6653ff7b12cfe24032383c762ea474eb30933df0))
+
+
+### 🐞 Bug Fixes
+
+* **input:** should keep focus after click clear button ([2e684d0](https://github.com/vexip-ui/vexip-ui/commit/2e684d09c8af4f3362f7abeafe8a32486d8d76e3))
+* **number-input:** should support scientific notation ([8112c1a](https://github.com/vexip-ui/vexip-ui/commit/8112c1aded63601394a2d6bbb0cb8bb12c992cdf))
+* **utils:** isValidNumber should consider scientific notation ([72edf02](https://github.com/vexip-ui/vexip-ui/commit/72edf025c5d555f30bc67d7facd720a34bc1f4ff))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename transformListToMap to listToMap ([cc40220](https://github.com/vexip-ui/vexip-ui/commit/cc4022075fce035a3eaa45be8fafddb771ecbc1f))
+
+
+
+## [2.2.22](https://github.com/vexip-ui/vexip-ui/compare/v2.2.21...v2.2.22) (2023-12-20)
+
+
+### 🐞 Bug Fixes
+
+* **table:** unexpected column group index error ([d61276d](https://github.com/vexip-ui/vexip-ui/commit/d61276d456a682b9e4b8c234c8faa33a6e24ec5d))
+
+
+
+## [2.2.21](https://github.com/vexip-ui/vexip-ui/compare/v2.2.20...v2.2.21) (2023-12-20)
+
+
+### ✨ Features
+
+* **hooks:** add useRaf method ([fac1427](https://github.com/vexip-ui/vexip-ui/commit/fac14270e091c8ecb47726b1816deca6f75affb7))
+* **hooks:** add useTimerRecord method ([7e6667f](https://github.com/vexip-ui/vexip-ui/commit/7e6667f7eaaa0e07459f7b474be4b922203c0d37))
+
+
+### 🐞 Bug Fixes
+
+* not self colorful components should inherit its color ([e928f65](https://github.com/vexip-ui/vexip-ui/commit/e928f65e3cedfddd946ec4f4c3ed983cb764ab27))
+* **table:** correct row height computation when paged ([0756d7b](https://github.com/vexip-ui/vexip-ui/commit/0756d7b5ab38fa417b4a962179dc71a25286cd58))
+
+
+### 🔨 Code Refactoring
+
+* **image:** rename srcs prop to src-list for viewer ([620d0a7](https://github.com/vexip-ui/vexip-ui/commit/620d0a77c1a4b4bcd5ea0600f16f581c4f168cdc))
+
+
+
+## [2.2.20](https://github.com/vexip-ui/vexip-ui/compare/v2.2.19...v2.2.20) (2023-12-19)
+
+
+### ✨ Features
+
+* **plugins:** add transformLogical postcss plugin ([#447](https://github.com/vexip-ui/vexip-ui/issues/447)) ([de86901](https://github.com/vexip-ui/vexip-ui/commit/de869019f9427bedaf017f7b5c6698c3a714d7cf))
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** incorrect bin file name ([1787579](https://github.com/vexip-ui/vexip-ui/commit/178757942b3da009946e479c6d9ce8c3e36d5e46))
+* **select:** should spread control width and has control min-width ([556f05f](https://github.com/vexip-ui/vexip-ui/commit/556f05fa13319bbd5604a67e0a80e6bc5d7deb97))
+* **table:** shallower watch columns and summaries changes ([c3b736f](https://github.com/vexip-ui/vexip-ui/commit/c3b736fb49fb5cc4f8976a59f312ed6ee759358f))
+
+
+### 🔨 Code Refactoring
+
+* compatibility for lower version browsers ([8b4949f](https://github.com/vexip-ui/vexip-ui/commit/8b4949f6726ad4ac5078ce6ad665dd3bcea8d23b))
+
+
+
 ## [2.2.19](https://github.com/vexip-ui/vexip-ui/compare/v2.2.18...v2.2.19) (2023-12-07)
 
 

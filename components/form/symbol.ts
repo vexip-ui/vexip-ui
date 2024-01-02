@@ -73,3 +73,6 @@ export const FORM_ACTIONS: InjectionKey<FormActions> = Symbol('FORM_ACTIONS')
 
 // form-item
 export const FIELD_OPTIONS: InjectionKey<FieldOptions> = Symbol('FIELD_OPTIONS')
+
+export const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
+export const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])

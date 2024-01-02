@@ -7,6 +7,7 @@ import {
   createBITree,
   debounceMinor,
   deepClone,
+  getLast,
   isNull,
   mapTree,
   sortByProps,
@@ -39,6 +40,7 @@ import type {
   TableColResizeType,
   TableColumnOptions,
   TableColumnRawOptions,
+  TableColumnType,
   TableDragColumn,
   TableExpandColumn,
   TableFilterOptions,
@@ -87,7 +89,9 @@ export function useStore(options: StoreOptions) {
     belowSummaries: [],
     rowMinHeight: options.rowMinHeight || 36,
     rowDraggable: !!options.rowDraggable,
+    columnMap: new Map(),
     rowMap: new Map(),
+    summaryMap: new Map(),
     idMaps: new WeakMap(),
     checkedAll: false,
     partial: false,
@@ -110,7 +114,8 @@ export function useStore(options: StoreOptions) {
     collapseMap: new Map(),
     sidePadding: options.sidePadding || [0, 0],
     locked: false,
-    barScrolling: false
+    barScrolling: false,
+    heightTrigger: 0
   }) as StoreState
 
   setColumns(options.columns)
@@ -144,6 +149,7 @@ export function useStore(options: StoreOptions) {
 
     return data
   })
+  const visibleKeys = computed(() => new Set(processedData.value.map(row => row.key)))
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
     const selectionColumn = state.columns.find(
@@ -275,6 +281,7 @@ export function useStore(options: StoreOptions) {
     filteredData,
     sortedData,
     processedData,
+    visibleKeys,
     disableCheckRows,
     disableExpandRows,
     disableDragRows,
@@ -297,6 +304,7 @@ export function useStore(options: StoreOptions) {
     // 这几个个方法被 deep watch 回调
     // 需要防止在一个微任务内被多次调用
     setColumns: debounceMinor(setColumns),
+    // setColumns,
     setSummaries: debounceMinor(setSummaries),
     setData: debounceMinor(setData),
 
@@ -305,6 +313,8 @@ export function useStore(options: StoreOptions) {
 
     isGroupColumn,
     buildSummaryKey,
+    setColumnProp,
+    setSummaryProp,
     setDataKey,
     setCurrentPage,
     setPageSize,
@@ -374,17 +384,28 @@ export function useStore(options: StoreOptions) {
     getCurrentData,
     createMinRowState,
     flatTreeRows,
-    refreshRowDepth
+    refreshRowDepth,
+    triggerHeightChange
   }
 
   watchEffect(() => {
-    state.heightBITree = markRaw(
-      createBITree(filteredData.value.length, state.rowHeight || state.rowMinHeight)
+    state.heightBITree = createBITree(
+      processedData.value.length,
+      state.rowHeight || state.rowMinHeight
     )
 
+    state.totalHeight = -1
     updateTotalHeight()
   })
   watchEffect(computeCellSpan)
+
+  function triggerHeightChange() {
+    ++state.heightTrigger
+
+    if (state.heightTrigger >= Number.MAX_SAFE_INTEGER) {
+      state.heightTrigger = 0
+    }
+  }
 
   function getColumnsWidths(columns = state.columns) {
     const widths = state.widths
@@ -436,6 +457,8 @@ export function useStore(options: StoreOptions) {
   function buildColumns(columns: TableColumnRawOptions[]) {
     const allColumns: ColumnRawWithKey[][] = []
     const baseColumns: ColumnWithKey[] = []
+    const columnMap = new Map<Key, ColumnRawWithKey>()
+    const existedTypes = new Set<TableColumnType>()
 
     const getFixedOrder = (fixed?: boolean | 'left' | 'right') => {
       return fixed === true || fixed === 'left' ? -1 : fixed === 'right' ? 1 : 0
@@ -471,18 +494,34 @@ export function useStore(options: StoreOptions) {
           column.headSpan = endIndex - index
           index = endIndex
         } else {
+          const validType = column.type && columnTypes.includes(column.type)
+
+          if (validType) {
+            if (existedTypes.has(column.type)) {
+              console.warn(`[vexip-ui:Table] Table has duplicate column with type '${column.type}'`)
+            }
+
+            existedTypes.add(column.type)
+          }
+
           let key = column.key
 
-          if (!(column.type && columnTypes.includes(column.type)) && isNull(key)) {
-            key = getIndexId()
+          if (isNull(key)) {
+            if (validType) {
+              key = `__vxp_${column.type}`
+            } else {
+              console.warn('[vexip-ui:Table] Table column requires key prop, but missing')
 
-            console.error('[vexip-ui:Table] Table column requires key prop, but missing')
+              key = getIndexId()
+            }
           }
 
           column.key = key
           baseColumns.push(column)
           index += 1
         }
+
+        columnMap.set(column.key, column)
       }
 
       return index
@@ -497,10 +536,8 @@ export function useStore(options: StoreOptions) {
     }
 
     for (const rowColumns of allColumns) {
-      const lastColumn = rowColumns.findLast(column => column)
-
-      if (lastColumn) {
-        lastColumn.last = true
+      if (rowColumns.length) {
+        getLast(rowColumns)!.last = true
       }
 
       rowColumns.length = length
@@ -522,12 +559,12 @@ export function useStore(options: StoreOptions) {
       }
     }
 
-    return { allColumns, baseColumns }
+    return { allColumns, baseColumns, columnMap }
   }
 
   function setColumns(columns: TableColumnRawOptions[]) {
     const { widths, sorters, filters } = state
-    const { allColumns, baseColumns } = buildColumns(columns)
+    const { allColumns, baseColumns, columnMap } = buildColumns(columns)
 
     const normalColumns: ColumnWithKey[] = []
     const rightFixedColumns: ColumnWithKey[] = []
@@ -619,6 +656,7 @@ export function useStore(options: StoreOptions) {
       state.rowMap.set(rowKey, createMinRowState(rowKey))
     }
 
+    state.columnMap = columnMap
     state.columns = Array.from(leftFixedColumns).concat(normalColumns, rightFixedColumns)
     state.normalColumns = normalColumns
     state.allColumns = allColumns
@@ -631,7 +669,7 @@ export function useStore(options: StoreOptions) {
         }
       }
 
-      state.columns.at(-1)!.last = true
+      getLast(state.columns)!.last = true
     }
 
     if (leftFixedColumns.length) {
@@ -640,6 +678,12 @@ export function useStore(options: StoreOptions) {
 
     if (rightFixedColumns.length) {
       state.rightFixedColumns = rightFixedColumns
+    }
+  }
+
+  function setColumnProp(key: Key, prop: string, value: any) {
+    if (state.columnMap.has(key)) {
+      ;(state.columnMap.get(key) as any)[prop] = value
     }
   }
 
@@ -655,6 +699,7 @@ export function useStore(options: StoreOptions) {
     const prevKeys = new Set(state.summaries.map(summary => summary.key))
     const aboveSummaries: SummaryWithKey[] = []
     const belowSummaries: SummaryWithKey[] = []
+    const summaryMap = new Map<Key, SummaryWithKey>()
 
     for (let i = 0, len = summaries.length; i < len; ++i) {
       const summary = { ...summaries[i] } as SummaryWithKey
@@ -662,9 +707,9 @@ export function useStore(options: StoreOptions) {
       let key = summary.key
 
       if (isNull(key)) {
-        key = getIndexId()
-
         console.error('[vexip-ui:Table] Table summary requires key prop, but missing')
+
+        key = getIndexId()
       }
 
       summary.key = key
@@ -677,9 +722,11 @@ export function useStore(options: StoreOptions) {
       }
 
       prevKeys.delete(summary.key)
+      summaryMap.set(summary.key, summary)
     }
 
     state.summaries = Array.from(aboveSummaries).concat(belowSummaries)
+    state.summaryMap = summaryMap
 
     if (aboveSummaries.length) {
       state.aboveSummaries = aboveSummaries
@@ -693,6 +740,12 @@ export function useStore(options: StoreOptions) {
       for (const key of prevKeys) {
         state.rowMap.delete(buildSummaryKey(key))
       }
+    }
+  }
+
+  function setSummaryProp(key: Key, prop: string, value: any) {
+    if (state.summaryMap.has(key)) {
+      ;(state.summaryMap.get(key) as any)[prop] = value
     }
   }
 
@@ -971,7 +1024,7 @@ export function useStore(options: StoreOptions) {
     }
 
     if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
-      widths.set(flexColumns.at(-1)!.key, flexWidth - usedWidth)
+      widths.set(getLast(flexColumns)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
@@ -1402,15 +1455,10 @@ export function useStore(options: StoreOptions) {
   }
 
   function updateTotalHeight() {
-    const { heightBITree, currentPage, pageSize, rowData } = state
+    const { heightBITree } = state
 
     if (heightBITree) {
-      if (currentPage && pageSize > 0 && pageSize < rowData.length) {
-        state.totalHeight =
-          heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
-      } else {
-        state.totalHeight = heightBITree.sum() ?? 0
-      }
+      state.totalHeight = heightBITree.sum() ?? 0
     } else {
       state.totalHeight = 0
     }
@@ -1568,7 +1616,7 @@ export function useStore(options: StoreOptions) {
     if (!columns.length || !length) return
 
     const deltaWidth = newWidth / length
-    const lastKey = columns.at(-1)!.key
+    const lastKey = getLast(columns)!.key
 
     for (let i = 0; i < length; ++i) {
       const key = keys[i]

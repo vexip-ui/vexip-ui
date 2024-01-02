@@ -3,13 +3,18 @@
     <Alert colorful-text>
       警告提示的内容
     </Alert>
-    <Alert type="success" colorful-text>
+    <Alert type="success" title="警告标题" colorful-text>
       警告提示的内容
     </Alert>
-    <Alert type="warning" colorful-text>
+    <Alert type="warning" icon colorful-text>
       警告提示的内容
     </Alert>
-    <Alert type="error" colorful-text>
+    <Alert
+      type="error"
+      title="警告标题"
+      icon
+      colorful-text
+    >
       警告提示的内容
     </Alert>
   </div>

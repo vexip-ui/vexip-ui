@@ -156,6 +156,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | empty-type     | `NumberInputEmptyType`                           | Set the type of empty value                                                                                                | `'NaN'`     | `2.1.8`  |
 | control-attrs  | `Record<string, any>`                            | Set the attributes of the control element                                                                                  | `null`      | `2.2.2`  |
 | name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
+| sync-step      | `boolean`                                        | Enable sync input mode only for increase and decrease operations (including keyboard triggering)                           | `false`     | `2.2.23` |
 
 ### NumberInput Events
 

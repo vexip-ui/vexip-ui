@@ -60,6 +60,14 @@ Add the `no-border` prop to disable borders, making it visually lighter in some 
 
 :::
 
+:::demo alert/custom
+
+### Custom Color
+
+You can custom the major color through the `color` prop.
+
+:::
+
 :::demo alert/scroll
 
 ### Auto Scroll
@@ -80,19 +88,20 @@ This example shows how to make a carousel content in Alert with the Carousel com
 
 ### Alert Props
 
-| Name          | Type                                          | Description                                                                                                  | Default  | Since   |
-| ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------- | ------- |
-| type          | `'info' \| 'success' \| 'warning' \| 'error'` | The type of warning                                                                                          | `'info'` | -       |
-| title         | `string`                                      | Set the title of the warning message, it will be invalid after using the same name slot                      | `''`     | -       |
-| colorful-text | `boolean`                                     | Set whether the font has the same color as the type                                                          | `false`  | -       |
-| icon          | `boolean \| Record<string, any>`              | Set whether to display the icon, you can directly pass the icon to display                                   | `false`  | -       |
-| closable      | `boolean`                                     | Set whether the warning can be closed                                                                        | `false`  | -       |
-| icon-color    | `string`                                      | Set the color of the alert icon                                                                              | `''`     | -       |
-| no-border     | `boolean`                                     | Set whether to disable the border of the warning prompt                                                      | `false`  | -       |
-| banner        | `boolean`                                     | Set whether to use as the form of the top announcement, the style will be adjusted accordingly after opening | `false`  | -       |
-| manual        | `boolean`                                     | Set to not automatically collapse when alert are closed                                                      | `false`  | `2.0.0` |
-| scroll        | `boolean`                                     | Set whether the content scrolls                                                                              | `false`  | `2.0.4` |
-| scroll-speed  | `number`                                      | Set the scroll speed of the content                                                                          | `1`      | `2.0.4` |
+| Name          | Type                                          | Description                                                                                                  | Default  | Since    |
+| ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------- | -------- |
+| type          | `'info' \| 'success' \| 'warning' \| 'error'` | The type of warning                                                                                          | `'info'` | -        |
+| title         | `string`                                      | Set the title of the warning message, it will be invalid after using the same name slot                      | `''`     | -        |
+| colorful-text | `boolean`                                     | Set whether the font has the same color as the type                                                          | `false`  | -        |
+| icon          | `boolean \| Record<string, any>`              | Set whether to display the icon, you can directly pass the icon to display                                   | `false`  | -        |
+| closable      | `boolean`                                     | Set whether the warning can be closed                                                                        | `false`  | -        |
+| icon-color    | `string`                                      | Set the color of the alert icon                                                                              | `''`     | -        |
+| no-border     | `boolean`                                     | Set whether to disable the border of the warning prompt                                                      | `false`  | -        |
+| banner        | `boolean`                                     | Set whether to use as the form of the top announcement, the style will be adjusted accordingly after opening | `false`  | -        |
+| manual        | `boolean`                                     | Set to not automatically collapse when alert are closed                                                      | `false`  | `2.0.0`  |
+| scroll        | `boolean`                                     | Set whether the content scrolls                                                                              | `false`  | `2.0.4`  |
+| scroll-speed  | `number`                                      | Set the scroll speed of the content                                                                          | `1`      | `2.0.4`  |
+| color         | `string`                                      | Set the major color of the alert                                                                             | `null`   | `2.2.23` |
 
 ### Alert Events
 

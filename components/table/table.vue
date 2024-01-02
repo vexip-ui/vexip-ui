@@ -24,6 +24,8 @@ import TableFoot from './table-foot.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
+  debounceMinor,
+  getLast,
   isDefined,
   isValidNumber,
   nextFrameOnce,
@@ -285,7 +287,11 @@ provide(TABLE_ACTIONS, {
   hasIcon: name => !!props.icons[name],
   getIcon: name => props.icons[name],
   renderTableSlot,
-  runInLocked
+  runInLocked,
+  updateColumns: () => debounceMinor(updateColumns),
+  setColumnProp,
+  updateSummaries: () => debounceMinor(updateSummaries),
+  setSummaryProp
 })
 provide(TABLE_SLOTS, slots)
 
@@ -365,7 +371,7 @@ const yBarLength = computed(() => {
 })
 const totalWidths = computed(() => {
   return (
-    (getters.totalWidths.at(-1) || 0) + (state.sidePadding[0] || 0) + (state.sidePadding[1] || 0)
+    (getLast(getters.totalWidths) || 0) + (state.sidePadding[0] || 0) + (state.sidePadding[1] || 0)
   )
 })
 const leftFixedActive = computed(() => xScrollEnabled.value && xScrollPercent.value > 0)
@@ -397,37 +403,14 @@ const {
   refreshRowDepth
 } = mutations
 
-watch(
-  allColumns,
-  value => {
-    runInLocked(() => {
-      setColumns(value)
-      isMounted && computeTableWidth()
-      nextTick(() => {
-        hasDragColumn.value = getters.hasDragColumn
-      })
-    })
-  },
-  { immediate: true, deep: true }
-)
-watch(
-  allSummaries,
-  value => {
-    runInLocked(() => {
-      setSummaries(value)
-    })
-  },
-  { deep: true }
-)
+watch(allColumns, updateColumns)
+watch(allSummaries, updateSummaries)
 watch(() => keyConfig.value.id, setDataKey)
 watch(() => props.data, forceRefreshData, { deep: true })
 watch(() => props.width, computeTableWidth)
-watch(
-  () => props.height,
-  () => {
-    nextTick(computeBodyHeight)
-  }
-)
+watch([() => props.height, () => props.borderWidth], () => {
+  nextTick(computeBodyHeight)
+})
 watch(locale, setLocale, { deep: true })
 watch(
   () => props.virtual,
@@ -478,6 +461,9 @@ onMounted(() => {
   watch(bodyScrollHeight, refreshPercentScroll)
   refresh()
   window.addEventListener('resize', handlerResize)
+  nextTick(() => {
+    hasDragColumn.value = getters.hasDragColumn
+  })
 
   if (mainScroll.value) {
     xScrollEnabled.value = mainScroll.value.enableXScroll
@@ -554,6 +540,7 @@ function computeTableWidth() {
 
 function computeBodyHeight() {
   const height = props.height
+  const borderWidth = props.borderWidth
 
   if (isDefined(height)) {
     headHeight.value = 0
@@ -572,10 +559,10 @@ function computeBodyHeight() {
         footHeight.value = belowTfoot.value.offsetHeight
       }
 
-      bodyHeight.value = height - headHeight.value - footHeight.value
+      bodyHeight.value = height - headHeight.value - footHeight.value - 2 * borderWidth
     } else {
       // one row as head placeholder
-      bodyHeight.value = height - (props.rowHeight || props.rowMinHeight)
+      bodyHeight.value = height - (props.rowHeight || props.rowMinHeight) - 2 * borderWidth
     }
   } else {
     bodyHeight.value = undefined
@@ -659,6 +646,30 @@ function increaseSummary(summary: TableSummaryOptions) {
 
 function decreaseSummary(summary: TableSummaryOptions) {
   tempSummaries.delete(summary)
+}
+
+function updateColumns() {
+  runInLocked(() => {
+    setColumns(allColumns.value)
+    isMounted && computeTableWidth()
+    nextTick(() => {
+      hasDragColumn.value = getters.hasDragColumn
+    })
+  })
+}
+
+function setColumnProp(key: Key, prop: string, value: any) {
+  mutations.setColumnProp(key, prop, value)
+}
+
+function updateSummaries() {
+  runInLocked(() => {
+    setSummaries(allSummaries.value)
+  })
+}
+
+function setSummaryProp(key: Key, prop: string, value: any) {
+  mutations.setSummaryProp(key, prop, value)
 }
 
 function getTableElement() {

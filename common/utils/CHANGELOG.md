@@ -1,3 +1,31 @@
+# [2.9.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.8.0...utils@2.9.0) (2023-12-27)
+
+
+### ✨ Features
+
+* **utils:** callIfFunc support provide extra function parameters ([6653ff7](https://github.com/vexip-ui/vexip-ui/commit/6653ff7b12cfe24032383c762ea474eb30933df0))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** isValidNumber should consider scientific notation ([72edf02](https://github.com/vexip-ui/vexip-ui/commit/72edf025c5d555f30bc67d7facd720a34bc1f4ff))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename transformListToMap to listToMap ([cc40220](https://github.com/vexip-ui/vexip-ui/commit/cc4022075fce035a3eaa45be8fafddb771ecbc1f))
+
+
+
+# [2.8.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.3...utils@2.8.0) (2023-12-19)
+
+
+### 🔨 Code Refactoring
+
+* compatibility for lower version browsers ([8b4949f](https://github.com/vexip-ui/vexip-ui/commit/8b4949f6726ad4ac5078ce6ad665dd3bcea8d23b))
+
+
+
 ## [2.7.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.2...utils@2.7.3) (2023-12-07)
 
 

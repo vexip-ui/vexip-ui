@@ -4,6 +4,7 @@ import { computed, inject, toRef } from 'vue'
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
+import { getLast } from '@vexip-ui/utils'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -33,12 +34,12 @@ const data = computed(() => (state.virtual ? state.virtualData : getters.process
 const style = computed(() => {
   const width =
     props.fixed === 'left'
-      ? getters.leftFixedWidths.at(-1)
+      ? getLast(getters.leftFixedWidths)
       : props.fixed === 'right'
-        ? getters.rightFixedWidths.at(-1)
-        : getters.normalWidths.at(-1)
+        ? getLast(getters.rightFixedWidths)
+        : getLast(getters.normalWidths)
   const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
-  const padRight = columns.value.at(-1)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
   return {
     [nh.cv('expanded-fix-width')]:

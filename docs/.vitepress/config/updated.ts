@@ -12,18 +12,24 @@ const mdRE = /^docs\/(zh-CN|en-US).+\.md$/
 // const demoRE = /^docs\/demos\/.+\/demo\.(zh-CN|en-US)/
 
 export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<string, Set<string>>> {
-  const versionsLog = (
-    await execa('git', ['log', '--grep=release:', '--oneline', '-n', `${prevVersionLimit}`], {
-      stdio: 'pipe'
-    })
-  ).stdout
-  const commit = versionsLog.split('\n').at(-1)?.trim().split(' ')[0]
+  let commitLog: string
 
-  if (!commit) return {}
+  try {
+    const versionsLog = (
+      await execa('git', ['log', '--grep=release:', '--oneline', '-n', `${prevVersionLimit}`], {
+        stdio: 'pipe'
+      })
+    ).stdout
+    const commit = versionsLog.split('\n').at(-1)?.trim().split(' ')[0]
 
-  const commitLog = (
-    await execa('git', ['log', `${commit}..`, '--name-only', '--oneline'], { stdio: 'pipe' })
-  ).stdout
+    if (!commit) return {}
+
+    commitLog = (
+      await execa('git', ['log', `${commit}..`, '--name-only', '--oneline'], { stdio: 'pipe' })
+    ).stdout
+  } catch (e) {
+    return {}
+  }
 
   const grouped = groupByProps(
     [

@@ -18,6 +18,7 @@ import {
   boundRange,
   debounce,
   isNull,
+  isValidNumber,
   minus,
   plus,
   throttle,
@@ -25,7 +26,6 @@ import {
   toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
-import { numberRE } from './symbol'
 
 type InputEventType = 'input' | 'change'
 
@@ -86,6 +86,7 @@ const props = useProps('numberInput', _props, {
   loadingLock: false,
   loadingEffect: null,
   sync: false,
+  syncStep: false,
   controlType: 'right',
   emptyType: 'NaN',
   controlAttrs: null,
@@ -203,6 +204,11 @@ const inputValue = computed(() => {
   return inputting.value ? preciseNumber.value : formattedValue.value
 })
 
+const delay = toNumber(props.delay)
+const handleInput = props.debounce
+  ? debounce(handleChange, delay || 100)
+  : throttle(handleChange, delay || 16)
+
 watch(
   () => props.value,
   value => {
@@ -213,13 +219,27 @@ watch(
   { immediate: true }
 )
 
+defineExpose({
+  idFor,
+  focused,
+  isHover,
+  outOfRange,
+  preciseNumber,
+  formattedValue,
+  isReadonly,
+  wrapper,
+  input: control,
+  focus,
+  blur: () => control.value?.blur()
+})
+
 function boundValueRange(value: number) {
   return boundRange(value, props.min, props.max)
 }
 
 function parseValue() {
   let value = props.value
-  value = inputting.value ? value : numberRE.test(String(value)) ? toNumber(value) : getEmptyValue()
+  value = inputting.value ? value : isValidNumber(value, true) ? toNumber(value) : getEmptyValue()
 
   if (props.precision >= 0 && !isNullOrNaN(value)) {
     value = toFixed(boundValueRange(value), props.precision)
@@ -299,7 +319,7 @@ function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt')
     value = minus(value, step)
   }
 
-  setValue(value, 'input')
+  setValue(value, props.syncStep && !props.sync ? 'change' : 'input')
 }
 
 function handleChange(event: Event) {
@@ -308,7 +328,8 @@ function handleChange(event: Event) {
 
   let value = stringValue.trim()
 
-  if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
+  // to rollback invalid value to empty in `<input>` when change
+  if (type === 'change' && stringValue && !isValidNumber(stringValue, true)) {
     const floatValue = parseFloat(stringValue)
 
     if (Number.isNaN(floatValue)) {
@@ -402,6 +423,7 @@ function handleClear() {
   setValue(NaN, 'change', false)
   emitEvent(props.onClear)
   clearField()
+  focus()
 }
 
 function handleEnter() {
@@ -419,25 +441,6 @@ function handleSuffixClick(event: MouseEvent) {
 function handleKeyPress(event: KeyboardEvent) {
   emitEvent(props.onKeyPress, event)
 }
-
-const delay = toNumber(props.delay)
-const handleInput = props.debounce
-  ? debounce(handleChange, delay || 100)
-  : throttle(handleChange, delay || 16)
-
-defineExpose({
-  idFor,
-  focused,
-  isHover,
-  outOfRange,
-  preciseNumber,
-  formattedValue,
-  isReadonly,
-  wrapper,
-  input: control,
-  focus,
-  blur: () => control.value?.blur()
-})
 </script>
 
 <template>

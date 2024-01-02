@@ -308,6 +308,7 @@ export default defineComponent({
           v-model:user-dropped={userDropped.value}
           v-model:color={currentColor.value}
           v-model:dark-mode={isDark.value}
+          inherit
           locale={props.locale}
           user={props.user}
           actions={props.actions}
@@ -363,6 +364,7 @@ export default defineComponent({
                 ref={aside}
                 v-model:expanded={asideExpanded.value}
                 v-model:reduced={asideReduced.value}
+                inherit
                 sign-type={currentSignType.value}
                 menus={props.menus}
                 menu-props={props.menuProps}
@@ -406,6 +408,7 @@ export default defineComponent({
 
       return (
         <LayoutFooter
+          inherit
           copyright={props.copyright}
           links={props.links}
           vertical-links={props.verticalLinks}
