@@ -6,7 +6,7 @@ export type VideoPresetControl =
   | 'play-next'
   | 'refresh'
   | 'timer'
-  | 'play-rate'
+  | 'playback-rate'
   | 'flip'
   | 'volume'
   | 'pip'
@@ -23,7 +23,7 @@ export interface VideoControlLayout {
   right?: VideoControlConfig[]
 }
 
-export interface VideoPlayRate {
+export interface VideoPlaybackRate {
   label?: string,
   value: number
 }
@@ -63,7 +63,7 @@ export interface VideoState {
 const defaultLayout: Required<VideoControlLayout> = {
   left: ['play-prev', 'play', 'play-next', 'refresh', 'timer'],
   center: [],
-  right: ['play-rate', 'volume', 'flip', 'pip', 'full-window', 'full-browser']
+  right: ['playback-rate', 'volume', 'flip', 'pip', 'full-window', 'full-browser']
 }
 
 for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {

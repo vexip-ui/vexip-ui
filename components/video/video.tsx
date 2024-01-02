@@ -27,7 +27,7 @@ import { videoProps } from './props'
 import { VIDEO_STATE, videoDefaultControlLayout } from './symbol'
 
 import type { FullScreenExposed, FullScreenType } from '@/components/full-screen'
-import type { VideoControlConfig, VideoPlayRate, VideoShortcutOptions } from './symbol'
+import type { VideoControlConfig, VideoPlaybackRate, VideoShortcutOptions } from './symbol'
 
 const defaultShortcuts: VideoShortcutOptions = {
   play: 'Space',
@@ -44,7 +44,7 @@ const defaultShortcuts: VideoShortcutOptions = {
 export default defineComponent({
   name: 'Video',
   props: videoProps,
-  emits: ['update:src', 'update:time', 'update:volume', 'update:play-rate'],
+  emits: ['update:src', 'update:time', 'update:volume', 'update:playback-rate'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('video', _props, {
       src: {
@@ -62,8 +62,8 @@ export default defineComponent({
         default: 0
       },
       volume: 1,
-      playRate: 1,
-      playRates: () => [0.5, 1, 1.25, 1.5, 2],
+      playbackRate: 1,
+      playbackRates: () => [0.5, 1, 1.25, 1.5, 2],
       // kernel: null,
       controlLayout: () => videoDefaultControlLayout,
       poster: '',
@@ -98,7 +98,7 @@ export default defineComponent({
     const stateShow = ref(true)
     // record the state is invisible (whether finish transition)
     const stateHidden = ref(false)
-    const currentRate = ref(props.playRate)
+    const currentRate = ref(props.playbackRate)
     // const loadedData = ref(false)
     const interacting = ref(false)
     const hasPlayed = ref(false)
@@ -163,14 +163,20 @@ export default defineComponent({
     })
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars')]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        {
+          [nh.bm('loading')]: props.loading
+        }
+      ]
     })
     const playIcon = computed(() => (playing.value ? icons.value.pause : icons.value.play))
     const stateIcon = computed(() => {
       return playing.value ? icons.value.pauseState : icons.value.playState
     })
     const rateOptions = computed(() => {
-      const rates = props.playRates
+      const rates = props.playbackRates
         .map(raw => {
           const rate = typeof raw === 'number' ? { value: raw } : raw
 
@@ -242,17 +248,22 @@ export default defineComponent({
       },
       { flush: 'pre' }
     )
-    watch(() => props.time, changeTime)
     watch(
-      () => props.volume,
+      () => props.time,
       value => {
-        currentVolume.value = value
+        changeTime(value, false)
       }
     )
     watch(
-      () => props.playRate,
+      () => props.volume,
       value => {
-        currentRate.value = value
+        changeVolume(value, false)
+      }
+    )
+    watch(
+      () => props.playbackRate,
+      value => {
+        changeRate(value, false)
       }
     )
     watch(playing, value => {
@@ -279,6 +290,10 @@ export default defineComponent({
       nextTick(() => {
         if (isClient && !videoRef.value && screen.value?.wrapper) {
           video.value = screen.value.wrapper.querySelector('video')
+        }
+
+        if (videoRef.value && currentTime.value > 0) {
+          videoRef.value.currentTime = currentTime.value
         }
       })
     })
@@ -315,6 +330,7 @@ export default defineComponent({
       duration,
       pip,
       interacting,
+      stateHidden,
       wrapper,
       video,
       resetMetaState
@@ -357,18 +373,20 @@ export default defineComponent({
       }
     }
 
-    function changeRate(rate: number) {
+    function changeRate(rate: number, dispatch = true) {
       currentRate.value = rate
 
       if (videoRef.value) {
         videoRef.value.playbackRate = rate
       }
 
-      emit('update:play-rate', rate)
-      emitEvent(props.onRateChange, rate)
+      if (dispatch) {
+        emit('update:playback-rate', rate)
+        emitEvent(props.onRateChange, rate)
+      }
     }
 
-    function changeTime(time: number) {
+    function changeTime(time: number, dispatch = true) {
       currentTime.value = time
 
       if (videoRef.value && time !== videoRef.value.currentTime) {
@@ -376,24 +394,31 @@ export default defineComponent({
         time = videoRef.value.currentTime
       }
 
-      emit('update:time', time)
-      emitEvent(props.onTimeChange, time)
+      if (dispatch) {
+        emit('update:time', time)
+        emitEvent(props.onTimeChange, time)
+      }
     }
 
-    function changeVolume(volume: number) {
+    function changeVolume(volume: number, dispatch = true) {
       currentVolume.value = volume
 
       if (videoRef.value) {
         videoRef.value.volume = volume
       }
 
-      emit('update:volume', volume)
-      emitEvent(props.onVolumeChange, volume)
+      if (dispatch) {
+        emit('update:volume', volume)
+        emitEvent(props.onVolumeChange, volume)
+      }
     }
 
-    function toggleFlip() {
-      flipped.value = !flipped.value
-      emitEvent(props.onToggleFlip, flipped.value)
+    function toggleFlip(value = !flipped.value, dispatch = true) {
+      flipped.value = value
+
+      if (dispatch) {
+        emitEvent(props.onToggleFlip, flipped.value)
+      }
     }
 
     function onFullChange(full: false | FullScreenType) {
@@ -532,14 +557,14 @@ export default defineComponent({
       )
     }
 
-    function renderPlayRate() {
+    function renderPlaybackRate() {
       return (
         <VideoControl
-          class={nh.be('play-rate')}
+          class={nh.be('playback-rate')}
           type={'select'}
           value={currentRate.value}
           options={rateOptions.value}
-          onSelect={(rate: VideoPlayRate) => changeRate(rate.value)}
+          onSelect={(rate: VideoPlaybackRate) => changeRate(rate.value)}
         ></VideoControl>
       )
     }
@@ -626,8 +651,8 @@ export default defineComponent({
           return renderRefresh()
         case 'timer':
           return renderTimer()
-        case 'play-rate':
-          return renderPlayRate()
+        case 'playback-rate':
+          return renderPlaybackRate()
         case 'volume':
           return renderVolume()
         case 'flip':

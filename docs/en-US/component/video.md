@@ -89,7 +89,7 @@ type VideoPresetControl =
   | 'play-next'
   | 'refresh'
   | 'timer'
-  | 'play-rate'
+  | 'playback-rate'
   | 'flip'
   | 'volume'
   | 'pip'
@@ -105,7 +105,7 @@ interface VideoControlLayout {
   right?: VideoControlConfig[]
 }
 
-interface VideoPlayRate {
+interface VideoPlaybackRate {
   label?: string,
   value: number
 }
@@ -129,24 +129,24 @@ interface VideoSegment {
 
 ### Video Props
 
-| Name           | Type                          | Description                                                                                                  | Default                     | Since |
-| -------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------- | ----- |
-| src            | `string`                      | Set the video address, you can use `v-model` two-way binding                                                 | `''`                        | -     |
-| src-list       | `string[]`                    | Set the addresses of multiple videos. After setting, the internal switching video processing will be enabled | `null`                      | -     |
-| no-controls    | `boolean`                     | Whether to disable controls                                                                                  | `false`                     | -     |
-| video-attrs    | `Record<string, any>`         | Set the attributes of the `<video>` tag                                                                      | `null`                      | -     |
-| time           | `number`                      | Set the playback time of the video, you can use `v-model` two-way binding                                    | `0`                         | -     |
-| volume         | `number`                      | Set the volume of the video, you can use `v-model` two-way binding                                           | `1`                         | -     |
-| play-rate      | `number`                      | Set the video playback rate, you can use `v-model` two-way binding                                           | `1`                         | -     |
-| play-rates     | `(number \| VideoPlayRate)[]` | Set the candidate play rate                                                                                  | `[0.5, 1, 1.25, 1.5, 2]`    | -     |
-| control-layout | `VideoControlLayout`          | Configure the layout of the control                                                                          | `videoDefaultControlLayout` | -     |
-| poster         | `string`                      | Set the address of the video cover                                                                           | `''`                        | -     |
-| video          | `HTMLVideoElement`            | Can manually pass in an html object of the `<video>` tag, often used with the `player` slot                  | `null`                      | -     |
-| segments       | `(number \| VideoSegment)[]`  | Set the segment information of the video                                                                     | `[]`                        | -     |
-| loading        | `boolean`                     | Set whether the video is loading                                                                             | `false`                     | -     |
-| loading-icon   | `Record<string, any>`         | Set the loading icon                                                                                         | `null`                      | -     |
-| loading-effect | `string`                      | Set the effect animation of the loading icon                                                                 | `null`                      | -     |
-| shortcuts      | `VideoShortcutOptions`        | Configure shortcut keys for preset controls                                                                  | `{}`                        | -     |
+| Name           | Type                              | Description                                                                                                  | Default                     | Since |
+| -------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------- | ----- |
+| src            | `string`                          | Set the video address, you can use `v-model` two-way binding                                                 | `''`                        | -     |
+| src-list       | `string[]`                        | Set the addresses of multiple videos. After setting, the internal switching video processing will be enabled | `null`                      | -     |
+| no-controls    | `boolean`                         | Whether to disable controls                                                                                  | `false`                     | -     |
+| video-attrs    | `Record<string, any>`             | Set the attributes of the `<video>` tag                                                                      | `null`                      | -     |
+| time           | `number`                          | Set the playback time of the video, you can use `v-model` two-way binding                                    | `0`                         | -     |
+| volume         | `number`                          | Set the volume of the video, you can use `v-model` two-way binding                                           | `1`                         | -     |
+| playback-rate  | `number`                          | Set the video playback rate, you can use `v-model` two-way binding                                           | `1`                         | -     |
+| playback-rates | `(number \| VideoPlaybackRate)[]` | Set the candidate play rate                                                                                  | `[0.5, 1, 1.25, 1.5, 2]`    | -     |
+| control-layout | `VideoControlLayout`              | Configure the layout of the control                                                                          | `videoDefaultControlLayout` | -     |
+| poster         | `string`                          | Set the address of the video cover                                                                           | `''`                        | -     |
+| video          | `HTMLVideoElement`                | Can manually pass in an html object of the `<video>` tag, often used with the `player` slot                  | `null`                      | -     |
+| segments       | `(number \| VideoSegment)[]`      | Set the segment information of the video                                                                     | `[]`                        | -     |
+| loading        | `boolean`                         | Set whether the video is loading                                                                             | `false`                     | -     |
+| loading-icon   | `Record<string, any>`             | Set the loading icon                                                                                         | `null`                      | -     |
+| loading-effect | `string`                          | Set the effect animation of the loading icon                                                                 | `null`                      | -     |
+| shortcuts      | `VideoShortcutOptions`            | Configure shortcut keys for preset controls                                                                  | `{}`                        | -     |
 
 ### Video Events
 

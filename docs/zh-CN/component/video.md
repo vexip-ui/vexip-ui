@@ -89,7 +89,7 @@ type VideoPresetControl =
   | 'play-next'
   | 'refresh'
   | 'timer'
-  | 'play-rate'
+  | 'playback-rate'
   | 'flip'
   | 'volume'
   | 'pip'
@@ -105,7 +105,7 @@ interface VideoControlLayout {
   right?: VideoControlConfig[]
 }
 
-interface VideoPlayRate {
+interface VideoPlaybackRate {
   label?: string,
   value: number
 }
@@ -129,24 +129,24 @@ interface VideoSegment {
 
 ### Video 属性
 
-| 名称           | 类型                          | 说明                                                                  | 默认值                      | 始于 |
-| -------------- | ----------------------------- | --------------------------------------------------------------------- | --------------------------- | ---- |
-| src            | `string`                      | 设置视频的地址，可以使用 `v-model` 双向绑定                           | `''`                        | -    |
-| src-list       | `string[]`                    | 设置多个视频的地址，设置后会开启内部的切换视频处理                    | `null`                      | -    |
-| no-controls    | `boolean`                     | 是否禁用控件                                                          | `false`                     | -    |
-| video-attrs    | `Record<string, any>`         | 设置 `<video>` 标签的属性                                             | `null`                      | -    |
-| time           | `number`                      | 设置视频的播放时间，可以使用 `v-model` 双向绑定                       | `0`                         | -    |
-| volume         | `number`                      | 设置视频的音量，可以使用 `v-model` 双向绑定                           | `1`                         | -    |
-| play-rate      | `number`                      | 设置视频的播放速率，可以使用 `v-model` 双向绑定                       | `1`                         | -    |
-| play-rates     | `(number \| VideoPlayRate)[]` | 设置候选的播放速率                                                    | `[0.5, 1, 1.25, 1.5, 2]`    | -    |
-| control-layout | `VideoControlLayout`          | 配置控件的布局                                                        | `videoDefaultControlLayout` | -    |
-| poster         | `string`                      | 设置视频封面的地址                                                    | `''`                        | -    |
-| video          | `HTMLVideoElement`            | 可手动传入一个 `<video>` 标签的 html 对象，常与 `player` 插槽一同使用 | `null`                      | -    |
-| segments       | `(number \| VideoSegment)[]`  | 设置视频的分段信息                                                    | `[]`                        | -    |
-| loading        | `boolean`                     | 设置视频是否为加载状态                                                | `false`                     | -    |
-| loading-icon   | `Record<string, any>`         | 设置加载中的图标                                                      | `null`                      | -    |
-| loading-effect | `string`                      | 设置加载中图标的效果动画                                              | `null`                      | -    |
-| shortcuts      | `VideoShortcutOptions`        | 配置预设控件的快捷键                                                  | `{}`                        | -    |
+| 名称           | 类型                              | 说明                                                                  | 默认值                      | 始于 |
+| -------------- | --------------------------------- | --------------------------------------------------------------------- | --------------------------- | ---- |
+| src            | `string`                          | 设置视频的地址，可以使用 `v-model` 双向绑定                           | `''`                        | -    |
+| src-list       | `string[]`                        | 设置多个视频的地址，设置后会开启内部的切换视频处理                    | `null`                      | -    |
+| no-controls    | `boolean`                         | 是否禁用控件                                                          | `false`                     | -    |
+| video-attrs    | `Record<string, any>`             | 设置 `<video>` 标签的属性                                             | `null`                      | -    |
+| time           | `number`                          | 设置视频的播放时间，可以使用 `v-model` 双向绑定                       | `0`                         | -    |
+| volume         | `number`                          | 设置视频的音量，可以使用 `v-model` 双向绑定                           | `1`                         | -    |
+| playback-rate  | `number`                          | 设置视频的播放速率，可以使用 `v-model` 双向绑定                       | `1`                         | -    |
+| playback-rates | `(number \| VideoPlaybackRate)[]` | 设置候选的播放速率                                                    | `[0.5, 1, 1.25, 1.5, 2]`    | -    |
+| control-layout | `VideoControlLayout`              | 配置控件的布局                                                        | `videoDefaultControlLayout` | -    |
+| poster         | `string`                          | 设置视频封面的地址                                                    | `''`                        | -    |
+| video          | `HTMLVideoElement`                | 可手动传入一个 `<video>` 标签的 html 对象，常与 `player` 插槽一同使用 | `null`                      | -    |
+| segments       | `(number \| VideoSegment)[]`      | 设置视频的分段信息                                                    | `[]`                        | -    |
+| loading        | `boolean`                         | 设置视频是否为加载状态                                                | `false`                     | -    |
+| loading-icon   | `Record<string, any>`             | 设置加载中的图标                                                      | `null`                      | -    |
+| loading-effect | `string`                          | 设置加载中图标的效果动画                                              | `null`                      | -    |
+| shortcuts      | `VideoShortcutOptions`            | 配置预设控件的快捷键                                                  | `{}`                        | -    |
 
 ### Video 事件
 

@@ -14,7 +14,7 @@ export type {
   VideoControlName,
   VideoControlConfig,
   VideoControlLayout,
-  VideoPlayRate,
+  VideoPlaybackRate,
   VideoControlType,
   VideoControlOption,
   VideoSegment
