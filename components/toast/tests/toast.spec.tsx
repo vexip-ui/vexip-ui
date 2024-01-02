@@ -2,17 +2,18 @@ import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { Check, Exclamation, GithubB, Spinner, Xmark } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import Toast from '../toast.vue'
 import { ToastManager } from '..'
 
 vi.useFakeTimers()
 
 const typeIconMap = {
-  success: Check,
-  warning: Exclamation,
-  error: Xmark,
-  loading: Spinner
+  success: globalIcons.value.success.icon,
+  warning: globalIcons.value.warning.icon,
+  error: globalIcons.value.error.icon,
+  loading: globalIcons.value.loading.icon
 }
 
 const TEXT = 'Text'
@@ -132,12 +133,12 @@ describe('Toast', () => {
 
     Toast.open({
       content: TEXT,
-      icon: GithubB
+      icon: Github
     })
     await toastOpened()
     expect(document.querySelector('.vxp-toast__icon')).toBeTruthy()
 
-    const icon = mount(GithubB)
+    const icon = mount(Github)
     expect(document.querySelector('.vxp-toast__icon')!.querySelector('svg')?.innerHTML).toEqual(
       icon.find('svg').element.innerHTML
     )

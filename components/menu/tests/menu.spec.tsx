@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { mount } from '@vue/test-utils'
 
-import { City, User } from '@vexip-ui/icons'
+import { Home, User } from 'lucide-vue-next'
 import { Menu } from '..'
 
 describe('Menu', () => {
@@ -50,14 +50,14 @@ describe('Menu', () => {
   it('with icon', () => {
     const wrapper = mount(() => (
       <Menu>
-        <MenuItem icon={City}>{'1'}</MenuItem>
+        <MenuItem icon={Home}>{'1'}</MenuItem>
         <MenuItem icon={User}>{'2'}</MenuItem>
       </Menu>
     ))
     const items = wrapper.findAll('.vxp-menu__item')
 
     expect(items[0].find('.vxp-menu__icon').exists()).toBe(true)
-    expect(items[0].findComponent(City).exists()).toBe(true)
+    expect(items[0].findComponent(Home).exists()).toBe(true)
     expect(items[1].findComponent(User).exists()).toBe(true)
   })
 
@@ -221,7 +221,7 @@ describe('Menu', () => {
           {
             label: '1',
             name: 'l1',
-            icon: City,
+            icon: Home,
             children: [
               { label: '1-1', meta: { foo: '1-1' } },
               { label: '1-2', meta: { foo: '1-2' } }
@@ -244,7 +244,7 @@ describe('Menu', () => {
 
     const parent = group.find('.vxp-menu__item')
     expect(parent.find('.vxp-menu__label').text()).toEqual('l1')
-    expect(parent.findComponent(City).exists()).toBe(true)
+    expect(parent.findComponent(Home).exists()).toBe(true)
     expect(parent.findAll('.vxp-menu__item').length).toEqual(2)
 
     await parent.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
@@ -273,7 +273,7 @@ describe('Menu', () => {
           meta: {
             label: '1',
             name: 'l1',
-            icon: City
+            icon: Home
           },
           children: [
             testRoute,
@@ -297,7 +297,7 @@ describe('Menu', () => {
     const items = wrapper.findAll('.vxp-menu__item')
 
     expect(items[0].find('.vxp-menu__label').text()).toEqual('l1')
-    expect(items[0].findComponent(City).exists()).toBe(true)
+    expect(items[0].findComponent(Home).exists()).toBe(true)
     expect(items[0].findAll('.vxp-menu__item').length).toEqual(2)
 
     await items[1].find('.vxp-menu__label').trigger('click')

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { Spin } from '..'
 import { loading } from '../directive'
 
@@ -93,12 +93,12 @@ describe('Spin', () => {
 
   it('icon', async () => {
     const wrapper = mount(() => (
-      <Spin active icon={GithubB}>
+      <Spin active icon={Github}>
         <div class={'content'}>{'content'}</div>
       </Spin>
     ))
 
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('v-loading', async () => {

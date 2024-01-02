@@ -3,7 +3,7 @@ import { TimelineItem } from '@/components/timeline-item'
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { Timeline } from '..'
 
 describe('Timeline', () => {
@@ -54,7 +54,7 @@ describe('Timeline', () => {
   })
 
   it('item type', () => {
-    (['default', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
+    ;(['default', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
       const wrapper = mount(() => (
         <Timeline>
           <TimelineItem type={type}></TimelineItem>
@@ -142,12 +142,12 @@ describe('Timeline', () => {
       <Timeline line-color={'yellow'}>
         <TimelineItem>
           {{
-            signal: () => <GithubB></GithubB>
+            signal: () => <Github></Github>
           }}
         </TimelineItem>
       </Timeline>
     ))
 
-    expect(wrapper.find('.vxp-timeline__item').findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.find('.vxp-timeline__item').findComponent(Github).exists()).toBe(true)
   })
 })

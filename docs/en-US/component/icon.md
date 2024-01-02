@@ -133,7 +133,7 @@ type IconRenderer = (
 
 | Name     | Type                                   | Description                                         | Default | Since    |
 | -------- | -------------------------------------- | --------------------------------------------------- | ------- | -------- |
-| icon     | `Record<string, any> \| (() => any)`   | Set `<svg>` vue component                           | `null`  | `2.0.0`  |
+| icon     | `VueComponent`                         | Set `<svg>` vue component                           | `null`  | `2.0.0`  |
 | scale    | `number \| string`                     | Set the scaling of the icon                         | `1`     | -        |
 | flip     | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -        |
 | title    | `string`                               | Set the title prop of the icon                      | `''`    | -        |

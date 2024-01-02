@@ -128,8 +128,8 @@ type ButtonAttrType = 'button' | 'submit' | 'reset'
 | disabled       | `boolean`                         | Set whether it is disabled                                                    | `false`     | -       |
 | loading        | `boolean`                         | Set whether it is loading                                                     | `false`     | -       |
 | circle         | `boolean`                         | Set whether it is circular                                                    | `false`     | -       |
-| icon           | `Record<string, any>`             | Auxiliary icon of the button, it will switch to the loading icon when loading | `''`        | -       |
-| loading-icon   | `Record<string, any>`             | Set whether to be read-only when loading                                      | `Spinner`   | -       |
+| icon           | `VueComponent`                    | Auxiliary icon of the button, it will switch to the loading icon when loading | `''`        | -       |
+| loading-icon   | `VueComponent`                    | Set whether to be read-only when loading                                      | `Spinner`   | -       |
 | loading-effect | `string`                          | Set the effect animation for the loading icon                                 | `false`     | -       |
 | button-type    | `ButtonAttrType`                  | Set the `type` attribute of the native `<button>`                             | `'button'`  | -       |
 | block          | `boolean`                         | Whether it is a block-level element, the width becomes 100% after setting     | `false`     | -       |

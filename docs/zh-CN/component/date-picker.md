@@ -164,9 +164,9 @@ interface DateShortcut {
 | disabled-date       | `(date: Date) => boolean`                               | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用                  | `() => false`           | -        |
 | steps               | `number[]`                                              | 分别设置时间选择器每个滚轮的滚动跨度                                    | `[1, 1, 1]`             | -        |
 | ctrl-steps          | `number[]`                                              | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                        | `[5, 5, 5]`             | -        |
-| prefix              | `Record<string, any>`                                   | 前缀图标，使用前缀插槽时无效                                            | `null`                  | -        |
+| prefix              | `VueComponent`                                          | 前缀图标，使用前缀插槽时无效                                            | `null`                  | -        |
 | prefix-color        | `string`                                                | 前缀内容的颜色，会影响前缀插槽                                          | `''`                    | -        |
-| suffix              | `Record<string, any>`                                   | 后缀图标，使用后缀插槽时无效                                            | `null`                  | -        |
+| suffix              | `VueComponent`                                          | 后缀图标，使用后缀插槽时无效                                            | `null`                  | -        |
 | suffix-color        | `string`                                                | 后缀内容的颜色，会影响后缀插槽                                          | `''`                    | -        |
 | no-suffix           | `boolean`                                               | 设置是否禁用后缀图标                                                    | `false`                 | -        |
 | disabled            | `boolean`                                               | 设置是否禁用日期选择器                                                  | `false`                 | -        |
@@ -175,7 +175,7 @@ interface DateShortcut {
 | cancel-text         | `string`                                                | 日期选择面板取消按钮的文本内容                                          | `locale.cancel`         | -        |
 | today               | `Dateable`                                              | 设置作为今天的日期，这主要会影响日期选择面板中日历的一些表现            | `new Date()`            | -        |
 | loading             | `boolean`                                               | 设置是否为加载中                                                        | `false`                 | `2.0.0`  |
-| loading-icon        | `Record<string, any>`                                   | 设置加载中的图标                                                        | `Spinner`               | `2.0.0`  |
+| loading-icon        | `VueComponent`                                          | 设置加载中的图标                                                        | `Spinner`               | `2.0.0`  |
 | loading-lock        | `boolean`                                               | 设置在加载中时是否为只读                                                | `false`                 | `2.0.0`  |
 | loading-lock        | `boolean`                                               | 设置在加载中时是否为只读                                                | `false`                 | `2.1.0`  |
 | min                 | `Dateable`                                              | 设置可选的最小日期                                                      | `null`                  | `2.0.14` |

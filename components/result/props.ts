@@ -1,4 +1,4 @@
-import { buildProps, sizeProp } from '@vexip-ui/config'
+import { buildProps, iconProp, sizeProp } from '@vexip-ui/config'
 
 import type { ResultType } from './symbol'
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -8,7 +8,7 @@ export const resultProps = buildProps({
   title: String,
   size: sizeProp,
   type: String as PropType<ResultType>,
-  icon: Object,
+  icon: iconProp,
   iconColor: String,
   description: String
 })

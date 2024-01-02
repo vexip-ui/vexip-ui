@@ -6,6 +6,7 @@ import { computed, ref, toRef, watch } from 'vue'
 
 import { useHover, useModifier } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -51,9 +52,9 @@ const props = useProps('numberInput', _props, {
   size: createSizeProp(size),
   state: createStateProp(state),
   locale: null,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   // 格式化后显示
   formatter: {
@@ -82,7 +83,7 @@ const props = useProps('numberInput', _props, {
   delay: null,
   clearable: false,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   sync: false,

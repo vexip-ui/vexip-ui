@@ -152,6 +152,9 @@ importers:
       lint-staged:
         specifier: ^15.2.0
         version: 15.2.0
+      lucide-vue-next:
+        specifier: ^0.303.0
+        version: 0.303.0(vue@3.3.10)
       magic-string:
         specifier: ^0.30.5
         version: 0.30.5
@@ -224,8 +227,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       lucide-vue-next:
-        specifier: ^0.295.0
-        version: 0.295.0(vue@3.3.10)
+        specifier: ^0.303.0
+        version: 0.303.0(vue@3.3.10)
     devDependencies:
       vue:
         specifier: ^3.3.10
@@ -7416,8 +7419,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lucide-vue-next@0.295.0(vue@3.3.10):
-    resolution: {integrity: sha512-FmC7plt4n7HuOoine7o8pq+Pg08BaCY/PjMLmo8JVDudC3Ij/Y7S99RiLGtIVSEtvdiVXlFuQG1rithxUu3tMw==}
+  /lucide-vue-next@0.303.0(vue@3.3.10):
+    resolution: {integrity: sha512-UyWxeqxrm5iIp4Tlovh90lfKoXKpwhwxOb4eFTtTBfJ59Y8R5f6vOFPiYwPf+K4InvZ4BntcIzswtGoDeSfBmg==}
     peerDependencies:
       vue: '>=3.0.1'
     peerDependenciesMeta:
@@ -7425,7 +7428,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.3.10(typescript@5.2.2)
-    dev: false
 
   /magic-string@0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}

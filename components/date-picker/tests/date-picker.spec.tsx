@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { CalendarR, GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import { format } from '@vexip-ui/utils'
 import { DatePicker } from '..'
 
@@ -370,21 +371,21 @@ describe('DatePicker', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <DatePicker prefix={GithubB}></DatePicker>)
+    const wrapper = mount(() => <DatePicker prefix={Github}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <DatePicker prefix={GithubB} prefix-color={'red'}></DatePicker>)
+    const wrapper = mount(() => <DatePicker prefix={Github} prefix-color={'red'}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <DatePicker prefix={GithubB}>
+      <DatePicker prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -392,7 +393,7 @@ describe('DatePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-date-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -400,22 +401,22 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker)
 
     expect(wrapper.find('.vxp-date-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(CalendarR).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.calendar.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(CalendarR).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(globalIcons.value.calendar.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <DatePicker suffix={GithubB} suffix-color={'red'}></DatePicker>)
+    const wrapper = mount(() => <DatePicker suffix={Github} suffix-color={'red'}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <DatePicker suffix={GithubB}>
+      <DatePicker suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -423,7 +424,7 @@ describe('DatePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-date-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -449,11 +450,11 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker)
 
     expect(wrapper.find('.vxp-date-picker__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-date-picker__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -467,10 +468,10 @@ describe('DatePicker', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <DatePicker loading loading-icon={GithubB}></DatePicker>)
+    const wrapper = mount(() => <DatePicker loading loading-icon={Github}></DatePicker>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {

@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Tree } from '..'
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 
 describe('Tree', () => {
   it('render', async () => {

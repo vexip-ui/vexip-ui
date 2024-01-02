@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import { NumberInput } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -86,26 +87,24 @@ describe('NumberInput', () => {
 
   it('prefix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => (
-      <NumberInput prefix={GithubB} onPrefixClick={onClick}></NumberInput>
-    ))
+    const wrapper = mount(() => <NumberInput prefix={Github} onPrefixClick={onClick}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-number-input__prefix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <NumberInput prefix={GithubB} prefix-color={'red'}></NumberInput>)
+    const wrapper = mount(() => <NumberInput prefix={Github} prefix-color={'red'}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <NumberInput prefix={GithubB}>
+      <NumberInput prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -113,32 +112,30 @@ describe('NumberInput', () => {
     ))
 
     expect(wrapper.find('.vxp-number-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
   it('suffix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => (
-      <NumberInput suffix={GithubB} onSuffixClick={onClick}></NumberInput>
-    ))
+    const wrapper = mount(() => <NumberInput suffix={Github} onSuffixClick={onClick}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-number-input__suffix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <NumberInput suffix={GithubB} suffix-color={'red'}></NumberInput>)
+    const wrapper = mount(() => <NumberInput suffix={Github} suffix-color={'red'}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <NumberInput suffix={GithubB}>
+      <NumberInput suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -146,7 +143,7 @@ describe('NumberInput', () => {
     ))
 
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -168,11 +165,11 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput)
 
     expect(wrapper.find('.vxp-number-input__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-number-input__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -185,10 +182,10 @@ describe('NumberInput', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <NumberInput loading loading-icon={GithubB}></NumberInput>)
+    const wrapper = mount(() => <NumberInput loading loading-icon={Github}></NumberInput>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {
@@ -263,7 +260,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: {
         clearable: true,
-        suffix: GithubB,
+        suffix: Github,
         onClear
       }
     })

@@ -6,6 +6,7 @@ import { useFieldStore } from '@/components/form'
 import { computed, defineComponent, onBeforeUnmount, ref, renderSlot, toRef, watch } from 'vue'
 
 import {
+  createIconProp,
   createStateProp,
   emitEvent,
   useIcons,
@@ -113,7 +114,7 @@ export default defineComponent({
       buttonLabel: null,
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       image: false,

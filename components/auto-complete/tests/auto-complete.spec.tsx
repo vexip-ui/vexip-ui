@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { AutoComplete } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -107,7 +107,7 @@ describe('AutoComplete', () => {
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <AutoComplete prefix={GithubB}>
+      <AutoComplete prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -115,13 +115,13 @@ describe('AutoComplete', () => {
     ))
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <AutoComplete suffix={GithubB}>
+      <AutoComplete suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -129,7 +129,7 @@ describe('AutoComplete', () => {
     ))
 
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
