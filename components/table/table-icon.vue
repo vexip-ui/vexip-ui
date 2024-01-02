@@ -30,14 +30,11 @@ const customIcon = computed(() => tableActions.getIcon(props.name))
 </script>
 
 <template>
-  <template v-if="tableActions.hasIcon(name)">
-    <Renderer v-if="isFunction(customIcon)" :renderer="customIcon"></Renderer>
-    <Icon v-else :icon="customIcon"></Icon>
-  </template>
   <Renderer
-    v-else-if="isFunction(tableSlots[`icon-${name}`])"
+    v-if="isFunction(tableSlots[`icon-${name}`])"
     :renderer="tableActions.renderTableSlot"
     :data="{ name: `icon-${name}` }"
   ></Renderer>
+  <Icon v-else-if="tableActions.hasIcon(name)" :icon="customIcon"></Icon>
   <Icon v-else v-bind="origin"></Icon>
 </template>

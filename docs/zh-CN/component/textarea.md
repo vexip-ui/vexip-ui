@@ -82,7 +82,7 @@
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`               | `2.1.25` |
 | max-length     | `number`                                         | 设置输入内容的最大长度，值为 `0` 时不限                                                      | `0`                  | -        |
 | loading        | `boolean`                                        | 设置是否为加载中                                                                             | `false`              | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                                                                             | `Spinner`            | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | 设置加载中的图标                                                                             | `Spinner`            | `2.0.0`  |
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                                                     | `false`              | `2.0.0`  |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                                                                     | `false`              | `2.0.0`  |
 | sync           | `boolean`                                        | 设置是否为同步输入模式                                                                       | `false`              | `2.0.6`  |

@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, classProp, styleProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, classProp, iconProp, styleProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -7,7 +7,7 @@ import type { ToastOptions, ToastPosition } from './symbol'
 
 export const toastProps = buildProps({
   bodyWidth: Number,
-  icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
+  icon: iconProp,
   iconProps: Object as PropType<IconMinorProps>,
   position: String as PropType<ToastPosition>,
   transitionName: String,

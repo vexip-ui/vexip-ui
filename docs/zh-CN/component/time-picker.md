@@ -113,9 +113,9 @@ interface TimeShortcut {
 | shortcuts           | `TimeShortcut[]`                    | 设置日期快捷选择的候选列表，元素为 `{ name, value }` 的对象，其中 value 可以是函数 | `[]`             | -        |
 | steps               | `number[]`                          | 分别设置时间选择器每个滚轮的滚动跨度                                               | `[1, 1, 1]`      | -        |
 | ctrl-steps          | `number[]`                          | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                   | `[5, 5, 5]`      | -        |
-| prefix              | `Record<string, any>`               | 前缀图标，使用前缀插槽时无效                                                       | `null`           | -        |
+| prefix              | `VueComponent`                      | 前缀图标，使用前缀插槽时无效                                                       | `null`           | -        |
 | prefix-color        | `string`                            | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | -        |
-| suffix              | `Record<string, any>`               | 后缀图标，使用后缀插槽时无效                                                       | `null`           | -        |
+| suffix              | `VueComponent`                      | 后缀图标，使用后缀插槽时无效                                                       | `null`           | -        |
 | suffix-color        | `string`                            | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | -        |
 | no-suffix           | `boolean`                           | 设置是否禁用后缀图标                                                               | `false`          | -        |
 | disabled            | `boolean`                           | 设置是否禁用日期选择框                                                             | `false`          | -        |
@@ -123,7 +123,7 @@ interface TimeShortcut {
 | ok-text             | `string`                            | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm` | -        |
 | cancel-text         | `string`                            | 时间选择窗口取消按钮的文本内容                                                     | `locale.cancel`  | -        |
 | loading             | `boolean`                           | 设置是否为加载中                                                                   | `false`          | `2.0.0`  |
-| loading-icon        | `Record<string, any>`               | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
+| loading-icon        | `VueComponent`                      | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
 | loading-lock        | `boolean`                           | 设置在加载中时是否为只读                                                           | `false`          | `2.0.0`  |
 | loading-effect      | `string`                            | 设置加载中图标的效果动画                                                           | `false`          | `2.1.0`  |
 | min                 | `string`                            | 设置可选的最小时间                                                                 | `null`           | `2.0.14` |

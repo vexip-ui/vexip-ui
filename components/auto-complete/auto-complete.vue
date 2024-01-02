@@ -6,6 +6,7 @@ import { useFieldStore } from '@/components/form'
 import { computed, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -58,9 +59,9 @@ const props = useProps('autoComplete', _props, {
     static: true
   },
   filter: false,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   placeholder: null,
   disabled: () => disabled.value,
@@ -76,7 +77,7 @@ const props = useProps('autoComplete', _props, {
   spellcheck: false,
   keyConfig: () => ({}),
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   transparent: false,

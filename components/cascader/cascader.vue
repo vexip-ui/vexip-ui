@@ -217,6 +217,7 @@ import {
 
 import CascaderPanel from './cascader-panel.vue'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -289,9 +290,9 @@ export default defineComponent({
         static: true
       },
       placeholder: null,
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       noCascaded: false,
       multiple: false,
@@ -323,7 +324,7 @@ export default defineComponent({
       tagType: null,
       emptyText: null,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       transparent: false,

@@ -1,4 +1,11 @@
-import { booleanProp, buildProps, eventProp, localeProp, sizeProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
+  sizeProp
+} from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -81,9 +88,9 @@ export const formSubmitProps = buildProps({
   ghost: booleanProp,
   disabled: booleanProp,
   circle: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingEffect: String as PropType<IconEffect>,
-  icon: Object,
+  icon: iconProp,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,
   block: booleanProp,
@@ -108,9 +115,9 @@ export const formResetProps = buildProps({
   disabled: booleanProp,
   loading: booleanProp,
   circle: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingEffect: String as PropType<IconEffect>,
-  icon: Object,
+  icon: iconProp,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,
   block: booleanProp,

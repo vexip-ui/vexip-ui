@@ -2,7 +2,7 @@ import { Icon } from '@/components/icon'
 
 import { computed, defineComponent, h, inject, renderSlot } from 'vue'
 
-import { useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -22,7 +22,7 @@ export default defineComponent({
       tag: 'div',
       activated: null,
       image: false,
-      imageIcon: null,
+      imageIcon: createIconProp(),
       iconScale: 4,
       round: null,
       circle: null,
