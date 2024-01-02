@@ -106,7 +106,7 @@ type TransferFilter = (value: string, options: TransferOptionState, type: 'sourc
 | target-title   | `string`                                         | 设置目标面板的标题                             | `locale.target` | -        |
 | deep-state     | `boolean`                                        | 设置是否同步状态到子控件                       | `false`         | `2.0.13` |
 | loading        | `boolean`                                        | 设置是否为加载中                               | `false`         | -        |
-| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                               | `Spinner`       | -        |
+| loading-icon   | `VueComponent`                                   | 设置加载中的图标                               | `Spinner`       | -        |
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                       | `false`         | -        |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                       | `false`         | -        |
 | locale         | `LocaleConfig['transfer']`                       | 设置多语言配置                                 | `null`          | `2.1.0`  |

@@ -19,7 +19,10 @@ const props = useProps('alert', _props, {
   },
   title: '',
   colorfulText: false,
-  icon: false,
+  icon: {
+    isFunc: true,
+    default: false
+  },
   closable: false,
   iconColor: '',
   noBorder: false,

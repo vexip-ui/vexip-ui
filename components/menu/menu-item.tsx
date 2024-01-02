@@ -19,7 +19,14 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useHoverDelay, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createIconProp,
+  emitEvent,
+  useHoverDelay,
+  useIcons,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
@@ -44,10 +51,7 @@ const MenuItem = defineComponent({
         default: null,
         static: true
       },
-      icon: {
-        isFunc: true,
-        default: null
-      },
+      icon: createIconProp(),
       iconProps: null,
       disabled: false,
       transfer: null,

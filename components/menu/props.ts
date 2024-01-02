@@ -1,4 +1,4 @@
-import { booleanProp, booleanStringProp, buildProps, eventProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { RouteLocationRaw, Router } from 'vue-router'
@@ -30,7 +30,7 @@ export type MenuCProps = ConfigurableProps<MenuProps>
 
 export const menuItemProps = buildProps({
   label: String,
-  icon: [Object, Function],
+  icon: iconProp,
   iconProps: Object as PropType<IconMinorProps>,
   disabled: booleanProp,
   transfer: booleanStringProp,

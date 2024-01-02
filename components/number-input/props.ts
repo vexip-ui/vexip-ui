@@ -3,6 +3,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   localeProp,
   sizeProp,
   stateProp
@@ -17,9 +18,9 @@ export const numberInputProps = buildProps({
   size: sizeProp,
   state: stateProp,
   locale: localeProp('input'),
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   /**
    * 格式化后显示
@@ -44,7 +45,7 @@ export const numberInputProps = buildProps({
   delay: Number,
   clearable: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,

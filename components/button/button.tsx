@@ -5,7 +5,14 @@ import { FIELD_OPTIONS } from '@/components/form/symbol'
 
 import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref } from 'vue'
 
-import { createSizeProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createIconProp,
+  createSizeProp,
+  emitEvent,
+  useIcons,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { adjustAlpha, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { buttonProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
@@ -30,9 +37,9 @@ export default defineComponent({
       disabled: () => (fieldActions ? fieldActions.disabled.value : false),
       loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingEffect: null,
-      icon: null,
+      icon: createIconProp(),
       color: null,
       buttonType: {
         default: 'button',

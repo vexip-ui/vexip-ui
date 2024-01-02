@@ -90,7 +90,7 @@ Add the `vertical` prop to make the avatar group vertical.
 | ------------ | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- | ----- |
 | size         | `number \| 'small' \| 'default' \| 'large'`                | The size of the avatar, the size of the group is used first when it is applied to the avatar group | `'default'` | -     |
 | src          | `string`                                                   | The source address of the avatar image                                                             | `''`        | -     |
-| icon         | `Record<string, any>`                                      | The icon object of the avatar                                                                      | `null`      | -     |
+| icon         | `VueComponent`                                             | The icon object of the avatar                                                                      | `null`      | -     |
 | circle       | `boolean`                                                  | Set whether the avatar is a circle                                                                 | `false`     | -     |
 | alt          | `string`                                                   | Set the `alt` attribute of the avatar image                                                        | `''`        | -     |
 | fit          | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | Set how to fill the image of the avatar, same as `object-fit` of `css`                             | `'cover'`   | -     |

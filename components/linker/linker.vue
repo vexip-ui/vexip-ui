@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 
 import { computed } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { linkerProps } from './props'
 
 import type { LinkerType } from './symbol'
@@ -29,10 +29,7 @@ const props = useProps('linker', _props, {
     default: 'default' as LinkerType,
     validator: (value: LinkerType) => linkerTypes.includes(value)
   },
-  icon: {
-    isFunc: true,
-    default: null
-  },
+  icon: createIconProp(),
   underline: false,
   disabled: false,
   target: '_blank'

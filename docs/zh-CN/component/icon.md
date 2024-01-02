@@ -133,7 +133,7 @@ type IconRenderer = (
 
 | 名称     | 类型                                   | 说明                               | 默认值 | 始于     |
 | -------- | -------------------------------------- | ---------------------------------- | ------ | -------- |
-| icon     | `Record<string, any> \| (() => any)`   | 图标 `<svg>` 组件                  | `null` | `2.0.0`  |
+| icon     | `VueComponent`                         | 图标 `<svg>` 组件                  | `null` | `2.0.0`  |
 | scale    | `number \| string`                     | 设置图标的缩放比例                 | `1`    | -        |
 | flip     | `'horizontal' \| 'vertical' \| 'both'` | 设置图标是否翻转                   | `null` | -        |
 | title    | `string`                               | 设置图标的标题属性                 | `''`   | -        |

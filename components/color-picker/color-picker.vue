@@ -12,6 +12,7 @@ import ColorHue from './color-hue.vue'
 import ColorAlpha from './color-alpha.vue'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -83,14 +84,14 @@ const props = useProps('colorPicker', _props, {
   clearable: false,
   cancelText: null,
   confirmText: null,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   noSuffix: false,
   staticSuffix: false,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   popperAlive: null,

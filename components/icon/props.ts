@@ -1,11 +1,11 @@
-import { buildProps } from '@vexip-ui/config'
+import { buildProps, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { IconEffect, IconRenderer } from './symbol'
 
 export const iconProps = buildProps({
-  icon: [Object, Function],
+  icon: iconProp,
   scale: [Number, String],
   title: String,
   label: String,

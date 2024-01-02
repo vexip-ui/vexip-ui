@@ -8,6 +8,7 @@ import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -97,9 +98,9 @@ const props = useProps('datePicker', _props, {
   },
   steps: () => [1, 1, 1],
   ctrlSteps: () => [5, 5, 5],
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   noSuffix: false,
   disabled: () => disabled.value,
@@ -112,7 +113,7 @@ const props = useProps('datePicker', _props, {
   },
   range: null,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   min: null,
