@@ -422,13 +422,9 @@ const MenuItem = defineComponent({
                       ? (
                           renderSlot(slots, 'icon')
                         )
-                      : typeof props.icon === 'function'
-                        ? (
-                            props.icon()
-                          )
-                        : (
-                          <Icon {...props.iconProps} icon={props.icon}></Icon>
-                          )}
+                      : (
+                        <Icon {...props.iconProps} icon={props.icon}></Icon>
+                        )}
                   </div>
                 )}
                 <span

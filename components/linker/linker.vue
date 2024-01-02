@@ -29,7 +29,10 @@ const props = useProps('linker', _props, {
     default: 'default' as LinkerType,
     validator: (value: LinkerType) => linkerTypes.includes(value)
   },
-  icon: null,
+  icon: {
+    isFunc: true,
+    default: null
+  },
   underline: false,
   disabled: false,
   target: '_blank'

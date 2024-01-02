@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { City, GithubB } from '@vexip-ui/icons'
+import { Github, Home } from 'lucide-vue-next'
 import { Layout } from '..'
 
 function waitMounted() {
@@ -15,7 +15,7 @@ describe('Layout', () => {
       {
         label: '1',
         name: '菜单 1',
-        icon: GithubB,
+        icon: Github,
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
@@ -25,7 +25,7 @@ describe('Layout', () => {
       {
         label: '2',
         name: '菜单 2',
-        icon: City,
+        icon: Home,
         disabled: true
       }
     ]
@@ -67,12 +67,12 @@ describe('Layout', () => {
     const actions = [
       {
         label: 'action1',
-        icon: GithubB,
+        icon: Github,
         name: 'Action 1'
       },
       {
         label: 'action2',
-        icon: City,
+        icon: Home,
         name: 'Action 2'
       }
     ]
@@ -127,8 +127,8 @@ describe('Layout', () => {
       {
         name: 'Group',
         children: [
-          { name: 'GithubB', icon: GithubB },
-          { name: 'City', icon: City }
+          { name: 'Github', icon: Github },
+          { name: 'City', icon: Home }
         ]
       },
       {
@@ -164,10 +164,10 @@ describe('Layout', () => {
 
     const footerLinks = groups[0].findAll('.vxp-layout__link')
     expect(footerLinks.length).toEqual(2)
-    expect(footerLinks[0].text()).toEqual('GithubB')
-    expect(footerLinks[0].findComponent(GithubB).exists()).toBe(true)
+    expect(footerLinks[0].text()).toEqual('Github')
+    expect(footerLinks[0].findComponent(Github).exists()).toBe(true)
     expect(footerLinks[1].text()).toEqual('City')
-    expect(footerLinks[1].findComponent(City).exists()).toBe(true)
+    expect(footerLinks[1].findComponent(Home).exists()).toBe(true)
 
     expect(wrapper.find('.vxp-layout__copyright').exists()).toBe(true)
     expect(wrapper.find('.vxp-layout__copyright').text()).toEqual('copyright')
@@ -178,7 +178,7 @@ describe('Layout', () => {
       {
         label: '1',
         name: '菜单 1',
-        icon: GithubB,
+        icon: Github,
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
@@ -188,7 +188,7 @@ describe('Layout', () => {
       {
         label: '2',
         name: '菜单 2',
-        icon: City,
+        icon: Home,
         disabled: true
       }
     ]
@@ -221,7 +221,7 @@ describe('Layout', () => {
       {
         label: '1',
         name: '菜单 1',
-        icon: GithubB,
+        icon: Github,
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
@@ -231,7 +231,7 @@ describe('Layout', () => {
       {
         label: '2',
         name: '菜单 2',
-        icon: City,
+        icon: Home,
         disabled: true
       }
     ]

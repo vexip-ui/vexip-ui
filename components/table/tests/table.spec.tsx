@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 import { noop } from '@vexip-ui/utils'
 import { Table, defineColumns, defineSummaries } from '..'
 import TableBody from '../table-body.vue'

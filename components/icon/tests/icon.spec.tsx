@@ -1,19 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { Spinner } from '@vexip-ui/icons'
+import { Loader2 } from 'lucide-vue-next'
 import { Icon } from '..'
 
 describe('Icon', () => {
   it('render', () => {
     const wrapper = mount(() => (
       <Icon>
-        <Spinner></Spinner>
+        <Loader2></Loader2>
       </Icon>
     ))
 
     expect(wrapper.find('.vxp-icon').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
     expect(wrapper.find('.vxp-icon').attributes('aria-hidden')).toEqual('true')
   })
 
@@ -25,15 +25,15 @@ describe('Icon', () => {
   })
 
   it('icon prop', () => {
-    const wrapper = mount(() => <Icon icon={Spinner}></Icon>)
+    const wrapper = mount(() => <Icon icon={Loader2}></Icon>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
   })
 
   it('label', () => {
     const wrapper = mount(() => (
       <Icon label={'icon'}>
-        <Spinner></Spinner>
+        <Loader2></Loader2>
       </Icon>
     ))
 
@@ -44,7 +44,7 @@ describe('Icon', () => {
   it('title', () => {
     const wrapper = mount(() => (
       <Icon title={'icon'}>
-        <Spinner></Spinner>
+        <Loader2></Loader2>
       </Icon>
     ))
 
@@ -54,7 +54,7 @@ describe('Icon', () => {
 
   it('spin', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'spin-in', icon: Spinner }
+      props: { effect: 'spin-in', icon: Loader2 }
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--spin-in')
@@ -65,7 +65,7 @@ describe('Icon', () => {
 
   it('pulse', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'pulse-in', icon: Spinner }
+      props: { effect: 'pulse-in', icon: Loader2 }
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--pulse-in')
@@ -75,9 +75,9 @@ describe('Icon', () => {
   })
 
   it('flip', () => {
-    (['horizontal', 'vertical', 'both'] as const).forEach(flip => {
+    ;(['horizontal', 'vertical', 'both'] as const).forEach(flip => {
       const wrapper = mount(Icon, {
-        props: { flip, icon: Spinner }
+        props: { flip, icon: Loader2 }
       })
 
       expect(wrapper.classes()).toContain(`vxp-icon--flip-${flip}`)
@@ -86,7 +86,7 @@ describe('Icon', () => {
 
   it('scale', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Spinner }
+      props: { icon: Loader2 }
     })
 
     expect(wrapper.attributes('style')).toBeUndefined()
@@ -100,7 +100,7 @@ describe('Icon', () => {
 
   it('custom effect', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'effect', icon: Spinner }
+      props: { effect: 'effect', icon: Loader2 }
     })
 
     expect(wrapper.classes()).toContain('effect')
@@ -108,7 +108,7 @@ describe('Icon', () => {
 
   it('size', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Spinner }
+      props: { icon: Loader2 }
     })
 
     expect(wrapper.attributes('style')).toBeUndefined()
@@ -121,14 +121,14 @@ describe('Icon', () => {
   })
 
   it('color', () => {
-    const wrapper = mount(() => <Icon icon={Spinner} color={'orange'}></Icon>)
+    const wrapper = mount(() => <Icon icon={Loader2} color={'orange'}></Icon>)
 
     expect(wrapper.find('.vxp-icon').attributes('style')).toContain('color: orange;')
   })
 
   it('rotate', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Spinner, rotate: 1 }
+      props: { icon: Loader2, rotate: 1 }
     })
 
     expect(wrapper.attributes('style')).toContain('--vxp-icon-rotate: 0.25turn;')

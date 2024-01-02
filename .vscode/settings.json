@@ -32,5 +32,6 @@
   },
   "[markdown]": {
     "editor.wordWrap": "off"
-  }
+  },
+  "cSpell.words": ["lucide"]
 }

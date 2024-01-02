@@ -7,7 +7,7 @@ import type { LinkerType } from './symbol'
 export const linkerProps = buildProps({
   to: String,
   type: String as PropType<LinkerType>,
-  icon: Object,
+  icon: [Object, Function],
   underline: booleanProp,
   disabled: booleanProp,
   target: String,

@@ -91,71 +91,73 @@ export interface IconOptions extends Record<string, any> {
 export type IconArrayValue = [IconValue, IconOptions?]
 export type IconConfig = IconValue | IconArrayValue
 
-export interface IconsConfig {
-  loading: IconConfig,
-  clear: IconConfig,
-  close: IconConfig,
-  calendar: IconConfig,
-  clock: IconConfig,
-  exchange: IconConfig,
-  angleUp: IconConfig,
-  angleRight: IconConfig,
-  angleDown: IconConfig,
-  angleLeft: IconConfig,
-  anglesRight: IconConfig,
-  anglesLeft: IconConfig,
-  retweet: IconConfig,
-  refresh: IconConfig,
-  filter: IconConfig,
-  ellipsis: IconConfig,
-  upload: IconConfig,
-  uploadCloud: IconConfig,
-  check: IconConfig,
-  help: IconConfig,
-  alert: IconConfig,
-  question: IconConfig,
-  info: IconConfig,
-  success: IconConfig,
-  warning: IconConfig,
-  error: IconConfig,
-  delete: IconConfig,
-  preview: IconConfig,
-  image: IconConfig,
-  plus: IconConfig,
-  minus: IconConfig,
-  plusSquare: IconConfig,
-  minusSquare: IconConfig,
-  cipherText: IconConfig,
-  plainText: IconConfig,
-  user: IconConfig,
-  light: IconConfig,
-  dark: IconConfig,
-  signOut: IconConfig,
-  indent: IconConfig,
-  outdent: IconConfig,
-  search: IconConfig,
-  rotateRight: IconConfig,
-  rotateLeft: IconConfig,
-  flipX: IconConfig,
-  flipY: IconConfig,
-  zoomIn: IconConfig,
-  zoonOut: IconConfig,
-  fullScreen: IconConfig,
-  resetScreen: IconConfig,
-  dragger: IconConfig,
-  file: IconConfig,
-  fileText: IconConfig,
-  fileCode: IconConfig,
-  fileImage: IconConfig,
-  fileAudio: IconConfig,
-  fileVideo: IconConfig,
-  fileZip: IconConfig
+export interface IconsOptions {
+  loading?: IconConfig,
+  clear?: IconConfig,
+  close?: IconConfig,
+  calendar?: IconConfig,
+  clock?: IconConfig,
+  exchange?: IconConfig,
+  angleUp?: IconConfig,
+  angleRight?: IconConfig,
+  angleDown?: IconConfig,
+  angleLeft?: IconConfig,
+  anglesRight?: IconConfig,
+  anglesLeft?: IconConfig,
+  retweet?: IconConfig,
+  refresh?: IconConfig,
+  filter?: IconConfig,
+  ellipsis?: IconConfig,
+  upload?: IconConfig,
+  uploadCloud?: IconConfig,
+  check?: IconConfig,
+  help?: IconConfig,
+  alert?: IconConfig,
+  question?: IconConfig,
+  info?: IconConfig,
+  success?: IconConfig,
+  warning?: IconConfig,
+  error?: IconConfig,
+  delete?: IconConfig,
+  preview?: IconConfig,
+  image?: IconConfig,
+  plus?: IconConfig,
+  minus?: IconConfig,
+  plusSquare?: IconConfig,
+  minusSquare?: IconConfig,
+  cipherText?: IconConfig,
+  plainText?: IconConfig,
+  user?: IconConfig,
+  light?: IconConfig,
+  dark?: IconConfig,
+  signOut?: IconConfig,
+  indent?: IconConfig,
+  outdent?: IconConfig,
+  search?: IconConfig,
+  rotateRight?: IconConfig,
+  rotateLeft?: IconConfig,
+  flipX?: IconConfig,
+  flipY?: IconConfig,
+  zoomIn?: IconConfig,
+  zoonOut?: IconConfig,
+  fullScreen?: IconConfig,
+  resetScreen?: IconConfig,
+  dragger?: IconConfig,
+  file?: IconConfig,
+  fileText?: IconConfig,
+  fileCode?: IconConfig,
+  fileImage?: IconConfig,
+  fileAudio?: IconConfig,
+  fileVideo?: IconConfig,
+  fileZip?: IconConfig
 }
 
-export type IconsOptions = Partial<IconsConfig>
-export type IconName = keyof IconsConfig
+export type IconName = keyof IconsOptions
 
-export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: IconValue }>
+export type IconsConfig = {
+  [K in keyof IconsOptions]-?: Record<string, any> | [Record<string, any>, IconOptions?]
+}
+export type NormalizedIconsConfig = Record<IconName, IconOptions & { icon: Record<string, any> }>
 
 const iconMap: IconsConfig = {
   loading: [Loader2, { effect: 'spin-in' }],
@@ -224,7 +226,7 @@ export const globalIcons = computed(() => {
   const icons = {} as NormalizedIconsConfig
 
   for (const name of iconNames) {
-    const [icon, options = {}] = ensureArray(iconMap[name]) as IconArrayValue
+    const [icon, options = {}] = ensureArray(iconMap[name]) as [Record<string, any>, IconOptions?]
 
     icons[name] = { ...options, icon }
   }
@@ -244,7 +246,7 @@ export function configIcons(icons: MaybeRef<IconsOptions>, app?: App) {
       ? globalIcons
       : inject<ComputedRef<IconsConfig> | null>(PROVIDED_ICONS, null)
   const normalizedIcons = computed(() => {
-    const normalizedIcons: Partial<IconsConfig> = {}
+    const normalizedIcons = {} as IconsConfig
     const unrefIcons = unref(icons)
 
     for (const name of iconNames) {

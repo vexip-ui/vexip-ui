@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import Confirm from '../confirm.vue'
 import { ConfirmManager } from '..'
 
@@ -49,7 +49,7 @@ describe('Confirm', () => {
 
     Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
       cancelText: 'no'
     })
@@ -71,7 +71,7 @@ describe('Confirm', () => {
 
     const promise = Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
       cancelText: 'no'
     })
@@ -90,7 +90,7 @@ describe('Confirm', () => {
 
     const promise = Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
       cancelText: 'no'
     })

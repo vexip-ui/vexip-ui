@@ -4,7 +4,7 @@ import { Masker } from '@/components/masker'
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 import { ConfigProvider } from '..'
 
 describe('ConfigProvider', () => {

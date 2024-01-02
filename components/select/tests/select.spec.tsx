@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { globalIcons } from '@vexip-ui/config'
 import { Select } from '..'
 
@@ -262,21 +262,21 @@ describe('Select', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <Select prefix={GithubB}></Select>)
+    const wrapper = mount(() => <Select prefix={Github}></Select>)
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <Select prefix={GithubB} prefix-color={'red'}></Select>)
+    const wrapper = mount(() => <Select prefix={Github} prefix-color={'red'}></Select>)
 
     expect(wrapper.find('.vxp-select__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <Select prefix={GithubB}>
+      <Select prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -284,7 +284,7 @@ describe('Select', () => {
     ))
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -294,20 +294,20 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
     expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
+    await wrapper.setProps({ suffix: Github })
     expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <Select suffix={GithubB} suffix-color={'red'}></Select>)
+    const wrapper = mount(() => <Select suffix={Github} suffix-color={'red'}></Select>)
 
     expect(wrapper.find('.vxp-select__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <Select suffix={GithubB}>
+      <Select suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -315,7 +315,7 @@ describe('Select', () => {
     ))
 
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -357,10 +357,10 @@ describe('Select', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Select loading loading-icon={GithubB}></Select>)
+    const wrapper = mount(() => <Select loading loading-icon={Github}></Select>)
 
     expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('single select', async () => {

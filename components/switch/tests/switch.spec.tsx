@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB, Spinner, Vault } from '@vexip-ui/icons'
+import { Github, Loader2, User } from 'lucide-vue-next'
 import { Switch } from '..'
 
 describe('Switch', () => {
@@ -72,7 +72,7 @@ describe('Switch', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Switch state={state}></Switch>)
 
       expect(wrapper.find('.vxp-switch').classes()).toContain(`vxp-switch--${state}`)
@@ -97,11 +97,11 @@ describe('Switch', () => {
     const wrapper = mount(Switch)
 
     expect(wrapper.classes()).not.toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.classes()).toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
   })
 
   it('inner text', async () => {
@@ -126,21 +126,21 @@ describe('Switch', () => {
   it('icon', async () => {
     const wrapper = mount(Switch, {
       props: {
-        openIcon: GithubB,
-        closeIcon: Vault
+        openIcon: Github,
+        closeIcon: User
       }
     })
 
-    expect(wrapper.findComponent(Vault).exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
 
     await wrapper.setProps({ value: true })
-    expect(wrapper.findComponent(Vault).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.setProps({ loading: true })
-    expect(wrapper.findComponent(Vault).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
   })
 
   it('before change', async () => {
