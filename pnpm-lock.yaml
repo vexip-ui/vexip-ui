@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   conventional-changelog-angular@7.0.0:
     hash: mnuz4pbg7c37j4ofaayqrj5u6y
@@ -404,6 +400,9 @@ importers:
       iconify-icon:
         specifier: ^1.0.8
         version: 1.0.8
+      lucide-vue-next:
+        specifier: ^0.303.0
+        version: 0.303.0(vue@3.3.4)
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
@@ -7429,6 +7428,17 @@ packages:
     dependencies:
       vue: 3.3.10(typescript@5.2.2)
 
+  /lucide-vue-next@0.303.0(vue@3.3.4):
+    resolution: {integrity: sha512-UyWxeqxrm5iIp4Tlovh90lfKoXKpwhwxOb4eFTtTBfJ59Y8R5f6vOFPiYwPf+K4InvZ4BntcIzswtGoDeSfBmg==}
+    peerDependencies:
+      vue: '>=3.0.1'
+    peerDependenciesMeta:
+      vue:
+        optional: true
+    dependencies:
+      vue: 3.3.4
+    dev: false
+
   /magic-string@0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
     engines: {node: '>=12'}
@@ -11202,3 +11212,7 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
