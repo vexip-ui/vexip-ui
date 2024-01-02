@@ -31,6 +31,14 @@ const props = useProps('videoControl', _props, {
   options: () => []
 })
 
+defineSlots<{
+  selected: (params: { option: VideoControlOption }) => any,
+  default: () => any,
+  label: () => any,
+  panel: () => any,
+  option: (params: { option: VideoControlOption, index: number, selected: boolean }) => any
+}>()
+
 const nh = useNameHelper('video')
 
 const videoState = inject(VIDEO_STATE)!

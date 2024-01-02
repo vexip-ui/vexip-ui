@@ -176,3 +176,37 @@ interface VideoSegment {
 | state          | Slot for video status flag                                                                                                       | `{ active: boolean }` | -     |
 | loading        | Slot for video loading icon                                                                                                      | -                     | -     |
 | extra          | Slot for extra content that will be added at the end of the wrapper element                                                      | -                     | -     |
+
+### VideoControl Props
+
+| Name      | Type                               | Description                                                                                                        | Default    | Since |
+| --------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------- | ----- |
+| type      | `VideoControlType`                 | Set the type of control                                                                                            | `'button'` | -     |
+| label     | `string`                           | Set the label of the control when the type is `'button'`                                                           | `''`       | -     |
+| tipClass  | `ClassType`                        | Set the custom class name of the popper tip                                                                        | `null`     | -     |
+| disabled  | `boolean`                          | Set whether it is disabled                                                                                         | `false`    | -     |
+| shortcut  | `string`                           | Set the shortcut key of the control, pressing the shortcut key when the player is focused will trigger the control | `''`       | -     |
+| focusable | `boolean`                          | Whether the control is focusable                                                                                   | `false`    | -     |
+| value     | `number \| string`                 | Set the value of the control when the type is `'select'`                                                           | `null`     | -     |
+| options   | `(string \| VideoControlOption)[]` | Set the options of the control when the type is `'select'`                                                         | `[]`       | -     |
+
+### VideoControl Events
+
+| Name   | Description                                                     | Parameters                     | Since |
+| ------ | --------------------------------------------------------------- | ------------------------------ | ----- |
+| click  | Emitted when the control is clicked                             | -                              | -     |
+| enter  | Emitted when the mouse moves into the control                   | -                              | -     |
+| leave  | Emitted when the mouse moves out of the control                 | -                              | -     |
+| focus  | Emitted when the control is focused                             | `(event: FocusEvent)`          | -     |
+| blur   | Emitted when the control is out of focus                        | `(event: FocusEvent)`          | -     |
+| select | When the type is `'select'`, emitted when an option is selected | `(option: VideoControlOption)` | -     |
+
+### VideoControl Slots
+
+| Name     | Description                                                 | Parameters                                                         | Since |
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
+| selected | Slot for selected label content                             | `{ option: VideoControlOption }`                                   | -     |
+| default  | Slot for the control content                                | -                                                                  | -     |
+| label    | Slot for the button tip content when the type is `'button'` | -                                                                  | -     |
+| panel    | Slot for the control panel when the type is not `'button'`  | -                                                                  | -     |
+| option   | Slot for the option content when the type is `'select'`     | `{ option: VideoControlOption, index: number, selected: boolean }` | -     |

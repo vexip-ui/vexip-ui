@@ -179,13 +179,34 @@ interface VideoSegment {
 
 ### VideoControl 属性
 
-| 名称      | 类型                               | 说明                               | 默认值     | 始于 |
-| --------- | ---------------------------------- | ---------------------------------- | ---------- | ---- |
-| type      | `VideoControlType`                 | 设置控件的类型                     | `'button'` | -    |
-| label     | `string`                           | 类型为 `'button'` 时设置控件的标签 | `''`       | -    |
-| tipClass  | `ClassType`                        | 设置弹出气泡的自定义类名           | `null`     | -    |
-| disabled  | `boolean`                          | 设置是否为禁用状态                 | `false`    | -    |
-| shortcut  | `string`                           | 设置控件的快捷键                   | `''`       | -    |
-| focusable | `boolean`                          |                                    | `false`    | -    |
-| value     | `number \| string`                 |                                    | `null`     | -    |
-| options   | `(string \| VideoControlOption)[]` |                                    | `[]`       | -    |
+| 名称      | 类型                               | 说明                                             | 默认值     | 始于 |
+| --------- | ---------------------------------- | ------------------------------------------------ | ---------- | ---- |
+| type      | `VideoControlType`                 | 设置控件的类型                                   | `'button'` | -    |
+| label     | `string`                           | 类型为 `'button'` 时设置控件的标签               | `''`       | -    |
+| tipClass  | `ClassType`                        | 设置弹出气泡的自定义类名                         | `null`     | -    |
+| disabled  | `boolean`                          | 设置是否为禁用状态                               | `false`    | -    |
+| shortcut  | `string`                           | 设置控件的快捷键，视频聚焦时按下快捷键会触发控件 | `''`       | -    |
+| focusable | `boolean`                          | 控件是否可聚焦                                   | `false`    | -    |
+| value     | `number \| string`                 | 类型为 `'select'` 时设置控件的值                 | `null`     | -    |
+| options   | `(string \| VideoControlOption)[]` | 类型为 `'select'` 时设置控件的选项               | `[]`       | -    |
+
+### VideoControl 事件
+
+| 名称   | 说明                                       | 参数                           | 始于 |
+| ------ | ------------------------------------------ | ------------------------------ | ---- |
+| click  | 当控件被点击时触发                         | -                              | -    |
+| enter  | 当鼠标移入控件时触发                       | -                              | -    |
+| leave  | 当鼠标移出控件时触发                       | -                              | -    |
+| focus  | 控件聚焦时触发                             | `(event: FocusEvent)`          | -    |
+| blur   | 控件失焦时触发                             | `(event: FocusEvent)`          | -    |
+| select | 类型为 `'select'` 时，选择了一个选项时触发 | `(option: VideoControlOption)` | -    |
+
+### VideoControl 插槽
+
+| 名称     | 说明                                   | 参数                                                               | 始于 |
+| -------- | -------------------------------------- | ------------------------------------------------------------------ | ---- |
+| selected | 已选选项的回显内容的插槽               | `{ option: VideoControlOption }`                                   | -    |
+| default  | 控件内容的插槽                         | -                                                                  | -    |
+| label    | 类型为 `'button'` 时按钮提示内容的插槽 | -                                                                  | -    |
+| panel    | 类型不为 `'button'` 时控件面板的插槽   | -                                                                  | -    |
+| option   | 类型为 `'select'` 时选项内容的插槽     | `{ option: VideoControlOption, index: number, selected: boolean }` | -    |
