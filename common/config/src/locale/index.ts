@@ -8,6 +8,7 @@ import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
 
 export * from './helper'
 
+export * from './ar-EG'
 export * from './de-DE'
 export * from './en-US'
 export * from './ta-IN'
