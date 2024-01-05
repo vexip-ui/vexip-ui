@@ -8,13 +8,13 @@ import type { LocaleConfig, LocaleNames, LocaleOptions } from './helper'
 
 export * from './helper'
 
+export * from './ar-EG'
 export * from './de-DE'
 export * from './en-US'
 export * from './ta-IN'
 export * from './zh-CN'
 export * from './zh-HK'
 export * from './zh-TW'
-export * from './ar-EG'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())

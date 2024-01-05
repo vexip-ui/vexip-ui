@@ -7,13 +7,13 @@ export {
   configProps,
   configZIndex,
   registerLocale,
+  arEGLocale,
   deDELocale,
   enUSLocale,
   taINLocale,
   zhCNLocale,
   zhHKLocale,
-  zhTWLocale,
-  arEGLocale
+  zhTWLocale
 } from '@vexip-ui/config'
 
 export type {
