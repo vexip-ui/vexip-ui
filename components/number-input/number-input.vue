@@ -4,8 +4,9 @@ import { useFieldStore } from '@/components/form'
 
 import { computed, ref, toRef, watch } from 'vue'
 
-import { useHover, useModifier } from '@vexip-ui/hooks'
+import { useHover, useModifier, useTimerRecord } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -18,6 +19,7 @@ import {
   boundRange,
   debounce,
   isNull,
+  isValidNumber,
   minus,
   plus,
   throttle,
@@ -25,7 +27,6 @@ import {
   toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
-import { numberRE } from './symbol'
 
 type InputEventType = 'input' | 'change'
 
@@ -51,9 +52,9 @@ const props = useProps('numberInput', _props, {
   size: createSizeProp(size),
   state: createStateProp(state),
   locale: null,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   // 格式化后显示
   formatter: {
@@ -82,10 +83,11 @@ const props = useProps('numberInput', _props, {
   delay: null,
   clearable: false,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   sync: false,
+  syncStep: false,
   controlType: 'right',
   emptyType: 'NaN',
   controlAttrs: null,
@@ -106,9 +108,13 @@ const nh = useNameHelper('number-input')
 const locale = useLocale('numberInput', toRef(props, 'locale'))
 const icons = useIcons()
 
+const { timeout, interval } = useTimerRecord()
+
 const focused = ref(false)
 const currentValue = ref<string | number>(props.value)
 const inputting = ref(false)
+const plusHolding = ref(false)
+const minusHolding = ref(false)
 
 const control = ref<HTMLInputElement>()
 const { wrapper, isHover } = useHover()
@@ -122,6 +128,11 @@ useModifier({
     if (modifier.up || modifier.down) {
       event.preventDefault()
       event.stopPropagation()
+
+      if ((modifier.up && plusDisabled.value) || (modifier.down && minusDisabled.value)) {
+        return
+      }
+
       changeStep(
         modifier.up ? 'plus' : 'minus',
         event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
@@ -152,6 +163,20 @@ const outOfRange = computed(() => {
   )
 })
 const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
+const plusDisabled = computed(() => {
+  return (
+    props.disabled ||
+    isReadonly.value ||
+    (!isNullOrNaN(currentValue.value) && toNumber(currentValue.value) >= props.max)
+  )
+})
+const minusDisabled = computed(() => {
+  return (
+    props.disabled ||
+    isReadonly.value ||
+    (!isNullOrNaN(currentValue.value) && toNumber(currentValue.value) <= props.min)
+  )
+})
 const className = computed(() => {
   const [display, fade] = (props.controlType || 'right').split('-')
 
@@ -238,7 +263,7 @@ function boundValueRange(value: number) {
 
 function parseValue() {
   let value = props.value
-  value = inputting.value ? value : numberRE.test(String(value)) ? toNumber(value) : getEmptyValue()
+  value = inputting.value ? value : isValidNumber(value, true) ? toNumber(value) : getEmptyValue()
 
   if (props.precision >= 0 && !isNullOrNaN(value)) {
     value = toFixed(boundValueRange(value), props.precision)
@@ -270,7 +295,37 @@ function handleBlur(event: FocusEvent) {
   }, 120)
 }
 
-function plusNumber(event: MouseEvent) {
+function handleHold(type: 'plus' | 'minus', event: PointerEvent) {
+  const disabled = type === 'plus' ? plusDisabled : minusDisabled
+  const change = type === 'plus' ? plusNumber : minusNumber
+
+  if (event.button !== 0 || disabled.value) return
+
+  change(event)
+  document.addEventListener('pointerup', cancelStep)
+  document.addEventListener('touchend', cancelStep)
+  clearTimeout(timeout.step)
+  clearInterval(interval.step)
+  ;(type === 'plus' ? plusHolding : minusHolding).value = true
+
+  timeout.step = setTimeout(() => {
+    interval.step = setInterval(() => {
+      disabled.value ? cancelStep() : change(event)
+    }, 32)
+  }, 500)
+}
+
+function cancelStep() {
+  document.removeEventListener('pointerup', cancelStep)
+  document.removeEventListener('touchend', cancelStep)
+  clearTimeout(timeout.step)
+  clearInterval(interval.step)
+
+  plusHolding.value = false
+  minusHolding.value = false
+}
+
+function plusNumber(event: PointerEvent) {
   !focused.value && focus()
   changeStep(
     'plus',
@@ -278,7 +333,7 @@ function plusNumber(event: MouseEvent) {
   )
 }
 
-function minusNumber(event: MouseEvent) {
+function minusNumber(event: PointerEvent) {
   !focused.value && focus()
   changeStep(
     'minus',
@@ -318,7 +373,7 @@ function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt')
     value = minus(value, step)
   }
 
-  setValue(value, 'input')
+  setValue(value, props.syncStep && !props.sync ? 'change' : 'input')
 }
 
 function handleChange(event: Event) {
@@ -327,7 +382,8 @@ function handleChange(event: Event) {
 
   let value = stringValue.trim()
 
-  if (type === 'change' && stringValue && !numberRE.test(stringValue)) {
+  // to rollback invalid value to empty in `<input>` when change
+  if (type === 'change' && stringValue && !isValidNumber(stringValue, true)) {
     const floatValue = parseFloat(stringValue)
 
     if (Number.isNaN(floatValue)) {
@@ -378,7 +434,7 @@ function emitChangeEvent(type: InputEventType, sync = props.sync) {
       boundValue = toFixed(boundValue, props.precision)
     }
 
-    const boundChange = !Object.is(boundValue, value)
+    const changed = !Object.is(boundValue, value)
 
     if (!empty) {
       currentValue.value = boundValue
@@ -391,14 +447,14 @@ function emitChangeEvent(type: InputEventType, sync = props.sync) {
 
     lastValue = boundValue
 
-    if (!sync || boundChange) {
+    if (!sync || changed) {
       emit('update:value', boundValue)
       setFieldValue(boundValue)
     }
 
     emitEvent(props.onChange, boundValue)
 
-    if (!sync || boundChange) {
+    if (!sync || changed) {
       validateField()
     }
   } else {
@@ -514,10 +570,28 @@ function handleKeyPress(event: KeyboardEvent) {
       </div>
     </Transition>
     <template v-if="props.controlType !== 'none'">
-      <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
+      <div
+        :class="{
+          [nh.be('plus')]: true,
+          [nh.bem('plus', 'disabled')]: plusDisabled,
+          [nh.bem('plus', 'holding')]: plusHolding
+        }"
+        @pointerdown.prevent="handleHold('plus', $event)"
+        @mousedown.prevent
+        @touchstart.prevent
+      >
         <Icon v-bind="icons.caretUp" :scale="+(icons.caretUp.scale || 1) * 0.8"></Icon>
       </div>
-      <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
+      <div
+        :class="{
+          [nh.be('minus')]: true,
+          [nh.bem('minus', 'disabled')]: minusDisabled,
+          [nh.bem('minus', 'holding')]: minusHolding
+        }"
+        @pointerdown.prevent="handleHold('minus', $event)"
+        @mousedown.prevent
+        @touchstart.prevent
+      >
         <Icon v-bind="icons.caretDown" :scale="+(icons.caretDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>

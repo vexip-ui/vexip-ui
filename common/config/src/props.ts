@@ -239,26 +239,26 @@ export function omitProps<
 export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
+const validSizeValues: ComponentSize[] = ['small', 'default', 'large']
+const sizeValidator = (value: ComponentSize) => validSizeValues.includes(value)
 
 export function createSizeProp(defaultValue: MaybeRef<ComponentSize> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator(value: ComponentSize) {
-      return ['small', 'default', 'large'].includes(value)
-    }
+    validator: sizeValidator
   }
 }
 
 export type ComponentState = 'default' | 'success' | 'error' | 'warning'
 
 export const stateProp = String as PropType<ComponentState>
+const validStateValues: ComponentState[] = ['default', 'success', 'error', 'warning']
+const stateValidator = (value: ComponentState) => validStateValues.includes(value)
 
 export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator(value: ComponentState) {
-      return ['default', 'success', 'error', 'warning'].includes(value)
-    }
+    validator: stateValidator
   }
 }
 
@@ -346,4 +346,13 @@ export const valueProp = {
 export const valuesProp = {
   type: [String, Number, Boolean, Array] as PropType<MaybeArray<string | number | boolean>>,
   default: null
+}
+
+export const iconProp = [Object, Function]
+
+export function createIconProp(defaultValue: Record<any, any> | AnyFunction | null = null) {
+  return {
+    isFunc: true,
+    default: defaultValue
+  }
 }

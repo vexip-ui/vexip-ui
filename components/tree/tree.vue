@@ -15,7 +15,7 @@ import {
 } from 'vue'
 
 import TreeNode from './tree-node.vue'
-import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMounted, useSetTimeout } from '@vexip-ui/hooks'
 import {
   debounce,
@@ -106,7 +106,7 @@ const props = useProps('tree', _props, {
   },
   useYBar: false,
   noTransition: false,
-  arrowIcon: null,
+  arrowIcon: createIconProp(),
   blockEffect: false,
   filterLeaf: false
 })

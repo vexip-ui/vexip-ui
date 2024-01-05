@@ -1,19 +1,46 @@
 import { isDefined, isFunction, isIterable, isObject, toTrue } from './common'
 import { deepClone } from './deep-clone'
+import { raf } from './performance'
 
+/**
+ * 如果一个值不为数组，则将其转换为数组
+ *
+ * @param value 指定的值
+ */
 export function ensureArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : [value]
 }
 
-export function callIfFunc<T>(value: T | (() => T)) {
-  return isFunction(value) ? value() : value
+/**
+ * 如果一个值为函数，则执行它并返回结果，否则返回其本身
+ *
+ * @param value 指定的值
+ * @param args 若为函数时，传入的参数
+ */
+export function callIfFunc<T, P extends any[] = any[]>(value: T | ((...args: P) => T), ...args: P) {
+  return isFunction(value) ? value(...args) : value
 }
 
+/**
+ * 将路径中的 `\` 替换为 `/`
+ *
+ * @param path 指定的路径
+ */
 export function normalizePath(path: string) {
   return path.replace(/[\\/]+/g, '/')
 }
 
+/**
+ * 获取字符串的最后一个字符
+ *
+ * @param value 指定的字符串
+ */
 export function getLast(value: string): string | undefined
+/**
+ * 获取数组的最后一个元素
+ *
+ * @param value 指定的数组
+ */
 export function getLast<T>(value: T[]): T | undefined
 export function getLast(value: string | any[]) {
   return value[value.length - 1]
@@ -153,14 +180,15 @@ export interface TreeOptions<T = string> {
   keyField?: T,
   childField?: T,
   parentField?: T,
+  /** 若指定，`parent` 值等于 `rootId` 的节点被认为是顶级节点 */
   rootId?: any
 }
 
 /**
- * Transform the given flatted list to tree
+ * 将一个展平的列表变为树
  *
- * @param list the flatted list
- * @param options the config for transforming
+ * @param list 要转换的列表
+ * @param options 转换的配置项
  */
 export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> = {}) {
   const {
@@ -208,21 +236,29 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
 export { transformTree as buildTree }
 
 /**
- * Transform the given tree to flatted list
+ * 将一个树展平成列表
  *
- * @param tree the tree
- * @param options the config for transforming
+ * @param tree 要展平的树
+ * @param options 转换的配置项
  */
 export function flatTree<T = any>(
   tree: T[],
   options: TreeOptions<keyof T> & {
+    /** 是否为深度优先遍历 */
     depthFirst?: boolean,
+    /**
+     * 是否为无 ID 的节点插入 ID 值
+     *
+     * @default true
+     */
     injectId?: boolean,
+    /** 构建节点的 ID 的方法 */
     buildId?: (index: number) => any,
+    /** 过滤节点的方法 */
     filter?: (item: T) => boolean,
-    /** Whether the filter result effect the children */
+    /** 过滤的结果是否会影响其子级 */
     cascaded?: boolean,
-    /** Force inject id */
+    /** 是否强制为节点插入 ID 值 */
     forceInject?: boolean
   } = {}
 ) {
@@ -290,16 +326,17 @@ export function flatTree<T = any>(
 }
 
 /**
- * Walk the given tree and call the callback for each node
+ * 遍历树并为每个节点执行回调方法
  *
- * @param tree the tree to walk
- * @param cb the callback function
- * @param options the config for walk
+ * @param tree 要遍历的树
+ * @param cb 回调函数
+ * @param options 遍历的配置项
  */
 export function walkTree<T = any>(
   tree: T[],
   cb: (item: T, depth: number, parent: T | null) => void,
   options: {
+    /** 是否为深度优先遍历 */
     depthFirst?: boolean,
     childField?: keyof T
   } = {}
@@ -322,18 +359,20 @@ export function walkTree<T = any>(
 }
 
 /**
- * Walk the given tree and call the callback for each node and returns a tree that contains the results
+ * 遍历树并为每个节点执行回调方法，并用其返回值构建一颗新的树
  *
- * @param tree the tree to walk
- * @param cb the callback function
- * @param options the config for walk
+ * @param tree 要遍历的树
+ * @param cb 回调函数
+ * @param options 遍历的配置项
  */
 export function mapTree<T = any, R = any>(
   tree: T[],
   cb: (item: T, depth: number, parent: T | null) => R,
   options: {
+    /** 是否为深度优先遍历 */
     depthFirst?: boolean,
     childField?: keyof T,
+    /** 是否强制重置 `children` 字段 */
     clearChildren?: boolean
   } = {}
 ) {
@@ -373,17 +412,19 @@ export function mapTree<T = any, R = any>(
 }
 
 /**
- * Filter the given tree and return nodes that meet the condition specified in the callback
+ * 遍历树并为每个节点执行过滤方法，并用符合条件的节点构建一棵新的树
  *
- * @param tree the tree to walk
- * @param cb the callback function
- * @param options the config for walk
+ * @param tree 要遍历的树
+ * @param cb 过滤的方法
+ * @param options 遍历的配置项
  */
 export function filterTree<T = any>(
   tree: T[],
   cb: (item: T, depth: number, parent: T | null) => boolean,
   options: {
+    /** 判断一个节点是否为叶子节点 */
     isLeaf?: (item: T) => boolean,
+    /** 是否只对叶子节点进行过滤 */
     leafOnly?: boolean,
     childField?: keyof T
   } = {}
@@ -433,11 +474,16 @@ export function filterTree<T = any>(
 }
 
 export interface SortOptions<T = string> {
+  /** 属性名 */
   key: T,
+  /** 排序方法 */
   method?: (prev: any, next: any) => number,
+  /** 读取方法 */
   accessor?: (...args: any[]) => any,
+  /** 升降序 */
   type?: 'asc' | 'desc',
-  params?: any[] // 传入读取器的额外参数
+  /** 传入读取器的额外参数 */
+  params?: any[]
 }
 
 const defaultSortMethod = (prev: any, next: any) => {
@@ -452,7 +498,7 @@ const defaultSortMethod = (prev: any, next: any) => {
  * 根据依赖的属性逐层排序
  *
  * @param list 需要排序的数组
- * @param props 排序依赖的属性 key-属性名 method-排序方法 accessor-数据获取方法 type-升降序
+ * @param props 排序依赖的属性
  */
 export function sortByProps<T = any>(
   list: T[],
@@ -571,6 +617,11 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
   return sourceObj as T & U
 }
 
+/**
+ * 将一个任务队列按每帧一次依次指定，返回一个触发取消的方法
+ *
+ * @param queue 任务队列
+ */
 export function runQueueFrame(queue: Array<() => void>) {
   queue = Array.from(queue)
 
@@ -580,7 +631,7 @@ export function runQueueFrame(queue: Array<() => void>) {
     if (cancelled) return
 
     queue.shift()?.()
-    queue.length && requestAnimationFrame(run)
+    queue.length && raf(run)
   }
 
   run()

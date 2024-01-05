@@ -102,14 +102,17 @@ export function toDate(any: Dateable, strict = false) {
  * @param date 需要格式化的Date对象
  * @param pattern 格式化结构 年-y 月-M 日-d 时-H 分-m 秒-s 季度-q
  *
- * @example format(new Date(), 'yyyy-MM-dd')
- * @example format(Date.now(), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'')
+ * @example
+ * format(new Date(), 'yyyy-MM-dd')
+ *
+ * @example
+ * format(Date.now(), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'')
  */
 export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss') {
   date = toDate(date)
 
-  const matchs = pattern.match(formatRegExp)
-  const length = matchs?.length
+  const matches = pattern.match(formatRegExp)
+  const length = matches?.length
 
   if (!length) {
     return pattern
@@ -119,7 +122,7 @@ export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss') {
   let result = ''
 
   while (i < length) {
-    const substring = (matchs as RegExpMatchArray)[i]
+    const substring = (matches as RegExpMatchArray)[i]
     const firstCharacter = substring[0]
     const formatter = formatters[firstCharacter]
 

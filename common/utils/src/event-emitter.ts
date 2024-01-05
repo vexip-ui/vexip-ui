@@ -11,6 +11,9 @@ export interface EventEmitter {
   emit: (type: EventType, ...payload: any[]) => void
 }
 
+/**
+ * 创建一个自定义的事件发射器
+ */
 export function createEventEmitter() {
   const handlerMap: EventHandlerMap = new Map()
 

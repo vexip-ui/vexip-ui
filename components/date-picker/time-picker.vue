@@ -9,6 +9,7 @@ import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
 import TimeWheel from './time-wheel.vue'
 import TimeControl from './time-control.vue'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -88,14 +89,14 @@ const props = useProps('timePicker', _props, {
   confirmText: null,
   cancelText: null,
   ctrlSteps: () => [5, 5, 5],
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   noSuffix: false,
   exchange: false,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   min: null,

@@ -9,7 +9,7 @@ export const alertProps = buildProps({
   title: String,
   colorfulText: booleanProp,
   icon: {
-    type: [Boolean, Object],
+    type: [Boolean, Object, Function],
     default: null
   },
   closable: booleanProp,

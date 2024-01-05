@@ -1,4 +1,4 @@
-import { booleanProp, booleanStringProp, buildProps, sizeProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, iconProp, sizeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -11,7 +11,7 @@ export const skeletonProps = buildProps({
   tag: String,
   activated: booleanProp,
   image: booleanProp,
-  imageIcon: Object,
+  imageIcon: iconProp,
   iconScale: Number,
   round: booleanProp,
   circle: booleanProp,

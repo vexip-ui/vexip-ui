@@ -15,12 +15,14 @@ function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
 }
 
-function emitInput(input: HTMLInputElement, value: number) {
+function emitInput(wrapper: DOMWrapper<Element>, value: number) {
+  const input = wrapper.element as HTMLInputElement
   input.value = String(value)
   input.dispatchEvent(new Event('input'))
 }
 
-function emitChange(input: HTMLInputElement, value: number) {
+function emitChange(wrapper: DOMWrapper<Element>, value: number) {
+  const input = wrapper.element as HTMLInputElement
   input.value = String(value)
   input.dispatchEvent(new Event('change'))
 }
@@ -42,6 +44,29 @@ describe('NumberInput', () => {
     })
 
     expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
+
+    await wrapper.setProps({ value: null })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
+  it('invalid value', async () => {
+    const wrapper = mount(NumberInput, {
+      props: { value: NUMBER }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
+
+    await wrapper.setProps({ value: 'abc' })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
+  it('scientific notation', async () => {
+    const value = 1.1641532182693484e-10
+    const wrapper = mount(NumberInput, {
+      props: { value }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(value))
 
     await wrapper.setProps({ value: null })
     expect(getValue(wrapper.find('input'))).toEqual('')
@@ -171,7 +196,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, NUMBER)
     await nextTick()
@@ -186,7 +211,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onInput }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitInput(input, NUMBER)
     vi.runOnlyPendingTimers()
@@ -199,7 +224,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onInput }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitInput(input, NUMBER)
     emitInput(input, NUMBER)
@@ -322,28 +347,34 @@ describe('NumberInput', () => {
     const plus = wrapper.find('.vxp-number-input__plus')
     const minus = wrapper.find('.vxp-number-input__minus')
 
-    await plus.trigger('click')
+    await plus.trigger('pointerdown')
     expect(getValue(input)).toEqual('1')
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--holding'
+    )
 
-    await minus.trigger('click')
+    await minus.trigger('pointerdown')
     expect(getValue(input)).toEqual('0')
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--holding'
+    )
 
-    await plus.trigger('click.ctrl')
+    await plus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('100')
 
-    await minus.trigger('click.ctrl')
+    await minus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.alt')
+    await plus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0.1')
 
-    await minus.trigger('click.alt')
+    await minus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.shift')
+    await plus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('10')
 
-    await minus.trigger('click.shift')
+    await minus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('0')
   })
 
@@ -415,18 +446,51 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { sync: true, onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
+    const plus = wrapper.find('.vxp-number-input__plus')
+
+    await plus.trigger('pointerdown')
+    document.dispatchEvent(new Event('pointerup'))
+    await nextTick()
+    expect(getValue(input)).toEqual('1')
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([1])
 
     emitInput(input, NUMBER)
     vi.runOnlyPendingTimers()
     await nextTick()
-    expect(wrapper.emitted()).toHaveProperty('update:value')
-    expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
+    expect(wrapper.emitted()['update:value'][1]).toEqual([NUMBER])
 
     emitChange(input, NUMBER)
     vi.runOnlyPendingTimers()
     await nextTick()
     expect(onChange).toHaveBeenCalledWith(NUMBER)
+    expect(wrapper.emitted()['update:value'][2]).toBeUndefined()
+  })
+
+  it('sync step', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(NumberInput, {
+      props: { syncStep: true, onChange }
+    })
+    const input = wrapper.find('input')
+    const plus = wrapper.find('.vxp-number-input__plus')
+
+    await plus.trigger('pointerdown')
+    expect(getValue(input)).toEqual('1')
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([1])
+
+    emitInput(input, NUMBER)
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.emitted()['update:value'][1]).toBeUndefined()
+
+    emitChange(input, NUMBER)
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(onChange).toHaveBeenCalledWith(NUMBER)
+    expect(wrapper.emitted()['update:value'][1]).toEqual([NUMBER])
   })
 
   it('range', async () => {
@@ -434,15 +498,21 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { min: 5, max: 10, onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, 11)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(10)
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--disabled'
+    )
 
     emitChange(input, 4)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(5)
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--disabled'
+    )
 
     emitInput(input, 11)
     vi.runOnlyPendingTimers()
@@ -455,7 +525,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { precision: 2 }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, 1.11)
     await nextTick()

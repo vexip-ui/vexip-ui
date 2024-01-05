@@ -217,9 +217,9 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | disabled        | `boolean`                                        | 设置是否禁用选择器                                                        | `false`        | -        |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                                      | `false`        | -        |
 | placeholder     | `string`                                         | 同原生的 placeholder                                                      | `''`           | -        |
-| prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                              | `null`         | -        |
+| prefix          | `VueComponent`                                   | 前缀图标，使用前缀插槽时无效                                              | `null`         | -        |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                            | `''`           | -        |
-| suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                              | `null`         | -        |
+| suffix          | `VueComponent`                                   | 后缀图标，使用后缀插槽时无效                                              | `null`         | -        |
 | suffix-color    | `string`                                         | 后缀内容的颜色，会影响后缀插槽                                            | `''`           | -        |
 | no-suffix       | `boolean`                                        | 设置是否禁用后缀图标                                                      | `false`        | -        |
 | static-suffix   | `boolean`                                        | 设置后缀图标是否为静态的                                                  | `false`        | -        |
@@ -235,7 +235,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | empty-text      | `string`                                         | 设置空选项时的提示语                                                      | `locale.empty` | -        |
 | key-config      | `SelectKeyConfig`                                | 设置选项解析 `options` 时的各项键名                                       | `{}`           | `2.0.0`  |
 | loading         | `boolean`                                        | 设置是否为加载中                                                          | `false`        | `2.0.0`  |
-| loading-icon    | `Record<string, any>`                            | 设置加载中的图标                                                          | `Spinner`      | `2.0.0`  |
+| loading-icon    | `VueComponent`                                   | 设置加载中的图标                                                          | `Spinner`      | `2.0.0`  |
 | loading-lock    | `boolean`                                        | 设置在加载中时是否为只读                                                  | `false`        | `2.0.0`  |
 | loading-effect  | `string`                                         | 设置加载中图标的效果动画                                                  | `false`        | `2.1.0`  |
 | filter          | `boolean \| SelectFilter`                        | 过滤 `options` 的方法，传入 `true` 时会使用内置比较方法                   | `false`        | `2.0.0`  |

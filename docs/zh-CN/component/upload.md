@@ -170,7 +170,7 @@ type BeforeSelect = (file: UploadFileState, files: UploadFileState[]) => MaybePr
 | button-label     | `string`                                         | 设置内置上传按钮的文本内容                                                                                       | `locale.upload`    | `2.0.0` |
 | disabled         | `boolean`                                        | 设置是否禁用上传                                                                                                 | `false`            | `2.0.0` |
 | loading          | `boolean`                                        | 设置是否为加载中                                                                                                 | `false`            | `2.0.0` |
-| loading-icon     | `Record<string, any>`                            | 设置加载中的图标                                                                                                 | `Spinner`          | `2.0.0` |
+| loading-icon     | `VueComponent`                                   | 设置加载中的图标                                                                                                 | `Spinner`          | `2.0.0` |
 | loading-lock     | `boolean`                                        | 设置在加载中时是否为只读                                                                                         | `false`            | `2.0.0` |
 | loading-effect   | `string`                                         | 设置加载中图标的效果动画                                                                                         | `false`            | `2.0.0` |
 | default-files    | `UploadFileOptions`                              | 设置静态的文件列表                                                                                               | `[]`               | `2.0.0` |
@@ -197,7 +197,7 @@ type BeforeSelect = (file: UploadFileState, files: UploadFileState[]) => MaybePr
 
 | 名称    | 说明                                                            | 参数                                                                      | 始于 |
 | ------- | --------------------------------------------------------------- | ------------------------------------------------------------------------- | ---- |
-| default | 选择文件的控件插槽，`isDragOver` 用于标记是否有内容往控件上拖拽 | `({ isDragOver: boolean })`                                               | -    |
+| default | 选择文件的控件插槽，`isDragOver` 用于标记是否有内容往控件上拖拽 | `{ isDragOver: boolean }`                                                 | -    |
 | tip     | 提示语内容插槽，如果使用了默认插槽，该插槽会失效                | -                                                                         | -    |
 | item    | 文件列表中文件信息的内容插槽                                    | `{ file: UploadFileState, status: UploadStatusType, percentage: number }` | -    |
 | icon    | 文件图标的插槽                                                  | `{ file: UploadFileState }`                                               | -    |

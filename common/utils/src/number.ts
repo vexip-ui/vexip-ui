@@ -1,6 +1,6 @@
 import type { AnyCase } from './word-case'
 
-const numberRE = /^\s*[+-]?\d*\.?\d+\s*$/
+export const numberRE = /^\s*[+-]?\d*\.?\d+(?:[eE][+-]?\d+)?\s*$/
 
 /**
  * 检测给定的值是否可以通过 parseFlat 或 Number 方法转为数字
@@ -61,9 +61,9 @@ export function doubleDigits(number: number) {
 }
 
 /**
- * Return decimal length of a number.
+ * 返回数字的小数位数
  *
- * @param number The input number
+ * @param number 指定的数字
  */
 export function decimalLength(number: number | string) {
   // Get digit length of e
@@ -74,7 +74,7 @@ export function decimalLength(number: number | string) {
 }
 
 /**
- * Return decimal length of a number.
+ * Return decimal length of a number
  *
  * @param number The input number
  * @deprecated Using `decimalLength` to replace it
@@ -84,7 +84,7 @@ export function digitLength(number: number | string) {
 }
 
 /**
- * 将给定的数字格式化为三位阶
+ * 将给定的数字格式化为指定的位阶
  *
  * @param number 需要格式化的数字
  * @param segment 分隔的位数，默认为 3
@@ -295,12 +295,13 @@ export function formatByteSize(
 }
 
 /**
- * Correct the given number to specifying significant digits.
+ * 将数字处理为的指定的有效位数
  *
- * @param number The input number
- * @param precision An integer specifying the number of significant digits
+ * @param number 需要处理的数字
+ * @param precision 数字的有效位数
  *
- * @example toPrecision(0.09999999999999998) === 0.1 // true
+ * @example
+ * toPrecision(0.09999999999999998) === 0.1 // true
  */
 export function toPrecision(number: number | string, precision = 15) {
   return +parseFloat(Number(number).toPrecision(precision))
@@ -336,9 +337,9 @@ function createOperation(operation: (n1: number | string, n2: number | string) =
 }
 
 /**
- * Accurate multiplication.
+ * 精确的乘法
  *
- * @param numbers The numbers to multiply
+ * @param numbers 需要依次相乘的数字
  */
 export const times = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)
@@ -350,9 +351,9 @@ export const times = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate addition.
+ * 精确的加法
  *
- * @param numbers The numbers to add
+ * @param numbers 需要依次相加的数字
  */
 export const plus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -361,9 +362,9 @@ export const plus = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate subtraction
+ * 精确的减法
  *
- * @param numbers The numbers to subtract
+ * @param numbers 需要依次相减的数字
  */
 export const minus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -372,9 +373,9 @@ export const minus = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate division.
+ * 精确的除法
  *
- * @param numbers The numbers to divide
+ * @param numbers 需要依次相除的数字
  */
 export const divide = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)

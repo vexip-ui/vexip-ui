@@ -125,9 +125,9 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
 | size           | `'small' \| 'default' \| 'large'`                | The size of the input, the optional value is                                                                               | `'default'` | -        |
 | state          | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input                                                                                                     | `'default'` | -        |
-| prefix         | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                                            | `''`        | -        |
+| prefix         | `VueComponent`                                   | The prefix icon, invalid when using prefix slot                                                                            | `''`        | -        |
 | prefix-color   | `string`                                         | The color of the prefix content, affects the prefix slot                                                                   | `''`        | -        |
-| suffix         | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                                                                            | `''`        | -        |
+| suffix         | `VueComponent`                                   | The suffix icon, invalid when using suffix slot                                                                            | `''`        | -        |
 | suffix-color   | `string`                                         | The color of the suffix content, which affects the suffix slot                                                             | `''`        | -        |
 | formatter      | `(value: number) => string`                      | Set the method to format the value of the input after each value change                                                    | `null`      | -        |
 | accessor       | `(value: number \| null) => any`                 | Set the method for reading the input value when the event is called back                                                   | `null`      | -        |
@@ -147,7 +147,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`     | `2.1.25` |
 | clearable      | `boolean`                                        | Set whether the value can be cleared                                                                                       | `false`     | -        |
 | loading        | `boolean`                                        | Set whether is loading                                                                                                     | `false`     | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                                                                       | `Spinner`   | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | Set the loading icon                                                                                                       | `Spinner`   | `2.0.0`  |
 | loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                                                                   | `false`     | `2.0.0`  |
 | loading-effect | `string`                                         | Set the effect animation for the loading icon                                                                              | `false`     | `2.1.0`  |
 | sync           | `boolean`                                        | Set whether sync input mode                                                                                                | `false`     | `2.0.6`  |
@@ -156,6 +156,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | empty-type     | `NumberInputEmptyType`                           | Set the type of empty value                                                                                                | `'NaN'`     | `2.1.8`  |
 | control-attrs  | `Record<string, any>`                            | Set the attributes of the control element                                                                                  | `null`      | `2.2.2`  |
 | name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
+| sync-step      | `boolean`                                        | Enable sync input mode only for increase and decrease operations (including keyboard triggering)                           | `false`     | `2.2.23` |
 
 ### NumberInput Events
 

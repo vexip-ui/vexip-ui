@@ -125,9 +125,9 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------- | ----------- | -------- |
 | size           | `'small' \| 'default' \| 'large'`                | 输入框的大小，可选值为                                                                       | `'default'` | -        |
 | state          | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                                                                 | `'default'` | -        |
-| prefix         | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                                                 | `''`        | -        |
+| prefix         | `VueComponent`                                   | 前缀图标，使用前缀插槽时无效                                                                 | `''`        | -        |
 | prefix-color   | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                                               | `''`        | -        |
-| suffix         | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                                                 | `''`        | -        |
+| suffix         | `VueComponent`                                   | 后缀图标，使用后缀插槽时无效                                                                 | `''`        | -        |
 | suffix-color   | `string`                                         | 后缀内容的颜色，会影响后缀插槽                                                               | `''`        | -        |
 | formatter      | `(value: number) => string`                      | 设置在每次值变化后，对输入框的值进行格式化的方法                                             | `null`      | -        |
 | accessor       | `(value: number \| null) => any`                 | 设置在事件回调时，对输入的值的读取方法                                                       | `null`      | -        |
@@ -147,7 +147,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`      | `2.1.25` |
 | clearable      | `boolean`                                        | 设置是否可以清空值                                                                           | `false`     | -        |
 | loading        | `boolean`                                        | 设置是否为加载中                                                                             | `false`     | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                                                     | `false`     | `2.0.0`  |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                                                                     | `false`     | `2.1.0`  |
 | sync           | `boolean`                                        | 设置是否为同步输入模式                                                                       | `false`     | `2.0.6`  |
@@ -156,6 +156,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | empty-type     | `NumberInputEmptyType`                           | 设置空值的类型                                                                               | `'NaN'`     | `2.1.8`  |
 | control-attrs  | `Record<string, any>`                            | 设置输入框控件元素的属性                                                                     | `null`      | `2.2.2`  |
 | name           | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
+| sync-step      | `boolean`                                        | 仅为增减操作开启同步模式（包括键盘触发）                                                     | `false`     | `2.2.23` |
 
 ### NumberInput 事件
 
