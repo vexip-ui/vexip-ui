@@ -145,7 +145,7 @@ type RadioRawOption =
 | ~~border~~     | `boolean`                         | Set whether the radio button has a border                                                                                         | `false`     | -       |
 | options        | `RawOption[]`                     | Set the options of the radios, generally used for simple and quick generation of radios under group, invalid after using the slot | `[]`        | -       |
 | loading        | `boolean`                         | Set whether is loading                                                                                                            | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`             | Set the loading icon, only effective in button mode                                                                               | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                    | Set the loading icon, only effective in button mode                                                                               | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                         | Set whether to be read-only when loading                                                                                          | `false`     | `2.0.0` |
 | loading-effect | `string`                          | Set the effect animation for the loading icon, only effective in button mode                                                      | `false`     | `2.0.0` |
 | shape          | `RadioGroupShape`                 | Set the shape of the radio group                                                                                                  | `'default'` | `2.2.8` |

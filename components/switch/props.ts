@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, sizeProp, stateProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp, sizeProp, stateProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -12,10 +12,10 @@ export const switchProps = buildProps({
   openColor: String,
   closeColor: String,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingEffect: String as PropType<IconEffect>,
-  openIcon: Object,
-  closeIcon: Object,
+  openIcon: iconProp,
+  closeIcon: iconProp,
   openText: String,
   closeText: String,
   onBeforeChange: Function as PropType<(checked: boolean) => unknown>,

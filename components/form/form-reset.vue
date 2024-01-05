@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 
 import { computed, inject, toRef } from 'vue'
 
-import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { formResetProps } from './props'
 import { FORM_ACTIONS } from './symbol'
@@ -23,9 +23,9 @@ const props = useProps('formReset', _props, {
   disabled: null,
   loading: null,
   circle: null,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingEffect: null,
-  icon: null,
+  icon: createIconProp(),
   color: null,
   buttonType: null,
   block: null,

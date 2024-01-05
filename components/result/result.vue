@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 
 import { computed } from 'vue'
 
-import { createSizeProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, createSizeProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { resultProps } from './props'
 import { resultTypes } from './symbol'
 
@@ -17,7 +17,7 @@ const props = useProps('result', _props, {
     default: 'info',
     validator: value => resultTypes.includes(value)
   },
-  icon: null,
+  icon: createIconProp(),
   iconColor: '',
   description: ''
 })

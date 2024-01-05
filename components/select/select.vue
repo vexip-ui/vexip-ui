@@ -361,6 +361,7 @@ import {
   usePopper
 } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -459,9 +460,9 @@ export default defineComponent({
       transitionName: () => nh.ns('drop'),
       outsideClose: true,
       placeholder: null,
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       noSuffix: false,
       value: {
@@ -481,7 +482,7 @@ export default defineComponent({
       emptyText: null,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       keyConfig: () => ({}),

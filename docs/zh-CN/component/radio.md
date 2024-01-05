@@ -147,7 +147,7 @@ type RadioRawOption =
 | ~~border~~     | `boolean`                         | 设置单选框是否具有边框                                             | `false`     | -       |
 | options        | `RadioRawOption[]`                | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]`        | -       |
 | loading        | `boolean`                         | 设置是否为加载中                                                   | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`             | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                    | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                         | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
 | loading-effect | `string`                          | 设置加载中图标的效果动画，只在按钮模式生效                         | `false`     | `2.0.0` |
 | shape          | `RadioGroupShape`                 | 设置单选框组的外形                                                 | `'default'` | `2.2.8` |

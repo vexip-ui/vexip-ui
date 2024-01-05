@@ -115,9 +115,9 @@
 | type           | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | 输入框的类型，其中时间相关类型为原生类型                                                     | `'text'`    | -        |
 | size           | `'small' \| 'default' \| 'large'`                        | 输入框的大小                                                                                 | `'default'` | -        |
 | state          | `'default' \| 'success' \| 'error' \| 'warning'`         | 输入框的状态                                                                                 | `'default'` | -        |
-| prefix         | `Record<string, any>`                                    | 前缀图标，使用前缀插槽时无效                                                                 | `null`      | -        |
+| prefix         | `VueComponent`                                           | 前缀图标，使用前缀插槽时无效                                                                 | `null`      | -        |
 | prefix-color   | `string`                                                 | 前缀内容的颜色，会影响前缀插槽                                                               | `''`        | -        |
-| suffix         | `Record<string, any>`                                    | 后缀图标，使用后缀插槽时无效                                                                 | `null`      | -        |
+| suffix         | `VueComponent`                                           | 后缀图标，使用后缀插槽时无效                                                                 | `null`      | -        |
 | suffix-color   | `string`                                                 | 后缀内容的颜色，会影响后缀插槽                                                               | `''`        | -        |
 | formatter      | `(value: string \| number) => string \| number`          | 设置在每次值变化后，对输入框的值进行格式化的方法                                             | `null`      | -        |
 | value          | `string \| number`                                       | 设置输入框的值，可以使用 `v-model` 双向绑定                                                  | `''`        | -        |
@@ -137,7 +137,7 @@
 | plain-password | `boolean`                                                | 设置是否显示查看明文密码的按钮                                                               | `false`     | -        |
 | clearable      | `boolean`                                                | 设置是否可以清空值                                                                           | `false`     | -        |
 | loading        | `boolean`                                                | 设置是否为加载中                                                                             | `false`     | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                                    | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
+| loading-icon   | `VueComponent`                                           | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
 | loading-lock   | `boolean`                                                | 设置在加载中时是否为只读                                                                     | `false`     | `2.0.0`  |
 | loading-effect | `string`                                                 | 设置加载中图标的效果动画                                                                     | `false`     | `2.1.0`  |
 | transparent    | `boolean`                                                | 设置是否为透明模式                                                                           | `false`     | `2.0.2`  |

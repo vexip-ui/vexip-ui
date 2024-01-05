@@ -34,17 +34,15 @@
             :title="getActionProp(action, 'title')"
             @click.stop="action.process(state)"
           >
-            <Renderer
-              v-if="typeof action.icon === 'function'"
-              :renderer="action.icon"
-              :data="{ state }"
-            ></Renderer>
             <Icon
-              v-else
+              v-if="action.icon"
               :icon="action.icon"
               :style="getActionProp(action, 'iconStyle')"
               :scale="getActionProp(action, 'iconScale') || 1"
             ></Icon>
+            <template v-else>
+              {{ action.name }}
+            </template>
           </button>
           <Divider
             v-if="getActionProp(action, 'divided')"
@@ -60,7 +58,6 @@
 <script lang="tsx">
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
-import { Renderer } from '@/components/renderer'
 
 import { computed, defineComponent, onMounted, reactive, ref, toRef } from 'vue'
 
@@ -76,8 +73,7 @@ export default defineComponent({
   name: 'Viewer',
   components: {
     Divider,
-    Icon,
-    Renderer
+    Icon
   },
   props: viewerProps,
   emits: [],
@@ -113,15 +109,15 @@ export default defineComponent({
     const flipX = ref(false)
     const flipY = ref(false)
 
+    const viewer = ref<HTMLElement>()
     const transition = ref<HTMLElement>()
 
     const {
       supported: fullSupported,
-      target: viewer,
       full,
       enter: enterFull,
       exit: exitFull
-    } = useFullScreen()
+    } = useFullScreen(viewer)
     const {
       target: container,
       x: currentLeft,

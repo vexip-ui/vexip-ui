@@ -38,7 +38,7 @@ Set customize result content via slots.
 | size        | `'small' \| 'default' \| 'large'`             | Set the size of the result, which will affect the icon and font size in it            | `'default'` | -     |
 | title       | `string`                                      | Set the title of the result, it will be invalid after using the same name slot        | `''`        | -     |
 | description | `string`                                      | Set the description of the result, it will be invalid after using the same name slot  | `''`        | -     |
-| icon        | `Record<string, any>`                         | Set the custom icon                                                                   | `''`        | -     |
+| icon        | `VueComponent`                                | Set the custom icon                                                                   | `''`        | -     |
 | icon-color  | `string`                                      | Set the color of the result icon                                                      | `''`        | -     |
 
 ### Result Slots

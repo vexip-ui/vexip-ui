@@ -78,14 +78,14 @@ type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 | disabled       | `boolean`                     | Set whether is disabled                                                                                    | `false`     | -       |
 | no-input       | `boolean`                     | Set whether to disable Input input color value                                                             | `false`     | -       |
 | shortcut       | `boolean \| string[]`         | Set whether to use shortcut to select color, can specify the list when passing a string array              | `false`     | -       |
-| prefix         | `Record<string, any>`         | The prefix icon, invalid when using prefix slot                                                            | `null`      | `2.0.0` |
+| prefix         | `VueComponent`                | The prefix icon, invalid when using prefix slot                                                            | `null`      | `2.0.0` |
 | prefix-color   | `string`                      | The color of the prefix content, affects the prefix slot                                                   | `''`        | `2.0.0` |
-| suffix         | `Record<string, any>`         | The suffix icon, invalid when using suffix slot                                                            | `null`      | `2.0.0` |
+| suffix         | `VueComponent`                | The suffix icon, invalid when using suffix slot                                                            | `null`      | `2.0.0` |
 | suffix-color   | `string`                      | The color of the suffix content, which affects the suffix slot                                             | `''`        | `2.0.0` |
 | no-suffix      | `boolean`                     | Set whether to disable suffix icon                                                                         | `false`     | `2.0.0` |
 | static-suffix  | `boolean`                     | Set whether the suffix icon is static                                                                      | `false`     | `2.0.0` |
 | loading        | `boolean`                     | Set whether is loading                                                                                     | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`         | Set the loading icon                                                                                       | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                | Set the loading icon                                                                                       | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                     | Set whether to be read-only when loading                                                                   | `false`     | `2.0.0` |
 | loading-effect | `string`                      | Set the effect animation for the loading icon                                                              | `false`     | `2.0.0` |
 | locale         | `LocaleConfig['colorPicker']` | Set the locale config                                                                                      | `null`      | `2.1.0` |

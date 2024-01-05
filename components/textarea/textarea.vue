@@ -5,6 +5,7 @@ import { useFieldStore } from '@/components/form'
 import { computed, ref, toRef, watch } from 'vue'
 
 import {
+  createIconProp,
   createStateProp,
   emitEvent,
   useIcons,
@@ -40,7 +41,7 @@ const props = useProps('textarea', _props, {
   delay: null,
   maxLength: 0,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   sync: false,
