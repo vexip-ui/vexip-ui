@@ -23,16 +23,25 @@ function getMaxTouchPoints() {
 
 const events: Map<string, Set<TransferNode>> = new Map()
 
+/**
+ * @internal
+ */
 export function createEvent(type: string) {
   if (!events.has(type)) {
     events.set(type, new Set())
   }
 }
 
+/**
+ * @internal
+ */
 export function getObservers(type: string) {
   return events.get(type) ?? events.set(type, new Set()).get(type)!
 }
 
+/**
+ * @internal
+ */
 export function observe(el: TransferNode, types: string | string[]) {
   if (typeof types === 'string') {
     types = [types as string]
@@ -51,6 +60,9 @@ export function observe(el: TransferNode, types: string | string[]) {
   }
 }
 
+/**
+ * @internal
+ */
 export function disconnect(el: TransferNode, types: string | string[]) {
   if (typeof types === 'string') {
     types = [types as string]
@@ -67,6 +79,9 @@ export function disconnect(el: TransferNode, types: string | string[]) {
   }
 }
 
+/**
+ * @internal
+ */
 export function dispatchEvent(el: TransferNode, payload: EventPayload, Event = window.Event) {
   const { type, bubbles = false, cancelable = false, ...data } = payload
 

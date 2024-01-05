@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, wrapProps } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
@@ -20,23 +20,11 @@ export const tabNavProps = buildProps({
 export type TabNavProps = ExtractPropTypes<typeof tabNavProps>
 export type TabNavCProps = ConfigurableProps<TabNavProps>
 
-export const tabNavItemProps = wrapProps({
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  closable: {
-    type: Boolean,
-    default: null
-  },
+export const tabNavItemProps = buildProps({
+  label: [String, Number],
+  disabled: booleanProp,
+  icon: iconProp,
+  closable: booleanProp,
   onToggle: eventProp<(active: boolean) => void>()
 })
 

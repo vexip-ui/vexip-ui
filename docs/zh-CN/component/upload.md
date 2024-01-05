@@ -170,7 +170,7 @@ type BeforeSelect = (file: UploadFileState, files: UploadFileState[]) => MaybePr
 | button-label     | `string`                                         | 设置内置上传按钮的文本内容                                                                                       | `locale.upload`    | `2.0.0` |
 | disabled         | `boolean`                                        | 设置是否禁用上传                                                                                                 | `false`            | `2.0.0` |
 | loading          | `boolean`                                        | 设置是否为加载中                                                                                                 | `false`            | `2.0.0` |
-| loading-icon     | `Record<string, any>`                            | 设置加载中的图标                                                                                                 | `Spinner`          | `2.0.0` |
+| loading-icon     | `VueComponent`                                   | 设置加载中的图标                                                                                                 | `Spinner`          | `2.0.0` |
 | loading-lock     | `boolean`                                        | 设置在加载中时是否为只读                                                                                         | `false`            | `2.0.0` |
 | loading-effect   | `string`                                         | 设置加载中图标的效果动画                                                                                         | `false`            | `2.0.0` |
 | default-files    | `UploadFileOptions`                              | 设置静态的文件列表                                                                                               | `[]`               | `2.0.0` |

@@ -5,6 +5,7 @@ import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef
 
 import { useHover } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -51,9 +52,9 @@ export default defineComponent({
         default: 'text',
         validator: value => inputTypes.includes(value)
       },
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       formatter: {
         default: null,
@@ -78,7 +79,7 @@ export default defineComponent({
       plainPassword: false,
       clearable: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       transparent: false,

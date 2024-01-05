@@ -4,7 +4,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, inject, ref, watch } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { avatarProps } from './props'
 import { GROUP_STATE, objectFitValues } from './symbol'
 
@@ -19,7 +19,7 @@ const props = useProps('avatar', _props, {
     default: '',
     static: true
   },
-  icon: null,
+  icon: createIconProp(),
   circle: false,
   alt: '',
   fit: {

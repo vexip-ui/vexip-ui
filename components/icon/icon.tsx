@@ -22,6 +22,7 @@ export default defineComponent({
   setup(_props, { attrs, slots }) {
     const props = useProps('icon', _props, {
       icon: {
+        isFunc: true,
         default: null,
         static: true
       },

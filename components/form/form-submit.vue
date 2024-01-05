@@ -4,7 +4,7 @@ import { FIELD_OPTIONS } from '@/components/form/symbol'
 
 import { computed, inject, ref, toRef } from 'vue'
 
-import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
@@ -24,9 +24,9 @@ const props = useProps('form-submit', _props, {
   ghost: null,
   disabled: null,
   circle: null,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingEffect: null,
-  icon: null,
+  icon: createIconProp(),
   color: null,
   buttonType: null,
   block: null,

@@ -95,16 +95,11 @@ defineExpose(
           :class="nh.be('icon')"
           :style="{ color: item.iconColor }"
         >
-          <Renderer
-            v-if="typeof item.icon === 'function'"
-            :renderer="item.icon"
-            :data="item"
-          ></Renderer>
           <Icon
-            v-else-if="item.icon"
+            v-if="item.icon"
             :icon="item.icon"
             :scale="!item.content && typeof item.renderer !== 'function' ? 1 : 2"
-            :style="[{ color: item.iconColor }, item.icon.style]"
+            :style="[{ color: item.iconColor }, (item.icon as any).style]"
           ></Icon>
           <Icon
             v-else

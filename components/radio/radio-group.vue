@@ -5,6 +5,7 @@ import { useFieldStore } from '@/components/form'
 import { computed, provide, reactive, ref, toRef, watch } from 'vue'
 
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -40,7 +41,7 @@ const props = useProps('radioGroup', _props, {
     static: true
   },
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   shape: null

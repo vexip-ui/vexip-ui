@@ -1,4 +1,11 @@
-import { booleanProp, buildProps, eventProp, localeProp, stateProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
+  stateProp
+} from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -33,7 +40,7 @@ export const transferProps = buildProps({
   targetTitle: String,
   deepState: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   onChange: eventProp<(values: Values) => void>(),

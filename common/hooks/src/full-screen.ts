@@ -1,11 +1,13 @@
-import { computed, getCurrentScope, onScopeDispose, ref } from 'vue'
+import { computed, getCurrentScope, isRef, onScopeDispose, ref, watch } from 'vue'
 
 import { isClient, noop } from '@vexip-ui/utils'
+import { unrefElement } from './shared/utils'
 
-import type { ComputedRef, Ref } from 'vue'
+import type { ComputedRef, MaybeRef, Ref } from 'vue'
+import type { MaybeInstance } from './shared/types'
 
 export interface UseFullScreenResult {
-  target: Ref<HTMLElement | null | undefined>,
+  target: Ref<MaybeInstance>,
   supported: boolean,
   full: ComputedRef<boolean>,
   enter: (force?: boolean) => Promise<boolean>,
@@ -87,43 +89,75 @@ const notSupportedResult = {
   toggle: noop
 }
 
-const subscriptions = new Set<Ref<boolean>>()
+const states = new Set<Ref<boolean>>()
+const subscriptions = new WeakMap<Element, Ref<boolean>>()
 
 if (isClient && map) {
-  const ELEMENT = map[2]
+  // const ELEMENT = map[2]
   const EVENT = map[4]
 
   document.addEventListener(
     EVENT,
-    () => {
-      const full = !!document[ELEMENT]
-      subscriptions.forEach(s => {
-        s.value = full
+    event => {
+      states.forEach(state => {
+        state.value = false
       })
+
+      if (event.target) {
+        const full = subscriptions.get(event.target as Element)
+
+        if (full) {
+          full.value = true
+        }
+      }
     },
     false
   )
 }
 
-export function useFullScreen(
-  target: Ref<HTMLElement | null | undefined> = ref(null)
-): UseFullScreenResult {
+export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseFullScreenResult {
+  const targetRef = computed({
+    get: () => unrefElement(target),
+    set: el => {
+      if (isRef(target)) {
+        target.value = el
+      }
+    }
+  })
+
   if (!isClient || !supported) {
-    return { ...notSupportedResult, target }
+    return { ...notSupportedResult, target: targetRef }
   }
 
   const [REQUEST, EXIT, ELEMENT] = map
   const full = ref(false)
 
+  watch(
+    () => unrefElement(target),
+    (el, old) => {
+      old && subscriptions.delete(old)
+      el && subscriptions.set(el, full)
+    },
+    { immediate: true, flush: 'post' }
+  )
+
+  states.add(full)
+
+  if (getCurrentScope()) {
+    onScopeDispose(exit)
+  }
+
   async function enter(force = false) {
     await exit()
 
-    if (target.value) {
+    const el = unrefElement(target)
+
+    if (el) {
       if (force || !document[ELEMENT]) {
-        await target.value[REQUEST]()
+        await el[REQUEST]()
         full.value = true
 
-        return document[ELEMENT] === target.value
+        return document[ELEMENT] === el
       }
     }
 
@@ -131,11 +165,13 @@ export function useFullScreen(
   }
 
   async function exit(force = false) {
-    if (force || (document[ELEMENT] && document[ELEMENT] === target.value)) {
+    const el = unrefElement(target)
+
+    if (force || (document[ELEMENT] && document[ELEMENT] === el)) {
       await document[EXIT]()
       full.value = false
 
-      return document[ELEMENT] !== target.value
+      return document[ELEMENT] !== el
     }
 
     return false
@@ -145,15 +181,9 @@ export function useFullScreen(
     return full.value ? await exit(force) : await enter(force)
   }
 
-  subscriptions.add(full)
-
-  if (getCurrentScope()) {
-    onScopeDispose(exit)
-  }
-
   return {
     supported,
-    target,
+    target: targetRef,
     full: computed(() => full.value),
     enter,
     exit,

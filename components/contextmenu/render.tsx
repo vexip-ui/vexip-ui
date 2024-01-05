@@ -12,20 +12,14 @@ import type { ContextmenuConfig } from './symbol'
 function renderItemIcon(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.icon) return null
 
-  let icon: any
-
-  if (typeof item.icon === 'function') {
-    icon = item.icon()
-  } else {
-    icon = (
+  return (
+    <div class={nh.be('icon')}>
       <Icon
         icon={item.icon}
-        style={[{ color: item.iconColor || item.color }, item.icon.style]}
+        style={[{ color: item.iconColor || item.color }, (item.icon as any).style]}
       ></Icon>
-    )
-  }
-
-  return <div class={nh.be('icon')}>{icon}</div>
+    </div>
+  )
 }
 
 function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
