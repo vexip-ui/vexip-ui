@@ -12,7 +12,8 @@ export {
   taINLocale,
   zhCNLocale,
   zhHKLocale,
-  zhTWLocale
+  zhTWLocale,
+  arEGLocale
 } from '@vexip-ui/config'
 
 export type {
