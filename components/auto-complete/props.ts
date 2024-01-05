@@ -3,6 +3,7 @@ import {
   booleanStringProp,
   buildProps,
   eventProp,
+  iconProp,
   localeProp,
   sizeProp,
   stateProp
@@ -31,9 +32,9 @@ export const autoCompleteProps = buildProps({
     type: [Boolean, Function] as PropType<boolean | AutoCompleteFilter>,
     default: null
   },
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   placeholder: String,
   disabled: booleanProp,
@@ -45,7 +46,7 @@ export const autoCompleteProps = buildProps({
   autofocus: booleanProp,
   spellcheck: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,

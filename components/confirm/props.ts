@@ -21,7 +21,7 @@ export const confirmProps = buildProps({
   confirmText: String,
   cancelText: String,
   icon: {
-    type: [Boolean, Object, Function] as PropType<boolean | Record<string, any> | (() => any)>,
+    type: [Boolean, Object, Function],
     default: null
   },
   className: classProp,

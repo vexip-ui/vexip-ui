@@ -10,6 +10,14 @@ function lowBit(num: number) {
   return num & -num
 }
 
+/**
+ * 创建一个二叉索引树（Fenwick 树）对象
+ *
+ * 为了节省初始化性能开销，需确保元素最小值已知，其初始值为：元素最小值 * 元素总数
+ *
+ * @param length 树的大小，即元素的总数
+ * @param min 规定元素的最小值
+ */
 export function createBITree(length: number, min = 0): BITree {
   const tree: number[] = new Array(length + 1).fill(0)
 

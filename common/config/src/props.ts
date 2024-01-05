@@ -347,3 +347,12 @@ export const valuesProp = {
   type: [String, Number, Boolean, Array] as PropType<MaybeArray<string | number | boolean>>,
   default: null
 }
+
+export const iconProp = [Object, Function]
+
+export function createIconProp(defaultValue: Record<any, any> | AnyFunction | null = null) {
+  return {
+    isFunc: true,
+    default: defaultValue
+  }
+}

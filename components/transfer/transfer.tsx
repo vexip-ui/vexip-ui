@@ -14,6 +14,7 @@ import {
 } from 'vue'
 
 import {
+  createIconProp,
   createStateProp,
   emitEvent,
   useIcons,
@@ -71,7 +72,7 @@ export default defineComponent({
       targetTitle: null,
       deepState: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null
     })

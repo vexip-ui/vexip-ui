@@ -2,6 +2,7 @@ import {
   booleanProp,
   buildProps,
   eventProp,
+  iconProp,
   localeProp,
   stateProp,
   styleProp
@@ -51,7 +52,7 @@ export const uploadProps = buildProps({
   buttonLabel: String,
   disabled: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   image: booleanProp,

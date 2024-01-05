@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, classProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, classProp, eventProp, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -6,7 +6,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const spinProps = buildProps({
   active: booleanProp,
-  icon: Object,
+  icon: iconProp,
   inner: booleanProp,
   delay: {
     type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,

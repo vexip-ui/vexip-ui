@@ -3,6 +3,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   sizeProp,
   stateProp,
   valueProp
@@ -42,7 +43,7 @@ export const radioGroupProps = buildProps({
   border: booleanProp,
   options: Array as PropType<RadioRawOption[]>,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   shape: String as PropType<RadioGroupShape>,
