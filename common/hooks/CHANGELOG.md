@@ -1,3 +1,12 @@
+## [2.3.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.3.0...hooks@2.3.1) (2024-01-04)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useFullScreen improve global full state subscription ([a7e91b1](https://github.com/vexip-ui/vexip-ui/commit/a7e91b1871ba25fbfd3ac7626fb0d8ce27cc3e37))
+
+
+
 # [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.3...hooks@2.3.0) (2023-12-20)
 
 

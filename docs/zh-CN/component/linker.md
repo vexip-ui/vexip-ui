@@ -42,7 +42,7 @@
 | --------- | ----------------------------------------------------------------------- | --------------------------------- | ----------- | ---- |
 | to        | `string`                                                                | 链接的目标地址                    | `null`      | -    |
 | type      | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning' \| 'info'` | 链接的类型                        | `'default'` | -    |
-| icon      | `Record<string, any>`                                                   | 链接的前置图标                    | `null`      | -    |
+| icon      | `VueComponent`                                                          | 链接的前置图标                    | `null`      | -    |
 | underline | `boolean`                                                               | 设置鼠标移入时是否显示下划线      | `false`     | -    |
 | disabled  | `boolean`                                                               | 设置是否为禁用状态                | `false`     | -    |
 | target    | `string`                                                                | 同原生 `<a>` 标签的 `target` 属性 | `'_blank'`  | -    |

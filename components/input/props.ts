@@ -3,6 +3,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   localeProp,
   sizeProp,
   stateProp
@@ -18,9 +19,9 @@ export const inputProps = buildProps({
   state: stateProp,
   locale: localeProp('input'),
   type: String as PropType<InputType>,
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   formatter: Function as PropType<(value: string | number) => string | number>,
   value: [String, Number],
@@ -36,11 +37,13 @@ export const inputProps = buildProps({
   maxLength: Number,
   before: String,
   after: String,
-  // 是否显示切换 password 为明文的按钮
+  /**
+   * 是否显示切换 password 为明文的按钮
+   */
   plainPassword: booleanProp,
   clearable: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,

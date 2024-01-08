@@ -128,8 +128,8 @@ type ButtonAttrType = 'button' | 'submit' | 'reset'
 | disabled       | `boolean`                         | 设置是否为禁用状态                         | `false`     | -       |
 | loading        | `boolean`                         | 设置是否为加载状态                         | `false`     | -       |
 | circle         | `boolean`                         | 设置是否为圆形按钮                         | `false`     | -       |
-| icon           | `Record<string, any>`             | 按钮的辅助图标，加载状态时会切换为加载图标 | `''`        | -       |
-| loading-icon   | `Record<string, any>`             | 设置加载中的图标                           | `Spinner`   | -       |
+| icon           | `VueComponent`                    | 按钮的辅助图标，加载状态时会切换为加载图标 | `''`        | -       |
+| loading-icon   | `VueComponent`                    | 设置加载中的图标                           | `Spinner`   | -       |
 | loading-effect | `string`                          | 设置加载中图标的效果动画                   | `false`     | -       |
 | button-type    | `ButtonAttrType`                  | 设置原生 `<button>` 的 `type` 属性         | `'button'`  | -       |
 | block          | `boolean`                         | 是否为块级元素，设置后宽度变为 `100%`      | `false`     | -       |

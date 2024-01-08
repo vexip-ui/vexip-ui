@@ -95,6 +95,7 @@ function toComponentDoc(fullName: string) {
 
 .doc-search {
   flex: auto;
+  max-width: 100%;
   padding-inline-start: 14px;
   margin-inline-start: -1px;
   border-inline-start: var(--vxp-border-light-2);

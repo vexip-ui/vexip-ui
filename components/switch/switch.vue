@@ -57,6 +57,7 @@ import { useFieldStore } from '@/components/form'
 import { computed, defineComponent, ref, watch } from 'vue'
 
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -89,10 +90,10 @@ export default defineComponent({
       openColor: '',
       closeColor: '',
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingEffect: null,
-      openIcon: null,
-      closeIcon: null,
+      openIcon: createIconProp(),
+      closeIcon: createIconProp(),
       openText: '',
       closeText: '',
       onBeforeChange: {

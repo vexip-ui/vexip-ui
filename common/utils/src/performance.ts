@@ -1,6 +1,6 @@
 import { isClient, noop } from './common'
 
-const raf = isClient
+export const raf = isClient
   ? requestAnimationFrame
   : (cb: FrameRequestCallback) => {
       setTimeout(cb, 16)

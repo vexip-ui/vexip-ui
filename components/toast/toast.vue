@@ -4,7 +4,7 @@ import { Renderer } from '@/components/renderer'
 
 import { computed, nextTick, onMounted, reactive } from 'vue'
 
-import { useIcons, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
+import { createIconProp, useIcons, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { toastProps } from './props'
 import { effectiveTypes } from './symbol'
@@ -18,7 +18,7 @@ const nh = useNameHelper('toast')
 const _props = defineProps(toastProps)
 const props = useProps('toast', _props, {
   bodyWidth: 100,
-  icon: null,
+  icon: createIconProp(),
   iconProps: () => ({}),
   position: 'center',
   transitionName: () => nh.ns('ease'),
@@ -185,9 +185,8 @@ function handleMaskClick() {
             v-if="state.icon || (state.type && effectiveTypes.includes(state.type))"
             :class="nh.be('icon')"
           >
-            <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
             <Icon
-              v-else-if="state.icon"
+              v-if="state.icon"
               :icon="state.icon"
               :scale="1.8"
               v-bind="state.iconProps"

@@ -7,6 +7,7 @@ export {
   configProps,
   configZIndex,
   registerLocale,
+  arEGLocale,
   deDELocale,
   enUSLocale,
   taINLocale,

@@ -5,15 +5,15 @@
       :class="contentClass"
       role="tab"
       tabindex="0"
-      :aria-disabled="disabled"
+      :aria-disabled="props.disabled"
       :aria-setsize="total || undefined"
       :aria-posinset="index || undefined"
       @click="handleSelect"
       @keydown.enter.stop="handleSelect"
     >
-      <Icon v-if="icon" :class="nh.be('icon')" :icon="icon"></Icon>
+      <Icon v-if="props.icon" :class="nh.be('icon')" :icon="props.icon"></Icon>
       <slot>
-        {{ label }}
+        {{ props.label }}
       </slot>
       <button
         v-if="isClosable"
@@ -32,7 +32,7 @@ import { Icon } from '@/components/icon'
 
 import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { tabNavItemProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
@@ -46,7 +46,17 @@ export default defineComponent({
   },
   props: tabNavItemProps,
   emits: [],
-  setup(props) {
+  setup(_props) {
+    const props = useProps('tabNavItem', _props, {
+      label: {
+        static: true,
+        default: null
+      },
+      disabled: false,
+      icon: createIconProp(),
+      closable: null
+    })
+
     const tabNavState = inject(TAB_NAV_STATE, null)
 
     const nh = useNameHelper('tab-nav')
@@ -129,6 +139,7 @@ export default defineComponent({
 
     return {
       nh,
+      props,
       icons: useIcons(),
       index,
       total,

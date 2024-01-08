@@ -7,7 +7,7 @@ import { Renderer } from '@/components/renderer'
 import { nextTick, onMounted, reactive, ref, toRef } from 'vue'
 
 import { useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { isFunction, isObject, isPromise } from '@vexip-ui/utils'
+import { isFunction, isPromise } from '@vexip-ui/utils'
 import { confirmProps } from './props'
 
 import type { ConfirmButtonType, ConfirmOptions, ConfirmRenderFn, ConfirmState } from './symbol'
@@ -54,7 +54,10 @@ const props = useProps('confirm', _props, {
   },
   confirmText: null,
   cancelText: null,
-  icon: null,
+  icon: {
+    isFunc: true,
+    default: false
+  },
   className: null,
   style: null,
   renderer: {
@@ -130,7 +133,7 @@ async function openConfirm(options: ConfirmOptions) {
 
   return await new Promise<boolean>(resolve => {
     for (const prop of commonProps) {
-      (state as any)[prop] = options[prop] ?? props[prop]
+      ;(state as any)[prop] = options[prop] ?? props[prop]
     }
 
     state.title = options.title ?? ''
@@ -196,7 +199,7 @@ function handleCancel() {
 
 function handleReset() {
   for (const prop of commonProps) {
-    (state as any)[prop] = props[prop]
+    ;(state as any)[prop] = props[prop]
   }
 
   state.visible = false
@@ -262,9 +265,8 @@ function handleReset() {
           ]"
         >
           <div v-if="state.icon !== false" :class="nh.be('icon')">
-            <Renderer v-if="isFunction(state.icon)" :renderer="state.icon"></Renderer>
             <Icon
-              v-else-if="isObject(state.icon)"
+              v-if="typeof state.icon !== 'boolean'"
               v-bind="state.iconProps"
               :icon="state.icon"
             ></Icon>

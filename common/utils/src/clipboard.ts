@@ -1,5 +1,10 @@
 import { isClient } from './common'
 
+/**
+ * 将指定的文本写入粘贴板
+ *
+ * @param text 需要写入的文本
+ */
 export async function writeClipboard(text: string) {
   if (!isClient) return false
 
@@ -43,7 +48,7 @@ export async function writeClipboard(text: string) {
 
     // Get the focus back on the previously focused element, if any
     if (prevFocused) {
-      (prevFocused as HTMLElement).focus()
+      ;(prevFocused as HTMLElement).focus()
     }
 
     return isSuccess

@@ -38,7 +38,7 @@
 | size        | `'small' \| 'default' \| 'large'`             | 设置结果的大小，将会影响其中的图标和字体大小           | `'default'` | -    |
 | title       | `string`                                      | 结果的标题，当使用同名插槽时无效                       | `''`        | -    |
 | description | `string`                                      | 结果的描述内容，当使用同名插槽时无效                   | `''`        | -    |
-| icon        | `Record<string, any>`                         | 自定义图标                                             | `''`        | -    |
+| icon        | `VueComponent`                                | 自定义图标                                             | `''`        | -    |
 | icon-color  | `string`                                      | 设置图标的颜色                                         | `''`        | -    |
 
 ### Result 插槽

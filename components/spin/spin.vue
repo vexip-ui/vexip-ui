@@ -78,7 +78,7 @@ import { Icon } from '@/components/icon'
 
 import { computed, defineComponent, ref, watch } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { spinProps } from './props'
 
@@ -95,7 +95,7 @@ export default defineComponent({
         default: false,
         static: true
       },
-      icon: null,
+      icon: createIconProp(),
       inner: false,
       delay: false,
       tip: '',

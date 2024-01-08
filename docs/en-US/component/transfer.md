@@ -106,7 +106,7 @@ type TransferFilter = (value: string, options: TransferOptionState, type: 'sourc
 | target-title   | `string`                                         | Set the title of the target panel                                                         | `locale.target` | -        |
 | deep-state     | `boolean`                                        | Set whether to sync state to child controls                                               | `false`         | `2.0.13` |
 | loading        | `boolean`                                        | Set whether is loading                                                                    | `false`         | -        |
-| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                                      | `Spinner`       | -        |
+| loading-icon   | `VueComponent`                                   | Set the loading icon                                                                      | `Spinner`       | -        |
 | loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                                  | `false`         | -        |
 | loading-effect | `string`                                         | Set the effect animation for the loading icon                                             | `false`         | -        |
 | locale         | `LocaleConfig['transfer']`                       | Set the locale config                                                                     | `null`          | `2.1.0`  |
