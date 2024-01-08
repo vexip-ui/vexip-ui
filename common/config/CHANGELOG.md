@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.4.0...config@1.5.0) (2024-01-08)
+
+
+### ✨ Features
+
+* **config:** add Arabic(ar-EG) locale config ([#455](https://github.com/vexip-ui/vexip-ui/issues/455)) ([2a5c8e7](https://github.com/vexip-ui/vexip-ui/commit/2a5c8e70ac2db14b43aed83b952ef9b3f275b466))
+
+
+
 # [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.2...config@1.4.0) (2024-01-04)
 
 
