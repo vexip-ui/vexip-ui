@@ -90,6 +90,7 @@ type CaptchaBeforeTest =
 
 | Name           | Type                              | Description                                                                                                                              | Default       | Since |
 | -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----- |
+| type           | `CaptchaType`                     | Set the interaction type of captcha                                                                                                      | `'slide'`     | -     |
 | slide-target   | `number \| number[]`              | Set the slide target position, the second item is the vertical position when passing in the array                                        | `null`        | -     |
 | title          | `string`                          | Set the title of captcha                                                                                                                 | `null`        | -     |
 | tip            | `string`                          | Set the tip of captcha                                                                                                                   | `null`        | -     |
@@ -97,10 +98,10 @@ type CaptchaBeforeTest =
 | image          | `string`                          | Set an image for captcha                                                                                                                 | `null`        | -     |
 | tolerance      | `number`                          | Set the error tolerance allowed for the captcha target position                                                                          | `null`        | -     |
 | canvas-size    | `number[]`                        | Set canvas size                                                                                                                          | `[1000, 600]` | -     |
-| refresh-icon   | `Record<string, any>`             | Set refresh icon                                                                                                                         | `null`        | -     |
+| refresh-icon   | `VueComponent`                    | Set refresh icon                                                                                                                         | `null`        | -     |
 | disabled       | `boolean`                         | Set whether to disable the captcha                                                                                                       | `false`       | -     |
 | loading        | `boolean`                         | Set whether the captcha is loading                                                                                                       | `false`       | -     |
-| loading-icon   | `Record<string, any>`             | Set loading icon                                                                                                                         | `null`        | -     |
+| loading-icon   | `VueComponent`                    | Set loading icon                                                                                                                         | `null`        | -     |
 | loading-effect | `string`                          | Set the effect animation for the loading icon                                                                                            | `null`        | -     |
 | on-before-test | `CaptchaBeforeTest`               | Set the callback before test, support async function and Promise, when returning a boolean value, it will be directly used as the result | `null`        | -     |
 | texts          | `string[]`                        | Set the letters to be pointed in sequence                                                                                                | `[]`          | -     |

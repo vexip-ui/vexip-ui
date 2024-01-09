@@ -1,4 +1,11 @@
-import { booleanProp, booleanStringProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  booleanStringProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  sizeProp
+} from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -15,10 +22,10 @@ export const captchaProps = buildProps({
   image: [String, Function] as PropType<string | (() => Promise<string>)>,
   tolerance: Number,
   canvasSize: Array as PropType<number[]>,
-  refreshIcon: Object,
+  refreshIcon: iconProp,
   disabled: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingEffect: String as PropType<IconEffect>,
   onBeforeTest: Function as PropType<CaptchaBeforeTest>,
   texts: Array as PropType<string[]>,
@@ -48,7 +55,7 @@ export const captchaSliderProps = buildProps({
   tolerance: Number,
   disabled: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   onBeforeTest: Function as PropType<(percent: number, matched: boolean) => unknown>,

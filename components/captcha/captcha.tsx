@@ -21,6 +21,7 @@ import {
 
 import CaptchaSlider from './captcha-slider.vue'
 import {
+  createIconProp,
   createSizeProp,
   emitEvent,
   useIcons,
@@ -76,10 +77,10 @@ export default defineComponent({
         validator: value => value >= 0
       },
       canvasSize: () => [1000, 600],
-      refreshIcon: null,
+      refreshIcon: createIconProp(),
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingEffect: null,
       onBeforeTest: {
         default: null,
@@ -599,7 +600,7 @@ export default defineComponent({
           loading-icon={props.loadingIcon}
           loading-lock
           loading-effect={props.loadingEffect}
-          disabled={disabled.value || failLocked.value}
+          disabled={props.disabled || failLocked.value}
           onBeforeTest={props.onBeforeTest}
           onSuccess={handleSlideSuccess}
           onFail={handleSlideFail}
@@ -664,7 +665,6 @@ export default defineComponent({
             >
               {renderSlot(slots, 'refresh', undefined, () => [
                 <Icon
-                  key={0}
                   {...icons.value.refresh}
                   icon={props.refreshIcon || icons.value.refresh.icon}
                 ></Icon>

@@ -88,6 +88,7 @@ type CaptchaBeforeTest =
 
 | 名称           | 类型                              | 说明                                                                     | 默认值        | 始于 |
 | -------------- | --------------------------------- | ------------------------------------------------------------------------ | ------------- | ---- |
+| type           | `CaptchaType`                     | 设置验证的交互类型                                                       | `'slide'`     | -    |
 | slide-target   | `number \| number[]`              | 设置滑动目标位置，传入数组时第二位为纵向位置                             | `null`        | -    |
 | title          | `string`                          | 设置验证的标题                                                           | `null`        | -    |
 | tip            | `string`                          | 设置验证的提示语                                                         | `null`        | -    |
@@ -95,10 +96,10 @@ type CaptchaBeforeTest =
 | image          | `string`                          | 设置验证用的图片                                                         | `null`        | -    |
 | tolerance      | `number`                          | 设置验证目标位置允许的误差范围                                           | `1`           | -    |
 | canvas-size    | `number[]`                        | 设置画布大小                                                             | `[1000, 600]` | -    |
-| refresh-icon   | `Record<string, any>`             | 设置验证的刷新图标                                                       | `null`        | -    |
+| refresh-icon   | `VueComponent`                    | 设置验证的刷新图标                                                       | `null`        | -    |
 | disabled       | `boolean`                         | 设置是否禁用验证                                                         | `false`       | -    |
 | loading        | `boolean`                         | 设置是否为加载中                                                         | `false`       | -    |
-| loading-icon   | `Record<string, any>`             | 设置加载中的图标                                                         | `null`        | -    |
+| loading-icon   | `VueComponent`                    | 设置加载中的图标                                                         | `null`        | -    |
 | loading-effect | `string`                          | 设置加载中图标的效果动画                                                 | `null`        | -    |
 | on-before-test | `CaptchaBeforeTest`               | 设置验证前的回调，支持异步函数和 Promise，返回布尔值时将直接作为验证结果 | `null`        | -    |
 | texts          | `string[]`                        | 设置要依次点击的单字                                                     | `[]`          | -    |
