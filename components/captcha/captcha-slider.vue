@@ -171,7 +171,9 @@ export default defineComponent({
           })
         }
 
+        console.log('a')
         if (currentLeft.value && (!matched || customResult === false)) {
+          console.log('b')
           resetting.value = true
           currentLeft.value = 0
           isSuccess.value = false

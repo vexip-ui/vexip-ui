@@ -30,7 +30,15 @@ import {
 } from '@vexip-ui/config'
 import { CircleCheckR } from '@vexip-ui/icons'
 import { createSlotRender, useSetTimeout } from '@vexip-ui/hooks'
-import { ensureArray, isClient, isNull, random, randomHardColor } from '@vexip-ui/utils'
+import {
+  ensureArray,
+  isClient,
+  isNull,
+  nextFrameOnce,
+  nextTickOnce,
+  random,
+  randomHardColor
+} from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
 import type { SuccessEvent } from './symbol'
@@ -139,6 +147,8 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.type),
         {
+          [nh.bm('success')]: success.value,
+          [nh.bm('fail')]: !success.value && failed.value,
           [nh.bm('dragging')]: dragging.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: isLoading.value
@@ -163,15 +173,14 @@ export default defineComponent({
         currentTarget.value = parseTarget(value)
       }
     )
-    watch(
-      () => props.image,
-      async () => {
-        image = undefined
-        await (imagePromise.value = loadImage())
-        drawImage()
-      }
-    )
-    watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], drawImage)
+    watch([() => props.image, wrapper], async () => {
+      image = undefined
+      await (imagePromise.value = loadImage())
+      drawImageNextFrame()
+    })
+    watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], () => {
+      drawImageNextFrame()
+    })
     watch(
       [() => props.type, () => props.remotePoint],
       () => {
@@ -192,14 +201,14 @@ export default defineComponent({
       [() => props.type, () => props.texts, () => props.texts.length, () => props.remotePoint],
       () => {
         if (props.type === 'point' && props.texts.length && !props.remotePoint && image) {
-          drawImage()
+          drawImageNextFrame()
         }
       }
     )
     watch(visible, async value => {
       if (value) {
         await (imagePromise.value = loadImage())
-        drawImage()
+        drawImageNextFrame()
       }
     })
     watch(isSuccess, value => {
@@ -232,7 +241,7 @@ export default defineComponent({
       const src = typeof props.image === 'function' ? await props.image() : props.image
 
       await new Promise<void>(resolve => {
-        if (!isClient || flag !== loadFlag) {
+        if (!isClient || flag !== loadFlag || !src) {
           resolve()
           return
         }
@@ -240,9 +249,15 @@ export default defineComponent({
         image = new Image()
         imageLoaded = false
         image.src = src
-        image.onload = () => {
+
+        if (src.trim().startsWith('data:image')) {
           imageLoaded = true
           resolve()
+        } else {
+          image.onload = () => {
+            imageLoaded = true
+            resolve()
+          }
         }
       }).finally(() => {
         imageLoading.value = false
@@ -251,7 +266,7 @@ export default defineComponent({
 
     function drawImageWithTexts() {
       const canvasEl = canvas.value
-      const ctx = canvasEl?.getContext('2d')
+      const ctx = canvasEl?.getContext?.('2d')
 
       if (!image || !canvasEl || !ctx) return
 
@@ -314,9 +329,9 @@ export default defineComponent({
 
     function drawImage() {
       const canvasEl = canvas.value
-      const ctx = canvasEl?.getContext('2d')
+      const ctx = canvasEl?.getContext?.('2d')
       const subCanvasEl = subCanvas.value
-      const subCtx = subCanvasEl?.getContext('2d')
+      const subCtx = subCanvasEl?.getContext?.('2d')
 
       if (!image || !imageLoaded || !canvasEl || !ctx || !props.image) return
 
@@ -362,6 +377,10 @@ export default defineComponent({
         sideLength + 2,
         sideLength + 2
       )
+    }
+
+    function drawImageNextFrame() {
+      nextFrameOnce(drawImage)
     }
 
     async function reset(newImage?: string | (() => Promise<string>)) {
@@ -670,7 +689,6 @@ export default defineComponent({
         { visible: visible.value, success: isSuccess.value },
         () => [
           <Button
-            key={0}
             class={[nh.be('button'), isSuccess.value && nh.bem('button', 'success')]}
             type={isSuccess.value ? 'success' : 'primary'}
             size={props.triggerSize}
