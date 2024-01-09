@@ -344,28 +344,34 @@ describe('NumberInput', () => {
     const plus = wrapper.find('.vxp-number-input__plus')
     const minus = wrapper.find('.vxp-number-input__minus')
 
-    await plus.trigger('click')
+    await plus.trigger('pointerdown')
     expect(getValue(input)).toEqual('1')
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--holding'
+    )
 
-    await minus.trigger('click')
+    await minus.trigger('pointerdown')
     expect(getValue(input)).toEqual('0')
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--holding'
+    )
 
-    await plus.trigger('click.ctrl')
+    await plus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('100')
 
-    await minus.trigger('click.ctrl')
+    await minus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.alt')
+    await plus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0.1')
 
-    await minus.trigger('click.alt')
+    await minus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.shift')
+    await plus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('10')
 
-    await minus.trigger('click.shift')
+    await minus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('0')
   })
 
@@ -440,7 +446,9 @@ describe('NumberInput', () => {
     const input = wrapper.find('input')
     const plus = wrapper.find('.vxp-number-input__plus')
 
-    await plus.trigger('click')
+    await plus.trigger('pointerdown')
+    document.dispatchEvent(new Event('pointerup'))
+    await nextTick()
     expect(getValue(input)).toEqual('1')
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([1])
@@ -465,7 +473,7 @@ describe('NumberInput', () => {
     const input = wrapper.find('input')
     const plus = wrapper.find('.vxp-number-input__plus')
 
-    await plus.trigger('click')
+    await plus.trigger('pointerdown')
     expect(getValue(input)).toEqual('1')
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([1])
@@ -492,10 +500,16 @@ describe('NumberInput', () => {
     emitChange(input, 11)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(10)
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--disabled'
+    )
 
     emitChange(input, 4)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(5)
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--disabled'
+    )
 
     emitInput(input, 11)
     vi.runOnlyPendingTimers()

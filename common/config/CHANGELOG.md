@@ -1,3 +1,29 @@
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.4.0...config@1.5.0) (2024-01-08)
+
+
+### ✨ Features
+
+* **config:** add Arabic(ar-EG) locale config ([#455](https://github.com/vexip-ui/vexip-ui/issues/455)) ([2a5c8e7](https://github.com/vexip-ui/vexip-ui/commit/2a5c8e70ac2db14b43aed83b952ef9b3f275b466))
+
+
+
+# [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.2...config@1.4.0) (2024-01-04)
+
+
+### 🔨 Code Refactoring
+
+* all icon props support function component ([385f257](https://github.com/vexip-ui/vexip-ui/commit/385f257d58cda9ae390ac1198abd78eab2036819))
+
+
+### ❌ Breaking Changes
+
+* All icon props no longer support render function. Now
+a function value will be parsed as function component, you need to use
+icon slot or upper content slot instead of render function passed in
+icon props.
+
+
+
 ## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.1...config@1.3.2) (2023-12-27)
 
 

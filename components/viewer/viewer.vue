@@ -109,15 +109,15 @@ export default defineComponent({
     const flipX = ref(false)
     const flipY = ref(false)
 
+    const viewer = ref<HTMLElement>()
     const transition = ref<HTMLElement>()
 
     const {
       supported: fullSupported,
-      target: viewer,
       full,
       enter: enterFull,
       exit: exitFull
-    } = useFullScreen()
+    } = useFullScreen(viewer)
     const {
       target: container,
       x: currentLeft,
