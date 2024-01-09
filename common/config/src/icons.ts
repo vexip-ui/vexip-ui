@@ -1,12 +1,4 @@
-import {
-  computed,
-  defineAsyncComponent,
-  getCurrentScope,
-  inject,
-  markRaw,
-  provide,
-  unref
-} from 'vue'
+import { computed, getCurrentScope, inject, markRaw, provide, unref } from 'vue'
 
 import {
   AlertCircle,
