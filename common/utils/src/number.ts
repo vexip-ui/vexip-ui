@@ -295,16 +295,16 @@ export function formatByteSize(
 }
 
 /**
- * Random a number within the given range.
+ * 在给定的范围内随机一个数
  *
- * @param max The max number
- * @param min The min number, 0 if not given
+ * @param max 最大值
+ * @param min 最小值，默认为 0
  */
 export function random(max: number, min = 0) {
   if (min === max) return min
 
   if (min > max) {
-    [min, max] = [max, min]
+    ;[min, max] = [max, min]
   }
 
   return Math.random() * (max - min) + min
