@@ -56,8 +56,17 @@ $number-input: map.merge(
       pointer-events: none;
     }
 
-    &:hover {
+    &:hover,
+    &--holding {
       color: get-css-var('input-icon-color-hover');
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        color: get-css-var('input-control-color-disabled');
+        cursor: not-allowed;
+      }
     }
 
     @extend %disabled-item;

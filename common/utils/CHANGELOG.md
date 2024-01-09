@@ -1,3 +1,17 @@
+# [2.10.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.9.0...utils@2.10.0) (2024-01-04)
+
+
+### ✨ Features
+
+* **utils:** add decide method ([87f2f06](https://github.com/vexip-ui/vexip-ui/commit/87f2f06fc5eae45b12816e591add212e204feaf9))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** dom util methods consider whether is client ([81c0ce3](https://github.com/vexip-ui/vexip-ui/commit/81c0ce32ed7f932677d81d3804e40d0cb99e4d90))
+
+
+
 # [2.9.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.8.0...utils@2.9.0) (2023-12-27)
 
 

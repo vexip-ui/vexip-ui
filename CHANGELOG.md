@@ -1,3 +1,33 @@
+## [2.2.24](https://github.com/vexip-ui/vexip-ui/compare/v2.2.23...v2.2.24) (2024-01-08)
+
+
+### ✨ Features
+
+* **config:** add Arabic(ar-EG) locale config ([#455](https://github.com/vexip-ui/vexip-ui/issues/455)) ([2a5c8e7](https://github.com/vexip-ui/vexip-ui/commit/2a5c8e70ac2db14b43aed83b952ef9b3f275b466))
+* **number-input:** keep step changing when holding actions ([46e6b04](https://github.com/vexip-ui/vexip-ui/commit/46e6b0403ebdf521c77ec7a4f288603aebe19ac5))
+* **utils:** add decide method ([87f2f06](https://github.com/vexip-ui/vexip-ui/commit/87f2f06fc5eae45b12816e591add212e204feaf9))
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useFullScreen improve global full state subscription ([a7e91b1](https://github.com/vexip-ui/vexip-ui/commit/a7e91b1871ba25fbfd3ac7626fb0d8ce27cc3e37))
+* **utils:** dom util methods consider whether is client ([81c0ce3](https://github.com/vexip-ui/vexip-ui/commit/81c0ce32ed7f932677d81d3804e40d0cb99e4d90))
+
+
+### 🔨 Code Refactoring
+
+* all icon props support function component ([385f257](https://github.com/vexip-ui/vexip-ui/commit/385f257d58cda9ae390ac1198abd78eab2036819))
+
+
+### ❌ Breaking Changes
+
+* All icon props no longer support render function. Now
+a function value will be parsed as function component, you need to use
+icon slot or upper content slot instead of render function passed in
+icon props.
+
+
+
 ## [2.2.23](https://github.com/vexip-ui/vexip-ui/compare/v2.2.22...v2.2.23) (2023-12-27)
 
 
