@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/utils",
-  "version": "2.1.0",
+  "version": "2.10.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -15,9 +15,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
   "private": false,

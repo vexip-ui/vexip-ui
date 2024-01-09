@@ -1,21 +1,24 @@
 <script setup lang="ts">
-import { globalIcons } from '@vexip-ui/config'
+import { computed } from 'vue'
+
+import { useIcons } from '@vexip-ui/config'
 import { useBEM } from '@vexip-ui/bem-helper'
 
 const nh = useBEM('internal-icons')
+const icons = computed(() => useIcons().value)
 </script>
 
 <template>
   <div :class="nh.b()">
     <article
-      v-for="(icon, name) in globalIcons"
+      v-for="(icon, name) in icons"
       :key="name"
       :class="nh.be('cell')"
       role="none"
     >
       <div :class="nh.be('item')">
         <span :class="nh.be('icon')">
-          <Icon v-bind="icon" :scale="(icon.scale || 1) * 1.6" :label="name"></Icon>
+          <Icon v-bind="icon" :scale="+(icon.scale || 1) * 1.6" :label="name"></Icon>
         </span>
         <span :class="nh.be('name')">{{ name }}</span>
       </div>

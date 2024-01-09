@@ -2,6 +2,7 @@
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
+import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
@@ -14,10 +15,11 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { debounce, isNull, isPromise } from '@vexip-ui/utils'
+import { isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
 import { modalProps, positionProp } from './props'
 import { getIdIndex } from './symbol'
 
+import type { MaskerExposed } from '@/components/masker'
 import type { ModalCommonSLot } from './symbol'
 
 defineOptions({ name: 'Modal' })
@@ -62,7 +64,9 @@ const props = useProps('modal', _props, {
   confirmType: 'primary',
   cancelType: 'default',
   actionSize: createSizeProp('small'),
-  undivided: false
+  undivided: false,
+  xOffset: 0,
+  yOffset: 0
 })
 
 const emit = defineEmits(['update:active'])
@@ -78,8 +82,16 @@ const slots = defineSlots<{
 const locale = useLocale('modal', toRef(props, 'locale'))
 const icons = useIcons()
 
-function normalizeStyle(value: string | number) {
-  return typeof value === 'number' ? `${value}px` : value
+function isSpecified(value?: string | number) {
+  return !isNull(value) && value !== 'auto'
+}
+
+function normalizeStyle(value?: string | number) {
+  return isValidNumber(value, true)
+    ? `${toNumber(value)}px`
+    : isNull(value)
+      ? 'auto'
+      : String(value)
 }
 
 const currentActive = ref(props.active)
@@ -91,29 +103,21 @@ const rect = reactive({
   width: normalizeStyle(props.width),
   height: normalizeStyle(props.height)
 })
+const maskerRect = reactive({ width: 0, height: 0 })
+const modalRect = reactive({ width: 0, height: 0 })
 
 const idIndex = `${getIdIndex()}`
+const transformed = ref(false)
 
-let transformed = false
-
+const masker = ref<MaskerExposed>()
 const wrapper = ref<HTMLElement>()
 const footer = ref<HTMLElement>()
 
 const uselessTop = computed(() => {
-  return (
-    props.top === 'auto' &&
-    !isNull(props.bottom) &&
-    props.bottom !== 'auto' &&
-    props.height !== 'auto'
-  )
+  return props.top === 'auto' && isSpecified(props.bottom) && isSpecified(props.height)
 })
 const uselessLeft = computed(() => {
-  return (
-    props.left === 'auto' &&
-    !isNull(props.right) &&
-    props.right !== 'auto' &&
-    props.width !== 'auto'
-  )
+  return props.left === 'auto' && isSpecified(props.right) && isSpecified(props.width)
 })
 
 const { target: header, moving: dragging } = useMoving({
@@ -125,7 +129,7 @@ const { target: header, moving: dragging } = useMoving({
 
     transferRect(false)
 
-    transformed = true
+    transformed.value = true
     state.xStart = parseFloat(rect.left)
     state.yStart = parseFloat(rect.top)
 
@@ -169,7 +173,7 @@ const { target: resizer, moving: resizing } = useMoving({
       minHeight += footer.value.offsetHeight
     }
 
-    transformed = true
+    transformed.value = true
     state.xStart = parseFloat(rect.width)
     state.yStart = parseFloat(rect.height)
     state.minHeight = Math.max(minHeight, props.minHeight)
@@ -202,6 +206,7 @@ const className = computed(() => {
     nh.b(),
     nh.bs('vars'),
     {
+      [nh.bm('inherit')]: props.inherit,
       [nh.bm('inner')]: props.inner,
       [nh.bm('draggable')]: props.draggable,
       [nh.bm('resizable')]: props.resizable,
@@ -220,14 +225,76 @@ const wrapperClass = computed(() => {
     props.modalClass
   ]
 })
+const transform = computed(() => {
+  const transforms: string[] = []
+
+  if (props.xOffset) {
+    transforms.push(`translateX(${normalizeStyle(props.xOffset)})`)
+  }
+
+  if (props.yOffset) {
+    transforms.push(`translateY(${normalizeStyle(props.yOffset)})`)
+  }
+
+  if (transforms.length) {
+    transforms.push('translateZ(0)')
+  }
+
+  return transforms.length ? transforms.join(' ') : undefined
+})
 const wrapperStyle = computed(() => {
   return [
     props.modalStyle,
     {
       ...rect,
-      height: rect.height !== 'auto' ? rect.height : undefined
+      height: rect.height !== 'auto' ? rect.height : undefined,
+      transform: transform.value
     }
   ]
+})
+const transformOrigin = computed(() => {
+  const origin = { x: '50%', y: '50%' }
+
+  if (transformed.value) {
+    origin.x = `${parseFloat(rect.left) + 0.5 * modalRect.width}px`
+    origin.y = `${parseFloat(rect.top) + 0.5 * modalRect.height}px`
+  } else {
+    if (uselessTop.value) {
+      origin.y = `calc(100% - ${parseFloat(rect.bottom) + 0.5 * parseFloat(rect.height)}px)`
+    } else if (isSpecified(props.top)) {
+      const top = parseFloat(rect.top)
+
+      if (isSpecified(props.height)) {
+        origin.y = `${top + 0.5 * parseFloat(rect.height)}px`
+      } else if (isSpecified(props.bottom)) {
+        const bottom = parseFloat(rect.bottom)
+        const height = maskerRect.height - top - bottom
+
+        origin.y = `${top + 0.5 * height}px`
+      } else {
+        origin.y = `${parseFloat(rect.top) + 0.5 * modalRect.height}px`
+      }
+    }
+
+    if (uselessLeft.value) {
+      origin.x = `calc(100% - ${parseFloat(rect.right) + 0.5 * parseFloat(rect.width)}px)`
+    } else if (isSpecified(props.left)) {
+      const left = parseFloat(rect.left)
+
+      if (isSpecified(props.width)) {
+        origin.x = `${left + 0.5 * parseFloat(rect.width)}px`
+      } else if (isSpecified(props.right)) {
+        const right = parseFloat(rect.right)
+        const width = maskerRect.width - left - right
+
+        origin.x = `${left + 0.5 * width}px`
+      } else {
+        origin.x = `${parseFloat(rect.left) + 0.5 * modalRect.width}px`
+      }
+    }
+  }
+
+  return `${origin.x} ${origin.y}`
 })
 const hasTitle = computed(() => {
   return !!(slots.header || slots.title || props.title)
@@ -260,12 +327,19 @@ watch([() => props.left, () => props.right, () => props.width], () => {
   currentActive.value && nextTick(computeLeft)
 })
 
-const handleResize = debounce(() => {
-  if (currentActive.value && !transformed) {
-    computeTop()
-    computeLeft()
+const handleResize = () => {
+  if (currentActive.value && !transformed.value) {
+    nextTick(() => {
+      computeTop()
+      computeLeft()
+    })
   }
-}, 16)
+
+  if (masker.value?.wrapper) {
+    maskerRect.width = masker.value.wrapper.offsetWidth
+    maskerRect.height = masker.value.wrapper.offsetHeight
+  }
+}
 
 defineExpose({
   dragging,
@@ -418,10 +492,23 @@ function handleMaskClose() {
     return handleClose(false)
   }
 }
+
+function handleModalResize(entry: ResizeObserverEntry) {
+  const box = entry.borderBoxSize?.[0]
+
+  if (box) {
+    modalRect.width = box.inlineSize
+    modalRect.height = box.blockSize
+  } else {
+    modalRect.width = entry.contentRect.width
+    modalRect.height = entry.contentRect.height
+  }
+}
 </script>
 
 <template>
   <Masker
+    ref="masker"
     v-model:active="currentActive"
     :inherit="props.inherit"
     :class="className"
@@ -437,76 +524,79 @@ function handleMaskClose() {
     @resize="handleResize"
   >
     <template #default="{ show }">
-      <section
-        v-show="show"
-        ref="wrapper"
-        :class="wrapperClass"
-        role="dialog"
-        :style="wrapperStyle"
-        :aria-modal="show ? 'true' : undefined"
-        :aria-labelledby="titleId"
-        :aria-describedby="bodyId"
-      >
-        <div v-if="hasTitle" ref="header" :class="nh.be('header')">
-          <slot name="header" v-bind="slotParams">
-            <div :id="titleId" :class="nh.be('title')">
-              <slot name="title" v-bind="slotParams">
-                {{ props.title }}
+      <section v-show="show" :class="nh.be('transform')" :style="{ transformOrigin }">
+        <ResizeObserver @resize="handleModalResize">
+          <div
+            ref="wrapper"
+            :class="wrapperClass"
+            role="dialog"
+            :style="wrapperStyle"
+            :aria-modal="show ? 'true' : undefined"
+            :aria-labelledby="titleId"
+            :aria-describedby="bodyId"
+          >
+            <div v-if="hasTitle" ref="header" :class="nh.be('header')">
+              <slot name="header" v-bind="slotParams">
+                <div :id="titleId" :class="nh.be('title')">
+                  <slot name="title" v-bind="slotParams">
+                    {{ props.title }}
+                  </slot>
+                </div>
+                <button
+                  v-if="props.closable"
+                  type="button"
+                  :class="nh.be('close')"
+                  @pointerdown.stop
+                  @mousedown.stop
+                  @touchstart.stop
+                  @click="handleClose(false)"
+                >
+                  <slot name="close" v-bind="slotParams">
+                    <Icon
+                      v-bind="icons.close"
+                      :scale="+(icons.close.scale || 1) * 1.2"
+                      label="close"
+                    ></Icon>
+                  </slot>
+                </button>
               </slot>
             </div>
-            <button
-              v-if="props.closable"
-              type="button"
-              :class="nh.be('close')"
-              @pointerdown.stop
-              @mousedown.stop
-              @touchstart.stop
-              @click="handleClose(false)"
+            <div
+              :id="bodyId"
+              :class="nh.be('content')"
+              :style="{
+                overflow: resizing ? 'hidden' : undefined
+              }"
             >
-              <slot name="close" v-bind="slotParams">
-                <Icon
-                  v-bind="icons.close"
-                  :scale="(icons.close.scale || 1) * 1.2"
-                  label="close"
-                ></Icon>
+              <slot v-bind="slotParams"></slot>
+            </div>
+            <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
+              <slot name="footer" v-bind="slotParams">
+                <Button
+                  :class="[nh.be('button'), nh.bem('button', 'cancel')]"
+                  inherit
+                  text
+                  :type="props.cancelType"
+                  :size="props.actionSize"
+                  @click="handleCancel"
+                >
+                  {{ props.cancelText || locale.cancel }}
+                </Button>
+                <Button
+                  :class="[nh.be('button'), nh.bem('button', 'confirm')]"
+                  inherit
+                  :type="props.confirmType"
+                  :size="props.actionSize"
+                  :loading="props.loading"
+                  @click="handleConfirm"
+                >
+                  {{ props.confirmText || locale.confirm }}
+                </Button>
               </slot>
-            </button>
-          </slot>
-        </div>
-        <div
-          :id="bodyId"
-          :class="nh.be('content')"
-          :style="{
-            overflow: resizing ? 'hidden' : undefined
-          }"
-        >
-          <slot v-bind="slotParams"></slot>
-        </div>
-        <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
-          <slot name="footer" v-bind="slotParams">
-            <Button
-              :class="[nh.be('button'), nh.bem('button', 'cancel')]"
-              inherit
-              text
-              :type="props.cancelType"
-              :size="props.actionSize"
-              @click="handleCancel"
-            >
-              {{ props.cancelText || locale.cancel }}
-            </Button>
-            <Button
-              :class="[nh.be('button'), nh.bem('button', 'confirm')]"
-              inherit
-              :type="props.confirmType"
-              :size="props.actionSize"
-              :loading="props.loading"
-              @click="handleConfirm"
-            >
-              {{ props.confirmText || locale.confirm }}
-            </Button>
-          </slot>
-        </div>
-        <div v-if="props.resizable" ref="resizer" :class="nh.be('resizer')"></div>
+            </div>
+            <div v-if="props.resizable" ref="resizer" :class="nh.be('resizer')"></div>
+          </div>
+        </ResizeObserver>
       </section>
     </template>
   </Masker>

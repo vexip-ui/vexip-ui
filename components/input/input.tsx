@@ -5,6 +5,7 @@ import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef
 
 import { useHover } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -28,9 +29,6 @@ function toNotNullString(value: any) {
 
 export default defineComponent({
   name: 'Input',
-  components: {
-    Icon
-  },
   props: inputProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
@@ -54,9 +52,9 @@ export default defineComponent({
         default: 'text',
         validator: value => inputTypes.includes(value)
       },
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       formatter: {
         default: null,
@@ -81,7 +79,7 @@ export default defineComponent({
       plainPassword: false,
       clearable: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       transparent: false,
@@ -103,6 +101,7 @@ export default defineComponent({
     const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
+    const composing = ref(false)
 
     const inputControl = ref<HTMLInputElement>()
 
@@ -125,6 +124,7 @@ export default defineComponent({
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })
+    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const className = computed(() => {
       return [
         nh.b(),
@@ -133,11 +133,11 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
-          [nh.bm('loading')]: props.loading,
           [nh.bm('transparent')]: props.transparent,
           [nh.bm('plain-password')]: props.plainPassword
         }
@@ -178,9 +178,10 @@ export default defineComponent({
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
-    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && hasValue.value && isHover.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && hasValue.value && isHover.value
+      )
     })
 
     watch(
@@ -195,6 +196,11 @@ export default defineComponent({
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      focused,
+      currentValue,
+      showPassword,
+      currentLength,
+      composing,
       input: inputControl,
       copyValue,
       focus: (options?: FocusOptions) => {
@@ -228,8 +234,13 @@ export default defineComponent({
     function handleChange(event: Event) {
       const type = event.type as InputEventType
 
-      currentValue.value = (event.target as HTMLInputElement).value
+      if (composing.value) {
+        if (type === 'input') return
 
+        composing.value = false
+      }
+
+      currentValue.value = (event.target as HTMLInputElement).value
       limitValueLength()
 
       const value = currentValue.value
@@ -308,10 +319,13 @@ export default defineComponent({
     }
 
     function handleClear(event: MouseEvent) {
+      if (props.disabled || readonly.value) return
+
       event.stopPropagation()
       setValue('', 'change', false)
       emitEvent(props.onClear)
       nextTick(clearField)
+      inputControl.value?.focus()
     }
 
     function handleEnter() {
@@ -343,10 +357,19 @@ export default defineComponent({
     }
 
     function handleCompositionStart(event: CompositionEvent) {
+      composing.value = true
       emitEvent(props.onCompositionStart, event)
     }
 
     function handleCompositionEnd(event: CompositionEvent) {
+      if (composing.value) {
+        composing.value = false
+
+        if (inputControl.value) {
+          inputControl.value.dispatchEvent(new Event('input'))
+        }
+      }
+
       emitEvent(props.onCompositionStart, event)
     }
 

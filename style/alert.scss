@@ -83,9 +83,9 @@ $alert: map.merge(
 
   &__icon {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -158,8 +158,16 @@ $alert: map.merge(
         (
           bg-color: 'color' $color 'opacity-8',
           b-color: 'color' $color 'opacity-5',
-          icon-color: 'color' $color 'dark-2',
-          text-color: 'color' $color 'dark-2'
+          icon-color: 'color' $color 'dark-2'
+        )
+      );
+    }
+
+    &--colorful-text#{&}--#{$type} {
+      @include define-alert-style(
+        (
+          text-color: 'color' $color 'dark-2',
+          title-color: 'color' $color 'dark-2'
         )
       );
     }

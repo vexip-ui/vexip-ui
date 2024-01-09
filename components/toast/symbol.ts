@@ -23,5 +23,7 @@ export interface ToastOptions extends Record<string, any> {
 
 export interface ToastInstance extends ComponentPublicInstance {
   openToast: (options: ToastOptions) => Promise<void>,
-  cloasToast: () => void
+  closeToast: () => void
 }
+
+export const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])

@@ -14,6 +14,9 @@
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
     <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="NPM version"/>
   </a>
+  <a href="https://github.com/vexip-ui/vexip-ui/commits/main" target="_blank">
+    <img src="https://img.shields.io/github/commit-activity/w/vexip-ui/vexip-ui" alt="commits pre week"/>
+  </a>
 </p>
 
 <p align="center">
@@ -30,7 +33,7 @@ Almost all **default property values** of each component can be easily customize
 
 Meanwhile, the component code pays great attention to reducing the threshold of **source code reading**, and the code layout is as close as possible to the habits of daily business code, avoiding fancy and showy code.
 
-Currently, there are **70+** components, some of which may be familiar to you, and even better, while others may bright your eyes.
+Currently, there are **70+** components, some of which may be familiar to you, and even better, while others may brighten your eyes.
 
 ## Features
 
@@ -47,6 +50,8 @@ Currently, there are **70+** components, some of which may be familiar to you, a
 - 🩹 Good a11n
 - 👀 Close to business code arrangement, low source code reading threshold
 
+> The design tokens are base on Open Color, and have some adjustments.
+
 ## Install
 
 It is recommended to use pnpm or yarn to install:
@@ -59,9 +64,11 @@ pnpm add vexip-ui
 yarn add vexip-ui
 ```
 
-## Document
+## Documentation
 
 [Here](https://www.vexipui.com) you can view the online document.
+
+> Author is not good at English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Help
 
@@ -93,7 +100,7 @@ Thanks for all their contributions!
 
 ## Environment
 
-All components supported in modern browsers, I try to ensure the support of neerly two or three versions.
+All components supported in modern browsers, I try to ensure the support of nearly two or three versions.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

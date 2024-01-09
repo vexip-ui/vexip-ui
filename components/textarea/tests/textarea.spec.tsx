@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { Spinner } from '@vexip-ui/icons'
+import { Loader2 } from 'lucide-vue-next'
 import { Textarea } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -58,7 +58,7 @@ describe('Textarea', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Textarea state={state}></Textarea>)
 
       expect(wrapper.find('.vxp-textarea').classes()).toContain(`vxp-textarea--${state}`)
@@ -69,11 +69,11 @@ describe('Textarea', () => {
     const wrapper = mount(Textarea)
 
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -106,7 +106,7 @@ describe('Textarea', () => {
     const textarea = wrapper.find('textarea').element
 
     emitInput(textarea, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -124,7 +124,7 @@ describe('Textarea', () => {
     emitInput(textarea, TEXT)
     emitInput(textarea, TEXT)
     expect(onInput).toHaveBeenCalledTimes(1)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledTimes(2)
   })
@@ -144,7 +144,7 @@ describe('Textarea', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await textarea.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-textarea--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -191,7 +191,7 @@ describe('Textarea', () => {
     const textarea = wrapper.find('textarea').element
 
     emitInput(textarea, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])

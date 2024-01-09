@@ -14,9 +14,15 @@ export const zhCN = defineI18n({
     changeColor: '换个主题色',
     rollColor: '随机一个颜色，可能很奇怪',
     resetColor: '重置主题色',
+    shareExperience: '分享你使用 Vexip UI 的经历？',
+    tellUs: '告诉我们',
     guides: '指南',
     components: '组件',
     playground: '游乐场',
+    ecosystem: '生态',
+    official: '官方',
+    partnership: '战略合作',
+    becomePartner: '成为伙伴？',
     searchComponent: '在 Vexip UI 中搜索组件',
     copyCode: '复制代码',
     copySuccess: '复制成功',
@@ -33,7 +39,11 @@ export const zhCN = defineI18n({
     thanksContribute: '感谢他们的所做的一切贡献！',
     toggleDirection: '切换文本方向',
     toggleTheme: '切换主题',
-    viewInGithub: '在 GitHub 查看'
+    viewInGithub: '在 GitHub 查看',
+    openSettings: '打开配置面板',
+    adjustSettings: '调整文档配置',
+    changeOrder: '换个 SFC 块顺序',
+    orderChanged: 'SFC 块顺序修改成功'
   },
   alert: {
     info: '提示',
@@ -53,7 +63,7 @@ export const zhCN = defineI18n({
     ssr: '服务端渲染',
     customFormControl: '自定义表单控件',
     developmentGuide: '开发指南',
-    customInternalIcons: '自定义内部图标'
+    changeIcons: '修改图标'
   },
   group: {
     basis: '基础',
@@ -69,6 +79,7 @@ export const zhCN = defineI18n({
     lintConfigSet: 'Lint 配置集',
     createProject: '创建 Vexip 项目',
     gridLayout: 'Vue3 栅格布局',
+    fantasticAdmin: '开箱即用的 Admin',
     hooksLib: 'Vue3 Hooks 库',
     logoDesign: 'Logo 设计',
     help: '帮助',
@@ -76,7 +87,8 @@ export const zhCN = defineI18n({
     issue: '议题',
     contribute: '参与贡献',
     qqGroup: '技术支持 Q 群',
-    sponsor: '赞助一杯喜茶'
+    sponsor: '赞助一杯喜茶',
+    releaseScripts: '发布脚本'
   },
   component: {
     // Basis

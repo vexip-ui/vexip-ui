@@ -22,11 +22,11 @@ export default defineConfig(({ command }) => {
 
   return {
     define: {
+      __VUE_PROD_DEVTOOLS__: JSON.stringify(true),
       __VERSION__: JSON.stringify(upstreamPkg.version),
       __VUE_VERSION__: JSON.stringify(getVersion('vue')),
       __TS_VERSION__: JSON.stringify(getVersion('typescript')),
-      __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl')),
-      __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
+      __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl'))
     },
     resolve: {
       alias: [

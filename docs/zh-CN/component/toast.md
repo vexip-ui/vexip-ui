@@ -1,4 +1,4 @@
-# Toast 吐司提示 ^[Since v2.0.0](!s)
+# Toast 吐司提示 ==!s|2.0.0==
 
 ## 代码示例
 
@@ -90,22 +90,22 @@
 
 组件实例内提供了 5 种基础的打开吐司提示的方法：
 
-- `this.$toast.open(content[, duration] | options)`
-- `this.$toast.info(content[, duration] | options)`
-- `this.$toast.success(content[, duration] | options)`
-- `this.$toast.warning(content[, duration] | options)`
-- `this.$toast.error(content[, duration] | options)`
+- `Toast.open(content[, duration] | options)`
+- `Toast.info(content[, duration] | options)`
+- `Toast.success(content[, duration] | options)`
+- `Toast.warning(content[, duration] | options)`
+- `Toast.error(content[, duration] | options)`
 
 > 在使用组合式 api 时需要 `import { Toast } from 'vexip-ui'` 后使用 `Toast.open(...)`。
 
-此外，还提供了手动关闭吐司的方法：
+此外，还提供了手动关闭吐司提示的方法：
 
-- `this.$toast.close()`
+- `Toast.close()`
 
 在打开吐司的方法调用后会返回一个函数，该函数也可以用于手动关闭提示：
 
 ```ts
-const cancel = this.$toast.open(options)
+const cancel = Toast.open(options)
 
 // 立即关闭吐司
 cancel()
@@ -114,14 +114,14 @@ cancel()
 需要修改组件的默认属性值时，可以这样做：
 
 ```ts
-this.$toast.config(options)
+Toast.config(options)
 ```
 
 有时需要创建多个吐司管理器以便于管理各类吐司提示：
 
 ```ts
 // 这是一个全新的吐司组件
-const topToast = this.$toast.clone()
+const topToast = Toast.clone()
 
 topToast.config({ position: 'top' })
 ```
@@ -136,6 +136,15 @@ const topToast = Toast.clone()
 
 topToast.config({ position: 'top' })
 createApp().use(topToast, { property: '$topToast' })
+```
+
+某些场景下，需要在全屏元素上显示吐司提示，此时可以将组件的渲染位置迁移：
+
+```ts
+Toast.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Toast.transferTo(document.body)
 ```
 
 ### Toast 选项

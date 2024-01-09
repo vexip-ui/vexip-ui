@@ -12,7 +12,7 @@ export interface VirtualListExposed extends ComponentPublicInstance {
   scrollToIndex: (index: number, behavior?: ScrollBehavior) => void,
   ensureIndexInView: (index: number, behavior?: ScrollBehavior) => void,
   ensureKeyInView: (key: string | number | symbol, behavior?: ScrollBehavior) => void,
-  refresh: () => void
+  refresh: () => Promise<void>
 }
 
 export interface ScrollPayload {

@@ -80,7 +80,9 @@ describe('NativeScroll', () => {
       set: v => (left = v)
     })
     ;(scroll.vm as any).refresh()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     return scroll
@@ -155,9 +157,9 @@ describe('NativeScroll', () => {
     mockScrollHeight(contentEl, 200)
 
     wrapper.vm.refresh()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     expect(onXEnabledChange).toHaveBeenCalled()
@@ -229,7 +231,7 @@ describe('NativeScroll', () => {
       autoplay: true
     })
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(wrapper.vm.y !== 0).toBe(true)
   })
 
@@ -282,7 +284,7 @@ describe('NativeScroll', () => {
     moveEvent.clientX = 20
     moveEvent.clientY = 20
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onBarScroll).toHaveBeenCalled()
     expect(onBarScroll).toHaveBeenCalledWith(expect.objectContaining({ percentY: 40 }))
 

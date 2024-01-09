@@ -89,7 +89,6 @@ $menu: map.merge(
   $popper: #{&}__popper;
   $item: #{&}__item;
   $label: #{&}__label;
-  $list: #{&}__list;
 
   &__item {
     padding: 0;
@@ -115,6 +114,14 @@ $menu: map.merge(
       padding-inline: calc(#{get-css-var('menu-item-x-span')} * 0.5);
       margin-top: 0;
     }
+
+    #{$popper} & {
+      padding: 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 
   &__label {
@@ -135,8 +142,8 @@ $menu: map.merge(
 
     &::after {
       position: absolute;
-      top: 0;
       inset-inline-start: -1px;
+      top: 0;
       bottom: 0;
       display: block;
       width: 3px;
@@ -151,8 +158,7 @@ $menu: map.merge(
     }
 
     &--marker-left::after {
-      inset-inline-end: auto;
-      inset-inline-start: 0;
+      inset-inline: 0 auto;
     }
 
     #{$self}--horizontal & {
@@ -189,6 +195,10 @@ $menu: map.merge(
         &::after {
           opacity: 100%;
         }
+      }
+
+      #{$popper} & {
+        background-color: get-css-var('menu-bg-color-hover');
       }
 
       #{$item}--disabled &::after {
@@ -264,8 +274,7 @@ $menu: map.merge(
     }
 
     #{$popper} & {
-      margin-inline-start: -2px;
-      margin-inline-end: 6px;
+      margin-inline: -2px 6px;
     }
   }
 
@@ -332,8 +341,7 @@ $menu: map.merge(
     #{$self}--horizontal & {
       position: relative;
       inset-inline-end: auto;
-      margin-inline-start: 6px;
-      margin-inline-end: 0;
+      margin-inline: 6px 0;
       transform: rotate(0);
 
       &--visible {
@@ -359,7 +367,8 @@ $menu: map.merge(
     @include clear-both;
 
     #{$popper} & {
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
       min-width: 70px;
       padding: 5px 0;
       user-select: none;
@@ -394,7 +403,8 @@ $menu: map.merge(
       list-style: none;
       user-select: none;
 
-      #{$self} > &:first-child {
+      #{$self} > &:first-child,
+      #{$popper} &:first-child {
         margin-top: 0;
       }
 
@@ -405,8 +415,8 @@ $menu: map.merge(
 
         &::before {
           position: absolute;
-          top: 50%;
           inset-inline-start: 50%;
+          top: 50%;
           width: 24px;
           height: 1px;
           content: '';
@@ -426,6 +436,10 @@ $menu: map.merge(
         #{$self}--horizontal & {
           display: none;
         }
+
+        #{$popper} & {
+          display: inline-block;
+        }
       }
 
       &__list {
@@ -438,6 +452,10 @@ $menu: map.merge(
         #{$self}--horizontal & {
           flex-direction: row;
           width: auto;
+        }
+
+        #{$popper} & {
+          flex-direction: column;
         }
       }
 

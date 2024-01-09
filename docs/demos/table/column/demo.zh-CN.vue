@@ -1,5 +1,5 @@
 <template>
-  <Table :columns="columns" :data="data">
+  <Table :columns="columns" :data="data" :width="1000">
     <TableColumn name="First Name" id-key="firstName" :order="0">
       <template #default="{ row }">
         <Icon style="margin-inline-end: 8px">
@@ -13,6 +13,7 @@
       id-key="job"
       :accessor="jobAccessor"
       :order="3"
+      :formatter="jobFormatter"
     ></TableColumn>
     <TableColumn
       name="Age"
@@ -24,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, ref } from 'vue'
+import { h, reactive } from 'vue'
 
 import { User } from '@vexip-ui/icons'
 
@@ -37,58 +38,34 @@ interface RowData {
   age: string
 }
 
-const columns = ref([
+const columns = reactive([
   {
     name: 'Last Name',
     key: 'lastName',
     order: 1
   }
 ])
-const data = ref([
-  {
-    id: '1',
-    job: 'Cashier',
-    email: 'Angelique_Walsh2268@twace.org',
-    firstName: 'Angelique',
-    lastName: 'Walsh',
-    age: '58'
-  },
-  {
-    id: '2',
-    job: 'Stockbroker',
-    email: 'Aeris_Drake5867@gmail.com',
-    firstName: 'Aeris',
-    lastName: 'Drake',
-    age: '40'
-  },
-  {
-    id: '3',
-    job: 'Machine Operator',
-    email: 'Elisabeth_Rogers7566@sheye.org',
-    firstName: 'Elisabeth',
-    lastName: 'Rogers',
-    age: '56'
-  },
-  {
-    id: '4',
-    job: 'Audiologist',
-    email: 'Sharon_Tanner5855@nickia.com',
-    firstName: 'Sharon',
-    lastName: 'Tanner',
-    age: '58'
-  },
-  {
-    id: '5',
-    job: 'Cashier',
-    email: 'Evie_Farmer6650@typill.biz',
-    firstName: 'Evie',
-    lastName: 'Farmer',
-    age: '26'
-  }
-])
+const data = reactive(
+  Array.from({ length: 5 }, (_, index) => {
+    return {
+      id: index + 1,
+      firstName: `First ${index}`,
+      lastName: `Last ${index}`,
+      company: `Company ${index}`,
+      job: `Job ${index}`,
+      age: 20 + index,
+      email: `email${index}@vexip.ui`,
+      address: `Address ${index}`
+    }
+  })
+)
 
 function jobAccessor(row: RowData) {
   return row.job
+}
+
+function jobFormatter(job: string) {
+  return `Good ${job}`
 }
 
 function handleAgeClick() {

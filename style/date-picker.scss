@@ -63,11 +63,14 @@ $date-picker: map.merge(
     cursor: pointer;
   }
 
+  &--disabled &__selector {
+    cursor: not-allowed;
+  }
+
   &__control {
     position: relative;
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__input {
@@ -154,6 +157,10 @@ $date-picker: map.merge(
     border-radius: get-css-var('date-picker-panel-border-radius');
     box-shadow: get-css-var('date-picker-panel-shadow');
 
+    &--vertical {
+      flex-direction: column;
+    }
+
     &-body {
       display: flex;
     }
@@ -162,18 +169,31 @@ $date-picker: map.merge(
   &__list {
     display: flex;
     flex-direction: column;
+  }
 
-    &--sub {
-      align-items: flex-start;
-      padding: 6px 0;
-      background-color: get-css-var('date-picker-shortcut-bg-color');
-      border-inline-end: get-css-var('border-shape') get-css-var('date-picker-d-color');
+  &__shortcuts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6px 0;
+    background-color: get-css-var('date-picker-shortcut-bg-color');
+    border-inline-end: get-css-var('border-shape') get-css-var('date-picker-d-color');
+
+    &--top,
+    &--bottom {
+      flex-flow: row wrap;
+      justify-content: center;
+      padding: 0 6px;
+    }
+
+    &--bottom,
+    &--right {
+      order: 1;
     }
   }
 
   &__shortcut {
     width: 100%;
-    max-width: 96px;
     padding: 6px 14px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -184,6 +204,11 @@ $date-picker: map.merge(
     &:hover {
       background-color: get-css-var('date-picker-shortcut-bg-color-hover');
     }
+  }
+
+  &__shortcuts--top &__shortcut,
+  &__shortcuts--bottom &__shortcut {
+    width: auto;
   }
 
   &__header {

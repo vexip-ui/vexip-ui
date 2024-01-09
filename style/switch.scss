@@ -103,8 +103,7 @@ $switch: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-inline-start: calc(#{$height} + 2px);
-    padding-inline-end: calc(#{$height} * 0.5 - 1px);
+    padding-inline: calc(#{$height} + 2px) calc(#{$height} * 0.5 - 1px);
     line-height: 1;
     color: get-css-var('switch-label-color');
     border-radius: $height;
@@ -112,8 +111,7 @@ $switch: map.merge(
   }
 
   &--open &__label {
-    padding-inline-start: calc(#{$height} * 0.5 - 1px);
-    padding-inline-end: calc(#{$height} + 2px);
+    padding-inline: calc(#{$height} * 0.5 - 1px) calc(#{$height} + 2px);
   }
 
   &__open-text,

@@ -12,6 +12,7 @@ import ColorHue from './color-hue.vue'
 import ColorAlpha from './color-alpha.vue'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -21,6 +22,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import {
+  getLast,
   hsvToHsl,
   hsvToRgb,
   isClient,
@@ -82,14 +84,14 @@ const props = useProps('colorPicker', _props, {
   clearable: false,
   cancelText: null,
   confirmText: null,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   noSuffix: false,
   staticSuffix: false,
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   popperAlive: null,
@@ -172,13 +174,15 @@ const className = computed(() => {
     [nh.bm(props.state)]: props.state !== 'default'
   }
 })
+const readonly = computed(() => props.loading && props.loadingLock)
 const selectorClass = computed(() => {
   const baseCls = nh.be('selector')
 
   return {
     [baseCls]: true,
     [`${baseCls}--disabled`]: props.disabled,
-    [`${baseCls}--loading`]: props.loading && props.loadingLock,
+    [`${baseCls}--readonly`]: readonly.value,
+    [`${baseCls}--loading`]: props.loading,
     [`${baseCls}--${props.size}`]: props.size !== 'default',
     [`${baseCls}--focused`]: currentVisible.value,
     [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -212,7 +216,7 @@ const shortcutList = computed(() => {
 })
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
 const showClear = computed(() => {
-  return !props.disabled && props.clearable && isHover.value && !isEmpty.value
+  return !props.disabled && !readonly.value && props.clearable && isHover.value && !isEmpty.value
 })
 const formattedColor = computed(() => getFormattedColor(props.format))
 const labelColor = computed(() => {
@@ -343,12 +347,14 @@ function handleClickOutside() {
 }
 
 function toggleVisible() {
-  if (props.disabled || (props.loading && props.loadingLock)) return
+  if (props.disabled || readonly.value) return
 
   setVisible(!currentVisible.value)
 }
 
 function handleClear() {
+  if (props.disabled || readonly.value) return
+
   if (props.clearable) {
     setVisible(false)
     emit('update:value', '')
@@ -363,6 +369,8 @@ function handleClear() {
 }
 
 function handleConfirm() {
+  if (props.disabled || readonly.value) return
+
   lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
   isEmpty.value = false
   setVisible(false)
@@ -436,11 +444,11 @@ function handleTabDown(event: KeyboardEvent) {
     let maybeEl: any
 
     if (!~index) {
-      maybeEl = elList.at(shift ? -1 : 0)
+      maybeEl = shift ? getLast(elList) : elList[0]
     } else if (shift ? !index : index === elList.length - 1) {
       maybeEl = reference.value
     } else {
-      maybeEl = elList.at(index + (shift ? -1 : 1))
+      maybeEl = elList[index + (shift ? -1 : 1)]
     }
 
     if (maybeEl) {
@@ -476,7 +484,7 @@ function handleShortcutsKeydown(event: KeyboardEvent) {
     case 'Enter':
     case 'Space':
     case ' ': {
-      const color = shortcutList.value.at(shortcutHitting.value)
+      const color = shortcutList.value[shortcutHitting.value]
 
       color && handleShortcutClick(color)
       break
@@ -543,7 +551,7 @@ function blur() {
         </div>
         <div :class="nh.be('control')">
           <div :class="[nh.be('marker'), showLabel && nh.bem('marker', 'with-label')]">
-            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.cross"></Icon>
+            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.close"></Icon>
             <div
               v-else
               :style="{
@@ -583,7 +591,7 @@ function blur() {
                 [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
+            <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
           </slot>
         </div>
         <div

@@ -10,9 +10,9 @@ vi.useFakeTimers()
 const TEXT = 'TEXT'
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -225,12 +225,16 @@ describe('Scroll', () => {
   })
 
   it('auto play', async () => {
+    const onScroll = vi.fn()
     wrapper = createScroll({
       mode: 'vertical',
-      autoplay: true
+      autoplay: true,
+      onScroll
     })
 
     await runScrollTimers()
+    await runScrollTimers()
+    expect(onScroll).toHaveBeenCalled()
     expect(wrapper.vm.y !== 0).toBe(true)
   })
 
@@ -285,7 +289,7 @@ describe('Scroll', () => {
     moveEvent.clientX = 20
     moveEvent.clientY = 20
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onBarScroll).toHaveBeenCalled()
     expect(onBarScroll).toHaveBeenCalledWith(expect.objectContaining({ percentY: 40 }))
 

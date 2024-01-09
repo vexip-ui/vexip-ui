@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { GithubB, Spinner } from '@vexip-ui/icons'
+import { Github, Loader2 } from 'lucide-vue-next'
 import { Transfer } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'
@@ -61,7 +61,7 @@ describe('Transfer', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Transfer state={state}></Transfer>)
 
       expect(wrapper.find('.vxp-transfer').classes()).toContain(`vxp-transfer--${state}`)
@@ -182,24 +182,24 @@ describe('Transfer', () => {
     const { source, target } = getPanels(wrapper)
 
     expect(source.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(source.findComponent(Spinner).exists()).toBe(false)
+    expect(source.findComponent(Loader2).exists()).toBe(false)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(target.findComponent(Spinner).exists()).toBe(false)
+    expect(target.findComponent(Loader2).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(source.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(source.findComponent(Spinner).exists()).toBe(true)
+    expect(source.findComponent(Loader2).exists()).toBe(true)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(target.findComponent(Spinner).exists()).toBe(true)
+    expect(target.findComponent(Loader2).exists()).toBe(true)
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Transfer loading loading-icon={GithubB}></Transfer>)
+    const wrapper = mount(() => <Transfer loading loading-icon={Github}></Transfer>)
     const { source, target } = getPanels(wrapper)
 
-    expect(source.findComponent(Spinner).exists()).toBe(false)
-    expect(source.findComponent(GithubB).exists()).toBe(true)
-    expect(target.findComponent(Spinner).exists()).toBe(false)
-    expect(target.findComponent(GithubB).exists()).toBe(true)
+    expect(source.findComponent(Loader2).exists()).toBe(false)
+    expect(source.findComponent(Github).exists()).toBe(true)
+    expect(target.findComponent(Loader2).exists()).toBe(false)
+    expect(target.findComponent(Github).exists()).toBe(true)
   })
 })

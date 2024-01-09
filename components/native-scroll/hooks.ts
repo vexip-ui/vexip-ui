@@ -31,11 +31,12 @@ export function useScrollWrapper({
   const { manualRef, triggerUpdate } = useManualRef()
 
   const { isRtl } = useRtl()
+  const syncing = ref(false)
 
-  const contentElement = ref<HTMLElement>()
+  const contentEl = ref<HTMLElement>()
 
   const content = reactive({
-    el: contentElement,
+    el: contentEl,
     scrollWidth: 0,
     offsetWidth: 0,
     scrollHeight: 0,
@@ -86,7 +87,7 @@ export function useScrollWrapper({
     return 35
   })
 
-  watch(contentElement, () => {
+  watch(contentEl, () => {
     computeContentSize()
   })
   watch(scrollX, value => {
@@ -98,18 +99,28 @@ export function useScrollWrapper({
 
   function setScrollX(value: number) {
     x.value = boundRange(value, 0, xScrollLimit.value)
-
-    if (content.el) {
-      content.el.scrollLeft = isRtl.value ? -x.value : x.value
-    }
+    syncScroll()
   }
 
   function setScrollY(value: number) {
     y.value = boundRange(value, 0, yScrollLimit.value)
+    syncScroll()
+  }
+
+  function syncScroll() {
+    syncing.value = true
 
     if (content.el) {
-      content.el.scrollTop = y.value
+      content.el.scrollTo({
+        top: y.value,
+        left: isRtl.value ? -x.value : x.value,
+        behavior: 'instant'
+      })
     }
+
+    setTimeout(() => {
+      syncing.value = false
+    }, 0)
   }
 
   const { isMounted } = useMounted()
@@ -157,16 +168,20 @@ export function useScrollWrapper({
   })
 
   const refresh = debounceMinor(() => {
-    if (typeof onBeforeRefresh === 'function') {
-      onBeforeRefresh()
-    }
-
-    computeContentSize()
-    setTimeout(() => {
-      if (typeof onAfterRefresh === 'function') {
-        onAfterRefresh()
+    return new Promise<void>(resolve => {
+      if (typeof onBeforeRefresh === 'function') {
+        onBeforeRefresh()
       }
-    }, 0)
+
+      computeContentSize()
+      setTimeout(() => {
+        if (typeof onAfterRefresh === 'function') {
+          onAfterRefresh()
+        }
+
+        resolve()
+      }, 0)
+    })
   })
 
   function scrollTo(clientX: number, clientY: number, duration = 500) {
@@ -224,8 +239,9 @@ export function useScrollWrapper({
   }
 
   return {
-    contentElement,
+    contentEl,
 
+    syncing,
     content,
     x,
     y,

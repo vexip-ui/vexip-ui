@@ -1,3 +1,321 @@
+<script setup lang="ts">
+import { Checkbox } from '@/components/checkbox'
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+
+import { computed, inject, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { useModifier, useRtl } from '@vexip-ui/hooks'
+import { isNull } from '@vexip-ui/utils'
+import { TREE_STATE } from './symbol'
+
+import type { PropType } from 'vue'
+import type { TreeNodeProps } from './symbol'
+
+defineOptions({ name: 'TreeNode', inheritAttrs: false })
+
+const props = defineProps({
+  node: {
+    type: Object as PropType<TreeNodeProps>,
+    default: () => ({})
+  }
+})
+
+const treeState = inject(TREE_STATE)!
+
+const nh = useNameHelper('tree')
+const icons = useIcons()
+
+const { isRtl } = useRtl()
+
+const wrapper = ref<HTMLElement>()
+const arrowEl = ref<HTMLElement>()
+
+const parentState = computed(() => {
+  return props.node.parent ? treeState.nodeStates.get(props.node.parent) : undefined
+})
+
+useModifier({
+  target: wrapper,
+  passive: false,
+  onKeyDown: (event, modifier) => {
+    if (treeState.expanding) return
+
+    const prevent = () => {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    if (modifier.up || modifier.down) {
+      prevent()
+      treeState.handleHittingChange(modifier.up ? 'up' : 'down')
+    } else if (modifier.left || modifier.right) {
+      prevent()
+      const hasChild = props.node.children?.length > 0
+
+      if (modifier.right && props.node.expanded && hasChild) {
+        treeState.handleHittingChange('down')
+      } else if (modifier.left && (!props.node.expanded || !hasChild)) {
+        treeState.handleNodeHitting(parentState.value?.el)
+      } else {
+        toggleExpanded(modifier.right)
+      }
+    } else if (hasCheckbox.value && modifier.space) {
+      prevent()
+      handleToggleCheck()
+    } else if (modifier.enter) {
+      prevent()
+      handleToggleSelect()
+    }
+  }
+})
+
+const loaded = ref(!treeState.boundAsyncLoad || props.node.loaded)
+const loadFail = ref(treeState.boundAsyncLoad && props.node.loadFail)
+const dragging = ref(false)
+const isDragOver = ref(false)
+const focused = ref(false)
+
+const isDisabled = computed(() => {
+  return (!treeState.noCascaded && parentState.value?.disabled) || props.node.disabled
+})
+const isReadonly = computed(() => {
+  return (!treeState.noCascaded && parentState.value?.readonly) || props.node.readonly
+})
+// const depth = computed(() => parentState.depth + 1)
+const secondary = computed(
+  () => !props.node.matched && (props.node.childMatched || props.node.upperMatched)
+)
+const hasLinkLine = computed(() => !!treeState.linkLine && props.node.depth > 0)
+const className = computed(() => {
+  return {
+    [nh.be('node')]: true,
+    [nh.bem('node', 'last')]: props.node.last,
+    [nh.bem('node', 'focused')]: focused.value,
+    [nh.bem('node', 'selected')]: props.node.selected,
+    [nh.bem('node', 'expanded')]: props.node.expanded,
+    [nh.bem('node', 'disabled')]: isDisabled.value,
+    [nh.bem('node', 'readonly')]: isReadonly.value,
+    [nh.bem('node', 'secondary')]: secondary.value,
+    [nh.bem('node', 'dragging')]: dragging.value,
+    [nh.bem('node', 'drag-over')]: isDragOver.value,
+    [nh.bem('node', 'link-line')]: hasLinkLine.value,
+    [nh.bem('node', 'no-arrow')]: !hasArrow.value,
+    [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length,
+    [nh.bem('node', 'loaded')]: loaded.value,
+    [nh.bem('node', 'load-fail')]: loadFail.value
+  }
+})
+const isLeaf = computed(() => {
+  const isLeaf = props.node.isLeaf
+
+  let leafSign: boolean | 'auto' = 'auto'
+  let asyncLoad = false
+
+  if (isNull(isLeaf) || isLeaf === 'auto') {
+    leafSign = 'auto'
+    asyncLoad = treeState.boundAsyncLoad
+  } else {
+    leafSign = isLeaf
+  }
+
+  return leafSign === 'auto'
+    ? !(props.node.children?.length || (asyncLoad && !loaded.value))
+    : !!leafSign
+})
+const hasArrow = computed(() => {
+  return isNull(props.node.arrow) || props.node.arrow === 'auto'
+    ? treeState.arrow === 'auto'
+      ? !isLeaf.value
+      : treeState.arrow
+    : props.node.arrow
+})
+const hasCheckbox = computed(() => {
+  const checkbox = props.node.checkbox
+
+  return isNull(checkbox) ? treeState.checkbox : checkbox
+})
+// const renderer = computed(() => treeState.renderer)
+const suffixCheckbox = computed(() => treeState.suffixCheckbox)
+const nodeState = reactive({
+  el: wrapper,
+  depth: computed(() => props.node.depth),
+  disabled: isDisabled,
+  readonly: isReadonly
+})
+
+watch([() => treeState.boundAsyncLoad, () => props.node.loaded], values => {
+  loaded.value = !values[0] || values[1]
+})
+watch([() => treeState.boundAsyncLoad, () => props.node.loadFail], values => {
+  loadFail.value = !values[0] || values[1]
+})
+watch(
+  () => props.node.id,
+  (value, prev) => {
+    treeState.nodeStates.delete(prev)
+    treeState.nodeStates.set(value, nodeState)
+  }
+)
+
+treeState.nodeStates.set(props.node.id, nodeState)
+
+let dragTimer: ReturnType<typeof setTimeout>
+
+onBeforeUnmount(() => {
+  clearTimeout(dragTimer)
+  treeState.nodeStates.set(props.node.id, nodeState)
+})
+
+// function updateVisible() {
+//   treeState.updateVisibleNodeEls()
+// }
+
+function setValue<T = unknown>(key: keyof TreeNodeProps, value: T) {
+  ;(props.node as any)[key] = value
+}
+
+function handleClick() {
+  treeState.handleNodeClick(props.node)
+
+  if (treeState.blockEffect) {
+    handleLabelClick()
+  }
+}
+
+function handleToggleCheck(able = !props.node.checked) {
+  if (isDisabled.value || props.node.checkDisabled) return
+
+  setValue('checked', able)
+  setValue('partial', false)
+
+  nextTick(() => {
+    treeState.computeCheckedState(props.node, able)
+  })
+}
+
+async function toggleExpanded(able = !props.node.expanded) {
+  if (
+    treeState.expanding ||
+    props.node.loading ||
+    isDisabled.value ||
+    props.node.expandDisabled ||
+    isLeaf.value
+  ) {
+    return
+  }
+
+  if (able && treeState.boundAsyncLoad && !loaded.value) {
+    setValue('loading', true)
+
+    const result = await treeState.handleAsyncLoad(props.node)
+
+    asyncLoadCallback(result)
+  } else {
+    setValue('expanded', able)
+
+    if (able) {
+      treeState.handleNodeExpand(props.node)
+    } else {
+      treeState.handleNodeReduce(props.node)
+    }
+  }
+}
+
+function handleToggleSelect(able = !props.node.selected) {
+  if (isDisabled.value || props.node.selectDisabled) return
+
+  if (treeState.floorSelect) {
+    return toggleExpanded()
+  }
+
+  setValue('selected', !isReadonly.value && able)
+
+  if (isReadonly.value || able) {
+    treeState.handleNodeSelect(props.node)
+  } else {
+    treeState.handleNodeCancel(props.node)
+  }
+}
+
+function handleLabelClick() {
+  treeState.handleLabelClick(props.node)
+  handleToggleSelect()
+}
+
+function asyncLoadCallback(success = true) {
+  setValue('loading', false)
+  setValue('expanded', success !== false)
+
+  if (success) {
+    setValue('loaded', true)
+    setValue('loadFail', false)
+    treeState.handleNodeExpand(props.node)
+  } else {
+    setValue('loadFail', true)
+  }
+}
+
+function getNodeState() {
+  return {
+    el: wrapper.value,
+    arrow: arrowEl.value,
+    node: props.node
+  }
+}
+
+function handleDragStart() {
+  if (!treeState.draggable) return
+
+  dragging.value = true
+  treeState.handleNodeDragStart(getNodeState())
+}
+
+function handleDragOver(event: DragEvent) {
+  if (!treeState.draggable || !treeState.dragging) return
+
+  clearTimeout(dragTimer)
+  event.stopPropagation()
+  event.preventDefault()
+
+  isDragOver.value = true
+
+  treeState.handleNodeDragOver(getNodeState(), event)
+}
+
+function handleDragLeave(event: DragEvent) {
+  if (!treeState.draggable) return
+
+  clearTimeout(dragTimer)
+  event.preventDefault()
+
+  dragTimer = setTimeout(() => {
+    isDragOver.value = false
+  }, 100)
+}
+
+function handleDrop(event: DragEvent) {
+  if (!treeState.draggable || !treeState.dragging) return
+
+  clearTimeout(dragTimer)
+  event.stopPropagation()
+  event.preventDefault()
+
+  isDragOver.value = false
+
+  treeState.handleNodeDrop(getNodeState())
+}
+
+function handleDragEnd(event: DragEvent) {
+  if (!treeState.draggable || !treeState.dragging) return
+
+  event.stopPropagation()
+  dragging.value = false
+  treeState.handleNodeDragEnd(getNodeState())
+}
+</script>
+
 <template>
   <li
     v-bind="$attrs"
@@ -22,23 +340,25 @@
       :node="node"
       :depth="node.depth"
       :focused="focused"
-      :line-count="node.depth - node.inLastCount"
+      :line-count="0"
+      :line-indexes="node.lineIndexes"
       :toggle-check="handleToggleCheck"
-      :toggle-expand="handleToggleExpand"
+      :toggle-expand="toggleExpanded"
       :toggle-select="handleToggleSelect"
     >
       <template v-if="hasLinkLine">
         <div
-          v-for="n in node.depth - node.inLastCount"
-          :key="n"
+          v-for="(lineIndex, index) in node.lineIndexes"
+          :key="index"
           :class="[
             nh.be('link-line'),
             nh.bem('link-line', 'vertical'),
-            n === 1 && nh.bem('link-line', 'first')
+            !index && nh.bem('link-line', 'first')
           ]"
-          :style="{ [nh.cv('link-line-index')]: n - 1 }"
+          :style="{ [nh.cv('link-line-index')]: lineIndex }"
           aria-hidden="true"
         ></div>
+
         <div
           :class="[nh.be('link-line'), nh.bem('link-line', 'horizontal')]"
           aria-hidden="true"
@@ -61,7 +381,7 @@
             [nh.bem('arrow', 'disabled')]: isDisabled || node.expandDisabled
           }"
           :aria-hidden="!node.loading && !hasArrow"
-          @click.stop="handleToggleExpand()"
+          @click.stop="toggleExpanded()"
         >
           <Icon v-if="node.loading" v-bind="icons.loading" label="loading"></Icon>
           <slot
@@ -73,7 +393,7 @@
             :focused="focused"
           >
             <Icon v-if="treeState.arrowIcon" :icon="treeState.arrowIcon"></Icon>
-            <Icon v-else v-bind="isRtl ? icons.arrowLeft : icons.arrowRight"></Icon>
+            <Icon v-else v-bind="isRtl ? icons.angleLeft : icons.angleRight"></Icon>
           </slot>
         </span>
         <Checkbox
@@ -100,7 +420,7 @@
             <Renderer
               v-if="treeState.prefixRenderer"
               :renderer="treeState.prefixRenderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else
@@ -115,7 +435,7 @@
             <Renderer
               v-if="treeState.renderer"
               :renderer="treeState.renderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else
@@ -132,7 +452,7 @@
             <Renderer
               v-if="treeState.suffixRenderer"
               :renderer="treeState.suffixRenderer"
-              :data="{ node, depth: node.depth, data: node.data }"
+              :data="{ node, depth: node.depth, data: node.data, focused }"
             ></Renderer>
             <slot
               v-else
@@ -159,348 +479,3 @@
     </slot>
   </li>
 </template>
-
-<script lang="ts">
-import { Checkbox } from '@/components/checkbox'
-import { Icon } from '@/components/icon'
-import { Renderer } from '@/components/renderer'
-
-import {
-  computed,
-  defineComponent,
-  inject,
-  nextTick,
-  onBeforeUnmount,
-  reactive,
-  ref,
-  watch
-} from 'vue'
-
-import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { useModifier, useRtl } from '@vexip-ui/hooks'
-import { isNull } from '@vexip-ui/utils'
-import { TREE_STATE } from './symbol'
-
-import type { PropType } from 'vue'
-import type { TreeNodeProps } from './symbol'
-
-export default defineComponent({
-  name: 'TreeNode',
-  components: {
-    Checkbox,
-    Icon,
-    Renderer
-  },
-  inheritAttrs: false,
-  props: {
-    node: {
-      type: Object as PropType<TreeNodeProps>,
-      default: () => ({})
-    }
-  },
-  setup(props) {
-    const treeState = inject(TREE_STATE)!
-
-    const { isRtl } = useRtl()
-
-    const nh = useNameHelper('tree')
-
-    const wrapper = ref<HTMLElement>()
-    const arrowEl = ref<HTMLElement>()
-
-    const parentState = computed(() => {
-      return treeState.nodeStates.get(props.node.parent)
-    })
-
-    useModifier({
-      target: wrapper,
-      passive: false,
-      onKeyDown: (event, modifier) => {
-        if (treeState.expanding) return
-
-        const prevent = () => {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        if (modifier.up || modifier.down) {
-          prevent()
-          treeState.handleHittingChange(modifier.up ? 'up' : 'down')
-        } else if (modifier.left || modifier.right) {
-          prevent()
-          const hasChild = props.node.children?.length > 0
-
-          if (modifier.right && props.node.expanded && hasChild) {
-            treeState.handleHittingChange('down')
-          } else if (modifier.left && (!props.node.expanded || !hasChild)) {
-            treeState.handleNodeHitting(parentState.value?.el)
-          } else {
-            handleToggleExpand(modifier.right)
-          }
-        } else if (hasCheckbox.value && modifier.space) {
-          prevent()
-          handleToggleCheck()
-        } else if (modifier.enter) {
-          prevent()
-          handleToggleSelect()
-        }
-      }
-    })
-
-    const loaded = ref(props.node.loaded)
-    const dragging = ref(false)
-    const isDragOver = ref(false)
-    const focused = ref(false)
-
-    const isDisabled = computed(() => {
-      return (!treeState.noCascaded && parentState.value?.disabled) || props.node.disabled
-    })
-    const isReadonly = computed(() => {
-      return (!treeState.noCascaded && parentState.value?.readonly) || props.node.readonly
-    })
-    // const depth = computed(() => parentState.depth + 1)
-    const secondary = computed(
-      () => !props.node.matched && (props.node.childMatched || props.node.upperMatched)
-    )
-    const hasLinkLine = computed(() => !!treeState.linkLine && props.node.depth > 0)
-    const className = computed(() => {
-      return {
-        [nh.be('node')]: true,
-        [nh.bem('node', 'last')]: props.node.last,
-        [nh.bem('node', 'focused')]: focused.value,
-        [nh.bem('node', 'selected')]: props.node.selected,
-        [nh.bem('node', 'expanded')]: props.node.expanded,
-        [nh.bem('node', 'disabled')]: isDisabled.value,
-        [nh.bem('node', 'readonly')]: isReadonly.value,
-        [nh.bem('node', 'secondary')]: secondary.value,
-        [nh.bem('node', 'dragging')]: dragging.value,
-        [nh.bem('node', 'drag-over')]: isDragOver.value,
-        [nh.bem('node', 'link-line')]: hasLinkLine.value,
-        [nh.bem('node', 'no-arrow')]: !hasArrow.value,
-        [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length
-      }
-    })
-    const hasArrow = computed(() => {
-      const arrow = props.node.arrow
-
-      let arrowSign: boolean | 'auto' = 'auto'
-      let asyncLoad = false
-
-      if (isNull(arrow) || arrow === 'auto') {
-        if (treeState) {
-          arrowSign = treeState.arrow
-          asyncLoad = treeState.boundAsyncLoad
-        }
-      } else {
-        arrowSign = arrow
-      }
-
-      return arrowSign === 'auto'
-        ? !!props.node.children?.length || (!loaded.value && asyncLoad)
-        : !!arrowSign
-    })
-    const hasCheckbox = computed(() => {
-      const checkbox = props.node.checkbox
-
-      return isNull(checkbox) ? treeState.checkbox : checkbox
-    })
-    // const renderer = computed(() => treeState.renderer)
-    const suffixCheckbox = computed(() => treeState.suffixCheckbox)
-    const nodeState = reactive({
-      el: wrapper,
-      depth: computed(() => props.node.depth),
-      disabled: isDisabled,
-      readonly: isReadonly
-    })
-
-    watch(
-      () => props.node.loaded,
-      value => {
-        loaded.value = value
-      }
-    )
-    watch(
-      () => props.node.id,
-      (value, prev) => {
-        treeState.nodeStates.delete(prev)
-        treeState.nodeStates.set(value, nodeState)
-      }
-    )
-
-    treeState.nodeStates.set(props.node.id, nodeState)
-
-    onBeforeUnmount(() => {
-      treeState.nodeStates.set(props.node.id, nodeState)
-    })
-
-    // function updateVisible() {
-    //   treeState.updateVisibleNodeEls()
-    // }
-
-    function setValue<T = unknown>(key: keyof TreeNodeProps, value: T) {
-      (props.node as any)[key] = value
-    }
-
-    function handleClick() {
-      treeState.handleNodeClick(props.node)
-
-      if (treeState.blockEffect) {
-        handleLabelClick()
-      }
-    }
-
-    function handleToggleCheck(able = !props.node.checked) {
-      if (isDisabled.value || props.node.checkDisabled) return
-
-      setValue('checked', able)
-      setValue('partial', false)
-
-      nextTick(() => {
-        treeState.computeCheckedState(props.node, able)
-      })
-    }
-
-    async function handleToggleExpand(able = !props.node.expanded) {
-      if (props.node.loading || isDisabled.value || props.node.expandDisabled) return
-
-      if (able && treeState.boundAsyncLoad && !loaded.value) {
-        setValue('loading', true)
-
-        const result = await treeState.handleAsyncLoad(props.node)
-
-        asyncLoadCallback(result)
-      } else {
-        setValue('expanded', able)
-
-        if (able) {
-          treeState.handleNodeExpand(props.node)
-        } else {
-          treeState.handleNodeReduce(props.node)
-        }
-      }
-    }
-
-    function handleToggleSelect(able = !props.node.selected) {
-      if (isDisabled.value || props.node.selectDisabled) return
-
-      if (treeState.floorSelect) {
-        return handleToggleExpand()
-      }
-
-      setValue('selected', !isReadonly.value && able)
-
-      if (isReadonly.value || able) {
-        treeState.handleNodeSelect(props.node)
-      } else {
-        treeState.handleNodeCancel(props.node)
-      }
-    }
-
-    function handleLabelClick() {
-      treeState.handleLabelClick(props.node)
-      handleToggleSelect()
-    }
-
-    function asyncLoadCallback(success = true) {
-      setValue('loading', false)
-      setValue('expanded', success !== false)
-
-      if (success) {
-        loaded.value = true
-        treeState.handleNodeExpand(props.node)
-      }
-    }
-
-    function getNodeState() {
-      return {
-        el: wrapper.value,
-        arrow: arrowEl.value,
-        node: props.node
-      }
-    }
-
-    function handleDragStart() {
-      if (!treeState.draggable) return
-
-      dragging.value = true
-      treeState.handleNodeDragStart(getNodeState())
-    }
-
-    function handleDragOver(event: DragEvent) {
-      if (!treeState.draggable || !treeState.dragging) return
-
-      event.stopPropagation()
-      event.preventDefault()
-      isDragOver.value = true
-      treeState.handleNodeDragOver(getNodeState(), event)
-    }
-
-    function handleDragLeave(event: DragEvent) {
-      if (!treeState.draggable) return
-
-      event.preventDefault()
-      isDragOver.value = false
-    }
-
-    function handleDrop(event: DragEvent) {
-      if (!treeState.draggable || !treeState.dragging) return
-
-      event.stopPropagation()
-      event.preventDefault()
-      isDragOver.value = false
-      treeState.handleNodeDrop(getNodeState())
-    }
-
-    function handleDragEnd(event: DragEvent) {
-      if (!treeState.draggable || !treeState.dragging) return
-
-      event.stopPropagation()
-      dragging.value = false
-      treeState.handleNodeDragEnd(getNodeState())
-    }
-
-    function getNodeChildren(node: TreeNodeProps) {
-      return node.children
-    }
-
-    // function handleResize(entry: ResizeObserverEntry) {
-    //   treeState.handleItemResize(props.node.id, entry)
-    // }
-
-    return {
-      nh,
-      icons: useIcons(),
-      treeState,
-
-      dragging,
-      focused,
-
-      isRtl,
-      isDisabled,
-      isReadonly,
-      secondary,
-      hasLinkLine,
-      className,
-      hasArrow,
-      hasCheckbox,
-      // renderer,
-      suffixCheckbox,
-
-      wrapper,
-      arrowEl,
-
-      handleClick,
-      handleToggleCheck,
-      handleToggleExpand,
-      handleToggleSelect,
-      handleLabelClick,
-      handleDragStart,
-      handleDragOver,
-      handleDragLeave,
-      handleDrop,
-      handleDragEnd,
-      getNodeChildren
-    }
-  }
-})
-</script>

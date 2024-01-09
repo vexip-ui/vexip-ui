@@ -1,6 +1,6 @@
 # Table
 
-Used to display structured 2D data.
+Used to display structured 2D data, and can quickly to sort, search, group, edit, paging, summarize and other operations on the data.
 
 ## Demos
 
@@ -10,6 +10,8 @@ Used to display structured 2D data.
 
 Simple data table.
 
+The data access method can be set via the `accessor` option, and the content formatter can be set via the `formatter` option.
+
 :::
 
 :::demo table/column
@@ -18,7 +20,7 @@ Simple data table.
 
 Use the TableColumn component to configure table columns.
 
-The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations, which is the recommended way to use them.
+The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations without writing render functions, which is the more recommended way of use.
 
 :::
 
@@ -112,6 +114,8 @@ If you want to only the filter events will be emitted (e.g. remote filter), you 
 
 Also you can custom the renderer of filter via `filter` slot of TableColumn component.
 
+Or you can define additional filter method via `data-filter` prop of the Table component.
+
 :::
 
 :::demo table/fixed
@@ -126,7 +130,7 @@ Set the `width` prop for a Column to specify the width of the column, and set th
 
 :::demo table/pagination
 
-### Page Table
+### Paged Table
 
 Combined with the Pagination component, table pagination can be implemented, which is generally used when there is a lot of data and it is not convenient to display on one page.
 
@@ -155,6 +159,12 @@ If you want to manually specify the indented column of the tree table, you can a
 Adding the `row-draggable` prop enables row dragging.
 
 However, this way will disable other interactions of rows. You can instead add a column which `type` prop is `'drag'` to create a separate drag handler.
+
+After dragging, you can get the latest data in any of the following ways:
+
+- Call the `getData` method of the component to obtain
+- Obtain via the second parameter of the `row-drag-end` event callback
+- Obtain via `update:data` event callback (meaning you can use `v-model:data`)
 
 :::
 
@@ -188,7 +198,7 @@ At this time, you need to call the `refresh` method of the Table instance to rec
 
 ### Resize Column Width
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 Adding the `col-resizable` prop enables resize column width.
 
@@ -198,11 +208,25 @@ Adding the `col-resizable` prop enables resize column width.
 
 ### Merge Cells
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
-Provide a callback function via the `cell-span` of column options to set the span of each cell.
+Provide a callback function via the `cell-span` prop of column options to set the span of each cell.
 
 If you want to merge the header, you need to set the `head-span` of column options.
+
+:::
+
+:::demo table/column-group
+
+### Head Grouping
+
+==!s|2.2.12==
+
+This example uses the TableColumnGroup component to group table columns.
+
+If the `columns` prop is used, it will be parsed into grouping options when the `children` prop is specified.
+
+Note that after using grouping, only the `fixed` prop of the top-level option will take effect, and other which like the age column in the example will be invalid.
 
 :::
 
@@ -210,7 +234,7 @@ If you want to merge the header, you need to set the `head-span` of column optio
 
 ### Table Summary
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 Similar to columns, you can define summaries via the `summaries` prop or the TableSummary component.
 
@@ -222,6 +246,8 @@ You can also define the summary content of a column independently via the `summa
 
 ### Preset Types
 
+There are many type declarations of Table component. If you want to fully understand the relationship between them, it is recommended to get started from [source code](https://github.com/vexip-ui/vexip-ui/blob/main/components/table/symbol.ts).
+
 ```ts
 type Key = string | number | symbol
 type Data = any
@@ -230,6 +256,7 @@ type TableRowPropFn<P = any> = (data: Data, index: number) => P
 type TableRowDropType = 'before' | 'after' | 'none'
 type TableTextAlign = 'left' | 'center' | 'right'
 type TableColumnType = 'order' | 'selection' | 'expand' | 'drag'
+type TableColResizeType = 'lazy' | 'responsive'
 
 type TableIcons = Partial<Record<TableIconName, Record<string, any> | (() => any)>>
 
@@ -250,7 +277,9 @@ type Accessor<D = Data, Val extends string | number = string | number> = (
   index: number
 ) => Val
 type ExpandRenderFn<D = Data> = (data: {
+  /** @deprecated */
   leftFixed: number,
+  /** @deprecated */
   rightFixed: number,
   row: D,
   rowIndex: number
@@ -339,11 +368,14 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
+  /** @deprecated */
   noEllipsis?: boolean,
+  ellipsis?: boolean,
   textAlign?: TableTextAlign,
   headSpan?: number,
   noSummary?: boolean,
   accessor?: Accessor<D, Val>,
+  formatter?: (value: Val) => unknown,
   cellSpan?: ColumnCellSpanFn<D>,
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
@@ -391,6 +423,18 @@ type ColumnWithKey<
   D = Data,
   Val extends string | number = string | number
 > = TableColumnOptions<D, Val> & { key: Key }
+
+interface TableColumnGroupOptions {
+  name?: string,
+  fixed?: boolean | 'left' | 'right',
+  order?: number,
+  ellipsis?: boolean,
+  textAlign?: TableTextAlign,
+  renderer?: () => any,
+  children: TableColumnOptions<any, any>[]
+}
+
+type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
 
 type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
@@ -464,7 +508,7 @@ interface TableSummaryOptions<D = Data, Val extends string | number = string | n
 type SummaryWithKey<
   D = Data,
   Val extends string | number = string | number
-> = TableSummaryOptions<D, Val> & { key: Key }
+> = TableSummaryOptions<D, Val> & { key: Key, rowSpan: number }
 
 interface TableRowPayload {
   row: Data,
@@ -507,10 +551,9 @@ interface TableFootPayload {
 
 | Name            | Type                                                          | Description                                                                                                                                           | Default        | Since    |
 | --------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------- |
-| columns         | `TableColumnOptions<any, any>[]`                              | Table columns configuration, refer to TableColumn props below                                                                                         | `[]`           | -        |
+| columns         | `TableColumnRawOptions[]`                                     | Table columns configuration, refer to TableColumn props below                                                                                         | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | Table summaries configuration, refer to TableSummary props below                                                                                      | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | Table data source                                                                                                                                     | `[]`           | -        |
-| data-key        | `string`                                                      | The index field of the data source, the value of this field needs to be unique in the data source                                                     | `'id'`         | -        |
 | width           | `number`                                                      | The width of the table, used when there are fixed columns                                                                                             | `null`         | -        |
 | height          | `number`                                                      | The height of the table, beyond which it will become scrollable                                                                                       | `null`         | -        |
 | row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | Custom class name for row                                                                                                                             | `null`         | -        |
@@ -551,10 +594,14 @@ interface TableFootPayload {
 | disabled-tree   | `boolean`                                                     | Set whether to disable automatic parsing tree data                                                                                                    | `false`        | `2.1.6`  |
 | row-indent      | `string \| number`                                            | Set the indent distance of each level of the tree table row                                                                                           | `'16px'`       | `2.1.6`  |
 | no-cascaded     | `boolean`                                                     | Enable parent and child rows to be checked independently in the tree table                                                                            | `false`        | `2.1.6`  |
-| col-resizable   | `boolean`                                                     | Set whether the width of columns can be resized                                                                                                       | `false`        | `2.1.23` |
+| col-resizable   | `boolean \| TableColResizeType`                               | Set whether the width of columns can be resized, set to `true` is same to `'lazy'`                                                                    | `false`        | `2.1.23` |
 | cell-span       | `TableCellSpanFn`                                             | Set the callback function to set cell span                                                                                                            | `null`         | `2.1.24` |
 | side-padding    | `number \| number[]`                                          | Set the horizontal side padding of table                                                                                                              | `0`            | `2.1.28` |
 | icons           | `TableIcons`                                                  | Use to set various icons for table                                                                                                                    | `{}`           | `2.1.28` |
+| border-width    | `number`                                                      | Set the border width of the table                                                                                                                     | `1`            | `2.2.12` |
+| data-filter     | `(data: Data) => boolean`                                     | Set the extra filter method for the data                                                                                                              | `null`         | `2.2.14` |
+| no-transition   | `boolean`                                                     | Whether to disable transition for table                                                                                                               | `false`        | `2.2.14` |
+| ellipsis        | `boolean`                                                     | Whether to use Ellipsis component for cell content                                                                                                    | `false`        | `2.2.16` |
 
 ### Table Events
 
@@ -593,6 +640,7 @@ interface TableFootPayload {
 | foot-click       | Emitted when a foot cell is clicked, returns column data and column index                                                            | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-dblclick    | Emitted when a foot cell is double-clicked, returns column data and column index                                                     | `(payload: TableFootPayload)`                                                           | `2.1.24` |
 | foot-contextmenu | Emitted when a foot cell is right-clicked, returns column data and column index                                                      | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| update:data      | Emitted when a row ends dragging and the data structure changed, returning the latest structured data                                | `(data: Data[])`                                                                        | `2.2.18` |
 
 ### Table Slots
 
@@ -604,46 +652,49 @@ interface TableFootPayload {
 
 ### Table Methods
 
-| Name          | Description                                                                         | Signature                         | Since   |
-| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- | ------- |
-| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                      | -       |
-| clearFilter   | Clear all active filters in the current table                                       | `() => void`                      | -       |
-| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => void`                      | -       |
-| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]` | -       |
-| clearSelected | Clear all selected row data                                                         | `() => void`                      | -       |
-| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                    | `2.2.6` |
+| Name          | Description                                                                         | Signature                         | Since    |
+| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- | -------- |
+| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                      | -        |
+| clearFilter   | Clear all active filters in the current table                                       | `() => void`                      | -        |
+| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => Promise<void>`             | -        |
+| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]` | -        |
+| clearSelected | Clear all selected row data                                                         | `() => void`                      | -        |
+| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                    | `2.2.6`  |
+| refreshData   | Refresh the table data, which will trigger the table to re-parse the data           | `(data?: any[]) => Promise<void>` | `2.2.14` |
 
 ### TableColumn Props
 
-| Name             | Type                                   | Description                                                                                                                                  | Default     | Since    |
-| ---------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
-| name             | `string`                               | The name of the column                                                                                                                       | `''`        | -        |
-| key \| id-key    | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                                                  | `''`        | -        |
-| accessor         | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -        |
-| fixed            | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -        |
-| class            | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | `2.1.19` |
-| style            | `StyleType`                            | Custom style for the cell in this column                                                                                                     | `null`      | `2.0.1`  |
-| attrs            | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                                                | `null`      | `2.0.1`  |
-| type             | `TableColumnType`                      | Set built-in type of the column                                                                                                              | `null`      | -        |
-| width            | `number`                               | Set column width                                                                                                                             | `null`      | -        |
-| filter           | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                                              | `null`      | -        |
-| sorter           | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                                                          | `null`      | -        |
-| order            | `number`                               | The rendering order of the column                                                                                                            | `0`         | -        |
-| renderer         | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                                                          | `null`      | -        |
-| head-renderer    | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -        |
-| filter-renderer  | `FilterRenderFn`                       | Custom filter render function                                                                                                                | `null`      | `2.1.18` |
-| no-ellipsis      | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -        |
-| checkbox-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                                           | `'default'` | -        |
-| disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -        |
-| truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -        |
-| order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -        |
-| meta             | `any`                                  | Set the column metadata                                                                                                                      | `null`      | `2.1.24` |
-| text-align       | `TableTextAlign`                       | Set the horizontal alignment of columns                                                                                                      | `'left'`    | `2.1.19` |
-| head-span        | `number`                               | Set the head span                                                                                                                            | `1`         | `2.1.24` |
-| cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                                                   | `null`      | `2.1.24` |
-| no-summary       | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                                                      | `false`     | `2.1.24` |
-| summary-renderer | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                                               | `null`      | `2.1.24` |
-| indented         | `boolean`                              | Specified as the indented column of the tree table                                                                                           | `false`     | `2.2.6`  |
+| Name             | Type                                   | Description                                                                                                       | Default     | Since    |
+| ---------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| name             | `string`                               | The name of the column                                                                                            | `''`        | -        |
+| key \| id-key    | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                       | `''`        | -        |
+| accessor         | `(data: any, rowIndex: number) => any` | Set data access method of this column                                                                             | `null`      | -        |
+| fixed            | `boolean \| 'left' \| 'right'`         | Whether to fix the column, the optional values ​​are `left`, `right`, when set to `true`, it is fixed to the left | `false`     | -        |
+| class            | `ClassType`                            | Custom class name for the cell in this column                                                                     | `null`      | `2.1.19` |
+| style            | `StyleType`                            | Custom style for the cell in this column                                                                          | `null`      | `2.0.1`  |
+| attrs            | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                     | `null`      | `2.0.1`  |
+| type             | `TableColumnType`                      | Set built-in type of the column                                                                                   | `null`      | -        |
+| width            | `number`                               | Set column width                                                                                                  | `null`      | -        |
+| filter           | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                   | `null`      | -        |
+| sorter           | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                               | `null`      | -        |
+| order            | `number`                               | The rendering order of the column                                                                                 | `0`         | -        |
+| renderer         | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                               | `null`      | -        |
+| head-renderer    | `HeadRenderFn`                         | Custom head render function                                                                                       | `null`      | -        |
+| filter-renderer  | `FilterRenderFn`                       | Custom filter render function                                                                                     | `null`      | `2.1.18` |
+| ~~no-ellipsis~~  | `boolean`                              | Whether to disable the ellipsis component of the cell                                                             | `false`     | -        |
+| ellipsis         | `boolean`                              | Whether to use Ellipsis component for cell content                                                                | `false`     | `2.2.12` |
+| checkbox-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | -        |
+| disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                        | `null`      | -        |
+| truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                              | `false`     | -        |
+| order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                           | `null`      | -        |
+| meta             | `any`                                  | Set the column metadata                                                                                           | `null`      | `2.1.24` |
+| text-align       | `TableTextAlign`                       | Set the horizontal alignment of the column                                                                        | `'left'`    | `2.1.19` |
+| head-span        | `number`                               | Set the head span                                                                                                 | `1`         | `2.1.24` |
+| cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                        | `null`      | `2.1.24` |
+| no-summary       | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                           | `false`     | `2.1.24` |
+| summary-renderer | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                    | `null`      | `2.1.24` |
+| indented         | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
+| formatter        | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
 
 ### TableColumn Slots
 
@@ -654,9 +705,31 @@ interface TableFootPayload {
 | filter  | Slot for column filter       | `Parameters<FilterRenderFn>`        | `2.1.18` |
 | summary | Slot for column summary      | `Parameters<ColumnSummaryRenderFn>` | `2.1.24` |
 
+### TableColumnGroup Props
+
+==!s|2.2.12==
+
+| Name       | Type                           | Description                                                                                                                                       | Default    | Since |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
+| name       | `string`                       | The name of the column group                                                                                                                      | `''`       | -     |
+| fixed      | `boolean \| 'left' \| 'right'` | Whether it is a fixed column group, the optional values are `left`, `right`, when set to `true`, it will be fixed to the left                     | `false`    | -     |
+| order      | `number`                       | The rendering order of column group, works together with the `order` prop of column. The sorting between each level and each group is independent | `0`        | -     |
+| ellipsis   | `boolean`                      | Whether to use Ellipsis component for head cell content                                                                                           | `false`    | -     |
+| text-align | `TableTextAlign`               | Set the horizontal alignment of head cell                                                                                                         | `'center'` | -     |
+| renderer   | `() => any`                    | Custom header render function                                                                                                                     | `null`     | -     |
+
+### TableColumnGroup Slots
+
+==!s|2.2.12==
+
+| Name    | Description                               | Parameters | Since |
+| ------- | ----------------------------------------- | ---------- | ----- |
+| default | Used to define the TableColumn components | -          | -     |
+| head    | Slot for column head content              | -          | -     |
+
 ### TableSummary Props
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 | Name          | Type                  | Description                                                                   | Default | Since |
 | ------------- | --------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
@@ -673,7 +746,7 @@ interface TableFootPayload {
 
 ### TableSummary Slots
 
-^[Since v2.1.24](!s)
+==!s|2.1.24==
 
 | Name    | Description              | Parameters                    | Since |
 | ------- | ------------------------ | ----------------------------- | ----- |

@@ -8,3 +8,4 @@ export { radioProps } from './props'
 export type RadioExposed = ComponentPublicInstance & InstanceType<typeof Radio>
 
 export type { RadioProps, RadioCProps } from './props'
+export type { RadioGroupShape, RadioRawOption, RadioShape } from './symbol'

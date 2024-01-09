@@ -1,3 +1,4 @@
+export * from './hover-delay'
 export * from './locale'
 export * from './icons'
 export * from './namespace'

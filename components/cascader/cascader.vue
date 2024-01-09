@@ -37,6 +37,7 @@
                 :class="nh.be('tag')"
                 :type="props.tagType"
                 closable
+                :disabled="props.disabled"
                 @click.stop="toggleVisible()"
                 @close="handleTipClose(item)"
               >
@@ -49,6 +50,7 @@
                 inherit
                 :class="[nh.be('tag'), nh.be('counter')]"
                 :type="props.tagType"
+                :disabled="props.disabled"
               >
                 {{ `+${count}` }}
               </Tag>
@@ -63,7 +65,12 @@
                   @click.stop="toggleShowRestTip"
                 >
                   <template #trigger>
-                    <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                    <Tag
+                      inherit
+                      :class="[nh.be('tag'), nh.be('counter')]"
+                      :type="props.tagType"
+                      :disabled="props.disabled"
+                    >
                       {{ `+${count}` }}
                     </Tag>
                   </template>
@@ -75,6 +82,7 @@
                         :class="nh.be('tag')"
                         closable
                         :type="props.tagType"
+                        :disabled="props.disabled"
                         @close="handleTipClose(item)"
                       >
                         {{ templateLabels[index] }}
@@ -112,7 +120,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
+          <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -209,6 +217,7 @@ import {
 
 import CascaderPanel from './cascader-panel.vue'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -218,7 +227,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
-import { flatTree, isNull, isPromise, transformTree } from '@vexip-ui/utils'
+import { flatTree, getLast, isNull, isPromise, transformTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -281,9 +290,9 @@ export default defineComponent({
         static: true
       },
       placeholder: null,
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       noCascaded: false,
       multiple: false,
@@ -315,7 +324,7 @@ export default defineComponent({
       tagType: null,
       emptyText: null,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       transparent: false,
@@ -343,6 +352,7 @@ export default defineComponent({
     let optionValueMap: Map<string, CascaderOptionState> = null!
     let outsideClosed = false
     let prevClosedId = -1
+    let flattedOptions: Record<any, any>[]
 
     const updateTrigger = ref(0)
 
@@ -350,13 +360,18 @@ export default defineComponent({
       /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
-      props.keyConfig.children
       props.keyConfig.disabled
       props.keyConfig.hasChild
       props.separator
-      props.options
       isAsyncLoad.value
       /* eslint-enable */
+
+      flattedOptions = flatTree(props.options as Record<any, any>[], {
+        keyField: ID_KEY,
+        parentField: PARENT_KEY,
+        childField: props.keyConfig.children ?? defaultKeyConfig.children,
+        forceInject: true
+      })
 
       updateTrigger.value++
     })
@@ -364,17 +379,10 @@ export default defineComponent({
     watch(updateTrigger, initOptionStates, { immediate: true })
 
     function initOptionStates() {
-      const childrenKey = props.keyConfig.children ?? defaultKeyConfig.children
-      const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
-        keyField: ID_KEY,
-        parentField: PARENT_KEY,
-        childField: childrenKey
-      })
-
       const separator = props.separator
       const isAsync = isAsyncLoad.value
 
-      optionList = createOptionStates(rawOptions)
+      optionList = createOptionStates(flattedOptions)
       optionIdMap = new Map()
       optionValueMap = new Map()
 
@@ -428,6 +436,7 @@ export default defineComponent({
         [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
@@ -435,7 +444,8 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--readonly`]: readonly.value,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -456,7 +466,9 @@ export default defineComponent({
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && hasValue.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && isHover.value && hasValue.value
+      )
     })
 
     watch(
@@ -469,9 +481,10 @@ export default defineComponent({
       if (value) {
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
+
         await updatePopper()
         nextTick(() => {
-          panelElList.value.at(-1)?.$el?.focus()
+          getLast(panelElList.value)?.$el?.focus()
         })
       } else {
         isPopperShow.value = false
@@ -555,12 +568,7 @@ export default defineComponent({
       () => {
         updatePopper()
         nextTick(() => {
-          const panel = panelElList.value.at(-1)
-
-          if (panel?.$el) {
-            panel.$el.focus()
-          }
-
+          getLast(panelElList.value)?.$el?.focus()
           prevClosedId = -1
         })
       }
@@ -573,22 +581,11 @@ export default defineComponent({
         }
       }
     )
-    watch(
-      () => props.loading,
-      value => {
-        if (value && props.loadingLock) {
-          setVisible(false)
-        }
+    watch(readonly, value => {
+      if (value) {
+        setVisible(false)
       }
-    )
-    watch(
-      () => props.loadingLock,
-      value => {
-        if (props.loading && value) {
-          setVisible(false)
-        }
-      }
-    )
+    })
 
     onBeforeUpdate(() => {
       panelElList.value.length = 0
@@ -869,7 +866,7 @@ export default defineComponent({
 
       openedIds.value.push(option.id)
       requestAnimationFrame(() => {
-        panelElList.value.at(-1)?.$el?.focus()
+        getLast(panelElList.value)?.$el?.focus()
       })
     }
 
@@ -1093,7 +1090,7 @@ export default defineComponent({
     }
 
     function toggleVisible(visible = !currentVisible.value) {
-      if (props.disabled || (props.loading && props.loadingLock)) return
+      if (props.disabled || readonly.value) return
 
       setVisible(visible)
     }
@@ -1110,6 +1107,8 @@ export default defineComponent({
     }
 
     function handleClear() {
+      if (props.disabled || readonly.value) return
+
       if (props.clearable) {
         const prev = emittedValue.value
 
@@ -1145,6 +1144,8 @@ export default defineComponent({
     }
 
     function handleTipClose(fullValue: string) {
+      if (props.disabled || readonly.value) return
+
       if (props.multiple) {
         handleOptionCheck(optionValueMap.get(fullValue)!)
       } else {
@@ -1156,7 +1157,7 @@ export default defineComponent({
       handlePanelOpen(option, depth)
 
       requestAnimationFrame(() => {
-        const panel = panelElList.value.at(-1)
+        const panel = getLast(panelElList.value)
 
         if (panel && panel.currentHitting < 0) {
           panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)

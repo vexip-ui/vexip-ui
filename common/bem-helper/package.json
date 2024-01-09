@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/bem-helper",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -15,9 +15,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "private": false,

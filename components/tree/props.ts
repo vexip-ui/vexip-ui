@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp, localeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -23,7 +23,9 @@ export const treeProps = buildProps({
   },
   data: Array as PropType<Data[]>,
   noBuildTree: booleanProp,
+  /** @deprecated */
   emptyTip: String,
+  emptyText: String,
   disabled: booleanProp,
   readonly: booleanProp,
   checkbox: booleanProp,
@@ -54,8 +56,9 @@ export const treeProps = buildProps({
   nodeMinHeight: Number,
   useYBar: booleanProp,
   noTransition: booleanProp,
-  arrowIcon: Object,
+  arrowIcon: iconProp,
   blockEffect: booleanProp,
+  filterLeaf: booleanProp,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),

@@ -17,7 +17,7 @@ const panelShow = ref(false)
     <component :is="Component"></component>
   </RouterView>
   <button
-    :class="['setting', panelShow && 'setting--active']"
+    :class="['dev-setting', panelShow && 'dev-setting--active']"
     type="button"
     tabindex="-1"
     @click="panelShow = !panelShow"
@@ -25,23 +25,26 @@ const panelShow = ref(false)
     <Gear></Gear>
   </button>
   <Transition name="vxp-fade">
-    <div v-show="panelShow" class="panel">
-      <div class="links">
-        <template v-for="route in router.options.routes">
-          <RouterLink
-            v-if="route.name"
-            :key="route.path"
-            class="router-link"
-            :to="route.path"
-          >
-            {{ route.name }}
-          </RouterLink>
-        </template>
-      </div>
-      <div class="actions">
-        <TogglePadding></TogglePadding>
-        <DirectionSwitch></DirectionSwitch>
-        <ThemeSwitch></ThemeSwitch>
+    <div v-show="panelShow" class="dev-panel">
+      <div class="dev-panel__container">
+        <div class="dev-links">
+          <template v-for="route in router.options.routes">
+            <RouterLink
+              v-if="route.name"
+              :key="route.path"
+              class="router-link"
+              :to="route.path"
+              @click="panelShow = false"
+            >
+              {{ route.name }}
+            </RouterLink>
+          </template>
+        </div>
+        <div class="dev-actions">
+          <TogglePadding></TogglePadding>
+          <DirectionSwitch></DirectionSwitch>
+          <ThemeSwitch></ThemeSwitch>
+        </div>
       </div>
     </div>
   </Transition>
@@ -77,7 +80,7 @@ body {
   font-variant-numeric: tabular-nums;
   line-height: var(--vxp-line-height-base);
   color: var(--vxp-content-color-base);
-  background-color: var(--body-bg-color);
+  background-color: var(--bg-color);
   transition: var(--vxp-transition-background);
 }
 
@@ -90,7 +93,7 @@ body {
   padding: 20px;
 }
 
-.setting {
+.dev-setting {
   position: absolute;
   inset-inline-end: 20px;
   bottom: 20px;
@@ -123,46 +126,65 @@ body {
   }
 }
 
-.panel {
+.dev-panel {
   position: absolute;
   inset-inline-end: 20px;
   bottom: 70px;
   z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  padding: 4px 0;
+  overflow: hidden;
   background-color: var(--vxp-fill-color-background);
   border-radius: var(--vxp-radius-base);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: calc(100vh - 128px);
+    padding: 20px;
+    overflow: hidden auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--vxp-color-primary-opacity-8) transparent;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--vxp-color-primary-opacity-8);
+      border-radius: 4px;
+    }
+  }
 }
 
-.links {
+.dev-links {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 180px;
+
+  .router-link {
+    padding: 7px 10px 8px;
+    line-height: 1;
+    color: var(--vxp-color-primary-base);
+    text-decoration: none;
+    background-color: var(--vxp-bg-color-base);
+    border: 1px solid var(--vxp-color-primary-opacity-6);
+    border-radius: var(--vxp-radius-base);
+    transition: var(--vxp-transition-background);
+
+    &:hover {
+      background-color: var(--vxp-color-primary-opacity-9);
+    }
+
+    &-active,
+    &-active:hover {
+      background-color: var(--vxp-color-primary-opacity-8);
+    }
+  }
 }
 
-.router-link {
-  padding: 7px 10px 8px;
-  line-height: 1;
-  color: var(--vxp-color-primary-base);
-  text-decoration: none;
-  background-color: var(--vxp-bg-color-base);
-  border: 1px solid var(--vxp-color-primary-opacity-6);
-  border-radius: var(--vxp-radius-base);
-  transition: var(--vxp-transition-background);
-
-  &:hover {
-    background-color: var(--vxp-color-primary-opacity-9);
-  }
-
-  &-active,
-  &-active:hover {
-    background-color: var(--vxp-color-primary-opacity-8);
-  }
-}
-
-.actions {
+.dev-actions {
   display: flex;
   gap: 14px;
   align-items: center;

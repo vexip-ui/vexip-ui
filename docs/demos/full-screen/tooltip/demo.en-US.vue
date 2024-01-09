@@ -1,5 +1,5 @@
 <template>
-  <FullScreen ref="fullScreen" v-slot="{ toggle }">
+  <FullScreen ref="fullScreen" v-slot="{ placeId, toggle }">
     <div class="container">
       <Button type="primary" @click="toggle('window')">
         Window
@@ -7,7 +7,7 @@
       <Button type="primary" @click="toggle('browser')">
         Browser
       </Button>
-      <Tooltip transfer="#full-screen-tooltips">
+      <Tooltip :transfer="`#${placeId}`">
         <template #trigger>
           <Button> Visible after full screen </Button>
         </template>
@@ -20,7 +20,6 @@
         Invisible after full screen
       </Tooltip>
     </div>
-    <div id="full-screen-tooltips"></div>
   </FullScreen>
 </template>
 

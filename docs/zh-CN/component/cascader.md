@@ -1,4 +1,4 @@
-# Cascader 联级选择器 ^[Since v2.0.0](!s)
+# Cascader 联级选择器 ==!s|2.0.0==
 
 当需要从一组相关联的数据集合进行一系列选择时使用，常用于在选择省市区、分类的事物等。
 
@@ -150,9 +150,9 @@ interface CascaderOptionState {
 | --------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ---------------- | ------- |
 | size            | `'small' \| 'default' \| 'large'`                | 联级选择器的大小                                                                                     | `'default'`      | -       |
 | state           | `'default' \| 'success' \| 'error' \| 'warning'` | 联级选择器的状态                                                                                     | `'default'`      | -       |
-| prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                                                         | `null`           | -       |
+| prefix          | `VueComponent`                                   | 前缀图标，使用前缀插槽时无效                                                                         | `null`           | -       |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                                                       | `''`             | -       |
-| suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                                                         | `null`           | -       |
+| suffix          | `VueComponent`                                   | 后缀图标，使用后缀插槽时无效                                                                         | `null`           | -       |
 | suffix-color    | `string`                                         | 后缀内容的颜色，会影响后缀插槽                                                                       | `''`             | -       |
 | no-suffix       | `boolean`                                        | 设置是否禁用后缀图标                                                                                 | `false`          | -       |
 | static-suffix   | `boolean`                                        | 设置后缀图标是否为静态的                                                                             | `false`          | -       |
@@ -179,7 +179,7 @@ interface CascaderOptionState {
 | transfer        | `boolean \| string`                              | 设置选项列表的渲染位置，设置为 `true` 时默认渲染至 `<body>`                                          | `false`          | -       |
 | empty-text      | `string`                                         | 设置空选项时的提示语                                                                                 | `locale.empty`   | -       |
 | loading         | `boolean`                                        | 设置是否为加载中                                                                                     | `false`          | -       |
-| loading-icon    | `Record<string, any>`                            | 设置加载中的图标                                                                                     | `Spinner`        | -       |
+| loading-icon    | `VueComponent`                                   | 设置加载中的图标                                                                                     | `Spinner`        | -       |
 | loading-lock    | `boolean`                                        | 设置在加载中时是否为只读                                                                             | `false`          | -       |
 | loading-effect  | `string`                                         | 设置加载中图标的效果动画                                                                             | `false`          | `2.1.0` |
 | transparent     | `boolean`                                        | 设置是否为透明模式                                                                                   | `false`          | `2.0.2` |

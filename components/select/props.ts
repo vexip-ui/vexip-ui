@@ -5,6 +5,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   localeProp,
   sizeProp,
   stateProp,
@@ -22,8 +23,7 @@ import type {
   SelectEvent,
   SelectFilter,
   SelectKeyConfig,
-  SelectRawOption,
-  SelectValue
+  SelectRawOption
 } from './symbol'
 
 type CustomChangeEvent =
@@ -47,12 +47,12 @@ export const selectProps = buildProps({
   transitionName: String,
   outsideClose: booleanProp,
   placeholder: String,
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   noSuffix: booleanProp,
-  value: valuesProp as PropType<SelectValue>,
+  value: valuesProp,
   multiple: booleanProp,
   clearable: booleanProp,
   maxListHeight: Number,
@@ -63,7 +63,7 @@ export const selectProps = buildProps({
   emptyText: String,
   staticSuffix: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   keyConfig: Object as PropType<SelectKeyConfig>,

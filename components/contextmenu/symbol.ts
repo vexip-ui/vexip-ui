@@ -1,4 +1,5 @@
-import type { ComponentPublicInstance } from 'vue'
+import type { ComponentPublicInstance, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
 
 export type Key = string | number
 
@@ -18,8 +19,9 @@ export interface ContextmenuConfig {
 export interface ContextmenuOptions {
   clientX: number,
   clientY: number,
-  appear?: boolean,
-  configs: ContextmenuConfig[]
+  configs: ContextmenuConfig[],
+  target?: MaybeRef<string | MaybeInstance>,
+  appear?: boolean
 }
 
 export interface ContextmenuInstance extends ComponentPublicInstance {

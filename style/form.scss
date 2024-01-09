@@ -21,6 +21,7 @@ $form: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
 
@@ -126,8 +127,7 @@ $form: map.merge(
   &--label-top &__help,
   &--label-left &__help {
     order: 1;
-    margin-inline-start: 3px;
-    margin-inline-end: 0;
+    margin-inline: 3px 0;
   }
 
   @mixin asterisk {

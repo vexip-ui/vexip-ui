@@ -47,7 +47,9 @@ export type ImageGroupCProps = ConfigurableProps<ExtractPropTypes<typeof imageGr
 export const imageViewerProps = buildProps({
   active: booleanProp,
   index: Number,
+  /** @deprecated */
   srcs: [String, Array] as PropType<string | string[]>,
+  srcList: [String, Array] as PropType<string | string[]>,
   transfer: booleanStringProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, src: string) => void>(),

@@ -19,6 +19,7 @@ $masker: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
   @include fixed;
 
   z-index: get-css-var('masker-z-index');
@@ -44,6 +45,13 @@ $masker: map.merge(
 
   &--inner &__mask {
     position: absolute;
+  }
+
+  &__placeholder {
+    @include fixed;
+
+    pointer-events: none;
+    visibility: hidden;
   }
 
   &--disabled {

@@ -1,12 +1,29 @@
 <template>
   <Input v-model:value="filter" clearable></Input>
-  <Tree :data="data" :filter="filter"></Tree>
+  <p>
+    仅过滤叶子节点：
+    <Switch v-model:value="filterLeaf"></Switch>
+  </p>
+  <Button style="margin-bottom: 10px" @click="getData">
+    获取数据
+  </Button>
+  <Tree
+    ref="tree"
+    :data="data"
+    :filter="filter"
+    :filter-leaf="filterLeaf"
+  ></Tree>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import type { TreeExposed } from 'vexip-ui'
+
+const tree = ref<TreeExposed>()
+
 const filter = ref('')
+const filterLeaf = ref(false)
 const data = [
   {
     id: 1,
@@ -60,6 +77,10 @@ const data = [
     parent: 2
   }
 ]
+
+function getData() {
+  console.info(tree.value?.getTreeData(true))
+}
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
     "module": "esnext",
     "allowJs": false,
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
@@ -13,7 +13,10 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@vexip-ui/*": ["../*/src"]
+    }
   },
   "include": ["scripts"],
   "exclude": ["node_modules"]

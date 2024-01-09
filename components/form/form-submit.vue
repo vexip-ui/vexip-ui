@@ -1,5 +1,107 @@
+<script setup lang="ts">
+import { Button } from '@/components/button'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
+
+import { computed, inject, ref, toRef } from 'vue'
+
+import { createIconProp, emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { useSetTimeout } from '@vexip-ui/hooks'
+import { isPromise } from '@vexip-ui/utils'
+import { formSubmitProps } from './props'
+import { FORM_ACTIONS, FORM_PROPS } from './symbol'
+
+defineOptions({ name: 'FormSubmit' })
+
+const _props = defineProps(formSubmitProps)
+const props = useProps('form-submit', _props, {
+  size: null,
+  locale: null,
+  type: 'primary',
+  label: null,
+  dashed: null,
+  text: null,
+  simple: null,
+  ghost: null,
+  disabled: null,
+  circle: null,
+  loadingIcon: createIconProp(),
+  loadingEffect: null,
+  icon: createIconProp(),
+  color: null,
+  buttonType: null,
+  block: null,
+  onBeforeSubmit: {
+    default: null,
+    isFunc: true
+  }
+})
+
+defineSlots<{
+  default: () => any,
+  icon: () => any,
+  loading: () => any
+}>()
+
+const fieldActions = inject(FIELD_OPTIONS, null)
+
+const formProps = inject(FORM_PROPS, {})
+const actions = inject(FORM_ACTIONS, null)
+
+const nh = useNameHelper('form')
+const locale = useLocale('form', toRef(props, 'locale'))
+
+const { timer } = useSetTimeout()
+
+const loading = ref(false)
+
+const submit = ref<HTMLElement>()
+
+const isNative = computed(() => formProps.method && formProps.action)
+const isInherit = computed(() => !!actions || props.inherit)
+const isLoading = computed(() => {
+  return loading.value || (fieldActions ? fieldActions.loading.value : false)
+})
+
+defineExpose({ submit, isNative, isLoading })
+
+async function handleSubmit() {
+  if (props.disabled || loading.value || !actions) return
+
+  loading.value = true
+
+  const errors = await actions.validate()
+
+  if (errors.length) {
+    emitEvent(props.onError, errors)
+  } else {
+    let result: unknown = true
+
+    if (typeof props.onBeforeSubmit === 'function') {
+      result = props.onBeforeSubmit()
+
+      if (isPromise(result)) {
+        result = await result
+      }
+    }
+
+    if (result !== false) {
+      emitEvent(props.onSubmit)
+
+      if (isNative.value) {
+        submit.value?.click()
+      }
+    }
+  }
+
+  timer.loading = setTimeout(() => {
+    loading.value = false
+  }, 300)
+}
+</script>
+
 <template>
   <Button
+    v-bind="$attrs"
     :inherit="isInherit"
     :class="nh.be('submit')"
     :size="props.size"
@@ -38,114 +140,3 @@
     ></button>
   </Button>
 </template>
-
-<script lang="ts">
-import { Button } from '@/components/button'
-import { FIELD_OPTIONS } from '@/components/form/symbol'
-
-import { computed, defineComponent, inject, ref, toRef } from 'vue'
-
-import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/hooks'
-import { isPromise } from '@vexip-ui/utils'
-import { formSubmitProps } from './props'
-import { FORM_ACTIONS, FORM_PROPS } from './symbol'
-
-export default defineComponent({
-  name: 'FormSubmit',
-  components: {
-    Button
-  },
-  props: formSubmitProps,
-  emits: [],
-  setup(_props) {
-    const fieldActions = inject(FIELD_OPTIONS, null)
-
-    const props = useProps('form-submit', _props, {
-      size: null,
-      locale: null,
-      type: 'primary',
-      label: null,
-      dashed: null,
-      text: null,
-      simple: null,
-      ghost: null,
-      disabled: null,
-      circle: null,
-      loadingIcon: null,
-      loadingEffect: null,
-      icon: null,
-      color: null,
-      buttonType: null,
-      block: null,
-      onBeforeSubmit: {
-        default: null,
-        isFunc: true
-      }
-    })
-
-    const formProps = inject(FORM_PROPS, {})
-    const actions = inject(FORM_ACTIONS, null)
-
-    const { timer } = useSetTimeout()
-
-    const loading = ref(false)
-
-    const submit = ref<HTMLElement>()
-
-    const isNative = computed(() => formProps.method && formProps.action)
-    const isInherit = computed(() => !!actions || props.inherit)
-    const isLoading = computed(() => {
-      return loading.value || (fieldActions ? fieldActions.loading.value : false)
-    })
-
-    async function handleSubmit() {
-      if (props.disabled || loading.value || !actions) return
-
-      loading.value = true
-
-      const errors = await actions.validate()
-
-      if (errors.length) {
-        emitEvent(props.onError, errors)
-      } else {
-        let result: unknown = true
-
-        if (typeof props.onBeforeSubmit === 'function') {
-          result = props.onBeforeSubmit()
-
-          if (isPromise(result)) {
-            result = await result
-          }
-        }
-
-        if (result !== false) {
-          emitEvent(props.onSubmit)
-
-          if (isNative.value) {
-            submit.value?.click()
-          }
-        }
-      }
-
-      timer.loading = setTimeout(() => {
-        loading.value = false
-      }, 300)
-    }
-
-    return {
-      props,
-      nh: useNameHelper('form'),
-      locale: useLocale('form', toRef(props, 'locale')),
-
-      submit,
-
-      isNative,
-      isInherit,
-      isLoading,
-
-      handleSubmit
-    }
-  }
-})
-</script>

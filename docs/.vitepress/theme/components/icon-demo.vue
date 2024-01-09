@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
-import IconLoading from './icon-loading.vue'
+import IconLoadingSvg from './icon-loading-svg.vue'
 
 const { locale } = useI18n({ useScope: 'global' })
 
 const icons = {
-  loading: IconLoading
+  loading: IconLoadingSvg
 }
 </script>
 
 <template>
   <div class="icon-demo">
     <Icon :scale="2">
-      <IconLoading></IconLoading>
+      <IconLoadingSvg></IconLoadingSvg>
     </Icon>
     <ConfigProvider :icons="icons" :locale="{ locale: locale as string }">
       <Space vertical>

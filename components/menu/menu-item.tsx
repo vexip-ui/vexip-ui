@@ -10,7 +10,7 @@ import {
   inject,
   nextTick,
   onBeforeUnmount,
-  onMounted,
+  // onMounted,
   provide,
   reactive,
   ref,
@@ -19,7 +19,14 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import {
+  createIconProp,
+  emitEvent,
+  useHoverDelay,
+  useIcons,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
 import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
@@ -44,10 +51,7 @@ const MenuItem = defineComponent({
         default: null,
         static: true
       },
-      icon: {
-        isFunc: true,
-        default: null
-      },
+      icon: createIconProp(),
       iconProps: null,
       disabled: false,
       transfer: null,
@@ -67,6 +71,7 @@ const MenuItem = defineComponent({
 
     const nh = useNameHelper('menu')
     const icons = useIcons()
+    const hoverDelay = useHoverDelay()
 
     const { isRtl } = useRtl()
 
@@ -89,7 +94,8 @@ const MenuItem = defineComponent({
       placement,
       transfer,
       wrapper,
-      popper: computed(() => popper.value?.wrapper)
+      popper: computed(() => popper.value?.wrapper),
+      shift: { crossAxis: true }
     })
 
     const isGroup = computed(() => !!(slots.group || props.children?.length))
@@ -192,19 +198,23 @@ const MenuItem = defineComponent({
 
     if (menuState) {
       watch(
-        () => [props.label, menuState.currentActive],
+        [() => props.label, () => menuState.currentActive],
         () => {
           selected.value = props.label === menuState.currentActive
         },
         { immediate: true }
       )
-    }
 
-    onMounted(() => {
-      if (typeof menuState?.increaseItem === 'function') {
+      if (typeof menuState.increaseItem === 'function') {
         menuState.increaseItem(itemState)
       }
-    })
+    }
+
+    // onMounted(() => {
+    //   if (typeof menuState?.increaseItem === 'function') {
+    //     menuState.increaseItem(itemState)
+    //   }
+    // })
 
     onBeforeUnmount(() => {
       if (typeof menuState?.decreaseItem === 'function') {
@@ -292,7 +302,7 @@ const MenuItem = defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleMouseLeave() {
@@ -310,7 +320,7 @@ const MenuItem = defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleClickOutside() {
@@ -388,6 +398,7 @@ const MenuItem = defineComponent({
         <Tooltip
           placement={isRtl.value ? 'left' : 'right'}
           reverse={tooltipReverse.value}
+          shift
           transfer
           disabled={tooltipDisabled.value}
         >
@@ -415,13 +426,9 @@ const MenuItem = defineComponent({
                       ? (
                           renderSlot(slots, 'icon')
                         )
-                      : typeof props.icon === 'function'
-                        ? (
-                            props.icon()
-                          )
-                        : (
-                          <Icon {...props.iconProps} icon={props.icon}></Icon>
-                          )}
+                      : (
+                        <Icon {...props.iconProps} icon={props.icon}></Icon>
+                        )}
                   </div>
                 )}
                 <span
@@ -434,7 +441,7 @@ const MenuItem = defineComponent({
                 </span>
                 {isGroup.value && (
                   <Icon
-                    {...icons.value.arrowDown}
+                    {...icons.value.angleDown}
                     class={{
                       [nh.be('arrow')]: true,
                       [nh.bem('arrow', 'visible')]: groupExpanded.value,

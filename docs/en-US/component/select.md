@@ -42,7 +42,7 @@ Set the `max-list-height` prop to adjust the max height of the options list.
 
 ### Get Label
 
-When you need to quickly get the `label` value, you can get it through the `@update:label` event.
+When you need to quickly get the `label` value, you can get it through the `update:label` event.
 
 Of course you can use `v-model:label` as in the example, but the component will not update option according to `label`.
 
@@ -168,7 +168,7 @@ Add the `transparent` prop to remove the original style, and then you can wrap t
 
 ### List Extra Content
 
-^[Since v2.2.7](!s)
+==!s|2.2.7==
 
 Any content can be added before and after the list via the `prepend` and `append` slots respectively.
 
@@ -221,9 +221,9 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | disabled        | `boolean`                                        | Set whether to disable the selector                                                                                                                           | `false`        | -        |
 | outside-close   | `boolean`                                        | Set whether to close the component by clicking outside                                                                                                        | `false`        | -        |
 | placeholder     | `string`                                         | Same as native placeholder                                                                                                                                    | `''`           | -        |
-| prefix          | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                                                                               | `null`         | -        |
+| prefix          | `VueComponent`                                   | The prefix icon, invalid when using prefix slot                                                                                                               | `null`         | -        |
 | prefix-color    | `string`                                         | The color of the prefix content, affects the prefix slot                                                                                                      | `''`           | -        |
-| suffix          | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                                                                                                               | `null`         | -        |
+| suffix          | `VueComponent`                                   | The suffix icon, invalid when using suffix slot                                                                                                               | `null`         | -        |
 | suffix-color    | `string`                                         | The color of the suffix content, which affects the suffix slot                                                                                                | `''`           | -        |
 | no-suffix       | `boolean`                                        | Set whether to disable suffix icon                                                                                                                            | `false`        | -        |
 | static-suffix   | `boolean`                                        | Set whether the suffix icon is static                                                                                                                         | `false`        | -        |
@@ -239,7 +239,7 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | empty-text      | `string`                                         | Prompt for empty options                                                                                                                                      | `locale.empty` | -        |
 | key-config      | `SelectKeyConfig`                                | Set the key names of options when parsing `options`                                                                                                           | `{}`           | `2.0.0`  |
 | loading         | `boolean`                                        | Set whether is loading                                                                                                                                        | `false`        | `2.0.0`  |
-| loading-icon    | `Record<string, any>`                            | Set the loading icon                                                                                                                                          | `Spinner`      | `2.0.0`  |
+| loading-icon    | `VueComponent`                                   | Set the loading icon                                                                                                                                          | `Spinner`      | `2.0.0`  |
 | loading-lock    | `boolean`                                        | Set whether to be read-only when loading                                                                                                                      | `false`        | `2.0.0`  |
 | loading-effect  | `string`                                         | Set the effect animation for the loading icon                                                                                                                 | `false`        | `2.1.0`  |
 | filter          | `boolean \| SelectFilter`                        | The method of filtering `options`, the built-in filter method is used when `true` is passed                                                                   | `false`        | `2.0.0`  |

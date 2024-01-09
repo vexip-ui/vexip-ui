@@ -4,7 +4,7 @@ import type { EventHandler } from '@vexip-ui/utils'
 
 export type NativeScrollMode = Exclude<ScrollMode, 'horizontal-exact'>
 
-export interface ScrollPayload {
+export interface NativeScrollPayload {
   type: NativeScrollMode,
   clientX: number,
   clientY: number,
@@ -12,13 +12,13 @@ export interface ScrollPayload {
   percentY: number
 }
 
-export interface BarScrollPayload {
-  type: 'vertical' | 'horizontal',
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
+// export interface BarScrollPayload {
+//   type: 'vertical' | 'horizontal',
+//   clientX: number,
+//   clientY: number,
+//   percentX: number,
+//   percentY: number
+// }
 
 export interface NativeScrollState {
   scrollX: number,
@@ -50,11 +50,11 @@ export interface NativeScrollExposed extends ComponentPublicInstance {
   xBarLength: number,
   yBarLength: number,
   content?: HTMLElement,
-  refresh: () => void,
+  refresh: () => Promise<void>,
   scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,
   scrollToElement: (el: string | Element, duration?: number, offset?: number) => Promise<void>,
-  ensureInView: (el: string | Element, duration?: number, offset?: number) => void,
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => Promise<void>,
   getXScrollLimit: () => number[],
   getYScrollLimit: () => number[],
   addScrollListener: (listener: EventHandler) => void,

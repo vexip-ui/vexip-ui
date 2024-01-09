@@ -1,4 +1,4 @@
-# NativeScroll 原生滚动 ^[Since v1.3.1](!s)
+# NativeScroll 原生滚动 ==!s|1.3.1==
 
 用于需要展示超出一个区域范围的内容，可以使用户滚动浏览，内部实现采用浏览器原生滚动以获得更好的兼容性与性能。
 
@@ -141,10 +141,10 @@ interface NativeScrollSlotParams {
 
 ### NativeScroll 方法
 
-| 名称            | 说明                                 | 签名                                                                           | 始于    |
-| --------------- | ------------------------------------ | ------------------------------------------------------------------------------ | ------- |
-| refresh         | 刷新滚动，将会触发滚动的重新计算大小 | `() => void`                                                                   | -       |
-| scrollTo        | 滚动到指定位置                       | `(x: number, y: number, duration?: number) => Promise<void>`                   | -       |
-| scrollBy        | 滚动指定的距离                       | `(dx: number, dy: number, duration?: number) => Promise<void>`                 | -       |
-| scrollToElement | 滚动到指定元素所在的位置             | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>` | -       |
-| ensureInView    | 确保提供的元素在滚动的可视区内       | `(el: string \| Element, duration?: number, offset?: number) => void`          | `2.1.4` |
+| 名称            | 说明                                 | 签名                                                                            | 始于    |
+| --------------- | ------------------------------------ | ------------------------------------------------------------------------------- | ------- |
+| refresh         | 刷新滚动，将会触发滚动的重新计算大小 | `() => Promise<void>`                                                           | -       |
+| scrollTo        | 滚动到指定位置                       | `(x: number, y: number, duration?: number) => Promise<void>`                    | -       |
+| scrollBy        | 滚动指定的距离                       | `(dx: number, dy: number, duration?: number) => Promise<void>`                  | -       |
+| scrollToElement | 滚动到指定元素所在的位置             | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>`  | -       |
+| ensureInView    | 确保提供的元素在滚动的可视区内       | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>s` | `2.1.4` |

@@ -12,7 +12,7 @@
       @click="handleToggle()"
     >
       <div :class="nh.be('arrow')">
-        <Icon v-bind="icons.arrowRight"></Icon>
+        <Icon v-bind="icons.angleRight"></Icon>
       </div>
       <slot name="title">
         <div v-if="props.icon" :class="nh.be('icon')">
@@ -44,7 +44,7 @@ import { Icon } from '@/components/icon'
 
 import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { createIconProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -75,7 +75,7 @@ export default defineComponent({
         default: 'right' as CollapseArrowType,
         validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value)
       },
-      icon: null,
+      icon: createIconProp(),
       ghost: false
     })
 

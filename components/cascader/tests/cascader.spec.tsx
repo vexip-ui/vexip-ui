@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { ChevronDown, GithubB, Spinner } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Cascader } from '..'
 
 interface CascaderOption {
@@ -12,6 +13,7 @@ interface CascaderOption {
   children: CascaderOption[] | null
 }
 
+const icons = globalIcons.value
 const TEXT = 'Text'
 
 function createOptions(depth = 3, prefix = '', iterator = 1) {
@@ -245,21 +247,21 @@ describe('Cascader', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <Cascader prefix={GithubB}></Cascader>)
+    const wrapper = mount(() => <Cascader prefix={Github}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <Cascader prefix={GithubB} prefix-color={'red'}></Cascader>)
+    const wrapper = mount(() => <Cascader prefix={Github} prefix-color={'red'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <Cascader prefix={GithubB}>
+      <Cascader prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -267,7 +269,7 @@ describe('Cascader', () => {
     ))
 
     expect(wrapper.find('.vxp-cascader__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -275,22 +277,22 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <Cascader suffix={GithubB} suffix-color={'red'}></Cascader>)
+    const wrapper = mount(() => <Cascader suffix={Github} suffix-color={'red'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <Cascader suffix={GithubB}>
+      <Cascader suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -298,7 +300,7 @@ describe('Cascader', () => {
     ))
 
     expect(wrapper.find('.vxp-cascader__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -311,7 +313,7 @@ describe('Cascader', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Cascader state={state}></Cascader>)
 
       expect(wrapper.find('.vxp-cascader__selector').classes()).toContain(
@@ -324,11 +326,11 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -342,10 +344,10 @@ describe('Cascader', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Cascader loading loading-icon={GithubB}></Cascader>)
+    const wrapper = mount(() => <Cascader loading loading-icon={Github}></Cascader>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('select options', async () => {

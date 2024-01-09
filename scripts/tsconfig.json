@@ -4,13 +4,17 @@
     "module": "esnext",
     "allowJs": false,
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "useUnknownInCatchVariables": false,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@vexip-ui/*": ["../common/*/src"]
+    }
   },
   "include": ["*.ts"]
 }

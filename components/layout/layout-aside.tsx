@@ -41,6 +41,7 @@ export default defineComponent({
 
     const nh = useNameHelper('layout')
     const icons = useIcons()
+
     const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
     const currentExpanded = ref(props.expanded)
@@ -224,7 +225,7 @@ export default defineComponent({
                   renderSlot(slots, 'expand', slotParams)
                 )
               : (
-                <Icon {...icons.value.caretRight}></Icon>
+                <Icon {...icons.value.angleRight}></Icon>
                 )}
           </div>
         </CustomTag>

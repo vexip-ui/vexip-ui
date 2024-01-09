@@ -1,5 +1,5 @@
-import type { InjectionKey } from 'vue'
-import type { MaybeElement, MaybeInstance, MaybeRef, Placement } from '@vexip-ui/hooks'
+import type { InjectionKey, MaybeRef } from 'vue'
+import type { MaybeElement, MaybeInstance, Placement } from '@vexip-ui/hooks'
 import type { BubbleType } from '@/components/bubble'
 
 export type TourType = BubbleType

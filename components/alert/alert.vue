@@ -5,7 +5,7 @@ import { Icon } from '@/components/icon'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { getRangeWidth } from '@vexip-ui/utils'
+import { adjustAlpha, getRangeWidth, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { alertProps } from './props'
 import { alertTypes } from './symbol'
 
@@ -19,14 +19,18 @@ const props = useProps('alert', _props, {
   },
   title: '',
   colorfulText: false,
-  icon: false,
+  icon: {
+    isFunc: true,
+    default: false
+  },
   closable: false,
   iconColor: '',
   noBorder: false,
   banner: false,
   manual: false,
   scroll: false,
-  scrollSpeed: 1
+  scrollSpeed: 1,
+  color: null
 })
 
 const slots = defineSlots<{
@@ -75,6 +79,25 @@ const className = computed(() => {
     [nh.bm('no-border')]: !props.banner && props.noBorder,
     [nh.bm('banner')]: props.banner
   }
+})
+const style = computed(() => {
+  if (!props.color) return undefined
+
+  const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
+  const black = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-black')) || '#000')
+  const baseColor = parseColorToRgba(props.color)
+
+  return nh.cvm({
+    'bg-color': adjustAlpha(baseColor, 0.2).toString(),
+    'b-color': adjustAlpha(baseColor, 0.5).toString(),
+    'icon-color': mixColor(black, baseColor, 0.2).toString(),
+    ...(props.colorfulText
+      ? {
+          'text-color': mixColor(black, baseColor, 0.2).toString(),
+          'title-color': mixColor(black, baseColor, 0.2).toString()
+        }
+      : {})
+  })
 })
 const iconComp = computed(() => {
   if (typeof props.icon === 'boolean') {
@@ -142,7 +165,12 @@ function handleScrollEnd() {
 
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
-    <div v-if="!closed" :class="className" role="alert">
+    <div
+      v-if="!closed"
+      :class="className"
+      role="alert"
+      :style="style"
+    >
       <div :class="nh.be('wrapper')">
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">

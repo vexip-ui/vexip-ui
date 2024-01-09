@@ -30,19 +30,11 @@
 
 :::
 
-:::demo radio/vertical
-
-### 垂直排列
-
-添加 `vertical` 属性可以设置单选框组垂直布局。
-
-:::
-
 :::demo radio/border
 
 ### 边框样式
 
-添加 `border` 属性可以设置单选框组为边框样式。
+设置 `shape` 属性为 `'border'` 可以置单选框组为边框样式。
 
 :::
 
@@ -50,7 +42,25 @@
 
 ### 按钮样式
 
-添加 `button` 属性可以设置单选框组为按钮样式。
+==!s|2.2.8==
+
+设置 `shape` 属性为 `'button'` 可以置单选框组为按钮样式。
+
+:::
+
+:::demo radio/button-group
+
+### 按钮组样式
+
+设置 `shape` 属性为 `'button-group'` 可以置单选框组为按钮组样式。
+
+:::
+
+:::demo radio/vertical
+
+### 垂直排列
+
+添加 `vertical` 属性可以设置单选框组垂直布局。
 
 :::
 
@@ -85,7 +95,10 @@
 ### 预设类型
 
 ```ts
-type RawOption =
+type RadioShape = 'default' | 'border' | 'button'
+type RadioGroupShape = RadioShape | 'button-group'
+
+type RadioRawOption =
   | string
   | {
     label: string | number | boolean,
@@ -104,10 +117,11 @@ type RawOption =
 | size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                                         | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                                         | `'default'` | -       |
 | disabled     | `boolean`                                        | 设置是否禁用单选框                                                                   | `false`     | -       |
-| border       | `boolean`                                        | 设置单选框是否具有边框                                                               | `false`     | -       |
+| ~~border~~   | `boolean`                                        | 设置单选框是否具有边框                                                               | `false`     | -       |
 | loading      | `boolean`                                        | 设置是否为加载中                                                                     | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                                             | `false`     | `2.0.0` |
 | name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                    | `''`        | `2.2.2` |
+| shape        | `RadioShape`                                     | 设置单选框的外形                                                                     | `'default'` | `2.2.8` |
 
 ### Radio 事件
 
@@ -129,13 +143,14 @@ type RawOption =
 | vertical       | `boolean`                         | 设置是否开启纵向显示                                               | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | 单选框的大小，会覆盖单选框单独设置的 `size`                        | `'default'` | -       |
 | disabled       | `boolean`                         | 设置是否禁用单选框组                                               | `false`     | -       |
-| button         | `boolean`                         | 设置是否开启按钮模式，在纵向显示时暂不支持                         | `false`     | -       |
-| border         | `boolean`                         | 设置单选框是否具有边框                                             | `false`     | -       |
-| options        | `RawOption[]`                     | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]`        | -       |
+| ~~button~~     | `boolean`                         | 设置是否开启按钮模式，在纵向显示时暂不支持                         | `false`     | -       |
+| ~~border~~     | `boolean`                         | 设置单选框是否具有边框                                             | `false`     | -       |
+| options        | `RadioRawOption[]`                | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]`        | -       |
 | loading        | `boolean`                         | 设置是否为加载中                                                   | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`             | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                    | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                         | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
 | loading-effect | `string`                          | 设置加载中图标的效果动画，只在按钮模式生效                         | `false`     | `2.0.0` |
+| shape          | `RadioGroupShape`                 | 设置单选框组的外形                                                 | `'default'` | `2.2.8` |
 
 ### RadioGroup 事件
 

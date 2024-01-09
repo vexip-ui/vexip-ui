@@ -28,7 +28,7 @@ export function getGuideConfig(): GuideGroup[] {
         { name: 'ssr', i18n: 'ssr' },
         { name: 'custom-form-control', i18n: 'customFormControl' },
         { name: 'development-guide', i18n: 'developmentGuide' },
-        { name: 'custom-internal-icons', i18n: 'customInternalIcons' }
+        { name: 'change-icons', i18n: 'changeIcons' }
       ]
     }
   ]

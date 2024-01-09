@@ -6,7 +6,7 @@
 $scroll: () !default;
 $scroll: map.merge(
   (
-    move-duration: 140ms,
+    move-duration: 180ms,
     move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
   ),
   $scroll
@@ -18,6 +18,7 @@ $scroll: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
   overflow: hidden;
@@ -67,8 +68,8 @@ $scroll: map.merge(
 
   &__extra {
     position: absolute;
-    top: 0;
     inset-inline-start: 0;
+    top: 0;
     width: 100%;
     height: 100%;
 

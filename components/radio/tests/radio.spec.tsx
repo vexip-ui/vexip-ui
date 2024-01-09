@@ -87,14 +87,14 @@ describe('Radio', () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 
-  it('border', async () => {
+  it('shape border', async () => {
     const wrapper = mount(Radio, {
       props: { label: TEXT }
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--border')
 
-    await wrapper.setProps({ border: true })
+    await wrapper.setProps({ shape: 'border' })
     expect(wrapper.classes()).toContain('vxp-radio--border')
   })
 
@@ -187,12 +187,13 @@ describe('Radio', () => {
     const items = wrapper.findAllComponents(Radio)
 
     items.forEach(item => {
-      expect(item.classes()).not.toContain('vxp-radio--loading')
+      expect(item.classes()).not.toContain('vxp-radio--readonly')
     })
 
     await wrapper.setProps({ loading: true, loadingLock: true })
     items.forEach(item => {
       expect(item.classes()).toContain('vxp-radio--loading')
+      expect(item.classes()).toContain('vxp-radio--readonly')
     })
 
     await wrapper.find('input[type="radio"]').trigger('change')
@@ -235,15 +236,36 @@ describe('Radio', () => {
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--vertical')
   })
 
-  it('group border', () => {
-    const wrapper = mount(() => <RadioGroup border></RadioGroup>)
+  it('group shape border', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'border'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
 
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--border')
+    expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--border')
   })
 
-  it('group button', () => {
-    const wrapper = mount(() => <RadioGroup button></RadioGroup>)
+  it('group shape button', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'button'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
 
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--button')
+    expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--button')
+  })
+
+  it('group shape button group', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'button-group'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
+
+    expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--button-group')
+    expect(wrapper.find('.vxp-radio').classes()).not.toContain('vxp-radio--button-group')
   })
 })

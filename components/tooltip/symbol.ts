@@ -1,17 +1,25 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export type TooltipTheme = 'light' | 'dark'
-export type TooltipTrigger = 'hover' | 'click' | 'focus' | 'custom'
+export type TooltipTrigger = 'hover' | 'click' | 'focus' | 'hover-focus' | 'custom'
+export type TooltipShift = 'horizontal' | 'vertical' | 'both'
 
 export type TooltipVirtual =
   | {
     getBoundingClientRect: () => DOMRect
   }
   | {
+    $el: {
+      getBoundingClientRect: () => DOMRect
+    }
+  }
+  | {
     x: number,
     y: number
   }
 export interface TooltipExposed extends ComponentPublicInstance {
+  rendering: boolean,
+  trigger: HTMLElement | undefined | null,
   toggleVisible: (visible: boolean) => void,
   updatePopper: () => void
 }

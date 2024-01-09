@@ -4,7 +4,7 @@ import { Popper } from '@/components/popper'
 
 import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
 
-import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { useHoverDelay, useIcons, useNameHelper } from '@vexip-ui/config'
 import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_ITEM_STATE, MENU_STATE } from './symbol'
@@ -26,6 +26,8 @@ export default defineComponent({
 
     const nh = useNameHelper('menu')
     const icons = useIcons()
+    const hoverDelay = useHoverDelay()
+
     const groupExpanded = ref(false)
     const sonSelected = ref(false)
     const popperShow = ref(false)
@@ -92,7 +94,7 @@ export default defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleMouseLeave() {
@@ -102,7 +104,7 @@ export default defineComponent({
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleClick() {

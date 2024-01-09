@@ -15,7 +15,7 @@ import {
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { createSlotRender, useMounted } from '@vexip-ui/hooks'
-import { getXBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
+import { getYBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
 import LayoutHeader from './layout-header'
 import LayoutFooter from './layout-footer'
@@ -242,7 +242,7 @@ export default defineComponent({
 
     function handleResize() {
       if (scroll.value?.$el) {
-        viewHeight.value = `${scroll.value.$el.offsetHeight - getXBorder(scroll.value.$el)}px`
+        viewHeight.value = `${scroll.value.$el.offsetHeight - getYBorder(scroll.value.$el)}px`
       }
 
       emitEvent(props.onContentResize)
@@ -294,7 +294,7 @@ export default defineComponent({
 
     function renderHeader() {
       if (props.noHeader) {
-        return null
+        return <header role={'none'} aria-hidden style={'display: none'}></header>
       }
 
       if (slots.header) {
@@ -308,6 +308,7 @@ export default defineComponent({
           v-model:user-dropped={userDropped.value}
           v-model:color={currentColor.value}
           v-model:dark-mode={isDark.value}
+          inherit
           locale={props.locale}
           user={props.user}
           actions={props.actions}
@@ -341,7 +342,7 @@ export default defineComponent({
 
     function renderAside() {
       if (props.noAside) {
-        return null
+        return <div role={'none'} aria-hidden style={'display: none'}></div>
       }
 
       return (
@@ -363,6 +364,7 @@ export default defineComponent({
                 ref={aside}
                 v-model:expanded={asideExpanded.value}
                 v-model:reduced={asideReduced.value}
+                inherit
                 sign-type={currentSignType.value}
                 menus={props.menus}
                 menu-props={props.menuProps}
@@ -406,6 +408,7 @@ export default defineComponent({
 
       return (
         <LayoutFooter
+          inherit
           copyright={props.copyright}
           links={props.links}
           vertical-links={props.verticalLinks}
@@ -467,10 +470,11 @@ export default defineComponent({
         <NativeScroll
           ref={scroll}
           class={className.value}
-          style={style.value}
+          inherit={props.inherit}
           use-y-bar
           observe-deep
           bar-class={[nh.be('scrollbar'), props.innerClasses.scrollbar]}
+          style={style.value}
           onResize={handleResize}
         >
           {renderWrapper()}

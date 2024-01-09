@@ -1,9 +1,17 @@
-import { defineComponent, inject, onBeforeUnmount, reactive, renderSlot, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  reactive,
+  renderSlot,
+  watch
+} from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
-import { TABLE_ACTIONS, columnTypes } from './symbol'
+import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes, noopFormatter } from './symbol'
 
 import type { ColumnWithKey, Data, TableRowState, TableTextAlign } from './symbol'
 
@@ -13,12 +21,23 @@ const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-const deepProps: ColumnPropKey[] = ['class', 'style', 'attrs', 'filter', 'sorter', 'meta']
 const ignoredProps: ColumnPropKey[] = [
   'renderer',
   'headRenderer',
   'filterRenderer',
   'summaryRenderer'
+]
+const triggerProps: ColumnPropKey[] = [
+  'idKey',
+  'fixed',
+  'type',
+  'width',
+  'sorter',
+  'order',
+  'orderLabel',
+  'disableRow',
+  'headSpan',
+  'cellSpan'
 ]
 const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
@@ -30,6 +49,7 @@ const funcProp = {
 
 export default defineComponent({
   name: 'TableColumn',
+  inheritAttrs: false,
   props: tableColumnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
@@ -69,7 +89,8 @@ export default defineComponent({
         default: 0,
         static: true
       },
-      noEllipsis: false,
+      noEllipsis: null,
+      ellipsis: null,
       checkboxSize: createSizeProp(),
       disableRow: {
         default: null,
@@ -92,10 +113,15 @@ export default defineComponent({
       cellSpan: funcProp,
       noSummary: false,
       summaryRenderer: funcProp,
-      indented: false
+      indented: false,
+      formatter: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
+    const parentActions = inject(COLUMN_GROUP_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
 
     for (const key of propKeys) {
@@ -106,24 +132,64 @@ export default defineComponent({
       ;(options[aliasKey] as any) = props[key]
 
       if (key === 'idKey') {
+        const update = (value: string | number) => {
+          if (isNull(value) && props.type) {
+            ;(options[aliasKey] as any) = value = `__vxp_${props.type}`
+          } else {
+            ;(options[aliasKey] as any) = value
+          }
+        }
+
+        update(props.idKey)
         watch(
-          () => props[key],
+          () => props.idKey,
           value => {
-            if (isNull(value) && props.type) {
-              (options[aliasKey] as any) = value = `__vxp_${props.type}`
-            } else {
-              (options[aliasKey] as any) = value
+            update(value)
+            tableAction?.updateColumns()
+          }
+        )
+      } else if (key === 'noEllipsis') {
+        const cancel = watch(
+          () => props.noEllipsis,
+          value => {
+            if (!isNull(value)) {
+              warnOnce(
+                "[vexip-ui:TableColumn] 'no-ellipsis' prop has been deprecated, please use" +
+                  "'ellipsis' prop to replace it"
+              )
+              cancel()
             }
+          }
+        )
+      } else if (key === 'filter') {
+        const filterWithoutMeta = computed(() => {
+          if (props.filter) {
+            const { meta, ...filter } = props.filter
+            return filter
+          }
+
+          return props.filter
+        })
+
+        watch(
+          filterWithoutMeta,
+          () => {
+            options.filter = props.filter
+            tableAction?.updateColumns()
           },
-          { immediate: true }
+          { deep: true }
         )
       } else {
+        const trigger = triggerProps.includes(key)
+
         watch(
           () => props[key],
           value => {
-            (options[aliasKey] as any) = value
-          },
-          { deep: deepProps.includes(key) }
+            ;(options[aliasKey] as any) = value
+            trigger
+              ? tableAction?.updateColumns()
+              : tableAction?.setColumnProp(options.key, key, value)
+          }
         )
       }
     }
@@ -138,22 +204,30 @@ export default defineComponent({
     setFilterRenderer()
     setSummaryRenderer()
 
-    tableAction?.increaseColumn(options)
+    if (parentActions) {
+      parentActions.increaseColumn(options)
+
+      onBeforeUnmount(() => {
+        parentActions.decreaseColumn(options)
+      })
+    } else {
+      tableAction?.increaseColumn(options)
+
+      onBeforeUnmount(() => {
+        tableAction?.decreaseColumn(options)
+      })
+    }
 
     // TODO: 在动态列时会触发无限 watch，初步估计是重置单元格合并状态导致的
     // onBeforeUpdate(() => {
     //   setRenderer()
     //   setHeadRenderer()
     //   setFilterRenderer()
-    // })
-
-    onBeforeUnmount(() => {
-      tableAction?.decreaseColumn(options)
-    })
+    // }
 
     function setRenderer() {
       if (options.type && options.type !== 'expand') {
-        (options as any).renderer = undefined
+        ;(options as any).renderer = undefined
         return
       }
 
@@ -172,14 +246,14 @@ export default defineComponent({
 
         const row = data.row
         const rowIndex = data.rowIndex as number
+        const formatter =
+          typeof options.formatter === 'function' ? options.formatter : noopFormatter
 
-        if (typeof props.accessor === 'function') {
-          const result = props.accessor(row as Data, rowIndex)
-
-          return isNull(result) ? '' : String(result)
-        }
-
-        const result = (row as TableRowState)[options.key as unknown as keyof TableRowState]
+        const result = formatter(
+          typeof props.accessor === 'function'
+            ? props.accessor(row as Data, rowIndex)
+            : (row as TableRowState)[options.key as unknown as keyof TableRowState]
+        )
 
         return isNull(result) ? '' : String(result)
       }
@@ -187,7 +261,7 @@ export default defineComponent({
 
     function setHeadRenderer() {
       if (options.type === 'selection') {
-        (options as any).renderer = undefined
+        ;(options as any).renderer = undefined
         return
       }
 

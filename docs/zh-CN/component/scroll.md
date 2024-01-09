@@ -118,6 +118,8 @@ interface ScrollSlotParams {
 | on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`     | 设置滚动前的回调，**不支持**异步函数和 `Promise`，返回值为 `false` 会阻止滚动 | `null`       | -        |
 | use-bar-track    | `boolean`                                                    | 设置滚动条是否启用轨道交互                                                    | `false`      | -        |
 | scroll-tag       | `string`                                                     | 滚动内容包围元素渲染的标签                                                    | `'div'`      | `2.0.13` |
+| no-buffer        | `boolean`                                                    | 是否禁用回弹缓冲效果                                                          | `false`      | -        |
+| no-transition    | `boolean`                                                    | 是否禁用过渡效果                                                              | `false`      | -        |
 
 ### Scroll 事件
 
@@ -142,10 +144,10 @@ interface ScrollSlotParams {
 
 ### Scroll 方法
 
-| 名称            | 说明                                 | 签名                                                                  | 始于 |
-| --------------- | ------------------------------------ | --------------------------------------------------------------------- | ---- |
-| refresh         | 刷新滚动，将会触发滚动的重新计算大小 | `() => void`                                                          | -    |
-| scrollTo        | 滚动到指定位置                       | `(x: number, y: number, duration?: number) => void`                   | -    |
-| scrollBy        | 滚动指定的距离                       | `(dx: number, dy: number, duration?: number) => void`                 | -    |
-| scrollToElement | 滚动到指定元素所在的位置             | `(el: string \| Element, duration?: number, offset?: number) => void` | -    |
-| ensureInView    | 确保提供的元素在滚动的可视区内       | `(el: string \| Element, duration?: number, offset?: number) => void` | -    |
+| 名称            | 说明                                 | 签名                                                                           | 始于 |
+| --------------- | ------------------------------------ | ------------------------------------------------------------------------------ | ---- |
+| refresh         | 刷新滚动，将会触发滚动的重新计算大小 | `() => Promise<void>`                                                          | -    |
+| scrollTo        | 滚动到指定位置                       | `(x: number, y: number, duration?: number) => Promise<void>`                   | -    |
+| scrollBy        | 滚动指定的距离                       | `(dx: number, dy: number, duration?: number) => Promise<void>`                 | -    |
+| scrollToElement | 滚动到指定元素所在的位置             | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>` | -    |
+| ensureInView    | 确保提供的元素在滚动的可视区内       | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>` | -    |

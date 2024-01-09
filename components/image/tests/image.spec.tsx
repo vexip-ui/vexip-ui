@@ -131,7 +131,7 @@ describe('Image', () => {
   })
 
   it('object fit', async () => {
-    (['fill', 'contain', 'cover', 'none', 'scale-down'] as const).forEach(fit => {
+    ;(['fill', 'contain', 'cover', 'none', 'scale-down'] as const).forEach(fit => {
       const wrapper = mount(() => <Image src={IMAGE} fit={fit}></Image>)
 
       expect(wrapper.find('.vxp-image').attributes('style')).toContain(`--vxp-image-fit: ${fit};`)
@@ -238,7 +238,7 @@ describe('Image', () => {
   })
 
   it('viewer render', () => {
-    const wrapper = mount(() => <ImageViewer active srcs={IMAGE}></ImageViewer>)
+    const wrapper = mount(() => <ImageViewer active src-list={IMAGE}></ImageViewer>)
 
     expect(wrapper.find('.vxp-image-viewer').classes()).toContain('vxp-image-vars')
     expect(wrapper.find('.vxp-image-viewer__wrapper').exists()).toBe(true)
@@ -261,7 +261,7 @@ describe('Image', () => {
   })
 
   it('viewer multiple images', () => {
-    const wrapper = mount(() => <ImageViewer active srcs={[IMAGE, IMAGE]}></ImageViewer>)
+    const wrapper = mount(() => <ImageViewer active src-list={[IMAGE, IMAGE]}></ImageViewer>)
 
     expect(wrapper.find('.vxp-image-viewer__prev').exists()).toBe(true)
     expect(wrapper.find('.vxp-image-viewer__next').exists()).toBe(true)
@@ -274,7 +274,7 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: {
         active: true,
-        srcs: ['1', '2'],
+        srcList: ['1', '2'],
         onPrev,
         onNext,
         onChange
@@ -313,7 +313,7 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: {
         active: true,
-        srcs: ['1', '2']
+        srcList: ['1', '2']
       },
       slots: {
         prev: () => <span class={'test'}></span>
@@ -327,7 +327,7 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: {
         active: true,
-        srcs: ['1', '2']
+        srcList: ['1', '2']
       },
       slots: {
         next: () => <span class={'test'}></span>

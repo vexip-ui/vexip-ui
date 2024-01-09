@@ -39,6 +39,10 @@ $select: map.merge(
     cursor: inherit;
   }
 
+  &--disabled {
+    cursor: not-allowed;
+  }
+
   &--multiple &__selector {
     @include define-css-var('input-v-padding', 2px);
 
@@ -55,6 +59,7 @@ $select: map.merge(
     position: relative;
     display: flex;
     align-items: center;
+    min-width: 40px;
   }
 
   &--multiple &__control {
@@ -75,11 +80,16 @@ $select: map.merge(
   }
 
   &__tag {
+    max-width: 100%;
     height: calc(get-css-var('input-height') - 8px);
     margin: 2px 4px;
     margin-inline-start: 0;
     pointer-events: auto;
     cursor: pointer;
+  }
+
+  &--disabled &__tag {
+    cursor: not-allowed;
   }
 
   &__selector--small &__tag {
@@ -93,6 +103,10 @@ $select: map.merge(
     margin-inline-start: 0;
   }
 
+  &__rest-tip {
+    max-width: 100%;
+  }
+
   &__anchor {
     position: relative;
     display: inline-block;
@@ -103,6 +117,7 @@ $select: map.merge(
   }
 
   &__input {
+    position: absolute;
     width: 100%;
     height: 100%;
     padding: 0;
@@ -114,6 +129,7 @@ $select: map.merge(
     outline: 0;
 
     &--multiple {
+      position: relative;
       min-width: 1px;
     }
 
@@ -136,14 +152,23 @@ $select: map.merge(
     opacity: 0%;
   }
 
+  &__selected,
   &__placeholder {
-    position: absolute;
+    max-width: 100%;
     overflow: hidden;
-    color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
+  }
+
+  &__selected--placeholder,
+  &__placeholder {
+    color: get-css-var('input-placeholder-color');
+  }
+
+  &--multiple#{&}--filter &__placeholder {
+    margin-left: -4px;
   }
 
   &__popper {

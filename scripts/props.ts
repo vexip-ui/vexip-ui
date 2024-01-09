@@ -5,15 +5,9 @@ import { cpus } from 'node:os'
 
 import { format } from 'prettier'
 import { ESLint } from 'eslint'
-import {
-  components,
-  componentsDir,
-  logger,
-  prettierConfig,
-  runParallel,
-  toCamelCase,
-  toCapitalCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { runParallel, toCamelCase, toCapitalCase } from '@vexip-ui/utils'
+import { components, componentsDir, prettierConfig } from './constant'
 
 async function main() {
   const ignores = ['config-provider', 'typography']
@@ -75,7 +69,7 @@ async function main() {
     interface SuggestedDefault {
       size?: ComponentSize,
       state?: ComponentState,
-      transfer?: boolean,
+      transfer?: boolean | string,
       disabled?: boolean,
       loading?: boolean,
       clearable?: boolean

@@ -13,7 +13,7 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   placementWhileList,
   useClickOutside,
@@ -39,7 +39,9 @@ export default defineComponent({
     const props = useProps('tooltip', _props, {
       trigger: {
         default: 'hover',
-        validator: value => ['hover', 'click', 'focus', 'custom'].includes(value)
+        validator: value => {
+          return ['hover', 'click', 'focus', 'hover-focus', 'custom'].includes(value)
+        }
       },
       wrapper: false,
       noArrow: false,
@@ -60,14 +62,25 @@ export default defineComponent({
       tipAlive: false,
       reverse: false,
       width: 'auto',
-      virtual: null
+      virtual: null,
+      shift: false
     })
+
+    const hoverDelay = useHoverDelay()
+    const { timer } = useSetTimeout()
 
     const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
     const triggerWidth = ref(100)
+
+    let hovered = false
+    let focused = false
+
+    const useHover = computed(() => props.trigger === 'hover' || props.trigger === 'hover-focus')
+    const useFocus = computed(() => props.trigger === 'focus' || props.trigger === 'hover-focus')
+
     const originalTrigger = ref<HTMLElement>()
 
     const reference = computed(() => {
@@ -94,7 +107,7 @@ export default defineComponent({
 
       return originalTrigger.value
     })
-    const trigger = computed(() => (isElement(reference.value) ? reference.value : null))
+    const triggerEl = computed(() => (isElement(reference.value) ? reference.value : null))
     const delay = computed(() => {
       return typeof props.delay === 'number'
         ? new Array<number>(2).fill(Math.max(props.delay, 0))
@@ -104,11 +117,23 @@ export default defineComponent({
     const popper = ref<PopperExposed>()
     const popperEl = computed(() => popper.value?.wrapper)
     const arrow = ref<HTMLElement>()
+    const shift = computed<{ mainAxis?: boolean, crossAxis?: boolean }>(() => {
+      if (!props.shift) {
+        return { mainAxis: false }
+      }
+
+      if (props.shift === true || props.shift === 'both') {
+        return { crossAxis: true }
+      }
+
+      return props.shift === 'horizontal' ? { mainAxis: false, crossAxis: true } : {}
+    })
     const { transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       arrow,
       reference,
+      shift,
       wrapper: originalTrigger,
       popper: popperEl
     })
@@ -134,11 +159,11 @@ export default defineComponent({
 
     const slotParams = shallowReadonly({ toggleVisible, updatePopper })
 
-    useListener(trigger, 'mouseenter', handleTriggerEnter)
-    useListener(trigger, 'mouseleave', handleTriggerLeave)
-    useListener(trigger, 'click', handleTriggerClick)
-    useListener(trigger, 'focus', handleTriggerFocus)
-    useListener(trigger, 'blur', handleTriggerBlur)
+    useListener(triggerEl, 'mouseenter', handleTriggerEnter)
+    useListener(triggerEl, 'mouseleave', handleTriggerLeave)
+    useListener(triggerEl, 'click', handleTriggerClick)
+    useListener(triggerEl, 'focus', handleTriggerFocus)
+    useListener(triggerEl, 'blur', handleTriggerBlur)
     useListener(popperEl, 'mouseenter', handleTriggerEnter)
     useListener(popperEl, 'mouseleave', handleTriggerLeave)
 
@@ -162,9 +187,11 @@ export default defineComponent({
       }
     )
 
-    expose({ trigger, toggleVisible, updatePopper })
+    expose({ rendering, trigger: triggerEl, toggleVisible, updatePopper })
 
     function toggleVisible(visible = !currentVisible.value) {
+      if (currentVisible.value === visible) return
+
       currentVisible.value = visible
 
       if (visible) {
@@ -178,22 +205,25 @@ export default defineComponent({
     }
 
     function computeTriggerWidth() {
-      if (!trigger.value) return
+      if (!triggerEl.value) return
 
-      triggerWidth.value = trigger.value.offsetWidth
+      triggerWidth.value = triggerEl.value.offsetWidth
     }
 
-    const { timer } = useSetTimeout()
+    function getActiveState() {
+      return (useHover.value && hovered) || (useFocus.value && focused)
+    }
 
     function handleTriggerEnter() {
       if (props.disabled) return
 
-      if (props.trigger === 'hover') {
+      if (useHover.value) {
         clearTimeout(timer.hover)
 
         timer.hover = setTimeout(() => {
-          toggleVisible(true)
-        }, delay.value[0] ?? 250)
+          hovered = true
+          toggleVisible(getActiveState())
+        }, delay.value[0] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipEnter)
@@ -202,12 +232,13 @@ export default defineComponent({
     function handleTriggerLeave() {
       if (props.disabled) return
 
-      if (props.trigger === 'hover') {
+      if (useHover.value) {
         clearTimeout(timer.hover)
 
         timer.hover = setTimeout(() => {
-          toggleVisible(false)
-        }, delay.value[1] ?? 250)
+          hovered = false
+          toggleVisible(getActiveState())
+        }, delay.value[1] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipLeave)
@@ -224,16 +255,18 @@ export default defineComponent({
     function handleTriggerFocus() {
       if (props.disabled) return
 
-      if (props.trigger === 'focus') {
-        toggleVisible(true)
+      if (useFocus.value) {
+        focused = true
+        toggleVisible(getActiveState())
       }
     }
 
     function handleTriggerBlur() {
       if (props.disabled) return
 
-      if (props.trigger === 'focus') {
-        toggleVisible(false)
+      if (useFocus.value) {
+        focused = false
+        toggleVisible(getActiveState())
       }
     }
 
@@ -300,7 +333,7 @@ export default defineComponent({
             : (
               <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
               )),
-        !props.disabled && (
+        !props.disabled && (props.tipAlive || rendering.value) && (
           <Popper
             ref={popper}
             class={{
@@ -322,9 +355,9 @@ export default defineComponent({
             onTransitionend={syncRendering}
           >
             <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
-              {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
               {renderSlot(slots, 'default', slotParams)}
             </div>
+            {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
           </Popper>
         )
       ]

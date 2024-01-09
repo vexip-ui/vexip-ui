@@ -5,6 +5,7 @@
     :data="data"
     :width="1000"
     :height="420"
+    :side-padding="10"
   >
     <TableColumn
       id-key="name"
@@ -23,6 +24,13 @@
       :id-key="`m${index + 1}`"
       :name="month"
       text-align="center"
+    ></TableColumn>
+    <TableColumn
+      id-key="year"
+      name="Year"
+      fixed="right"
+      text-align="center"
+      :accessor="sum"
     ></TableColumn>
 
     <TableSummary
@@ -48,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 const months = [
   'January',
@@ -66,7 +74,7 @@ const months = [
 ]
 const random = () => Math.round(100 * Math.random())
 
-const data = ref(
+const data = reactive(
   Array.from({ length: 20 }, (_, index) => {
     return {
       index,
@@ -86,6 +94,16 @@ const data = ref(
     }
   })
 )
+
+function sum(item: (typeof data)[0]) {
+  let total = 0
+
+  for (let i = 1; i < 13; ++i) {
+    total += item[`m${i}` as Exclude<keyof typeof item, 'name' | 'index'>]
+  }
+
+  return total
+}
 
 function footCellSpan({ index }: { index: number }) {
   if (index === 0) {

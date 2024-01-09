@@ -8,7 +8,7 @@ Almost all the **default value of props** for each component can be quickly modi
 
 And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
 
-There are currently **70+** components, many you see everywhere are here and are better, and a few may bright your eyes.
+There are currently **70+** components, many you see everywhere are here and are better, and a few may brighten your eyes.
 
 ## Features
 
@@ -25,9 +25,11 @@ There are currently **70+** components, many you see everywhere are here and are
 - 🩹 Good a11n
 - 👀 Close to business code arrangement, low threshold for source code reading
 
+> The design tokens are base on Open Color, and have some adjustments.
+
 ## Environment
 
-All components supported in modern browsers, support of neerly two or three versions.
+All components supported in modern browsers, support of nearly two or three versions.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -40,6 +42,8 @@ All components supported in modern browsers, support of neerly two or three vers
 </a>
 
 > The version on the top-left is the version of the component library that the docs depends on when it is built, which may be inconsistent with the latest version.
+
+You can view the [Changelog](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) to learn about the update process.
 
 ## Install
 
@@ -72,6 +76,8 @@ WeChat:
 Alipay:
 
 <img src="/sponsor-alipay.webp" alt="Alipay payment" style="width: 240px;" />
+
+> Author is not good at English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Contributors
 

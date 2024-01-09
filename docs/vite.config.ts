@@ -24,6 +24,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
 
   return <UserConfigExport>{
     define: {
+      // __VUE_PROD_DEVTOOLS__: JSON.stringify(true),
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
       __VERSION__: JSON.stringify(pkg.version || '')
     },
@@ -55,7 +56,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       host: '0.0.0.0'
     },
     build: {
-      // sourcemap: false,
+      // sourcemap: true,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 10 * 1024
     },

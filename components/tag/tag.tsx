@@ -42,6 +42,7 @@ export default defineComponent({
       },
       border: false,
       closable: false,
+      color: null,
       simple: false,
       circle: false,
       prefix: '',
@@ -49,7 +50,8 @@ export default defineComponent({
       prefixColor: '',
       suffix: '',
       suffixBg: '',
-      suffixColor: ''
+      suffixColor: '',
+      disabled: false
     })
 
     const nh = useNameHelper('tag')
@@ -65,41 +67,40 @@ export default defineComponent({
         [nh.bm('border')]: props.border,
         [nh.bm('simple')]: props.simple,
         [nh.bm('circle')]: props.circle,
-        [nh.bm('closable')]: props.closable
+        [nh.bm('closable')]: props.closable,
+        [nh.bm('disabled')]: props.disabled
       }
     })
     const style = computed(() => {
-      if (props.color) {
-        const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
-        const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
-        const baseColor = parseColorToRgba(props.color)
-        const base = baseColor.toString()
+      if (!props.color) return undefined
 
-        return nh.cvm({
-          color: 'var(--vxp-color-white)',
-          'bg-color': base,
-          'b-color': base,
-          'close-color': 'var(--vxp-color-white)',
-          'd-color': mixColor(white, baseColor, 0.3).toString(),
-          ...(props.simple || props.border
-            ? {
-                color: base,
-                'close-color': base
-              }
-            : {}),
-          ...(props.simple
-            ? {
-                'bg-color': adjustAlpha(baseColor, 0.2).toString()
-              }
-            : {})
-        })
-      }
+      const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
+      const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
+      const baseColor = parseColorToRgba(props.color)
+      const base = baseColor.toString()
 
-      return {}
+      return nh.cvm({
+        color: 'var(--vxp-color-white)',
+        'bg-color': base,
+        'b-color': base,
+        'close-color': 'var(--vxp-color-white)',
+        'd-color': mixColor(white, baseColor, 0.3).toString(),
+        ...(props.simple || props.border
+          ? {
+              color: base,
+              'close-color': base
+            }
+          : {}),
+        ...(props.simple
+          ? {
+              'bg-color': adjustAlpha(baseColor, 0.2).toString()
+            }
+          : {})
+      })
     })
 
     function handleClose(event: MouseEvent) {
-      if (!props.closable || event.button > 0) {
+      if (!props.closable || props.disabled || event.button > 0) {
         return false
       }
 

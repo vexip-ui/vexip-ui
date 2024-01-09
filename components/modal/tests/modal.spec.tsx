@@ -201,7 +201,7 @@ describe('Modal', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onDragMove).toHaveBeenCalled()
     expect(onDragMove).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
@@ -257,7 +257,7 @@ describe('Modal', () => {
     moveEvent.clientX = 80
     moveEvent.clientY = 80
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onResizeMove).toHaveBeenCalled()
     expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 80, height: 80 }))

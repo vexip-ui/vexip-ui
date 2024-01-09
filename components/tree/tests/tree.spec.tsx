@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Tree } from '..'
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 
 describe('Tree', () => {
   it('render', async () => {
@@ -37,6 +37,27 @@ describe('Tree', () => {
     expect(nodes[0].text()).toEqual('n1')
     expect(nodes[1].text()).toEqual('n2')
     expect(nodes[2].text()).toEqual('n3')
+  })
+
+  it('tree data', async () => {
+    const data = [
+      {
+        label: 'n1',
+        expanded: true,
+        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }]
+      },
+      { label: 'n5' }
+    ]
+    const wrapper = mount(() => <Tree data={data} no-build-tree></Tree>)
+
+    await nextTick()
+    const nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(5)
+    expect(nodes[0].text()).toEqual('n1')
+    expect(nodes[1].text()).toEqual('n2')
+    expect(nodes[2].text()).toEqual('n3')
+    expect(nodes[3].text()).toEqual('n4')
+    expect(nodes[4].text()).toEqual('n5')
   })
 
   it('select/cancel node', async () => {
@@ -175,6 +196,7 @@ describe('Tree', () => {
     const wrapper = mount(() => <Tree data={data} checkbox onNodeChange={onNodeChange}></Tree>)
 
     await nextTick()
+    const vm = wrapper.findComponent(Tree).vm
     const nodes = wrapper.findAll('.vxp-tree__node')
 
     await nodes[0].find('.vxp-tree__checkbox').trigger('click')
@@ -187,10 +209,14 @@ describe('Tree', () => {
       expect.objectContaining({ data: data[0] }),
       true
     )
+    expect(vm.getCheckedNodes().length).toBe(3)
+    expect(vm.getCheckedNodeData().length).toBe(3)
 
     await nodes[1].find('.vxp-tree__checkbox').trigger('click')
     expect(nodes[0].find('.vxp-tree__checkbox').classes()).toContain('vxp-checkbox--partial')
     expect(nodes[1].find('.vxp-tree__checkbox').classes()).not.toContain('vxp-checkbox--checked')
+    expect(vm.getCheckedNodes().length).toBe(1)
+    expect(vm.getCheckedNodeData().length).toBe(1)
   })
 
   it('toggle check with no cascaded', async () => {
@@ -459,13 +485,53 @@ describe('Tree', () => {
         parent: 1
       }
     ]
-    const wrapper = mount(() => <Tree data={data} filter={'2'}></Tree>)
+    const wrapper = mount(Tree, {
+      props: { data, filter: '2' }
+    })
 
     await nextTick()
-    const nodes = wrapper.findAll('.vxp-tree__node')
+    let nodes = wrapper.findAll('.vxp-tree__node')
     expect(nodes.length).toEqual(2)
     expect(nodes[0].find('.vxp-tree__label').text()).toEqual('n1')
     expect(nodes[1].find('.vxp-tree__label').text()).toEqual('n2')
+
+    await wrapper.setProps({ filter: '1' })
+    await nextTick()
+    nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(3)
+  })
+
+  it('filter leaf', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+        parent: 0,
+        expanded: true
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      },
+      {
+        id: 3,
+        label: 'n3',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(Tree, {
+      props: { data, filterLeaf: true, filter: '1' }
+    })
+
+    await nextTick()
+    let nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(0)
+
+    await wrapper.setProps({ filter: '2' })
+    await nextTick()
+    nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(2)
   })
 
   it('async load', async () => {
@@ -616,5 +682,34 @@ describe('Tree', () => {
     await wrapper.setProps({ blockEffect: true })
     expect(wrapper.find('.vxp-tree__content').classes()).toContain('vxp-tree__content--effect')
     expect(wrapper.find('.vxp-tree__label').classes()).not.toContain('vxp-tree__label--effect')
+  })
+
+  it('getTreeData / getFlattedData', async () => {
+    const data = [
+      {
+        label: 'n1',
+        expanded: true,
+        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }]
+      },
+      { label: 'n5' }
+    ]
+
+    const wrapper = mount(() => <Tree data={data} no-build-tree></Tree>)
+    await nextTick()
+    const vm = wrapper.findComponent(Tree).vm
+
+    const treeData = vm.getTreeData()
+    expect(treeData !== data).toBe(true)
+    expect(treeData[0] !== data[0]).toBe(true)
+    expect(treeData).toMatchObject(data)
+
+    const flattedData = vm.getFlattedData()
+    expect(flattedData).toMatchObject([
+      { label: 'n1' },
+      { label: 'n2' },
+      { label: 'n3' },
+      { label: 'n4' },
+      { label: 'n5' }
+    ])
   })
 })

@@ -2,16 +2,16 @@ import { computed, inject, provide, reactive, unref, watch } from 'vue'
 
 import { has, isFunction, isNull, isObject, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, CSSProperties, ComponentObjectPropsOptions, ComputedRef, PropType } from 'vue'
-import type { LocaleConfig, LocaleNames } from './locale'
 import type {
-  AnyFunction,
-  EnsureValue,
-  Expand,
-  MaybeFunction,
+  App,
+  CSSProperties,
+  ComponentObjectPropsOptions,
+  ComputedRef,
   MaybeRef,
-  VoidFunction
-} from './types'
+  PropType
+} from 'vue'
+import type { LocaleConfig, LocaleNames } from './locale'
+import type { AnyFunction, EnsureValue, Expand, MaybeFunction, VoidFunction } from './types'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
@@ -239,26 +239,26 @@ export function omitProps<
 export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
+const validSizeValues: ComponentSize[] = ['small', 'default', 'large']
+const sizeValidator = (value: ComponentSize) => validSizeValues.includes(value)
 
 export function createSizeProp(defaultValue: MaybeRef<ComponentSize> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator(value: ComponentSize) {
-      return ['small', 'default', 'large'].includes(value)
-    }
+    validator: sizeValidator
   }
 }
 
 export type ComponentState = 'default' | 'success' | 'error' | 'warning'
 
 export const stateProp = String as PropType<ComponentState>
+const validStateValues: ComponentState[] = ['default', 'success', 'error', 'warning']
+const stateValidator = (value: ComponentState) => validStateValues.includes(value)
 
 export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator(value: ComponentState) {
-      return ['default', 'success', 'error', 'warning'].includes(value)
-    }
+    validator: stateValidator
   }
 }
 
@@ -339,5 +339,20 @@ export function localeProp<N extends LocaleNames>(_name: N) {
   return Object as PropType<Partial<LocaleConfig[N]>>
 }
 
-export const valueProp = [String, Number, Boolean]
-export const valuesProp = [String, Number, Boolean, Array]
+export const valueProp = {
+  type: [String, Number, Boolean],
+  default: null
+}
+export const valuesProp = {
+  type: [String, Number, Boolean, Array] as PropType<MaybeArray<string | number | boolean>>,
+  default: null
+}
+
+export const iconProp = [Object, Function]
+
+export function createIconProp(defaultValue: Record<any, any> | AnyFunction | null = null) {
+  return {
+    isFunc: true,
+    default: defaultValue
+  }
+}

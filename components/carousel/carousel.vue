@@ -30,7 +30,7 @@
           @click="handlePrevClick"
         >
           <slot name="prev-arrow" :disabled="disabledPrev">
-            <Icon :icon="arrowIcons[0]" :scale="1.5"></Icon>
+            <Icon v-bind="arrowIcons[0]" :scale="+(arrowIcons[0].scale || 1) * 1.5"></Icon>
           </slot>
         </div>
       </div>
@@ -56,7 +56,7 @@
           @click="handleNextClick"
         >
           <slot name="next-arrow" :disabled="disabledNext">
-            <Icon :icon="arrowIcons[1]" :scale="1.5"></Icon>
+            <Icon v-bind="arrowIcons[1]" :scale="+(arrowIcons[1].scale || 1) * 1.5"></Icon>
           </slot>
         </div>
       </div>
@@ -99,10 +99,9 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useHover, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from '@vexip-ui/icons'
 import { carouselProps } from './props'
 import { CAROUSEL_STATE } from './symbol'
 
@@ -151,6 +150,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('carousel')
+    const icons = useIcons()
+    const hoverDelay = useHoverDelay()
     const { isRtl } = useRtl()
     const itemStates = ref(new Set<ItemState>())
     const currentActive = ref(0)
@@ -225,10 +226,10 @@ export default defineComponent({
     })
     const arrowIcons = computed(() => {
       return props.vertical
-        ? [ArrowUp, ArrowDown]
+        ? [icons.value.angleUp, icons.value.angleDown]
         : isRtl.value
-          ? [ArrowRight, ArrowLeft]
-          : [ArrowLeft, ArrowRight]
+          ? [icons.value.angleRight, icons.value.angleLeft]
+          : [icons.value.angleLeft, icons.value.angleRight]
     })
 
     watch(
@@ -578,7 +579,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           clearInterval(timer.play)
-        }, 250)
+        }, hoverDelay.value)
       }
 
       if (props.arrowTrigger === 'hover' && props.arrow === 'inside') {
@@ -592,7 +593,7 @@ export default defineComponent({
 
         timer.hover = setTimeout(() => {
           setAutoplay()
-        }, 250)
+        }, hoverDelay.value)
       }
 
       if (props.arrowTrigger === 'hover') {

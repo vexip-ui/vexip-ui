@@ -1,3 +1,151 @@
+# [2.10.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.9.0...utils@2.10.0) (2024-01-04)
+
+
+### ✨ Features
+
+* **utils:** add decide method ([87f2f06](https://github.com/vexip-ui/vexip-ui/commit/87f2f06fc5eae45b12816e591add212e204feaf9))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** dom util methods consider whether is client ([81c0ce3](https://github.com/vexip-ui/vexip-ui/commit/81c0ce32ed7f932677d81d3804e40d0cb99e4d90))
+
+
+
+# [2.9.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.8.0...utils@2.9.0) (2023-12-27)
+
+
+### ✨ Features
+
+* **utils:** callIfFunc support provide extra function parameters ([6653ff7](https://github.com/vexip-ui/vexip-ui/commit/6653ff7b12cfe24032383c762ea474eb30933df0))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** isValidNumber should consider scientific notation ([72edf02](https://github.com/vexip-ui/vexip-ui/commit/72edf025c5d555f30bc67d7facd720a34bc1f4ff))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename transformListToMap to listToMap ([cc40220](https://github.com/vexip-ui/vexip-ui/commit/cc4022075fce035a3eaa45be8fafddb771ecbc1f))
+
+
+
+# [2.8.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.3...utils@2.8.0) (2023-12-19)
+
+
+### 🔨 Code Refactoring
+
+* compatibility for lower version browsers ([8b4949f](https://github.com/vexip-ui/vexip-ui/commit/8b4949f6726ad4ac5078ce6ad665dd3bcea8d23b))
+
+
+
+## [2.7.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.2...utils@2.7.3) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** throttle and debounce incorrect parameters passed ([305467d](https://github.com/vexip-ui/vexip-ui/commit/305467d479ab5156ba4cad9c1476df091deeb8ee))
+
+
+
+## [2.7.2](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.1...utils@2.7.2) (2023-12-07)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** mapTree may clear children field by default ([965103f](https://github.com/vexip-ui/vexip-ui/commit/965103fc7887e04ac407e2caf4e1c9ac6d35fe5f))
+* **utils:** throttle and debounce adapt delay 0 ([a6046e5](https://github.com/vexip-ui/vexip-ui/commit/a6046e5fc30318558528a973a12ae62fe2228dd5))
+
+
+### 👓 Types
+
+* **utils:** improve generics for is... methods ([4302ca5](https://github.com/vexip-ui/vexip-ui/commit/4302ca5dbdbd2873212a4d4aced2b4479a48a2a4))
+
+
+
+## [2.7.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.7.0...utils@2.7.1) (2023-12-01)
+
+
+
+# [2.7.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.6.0...utils@2.7.0) (2023-11-29)
+
+
+### ✨ Features
+
+* **utils:** async debounceMinor and debounceFrame ([1e53baf](https://github.com/vexip-ui/vexip-ui/commit/1e53bafe176920f55b628d2f2401aa05683eb573))
+
+
+
+# [2.6.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.5.0...utils@2.6.0) (2023-11-23)
+
+
+### ✨ Features
+
+* **utils:** add filterTree method ([77954c8](https://github.com/vexip-ui/vexip-ui/commit/77954c84d2b33920f45118d1d07279cff7aa8bfc))
+* **utils:** add isIterable and mapTree methods ([2582af3](https://github.com/vexip-ui/vexip-ui/commit/2582af35a18c71f97907a98ceaa89719232520ac))
+* **utils:** flatTree add buildId option ([8ecbf1c](https://github.com/vexip-ui/vexip-ui/commit/8ecbf1c720f2f1431dddc9866918d52a1e99db90))
+* **utils:** walkTree callabck add parent parameter ([b4962bf](https://github.com/vexip-ui/vexip-ui/commit/b4962bf5dde77e26ad21d6aa9fa01df4b5667182))
+
+
+
+# [2.5.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.4.0...utils@2.5.0) (2023-11-06)
+
+
+### ✨ Features
+
+* **utils:** add toCssSize method ([79941f5](https://github.com/vexip-ui/vexip-ui/commit/79941f5f383caedbe83e0497407d67dae7a82bf1))
+
+
+
+# [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.3.0...utils@2.4.0) (2023-11-03)
+
+
+### ✨ Features
+
+* **utils:** add leaveNumber method ([2764872](https://github.com/vexip-ui/vexip-ui/commit/2764872e034802c256a2b80f576adac1f9b107b2))
+* **utils:** add runParallel method ([e7d20a5](https://github.com/vexip-ui/vexip-ui/commit/e7d20a59505e5d813472deb0c78bcffe7968b5ce))
+* **utils:** formatByteSize support specify precision ([e158702](https://github.com/vexip-ui/vexip-ui/commit/e158702b9e37364195fe5f09318c0c7f9f8b619b))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** improve toCamelCase logic for all capital case ([c5fa815](https://github.com/vexip-ui/vexip-ui/commit/c5fa815a837515921648e2db424f3516de95b525))
+* **utils:** improve toKebabCase logic for all capital case ([7347675](https://github.com/vexip-ui/vexip-ui/commit/7347675eb1d0e160d35685ef23c31da8416e54e2))
+
+
+
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.2.0...utils@2.3.0) (2023-10-27)
+
+
+### ✨ Features
+
+* **utils:** add forceInject option for flatTree method ([49e7b9a](https://github.com/vexip-ui/vexip-ui/commit/49e7b9aee2cca4884817293fb981d8935e7d53c0))
+* **utils:** add writeClipboard method ([41dce09](https://github.com/vexip-ui/vexip-ui/commit/41dce092828fec83bd00e4465a6aab2818ed2bde))
+
+
+
+# [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.1.0...utils@2.2.0) (2023-10-19)
+
+
+### ✨ Features
+
+* **utils:** add methods to random prefer color ([1976c92](https://github.com/vexip-ui/vexip-ui/commit/1976c92e360776aa1a667a6ab0e5706fe85a6f6b))
+* **utils:** add padStartZeros method ([666bfcd](https://github.com/vexip-ui/vexip-ui/commit/666bfcd92b66c7f44741e3f9b31905f7dbbcdb30))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** add unexpectedly removed toCamelCase ([b3a9e53](https://github.com/vexip-ui/vexip-ui/commit/b3a9e531b6fede4a1c5e1ea41f4ff59281f394bd))
+* **utils:** correct color methods returns type ([9cfe584](https://github.com/vexip-ui/vexip-ui/commit/9cfe5848ff070011930c1ba32e6a8d5c8be69df8))
+
+
+### 🔨 Code Refactoring
+
+* **utils:** rename digitLength to decimalLength ([8120e3f](https://github.com/vexip-ui/vexip-ui/commit/8120e3fc87230f86a69e24cc42cc340a30e66ab7))
+
+
+
 # [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.0.1...utils@2.1.0) (2023-10-08)
 
 

@@ -10,7 +10,7 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @focus=";(!props.filter || !currentVisible) && handleFocus($event)"
+      @focus="handleFocus"
       @blur=";(!props.filter || !currentVisible) && handleBlur($event)"
     >
       <div
@@ -35,18 +35,21 @@
               }"
               @rest-change="restTagCount = $event"
             >
-              <template #default="{ item, index }">
+              <template #default="{ item: value, index }">
                 <Tag
                   inherit
                   :class="nh.be('tag')"
                   :type="props.tagType"
                   closable
+                  :disabled="props.disabled"
                   @click.stop="toggleVisible"
-                  @close="handleTagClose(item)"
+                  @close="handleTagClose(value)"
                 >
-                  <slot name="selected" :option="item">
-                    {{ currentLabels[index] }}
-                  </slot>
+                  <span :class="nh.be('label')">
+                    <slot name="selected" :option="getOptionFromMap(value)">
+                      {{ currentLabels[index] }}
+                    </slot>
+                  </span>
                 </Tag>
               </template>
               <template #counter="{ count }">
@@ -55,12 +58,14 @@
                   inherit
                   :class="[nh.be('tag'), nh.be('counter')]"
                   :type="props.tagType"
+                  :disabled="props.disabled"
                   @click.stop="toggleVisible"
                 >
                   {{ `+${count}` }}
                 </Tag>
                 <span v-else>
                   <Tooltip
+                    ref="restTip"
                     inherit
                     :transfer="false"
                     :visible="restTipShow"
@@ -70,23 +75,31 @@
                     @click.stop="toggleShowRestTip"
                   >
                     <template #trigger>
-                      <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                      <Tag
+                        inherit
+                        :class="[nh.be('tag'), nh.be('counter')]"
+                        :type="props.tagType"
+                        :disabled="props.disabled"
+                      >
                         {{ `+${count}` }}
                       </Tag>
                     </template>
                     <NativeScroll inherit use-y-bar>
-                      <template v-for="(item, index) in currentValues" :key="index">
+                      <template v-for="(value, index) in currentValues" :key="index">
                         <Tag
                           v-if="index >= currentValues.length - restTagCount"
                           inherit
                           :class="nh.be('tag')"
                           closable
                           :type="props.tagType"
-                          @close="handleTagClose(item)"
+                          :disabled="props.disabled"
+                          @close="handleRestTagClose(value)"
                         >
-                          <slot name="selected" :option="item">
-                            {{ currentLabels[index] }}
-                          </slot>
+                          <span :class="nh.be('label')">
+                            <slot name="selected" :option="getOptionFromMap(value)">
+                              {{ currentLabels[index] }}
+                            </slot>
+                          </span>
                         </Tag>
                       </template>
                     </NativeScroll>
@@ -119,6 +132,9 @@
                 @keydown="handleFilterKeyDown"
                 @focus="handleFocus($event)"
                 @blur="handleBlur($event)"
+                @compositionstart="composing = true"
+                @compositionend="handleCompositionEnd"
+                @change="handleCompositionEnd"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -126,54 +142,54 @@
             </div>
           </template>
           <template v-else>
-            <template v-if="props.filter">
-              <input
-                ref="input"
-                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
-                :disabled="props.disabled"
-                :placeholder="
-                  previewOption?.label ||
-                    currentLabels[0] ||
-                    (props.placeholder ?? locale.placeholder)
-                "
-                autocomplete="off"
-                tabindex="-1"
-                role="combobox"
-                aria-autocomplete="list"
-                :name="props.name"
-                @submit.prevent
-                @input="handleFilterInput"
-                @focus="handleFocus($event)"
-                @blur="handleBlur($event)"
-              />
-            </template>
-            <slot
-              v-else-if="getOptionFromMap(currentValues[0])"
-              name="selected"
-              :option="getOptionFromMap(currentValues[0])"
+            <input
+              v-if="props.filter"
+              ref="input"
+              :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
+              :disabled="props.disabled"
+              autocomplete="off"
+              tabindex="-1"
+              role="combobox"
+              aria-autocomplete="list"
+              :name="props.name"
+              :style="{
+                opacity: currentVisible ? undefined : '0%'
+              }"
+              @submit.prevent
+              @input="handleFilterInput"
+              @focus="handleFocus($event)"
+              @blur="handleBlur($event)"
+              @compositionstart="composing = true"
+              @compositionend="handleCompositionEnd"
+              @change="handleCompositionEnd"
+            />
+            <span
+              v-if="(props.noPreview || !currentVisible) && hasValue && !currentFilter"
+              :class="{
+                [nh.be('selected')]: true,
+                [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
+              }"
             >
-              {{ currentLabels[0] }}
-            </slot>
-            <template v-else>
-              {{ currentLabels[0] }}
-            </template>
+              <slot
+                v-if="getOptionFromMap(currentValues[0])"
+                name="selected"
+                :option="getOptionFromMap(currentValues[0])"
+              >
+                {{ currentLabels[0] }}
+              </slot>
+              <template v-else>
+                {{ currentLabels[0] }}
+              </template>
+            </span>
           </template>
-          <span
-            v-if="
-              (props.multiple || !props.filter) &&
-                (!currentVisible || !currentFilter) &&
-                (props.placeholder ?? locale.placeholder) &&
-                !hasValue
-            "
-            :class="nh.be('placeholder')"
-          >
+          <span v-if="showPlaceholder" :class="nh.be('placeholder')">
             <slot
               v-if="previewOption"
               name="selected"
               :preview="true"
               :option="previewOption"
             >
-              {{ previewOption?.label ?? props.placeholder ?? locale.placeholder }}
+              {{ previewOption.label }}
             </slot>
             <template v-else>
               {{ props.placeholder ?? locale.placeholder }}
@@ -197,7 +213,7 @@
               [nh.be('arrow')]: !props.staticSuffix
             }"
           ></Icon>
-          <Icon v-else v-bind="icons.arrowDown" :class="nh.be('arrow')"></Icon>
+          <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
         </slot>
       </div>
       <div
@@ -324,7 +340,17 @@ import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
 
-import { computed, defineComponent, onMounted, reactive, ref, toRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRef,
+  watch,
+  watchEffect
+} from 'vue'
 
 import {
   placementWhileList,
@@ -335,6 +361,7 @@ import {
   usePopper
 } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -343,10 +370,11 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import { getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
+import type { TooltipExposed } from '@/components/tooltip'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
   ChangeEvent,
@@ -432,9 +460,9 @@ export default defineComponent({
       transitionName: () => nh.ns('drop'),
       outsideClose: true,
       placeholder: null,
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       noSuffix: false,
       value: {
@@ -454,7 +482,7 @@ export default defineComponent({
       emptyText: null,
       staticSuffix: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
       keyConfig: () => ({}),
@@ -465,7 +493,7 @@ export default defineComponent({
       maxTagCount: 0,
       noRestTip: false,
       tagType: null,
-      noPreview: false,
+      noPreview: true,
       remote: false,
       fitPopper: false,
       name: {
@@ -490,6 +518,7 @@ export default defineComponent({
     const userOptions = ref<SelectOptionState[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
+    const composing = ref(false)
 
     const { isMounted } = useMounted()
 
@@ -519,6 +548,7 @@ export default defineComponent({
     const device = ref<HTMLElement>()
     const virtualList = ref<VirtualListExposed>()
     const popper = ref<PopperExposed>()
+    const restTip = ref<TooltipExposed>()
 
     const { reference, transferTo, updatePopper } = usePopper({
       placement,
@@ -545,7 +575,12 @@ export default defineComponent({
       props.keyConfig.title
       props.keyConfig.group
       props.keyConfig.children
-      props.options
+
+      // If we only read the `props.options`, when user use Array native methods to
+      // change options, Vue will not trigger the watch callback
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++
@@ -635,6 +670,11 @@ export default defineComponent({
       target: wrapper,
       passive: false,
       onKeyDown: (event, modifier) => {
+        if (composing.value) {
+          event.stopPropagation()
+          return
+        }
+
         if (!currentVisible.value) {
           if (modifier.space || modifier.enter) {
             event.preventDefault()
@@ -695,9 +735,11 @@ export default defineComponent({
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('filter')]: props.filter,
-        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
+        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0,
+        [nh.bm('disabled')]: props.disabled
       }
     })
+    const readonly = computed(() => props.loading && props.loadingLock)
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
@@ -705,7 +747,8 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--readonly`]: readonly.value,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -742,7 +785,9 @@ export default defineComponent({
       return map
     })
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && hasValue.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && isHover.value && hasValue.value
+      )
     })
     const previewOption = computed(() => {
       return !props.noPreview && currentVisible.value ? hittingOption.value : undefined
@@ -750,6 +795,19 @@ export default defineComponent({
     const limited = computed(() => {
       return (
         props.multiple && props.countLimit > 0 && currentValues.value.length >= props.countLimit
+      )
+    })
+    const showPlaceholder = computed(() => {
+      // 采用反推，出现下列情况时不显示：
+      // 1. 开始组合（如输入了任意拼音）
+      // 2. 有值且 未开预览/多选模式/未打开列表
+      // 3. 没有预览选项且没有合法的占位值
+      // 4. 打开列表且输入了过滤值
+      return (
+        !composing.value &&
+        !(hasValue.value && (props.noPreview || props.multiple || !currentVisible.value)) &&
+        !(!previewOption.value && !(props.placeholder ?? locale.value.placeholder)) &&
+        !(currentVisible.value && currentFilter.value)
       )
     })
 
@@ -808,22 +866,11 @@ export default defineComponent({
         }
       }
     )
-    watch(
-      () => props.loading,
-      value => {
-        if (value && props.loadingLock) {
-          setVisible(false)
-        }
+    watch(readonly, value => {
+      if (value) {
+        setVisible(false)
       }
-    )
-    watch(
-      () => props.loadingLock,
-      value => {
-        if (props.loading && value) {
-          setVisible(false)
-        }
-      }
-    )
+    })
     watch(currentFilter, value => {
       dynamicOption.value = value
       dynamicOption.label = value
@@ -1002,7 +1049,17 @@ export default defineComponent({
     }
 
     function handleTagClose(value?: SelectBaseValue | null) {
+      if (props.disabled || readonly.value) return
+
       !isNull(value) && handleSelect(getOptionFromMap(value))
+    }
+
+    function handleRestTagClose(value?: SelectBaseValue | null) {
+      handleTagClose(value)
+
+      if (restTipShow.value) {
+        restTip.value?.updatePopper()
+      }
     }
 
     function handleSelect(option?: SelectOptionState | null) {
@@ -1046,7 +1103,7 @@ export default defineComponent({
         currentFilter.value = ''
 
         syncInputValue()
-        updatePopper()
+        requestAnimationFrame(updatePopper)
       } else {
         setVisible(false)
       }
@@ -1100,7 +1157,7 @@ export default defineComponent({
     }
 
     function toggleVisible() {
-      if (props.disabled || (props.loading && props.loadingLock)) return
+      if (props.disabled || readonly.value) return
 
       setVisible(!currentVisible.value)
     }
@@ -1116,6 +1173,8 @@ export default defineComponent({
     }
 
     function handleClear() {
+      if (props.disabled || readonly.value) return
+
       if (props.clearable) {
         for (const option of userOptions.value) {
           optionValueMap.value.delete(option.value)
@@ -1139,12 +1198,25 @@ export default defineComponent({
       }
     }
 
+    let focused = false
+
     function handleFocus(event: FocusEvent) {
-      emitEvent(props.onFocus, event)
+      if (!focused) {
+        focused = true
+        emitEvent(props.onFocus, event)
+      }
     }
 
     function handleBlur(event: FocusEvent) {
-      emitEvent(props.onBlur, event)
+      if (focused) {
+        focused = false
+
+        setTimeout(() => {
+          if (!focused) {
+            emitEvent(props.onBlur, event)
+          }
+        }, 120)
+      }
     }
 
     function syncInputValue() {
@@ -1162,7 +1234,7 @@ export default defineComponent({
     }
 
     function handleFilterInput() {
-      if (!input.value) return
+      if (!input.value || composing.value) return
 
       let hittingIndex: number
 
@@ -1200,18 +1272,38 @@ export default defineComponent({
       emitEvent(props.onFilterInput, currentFilter.value)
     }
 
+    function handleCompositionEnd() {
+      if (!composing.value) return
+
+      composing.value = false
+
+      if (input.value) {
+        input.value.dispatchEvent(new Event('input'))
+      }
+    }
+
     function handleFilterKeyDown(event: KeyboardEvent) {
       if (!input.value) return
 
-      if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
+      if (
+        event.key === 'Backspace' &&
+        !input.value.value &&
+        !isNull(getLast(currentValues.value))
+      ) {
         event.stopPropagation()
-        handleTagClose(currentValues.value.at(-1))
+        handleTagClose(getLast(currentValues.value))
       }
     }
 
     function toggleShowRestTip() {
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
+
+        if (restTipShow.value) {
+          nextTick(() => {
+            restTip.value?.updatePopper()
+          })
+        }
       } else {
         toggleVisible()
         restTipShow.value = false
@@ -1220,7 +1312,7 @@ export default defineComponent({
 
     function focus(options?: FocusOptions) {
       if (currentVisible.value) {
-        (input.value || reference.value)?.focus(options)
+        ;(input.value || reference.value)?.focus(options)
       } else {
         reference.value?.focus(options)
       }
@@ -1243,6 +1335,7 @@ export default defineComponent({
       anchorWidth,
       restTagCount,
       restTipShow,
+      composing,
 
       className,
       selectorClass,
@@ -1255,6 +1348,7 @@ export default defineComponent({
       optionParentMap,
       previewOption,
       limited,
+      showPlaceholder,
 
       wrapper,
       reference,
@@ -1262,18 +1356,21 @@ export default defineComponent({
       input,
       device,
       virtualList,
+      restTip,
 
       getOptionFromMap,
       isSelected,
       filterOptions,
       updateHitting,
       handleTagClose,
+      handleRestTagClose,
       handleSelect,
       toggleVisible,
       handleClear,
       handleFocus,
       handleBlur,
       handleFilterInput,
+      handleCompositionEnd,
       handleFilterKeyDown,
       toggleShowRestTip,
 

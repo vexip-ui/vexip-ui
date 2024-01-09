@@ -1,3 +1,87 @@
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.4.0...config@1.5.0) (2024-01-08)
+
+
+### ✨ Features
+
+* **config:** add Arabic(ar-EG) locale config ([#455](https://github.com/vexip-ui/vexip-ui/issues/455)) ([2a5c8e7](https://github.com/vexip-ui/vexip-ui/commit/2a5c8e70ac2db14b43aed83b952ef9b3f275b466))
+
+
+
+# [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.2...config@1.4.0) (2024-01-04)
+
+
+### 🔨 Code Refactoring
+
+* all icon props support function component ([385f257](https://github.com/vexip-ui/vexip-ui/commit/385f257d58cda9ae390ac1198abd78eab2036819))
+
+
+### ❌ Breaking Changes
+
+* All icon props no longer support render function. Now
+a function value will be parsed as function component, you need to use
+icon slot or upper content slot instead of render function passed in
+icon props.
+
+
+
+## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.1...config@1.3.2) (2023-12-27)
+
+
+### ⚡ Performance Improvements
+
+* **config:** improve size and state props definition ([9e31d91](https://github.com/vexip-ui/vexip-ui/commit/9e31d91bbe7ea3f406dec1c3d0a47a21f485a754))
+
+
+
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.3.0...config@1.3.1) (2023-11-29)
+
+
+### 👓 Types
+
+* normalize MaybeRef type ([8ac0762](https://github.com/vexip-ui/vexip-ui/commit/8ac07623268844cecc0e7d8674d321614bc08edf))
+
+
+
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.2.1...config@1.3.0) (2023-11-12)
+
+
+### 🔨 Code Refactoring
+
+* **config:** remove arrow series icons and transfer to angle series ([d24e9bb](https://github.com/vexip-ui/vexip-ui/commit/d24e9bb85f88e7040a362b07ac27618b18c0fca4))
+* **upload:** transfer file preset icons into config ([e3caf85](https://github.com/vexip-ui/vexip-ui/commit/e3caf85cb2da3549a046ca1f1eb2c84364f4fe1a))
+
+
+
+## [1.2.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.2.0...config@1.2.1) (2023-11-11)
+
+
+### ✨ Features
+
+* export all config api methods ([8b19a1c](https://github.com/vexip-ui/vexip-ui/commit/8b19a1c9d137afe1dec5fb48c15593398f13a6f7))
+* **icon:** support custom renderer ([ca8f54b](https://github.com/vexip-ui/vexip-ui/commit/ca8f54b7daa75ec9ede7e25924d53ccf69a30446))
+
+
+### 🔨 Code Refactoring
+
+* support globally config hover delay, defaults to 100ms ([b409d01](https://github.com/vexip-ui/vexip-ui/commit/b409d011e01c0d44e8c84496faff36e8613fab8b))
+
+
+
+# [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.1...config@1.2.0) (2023-11-06)
+
+
+### ✨ Features
+
+* add German locale config ([#406](https://github.com/vexip-ui/vexip-ui/issues/406)) ([e90ba63](https://github.com/vexip-ui/vexip-ui/commit/e90ba6385d69e727ca58386e7f183062b61924c4))
+
+
+### 🐞 Bug Fixes
+
+* **config:** force vxp namespace for css variables ([814fd2c](https://github.com/vexip-ui/vexip-ui/commit/814fd2caaada47b3e7053ec69673b4b6bc881dd8))
+* **config:** incorrect default value for value(s)Prop ([db750d3](https://github.com/vexip-ui/vexip-ui/commit/db750d3233b3399ef8edf680933f7e50794dce6b))
+
+
+
 ## [1.1.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.1.0...config@1.1.1) (2023-09-07)
 
 

@@ -25,6 +25,7 @@ $image: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: inline-flex;
   flex-shrink: 0;
@@ -123,23 +124,23 @@ $image: map.merge(
     &__close {
       @include handler;
 
-      top: get-css-var('image-action-offset');
       inset-inline-end: get-css-var('image-action-offset');
+      top: get-css-var('image-action-offset');
     }
 
     &__prev {
       @include handler;
 
-      top: 50%;
       inset-inline-start: get-css-var('image-action-offset');
+      top: 50%;
       transform: translateY(-50%);
     }
 
     &__next {
       @include handler;
 
-      top: 50%;
       inset-inline-end: get-css-var('image-action-offset');
+      top: 50%;
       transform: translateY(-50%);
     }
 

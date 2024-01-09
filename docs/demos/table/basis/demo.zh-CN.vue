@@ -1,20 +1,17 @@
 <template>
-  <Table
-    :columns="columns"
-    :data="data"
-    :width="1000"
-    :side-padding="[10, 5]"
-  ></Table>
+  <Table :columns="columns" :data="data" :width="1000"></Table>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 // 在 typescript 时可以使用辅助函数来帮助类型推导
-import { defineColumns } from 'vexip-ui'
+import { defineTableColumns } from 'vexip-ui'
 
-const columns = ref(
-  defineColumns([
+const currentYear = new Date().getFullYear()
+
+const columns = reactive(
+  defineTableColumns([
     {
       name: 'First Name',
       key: 'firstName'
@@ -26,56 +23,29 @@ const columns = ref(
     {
       name: 'Job',
       key: 'job',
-      accessor(row) {
-        return row.job
-      }
+      accessor: row => row.job,
+      formatter: job => `Good ${job}`
     },
     {
       name: 'Age',
-      key: 'age'
+      key: 'age',
+      formatter: age => `${age} (${currentYear - age})`
     }
   ])
 )
-const data = ref([
-  {
-    id: '1',
-    job: 'Cashier',
-    email: 'Angelique_Walsh2268@twace.org',
-    firstName: 'Angelique',
-    lastName: 'Walsh',
-    age: '58'
-  },
-  {
-    id: '2',
-    job: 'Stockbroker',
-    email: 'Aeris_Drake5867@gmail.com',
-    firstName: 'Aeris',
-    lastName: 'Drake',
-    age: '40'
-  },
-  {
-    id: '3',
-    job: 'Machine Operator',
-    email: 'Elisabeth_Rogers7566@sheye.org',
-    firstName: 'Elisabeth',
-    lastName: 'Rogers',
-    age: '56'
-  },
-  {
-    id: '4',
-    job: 'Audiologist',
-    email: 'Sharon_Tanner5855@nickia.com',
-    firstName: 'Sharon',
-    lastName: 'Tanner',
-    age: '58'
-  },
-  {
-    id: '5',
-    job: 'Cashier',
-    email: 'Evie_Farmer6650@typill.biz',
-    firstName: 'Evie',
-    lastName: 'Farmer',
-    age: '26'
-  }
-])
+
+const data = reactive(
+  Array.from({ length: 5 }, (_, index) => {
+    return {
+      id: index + 1,
+      firstName: `First ${index}`,
+      lastName: `Last ${index}`,
+      company: `Company ${index}`,
+      job: `Job ${index}`,
+      age: 20 + index,
+      email: `email${index}@vexip.ui`,
+      address: `Address ${index}`
+    }
+  })
+)
 </script>

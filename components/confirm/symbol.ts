@@ -24,6 +24,14 @@ export interface ConfirmState {
   contentAlign: ConfirmAlign,
   actionsAlign: ConfirmAlign,
   cancelable: boolean,
+  width: number | string,
+  height: number | string,
+  top: number | string,
+  right: number | string,
+  bottom: number | string,
+  left: number | string,
+  xOffset: number | string,
+  yOffset: number | string,
   raw: Record<any, any>
 }
 
@@ -33,23 +41,9 @@ export type ConfirmRenderFn = (
   handleCancel: () => void
 ) => any
 
-export interface ConfirmOptions extends Record<any, any> {
-  title?: string,
-  content?: string,
-  confirmType?: ConfirmButtonType,
-  cancelType?: ConfirmButtonType,
-  confirmText?: string,
-  cancelText?: string,
-  icon?: Record<string, any> | (() => any) | null | boolean,
-  iconProps?: IconMinorProps,
-  className?: string | Record<string, any>,
-  style?: string | Record<string, any>,
-  closable?: boolean,
-  maskClose?: boolean,
-  parseHtml?: boolean,
-  contentAlign?: ConfirmAlign,
-  actionsAlign?: ConfirmAlign,
-  cancelable?: boolean,
+export interface ConfirmOptions
+  extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>,
+  Record<any, any> {
   renderer?: ConfirmRenderFn,
   onBeforeConfirm?: () => unknown
 }

@@ -1,4 +1,4 @@
-# Tour ^[Since v2.2.0](!s)
+# Tour ==!s|2.2.0==
 
 Used to guide users on how to use certain features.
 

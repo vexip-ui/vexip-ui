@@ -247,7 +247,7 @@ describe('Upload', () => {
     hasDargOver()
 
     await triggerItem.trigger('dragleave')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     notDragOver()
 

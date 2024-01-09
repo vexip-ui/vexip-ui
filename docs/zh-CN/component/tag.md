@@ -1,5 +1,7 @@
 # Tag 标签
 
+用于对事物进行标记或分类。
+
 ## 代码示例
 
 :::demo tag/basis
@@ -7,6 +9,14 @@
 ### 基础用法
 
 通过设置 `type` 属性的值为 `primary`、`success`、`error`、`warning` 创建不同类型的标签，不设置时为默认类型。
+
+:::
+
+:::demo tag/border
+
+### 边框标签
+
+添加 `border` 属性可以设置标签为边框标签。
 
 :::
 
@@ -62,7 +72,7 @@
 
 ### 额外内容
 
-^[Since v2.1.0](!s)
+==!s|2.1.0==
 
 通过 `prefix` 和 `suffix` 属性可以在分别前后插入额外内容。
 
@@ -91,21 +101,22 @@ type TagType = TagState | TagNamedColor
 
 ### Tag 属性
 
-| 名称         | 类型                              | 说明                                                         | 默认值      | 始于    |
-| ------------ | --------------------------------- | ------------------------------------------------------------ | ----------- | ------- |
-| type         | `TagType`                         | 设置标签的类型，包含状态类型和颜色类型                       | `'default'` | -       |
-| size         | `'small' \| 'default' \| 'large'` | 标签的大小，与其他组件不同的是，该属性会同时改变标签字体大小 | `'default'` | -       |
-| border       | `boolean`                         | 设置标签是否具有边框                                         | `false`     | -       |
-| closable     | `boolean`                         | 设置标签是否具有关闭功能                                     | `false`     | -       |
-| color        | `string`                          | 设置标签的自定义颜色，其优先级高于 `type` 预设类型           | `null`      | -       |
-| simple       | `boolean`                         | 设置标签是否为简约模式                                       | `false`     | -       |
-| circle       | `boolean`                         | 设置标签是否为圆角标签                                       | `false`     | -       |
-| prefix       | `string \| number`                | 设置标签的前置内容                                           | `''`        | `2.1.0` |
-| prefix-bg    | `string`                          | 设置标签前置内容的背景颜色                                   | `''`        | `2.1.0` |
-| prefix-color | `string`                          | 设置标签前置内容的颜色                                       | `''`        | `2.1.0` |
-| suffix       | `string \| number`                | 设置标签的前置内容                                           | `''`        | `2.1.0` |
-| suffix-bg    | `string`                          | 设置标签前置内容的背景颜色                                   | `''`        | `2.1.0` |
-| suffix-color | `string`                          | 设置标签前置内容的颜色                                       | `''`        | `2.1.0` |
+| 名称         | 类型                              | 说明                                                         | 默认值      | 始于     |
+| ------------ | --------------------------------- | ------------------------------------------------------------ | ----------- | -------- |
+| type         | `TagType`                         | 设置标签的类型，包含状态类型和颜色类型                       | `'default'` | -        |
+| size         | `'small' \| 'default' \| 'large'` | 标签的大小，与其他组件不同的是，该属性会同时改变标签字体大小 | `'default'` | -        |
+| border       | `boolean`                         | 设置标签是否为边框标签                                       | `false`     | -        |
+| closable     | `boolean`                         | 设置标签是否具有关闭功能                                     | `false`     | -        |
+| color        | `string`                          | 设置标签的自定义颜色，其优先级高于 `type` 预设类型           | `null`      | -        |
+| simple       | `boolean`                         | 设置标签是否为简约模式                                       | `false`     | -        |
+| circle       | `boolean`                         | 设置标签是否为圆角标签                                       | `false`     | -        |
+| prefix       | `string \| number`                | 设置标签的前置内容                                           | `''`        | `2.1.0`  |
+| prefix-bg    | `string`                          | 设置标签前置内容的背景颜色                                   | `''`        | `2.1.0`  |
+| prefix-color | `string`                          | 设置标签前置内容的颜色                                       | `''`        | `2.1.0`  |
+| suffix       | `string \| number`                | 设置标签的前置内容                                           | `''`        | `2.1.0`  |
+| suffix-bg    | `string`                          | 设置标签前置内容的背景颜色                                   | `''`        | `2.1.0`  |
+| suffix-color | `string`                          | 设置标签前置内容的颜色                                       | `''`        | `2.1.0`  |
+| disabled     | `boolean`                         | 设置标签是否禁用                                             | `false`     | `2.2.17` |
 
 ### Tag 事件
 

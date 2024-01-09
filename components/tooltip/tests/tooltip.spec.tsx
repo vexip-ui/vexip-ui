@@ -39,7 +39,7 @@ describe('Tooltip', () => {
     wrapper = createTooltip()
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
     expect(wrapper.find('.vxp-tooltip__popper').classes()).toContain('vxp-tooltip-vars')
@@ -51,7 +51,7 @@ describe('Tooltip', () => {
     wrapper = createTooltip({ trigger: 'click' })
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
 
@@ -65,7 +65,7 @@ describe('Tooltip', () => {
     wrapper = createTooltip({ trigger: 'focus' })
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
 
@@ -75,11 +75,37 @@ describe('Tooltip', () => {
     expect(wrapper.find('.tip').text()).toEqual(TEXT)
   })
 
+  it('hover-focus trigger', async () => {
+    wrapper = createTooltip({ trigger: 'hover-focus' })
+
+    await wrapper.find('.trigger').trigger('mouseenter')
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+    expect(wrapper.find('.tip').exists()).toBe(true)
+    expect(wrapper.find('.tip').text()).toEqual(TEXT)
+
+    await wrapper.find('.trigger').trigger('focus')
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+
+    await wrapper.find('.trigger').trigger('mouseleave')
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
+
+    await wrapper.find('.trigger').trigger('blur')
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
+  })
+
   it('custom trigger', async () => {
     wrapper = createTooltip({ trigger: 'custom' })
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
 
@@ -95,7 +121,7 @@ describe('Tooltip', () => {
     expect(wrapper.find('.trigger').exists()).toBe(true)
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     await wrapper.setProps({ disabled: true })
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(false)
@@ -105,7 +131,10 @@ describe('Tooltip', () => {
     wrapper = createTooltip({ transfer: true })
 
     await wrapper.find('.trigger').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    await nextTick()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(document.querySelector('.vxp-tooltip__popper')).not.toBeNull()
     expect(document.querySelector('.tip')).not.toBeNull()

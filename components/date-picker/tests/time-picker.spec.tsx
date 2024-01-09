@@ -4,15 +4,16 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { ClockR, GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import { format } from '@vexip-ui/utils'
 
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -92,6 +93,8 @@ describe('TimePicker', () => {
   })
 
   it('key toggle visible', async () => {
+    vi.useRealTimers()
+
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(TimePicker, {
@@ -122,6 +125,8 @@ describe('TimePicker', () => {
     await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
+
+    vi.useFakeTimers()
   })
 
   it('popper show', async () => {
@@ -263,21 +268,21 @@ describe('TimePicker', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <TimePicker prefix={GithubB}></TimePicker>)
+    const wrapper = mount(() => <TimePicker prefix={Github}></TimePicker>)
 
     expect(wrapper.find('.vxp-time-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <TimePicker prefix={GithubB} prefix-color={'red'}></TimePicker>)
+    const wrapper = mount(() => <TimePicker prefix={Github} prefix-color={'red'}></TimePicker>)
 
     expect(wrapper.find('.vxp-time-picker__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <TimePicker prefix={GithubB}>
+      <TimePicker prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -285,7 +290,7 @@ describe('TimePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-time-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -293,22 +298,22 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker)
 
     expect(wrapper.find('.vxp-time-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ClockR).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.clock.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ClockR).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(globalIcons.value.clock.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <TimePicker suffix={GithubB} suffix-color={'red'}></TimePicker>)
+    const wrapper = mount(() => <TimePicker suffix={Github} suffix-color={'red'}></TimePicker>)
 
     expect(wrapper.find('.vxp-time-picker__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <TimePicker suffix={GithubB}>
+      <TimePicker suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -316,7 +321,7 @@ describe('TimePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-time-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -329,7 +334,7 @@ describe('TimePicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <TimePicker state={state}></TimePicker>)
 
       expect(wrapper.find('.vxp-time-picker__selector').classes()).toContain(
@@ -342,11 +347,11 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker)
 
     expect(wrapper.find('.vxp-time-picker__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-time-picker__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -360,10 +365,10 @@ describe('TimePicker', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <TimePicker loading loading-icon={GithubB}></TimePicker>)
+    const wrapper = mount(() => <TimePicker loading loading-icon={Github}></TimePicker>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {
@@ -558,7 +563,7 @@ describe('TimePicker', () => {
     expect(units[2].text()).toEqual('51')
   })
 
-  it('shortcut', async () => {
+  it('shortcuts', async () => {
     const fnValue = vi.fn(() => '12:00:00')
     const onShortcut = vi.fn()
     const shortcuts = [
@@ -591,6 +596,20 @@ describe('TimePicker', () => {
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('12:00:00')
+  })
+
+  it('shortcuts placement', () => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const shortcuts = [{ name: 'morning', value: '08:00:00' }]
+      const wrapper = mount(TimePicker, {
+        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+      })
+
+      expect(wrapper.find('.vxp-time-picker__shortcuts').exists()).toBe(true)
+      expect(wrapper.find('.vxp-time-picker__shortcuts').classes()).toContain(
+        `vxp-time-picker__shortcuts--${placement}`
+      )
+    })
   })
 
   it('range select', async () => {

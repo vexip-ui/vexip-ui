@@ -74,7 +74,7 @@
 
 ### 列表额外内容
 
-^[Since v2.2.7](!s)
+==!s|2.2.7==
 
 通过 `prepend` 和 `append` 插槽可以分别为选项列表的前方和后方插入内容。
 
@@ -119,9 +119,9 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | value          | `string \| number`                               | Input 控件的值                                                                               | `''`        | -        |
 | options        | `AutoCompleteRawOption[]`                        | 可选项列表，可以是字符串或者符合 `ObjectOption` 的对象                                       | `[]`        | -        |
 | filter         | `boolean \| AutoCompleteFilter`                  | 过滤 `options` 的方法，传入 `true` 时会使用内置比较方法                                      | `false`     | -        |
-| prefix         | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                                                 | `null`      | -        |
+| prefix         | `VueComponent`                                   | 前缀图标，使用前缀插槽时无效                                                                 | `null`      | -        |
 | prefix-color   | `string`                                         | 前缀内容的颜色，会影响前缀插槽                                                               | `''`        | -        |
-| suffix         | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                                                 | `null`      | -        |
+| suffix         | `VueComponent`                                   | 后缀图标，使用后缀插槽时无效                                                                 | `null`      | -        |
 | suffix-color   | `string`                                         | 后缀内容的颜色，会影响后缀插槽                                                               | `''`        | -        |
 | placeholder    | `string`                                         | Input 控件占位符                                                                             | `null`      | -        |
 | size           | `'small' \| 'default' \| 'large'`                | 设置输入控件大小                                                                             | `'default'` | -        |
@@ -133,7 +133,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | ignore-case    | `boolean`                                        | 在使用内置的过滤时，设置是否忽略大小写                                                       | `false`     | -        |
 | key-config     | `AutoCompleteKeyConfig`                          | 设置选项解析 `options` 时的各项键名                                                          | `{}`        | `2.0.0`  |
 | loading        | `boolean`                                        | 设置是否为加载中                                                                             | `false`     | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                                                     | `false`     | `2.0.0`  |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                                                                     | `false`     | `2.0.0`  |
 | transparent    | `boolean`                                        | 设置是否为透明模式                                                                           | `false`     | `2.0.2`  |

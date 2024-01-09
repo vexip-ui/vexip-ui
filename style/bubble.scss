@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 
 @use './shared' as *;
 @use './design' as *;
@@ -33,6 +34,7 @@ $bubble: map.merge(
 
   @include basis;
 
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
@@ -60,6 +62,8 @@ $bubble: map.merge(
   }
 
   &__arrow {
+    // pointer-events: none;
+
     &,
     &::after {
       position: absolute;
@@ -110,7 +114,9 @@ $bubble: map.merge(
   }
 
   $size: get-css-var('bubble-arrow-size');
-  $padding: calc(#{$size} + 4px);
+  $s-pad: 6px;
+  $l-pad: calc(#{math.round($s-pad * 0.5)} + #{$size});
+
   $bg-color: get-css-var('bubble-bg-color');
   $border-color: get-css-var('bubble-b-color');
   $v-offset: get-css-var('bubble-arrow-v-offset');
@@ -119,11 +125,11 @@ $bubble: map.merge(
   &--top,
   &--top-start,
   &--top-end {
-    padding: $size 0 $padding;
+    padding: $s-pad 0 $l-pad;
   }
 
   @mixin top-arrow {
-    bottom: 0;
+    bottom: $l-pad;
     border-width: $size $size 0;
     border-top-color: $border-color;
     transform: translateY(100%);
@@ -140,19 +146,19 @@ $bubble: map.merge(
     }
   }
 
-  &--top &__arrow {
+  &--top > &__arrow {
     @include top-arrow;
 
     left: calc(50% - #{$size});
   }
 
-  &--top-start &__arrow {
+  &--top-start > &__arrow {
     @include top-arrow;
 
     left: calc(#{$h-offset} - #{$size});
   }
 
-  &--top-end &__arrow {
+  &--top-end > &__arrow {
     @include top-arrow;
 
     left: calc(100% - #{$h-offset} - #{$size});
@@ -161,11 +167,11 @@ $bubble: map.merge(
   &--bottom,
   &--bottom-start,
   &--bottom-end {
-    padding: $padding 0 $size;
+    padding: $l-pad 0 $s-pad;
   }
 
   @mixin bottom-arrow {
-    top: 0;
+    top: $l-pad;
     border-width: 0 $size $size;
     border-bottom-color: $border-color;
     transform: translateY(-100%);
@@ -182,19 +188,19 @@ $bubble: map.merge(
     }
   }
 
-  &--bottom &__arrow {
+  &--bottom > &__arrow {
     @include bottom-arrow;
 
     left: calc(50% - #{$size});
   }
 
-  &--bottom-start &__arrow {
+  &--bottom-start > &__arrow {
     @include bottom-arrow;
 
     left: calc(#{$h-offset} - #{$size});
   }
 
-  &--bottom-end &__arrow {
+  &--bottom-end > &__arrow {
     @include bottom-arrow;
 
     left: calc(100% - #{$h-offset} - #{$size});
@@ -204,11 +210,11 @@ $bubble: map.merge(
   &--left-start,
   &--left-end {
     padding: 0;
-    padding-inline: $size $padding;
+    padding-inline: $s-pad $l-pad;
   }
 
   @mixin left-arrow {
-    right: 0;
+    right: $l-pad;
     border-width: $size 0 $size $size;
     border-inline-start-color: $border-color;
     transform: translateX(100%);
@@ -230,19 +236,19 @@ $bubble: map.merge(
     }
   }
 
-  &--left &__arrow {
+  &--left > &__arrow {
     @include left-arrow;
 
     top: calc(50% - #{$size});
   }
 
-  &--left-start &__arrow {
+  &--left-start > &__arrow {
     @include left-arrow;
 
     top: calc(#{$v-offset} - #{$size});
   }
 
-  &--left-end &__arrow {
+  &--left-end > &__arrow {
     @include left-arrow;
 
     top: calc(100% - #{$v-offset} - #{$size});
@@ -252,11 +258,11 @@ $bubble: map.merge(
   &--right-start,
   &--right-end {
     padding: 0;
-    padding-inline: $padding $size;
+    padding-inline: $l-pad $s-pad;
   }
 
   @mixin right-arrow {
-    left: 0;
+    left: $l-pad;
     border-width: $size $size $size 0;
     border-inline-end-color: $border-color;
     transform: translateX(-100%);
@@ -278,19 +284,19 @@ $bubble: map.merge(
     }
   }
 
-  &--right &__arrow {
+  &--right > &__arrow {
     @include right-arrow;
 
     top: calc(50% - #{$size});
   }
 
-  &--right-start &__arrow {
+  &--right-start > &__arrow {
     @include right-arrow;
 
     top: calc($v-offset - #{$size});
   }
 
-  &--right-end &__arrow {
+  &--right-end > &__arrow {
     @include right-arrow;
 
     top: calc(100% - #{$v-offset} - #{$size});

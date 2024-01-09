@@ -28,7 +28,7 @@ $tree: map.merge(
     indicator-color: get-css-var('color-primary-base'),
     indent-width: 16px,
     depth: -1,
-    link-line-index: -1,
+    // link-line-index: -1,
     link-line-type: 'dashed',
     link-line-color: get-css-var('border-color-base')
   ),
@@ -41,6 +41,7 @@ $tree: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
 
@@ -56,9 +57,9 @@ $tree: map.merge(
     border: 0 get-css-var('tree-link-line-type') get-css-var('tree-link-line-color');
 
     &--vertical {
+      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
       top: 0;
       bottom: 0;
-      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
       border-inline-start-width: 1px;
       transform: translateX(calc(-1 * #{get-css-var('tree-link-line-index')} * #{$indent-w}));
 
@@ -68,8 +69,8 @@ $tree: map.merge(
     }
 
     &--horizontal {
-      bottom: calc(50% - #{get-css-var('tree-node-span')});
       inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      bottom: calc(50% - #{get-css-var('tree-node-span')});
       width: calc(#{$indent-w} * 0.5);
       border-bottom-width: 1px;
     }
@@ -275,15 +276,13 @@ $tree: map.merge(
     margin-inline-end: 6px;
 
     &--suffix {
-      margin-inline-start: 6px;
-      margin-inline-end: 0;
+      margin-inline: 6px 0;
     }
   }
 
   &__indicator {
     position: absolute;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
+    inset-inline: 0 0;
     height: 1px;
     will-change: top, inset-inline-start;
     background-color: get-css-var('tree-indicator-color');

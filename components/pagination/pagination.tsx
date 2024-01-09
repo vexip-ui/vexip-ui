@@ -152,7 +152,7 @@ export default defineComponent({
     const itemCount = computed(() => {
       if (!isNull(props.maxCount)) {
         warnOnce(
-          "[vexip-ui:Pagination] 'max-count' props" +
+          "[vexip-ui:Pagination] 'max-count' prop" +
             " have been deprecated, please use 'item-count' prop to replace it"
         )
       }
@@ -445,7 +445,7 @@ export default defineComponent({
 
     function renderPrev(Tag: any) {
       const disabled = props.disabled || disabledPrev.value
-      const arrow = isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft
+      const arrow = isRtl.value ? icons.value.angleRight : icons.value.angleLeft
 
       return (
         <Tag
@@ -469,7 +469,7 @@ export default defineComponent({
                 renderSlot(slots, 'prev', { disabled })
               )
             : (
-              <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
               )}
         </Tag>
       )
@@ -477,7 +477,7 @@ export default defineComponent({
 
     function renderNext(Tag: any) {
       const disabled = props.disabled || disabledNext.value
-      const arrow = isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight
+      const arrow = isRtl.value ? icons.value.angleLeft : icons.value.angleRight
 
       return (
         <Tag
@@ -501,7 +501,7 @@ export default defineComponent({
                 renderSlot(slots, 'next', { disabled })
               )
             : (
-              <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
               )}
         </Tag>
       )
@@ -535,14 +535,14 @@ export default defineComponent({
 
             return (
               <Transition name={nh.ns('fade')}>
-                {inPrevEllipsis.value
+                {!disabled && inPrevEllipsis.value
                   ? (
-                    <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
                     )
                   : (
                     <Icon
                       {...icons.value.ellipsis}
-                      scale={(icons.value.ellipsis.scale || 1) * 0.8}
+                      scale={+(icons.value.ellipsis.scale || 1)}
                       style={'position: absolute'}
                     ></Icon>
                     )}
@@ -556,11 +556,11 @@ export default defineComponent({
     function renderNextEllipsis(Tag: any) {
       if (!useEllipsis.value || mode.value === PaginationMode.RIGHT) return null
 
-      const disabled = props.disabled || !prevEllipsisTarget.value
+      const disabled = props.disabled || !nextEllipsisTarget.value
 
       return (
         <Tag
-          ref={el => el && prevEllipsisTarget.value && itemElList.push(el as any)}
+          ref={el => el && nextEllipsisTarget.value && itemElList.push(el as any)}
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'more')]: true,
@@ -581,14 +581,14 @@ export default defineComponent({
 
             return (
               <Transition name={nh.ns('fade')}>
-                {inNextEllipsis.value
+                {!disabled && inNextEllipsis.value
                   ? (
-                    <Icon {...arrow} scale={(arrow.scale || 1) * 0.8}></Icon>
+                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
                     )
                   : (
                     <Icon
                       {...icons.value.ellipsis}
-                      scale={(icons.value.ellipsis.scale || 1) * 0.8}
+                      scale={+(icons.value.ellipsis.scale || 1)}
                       style={'position: absolute'}
                     ></Icon>
                     )}

@@ -18,6 +18,7 @@ $column: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   position: relative;
   display: get-css-var('column-display');

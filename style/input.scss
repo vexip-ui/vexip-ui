@@ -104,7 +104,7 @@ $input: map.merge(
       }
     }
 
-    &--loading {
+    &--readonly {
       cursor: auto;
     }
 
@@ -180,7 +180,7 @@ $input: map.merge(
     @extend %disabled-item;
   }
 
-  #{$handler}--loading &__control {
+  #{$handler}--readonly &__control {
     cursor: auto;
   }
 

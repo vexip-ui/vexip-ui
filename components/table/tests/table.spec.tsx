@@ -2,10 +2,10 @@ import { TableColumn } from '@/components/table-column'
 import { TableSummary } from '@/components/table-summary'
 
 import { describe, expect, it, vi } from 'vitest'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 import { noop } from '@vexip-ui/utils'
 import { Table, defineColumns, defineSummaries } from '..'
 import TableBody from '../table-body.vue'
@@ -16,9 +16,10 @@ import type { TableRowState } from '../symbol'
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
+  await nextTick()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -52,6 +53,51 @@ describe('Table', () => {
       expect(row.find('.vxp-table__cell').exists()).toBe(true)
       expect(row.find('.vxp-table__cell').text()).toEqual(data[i].name)
     })
+  })
+
+  it('accessor', async () => {
+    const columns = [
+      {
+        name: 'Value',
+        key: 'value',
+        accessor: (item: any) => item.value
+      }
+    ]
+    const data = [{ value: 100 }]
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const body = wrapper.find('.vxp-table__body')
+    const row = body.find('.vxp-table__row')
+
+    expect(row.find('.vxp-table__cell').text()).toEqual(String(data[0].value))
+  })
+
+  it('formatter', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name',
+        formatter: (n: string) => `Name: ${n}`
+      },
+      {
+        name: 'Value',
+        key: 'value',
+        accessor: (item: any) => item.value,
+        formatter: (v: number) => v + 1
+      }
+    ]
+    const data = [{ name: 'n', value: 100 }]
+    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+
+    await runScrollTimers()
+
+    const body = wrapper.find('.vxp-table__body')
+    const row = body.find('.vxp-table__row')
+
+    expect(row.findAll('.vxp-table__cell')[0].text()).toEqual(`Name: ${data[0].name}`)
+    expect(row.findAll('.vxp-table__cell')[1].text()).toEqual(String(data[0].value + 1))
   })
 
   it('set a new data', async () => {
@@ -344,6 +390,7 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
+        order: -1,
         sorter: {
           able: true,
           method: sortMethod
@@ -381,7 +428,7 @@ describe('Table', () => {
       renderRows = body.vm.data
     }
 
-    await clickSorter(headCells[1], 'asc')
+    await clickSorter(headCells[0], 'asc')
     expect(renderRows.map(row => row.data.name)).toEqual([
       'n0',
       'n0',
@@ -396,7 +443,7 @@ describe('Table', () => {
     ])
     expect(sortMethod).toHaveBeenCalled()
 
-    await clickSorter(headCells[1], 'desc')
+    await clickSorter(headCells[0], 'desc')
     expect(renderRows.map(row => row.data.name)).toEqual([
       'n4',
       'n4',
@@ -410,7 +457,7 @@ describe('Table', () => {
       'n0'
     ])
 
-    await clickSorter(headCells[0], 'desc')
+    await clickSorter(headCells[1], 'desc')
     expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l1n4',
       'l0n4',
@@ -424,7 +471,7 @@ describe('Table', () => {
       'l0n0'
     ])
 
-    await clickSorter(headCells[0], 'asc')
+    await clickSorter(headCells[1], 'asc')
     expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l0n4',
       'l1n4',
@@ -545,6 +592,37 @@ describe('Table', () => {
     expect(rows.length).toEqual(2)
   })
 
+  it('data filter', async () => {
+    const search = ref('A')
+    const filter = (item: { name: string, label: string }) => item.name.includes(search.value)
+    const data = [
+      { name: 'Angelique', label: 'Walsh' },
+      { name: 'Aeris', label: 'Drake' },
+      { name: 'Elisabeth', label: 'Rogers' },
+      { name: 'Sharon', label: 'Tanner' },
+      { name: 'Evie', label: 'Farmer' }
+    ]
+    const wrapper = mount(() => (
+      <Table data={data} data-filter={filter}>
+        <TableColumn id-key={'name'} name={'Name'}></TableColumn>
+        <TableColumn id-key={'label'} name={'Label'}></TableColumn>
+      </Table>
+    ))
+
+    await runScrollTimers()
+
+    let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toBe(2)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual('Angelique')
+    expect(rows[1].find('.vxp-table__cell').text()).toEqual('Aeris')
+
+    search.value = 'S'
+    await nextTick()
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toBe(1)
+    expect(rows[0].find('.vxp-table__cell').text()).toEqual('Sharon')
+  })
+
   it('selection column', async () => {
     const columns = [
       {
@@ -644,11 +722,11 @@ describe('Table', () => {
     })
 
     await rowGroups[0].find('.vxp-table__expand').trigger('click')
-    expect(rowGroups[0].find('.vxp-table__collapse').exists()).toBe(true)
+    expect(rowGroups[0].find('.vxp-table__expanded').exists()).toBe(true)
     expect(rowGroups[0].find('.expand').exists()).toBe(true)
 
     await rowGroups[0].find('.vxp-table__expand').trigger('click')
-    expect(rowGroups[0].find('.vxp-table__collapse').exists()).not.toBe(true)
+    expect(rowGroups[0].find('.vxp-table__expanded').exists()).not.toBe(true)
     expect(rowGroups[0].find('.expand').exists()).not.toBe(true)
   })
 
@@ -704,6 +782,9 @@ describe('Table', () => {
       </Table>
     ))
 
+    await runScrollTimers()
+    // await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+
     let rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
 
     expect(rows.length).toEqual(6)
@@ -720,6 +801,7 @@ describe('Table', () => {
     )
 
     await rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    await runScrollTimers()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(9)
     expect(rows[2].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
@@ -727,6 +809,7 @@ describe('Table', () => {
     )
 
     await rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
+    await runScrollTimers()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(3)
   })
@@ -753,6 +836,8 @@ describe('Table', () => {
     data[0].children = Array.from({ length: 3 }, (_, i) => ({ label: `l${3 + i}` }))
 
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+    await nextTick()
+    await nextTick()
 
     const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     const cells = rows[0].findAll('.vxp-table__cell')
@@ -785,6 +870,7 @@ describe('Table', () => {
         onColResizeEnd={onEnd}
       ></Table>
     ))
+    await nextTick()
     await nextTick()
 
     const heads = wrapper.findAll('.vxp-table__head-cell')
@@ -819,7 +905,7 @@ describe('Table', () => {
     const moveEvent = new CustomEvent('pointermove') as any
     moveEvent.clientX = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onMove).toHaveBeenCalled()
     expect(currentWidth).toEqual(140)
 
@@ -1125,5 +1211,40 @@ describe('Table', () => {
         .findComponent(User)
         .exists()
     ).toBe(true)
+  })
+
+  it('ellipsis', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name',
+        ellipsis: true
+      },
+      {
+        name: 'Value',
+        key: 'value'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, value: i }))
+    const wrapper = mount(Table, {
+      props: { columns, data }
+    })
+
+    await runScrollTimers()
+
+    const headCells = wrapper.findAll('.vxp-table__head .vxp-table__head-cell')
+    const bodyCells = wrapper.findAll('.vxp-table__body .vxp-table__cell')
+
+    expect(headCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(headCells[1].find('.vxp-ellipsis').exists()).toBe(false)
+    expect(bodyCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[1].find('.vxp-ellipsis').exists()).toBe(false)
+
+    await wrapper.setProps({ ellipsis: true })
+
+    expect(headCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(headCells[1].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[0].find('.vxp-ellipsis').exists()).toBe(true)
+    expect(bodyCells[1].find('.vxp-ellipsis').exists()).toBe(true)
   })
 })

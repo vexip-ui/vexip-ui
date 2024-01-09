@@ -24,8 +24,14 @@ export const scv = <V extends string, S extends string>(v: V, s: S) => `--${v}: 
 
 export function useBEM<B extends string>(block: B): BEM<B>
 export function useBEM<B extends string, N extends string>(block: B, namespace: N): NBEM<B, N>
-export function useBEM<B extends string, N extends string>(block: B, namespace: () => N): NBEM<B, N>
-export function useBEM<B extends string, N extends string>(block: B, namespace?: N | (() => N)) {
+export function useBEM<B extends string, N extends string>(
+  block: B,
+  namespace: (isVar?: boolean) => N
+): NBEM<B, N>
+export function useBEM<B extends string, N extends string>(
+  block: B,
+  namespace?: N | ((isVar?: boolean) => N)
+) {
   if (!namespace) {
     return <BEM<B>>{
       b: () => `${block}`,
@@ -53,7 +59,7 @@ export function useBEM<B extends string, N extends string>(block: B, namespace?:
     }
   }
 
-  const n = () => (typeof namespace === 'function' ? namespace() : namespace)
+  const n = (isVar?: boolean) => (typeof namespace === 'function' ? namespace(isVar) : namespace)
 
   return <NBEM<B, N>>{
     b: () => `${n()}-${block}`,
@@ -70,9 +76,9 @@ export function useBEM<B extends string, N extends string>(block: B, namespace?:
     cbs: s => `.${n()}-${block}-${s}`,
     cns: s => `.${n()}-${s}`,
 
-    cv: v => cv(`${n()}-${block}-${v}`),
+    cv: v => cv(`${n(true)}-${block}-${v}`),
     cvm: (m, s = {} as any) => {
-      const namespace = n()
+      const namespace = n(true)
 
       for (const key of Object.keys(m)) {
         s[cv(`${namespace}-${block}-${key}`)] = m[key]
@@ -80,11 +86,11 @@ export function useBEM<B extends string, N extends string>(block: B, namespace?:
 
       return s
     },
-    gcv: v => gcv(`${n()}-${block}-${v}`),
-    scv: (v, s) => scv(`${n()}-${block}-${v}`, s),
-    nv: v => cv(`${n()}-${v}`),
+    gcv: v => gcv(`${n(true)}-${block}-${v}`),
+    scv: (v, s) => scv(`${n(true)}-${block}-${v}`, s),
+    nv: v => cv(`${n(true)}-${v}`),
     nvm: (m, s = {} as any) => {
-      const namespace = n()
+      const namespace = n(true)
 
       for (const key of Object.keys(m)) {
         s[cv(`${namespace}-${key}`)] = m[key]
@@ -92,7 +98,7 @@ export function useBEM<B extends string, N extends string>(block: B, namespace?:
 
       return s
     },
-    gnv: v => gcv(`${n()}-${v}`),
-    snv: (v, s) => scv(`${n()}-${v}`, s)
+    gnv: v => gcv(`${n(true)}-${v}`),
+    snv: (v, s) => scv(`${n(true)}-${v}`, s)
   }
 }

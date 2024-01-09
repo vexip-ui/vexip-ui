@@ -3,7 +3,7 @@ import { ButtonGroup } from '@/components/button-group'
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 import { parseColorToRgba } from '@vexip-ui/utils'
 import { Button } from '..'
 import { buttonTypes } from '../symbol'

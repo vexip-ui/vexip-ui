@@ -1,6 +1,6 @@
 import type { AnyCase } from './word-case'
 
-const numberRE = /^\s*[+-]?\d*\.?\d+\s*$/
+export const numberRE = /^\s*[+-]?\d*\.?\d+(?:[eE][+-]?\d+)?\s*$/
 
 /**
  * 检测给定的值是否可以通过 parseFlat 或 Number 方法转为数字
@@ -61,9 +61,9 @@ export function doubleDigits(number: number) {
 }
 
 /**
- * Return decimal length of a number.
+ * 返回数字的小数位数
  *
- * @param number The input number
+ * @param number 指定的数字
  */
 export function decimalLength(number: number | string) {
   // Get digit length of e
@@ -74,7 +74,7 @@ export function decimalLength(number: number | string) {
 }
 
 /**
- * Return decimal length of a number.
+ * Return decimal length of a number
  *
  * @param number The input number
  * @deprecated Using `decimalLength` to replace it
@@ -84,7 +84,7 @@ export function digitLength(number: number | string) {
 }
 
 /**
- * 将给定的数字格式化为三位阶
+ * 将给定的数字格式化为指定的位阶
  *
  * @param number 需要格式化的数字
  * @param segment 分隔的位数，默认为 3
@@ -182,6 +182,34 @@ export function boundRange(number: number | string, min: number, max: number) {
   return Math.max(min, Math.min(max, parseFloat(number as string)))
 }
 
+/**
+ * 将给定一个被除数和除数，不断的取余直至达到次数限制或余数小于除数，返回系列余数
+ *
+ * @param number 被除数，需大于 0
+ * @param divideBy 除数，需大于 1
+ * @param limit 次数限制，小于 1 则不作限制
+ */
+export function leaveNumber(number: number, divideBy: number, limit = 0) {
+  if (number <= 0 || divideBy <= 1) return [number]
+
+  if (limit < 1) {
+    limit = Infinity
+  }
+
+  const remainders: number[] = []
+  let count = 0
+
+  while (number >= divideBy && count < limit) {
+    remainders.push(number % divideBy)
+    number = Math.floor(number / divideBy)
+    ++count
+  }
+
+  remainders.push(number)
+
+  return remainders.reverse()
+}
+
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
 export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
 
@@ -201,8 +229,29 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
  * @param unit 格式化的单位
  */
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto): number
+export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, precision?: number): number
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, joinUtil?: true): number
-export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', joinUtil = false) {
+export function formatByteSize(
+  byte: number,
+  unit?: SizeUnitWithAuto,
+  joinUtil?: true,
+  precision?: number
+): number
+export function formatByteSize(
+  byte: number,
+  unit: SizeUnitWithAuto = 'AUTO',
+  joinUtil: number | boolean = false,
+  precision?: number
+) {
+  if (typeof precision === 'undefined') {
+    if (typeof joinUtil === 'number') {
+      precision = joinUtil
+      joinUtil = false
+    } else {
+      precision = 2
+    }
+  }
+
   let upperUnit = unit.toUpperCase() as Uppercase<SizeUnitWithAuto>
   upperUnit = SIZE_UNIT_WITH_AUTO.includes(upperUnit) ? upperUnit : 'AUTO'
 
@@ -238,6 +287,8 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO', jo
     targetSize = byte / 1024 ** power
   }
 
+  targetSize = toFixed(targetSize, precision)
+
   return joinUtil
     ? `${targetSize}${upperUnit === 'AUTO' ? SIZE_UNIT_WITH_AUTO[Math.min(power, 4)] : upperUnit}`
     : targetSize
@@ -260,12 +311,13 @@ export function random(max: number, min = 0) {
 }
 
 /**
- * Correct the given number to specifying significant digits.
+ * 将数字处理为的指定的有效位数
  *
- * @param number The input number
- * @param precision An integer specifying the number of significant digits
+ * @param number 需要处理的数字
+ * @param precision 数字的有效位数
  *
- * @example toPrecision(0.09999999999999998) === 0.1 // true
+ * @example
+ * toPrecision(0.09999999999999998) === 0.1 // true
  */
 export function toPrecision(number: number | string, precision = 15) {
   return +parseFloat(Number(number).toPrecision(precision))
@@ -301,9 +353,9 @@ function createOperation(operation: (n1: number | string, n2: number | string) =
 }
 
 /**
- * Accurate multiplication.
+ * 精确的乘法
  *
- * @param numbers The numbers to multiply
+ * @param numbers 需要依次相乘的数字
  */
 export const times = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)
@@ -315,9 +367,9 @@ export const times = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate addition.
+ * 精确的加法
  *
- * @param numbers The numbers to add
+ * @param numbers 需要依次相加的数字
  */
 export const plus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -326,9 +378,9 @@ export const plus = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate subtraction
+ * 精确的减法
  *
- * @param numbers The numbers to subtract
+ * @param numbers 需要依次相减的数字
  */
 export const minus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -337,9 +389,9 @@ export const minus = createOperation((number1, number2) => {
 })
 
 /**
- * Accurate division.
+ * 精确的除法
  *
- * @param numbers The numbers to divide
+ * @param numbers 需要依次相除的数字
  */
 export const divide = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)

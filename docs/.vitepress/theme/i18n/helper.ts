@@ -12,9 +12,15 @@ export interface I18nConfig {
     changeColor: string,
     rollColor: string,
     resetColor: string,
+    shareExperience: string,
+    tellUs: string,
     guides: string,
     components: string,
     playground: string,
+    ecosystem: string,
+    official: string,
+    partnership: string,
+    becomePartner: string,
     searchComponent: string,
     copyCode: string,
     copySuccess: string,
@@ -31,7 +37,11 @@ export interface I18nConfig {
     thanksContribute: string,
     toggleDirection: string,
     toggleTheme: string,
-    viewInGithub: string
+    viewInGithub: string,
+    openSettings: string,
+    adjustSettings: string,
+    changeOrder: string,
+    orderChanged: string
   },
   alert: {
     info: string,
@@ -51,7 +61,7 @@ export interface I18nConfig {
     ssr: string,
     customFormControl: string,
     developmentGuide: string,
-    customInternalIcons: string
+    changeIcons: string
   },
   group: {
     basis: string,
@@ -67,6 +77,7 @@ export interface I18nConfig {
     lintConfigSet: string,
     createProject: string,
     gridLayout: string,
+    fantasticAdmin: string,
     hooksLib: string,
     logoDesign: string,
     help: string,
@@ -74,7 +85,8 @@ export interface I18nConfig {
     issue: string,
     contribute: string,
     qqGroup?: string,
-    sponsor: string
+    sponsor: string,
+    releaseScripts: string
   },
   component: {
     // Basis

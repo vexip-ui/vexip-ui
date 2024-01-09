@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watchEffect } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { useRoute, useRouter } from 'vitepress'
 import { MagnifyingGlass } from '@vexip-ui/icons'
 import { getComponentConfig } from '../../config/component'
 import { useListener } from '@vexip-ui/hooks'
-import { isClient, toKebabCase } from '@vexip-ui/utils'
+import { getLast, isClient, toKebabCase } from '@vexip-ui/utils'
+import { matchPath } from '../../shared'
 
 import type { AutoCompleteExposed } from 'vexip-ui'
 
@@ -40,7 +40,7 @@ const searchOptions = computed(() => {
 })
 
 watchEffect(() => {
-  placeholder.value = route.path.startsWith(`/${locale.value}/component/`)
+  placeholder.value = matchPath(route.path, `/${locale.value}/component/`)
     ? route.data.title
     : t('common.searchComponent')
 })
@@ -55,8 +55,8 @@ isClient &&
   })
 
 function toComponentDoc(fullName: string) {
-  if (!route.path.startsWith(`/${locale.value}/component/${fullName}`)) {
-    router.go(`/${locale.value}/component/${toKebabCase(fullName.split(' ').at(-1)!)}`)
+  if (!matchPath(route.path, `/${locale.value}/component/${fullName}`)) {
+    router.go(`/${locale.value}/component/${toKebabCase(getLast(fullName.split(' '))!)}`)
   }
 
   nextTick(() => {
@@ -95,6 +95,7 @@ function toComponentDoc(fullName: string) {
 
 .doc-search {
   flex: auto;
+  max-width: 100%;
   padding-inline-start: 14px;
   margin-inline-start: -1px;
   border-inline-start: var(--vxp-border-light-2);

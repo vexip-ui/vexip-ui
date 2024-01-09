@@ -2,6 +2,7 @@ import {
   booleanProp,
   buildProps,
   eventProp,
+  iconProp,
   localeProp,
   stateProp,
   styleProp
@@ -13,10 +14,10 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
   BeforeSelect,
   BeforeUpload,
-  FileOptions,
-  FileState,
-  HttpError,
   RenderFn,
+  UploadFileOptions,
+  UploadFileState,
+  UploadHttpError,
   UploadListType
 } from './symbol'
 
@@ -24,7 +25,7 @@ export const uploadProps = buildProps({
   state: stateProp,
   locale: localeProp('upload'),
   url: String,
-  fileList: Array as PropType<FileOptions[]>,
+  fileList: Array as PropType<UploadFileOptions[]>,
   multiple: booleanProp,
   tip: String,
   accept: [String, Array] as PropType<string | string[]>,
@@ -51,23 +52,23 @@ export const uploadProps = buildProps({
   buttonLabel: String,
   disabled: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   image: booleanProp,
-  defaultFiles: Array as PropType<FileOptions[]>,
-  canPreview: Function as PropType<(file: FileState) => boolean>,
+  defaultFiles: Array as PropType<UploadFileOptions[]>,
+  canPreview: Function as PropType<(file: UploadFileState) => boolean>,
   listStyle: styleProp,
   name: String,
-  onExceed: eventProp<(files: FileState[]) => void>(),
-  onChange: eventProp<(files: FileState[]) => void>(),
-  onFilterError: eventProp<(files: FileState) => void>(),
-  onSizeError: eventProp<(files: FileState) => void>(),
-  onDelete: eventProp<(file: FileState) => void>(),
-  onPreview: eventProp<(file: FileState) => void>(),
-  onProgress: eventProp<(file: FileState, percent: number) => void>(),
-  onSuccess: eventProp<(file: FileState, response: any) => void>(),
-  onError: eventProp<(file: FileState, error: HttpError) => void>()
+  onExceed: eventProp<(files: UploadFileState[]) => void>(),
+  onChange: eventProp<(files: UploadFileState[]) => void>(),
+  onFilterError: eventProp<(files: UploadFileState) => void>(),
+  onSizeError: eventProp<(files: UploadFileState) => void>(),
+  onDelete: eventProp<(file: UploadFileState) => void>(),
+  onPreview: eventProp<(file: UploadFileState) => void>(),
+  onProgress: eventProp<(file: UploadFileState, percent: number) => void>(),
+  onSuccess: eventProp<(file: UploadFileState, response: any) => void>(),
+  onError: eventProp<(file: UploadFileState, error: UploadHttpError) => void>()
 })
 
 export type UploadProps = ExtractPropTypes<typeof uploadProps>
@@ -78,16 +79,16 @@ export type UploadCProps = ConfigurableProps<
 >
 
 export const uploadListProps = buildProps({
-  files: Array as PropType<FileState[]>,
+  files: Array as PropType<UploadFileState[]>,
   selectToAdd: booleanProp,
   iconRenderer: Function as PropType<RenderFn>,
   type: String as PropType<UploadListType>,
   loadingText: String,
   style: styleProp,
   precision: Number,
-  canPreview: Function as PropType<(file: FileState) => boolean>,
-  onDelete: eventProp<(file: FileState) => void>(),
-  onPreview: eventProp<(file: FileState) => void>()
+  canPreview: Function as PropType<(file: UploadFileState) => boolean>,
+  onDelete: eventProp<(file: UploadFileState) => void>(),
+  onPreview: eventProp<(file: UploadFileState) => void>()
 })
 
 export type UploadListProps = ExtractPropTypes<typeof uploadListProps>
@@ -95,15 +96,15 @@ export type UploadListCProps = ConfigurableProps<UploadListProps, 'files'>
 
 export const uploadFileProps = buildProps({
   locale: localeProp('upload'),
-  file: Object as PropType<FileState>,
+  file: Object as PropType<UploadFileState>,
   iconRenderer: Function as PropType<RenderFn>,
   listType: String as PropType<UploadListType>,
   loadingText: String,
   selectToAdd: booleanProp,
   precision: Number,
-  canPreview: Function as PropType<(file: FileState) => boolean>,
-  onDelete: eventProp<(file: FileState) => void>(),
-  onPreview: eventProp<(file: FileState) => void>()
+  canPreview: Function as PropType<(file: UploadFileState) => boolean>,
+  onDelete: eventProp<(file: UploadFileState) => void>(),
+  onPreview: eventProp<(file: UploadFileState) => void>()
 })
 
 export type UploadFileProps = ExtractPropTypes<typeof uploadFileProps>

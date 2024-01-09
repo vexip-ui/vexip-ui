@@ -24,7 +24,7 @@
 
 ### 颜色标签
 
-^[Since v2.2.4](!s)
+==!s|2.2.4==
 
 添加 `show-label` 属性可以显示颜色标签，通过 `label-format` 属性可以单独指定颜色标签的格式。
 
@@ -78,14 +78,14 @@ type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 | disabled       | `boolean`                     | 是否为禁用状态                                                     | `false`     | -       |
 | no-input       | `boolean`                     | 是否禁用 Input 输入颜色值                                          | `false`     | -       |
 | shortcut       | `boolean \| string[]`         | 是否使用快捷选取颜色，传入字符串数组时可以定制化候选列表           | `false`     | -       |
-| prefix         | `Record<string, any>`         | 前缀图标，使用前缀插槽时无效                                       | `null`      | `2.0.0` |
+| prefix         | `VueComponent`                | 前缀图标，使用前缀插槽时无效                                       | `null`      | `2.0.0` |
 | prefix-color   | `string`                      | 前缀内容的颜色，会影响前缀插槽                                     | `''`        | `2.0.0` |
-| suffix         | `Record<string, any>`         | 后缀图标，使用后缀插槽时无效                                       | `null`      | `2.0.0` |
+| suffix         | `VueComponent`                | 后缀图标，使用后缀插槽时无效                                       | `null`      | `2.0.0` |
 | suffix-color   | `string`                      | 后缀内容的颜色，会影响后缀插槽                                     | `''`        | `2.0.0` |
 | no-suffix      | `boolean`                     | 设置是否禁用后缀图标                                               | `false`     | `2.0.0` |
 | static-suffix  | `boolean`                     | 设置后缀图标是否为静态的                                           | `false`     | `2.0.0` |
 | loading        | `boolean`                     | 设置是否为加载中                                                   | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`         | 设置加载中的图标                                                   | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                | 设置加载中的图标                                                   | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                     | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
 | loading-effect | `string`                      | 设置加载中图标的效果动画                                           | `false`     | `2.0.0` |
 | locale         | `LocaleConfig['colorPicker']` | 设置多语言配置                                                     | `null`      | `2.1.0` |

@@ -2,10 +2,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { ChevronDown, GithubB, Spinner } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Select } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
+
+const icons = globalIcons.value
 
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
@@ -83,6 +86,7 @@ describe('Select', () => {
       }
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-select__control').text()).toEqual(OPTIONS[0])
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
 
@@ -114,6 +118,8 @@ describe('Select', () => {
   })
 
   it('focus and blur', async () => {
+    vi.useFakeTimers()
+
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Select, {
@@ -127,7 +133,10 @@ describe('Select', () => {
 
     await selector.trigger('blur')
     expect(onFocus).toHaveBeenCalledTimes(1)
+    await vi.runOnlyPendingTimersAsync()
     expect(onBlur).toHaveBeenCalledTimes(1)
+
+    vi.useRealTimers()
   })
 
   it('key toggle visible', async () => {
@@ -253,21 +262,21 @@ describe('Select', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <Select prefix={GithubB}></Select>)
+    const wrapper = mount(() => <Select prefix={Github}></Select>)
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <Select prefix={GithubB} prefix-color={'red'}></Select>)
+    const wrapper = mount(() => <Select prefix={Github} prefix-color={'red'}></Select>)
 
     expect(wrapper.find('.vxp-select__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <Select prefix={GithubB}>
+      <Select prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -275,7 +284,7 @@ describe('Select', () => {
     ))
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -283,22 +292,22 @@ describe('Select', () => {
     const wrapper = mount(Select)
 
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <Select suffix={GithubB} suffix-color={'red'}></Select>)
+    const wrapper = mount(() => <Select suffix={Github} suffix-color={'red'}></Select>)
 
     expect(wrapper.find('.vxp-select__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <Select suffix={GithubB}>
+      <Select suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -306,7 +315,7 @@ describe('Select', () => {
     ))
 
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -317,7 +326,7 @@ describe('Select', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Select state={state}></Select>)
 
       expect(wrapper.find('.vxp-select__selector').classes()).toContain(
@@ -330,11 +339,11 @@ describe('Select', () => {
     const wrapper = mount(Select)
 
     expect(wrapper.find('.vxp-select__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-select__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -348,10 +357,10 @@ describe('Select', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Select loading loading-icon={GithubB}></Select>)
+    const wrapper = mount(() => <Select loading loading-icon={Github}></Select>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('single select', async () => {
@@ -600,9 +609,9 @@ describe('Select', () => {
     })
 
     await wrapper.setProps({ value: [OPTIONS[0], OPTIONS[1]] })
-    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(2)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toBe(2)
     await wrapper.find('input').trigger('keydown', { key: 'Backspace' })
-    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(1)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toBe(1)
   })
 
   it('hitting option', async () => {
@@ -629,7 +638,7 @@ describe('Select', () => {
     expect(options[2].classes()).toContain('vxp-option--hitting')
   })
 
-  it('key config', () => {
+  it('key config', async () => {
     const wrapper = mount(Select, {
       props: {
         visible: true,
@@ -647,6 +656,7 @@ describe('Select', () => {
       }
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-select__control').text()).toEqual('l')
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
   })

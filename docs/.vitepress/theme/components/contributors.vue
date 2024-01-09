@@ -2,7 +2,6 @@
 import metaData from 'vexip-ui/meta-data/contributors.json'
 
 import { computed } from 'vue'
-
 import { useI18n } from 'vue-i18n'
 
 import { useData } from 'vitepress'

@@ -1,6 +1,6 @@
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { computed, onScopeDispose, ref, unref, watch } from 'vue'
 
-import { createBITree, isDefined, nextFrameOnce } from '@vexip-ui/utils'
+import { createBITree, isDefined, nextFrameOnce, noop } from '@vexip-ui/utils'
 import { isHiddenElement } from './display'
 import { observeResize, unobserveResize } from './resize'
 
@@ -133,25 +133,33 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     }
   })
 
-  onMounted(() => {
-    nextTick(() => {
-      const wrapperEl = unref(wrapper)
-
-      if (autoResize && wrapperEl) {
-        observeResize(wrapperEl, handleResize)
-      }
-
-      if (isDefined(defaultKeyAt)) {
-        scrollToKey(defaultKeyAt)
-      }
-    })
-  })
-
   if (autoResize) {
-    onBeforeUnmount(() => {
-      const wrapperEl = unref(wrapper)
+    let unobserve = noop
 
-      wrapperEl && unobserveResize(wrapperEl)
+    const stopWatch = watch(
+      () => unref(wrapper),
+      el => {
+        unobserve()
+
+        if (!el) return
+
+        observeResize(el, handleResize)
+
+        unobserve = () => {
+          unobserveResize(el)
+          unobserve = noop
+        }
+
+        if (isDefined(defaultKeyAt)) {
+          scrollToKey(defaultKeyAt)
+        }
+      },
+      { immediate: true, flush: 'post' }
+    )
+
+    onScopeDispose(() => {
+      stopWatch()
+      unobserve()
     })
   }
 

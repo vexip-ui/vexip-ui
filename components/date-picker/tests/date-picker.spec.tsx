@@ -2,15 +2,17 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { CalendarR, GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
+import { format } from '@vexip-ui/utils'
 import { DatePicker } from '..'
 
 vi.useFakeTimers()
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -114,6 +116,8 @@ describe('DatePicker', () => {
   })
 
   it('key toggle visible', async () => {
+    vi.useRealTimers()
+
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(DatePicker, {
@@ -144,6 +148,8 @@ describe('DatePicker', () => {
     await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
+
+    vi.useFakeTimers()
   })
 
   it('disabled', async () => {
@@ -365,21 +371,21 @@ describe('DatePicker', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <DatePicker prefix={GithubB}></DatePicker>)
+    const wrapper = mount(() => <DatePicker prefix={Github}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <DatePicker prefix={GithubB} prefix-color={'red'}></DatePicker>)
+    const wrapper = mount(() => <DatePicker prefix={Github} prefix-color={'red'}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <DatePicker prefix={GithubB}>
+      <DatePicker prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -387,7 +393,7 @@ describe('DatePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-date-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -395,22 +401,22 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker)
 
     expect(wrapper.find('.vxp-date-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(CalendarR).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.calendar.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(CalendarR).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(globalIcons.value.calendar.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <DatePicker suffix={GithubB} suffix-color={'red'}></DatePicker>)
+    const wrapper = mount(() => <DatePicker suffix={Github} suffix-color={'red'}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <DatePicker suffix={GithubB}>
+      <DatePicker suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -418,7 +424,7 @@ describe('DatePicker', () => {
     ))
 
     expect(wrapper.find('.vxp-date-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -431,7 +437,7 @@ describe('DatePicker', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <DatePicker state={state}></DatePicker>)
 
       expect(wrapper.find('.vxp-date-picker__selector').classes()).toContain(
@@ -444,11 +450,11 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker)
 
     expect(wrapper.find('.vxp-date-picker__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-date-picker__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -462,10 +468,10 @@ describe('DatePicker', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <DatePicker loading loading-icon={GithubB}></DatePicker>)
+    const wrapper = mount(() => <DatePicker loading loading-icon={Github}></DatePicker>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {
@@ -483,6 +489,42 @@ describe('DatePicker', () => {
     expect(onChange).toHaveBeenLastCalledWith(
       new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
     )
+  })
+
+  it('value format', async () => {
+    const date = new Date()
+    vi.setSystemTime(date)
+
+    const valueFormat = 'yyyy-MM-dd HH:mm:ss'
+    let wrapper = mount(DatePicker, { props: { valueFormat } })
+
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
+    expect(wrapper.emitted('update:formatted-value')![0][0]).toMatch(
+      format(date, 'yyyy-MM-dd HH:mm:')
+    )
+    wrapper.unmount()
+
+    const formatFn = vi.fn(() => '1')
+    wrapper = mount(DatePicker, { props: { valueFormat: formatFn } })
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(formatFn).toHaveBeenCalled()
+    expect(formatFn).toHaveBeenLastCalledWith(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
+      'start'
+    )
+    expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
+    expect(wrapper.emitted('update:formatted-value')![0]).toEqual(['1'])
+    wrapper.unmount()
+
+    wrapper = mount(DatePicker, {
+      props: { range: true, valueFormat: formatFn }
+    })
+    await wrapper.trigger('click')
+    await wrapper.trigger('clickoutside')
+    expect(wrapper.emitted('update:formatted-value')![0]).toEqual([['1', '1']])
   })
 
   it('clearable', async () => {
@@ -635,7 +677,7 @@ describe('DatePicker', () => {
     expect(units[2].text()).toEqual('31')
   })
 
-  it('shortcut', async () => {
+  it('shortcuts', async () => {
     const fnValue = vi.fn(() => '2022-06-01')
     const onShortcut = vi.fn()
     const shortcuts = [
@@ -668,6 +710,20 @@ describe('DatePicker', () => {
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('2022/06/01')
+  })
+
+  it('shortcuts placement', () => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const shortcuts = [{ name: 'Labor Day', value: '2022-05-01' }]
+      const wrapper = mount(DatePicker, {
+        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+      })
+
+      expect(wrapper.find('.vxp-date-picker__shortcuts').exists()).toBe(true)
+      expect(wrapper.find('.vxp-date-picker__shortcuts').classes()).toContain(
+        `vxp-date-picker__shortcuts--${placement}`
+      )
+    })
   })
 
   it('range select', async () => {

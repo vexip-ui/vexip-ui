@@ -3,6 +3,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   localeProp,
   stateProp
 } from '@vexip-ui/config'
@@ -27,7 +28,7 @@ export const textareaProps = buildProps({
   delay: Number,
   maxLength: Number,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
@@ -41,7 +42,9 @@ export const textareaProps = buildProps({
   onEnter: eventProp(),
   onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-  onKeyUp: eventProp<(event: KeyboardEvent) => void>()
+  onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
+  onCompositionStart: eventProp<(event: CompositionEvent) => void>(),
+  onCompositionEnd: eventProp<(event: CompositionEvent) => void>()
 })
 
 export type TextareaProps = ExtractPropTypes<typeof textareaProps>

@@ -7,16 +7,22 @@ export const enUS = defineI18n({
     slogan: 'Highly customizability, full TypeScript, performance pretty good',
     getStarted: 'Get started',
     getComponents: 'Components',
-    changePrefix: 'Change Component Name Prefix',
+    changePrefix: 'Change component name prefix',
     invalidPrefix: 'Prefix must starts with letter and only includes number and letter',
     apply: 'Apply',
     prefixChanged: 'Change the component name prefix successfully',
-    changeColor: 'Change Major Color',
+    changeColor: 'Change theme major color',
     rollColor: 'Roll a color, maybe strange',
     resetColor: 'Reset the color',
+    shareExperience: 'Share your experience using Vexip UI?',
+    tellUs: 'Tell us',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',
+    ecosystem: 'Ecosystem',
+    official: 'Official',
+    partnership: 'Partnership',
+    becomePartner: 'Become partner?',
     searchComponent: 'Search component in Vexip UI',
     copyCode: 'Copy code',
     copySuccess: 'Copy success',
@@ -33,7 +39,11 @@ export const enUS = defineI18n({
     thanksContribute: 'Thanks for all their contributions!',
     toggleDirection: 'Toggle text direction',
     toggleTheme: 'Toggle theme',
-    viewInGithub: 'View in GitHub'
+    viewInGithub: 'View in GitHub',
+    openSettings: 'Open setting panel',
+    adjustSettings: 'Adjust Document Setting',
+    changeOrder: 'Change SFC block order',
+    orderChanged: 'Change SFC block order successfully'
   },
   alert: {
     info: 'Tip',
@@ -53,7 +63,7 @@ export const enUS = defineI18n({
     ssr: 'Server-Side Rendering',
     customFormControl: 'Custom Form Control',
     developmentGuide: 'Development Guide',
-    customInternalIcons: 'Custom Internal Icons'
+    changeIcons: 'Change Icons'
   },
   group: {
     basis: 'Basis',
@@ -69,6 +79,7 @@ export const enUS = defineI18n({
     lintConfigSet: 'Lint Config Set',
     createProject: 'Create Vexip Project',
     gridLayout: 'Vue3 Grid Layout',
+    fantasticAdmin: 'Out-of-box Admin',
     hooksLib: 'Vue3 Hooks Lib',
     logoDesign: 'Login Design',
     help: 'Help',
@@ -76,7 +87,8 @@ export const enUS = defineI18n({
     issue: 'Issue',
     contribute: 'Contribute',
     qqGroup: 'Support QQ Group',
-    sponsor: 'Buy a Cup of Coffee'
+    sponsor: 'Buy a Cup of Coffee',
+    releaseScripts: 'Release Scripts'
   },
   component: {
     // Basis

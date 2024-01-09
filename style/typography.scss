@@ -86,8 +86,11 @@ $text: map.merge(
   }
 
   &--keyboard {
-    padding: 4px 5px 3px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 5px;
     font-family: get-css-var('text-font-family-mono');
+    line-height: 1;
     background-color: get-css-var('text-keyboard-bg-color');
     border: get-css-var('border-shape') get-css-var('text-keyboard-b-color');
     border-radius: get-css-var('text-keyboard-radius');
@@ -167,9 +170,9 @@ $title: map.merge(
 
     &::before {
       position: absolute;
+      inset-inline-start: calc(get-css-var('title-marker-offset') * -1);
       top: 0;
       bottom: 0;
-      inset-inline-start: calc(get-css-var('title-marker-offset') * -1);
       width: get-css-var('title-marker-width');
       content: '';
       background-color: get-css-var('title-marker-color');

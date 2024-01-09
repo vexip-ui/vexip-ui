@@ -51,10 +51,13 @@ $color-picker: map.merge(
     cursor: pointer;
   }
 
+  &--disabled &__selector {
+    cursor: not-allowed;
+  }
+
   &__control {
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__marker {

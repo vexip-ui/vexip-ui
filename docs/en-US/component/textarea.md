@@ -82,7 +82,7 @@ Different states can be set via `state`.
 | delay          | `number`                                         | Set `input` event throttle or debounce delay, the default throttle is `16` ms, and debounce is `100` ms, not reactive prop | `false`              | `2.1.25` |
 | max-length     | `number`                                         | Set the maximum length of the textarea content, if the value is `0`, there is no limit                                     | `0`                  | -        |
 | loading        | `boolean`                                        | Set whether is loading                                                                                                     | `false`              | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                                                                       | `Spinner`            | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | Set the loading icon                                                                                                       | `Spinner`            | `2.0.0`  |
 | loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                                                                   | `false`              | `2.0.0`  |
 | loading-effect | `string`                                         | Set the effect animation for the loading icon                                                                              | `false`              | `2.0.0`  |
 | sync           | `boolean`                                        | Set whether enable sync input mode                                                                                         | `false`              | `2.0.6`  |
@@ -93,17 +93,19 @@ Different states can be set via `state`.
 
 ### Textarea Events
 
-| Name      | Description                                                                                   | Parameters               | Since |
-| --------- | --------------------------------------------------------------------------------------------- | ------------------------ | ----- |
-| focus     | Emitted when the textarea is focused, returns the event object                                | `(event: FocusEvent)`    | -     |
-| blur      | Emitted when the textarea loses focus, returns the event object                               | `(event: FocusEvent)`    | -     |
-| change    | Emitted when the value of the textarea changes, returns the read value and the original value | `(value: string)`        | -     |
-| input     | Emitted when a value is entered, returns the read value and the original value                | `(value: string)`        | -     |
-| enter     | Emitted when enter, returns the key event                                                     | `(event: KeyboardEvent)` | -     |
-| key-down  | Emitted when a key is pressed, returns the key event                                          | `(event: KeyboardEvent)` | -     |
-| key-press | Emitted when the key is held down, returns the key event                                      | `(event: KeyboardEvent)` | -     |
-| key-up    | Emitted when the key is released, returns the key event                                       | `(event: KeyboardEvent)` | -     |
-| clear     | Emitted when the value is cleared by the clear button                                         | -                        | -     |
+| Name              | Description                                                                                   | Parameters                  | Since    |
+| ----------------- | --------------------------------------------------------------------------------------------- | --------------------------- | -------- |
+| focus             | Emitted when the textarea is focused, returns the event object                                | `(event: FocusEvent)`       | -        |
+| blur              | Emitted when the textarea loses focus, returns the event object                               | `(event: FocusEvent)`       | -        |
+| change            | Emitted when the value of the textarea changes, returns the read value and the original value | `(value: string)`           | -        |
+| input             | Emitted when a value is entered, returns the read value and the original value                | `(value: string)`           | -        |
+| enter             | Emitted when enter, returns the key event                                                     | `(event: KeyboardEvent)`    | -        |
+| key-down          | Emitted when a key is pressed, returns the key event                                          | `(event: KeyboardEvent)`    | -        |
+| key-press         | Emitted when the key is held down, returns the key event                                      | `(event: KeyboardEvent)`    | -        |
+| key-up            | Emitted when the key is released, returns the key event                                       | `(event: KeyboardEvent)`    | -        |
+| clear             | Emitted when the value is cleared by the clear button                                         | -                           | -        |
+| composition-start | Emitted when composition start                                                                | `(event: CompositionEvent)` | `2.2.14` |
+| composition-end   | Emitted when composition end                                                                  | `(event: CompositionEvent)` | `2.2.14` |
 
 ### Textarea Slots
 

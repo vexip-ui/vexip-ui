@@ -72,7 +72,7 @@ const icons = useIcons()
 
 const currentActive = ref(props.active)
 const currentIndex = ref(props.index)
-const tempSteps = reactive(new Set<TourStepOptions>())
+const tempSteps: Set<TourStepOptions> = reactive(new Set<any>())
 const currentRect = ref<number[]>()
 const sideRects = ref<(number | string)[][]>()
 
@@ -359,7 +359,7 @@ function handleClose() {
                   <slot name="close" v-bind="slotParams">
                     <Icon
                       v-bind="icons.close"
-                      :scale="(icons.close.scale || 1) * 1.2"
+                      :scale="+(icons.close.scale || 1) * 1.2"
                       label="close"
                     ></Icon>
                   </slot>

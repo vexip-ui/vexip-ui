@@ -82,7 +82,7 @@
 | delay          | `number`                                         | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`               | `2.1.25` |
 | max-length     | `number`                                         | 设置输入内容的最大长度，值为 `0` 时不限                                                      | `0`                  | -        |
 | loading        | `boolean`                                        | 设置是否为加载中                                                                             | `false`              | `2.0.0`  |
-| loading-icon   | `Record<string, any>`                            | 设置加载中的图标                                                                             | `Spinner`            | `2.0.0`  |
+| loading-icon   | `VueComponent`                                   | 设置加载中的图标                                                                             | `Spinner`            | `2.0.0`  |
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                                                     | `false`              | `2.0.0`  |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                                                                     | `false`              | `2.0.0`  |
 | sync           | `boolean`                                        | 设置是否为同步输入模式                                                                       | `false`              | `2.0.6`  |
@@ -93,17 +93,19 @@
 
 ### Textarea 事件
 
-| 名称      | 说明                                         | 参数                     | 始于 |
-| --------- | -------------------------------------------- | ------------------------ | ---- |
-| focus     | 输入框聚焦时触发，返回事件对象               | `(event: FocusEvent)`    | -    |
-| blur      | 输入框失去焦点时触发，返回事件对象           | `(event: FocusEvent)`    | -    |
-| change    | 当输入框值改变时触发，返回读取后的值和原始值 | `(value: string)`        | -    |
-| input     | 当键入了值时触发，返回读取后的值和原始值     | `(value: string)`        | -    |
-| enter     | 当键入回车时触发，返回按键事件               | `(event: KeyboardEvent)` | -    |
-| key-down  | 当键按下时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
-| key-press | 当键按住时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
-| key-up    | 当键松开时触发，返回按键事件                 | `(event: KeyboardEvent)` | -    |
-| clear     | 当通过清除按钮清空值时触发                   | -                        | -    |
+| 名称              | 说明                                         | 参数                        | 始于     |
+| ----------------- | -------------------------------------------- | --------------------------- | -------- |
+| focus             | 输入框聚焦时触发，返回事件对象               | `(event: FocusEvent)`       | -        |
+| blur              | 输入框失去焦点时触发，返回事件对象           | `(event: FocusEvent)`       | -        |
+| change            | 当输入框值改变时触发，返回读取后的值和原始值 | `(value: string)`           | -        |
+| input             | 当键入了值时触发，返回读取后的值和原始值     | `(value: string)`           | -        |
+| enter             | 当键入回车时触发，返回按键事件               | `(event: KeyboardEvent)`    | -        |
+| key-down          | 当键按下时触发，返回按键事件                 | `(event: KeyboardEvent)`    | -        |
+| key-press         | 当键按住时触发，返回按键事件                 | `(event: KeyboardEvent)`    | -        |
+| key-up            | 当键松开时触发，返回按键事件                 | `(event: KeyboardEvent)`    | -        |
+| clear             | 当通过清除按钮清空值时触发                   | -                           | -        |
+| composition-start | 文本开始合成时触发                           | `(event: CompositionEvent)` | `2.2.14` |
+| composition-end   | 文本结束合成时触发                           | `(event: CompositionEvent)` | `2.2.14` |
 
 ### Textarea 插槽
 

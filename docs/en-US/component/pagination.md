@@ -60,7 +60,7 @@ The order within the array determines where the plugin renders, with a null valu
 
 ### Custom Tags
 
-^[Since v2.2.0](!s)
+==!s|2.2.0==
 
 The tag of the elements can be customized through the `list-tag` and `item-tag` props.
 
@@ -111,10 +111,10 @@ Using slots allow you to combine Pagination with components like RouterLink or N
 
 ### Pagination Slots
 
-| Name      | Description                          | Parameters                                           | Since   |
-| --------- | ------------------------------------ | ---------------------------------------------------- | ------- |
-| prev      | Slot for page forward button         | `(disabled: boolean)`                                | -       |
-| next      | Slot for page back button            | `(disabled: boolean)`                                | -       |
-| item      | Slot for page number display content | `(page: number, disabled: boolean, active: boolean)` | -       |
-| prev-jump | Slot for page forward jump button    | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
-| next-jump | Slot for page back jump button       | `(disabled: boolean, entered: boolean)`              | `2.2.0` |
+| Name      | Description                          | Parameters                                             | Since   |
+| --------- | ------------------------------------ | ------------------------------------------------------ | ------- |
+| prev      | Slot for page forward button         | `{ disabled: boolean }`                                | -       |
+| next      | Slot for page back button            | `{ disabled: boolean }`                                | -       |
+| item      | Slot for page number display content | `{ page: number, disabled: boolean, active: boolean }` | -       |
+| prev-jump | Slot for page forward jump button    | `{ disabled: boolean, entered: boolean }`              | `2.2.0` |
+| next-jump | Slot for page back jump button       | `{ disabled: boolean, entered: boolean }`              | `2.2.0` |

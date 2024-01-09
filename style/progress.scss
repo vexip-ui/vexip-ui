@@ -25,6 +25,10 @@ $progress: map.merge(
     @include define-preset-values('progress', $progress);
   }
 
+  @mixin define-progress-style($style-map) {
+    @include define-preset-style('progress', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -112,9 +116,9 @@ $progress: map.merge(
 
   &--info-inside &__info {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     justify-content: flex-end;
     width: 100%;
     padding-inline-end: 8px;
@@ -149,9 +153,9 @@ $progress: map.merge(
 
   &__reference {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     width: 100%;
     pointer-events: none;
     transition: get-css-var('transition-transform');
@@ -170,6 +174,18 @@ $progress: map.merge(
 
     @include rtl {
       transform: translateX(-50%);
+    }
+  }
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-progress-style(
+        (
+          filler-bg-color: 'color' $state 'base'
+        )
+      );
     }
   }
 }

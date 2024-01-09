@@ -167,7 +167,8 @@ export function useReplStore(options: ReplOptions = {}) {
     renameFile,
     getImportMap,
     getTsConfig,
-    reloadLanguageTools: undefined
+    reloadLanguageTools: undefined,
+    customElement: /\.ce\.vue$/
   })
 
   // watch(

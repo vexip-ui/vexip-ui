@@ -18,7 +18,7 @@ async function toggleStartAndMove(el: HTMLElement, value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 

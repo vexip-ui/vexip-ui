@@ -10,6 +10,7 @@ interface NodeData {
   label: string,
   parent: number,
   expanded?: boolean,
+  isLeaf?: boolean,
   loaded?: boolean
 }
 
@@ -33,7 +34,7 @@ const nodeData = reactive<NodeData[]>([
 ])
 
 function loadData(data: NodeData) {
-  return new Promise<void>(resolve => {
+  return new Promise<boolean>(resolve => {
     setTimeout(() => {
       if (data.id === 3) {
         nodeData.push(
@@ -41,7 +42,7 @@ function loadData(data: NodeData) {
             id: 7,
             label: 'Earthworm',
             parent: 3,
-            loaded: true
+            isLeaf: true
           },
           {
             id: 8,
@@ -60,8 +61,7 @@ function loadData(data: NodeData) {
           {
             id: 4,
             label: 'Mammal',
-            parent: 5,
-            loaded: true
+            parent: 5
           }
         )
       } else if (data.id === 2) {
@@ -70,7 +70,7 @@ function loadData(data: NodeData) {
             id: 6,
             label: 'Magpie',
             parent: 2,
-            loaded: true
+            isLeaf: true
           },
           {
             id: 10,
@@ -80,16 +80,24 @@ function loadData(data: NodeData) {
           }
         )
       } else if (data.id === 4) {
-        nodeData.push({
-          id: 9,
-          label: 'Pangolin',
-          parent: 4,
-          loaded: true
-        })
+        // nodeData.push({
+        //   id: 9,
+        //   label: 'Pangolin',
+        //   parent: 4,
+        //   loaded: true
+        // })
+        resolve(false)
+        return
       }
 
-      resolve()
+      resolve(true)
     }, 1000)
   })
 }
 </script>
+
+<style scoped>
+:deep(.vxp-tree__node--load-fail) {
+  color: var(--vxp-color-error-base);
+}
+</style>

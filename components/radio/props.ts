@@ -3,6 +3,7 @@ import {
   buildProps,
   classProp,
   eventProp,
+  iconProp,
   sizeProp,
   stateProp,
   valueProp
@@ -11,7 +12,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
-import type { ChangeEvent } from './symbol'
+import type { ChangeEvent, RadioGroupShape, RadioRawOption, RadioShape } from './symbol'
 
 export const radioProps = buildProps({
   size: sizeProp,
@@ -25,19 +26,12 @@ export const radioProps = buildProps({
   loading: booleanProp,
   loadingLock: booleanProp,
   name: String,
+  shape: String as PropType<RadioShape>,
   onChange: eventProp<EventListener<ChangeEvent>>()
 })
 
 export type RadioProps = ExtractPropTypes<typeof radioProps>
 export type RadioCProps = ConfigurableProps<RadioProps>
-
-export type RawOption =
-  | string
-  | {
-    label: string | number | boolean,
-    content?: string,
-    disabled?: boolean
-  }
 
 export const radioGroupProps = buildProps({
   size: sizeProp,
@@ -47,11 +41,12 @@ export const radioGroupProps = buildProps({
   disabled: booleanProp,
   button: booleanProp,
   border: booleanProp,
-  options: Array as PropType<RawOption[]>,
+  options: Array as PropType<RadioRawOption[]>,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
+  shape: String as PropType<RadioGroupShape>,
   onChange: eventProp<EventListener<ChangeEvent>>()
 })
 

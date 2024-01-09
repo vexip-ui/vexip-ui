@@ -82,6 +82,10 @@ When on demand import, we can automatically import styles via some plugins.
 
 On demand import can more concise with the help of the Vite plugin [vite-plugin-style-import](https://github.com/anncwb/vite-plugin-style-import).
 
+:::warning
+If you are using unplugin, this plugin is no longer needed.
+:::
+
 Install plugin:
 
 ```sh
@@ -182,18 +186,18 @@ You can change the icon prefix via `iconPrefix` option of the resolver.
 However, when only resolver is used, the icon components can only be used via tag type. If you want to use it via variable, you need a little extra configuration:
 
 ```ts
-export default defineConfig(async () => ({
+export default defineConfig(async ({ command }) => ({
   plugins: [
     vue(),
     Components({
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ]
     }),
     AutoImport({
       vueTemplate: true,
       resolvers: [
-        VexipUIResolver()
+        VexipUIResolver({ fullStyle: command === 'serve' })
       ],
       imports: [
         {
@@ -207,7 +211,7 @@ export default defineConfig(async () => ({
 }))
 ```
 
-The options of Resolver can be viewed via editor's prompt or [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts#L7).
+The options of Resolver can be viewed via editor's prompt or [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts).
 
 If you also use plugin components link `Message`, you need to call `App.use` to install them before using them to ensure that they can get the configuration from context of the app:
 
@@ -233,6 +237,10 @@ The content of using the unplugin above is also applicable to Webpack, you just 
 :::
 
 On demand import can more concise with the help of the Webpack plugin [babel-plugin-import](https://github.com/ant-design/babel-plugin-import).
+
+:::warning
+If you are using unplugin, this plugin is no longer needed.
+:::
 
 Install plugin:
 
@@ -264,7 +272,7 @@ Due to plugin limitations, you still need to manually import `vexip-ui/es/css/da
 
 ## Global Types Infer
 
-If the components are imported globally, add the `compilerOptions.types` option in your project's `tsconfig.json` file to quickly get global types infer:
+If the components are imported globally, add the `compilerOptions.types` option in your project's `tsconfig.json` to quickly get global types infer:
 
 ```json
 {
@@ -274,6 +282,22 @@ If the components are imported globally, add the `compilerOptions.types` option 
 }
 ```
 
+The above configuration will not take effect after using [Component Name Namespace](/en-US/guide/global-config.html#component-name-namespace). In order to deal with this situation, Vexip UI provides commands to generate declaration file with namespace.
+
+Install dependency:
+
+```sh
+pnpm i -D @vexip-ui/scripts
+```
+
+Then run the below command, where `[prefix]` is the namespace you are using:
+
+```sh
+npx vexip gen types --prefix [prefix]
+```
+
+After the execution is completed, you can see that the `vexip-ui.d.ts` file is generated. Just add the file to the `include` option of `tsconfig.json`.
+
 ## Full Components List
 
-You can check full components list [here](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L120).
+You can check full components list [here](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts).

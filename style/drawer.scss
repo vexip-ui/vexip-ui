@@ -31,6 +31,7 @@ $drawer: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
   @include fixed;
 
   z-index: get-css-var('drawer-z-index');

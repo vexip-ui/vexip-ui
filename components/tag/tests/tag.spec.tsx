@@ -61,4 +61,17 @@ describe('Tag', () => {
     await wrapper.find('.vxp-tag__close').trigger('click')
     expect(onClose).toHaveBeenCalled()
   })
+
+  it('disabled', async () => {
+    const onClose = vi.fn()
+    const wrapper = mount(Tag, {
+      props: { disabled: true, closable: true, onClose }
+    })
+
+    expect(wrapper.find('.vxp-tag').classes()).toContain('vxp-tag--disabled')
+    expect(wrapper.find('.vxp-tag__close').exists()).toBe(true)
+
+    await wrapper.find('.vxp-tag__close').trigger('click')
+    expect(onClose).not.toHaveBeenCalled()
+  })
 })

@@ -1,11 +1,11 @@
-import { buildProps } from '@vexip-ui/config'
+import { buildProps, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { IconEffect } from './symbol'
+import type { IconEffect, IconRenderer } from './symbol'
 
 export const iconProps = buildProps({
-  icon: Object,
+  icon: iconProp,
   scale: [Number, String],
   title: String,
   label: String,
@@ -13,7 +13,8 @@ export const iconProps = buildProps({
   effect: String as PropType<IconEffect>,
   size: String,
   color: String,
-  rotate: [Number, String]
+  rotate: [Number, String],
+  renderer: Function as PropType<IconRenderer>
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>

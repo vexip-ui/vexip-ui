@@ -1,4 +1,4 @@
-# Ellipsis 省略 ^[Since v1.1.3](!s)
+# Ellipsis 省略 ==!s|1.1.3==
 
 当有一段长到放不下的文本时，可以派上用场。
 
@@ -37,3 +37,4 @@
 | max-lines       | `number`            | 设置最大行数，传入一个大于 `0` 的整数后将开启多行模式，其实现基于 `-webkit-line-clamp` | `null`       | -        |
 | tip-max-width   | `number \| string`  | 设置提示气泡的最大宽度                                                                 | `500`        | `2.0.13` |
 | tip-disabled    | `boolean`           | 是否禁用气泡提示                                                                       | `false`      | `2.1.18` |
+| shift           | `TooltipShift`      | 是否将气泡限制在可视区域内                                                             | `false`      | `2.2.12` |

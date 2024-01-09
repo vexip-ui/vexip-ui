@@ -1,4 +1,4 @@
-# Loading 加载 ^[Since v1.1.0](!s)
+# Loading 加载 ==!s|1.1.0==
 
 通常用于反馈一些全局的加载状态，如页面路由切换、全局请求等。
 
@@ -39,6 +39,15 @@
 :::
 
 ## API
+
+某些场景下，需要在全屏元素上显示消息，此时可以将组件的渲染位置迁移：
+
+```ts
+Loading.transferTo('#a-new-place')
+
+// 重新迁移回 body
+Loading.transferTo(document.body)
+```
 
 ### Loading 选项
 

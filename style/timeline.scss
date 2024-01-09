@@ -37,25 +37,26 @@ $timeline: map.merge(
 
   @include basis;
 
+  $side-pad: calc(#{get-css-var('timeline-pointer-size')} * 0.5);
+
   display: inline-flex;
   flex-direction: column;
-  padding-inline-start: 6px;
+  padding-inline-start: $side-pad;
 
   &--horizontal {
     flex-direction: row;
     padding-inline-start: 0;
-    padding-top: 6px;
+    padding-top: $side-pad;
   }
 
   &--flip {
-    padding-inline-start: 0;
-    padding-inline-end: 6px;
+    padding-inline: 0 $side-pad;
   }
 
   &--horizontal#{&}--flip {
     padding-inline-end: 0;
     padding-top: 0;
-    padding-bottom: 6px;
+    padding-bottom: $side-pad;
   }
 
   &--alternate,
@@ -118,8 +119,8 @@ $timeline: map.merge(
 
   &__signal {
     position: absolute;
-    top: 0;
     inset-inline-start: calc($pointer-size * -0.5);
+    top: 0;
     z-index: 1;
     display: inline-flex;
     align-items: center;
@@ -129,8 +130,8 @@ $timeline: map.merge(
   }
 
   &--horizontal &__signal {
-    top: calc($pointer-size * -0.5);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5);
   }
 
   &--flip &__signal {
@@ -138,8 +139,8 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--flip &__signal {
-    top: calc($pointer-size * -0.5 + 100%);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5 + 100%);
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
@@ -151,13 +152,13 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {
-    top: calc($pointer-size * -0.5 + 100%);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5 + 100%);
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__signal {
-    top: calc($pointer-size * -0.5);
     inset-inline-start: 0;
+    top: calc($pointer-size * -0.5);
   }
 
   &--signal-click &__signal {
@@ -181,9 +182,9 @@ $timeline: map.merge(
 
   &__line {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    inset-inline-start: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -196,6 +197,7 @@ $timeline: map.merge(
       content: '';
       border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
       border-inline-start-width: $line-width;
+      transition: get-css-var('transition-border');
     }
   }
 
@@ -205,8 +207,8 @@ $timeline: map.merge(
     width: 100%;
     height: 0;
     padding: 0;
-    padding-inline-start: calc($pointer-size + get-css-var('timeline-line-inset-start'));
-    padding-inline-end: get-css-var('timeline-line-inset-end');
+    padding-inline: calc($pointer-size + get-css-var('timeline-line-inset-start'))
+      get-css-var('timeline-line-inset-end');
 
     &::after {
       width: 100%;
@@ -221,8 +223,8 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--flip &__line {
-    top: 100%;
     inset-inline-start: 0;
+    top: 100%;
   }
 
   &--alternate:not(&--flip) &__item:nth-child(even) &__line {
@@ -234,13 +236,13 @@ $timeline: map.merge(
   }
 
   &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
+    inset-inline-start: 0;
     top: 100%;
-    inset-block-start: 0;
   }
 
   &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
+    inset-inline-start: 0;
     top: 0;
-    inset-block-start: 0;
   }
 
   $content-pad: calc($pointer-size * 0.5 + 8px);
@@ -313,7 +315,7 @@ $timeline: map.merge(
     padding-inline-end: 0;
   }
 
-  &__item:last-child &__line {
+  &__item:last-child &__line::after {
     display: none;
   }
 

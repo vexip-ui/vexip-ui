@@ -1,6 +1,4 @@
-import type { ComponentPublicInstance, Ref } from 'vue'
-
-export type MaybeRef<T> = Ref<T> | T
+import type { ComponentPublicInstance, MaybeRef } from 'vue'
 
 export type MaybeRefRecord<T> = {
   [K in keyof T]: MaybeRef<T[K]>
@@ -8,3 +6,8 @@ export type MaybeRefRecord<T> = {
 
 export type MaybeElement = HTMLElement | SVGElement | undefined | null
 export type MaybeInstance = MaybeElement | ComponentPublicInstance
+
+export type {
+  /** @deprecated Please use `MaybeRef` type from 'vue' to replace it */
+  MaybeRef
+}

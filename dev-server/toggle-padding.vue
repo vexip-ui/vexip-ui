@@ -4,7 +4,6 @@ import { onMounted, ref } from 'vue'
 import { isClient } from '@vexip-ui/utils'
 
 const rootCls = isClient ? document.documentElement.classList : undefined
-
 const active = ref(false)
 
 onMounted(() => {
@@ -22,6 +21,8 @@ function togglePadding(value: boolean) {
     } else {
       rootCls.remove('padding')
     }
+
+    localStorage.setItem('vexip-dev-prefer-no-padding', String(!value))
   })
 }
 </script>

@@ -6,6 +6,9 @@
 $radio: () !default;
 $radio: map.merge(
   (
+    color-checked-button: #fff,
+    bg-color-button: transparent,
+    bg-color-checked-button: get-css-var('color-primary-base'),
     bg-color-disabled-button: get-css-var('fill-color-background'),
     b-color: get-css-var('border-color-base'),
     b-color-hover: get-css-var('color-primary-base'),
@@ -16,17 +19,19 @@ $radio: map.merge(
     signal-bg-color-disabled: get-css-var('fill-color-disabled'),
     signal-b-color-hover: get-css-var('radio-b-color-hover'),
     label-color: inherit,
+    label-color-hover-button: get-css-var('radio-b-color-hover'),
     label-color-checked: get-css-var('color-primary-base'),
+    label-color-checked-button: #fff,
     label-color-disabled: get-css-var('content-color-disabled'),
-    border: get-css-var('border-shape') get-css-var('radio-b-color'),
-    signal-border: get-css-var('radio-border'),
+    radius: get-css-var('radius-base'),
     s-color-focus: get-css-var('color-primary-opacity-6'),
     shadow-focus: get-css-var('shadow-focus') get-css-var('radio-s-color-focus'),
     signal-size: 18px,
     signal-inner-size: 10px,
     button-height: 32px,
     button-v-padding: 0,
-    button-h-padding: 10px
+    button-h-padding: 10px,
+    series-span: 10px
   ),
   $radio
 );
@@ -45,7 +50,7 @@ $radio: map.merge(
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin-inline-end: 10px;
+  margin-inline-end: get-css-var('radio-series-span');
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
@@ -57,18 +62,62 @@ $radio: map.merge(
     line-height: 1;
   }
 
-  &--border {
-    padding: 8px 10px;
-    border: get-css-var('radio-border');
-    border-radius: get-css-var('radius-base');
+  &:last-child {
+    margin-inline-end: 0;
+  }
+
+  @mixin border-base-style {
+    height: get-css-var('radio-button-height');
+    padding: get-css-var('radio-button-v-padding') get-css-var('radio-button-h-padding');
+    border: get-css-var('border-shape') get-css-var('radio-b-color');
+    border-radius: get-css-var('radio-radius');
 
     &:hover {
       border-color: get-css-var('radio-b-color-hover');
     }
   }
 
+  &--border {
+    @include border-base-style;
+  }
+
   &--checked#{&}--border {
     border-color: get-css-var('radio-b-color-checked');
+  }
+
+  &--disabled#{&}--border {
+    &,
+    &:hover {
+      border-color: get-css-var('radio-b-color-disabled');
+    }
+  }
+
+  @mixin button-base-style {
+    @include border-base-style;
+
+    background-color: get-css-var('radio-bg-color-button');
+  }
+
+  &--button {
+    @include button-base-style;
+
+    &:focus-within {
+      border-color: get-css-var('radio-b-color-hover');
+      box-shadow: get-css-var('radio-shadow-focus');
+    }
+  }
+
+  &--checked#{&}--button {
+    background-color: get-css-var('radio-bg-color-checked-button');
+    border-color: get-css-var('radio-b-color-checked');
+  }
+
+  &--disabled#{&}--button {
+    &,
+    &:hover {
+      background-color: get-css-var('radio-bg-color-disabled-button');
+      border-color: get-css-var('radio-b-color-disabled');
+    }
   }
 
   &--loading {
@@ -84,7 +133,7 @@ $radio: map.merge(
     height: get-css-var('radio-signal-size');
     margin-inline-end: 6px;
     background-color: get-css-var('radio-signal-bg-color');
-    border: get-css-var('radio-signal-border');
+    border: get-css-var('border-shape') get-css-var('radio-b-color');
     border-radius: 50%;
     transition: get-css-var('transition-border'), get-css-var('transition-shadow');
 
@@ -114,6 +163,10 @@ $radio: map.merge(
 
   &:focus-within &__signal {
     box-shadow: get-css-var('radio-shadow-focus');
+  }
+
+  &--button &__signal {
+    display: none;
   }
 
   @mixin small-vars {
@@ -175,8 +228,17 @@ $radio: map.merge(
     transition: get-css-var('transition-color');
   }
 
+  &--button:hover &__label,
+  &--button:focus-within &__label {
+    color: get-css-var('radio-label-color-hover-button');
+  }
+
   &--checked &__label {
     color: get-css-var('radio-label-color-checked');
+  }
+
+  &--checked#{&}--button &__label {
+    color: get-css-var('radio-label-color-checked-button');
   }
 
   &__loading {
@@ -194,16 +256,19 @@ $radio: map.merge(
     &--#{$state} {
       @include define-radio-style(
         (
-          label-color-checked: 'color' $state 'base',
+          bg-color-checked-button: 'color' $state 'base',
           b-color: 'color' $state 'base',
           b-color-hover: 'color' $state 'base',
           b-color-checked: 'color' $state 'base',
           signal-bg-color-checked: 'color' $state 'base',
+          label-color-checked: 'color' $state 'base',
           s-color-focus: 'color' $state 'opacity-6'
         )
       );
     }
   }
+
+  $label: #{&}__label;
 
   &--disabled {
     cursor: not-allowed;
@@ -211,6 +276,14 @@ $radio: map.merge(
     &,
     &:hover {
       border-color: get-css-var('radio-b-color-disabled');
+    }
+
+    &,
+    &:hover,
+    &:focus-within {
+      #{$label} {
+        color: get-css-var('radio-label-color-disabled');
+      }
     }
   }
 
@@ -224,10 +297,6 @@ $radio: map.merge(
     &::after {
       background-color: get-css-var('radio-signal-bg-color-disabled');
     }
-  }
-
-  &--disabled &__label {
-    color: get-css-var('radio-label-color-disabled');
   }
 
   &__input {
@@ -262,126 +331,93 @@ $radio: map.merge(
       }
     }
 
-    &-group--border & {
-      height: get-css-var('radio-button-height');
-      padding: get-css-var('radio-button-v-padding') get-css-var('radio-button-h-padding');
-      border: get-css-var('radio-border');
-      border-radius: get-css-var('radius-base');
+    $radius: get-css-var('radius-base');
+    $bw: get-css-var('border-width');
+    $rbw: calc(get-css-var('border-width') * -1);
 
-      &:hover {
-        border-color: get-css-var('radio-b-color-hover');
-      }
-
-      &--checked {
-        border-color: get-css-var('radio-b-color-checked');
-      }
-    }
-
-    &-group--border &--disabled {
-      &,
-      &:hover {
-        border-color: get-css-var('radio-b-color-disabled');
-      }
-    }
-
-    &-group--disabled & {
-      cursor: not-allowed;
-
-      &,
-      &:hover {
-        border-color: get-css-var('radio-b-color-disabled');
-      }
-
-      &__signal {
-        border-color: get-css-var('radio-b-color-disabled') !important;
-
-        &::after {
-          background-color: get-css-var('radio-signal-bg-color-disabled');
-        }
-      }
-
-      &__label {
-        color: get-css-var('radio-label-color-disabled');
-      }
-    }
-
-    &-group--button & {
+    &-group--button-group & {
       position: relative;
       z-index: 0;
       height: get-css-var('radio-button-height');
       padding: get-css-var('radio-button-v-padding') get-css-var('radio-button-h-padding');
       margin: 0;
-      border: get-css-var('radio-border');
+      border: get-css-var('border-shape') get-css-var('radio-b-color');
       border-inline-start-width: 0;
       border-radius: 0;
 
       &::after {
         position: absolute;
+        inset-inline-start: $rbw;
         top: 0;
-        inset-inline-start: -1px;
+        bottom: 0;
         display: block;
-        width: 1px;
-        height: 100%;
+        width: $bw;
         content: '';
         background-color: transparent;
+        transition: get-css-var('transition-background');
       }
 
       &:hover {
-        border-color: get-css-var('radio-b-color-hover');
-        box-shadow: -1px 0 0 0 get-css-var('radio-b-color-hover');
+        border-color: get-css-var('radio-b-color-checked');
+        box-shadow: $rbw 0 0 0 get-css-var('radio-b-color-checked');
 
         @include rtl {
-          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked');
+          box-shadow: $bw 0 0 0 get-css-var('radio-b-color-checked');
         }
       }
 
+      &:hover #{$label},
+      &:focus-within #{$label} {
+        color: get-css-var('radio-label-color-hover-button');
+      }
+
       &:first-child {
-        border-inline-start-width: 1px;
+        @include logical-radius($radius 0 0 $radius);
 
-        @include logical-radius(get-css-var('radius-base') 0 0 get-css-var('radius-base'));
-
+        border-inline-start-width: $bw;
         box-shadow: none;
 
         @include rtl {
           box-shadow: none;
         }
 
-        &::before,
         &::after {
           content: none;
         }
       }
 
       &:last-child {
-        @include logical-radius(0 get-css-var('radius-base') get-css-var('radius-base') 0);
+        @include logical-radius(0 $radius $radius 0);
       }
 
       &--checked {
         z-index: 1;
         border-color: get-css-var('radio-b-color-checked');
-        box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked');
+        box-shadow: $rbw 0 0 0 get-css-var('radio-b-color-checked');
 
         @include rtl {
-          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked');
+          box-shadow: $bw 0 0 0 get-css-var('radio-b-color-checked');
         }
       }
 
       &:focus-within {
-        box-shadow: -1px 0 0 0 get-css-var('radio-b-color-checked'),
+        border-color: get-css-var('radio-b-color-hover');
+        box-shadow:
+          $rbw 0 0 0 get-css-var('radio-b-color-hover'),
           get-css-var('radio-shadow-focus');
 
         @include rtl {
-          box-shadow: 1px 0 0 0 get-css-var('radio-b-color-checked'),
+          box-shadow:
+            $bw 0 0 0 get-css-var('radio-b-color-hover'),
             get-css-var('radio-shadow-focus');
         }
 
         &::after {
-          top: -3px;
           inset-inline-start: -3px;
-          height: calc(100% + 6px);
+          top: -3px;
+          bottom: -3px;
           background-color: get-css-var('radio-s-color-focus');
-          transition: top get-css-var('transition-base'), left get-css-var('transition-base'),
-            height get-css-var('transition-base'), get-css-var('transition-background');
+          opacity: 50%;
         }
       }
 
@@ -398,6 +434,78 @@ $radio: map.merge(
       }
     }
 
+    &-group--vertical#{&}-group--button-group & {
+      border-inline-start-width: $bw;
+      border-top-width: 0;
+
+      &::after {
+        inset: $rbw 0 auto;
+        width: auto;
+        height: $bw;
+      }
+
+      &:hover {
+        box-shadow: 0 $rbw 0 0 get-css-var('radio-b-color-checked');
+
+        @include rtl {
+          box-shadow: 0 $bw 0 0 get-css-var('radio-b-color-checked');
+        }
+      }
+
+      &:first-child {
+        @include logical-radius($radius $radius 0 0);
+
+        border-top-width: $bw;
+        box-shadow: none;
+
+        @include rtl {
+          box-shadow: none;
+        }
+
+        &::after {
+          content: none;
+        }
+      }
+
+      &:last-child {
+        @include logical-radius(0 0 $radius $radius);
+      }
+
+      &--checked {
+        box-shadow: 0 $rbw 0 0 get-css-var('radio-b-color-checked');
+
+        @include rtl {
+          box-shadow: 0 $bw 0 0 get-css-var('radio-b-color-checked');
+        }
+      }
+
+      &:focus-within {
+        box-shadow:
+          0 $rbw 0 0 get-css-var('radio-b-color-hover'),
+          get-css-var('radio-shadow-focus');
+
+        @include rtl {
+          box-shadow:
+            0 $bw 0 0 get-css-var('radio-b-color-hover'),
+            get-css-var('radio-shadow-focus');
+        }
+
+        &::after {
+          inset-inline: -3px;
+          top: -3px;
+          bottom: auto;
+        }
+      }
+
+      &:focus-within:first-child {
+        box-shadow: get-css-var('radio-shadow-focus');
+
+        @include rtl {
+          box-shadow: get-css-var('radio-shadow-focus');
+        }
+      }
+    }
+
     &-group--small & {
       @include small-vars;
     }
@@ -406,36 +514,27 @@ $radio: map.merge(
       @include large-vars;
     }
 
-    // &-group--button#{&}-group--small & {
-    //   padding: 6px 8px;
-    // }
-
-    // &-group--button#{&}-group--large & {
-    //   padding: 10px 14px;
-    // }
-
-    &-group--button#{&}-group--disabled &,
-    &-group--button &--disabled {
+    &-group--button-group#{&}-group--disabled &,
+    &-group--button-group &--disabled {
       background-color: get-css-var('radio-bg-color-disabled-button');
       border-color: get-css-var('radio-b-color') !important;
       box-shadow: none !important;
-    }
 
-    &-group--button &--disabled#{&}--checked {
-      background-color: get-css-var('radio-bg-color-disabled-button');
-
-      .#{$namespace}-radio__label {
-        color: get-css-var('radio-label-color-disabled');
+      &,
+      &:hover,
+      &:focus-within {
+        #{$label} {
+          color: get-css-var('radio-label-color-disabled');
+        }
       }
     }
 
-    &-group--button#{&}-group--disabled & {
-      &--checked {
-        background-color: get-css-var('radio-bg-color-disabled-button');
+    &-group--button-group &--disabled#{&}--checked,
+    &-group--button-group#{&}-group--disabled &--checked {
+      background-color: get-css-var('radio-bg-color-disabled-button');
 
-        // .#{$namespace}-radio__label {
-        //   color: get-css-var('color-content-reverse');
-        // }
+      #{$label} {
+        color: get-css-var('radio-label-color-disabled');
       }
     }
   }

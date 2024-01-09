@@ -1,3 +1,82 @@
+## [2.3.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.3.0...hooks@2.3.1) (2024-01-04)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useFullScreen improve global full state subscription ([a7e91b1](https://github.com/vexip-ui/vexip-ui/commit/a7e91b1871ba25fbfd3ac7626fb0d8ce27cc3e37))
+
+
+
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.3...hooks@2.3.0) (2023-12-20)
+
+
+### ✨ Features
+
+* **hooks:** add useRaf method ([fac1427](https://github.com/vexip-ui/vexip-ui/commit/fac14270e091c8ecb47726b1816deca6f75affb7))
+* **hooks:** add useTimerRecord method ([7e6667f](https://github.com/vexip-ui/vexip-ui/commit/7e6667f7eaaa0e07459f7b474be4b922203c0d37))
+
+
+
+## [2.2.3](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.2...hooks@2.2.3) (2023-12-07)
+
+
+
+## [2.2.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.1...hooks@2.2.2) (2023-12-07)
+
+
+
+## [2.2.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.2.0...hooks@2.2.1) (2023-11-29)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** useVirtual support wrapper changed ([6ab1558](https://github.com/vexip-ui/vexip-ui/commit/6ab1558adcdb2dfe61b5c2047067ae81c1cecf87))
+
+
+### 👓 Types
+
+* normalize MaybeRef type ([8ac0762](https://github.com/vexip-ui/vexip-ui/commit/8ac07623268844cecc0e7d8674d321614bc08edf))
+
+
+
+# [2.2.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.1...hooks@2.2.0) (2023-11-23)
+
+
+### ✨ Features
+
+* **hooks:** add watchPauseable util method ([183eb73](https://github.com/vexip-ui/vexip-ui/commit/183eb73c8c70fbc8e5d331e8607c90acfacd857c))
+
+
+
+## [2.1.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.1.0...hooks@2.1.1) (2023-11-20)
+
+
+### ✨ Features
+
+* **full-screen:** add onToggle event ([8c89cde](https://github.com/vexip-ui/vexip-ui/commit/8c89cde57358217266af3f29f5cd928fa65d126e))
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** improve useFullScreen methods return ([20cec1b](https://github.com/vexip-ui/vexip-ui/commit/20cec1b002f7e54322a697f3352db756596a787e))
+
+
+### 🔨 Code Refactoring
+
+* support globally config hover delay, defaults to 100ms ([b409d01](https://github.com/vexip-ui/vexip-ui/commit/b409d011e01c0d44e8c84496faff36e8613fab8b))
+
+
+
+# [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.2...hooks@2.1.0) (2023-11-03)
+
+
+### ✨ Features
+
+* **hooks:** add hook to observe current theme ([709c943](https://github.com/vexip-ui/vexip-ui/commit/709c9433cb55f9fce16b94f825a144d0fe0e18ff))
+* **tooltip:** support limit tip inside visible area ([a65ff70](https://github.com/vexip-ui/vexip-ui/commit/a65ff7024281078f0296695fe29f5d301340b530))
+
+
+
 ## [2.0.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.0.1...hooks@2.0.2) (2023-09-22)
 
 

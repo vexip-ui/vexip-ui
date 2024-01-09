@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { EyeR, EyeSlashR, GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import { Input } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -61,24 +62,24 @@ describe('Input', () => {
 
   it('prefix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => <Input prefix={GithubB} onPrefixClick={onClick}></Input>)
+    const wrapper = mount(() => <Input prefix={Github} onPrefixClick={onClick}></Input>)
 
     expect(wrapper.find('.vxp-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-input__prefix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <Input prefix={GithubB} prefix-color={'red'}></Input>)
+    const wrapper = mount(() => <Input prefix={Github} prefix-color={'red'}></Input>)
 
     expect(wrapper.find('.vxp-input__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <Input prefix={GithubB}>
+      <Input prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -86,30 +87,30 @@ describe('Input', () => {
     ))
 
     expect(wrapper.find('.vxp-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
   it('suffix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => <Input suffix={GithubB} onSuffixClick={onClick}></Input>)
+    const wrapper = mount(() => <Input suffix={Github} onSuffixClick={onClick}></Input>)
 
     expect(wrapper.find('.vxp-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-input__suffix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <Input suffix={GithubB} suffix-color={'red'}></Input>)
+    const wrapper = mount(() => <Input suffix={Github} suffix-color={'red'}></Input>)
 
     expect(wrapper.find('.vxp-input__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <Input suffix={GithubB}>
+      <Input suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -117,7 +118,7 @@ describe('Input', () => {
     ))
 
     expect(wrapper.find('.vxp-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -128,7 +129,7 @@ describe('Input', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Input state={state}></Input>)
 
       expect(wrapper.find('.vxp-input').classes()).toContain(`vxp-input--${state}`)
@@ -139,11 +140,11 @@ describe('Input', () => {
     const wrapper = mount(Input)
 
     expect(wrapper.find('.vxp-input__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-input__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -156,10 +157,10 @@ describe('Input', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Input loading loading-icon={GithubB}></Input>)
+    const wrapper = mount(() => <Input loading loading-icon={Github}></Input>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {
@@ -185,7 +186,7 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -203,8 +204,8 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, '2')
-    vi.runAllTimers()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledWith(2)
 
@@ -226,7 +227,7 @@ describe('Input', () => {
     emitInput(input, TEXT)
     emitInput(input, TEXT)
     expect(onInput).toHaveBeenCalledTimes(1)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledTimes(2)
   })
@@ -246,7 +247,7 @@ describe('Input', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await input.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-input--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -257,7 +258,7 @@ describe('Input', () => {
     const wrapper = mount(Input, {
       props: {
         clearable: true,
-        suffix: GithubB,
+        suffix: Github,
         onClear
       }
     })
@@ -368,11 +369,11 @@ describe('Input', () => {
     const wrapper = mount(() => <Input type={'password'} plain-password></Input>)
 
     expect(wrapper.find('.vxp-input__password').exists()).toBe(true)
-    expect(wrapper.findComponent(EyeSlashR).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.cipherText.icon).exists()).toBe(true)
 
     await wrapper.find('.vxp-input__password').trigger('click')
     expect(wrapper.find('input[type="password"]').exists()).toBe(false)
-    expect(wrapper.findComponent(EyeR).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.plainText.icon).exists()).toBe(true)
   })
 
   it('formatter', async () => {
@@ -399,7 +400,7 @@ describe('Input', () => {
     const input = wrapper.find('input').element
 
     emitInput(input, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])

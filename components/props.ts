@@ -32,6 +32,7 @@ import type { FormCProps } from './form'
 import type { FormItemCProps } from './form-item'
 import type { FormResetCProps } from './form-reset'
 import type { FormSubmitCProps } from './form-submit'
+import type { FullScreenCProps } from './full-screen'
 import type { GridCProps } from './grid'
 import type { HighlightCProps } from './highlight'
 import type { IconCProps } from './icon'
@@ -73,6 +74,7 @@ import type { SwitchCProps } from './switch'
 import type { TabNavCProps } from './tab-nav'
 import type { TableCProps } from './table'
 import type { TableColumnCProps } from './table-column'
+import type { TableColumnGroupCProps } from './table-column-group'
 import type { TableSummaryCProps } from './table-summary'
 import type { TabsCProps } from './tabs'
 import type { TagCProps } from './tag'
@@ -114,7 +116,7 @@ import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 interface SuggestedDefault {
   size?: ComponentSize,
   state?: ComponentState,
-  transfer?: boolean,
+  transfer?: boolean | string,
   disabled?: boolean,
   loading?: boolean,
   clearable?: boolean
@@ -156,6 +158,7 @@ export interface PropsOptions {
   formItem?: FormItemCProps,
   formReset?: FormResetCProps,
   formSubmit?: FormSubmitCProps,
+  fullScreen?: FullScreenCProps,
   grid?: GridCProps,
   highlight?: HighlightCProps,
   icon?: IconCProps,
@@ -197,6 +200,7 @@ export interface PropsOptions {
   tabNav?: TabNavCProps,
   table?: TableCProps,
   tableColumn?: TableColumnCProps,
+  tableColumnGroup?: TableColumnGroupCProps,
   tableSummary?: TableSummaryCProps,
   tabs?: TabsCProps,
   tag?: TagCProps,

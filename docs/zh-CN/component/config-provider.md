@@ -1,4 +1,4 @@
-# ConfigProvider 配置注入 ^[Since v2.0.0](!s)
+# ConfigProvider 配置注入 ==!s|2.0.0==
 
 配置注入用于为其内部组件的提供各项配置。
 
@@ -46,10 +46,11 @@
 
 ### ConfigProvider 属性
 
-| 名称    | 类型                                                                                                    | 说明                                                                                                       | 默认值 | 始于     |
-| ------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------ | -------- |
-| props   | `Record<string, any>`                                                                                   | 需要注入的组件属性配置，键值为组件的驼峰命名，值为对应组件的属性配置，注入的属性将覆盖组件原有的属性默认值 | `{}`   | -        |
-| locale  | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5) | 需要注入的国际化配置                                                                                       | `{}`   | -        |
-| icons   | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L88)         | 需要注入的内部图标配置                                                                                     | `{}`   | `2.1.9`  |
-| z-index | `number`                                                                                                | 需要注入的基础层级数                                                                                       | `null` | `2.1.17` |
-| theme   | `string`                                                                                                | 设置作用域的主题                                                                                           | `null` | `2.1.24` |
+| 名称        | 类型                                                                                                 | 说明                                                                                                       | 默认值 | 始于     |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------ | -------- |
+| props       | [`PropsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/components/props.ts)                 | 需要注入的组件属性配置，键值为组件的驼峰命名，值为对应组件的属性配置，注入的属性将覆盖组件原有的属性默认值 | `{}`   | -        |
+| locale      | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts) | 需要注入的国际化配置                                                                                       | `{}`   | -        |
+| icons       | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)          | 需要注入的内部图标配置                                                                                     | `{}`   | `2.1.9`  |
+| z-index     | `number`                                                                                             | 需要注入的基础层级数                                                                                       | `null` | `2.1.17` |
+| theme       | `string`                                                                                             | 设置作用域的主题                                                                                           | `null` | `2.1.24` |
+| hover-delay | `number`                                                                                             | 需要注入的悬停延迟毫秒数                                                                                   | `null` | `2.2.11` |

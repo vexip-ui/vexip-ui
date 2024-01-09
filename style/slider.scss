@@ -25,7 +25,8 @@ $slider: map.merge(
     handler-shadow-disabled: unset,
     handler-scale-hover: 1.25,
     handler-scale-focus: 1.25,
-    marker-size: 8px
+    marker-size: 8px,
+    marker-pad: 32px
   ),
   $slider
 );
@@ -47,29 +48,34 @@ $slider: map.merge(
   );
   $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
 
-  position: relative;
   display: flex;
-  flex-direction: column;
   width: 100%;
-  padding: $padding 0;
-  margin: 2px $margin;
   cursor: pointer;
 
   &--vertical {
     display: inline-flex;
-    flex-direction: row;
     width: auto;
     height: 100%;
-    padding: 0 $padding;
-    margin: $margin 2px;
   }
 
   &--with-marker {
-    margin-bottom: 32px;
+    margin-bottom: get-css-var('slider-marker-pad');
+  }
+
+  &--flip-marker {
+    margin-top: get-css-var('slider-marker-pad');
+    margin-bottom: 0;
   }
 
   &--vertical#{&}--with-marker {
-    margin-inline-end: 32px;
+    margin-inline-end: get-css-var('slider-marker-pad');
+    margin-bottom: 0;
+  }
+
+  &--vertical#{&}--flip-marker {
+    margin-inline: get-css-var('slider-marker-pad') 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   &--loading {
@@ -77,6 +83,28 @@ $slider: map.merge(
   }
 
   &--disabled {
+    cursor: not-allowed;
+  }
+
+  &__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - get-css-var('slider-handler-size') - 2px);
+    padding: $padding 0;
+    margin: 0 $margin;
+    cursor: pointer;
+  }
+
+  &--vertical &__container {
+    flex-direction: row;
+    width: auto;
+    height: calc(100% - get-css-var('slider-handler-size') - 2px);
+    padding: 0 $padding;
+    margin: $margin 0;
+  }
+
+  &--disabled &__container {
     cursor: not-allowed;
   }
 
@@ -113,22 +141,36 @@ $slider: map.merge(
   }
 
   &__filler {
+    position: relative;
     width: 100%;
     height: 100%;
-    background-color: get-css-var('slider-filler-bg-color');
+    overflow: hidden;
     border-radius: get-css-var('slider-track-height');
-    transition: get-css-var('transition-background');
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      background-color: get-css-var('slider-filler-bg-color');
+      border-radius: get-css-var('slider-track-height');
+      transition: get-css-var('transition-background');
+      transform: get-css-var('slider-filler-after-transform');
+    }
   }
 
   &:hover &__filler,
   &--sliding &__filler {
-    background-color: get-css-var('slider-filler-bg-color-hover');
+    &::after {
+      background-color: get-css-var('slider-filler-bg-color-hover');
+    }
   }
 
   &--disabled &__filler,
   &--disabled:hover &__filler,
   &--disabled#{&}--sliding &__filler {
-    background-color: get-css-var('slider-filler-bg-color-disabled');
+    &::after {
+      background-color: get-css-var('slider-filler-bg-color-disabled');
+    }
   }
 
   $handler-size: get-css-var('slider-handler-size');
@@ -140,6 +182,7 @@ $slider: map.merge(
     justify-content: center;
     width: $handler-size;
     height: $handler-size;
+    transition: get-css-var('transition-opacity');
 
     .#{$namespace}-tooltip {
       line-height: 1;
@@ -154,6 +197,10 @@ $slider: map.merge(
     }
   }
 
+  &--hide-trigger &__trigger {
+    opacity: 0%;
+  }
+
   &__handler {
     @include round-border(get-css-var('slider-handler-b-color'));
 
@@ -165,15 +212,20 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-border'), get-css-var('transition-shadow');
+    transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
+      get-css-var('transition-transform');
 
     &::before {
-      top: 2px;
       inset-inline-start: 2px;
+      top: 2px;
       width: calc(100% - 4px);
       height: calc(100% - 4px);
       opacity: 0%;
     }
+  }
+
+  &--hide-trigger &__handler {
+    transform: scale(0);
   }
 
   $handler: #{&}__handler;
@@ -225,7 +277,6 @@ $slider: map.merge(
 
   &--disabled#{&}--sliding &__button &__handler {
     box-shadow: get-css-var('slider-handler-shadow-disabled');
-    transform: scale(1);
   }
 
   &__tip {
@@ -238,40 +289,65 @@ $slider: map.merge(
 
   &__point {
     position: absolute;
+    display: flex;
+    pointer-events: none;
+  }
+
+  &__dot {
     width: $marker-size;
     height: $marker-size;
-    pointer-events: none;
     background-color: get-css-var('slider-handler-bg-color');
     border: get-css-var('slider-handler-b-width') solid
       get-css-var('slider-handler-b-color-disabled');
     border-radius: $marker-size;
     transition: get-css-var('transition-border');
-
-    &--in-range {
-      border-color: get-css-var('slider-handler-b-color');
-    }
   }
 
-  &--disabled &__point {
+  &__point--in-range &__dot {
+    border-color: get-css-var('slider-handler-b-color');
+  }
+
+  &--disabled &__point &__dot {
     border-color: get-css-var('slider-handler-b-color-disabled');
   }
 
+  $markers-pos: calc(get-css-var('slider-handler-size') + 6px);
+
   &__markers {
     position: absolute;
-    top: calc(get-css-var('slider-handler-size') + 6px);
+    top: $markers-pos;
     width: 100%;
   }
 
-  &--vertical &__markers {
+  &--flip-marker &__markers {
     top: auto;
-    inset-inline-start: calc(get-css-var('slider-handler-size') + 6px);
+    bottom: $markers-pos;
+  }
+
+  &--vertical &__markers {
+    inset-inline-start: $markers-pos;
+    top: auto;
     width: auto;
     height: 100%;
+  }
+
+  &--vertical#{&}--flip-marker &__markers {
+    inset-inline: auto $markers-pos;
+    bottom: auto;
   }
 
   &__marker {
     position: absolute;
     user-select: none;
+  }
+
+  &--flip-marker &__marker {
+    bottom: 0;
+  }
+
+  &--vertical#{&}--flip-marker &__marker {
+    right: 0;
+    bottom: auto;
   }
 
   $states: success, error, warning;
@@ -280,7 +356,8 @@ $slider: map.merge(
     &--#{$state} {
       @include define-slider-style(
         (
-          filler-bg-color: 'color' $state 'base',
+          filler-bg-color: 'color' $state 'opacity-2',
+          filler-bg-color-hover: 'color' $state 'base',
           handler-b-color: 'color' $state 'base',
           handler-s-color: 'color' $state 'light-6'
         )

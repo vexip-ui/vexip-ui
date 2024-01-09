@@ -4,11 +4,13 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useData, useRoute } from 'vitepress'
+import { Message } from 'vexip-ui'
 import { Bars } from '@vexip-ui/icons'
 import { useBEM } from '@vexip-ui/bem-helper'
-import { boundRange, isClient, multipleFixed } from '@vexip-ui/utils'
+import { useListener } from '@vexip-ui/hooks'
+import { boundRange, isClient, multipleFixed, writeClipboard } from '@vexip-ui/utils'
 import { hashTarget } from './common/hash-target'
-import { ensureStartingSlash } from '../shared'
+import { ensureStartingSlash, matchPath } from '../shared'
 
 import Homepage from './components/homepage.vue'
 import NotFound from './components/not-found.vue'
@@ -28,13 +30,6 @@ const { t, locale } = useI18n({ useScope: 'global' })
 const route = useRoute()
 
 const nh = useBEM('docs-layout')
-const layoutClasses: LayoutInnerClass = {
-  section: nh.be('section'),
-  header: nh.be('header'),
-  sidebar: nh.be('sidebar'),
-  aside: nh.be('aside'),
-  footer: nh.be('footer')
-}
 
 const providedProps: PropsOptions = {
   default: { transfer: '#transfer-place' as any },
@@ -59,7 +54,7 @@ const outline = computed(() => {
   const path = ensureStartingSlash(page.value.relativePath)
 
   for (const key of Object.keys(config)) {
-    if (path.startsWith(`/${locale.value}${key}`)) {
+    if (matchPath(path, `/${locale.value}${key}`)) {
       return config[key]
     }
   }
@@ -67,11 +62,28 @@ const outline = computed(() => {
   return undefined
 })
 
-const footerLinks = computed(() => {
-  if (frontmatter.value.footer === false) {
-    return []
-  }
+const linkCenter = computed(() => {
+  return !!(
+    frontmatter.value.homepage ||
+    page.value.isNotFound ||
+    frontmatter.value.footer === false
+  )
+})
 
+const layoutClasses = computed(() => {
+  return {
+    section: nh.be('section'),
+    header: nh.be('header'),
+    sidebar: nh.be('sidebar'),
+    aside: nh.be('aside'),
+    footer: {
+      [nh.be('footer')]: true,
+      [nh.bem('footer', 'center')]: linkCenter.value
+    }
+  } as LayoutInnerClass
+})
+
+const footerLinks = computed(() => {
   return (theme.value.footerLinks || [])
     .filter(group => group.items.length && (group.text || group.i18n))
     .map(group => ({
@@ -124,7 +136,53 @@ onMounted(() => {
   if (!isClient) return
 
   computeBarLength()
-  window.addEventListener('scroll', handleScroll)
+
+  useListener(window, 'scroll', handleScroll)
+  useListener(window, 'click', async event => {
+    const target = event.target as HTMLElement
+
+    if (target.matches('div[class*="language-"] > button.copy')) {
+      if (target.classList.contains('copied')) return
+
+      const parent = target.parentElement
+      const code = parent?.querySelector('code')
+
+      if (!parent || !code) return
+
+      if (await writeClipboard((code.textContent ?? '').replace(/\n$/, ''))) {
+        Message.success(t('common.copySuccess'))
+      } else {
+        Message.error(t('common.copyFail'))
+      }
+    }
+  })
+  useListener<KeyboardEvent>(window, 'keydown', event => {
+    const target = event.target as HTMLElement
+
+    if (
+      event.isTrusted &&
+      event.ctrlKey &&
+      event.code === 'KeyA' &&
+      target.matches('pre[class*="language-"]')
+    ) {
+      const code = target.querySelector('code')
+
+      if (!code) return
+
+      event.preventDefault()
+
+      const range = document.createRange()
+      const selection = document.getSelection()
+
+      range.setStart(code, 0)
+      range.setEnd(code, code.childNodes.length)
+
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+    }
+  })
 })
 
 function computeBarLength() {
@@ -197,7 +255,7 @@ function refreshScroll() {
     sign-type="header"
     fit-window
     :no-aside="frontmatter.homepage || page.isNotFound"
-    :footer="!(frontmatter.homepage || page.isNotFound || frontmatter.footer === false)"
+    :footer="!page.isNotFound"
     :links="footerLinks"
     :inner-classes="layoutClasses"
     :style="{
@@ -253,7 +311,7 @@ function refreshScroll() {
       <template v-else>
         <ConfigProvider :props="providedProps">
           <Article :anchor-level="outline">
-            <Content class="markdown"></Content>
+            <Content class="markdown" as="section"></Content>
           </Article>
         </ConfigProvider>
         <div id="transfer-place"></div>
@@ -348,6 +406,12 @@ function refreshScroll() {
       &__link-name--group {
         font-weight: bold;
       }
+    }
+  }
+
+  &__footer--center.vxp-layout__footer {
+    .vxp-layout__links-row {
+      justify-content: center;
     }
   }
 

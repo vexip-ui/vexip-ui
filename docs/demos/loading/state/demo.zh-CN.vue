@@ -1,5 +1,5 @@
 <template>
-  <Button type="primary" :loading="loading" @click="doLoading">
+  <Button type="primary" :loading="loading" @click="doLoading()">
     加载结束
   </Button>
   <Button type="success" :loading="loading" @click="doLoading('success')">

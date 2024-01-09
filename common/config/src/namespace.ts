@@ -2,14 +2,21 @@ import { computed, inject, provide, unref } from 'vue'
 
 import { useBEM } from '@vexip-ui/bem-helper'
 
-import type { App, ComputedRef } from 'vue'
-import type { MaybeRef } from './types'
+import type { App, ComputedRef, MaybeRef } from 'vue'
 
 export type Namespace = 'vxp'
 
 export const PROVIDED_NAMESPACE = '__vxp-provided-namespace'
 export const globalNamespace = computed(() => 'vxp' as Namespace)
 
+/**
+ * Provide a namespace config for under components.
+ *
+ * You only should use this method when initialize application.
+ *
+ * @param sourceNamespace namespace config
+ * @param app the app of Vue, will use app.provide if specify
+ */
 export function configNamespace<N extends string = Namespace>(
   sourceNamespace: MaybeRef<N>,
   app?: App
@@ -45,7 +52,7 @@ export function useNameHelper<B extends string, N extends string = Namespace>(
   block: B,
   namespace: MaybeRef<N> = useNamespace()
 ) {
-  return useBEM(block, () => unref(namespace))
+  return useBEM(block, isVar => (isVar ? 'vxp' : unref(namespace)))
 }
 
 export type NameHelper = ReturnType<typeof useNameHelper>

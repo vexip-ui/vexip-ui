@@ -57,8 +57,8 @@ Sometimes it is a little troublesome to set props and switch one by one skeleton
 | tag        | `string`                          | Set the element for skeleton rendering                                                         | `'div'` | -        |
 | activated  | `boolean`                         | Set whether the skeleton is activated                                                          | `false` | -        |
 | image      | `boolean`                         | Set whether the skeleton is as image                                                           | `false` | -        |
-| imageIcon  | `Record<string, any>`             | Set icon for image skeleton                                                                    | `null`  | -        |
-| iconScale  | `Number`                          | Set icon scale for image skeleton                                                              | `4`     | -        |
+| image-icon | `VueComponent`                    | Set icon for image skeleton                                                                    | `null`  | -        |
+| icon-scale | `Number`                          | Set icon scale for image skeleton                                                              | `4`     | -        |
 | round      | `boolean`                         | Set whether it is a round skeleton                                                             | `false` | -        |
 | circle     | `boolean`                         | Set whether it is a circular skeleton. After setting, the `width` prop will be invalid         | `false` | -        |
 | block      | `boolean`                         | Set whether is a `block` element                                                               | `false` | -        |

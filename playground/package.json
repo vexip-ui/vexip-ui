@@ -1,32 +1,29 @@
 {
   "name": "@vexip-ui/playground",
-  "author": {
-    "name": "qmhc"
-  },
+  "author": "qmhc",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "vite build",
     "preview": "vite preview",
     "serve": "vite"
   },
-  "type": "module",
   "dependencies": {
     "@vexip-ui/icons": "workspace:*",
-    "@vue/repl": "^2.5.8",
+    "@vue/repl": "^3.0.0",
     "fflate": "^0.8.1",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "vexip-ui": "workspace:*",
-    "vue": "^3.3.4"
+    "vue": "^3.3.10"
   },
   "devDependencies": {
-    "@types/file-saver": "^2.0.5",
-    "@types/prettier": "^2.7.3",
-    "@vitejs/plugin-vue": "^4.4.0",
-    "@vitejs/plugin-vue-jsx": "^3.0.2",
+    "@types/file-saver": "^2.0.7",
+    "@vitejs/plugin-vue": "^4.5.1",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "vite": "^4.4.11",
+    "postcss": "^8.4.32",
+    "vite": "^5.0.5",
     "vue-router": "^4.2.5"
   }
 }

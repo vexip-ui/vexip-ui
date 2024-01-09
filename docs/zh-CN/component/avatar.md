@@ -1,4 +1,4 @@
-# Avatar 头像 ^[Since v2.0.0](!s)
+# Avatar 头像 ==!s|2.0.0==
 
 用户的首要标志，可以使用图片、图标或文字进行展示。
 
@@ -90,7 +90,7 @@
 | ------------ | ---------------------------------------------------------- | ------------------------------------------------ | ----------- | ---- |
 | size         | `number \| 'small' \| 'default' \| 'large'`                | 头像的大小，当作用在头像组时优先使用组的大小     | `'default'` | -    |
 | src          | `string`                                                   | 头像图片的源地址                                 | `''`        | -    |
-| icon         | `Record<string, any>`                                      | 头像的图标对象                                   | `null`      | -    |
+| icon         | `VueComponent`                                             | 头像的图标对象                                   | `null`      | -    |
 | circle       | `boolean`                                                  | 设置头像是否为圆形                               | `false`     | -    |
 | alt          | `string`                                                   | 设置头像图片的 `alt` 属性                        | `''`        | -    |
 | fit          | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | 设置头像的图片如何填充，同 `css` 的 `object-fit` | `'cover'`   | -    |

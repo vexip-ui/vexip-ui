@@ -5,8 +5,8 @@ import { useFieldStore } from '@/components/form'
 
 import { computed, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
-import { placementWhileList } from '@vexip-ui/hooks'
 import {
+  createIconProp,
   createSizeProp,
   createStateProp,
   emitEvent,
@@ -14,6 +14,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
+import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
@@ -58,9 +59,9 @@ const props = useProps('autoComplete', _props, {
     static: true
   },
   filter: false,
-  prefix: null,
+  prefix: createIconProp(),
   prefixColor: '',
-  suffix: null,
+  suffix: createIconProp(),
   suffixColor: '',
   placeholder: null,
   disabled: () => disabled.value,
@@ -76,7 +77,7 @@ const props = useProps('autoComplete', _props, {
   spellcheck: false,
   keyConfig: () => ({}),
   loading: () => loading.value,
-  loadingIcon: null,
+  loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
   transparent: false,
@@ -110,6 +111,8 @@ const slots = defineSlots<{
 
 const locale = useLocale('input', toRef(props, 'locale'))
 
+const { timer } = useSetTimeout()
+
 const currentValue = ref(props.value)
 const currentIndex = ref(-1)
 const currentVisible = ref(false)
@@ -119,6 +122,7 @@ let changed = false
 let lastValue = props.value
 let lastInput = String(lastValue)
 
+const isReadonly = computed(() => props.loading && props.loadingLock)
 const optionStates = computed(() => select.value?.optionStates || [])
 const filteredOptions = computed(() => select.value?.visibleOptions || [])
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
@@ -196,14 +200,26 @@ function computeHitting() {
   }
 }
 
+let focused = false
+
 function handleFocus(event: FocusEvent) {
-  control.value?.focus()
-  emitEvent(props.onFocus, event)
+  if (!focused) {
+    focused = true
+    emitEvent(props.onFocus, event)
+  }
 }
 
 function handleBlur(event: FocusEvent) {
-  control.value?.blur()
-  emitEvent(props.onBlur, event)
+  if (focused) {
+    focused = false
+
+    timer.focus = setTimeout(() => {
+      if (!focused) {
+        emitEvent(props.onBlur, event)
+        handleChange()
+      }
+    }, 120)
+  }
 }
 
 function handleSelect(value: string | number, data: AutoCompleteRawOption) {
@@ -261,6 +277,12 @@ function handleChange(valid = true) {
 
   const option = optionStates.value.find(option => option.value === lastValue)
 
+  if (select.value) {
+    select.value.currentValues.length = 0
+    ;(currentValue.value || currentValue.value === 0) &&
+      select.value.currentValues.push(currentValue.value)
+  }
+
   emit('update:value', currentValue.value)
   setFieldValue(currentValue.value)
   emitEvent(props.onChange as ChangeEvent, currentValue.value, option?.data || null!)
@@ -270,7 +292,6 @@ function handleChange(valid = true) {
 
   if (control.value) {
     control.value.value = String(lastValue)
-    control.value.blur()
   }
 }
 
@@ -278,6 +299,8 @@ let beforeVisible = false
 let inClickProcess = false
 
 function beforeClick() {
+  if (props.disabled || isReadonly.value) return
+
   beforeVisible = currentVisible.value
   inClickProcess = true
 
@@ -287,6 +310,8 @@ function beforeClick() {
 }
 
 function handleClick() {
+  if (props.disabled || isReadonly.value) return
+
   inClickProcess = false
 
   if (!select.value) return
@@ -303,7 +328,7 @@ function handleClick() {
 }
 
 function handleToggle(visible: boolean) {
-  if (inClickProcess) return
+  if (props.disabled || isReadonly.value || inClickProcess) return
 
   currentVisible.value = visible
 
@@ -338,7 +363,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
   const key = event.code || event.key
 
-  if (key === 'Enter') {
+  if (key === 'Enter' || key === 'NumpadEnter') {
     handleEnter(event)
   } else if (key === 'ArrowDown' || key === 'ArrowUp') {
     event.preventDefault()
@@ -379,7 +404,7 @@ function handleEnter(event: KeyboardEvent) {
 
   if (composing.value) return
 
-  if (filteredOptions.value.length) {
+  if (currentIndex.value >= 0 && filteredOptions.value.length) {
     const option = filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value]
 
     handleSelect(option.value, option.data)
@@ -388,7 +413,6 @@ function handleEnter(event: KeyboardEvent) {
   }
 
   emitEvent(props.onEnter as EnterEvent, currentValue.value)
-  control.value?.blur()
   currentVisible.value = false
 }
 
@@ -406,6 +430,17 @@ function handleClear() {
     handleChange(false)
     emitEvent(props.onClear)
     nextTick(clearField)
+    control.value?.focus()
+  }
+}
+
+function handleCompositionEnd() {
+  if (composing.value) {
+    composing.value = false
+
+    if (control.value) {
+      control.value.dispatchEvent(new Event('input'))
+    }
   }
 }
 </script>
@@ -415,7 +450,7 @@ function handleClear() {
     :id="idFor"
     ref="select"
     v-model:visible="currentVisible"
-    :class="nh.b()"
+    :class="[nh.b(), props.inherit && nh.bm('inherit')]"
     :inherit="props.inherit"
     :list-class="nh.be('list')"
     :value="currentValue"
@@ -443,8 +478,7 @@ function handleClear() {
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
-    @focus="handleFocus"
-    @blur="handleBlur"
+    @focus="control?.focus()"
     @outside-close="handleChange"
     @click="handleClick"
     @click.capture="beforeClick"
@@ -470,7 +504,7 @@ function handleClear() {
           :spellcheck="props.spellcheck"
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
-          :readonly="props.loading && props.loadingLock"
+          :readonly="isReadonly"
           :name="props.name"
           autocomplete="off"
           tabindex="-1"
@@ -479,10 +513,11 @@ function handleClear() {
           @submit.prevent
           @input="handleInput"
           @keydown="handleKeyDown"
-          @focus="props.filter && handleFocus($event)"
-          @blur="props.filter && handleBlur($event)"
+          @focus="handleFocus($event)"
+          @blur="handleBlur($event)"
           @compositionstart="composing = true"
-          @compositionend="composing = false"
+          @compositionend="handleCompositionEnd"
+          @change="handleCompositionEnd"
         />
       </slot>
     </template>

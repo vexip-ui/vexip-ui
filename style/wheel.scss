@@ -50,15 +50,15 @@ $wheel: map.merge(
     flex-direction: row;
   }
 
-  &--disabled {
-    cursor: not-allowed;
-  }
-
   &__scroll {
     position: relative;
     cursor: pointer;
     user-select: none;
     border: get-css-var('border-shape') transparent;
+  }
+
+  &--disabled &__scroll {
+    cursor: not-allowed;
   }
 
   &--loading &__scroll {
@@ -156,8 +156,7 @@ $wheel: map.merge(
   $border-width: get-css-var('wheel-mask-b-width');
 
   &--vertical &__mask {
-    inset-inline-end: 0;
-    inset-inline-start: 0;
+    inset-inline: 0 0;
 
     &--top {
       top: 0;

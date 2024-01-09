@@ -208,8 +208,7 @@ $pagination: map.merge(
     margin-inline-start: get-css-var('pagination-plugin-span');
 
     &--prefix {
-      margin-inline-start: 0;
-      margin-inline-end: get-css-var('pagination-plugin-span');
+      margin-inline: 0 get-css-var('pagination-plugin-span');
     }
   }
 }

@@ -30,19 +30,11 @@ Using a radio group can easily generate a series of radios through a list, which
 
 :::
 
-:::demo radio/vertical
-
-### Vertical Arrangement
-
-Add the `vertical` prop to set the radio group to vertical layout.
-
-:::
-
 :::demo radio/border
 
 ### Border Type
 
-Add the `border` prop to set the radios with border style in group.
+Set the `shape` prop to `'border'` to set the radio to border style.
 
 :::
 
@@ -50,7 +42,23 @@ Add the `border` prop to set the radios with border style in group.
 
 ### Button Type
 
-Add the `button` prop to set the radios with button style in group.
+Set the `shape` prop to `'button'` to set the radio to button style.
+
+:::
+
+:::demo radio/button-group
+
+### Button Group Type
+
+Set the `shape` prop to `'button-group'` to style the radio button group as a button group.
+
+:::
+
+:::demo radio/vertical
+
+### Vertical Arrangement
+
+Add the `vertical` prop to set the radio group to vertical layout.
 
 :::
 
@@ -85,7 +93,10 @@ Different states can be set via `state`.
 ### Preset Types
 
 ```ts
-type RawOption =
+type RadioShape = 'default' | 'border' | 'button'
+type RadioGroupShape = RadioShape | 'button-group'
+
+type RadioRawOption =
   | string
   | {
     label: string | number | boolean,
@@ -108,6 +119,7 @@ type RawOption =
 | loading      | `boolean`                                        | Set whether is loading                                                                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                 | `false`     | `2.0.0` |
 | name         | `string`                                         | set `name` attribute of internal `<input>`                                                                               | `''`        | `2.2.2` |
+| shape        | `RadioGroupShape`                                | Set the shape of the radio                                                                                               | `'default'` | `2.2.8` |
 
 ### Radio Events
 
@@ -129,13 +141,14 @@ type RawOption =
 | vertical       | `boolean`                         | Set whether to enable vertical display                                                                                            | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | The size of the radio box, it will override the `size` set by the radio box alone                                                 | `'default'` | -       |
 | disabled       | `boolean`                         | Set whether to disable the radio group                                                                                            | `false`     | -       |
-| button         | `boolean`                         | Set whether to enable button mode, it is not supported in vertical display                                                        | `false`     | -       |
-| border         | `boolean`                         | Set whether the radio button has a border                                                                                         | `false`     | -       |
+| ~~button~~     | `boolean`                         | Set whether to enable button mode, it is not supported in vertical display                                                        | `false`     | -       |
+| ~~border~~     | `boolean`                         | Set whether the radio button has a border                                                                                         | `false`     | -       |
 | options        | `RawOption[]`                     | Set the options of the radios, generally used for simple and quick generation of radios under group, invalid after using the slot | `[]`        | -       |
 | loading        | `boolean`                         | Set whether is loading                                                                                                            | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`             | Set the loading icon, only effective in button mode                                                                               | `Spinner`   | `2.0.0` |
+| loading-icon   | `VueComponent`                    | Set the loading icon, only effective in button mode                                                                               | `Spinner`   | `2.0.0` |
 | loading-lock   | `boolean`                         | Set whether to be read-only when loading                                                                                          | `false`     | `2.0.0` |
 | loading-effect | `string`                          | Set the effect animation for the loading icon, only effective in button mode                                                      | `false`     | `2.0.0` |
+| shape          | `RadioGroupShape`                 | Set the shape of the radio group                                                                                                  | `'default'` | `2.2.8` |
 
 ### RadioGroup Events
 

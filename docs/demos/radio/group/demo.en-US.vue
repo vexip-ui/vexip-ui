@@ -3,8 +3,8 @@
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
-    <Radio label="Else">
-      Else
+    <Radio label="Other">
+      Other
       <Input style="margin-inline-start: 6px"></Input>
     </Radio>
   </RadioGroup>

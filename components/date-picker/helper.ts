@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from 'vue'
 
-import { toNumber } from '@vexip-ui/utils'
+import { getLast, toNumber } from '@vexip-ui/utils'
 import { DisabledType } from './symbol'
 
 import type { Ref } from 'vue'
@@ -120,7 +120,7 @@ export function useColumn<T extends string>(
 
   function enterColumn(type: 'prev' | 'next', canLoop = true) {
     if (!currentColumn.value) {
-      currentColumn.value = (type === 'next' ? columnTypes.at(-1) : columnTypes[0]) ?? null
+      currentColumn.value = (type === 'next' ? getLast(columnTypes) : columnTypes[0]) ?? null
     }
 
     for (let i = 0; i < columnCount; ++i) {

@@ -10,10 +10,10 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { TooltipTrigger, TooltipVirtual } from './symbol'
+import type { TooltipShift, TooltipTrigger, TooltipVirtual } from './symbol'
 
 export const tooltipProps = buildProps({
-  trigger: String as PropType<TooltipTrigger>,
+  trigger: [String, Array] as PropType<TooltipTrigger>,
   wrapper: booleanStringProp,
   noArrow: booleanProp,
   transitionName: String,
@@ -31,6 +31,10 @@ export const tooltipProps = buildProps({
   reverse: booleanProp,
   width: [String, Number] as PropType<number | 'trigger' | 'auto'>,
   virtual: Object as PropType<TooltipVirtual>,
+  shift: {
+    type: [Boolean, String] as PropType<boolean | TooltipShift>,
+    default: null
+  },
   onToggle: eventProp<(visible: boolean) => void>(),
   onTipEnter: eventProp(),
   onTipLeave: eventProp(),

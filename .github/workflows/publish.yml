@@ -9,6 +9,7 @@ on:
       - icons*
       - hooks*
       - plugins*
+      - scripts*
       - utils*
 
 jobs:
@@ -17,7 +18,8 @@ jobs:
     if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -40,6 +42,10 @@ jobs:
       - name: Build plugins
         if: startsWith(github.ref_name, 'plugins')
         run: pnpm run build:plugins
+
+      - name: Build scripts
+        if: startsWith(github.ref_name, 'scripts')
+        run: pnpm run build:scripts
 
       - name: Build meta
         if: startsWith(github.ref_name, 'v')

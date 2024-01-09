@@ -81,8 +81,9 @@ export default defineComponent({
     let initialized = false
 
     const {
-      contentElement,
+      contentEl,
 
+      syncing,
       content,
       x,
       y,
@@ -147,7 +148,7 @@ export default defineComponent({
       )
     })
 
-    watch([() => props.autoplay, () => props.playWaiting, contentElement], () => {
+    watch([() => props.autoplay, () => props.playWaiting, contentEl], () => {
       stopAutoplay()
       nextTick(startAutoplay)
     })
@@ -161,7 +162,7 @@ export default defineComponent({
     function startAutoplay() {
       stopAutoplay()
 
-      if (!canAutoplay.value || !contentElement.value) return
+      if (!canAutoplay.value || !contentEl.value) return
 
       const mode = props.mode
       const distance = mode === 'horizontal' ? 'offsetWidth' : 'offsetHeight'
@@ -173,7 +174,7 @@ export default defineComponent({
       let playSpeed = 0.5
 
       if (typeof props.autoplay === 'number') {
-        playSpeed = (contentElement.value[distance] / props.autoplay) * 16
+        playSpeed = (contentEl.value[distance] / props.autoplay) * 16
       }
 
       const scroll = () => {
@@ -270,10 +271,10 @@ export default defineComponent({
     let observer: MutationObserver | undefined
 
     function createMutation() {
-      if (!isClient || !contentElement.value) return
+      if (!isClient || !contentEl.value) return
 
       observer = new MutationObserver(handleMutate)
-      observer.observe(contentElement.value, {
+      observer.observe(contentEl.value, {
         childList: true
       })
     }
@@ -284,7 +285,7 @@ export default defineComponent({
     }
 
     watch(
-      contentElement,
+      contentEl,
       () => {
         clearMutation()
         createMutation()
@@ -312,7 +313,7 @@ export default defineComponent({
       enableYScroll,
 
       wrapper,
-      content: contentElement,
+      content: contentEl,
       xBar,
       yBar,
 
@@ -423,14 +424,14 @@ export default defineComponent({
     }
 
     function handleScroll(event: UIEvent) {
-      if (!contentElement.value) return
+      if (!contentEl.value || syncing.value) return
 
       event.stopPropagation()
 
-      const type = contentElement.value?.scrollLeft !== x.value ? 'horizontal' : 'vertical'
+      const type = contentEl.value?.scrollLeft !== x.value ? 'horizontal' : 'vertical'
 
-      y.value = contentElement.value.scrollTop
-      x.value = contentElement.value.scrollLeft
+      y.value = contentEl.value.scrollTop
+      x.value = contentEl.value.scrollLeft
 
       computePercent()
       triggerUpdate()
@@ -515,13 +516,13 @@ export default defineComponent({
     }
 
     function ensureInView(el: string | Element, duration?: number, offset = 0) {
-      if (!wrapper.value) return
+      if (!wrapper.value) return Promise.resolve()
 
       if (typeof el === 'string') {
         el = wrapper.value.querySelector(el)!
       }
 
-      if (!isElement(el)) return
+      if (!isElement(el)) return Promise.resolve()
 
       const wrapperRect = wrapper.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
@@ -545,7 +546,7 @@ export default defineComponent({
         }
       }
 
-      scrollBy(clientX, clientY, duration)
+      return scrollBy(clientX, clientY, duration)
     }
 
     function addScrollListener(listener: EventHandler) {
@@ -565,7 +566,7 @@ export default defineComponent({
         <Content
           {...props.scrollAttrs}
           {...(props.scrollOnly ? attrs : {})}
-          ref={contentElement}
+          ref={contentEl}
           class={wrapperClass.value}
           style={[props.scrollAttrs?.style, props.scrollStyle, props.scrollOnly && style.value]}
           onMousedown={handleMouseDown}

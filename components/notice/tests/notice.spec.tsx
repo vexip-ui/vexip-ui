@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import Notice from '../notice.vue'
 import { NoticeManager } from '..'
 
@@ -44,13 +44,13 @@ describe('Notice', () => {
     await wrapper.vm.add({
       title: TEXT,
       content: TEXT,
-      icon: GithubB
+      icon: Github
     })
     const item = wrapper.find('.vxp-notice__item')
 
     expect(item.exists()).toBe(true)
     expect(item.find('.vxp-notice__icon').exists()).toBe(true)
-    expect(item.findComponent(GithubB).exists()).toBe(true)
+    expect(item.findComponent(Github).exists()).toBe(true)
     expect(item.find('.vxp-notice__title').exists()).toBe(true)
     expect(item.find('.vxp-notice__title').text()).toBe(TEXT)
     expect(item.find('.vxp-notice__content').exists()).toBe(true)
@@ -116,12 +116,12 @@ describe('Notice', () => {
 
     Notice.open({
       content: TEXT,
-      icon: GithubB
+      icon: Github
     })
     await noticeOpened()
     expect(document.querySelector('.vxp-notice__icon')).toBeTruthy()
 
-    const icon = mount(GithubB)
+    const icon = mount(Github)
     expect(document.querySelector('.vxp-notice__icon')!.querySelector('svg')?.innerHTML).toEqual(
       icon.find('svg').element.innerHTML
     )
@@ -138,5 +138,14 @@ describe('Notice', () => {
     await noticeOpened()
     expect(document.querySelector('.test1')).toBeTruthy()
     expect(document.querySelector('.test2')).toBeTruthy()
+  })
+
+  it('transferTo', async () => {
+    const Notice = createNotice()
+    const el = document.createElement('div')
+    Notice.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-notice')).toBeTruthy()
   })
 })

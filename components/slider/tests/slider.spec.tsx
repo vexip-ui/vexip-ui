@@ -7,23 +7,39 @@ import { Slider } from '..'
 
 vi.useFakeTimers()
 
-async function toggleMove(el: HTMLElement, value = 40) {
+async function moveStart(el: HTMLElement, value = 40) {
   const downEvent = new CustomEvent('pointerdown') as any
   downEvent.button = 0
   downEvent.clientX = value
   downEvent.clientY = value
   el.dispatchEvent(downEvent)
   await nextTick()
+}
 
+async function move(value = 40) {
   const moveEvent = new CustomEvent('pointermove') as any
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
+}
 
+async function moveEnd() {
   const upEvent = new CustomEvent('pointerup') as any
   document.dispatchEvent(upEvent)
+  vi.runOnlyPendingTimers()
+  await nextTick()
+}
+
+async function toggleMove(el: HTMLElement, value = 40) {
+  await moveStart(el, value)
+  await move(value)
+  await moveEnd()
+}
+
+function afterTranslate(xy: 'X' | 'Y', value: number) {
+  return `--vxp-slider-filler-after-transform: translate${xy}(${value}%) translateZ(0);`
 }
 
 describe('Slider', () => {
@@ -42,11 +58,17 @@ describe('Slider', () => {
       props: { value: 40 }
     })
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-60%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 60)
+    )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 40%;')
 
     await wrapper.setProps({ value: 60 })
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.6)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-40%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 40)
+    )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 60%;')
   })
 
@@ -54,7 +76,10 @@ describe('Slider', () => {
     const wrapper = mount(() => <Slider value={65} min={50} max={200}></Slider>)
 
     await nextTick()
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.1)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-90%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 90)
+    )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 10%;')
   })
 
@@ -83,7 +108,10 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-60%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 60)
+    )
     expect(trigger.attributes('style')).toContain('left: 40%;')
 
     trackMock.mockRestore()
@@ -123,7 +151,7 @@ describe('Slider', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Slider state={state}></Slider>)
 
       expect(wrapper.find('.vxp-slider').classes()).toContain(`vxp-slider--${state}`)
@@ -197,7 +225,10 @@ describe('Slider', () => {
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleY(0.4)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateY(-60%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('Y', 60)
+    )
     expect(trigger.attributes('style')).toContain('top: 40%;')
 
     trackMock.mockRestore()
@@ -228,9 +259,9 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'transform-origin: 100% 50%;'
+      afterTranslate('X', -60)
     )
     expect(trigger.attributes('style')).toContain('right: 40%;')
 
@@ -261,23 +292,80 @@ describe('Slider', () => {
     const triggers = wrapper.findAll('.vxp-slider__trigger')
 
     expect(triggers.length).toEqual(2)
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.3)')
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(20%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-50%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 70)
+    )
 
     await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 30)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith([30, 50])
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([30, 50])
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.2)')
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(30%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-50%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 80)
+    )
 
     await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 80)
     expect(onInput).toHaveBeenCalledWith([30, 80])
     expect(onChange).toHaveBeenCalledWith([30, 80])
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.5)')
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(30%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-20%)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      afterTranslate('X', 50)
+    )
 
     trackMock.mockRestore()
+  })
+
+  it('trigger-fade', async () => {
+    const wrapper = mount(() => <Slider trigger-fade></Slider>)
+    const wrapperEl = wrapper.find('.vxp-slider').element as HTMLElement
+
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
+    await moveStart(wrapperEl, 30)
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+    await moveEnd()
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
+
+    wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+    await moveStart(wrapperEl, 30)
+    wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).not.toContain('vxp-slider--hide-trigger')
+
+    wrapperEl.dispatchEvent(new CustomEvent('pointerenter'))
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    await moveEnd()
+    wrapperEl.dispatchEvent(new CustomEvent('pointerleave'))
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
+  })
+
+  it('filler slot', async () => {
+    let paramsRecord: any
+
+    const wrapper = mount(() => (
+      <Slider value={[20, 50]} range>
+        {{
+          filler: (params: any) => <span class={'filler'}>{(paramsRecord = params)}</span>
+        }}
+      </Slider>
+    ))
+
+    expect(wrapper.find('.filler').exists()).toBe(true)
+    expect(paramsRecord).toMatchObject({
+      values: [20, 50],
+      sliding: [false, false],
+      percent: [20, 50],
+      disabled: false,
+      loading: false
+    })
   })
 })

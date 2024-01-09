@@ -1,7 +1,7 @@
 import type { InjectionKey } from 'vue'
 // import type { BITree } from '@vexip-ui/utils'
 
-export type Key = string | number
+export type Key = string | number | symbol
 export type Data = any
 export type TreeNodeDropType = 'before' | 'inner' | 'after'
 export type TreeLinkLine = 'dashed' | 'solid' | 'dotted' | 'none'
@@ -18,12 +18,14 @@ export interface TreeNodeKeyConfig {
   checked?: string,
   loading?: string,
   loaded?: string,
+  loadFail?: string,
   readonly?: string,
   arrow?: string,
   checkbox?: string,
   selectDisabled?: string,
   expandDisabled?: string,
-  checkDisabled?: string
+  checkDisabled?: string,
+  isLeaf?: string
 }
 
 export const enum DropType {
@@ -34,7 +36,7 @@ export const enum DropType {
 
 export type TreeNodeProps<D = Data> = {
   id: Key,
-  parent: Key,
+  parent?: Key,
   children: TreeNodeProps[],
   visible: boolean,
   selected: boolean,
@@ -43,12 +45,14 @@ export type TreeNodeProps<D = Data> = {
   checked: boolean,
   loading: boolean,
   loaded: boolean,
+  loadFail: boolean,
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
   selectDisabled: boolean,
   expandDisabled: boolean,
   checkDisabled: boolean,
+  isLeaf: boolean | 'auto',
   data: D,
   /** @internal */
   partial: boolean,
@@ -63,7 +67,9 @@ export type TreeNodeProps<D = Data> = {
   /** @internal */
   last: boolean,
   /** @internal */
-  inLastCount: number
+  upstreamLast: boolean[],
+  /** @internal */
+  lineIndexes: number[]
 }
 
 export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
@@ -83,7 +89,9 @@ export interface TreeCommonSlotParams {
 }
 
 export interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  /** @deprecated */
   lineCount: number,
+  lineIndexes: number[],
   toggleCheck: (checked?: boolean) => void,
   toggleExpand: (expanded?: boolean) => Promise<void>,
   toggleSelect: (able?: boolean) => Promise<void>
@@ -149,3 +157,31 @@ export interface TreeState {
 
 export const TREE_STATE: InjectionKey<TreeState> = Symbol('TREE_STATE')
 export const TREE_NODE_STATE: InjectionKey<TreeNodeState> = Symbol('TREE_NODE_STATE')
+
+export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
+  id: 'id',
+  parent: 'parent',
+  label: 'label',
+  children: 'children',
+  visible: 'visible',
+  selected: 'selected',
+  expanded: 'expanded',
+  disabled: 'disabled',
+  checked: 'checked',
+  loading: 'loading',
+  loaded: 'loaded',
+  loadFail: 'loadFail',
+  readonly: 'readonly',
+  arrow: 'arrow',
+  checkbox: 'checkbox',
+  selectDisabled: 'selectDisabled',
+  expandDisabled: 'expandDisabled',
+  checkDisabled: 'checkDisabled',
+  isLeaf: 'isLeaf'
+}
+
+let idIndex = 1
+
+export function getIndexId() {
+  return `__vxp-tree-key-${idIndex++}`
+}

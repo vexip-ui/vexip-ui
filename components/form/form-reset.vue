@@ -1,5 +1,76 @@
+<script setup lang="ts">
+import { Button } from '@/components/button'
+
+import { computed, inject, toRef } from 'vue'
+
+import { createIconProp, emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
+import { formResetProps } from './props'
+import { FORM_ACTIONS } from './symbol'
+
+defineOptions({ name: 'FormReset' })
+
+const _props = defineProps(formResetProps)
+const props = useProps('formReset', _props, {
+  size: null,
+  locale: null,
+  type: 'default',
+  label: null,
+  dashed: null,
+  text: null,
+  simple: null,
+  ghost: null,
+  disabled: null,
+  loading: null,
+  circle: null,
+  loadingIcon: createIconProp(),
+  loadingEffect: null,
+  icon: createIconProp(),
+  color: null,
+  buttonType: null,
+  block: null,
+  onBeforeReset: {
+    default: null,
+    isFunc: true
+  }
+})
+
+defineSlots<{
+  default: () => any,
+  icon: () => any,
+  loading: () => any
+}>()
+
+const actions = inject(FORM_ACTIONS, null)
+
+const nh = useNameHelper('form')
+const locale = useLocale('form', toRef(props, 'locale'))
+
+const isInherit = computed(() => !!actions || props.inherit)
+
+async function handleReset() {
+  if (props.disabled) return
+
+  let result: unknown = true
+
+  if (typeof props.onBeforeReset === 'function') {
+    result = props.onBeforeReset()
+
+    if (isPromise(result)) {
+      result = await result
+    }
+  }
+
+  if (result !== false) {
+    actions?.reset()
+    emitEvent(props.onReset)
+  }
+}
+</script>
+
 <template>
   <Button
+    v-bind="$attrs"
     :inherit="isInherit"
     :class="nh.be('reset')"
     :size="props.size"
@@ -31,80 +102,3 @@
     </template>
   </Button>
 </template>
-
-<script lang="ts">
-import { Button } from '@/components/button'
-
-import { computed, defineComponent, inject, toRef } from 'vue'
-
-import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
-import { isPromise } from '@vexip-ui/utils'
-import { formResetProps } from './props'
-import { FORM_ACTIONS } from './symbol'
-
-export default defineComponent({
-  name: 'FormReset',
-  components: {
-    Button
-  },
-  props: formResetProps,
-  emits: [],
-  setup(_props) {
-    const props = useProps('formReset', _props, {
-      size: null,
-      locale: null,
-      type: 'default',
-      label: null,
-      dashed: null,
-      text: null,
-      simple: null,
-      ghost: null,
-      disabled: null,
-      loading: null,
-      circle: null,
-      loadingIcon: null,
-      loadingEffect: null,
-      icon: null,
-      color: null,
-      buttonType: null,
-      block: null,
-      onBeforeReset: {
-        default: null,
-        isFunc: true
-      }
-    })
-    const actions = inject(FORM_ACTIONS, null)
-
-    const isInherit = computed(() => !!actions || props.inherit)
-
-    async function handleReset() {
-      if (props.disabled) return
-
-      let result: unknown = true
-
-      if (typeof props.onBeforeReset === 'function') {
-        result = props.onBeforeReset()
-
-        if (isPromise(result)) {
-          result = await result
-        }
-      }
-
-      if (result !== false) {
-        actions?.reset()
-        emitEvent(props.onReset)
-      }
-    }
-
-    return {
-      props,
-      nh: useNameHelper('form'),
-      locale: useLocale('form', toRef(props, 'locale')),
-
-      isInherit,
-
-      handleReset
-    }
-  }
-})
-</script>

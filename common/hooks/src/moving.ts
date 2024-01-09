@@ -3,8 +3,7 @@ import { computed, isRef, ref } from 'vue'
 import { throttle } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
-import type { Ref } from 'vue'
-import type { MaybeRef } from './shared/types'
+import type { MaybeRef, Ref } from 'vue'
 
 export interface MovingState {
   xStart: number,

@@ -10,6 +10,18 @@ It is used to quickly generate a multi-level structure list. It is usually used 
 
 Use the `data` prop to pass in a list of data to generate the corresponding tree.
 
+The data needs to contain the necessary information to build the tree, namely unique key and parent key.
+
+:::
+
+:::demo tree/tree-data
+
+### Tree Data
+
+By default the `data` prop receives flattened list data.
+
+After adding the `no-build-tree` prop, the data passed in the `data` prop will be parsed according to the tree structure.
+
 :::
 
 :::demo tree/checkbox
@@ -54,7 +66,7 @@ The other options can respectively control the interaction disabled state of the
 
 ### Arrow Icon
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 The icon at the arrow position can be changed via the `arrow-icon` prop.
 
@@ -150,7 +162,7 @@ This can be useful, for example, when init info for nodes is not stored directly
 
 ### Virtual Scroll
 
-^[Since v2.1.30](!s)
+==!s|2.1.30==
 
 Add the `virtual` prop to enable virtualization. You may need it when there is too much data.
 
@@ -160,7 +172,7 @@ Add the `virtual` prop to enable virtualization. You may need it when there is t
 
 ### External Content
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 You can customize prefix and suffix content of node label respectively via the `prefix` and `suffix` slots.
 
@@ -172,7 +184,7 @@ Although you can implement this feature just using `label` slot, they help you b
 
 ### Block Effect
 
-^[Since v2.2.5](!s)
+==!s|2.2.5==
 
 Adding the `block-effect` prop to make the effect apply to the entire block of the node.
 
@@ -183,7 +195,7 @@ Adding the `block-effect` prop to make the effect apply to the entire block of t
 ### Preset Types
 
 ```ts
-type Key = string | number
+type Key = string | number | symbol
 type Data = Record<string, any>
 
 type TreeNodeDropType = 'before' | 'inner' | 'after'
@@ -201,17 +213,19 @@ interface TreeNodeKeyConfig {
   checked?: string,
   loading?: string,
   loaded?: string,
+  loadFail?: string,
   readonly?: string,
   arrow?: string,
   checkbox?: string,
   selectDisabled?: string,
   expandDisabled?: string,
-  checkDisabled?: string
+  checkDisabled?: string,
+  isLeaf?: string
 }
 
 type TreeNodeProps<D = Data> = {
   id: Key,
-  parent: Key,
+  parent?: Key,
   children: TreeNodeProps[],
   visible: boolean,
   selected: boolean,
@@ -220,14 +234,19 @@ type TreeNodeProps<D = Data> = {
   checked: boolean,
   loading: boolean,
   loaded: boolean,
+  loadFail: boolean,
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
   selectDisabled: boolean,
   expandDisabled: boolean,
   checkDisabled: boolean,
-  data: Data
+  isLeaf: boolean | 'auto',
+  data: D
 }
+
+type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
+type TreeNodeRenderFn<D = Data> = (params: { data: D, node: TreeNodeProps<D> }) => any
 
 interface TreeCommonSlotParams {
   data: Data,
@@ -237,7 +256,9 @@ interface TreeCommonSlotParams {
 }
 
 interface TreeNodeSlotParams extends TreeCommonSlotParams {
+  /** @deprecated */
   lineCount: number,
+  lineIndexes: number[],
   toggleCheck: (checked?: boolean) => void,
   toggleExpand: (expanded?: boolean) => Promise<void>,
   toggleSelect: (able?: boolean) => Promise<void>
@@ -251,7 +272,8 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | data            | `Data[]`                                                               | Tree data source, supports passing in the array structure to be constructed or the processed tree structure                                                                                                                                      | `[]`           | -        |
 | arrow           | `'auto' \| boolean`                                                    | Set whether the tree node has arrow indication, when set to `'auto'`, it will be automatically displayed and hidden according to whether the node has subordinates                                                                               | `'auto'`       | -        |
 | no-build-tree   | `boolean`                                                              | Set whether to disable the built-in build tree, set when the data source of `data` is a tree structure                                                                                                                                           | `false`        | -        |
-| empty-tip       | `string`                                                               | Tip to show when data is empty                                                                                                                                                                                                                   | `locale.empty` | -        |
+| empty-text      | `string`                                                               | Tip to show when data is empty                                                                                                                                                                                                                   | `locale.empty` | `2.2.15` |
+| ~~empty-tip~~   | `string`                                                               | Tip to show when data is empty                                                                                                                                                                                                                   | `locale.empty` | -        |
 | disabled        | `boolean`                                                              | Set whether the tree is disabled, if set, all tree nodes will be disabled                                                                                                                                                                        | `false`        | -        |
 | readonly        | `boolean`                                                              | Set whether the tree is read-only, if set, all tree nodes will be read-only                                                                                                                                                                      | `false`        | -        |
 | checkbox        | `boolean`                                                              | Set whether to enable the checkbox of the node                                                                                                                                                                                                   | `false`        | -        |
@@ -276,11 +298,12 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | link-line       | `boolean \| TreeLinkLine`                                              | Set whether to add link line                                                                                                                                                                                                                     | `false`        | `2.1.6`  |
 | post-create     | `TreeNodePostCreate`                                                   | The post process when node is created                                                                                                                                                                                                            | `null`         | `2.1.7`  |
 | virtual         | `boolean`                                                              | Whether enable virtual scroll                                                                                                                                                                                                                    | `false`        | `2.1.30` |
-| node-min-height | `number`                                                               | Set node min height, only use for virtual scroll, no applied style                                                                                                                                                                               | `28`           | `2.1.30` |
+| node-min-height | `number`                                                               | Set node min height, only use for virtual scroll, no applied style                                                                                                                                                                               | `26`           | `2.1.30` |
 | use-y-bar       | `boolean`                                                              | Set whether the table uses vertical scroll bar                                                                                                                                                                                                   | `false`        | `2.1.30` |
 | no-transition   | `boolean`                                                              | Whether disable transition of expanding or collapsing                                                                                                                                                                                            | `false`        | `2.1.30` |
-| arrow-icon      | `Record<string, any>`                                                  | Set the icon at the arrow position                                                                                                                                                                                                               | `null`         | `2.2.5`  |
+| arrow-icon      | `VueComponent`                                                         | Set the icon at the arrow position                                                                                                                                                                                                               | `null`         | `2.2.5`  |
 | block-effect    | `boolean`                                                              | Whether the node is block effect                                                                                                                                                                                                                 | `false`        | `2.2.5`  |
+| filter-leaf     | `boolean`                                                              | Whether only filter the leaf nodes                                                                                                                                                                                                               | `false`        | `2.2.14` |
 
 ### Tree Events
 
@@ -311,41 +334,47 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 
 ### Tree Methods
 
-| Name                    | Description                                                                                                                                                                 | Signature                                                                   | Since |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----- |
-| parseAndTransformData   | Trigger to re-parse and transform data inside the component                                                                                                                 | `() => void`                                                                | -     |
-| forceUpdateData         | Force update data, generally use to update the tree after manually changing the data source                                                                                 | `() => void`                                                                | -     |
-| syncNodeStateIntoData   | The state attribute in node is synchronized to data, it will cover `visible`, `selected`, `expanded`, `disabled`, `checked`, `loading`, `readonly` fields, use with caution | `() => void`                                                                | -     |
-| getCheckedNodes         | Get all node objects whose checkboxes are checked                                                                                                                           | `() => TreeNodeProps[]`                                                     | -     |
-| getCheckedNodeData      | Get all node data whose checkboxes are checked                                                                                                                              | `() => Data[]`                                                              | -     |
-| getSelectedNodes        | Get all selected node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -     |
-| getSelectedNodeData     | Get all selected node data                                                                                                                                                  | `() => Data[]`                                                              | -     |
-| getExpandedNodes        | Get all expanded node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -     |
-| getDisabledNodes        | Get all disabled node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -     |
-| getNodeChildren         | Get the child node object of the node object                                                                                                                                | `(node: TreeNodeProps) => TreeNodeProps[]`                                  | -     |
-| getParentNode           | Get the parent node object according to the node object, or return `null` if it does not exist                                                                              | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -     |
-| getSiblingNodes         | Get all sibling node objects according to the node object, excluding itself by default                                                                                      | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]`            | -     |
-| getPrevSiblingNode      | Get the previous sibling node object according to the node object, or return `null` if it does not exist                                                                    | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -     |
-| getNextSiblingNode      | Get the next sibling node object according to the node object, or return `null` if it does not exist                                                                        | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -     |
-| getNodeByData           | Get node object according to data                                                                                                                                           | `<T extends Data>(data: T) => TreeNodeProps \| null`                        | -     |
-| expandNodeByData        | Change the expanded state of a node based on data                                                                                                                           | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void` | -     |
-| selectNodeByData        | Change node selection state based on data                                                                                                                                   | `<T extends Data>(data: T, selected?: boolean) => void`                     | -     |
-| checkNodeByData         | Change the selected state of the node's checkbox according to the data                                                                                                      | `<T extends Data>(data: T, checked?: boolean) => void`                      | -     |
-| toggleNodeLoadingByData | Change the loading state of a node based on data                                                                                                                            | `<T extends Data>(data: T, loading?: boolean) => void`                      | -     |
+| Name                    | Description                                                                                                                                                                 | Signature                                                                   | Since    |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------- |
+| parseAndTransformData   | Trigger to re-parse and transform data inside the component                                                                                                                 | `() => void`                                                                | -        |
+| forceUpdateData         | Force update data, generally use to update the tree after manually changing the data source                                                                                 | `() => void`                                                                | -        |
+| syncNodeStateIntoData   | The state attribute in node is synchronized to data, it will cover `visible`, `selected`, `expanded`, `disabled`, `checked`, `loading`, `readonly` fields, use with caution | `() => void`                                                                | -        |
+| getCheckedNodes         | Get all node objects whose checkboxes are checked                                                                                                                           | `(includePartial?: boolean) => TreeNodeProps[]`                             | -        |
+| getCheckedNodeData      | Get all node data whose checkboxes are checked                                                                                                                              | `(includePartial?: boolean) => Data[]`                                      | -        |
+| getSelectedNodes        | Get all selected node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -        |
+| getSelectedNodeData     | Get all selected node data                                                                                                                                                  | `() => Data[]`                                                              | -        |
+| getExpandedNodes        | Get all expanded node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -        |
+| getDisabledNodes        | Get all disabled node objects                                                                                                                                               | `() => TreeNodeProps[]`                                                     | -        |
+| getNodeChildren         | Get the child node object of the node object                                                                                                                                | `(node: TreeNodeProps) => TreeNodeProps[]`                                  | -        |
+| getParentNode           | Get the parent node object according to the node object, or return `null` if it does not exist                                                                              | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getSiblingNodes         | Get all sibling node objects according to the node object, excluding itself by default                                                                                      | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]`            | -        |
+| getPrevSiblingNode      | Get the previous sibling node object according to the node object, or return `null` if it does not exist                                                                    | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getNextSiblingNode      | Get the next sibling node object according to the node object, or return `null` if it does not exist                                                                        | `(node: TreeNodeProps) => TreeNodeProps \| null`                            | -        |
+| getNodeByData           | Get node object according to data                                                                                                                                           | `<T extends Data>(data: T) => TreeNodeProps \| null`                        | -        |
+| expandNodeByData        | Change the expanded state of a node based on data                                                                                                                           | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void` | -        |
+| selectNodeByData        | Change node selection state based on data                                                                                                                                   | `<T extends Data>(data: T, selected?: boolean) => void`                     | -        |
+| checkNodeByData         | Change the selected state of the node's checkbox according to the data                                                                                                      | `<T extends Data>(data: T, checked?: boolean) => void`                      | -        |
+| toggleNodeLoadingByData | Change the loading state of a node based on data                                                                                                                            | `<T extends Data>(data: T, loading?: boolean) => void`                      | -        |
+| isLeafNode              | Determine whether the node is a leaf node                                                                                                                                   | `(node: TreeNodeProps) => boolean`                                          | `2.2.14` |
+| getTreeData             | Get original tree data                                                                                                                                                      | `(withFilter?: boolean) => Data[]`                                          | `2.2.14` |
+| getFlattedData          | Get original flatted data                                                                                                                                                   | `(withFilter?: boolean) => Data[]`                                          | `2.2.14` |
+| updateVisibleNodeEls    | Trigger to update the visible node elements (used to precess keyboard operation)                                                                                            | `() => void`                                                                | `2.2.14` |
 
 ### TreeNode Props
 
 > The following props will get the initial value from the property of the same name of data when the node is initialized. If it is not defined, the default value will be used. Note that the refresh of the node will trigger the re-initialization of the node.
 
-| Name     | Type                | Description                                                                                                                                                                                         | Default  | Since |
-| -------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----- |
-| label    | `string`            | Label content displayed by the node                                                                                                                                                                 | `''`     | -     |
-| selected | `boolean`           | Set the selected state of the node                                                                                                                                                                  | `false`  | -     |
-| expanded | `boolean`           | Set the expanded state of the node                                                                                                                                                                  | `false`  | -     |
-| disabled | `boolean`           | Set the disabled state of the node, if not set, the state of the same name of the Tree will be used                                                                                                 | `false`  | -     |
-| readonly | `boolean`           | Set the read-only status of the node, if not set, the same name status of the Tree will be used                                                                                                     | `false`  | -     |
-| checkbox | `boolean`           | Set whether the node has a checkbox, if not set, the state of Tree will be used                                                                                                                     | `false`  | -     |
-| arrow    | `'auto' \| boolean` | Set whether the node has arrow indication, when set to 'auto', it will be automatically displayed and hidden according to whether there are subordinates, if not set, it will use the state of Tree | `'auto'` | -     |
-| checked  | `boolean`           | Set the checked state of the node's checkbox                                                                                                                                                        | `false`  | -     |
-| loading  | `boolean`           | Set whether the node is in the loading state                                                                                                                                                        | `false`  | -     |
-| loaded   | `boolean`           | Set whether the node is loaded                                                                                                                                                                      | `false`  | -     |
+| Name     | Type                | Description                                                                                                                                                                            | Default  | Since    |
+| -------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
+| label    | `string`            | Label content displayed by the node                                                                                                                                                    | `''`     | -        |
+| selected | `boolean`           | Set the selected state of the node                                                                                                                                                     | `false`  | -        |
+| expanded | `boolean`           | Set the expanded state of the node                                                                                                                                                     | `false`  | -        |
+| disabled | `boolean`           | Set the disabled state of the node, if not set, the state of the same name of the Tree will be used                                                                                    | `false`  | -        |
+| readonly | `boolean`           | Set the read-only status of the node, if not set, the same name status of the Tree will be used                                                                                        | `false`  | -        |
+| checkbox | `boolean`           | Set whether the node has a checkbox, if not set, the state of Tree will be used                                                                                                        | `false`  | -        |
+| arrow    | `'auto' \| boolean` | Set whether the node has arrow, will use the `arrow` props of Tree if not set. When set to `'auto'`, the arrow will automatically show or hide based on the presence of any child node | `'auto'` | -        |
+| checked  | `boolean`           | Set the checked state of the node's checkbox                                                                                                                                           | `false`  | -        |
+| loading  | `boolean`           | Set whether the node is in the loading state                                                                                                                                           | `false`  | -        |
+| loaded   | `boolean`           | Set whether the node is loaded                                                                                                                                                         | `false`  | -        |
+| loadFail | `boolean`           | Set whether the node fails to load                                                                                                                                                     | `false`  | `2.2.14` |
+| isLeaf   | `'auto' \| boolean` | Forces set the node to leaf node. When set to `'auto'`, it will be judged based on the presence of any child node                                                                      | `'auto'` | `2.2.14` |

@@ -27,6 +27,7 @@ $card: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   display: flex;
   flex-direction: column;

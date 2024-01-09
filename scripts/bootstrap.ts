@@ -5,15 +5,9 @@ import { cpus } from 'node:os'
 
 import { format } from 'prettier'
 import { ESLint } from 'eslint'
-import {
-  components as allComponents,
-  componentsDir,
-  logger,
-  prettierConfig,
-  rootDir,
-  runParallel,
-  toCapitalCase
-} from './utils'
+import { logger } from '@vexip-ui/scripts'
+import { runParallel, toCapitalCase } from '@vexip-ui/utils'
+import { components as allComponents, componentsDir, prettierConfig, rootDir } from './constant'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
@@ -138,7 +132,7 @@ async function main() {
       isClient && localStorage.setItem(prefixKey, prefix.value)
     }
 
-    export function transformDemoCode(code: string) {
+    export function transformPrefix(code: string) {
       return code.replace(templateRE, s => s.replace(replaceRE, \`\${capitalPrefix.value}$1\`))
     }
   `
@@ -160,10 +154,9 @@ async function main() {
     )
   ])
 
-  await ESLint.outputFixes(await eslint.lintFiles(indexPath))
-  await ESLint.outputFixes(await eslint.lintFiles(typesPath))
-  await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
-  await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
+  await ESLint.outputFixes(
+    await eslint.lintFiles([indexPath, typesPath, metaDataPath, demoPrefixPath])
+  )
 
   await runParallel(cpus().length, allComponents, async component => {
     const scssPath = resolve(rootDir, `style/${component}.scss`)
@@ -173,15 +166,18 @@ async function main() {
     }
   })
 
+  const componentsStyle =
+    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const styleIndex =
-    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" +
-    // allComponents.map(component => `@use './${component}.scss';`).join('\n') +
-    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') +
-    '\n'
-  const stylePath = resolve(rootDir, 'style/index.scss')
+    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" + componentsStyle
 
   await writeFile(
-    stylePath,
+    resolve(rootDir, 'style/components.scss'),
+    await format(componentsStyle, { ...prettierConfig, parser: 'scss' }),
+    'utf-8'
+  )
+  await writeFile(
+    resolve(rootDir, 'style/index.scss'),
     await format(styleIndex, { ...prettierConfig, parser: 'scss' }),
     'utf-8'
   )

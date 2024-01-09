@@ -9,7 +9,7 @@ export const alertProps = buildProps({
   title: String,
   colorfulText: booleanProp,
   icon: {
-    type: [Boolean, Object],
+    type: [Boolean, Object, Function],
     default: null
   },
   closable: booleanProp,
@@ -19,6 +19,7 @@ export const alertProps = buildProps({
   manual: booleanProp,
   scroll: booleanProp,
   scrollSpeed: Number,
+  color: String,
   onClose: eventProp(),
   onHide: eventProp(),
   onScrollEnd: eventProp()

@@ -25,6 +25,8 @@ Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>
 - 🩹 优秀的可访问性
 - 👀 贴近业务代码编排，低源码阅读门槛
 
+> 设计令牌基于 Open Color，并进行了一些调整。
+
 ## 兼容环境
 
 所有组件兼容现代浏览器，尽量保证近两三个版本的支持。
@@ -40,6 +42,8 @@ Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>
 </a>
 
 > 左上方的版本为文档构建时依赖的组件库版本，可能与最新的不一致，因为文档的更新往往会落后一些。
+
+你可以查看 [更新日志](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) 以了解更新历程。
 
 ## 安装
 
@@ -78,6 +82,8 @@ yarn add vexip-ui
 支付宝：
 
 <img src="/sponsor-alipay.webp" alt="支付宝收款" style="width: 240px;" />
+
+> 作者的英语很差，如果你有任何改进英语文档的建议，可以创建一个 issue 或 PR。
 
 ## 贡献者
 

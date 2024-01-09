@@ -1,9 +1,11 @@
 import { createApp, createVNode, render } from 'vue'
 
 import Component from './loading.vue'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
 import { destroyObject, isClient } from '@vexip-ui/utils'
 
-import type { App } from 'vue'
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
 import type { LoadingInstance, LoadingOptions, LoadingState } from './symbol'
 
 export type { LoadingState, LoadingOptions }
@@ -18,12 +20,16 @@ export class LoadingManager {
   private _instance: LoadingInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
 
   constructor(options: InitLoadingOptions = {}) {
     this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
+    this._wrapper = null
+    this._mountedEl = null
     this.name = 'Loading'
     this.defaults = {}
 
@@ -39,7 +45,7 @@ export class LoadingManager {
       options = { percent: options }
     }
 
-    this._getInstance().startLoading({ ...this.defaults, ...options })
+    this._getInstance()!.startLoading({ ...this.defaults, ...options })
   }
 
   close() {
@@ -59,6 +65,7 @@ export class LoadingManager {
   }
 
   destroy() {
+    this._mountedEl && this._wrapper?.removeChild(this._mountedEl)
     this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
@@ -79,8 +86,24 @@ export class LoadingManager {
     }
   }
 
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
+  }
+
   private _getInstance() {
-    if (!this._instance) {
+    if (!this._instance && isClient) {
       if (!this._mountedApp) {
         console.warn('[vexip-ui:Loading]: App missing, the plugin maybe not installed.')
 
@@ -95,10 +118,11 @@ export class LoadingManager {
 
         render(vnode, this._container, false)
 
-        this._instance = vnode.component!.proxy as LoadingInstance
+        this._instance = proxyExposed<LoadingInstance>(vnode)
       }
 
-      document.body.appendChild(this._container.firstElementChild!)
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance

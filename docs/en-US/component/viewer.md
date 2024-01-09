@@ -125,6 +125,6 @@ interface ToolbarAction {
 
 ### Viewer Slots
 
-| Name    | Description                            | Parameters | Since |
-| ------- | -------------------------------------- | ---------- | ----- |
-| default | The slot of content which need to view | -          | -     |
+| Name    | Description                                  | Parameters | Since |
+| ------- | -------------------------------------------- | ---------- | ----- |
+| default | The slot of content which needs to be viewed | -          | -     |

@@ -42,7 +42,7 @@ Added the `underline` prop to display the underline when the hover a link.
 | --------- | ----------------------------------------------------------------------- | ----------------------------------------------------- | ----------- | ----- |
 | to        | `string`                                                                | Destination address of the link                       | `null`      | -     |
 | type      | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning' \| 'info'` | The types of link                                     | `'default'` | -     |
-| icon      | `Record<string, any>`                                                   | Prefix icon of link                                   | `null`      | -     |
+| icon      | `VueComponent`                                                          | Prefix icon of link                                   | `null`      | -     |
 | underline | `boolean`                                                               | Set whether display underline when hover              | `false`     | -     |
 | disabled  | `boolean`                                                               | Set whether is disabled                               | `false`     | -     |
 | target    | `string`                                                                | ame as the `target` attribute of the native `<a>` tag | `'_blank'`  | -     |

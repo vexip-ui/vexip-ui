@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB, Spinner } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import { NumberInput } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -15,12 +16,14 @@ function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
 }
 
-function emitInput(input: HTMLInputElement, value: number) {
+function emitInput(wrapper: DOMWrapper<Element>, value: number) {
+  const input = wrapper.element as HTMLInputElement
   input.value = String(value)
   input.dispatchEvent(new Event('input'))
 }
 
-function emitChange(input: HTMLInputElement, value: number) {
+function emitChange(wrapper: DOMWrapper<Element>, value: number) {
+  const input = wrapper.element as HTMLInputElement
   input.value = String(value)
   input.dispatchEvent(new Event('change'))
 }
@@ -47,6 +50,29 @@ describe('NumberInput', () => {
     expect(getValue(wrapper.find('input'))).toEqual('')
   })
 
+  it('invalid value', async () => {
+    const wrapper = mount(NumberInput, {
+      props: { value: NUMBER }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
+
+    await wrapper.setProps({ value: 'abc' })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
+  it('scientific notation', async () => {
+    const value = 1.1641532182693484e-10
+    const wrapper = mount(NumberInput, {
+      props: { value }
+    })
+
+    expect(getValue(wrapper.find('input'))).toEqual(String(value))
+
+    await wrapper.setProps({ value: null })
+    expect(getValue(wrapper.find('input'))).toEqual('')
+  })
+
   it('disabled', async () => {
     const wrapper = mount(NumberInput)
     const input = wrapper.find('input').element
@@ -61,26 +87,24 @@ describe('NumberInput', () => {
 
   it('prefix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => (
-      <NumberInput prefix={GithubB} onPrefixClick={onClick}></NumberInput>
-    ))
+    const wrapper = mount(() => <NumberInput prefix={Github} onPrefixClick={onClick}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-number-input__prefix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <NumberInput prefix={GithubB} prefix-color={'red'}></NumberInput>)
+    const wrapper = mount(() => <NumberInput prefix={Github} prefix-color={'red'}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <NumberInput prefix={GithubB}>
+      <NumberInput prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -88,32 +112,30 @@ describe('NumberInput', () => {
     ))
 
     expect(wrapper.find('.vxp-number-input__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
   it('suffix', async () => {
     const onClick = vi.fn()
-    const wrapper = mount(() => (
-      <NumberInput suffix={GithubB} onSuffixClick={onClick}></NumberInput>
-    ))
+    const wrapper = mount(() => <NumberInput suffix={Github} onSuffixClick={onClick}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
 
     await wrapper.find('.vxp-number-input__suffix').trigger('click')
     expect(onClick).toHaveBeenCalled()
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <NumberInput suffix={GithubB} suffix-color={'red'}></NumberInput>)
+    const wrapper = mount(() => <NumberInput suffix={Github} suffix-color={'red'}></NumberInput>)
 
     expect(wrapper.find('.vxp-number-input__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <NumberInput suffix={GithubB}>
+      <NumberInput suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -121,7 +143,7 @@ describe('NumberInput', () => {
     ))
 
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -132,7 +154,7 @@ describe('NumberInput', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <NumberInput state={state}></NumberInput>)
 
       expect(wrapper.find('.vxp-number-input').classes()).toContain(`vxp-number-input--${state}`)
@@ -143,11 +165,11 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput)
 
     expect(wrapper.find('.vxp-number-input__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-number-input__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -160,10 +182,10 @@ describe('NumberInput', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <NumberInput loading loading-icon={GithubB}></NumberInput>)
+    const wrapper = mount(() => <NumberInput loading loading-icon={Github}></NumberInput>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('change event', async () => {
@@ -171,7 +193,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, NUMBER)
     await nextTick()
@@ -186,10 +208,10 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onInput }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitInput(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -199,7 +221,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { onInput }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitInput(input, NUMBER)
     emitInput(input, NUMBER)
@@ -207,7 +229,7 @@ describe('NumberInput', () => {
     emitInput(input, NUMBER)
     emitInput(input, NUMBER)
     expect(onInput).toHaveBeenCalledTimes(1)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalledTimes(2)
   })
@@ -227,7 +249,7 @@ describe('NumberInput', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await input.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-number-input--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -238,7 +260,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: {
         clearable: true,
-        suffix: GithubB,
+        suffix: Github,
         onClear
       }
     })
@@ -322,28 +344,34 @@ describe('NumberInput', () => {
     const plus = wrapper.find('.vxp-number-input__plus')
     const minus = wrapper.find('.vxp-number-input__minus')
 
-    await plus.trigger('click')
+    await plus.trigger('pointerdown')
     expect(getValue(input)).toEqual('1')
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--holding'
+    )
 
-    await minus.trigger('click')
+    await minus.trigger('pointerdown')
     expect(getValue(input)).toEqual('0')
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--holding'
+    )
 
-    await plus.trigger('click.ctrl')
+    await plus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('100')
 
-    await minus.trigger('click.ctrl')
+    await minus.trigger('pointerdown.ctrl')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.alt')
+    await plus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0.1')
 
-    await minus.trigger('click.alt')
+    await minus.trigger('pointerdown.alt')
     expect(getValue(input)).toEqual('0')
 
-    await plus.trigger('click.shift')
+    await plus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('10')
 
-    await minus.trigger('click.shift')
+    await minus.trigger('pointerdown.shift')
     expect(getValue(input)).toEqual('0')
   })
 
@@ -415,18 +443,51 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { sync: true, onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
+    const plus = wrapper.find('.vxp-number-input__plus')
+
+    await plus.trigger('pointerdown')
+    document.dispatchEvent(new Event('pointerup'))
+    await nextTick()
+    expect(getValue(input)).toEqual('1')
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([1])
 
     emitInput(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
-    expect(wrapper.emitted()).toHaveProperty('update:value')
-    expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
+    expect(wrapper.emitted()['update:value'][1]).toEqual([NUMBER])
 
     emitChange(input, NUMBER)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onChange).toHaveBeenCalledWith(NUMBER)
+    expect(wrapper.emitted()['update:value'][2]).toBeUndefined()
+  })
+
+  it('sync step', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(NumberInput, {
+      props: { syncStep: true, onChange }
+    })
+    const input = wrapper.find('input')
+    const plus = wrapper.find('.vxp-number-input__plus')
+
+    await plus.trigger('pointerdown')
+    expect(getValue(input)).toEqual('1')
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([1])
+
+    emitInput(input, NUMBER)
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.emitted()['update:value'][1]).toBeUndefined()
+
+    emitChange(input, NUMBER)
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(onChange).toHaveBeenCalledWith(NUMBER)
+    expect(wrapper.emitted()['update:value'][1]).toEqual([NUMBER])
   })
 
   it('range', async () => {
@@ -434,18 +495,24 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { min: 5, max: 10, onChange }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, 11)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(10)
+    expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
+      'vxp-number-input__plus--disabled'
+    )
 
     emitChange(input, 4)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(5)
+    expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
+      'vxp-number-input__minus--disabled'
+    )
 
     emitInput(input, 11)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-number-input').classes()).toContain('vxp-number-input--out-of-range')
   })
@@ -455,7 +522,7 @@ describe('NumberInput', () => {
     const wrapper = mount(NumberInput, {
       props: { precision: 2 }
     })
-    const input = wrapper.find('input').element
+    const input = wrapper.find('input')
 
     emitChange(input, 1.11)
     await nextTick()

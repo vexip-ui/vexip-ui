@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp, styleProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp, styleProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -24,7 +24,7 @@ export const collapsePanelProps = buildProps({
   expanded: booleanProp,
   card: booleanProp,
   arrowType: String as PropType<CollapseArrowType>,
-  icon: Object,
+  icon: iconProp,
   ghost: booleanProp,
   onToggle: eventProp<(expanded: boolean) => void>()
 })
@@ -47,6 +47,7 @@ export const collapseTransitionProps = buildProps({
    * @internal
    */
   reverse: booleanProp,
+  disabled: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),
   onAfterEnter: eventProp<(el: Element) => void>(),

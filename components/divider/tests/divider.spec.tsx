@@ -47,4 +47,19 @@ describe('Divider', () => {
       }
     })
   })
+
+  it('margin', async () => {
+    const wrapper = mount(Divider, {
+      props: { margin: 10 }
+    })
+
+    expect(wrapper.attributes('style')).toContain('margin-top: 10px;')
+    expect(wrapper.attributes('style')).toContain('margin-bottom: 10px;')
+
+    await wrapper.setProps({ vertical: true })
+    expect(wrapper.attributes('style')).not.toContain('margin-top')
+    expect(wrapper.attributes('style')).not.toContain('margin-bottom')
+    expect(wrapper.attributes('style')).toContain('margin-right: 10px;')
+    expect(wrapper.attributes('style')).toContain('margin-left: 10px;')
+  })
 })

@@ -1,3 +1,136 @@
+<script setup lang="ts">
+import { Icon } from '@/components/icon'
+import { Masker } from '@/components/masker'
+import { Viewer } from '@/components/viewer'
+
+import { computed, ref, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
+import { boundRange, ensureArray, isDefined, warnOnce } from '@vexip-ui/utils'
+import { imageViewerProps } from './props'
+
+defineOptions({ name: 'ImageViewer' })
+
+const _props = defineProps(imageViewerProps)
+const props = useProps('imageViewer', _props, {
+  active: false,
+  index: 0,
+  srcs: {
+    default: null,
+    static: true
+  },
+  srcList: {
+    default: null,
+    static: true
+  },
+  transfer: false
+})
+
+const emit = defineEmits(['update:active', 'update:index'])
+
+const nh = useNameHelper('image-viewer')
+const icons = useIcons()
+
+const currentActive = ref(props.active)
+const currentIndex = ref(props.index)
+
+const viewer = ref<InstanceType<typeof Viewer>>()
+
+const className = computed(() => {
+  return [nh.b(), nh.ns('image-vars'), props.inherit && nh.bm('inherit')]
+})
+const srcArray = computed(() => {
+  if (isDefined(props.srcs)) {
+    warnOnce(
+      "[vexip-ui:ImageViewer] 'srcs' prop have been deprecated, " +
+        "please use 'src-list' prop to replace it"
+    )
+  }
+
+  return ensureArray(isDefined(props.srcList) ? props.srcList : props.srcs || '')
+})
+const prevDisabled = computed(() => currentIndex.value <= 0)
+const nextDisabled = computed(() => currentIndex.value >= srcArray.value.length - 1)
+
+watch(
+  () => props.active,
+  value => {
+    currentActive.value = value
+  }
+)
+watch(
+  () => props.index,
+  value => {
+    currentIndex.value = value
+  }
+)
+watch(() => srcArray.value.length, verifyIndex)
+
+defineExpose({
+  currentActive,
+  currentIndex,
+  prevDisabled,
+  nextDisabled,
+  viewer
+})
+
+function setActive(active: boolean) {
+  if (currentActive.value === active) return
+
+  currentActive.value = active
+
+  emit('update:active', active)
+  emitEvent(props.onToggle, active)
+}
+
+function verifyIndex() {
+  currentIndex.value = boundRange(currentIndex.value, 0, srcArray.value.length - 1)
+}
+
+function handleChange() {
+  const value = currentIndex.value
+
+  viewer.value?.handleReset()
+  emit('update:index', value)
+  emitEvent(props.onChange, value, srcArray.value[value])
+}
+
+function handlePrev() {
+  if (prevDisabled.value) return
+
+  const prev = currentIndex.value
+
+  currentIndex.value--
+  verifyIndex()
+  currentIndex.value !== prev && handleChange()
+  emitEvent(props.onPrev, currentIndex.value, srcArray.value[currentIndex.value])
+}
+
+function handleNext() {
+  if (nextDisabled.value) return
+
+  const prev = currentIndex.value
+
+  currentIndex.value++
+  verifyIndex()
+  currentIndex.value !== prev && handleChange()
+  emitEvent(props.onNext, currentIndex.value, srcArray.value[currentIndex.value])
+}
+
+function handleClose() {
+  setActive(false)
+  emitEvent(props.onClose)
+}
+
+function handleShow() {
+  emitEvent(props.onShow)
+}
+
+function handleHide() {
+  emitEvent(props.onHide)
+}
+</script>
+
 <template>
   <Masker
     v-slot="{ show }"
@@ -12,11 +145,11 @@
   >
     <div v-show="show" :class="nh.be('wrapper')">
       <Viewer ref="viewer">
-        <slot :src="srcList[currentIndex]">
-          <img :src="srcList[currentIndex]" />
+        <slot :src="srcArray[currentIndex]">
+          <img :src="srcArray[currentIndex]" />
         </slot>
       </Viewer>
-      <template v-if="srcList.length > 1">
+      <template v-if="srcArray.length > 1">
         <button
           type="button"
           :class="[nh.be('prev'), prevDisabled && nh.bem('prev', 'disabled')]"
@@ -25,8 +158,8 @@
           <slot name="prev" :disabled="prevDisabled">
             <div :class="nh.be('prev-handler')">
               <Icon
-                v-bind="icons.arrowLeft"
-                :scale="(icons.arrowLeft.scale || 1) * 1.4"
+                v-bind="icons.angleLeft"
+                :scale="+(icons.angleLeft.scale || 1) * 1.4"
                 label="prev"
               ></Icon>
             </div>
@@ -40,8 +173,8 @@
           <slot name="next" :disabled="prevDisabled">
             <div :class="nh.be('next-handler')">
               <Icon
-                v-bind="icons.arrowRight"
-                :scale="(icons.arrowRight.scale || 1) * 1.4"
+                v-bind="icons.angleRight"
+                :scale="+(icons.angleRight.scale || 1) * 1.4"
                 label="next"
               ></Icon>
             </div>
@@ -51,149 +184,14 @@
       <button type="button" :class="nh.be('close')" @click.stop="handleClose">
         <slot name="close">
           <div :class="nh.be('close-handler')">
-            <Icon v-bind="icons.close" :scale="(icons.close.scale || 1) * 1.4" label="close"></Icon>
+            <Icon
+              v-bind="icons.close"
+              :scale="+(icons.close.scale || 1) * 1.4"
+              label="close"
+            ></Icon>
           </div>
         </slot>
       </button>
     </div>
   </Masker>
 </template>
-
-<script lang="ts">
-import { Icon } from '@/components/icon'
-import { Masker } from '@/components/masker'
-import { Viewer } from '@/components/viewer'
-
-import { computed, defineComponent, ref, watch } from 'vue'
-
-import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { boundRange } from '@vexip-ui/utils'
-import { imageViewerProps } from './props'
-
-export default defineComponent({
-  name: 'ImageViewer',
-  components: {
-    Icon,
-    Masker,
-    Viewer
-  },
-  props: imageViewerProps,
-  emits: ['update:active', 'update:index'],
-  setup(_props, { emit }) {
-    const nh = useNameHelper('image-viewer')
-    const props = useProps('imageViewer', _props, {
-      active: false,
-      index: 0,
-      srcs: {
-        default: '',
-        static: true
-      },
-      transfer: false
-    })
-
-    const currentActive = ref(props.active)
-    const currentIndex = ref(props.index)
-
-    const viewer = ref<InstanceType<typeof Viewer>>()
-
-    const className = computed(() => {
-      return [nh.b(), nh.ns('image-vars')]
-    })
-    const srcList = computed(() => (Array.isArray(props.srcs) ? props.srcs : [props.srcs]))
-    const prevDisabled = computed(() => currentIndex.value <= 0)
-    const nextDisabled = computed(() => currentIndex.value >= srcList.value.length - 1)
-
-    watch(
-      () => props.active,
-      value => {
-        currentActive.value = value
-      }
-    )
-    watch(
-      () => props.index,
-      value => {
-        currentIndex.value = value
-      }
-    )
-    watch(() => srcList.value.length, verifyIndex)
-
-    function setActive(active: boolean) {
-      if (currentActive.value === active) return
-
-      currentActive.value = active
-
-      emit('update:active', active)
-      emitEvent(props.onToggle, active)
-    }
-
-    function verifyIndex() {
-      currentIndex.value = boundRange(currentIndex.value, 0, srcList.value.length - 1)
-    }
-
-    function handleChange() {
-      const value = currentIndex.value
-
-      viewer.value?.handleReset()
-      emit('update:index', value)
-      emitEvent(props.onChange, value, srcList.value[value])
-    }
-
-    function handlePrev() {
-      if (prevDisabled.value) return
-
-      const prev = currentIndex.value
-
-      currentIndex.value--
-      verifyIndex()
-      currentIndex.value !== prev && handleChange()
-      emitEvent(props.onPrev, currentIndex.value, srcList.value[currentIndex.value])
-    }
-
-    function handleNext() {
-      if (nextDisabled.value) return
-
-      const prev = currentIndex.value
-
-      currentIndex.value++
-      verifyIndex()
-      currentIndex.value !== prev && handleChange()
-      emitEvent(props.onNext, currentIndex.value, srcList.value[currentIndex.value])
-    }
-
-    function handleClose() {
-      setActive(false)
-      emitEvent(props.onClose)
-    }
-
-    function handleShow() {
-      emitEvent(props.onShow)
-    }
-
-    function handleHide() {
-      emitEvent(props.onHide)
-    }
-
-    return {
-      props,
-      nh,
-      icons: useIcons(),
-
-      currentActive,
-      currentIndex,
-
-      className,
-      srcList,
-      prevDisabled,
-      nextDisabled,
-
-      viewer,
-
-      handlePrev,
-      handleNext,
-      handleClose,
-      handleShow,
-      handleHide
-    }
-  }
-})
-</script>

@@ -4,7 +4,7 @@
     "module": "esnext",
     "allowJs": false,
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
@@ -13,7 +13,11 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@vexip-ui/*": ["../common/*/src"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]

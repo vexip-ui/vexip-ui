@@ -3,7 +3,12 @@ import type { ComponentPublicInstance } from 'vue'
 export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
 
 export interface InputExposed extends ComponentPublicInstance {
-  input?: HTMLElement | null,
+  focused: boolean,
+  currentValue: string,
+  showPassword: boolean,
+  currentLength: number,
+  composing: boolean,
+  input?: HTMLInputElement | null,
   copyValue: () => boolean,
   focus: (options?: FocusOptions) => void,
   blur: () => void

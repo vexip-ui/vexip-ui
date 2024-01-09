@@ -53,7 +53,7 @@ export default defineComponent({
     })
     const getIndex = useZIndex()
 
-    const zIndex = ref(0)
+    const zIndex = ref(10)
 
     const wrapper = ref<HTMLElement>()
 
@@ -63,7 +63,8 @@ export default defineComponent({
         if (props.to && value) {
           zIndex.value = getIndex()
         }
-      }
+      },
+      { immediate: true }
     )
 
     function emitHookEvent(name: 'be' | 'e' | 'ae' | 'ec' | 'bl' | 'l' | 'al' | 'lc', el: Element) {

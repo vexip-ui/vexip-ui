@@ -1,5 +1,5 @@
 <template>
-  <Button type="primary" :loading="loading" @click="doLoading">
+  <Button type="primary" :loading="loading" @click="doLoading()">
     Loading(Normal)
   </Button>
   <Button type="success" :loading="loading" @click="doLoading('success')">

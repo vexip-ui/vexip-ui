@@ -14,6 +14,9 @@
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
     <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm 版本"/>
   </a>
+  <a href="https://github.com/vexip-ui/vexip-ui/commits/main" target="_blank">
+    <img src="https://img.shields.io/github/commit-activity/w/vexip-ui/vexip-ui" alt="commits pre week"/>
+  </a>
 </p>
 
 <p align="center">
@@ -47,6 +50,8 @@ Vexip (发音为 `/ˈvesɪp/`) UI 提供了一系列开箱即用的组件。
 - 🩹 优秀的可访问性
 - 👀 贴近业务代码编排，低源码阅读门槛
 
+> 设计令牌基于 Open Color，并进行了一些调整。
+
 ## 安装
 
 推荐使用 pnpm 或 yarn 的方式进行安装:
@@ -62,6 +67,8 @@ yarn add vexip-ui
 ## 文档
 
 [这里](https://www.vexipui.com) 可以查看在线文档。
+
+> 作者的英语很差，如果你有任何改进英语文档的建议，可以创建一个 issue 或 PR。
 
 ## 帮助
 

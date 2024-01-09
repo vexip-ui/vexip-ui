@@ -14,6 +14,7 @@ import {
 } from 'vue'
 
 import {
+  createIconProp,
   createStateProp,
   emitEvent,
   useIcons,
@@ -71,7 +72,7 @@ export default defineComponent({
       targetTitle: null,
       deepState: false,
       loading: () => loading.value,
-      loadingIcon: null,
+      loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null
     })
@@ -104,7 +105,10 @@ export default defineComponent({
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.disabled
-      props.options
+
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++
@@ -166,13 +170,16 @@ export default defineComponent({
       currentValue.value = new Set(emittedValue)
     }
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -331,7 +338,7 @@ export default defineComponent({
                   type={actionType.value}
                   size={'small'}
                   disabled={props.disabled || !toTargetEnabled.value}
-                  loading={props.loading && props.loadingLock}
+                  loading={readonly.value}
                   loading-icon={props.loadingIcon}
                   loading-effect={props.loadingEffect}
                   style={{ marginBottom: '6px' }}
@@ -340,7 +347,7 @@ export default defineComponent({
                   {{
                     icon: () => (
                       <Icon
-                        {...(isRtl.value ? icons.value.arrowLeft : icons.value.arrowRight)}
+                        {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                         label={isRtl.value ? 'to left' : 'to right'}
                       ></Icon>
                     )
@@ -353,7 +360,7 @@ export default defineComponent({
                   type={actionType.value}
                   size={'small'}
                   disabled={props.disabled || !toSourceEnabled.value}
-                  loading={props.loading && props.loadingLock}
+                  loading={readonly.value}
                   loading-icon={props.loadingIcon}
                   loading-effect={props.loadingEffect}
                   style={{ margin: '0' }}
@@ -362,7 +369,7 @@ export default defineComponent({
                   {{
                     icon: () => (
                       <Icon
-                        {...(isRtl.value ? icons.value.arrowRight : icons.value.arrowLeft)}
+                        {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
                         label={isRtl.value ? 'to right' : 'to left'}
                       ></Icon>
                     )

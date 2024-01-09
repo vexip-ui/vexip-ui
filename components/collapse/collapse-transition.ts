@@ -1,4 +1,4 @@
-import { Transition, defineComponent, h } from 'vue'
+import { Transition, defineComponent, h, renderSlot } from 'vue'
 
 import { emitEvent, useProps } from '@vexip-ui/config'
 import { collapseTransitionProps } from './props'
@@ -28,6 +28,10 @@ export default defineComponent({
     let leaveStage: 'before' | 'in' | null = null
 
     return () => {
+      if (props.disabled) {
+        return renderSlot(slots, 'default')
+      }
+
       const duration = props.duration
       const timing = props.timing || 'ease-in-out'
 

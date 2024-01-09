@@ -10,8 +10,11 @@ $tag: () !default;
 $tag: map.merge(
   (
     color: get-css-var('content-color-base'),
+    color-disabled: get-css-var('content-color-disabled'),
     bg-color: get-css-var('fill-color-background'),
+    bg-color-disabled: get-css-var('fill-color-background'),
     b-color: get-css-var('border-color-base'),
+    b-color-disabled: get-css-var('border-color-light-2'),
     v-padding: 0,
     h-padding: 8px,
     radius: get-css-var('radius-base'),
@@ -67,15 +70,21 @@ $tag: map.merge(
     );
   }
 
+  &--disabled {
+    color: get-css-var('tag-color-disabled');
+    cursor: not-allowed;
+  }
+
   &__unit {
     display: flex;
     align-items: center;
+    max-width: 100%;
     padding: get-css-var('tag-v-padding') get-css-var('tag-h-padding');
     background-color: get-css-var('tag-bg-color');
     border: get-css-var('border-shape') get-css-var('tag-b-color');
     border-inline-start-color: get-css-var('tag-d-color');
     border-inline-end-width: 0;
-    transition: get-css-var('transition-background');
+    transition: get-css-var('transition-background'), get-css-var('transition-border');
 
     &:first-child {
       border-inline-start-color: get-css-var('tag-b-color');
@@ -88,6 +97,11 @@ $tag: map.merge(
 
       @include logical-radius(null $radius $radius null);
     }
+  }
+
+  &--disabled &__unit {
+    background-color: get-css-var('tag-bg-color-disabled');
+    border-color: get-css-var('tag-b-color-disabled');
   }
 
   &__close {
@@ -110,6 +124,14 @@ $tag: map.merge(
     &:hover,
     &:focus {
       opacity: 100%;
+    }
+  }
+
+  &--disabled &__close {
+    &,
+    &:hover,
+    &:focus {
+      opacity: 50%;
     }
   }
 
@@ -189,7 +211,8 @@ $tag: map.merge(
     }
   }
 
-  &--border &__unit {
+  &--border &__unit,
+  &--border#{&}--disabled &__unit {
     background-color: transparent;
   }
 }
