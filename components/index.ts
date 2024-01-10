@@ -1,4 +1,4 @@
-import { install as installDirectives } from '@/directives'
+import { installDirectives } from '@/directives'
 
 import { Affix } from './affix'
 import { Alert } from './alert'
@@ -379,4 +379,4 @@ export * from './viewer'
 export * from './virtual-list'
 export * from './wheel'
 
-export * from '@/directives/loading'
+export * from '@/directives'
