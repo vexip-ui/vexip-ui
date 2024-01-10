@@ -29,7 +29,6 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { CircleCheckR } from '@vexip-ui/icons'
 import { createSlotRender, useSetTimeout } from '@vexip-ui/hooks'
 import {
   ensureArray,
@@ -705,7 +704,7 @@ export default defineComponent({
             size={props.triggerSize}
             block
             loading={visible.value && !isSuccess.value}
-            icon={isSuccess.value ? CircleCheckR : null}
+            icon={isSuccess.value ? icons.value.success.icon : null}
             onClick={handleTrigger}
           >
             {props.triggerText ?? (isSuccess.value ? locale.value.completed : locale.value.trigger)}

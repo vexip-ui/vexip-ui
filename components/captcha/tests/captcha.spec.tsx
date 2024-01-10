@@ -324,6 +324,7 @@ describe('Captcha', () => {
 
   it('use trigger', async () => {
     wrapper = await createCaptcha({
+      slideTarget: 50,
       useTrigger: true
     })
     const button = wrapper.find('.vxp-captcha__button')
@@ -332,9 +333,39 @@ describe('Captcha', () => {
     expect(button.exists()).toBe(true)
     expect(wrapper.find('.vxp-captcha').exists()).toBe(false)
 
+    vi.useRealTimers()
+
     await button.trigger('click')
     await nextTick()
     expect(wrapper.find('.vxp-captcha').exists()).toBe(true)
+    expect(wrapper.find('.vxp-captcha__trigger').exists()).toBe(true)
+
+    await nextFrame()
+    await wrapper.find('.vxp-captcha__trigger').trigger('transitionend')
+    await nextTick()
+    vi.useFakeTimers()
+
+    const trackEl = wrapper.find('.vxp-captcha__track').element
+    mocked.push(
+      vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        right: 0,
+        bottom: 0,
+        toJSON: noop
+      }))
+    )
+
+    await toggleMove(50)
+    expect(wrapper.find('.vxp-captcha').classes()).toContain('vxp-captcha--success')
+
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(wrapper.find('.vxp-captcha').exists()).toBe(false)
   })
 
   it('trigger text', async () => {
