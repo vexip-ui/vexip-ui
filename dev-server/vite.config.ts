@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
-import { existsSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, statSync } from 'node:fs'
+import { readdir, stat } from 'node:fs/promises'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -18,15 +19,7 @@ const demos = process.env.DEMOS
 const port = parseInt(process.env.PORT || '') || 8008
 
 const componentsDir = resolve(__dirname, '../components')
-const components = readdirSync(componentsDir).filter(f => {
-  const path = resolve(componentsDir, f)
-
-  if (!statSync(path).isDirectory()) {
-    return false
-  }
-
-  return existsSync(`${path}/index.ts`)
-})
+const directivesDir = resolve(__dirname, '../directives')
 
 const typography = [
   'Title',
@@ -44,7 +37,29 @@ const typography = [
   'Strong'
 ]
 
-export default defineConfig((): UserConfig => {
+export default defineConfig(async (): Promise<UserConfig> => {
+  const components: string[] = []
+  const directives: string[] = []
+
+  const results = await Promise.all([readdir(componentsDir), readdir(directivesDir)])
+
+  await Promise.all([
+    ...results[0].map(async f => {
+      const path = resolve(componentsDir, f)
+
+      if ((await stat(path)).isDirectory() && existsSync(`${path}/index.ts`)) {
+        components.push(f)
+      }
+    }),
+    ...results[1].map(async f => {
+      const path = resolve(directivesDir, f)
+
+      if ((await stat(path)).isDirectory() && existsSync(`${path}/index.ts`)) {
+        directives.push(f)
+      }
+    })
+  ])
+
   return {
     publicDir: '../docs/public',
     define: {
@@ -93,6 +108,19 @@ export default defineConfig((): UserConfig => {
                 return {
                   name,
                   from: `@/components/${kebabName}/index.ts`
+                }
+              }
+            }
+          },
+          {
+            type: 'directive',
+            resolve: name => {
+              const kebabName = toKebabCase(name)
+
+              if (directives.includes(kebabName)) {
+                return {
+                  name: `v${name}`,
+                  from: `@/directives/${kebabName}/index.ts`
                 }
               }
             }

@@ -26,7 +26,7 @@
 
 :::demo spin/directive
 
-### 指令加载中
+### 使用指令
 
 使用 `v-loading` 指令可以快速为元素添加加载中状态。
 
