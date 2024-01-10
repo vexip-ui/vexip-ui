@@ -192,6 +192,15 @@ export default defineComponent({
         limitValueLength()
       }
     )
+    watch(
+      [formattedValue, inputControl],
+      () => {
+        if (inputControl.value) {
+          inputControl.value.value = formattedValue.value
+        }
+      },
+      { immediate: true, flush: 'post' }
+    )
 
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
@@ -521,12 +530,11 @@ export default defineComponent({
             ref={inputControl}
             class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
-            value={formattedValue.value}
             autofocus={props.autofocus}
             autocomplete={props.autocomplete ? 'on' : 'off'}
             spellcheck={props.spellcheck}
             disabled={props.disabled}
-            readonly={readonly.value}
+            readonly={readonly.value || undefined}
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
             name={props.name || props.controlAttrs?.name}
