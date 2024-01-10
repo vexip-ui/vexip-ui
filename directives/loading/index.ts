@@ -5,12 +5,38 @@ import { createVNode, nextTick, render } from 'vue'
 import { isObject } from '@vexip-ui/utils'
 
 import type { SpinProps } from '@/components/spin'
-import type { ObjectDirective, VNode } from 'vue'
+import type { DirectiveBinding, ObjectDirective, VNode } from 'vue'
 
 interface LoadingRecord {
   spin: VNode,
-  props: any,
+  props: SpinProps,
   originPosition: string
+}
+
+function createSpin(
+  el: HTMLElement & { __loading?: LoadingRecord },
+  binding: DirectiveBinding<boolean | SpinProps>
+) {
+  const props: SpinProps = isObject(binding.value)
+    ? { ...binding.value }
+    : { active: binding.value }
+
+  props.inner = true
+
+  const spin = createVNode(Spin, props, null, 0, Object.keys(props))
+  const position = getComputedStyle(el).position
+
+  el.__loading = {
+    spin,
+    props,
+    originPosition: position
+  }
+
+  if (position === 'static') {
+    el.style.position = 'relative'
+  }
+
+  render(spin, el)
 }
 
 export const vLoading: ObjectDirective<
@@ -18,32 +44,14 @@ export const vLoading: ObjectDirective<
   boolean | SpinProps
 > = {
   mounted(el, binding) {
-    nextTick(() => {
-      const props: SpinProps = isObject(binding.value)
-        ? { ...binding.value }
-        : { active: binding.value }
-
-      props.inner = true
-
-      const spin = createVNode(Spin, props, null, 0, Object.keys(props))
-      const position = getComputedStyle(el).position
-
-      el.__loading = {
-        spin,
-        props,
-        originPosition: position
-      }
-
-      if (position === 'static') {
-        el.style.position = 'relative'
-      }
-
-      render(spin, el)
-    })
+    nextTick(() => createSpin(el, binding))
   },
   updated(el, binding) {
     nextTick(() => {
-      if (!el.__loading) return
+      if (!el.__loading) {
+        createSpin(el, binding)
+        return
+      }
 
       const props: SpinProps = isObject(binding.value) ? binding.value : { active: binding.value }
       const component = el.__loading.spin.component
