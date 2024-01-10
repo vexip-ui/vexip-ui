@@ -4,6 +4,7 @@ import { createVNode, nextTick, render } from 'vue'
 
 import { isObject } from '@vexip-ui/utils'
 
+import type { SpinProps } from '@/components/spin'
 import type { ObjectDirective, VNode } from 'vue'
 
 interface LoadingRecord {
@@ -12,12 +13,15 @@ interface LoadingRecord {
   originPosition: string
 }
 
-export const vLoading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord }, any> = {
+export const vLoading: ObjectDirective<
+  HTMLElement & { __loading?: LoadingRecord },
+  boolean | SpinProps
+> = {
   mounted(el, binding) {
     nextTick(() => {
-      const props = isObject(binding.value)
+      const props: SpinProps = isObject(binding.value)
         ? { ...binding.value }
-        : ({ active: binding.value } as any)
+        : { active: binding.value }
 
       props.inner = true
 
@@ -41,12 +45,12 @@ export const vLoading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord
     nextTick(() => {
       if (!el.__loading) return
 
-      const props = isObject(binding.value) ? binding.value : { active: binding.value }
+      const props: SpinProps = isObject(binding.value) ? binding.value : { active: binding.value }
       const component = el.__loading.spin.component
 
       if (component) {
         Object.keys(props).forEach(key => {
-          component.props[key] = props[key]
+          component.props[key] = props[key as keyof SpinProps]
         })
 
         component.props.inner = true
