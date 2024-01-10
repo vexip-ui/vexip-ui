@@ -36,12 +36,12 @@ import {
   isClient,
   isNull,
   nextFrameOnce,
-  nextTickOnce,
   random,
   randomHardColor
 } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 
+import type { CaptchaSliderExposed } from '@/components/captcha-slider'
 import type { SuccessEvent } from './symbol'
 
 export default defineComponent({
@@ -119,9 +119,8 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement>()
     const canvas = ref<HTMLCanvasElement>()
-    const subImage = ref<HTMLImageElement>()
     const subCanvas = ref<HTMLCanvasElement>()
-    const slider = ref<InstanceType<typeof CaptchaSlider>>()
+    const slider = ref<CaptchaSliderExposed>()
 
     const track = computed(() => slider.value?.track)
 
@@ -142,17 +141,19 @@ export default defineComponent({
     let image: HTMLImageElement | undefined
 
     const isLoading = computed(() => props.loading || imageLoading.value || testLoading.value)
+    const failLocked = computed(() => props.failLimit > 0 && failedCount.value >= props.failLimit)
     const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
         nh.bm(props.type),
         {
-          [nh.bm('success')]: success.value,
-          [nh.bm('fail')]: !success.value && failed.value,
+          [nh.bm('success')]: isSuccess.value,
+          [nh.bm('fail')]: !isSuccess.value && failed.value,
           [nh.bm('dragging')]: dragging.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: isLoading.value
+          [nh.bm('loading')]: isLoading.value,
+          [nh.bm('fail-locked')]: failLocked.value
         }
       ]
     })
@@ -166,7 +167,6 @@ export default defineComponent({
       return [props.canvasSize[0] || 1000, props.canvasSize[1] || 600]
     })
     const actionLocked = computed(() => props.disabled || isSuccess.value || isLoading.value)
-    const failLocked = computed(() => props.failLimit > 0 && failedCount.value >= props.failLimit)
 
     watch(
       () => props.slideTarget,
@@ -227,7 +227,18 @@ export default defineComponent({
       drawImage()
     })
 
-    expose({ dragging, imageLoading, imagePromise, reset })
+    expose({
+      dragging,
+      resetting,
+      isSuccess,
+      imageLoading,
+      imagePromise,
+      wrapper,
+      canvas,
+      subCanvas,
+      slider,
+      reset
+    })
 
     // 避免多次触发时发生竞态问题
     let loadFlag: string
@@ -545,7 +556,7 @@ export default defineComponent({
                 height={canvasSize.value[1]}
               ></canvas>
               {props.type === 'slide' && (
-                <div ref={subImage} class={nh.be('sub-image')}>
+                <div class={nh.be('sub-image')}>
                   <canvas
                     ref={subCanvas}
                     class={nh.be('sub-canvas')}

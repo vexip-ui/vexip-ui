@@ -146,6 +146,7 @@ const className = computed(() => {
   return {
     [baseCls]: true,
     [nh.bs('vars')]: true,
+    [`${baseCls}--success`]: isSuccess.value,
     [`${baseCls}--disabled`]: props.disabled,
     [`${baseCls}--loading`]: isLoading.value,
     [`${baseCls}--${props.size}`]: props.size !== 'default'
@@ -187,6 +188,18 @@ watch(
 )
 watch(readonly, value => value && reset())
 
+defineExpose({
+  idFor,
+  currentLeft,
+  resetting,
+  isSuccess,
+  dragging,
+  isLoading,
+  track,
+  trigger,
+  reset
+})
+
 function verifyPosition() {
   currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
 }
@@ -208,18 +221,6 @@ function matchTarget(value: number) {
 function focus(options?: FocusOptions) {
   trigger.value?.focus(options)
 }
-
-defineExpose({
-  idFor,
-  currentLeft,
-  resetting,
-  isSuccess,
-  dragging,
-  isLoading,
-  track,
-  trigger,
-  reset
-})
 </script>
 
 <template>
