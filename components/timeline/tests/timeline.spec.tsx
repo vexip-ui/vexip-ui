@@ -54,22 +54,14 @@ describe('Timeline', () => {
   })
 
   it('item type', () => {
-    ;(['default', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
       const wrapper = mount(() => (
         <Timeline>
           <TimelineItem type={type}></TimelineItem>
         </Timeline>
       ))
 
-      if (type !== 'default') {
-        expect(wrapper.find('.vxp-timeline__item').classes()).toContain(
-          `vxp-timeline__item--${type}`
-        )
-      } else {
-        expect(wrapper.find('.vxp-timeline__item').classes()).not.toContain(
-          `vxp-timeline__item--${type}`
-        )
-      }
+      expect(wrapper.find('.vxp-timeline__item').classes()).toContain(`vxp-timeline__item--${type}`)
     })
   })
 

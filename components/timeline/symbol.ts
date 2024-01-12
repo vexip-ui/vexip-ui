@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 
-export type TimelineItemType = 'default' | 'success' | 'error' | 'warning' | 'disabled'
+export type TimelineItemType = 'primary' | 'info' | 'success' | 'error' | 'warning' | 'disabled'
 
 export interface ItemState {
   label: string | number,
@@ -20,4 +20,13 @@ export interface TimelineState {
   handleSignalClick: (label: string | number) => void
 }
 
-export const TIMELINE_STATE: InjectionKey<TimelineState> = Symbol('TTIMELINE_STATE')
+export const TIMELINE_STATE: InjectionKey<TimelineState> = Symbol('TIMELINE_STATE')
+
+export const timelineItemTypes = Object.freeze<TimelineItemType[]>([
+  'primary',
+  'info',
+  'success',
+  'error',
+  'warning',
+  'disabled'
+])
