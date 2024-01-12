@@ -74,15 +74,12 @@ $result: map.merge(
     margin-top: get-css-var('result-extra-margin-top');
   }
 
-  $types: info success warning error;
-
   @each $type in $types {
-    $color: if($type == 'info', 'primary', $type);
     &--#{$type} {
       @include define-result-style(
         (
-          bg-color: 'color' $color 'opacity-8',
-          icon-color: 'color' $color 'dark-2'
+          bg-color: 'color' $type 'opacity-8',
+          icon-color: 'color' $type 'dark-2'
         )
       );
     }

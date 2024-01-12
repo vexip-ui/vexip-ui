@@ -2,7 +2,7 @@
   <Row style="gap: 30px">
     <Result title="Success" type="success" description="success...">
       <template #extra>
-        <Button type="primary">
+        <Button type="success">
           Back
         </Button>
       </template>
@@ -17,6 +17,13 @@
     <Result title="Error" type="error" description="error...">
       <template #extra>
         <Button type="error">
+          Back
+        </Button>
+      </template>
+    </Result>
+    <Result title="Primary" type="primary" description="primary...">
+      <template #extra>
+        <Button type="primary">
           Back
         </Button>
       </template>

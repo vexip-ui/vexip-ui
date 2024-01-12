@@ -5,6 +5,7 @@ import { globalIcons } from '@vexip-ui/config'
 import { Result } from '..'
 
 const typeIconMap = {
+  primary: globalIcons.value.info.icon,
   info: globalIcons.value.info.icon,
   success: globalIcons.value.success.icon,
   warning: globalIcons.value.warning.icon,
@@ -26,7 +27,7 @@ describe('Result', () => {
   })
 
   it('types', () => {
-    ;(['info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Result type={type}></Result>)
       expect(wrapper.find('.vxp-result').classes()).toContain(`vxp-result--${type}`)
       expect(wrapper.findComponent(typeIconMap[type]).exists()).toBe(true)
