@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
 import { nextTick } from 'vue'
@@ -137,5 +137,60 @@ describe('Video', () => {
 
     expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
     expect(wrapper.findComponent(Github).exists()).toBe(true)
+  })
+
+  it('player slot', async () => {
+    const wrapper = mount(() => (
+      <Video>
+        {{
+          player: () => <video class={'video'}></video>
+        }}
+      </Video>
+    ))
+
+    expect(wrapper.find('.vxp-video__player').exists()).toBe(true)
+    expect(wrapper.find('.vxp-video__video').exists()).toBe(false)
+    expect(wrapper.find('.video').exists()).toBe(true)
+  })
+
+  it('shortcuts', async () => {
+    const shortcuts = { refresh: 'A' }
+    const onRefresh = vi.fn()
+    const wrapper = mount(() => <Video shortcuts={shortcuts} onRefresh={onRefresh}></Video>)
+
+    await nextTick()
+
+    await wrapper.find('.vxp-video').trigger('keydown', { key: 'A' })
+    expect(onRefresh).toHaveBeenCalled()
+  })
+
+  it('control layout', async () => {
+    const layout = {
+      left: ['flip'],
+      center: ['volume'],
+      right: ['play']
+    }
+    const wrapper = mount(() => <Video control-layout={layout}></Video>)
+
+    await nextTick()
+
+    expect(wrapper.find('.vxp-video__controls-left .vxp-video__flip').exists()).toBe(true)
+    expect(wrapper.find('.vxp-video__controls-center .vxp-video__volume').exists()).toBe(true)
+    expect(wrapper.find('.vxp-video__controls-right .vxp-video__play').exists()).toBe(true)
+  })
+
+  it('custom control', async () => {
+    const layout = {
+      left: ['foo']
+    }
+    const wrapper = mount(() => (
+      <Video control-layout={layout}>
+        {{
+          controlFoo: () => <div class={'foo'}></div>
+        }}
+      </Video>
+    ))
+
+    expect(wrapper.find('.vxp-video__controls-left .foo').exists()).toBe(true)
   })
 })

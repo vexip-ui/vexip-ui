@@ -72,4 +72,16 @@ for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {
 
 export const videoDefaultControlLayout = Object.freeze(defaultLayout)
 
+export const videoDefaultShortcuts = Object.freeze({
+  play: 'Space',
+  'play-prev': 'PageUp',
+  'play-next': 'PageDown',
+  refresh: 'R',
+  flip: 'C',
+  volume: 'M',
+  pip: 'P',
+  'full-window': 'G',
+  'full-browser': 'F'
+})
+
 export const VIDEO_STATE: InjectionKey<VideoState> = Symbol('VIDEO_STATE')

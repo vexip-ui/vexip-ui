@@ -24,22 +24,10 @@ import VideoVolume from './video-volume.vue'
 import { createSlotRender, useListener, useModifier, useSetTimeout } from '@vexip-ui/hooks'
 import { decide, decimalLength, isClient, noop, toCapitalCase, toNumber } from '@vexip-ui/utils'
 import { videoProps } from './props'
-import { VIDEO_STATE, videoDefaultControlLayout } from './symbol'
+import { VIDEO_STATE, videoDefaultControlLayout, videoDefaultShortcuts } from './symbol'
 
 import type { FullScreenExposed, FullScreenType } from '@/components/full-screen'
-import type { VideoControlConfig, VideoPlaybackRate, VideoShortcutOptions } from './symbol'
-
-const defaultShortcuts: VideoShortcutOptions = {
-  play: 'Space',
-  'play-prev': 'PageUp',
-  'play-next': 'PageDown',
-  refresh: 'R',
-  flip: 'C',
-  volume: 'M',
-  pip: 'P',
-  'full-window': 'G',
-  'full-browser': 'F'
-}
+import type { VideoControlConfig, VideoPlaybackRate } from './symbol'
 
 export default defineComponent({
   name: 'Video',
@@ -115,7 +103,7 @@ export default defineComponent({
     const videoRef = computed<HTMLVideoElement | undefined>(() => video.value || props.video)
 
     const shortcutRecord = reactive({} as Record<string, () => void>)
-    const shortcuts = computed(() => ({ ...defaultShortcuts, ...props.shortcuts }))
+    const shortcuts = computed(() => ({ ...videoDefaultShortcuts, ...props.shortcuts }))
 
     function addShortcut(key: string, cb: () => void) {
       if (shortcutRecord[key]) {
@@ -486,6 +474,7 @@ export default defineComponent({
     function renderPlayPrev() {
       return (
         <VideoControl
+          class={nh.be('play-prev')}
           label={locale.value.playPrev}
           shortcut={shortcuts.value['play-prev']}
           disabled={!!props.srcList && !srcIndex.value}
@@ -502,6 +491,7 @@ export default defineComponent({
     function renderPlay() {
       return (
         <VideoControl
+          class={nh.be('play')}
           label={playing.value ? locale.value.pause : locale.value.play}
           shortcut={shortcuts.value.play}
           disabled={!canPlay.value}
@@ -518,6 +508,7 @@ export default defineComponent({
     function renderPlayNext() {
       return (
         <VideoControl
+          class={nh.be('play-next')}
           label={locale.value.playNext}
           shortcut={shortcuts.value['play-next']}
           disabled={!!props.srcList && srcIndex.value === srcFullList.value.length - 1}
@@ -534,6 +525,7 @@ export default defineComponent({
     function renderRefresh() {
       return (
         <VideoControl
+          class={nh.be('play-refresh')}
           label={locale.value.refresh}
           shortcut={shortcuts.value.refresh}
           onClick={handleRefresh}
@@ -582,6 +574,7 @@ export default defineComponent({
     function renderFlip() {
       return (
         <VideoControl
+          class={nh.be('flip')}
           label={locale.value.flip}
           shortcut={shortcuts.value.flip}
           onClick={toggleFlip}
@@ -599,6 +592,7 @@ export default defineComponent({
 
       return (
         <VideoControl
+          class={nh.be('pip')}
           label={pip.value ? locale.value.exitPip : locale.value.requestPip}
           shortcut={shortcuts.value.pip}
           disabled={!canPlay.value}
@@ -612,6 +606,7 @@ export default defineComponent({
     function renderFullWindow() {
       return (
         <VideoControl
+          class={nh.be('full-window')}
           label={full.value === 'window' ? locale.value.fullWindowExit : locale.value.fullWindow}
           shortcut={shortcuts.value['full-window']}
           onClick={() => toggleFull('window')}
@@ -627,6 +622,7 @@ export default defineComponent({
     function renderFullBrowser() {
       return (
         <VideoControl
+          class={nh.be('full-browser')}
           label={full.value === 'browser' ? locale.value.fullScreenExit : locale.value.fullScreen}
           shortcut={shortcuts.value['full-browser']}
           onClick={() => toggleFull('browser')}

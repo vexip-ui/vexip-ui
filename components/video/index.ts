@@ -4,7 +4,7 @@ import type { ComponentPublicInstance } from 'vue'
 
 export { Video }
 export { videoProps } from './props'
-export { videoDefaultControlLayout } from './symbol'
+export { videoDefaultShortcuts, videoDefaultControlLayout } from './symbol'
 
 export type VideoExposed = ComponentPublicInstance & InstanceType<typeof Video>
 
