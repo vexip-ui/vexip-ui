@@ -1,7 +1,7 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export type Key = string | number
-export type MessageType = 'info' | 'success' | 'warning' | 'error'
+export type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 export type MessagePlacement = 'top' | 'bottom'
 
 export interface MessageOptions extends Record<string, any> {
@@ -33,5 +33,6 @@ export interface MessageInstance extends ComponentPublicInstance {
   config: (config: MessageConfig) => void
 }
 
-export const effectiveTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+export const effectiveTypes = Object.freeze(['primary', 'info', 'success', 'warning', 'error'])
+// For a11n
 export const assertiveTypes = Object.freeze(['success', 'warning', 'error'])

@@ -91,17 +91,13 @@ $message: map.merge(
       content: '';
     }
 
-    $types: info success warning error;
-
     @each $type in $types {
-      $color: if($type == 'info', 'primary', $type);
-
       &--color-only#{&}--#{$type} {
         @include define-message-style(
           (
-            color: 'color' $color 'base',
-            close-color: 'color' $color 'opacity-5',
-            close-color-hover: 'color' $color 'base'
+            color: 'color' $type 'base',
+            close-color: 'color' $type 'opacity-5',
+            close-color-hover: 'color' $type 'base'
           )
         );
       }
@@ -109,11 +105,11 @@ $message: map.merge(
       &--background#{&}--#{$type} {
         @include define-message-style(
           (
-            b-color: 'color' $color 'opacity-5',
-            mask-bg-color: 'color' $color 'opacity-9',
+            b-color: 'color' $type 'opacity-5',
+            mask-bg-color: 'color' $type 'opacity-9',
             shadow: unset,
-            close-color: 'color' $color 'opacity-7',
-            close-color-hover: 'color' $color 'opacity-2'
+            close-color: 'color' $type 'opacity-7',
+            close-color-hover: 'color' $type 'opacity-2'
           )
         );
       }
@@ -121,8 +117,8 @@ $message: map.merge(
       &--background#{&}--color#{&}--#{$type} {
         @include define-message-style(
           (
-            color: 'color' $color 'dark-2',
-            icon-color: 'color' $color 'dark-1'
+            color: 'color' $type 'dark-2',
+            icon-color: 'color' $type 'dark-1'
           )
         );
       }
@@ -130,7 +126,7 @@ $message: map.merge(
       &--#{$type} {
         @include define-message-style(
           (
-            icon-color: 'color' $color 'base'
+            icon-color: 'color' $type 'base'
           )
         );
       }

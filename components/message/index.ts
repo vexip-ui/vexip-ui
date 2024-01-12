@@ -40,6 +40,7 @@ export class MessageManager {
   defaults: Record<string, unknown>
 
   open: AipMethod
+  primary: AipMethod
   info: AipMethod
   success: AipMethod
   warning: AipMethod
@@ -71,6 +72,10 @@ export class MessageManager {
 
     this.open = (content: FuzzyOptions, duration?: number) => {
       return this._open(null, content, duration)
+    }
+
+    this.primary = (content: FuzzyOptions, duration?: number) => {
+      return this._open('primary', content, duration)
     }
 
     this.info = (content: FuzzyOptions, duration?: number) => {
