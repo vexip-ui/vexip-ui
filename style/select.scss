@@ -86,6 +86,15 @@ $select: map.merge(
     margin-inline-start: 0;
     pointer-events: auto;
     cursor: pointer;
+
+    // &--preview {
+    //   pointer-events: none;
+    //   opacity: 50%;
+    // }
+
+    // &--deleted {
+    //   text-decoration: line-through;
+    // }
   }
 
   &--disabled &__tag {

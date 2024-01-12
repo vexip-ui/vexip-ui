@@ -25,6 +25,7 @@ import {
   Filter,
   FlipHorizontal,
   FlipVertical,
+  Fullscreen,
   GripVertical,
   HelpCircle,
   Image,
@@ -40,6 +41,9 @@ import {
   Moon,
   MoreHorizontal,
   Outdent,
+  Pause,
+  PictureInPicture,
+  Play,
   Plus,
   PlusSquare,
   RefreshCw,
@@ -48,11 +52,16 @@ import {
   RotateCw,
   Search,
   Siren,
+  SkipBack,
+  SkipForward,
   Sun,
   Trash2,
   Upload,
   UploadCloud,
   UserRound,
+  Volume1,
+  Volume2,
+  VolumeX,
   X,
   XCircle,
   ZoomIn,
@@ -141,7 +150,18 @@ export interface IconsOptions {
   fileImage?: IconConfig,
   fileAudio?: IconConfig,
   fileVideo?: IconConfig,
-  fileZip?: IconConfig
+  fileZip?: IconConfig,
+  volume?: IconConfig,
+  volumeLow?: IconConfig,
+  volumeMute?: IconConfig,
+  play?: IconConfig,
+  pause?: IconConfig,
+  fullWindow?: IconConfig,
+  pip?: IconConfig,
+  playState?: IconConfig,
+  pauseState?: IconConfig,
+  playPrev?: IconConfig,
+  playNext?: IconConfig
 }
 
 export type IconName = keyof IconsOptions
@@ -208,7 +228,18 @@ const iconMap: IconsConfig = {
   fileImage: FileImage,
   fileAudio: FileMusic,
   fileVideo: FileVideo,
-  fileZip: FileArchive
+  fileZip: FileArchive,
+  volume: Volume2,
+  volumeLow: Volume1,
+  volumeMute: VolumeX,
+  play: Play,
+  pause: Pause,
+  fullWindow: Fullscreen,
+  pip: PictureInPicture,
+  playState: Play,
+  pauseState: Pause,
+  playPrev: SkipBack,
+  playNext: SkipForward
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

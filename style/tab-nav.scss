@@ -251,8 +251,11 @@ $tab-nav: map.merge(
   &__track {
     position: absolute;
     pointer-events: none;
-    transition: top get-css-var('transition-base'), left get-css-var('transition-base'),
-      width get-css-var('transition-base'), height get-css-var('transition-base');
+    transition:
+      top get-css-var('transition-base'),
+      left get-css-var('transition-base'),
+      width get-css-var('transition-base'),
+      height get-css-var('transition-base');
   }
 
   $card: #{&}--card;

@@ -109,7 +109,9 @@ $scrollbar: map.merge(
     background-color: get-css-var('scrollbar-bar-bg-color');
     border-radius: calc(get-css-var('scrollbar-width') * 0.5);
     will-change: transform;
-    transition: width get-css-var('transition-base'), height get-css-var('transition-base'),
+    transition:
+      width get-css-var('transition-base'),
+      height get-css-var('transition-base'),
       get-css-var('transition-opacity'),
       transform get-css-var('scrollbar-move-duration') get-css-var('scrollbar-move-timing');
   }

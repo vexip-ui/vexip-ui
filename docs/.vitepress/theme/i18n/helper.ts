@@ -135,6 +135,7 @@ export interface I18nConfig {
     Wheel: string,
 
     // Data
+    Video: string,
     Avatar: string,
     Badge: string,
     Bubble: string,

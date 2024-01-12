@@ -186,6 +186,22 @@ export function zhCNLocale() {
       dragOrClick: '将文件拖到此处, 或点击上传'
     },
 
+    video: {
+      play: '播放',
+      pause: '暂停',
+      playPrev: '上一个',
+      playNext: '下一个',
+      refresh: '刷新',
+      flip: '镜像翻转',
+      requestPip: '进入画中画',
+      exitPip: '退出画中画',
+      fullWindow: '进入网页全屏',
+      fullWindowExit: '退出网页全屏',
+      fullScreen: '进入全屏',
+      fullScreenExit: '退出全屏',
+      chapterCount: '第 {n} 章'
+    },
+
     viewer: {
       rotateRight: '向右旋转',
       rotateLeft: '向左旋转',
@@ -193,7 +209,7 @@ export function zhCNLocale() {
       flipVertical: '纵向翻转',
       zoomIn: '放大',
       zoomOut: '缩小',
-      fullScreen: '全屏',
+      fullScreen: '进入全屏',
       fullScreenExit: '退出全屏',
       reset: '重置'
     }

@@ -137,6 +137,7 @@ export const enUS = defineI18n({
     Wheel: 'Wheel',
 
     // Data
+    Video: 'Video',
     Avatar: 'Avatar',
     Badge: 'Badge',
     Bubble: 'Bubble',

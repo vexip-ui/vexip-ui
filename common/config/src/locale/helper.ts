@@ -184,6 +184,22 @@ export interface LocaleConfig {
     dragOrClick: string
   },
 
+  video: {
+    play: string,
+    pause: string,
+    playPrev: string,
+    playNext: string,
+    refresh: string,
+    flip: string,
+    requestPip: string,
+    exitPip: string,
+    fullWindow: string,
+    fullWindowExit: string,
+    fullScreen: string,
+    fullScreenExit: string,
+    chapterCount: string
+  },
+
   viewer: {
     rotateRight: string,
     rotateLeft: string,

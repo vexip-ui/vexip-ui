@@ -106,6 +106,22 @@
                   </Tooltip>
                 </span>
               </template>
+              <!-- <template v-if="!limited && previewOption" #suffix>
+                <Tag
+                  inherit
+                  :class="[
+                    nh.be('tag'),
+                    nh.bem('tag', 'preview'),
+                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
+                  ]"
+                  :type="props.tagType"
+                  closable
+                >
+                  <slot name="selected" :preview="true" :option="previewOption">
+                    {{ previewOption.label }}
+                  </slot>
+                </Tag>
+              </template> -->
             </Overflow>
             <div
               v-if="props.filter"

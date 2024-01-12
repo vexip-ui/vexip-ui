@@ -15,8 +15,8 @@ declare module 'vue' {
     ButtonGroup: (typeof import('vexip-ui'))['ButtonGroup'],
     Calendar: (typeof import('vexip-ui'))['Calendar'],
     CalendarPanel: (typeof import('vexip-ui'))['CalendarPanel'],
-    Captcha: typeof import('vexip-ui')['Captcha'],
-    CaptchaSlider: typeof import('vexip-ui')['CaptchaSlider'],
+    Captcha: (typeof import('vexip-ui'))['Captcha'],
+    CaptchaSlider: (typeof import('vexip-ui'))['CaptchaSlider'],
     Card: (typeof import('vexip-ui'))['Card'],
     Carousel: (typeof import('vexip-ui'))['Carousel'],
     CarouselItem: (typeof import('vexip-ui'))['CarouselItem'],
@@ -108,6 +108,7 @@ declare module 'vue' {
     Upload: (typeof import('vexip-ui'))['Upload'],
     UploadFile: (typeof import('vexip-ui'))['UploadFile'],
     UploadList: (typeof import('vexip-ui'))['UploadList'],
+    Video: (typeof import('vexip-ui'))['Video'],
     Viewer: (typeof import('vexip-ui'))['Viewer'],
     VirtualList: (typeof import('vexip-ui'))['VirtualList'],
     Wheel: (typeof import('vexip-ui'))['Wheel'],
@@ -127,12 +128,12 @@ declare module 'vue' {
   }
 
   interface ComponentCustomProperties {
-    $confirm: typeof import('vexip-ui')['Confirm'],
-    $contextmenu: typeof import('vexip-ui')['Contextmenu'],
-    $loading: typeof import('vexip-ui')['Loading'],
-    $message: typeof import('vexip-ui')['Message'],
-    $notice: typeof import('vexip-ui')['Notice'],
-    $toast: typeof import('vexip-ui')['Toast']
+    $confirm: (typeof import('vexip-ui'))['Confirm'],
+    $contextmenu: (typeof import('vexip-ui'))['Contextmenu'],
+    $loading: (typeof import('vexip-ui'))['Loading'],
+    $message: (typeof import('vexip-ui'))['Message'],
+    $notice: (typeof import('vexip-ui'))['Notice'],
+    $toast: (typeof import('vexip-ui'))['Toast']
   }
 }
 
