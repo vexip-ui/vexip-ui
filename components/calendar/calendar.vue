@@ -148,7 +148,8 @@ function handleMonthChange(value: number) {
               :value="calendarYear"
               inherit
               :class="nh.be('year-input')"
-              :range="[1970, 2300]"
+              :min="1970"
+              :max="2300"
               :formatter="formatYearInput"
               @change="handleYearChange"
             ></NumberInput>
@@ -156,7 +157,8 @@ function handleMonthChange(value: number) {
               :value="calendarMonth"
               inherit
               :class="nh.be('month-input')"
-              :range="[1, 12]"
+              :min="1"
+              :max="12"
               :formatter="formatMonthInput"
               @change="handleMonthChange"
             ></NumberInput>
