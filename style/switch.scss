@@ -130,8 +130,7 @@ $switch: map.merge(
     height: $signal;
     background-color: get-css-var('switch-signal-bg-color');
     border-radius: 50%;
-    transition:
-      inset-inline-start get-css-var('transition-base'),
+    transition: inset-inline-start get-css-var('transition-base'),
       get-css-var('transition-transform');
     will-change: inset-inline-start;
 

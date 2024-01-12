@@ -116,6 +116,7 @@ export const enUS = defineI18n({
 
     // Form
     AutoComplete: 'AutoComplete',
+    Captcha: 'Captcha',
     Cascader: 'Cascader',
     Checkbox: 'Checkbox',
     ColorPicker: 'ColorPicker',

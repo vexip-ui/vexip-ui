@@ -112,11 +112,8 @@ $checkbox: map.merge(
       border: solid get-css-var('checkbox-signal-check-color');
       border-width: 0 get-css-var('checkbox-signal-thick') get-css-var('checkbox-signal-thick') 0;
       opacity: 0%;
-      transition:
-        width get-css-var('transition-base'),
-        height get-css-var('transition-base'),
-        get-css-var('transition-background'),
-        get-css-var('transition-opacity'),
+      transition: width get-css-var('transition-base'), height get-css-var('transition-base'),
+        get-css-var('transition-background'), get-css-var('transition-opacity'),
         get-css-var('transition-transform');
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }

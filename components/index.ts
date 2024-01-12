@@ -15,6 +15,8 @@ import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { Calendar } from './calendar'
 import { CalendarPanel } from './calendar-panel'
+import { Captcha } from './captcha'
+import { CaptchaSlider } from './captcha-slider'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
@@ -141,6 +143,8 @@ const components = [
   ButtonGroup,
   Calendar,
   CalendarPanel,
+  Captcha,
+  CaptchaSlider,
   Card,
   Carousel,
   CarouselItem,
@@ -277,6 +281,8 @@ export * from './button'
 export * from './button-group'
 export * from './calendar'
 export * from './calendar-panel'
+export * from './captcha'
+export * from './captcha-slider'
 export * from './card'
 export * from './carousel'
 export * from './carousel-item'

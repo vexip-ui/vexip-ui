@@ -110,7 +110,6 @@ export interface LayoutHeaderExposed extends ComponentPublicInstance {
   toggleUserDropped: (dropped: boolean) => void
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LayoutMainExposed extends ComponentPublicInstance {}
 
 export interface LayoutAsideExposed extends ComponentPublicInstance {

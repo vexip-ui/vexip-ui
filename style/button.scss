@@ -159,9 +159,7 @@ $button: map.merge(
   }
 
   &--pulsing::after {
-    animation-name:
-      #{$namespace}-button-pulse,
-      #{$namespace}-button-pulse-opacity;
+    animation-name: #{$namespace}-button-pulse, #{$namespace}-button-pulse-opacity;
 
     @keyframes #{$namespace}-button-pulse {
       0% {

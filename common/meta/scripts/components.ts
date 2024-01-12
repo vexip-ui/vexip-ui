@@ -63,7 +63,9 @@ async function readDirectives() {
   const componentRE = /import \{ (.+) \} from '@\/components\/.+'/
   const directivesDir = resolve(rootDir, '../../directives')
   const directives = await Promise.all(
-    (await readdir(directivesDir, 'utf-8'))
+    (
+      await readdir(directivesDir, 'utf-8')
+    )
       .filter(f => statSync(resolve(directivesDir, f)).isDirectory())
       .map(async directive => {
         const content = await readFile(resolve(directivesDir, directive, 'index.ts'), 'utf-8')
