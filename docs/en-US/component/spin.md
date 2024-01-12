@@ -28,7 +28,7 @@ When you want to obtain different delay durations for display and disappearance,
 
 :::demo spin/directive
 
-### Directive
+### Use Directive
 
 Use the `v-loading` directive to quickly add a loading state to an element.
 
