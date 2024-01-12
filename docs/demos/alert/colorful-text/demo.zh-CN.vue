@@ -3,6 +3,9 @@
     <Alert colorful-text>
       警告提示的内容
     </Alert>
+    <Alert type="info" icon colorful-text>
+      警告提示的内容
+    </Alert>
     <Alert type="success" title="警告标题" colorful-text>
       警告提示的内容
     </Alert>

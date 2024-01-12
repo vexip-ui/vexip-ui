@@ -14,7 +14,7 @@ defineOptions({ name: 'Alert' })
 const _props = defineProps(alertProps)
 const props = useProps('alert', _props, {
   type: {
-    default: 'info',
+    default: 'primary',
     validator: value => alertTypes.includes(value)
   },
   title: '',
@@ -45,6 +45,7 @@ const icons = useIcons()
 
 const predefinedIcons = computed(() => ({
   default: icons.value.alert,
+  primary: icons.value.info,
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,

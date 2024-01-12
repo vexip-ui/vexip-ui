@@ -3,6 +3,9 @@
     <Alert colorful-text>
       Some content to alert
     </Alert>
+    <Alert type="info" icon colorful-text>
+      Some content to alert
+    </Alert>
     <Alert type="success" title="Alert Title" colorful-text>
       Some content to alert
     </Alert>

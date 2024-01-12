@@ -1,31 +1,26 @@
 <template>
-  <div>
-    <Alert icon>
-      Some content to alert
-    </Alert>
-    <Alert icon type="success">
-      Some content to alert
-    </Alert>
-    <Alert icon type="warning">
-      Some content to alert
-    </Alert>
-    <Alert icon type="error">
-      Some content to alert
-    </Alert>
-    <Alert icon title="Alert Title">
-      Some content to alert
-    </Alert>
-    <Alert icon type="success" title="Alert Title">
-      Some content to alert
-    </Alert>
-    <Alert icon type="warning" title="Alert Title">
-      Some content to alert
-    </Alert>
-    <Alert icon type="error" title="Alert Title">
-      Some content to alert
-    </Alert>
-  </div>
+  <Alert
+    v-for="alertType in types"
+    :key="alertType"
+    icon
+    :type="alertType"
+  >
+    Some content to alert
+  </Alert>
+  <Alert
+    v-for="alertType in types"
+    :key="alertType"
+    icon
+    :type="alertType"
+    title="Alert Title"
+  >
+    Some content to alert
+  </Alert>
 </template>
+
+<script setup lang="ts">
+const types = ['primary', 'info', 'success', 'warning', 'error'] as const
+</script>
 
 <style scoped>
 .vxp-alert {

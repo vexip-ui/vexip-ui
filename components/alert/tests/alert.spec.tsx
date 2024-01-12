@@ -5,6 +5,7 @@ import { globalIcons } from '@vexip-ui/config'
 import { Alert } from '..'
 
 const typeIconMap = {
+  primary: globalIcons.value.info.icon,
   info: globalIcons.value.info.icon,
   success: globalIcons.value.success.icon,
   warning: globalIcons.value.warning.icon,
@@ -24,7 +25,7 @@ describe('Alert', () => {
   })
 
   it('types', () => {
-    ;(['info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Alert icon type={type}></Alert>)
 
       expect(wrapper.find('.vxp-alert').classes()).toContain(`vxp-alert--${type}`)

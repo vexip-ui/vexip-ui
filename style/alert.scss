@@ -148,17 +148,13 @@ $alert: map.merge(
     opacity: 0%;
   }
 
-  $types: info success warning error;
-
   @each $type in $types {
-    $color: if($type == 'info', 'primary', $type);
-
     &--#{$type} {
       @include define-alert-style(
         (
-          bg-color: 'color' $color 'opacity-8',
-          b-color: 'color' $color 'opacity-5',
-          icon-color: 'color' $color 'dark-2'
+          bg-color: 'color' $type 'opacity-8',
+          b-color: 'color' $type 'opacity-5',
+          icon-color: 'color' $type 'dark-2'
         )
       );
     }
@@ -166,8 +162,8 @@ $alert: map.merge(
     &--colorful-text#{&}--#{$type} {
       @include define-alert-style(
         (
-          text-color: 'color' $color 'dark-2',
-          title-color: 'color' $color 'dark-2'
+          text-color: 'color' $type 'dark-2',
+          title-color: 'color' $type 'dark-2'
         )
       );
     }
