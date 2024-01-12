@@ -1,5 +1,8 @@
 <template>
-  <Button type="primary" @click="Notice.info('提示的标题', '一条一般提示消息')">
+  <Button type="primary" @click="Notice.primary('提示的标题', '一条一般提示消息')">
+    一般提示
+  </Button>
+  <Button type="info" @click="Notice.info('提示的标题', '一条一般提示消息')">
     一般提示
   </Button>
   <Button type="success" @click="Notice.success('提示的标题', '一条成功提示消息')">

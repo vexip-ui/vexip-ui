@@ -85,7 +85,7 @@ describe('Notice', () => {
     expect(document.querySelector('.vxp-notice__content')?.textContent).toEqual(TEXT)
   })
 
-  const types = ['info', 'success', 'warning', 'error'] as const
+  const types = ['primary', 'info', 'success', 'warning', 'error'] as const
 
   types.forEach(type => {
     it(`type ${type}`, async () => {

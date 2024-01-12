@@ -154,18 +154,14 @@ $notice: map.merge(
       content: '';
     }
 
-    $types: info success warning error;
-
     @each $type in $types {
-      $color: if($type == 'info', 'primary', $type);
-
       &--color-only#{&}--#{$type} {
         @include define-notice-style(
           (
-            title-color: 'color' $color 'dark-1',
-            color: 'color' $color 'base',
-            close-color: 'color' $color 'opacity-5',
-            close-color-hover: 'color' $color 'base'
+            title-color: 'color' $type 'dark-1',
+            color: 'color' $type 'base',
+            close-color: 'color' $type 'opacity-5',
+            close-color-hover: 'color' $type 'base'
           )
         );
       }
@@ -173,11 +169,11 @@ $notice: map.merge(
       &--background#{&}--#{$type} {
         @include define-notice-style(
           (
-            b-color: 'color' $color 'opacity-5',
-            mask-bg-color: 'color' $color 'opacity-9',
+            b-color: 'color' $type 'opacity-5',
+            mask-bg-color: 'color' $type 'opacity-9',
             shadow: unset,
-            close-color: 'color' $color 'opacity-7',
-            close-color-hover: 'color' $color 'opacity-2'
+            close-color: 'color' $type 'opacity-7',
+            close-color-hover: 'color' $type 'opacity-2'
           )
         );
       }
@@ -185,10 +181,10 @@ $notice: map.merge(
       &--background#{&}--color#{&}--#{$type} {
         @include define-notice-style(
           (
-            title-color: 'color' $color 'dark-2',
-            color: 'color' $color 'dark-2',
-            icon-color: 'color' $color 'dark-1',
-            marker-bg-color: 'color' $color 'dark-1'
+            title-color: 'color' $type 'dark-2',
+            color: 'color' $type 'dark-2',
+            icon-color: 'color' $type 'dark-1',
+            marker-bg-color: 'color' $type 'dark-1'
           )
         );
       }
@@ -196,8 +192,8 @@ $notice: map.merge(
       &--#{$type} {
         @include define-notice-style(
           (
-            icon-color: 'color' $color 'base',
-            marker-bg-color: 'color' $color 'base'
+            icon-color: 'color' $type 'base',
+            marker-bg-color: 'color' $type 'base'
           )
         );
       }

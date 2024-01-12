@@ -49,6 +49,7 @@ export class NoticeManager {
   defaults: Record<string, unknown>
 
   open: AipMethod
+  primary: AipMethod
   info: AipMethod
   success: AipMethod
   warning: AipMethod
@@ -81,6 +82,10 @@ export class NoticeManager {
 
     this.open = (title: FuzzyOptions, content?: string | number, duration?: number) => {
       return this._open(null, title, content, duration)
+    }
+
+    this.primary = (title: FuzzyOptions, content?: string | number, duration?: number) => {
+      return this._open('primary', title, content, duration)
     }
 
     this.info = (title: FuzzyOptions, content?: string | number, duration?: number) => {

@@ -5,7 +5,7 @@
   <Button type="primary" @click="Notice.open('A Title Only Notice')">
     Title Only
   </Button>
-  <Button type="primary" @click="$notice.open({ content: 'A content only notice' })">
+  <Button type="primary" @click="Notice.open({ content: 'A content only notice' })">
     Content Only
   </Button>
 </template>

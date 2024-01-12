@@ -1,5 +1,8 @@
 <template>
-  <Button type="primary" @click="Notice.info('Notice Title', 'A normal notice')">
+  <Button type="primary" @click="Notice.primary('Notice Title', 'A normal notice')">
+    Normal
+  </Button>
+  <Button type="info" @click="Notice.info('Notice Title', 'A normal notice')">
     Normal
   </Button>
   <Button type="success" @click="Notice.success('Notice Title', 'A success notice')">
