@@ -39,6 +39,7 @@ import {
   randomHardColor
 } from '@vexip-ui/utils'
 import { captchaProps } from './props'
+import { captchaRectPath } from './paths'
 
 import type { CaptchaSliderExposed } from '@/components/captcha-slider'
 import type { SuccessEvent } from './symbol'
@@ -98,6 +99,10 @@ export default defineComponent({
       hideDelay: {
         default: 3000,
         validator: value => value >= 0
+      },
+      pathProcess: {
+        default: captchaRectPath,
+        isFunc: true
       }
     })
 
@@ -138,6 +143,7 @@ export default defineComponent({
 
     let imageLoaded = false
     let image: HTMLImageElement | undefined
+    let memoryCanvas: HTMLCanvasElement | undefined
 
     const isLoading = computed(() => props.loading || imageLoading.value || testLoading.value)
     const failLocked = computed(() => props.failLimit > 0 && failedCount.value >= props.failLimit)
@@ -351,43 +357,83 @@ export default defineComponent({
         return
       }
 
-      if (!subCanvasEl || !subCtx) return
+      if (!subCanvasEl || !subCtx || !track.value) return
+
+      if (!memoryCanvas) {
+        if (!isClient) return
+
+        memoryCanvas = document.createElement('canvas')
+        memoryCanvas.width = props.canvasSize[0]
+        memoryCanvas.height = props.canvasSize[1]
+      }
+
+      const pathCtx = memoryCanvas.getContext('2d')
+
+      if (!pathCtx) return
 
       const canvasRect = canvasEl.getBoundingClientRect()
-      const subImageRect = track.value!.getBoundingClientRect()
-      const widthFix = ((canvasRect.width - subImageRect.width) / canvasRect.width) * canvasEl.width
+      const trackRect = track.value.getBoundingClientRect()
+      // 滑动时以轨道为准，所以需要补正 canvas 宽度和 track 宽度的差值
+      const widthFix = ((canvasRect.width - trackRect.width) / canvasRect.width) * canvasEl.width
 
       const targetX = widthFix / 2 + currentTarget.value[0] * (canvasEl.width - widthFix) * 0.01
       const targetY = currentTarget.value[1] * canvasEl.height * 0.01
-      const sideLength = Math.min(canvasEl.width, canvasEl.height) * 0.25
-      const halfSideLength = sideLength * 0.5
 
-      subCanvasEl.width = sideLength + 4
+      pathCtx.clearRect(0, 0, props.canvasSize[0], props.canvasSize[1])
+      pathCtx.beginPath()
+      pathCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      pathCtx.lineWidth = 4
 
-      ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
+      const [clipX, clipY, clipWidth, clipHeight] = props.pathProcess({
+        ctx: pathCtx,
+        x: targetX,
+        y: targetY,
+        width: props.canvasSize[0],
+        height: props.canvasSize[1]
+      })
+
+      pathCtx.stroke()
+      pathCtx.clip()
+      pathCtx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
+
+      // 中心点偏移修正
+      const xLeftWidth = targetX - clipX
+      const translateFix = ((clipWidth * 0.5 - xLeftWidth) / clipWidth) * 100
+
+      subCanvasEl.style.transform = `translate3d(${translateFix - 50}%, 0, 0)`
+      subCanvasEl.width = clipWidth
 
       subCtx.drawImage(
-        canvasEl,
-        targetX - halfSideLength,
-        targetY - halfSideLength,
-        sideLength,
-        sideLength,
-        2,
-        targetY - halfSideLength,
-        sideLength,
-        sideLength
+        memoryCanvas,
+        clipX,
+        clipY,
+        clipWidth,
+        clipHeight,
+        0,
+        clipY,
+        clipWidth,
+        clipHeight
       )
-      subCtx.lineWidth = 2
-      subCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
-      subCtx.strokeRect(1, targetY - halfSideLength, sideLength + 2, sideLength)
 
+      ctx.save()
+      ctx.beginPath()
       ctx.fillStyle = 'rgba(255, 255, 255, 0.75)'
-      ctx.fillRect(
-        targetX - halfSideLength - 1,
-        targetY - halfSideLength - 1,
-        sideLength + 2,
-        sideLength + 2
-      )
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.lineWidth = 10
+
+      props.pathProcess({
+        ctx,
+        x: targetX,
+        y: targetY,
+        width: props.canvasSize[0],
+        height: props.canvasSize[1]
+      })
+
+      ctx.stroke()
+      ctx.fill()
+      ctx.restore()
+      ctx.globalCompositeOperation = 'destination-over'
+      ctx.drawImage(image, 0, 0, canvasEl.width, canvasEl.height)
     }
 
     function drawImageNextFrame() {
