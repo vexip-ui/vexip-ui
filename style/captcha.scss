@@ -1,0 +1,374 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$captcha: () !default;
+$captcha: map.merge(
+  (
+    width: 320px,
+    bg-color: get-css-var('bg-color-base'),
+    b-color: get-css-var('border-color-light-2'),
+    radius: get-css-var('radius-base'),
+    shadow: get-css-var('shadow-base'),
+    panel-bg-color: get-css-var('bg-color-base'),
+    panel-border-radius: get-css-var('radius-base'),
+    panel-shadow: get-css-var('shadow-base'),
+    image-radius: get-css-var('radius-base'),
+    slider-height: 32px,
+    slider-radius: get-css-var('radius-base'),
+    slider-bg-color: get-css-var('fill-color-background'),
+    filler-bg-color: get-css-var('color-primary-opacity-3'),
+    filler-bg-color-success: get-css-var('color-success-opacity-3'),
+    filler-transition: 'transform 0ms ease',
+    tip-color: get-css-var('content-color-base'),
+    tip-color-fill: get-css-var('color-white'),
+    tip-color-disabled: get-css-var('content-color-disabled'),
+    tip-transition: 'background-position 0ms ease',
+    tip-bg-color-success: get-css-var('color-success-opacity-3'),
+    tip-bg-color-fail: get-css-var('color-error-opacity-3'),
+    trigger-width: 32px,
+    trigger-height: 32px,
+    trigger-color: get-css-var('content-color-third'),
+    trigger-color-hover: get-css-var('color-primary-base'),
+    trigger-color-success: get-css-var('color-success-base'),
+    trigger-color-disabled: get-css-var('content-color-disabled'),
+    trigger-bg-color: get-css-var('color-white'),
+    trigger-radius: get-css-var('radius-small'),
+    trigger-transition: 'left 0ms ease',
+    action-color: get-css-var('content-color-secondary'),
+    action-color-hover: get-css-var('color-primary-base'),
+    action-color-disabled: get-css-var('content-color-disabled'),
+    text-size: 18px,
+    pointer-color: get-css-var('color-primary-base')
+  ),
+  $captcha
+);
+
+.#{$namespace}-captcha {
+  &-vars {
+    @include define-preset-values('captcha', $captcha);
+  }
+
+  &-wrapper {
+    @include basis;
+  }
+
+  @include basis;
+
+  display: flex;
+  flex-direction: column;
+  width: get-css-var('captcha-width');
+  padding: 12px 16px;
+  user-select: none;
+  background-color: get-css-var('captcha-bg-color');
+  border: get-css-var('border-shape') get-css-var('captcha-b-color');
+  border-radius: get-css-var('captcha-radius');
+  outline: 0;
+  box-shadow: get-css-var('captcha-shadow');
+
+  &--dragging {
+    cursor: move;
+  }
+
+  &__image {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 0;
+    padding-top: 60%;
+    border: get-css-var('border-light-2');
+    border-radius: get-css-var('captcha-image-radius');
+
+    &-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+
+  &--point &__image {
+    cursor: pointer;
+
+    &--locked {
+      cursor: default;
+    }
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__sub-image {
+    position: absolute;
+    inset: 0 calc(#{get-css-var('captcha-trigger-width')} * 0.5);
+  }
+
+  &__sub-canvas {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    will-change: left;
+    pointer-events: none;
+    transition: get-css-var('captcha-trigger-transition');
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  &__image-tip {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    color: get-css-var('captcha-tip-color-fill');
+    white-space: nowrap;
+    pointer-events: none;
+
+    &--success {
+      background-color: get-css-var('captcha-tip-bg-color-success');
+    }
+
+    &--fail {
+      background-color: get-css-var('captcha-tip-bg-color-fail');
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    color: get-css-var('captcha-action-color');
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('captcha-action-color-hover');
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('captcha-action-color-disabled');
+      }
+    }
+  }
+
+  &__slider {
+    @include basis;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: get-css-var('captcha-slider-height');
+    padding: 0 calc(#{get-css-var('captcha-trigger-width')} * 0.5);
+    user-select: none;
+    background-color: get-css-var('captcha-slider-bg-color');
+    border: get-css-var('border-light-2');
+    border-radius: get-css-var('captcha-slider-radius');
+
+    &--small {
+      @include define-preset-values(
+        'captcha',
+        (
+          slider-height: 24px,
+          trigger-width: 24px,
+          trigger-height: 24px
+        )
+      );
+    }
+
+    &--large {
+      @include define-preset-values(
+        'captcha',
+        (
+          slider-height: 40px,
+          trigger-width: 40px,
+          trigger-height: 40px
+        )
+      );
+    }
+
+    &--inner {
+      @include define-preset-values(
+        'captcha',
+        (
+          slider-height: 26px,
+          slider-radius: 12px,
+          trigger-width: 36px,
+          trigger-height: 36px
+        )
+      );
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &--slide &__slider {
+    margin-top: 16px;
+    margin-bottom: 6px;
+  }
+
+  &__filler {
+    position: absolute;
+    inset: 0;
+    background-color: get-css-var('captcha-filler-bg-color');
+    border-radius: get-css-var('captcha-trigger-radius');
+    will-change: transform;
+    transition: get-css-var('transition-background'), get-css-var('captcha-filler-transition');
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+
+    &--success {
+      background-color: get-css-var('captcha-filler-bg-color-success');
+    }
+  }
+
+  &--slide &__filler {
+    display: none;
+  }
+
+  &__tip {
+    display: flex;
+    align-items: center;
+  }
+
+  &__slider &__tip {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    white-space: nowrap;
+    background-image: linear-gradient(
+      to right,
+      get-css-var('captcha-tip-color'),
+      get-css-var('captcha-tip-color') 50%,
+      get-css-var('captcha-tip-color-fill') 50%
+    );
+    background-position: 0%;
+    background-clip: text;
+    background-size: 200% 100%;
+    transition: get-css-var('transition-color'), get-css-var('captcha-tip-transition');
+  }
+
+  &--slide &__tip {
+    line-height: 1;
+    color: get-css-var('content-color-third');
+    background-image: none;
+  }
+
+  &__slider--disabled &__tip {
+    color: get-css-var('captcha-tip-color-disabled');
+  }
+
+  &__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__trigger {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var('captcha-trigger-width');
+    height: get-css-var('captcha-trigger-height');
+    color: get-css-var('captcha-trigger-color');
+    cursor: move;
+    background-color: get-css-var('captcha-trigger-bg-color');
+    border-radius: get-css-var('captcha-trigger-radius');
+    will-change: left;
+    outline: 0;
+    box-shadow: get-css-var('shadow-base');
+    transition: get-css-var('transition-color'), get-css-var('captcha-trigger-transition');
+    transform: translate3d(-50%, 0, 0);
+
+    &:hover,
+    &:focus,
+    &--focused {
+      color: get-css-var('captcha-trigger-color-hover');
+    }
+
+    &--success {
+      cursor: inherit;
+
+      &,
+      &:focus,
+      &:hover {
+        color: get-css-var('captcha-trigger-color-success');
+      }
+    }
+  }
+
+  &--slide &__trigger {
+    border-radius: 50%;
+  }
+
+  &__slider--disabled &__trigger {
+    color: get-css-var('captcha-trigger-color-disabled');
+    cursor: not-allowed;
+  }
+
+  &__pointer {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-weight: bold;
+    color: get-css-var('captcha-pointer-color');
+    background-color: #fff;
+    border: 4px solid get-css-var('captcha-pointer-color');
+    border-radius: 50%;
+    box-shadow: get-css-var('shadow-base');
+    transform: translate(-50%, -50%);
+  }
+
+  &__text-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    margin-top: 10px;
+    line-height: 1;
+  }
+
+  &__text {
+    display: flex;
+    margin-inline-start: 6px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &__button--success {
+    pointer-events: none;
+  }
+}

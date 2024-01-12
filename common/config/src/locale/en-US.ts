@@ -32,6 +32,17 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    captcha: {
+      slideEnd: 'Please slide to the end',
+      slide: 'Please slide to a suitable position',
+      success: 'Test successful',
+      fail: 'Test failed, please retry',
+      doCaptcha: 'Please complete the captcha below',
+      pointInOrder: 'Please point in order',
+      trigger: 'Click to trigger captcha',
+      completed: 'Captcha completed'
+    },
+
     checkbox: {
       all: 'All'
     },

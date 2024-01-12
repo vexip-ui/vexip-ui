@@ -4,7 +4,7 @@ import { config } from '@vue/test-utils'
 import { ResizeObserver } from '@juggle/resize-observer'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 class IntersectionObserver {
   readonly root: Element | Document | null = null
   readonly rootMargin = ''

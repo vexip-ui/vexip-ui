@@ -32,6 +32,13 @@ export function taINLocale() {
       week7: 'ஞாயிறு'
     },
 
+    captcha: {
+      slideEnd: 'இறுதிக்கு ஸ்லைடு',
+      slide: 'சரியான நிலைக்கு ஸ்லைடு செய்யவும்',
+      success: 'சோதனை வெற்றி',
+      fixImage: 'படத்தை சரிசெய்யவும்'
+    },
+
     checkbox: {
       all: 'அனைத்தும்'
     },

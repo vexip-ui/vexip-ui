@@ -42,6 +42,7 @@ describe('Input', () => {
       props: { value: TEXT }
     })
 
+    await nextTick()
     expect(getValue(wrapper.find('input'))).toEqual(TEXT)
 
     await wrapper.setProps({ value: '' })

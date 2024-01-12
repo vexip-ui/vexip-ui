@@ -30,6 +30,17 @@ export interface LocaleConfig {
     week7: string
   },
 
+  captcha: {
+    slideEnd: string,
+    slide: string,
+    success: string,
+    fail: string,
+    doCaptcha: string,
+    pointInOrder: string,
+    trigger: string,
+    completed: string
+  },
+
   checkbox: {
     all: string
   },
