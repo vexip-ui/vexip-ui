@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { CircleCheck, CircleExclamation, CircleInfo, CircleXmark } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
 import { Result } from '..'
 
 const typeIconMap = {
-  info: CircleInfo,
-  success: CircleCheck,
-  warning: CircleExclamation,
-  error: CircleXmark
+  info: globalIcons.value.info.icon,
+  success: globalIcons.value.success.icon,
+  warning: globalIcons.value.warning.icon,
+  error: globalIcons.value.error.icon
 }
 
 const TEXT = 'Text'
@@ -26,7 +26,7 @@ describe('Result', () => {
   })
 
   it('types', () => {
-    (['info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Result type={type}></Result>)
       expect(wrapper.find('.vxp-result').classes()).toContain(`vxp-result--${type}`)
       expect(wrapper.findComponent(typeIconMap[type]).exists()).toBe(true)

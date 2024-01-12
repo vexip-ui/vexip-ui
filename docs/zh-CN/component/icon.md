@@ -1,6 +1,10 @@
 # Icon 图标
 
-Vexip UI 使用 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 SVG 封装成了 Vue 组件。
+:::info
+从 `v2.3` 开始，Vexip UI 使用 [lucide](https://lucide.dev/) 图标库提供组件的内部图标。
+:::
+
+Vexip UI 提供 `@vexip-ui/icons` 作为图标库，该图标库基于 [Font Awesome](https://fontawesome.com/) 6.x 的免费图标，将其 SVG 封装成了 Vue 组件。
 
 你可以直接在这个 [页面](https://fontawesome.com/search?m=free) 查询图标（他们给图标起名一直很奇怪）。
 

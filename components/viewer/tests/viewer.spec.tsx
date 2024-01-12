@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { Viewer } from '..'
 
 vi.useFakeTimers()
@@ -117,7 +117,7 @@ describe('Viewer', () => {
       {
         name: 'test',
         title: 'Title',
-        icon: GithubB,
+        icon: Github,
         process
       }
     ]
@@ -129,7 +129,7 @@ describe('Viewer', () => {
     const toolbar = wrapper.find('.vxp-viewer__toolbar')
 
     expect(toolbar.find('button[title="Title"]').exists()).toBe(true)
-    expect(toolbar.findComponent(GithubB).exists()).toBe(true)
+    expect(toolbar.findComponent(Github).exists()).toBe(true)
 
     toolbar.find('button[title="Title"]').trigger('click')
     expect(process).toHaveBeenCalled()

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { TabNav } from '..'
 
 describe('TabNav', () => {
@@ -104,12 +104,12 @@ describe('TabNav', () => {
   it('icon', () => {
     const wrapper = mount(() => (
       <TabNav>
-        <TabNavItem icon={GithubB}>{'content'}</TabNavItem>
+        <TabNavItem icon={Github}>{'content'}</TabNavItem>
       </TabNav>
     ))
 
     expect(wrapper.find('.vxp-tab-nav__icon').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('card', () => {
@@ -123,7 +123,7 @@ describe('TabNav', () => {
   })
 
   it('align', () => {
-    (['left', 'center', 'right'] as const).forEach(align => {
+    ;(['left', 'center', 'right'] as const).forEach(align => {
       const wrapper = mount(() => (
         <TabNav align={align}>
           <TabNavItem>{'tab'}</TabNavItem>
@@ -135,7 +135,7 @@ describe('TabNav', () => {
   })
 
   it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => (
         <TabNav placement={placement}>
           <TabNavItem>{'tab'}</TabNavItem>

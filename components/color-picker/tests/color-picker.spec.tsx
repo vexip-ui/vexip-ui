@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { noop } from '@vexip-ui/utils'
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { globalIcons } from '@vexip-ui/config'
 import { ColorPicker } from '..'
 
@@ -154,21 +154,21 @@ describe('ColorPicker', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <ColorPicker prefix={GithubB}></ColorPicker>)
+    const wrapper = mount(() => <ColorPicker prefix={Github}></ColorPicker>)
 
     expect(wrapper.find('.vxp-color-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <ColorPicker prefix={GithubB} prefix-color={'red'}></ColorPicker>)
+    const wrapper = mount(() => <ColorPicker prefix={Github} prefix-color={'red'}></ColorPicker>)
 
     expect(wrapper.find('.vxp-color-picker__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <ColorPicker prefix={GithubB}>
+      <ColorPicker prefix={Github}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -176,7 +176,7 @@ describe('ColorPicker', () => {
     ))
 
     expect(wrapper.find('.vxp-color-picker__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -186,20 +186,20 @@ describe('ColorPicker', () => {
     expect(wrapper.find('.vxp-color-picker__suffix').exists()).toBe(true)
     expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
+    await wrapper.setProps({ suffix: Github })
     expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <ColorPicker suffix={GithubB} suffix-color={'red'}></ColorPicker>)
+    const wrapper = mount(() => <ColorPicker suffix={Github} suffix-color={'red'}></ColorPicker>)
 
     expect(wrapper.find('.vxp-color-picker__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <ColorPicker suffix={GithubB}>
+      <ColorPicker suffix={Github}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -207,7 +207,7 @@ describe('ColorPicker', () => {
     ))
 
     expect(wrapper.find('.vxp-color-picker__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -251,10 +251,10 @@ describe('ColorPicker', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <ColorPicker loading loading-icon={GithubB}></ColorPicker>)
+    const wrapper = mount(() => <ColorPicker loading loading-icon={Github}></ColorPicker>)
 
     expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('select color', async () => {

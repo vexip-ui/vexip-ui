@@ -160,7 +160,7 @@ app.use(install, {
 
 如果你想配置其他的语言，你需要根据完整的配置项自行完成，详见 [国际化](/zh-CN/guide/i18n)。
 
-> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5)。
+> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts)。
 
 ## 内置图标
 
@@ -179,9 +179,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // 可以传入一个函数，并返回一个组件
-    clear: () => CircleXmark,
-
     // 可以传入一个数组，并在第二个参数配置自定义参数
     loading: [
       Spinner,
@@ -193,7 +190,7 @@ app.use(install, {
 
 结合 ConfigProvider 组件的 `icons` 属性，你还可以为局部的区域自定义图标，详情请查阅 [ConfigProvider 文档](/zh-CN/component/config-provider)。
 
-> 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90)。
+> 完整的内置图标选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)。
 
 所有的内置图标预览可以参考 [修改图标](/zh-CN/guide/change-icons#内部图标一览) 章节。
 

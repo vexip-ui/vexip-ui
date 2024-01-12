@@ -225,7 +225,7 @@ export default defineComponent({
                   renderSlot(slots, 'expand', slotParams)
                 )
               : (
-                <Icon {...icons.value.caretRight}></Icon>
+                <Icon {...icons.value.angleRight}></Icon>
                 )}
           </div>
         </CustomTag>

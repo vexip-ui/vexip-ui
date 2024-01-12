@@ -551,7 +551,7 @@ function blur() {
         </div>
         <div :class="nh.be('control')">
           <div :class="[nh.be('marker'), showLabel && nh.bem('marker', 'with-label')]">
-            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.emptyCross"></Icon>
+            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.close"></Icon>
             <div
               v-else
               :style="{
