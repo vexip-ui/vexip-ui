@@ -1,4 +1,4 @@
-# Captcha ^[Since v2.3.0](!s)
+# Captcha ==!s|2.3.0==
 
 在某些场合，要尽可能的防止脚本和机器人行为，此时便会用到人机验证。
 
@@ -27,6 +27,16 @@
 ### 刷新图片
 
 通过监听 `refresh` 事件实现用户点击刷新按钮时重新从远程获取图片。
+
+:::
+
+:::demo captcha/hollow-shape
+
+### 镂空形状
+
+通过 `hollow-shape` 属性可以指定内置的镂空形状名称。
+
+你也可以传入一个自定义的处理方法来画镂空的形状。
 
 :::
 
@@ -82,34 +92,48 @@ type CaptchaType = 'slide' | 'point'
 type CaptchaBeforeTest =
   | ((percent: number, matched: boolean) => unknown)
   | ((positions: number[]) => unknown)
+
+interface CaptchaHollowOptions {
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+}
+
+type CaptchaHollowResult = [x: number, y: number, width: number, height: number]
+type CaptchaHollowProcess = (options: CaptchaHollowOptions) => CaptchaHollowResult
+
+type CaptchaHollowType = 'square' | 'puzzle' | 'shield' | 'heart'
 ```
 
 ### Captcha 属性
 
-| 名称           | 类型                              | 说明                                                                     | 默认值        | 始于 |
-| -------------- | --------------------------------- | ------------------------------------------------------------------------ | ------------- | ---- |
-| type           | `CaptchaType`                     | 设置验证的交互类型                                                       | `'slide'`     | -    |
-| slide-target   | `number \| number[]`              | 设置滑动目标位置，传入数组时第二位为纵向位置                             | `null`        | -    |
-| title          | `string`                          | 设置验证的标题                                                           | `null`        | -    |
-| tip            | `string`                          | 设置验证的提示语                                                         | `null`        | -    |
-| success-tip    | `string`                          | 设置验证成功时的提示语                                                   | `null`        | -    |
-| image          | `string`                          | 设置验证用的图片                                                         | `null`        | -    |
-| tolerance      | `number`                          | 设置验证目标位置允许的误差范围                                           | `1`           | -    |
-| canvas-size    | `number[]`                        | 设置画布大小                                                             | `[1000, 600]` | -    |
-| refresh-icon   | `VueComponent`                    | 设置验证的刷新图标                                                       | `null`        | -    |
-| disabled       | `boolean`                         | 设置是否禁用验证                                                         | `false`       | -    |
-| loading        | `boolean`                         | 设置是否为加载中                                                         | `false`       | -    |
-| loading-icon   | `VueComponent`                    | 设置加载中的图标                                                         | `null`        | -    |
-| loading-effect | `string`                          | 设置加载中图标的效果动画                                                 | `null`        | -    |
-| on-before-test | `CaptchaBeforeTest`               | 设置验证前的回调，支持异步函数和 Promise，返回布尔值时将直接作为验证结果 | `null`        | -    |
-| texts          | `string[]`                        | 设置要依次点击的单字                                                     | `[]`          | -    |
-| fail-limit     | `number`                          | 设置验证失败的限制次数，达到或超出后需刷新                               | `0`           | -    |
-| remote-point   | `boolean`                         | 是否使用远程点击验证                                                     | `false`       | -    |
-| use-trigger    | `boolean`                         | 是否使用触发器                                                           | `false`       | -    |
-| trigger-size   | `'small' \| 'default' \| 'large'` | 设置触发器的大小                                                         | `'default'`   | -    |
-| trigger-text   | `string`                          | 设置触发器中的提示语                                                     | `null`        | -    |
-| transfer       | `boolean \| string`               | 设置验证面板的渲染位置，设置为 `true` 时默认渲染至 `<body>`              | `false`       | -    |
-| hide-delay     | `number`                          | 使用触发器时，设置验证成功后隐藏面板的延迟毫秒数                         | `3000`        | -    |
+| 名称           | 类型                                        | 说明                                                                     | 默认值        | 始于 |
+| -------------- | ------------------------------------------- | ------------------------------------------------------------------------ | ------------- | ---- |
+| type           | `CaptchaType`                               | 设置验证的交互类型                                                       | `'slide'`     | -    |
+| slide-target   | `number \| number[]`                        | 设置滑动目标位置，传入数组时第二位为纵向位置                             | `null`        | -    |
+| title          | `string`                                    | 设置验证的标题                                                           | `null`        | -    |
+| tip            | `string`                                    | 设置验证的提示语                                                         | `null`        | -    |
+| success-tip    | `string`                                    | 设置验证成功时的提示语                                                   | `null`        | -    |
+| image          | `string`                                    | 设置验证用的图片                                                         | `null`        | -    |
+| tolerance      | `number`                                    | 设置验证目标位置允许的误差范围                                           | `1`           | -    |
+| canvas-size    | `number[]`                                  | 设置画布大小                                                             | `[1000, 600]` | -    |
+| refresh-icon   | `VueComponent`                              | 设置验证的刷新图标                                                       | `null`        | -    |
+| disabled       | `boolean`                                   | 设置是否禁用验证                                                         | `false`       | -    |
+| loading        | `boolean`                                   | 设置是否为加载中                                                         | `false`       | -    |
+| loading-icon   | `VueComponent`                              | 设置加载中的图标                                                         | `null`        | -    |
+| loading-effect | `string`                                    | 设置加载中图标的效果动画                                                 | `null`        | -    |
+| on-before-test | `CaptchaBeforeTest`                         | 设置验证前的回调，支持异步函数和 Promise，返回布尔值时将直接作为验证结果 | `null`        | -    |
+| texts          | `string[]`                                  | 设置要依次点击的单字                                                     | `[]`          | -    |
+| fail-limit     | `number`                                    | 设置验证失败的限制次数，达到或超出后需刷新                               | `0`           | -    |
+| remote-point   | `boolean`                                   | 是否使用远程点击验证                                                     | `false`       | -    |
+| use-trigger    | `boolean`                                   | 是否使用触发器                                                           | `false`       | -    |
+| trigger-size   | `'small' \| 'default' \| 'large'`           | 设置触发器的大小                                                         | `'default'`   | -    |
+| trigger-text   | `string`                                    | 设置触发器中的提示语                                                     | `null`        | -    |
+| transfer       | `boolean \| string`                         | 设置验证面板的渲染位置，设置为 `true` 时默认渲染至 `<body>`              | `false`       | -    |
+| hide-delay     | `number`                                    | 使用触发器时，设置验证成功后隐藏面板的延迟毫秒数                         | `3000`        | -    |
+| hollow-shape   | `CaptchaHollowType \| CaptchaHollowProcess` | 设置镂空的形状                                                           | `'square'`    | -    |
 
 ### Captcha 事件
 

@@ -39,7 +39,7 @@ import {
   randomHardColor
 } from '@vexip-ui/utils'
 import { captchaProps } from './props'
-import { captchaRectPath } from './paths'
+import { heartPath, puzzlePath, shieldPath, squarePath } from './hollow-paths'
 
 import type { CaptchaSliderExposed } from '@/components/captcha-slider'
 import type { SuccessEvent } from './symbol'
@@ -100,8 +100,8 @@ export default defineComponent({
         default: 3000,
         validator: value => value >= 0
       },
-      pathProcess: {
-        default: captchaRectPath,
+      hollowShape: {
+        default: squarePath,
         isFunc: true
       }
     })
@@ -184,9 +184,15 @@ export default defineComponent({
       await (imagePromise.value = loadImage())
       drawImageNextFrame()
     })
-    watch([currentTarget, () => props.canvasSize[0], () => props.canvasSize[1]], () => {
-      drawImageNextFrame()
-    })
+    watch(
+      [
+        currentTarget,
+        () => props.canvasSize[0],
+        () => props.canvasSize[1],
+        () => props.hollowShape
+      ],
+      drawImageNextFrame
+    )
     watch(
       [() => props.type, () => props.remotePoint],
       () => {
@@ -344,6 +350,21 @@ export default defineComponent({
       }
     }
 
+    function getHollowProcess() {
+      if (typeof props.hollowShape === 'function') return props.hollowShape
+
+      switch (props.hollowShape) {
+        case 'puzzle':
+          return puzzlePath
+        case 'shield':
+          return shieldPath
+        case 'heart':
+          return heartPath
+        default:
+          return squarePath
+      }
+    }
+
     function drawImage() {
       const canvasEl = canvas.value
       const ctx = canvasEl?.getContext?.('2d')
@@ -363,13 +384,18 @@ export default defineComponent({
         if (!isClient) return
 
         memoryCanvas = document.createElement('canvas')
-        memoryCanvas.width = props.canvasSize[0]
-        memoryCanvas.height = props.canvasSize[1]
       }
+
+      memoryCanvas.width = canvasEl.width
+      memoryCanvas.height = canvasEl.height
 
       const pathCtx = memoryCanvas.getContext('2d')
 
       if (!pathCtx) return
+
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+      subCtx.clearRect(0, 0, subCanvasEl.width, subCanvasEl.height)
+      pathCtx.clearRect(0, 0, memoryCanvas.width, memoryCanvas.height)
 
       const canvasRect = canvasEl.getBoundingClientRect()
       const trackRect = track.value.getBoundingClientRect()
@@ -379,12 +405,13 @@ export default defineComponent({
       const targetX = widthFix / 2 + currentTarget.value[0] * (canvasEl.width - widthFix) * 0.01
       const targetY = currentTarget.value[1] * canvasEl.height * 0.01
 
-      pathCtx.clearRect(0, 0, props.canvasSize[0], props.canvasSize[1])
+      const hollowProcess = getHollowProcess()
+
       pathCtx.beginPath()
       pathCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
       pathCtx.lineWidth = 4
 
-      const [clipX, clipY, clipWidth, clipHeight] = props.pathProcess({
+      const [clipX, clipY, clipWidth, clipHeight] = hollowProcess({
         ctx: pathCtx,
         x: targetX,
         y: targetY,
@@ -421,7 +448,7 @@ export default defineComponent({
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
       ctx.lineWidth = 10
 
-      props.pathProcess({
+      hollowProcess({
         ctx,
         x: targetX,
         y: targetY,
