@@ -10,6 +10,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type { CaptchaHollowProcess, CaptchaHollowType } from './hollow-paths'
 import type { CaptchaBeforeTest, CaptchaType, SuccessEvent } from './symbol'
 
 export const captchaProps = buildProps({
@@ -36,6 +37,7 @@ export const captchaProps = buildProps({
   triggerText: String,
   transfer: booleanStringProp,
   hideDelay: Number,
+  hollowShape: [String, Function] as PropType<CaptchaHollowType | CaptchaHollowProcess>,
   onSuccess: eventProp<EventListener<SuccessEvent>>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),

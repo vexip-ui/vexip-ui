@@ -1,4 +1,4 @@
-# Captcha ^[Since v2.3.0](!s)
+# Captcha ==!s|2.3.0==
 
 In some cases, it's necessary to prevent script and robot behaviors as much as possible, and captcha will be used.
 
@@ -29,6 +29,16 @@ We can use the `on-before-test` prop to send to the front-end result to remote, 
 ### Refresh Image
 
 By listening to the `refresh` event, we can change the image from the remote when the user clicks the refresh button.
+
+:::
+
+:::demo captcha/hollow-shape
+
+### Hollow Shape
+
+The built-in hollow shape name can be specified via the `hollow-shape` prop.
+
+You can also pass in a custom process method to draw the hollow shape.
 
 :::
 
@@ -84,34 +94,48 @@ type CaptchaType = 'slide' | 'point'
 type CaptchaBeforeTest =
   | ((percent: number, matched: boolean) => unknown)
   | ((positions: number[]) => unknown)
+
+interface CaptchaHollowOptions {
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+}
+
+type CaptchaHollowResult = [x: number, y: number, width: number, height: number]
+type CaptchaHollowProcess = (options: CaptchaHollowOptions) => CaptchaHollowResult
+
+type CaptchaHollowType = 'square' | 'puzzle' | 'shield' | 'heart'
 ```
 
 ### Captcha Props
 
-| Name           | Type                              | Description                                                                                                                              | Default       | Since |
-| -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----- |
-| type           | `CaptchaType`                     | Set the interaction type of captcha                                                                                                      | `'slide'`     | -     |
-| slide-target   | `number \| number[]`              | Set the slide target position, the second item is the vertical position when passing in the array                                        | `null`        | -     |
-| title          | `string`                          | Set the title of captcha                                                                                                                 | `null`        | -     |
-| tip            | `string`                          | Set the tip of captcha                                                                                                                   | `null`        | -     |
-| success-tip    | `string`                          | Set the tip when the captcha is successful                                                                                               | `null`        | -     |
-| image          | `string`                          | Set an image for captcha                                                                                                                 | `null`        | -     |
-| tolerance      | `number`                          | Set the error tolerance allowed for the captcha target position                                                                          | `null`        | -     |
-| canvas-size    | `number[]`                        | Set canvas size                                                                                                                          | `[1000, 600]` | -     |
-| refresh-icon   | `VueComponent`                    | Set refresh icon                                                                                                                         | `null`        | -     |
-| disabled       | `boolean`                         | Set whether to disable the captcha                                                                                                       | `false`       | -     |
-| loading        | `boolean`                         | Set whether the captcha is loading                                                                                                       | `false`       | -     |
-| loading-icon   | `VueComponent`                    | Set loading icon                                                                                                                         | `null`        | -     |
-| loading-effect | `string`                          | Set the effect animation for the loading icon                                                                                            | `null`        | -     |
-| on-before-test | `CaptchaBeforeTest`               | Set the callback before test, support async function and Promise, when returning a boolean value, it will be directly used as the result | `null`        | -     |
-| texts          | `string[]`                        | Set the letters to be pointed in sequence                                                                                                | `[]`          | -     |
-| fail-limit     | `number`                          | Set the limit count of captcha failures, which needs to be refreshed after reaching or exceeding                                         | `0`           | -     |
-| remote-point   | `boolean`                         | Whether to use remote point captcha                                                                                                      | `false`       | -     |
-| use-trigger    | `boolean`                         | Whether to use trigger                                                                                                                   | `false`       | -     |
-| trigger-size   | `'small' \| 'default' \| 'large'` | Set the size of the trigger                                                                                                              | `'default'`   | -     |
-| trigger-text   | `string`                          | Set the content in the trigger                                                                                                           | `null`        | -     |
-| transfer       | `boolean \| string`               | Set the rendering place of panel. When set to `true`, it will render to `<body>` by default                                              | `false`       | -     |
-| hide-delay     | `number`                          | When using trigger, set the number of milliseconds to delay hiding the panel after successful captcha                                    | `3000`        | -     |
+| Name           | Type                                        | Description                                                                                                                              | Default       | Since |
+| -------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----- |
+| type           | `CaptchaType`                               | Set the interaction type of captcha                                                                                                      | `'slide'`     | -     |
+| slide-target   | `number \| number[]`                        | Set the slide target position, the second item is the vertical position when passing in the array                                        | `null`        | -     |
+| title          | `string`                                    | Set the title of captcha                                                                                                                 | `null`        | -     |
+| tip            | `string`                                    | Set the tip of captcha                                                                                                                   | `null`        | -     |
+| success-tip    | `string`                                    | Set the tip when the captcha is successful                                                                                               | `null`        | -     |
+| image          | `string`                                    | Set an image for captcha                                                                                                                 | `null`        | -     |
+| tolerance      | `number`                                    | Set the error tolerance allowed for the captcha target position                                                                          | `null`        | -     |
+| canvas-size    | `number[]`                                  | Set canvas size                                                                                                                          | `[1000, 600]` | -     |
+| refresh-icon   | `VueComponent`                              | Set refresh icon                                                                                                                         | `null`        | -     |
+| disabled       | `boolean`                                   | Set whether to disable the captcha                                                                                                       | `false`       | -     |
+| loading        | `boolean`                                   | Set whether the captcha is loading                                                                                                       | `false`       | -     |
+| loading-icon   | `VueComponent`                              | Set loading icon                                                                                                                         | `null`        | -     |
+| loading-effect | `string`                                    | Set the effect animation for the loading icon                                                                                            | `null`        | -     |
+| on-before-test | `CaptchaBeforeTest`                         | Set the callback before test, support async function and Promise, when returning a boolean value, it will be directly used as the result | `null`        | -     |
+| texts          | `string[]`                                  | Set the letters to be pointed in sequence                                                                                                | `[]`          | -     |
+| fail-limit     | `number`                                    | Set the limit count of captcha failures, which needs to be refreshed after reaching or exceeding                                         | `0`           | -     |
+| remote-point   | `boolean`                                   | Whether to use remote point captcha                                                                                                      | `false`       | -     |
+| use-trigger    | `boolean`                                   | Whether to use trigger                                                                                                                   | `false`       | -     |
+| trigger-size   | `'small' \| 'default' \| 'large'`           | Set the size of the trigger                                                                                                              | `'default'`   | -     |
+| trigger-text   | `string`                                    | Set the content in the trigger                                                                                                           | `null`        | -     |
+| transfer       | `boolean \| string`                         | Set the rendering place of panel. When set to `true`, it will render to `<body>` by default                                              | `false`       | -     |
+| hide-delay     | `number`                                    | When using trigger, set the number of milliseconds to delay hiding the panel after successful captcha                                    | `3000`        | -     |
+| hollow-shape   | `CaptchaHollowType \| CaptchaHollowProcess` | Set the shape of hollow                                                                                                                  | `'square'`    | -     |
 
 ### Captcha Events
 
