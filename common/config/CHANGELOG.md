@@ -1,3 +1,23 @@
+## [1.5.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.5.0...config@1.5.1) (2024-01-17)
+
+
+### ✨ Features
+
+* **captcha:** add Captcha component ([#295](https://github.com/vexip-ui/vexip-ui/issues/295)) ([9dfafb6](https://github.com/vexip-ui/vexip-ui/commit/9dfafb6d85a978a56fe5c2cd261e2892e35b5765))
+* **video:** add Video component ([#426](https://github.com/vexip-ui/vexip-ui/issues/426)) ([17f02cd](https://github.com/vexip-ui/vexip-ui/commit/17f02cdc93087983523e25ea28ef9cad48c6fa42)), closes [#433](https://github.com/vexip-ui/vexip-ui/issues/433) [#434](https://github.com/vexip-ui/vexip-ui/issues/434) [#435](https://github.com/vexip-ui/vexip-ui/issues/435) [#436](https://github.com/vexip-ui/vexip-ui/issues/436) [#437](https://github.com/vexip-ui/vexip-ui/issues/437) [#438](https://github.com/vexip-ui/vexip-ui/issues/438) [#439](https://github.com/vexip-ui/vexip-ui/issues/439)
+
+
+### 🐞 Bug Fixes
+
+* **config:** support validate required props ([46a0f88](https://github.com/vexip-ui/vexip-ui/commit/46a0f88e0c95a460ef1130d8c6edf62957b383f7))
+
+
+### 🔨 Code Refactoring
+
+* switch to use lucide to provide internal component icons ([#456](https://github.com/vexip-ui/vexip-ui/issues/456)) ([d1c03a1](https://github.com/vexip-ui/vexip-ui/commit/d1c03a1964df324929565638bdadcc5647e93bc1))
+
+
+
 # [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.4.0...config@1.5.0) (2024-01-08)
 
 
