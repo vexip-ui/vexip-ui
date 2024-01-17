@@ -12,7 +12,6 @@ export const paginationProps = buildProps({
   background: booleanProp,
   pageSize: Number,
   sizeOptions: Array as PropType<number[]>,
-  maxCount: Number,
   itemCount: Number,
   active: Number,
   disabled: booleanProp,

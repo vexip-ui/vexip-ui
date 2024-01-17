@@ -115,7 +115,6 @@ type RadioRawOption =
 | size         | `'small' \| 'default' \| 'large'`                | The size of the radio                                                                                                    | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of radio                                                                                                       | `'default'` | -       |
 | disabled     | `boolean`                                        | Set whether to disable the radio button                                                                                  | `false`     | -       |
-| border       | `boolean`                                        | Set whether the radio button has a border                                                                                | `false`     | -       |
 | loading      | `boolean`                                        | Set whether is loading                                                                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                 | `false`     | `2.0.0` |
 | name         | `string`                                         | set `name` attribute of internal `<input>`                                                                               | `''`        | `2.2.2` |
@@ -141,8 +140,6 @@ type RadioRawOption =
 | vertical       | `boolean`                         | Set whether to enable vertical display                                                                                            | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | The size of the radio box, it will override the `size` set by the radio box alone                                                 | `'default'` | -       |
 | disabled       | `boolean`                         | Set whether to disable the radio group                                                                                            | `false`     | -       |
-| ~~button~~     | `boolean`                         | Set whether to enable button mode, it is not supported in vertical display                                                        | `false`     | -       |
-| ~~border~~     | `boolean`                         | Set whether the radio button has a border                                                                                         | `false`     | -       |
 | options        | `RawOption[]`                     | Set the options of the radios, generally used for simple and quick generation of radios under group, invalid after using the slot | `[]`        | -       |
 | loading        | `boolean`                         | Set whether is loading                                                                                                            | `false`     | `2.0.0` |
 | loading-icon   | `VueComponent`                    | Set the loading icon, only effective in button mode                                                                               | `Spinner`   | `2.0.0` |

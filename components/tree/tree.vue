@@ -28,8 +28,7 @@ import {
   queryAll,
   removeArrayItem,
   transformTree,
-  walkTree,
-  warnOnce
+  walkTree
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { useCascadedChecked } from './hooks'
@@ -59,7 +58,6 @@ const props = useProps('tree', _props, {
     static: true
   },
   noBuildTree: false,
-  emptyTip: null,
   emptyText: null,
   disabled: false,
   readonly: false,
@@ -110,19 +108,6 @@ const props = useProps('tree', _props, {
   blockEffect: false,
   filterLeaf: false
 })
-
-const cancelWatch = watch(
-  () => props.emptyText,
-  value => {
-    if (!isNull(value)) {
-      warnOnce(
-        "[vexip-ui:Tree] 'empty-tip' prop has been deprecated, " +
-          "please use 'empty-text' prop to replace it"
-      )
-      cancelWatch()
-    }
-  }
-)
 
 const nh = useNameHelper('tree')
 const locale = useLocale('tree', toRef(props, 'locale'))
@@ -1400,7 +1385,7 @@ const transferring = ref(false)
     <template #empty>
       <div :class="nh.be('empty-tip')">
         <slot name="empty">
-          {{ props.emptyText ?? props.emptyTip ?? locale.empty }}
+          {{ props.emptyText ?? locale.empty }}
         </slot>
       </div>
     </template>

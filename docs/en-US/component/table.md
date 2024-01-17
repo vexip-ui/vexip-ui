@@ -681,7 +681,6 @@ interface TableFootPayload {
 | renderer         | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                               | `null`      | -        |
 | head-renderer    | `HeadRenderFn`                         | Custom head render function                                                                                       | `null`      | -        |
 | filter-renderer  | `FilterRenderFn`                       | Custom filter render function                                                                                     | `null`      | `2.1.18` |
-| ~~no-ellipsis~~  | `boolean`                              | Whether to disable the ellipsis component of the cell                                                             | `false`     | -        |
 | ellipsis         | `boolean`                              | Whether to use Ellipsis component for cell content                                                                | `false`     | `2.2.12` |
 | checkbox-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | -        |
 | disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                        | `null`      | -        |

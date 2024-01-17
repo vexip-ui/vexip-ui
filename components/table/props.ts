@@ -184,8 +184,6 @@ export const tableColumnProps = buildProps({
   headRenderer: Function as PropType<HeadRenderFn>,
   filterRenderer: Function as PropType<FilterRenderFn>,
   order: Number,
-  /** @deprecated please use `ellipsis` option to replace it */
-  noEllipsis: booleanProp,
   ellipsis: booleanProp,
   checkboxSize: sizeProp,
   disableRow: Function as PropType<(data: Data) => boolean>,

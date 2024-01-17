@@ -9,7 +9,7 @@ import {
 } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull, warnOnce } from '@vexip-ui/utils'
+import { isNull } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes, noopFormatter } from './symbol'
 
@@ -89,7 +89,6 @@ export default defineComponent({
         default: 0,
         static: true
       },
-      noEllipsis: null,
       ellipsis: null,
       checkboxSize: createSizeProp(),
       disableRow: {
@@ -146,19 +145,6 @@ export default defineComponent({
           value => {
             update(value)
             tableAction?.updateColumns()
-          }
-        )
-      } else if (key === 'noEllipsis') {
-        const cancel = watch(
-          () => props.noEllipsis,
-          value => {
-            if (!isNull(value)) {
-              warnOnce(
-                "[vexip-ui:TableColumn] 'no-ellipsis' prop has been deprecated, please use" +
-                  "'ellipsis' prop to replace it"
-              )
-              cancel()
-            }
           }
         )
       } else if (key === 'filter') {

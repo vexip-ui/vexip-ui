@@ -27,7 +27,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { createSlotRender, useModifier, useRtl } from '@vexip-ui/hooks'
-import { boundRange, isClient, isNull, range, warnOnce } from '@vexip-ui/utils'
+import { boundRange, isClient, isNull, range } from '@vexip-ui/utils'
 import { paginationProps } from './props'
 
 const enum PaginationMode {
@@ -56,13 +56,9 @@ export default defineComponent({
         validator: value => value > 0
       },
       sizeOptions: () => [10, 20, 50, 100],
-      maxCount: {
-        default: null,
-        validator: value => value === parseInt(String(value)) && value > 6
-      },
       itemCount: {
-        default: null,
-        validator: value => value === parseInt(String(value)) && value > 6
+        default: 7,
+        validator: value => Number.isInteger(value) && value > 6
       },
       active: {
         default: 1,
@@ -149,17 +145,7 @@ export default defineComponent({
     const pagerCount = computed(() => {
       return Math.ceil(props.total / (currentPageSize.value || 1)) || 1
     })
-    const itemCount = computed(() => {
-      if (!isNull(props.maxCount)) {
-        warnOnce(
-          "[vexip-ui:Pagination] 'max-count' prop" +
-            " have been deprecated, please use 'item-count' prop to replace it"
-        )
-      }
-
-      return props.itemCount ?? props.maxCount ?? 7
-    })
-    const useEllipsis = computed(() => pagerCount.value > itemCount.value)
+    const useEllipsis = computed(() => pagerCount.value > props.itemCount)
     const disabledPrev = computed(() => {
       const count = queryEnabledActive(1, 1)
 
@@ -240,7 +226,7 @@ export default defineComponent({
         changeActive(value, false)
       }
     )
-    watch(itemCount, computePagers)
+    watch(() => props.itemCount, computePagers)
     watch(pagerCount, computePagers)
     watch(
       () => props.pageSize,
@@ -346,12 +332,12 @@ export default defineComponent({
     function computePagers() {
       let pagers: number[]
 
-      if (pagerCount.value <= itemCount.value) {
+      if (pagerCount.value <= props.itemCount) {
         // 未超过最大值，显示所有页号
         pagers = range(pagerCount.value)
       } else {
-        const numberCount = itemCount.value - 2 // 显示为数字的页号
-        const criticalCount = Math.ceil(itemCount.value / 2) // 切换模式的关键计数
+        const numberCount = props.itemCount - 2 // 显示为数字的页号
+        const criticalCount = Math.ceil(props.itemCount / 2) // 切换模式的关键计数
 
         if (currentActive.value < criticalCount) {
           // 出现后侧一个省略号，前侧连续

@@ -12,9 +12,9 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { isDefined, warnOnce } from '@vexip-ui/utils'
+import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
-import { GROUP_STATE } from './symbol'
+import { GROUP_STATE, radioShapes } from './symbol'
 
 import type { ChangeEvent } from './symbol'
 
@@ -35,7 +35,6 @@ const props = useProps('radio', _props, {
   },
   labelClass: null,
   disabled: false,
-  border: null,
   tabIndex: 0,
   loading: false,
   loadingLock: false,
@@ -43,7 +42,10 @@ const props = useProps('radio', _props, {
     default: '',
     static: true
   },
-  shape: null
+  shape: {
+    default: 'default',
+    validator: value => radioShapes.includes(value)
+  }
 })
 
 const emit = defineEmits(['update:value'])
@@ -65,16 +67,7 @@ const isLoading = computed(() => groupState?.loading || props.loading)
 const loadingIcon = computed(() => groupState?.loadingIcon)
 const isLoadingLock = computed(() => groupState?.loadingLock || false)
 const loadingEffect = computed(() => groupState?.loadingEffect || '')
-const shape = computed(() => {
-  if (isDefined(props.border)) {
-    warnOnce(
-      "[vexip-ui:Radio] 'border' prop has been deprecated, please use" +
-        "'border' value of 'shape' prop to replace it"
-    )
-  }
-
-  return groupState?.shape || (props.shape ?? (props.border ? 'border' : 'default'))
-})
+const shape = computed(() => groupState?.shape || props.shape)
 const readonly = computed(() => isLoading.value && isLoadingLock.value)
 const className = computed(() => {
   return [
@@ -87,7 +80,6 @@ const className = computed(() => {
       [nh.bm('readonly')]: readonly.value,
       [nh.bm('loading')]: isLoading.value,
       [nh.bm(size.value)]: size.value !== 'default',
-      // [nh.bm('border')]: isBorder.value,
       [nh.bm(state.value)]: state.value !== 'default',
       [nh.bm(shape.value)]: shape.value !== 'default' && shape.value !== 'button-group'
     }

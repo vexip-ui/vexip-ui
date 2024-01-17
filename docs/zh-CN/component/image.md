@@ -173,7 +173,6 @@ type ImageSkeletonProps = Pick<
 | -------- | -------------------- | ------------------------------------------------------------- | ------- | -------- |
 | active   | `boolean`            | 设置图片查看器是否显示，可以使用 `v-model` 双向绑定           | `false` | -        |
 | index    | `number`             | 当前查看的图片的索引，可以使用 `v-model` 双向绑定             | `0`     | -        |
-| ~~srcs~~ | `string \| string[]` | 查看图片的源列表                                              | `''`    | -        |
 | src-list | `string \| string[]` | 查看图片的源列表                                              | `''`    | `2.2.21` |
 | transfer | `boolean \| string`  | 设置图片查看器的渲染位置，设置为 `true` 时默认渲染至 `<body>` | `false` | -        |
 

@@ -12,9 +12,9 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounceMinor, isClient, isDefined, isObject, warnOnce } from '@vexip-ui/utils'
+import { debounceMinor, isClient, isObject } from '@vexip-ui/utils'
 import { radioGroupProps } from './props'
-import { GROUP_STATE } from './symbol'
+import { GROUP_STATE, radioGroupShapes } from './symbol'
 
 import type { Ref } from 'vue'
 import type { ChangeEvent } from './symbol'
@@ -34,8 +34,6 @@ const props = useProps('radioGroup', _props, {
   },
   vertical: false,
   disabled: () => disabled.value,
-  button: null,
-  border: null,
   options: {
     default: () => [],
     static: true
@@ -44,7 +42,10 @@ const props = useProps('radioGroup', _props, {
   loadingIcon: createIconProp(),
   loadingLock: false,
   loadingEffect: null,
-  shape: null
+  shape: {
+    default: 'default',
+    validator: value => radioGroupShapes.includes(value)
+  }
 })
 
 const emit = defineEmits(['update:value'])
@@ -53,26 +54,6 @@ const nh = useNameHelper('radio-group')
 const currentValue = ref(props.value)
 const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
 
-const shape = computed(() => {
-  if (isDefined(props.border)) {
-    warnOnce(
-      "[vexip-ui:RadioGroup] 'border' prop has been deprecated, please use" +
-        "'border' value of 'shape' prop to replace it"
-    )
-  }
-
-  if (isDefined(props.button)) {
-    warnOnce(
-      "[vexip-ui:RadioGroup] 'button' prop has been deprecated, please use" +
-        "'button-group' value of 'shape' prop to replace it"
-    )
-  }
-
-  return (
-    props.shape ??
-    (isDefined(props.border) ? 'border' : isDefined(props.button) ? 'button-group' : 'default')
-  )
-})
 const readonly = computed(() => props.loading && props.loadingLock)
 const className = computed(() => {
   return [
@@ -86,7 +67,7 @@ const className = computed(() => {
       [nh.bm('loading')]: props.loading,
       [nh.bm(props.size)]: props.size !== 'default',
       [nh.bm(props.state)]: props.state !== 'default',
-      [nh.bm(shape.value)]: shape.value !== 'default'
+      [nh.bm(props.shape)]: props.shape !== 'default'
     }
   ]
 })
@@ -96,13 +77,11 @@ const groupState = reactive({
   size: toRef(props, 'size'),
   state: toRef(props, 'state'),
   disabled: toRef(props, 'disabled'),
-  button: toRef(props, 'button'),
-  border: toRef(props, 'border'),
   loading: toRef(props, 'loading'),
   loadingIcon: toRef(props, 'loadingIcon'),
   loadingLock: toRef(props, 'loadingLock'),
   loadingEffect: toRef(props, 'loadingEffect'),
-  shape,
+  shape: toRef(props, 'shape'),
   updateValue: debounceMinor(updateValue),
   registerInput,
   unregisterInput

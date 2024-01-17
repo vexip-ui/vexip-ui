@@ -137,7 +137,7 @@ describe('Tree', () => {
   it('empty', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyTip: 'empty'
+        emptyText: 'empty'
       }
     })
 
@@ -148,7 +148,7 @@ describe('Tree', () => {
   it('empty slot', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyTip: 'empty'
+        emptyText: 'empty'
       },
       slots: {
         empty: () => <span class={'empty'}></span>
