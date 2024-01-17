@@ -11,6 +11,8 @@ import type { ButtonCProps } from './button'
 import type { ButtonGroupCProps } from './button-group'
 import type { CalendarCProps } from './calendar'
 import type { CalendarPanelCProps } from './calendar-panel'
+import type { CaptchaCProps } from './captcha'
+import type { CaptchaSliderCProps } from './captcha-slider'
 import type { CardCProps } from './card'
 import type { CarouselCProps } from './carousel'
 import type { CascaderCProps } from './cascader'
@@ -92,6 +94,7 @@ import type { TreeCProps } from './tree'
 import type { UploadCProps } from './upload'
 import type { UploadFileCProps } from './upload-file'
 import type { UploadListCProps } from './upload-list'
+import type { VideoCProps } from './video'
 import type { ViewerCProps } from './viewer'
 import type { VirtualListCProps } from './virtual-list'
 import type { WheelCProps } from './wheel'
@@ -137,6 +140,8 @@ export interface PropsOptions {
   buttonGroup?: ButtonGroupCProps,
   calendar?: CalendarCProps,
   calendarPanel?: CalendarPanelCProps,
+  captcha?: CaptchaCProps,
+  captchaSlider?: CaptchaSliderCProps,
   card?: CardCProps,
   carousel?: CarouselCProps,
   cascader?: CascaderCProps,
@@ -218,6 +223,7 @@ export interface PropsOptions {
   upload?: UploadCProps,
   uploadFile?: UploadFileCProps,
   uploadList?: UploadListCProps,
+  video?: VideoCProps,
   viewer?: ViewerCProps,
   virtualList?: VirtualListCProps,
   wheel?: WheelCProps,

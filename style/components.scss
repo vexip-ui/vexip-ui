@@ -26,6 +26,9 @@
 @use './row.scss';
 @use './calendar.scss';
 @use './calendar-panel.scss';
+@use './spin.scss';
+@use './captcha.scss';
+@use './captcha-slider.scss';
 @use './card.scss';
 @use './carousel.scss';
 @use './carousel-item.scss';
@@ -90,7 +93,6 @@
 @use './skeleton-group.scss';
 @use './slider.scss';
 @use './space.scss';
-@use './spin.scss';
 @use './split.scss';
 @use './tab-nav.scss';
 @use './tab-nav-item.scss';
