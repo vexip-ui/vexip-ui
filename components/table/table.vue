@@ -273,6 +273,7 @@ provide(TABLE_ACTIONS, {
   emitRowCheck,
   emitAllRowCheck,
   emitRowExpand,
+  emitRowTreeExpand,
   emitRowFilter,
   emitRowSort,
   handleRowDragStart,
@@ -699,6 +700,10 @@ function emitAllRowCheck(checked: boolean, partial: boolean) {
 
 function emitRowExpand(payload: TableRowPayload & { expanded: boolean }) {
   emitEvent(props.onRowExpand, payload)
+}
+
+function emitRowTreeExpand(payload: TableRowPayload & { expanded: boolean }) {
+  emitEvent(props.onRowTreeExpand, payload)
 }
 
 function emitRowFilter() {

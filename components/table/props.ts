@@ -130,6 +130,7 @@ export const tableProps = buildProps({
   onRowCheck: eventProp<(payload: TableRowPayload) => void>(),
   onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
   onRowExpand: eventProp<(payload: TableRowPayload) => void>(),
+  onRowTreeExpand: eventProp<(payload: TableRowPayload) => void>(),
   onRowDragStart: eventProp<(row: Data, event: DragEvent) => void>(),
   onRowDragOver: eventProp<(row: Data, event: DragEvent) => void>(),
   onRowDrop: eventProp<(row: Data, type: DropType, event: DragEvent) => void>(),
