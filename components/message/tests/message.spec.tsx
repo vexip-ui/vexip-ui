@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import Message from '../message.vue'
 import { MessageManager } from '..'
 
@@ -45,13 +45,13 @@ describe('Message', () => {
 
     await wrapper.vm.add({
       content: TEXT,
-      icon: GithubB
+      icon: Github
     })
     const item = wrapper.find('.vxp-message__item')
 
     expect(item.exists()).toBe(true)
     expect(item.find('.vxp-message__icon').exists()).toBe(true)
-    expect(item.findComponent(GithubB).exists()).toBe(true)
+    expect(item.findComponent(Github).exists()).toBe(true)
     expect(item.find('.vxp-message__content').exists()).toBe(true)
     expect(item.find('.vxp-message__content').text()).toBe(TEXT)
   })
@@ -65,7 +65,7 @@ describe('Message', () => {
     expect(document.querySelector('.vxp-message__content')?.textContent).toEqual(TEXT)
   })
 
-  const types = ['info', 'success', 'warning', 'error'] as const
+  const types = ['primary', 'info', 'success', 'warning', 'error'] as const
 
   types.forEach(type => {
     it(`type ${type}`, async () => {
@@ -96,12 +96,12 @@ describe('Message', () => {
 
     Message.open({
       content: TEXT,
-      icon: GithubB
+      icon: Github
     })
     await messageOpened()
     expect(document.querySelector('.vxp-message__icon')).toBeTruthy()
 
-    const icon = mount(GithubB)
+    const icon = mount(Github)
     expect(document.querySelector('.vxp-message__icon')!.querySelector('svg')?.innerHTML).toEqual(
       icon.find('svg').element.innerHTML
     )

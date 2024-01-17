@@ -18,8 +18,6 @@ export interface GroupState {
   size: ComponentSize,
   state: ComponentState,
   disabled: boolean,
-  button: boolean,
-  border: boolean,
   loading: boolean,
   loadingIcon: Record<string, any>,
   loadingLock: boolean,
@@ -33,3 +31,6 @@ export interface GroupState {
 export type ChangeEvent = (value: string | number | boolean) => void
 
 export const GROUP_STATE: InjectionKey<GroupState> = Symbol('RADIO_GROUP_STATE')
+
+export const radioShapes = Object.freeze<RadioShape[]>(['default', 'border', 'button'])
+export const radioGroupShapes = Object.freeze<RadioGroupShape[]>([...radioShapes, 'button-group'])

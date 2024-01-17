@@ -173,7 +173,6 @@ type ImageSkeletonProps = Pick<
 | -------- | -------------------- | --------------------------------------------------------------------------------------------------------- | ------- | -------- |
 | active   | `boolean`            | Set whether the image viewer is displayed, you can use `v-model` two-way binding                          | `false` | -        |
 | index    | `number`             | The index of the currently viewed image, you can use `v-model` two-way binding                            | `0`     | -        |
-| ~~srcs~~ | `string \| string[]` | The source list of viewed images                                                                          | `''`    | -        |
 | src-list | `string \| string[]` | The source list of viewed images                                                                          | `''`    | `2.2.21` |
 | transfer | `boolean \| string`  | Set the rendering position of the image viewer, when set to `true`, it will render to `<body>` by default | `false` | -        |
 

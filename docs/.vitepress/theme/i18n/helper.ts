@@ -114,6 +114,7 @@ export interface I18nConfig {
 
     // Form
     AutoComplete: string,
+    Captcha: string,
     Cascader: string,
     Checkbox: string,
     ColorPicker: string,
@@ -134,6 +135,7 @@ export interface I18nConfig {
     Wheel: string,
 
     // Data
+    Video: string,
     Avatar: string,
     Badge: string,
     Bubble: string,

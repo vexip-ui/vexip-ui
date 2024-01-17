@@ -74,16 +74,16 @@ $timeline: map.merge(
       padding-bottom: 0;
     }
 
-    $types: success error warning;
-
     @each $type in $types {
-      &--#{$type} {
-        @include define-timeline-style(
-          (
-            pointer-color: 'color' $type 'base',
-            pointer-b-color: 'color' $type 'base'
-          )
-        );
+      @if $type != 'primary' {
+        &--#{$type} {
+          @include define-timeline-style(
+            (
+              pointer-color: 'color' $type 'base',
+              pointer-b-color: 'color' $type 'base'
+            )
+          );
+        }
       }
     }
   }

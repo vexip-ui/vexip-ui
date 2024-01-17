@@ -580,7 +580,7 @@ function handleKeyPress(event: KeyboardEvent) {
         @mousedown.prevent
         @touchstart.prevent
       >
-        <Icon v-bind="icons.caretUp" :scale="+(icons.caretUp.scale || 1) * 0.8"></Icon>
+        <Icon v-bind="icons.angleUp" :scale="+(icons.angleUp.scale || 1) * 0.8"></Icon>
       </div>
       <div
         :class="{
@@ -592,7 +592,7 @@ function handleKeyPress(event: KeyboardEvent) {
         @mousedown.prevent
         @touchstart.prevent
       >
-        <Icon v-bind="icons.caretDown" :scale="+(icons.caretDown.scale || 1) * 0.8"></Icon>
+        <Icon v-bind="icons.angleDown" :scale="+(icons.angleDown.scale || 1) * 0.8"></Icon>
       </div>
     </template>
   </div>

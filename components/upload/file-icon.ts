@@ -6,7 +6,7 @@ import type { IconsConfig } from '@vexip-ui/config'
 
 const iconConfig = new Map<keyof IconsConfig, string[]>()
 
-iconConfig.set('fileWord', ['doc', 'docx'])
+// iconConfig.set('fileWord', ['doc', 'docx'])
 iconConfig.set('fileVideo', [
   'mp4',
   'flv',
@@ -21,7 +21,7 @@ iconConfig.set('fileVideo', [
   'amv',
   'dmv'
 ])
-iconConfig.set('filePdf', ['pdf'])
+// iconConfig.set('filePdf', ['pdf'])
 iconConfig.set('fileImage', [
   'bmp',
   'jpg',
@@ -45,7 +45,7 @@ iconConfig.set('fileImage', [
   'wmf',
   'webp'
 ])
-iconConfig.set('fileExcel', ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'])
+// iconConfig.set('fileExcel', ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'])
 iconConfig.set(
   'fileCode',
   [
@@ -110,7 +110,14 @@ iconConfig.set('fileZip', [
   'jar',
   'iso'
 ])
-iconConfig.set('fileText', ['txt', 'md'])
+iconConfig.set(
+  'fileText',
+  [
+    ['doc', 'docx'],
+    ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'],
+    ['pdf', 'txt', 'md']
+  ].flat()
+)
 iconConfig.set('file', ['default'])
 
 export function useFileIcons(icons = useIcons()) {

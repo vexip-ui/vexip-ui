@@ -211,7 +211,7 @@ export default defineConfig(async ({ command }) => ({
 }))
 ```
 
-The options of Resolver can be viewed via editor's prompt or [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts#L7).
+The options of Resolver can be viewed via editor's prompt or [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/plugins/src/unplugin-vue-components.ts).
 
 If you also use plugin components link `Message`, you need to call `App.use` to install them before using them to ensure that they can get the configuration from context of the app:
 

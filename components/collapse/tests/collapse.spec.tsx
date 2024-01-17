@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import { Collapse } from '..'
 
 describe('Collapse', () => {
@@ -135,7 +135,7 @@ describe('Collapse', () => {
   })
 
   it('arrow type', () => {
-    (['right', 'left', 'none'] as const).forEach(type => {
+    ;(['right', 'left', 'none'] as const).forEach(type => {
       const wrapper = mount(() => (
         <Collapse arrow-type={type}>
           <CollapsePanel></CollapsePanel>
@@ -178,7 +178,7 @@ describe('Collapse', () => {
   })
 
   it('panel arrow type', () => {
-    (['right', 'left', 'none'] as const).forEach(type => {
+    ;(['right', 'left', 'none'] as const).forEach(type => {
       const wrapper = mount(() => <CollapsePanel arrow-type={type}></CollapsePanel>)
 
       expect(wrapper.find('.vxp-collapse__panel').classes()).toContain(
@@ -188,10 +188,10 @@ describe('Collapse', () => {
   })
 
   it('panel icon', () => {
-    const wrapper = mount(() => <CollapsePanel icon={GithubB}></CollapsePanel>)
+    const wrapper = mount(() => <CollapsePanel icon={Github}></CollapsePanel>)
 
     expect(wrapper.find('.vxp-collapse__icon').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('panel toggle event', async () => {

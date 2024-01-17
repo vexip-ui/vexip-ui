@@ -8,16 +8,16 @@ Almost all the **default value of props** for each component can be quickly modi
 
 And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
 
-There are currently **70+** components, many you see everywhere are here and are better, and a few may brighten your eyes.
+There are currently **78** components, many you see everywhere are here and are better, and a few may brighten your eyes.
 
 ## Features
 
-- 📦 70+ out-of-box high quality Vue 3 components
+- 📦 Out-of-box high quality Vue 3 components
 - 📐 Intuitive, minimalistic Api design
 - 🔧 Configurable default value of props, quickly complete global/local modifications
 - ⚡ Composition Api, good performance base
 - 🔨 With TypeScript, fully types
-- 💪 1000+ unit tests to provide good stability
+- 💪 1100+ unit tests to provide good stability
 - 🎨 Support CSS variable, built-in dark theme
 - 🚩 Support i18n
 - 🛫 Provide resolver, support unplugin

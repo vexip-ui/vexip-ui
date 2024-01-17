@@ -1,3 +1,39 @@
+# [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/v2.2.24...v2.3.0) (2024-01-17)
+
+
+### ✨ Features
+
+* **alert:** separate info type and add primary type ([b31d239](https://github.com/vexip-ui/vexip-ui/commit/b31d2391565c2f339c220ccbb9e9b63402c55062))
+* **captcha:** add Captcha component ([#295](https://github.com/vexip-ui/vexip-ui/issues/295)) ([9dfafb6](https://github.com/vexip-ui/vexip-ui/commit/9dfafb6d85a978a56fe5c2cd261e2892e35b5765))
+* **captcha:** add hollow-shape prop ([#458](https://github.com/vexip-ui/vexip-ui/issues/458)) ([21e675e](https://github.com/vexip-ui/vexip-ui/commit/21e675e926291219a06538a721c4f18ffdd2dfa3))
+* **message:** separate info type and add primary type ([5ac3055](https://github.com/vexip-ui/vexip-ui/commit/5ac3055ed2964877a992837869c7e75538e0c5b4))
+* **notice:** separate info type and add primary type ([0bce250](https://github.com/vexip-ui/vexip-ui/commit/0bce2503c5cac859d3cbfdb7a736b941dd0ace57))
+* **result:** separate info type and add primary type ([7845ce2](https://github.com/vexip-ui/vexip-ui/commit/7845ce204654d2b0e26e36f1d17cb1ef51df4e2b))
+* **timeline:** separate info type and rename default type to primary type ([84d0b85](https://github.com/vexip-ui/vexip-ui/commit/84d0b85b50e15f10aa2c65f85267ce6094694797))
+* **utils:** add random method ([c73e76f](https://github.com/vexip-ui/vexip-ui/commit/c73e76fe9690d3f6c092a08c06fb922ca2a0ad9d))
+* **v-resize:** add `v-resize` directive ([#457](https://github.com/vexip-ui/vexip-ui/issues/457)) ([7a0571e](https://github.com/vexip-ui/vexip-ui/commit/7a0571e6f60e56fcd5521602e4379631d3cf29e8))
+* **video:** add Video component ([#426](https://github.com/vexip-ui/vexip-ui/issues/426)) ([17f02cd](https://github.com/vexip-ui/vexip-ui/commit/17f02cdc93087983523e25ea28ef9cad48c6fa42)), closes [#433](https://github.com/vexip-ui/vexip-ui/issues/433) [#434](https://github.com/vexip-ui/vexip-ui/issues/434) [#435](https://github.com/vexip-ui/vexip-ui/issues/435) [#436](https://github.com/vexip-ui/vexip-ui/issues/436) [#437](https://github.com/vexip-ui/vexip-ui/issues/437) [#438](https://github.com/vexip-ui/vexip-ui/issues/438) [#439](https://github.com/vexip-ui/vexip-ui/issues/439)
+
+
+### 🐞 Bug Fixes
+
+* **calendar:** correct the range for header inputs ([d84d264](https://github.com/vexip-ui/vexip-ui/commit/d84d264311275fbcebd129ddcd8fde09c7185cb8))
+* **config:** support validate required props ([46a0f88](https://github.com/vexip-ui/vexip-ui/commit/46a0f88e0c95a460ef1130d8c6edf62957b383f7))
+* **input:** improve attributes hydration in Nuxt ([a640f13](https://github.com/vexip-ui/vexip-ui/commit/a640f139d7b6446a96a2d998732a36852b8f4cc5))
+* **v-loading:** auto create component on updated if not mounted ([3867db7](https://github.com/vexip-ui/vexip-ui/commit/3867db7d5c128f7bd5df9a27874e19a87bb80d12))
+
+
+### 👓 Types
+
+* **v-loading:** improve type definition for binding.value ([45728d9](https://github.com/vexip-ui/vexip-ui/commit/45728d9bb62ecb13809e7bb03e8fb6849f409df7))
+
+
+### 🔨 Code Refactoring
+
+* switch to use lucide to provide internal component icons ([#456](https://github.com/vexip-ui/vexip-ui/issues/456)) ([d1c03a1](https://github.com/vexip-ui/vexip-ui/commit/d1c03a1964df324929565638bdadcc5647e93bc1))
+
+
+
 ## [2.2.24](https://github.com/vexip-ui/vexip-ui/compare/v2.2.23...v2.2.24) (2024-01-08)
 
 

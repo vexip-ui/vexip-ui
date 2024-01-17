@@ -9,9 +9,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // can be a function that returns a component
-    clear: () => CircleXmark,
-
     // can be an array, and set parameters in second item
     loading: [
       Spinner,
@@ -46,3 +43,11 @@ As you can see, the replaced icons will be rendered as Iconify icons, while the 
 <IconifyDemo></IconifyDemo>
 
 The above example partially replaces the icons through ConfigProvider. In a real project, you can handle this by library initializing.
+
+## Prev Internal Icons
+
+<InternalPrevIcons></InternalPrevIcons>
+
+You can use prev internal icons via the following config:
+
+<<< @/.vitepress/theme/components/internal-prev-icons.vue#snippet{ts}

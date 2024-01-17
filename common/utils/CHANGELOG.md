@@ -1,3 +1,12 @@
+# [2.11.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.10.0...utils@2.11.0) (2024-01-17)
+
+
+### ✨ Features
+
+* **utils:** add random method ([c73e76f](https://github.com/vexip-ui/vexip-ui/commit/c73e76fe9690d3f6c092a08c06fb922ca2a0ad9d))
+
+
+
 # [2.10.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.9.0...utils@2.10.0) (2024-01-04)
 
 

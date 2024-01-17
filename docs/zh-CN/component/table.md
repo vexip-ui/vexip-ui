@@ -681,7 +681,6 @@ interface TableFootPayload {
 | renderer         | `ColumnRenderFn`                       | 自定义渲染函数，若 `type` 为 `'expand'` 时则为 `ExpandRenderFn`    | `null`      | -        |
 | head-renderer    | `HeadRenderFn`                         | 自定义头部渲染函数                                                 | `null`      | -        |
 | filter-renderer  | `FilterRenderFn`                       | 自定义过滤器渲染函数                                               | `null`      | `2.1.18` |
-| ~~no-ellipsis~~  | `boolean`                              | 是否禁用单元格的省略组件                                           | `false`     | -        |
 | ellipsis         | `boolean`                              | 是否为单元格内容使用省略组件                                       | `false`     | `2.2.12` |
 | checkbox-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | -        |
 | disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                               | `null`      | -        |

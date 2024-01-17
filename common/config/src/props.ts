@@ -16,9 +16,33 @@ import type { AnyFunction, EnsureValue, Expand, MaybeFunction, VoidFunction } fr
 export type PropsOptions = Record<string, Record<string, unknown>>
 
 interface PropsConfig<T = any> {
+  /**
+   * The default value of the prop
+   */
   default: T | (() => T) | null,
+  /**
+   * Whether the prop is a function type
+   *
+   * @default false
+   */
   isFunc?: boolean,
+  /**
+   * Whether the prop is not configurable
+   *
+   * @default false
+   */
   static?: boolean,
+  /**
+   * Whether the prop is required
+   *
+   * @default false
+   */
+  required?: boolean,
+  /**
+   * The validator for the prop, decide whether the value of the prop is valid
+   *
+   * @param value the value of the prop
+   */
   validator?: (value: T) => any
 }
 
@@ -92,11 +116,19 @@ export function useProps<T extends Record<string, any>>(
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
-    validator &&
+    ;(propOptions.required || validator) &&
       watch(
         () => sourceProps[key],
         value => {
-          if (isNull(value)) return
+          if (isNull(value)) {
+            if (propOptions.required) {
+              console.warn(`${toWarnPrefix(name)}: '${key as string}' prop is required but not set`)
+            }
+
+            return
+          } else if (!validator) {
+            return
+          }
 
           const result = validator(value)
 

@@ -32,6 +32,17 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    captcha: {
+      slideEnd: 'Please slide to the end',
+      slide: 'Please slide to a suitable position',
+      success: 'Test successful',
+      fail: 'Test failed, please retry',
+      doCaptcha: 'Please complete the captcha below',
+      pointInOrder: 'Please point in order',
+      trigger: 'Click to trigger captcha',
+      completed: 'Captcha completed'
+    },
+
     checkbox: {
       all: 'All'
     },
@@ -173,6 +184,22 @@ export function enUSLocale() {
       upload: 'Upload files',
       uploading: 'Uploading',
       dragOrClick: 'Drag files here, or click to upload'
+    },
+
+    video: {
+      play: 'Play',
+      pause: 'Pause',
+      playPrev: 'Prev',
+      playNext: 'Next',
+      refresh: 'Refresh',
+      flip: 'Flip',
+      requestPip: 'Enter PIP',
+      exitPip: 'Exit PIP',
+      fullWindow: 'Full window',
+      fullWindowExit: 'Full window exit',
+      fullScreen: 'Full screen',
+      fullScreenExit: 'Full screen exit',
+      chapterCount: 'Chapter {n}'
     },
 
     viewer: {

@@ -30,6 +30,17 @@ export interface LocaleConfig {
     week7: string
   },
 
+  captcha: {
+    slideEnd: string,
+    slide: string,
+    success: string,
+    fail: string,
+    doCaptcha: string,
+    pointInOrder: string,
+    trigger: string,
+    completed: string
+  },
+
   checkbox: {
     all: string
   },
@@ -171,6 +182,22 @@ export interface LocaleConfig {
     upload: string,
     uploading: string,
     dragOrClick: string
+  },
+
+  video: {
+    play: string,
+    pause: string,
+    playPrev: string,
+    playNext: string,
+    refresh: string,
+    flip: string,
+    requestPip: string,
+    exitPip: string,
+    fullWindow: string,
+    fullWindowExit: string,
+    fullScreen: string,
+    fullScreenExit: string,
+    chapterCount: string
   },
 
   viewer: {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { GithubB } from '@vexip-ui/icons'
+import { Github } from 'lucide-vue-next'
 import Contextmenu from '../contextmenu.vue'
 import { ContextmenuManager } from '..'
 
@@ -93,7 +93,7 @@ describe('Contextmenu', () => {
         key: '1',
         label: 'label',
         color: 'red',
-        icon: GithubB,
+        icon: Github,
         shortcut: 'shortcut'
       }
     ]

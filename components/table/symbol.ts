@@ -141,8 +141,6 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,
-  /** @deprecated please use `ellipsis` option to replace it */
-  noEllipsis?: boolean,
   ellipsis?: boolean | null,
   textAlign?: TableTextAlign,
   headSpan?: number,

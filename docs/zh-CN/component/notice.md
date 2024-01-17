@@ -104,9 +104,10 @@
 
 ### Notice 方法
 
-组件实例内提供了 5 种基础的打开提示的方法：
+组件实例内提供了几种基础的打开提示的方法：
 
 - `Notice.open(title[, content][, duration] | options)`
+- `Notice.primary(title[, content][, duration] | options)`
 - `Notice.info(title[, content][, duration] | options)`
 - `Notice.success(title[, content][, duration] | options)`
 - `Notice.warning(title[, content][, duration] | options)`
@@ -171,24 +172,30 @@ Notice.transferTo('#a-new-place')
 Notice.transferTo(document.body)
 ```
 
+### 预设类型
+
+```ts
+type NoticeType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+```
+
 ### Notice 选项
 
-| 名称        | 类型                                          | 说明                                               | 默认值  | 始于     |
-| ----------- | --------------------------------------------- | -------------------------------------------------- | ------- | -------- |
-| type        | `'info' \| 'success' \| 'warning' \| 'error'` | 提示的类型                                         | `''`    | -        |
-| title       | `string`                                      | 提示的标题                                         | `''`    | -        |
-| content     | `string`                                      | 提示的内容                                         | `''`    | -        |
-| key         | `number \| string`                            | 提示的唯一索引，不设置时将使用内置的索引           | `''`    | -        |
-| className   | `ClassType`                                   | 提示的自定义类名                                   | `null`  | -        |
-| style       | `StyleType`                                   | 提示的内联样式                                     | `null`  | -        |
-| duration    | `number`                                      | 提示的持续毫秒，设置为小于 500 时则不会自动关闭    | `4000`  | -        |
-| background  | `boolean \| string`                           | 是否显示背景颜色，传入有效颜色值时可以自定义颜色   | `false` | -        |
-| color       | `boolean \| string`                           | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色 | `false` | -        |
-| titleColor  | `string`                                      | 单独设置提示标题字体的颜色                         | `''`    | -        |
-| closable    | `boolean`                                     | 是否有关闭按钮进行关闭                             | `false` | -        |
-| icon        | `Record<string, any> \| (() => any)`          | 提示前缀的图标，传入函数时作为 render 函数渲染     | `null`  | -        |
-| iconColor   | `string`                                      | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置     | `''`    | -        |
-| renderer    | `() => any`                                   | 使用 Vue 的 render 函数渲染自定义内容              | `null`  | -        |
-| marker      | `boolean`                                     | 是否显示侧边 marker                                | `false` | -        |
-| parseHtml   | `boolean`                                     | 是否将 `title` 和 `content` 作为 html 解析         | `false` | `2.0.14` |
-| liveOnEnter | `boolean`                                     | 使提示被悬停时不自动关闭                           | `false` | `2.2.11` |
+| 名称        | 类型                                 | 说明                                               | 默认值  | 始于     |
+| ----------- | ------------------------------------ | -------------------------------------------------- | ------- | -------- |
+| type        | `NoticeType`                         | 提示的类型                                         | `null`  | -        |
+| title       | `string`                             | 提示的标题                                         | `''`    | -        |
+| content     | `string`                             | 提示的内容                                         | `''`    | -        |
+| key         | `number \| string`                   | 提示的唯一索引，不设置时将使用内置的索引           | `''`    | -        |
+| className   | `ClassType`                          | 提示的自定义类名                                   | `null`  | -        |
+| style       | `StyleType`                          | 提示的内联样式                                     | `null`  | -        |
+| duration    | `number`                             | 提示的持续毫秒，设置为小于 500 时则不会自动关闭    | `4000`  | -        |
+| background  | `boolean \| string`                  | 是否显示背景颜色，传入有效颜色值时可以自定义颜色   | `false` | -        |
+| color       | `boolean \| string`                  | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色 | `false` | -        |
+| titleColor  | `string`                             | 单独设置提示标题字体的颜色                         | `''`    | -        |
+| closable    | `boolean`                            | 是否有关闭按钮进行关闭                             | `false` | -        |
+| icon        | `Record<string, any> \| (() => any)` | 提示前缀的图标，传入函数时作为 render 函数渲染     | `null`  | -        |
+| iconColor   | `string`                             | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置     | `''`    | -        |
+| renderer    | `() => any`                          | 使用 Vue 的 render 函数渲染自定义内容              | `null`  | -        |
+| marker      | `boolean`                            | 是否显示侧边 marker                                | `false` | -        |
+| parseHtml   | `boolean`                            | 是否将 `title` 和 `content` 作为 html 解析         | `false` | `2.0.14` |
+| liveOnEnter | `boolean`                            | 使提示被悬停时不自动关闭                           | `false` | `2.2.11` |

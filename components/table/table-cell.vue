@@ -365,8 +365,8 @@ function handleCellResize(entry: ResizeObserverEntry) {
             ]"
             @click="handleExpandTree(row)"
           >
-            <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minus"></TableIcon>
-            <TableIcon v-else name="plus" :origin="icons.plus"></TableIcon>
+            <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minusSquare"></TableIcon>
+            <TableIcon v-else name="plus" :origin="icons.plusSquare"></TableIcon>
           </button>
         </template>
         <Ellipsis

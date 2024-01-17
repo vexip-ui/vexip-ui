@@ -116,3 +116,19 @@ export default defineNuxtConfig({
   }
 })
 ```
+
+### Internationalization
+
+After using the Nuxt module, since `app.use` is not used, locale configuration needs to be provided via the ConfigProvider component:
+
+```vue
+<template>
+  <VConfigProvider :locale="enUSLocale()">
+    <App></App>
+  </VConfigProvider>
+</template>
+
+<script setup lang="ts">
+import { enUSLocale } from 'vexip-ui'
+</script>
+```

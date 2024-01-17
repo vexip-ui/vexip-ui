@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/config",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "license": "MIT",
   "author": "qmhc",
   "type": "module",
@@ -30,7 +30,8 @@
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
     "@vexip-ui/icons": "workspace:*",
-    "@vexip-ui/utils": "workspace:*"
+    "@vexip-ui/utils": "workspace:*",
+    "lucide-vue-next": "^0.303.0"
   },
   "devDependencies": {
     "vue": "^3.3.10"

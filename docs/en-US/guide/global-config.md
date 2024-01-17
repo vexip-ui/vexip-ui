@@ -159,7 +159,7 @@ You can also change i18n of partial components with the `locale` prop of the Con
 
 If you want to configure a other language, you need do it yourself by following the full i18n options, see [Internationalization Documentation](/en-US/guide/i18n).
 
-> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts#L5).
+> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts).
 
 ## Internal Icons
 
@@ -178,9 +178,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // can be a function that returns a component
-    clear: () => CircleXmark,
-
     // can be an array, and set parameters in second item
     loading: [
       Spinner,
@@ -192,7 +189,7 @@ app.use(install, {
 
 You can also change internal icons of partial components with the `icons` prop of the ConfigProvider component, see [ConfigProvider Documentation](/en-US/component/config-provider).
 
-> The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts#L90).
+> The full internal icons options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts).
 
 All internal icons can be previewed refer to [Change Icons](/en-US/guide/change-icons#list-of-internal-icons) chapter.
 

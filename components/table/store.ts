@@ -1,6 +1,6 @@
 import { useCascadedChecked } from '@/components/tree/hooks'
 
-import { computed, markRaw, reactive, watchEffect } from 'vue'
+import { computed, reactive, watchEffect } from 'vue'
 
 import {
   boundRange,

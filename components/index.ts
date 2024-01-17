@@ -1,4 +1,4 @@
-import { install as installDirectives } from '@/directives'
+import { installDirectives } from '@/directives'
 
 import { Affix } from './affix'
 import { Alert } from './alert'
@@ -15,6 +15,8 @@ import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { Calendar } from './calendar'
 import { CalendarPanel } from './calendar-panel'
+import { Captcha } from './captcha'
+import { CaptchaSlider } from './captcha-slider'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
@@ -112,6 +114,7 @@ import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
 import { UploadList } from './upload-list'
+import { Video } from './video'
 import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
@@ -141,6 +144,8 @@ const components = [
   ButtonGroup,
   Calendar,
   CalendarPanel,
+  Captcha,
+  CaptchaSlider,
   Card,
   Carousel,
   CarouselItem,
@@ -232,6 +237,7 @@ const components = [
   Upload,
   UploadFile,
   UploadList,
+  Video,
   Viewer,
   VirtualList,
   Wheel,
@@ -277,6 +283,8 @@ export * from './button'
 export * from './button-group'
 export * from './calendar'
 export * from './calendar-panel'
+export * from './captcha'
+export * from './captcha-slider'
 export * from './card'
 export * from './carousel'
 export * from './carousel-item'
@@ -375,8 +383,9 @@ export * from './typography'
 export * from './upload'
 export * from './upload-file'
 export * from './upload-list'
+export * from './video'
 export * from './viewer'
 export * from './virtual-list'
 export * from './wheel'
 
-export * from '@/directives/loading'
+export * from '@/directives'

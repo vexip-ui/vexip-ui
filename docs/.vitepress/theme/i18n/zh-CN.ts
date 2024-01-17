@@ -116,6 +116,7 @@ export const zhCN = defineI18n({
 
     // Form
     AutoComplete: '自动完成',
+    Captcha: '验证',
     Cascader: '联级选择器',
     Checkbox: '多选框',
     ColorPicker: '颜色选择器',
@@ -136,6 +137,7 @@ export const zhCN = defineI18n({
     Wheel: '滚轮',
 
     // Data
+    Video: '视频',
     Avatar: '头像',
     Badge: '徽标',
     Bubble: '气泡框',

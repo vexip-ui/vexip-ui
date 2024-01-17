@@ -62,6 +62,12 @@ You can use the slots and add a little style to make a simple steps bar.
 
 ## API
 
+### Preset Types
+
+```ts
+type TimelineItemType = 'primary' | 'info' | 'success' | 'error' | 'warning' | 'disabled'
+```
+
 ### Timeline Props
 
 | Name       | Type               | Description                                                                           | Default | Since    |
@@ -82,14 +88,14 @@ You can use the slots and add a little style to make a simple steps bar.
 
 ### TimelineItem Props
 
-| Name       | Type                                                           | Description                                                                           | Default     | Since |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------- | ----- |
-| type       | `'default' \| 'success' \| 'error' \| 'warning' \| 'disabled'` | Time node type                                                                        | `'default'` | -     |
-| color      | `string`                                                       | You can specify a custom color for the node                                           | `''`        | -     |
-| label      | `number \| string`                                             | Set the `label` of the node, useful when listening for node click events              | `null`      | -     |
-| dashed     | `boolean`                                                      | Set whether the line of the time node is dashed                                       | `false`     | -     |
-| line-color | `string`                                                       | Set the line color of the time node                                                   | `null`      | -     |
-| spacing    | `number \| string`                                             | Set the spacing between time nodes, you can pass a number or a legal css length value | `null`      | -     |
+| Name       | Type               | Description                                                                           | Default     | Since |
+| ---------- | ------------------ | ------------------------------------------------------------------------------------- | ----------- | ----- |
+| type       | `TimelineItemType` | The type of tSimeline node                                                            | `'primary'` | -     |
+| color      | `string`           | You can specify a custom color for the node                                           | `''`        | -     |
+| label      | `number \| string` | Set the `label` of the node, useful when listening for node click events              | `null`      | -     |
+| dashed     | `boolean`          | Set whether the line of the time node is dashed                                       | `false`     | -     |
+| line-color | `string`           | Set the line color of the time node                                                   | `null`      | -     |
+| spacing    | `number \| string` | Set the spacing between time nodes, you can pass a number or a legal css length value | `null`      | -     |
 
 ### TimelineItem Events
 

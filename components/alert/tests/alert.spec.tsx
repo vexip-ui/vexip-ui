@@ -1,14 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { CircleCheck, CircleExclamation, CircleInfo, CircleXmark } from '@vexip-ui/icons'
+import { globalIcons } from '@vexip-ui/config'
 import { Alert } from '..'
 
 const typeIconMap = {
-  info: CircleInfo,
-  success: CircleCheck,
-  warning: CircleExclamation,
-  error: CircleXmark
+  primary: globalIcons.value.info.icon,
+  info: globalIcons.value.info.icon,
+  success: globalIcons.value.success.icon,
+  warning: globalIcons.value.warning.icon,
+  error: globalIcons.value.error.icon
 }
 
 const TEXT = 'Text'
@@ -20,11 +21,11 @@ describe('Alert', () => {
     expect(wrapper.find('.vxp-alert').classes()).toContain('vxp-alert-vars')
     expect(wrapper.find('.vxp-alert__content').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-alert__icon').exists()).toBe(true)
-    expect(wrapper.findComponent(CircleInfo).exists()).toBe(true)
+    expect(wrapper.findComponent(typeIconMap.info).exists()).toBe(true)
   })
 
   it('types', () => {
-    (['info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Alert icon type={type}></Alert>)
 
       expect(wrapper.find('.vxp-alert').classes()).toContain(`vxp-alert--${type}`)

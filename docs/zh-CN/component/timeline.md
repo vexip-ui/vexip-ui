@@ -62,6 +62,12 @@
 
 ## API
 
+### 预设类型
+
+```ts
+type TimelineItemType = 'primary' | 'info' | 'success' | 'error' | 'warning' | 'disabled'
+```
+
 ### Timeline 属性
 
 | 名称       | 类型               | 说明                                                          | 默认值  | 始于     |
@@ -82,14 +88,14 @@
 
 ### TimelineItem 属性
 
-| 名称       | 类型                                                           | 说明                                                          | 默认值      | 始于 |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------- | ----------- | ---- |
-| type       | `'default' \| 'success' \| 'error' \| 'warning' \| 'disabled'` | 时间节点的类型                                                | `'default'` | -    |
-| color      | `string`                                                       | 可以指定节点的自定义颜色                                      | `''`        | -    |
-| label      | `number \| string`                                             | 设置节点的 `label`，在监听节点点击事件时有用                  | `null`      | -    |
-| dashed     | `boolean`                                                      | 设置时间节点的线是否为虚线                                    | `false`     | -    |
-| line-color | `string`                                                       | 设置时间节点的线的颜色                                        | `null`      | -    |
-| spacing    | `number \| string`                                             | 设置时间节点间的间隔距离，可以传入一个数字或合法的 css 长度值 | `null`      | -    |
+| 名称       | 类型               | 说明                                                          | 默认值      | 始于 |
+| ---------- | ------------------ | ------------------------------------------------------------- | ----------- | ---- |
+| type       | `TimelineItemType` | 时间节点的类型                                                | `'primary'` | -    |
+| color      | `string`           | 可以指定节点的自定义颜色                                      | `''`        | -    |
+| label      | `number \| string` | 设置节点的 `label`，在监听节点点击事件时有用                  | `null`      | -    |
+| dashed     | `boolean`          | 设置时间节点的线是否为虚线                                    | `false`     | -    |
+| line-color | `string`           | 设置时间节点的线的颜色                                        | `null`      | -    |
+| spacing    | `number \| string` | 设置时间节点间的间隔距离，可以传入一个数字或合法的 css 长度值 | `null`      | -    |
 
 ### TimelineItem 事件
 

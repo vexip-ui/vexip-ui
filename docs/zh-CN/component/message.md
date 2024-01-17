@@ -92,9 +92,10 @@
 
 ### Message 方法
 
-组件实例内提供了 5 种基础的打开消息的方法：
+组件实例内提供了几种基础的打开消息的方法：
 
 - `Message.open(content[, duration] | options)`
+- `Message.primary(content[, duration] | options)`
 - `Message.info(content[, duration] | options)`
 - `Message.success(content[, duration] | options)`
 - `Message.warning(content[, duration] | options)`
@@ -159,21 +160,27 @@ Message.transferTo('#a-new-place')
 Message.transferTo(document.body)
 ```
 
+### 预设类型
+
+```ts
+type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+```
+
 ### Message 选项
 
-| 名称        | 类型                                          | 说明                                               | 默认值  | 始于     |
-| ----------- | --------------------------------------------- | -------------------------------------------------- | ------- | -------- |
-| type        | `'info' \| 'success' \| 'warning' \| 'error'` | 消息的类型                                         | `''`    | -        |
-| content     | `string`                                      | 消息的内容                                         | `''`    | -        |
-| key         | `number \| string`                            | 消息的唯一索引，不设置时将使用内置的索引           | `''`    | -        |
-| className   | `string \| Record<string, unknown>`           | 消息的自定义类名                                   | `null`  | -        |
-| style       | `Record<string, any>`                         | 消息的内联样式                                     | `null`  | -        |
-| duration    | `number`                                      | 消息的持续毫秒，设置为小于 `500` 时则不会自动关闭  | `3000`  | -        |
-| background  | `boolean \| string`                           | 是否显示背景颜色，传入有效颜色值时可以自定义颜色   | `false` | -        |
-| color       | `boolean \| string`                           | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色 | `false` | -        |
-| closable    | `boolean`                                     | 是否有关闭按钮进行关闭                             | `false` | -        |
-| icon        | `Record<string, any> \| (() => any)`          | 消息前缀的图标，传入函数时作为 render 函数渲染     | `null`  | -        |
-| iconColor   | `string`                                      | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置     | `''`    | -        |
-| renderer    | `() => any`                                   | 使用 Vue 的 render 函数渲染自定义内容              | `null`  | -        |
-| parseHtml   | `boolean`                                     | 是否将 `content` 作为 html 解析                    | `false` | `2.0.14` |
-| liveOnEnter | `boolean`                                     | 使消息被悬停时不自动关闭                           | `false` | `2.2.11` |
+| 名称        | 类型                                 | 说明                                               | 默认值  | 始于     |
+| ----------- | ------------------------------------ | -------------------------------------------------- | ------- | -------- |
+| type        | `MessageType`                        | 消息的类型                                         | `null`  | -        |
+| content     | `string`                             | 消息的内容                                         | `''`    | -        |
+| key         | `number \| string`                   | 消息的唯一索引，不设置时将使用内置的索引           | `''`    | -        |
+| className   | `string \| Record<string, unknown>`  | 消息的自定义类名                                   | `null`  | -        |
+| style       | `Record<string, any>`                | 消息的内联样式                                     | `null`  | -        |
+| duration    | `number`                             | 消息的持续毫秒，设置为小于 `500` 时则不会自动关闭  | `3000`  | -        |
+| background  | `boolean \| string`                  | 是否显示背景颜色，传入有效颜色值时可以自定义颜色   | `false` | -        |
+| color       | `boolean \| string`                  | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色 | `false` | -        |
+| closable    | `boolean`                            | 是否有关闭按钮进行关闭                             | `false` | -        |
+| icon        | `Record<string, any> \| (() => any)` | 消息前缀的图标，传入函数时作为 render 函数渲染     | `null`  | -        |
+| iconColor   | `string`                             | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置     | `''`    | -        |
+| renderer    | `() => any`                          | 使用 Vue 的 render 函数渲染自定义内容              | `null`  | -        |
+| parseHtml   | `boolean`                            | 是否将 `content` 作为 html 解析                    | `false` | `2.0.14` |
+| liveOnEnter | `boolean`                            | 使消息被悬停时不自动关闭                           | `false` | `2.2.11` |

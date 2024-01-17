@@ -1,5 +1,8 @@
 <template>
-  <Button type="primary" @click="Message.info('A normal message')">
+  <Button type="primary" @click="Message.primary('A normal message')">
+    Normal
+  </Button>
+  <Button type="info" @click="Message.info('A normal message')">
     Normal
   </Button>
   <Button type="success" @click="Message.success('A success message')">

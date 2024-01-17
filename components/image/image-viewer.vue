@@ -6,7 +6,7 @@ import { Viewer } from '@/components/viewer'
 import { computed, ref, watch } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
-import { boundRange, ensureArray, isDefined, warnOnce } from '@vexip-ui/utils'
+import { boundRange, ensureArray, isDefined } from '@vexip-ui/utils'
 import { imageViewerProps } from './props'
 
 defineOptions({ name: 'ImageViewer' })
@@ -15,12 +15,8 @@ const _props = defineProps(imageViewerProps)
 const props = useProps('imageViewer', _props, {
   active: false,
   index: 0,
-  srcs: {
-    default: null,
-    static: true
-  },
   srcList: {
-    default: null,
+    default: '',
     static: true
   },
   transfer: false
@@ -39,16 +35,7 @@ const viewer = ref<InstanceType<typeof Viewer>>()
 const className = computed(() => {
   return [nh.b(), nh.ns('image-vars'), props.inherit && nh.bm('inherit')]
 })
-const srcArray = computed(() => {
-  if (isDefined(props.srcs)) {
-    warnOnce(
-      "[vexip-ui:ImageViewer] 'srcs' prop have been deprecated, " +
-        "please use 'src-list' prop to replace it"
-    )
-  }
-
-  return ensureArray(isDefined(props.srcList) ? props.srcList : props.srcs || '')
-})
+const srcArray = computed(() => ensureArray(isDefined(props.srcList) ? props.srcList : ''))
 const prevDisabled = computed(() => currentIndex.value <= 0)
 const nextDisabled = computed(() => currentIndex.value >= srcArray.value.length - 1)
 

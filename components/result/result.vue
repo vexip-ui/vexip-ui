@@ -14,7 +14,7 @@ const props = useProps('result', _props, {
   title: '',
   size: createSizeProp(),
   type: {
-    default: 'info',
+    default: 'primary',
     validator: value => resultTypes.includes(value)
   },
   icon: createIconProp(),
@@ -33,6 +33,7 @@ const nh = useNameHelper('result')
 const icons = useIcons()
 
 const predefinedIcons = computed(() => ({
+  primary: icons.value.info,
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,

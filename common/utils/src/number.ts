@@ -295,6 +295,22 @@ export function formatByteSize(
 }
 
 /**
+ * 在给定的范围内随机一个数
+ *
+ * @param max 最大值
+ * @param min 最小值，默认为 0
+ */
+export function random(max: number, min = 0) {
+  if (min === max) return min
+
+  if (min > max) {
+    ;[min, max] = [max, min]
+  }
+
+  return Math.random() * (max - min) + min
+}
+
+/**
  * 将数字处理为的指定的有效位数
  *
  * @param number 需要处理的数字

@@ -9,9 +9,6 @@ app.use(install, {
   icons: {
     close: Xmark,
 
-    // 可以传入一个函数，并返回一个组件
-    clear: () => CircleXmark,
-
     // 可以传入一个数组，并在第二个参数配置自定义参数
     loading: [
       Spinner,
@@ -46,3 +43,11 @@ app.use(install, {
 <IconifyDemo></IconifyDemo>
 
 上面的示例通过 ConfigProvider 局部地替换了图标，在实际的项目中你可以在组件库初始化时进行处理。
+
+## 旧内置图标
+
+<InternalPrevIcons></InternalPrevIcons>
+
+你可以通过下面的配置使用旧的内置图标：
+
+<<< @/.vitepress/theme/components/internal-prev-icons.vue#snippet{ts}

@@ -16,6 +16,7 @@ const nh = useNameHelper('notice')
 const icons = useIcons()
 
 const predefinedIcons = computed(() => ({
+  primary: icons.value.info,
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,

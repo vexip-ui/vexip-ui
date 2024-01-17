@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Tree } from '..'
-import { User } from '@vexip-ui/icons'
+import { User } from 'lucide-vue-next'
 
 describe('Tree', () => {
   it('render', async () => {
@@ -137,7 +137,7 @@ describe('Tree', () => {
   it('empty', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyTip: 'empty'
+        emptyText: 'empty'
       }
     })
 
@@ -148,7 +148,7 @@ describe('Tree', () => {
   it('empty slot', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyTip: 'empty'
+        emptyText: 'empty'
       },
       slots: {
         empty: () => <span class={'empty'}></span>

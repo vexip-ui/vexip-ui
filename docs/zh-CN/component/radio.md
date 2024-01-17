@@ -112,12 +112,11 @@ type RadioRawOption =
 | 名称         | 类型                                             | 说明                                                                                 | 默认值      | 始于    |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------- | ------- |
 | value        | `string \| number \| boolean`                    | 单选框的值，与 `label` 全等时单选框被选中，与 RadioGroup 一同使用时无效              | `null`      | -       |
-| label        | `string \| number \| boolean`                    | 单选框的标签，**必须设置**，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中 | `null`      | -       |
+| **label**    | `string \| number \| boolean`                    | 单选框的标签，**必须设置**，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中 | `null`      | -       |
 | label-class  | `ClassType`                                      | 单选框的标签内容的自定义类名                                                         | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                                         | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                                         | `'default'` | -       |
 | disabled     | `boolean`                                        | 设置是否禁用单选框                                                                   | `false`     | -       |
-| ~~border~~   | `boolean`                                        | 设置单选框是否具有边框                                                               | `false`     | -       |
 | loading      | `boolean`                                        | 设置是否为加载中                                                                     | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                                             | `false`     | `2.0.0` |
 | name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                    | `''`        | `2.2.2` |
@@ -143,8 +142,6 @@ type RadioRawOption =
 | vertical       | `boolean`                         | 设置是否开启纵向显示                                               | `false`     | -       |
 | size           | `'small' \| 'default' \| 'large'` | 单选框的大小，会覆盖单选框单独设置的 `size`                        | `'default'` | -       |
 | disabled       | `boolean`                         | 设置是否禁用单选框组                                               | `false`     | -       |
-| ~~button~~     | `boolean`                         | 设置是否开启按钮模式，在纵向显示时暂不支持                         | `false`     | -       |
-| ~~border~~     | `boolean`                         | 设置单选框是否具有边框                                             | `false`     | -       |
 | options        | `RadioRawOption[]`                | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]`        | -       |
 | loading        | `boolean`                         | 设置是否为加载中                                                   | `false`     | `2.0.0` |
 | loading-icon   | `VueComponent`                    | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |

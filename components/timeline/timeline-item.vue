@@ -3,24 +3,16 @@ import { computed, inject, onBeforeUnmount, onMounted, onUpdated, reactive, ref,
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { timelineItemProps } from './props'
-import { TIMELINE_STATE } from './symbol'
+import { TIMELINE_STATE, timelineItemTypes } from './symbol'
 
-import type { ItemState, TimelineItemType } from './symbol'
-
-const timelineItemTypes = Object.freeze<TimelineItemType[]>([
-  'default',
-  'success',
-  'error',
-  'warning',
-  'disabled'
-])
+import type { ItemState } from './symbol'
 
 defineOptions({ name: 'TimelineItem' })
 
 const _props = defineProps(timelineItemProps)
 const props = useProps('timelineItem', _props, {
   type: {
-    default: 'default',
+    default: 'primary',
     validator: value => timelineItemTypes.includes(value)
   },
   color: '',
@@ -48,7 +40,7 @@ const content = ref<HTMLElement>()
 const className = computed(() => {
   return {
     [nh.be('item')]: true,
-    [nh.bem('item', props.type)]: props.type !== 'default'
+    [nh.bem('item', props.type)]: timelineItemTypes.includes(props.type)
   }
 })
 const itemStyle = computed(() => {

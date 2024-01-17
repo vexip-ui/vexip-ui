@@ -41,7 +41,7 @@ async function main() {
     } from './typography'
 
     import { buildInstall } from './create'
-    import { install as installDirectives } from '@/directives'
+    import { installDirectives } from '@/directives'
 
     export { version } from './version'
     export * from './create'
@@ -62,7 +62,7 @@ async function main() {
 
     ${allComponents.map(component => `export * from './${component}'`).join('\n')}
 
-    ${directives.map(directive => `export * from '@/directives/${directive.name}'`).join('\n')}
+    export * from '@/directives'
   `
 
   const types = `
