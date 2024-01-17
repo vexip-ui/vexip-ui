@@ -110,7 +110,7 @@ type RadioRawOption =
 | Name         | Type                                             | Description                                                                                                              | Default     | Since   |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------- | ------- |
 | value        | `string \| number \| boolean`                    | The value of the radio, the radio will be checked when it is equal to `label`, not valid when used with RadioGroup       | `null`      | -       |
-| label        | `string \| number \| boolean`                    | The label of the radio, **required**, the radio will be checked when it is equal to `value` or `value` of the RadioGroup | `null`      | -       |
+| **label**    | `string \| number \| boolean`                    | The label of the radio, **required**, the radio will be checked when it is equal to `value` or `value` of the RadioGroup | `null`      | -       |
 | label-class  | `ClassType`                                      | Custom class name of the label content of the radio button                                                               | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | The size of the radio                                                                                                    | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of radio                                                                                                       | `'default'` | -       |

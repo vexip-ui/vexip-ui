@@ -12,7 +12,6 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { isDefined } from '@vexip-ui/utils'
 import { radioProps } from './props'
 import { GROUP_STATE, radioShapes } from './symbol'
 
@@ -30,8 +29,8 @@ const props = useProps('radio', _props, {
   },
   label: {
     default: null,
-    validator: isDefined,
-    static: true
+    static: true,
+    required: true
   },
   labelClass: null,
   disabled: false,
