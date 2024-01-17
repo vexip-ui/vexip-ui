@@ -267,9 +267,11 @@ interface CellSpanResult {
 
 interface TableKeyConfig {
   id?: string,
+  children?: string,
   checked?: string,
   height?: string,
-  expanded?: string
+  expanded?: string,
+  treeExpanded?: string
 }
 
 type Accessor<D = Data, Val extends string | number = string | number> = (
@@ -652,15 +654,17 @@ interface TableFootPayload {
 
 ### Table Methods
 
-| Name          | Description                                                                         | Signature                         | Since    |
-| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- | -------- |
-| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                      | -        |
-| clearFilter   | Clear all active filters in the current table                                       | `() => void`                      | -        |
-| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => Promise<void>`             | -        |
-| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]` | -        |
-| clearSelected | Clear all selected row data                                                         | `() => void`                      | -        |
-| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                    | `2.2.6`  |
-| refreshData   | Refresh the table data, which will trigger the table to re-parse the data           | `(data?: any[]) => Promise<void>` | `2.2.14` |
+| Name          | Description                                                                         | Signature                                                       | Since    |
+| ------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------- |
+| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                                                    | -        |
+| clearFilter   | Clear all active filters in the current table                                       | `() => void`                                                    | -        |
+| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => Promise<void>`                                           | -        |
+| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]`                               | -        |
+| clearSelected | Clear all selected row data                                                         | `() => void`                                                    | -        |
+| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                                                  | `2.2.6`  |
+| refreshData   | Refresh the table data, which will trigger the table to re-parse the data           | `(data?: any[]) => Promise<void>`                               | `2.2.14` |
+| selectRow     | Manually check or uncheck row                                                       | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
+| treeExpandRow | Manually expand or collapse row                                                     | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
 
 ### TableColumn Props
 

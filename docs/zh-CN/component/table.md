@@ -267,9 +267,11 @@ interface CellSpanResult {
 
 interface TableKeyConfig {
   id?: string,
+  children?: string,
   checked?: string,
   height?: string,
-  expanded?: string
+  expanded?: string,
+  treeExpanded?: string
 }
 
 type Accessor<D = Data, Val extends string | number = string | number> = (
@@ -652,15 +654,17 @@ interface TableFootPayload {
 
 ### Table 方法
 
-| 名称          | 说明                                       | 签名                              | 始于     |
-| ------------- | ------------------------------------------ | --------------------------------- | -------- |
-| clearSort     | 清除表格当前激活的所有排序                 | `() => void`                      | -        |
-| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                      | -        |
-| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => Promise<void>`             | -        |
-| getSelected   | 获取所有被勾选的行数据                     | `() => Data[]`                    | -        |
-| clearSelected | 清除所有被勾选的行数据                     | `() => void`                      | -        |
-| getData       | 获取表格的数据，通常用于获取拖拽后的数据   | `() => Data[]`                    | `2.2.6`  |
-| refreshData   | 刷新表格数据，会触发表格重新解析数据       | `(data?: any[]) => Promise<void>` | `2.2.14` |
+| 名称          | 说明                                       | 签名                                                            | 始于     |
+| ------------- | ------------------------------------------ | --------------------------------------------------------------- | -------- |
+| clearSort     | 清除表格当前激活的所有排序                 | `() => void`                                                    | -        |
+| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                                                    | -        |
+| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => Promise<void>`                                           | -        |
+| getSelected   | 获取所有被勾选的行数据                     | `() => Data[]`                                                  | -        |
+| clearSelected | 清除所有被勾选的行数据                     | `() => void`                                                    | -        |
+| getData       | 获取表格的数据，通常用于获取拖拽后的数据   | `() => Data[]`                                                  | `2.2.6`  |
+| refreshData   | 刷新表格数据，会触发表格重新解析数据       | `(data?: any[]) => Promise<void>`                               | `2.2.14` |
+| selectRow     | 手动勾选或取消勾选行数据                   | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
+| treeExpandRow | 手动展开或收起行数据                       | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
 
 ### TableColumn 属性
 
