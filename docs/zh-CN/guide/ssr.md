@@ -116,3 +116,19 @@ export default defineNuxtConfig({
   }
 })
 ```
+
+### 国际化
+
+在使用 Nuxt 模块后，由于没有使用 `app.use`，所以需要通过 ConfigProvider 组件提供国际化配置：
+
+```vue
+<template>
+  <VConfigProvider :locale="enUSLocale()">
+    <App></App>
+  </VConfigProvider>
+</template>
+
+<script setup lang="ts">
+import { enUSLocale } from 'vexip-ui'
+</script>
+```

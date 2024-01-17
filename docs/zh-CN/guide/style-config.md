@@ -166,3 +166,35 @@ export default defineConfig({
 - `vxp-move-bottom` 从下往上移入
 - `vxp-move-left` 从左往右移入
 - `vxp-zoom` 渐隐渐显并伴随明显的放大缩小
+
+## 回退逻辑属性
+
+为了更友好地支持国际化，Vexip UI 提供了 RTL（从右向左排版）特性，组件样式也采用了 [逻辑属性](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_logical_properties_and_values) 编写。
+
+但是一些 [旧版现代浏览器](https://caniuse.com/css-logical-props) 不支持逻辑属性，为了能在这些浏览器上正常运行，需要借助 PostCSS 插件将逻辑属性还原成普通属性。
+
+安装插件：
+
+```sh
+pnpm i -D @vexip-ui/plugins
+```
+
+在 `vite.config.ts` 中拓展以下内容：
+
+```ts
+import { defineConfig } from 'vite'
+import { transformLogical } from '@vexip-ui/plugins'
+
+export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [
+        transformLogical({
+          // rtl: true,
+          replace: true
+        })
+      ]
+    }
+  }
+})
+```

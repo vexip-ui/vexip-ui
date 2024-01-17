@@ -167,3 +167,35 @@ The list of common transition effects is as follows:
 - `vxp-move-bottom` moves in from bottom to top
 - `vxp-move-left` moves in from left to right
 - `vxp-zoom` fades in and out and zooms in and out significantly
+
+## Rollback Logical
+
+In order to support i18n, Vexip UI provides RTL (right-to-left) features, and the style of components is wrote in [logical properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values).
+
+However, some [older modern browsers](https://caniuse.com/css-logical-props) do not support logical properties. To work on these browsers, you need to use the PostCSS plugin to restore logical properties to normal properties.
+
+Install plugin:
+
+```sh
+pnpm i -D @vexip-ui/plugins
+```
+
+Add following in `vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vite'
+import { transformLogical } from '@vexip-ui/plugins'
+
+export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [
+        transformLogical({
+          // rtl: true,
+          replace: true
+        })
+      ]
+    }
+  }
+})
+```
