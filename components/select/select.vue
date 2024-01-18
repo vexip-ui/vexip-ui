@@ -386,7 +386,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import { decide, getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -701,45 +701,58 @@ export default defineComponent({
           return
         }
 
-        if (modifier.up || modifier.down) {
-          event.preventDefault()
-          event.stopPropagation()
-
-          const options = visibleOptions.value
-          const length = options.length
-
-          if (!length) return
-
-          const step = modifier.down ? 1 : -1
-
-          let index = (Math.max(-1, currentIndex.value + step) + length) % length
-          let option = options[index]
-
-          for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
-            index += step
-            index = (index + length) % length
-            option = options[index]
-          }
-
-          updateHitting(index)
-          modifier.resetAll()
-        } else if (modifier.enter || (!props.filter && modifier.space)) {
-          event.preventDefault()
-          event.stopPropagation()
-
-          if (currentIndex.value >= 0) {
-            handleSelect(totalOptions.value[currentIndex.value])
-          } else if (showDynamic.value) {
-            handleSelect(dynamicOption)
-          } else {
-            setVisible(false)
-          }
-
-          modifier.resetAll()
-        } else if (modifier.tab || modifier.escape) {
+        if (modifier.tab || modifier.escape) {
           setVisible(false)
           modifier.resetAll()
+
+          return
         }
+
+        decide(
+          [
+            [
+              () => modifier.up || modifier.down,
+              () => {
+                const options = visibleOptions.value
+                const length = options.length
+
+                if (!length) return
+
+                const step = modifier.down ? 1 : -1
+
+                let index = (Math.max(-1, currentIndex.value + step) + length) % length
+                let option = options[index]
+
+                for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
+                  index += step
+                  index = (index + length) % length
+                  option = options[index]
+                }
+
+                updateHitting(index)
+              }
+            ],
+            [
+              () => modifier.enter || (!props.filter && modifier.space),
+              () => {
+                if (currentIndex.value >= 0) {
+                  handleSelect(totalOptions.value[currentIndex.value])
+                } else if (showDynamic.value) {
+                  handleSelect(dynamicOption)
+                } else {
+                  setVisible(false)
+                }
+              }
+            ]
+          ],
+          {
+            beforeMatchAny: () => {
+              event.preventDefault()
+              event.stopPropagation()
+            },
+            afterMatchAny: modifier.resetAll
+          }
+        )
       }
     })
 

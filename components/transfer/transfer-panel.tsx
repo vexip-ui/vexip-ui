@@ -19,7 +19,7 @@ import {
 
 import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier, useRtl } from '@vexip-ui/hooks'
-import { boundRange } from '@vexip-ui/utils'
+import { boundRange, decide } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -123,66 +123,84 @@ export default defineComponent({
     const { target: wrapper, modifier } = useModifier({
       passive: false,
       onKeyDown: (event, modifier) => {
-        if (modifier.up || modifier.down) {
-          if (!keyUsed && currentHitting.value < 0) {
-            keyUsed = true
+        decide(
+          [
+            [
+              () => modifier.up || modifier.down,
+              () => {
+                if (!keyUsed && currentHitting.value < 0) {
+                  keyUsed = true
 
-            if (lastSelected) {
-              currentHitting.value = props.options.findIndex(
-                option => option.value === lastSelected
-              )
-            } else if (list.value) {
-              currentHitting.value = Math.round(list.value.scrollOffset / props.optionHeight)
-            }
+                  if (lastSelected) {
+                    currentHitting.value = props.options.findIndex(
+                      option => option.value === lastSelected
+                    )
+                  } else if (list.value) {
+                    currentHitting.value = Math.round(list.value.scrollOffset / props.optionHeight)
+                  }
 
-            currentHitting.value = currentHitting.value === -1 ? 0 : currentHitting.value
-          } else {
-            currentHitting.value = boundRange(
-              findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
-              0,
-              currentOptions.value.length - 1
-            )
+                  currentHitting.value = currentHitting.value === -1 ? 0 : currentHitting.value
+                } else {
+                  currentHitting.value = boundRange(
+                    findEnabledIndex(
+                      currentHitting.value + (modifier.up ? -1 : 1),
+                      modifier.up ? -1 : 1
+                    ),
+                    0,
+                    currentOptions.value.length - 1
+                  )
+                }
+
+                if (!props.paged) {
+                  ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
+                }
+              }
+            ],
+            [
+              () => props.paged && (modifier.left || modifier.right) && event.ctrlKey,
+              () => {
+                handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
+                currentHitting.value = 0
+              }
+            ],
+            [
+              () =>
+                (props.type === 'source' && modifier.right) ||
+                (props.type === 'target' && modifier.left),
+              () => {
+                keyUsed = false
+                currentHitting.value = -1
+                lastSelected = null
+                emit('switch')
+              }
+            ],
+            [
+              () => modifier.space,
+              () => {
+                const option = currentOptions.value[currentHitting.value]
+
+                if (option) {
+                  currentSelected.value[currentSelected.value.has(option.value) ? 'delete' : 'add'](
+                    option.value
+                  )
+                  emitSelectedChange()
+                }
+              }
+            ],
+            [() => modifier.enter, () => emit('enter')],
+            [
+              () => typeof props.filter === 'function' && !!input.value && modifier['ctrl+f'],
+              () => {
+                event.stopPropagation()
+                input.value!.focus()
+              }
+            ]
+          ],
+          {
+            beforeMatchAny: () => event.preventDefault(),
+            afterMatchAny: modifier.resetAll
           }
-
-          if (!props.paged) {
-            ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
-          }
-
-          event.preventDefault()
-        } else if (props.paged && (modifier.left || modifier.right) && event.ctrlKey) {
-          handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
-          currentHitting.value = 0
-          event.preventDefault()
-        } else if (
-          (props.type === 'source' && modifier.right) ||
-          (props.type === 'target' && modifier.left)
-        ) {
-          keyUsed = false
-          currentHitting.value = -1
-          lastSelected = null
-          emit('switch')
-          event.preventDefault()
-        } else if (modifier.space) {
-          const option = currentOptions.value[currentHitting.value]
-
-          if (option) {
-            currentSelected.value[currentSelected.value.has(option.value) ? 'delete' : 'add'](
-              option.value
-            )
-            emitSelectedChange()
-          }
-
-          event.preventDefault()
-        } else if (modifier.enter) {
-          event.preventDefault()
-          emit('enter')
-          event.preventDefault()
-        } else if (typeof props.filter === 'function' && input.value && modifier['ctrl+f']) {
-          event.preventDefault()
-          event.stopPropagation()
-          input.value.focus()
-          event.preventDefault()
-        }
+        )
       }
     })
 
@@ -313,7 +331,7 @@ export default defineComponent({
       const method = currentSelected.value.has(options[startIndex]?.value) ? 'add' : 'delete'
 
       if (startIndex > endIndex) {
-        [startIndex, endIndex] = [endIndex, startIndex]
+        ;[startIndex, endIndex] = [endIndex, startIndex]
       }
 
       for (let i = startIndex; i <= endIndex; ++i) {

@@ -27,7 +27,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { createSlotRender, useModifier, useRtl } from '@vexip-ui/hooks'
-import { boundRange, isClient, isNull, range } from '@vexip-ui/utils'
+import { boundRange, decide, isClient, isNull, range } from '@vexip-ui/utils'
 import { paginationProps } from './props'
 
 const enum PaginationMode {
@@ -100,34 +100,45 @@ export default defineComponent({
       onKeyDown: (event, modifier) => {
         if (props.disabled) return
 
-        if (modifier.up || modifier.down || modifier.left || modifier.right) {
-          event.preventDefault()
+        decide(
+          [
+            [
+              () => modifier.up || modifier.down || modifier.left || modifier.right,
+              () => {
+                const sign = modifier.up || modifier.left ? -1 : 1
 
-          const sign = modifier.up || modifier.left ? -1 : 1
+                if (isClient && document.activeElement) {
+                  const index = itemElList.findIndex(el => el === document.activeElement)
 
-          if (isClient && document.activeElement) {
-            const index = itemElList.findIndex(el => el === document.activeElement)
+                  if (!~index) return
 
-            if (!~index) return
+                  const target = itemElList[boundRange(index + sign, 0, itemElList.length - 1)]
 
-            const target = itemElList[boundRange(index + sign, 0, itemElList.length - 1)]
+                  target.focus()
+                }
+              }
+            ],
+            [
+              () => modifier.enter || modifier.space,
+              () => {
+                if (document && document.activeElement) {
+                  const index = itemElList.findIndex(el => el === document.activeElement)
 
-            target.focus()
+                  if (!~index) {
+                    const activeClass = nh.bem('item', 'active')
+                    const activeEl = itemElList.find(el => el.classList.contains(activeClass))
+
+                    activeEl?.focus()
+                  }
+                }
+              }
+            ]
+          ],
+          {
+            beforeMatchAny: () => event.preventDefault(),
+            afterMatchAny: modifier.resetAll
           }
-        } else if (modifier.enter || modifier.space) {
-          event.preventDefault()
-
-          if (document && document.activeElement) {
-            const index = itemElList.findIndex(el => el === document.activeElement)
-
-            if (!~index) {
-              const activeClass = nh.bem('item', 'active')
-              const activeEl = itemElList.find(el => el.classList.contains(activeClass))
-
-              activeEl?.focus()
-            }
-          }
-        }
+        )
       }
     })
 
