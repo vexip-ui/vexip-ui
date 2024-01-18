@@ -325,6 +325,10 @@ export async function decide(
   conditions: [boolean | (() => boolean), () => void | Promise<void>][],
   options: {
     /**
+     * 当匹配任意一个条件时，会在该条件对应的回调函数执行前执行
+     */
+    beforeMatchAny?: () => void | Promise<void>,
+    /**
      * 当匹配任意一个条件时，会在该条件对应的回调函数执行完后执行
      */
     afterMatchAny?: () => void | Promise<void>
@@ -333,6 +337,10 @@ export async function decide(
   if (conditions.length) {
     for (const [condition, callback] of conditions) {
       if (typeof condition === 'function' ? condition() : condition) {
+        if (typeof options.beforeMatchAny === 'function') {
+          await options.beforeMatchAny()
+        }
+
         await callback()
 
         if (typeof options.afterMatchAny === 'function') {
