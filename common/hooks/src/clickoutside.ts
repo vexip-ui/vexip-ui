@@ -1,15 +1,6 @@
 import { getCurrentScope, onScopeDispose, ref, unref, watch } from 'vue'
 
-import {
-  CLICK_TYPE,
-  createEvent,
-  disconnect,
-  dispatchEvent,
-  getObservers,
-  isClient,
-  noop,
-  observe
-} from '@vexip-ui/utils'
+import { CLICK_TYPE, dispatchEvent, isClient, noop } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
 import type { Ref } from 'vue'
@@ -17,7 +8,7 @@ import type { TransferNode } from '@vexip-ui/utils'
 
 export const CLICK_OUTSIDE = 'clickoutside'
 
-createEvent(CLICK_OUTSIDE)
+const elements = new Set<TransferNode>()
 
 if (isClient) {
   document.addEventListener(
@@ -26,7 +17,7 @@ if (isClient) {
       const target = event.target as Node | null
       const path = event.composedPath && event.composedPath()
 
-      getObservers(CLICK_OUTSIDE).forEach((el: TransferNode) => {
+      elements.forEach(el => {
         if (
           el !== target &&
           (path ? !path.includes(el) : !el.contains(target)) &&
@@ -62,10 +53,10 @@ export function useClickOutside(
         return
       }
 
-      observe(el as TransferNode, CLICK_OUTSIDE)
+      elements.add(el)
 
       remove = () => {
-        disconnect(el as TransferNode, CLICK_OUTSIDE)
+        elements.delete(el)
         remove = noop
       }
     },
