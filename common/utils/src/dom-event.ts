@@ -1,18 +1,27 @@
 import { isClient, isDefined } from './common'
 
-export interface TransferNode extends Node {
-  __transferElement?: Node | null
+/**
+ * 专用的类型，用于适配 Vexip UI 中 `transfer` 属性的处理
+ */
+export interface TransferNode extends Element {
+  __transferElement?: Element | null
 }
 
 export interface EventPayload extends EventInit {
+  /**
+   * 事件的类型
+   */
   type: string,
   [prop: string]: any
 }
 
 /**
- * Whether current interaction is using touch.
+ * 当前是否可以使用触摸交互
  */
 export const USE_TOUCH = isClient && ('ontouchstart' in window || getMaxTouchPoints() > 0)
+/**
+ * 当前点击的类型，可以使用触摸交互时为 `pointerdown`，否则为 `click`
+ */
 export const CLICK_TYPE = USE_TOUCH ? 'pointerdown' : 'click'
 
 function getMaxTouchPoints() {
@@ -21,68 +30,16 @@ function getMaxTouchPoints() {
     : 0
 }
 
-const events: Map<string, Set<TransferNode>> = new Map()
-
 /**
- * @internal
+ * 为指定的元素派发事件
+ *
+ * @param el 指定的元素
+ * @param payload 事件的属性
+ * @param Event 事件类
+ *
+ * @returns 事件是否派发成功
  */
-export function createEvent(type: string) {
-  if (!events.has(type)) {
-    events.set(type, new Set())
-  }
-}
-
-/**
- * @internal
- */
-export function getObservers(type: string) {
-  return events.get(type) ?? events.set(type, new Set()).get(type)!
-}
-
-/**
- * @internal
- */
-export function observe(el: TransferNode, types: string | string[]) {
-  if (typeof types === 'string') {
-    types = [types as string]
-  }
-
-  if (Array.isArray(types)) {
-    for (let i = 0, len = types.length; i < len; ++i) {
-      const type = types[i]
-
-      if (!events.has(type)) {
-        events.set(type, new Set())
-      }
-
-      events.get(type)!.add(el)
-    }
-  }
-}
-
-/**
- * @internal
- */
-export function disconnect(el: TransferNode, types: string | string[]) {
-  if (typeof types === 'string') {
-    types = [types as string]
-  }
-
-  if (Array.isArray(types)) {
-    for (let i = 0, len = types.length; i < len; ++i) {
-      const type = types[i]
-
-      if (events.has(type)) {
-        events.get(type)?.delete(el)
-      }
-    }
-  }
-}
-
-/**
- * @internal
- */
-export function dispatchEvent(el: TransferNode, payload: EventPayload, Event = window.Event) {
+export function dispatchEvent(el: Element, payload: EventPayload, Event = window.Event) {
   const { type, bubbles = false, cancelable = false, ...data } = payload
 
   if (!isDefined(type) || type === '') return false
