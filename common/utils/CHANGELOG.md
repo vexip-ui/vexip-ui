@@ -1,3 +1,12 @@
+# [2.12.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.11.0...utils@2.12.0) (2024-01-19)
+
+
+### ✨ Features
+
+* **utils:** decide method add beforeMatchAny option ([facbc6e](https://github.com/vexip-ui/vexip-ui/commit/facbc6e91f5aded6c5925ec178fba93838db9b0c))
+
+
+
 # [2.11.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.10.0...utils@2.11.0) (2024-01-17)
 
 
