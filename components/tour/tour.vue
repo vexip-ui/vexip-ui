@@ -16,7 +16,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
-import { callIfFunc, isClient, isFunction } from '@vexip-ui/utils'
+import { callIfFunc, decide, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE, getIdIndex } from './symbol'
 
@@ -86,24 +86,20 @@ useModifier({
   onKeyDown: (event, modifier) => {
     if (!currentActive.value) return
 
-    if (modifier.left || modifier.up) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      prev()
-    } else if (modifier.right || modifier.down) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      next()
-    } else if (modifier.escape) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      handleClose()
-    }
-
-    modifier.resetAll()
+    decide(
+      [
+        [() => modifier.left || modifier.up, prev],
+        [() => modifier.right || modifier.down, next],
+        [() => modifier.escape, handleClose]
+      ],
+      {
+        beforeMatchAny: () => {
+          event.preventDefault()
+          event.stopPropagation()
+        },
+        afterMatchAny: modifier.resetAll
+      }
+    )
   }
 })
 

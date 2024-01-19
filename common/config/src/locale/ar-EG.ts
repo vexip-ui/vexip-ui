@@ -32,6 +32,17 @@ export function arEGLocale() {
       week7: 'Su'
     },
 
+    captcha: {
+      slideEnd: 'يرجى الانزلاق إلى النهاية',
+      slide: 'يرجى الانزلاق إلى وضع مناسب',
+      success: 'تم الاختبار بنجاح',
+      fail: 'فشل الاختبار، يرجى إعادة المحاولة',
+      doCaptcha: 'يرجى إكمال كلمة التحقق أدناه',
+      pointInOrder: 'يرجى الإشارة بالترتيب',
+      trigger: 'انقر لتشغيل كلمة التحقق',
+      completed: 'تم الانتهاء من التحقق'
+    },
+
     checkbox: {
       all: 'الكل'
     },
@@ -173,6 +184,22 @@ export function arEGLocale() {
       upload: 'تحميل ملفات',
       uploading: 'جار التحميل',
       dragOrClick: 'اسحب وضع الملقات هنا, او اضغط تحميل ملفات'
+    },
+
+    video: {
+      play: 'لعب',
+      pause: 'تورع',
+      playPrev: 'السابق',
+      playNext: 'مقبل',
+      refresh: 'تحديث',
+      flip: 'الوجه',
+      requestPip: 'أدخل صورة داخل صورة',
+      exitPip: 'الخروج من اللوحة',
+      fullWindow: 'صفحة ويب ملء الشاشة',
+      fullWindowExit: 'يتم إنهاء صفحة الويب في وضع ملء الشاشة',
+      fullScreen: 'شاشة كاملة',
+      fullScreenExit: 'خروج من شاشة كاملة',
+      chapterCount: '{n} الفصل'
     },
 
     viewer: {

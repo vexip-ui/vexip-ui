@@ -273,6 +273,7 @@ provide(TABLE_ACTIONS, {
   emitRowCheck,
   emitAllRowCheck,
   emitRowExpand,
+  emitRowTreeExpand,
   emitRowFilter,
   emitRowSort,
   handleRowDragStart,
@@ -400,7 +401,10 @@ const {
   getParentRow,
   getCurrentData,
   flatTreeRows,
-  refreshRowDepth
+  refreshRowDepth,
+  queryRow,
+  handleCheck,
+  setTreeExpanded
 } = mutations
 
 watch(allColumns, updateColumns)
@@ -509,8 +513,11 @@ defineExpose({
   clearFilter,
   clearSelected: clearCheckAll,
   refresh,
+  refreshData: forceRefreshData,
   getSelected,
-  getData: getCurrentData
+  getData: getCurrentData,
+  selectRow: setRowChecked,
+  treeExpandRow: setRowTreeExpanded
 })
 
 function forceRefreshData(data = props.data) {
@@ -693,6 +700,10 @@ function emitAllRowCheck(checked: boolean, partial: boolean) {
 
 function emitRowExpand(payload: TableRowPayload & { expanded: boolean }) {
   emitEvent(props.onRowExpand, payload)
+}
+
+function emitRowTreeExpand(payload: TableRowPayload & { expanded: boolean }) {
+  emitEvent(props.onRowTreeExpand, payload)
 }
 
 function emitRowFilter() {
@@ -1011,6 +1022,23 @@ function getSelected() {
   }
 
   return selectedData
+}
+
+function setRowChecked(keyOrData: Key | Record<any, any>, checked?: boolean) {
+  const row = queryRow(keyOrData)
+
+  if (!row || getters.disableCheckRows.has(row.key)) return
+
+  handleCheck(row.key, checked ?? !row.checked)
+}
+
+function setRowTreeExpanded(keyOrData: Key | Record<any, any>, expanded?: boolean) {
+  const row = queryRow(keyOrData)
+
+  if (!row) return
+
+  runInLocked()
+  setTreeExpanded(row.key, expanded ?? !row.treeExpanded)
 }
 
 function renderTableSlot({ name }: { name: string }) {

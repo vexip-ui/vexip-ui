@@ -1,3 +1,7 @@
+# [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.3.1...hooks@2.4.0) (2024-01-19)
+
+
+
 ## [2.3.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.3.0...hooks@2.3.1) (2024-01-04)
 
 

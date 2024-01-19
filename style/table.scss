@@ -305,13 +305,13 @@ $table: map.merge(
   $fixed-active: #{&}__fixed--active;
   $side-pad: #{&}__side-pad;
 
-  &__body &__group,
-  &__foot &__group {
+  &__body > &__group,
+  &__foot > &__group {
     position: absolute;
     transition: get-css-var('transition-transform');
   }
 
-  &__body &__group--last {
+  &__body > &__group--last {
     margin-bottom: -1px;
 
     #{$cell},
@@ -320,7 +320,7 @@ $table: map.merge(
     }
   }
 
-  &__foot &__group {
+  &__foot > &__group {
     position: relative;
 
     &:last-child {
@@ -341,7 +341,7 @@ $table: map.merge(
     }
   }
 
-  &--below-foot &__body &__group:last-child {
+  &--below-foot &__body > &__group:last-child {
     margin-bottom: 0;
   }
 

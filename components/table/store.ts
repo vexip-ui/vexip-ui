@@ -385,7 +385,8 @@ export function useStore(options: StoreOptions) {
     createMinRowState,
     flatTreeRows,
     refreshRowDepth,
-    triggerHeightChange
+    triggerHeightChange,
+    queryRow
   }
 
   watchEffect(() => {
@@ -1841,6 +1842,20 @@ export function useStore(options: StoreOptions) {
     return mapTree(treeRowData, row => ({ ...row.data }), {
       childField: keyConfig.children as 'children'
     })
+  }
+
+  function queryRow(keyOrData: Key | Record<any, any>) {
+    const { dataKey, rowMap, idMaps } = state
+
+    let key: Key
+
+    if (typeof keyOrData === 'object') {
+      key = idMaps.get(keyOrData) ?? keyOrData[dataKey]
+    } else {
+      key = keyOrData
+    }
+
+    return isNull(key) ? undefined : rowMap.get(key)
   }
 
   type Store = Readonly<{

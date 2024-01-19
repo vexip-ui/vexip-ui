@@ -267,9 +267,11 @@ interface CellSpanResult {
 
 interface TableKeyConfig {
   id?: string,
+  children?: string,
   checked?: string,
   height?: string,
-  expanded?: string
+  expanded?: string,
+  treeExpanded?: string
 }
 
 type Accessor<D = Data, Val extends string | number = string | number> = (
@@ -605,42 +607,43 @@ interface TableFootPayload {
 
 ### Table Events
 
-| Name             | Description                                                                                                                          | Parameters                                                                              | Since    |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | -------- |
-| scroll           | Emitted when the table is scrolled, returns an object containing the scroll offset and scroll percentage                             | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
-| row-enter        | Emitted when the mouse moves into a row, returns row data, row index and row position index                                          | `((payload: TableRowPayload)`                                                           | -        |
-| row-leave        | Emitted when the mouse moves out of the row, returns row data, row index and row position index                                      | `(payload: TableRowPayload)`                                                            | -        |
-| row-click        | Emitted when a row is clicked, returns row data, row index and row position index                                                    | `(payload: TableRowPayload)`                                                            | -        |
-| row-dblclick     | Emitted when a row is double-clicked, returns row data, row index and row position index                                             | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
-| row-contextmenu  | Emitted when a row is right-clicked, returns row data, row index and row position index                                              | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
-| row-check        | Emitted when a row checkbox is checked, returns row data, check state, row index and row position index                              | `(payload: TableRowPayload)`                                                            | -        |
-| row-check-all    | Emitted when all is selected, returns whether the current state is all selected and whether it is partially selected                 | `(checked: boolean, partial: boolean)`                                                  | -        |
-| row-expand       | Emitted when the expanded state of row expansion content changes, returns row data, expanded state, row index and row position index | `(payload: TableRowPayload)`                                                            | -        |
-| row-drag-start   | Emitted when a row starts to drag, returns the data of the current row                                                               | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
-| row-drag-over    | Emitted when a row is being dragged, returns the data of the previous row                                                            | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
-| row-drop         | Emitted when a row is dropped by another dragged row, returns the data and drop type of the current row (before and after)           | `(data: Record<string, unknown>, dropType?: 'before ' \| 'after', event: DragEvent)`    | -        |
-| row-drag-end     | Emitted when a row ends dragging, returns the data of the previous row and the data of all rows                                      | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -        |
-| row-filter       | Emitted when table data filtering occurs, returns the column information that participated in the filtering and the filtered data    | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -        |
-| row-sort         | Emitted when the table data is sorted, returns the column information and sorted data that participated in the sorting               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -        |
-| cell-enter       | Emitted when the mouse moves into a cell, returns row data, row index, row position index, column data and column index              | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-leave       | Emitted when the mouse moves out of the cell, returns row data, row index, row position index, column data and column index          | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-click       | Emitted when a cell is clicked, returns row data, row index, row position index, column data and column index                        | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-dblclick    | Emitted when a cell is double-clicked, returns row data, row index, row position index, column data and column index                 | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-contextmenu | Emitted when a cell is right-clicked, returns row data, row index, row position index, column data and column index                  | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| col-resize-start | Emitted when a column starts to resize, returns column data and column index                                                         | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| col-resize-move  | Emitted when a column is being resized, returns column data and column index                                                         | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| col-resize-end   | Emitted when a column ends to resize, returns column data and column index                                                           | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| head-enter       | Emitted when the mouse moves into the head cell, returns column data and column index                                                | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-leave       | Emitted when the mouse moves out of the head cell, returns column data and column index                                              | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-click       | Emitted when a head cell is clicked, returns column data and column index                                                            | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-dblclick    | Emitted when a head cell is double-clicked, returns column data and column index                                                     | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-contextmenu | Emitted when a head cell is right-clicked, returns column data and column index                                                      | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| foot-enter       | Emitted when the mouse moves into the foot cell, returns column data and column index                                                | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-leave       | Emitted when the mouse moves out of the foot cell, returns column data and column index                                              | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-click       | Emitted when a foot cell is clicked, returns column data and column index                                                            | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-dblclick    | Emitted when a foot cell is double-clicked, returns column data and column index                                                     | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-contextmenu | Emitted when a foot cell is right-clicked, returns column data and column index                                                      | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| update:data      | Emitted when a row ends dragging and the data structure changed, returning the latest structured data                                | `(data: Data[])`                                                                        | `2.2.18` |
+| Name             | Description                                                      | Parameters                                                                              | Since    |
+| ---------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
+| scroll           | Emitted when the table is scrolled                               | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
+| row-enter        | Emitted when the mouse moves into a row                          | `((payload: TableRowPayload)`                                                           | -        |
+| row-leave        | Emitted when the mouse moves out of the row                      | `(payload: TableRowPayload)`                                                            | -        |
+| row-click        | Emitted when a row is clicked                                    | `(payload: TableRowPayload)`                                                            | -        |
+| row-dblclick     | Emitted when a row is double-clicked                             | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-contextmenu  | Emitted when a row is right-clicked                              | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-check        | Emitted when a row checkbox is checked                           | `(payload: TableRowPayload)`                                                            | -        |
+| row-check-all    | Emitted when all is selected                                     | `(checked: boolean, partial: boolean)`                                                  | -        |
+| row-expand       | Emitted when the expanded state of row expansion content changes | `(payload: TableRowPayload)`                                                            | -        |
+| row-tree-expand  | Emitted when the tree expanded state of row changes              | `(payload: TableRowPayload)`                                                            | `2.3.1`  |
+| row-drag-start   | Emitted when a row starts to drag                                | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drag-over    | Emitted when a row is being dragged                              | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drop         | Emitted when a row is dropped by another dragged row             | `(data: Record<string, unknown>, dropType?: 'before ' \| 'after', event: DragEvent)`    | -        |
+| row-drag-end     | Emitted when a row ends dragging                                 | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -        |
+| row-filter       | Emitted when table data filtering occurs                         | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -        |
+| row-sort         | Emitted when the table data is sorted                            | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -        |
+| cell-enter       | Emitted when the mouse moves into a cell                         | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-leave       | Emitted when the mouse moves out of the cell                     | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-click       | Emitted when a cell is clicked                                   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-dblclick    | Emitted when a cell is double-clicked                            | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-contextmenu | Emitted when a cell is right-clicked                             | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| col-resize-start | Emitted when a column starts to resize                           | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-move  | Emitted when a column is being resized                           | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-end   | Emitted when a column ends to resize                             | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| head-enter       | Emitted when the mouse moves into the head cell                  | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-leave       | Emitted when the mouse moves out of the head cell                | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-click       | Emitted when a head cell is clicked                              | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-dblclick    | Emitted when a head cell is double-clicked                       | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-contextmenu | Emitted when a head cell is right-clicked                        | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| foot-enter       | Emitted when the mouse moves into the foot cell                  | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-leave       | Emitted when the mouse moves out of the foot cell                | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-click       | Emitted when a foot cell is clicked                              | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-dblclick    | Emitted when a foot cell is double-clicked                       | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-contextmenu | Emitted when a foot cell is right-clicked                        | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| update:data      | Emitted when a row ends dragging and the data structure changed  | `(data: Data[])`                                                                        | `2.2.18` |
 
 ### Table Slots
 
@@ -652,15 +655,17 @@ interface TableFootPayload {
 
 ### Table Methods
 
-| Name          | Description                                                                         | Signature                         | Since    |
-| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- | -------- |
-| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                      | -        |
-| clearFilter   | Clear all active filters in the current table                                       | `() => void`                      | -        |
-| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => Promise<void>`             | -        |
-| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]` | -        |
-| clearSelected | Clear all selected row data                                                         | `() => void`                      | -        |
-| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                    | `2.2.6`  |
-| refreshData   | Refresh the table data, which will trigger the table to re-parse the data           | `(data?: any[]) => Promise<void>` | `2.2.14` |
+| Name          | Description                                                                         | Signature                                                       | Since    |
+| ------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------- |
+| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                                                    | -        |
+| clearFilter   | Clear all active filters in the current table                                       | `() => void`                                                    | -        |
+| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => Promise<void>`                                           | -        |
+| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]`                               | -        |
+| clearSelected | Clear all selected row data                                                         | `() => void`                                                    | -        |
+| getData       | Get the data of the table, usually used to get the data after dragging              | `() => Data[]`                                                  | `2.2.6`  |
+| refreshData   | Refresh the table data, which will trigger the table to re-parse the data           | `(data?: any[]) => Promise<void>`                               | `2.2.14` |
+| selectRow     | Manually check or uncheck row                                                       | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
+| treeExpandRow | Manually expand or collapse row                                                     | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
 
 ### TableColumn Props
 

@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/vexip-ui/vexip-ui/compare/config@1.5.1...config@1.5.2) (2024-01-19)
+
+
+### 🐞 Bug Fixes
+
+* **config:** complete various locale config ([c5c27f1](https://github.com/vexip-ui/vexip-ui/commit/c5c27f1053a1b302282b162c36c402176a271aad))
+
+
+
 ## [1.5.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.5.0...config@1.5.1) (2024-01-17)
 
 

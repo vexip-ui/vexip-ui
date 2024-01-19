@@ -269,11 +269,15 @@ function handleDragRow(row: TableRowState) {
   }
 }
 
-function handleExpandTree(row: TableRowState) {
+function handleExpandTree(row: TableRowState, event: MouseEvent) {
   if (!row.children?.length) return
 
+  const expanded = !row.treeExpanded
+  const { data, key, index } = row
+
   tableActions.runInLocked()
-  mutations.setTreeExpanded(row.key, !row.treeExpanded)
+  mutations.setTreeExpanded(row.key, expanded)
+  tableActions.emitRowExpand({ row: data, key, index, event, expanded })
 }
 
 function handleCellResize(entry: ResizeObserverEntry) {
@@ -363,7 +367,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
               nh.be('tree-expand'),
               !row.children?.length && nh.bem('tree-expand', 'hidden')
             ]"
-            @click="handleExpandTree(row)"
+            @click="handleExpandTree(row, $event)"
           >
             <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minusSquare"></TableIcon>
             <TableIcon v-else name="plus" :origin="icons.plusSquare"></TableIcon>

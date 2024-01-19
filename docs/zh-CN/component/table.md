@@ -267,9 +267,11 @@ interface CellSpanResult {
 
 interface TableKeyConfig {
   id?: string,
+  children?: string,
   checked?: string,
   height?: string,
-  expanded?: string
+  expanded?: string,
+  treeExpanded?: string
 }
 
 type Accessor<D = Data, Val extends string | number = string | number> = (
@@ -605,42 +607,43 @@ interface TableFootPayload {
 
 ### Table 事件
 
-| 名称             | 说明                                                                         | 参数                                                                                    | 始于     |
-| ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
-| scroll           | 当表格滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象                   | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
-| row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
-| row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -        |
-| row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -        |
-| row-dblclick     | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
-| row-contextmenu  | 当右击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
-| row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: TableRowPayload)`                                                            | -        |
-| row-check-all    | 当进行了全选时触发，返回当前是否为全选状态以及是否处于部分全选状态           | `(checked: boolean, partial: boolean)`                                                  | -        |
-| row-expand       | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | `(payload: TableRowPayload)`                                                            | -        |
-| row-drag-start   | 当行将要开始拖拽时触发，返回当前行的数据                                     | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
-| row-drag-over    | 当行正在拖拽时触发，返回前行的数据                                           | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
-| row-drop         | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | `(data: Record<string, unknown>, dropType?: 'before' \| 'after', event: DragEvent)`     | -        |
-| row-drag-end     | 当行结束拖拽时触发，返回前行的数据和所有行的数据                             | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -        |
-| row-filter       | 当发生表格数据过滤时触发，返回参与了过滤的列信息与过滤后的数据               | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -        |
-| row-sort         | 当发生表格数据排序时触发，返回参与了排序的列信息与排序后的数据               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -        |
-| cell-enter       | 当鼠标移入了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-leave       | 当鼠标移出了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-click       | 当点击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-dblclick    | 当双击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| cell-contextmenu | 当右击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
-| col-resize-start | 当列要开始调整宽度时触发，返回列数据和列索引                                 | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| col-resize-move  | 当列正在调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| col-resize-end   | 当列结束调整宽度时触发，返回列数据和列索引                                   | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
-| head-enter       | 当鼠标移入了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-leave       | 当鼠标移出了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-click       | 当点击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-dblclick    | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| head-contextmenu | 当右击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
-| foot-enter       | 当鼠标移入了尾部单元格时触发，返回列数据和列索引                             | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-leave       | 当鼠标移出了尾部单元格时触发，返回列数据和列索引                             | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-click       | 当点击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-dblclick    | 当双击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| foot-contextmenu | 当右击了尾部单元格时触发，返回列数据和列索引                                 | `(payload: TableFootPayload)`                                                           | `2.1.24` |
-| update:data      | 当行结束拖拽并且数据结构发生变化时触发，返回最新结构的数据                   | `(data: Data[])`                                                                        | `2.2.18` |
+| 名称             | 说明                                   | 参数                                                                                    | 始于     |
+| ---------------- | -------------------------------------- | --------------------------------------------------------------------------------------- | -------- |
+| scroll           | 当表格滚动时触发                       | `(scroll: { type: 'horizontal' \| 'vertical', client: number, percent: number })`       | `2.1.25` |
+| row-enter        | 当鼠标移入了行时触发                   | `(payload: TableRowPayload)`                                                            | -        |
+| row-leave        | 当鼠标移出了行时触发                   | `(payload: TableRowPayload)`                                                            | -        |
+| row-click        | 当点击了行时触发                       | `(payload: TableRowPayload)`                                                            | -        |
+| row-dblclick     | 当双击了行时触发                       | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-contextmenu  | 当右击了行时触发                       | `(payload: TableRowPayload)`                                                            | `2.0.1`  |
+| row-check        | 当勾选了行复选框时触发                 | `(payload: TableRowPayload)`                                                            | -        |
+| row-check-all    | 当进行了全选时触发                     | `(checked: boolean, partial: boolean)`                                                  | -        |
+| row-expand       | 当行拓展内容的展开状态改变时触发       | `(payload: TableRowPayload)`                                                            | -        |
+| row-tree-expand  | 当行的树展开状态改变时触发             | `(payload: TableRowPayload)`                                                            | `2.3.1`  |
+| row-drag-start   | 当行将要开始拖拽时触发                 | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drag-over    | 当行正在拖拽时触发                     | `(data: Record<string, unknown>, event: DragEvent)`                                     | -        |
+| row-drop         | 当行被其他的拖拽行放入时触发           | `(data: Record<string, unknown>, dropType?: 'before' \| 'after', event: DragEvent)`     | -        |
+| row-drag-end     | 当行结束拖拽时触发                     | `(data: Record<string, unknown>, allData: Record<string, unknown>[], event: DragEvent)` | -        |
+| row-filter       | 当发生表格数据过滤时触发               | `(profiles: TableFilterProfile[], filteredRow: Data[])`                                 | -        |
+| row-sort         | 当发生表格数据排序时触发               | `(profiles: SortProfile[], sortedRow: Data[])`                                          | -        |
+| cell-enter       | 当鼠标移入了单元格时触发               | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-leave       | 当鼠标移出了单元格时触发               | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-click       | 当点击了单元格时触发                   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-dblclick    | 当双击了单元格时触发                   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| cell-contextmenu | 当右击了单元格时触发                   | `(payload: TableCellPayload)`                                                           | `2.0.1`  |
+| col-resize-start | 当列要开始调整宽度时触发               | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-move  | 当列正在调整宽度时触发                 | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| col-resize-end   | 当列结束调整宽度时触发                 | `(payload: TableColResizePayload)`                                                      | `2.1.23` |
+| head-enter       | 当鼠标移入了头部单元格时触发           | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-leave       | 当鼠标移出了头部单元格时触发           | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-click       | 当点击了头部单元格时触发               | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-dblclick    | 当双击了头部单元格时触发               | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| head-contextmenu | 当右击了头部单元格时触发               | `(payload: TableHeadPayload)`                                                           | `2.0.1`  |
+| foot-enter       | 当鼠标移入了尾部单元格时触发           | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-leave       | 当鼠标移出了尾部单元格时触发           | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-click       | 当点击了尾部单元格时触发               | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-dblclick    | 当双击了尾部单元格时触发               | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| foot-contextmenu | 当右击了尾部单元格时触发               | `(payload: TableFootPayload)`                                                           | `2.1.24` |
+| update:data      | 当行结束拖拽并且数据结构发生变化时触发 | `(data: Data[])`                                                                        | `2.2.18` |
 
 ### Table 插槽
 
@@ -652,15 +655,17 @@ interface TableFootPayload {
 
 ### Table 方法
 
-| 名称          | 说明                                       | 签名                              | 始于     |
-| ------------- | ------------------------------------------ | --------------------------------- | -------- |
-| clearSort     | 清除表格当前激活的所有排序                 | `() => void`                      | -        |
-| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                      | -        |
-| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => Promise<void>`             | -        |
-| getSelected   | 获取所有被勾选的行数据                     | `() => Data[]`                    | -        |
-| clearSelected | 清除所有被勾选的行数据                     | `() => void`                      | -        |
-| getData       | 获取表格的数据，通常用于获取拖拽后的数据   | `() => Data[]`                    | `2.2.6`  |
-| refreshData   | 刷新表格数据，会触发表格重新解析数据       | `(data?: any[]) => Promise<void>` | `2.2.14` |
+| 名称          | 说明                                       | 签名                                                            | 始于     |
+| ------------- | ------------------------------------------ | --------------------------------------------------------------- | -------- |
+| clearSort     | 清除表格当前激活的所有排序                 | `() => void`                                                    | -        |
+| clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                                                    | -        |
+| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => Promise<void>`                                           | -        |
+| getSelected   | 获取所有被勾选的行数据                     | `() => Data[]`                                                  | -        |
+| clearSelected | 清除所有被勾选的行数据                     | `() => void`                                                    | -        |
+| getData       | 获取表格的数据，通常用于获取拖拽后的数据   | `() => Data[]`                                                  | `2.2.6`  |
+| refreshData   | 刷新表格数据，会触发表格重新解析数据       | `(data?: any[]) => Promise<void>`                               | `2.2.14` |
+| selectRow     | 手动勾选或取消勾选行数据                   | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
+| treeExpandRow | 手动展开或收起行数据                       | `(keyOrData: Key \| Record<any, any>, checked?: boolean): void` | `2.3.1`  |
 
 ### TableColumn 属性
 

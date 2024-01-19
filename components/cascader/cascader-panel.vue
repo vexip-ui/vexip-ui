@@ -96,7 +96,7 @@ import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier, useRtl } from '@vexip-ui/hooks'
-import { boundRange } from '@vexip-ui/utils'
+import { boundRange, decide } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -164,53 +164,73 @@ export default defineComponent({
     const { target: wrapper } = useModifier({
       passive: false,
       onKeyDown: (event, modifier) => {
-        if (modifier.up || modifier.down) {
-          event.preventDefault()
-
-          if (currentHitting.value < 0) {
-            currentHitting.value = props.options.findIndex(isSelected)
-
-            if (currentHitting.value < 0) {
-              currentHitting.value = 0
-            }
-
-            return
-          }
-
-          currentHitting.value = boundRange(
-            findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
-            0,
-            props.options.length - 1
-          )
-          ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
-        } else if (modifier.left || modifier.right) {
-          event.preventDefault()
-
-          if (modifier.right) {
-            const option = props.options[currentHitting.value]
-
-            if (option && hasChildren(option)) {
-              emit('open', option)
-            }
-          } else {
-            emit('back')
-          }
-        } else if (modifier.enter || modifier.space) {
-          event.preventDefault()
-          event.stopPropagation()
-
-          const option = props.options[currentHitting.value]
-
-          if (option) {
-            if (props.multiple) {
-              handleToggleCheck(option)
-            } else {
-              handleSelect(option, currentHitting.value)
-            }
-          }
-        } else if (modifier.escape) {
+        if (modifier.escape) {
           emit('close')
+          return
         }
+
+        decide(
+          [
+            [
+              () => modifier.up || modifier.down,
+              () => {
+                if (currentHitting.value < 0) {
+                  currentHitting.value = props.options.findIndex(isSelected)
+
+                  if (currentHitting.value < 0) {
+                    currentHitting.value = 0
+                  }
+
+                  return
+                }
+
+                currentHitting.value = boundRange(
+                  findEnabledIndex(
+                    currentHitting.value + (modifier.up ? -1 : 1),
+                    modifier.up ? -1 : 1
+                  ),
+                  0,
+                  props.options.length - 1
+                )
+                ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
+              }
+            ],
+            [
+              () => modifier.left || modifier.right,
+              () => {
+                if (modifier.right) {
+                  const option = props.options[currentHitting.value]
+
+                  if (option && hasChildren(option)) {
+                    emit('open', option)
+                  }
+                } else {
+                  emit('back')
+                }
+              }
+            ],
+            [
+              () => modifier.enter || modifier.space,
+              () => {
+                event.stopPropagation()
+
+                const option = props.options[currentHitting.value]
+
+                if (option) {
+                  if (props.multiple) {
+                    handleToggleCheck(option)
+                  } else {
+                    handleSelect(option, currentHitting.value)
+                  }
+                }
+              }
+            ]
+          ],
+          {
+            beforeMatchAny: () => event.preventDefault(),
+            afterMatchAny: modifier.resetAll
+          }
+        )
       }
     })
 

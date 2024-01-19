@@ -32,6 +32,17 @@ export function deDELocale() {
       week7: 'So'
     },
 
+    captcha: {
+      slideEnd: 'Bitte zum Ende schieben',
+      slide: 'Bitte in eine geeignete Position schieben',
+      success: 'Test erfolgreich',
+      fail: 'Test fehlgeschlagen, bitte wiederholen',
+      doCaptcha: 'Bitte füllen Sie das folgende Captcha aus',
+      pointInOrder: 'Bitte zeigen Sie in der Reihenfolge',
+      trigger: 'Klicken Sie auf das Captcha',
+      completed: 'Captcha abgeschlossen'
+    },
+
     checkbox: {
       all: 'Alle'
     },
@@ -173,6 +184,22 @@ export function deDELocale() {
       upload: 'Dateiupload',
       uploading: 'Hochladen',
       dragOrClick: 'Ziehen Sie Dateien hierher oder klicken Sie zum Hochladen'
+    },
+
+    video: {
+      play: 'Spielen',
+      pause: 'Pause',
+      playPrev: 'Zurück',
+      playNext: 'Nächster',
+      refresh: 'Auffrischen',
+      flip: 'Schnipsen',
+      requestPip: 'Hier kommt PIP ins Spiel',
+      exitPip: 'PIP beenden',
+      fullWindow: 'Volles Fenster',
+      fullWindowExit: 'Volles Fenster beenden',
+      fullScreen: 'Vollbild',
+      fullScreenExit: 'Vollbild beenden',
+      chapterCount: 'Kapitel {n}'
     },
 
     viewer: {

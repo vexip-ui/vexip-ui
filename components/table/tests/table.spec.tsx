@@ -484,6 +484,12 @@ describe('Table', () => {
       'l0n0',
       'l1n0'
     ])
+
+    // api method
+    wrapper.findComponent(Table).vm.clearSort()
+    await nextTick()
+    renderRows = body.vm.data
+    expect(renderRows.map(row => row.data.name)).toEqual(data.map(item => item.name))
   })
 
   it('filter by columns', async () => {
@@ -590,6 +596,12 @@ describe('Table', () => {
     await nextTick()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(2)
+
+    // api method
+    wrapper.findComponent(Table).vm.clearFilter()
+    await nextTick()
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toEqual(data.length)
   })
 
   it('data filter', async () => {
@@ -657,12 +669,28 @@ describe('Table', () => {
     expect(headCells[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--partial')
     expect(rows[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
 
+    // api method
+    const selected = wrapper.findComponent(Table).vm.getSelected()
+    expect(selected).toMatchObject(data.slice(0, 1))
+
     headCells[0].find('.vxp-table__selection').trigger('click')
     await nextTick()
     expect(headCells[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
     rows.forEach(row => {
       expect(row.find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
     })
+
+    // api method
+    wrapper.findComponent(Table).vm.clearSelected()
+    await nextTick()
+    rows.forEach(row => {
+      expect(row.find('.vxp-checkbox').classes()).not.toContain('vxp-checkbox--checked')
+    })
+
+    // api method
+    wrapper.findComponent(Table).vm.selectRow(data[1])
+    await nextTick()
+    expect(rows[1].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
   })
 
   it('order column', async () => {
@@ -812,6 +840,12 @@ describe('Table', () => {
     await runScrollTimers()
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(3)
+
+    // api method
+    wrapper.findComponent(Table).vm.treeExpandRow(data[0])
+    await runScrollTimers()
+    rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(rows.length).toEqual(9)
   })
 
   it('indented column', async () => {
@@ -1246,5 +1280,26 @@ describe('Table', () => {
     expect(headCells[1].find('.vxp-ellipsis').exists()).toBe(true)
     expect(bodyCells[0].find('.vxp-ellipsis').exists()).toBe(true)
     expect(bodyCells[1].find('.vxp-ellipsis').exists()).toBe(true)
+  })
+
+  it('getData method', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      },
+      {
+        name: 'Value',
+        key: 'value'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, value: i }))
+    const wrapper = mount(Table, {
+      props: { columns, data }
+    })
+
+    await runScrollTimers()
+
+    expect(wrapper.vm.getData()).toMatchObject(data)
   })
 })

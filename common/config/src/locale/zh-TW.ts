@@ -32,6 +32,17 @@ export function zhTWLocale() {
       week7: '日'
     },
 
+    captcha: {
+      slideEnd: '請滑動到最後',
+      slide: '請滑動到適當的位置',
+      success: '驗證成功',
+      fail: '驗證失敗，請重試',
+      doCaptcha: '請完成下面的驗證',
+      pointInOrder: '請按順序點選',
+      trigger: '點選進行驗證',
+      completed: '已完成驗證'
+    },
+
     checkbox: {
       all: '全選'
     },
@@ -173,6 +184,22 @@ export function zhTWLocale() {
       upload: '上傳檔案',
       uploading: '上傳中',
       dragOrClick: '將檔案拖到此處, 或點選上傳'
+    },
+
+    video: {
+      play: '播放',
+      pause: '暫停',
+      playPrev: '上一個',
+      playNext: '下一個',
+      refresh: '重新整理',
+      flip: '映象翻轉',
+      requestPip: '進入畫中畫',
+      exitPip: '退出畫中畫',
+      fullWindow: '進入網頁全屏',
+      fullWindowExit: '退出網頁全屏',
+      fullScreen: '進入全屏',
+      fullScreenExit: '退出全屏',
+      chapterCount: '第 {n} 章'
     },
 
     viewer: {

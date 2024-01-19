@@ -36,7 +36,11 @@ export function taINLocale() {
       slideEnd: 'இறுதிக்கு ஸ்லைடு',
       slide: 'சரியான நிலைக்கு ஸ்லைடு செய்யவும்',
       success: 'சோதனை வெற்றி',
-      fixImage: 'படத்தை சரிசெய்யவும்'
+      fail: 'சோதனை தோல்வி',
+      doCaptcha: 'கீழே உள்ள கேப்ட்சாவை முடிக்கவும்',
+      pointInOrder: 'வரிசையில் புள்ளி',
+      trigger: 'கேப்ட்சா கிளிக் செய்யவும்',
+      completed: 'கேப்ட்சா முடிந்தது'
     },
 
     checkbox: {
@@ -180,6 +184,22 @@ export function taINLocale() {
       upload: 'கோப்புகளை பதிவேற்று',
       uploading: 'பதிவேற்றுகிறது...',
       dragOrClick: 'கோப்புகளை இங்கே விடவும் அல்லது பதிவேற்ற அழுத்தவும்'
+    },
+
+    video: {
+      play: 'விளையாட்டு',
+      pause: 'இடை ஓய்வு',
+      playPrev: 'முன்',
+      playNext: 'அடுத்தவர்',
+      refresh: 'புதுக்கிளர்ச்சியூட்டு',
+      flip: 'விரல் நொடி',
+      requestPip: 'PIP ஐ உள்ளிடவும்',
+      exitPip: 'PIP இலிருந்து வெளியேறவும்',
+      fullWindow: 'முழு ஜன்னல்',
+      fullWindowExit: 'முழு சாளர வெளியேற்றம்',
+      fullScreen: 'முழுத் திரை',
+      fullScreenExit: 'முழுத்திரை வெளியேறு',
+      chapterCount: 'அத்தியாயம் {n}'
     },
 
     viewer: {

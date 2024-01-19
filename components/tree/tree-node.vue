@@ -7,7 +7,7 @@ import { computed, inject, nextTick, onBeforeUnmount, reactive, ref, watch } fro
 
 import { useIcons, useNameHelper } from '@vexip-ui/config'
 import { useModifier, useRtl } from '@vexip-ui/hooks'
-import { isNull } from '@vexip-ui/utils'
+import { decide, isNull } from '@vexip-ui/utils'
 import { TREE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -42,32 +42,37 @@ useModifier({
   onKeyDown: (event, modifier) => {
     if (treeState.expanding) return
 
-    const prevent = () => {
-      event.preventDefault()
-      event.stopPropagation()
-    }
+    decide(
+      [
+        [
+          () => modifier.up || modifier.down,
+          () => treeState.handleHittingChange(modifier.up ? 'up' : 'down')
+        ],
+        [
+          () => modifier.left || modifier.right,
+          () => {
+            const hasChild = props.node.children?.length > 0
 
-    if (modifier.up || modifier.down) {
-      prevent()
-      treeState.handleHittingChange(modifier.up ? 'up' : 'down')
-    } else if (modifier.left || modifier.right) {
-      prevent()
-      const hasChild = props.node.children?.length > 0
-
-      if (modifier.right && props.node.expanded && hasChild) {
-        treeState.handleHittingChange('down')
-      } else if (modifier.left && (!props.node.expanded || !hasChild)) {
-        treeState.handleNodeHitting(parentState.value?.el)
-      } else {
-        toggleExpanded(modifier.right)
+            if (modifier.right && props.node.expanded && hasChild) {
+              treeState.handleHittingChange('down')
+            } else if (modifier.left && (!props.node.expanded || !hasChild)) {
+              treeState.handleNodeHitting(parentState.value?.el)
+            } else {
+              toggleExpanded(modifier.right)
+            }
+          }
+        ],
+        [() => hasCheckbox.value && modifier.space, handleToggleCheck],
+        [() => modifier.enter, handleToggleSelect]
+      ],
+      {
+        beforeMatchAny: () => {
+          event.preventDefault()
+          event.stopPropagation()
+        },
+        afterMatchAny: modifier.resetAll
       }
-    } else if (hasCheckbox.value && modifier.space) {
-      prevent()
-      handleToggleCheck()
-    } else if (modifier.enter) {
-      prevent()
-      handleToggleSelect()
-    }
+    )
   }
 })
 

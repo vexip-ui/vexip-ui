@@ -472,6 +472,7 @@ export interface TableActions {
   emitRowCheck(payload: TableRowPayload & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(payload: TableRowPayload & { expanded: boolean }): void,
+  emitRowTreeExpand(payload: TableRowPayload & { expanded: boolean }): void,
   emitRowFilter(): void,
   emitRowSort(): void,
   handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent): void,
