@@ -1,3 +1,20 @@
+## [2.3.1](https://github.com/vexip-ui/vexip-ui/compare/v2.3.0...v2.3.1) (2024-01-19)
+
+
+### ✨ Features
+
+* **table:** add row-tree-expand event ([54b657f](https://github.com/vexip-ui/vexip-ui/commit/54b657f8b1d787d85b10b5210e25ac06f0d498cc))
+* **table:** add selectRow and treeExpandRow methods ([dd78f5e](https://github.com/vexip-ui/vexip-ui/commit/dd78f5e28f304b501e591c0d78fd4a94786dfdd1))
+* **utils:** decide method add beforeMatchAny option ([facbc6e](https://github.com/vexip-ui/vexip-ui/commit/facbc6e91f5aded6c5925ec178fba93838db9b0c))
+
+
+### 🐞 Bug Fixes
+
+* **config:** complete various locale config ([c5c27f1](https://github.com/vexip-ui/vexip-ui/commit/c5c27f1053a1b302282b162c36c402176a271aad))
+* **table:** import group style when nesting ([4832789](https://github.com/vexip-ui/vexip-ui/commit/4832789bef09a46d9f9da16c40ee3e4299e90a33))
+
+
+
 # [2.3.0](https://github.com/vexip-ui/vexip-ui/compare/v2.2.24...v2.3.0) (2024-01-17)
 
 
