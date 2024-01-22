@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 patchedDependencies:
   conventional-changelog-angular@7.0.0:
     hash: mnuz4pbg7c37j4ofaayqrj5u6y
@@ -209,7 +213,11 @@ importers:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.3.10)
 
-  common/bem-helper: {}
+  common/bem-helper:
+    dependencies:
+      '@vexip-ui/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   common/config:
     dependencies:
@@ -11212,7 +11220,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

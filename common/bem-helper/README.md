@@ -10,6 +10,8 @@ pnpm i @vexip-ui/bem-helper
 
 ## Usage
 
+`useBEM`:
+
 Without namespace:
 
 ```ts
@@ -40,7 +42,40 @@ bem.cb() // .vxp-button
 bem.cv('color') // --vxp-button-color
 ```
 
-## Methods
+`useCSS`:
+
+```ts
+import { useCSS } from '@vexip-ui/bem-helper'
+
+useCSS(
+  // unique key, do not create if exists
+  'foo',
+  [
+    '.foo': {
+      color: 'red'
+    },
+    '.foo--baz': {
+      color: 'red'
+    }
+  ]
+)
+
+useCSS(
+  'foo',
+  [
+    '.foo': {
+      color: 'red'
+    }
+  ],
+  {
+    // force refresh (re-create)
+    refresh: true,
+    minify: true
+  }
+)
+```
+
+## Declarations
 
 You can view the [definition of types](./src/types.ts). There are detailed comments in this file.
 
