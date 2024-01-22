@@ -1,4 +1,4 @@
-import { ensureArray, toKebabCase } from '@vexip-ui/utils'
+import { ensureArray, isClient, noop, toKebabCase } from '@vexip-ui/utils'
 
 import type * as CSS from 'csstype'
 
@@ -32,7 +32,18 @@ export type CSSConfig = MaybeArray<StyleConfig | AtRuleConfig>
 
 const styleSheets = new Map<Key, Context>()
 
-export function useCSS(key: Key, css: CSSConfig, options: RenderOptions = {}) {
+/**
+ * Create a style tag and push the rendering result into it
+ *
+ * @param key the unique key
+ * @param css the CSS config
+ * @param options the extra options
+ *
+ * @returns a function to remove the style tag
+ */
+export function useCSS(key: Key, css: CSSConfig, options: RenderOptions = {}): () => void {
+  if (!isClient) return noop
+
   let context = styleSheets.get(key)
 
   if (context) {
