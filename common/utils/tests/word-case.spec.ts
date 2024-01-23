@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { toCapitalCase } from '../src/word-case'
+import { toCapitalCase } from '../src'
 
 describe('word case', () => {
   it('toCapitalCase', () => {

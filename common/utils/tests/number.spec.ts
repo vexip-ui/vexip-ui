@@ -20,7 +20,7 @@ import {
   toFixed,
   toNumber,
   toPrecision
-} from '../src/number'
+} from '../src'
 
 describe('number', () => {
   it('isValidNumber', () => {
