@@ -93,4 +93,20 @@ describe('css render', () => {
       )
     ).toEqual('@media screen{.box{width:60px}}.box{width:100px}')
   })
+
+  it('css variables', () => {
+    expect(
+      render(
+        [
+          {
+            '.box': {
+              '--color': 'red',
+              color: 'var(--color)'
+            }
+          }
+        ],
+        true
+      )
+    ).toEqual('.box{--color:red;color:var(--color)}')
+  })
 })

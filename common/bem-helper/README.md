@@ -73,6 +73,27 @@ useCSS(
     minify: true
   }
 )
+
+useCSS(
+  'foo',
+  [
+    // At rule must define in a standalone object and cannot mixin with normal style
+    {
+      '@media screen': [
+        {
+          '.foo': {
+            color: 'yellow'
+          }
+        }
+      ]
+    },
+    {
+      '.foo': {
+        color: 'red'
+      }
+    }
+  ]
+)
 ```
 
 ## Declarations
