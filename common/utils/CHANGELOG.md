@@ -1,3 +1,18 @@
+# [2.13.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.12.0...utils@2.13.0) (2024-01-24)
+
+
+### ✨ Features
+
+* **utils:** deepClone support clone Date, Set and Map ([cfee561](https://github.com/vexip-ui/vexip-ui/commit/cfee56169a538bbab8de23a166c16fcc81a9423e))
+
+
+### 🐞 Bug Fixes
+
+* **utils:** improve toKebabCase implementation ([702398c](https://github.com/vexip-ui/vexip-ui/commit/702398c48638fb5e81447bb0e999836027489cf3))
+* **utils:** normalize variable name of date constants ([9c547b4](https://github.com/vexip-ui/vexip-ui/commit/9c547b4c90b162f551e6e568a234c3388ad2bf1c))
+
+
+
 # [2.12.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.11.0...utils@2.12.0) (2024-01-19)
 
 
