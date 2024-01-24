@@ -15,35 +15,47 @@ function allCapital(value: string) {
   return matched && matched[0] === value
 }
 
+// const kebabRE = /\B([A-Z])/g
+const kebabRE = /\B([A-Z])(?=[^A-Z_-])/g
+
 /**
- * 将命名转换为短横线命名
+ * 将字面值转换为短横线连接
  *
- * @param value 需要转换的命名
+ * @param value 需要转换的字面值
+ *
+ * @returns 转换后的短横线连接字面值
+ *
+ * @example
+ * ```ts
+ * toKebabCase('AaBbCc') // aa-bb-cc
+ * toKebabCase('AABb') // aa-bb
+ * toKebabCase('AAA') // aaa
+ * toKebabCase('AaBb CcDd') // aa-bb cc-dd
+ * ```
  */
 export function toKebabCase(value: string) {
-  if (allCapital(value)) {
-    return value.toLocaleLowerCase()
-  }
+  // if (allCapital(value)) {
+  //   return value.toLocaleLowerCase()
+  // }
 
-  return (
-    value.charAt(0).toLowerCase() +
-    value
-      .slice(1)
-      .replace(/([A-Z])/g, '-$1')
-      .toLowerCase()
-  )
+  return value.replace(kebabRE, '-$1').toLowerCase()
 }
 
-type CapitalCase<T extends string> = T extends `${infer First} ${infer Rest}`
+/**
+ * 将给定的常量字符串类型拓展为大驼峰
+ */
+export type CapitalCase<T extends string> = T extends `${infer First} ${infer Rest}`
   ? CapitalCase<`${First}-${Rest}`>
   : T extends `${infer First}-${infer Rest}`
     ? `${Capitalize<First>}${CapitalCase<Rest>}`
     : Capitalize<T>
 
 /**
- * 将命名转换为首字母大写的驼峰
+ * 将字面值转换为大驼峰
  *
- * @param value 需要转换的命名
+ * @param value 需要转换的字面值
+ *
+ * @returns 转换后的大驼峰字面值
  */
 export function toCapitalCase<T extends string>(value: T) {
   value = value.trim().replace(/\s+/g, '-') as T
@@ -56,9 +68,11 @@ export function toCapitalCase<T extends string>(value: T) {
 }
 
 /**
- *  将命名转换为驼峰命名
+ *  将字面值转换为小驼峰
  *
- * @param value 需要转换的命名
+ * @param value 需要转换的字面值
+ *
+ * @returns 转换后的小驼峰字面值
  */
 export function toCamelCase(value: string) {
   const capitalName = toCapitalCase(value)
