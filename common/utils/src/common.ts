@@ -14,6 +14,8 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  *
  * @param value 需判断的值
  * @param type 指定的类型，注意大小写
+ *
+ * @returns 类型是否匹配
  */
 export function is(value: unknown, type: string) {
   return toString.call(value) === `[object ${type}]`
@@ -24,15 +26,19 @@ export function is(value: unknown, type: string) {
  *
  * @param value 需判断的对象
  * @param key 指定的键值
+ *
+ * @returns 是否包含键值
  */
 export function has(value: Record<string, any>, key: string | symbol): key is keyof typeof value {
   return hasOwnProperty.call(value, key)
 }
 
 /**
- * 判断一个值是否被定义
+ * 判断一个值是否已定义
  *
  * @param value 需判断的值
+ *
+ * @returns 是否已定义
  */
 export function isDefined<T = unknown>(value: T | undefined | null): value is T {
   return value !== undefined && value !== null
@@ -42,6 +48,8 @@ export function isDefined<T = unknown>(value: T | undefined | null): value is T 
  * 判断一个值是否未被定义
  *
  * @param value 需判断的值
+ *
+ * @returns 是否未定义
  */
 export function isNull(value: unknown): value is null | undefined {
   return value === undefined || value === null
@@ -51,6 +59,8 @@ export function isNull(value: unknown): value is null | undefined {
  * 判断一个值是否为数字
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为数字
  */
 export function isNumber(value: unknown): value is number {
   return typeof value === 'number'
@@ -60,6 +70,8 @@ export function isNumber(value: unknown): value is number {
  * 判断一个值是否为 `NaN`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `NaN`
  */
 export function isNaN(value: unknown): value is number {
   return Number.isNaN(value)
@@ -69,6 +81,8 @@ export function isNaN(value: unknown): value is number {
  * 判断一个值是否为字符串
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为字符串
  */
 export function isString(value: unknown): value is string {
   return typeof value === 'string'
@@ -78,6 +92,8 @@ export function isString(value: unknown): value is string {
  * 判断一个值是否为布尔值
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为布尔值
  */
 export function isBoolean(value: unknown): value is boolean {
   return typeof value === 'boolean'
@@ -87,6 +103,8 @@ export function isBoolean(value: unknown): value is boolean {
  * 判断一个值是否为 `true`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `true`
  */
 export function isTrue(value: unknown): value is true {
   return value === true
@@ -96,6 +114,8 @@ export function isTrue(value: unknown): value is true {
  * 判断一个值是否为 `false`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `false`
  */
 export function isFalse(value: unknown): value is false {
   return value === false
@@ -105,6 +125,8 @@ export function isFalse(value: unknown): value is false {
  * 判断一个值是否为 `Symbol`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `Symbol`
  */
 export function isSymbol(value: unknown): value is symbol {
   return typeof value === 'symbol'
@@ -114,6 +136,8 @@ export function isSymbol(value: unknown): value is symbol {
  * 判断一个值是否为 `BigInt`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `BigInt`
  */
 export function isBigInt(value: unknown): value is bigint {
   return typeof value === 'bigint'
@@ -123,6 +147,8 @@ export function isBigInt(value: unknown): value is bigint {
  * 判断一个值是否为数组
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为数组
  */
 export function isArray<T = any>(value: unknown): value is T[] {
   return Array.isArray(value)
@@ -132,6 +158,10 @@ export function isArray<T = any>(value: unknown): value is T[] {
  * 判断一个值是否为对象
  *
  * 注意，`null` 与原生的特殊对象不被包含
+ *
+ * @param value 需判断的值
+ *
+ * @returns 是否为对象
  */
 export function isObject<T extends Record<any, any> = Record<any, any>>(
   value: unknown
@@ -143,6 +173,10 @@ export function isObject<T extends Record<any, any> = Record<any, any>>(
  * 判断一个值是否为 `Promise`
  *
  * 如果一个对象包含 `then` 和 `catch` 方法，则被认为是一个 `Promise`
+ *
+ * @param value 需判断的值
+ *
+ * @returns 是否为 `Promise`
  */
 export function isPromise<T = any>(value: unknown): value is Promise<T> {
   return (
@@ -156,6 +190,8 @@ export function isPromise<T = any>(value: unknown): value is Promise<T> {
  * 判断一个值是否为函数
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为函数
  */
 export function isFunction(value: unknown): value is (...any: any[]) => any {
   return typeof value === 'function'
@@ -165,6 +201,8 @@ export function isFunction(value: unknown): value is (...any: any[]) => any {
  * 判断一个值是否为 `Set`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `Set`
  */
 export function isSet<T = any>(value: unknown): value is Set<T> {
   return is(value, 'Set')
@@ -174,6 +212,8 @@ export function isSet<T = any>(value: unknown): value is Set<T> {
  * 判断一个值是否为 `Map`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `Map`
  */
 export function isMap<K = any, V = any>(value: unknown): value is Map<K, V> {
   return is(value, 'Map')
@@ -183,6 +223,8 @@ export function isMap<K = any, V = any>(value: unknown): value is Map<K, V> {
  * 判断一个值是否为 `Date`
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为 `Date`
  */
 export function isDate(value: unknown): value is Date {
   return is(value, 'Date')
@@ -192,6 +234,8 @@ export function isDate(value: unknown): value is Date {
  * 判断一个值是否为正则
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为正则
  */
 export function isRegExp(value: unknown): value is RegExp {
   return is(value, 'RegExp')
@@ -207,6 +251,8 @@ export function isRegExp(value: unknown): value is RegExp {
  * - 其余情况下，未定义时为空
  *
  * @param value 需判断的值
+ *
+ * @returns 是否为空
  */
 export function isEmpty(value: unknown) {
   if (Array.isArray(value) || typeof value === 'string') {
@@ -233,6 +279,8 @@ export function isEmpty(value: unknown) {
  *
  * @param value 需判断的值
  * @param ssr 是否考虑服务端渲染
+ *
+ * @returns 是否为 `Element`
  */
 export function isElement<T extends Element = Element>(value: unknown, ssr = false): value is T {
   if (!ssr && !isClient) return false
@@ -244,6 +292,8 @@ export function isElement<T extends Element = Element>(value: unknown, ssr = fal
  * 判断一个值能否被迭代
  *
  * @param value 需判断的值
+ *
+ * @returns 能否被迭代
  */
 export function isIterable(value: unknown) {
   return isDefined(value) && typeof (value as any)[Symbol.iterator] === 'function'
@@ -257,6 +307,8 @@ export function noop() {}
 
 /**
  * 一个返回 `true` 的占位函数
+ *
+ * @returns `true`
  */
 export function toTrue(...args: any[]): true
 export function toTrue() {
@@ -265,6 +317,8 @@ export function toTrue() {
 
 /**
  * 一个返回 `false` 的占位函数
+ *
+ * @returns `false`
  */
 export function toFalse(...args: any[]): false
 export function toFalse() {
@@ -272,11 +326,13 @@ export function toFalse() {
 }
 
 /**
- * 生成一个 range 数组
+ * 生成一个值递进的数组
  *
  * @param size 大小
  * @param start 开始的数值，默认为 1
  * @param step 跨度，默认为 1
+ *
+ * @returns 生成的数组
  */
 export function range(size: number, start = 1, step = 1) {
   const array: number[] = []
@@ -289,9 +345,11 @@ export function range(size: number, start = 1, step = 1) {
 }
 
 /**
- * 获取变量类型
+ * 获取变量的类型
  *
  * @param value 任意变量
+ *
+ * @returns 变量的类型
  */
 export function getType(value: unknown) {
   return Object.prototype.toString.call(value).slice(8, -1)
@@ -301,6 +359,8 @@ export function getType(value: unknown) {
  * 根据长度生成一串随机的字符串
  *
  * @param length 字符串的长度
+ *
+ * @returns 生成的字符串
  */
 export function randomString(length = 16) {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
@@ -320,6 +380,8 @@ export function randomString(length = 16) {
  *
  * @param conditions 判断条件及回调函数
  * @param options 额外的选项
+ *
+ * @returns 是否匹配了任一条件
  */
 export async function decide(
   conditions: [boolean | (() => boolean), () => void | Promise<void>][],

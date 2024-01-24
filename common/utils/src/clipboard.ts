@@ -4,6 +4,8 @@ import { isClient } from './common'
  * 将指定的文本写入粘贴板
  *
  * @param text 需要写入的文本
+ *
+ * @returns 是否写入成功
  */
 export async function writeClipboard(text: string) {
   if (!isClient) return false

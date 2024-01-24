@@ -4,6 +4,8 @@ const escapeRE = /["'&<>]/
  * 将 html 内容的敏感字符进行转换
  *
  * @param string html 内容
+ *
+ * @returns 转换后的 html 内容
  */
 export function escapeHtml(string: unknown) {
   const str = '' + string

@@ -85,10 +85,12 @@ const formatRegExp = /[yMdHmsq](\w)*|./g
 const quotationRegExp = /'(.+?)'/g
 
 /**
- * 将任意可转为 Date 的变量转为一个新日期
+ * 将任意可转为 `Date` 对象的变量转为一个新日期
  *
  * @param any 任意可转换的值
  * @param strict 是否在传入非法值时抛错
+ *
+ * @returns 转换后的 `Date` 对象
  */
 export function toDate(any: Dateable, strict = false) {
   const date = new Date(any)
@@ -112,11 +114,17 @@ export function toDate(any: Dateable, strict = false) {
  * @param date 需要格式化的Date对象
  * @param pattern 格式化结构 年-y 月-M 日-d 时-H 分-m 秒-s 季度-q
  *
- * @example
- * format(new Date(), 'yyyy-MM-dd')
+ * @returns 格式化后的字面值
  *
  * @example
+ * ```ts
+ * format(new Date(), 'yyyy-MM-dd')
+ * ```
+ *
+ * @example
+ * ```ts
  * format(Date.now(), 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'')
+ * ```
  */
 export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss') {
   date = toDate(date)
@@ -152,6 +160,8 @@ export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss') {
  * 获取日期的时间部分
  *
  * @param date 给定的日期
+ *
+ * @returns 日期的时间部分
  */
 export function getTime(date: Dateable) {
   date = toDate(date)
@@ -165,6 +175,8 @@ export function getTime(date: Dateable) {
  * 获取日期所在的季度
  *
  * @param date 给定的日期
+ *
+ * @returns 日期所在的季度
  */
 export function getQuarter(date: Dateable) {
   date = toDate(date)
@@ -178,6 +190,8 @@ const weeksForChinese = ['日', '一', '二', '三', '四', '五', '六']
  * 获取中文星期
  *
  * @param date 给定的日期
+ *
+ * @returns 中文星期
  */
 export function getChineseWeek(date: Date) {
   return weeksForChinese[date.getDay()]
@@ -188,6 +202,8 @@ export function getChineseWeek(date: Date) {
  *
  * @param date 原始日期
  * @param amount 增减的毫秒
+ *
+ * @returns 修改后的日期
  */
 export function addMilliseconds(date: Dateable, amount: number) {
   date = toDate(date)
@@ -201,9 +217,11 @@ export function addMilliseconds(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的秒
+ *
+ * @returns 修改后的日期
  */
 export function addSeconds(date: Dateable, amount: number) {
-  amount *= SECOND_ON_MILLS
+  amount *= SECOND_ON_MILLISECONDS
 
   return addMilliseconds(date, amount)
 }
@@ -213,6 +231,8 @@ export function addSeconds(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的分钟
+ *
+ * @returns 修改后的日期
  */
 export function addMinutes(date: Dateable, amount: number) {
   amount *= MINUTE_ON_SECONDS
@@ -225,6 +245,8 @@ export function addMinutes(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的小时
+ *
+ * @returns 修改后的日期
  */
 export function addHours(date: Dateable, amount: number) {
   amount *= HOUR_ON_MINUTES
@@ -237,6 +259,8 @@ export function addHours(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的半天数
+ *
+ * @returns 修改后的日期
  */
 export function addHalfDays(date: Dateable, amount: number) {
   amount *= 12
@@ -249,6 +273,8 @@ export function addHalfDays(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的天数
+ *
+ * @returns 修改后的日期
  */
 export function addDays(date: Dateable, amount: number) {
   date = toDate(date)
@@ -264,6 +290,8 @@ export function addDays(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的周数
+ *
+ * @returns 修改后的日期
  */
 export function addWeeks(date: Dateable, amount: number) {
   amount *= WEEK_ON_DAYS
@@ -276,6 +304,8 @@ export function addWeeks(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的月数
+ *
+ * @returns 修改后的日期
  */
 export function addMonths(date: Dateable, amount: number) {
   date = toDate(date)
@@ -291,6 +321,8 @@ export function addMonths(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的季度
+ *
+ * @returns 修改后的日期
  */
 export function addQuarters(date: Dateable, amount: number) {
   amount *= QUARTER_ON_MONTHS
@@ -303,6 +335,8 @@ export function addQuarters(date: Dateable, amount: number) {
  *
  * @param date 原始日期
  * @param amount 增减的年份
+ *
+ * @returns 修改后的日期
  */
 export function addYears(date: Dateable, amount: number) {
   amount *= YEAR_ON_MONTHS
@@ -311,11 +345,13 @@ export function addYears(date: Dateable, amount: number) {
 }
 
 /**
- * 生成一个日期 range 数组
+ * 生成一个天数递进的日期数组
  *
  * @param start 开始日期
  * @param size range 的大小, 默认 42 (一般电子日历为 6 行 7 列)
  * @param step range 的跨幅
+ *
+ * @returns 生成的日期数组
  */
 export function rangeDate(start: Dateable, size = 42, step = 1) {
   start = toDate(start)
@@ -330,11 +366,13 @@ export function rangeDate(start: Dateable, size = 42, step = 1) {
 }
 
 /**
- * 生成一个月份 range 数组
+ * 生成一个月份递进的日期数组
  *
  * @param start 开始日期
  * @param size range 的大小, 默认 12 (一年)
  * @param step range 的跨幅
+ *
+ * @returns 生成的日期数组
  */
 export function rangeMonth(start: Dateable, size = 12, step = 1) {
   start = toDate(start)
@@ -352,6 +390,8 @@ export function rangeMonth(start: Dateable, size = 12, step = 1) {
  * 根据给定的日期获取上一个周日
  *
  * @param date 原始日期
+ *
+ * @returns 上一个周日
  */
 export function getLastSunday(date: Date) {
   const day = date.getDay() ?? 7
@@ -363,6 +403,8 @@ export function getLastSunday(date: Date) {
  * 获取给定的日期所在秒的开始日期（毫秒归零）
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function startOfSecond(date: Dateable) {
   date = toDate(date)
@@ -375,6 +417,8 @@ export function startOfSecond(date: Dateable) {
  * 获取给定的日期所在分钟的开始日期 (秒归零)
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function startOfMinute(date: Dateable) {
   date = toDate(date)
@@ -387,6 +431,8 @@ export function startOfMinute(date: Dateable) {
  * 获取给定的日期所在小时的开始日期 (分钟归零)
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function startOfHour(date: Dateable) {
   date = toDate(date)
@@ -399,6 +445,8 @@ export function startOfHour(date: Dateable) {
  * 获取给定的日期所在天的开始日期
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function startOfDay(date: Dateable) {
   date = toDate(date)
@@ -411,6 +459,8 @@ export function startOfDay(date: Dateable) {
  * 获取给定日期所在天的结束日期
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function endOfDay(date: Dateable) {
   date = toDate(date)
@@ -424,6 +474,8 @@ export function endOfDay(date: Dateable) {
  *
  * @param date 需要解析的时间
  * @param startOn 设定周的第一天，默认为周日
+ *
+ * @returns 新的开始日期
  */
 export function startOfWeek(date: Dateable, startOn = 0) {
   startOn = startOn % 7
@@ -447,6 +499,8 @@ export function startOfWeek(date: Dateable, startOn = 0) {
  * 判断给定的年份是否为闰年
  *
  * @param year 原始年份
+ *
+ * @returns 是否为闰年
  */
 export function isLeapYear(year: number) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
@@ -457,6 +511,8 @@ export function isLeapYear(year: number) {
  *
  * @param date 原始日期
  * @param startOn 设定一个月的第一天，默认为 1 号
+ *
+ * @returns 新的开始日期
  */
 export function startOfMonth(date: Dateable, startOn = 1) {
   date = toDate(date)
@@ -501,6 +557,8 @@ export function startOfMonth(date: Dateable, startOn = 1) {
  * 获取给定日期所在季度的第一天的开始日期
  *
  * @param date 原始日期
+ *
+ * @returns 新的开始日期
  */
 export function startOfQuarter(date: Dateable) {
   date = toDate(date)
@@ -519,6 +577,8 @@ export function startOfQuarter(date: Dateable) {
  *
  * @param date 原始日期
  * @param startOn 设定年的开始月份，默认为一月
+ *
+ * @returns 新的开始日期
  */
 export function startOfYear(date: Dateable, startOn = 0) {
   startOn = startOn % 11
@@ -544,6 +604,8 @@ export function startOfYear(date: Dateable, startOn = 0) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的毫秒数
  */
 export function differenceMilliseconds(left: Dateable, right: Dateable) {
   left = toDate(left)
@@ -557,6 +619,8 @@ export function differenceMilliseconds(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的秒数
  */
 export function differenceSeconds(left: Dateable, right: Dateable) {
   const diff = differenceMilliseconds(left, right) / SECOND_ON_MILLS
@@ -569,6 +633,8 @@ export function differenceSeconds(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的分钟数
  */
 export function differenceMinutes(left: Dateable, right: Dateable) {
   const diff = differenceMilliseconds(left, right) / MINUTE_ON_MILLS
@@ -581,6 +647,8 @@ export function differenceMinutes(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的小时数
  */
 export function differenceHours(left: Dateable, right: Dateable) {
   const diff = differenceMilliseconds(left, right) / HOUR_ON_MILLS
@@ -593,6 +661,8 @@ export function differenceHours(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的天数
  */
 export function differenceDays(left: Dateable, right: Dateable) {
   left = startOfDay(left)
@@ -607,6 +677,8 @@ export function differenceDays(left: Dateable, right: Dateable) {
  * @param left 原始日期
  * @param right 原始日期
  * @param weekStartOn 设定周的第一天，默认为周日
+ *
+ * @returns 相差的周数
  */
 export function differenceWeeks(left: Dateable, right: Dateable, weekStartOn = 0) {
   left = startOfWeek(left, weekStartOn)
@@ -620,6 +692,8 @@ export function differenceWeeks(left: Dateable, right: Dateable, weekStartOn = 0
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的月份
  */
 export function differenceMonths(left: Dateable, right: Dateable) {
   left = toDate(left)
@@ -636,6 +710,8 @@ export function differenceMonths(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的季度
  */
 export function differenceQuarters(left: Dateable, right: Dateable) {
   left = toDate(left)
@@ -652,6 +728,8 @@ export function differenceQuarters(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的年份
  */
 export function differenceYears(left: Dateable, right: Dateable) {
   left = toDate(left)
@@ -665,6 +743,8 @@ export function differenceYears(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 比较后的结果，`-1` 则左侧小，`1` 则右侧小，`0` 则相等
  */
 export function compareAsc(left: Dateable, right: Dateable) {
   left = toDate(left)
@@ -680,6 +760,8 @@ export function compareAsc(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 比较后的结果，`1` 则左侧小，`-1` 则右侧小，`0` 则相等
  */
 export function compareDesc(left: Dateable, right: Dateable) {
   return -compareAsc(left, right)
@@ -690,6 +772,8 @@ export function compareDesc(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整秒数
  */
 export function differenceFullSeconds(left: Dateable, right: Dateable) {
   left = startOfSecond(left)
@@ -703,6 +787,8 @@ export function differenceFullSeconds(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整分钟数
  */
 export function differenceFullMinutes(left: Dateable, right: Dateable) {
   left = startOfMinute(left)
@@ -716,6 +802,8 @@ export function differenceFullMinutes(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整小时数
  */
 export function differenceFullHours(left: Dateable, right: Dateable) {
   left = startOfHour(left)
@@ -729,6 +817,8 @@ export function differenceFullHours(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整天数
  */
 export function differenceFullDays(left: Dateable, right: Dateable) {
   const sign = compareDesc(left, right)
@@ -747,6 +837,8 @@ export function differenceFullDays(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整周数
  */
 export function differenceFullWeeks(left: Dateable, right: Dateable) {
   const diff = differenceFullDays(left, right) / WEEK_ON_DAYS
@@ -759,6 +851,8 @@ export function differenceFullWeeks(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整月份
  */
 export function differenceFullMonths(left: Dateable, right: Dateable) {
   const sign = compareDesc(left, right)
@@ -777,6 +871,8 @@ export function differenceFullMonths(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整季度
  */
 export function differenceFullQuarters(left: Dateable, right: Dateable) {
   const diff = differenceFullMonths(left, right) / 3
@@ -789,6 +885,8 @@ export function differenceFullQuarters(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
+ *
+ * @returns 相差的完整年份
  */
 export function differenceFullYears(left: Dateable, right: Dateable) {
   const sign = compareDesc(left, right)

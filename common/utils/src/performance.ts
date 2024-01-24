@@ -7,10 +7,12 @@ export const raf = isClient
     }
 
 /**
- * 将一个函数或方法进行节流
+ * 将一个方法进行节流
  *
  * @param method 需要节流的方法，需自行绑定 this
  * @param interval 节流后的触发间隔，默认 16 ms (1 帧)
+ *
+ * @returns 节流后的方法
  */
 export function throttle<T extends (...args: any[]) => any>(
   method: T,
@@ -53,10 +55,12 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 /**
- * 将一个函数或方法进行防抖
+ * 将一个方法进行防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
  * @param delay 防抖的限制时间，默认 100ms
+ *
+ * @returns 防抖后的方法
  */
 export function debounce<T extends (...args: any[]) => any>(
   method: T,
@@ -86,9 +90,11 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 /**
- * 针对每个微任务，将一个函数或方法进行防抖
+ * 对给定的方法进行微任务级别的防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
+ *
+ * @returns 防抖后的方法
  */
 export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
@@ -117,9 +123,11 @@ export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
 }
 
 /**
- * 针对每一帧，将一个函数或方法进行防抖
+ * 对给定的方法进行渲染帧级别的防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
+ *
+ * @returns 防抖后的方法
  */
 export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
@@ -223,6 +231,8 @@ export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...a
  * @param maxConcurrency 最大的并发数
  * @param source 源数据
  * @param iteratorFn 处理操作的异步函数
+ *
+ * @returns 等待所有任务执行完的 Promise 对象
  */
 export async function runParallel<T>(
   maxConcurrency: number,

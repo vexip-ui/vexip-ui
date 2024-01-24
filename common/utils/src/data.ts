@@ -1,9 +1,36 @@
 export interface BITree {
   tree: number[],
+  /**
+   * 为第 index 个元素增减值
+   *
+   * @param index 索引值
+   * @param num 增减的值
+   */
   add(index: number, num: number): void,
+  /**
+   * 求前 index 个元素的和
+   *
+   * @param index 索引值
+   *
+   * @returns 前 index 个元素的和
+   */
   sum(index?: number): number,
+  /**
+   * 获取第 index 个元素的值
+   *
+   * @param index 索引值
+   *
+   * @returns 第 index 个元素的值
+   */
   get(index: number): number,
-  boundIndex(limit: number): number
+  /**
+   * 根据目标值寻找一个最接近的元素的索引值
+   *
+   * @param target 目标值
+   *
+   * @returns 最接近的元素的索引值
+   */
+  boundIndex(target: number): number
 }
 
 function lowBit(num: number) {
@@ -17,13 +44,12 @@ function lowBit(num: number) {
  *
  * @param length 树的大小，即元素的总数
  * @param min 规定元素的最小值
+ *
+ * @returns 二叉索引树对象
  */
 export function createBITree(length: number, min = 0): BITree {
   const tree: number[] = new Array(length + 1).fill(0)
 
-  /**
-   * 为第 index 个元素增/减值
-   */
   function add(index: number, delta: number) {
     if (!delta || index >= length) return
 
@@ -35,9 +61,6 @@ export function createBITree(length: number, min = 0): BITree {
     }
   }
 
-  /**
-   * 求前 index 个元素的和
-   */
   function sum(index = length) {
     if (index <= 0) return 0
     if (index > length) index = length
@@ -52,17 +75,11 @@ export function createBITree(length: number, min = 0): BITree {
     return sum
   }
 
-  /**
-   * 获取第 index 个元素的值
-   */
   function get(index: number) {
     return sum(index + 1) - sum(index)
   }
 
-  /**
-   * 根据 limit 提供的值寻找一个命中的元素的 index
-   */
-  function boundIndex(limit: number) {
+  function boundIndex(target: number) {
     let left = 0
     let right = length
 
@@ -70,12 +87,12 @@ export function createBITree(length: number, min = 0): BITree {
       const middle = Math.floor((left + right) / 2)
       const total = sum(middle)
 
-      if (total > limit) {
+      if (total > target) {
         right = middle
         continue
-      } else if (total < limit) {
+      } else if (total < target) {
         if (left === middle) {
-          return sum(left + 1) <= limit ? left + 1 : left
+          return sum(left + 1) <= target ? left + 1 : left
         }
 
         left = middle

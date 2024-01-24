@@ -28,6 +28,8 @@ function ensureElement(el?: Element | null) {
  *
  * @param selector 选择器
  * @param root 根元素，不指定时为 `document.body`
+ *
+ * @returns 匹配的所有元素
  */
 export function queryAll(selector: string, root?: Element | null) {
   if (!isClient || !selector) return []
@@ -39,6 +41,8 @@ export function queryAll(selector: string, root?: Element | null) {
  * 判断指定的元素是否聚焦或包含聚焦的元素
  *
  * @param el 需判断的元素
+ *
+ * @returns 是否聚焦或包含聚焦的元素
  */
 export function isFocusIn(el?: Element | null) {
   if (!isClient) return false
@@ -55,6 +59,8 @@ export function isFocusIn(el?: Element | null) {
  *
  * @param el 被包含的元素（子元素）
  * @param parent 包含的元素（父元素）
+ *
+ * @returns 元素是否包含另一个元素
  */
 export function contains(el?: Element | null, parent?: HTMLElement | null) {
   if (!el || !parent) return false
@@ -68,6 +74,8 @@ export function contains(el?: Element | null, parent?: HTMLElement | null) {
  * 判断指定的元素是否隐藏
  *
  * @param el 需判断的元素
+ *
+ * @returns 元素是否隐藏
  */
 export function isHidden(el?: Element | null) {
   if (!isClient || !isElement(el) || !el.parentNode || !contains(el, document.body)) {
@@ -87,6 +95,8 @@ export function isHidden(el?: Element | null) {
  * 判断指定的元素是否可见
  *
  * @param el 需判断的元素
+ *
+ * @returns 元素是否可见
  */
 export function isVisible(el?: Element | null) {
   return !isHidden(el)
@@ -96,6 +106,8 @@ export function isVisible(el?: Element | null) {
  * 判断指定的元素是否被禁用
  *
  * @param el 需判断的元素
+ *
+ * @returns 元素是否被禁用
  */
 export function isDisabled(el?: Element | null) {
   return (
@@ -110,6 +122,8 @@ export function isDisabled(el?: Element | null) {
  *
  * @param root 根元素，不指定时为 `document.body`
  * @param includeDisabled 是否包含被禁用的元素
+ *
+ * @returns 可以被切换焦点的元素
  */
 export function queryTabables(root?: HTMLElement, includeDisabled = false) {
   const isDis = includeDisabled ? () => false : isDisabled
@@ -120,9 +134,11 @@ export function queryTabables(root?: HTMLElement, includeDisabled = false) {
 }
 
 /**
- * 获取元素横向的内边距值
+ * 获取元素横向的内边距像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素横向的内边距像素值
  */
 export function getXPadding(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -134,9 +150,11 @@ export function getXPadding(el: HTMLElement | null) {
 }
 
 /**
- * 获取元素纵向的内边距值
+ * 获取元素纵向的内边距像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素纵向的内边距像素值
  */
 export function getYPadding(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -148,9 +166,11 @@ export function getYPadding(el: HTMLElement | null) {
 }
 
 /**
- * 获取元素横向的外边距值
+ * 获取元素横向的外边距像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素横向的外边距像素值
  */
 export function getXMargin(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -162,9 +182,11 @@ export function getXMargin(el: HTMLElement | null) {
 }
 
 /**
- * 获取元素纵向的外边距值
+ * 获取元素纵向的外边距像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素纵向的外边距像素值
  */
 export function getYMargin(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -176,9 +198,11 @@ export function getYMargin(el: HTMLElement | null) {
 }
 
 /**
- * 获取元素横向的边框宽度值
+ * 获取元素横向的边框像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素横向的边框像素值
  */
 export function getXBorder(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -191,9 +215,11 @@ export function getXBorder(el: HTMLElement | null) {
 }
 
 /**
- * 获取元素纵向的边框宽度值
+ * 获取元素纵向的边框像素值
  *
  * @param el 指定的元素
+ *
+ * @returns 元素纵向的边框像素值
  */
 export function getYBorder(el: HTMLElement | null) {
   if (!isClient || !el) return 0
@@ -209,6 +235,8 @@ export function getYBorder(el: HTMLElement | null) {
  * 获取元素的选中宽度
  *
  * @param el 指定的元素
+ *
+ * @returns 元素的选中宽度
  */
 export function getRangeWidth(el: HTMLElement | null) {
   if (!isClient || !el) return 0
