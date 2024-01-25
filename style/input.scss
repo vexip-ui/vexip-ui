@@ -243,6 +243,7 @@ $input: map.merge(
     align-items: center;
     width: 100%;
     background-color: get-css-var('input-bg-color');
+    border-radius: get-css-var('input-radius');
   }
 
   @include basis;
