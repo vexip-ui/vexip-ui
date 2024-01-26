@@ -40,7 +40,9 @@ export function has(value: Record<string, any>, key: string | symbol): key is ke
  *
  * @returns 是否已定义
  */
-export function isDefined<T = unknown>(value: T | undefined | null): value is T {
+export function isDefined<T = unknown>(
+  value: T | undefined | null
+): value is Exclude<T, undefined | null> {
   return value !== undefined && value !== null
 }
 
