@@ -321,7 +321,7 @@ $input: map.merge(
 
   @mixin inner-input($inner-radius) {
     & > #{$wrapper},
-    .#{$namespace}-number-input {
+    & > .#{$namespace}-number-input {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
       height: 100%;
 
@@ -330,28 +330,27 @@ $input: map.merge(
   }
 
   @mixin inner-select($inner-radius) {
-    .#{$namespace}-cascader,
-    .#{$namespace}-color-picker,
-    .#{$namespace}-date-picker,
-    .#{$namespace}-select,
-    .#{$namespace}-time-picker {
-      width: calc(100% + 2 * get-css-var('input-h-padding'));
-      height: 100%;
+    $selects: cascader color-picker date-picker select time-picker;
 
-      &__selector {
-        min-width: 60px;
+    @each $select in $selects {
+      & > .#{$namespace}-#{$select} {
+        width: calc(100% + 2 * get-css-var('input-h-padding'));
         height: 100%;
-        background-color: transparent;
 
-        @include logical-radius($inner-radius);
+        & .#{$namespace}-#{$select}__selector {
+          min-width: 60px;
+          height: 100%;
+          background-color: transparent;
+          box-shadow: unset;
 
-        box-shadow: unset;
+          @include logical-radius($inner-radius);
+        }
       }
     }
   }
 
   @mixin inner-button($inner-radius) {
-    .#{$namespace}-button {
+    & > .#{$namespace}-button {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
       height: 100%;
 
