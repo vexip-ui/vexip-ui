@@ -97,18 +97,23 @@ interface ToolbarAction {
 
 ### Viewer Props
 
-| Name              | Type                     | Description                                                                                                             | Default    | Since   |
-| ----------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------- | ------- |
-| move-disabled     | `boolean`                | Set whether to disable the move function                                                                                | `false`    | -       |
-| zoom-disabled     | `boolean`                | Set whether to disable zoom function                                                                                    | `false`    | -       |
-| zoom-delta        | `number`                 | Set the amount of change per zoom                                                                                       | `0.15`     | -       |
-| rotate-disabled   | `boolean`                | Set whether to disable rotation                                                                                         | `false`    | -       |
-| rotate-delta      | `number`                 | Set the delta per rotation                                                                                              | `90`       | -       |
-| full-disabled     | `boolean`                | Set whether to disable full screen function                                                                             | `false`    | -       |
-| toolbar-placement | `ToolbarPlacement`       | Set the position of the toolbar                                                                                         | `'bottom'` | -       |
-| actions           | `ToolbarAction[]`        | Add custom action buttons                                                                                               | `[]`       | -       |
-| toolbar-fade      | `boolean \| number`      | Set whether to trigger the toolbar to fade or not. When passing in a number, you can set the wait milliseconds for fade | `false`    | -       |
-| locale            | `LocaleConfig['viewer']` | Set the locale config                                                                                                   | `null`     | `2.1.0` |
+| Name              | Type                     | Description                                                                                       | Default    | Since   |
+| ----------------- | ------------------------ | ------------------------------------------------------------------------------------------------- | ---------- | ------- |
+| move-disabled     | `boolean`                | Whether to disable the move function                                                              | `false`    | -       |
+| zoom-disabled     | `boolean`                | Whether to disable the zoom function                                                              | `false`    | -       |
+| zoom-delta        | `number`                 | Set the amount of change for each zoom                                                            | `0.15`     | -       |
+| zoom-min          | `number`                 | Minimum zoom ratio                                                                                | `0.1`      | -       |
+| zoom-max          | `number`                 | Maximum zoom ratio                                                                                | `Infinity` | -       |
+| flip-disabled     | `boolean`                | Whether to disable the mirror flip function                                                       | `false`    | -       |
+| rotate-disabled   | `boolean`                | Whether to disable the rotation function                                                          | `false`    | -       |
+| rotate-delta      | `number`                 | Set the amount of change for each rotation                                                        | `90`       | -       |
+| full-disabled     | `boolean`                | Whether to disable the full screen function                                                       | `false`    | -       |
+| toolbar-placement | `ToolbarPlacement`       | Set the position of the toolbar                                                                   | `'bottom'` | -       |
+| actions           | `ToolbarAction[]`        | Add custom action buttons                                                                         | `[]`       | -       |
+| toolbar-fade      | `boolean \| number`      | Set whether the toolbar is fading, when passing in a number, you can set the delay for the fading | `false`    | -       |
+| locale            | `LocaleConfig['viewer']` | Set the locale config                                                                             | `null`     | `2.1.0` |
+| no-transition     | `boolean`                | Whether to disable transition effects                                                             | `false`    | -       |
+| center-scale      | `boolean`                | Whether to use the center point of the content as the center of scaling                           | `false`    | `2.3.2` |
 
 ### Viewer Events
 

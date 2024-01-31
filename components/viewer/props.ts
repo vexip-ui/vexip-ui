@@ -21,6 +21,7 @@ export const viewerProps = buildProps({
   actions: Array as PropType<ToolbarAction[]>,
   toolbarFade: booleanNumberProp,
   noTransition: booleanProp,
+  centerScale: booleanProp,
   onMoveStart: eventProp<(state: ViewerState) => void>(),
   onMove: eventProp<(state: ViewerState) => void>(),
   onMoveEnd: eventProp<(state: ViewerState) => void>(),

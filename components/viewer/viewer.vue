@@ -94,7 +94,8 @@ export default defineComponent({
       toolbarPlacement: 'bottom',
       actions: () => [],
       toolbarFade: false,
-      noTransition: false
+      noTransition: false,
+      centerScale: false
     })
 
     const nh = useNameHelper('viewer')
@@ -343,9 +344,7 @@ export default defineComponent({
     }
 
     function handleRotate(deg: number) {
-      if (props.rotateDisabled) {
-        return
-      }
+      if (props.rotateDisabled) return
 
       rotate.value += deg
 
@@ -357,27 +356,21 @@ export default defineComponent({
     }
 
     function toggleFlipHorizontal(target = !flipX.value) {
-      if (props.flipDisabled) {
-        return
-      }
+      if (props.flipDisabled) return
 
       flipX.value = target
       emitEvent(props.onFlipX, target, state)
     }
 
     function toggleFlipVertical(target = !flipY.value) {
-      if (props.flipDisabled) {
-        return
-      }
+      if (props.flipDisabled) return
 
       flipY.value = target
       emitEvent(props.onFlipY, target, state)
     }
 
     function handleZoom(ratio: number) {
-      if (props.zoomDisabled || !container.value) {
-        return
-      }
+      if (props.zoomDisabled || !container.value) return
 
       const containerRect = container.value.getBoundingClientRect()
       const { x, y } = zoomOrigin
@@ -390,8 +383,10 @@ export default defineComponent({
       const originX = delta * offsetWidth * 0.5
       const originY = delta * offsetHeight * 0.5
 
-      currentLeft.value -= delta * (x - containerRect.left - currentLeft.value) - originX
-      currentTop.value -= delta * (y - containerRect.top - currentTop.value) - originY
+      if (!props.centerScale) {
+        currentLeft.value -= delta * (x - containerRect.left - currentLeft.value) - originX
+        currentTop.value -= delta * (y - containerRect.top - currentTop.value) - originY
+      }
 
       emitEvent(props.onZoom, zoom.value, state)
     }
