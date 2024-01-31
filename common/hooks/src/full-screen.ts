@@ -93,18 +93,19 @@ const states = new Set<Ref<boolean>>()
 const subscriptions = new WeakMap<Element, Ref<boolean>>()
 
 if (isClient && map) {
-  // const ELEMENT = map[2]
+  const ELEMENT = map[2]
   const EVENT = map[4]
 
   document.addEventListener(
     EVENT,
-    event => {
+    () => {
+      debugger
       states.forEach(state => {
         state.value = false
       })
 
-      if (event.target) {
-        const full = subscriptions.get(event.target as Element)
+      if (document[ELEMENT]) {
+        const full = subscriptions.get(document[ELEMENT])
 
         if (full) {
           full.value = true
@@ -154,6 +155,7 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
 
     if (el) {
       if (force || !document[ELEMENT]) {
+        debugger
         await el[REQUEST]()
         full.value = true
 
@@ -168,6 +170,7 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
     const el = unrefElement(target)
 
     if (force || (document[ELEMENT] && document[ELEMENT] === el)) {
+      debugger
       await document[EXIT]()
       full.value = false
 
