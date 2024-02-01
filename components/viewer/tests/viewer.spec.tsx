@@ -111,6 +111,20 @@ describe('Viewer', () => {
     expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain('scale(1)')
   })
 
+  it('action layout', async () => {
+    const layout = [['flip-x'], ['flip-y']]
+    const wrapper = mount(() => <Viewer action-layout={layout}></Viewer>)
+
+    await nextTick()
+
+    const els = wrapper.findAll('.vxp-viewer__toolbar > *')
+
+    expect(els.length).toBe(3)
+    expect(els[0].classes()).toContain('vxp-viewer__flip-x')
+    expect(els[1].classes()).toContain('vxp-divider')
+    expect(els[2].classes()).toContain('vxp-viewer__flip-y')
+  })
+
   it('custom actions', async () => {
     const process = vi.fn()
     const actions = [
