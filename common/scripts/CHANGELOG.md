@@ -1,3 +1,12 @@
+## [1.1.4](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.3...scripts@1.1.4) (2024-02-01)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** support specify path of ending with package.json ([ebe2f09](https://github.com/vexip-ui/vexip-ui/commit/ebe2f099f9d48a4837b95ee201e084b6e78c44a2))
+
+
+
 ## [1.1.3](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.1.2...scripts@1.1.3) (2023-12-14)
 
 
