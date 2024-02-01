@@ -1,3 +1,12 @@
+## [2.13.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.13.0...utils@2.13.1) (2024-02-01)
+
+
+### 👓 Types
+
+* **utils:** improve declaration of isDefined return ([eca0709](https://github.com/vexip-ui/vexip-ui/commit/eca07099fac236c5fbfd8713b626ad39b1722c6c))
+
+
+
 # [2.13.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.12.0...utils@2.13.0) (2024-01-24)
 
 
