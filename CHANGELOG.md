@@ -1,3 +1,36 @@
+## [2.3.2](https://github.com/vexip-ui/vexip-ui/compare/v2.3.1...v2.3.2) (2024-02-01)
+
+
+### ✨ Features
+
+* **slider:** add sync prop ([5458305](https://github.com/vexip-ui/vexip-ui/commit/5458305199ab65c7d659bcfd669d9610b9e5d2b5))
+* **utils:** deepClone support clone Date, Set and Map ([cfee561](https://github.com/vexip-ui/vexip-ui/commit/cfee56169a538bbab8de23a166c16fcc81a9423e))
+* **viewer:** add center-scale prop ([1458e41](https://github.com/vexip-ui/vexip-ui/commit/1458e41bd53603d9ac21a5377c7a3b613b2fb5e5))
+
+
+### 🐞 Bug Fixes
+
+* **color-picker:** marker content overflow when using border-radius ([722c17a](https://github.com/vexip-ui/vexip-ui/commit/722c17ace937c26a592b6d8b1c35b751988331e7))
+* **hooks:** correctly process global full screen element state ([c9dab29](https://github.com/vexip-ui/vexip-ui/commit/c9dab295b49d64264dd975f8f5fc2be3b350aade))
+* **input:** improve border radius style when using before/after slots ([738a5e5](https://github.com/vexip-ui/vexip-ui/commit/738a5e5a070d7bc4e207f7175ed0e264e533c2a7))
+* **input:** more accurate scope for before/after actions ([6e8de9a](https://github.com/vexip-ui/vexip-ui/commit/6e8de9a39fdfd6af97c9521f57754f79c11a22b9))
+* **scripts:** support specify path of ending with package.json ([ebe2f09](https://github.com/vexip-ui/vexip-ui/commit/ebe2f099f9d48a4837b95ee201e084b6e78c44a2))
+* **tooltip:** correct theme style scope ([739928c](https://github.com/vexip-ui/vexip-ui/commit/739928c9a50f26e72d1fa1a03d11f258990b04b8))
+* **utils:** improve toKebabCase implementation ([702398c](https://github.com/vexip-ui/vexip-ui/commit/702398c48638fb5e81447bb0e999836027489cf3))
+* **utils:** normalize variable name of date constants ([9c547b4](https://github.com/vexip-ui/vexip-ui/commit/9c547b4c90b162f551e6e568a234c3388ad2bf1c))
+
+
+### 👓 Types
+
+* **utils:** improve declaration of isDefined return ([eca0709](https://github.com/vexip-ui/vexip-ui/commit/eca07099fac236c5fbfd8713b626ad39b1722c6c))
+
+
+### 🔨 Code Refactoring
+
+* **viewer:** support custom layout of action buttons ([5cb208b](https://github.com/vexip-ui/vexip-ui/commit/5cb208b26ae619b6623cc41cb551d06e398eccdc))
+
+
+
 ## [2.3.1](https://github.com/vexip-ui/vexip-ui/compare/v2.3.0...v2.3.1) (2024-01-19)
 
 

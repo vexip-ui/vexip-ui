@@ -1,5 +1,10 @@
 import { getCountWord, makeSentence } from '@vexip-ui/config'
-import { DAY_ON_MILLS, HOUR_ON_MILLS, MINUTE_ON_MILLS, SECOND_ON_MILLS } from '@vexip-ui/utils'
+import {
+  DAY_ON_MILLISECONDS,
+  HOUR_ON_MILLISECONDS,
+  MINUTE_ON_MILLISECONDS,
+  SECOND_ON_MILLISECONDS
+} from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 
@@ -73,20 +78,20 @@ export function computeTimeAgo(
   let usedDiff: number
   let noFormat = false
 
-  if (diff < 10 * SECOND_ON_MILLS) {
+  if (diff < 10 * SECOND_ON_MILLISECONDS) {
     label = locale.justNow
     noFormat = true
-  } else if (diff < MINUTE_ON_MILLS) {
+  } else if (diff < MINUTE_ON_MILLISECONDS) {
     label = locale.second
-    usedDiff = Math.floor(diff / SECOND_ON_MILLS)
-  } else if (diff < HOUR_ON_MILLS) {
+    usedDiff = Math.floor(diff / SECOND_ON_MILLISECONDS)
+  } else if (diff < HOUR_ON_MILLISECONDS) {
     label = locale.minute
-    usedDiff = Math.floor(diff / MINUTE_ON_MILLS)
-  } else if (diff < DAY_ON_MILLS) {
+    usedDiff = Math.floor(diff / MINUTE_ON_MILLISECONDS)
+  } else if (diff < DAY_ON_MILLISECONDS) {
     label = locale.hour
-    usedDiff = Math.floor(diff / HOUR_ON_MILLS)
-  } else if (diff < 30 * DAY_ON_MILLS) {
-    usedDiff = Math.floor(diff / DAY_ON_MILLS)
+    usedDiff = Math.floor(diff / HOUR_ON_MILLISECONDS)
+  } else if (diff < 30 * DAY_ON_MILLISECONDS) {
+    usedDiff = Math.floor(diff / DAY_ON_MILLISECONDS)
 
     if (usedDiff === 1) {
       label = locale.yesterday
@@ -94,8 +99,8 @@ export function computeTimeAgo(
     } else {
       label = locale.days
     }
-  } else if (diff < 365 * DAY_ON_MILLS) {
-    usedDiff = Math.floor(diff / (30 * DAY_ON_MILLS))
+  } else if (diff < 365 * DAY_ON_MILLISECONDS) {
+    usedDiff = Math.floor(diff / (30 * DAY_ON_MILLISECONDS))
 
     if (usedDiff === 1) {
       label = locale.lastMonth
@@ -104,7 +109,7 @@ export function computeTimeAgo(
       label = locale.months
     }
   } else {
-    usedDiff = Math.floor(diff / 365 / DAY_ON_MILLS)
+    usedDiff = Math.floor(diff / 365 / DAY_ON_MILLISECONDS)
 
     if (usedDiff === 1) {
       label = locale.lastYear

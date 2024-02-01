@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { existsSync, lstatSync, readFileSync, readdirSync, rmdirSync, unlinkSync } from 'node:fs'
 import { createServer } from 'node:net'
 
@@ -169,7 +169,13 @@ export function queryIdlePort(startPort: number, host = 'localhost', maxTry = 20
   })
 }
 
+const endsWithPkgRE = /[\\/]package\.json$/
+
 export function getPkgInfo(pkgDir: string, errorIfPrivate = false) {
+  if (endsWithPkgRE.test(pkgDir)) {
+    pkgDir = dirname(pkgDir)
+  }
+
   const pkgPath = resolve(pkgDir, 'package.json')
 
   if (!existsSync(pkgPath)) {

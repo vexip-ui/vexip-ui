@@ -261,7 +261,7 @@ $tooltip: map.merge(
   }
 
   @mixin theme($name, $content-color, $border-color, $fill-color) {
-    &__popper--#{$name} &__tip {
+    &__popper--#{$name} > &__tip {
       color: $content-color;
       background-color: $fill-color;
     }

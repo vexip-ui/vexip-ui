@@ -176,6 +176,7 @@ interface SliderTriggerParams {
 | flip-marker  | `boolean`                                        | Set whether to place the marker label on the other side                                        | `false`   | `2.2.9`  |
 | trigger-fade | `boolean`                                        | Whether the trigger will be automatically hidden                                               | `false`   | `2.2.9`  |
 | tip-props    | `SliderTipProps`                                 | Set other props of the Tooltip                                                                 | `{}`      | `2.2.11` |
+| sync         | `boolean`                                        | Set whether enable sync input mode                                                             | `false`   | `2.3.2`  |
 
 ### Slider Events
 

@@ -1,3 +1,12 @@
+## [2.4.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.4.0...hooks@2.4.1) (2024-02-01)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** correctly process global full screen element state ([c9dab29](https://github.com/vexip-ui/vexip-ui/commit/c9dab295b49d64264dd975f8f5fc2be3b350aade))
+
+
+
 # [2.4.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.3.1...hooks@2.4.0) (2024-01-19)
 
 

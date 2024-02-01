@@ -9,6 +9,8 @@ export const numberRE = /^\s*[+-]?\d*\.?\d+(?:[eE][+-]?\d+)?\s*$/
  *
  * @param value 需要检测的值
  * @param strict 是否为严格模式
+ *
+ * @returns 值是否可以转为数字
  */
 export function isValidNumber(value: unknown, strict = false) {
   if (typeof value === 'number') {
@@ -25,7 +27,9 @@ export function isValidNumber(value: unknown, strict = false) {
 /**
  * 将给定的值转成数字，NaN 的情况将会处理成 0
  *
- * @param value 需要转化的值
+ * @param value 需要转换的值
+ *
+ * @returns 转换后的数字
  */
 export function toNumber(value: unknown) {
   let number = parseFloat(value as string)
@@ -42,6 +46,8 @@ export function toNumber(value: unknown) {
  *
  * @param number 需要处理的整数
  * @param length 填充至的长度
+ *
+ * @returns 填充后的字面值
  */
 export function padStartZeros(number: number, length: number) {
   if (length <= 0) {
@@ -55,6 +61,8 @@ export function padStartZeros(number: number, length: number) {
  * 将小于 10 整数 N 变成 `0N` 的字符串，方法不会对入参校验
  *
  * @param number 需要处理的整数
+ *
+ * @returns 填充后的字面值
  */
 export function doubleDigits(number: number) {
   return padStartZeros(number, 2)
@@ -64,6 +72,8 @@ export function doubleDigits(number: number) {
  * 返回数字的小数位数
  *
  * @param number 指定的数字
+ *
+ * @returns 数字的小数位数
  */
 export function decimalLength(number: number | string) {
   // Get digit length of e
@@ -89,8 +99,10 @@ export function digitLength(number: number | string) {
  * @param number 需要格式化的数字
  * @param segment 分隔的位数，默认为 3
  * @param separator 分隔的符号，默认为 ','
+ *
+ * @returns 格式化后的字面值
  */
-export function segmentNumber(number: number | string, segment = 3, separator = ','): string {
+export function segmentNumber(number: number | string, segment = 3, separator = ',') {
   if (typeof number !== 'number') {
     number = parseFloat(number)
   }
@@ -115,6 +127,8 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
  *
  * @param number 需要处理的实数
  * @param decimal 需要保留的小数
+ *
+ * @returns 保留小数后的值
  */
 export function toFixed(number: number, decimal: number) {
   if (decimal === 0) return Math.round(number)
@@ -146,6 +160,8 @@ export function toFixed(number: number, decimal: number) {
  * @param number 要处理的实数
  * @param multiple 要扩大的倍数
  * @param decimal 要保留的小数
+ *
+ * @returns 扩大并保留小数后的值
  */
 export function multipleFixed(number: number, multiple: number, decimal: number) {
   return toFixed(number * multiple, decimal)
@@ -156,6 +172,8 @@ export function multipleFixed(number: number, multiple: number, decimal: number)
  *
  * @param number 需要舍入的数
  * @param criticalValue 舍入的临界值 (0 ~ 1)，达到临界值进位反之舍弃
+ *
+ * @returns 舍入后的值
  */
 export function round(number: number, criticalValue: number) {
   if (criticalValue < 0 || criticalValue > 1) {
@@ -177,17 +195,21 @@ export function round(number: number, criticalValue: number) {
  * @param number 需要限定范围的数
  * @param min 边界最小值，包含该值
  * @param max 边界最大值，包含该值
+ *
+ * @returns 限定在范围内的值
  */
 export function boundRange(number: number | string, min: number, max: number) {
   return Math.max(min, Math.min(max, parseFloat(number as string)))
 }
 
 /**
- * 将给定一个被除数和除数，不断的取余直至达到次数限制或余数小于除数，返回系列余数
+ * 将给定的被除数和除数，不断的取余直至达到次数限制或余数小于除数，返回系列余数
  *
  * @param number 被除数，需大于 0
  * @param divideBy 除数，需大于 1
- * @param limit 次数限制，小于 1 则不作限制
+ * @param limit 次数限制，默认为 0，小于 1 则不作限制
+ *
+ * @returns 相除过程的系列余数
  */
 export function leaveNumber(number: number, divideBy: number, limit = 0) {
   if (number <= 0 || divideBy <= 1) return [number]
@@ -227,6 +249,10 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
  *
  * @param byte 需要计算的 Byte 数值
  * @param unit 格式化的单位
+ * @param precision 结果的精度
+ * @param joinUtil 是否加入单位
+ *
+ * @returns 格式化后的值
  */
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto): number
 export function formatByteSize(byte: number, unit?: SizeUnitWithAuto, precision?: number): number
@@ -299,6 +325,8 @@ export function formatByteSize(
  *
  * @param max 最大值
  * @param min 最小值，默认为 0
+ *
+ * @returns 生成的随机数
  */
 export function random(max: number, min = 0) {
   if (min === max) return min
@@ -316,8 +344,12 @@ export function random(max: number, min = 0) {
  * @param number 需要处理的数字
  * @param precision 数字的有效位数
  *
+ * @returns 处理后的数字
+ *
  * @example
+ * ```ts
  * toPrecision(0.09999999999999998) === 0.1 // true
+ * ```
  */
 export function toPrecision(number: number | string, precision = 15) {
   return +parseFloat(Number(number).toPrecision(precision))
@@ -356,6 +388,8 @@ function createOperation(operation: (n1: number | string, n2: number | string) =
  * 精确的乘法
  *
  * @param numbers 需要依次相乘的数字
+ *
+ * @returns 乘积
  */
 export const times = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)
@@ -370,6 +404,8 @@ export const times = createOperation((number1, number2) => {
  * 精确的加法
  *
  * @param numbers 需要依次相加的数字
+ *
+ * @returns 和
  */
 export const plus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -381,6 +417,8 @@ export const plus = createOperation((number1, number2) => {
  * 精确的减法
  *
  * @param numbers 需要依次相减的数字
+ *
+ * @returns 差值
  */
 export const minus = createOperation((number1, number2) => {
   const base = 10 ** Math.max(decimalLength(number1), decimalLength(number2))
@@ -392,6 +430,8 @@ export const minus = createOperation((number1, number2) => {
  * 精确的除法
  *
  * @param numbers 需要依次相除的数字
+ *
+ * @returns 商
  */
 export const divide = createOperation((number1, number2) => {
   const int1 = multipleInt(number1)

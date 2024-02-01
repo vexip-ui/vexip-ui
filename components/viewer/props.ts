@@ -2,7 +2,12 @@ import { booleanNumberProp, booleanProp, buildProps, eventProp, localeProp } fro
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ToolbarAction, ViewerState, ViewerToolbarPlacement } from './symbol'
+import type {
+  ViewerActionLayout,
+  ViewerState,
+  ViewerToolbarAction,
+  ViewerToolbarPlacement
+} from './symbol'
 
 export const viewerProps = buildProps({
   locale: localeProp('viewer'),
@@ -18,9 +23,11 @@ export const viewerProps = buildProps({
   rotateDelta: Number,
   fullDisabled: booleanProp,
   toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
-  actions: Array as PropType<ToolbarAction[]>,
+  actions: Array as PropType<ViewerToolbarAction[]>,
   toolbarFade: booleanNumberProp,
   noTransition: booleanProp,
+  centerScale: booleanProp,
+  actionLayout: Array as PropType<ViewerActionLayout>,
   onMoveStart: eventProp<(state: ViewerState) => void>(),
   onMove: eventProp<(state: ViewerState) => void>(),
   onMoveEnd: eventProp<(state: ViewerState) => void>(),

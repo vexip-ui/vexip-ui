@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { debounce, debounceFrame, debounceMinor, throttle } from '../src/performance'
+import { debounce, debounceFrame, debounceMinor, throttle } from '../src'
 
 vi.useFakeTimers()
 

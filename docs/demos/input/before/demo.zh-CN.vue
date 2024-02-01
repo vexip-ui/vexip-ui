@@ -36,15 +36,15 @@
         <Input style="max-width: 72px"></Input>
       </template>
       <template #after-action>
-        <Input style="max-width: 72px"></Input>
+        <NumberInput style="max-width: 100px"></NumberInput>
       </template>
     </Input>
-    <Input size="large" placeholder="vexip-ui">
+    <Input placeholder="vexip-ui">
       <template #before-action>
         <NumberInput style="max-width: 100px"></NumberInput>
       </template>
       <template #after-action>
-        <NumberInput style="max-width: 100px"></NumberInput>
+        <ColorPicker style="max-width: 100px"></ColorPicker>
       </template>
     </Input>
   </Space>

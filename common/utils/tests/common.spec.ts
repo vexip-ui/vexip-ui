@@ -28,7 +28,7 @@ import {
   range,
   toFalse,
   toTrue
-} from '../src/common'
+} from '../src'
 
 describe('number', () => {
   it('is', () => {

@@ -7,9 +7,9 @@ import {
   mapTree,
   normalizePath,
   sortByProps,
-  transformTree
-} from '../src/transform'
-import { walkTree } from '../dist'
+  transformTree,
+  walkTree
+} from '../src'
 
 describe('transform', () => {
   it('normalizePath', () => {

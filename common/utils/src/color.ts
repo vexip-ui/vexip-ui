@@ -285,6 +285,8 @@ export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as 
  * 判断给定的字符串是否为一个合法颜色值
  *
  * @param value 原始字符串
+ *
+ * @returns 是否为合法颜色
  */
 export function isColor(value: string): boolean {
   value = String(value).trim().toLowerCase()
@@ -317,6 +319,8 @@ export function isColor(value: string): boolean {
  * 将给定的字符串转化为 {@link ObjectColor}，无法转换时返回 null
  *
  * @param color 原始颜色字符串
+ *
+ * @returns 解析后的颜色对象
  */
 export function parseStringColor(color: string): ObjectColor | null {
   color = color.toString().trim().toLowerCase()
@@ -446,6 +450,8 @@ export function parseStringColor(color: string): ObjectColor | null {
  * 将给定的 {@link Color} 解析为 {@link ColorMeta}
  *
  * @param color 原始颜色值
+ *
+ * @returns 解析后的颜色元数据
  */
 export function parseColor(color: Color): ColorMeta {
   const { a, ...rgb } = parseColorToRgba(color)
@@ -477,6 +483,8 @@ export function parseColor(color: Color): ColorMeta {
  * 将给定的 {@link Color} 解析为 {@link RGBAColor}
  *
  * @param originColor 原始颜色值
+ *
+ * @returns 解析后的 RGB 颜色对象
  */
 export function parseColorToRgba(originColor: Color): RGBAColor {
   let rgb: RGBColor = { r: 0, g: 0, b: 0 }
@@ -516,6 +524,8 @@ export function parseColorToRgba(originColor: Color): RGBAColor {
  * @param h 0 ~ 360
  * @param s 0 ~ 1，0% ~ 100%
  * @param l 0 ~ 1，0% ~ 100%
+ *
+ * @returns 标准化后的 HSL 对象
  */
 export function normalizeHsl(h: number | string, s: number | string, l: number | string) {
   return {
@@ -531,6 +541,8 @@ export function normalizeHsl(h: number | string, s: number | string, l: number |
  * @param r 0 ~ 255
  * @param g 0 ~ 255
  * @param b 0 ~ 255
+ *
+ * @returns 标准化后 RGB 对象
  */
 export function normalizeRgb(r: number | string, g: number | string, b: number | string) {
   return {
@@ -546,6 +558,8 @@ export function normalizeRgb(r: number | string, g: number | string, b: number |
  * @param h 0 ~ 360
  * @param s 0 ~ 1，0% ~ 100%
  * @param v 0 ~ 1，0% ~ 100%
+ *
+ * @returns 标准化的 HSV 对象
  */
 export function normalizeHsv(h: number | string, s: number | string, v: number | string) {
   return {
@@ -559,11 +573,22 @@ export function normalizeHsv(h: number | string, s: number | string, v: number |
  * 将原始透明度值标准化为 0 ~ 1 的值
  *
  * @param a 0 ~ 1，0% ~ 100%
+ *
+ * @returns 标准化后的透明度
  */
 export function normalizeAlpha(a: number | string) {
   return boundRange(isPercentage(a) ? parsePercentage(a) : a, 0, 1)
 }
 
+/**
+ * 将 HSL 颜色转换为 RGB 颜色
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param l 0 ~ 1，0% ~ 100%
+ *
+ * @returns 转换后的 RGB 颜色
+ */
 export function hslToRgb(h: number | string, s: number | string, l: number | string): RGBColor {
   let r, g, b
   ;({ h, s, l } = normalizeHsl(h, s, l))
@@ -586,8 +611,17 @@ export function hslToRgb(h: number | string, s: number | string, l: number | str
   return { r, g, b, toString: toRgbString }
 }
 
+/**
+ * 将 RGB 颜色转换为 HSL 颜色
+ *
+ * @param r 0 ~ 255
+ * @param g 0 ~ 255
+ * @param b 0 ~ 255
+ *
+ * @returns 转换后的 HSL 颜色
+ */
 export function rgbToHsl(r: number | string, g: number | string, b: number | string): HSLColor {
-  ({ r, g, b } = normalizeRgb(r, g, b))
+  ;({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -626,8 +660,17 @@ export function rgbToHsl(r: number | string, g: number | string, b: number | str
   return { h, s, l, toString: toHslString }
 }
 
+/**
+ * 将 HSL 颜色转换为 HSV 颜色
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param l 0 ~ 1，0% ~ 100%
+ *
+ * @returns 转换后的 HSV 颜色
+ */
 export function hslToHsv(h: number | string, s: number | string, l: number | string): HSVColor {
-  ({ h, s, l } = normalizeHsl(h, s, l))
+  ;({ h, s, l } = normalizeHsl(h, s, l))
 
   const v = 0.5 * (2 * l + s * (1 - Math.abs(2 * l - 1)))
 
@@ -636,8 +679,17 @@ export function hslToHsv(h: number | string, s: number | string, l: number | str
   return { h: h * 360, s, v, toString: toHsvString }
 }
 
+/**
+ * 将 HSV 颜色转换为 HSL 颜色
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param v 0 ~ 1，0% ~ 100%
+ *
+ * @returns 转换后的 HSL 颜色
+ */
 export function hsvToHsl(h: number | string, s: number | string, v: number | string): HSLColor {
-  ({ h, s, v } = normalizeHsv(h, s, v))
+  ;({ h, s, v } = normalizeHsv(h, s, v))
 
   const l = 0.5 * v * (2 - s)
 
@@ -646,8 +698,17 @@ export function hsvToHsl(h: number | string, s: number | string, v: number | str
   return { h: h * 360, s, l, toString: toHslString }
 }
 
+/**
+ * 将 HSV 颜色转换为 RGB 颜色
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param v 0 ~ 1，0% ~ 100%
+ *
+ * @returns 转换后的 RGB 颜色
+ */
 export function hsvToRgb(h: number | string, s: number | string, v: number | string): RGBColor {
-  ({ h, s, v } = normalizeHsv(h, s, v))
+  ;({ h, s, v } = normalizeHsv(h, s, v))
 
   h *= 6
 
@@ -669,8 +730,17 @@ export function hsvToRgb(h: number | string, s: number | string, v: number | str
   return { r, g, b, toString: toRgbString }
 }
 
+/**
+ * 将 RGB 颜色转换为 HSV 颜色
+ *
+ * @param r 0 ~ 255
+ * @param g 0 ~ 255
+ * @param b 0 ~ 255
+ *
+ * @returns 转换后的 HSV 颜色
+ */
 export function rgbToHsv(r: number | string, g: number | string, b: number | string): HSVColor {
-  ({ r, g, b } = normalizeRgb(r, g, b))
+  ;({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -708,13 +778,23 @@ export function rgbToHsv(r: number | string, g: number | string, b: number | str
   return { h, s, v, toString: toHsvString }
 }
 
+/**
+ * 将 RGB 颜色转换为 HEX 颜色
+ *
+ * @param r 0 ~ 255
+ * @param g 0 ~ 255
+ * @param b 0 ~ 255
+ * @param allow3Char 是否允许 3 位的 HEX 值
+ *
+ * @returns 转换后的 HEX 颜色
+ */
 export function rgbToHex(
   r: number | string,
   g: number | string,
   b: number | string,
   allow3Char = false
 ) {
-  ({ r, g, b } = normalizeRgb(r, g, b))
+  ;({ r, g, b } = normalizeRgb(r, g, b))
 
   const hex = [
     repairDigits(Math.round(r * 255).toString(16)),
@@ -729,6 +809,17 @@ export function rgbToHex(
   return '#' + hex.join('')
 }
 
+/**
+ * 将 RGBA 颜色转换为 HEX 颜色
+ *
+ * @param r 0 ~ 255
+ * @param g 0 ~ 255
+ * @param b 0 ~ 255
+ * @param a 0 ~ 1，0% ~ 100%
+ * @param allow4Char 是否允许 4 位的 HEX 值
+ *
+ * @returns 转换后的 HEX 颜色
+ */
 export function rgbaToHex(
   r: number | string,
   g: number | string,
@@ -736,7 +827,7 @@ export function rgbaToHex(
   a: number | string,
   allow4Char = false
 ) {
-  ({ r, g, b } = normalizeRgb(r, g, b))
+  ;({ r, g, b } = normalizeRgb(r, g, b))
 
   const hex = [
     repairDigits(Math.round(r * 255).toString(16)),
@@ -758,6 +849,15 @@ export function rgbaToHex(
   return '#' + hex.join('')
 }
 
+/**
+ * 将两种颜色按照一定的比例混合
+ *
+ * @param color1 第一种颜色
+ * @param color2 第二种颜色
+ * @param weight 混合比例 0 ~ 1，越小则第一种颜色越少
+ *
+ * @returns 混合后的颜色
+ */
 export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor {
   if (!color1 && !color2) return { r: 0, g: 0, b: 0, a: 1 }
   if (!color1) return parseColorToRgba(color2)
@@ -787,14 +887,30 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor 
   }
 }
 
+/**
+ * 调整给定颜色值的透明度
+ *
+ * @param color 需要调整的颜色
+ * @param alpha 调整后的透明度 0 ~ 1，0% ~ 100%
+ *
+ * @returns 调整后的颜色
+ */
 export function adjustAlpha(color: Color, alpha: number | string) {
   const rgba = parseColorToRgba(color)
 
-  rgba.a = normalizeAlpha(isPercentage(alpha) ? parsePercentage(alpha) : alpha)
+  rgba.a = normalizeAlpha(alpha)
 
   return rgba
 }
 
+/**
+ * 随机生成一个颜色值
+ *
+ * @param withAlpha 是否具有透明度
+ * @param type 颜色的类型
+ *
+ * @returns 生成的颜色字面值
+ */
 export function randomColor(withAlpha = false, type: ColorType = 'hex') {
   const r = Math.round(Math.random() * 255)
   const g = Math.round(Math.random() * 255)
@@ -815,12 +931,21 @@ export function randomColor(withAlpha = false, type: ColorType = 'hex') {
   }
 
   if (withAlpha) {
-    (color as RGBAColor).a = Math.random()
+    ;(color as RGBAColor).a = Math.random()
   }
 
   return color.toString()
 }
 
+/**
+ * 随机生成一个特定色调（冷暖色）的颜色值
+ *
+ * @param prefer 色调
+ * @param withAlpha 是否具有透明度
+ * @param type 颜色的类型
+ *
+ * @returns 生成的颜色字面值
+ */
 export function randomPreferColor(
   prefer: 'hard' | 'soft',
   withAlpha = false,
@@ -849,20 +974,43 @@ export function randomPreferColor(
   }
 
   if (withAlpha) {
-    (color as RGBAColor).a = Math.random()
+    ;(color as RGBAColor).a = Math.random()
   }
 
   return color.toString()
 }
 
+/**
+ * 随机生成一个冷色调的颜色值
+ *
+ * @param withAlpha 是否具有透明度
+ * @param type 颜色的类型
+ *
+ * @returns 生成的颜色字面值
+ */
 export function randomHardColor(withAlpha = false, type: ColorType = 'hex') {
   return randomPreferColor('hard', withAlpha, type)
 }
 
+/**
+ * 随机生成一个暖色调的颜色值
+ *
+ * @param withAlpha 是否具有透明度
+ * @param type 颜色的类型
+ *
+ * @returns 生成的颜色字面值
+ */
 export function randomSoftColor(withAlpha = false, type: ColorType = 'hex') {
   return randomPreferColor('soft', withAlpha, type)
 }
 
+/**
+ * 获取给定颜色的灰度
+ *
+ * @param color 颜色字面值
+ *
+ * @returns 颜色的灰度
+ */
 export function toGrayScale(color: string) {
   return rgbToGrayScale(parseColorToRgba(color))
 }

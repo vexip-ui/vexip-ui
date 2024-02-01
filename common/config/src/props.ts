@@ -328,6 +328,7 @@ type GenerateEvent<T extends any[], Others extends any[], R = any> = T extends u
  * Split and combo the first parameter of the given function
  *
  * @example
+ * ```ts
  * // origin function
  * type Fn = (value: string | number | boolean) => void
  *
@@ -340,6 +341,7 @@ type GenerateEvent<T extends any[], Others extends any[], R = any> = T extends u
  *  | ((value: string) => void)
  *  | ((value: number) => void)
  *  | ((value: boolean) => void)
+ * ```
  */
 export type EventListener<T extends AnyFunction> = Expand<
   ForceBooleanDeep<SplitAndCombo<Parameters<T>[0]>>

@@ -6,6 +6,8 @@ import { raf } from './performance'
  * 如果一个值不为数组，则将其转换为数组
  *
  * @param value 指定的值
+ *
+ * @returns 原始数组或转换后的数组
  */
 export function ensureArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : [value]
@@ -16,6 +18,8 @@ export function ensureArray<T>(value: T | T[]) {
  *
  * @param value 指定的值
  * @param args 若为函数时，传入的参数
+ *
+ * @returns 原始值或函数执行结果
  */
 export function callIfFunc<T, P extends any[] = any[]>(value: T | ((...args: P) => T), ...args: P) {
   return isFunction(value) ? value(...args) : value
@@ -25,6 +29,8 @@ export function callIfFunc<T, P extends any[] = any[]>(value: T | ((...args: P) 
  * 将路径中的 `\` 替换为 `/`
  *
  * @param path 指定的路径
+ *
+ * @returns 替换后的路径
  */
 export function normalizePath(path: string) {
   return path.replace(/[\\/]+/g, '/')
@@ -34,12 +40,16 @@ export function normalizePath(path: string) {
  * 获取字符串的最后一个字符
  *
  * @param value 指定的字符串
+ *
+ * @returns 最后一个字符
  */
 export function getLast(value: string): string | undefined
 /**
  * 获取数组的最后一个元素
  *
  * @param value 指定的数组
+ *
+ * @returns 最后一个元素
  */
 export function getLast<T>(value: T[]): T | undefined
 export function getLast(value: string | any[]) {
@@ -47,12 +57,14 @@ export function getLast(value: string | any[]) {
 }
 
 /**
- * 根据数组元素中某个或多个属性的值转换为映射
+ * 根据数组元素中某个或多个属性的值转换为映射对象
  *
  * @param list 需要被转换的数组
  * @param prop 需要被转换的属性或提供一个读取方法
  * @param accessor 映射的值的读取方法，默认返回元素本身
  * @param isMap 是否使用 Map 对象储存结果
+ *
+ * @returns 转换后的映射对象
  */
 export function listToMap<T = any, O = T>(
   list: T[],
@@ -109,6 +121,8 @@ export {
  * @param array 需要被移除元素的数组
  * @param item 需要被移除的元素, 或一个查找方法，如果元素为函数时则需要做一层简单包装
  * @param isFn 标记数组的元素是否为函数
+ *
+ * @returns 被移除的元素
  */
 export function removeArrayItem<T = any>(
   array: T[],
@@ -135,6 +149,8 @@ export function removeArrayItem<T = any>(
  *
  * @param list 需要分数的数据
  * @param props 需要按顺序分组的属性
+ *
+ * @returns 分组后的对象
  */
 export function groupByProps<T = any>(
   list: T[],
@@ -185,10 +201,12 @@ export interface TreeOptions<T = string> {
 }
 
 /**
- * 将一个展平的列表变为树
+ * 将一个展平的列表转换为树
  *
  * @param list 要转换的列表
  * @param options 转换的配置项
+ *
+ * @returns 转换后的树
  */
 export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> = {}) {
   const {
@@ -240,6 +258,8 @@ export { transformTree as buildTree }
  *
  * @param tree 要展平的树
  * @param options 转换的配置项
+ *
+ * @returns 展平后的列表
  */
 export function flatTree<T = any>(
   tree: T[],
@@ -364,6 +384,8 @@ export function walkTree<T = any>(
  * @param tree 要遍历的树
  * @param cb 回调函数
  * @param options 遍历的配置项
+ *
+ * @returns 构建后新的树
  */
 export function mapTree<T = any, R = any>(
   tree: T[],
@@ -417,6 +439,8 @@ export function mapTree<T = any, R = any>(
  * @param tree 要遍历的树
  * @param cb 过滤的方法
  * @param options 遍历的配置项
+ *
+ * @returns 过滤后新的树
  */
 export function filterTree<T = any>(
   tree: T[],
@@ -495,10 +519,12 @@ const defaultSortMethod = (prev: any, next: any) => {
 }
 
 /**
- * 根据依赖的属性逐层排序
+ * 根据依赖的属性对数组逐层排序
  *
  * @param list 需要排序的数组
  * @param props 排序依赖的属性
+ *
+ * @returns 排序后的数组
  */
 export function sortByProps<T = any>(
   list: T[],
@@ -568,6 +594,8 @@ export function sortByProps<T = any>(
  * @param sourceObj 用于接收合并的源对象
  * @param targetObj 被合并的对象，当属性名相同但值类型不同的情况，此对象的权重更高
  * @param isNewObj 标记合并至一个全新的对象（深度的）
+ *
+ * @returns 合并后的对象
  */
 export function mergeObjects<T extends Record<string, any>, U extends Record<string, any>>(
   sourceObj: T,
@@ -621,6 +649,8 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
  * 将一个任务队列按每帧一次依次指定，返回一个触发取消的方法
  *
  * @param queue 任务队列
+ *
+ * @returns 终止队列执行的方法
  */
 export function runQueueFrame(queue: Array<() => void>) {
   queue = Array.from(queue)
