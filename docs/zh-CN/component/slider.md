@@ -176,6 +176,7 @@ interface SliderTriggerParams {
 | flip-marker  | `boolean`                                        | 设置是否将标记点标签置于另一侧                   | `false`   | `2.2.9`  |
 | trigger-fade | `boolean`                                        | 触发手柄是否会自动隐藏                           | `false`   | `2.2.9`  |
 | tip-props    | `SliderTipProps`                                 | 设置 Tooltip 的其他属性                          | `{}`      | `2.2.11` |
+| sync         | `boolean`                                        | 设置是否为同步输入模式                           | `false`   | `2.3.2`  |
 
 ### Slider 事件
 

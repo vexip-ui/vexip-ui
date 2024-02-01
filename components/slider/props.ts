@@ -24,6 +24,7 @@ export const sliderProps = buildProps({
   flipMarker: booleanProp,
   triggerFade: booleanProp,
   tipProps: Object as PropType<SliderTipProps>,
+  sync: booleanProp,
   onChange: eventProp<(value: number | number[]) => void>(),
   onInput: eventProp<(value: number | number[]) => void>()
 })

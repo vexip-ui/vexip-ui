@@ -53,7 +53,8 @@ const props = useProps('slider', _props, {
   tipHover: false,
   flipMarker: false,
   triggerFade: false,
-  tipProps: () => ({})
+  tipProps: () => ({}),
+  sync: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -182,18 +183,16 @@ const endTriggerStyle = computed(() => {
 })
 const isDisabled = computed(() => props.disabled || readonly.value)
 
+let lastValue: number | number[]
+let lastInputValue: number | number[]
+
 parseValue(props.value)
 verifyValue()
 
 watch(
   () => props.value,
-  (value, prevValue) => {
-    if (
-      Array.isArray(value) &&
-      Array.isArray(prevValue) &&
-      value[0] === prevValue[0] &&
-      value[1] === prevValue[1]
-    ) {
+  value => {
+    if (isEqualValue(lastValue, value)) {
       return
     }
 
@@ -282,14 +281,43 @@ function handlePointerLeave() {
   }, hoverDelay.value)
 }
 
-function emitChange() {
+function emitChange(type: 'change' | 'input' = 'change', sync = props.sync) {
   const [start, end] = truthValue.value
   const value = props.range ? (start > end ? [end, start] : [start, end]) : end
 
-  emit('update:value', value)
-  setFieldValue(value)
-  emitEvent(props.onChange, value)
-  validateField()
+  if (type === 'change') {
+    if (isEqualValue(lastValue, value)) return
+
+    lastValue = value
+
+    if (!sync) {
+      lastInputValue = value
+
+      emit('update:value', value)
+      setFieldValue(value)
+    }
+
+    emitEvent(props.onChange, value)
+
+    if (!sync) {
+      validateField()
+    }
+  } else {
+    if (isEqualValue(lastInputValue, value)) return
+
+    lastInputValue = value
+
+    if (sync) {
+      emit('update:value', value)
+      setFieldValue(value)
+    }
+
+    emitEvent(props.onInput, value)
+
+    if (sync) {
+      validateField()
+    }
+  }
 }
 
 let trackRect: DOMRect | null = null
@@ -308,8 +336,6 @@ function computePointedValue(event: PointerEvent) {
       stepOneTotal.value +
     stepOneMin.value
 }
-
-let lastValue: number | number[]
 
 function isEqualValue(prev: number | number[], current: number | number[]) {
   if (Array.isArray(prev) && Array.isArray(current)) {
@@ -335,13 +361,14 @@ const throttleMove = throttle((event: PointerEvent) => {
     endTrigger.value.updateTooltip()
   }
 
-  const [start, end] = truthValue.value
-  const value = props.range ? (start > end ? [end, start] : [start, end]) : end
+  // const [start, end] = truthValue.value
+  // const value = props.range ? (start > end ? [end, start] : [start, end]) : end
 
-  if (!isEqualValue(lastValue, value)) {
-    lastValue = value
-    emitEvent(props.onInput, value)
-  }
+  // if (!isEqualValue(lastValue, value)) {
+  //   lastValue = value
+  //   emitEvent(props.onInput, value)
+  // }
+  emitChange('input')
 })
 
 function handleTrackDown(event: PointerEvent) {
@@ -496,11 +523,11 @@ function handleMinus(type: TriggerType, extra: 'ctrl' | 'shift' | 'alt') {
 }
 
 function focus(options?: FocusOptions) {
-  (startTrigger.value || endTrigger.value)?.focus(options)
+  ;(startTrigger.value || endTrigger.value)?.focus(options)
 }
 
 function blur() {
-  (startTrigger.value || endTrigger.value)?.blur()
+  ;(startTrigger.value || endTrigger.value)?.blur()
 }
 </script>
 

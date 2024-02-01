@@ -7,7 +7,7 @@ import { Slider } from '..'
 
 vi.useFakeTimers()
 
-async function moveStart(el: HTMLElement, value = 40) {
+async function moveStart(el: Element, value = 40) {
   const downEvent = new CustomEvent('pointerdown') as any
   downEvent.button = 0
   downEvent.clientX = value
@@ -32,7 +32,7 @@ async function moveEnd() {
   await nextTick()
 }
 
-async function toggleMove(el: HTMLElement, value = 40) {
+async function toggleMove(el: Element, value = 40) {
   await moveStart(el, value)
   await move(value)
   await moveEnd()
@@ -88,7 +88,7 @@ describe('Slider', () => {
     const onChange = vi.fn()
     const wrapper = mount(() => <Slider onInput={onInput} onChange={onChange}></Slider>)
     const trigger = wrapper.find('.vxp-slider__trigger')
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -102,11 +102,12 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
+    await toggleMove(wrapper.find('.vxp-slider').element)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith(40)
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
+    expect(wrapper.findComponent(Slider).emitted('update:value')![0][0]).toBe(40)
 
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
@@ -129,7 +130,7 @@ describe('Slider', () => {
     expect(wrapper.classes()).toContain('vxp-slider--disabled')
 
     const trigger = wrapper.find('.vxp-slider__trigger')
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -143,7 +144,7 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
+    await toggleMove(wrapper.find('.vxp-slider').element)
     expect(onChange).not.toHaveBeenCalled()
     expect(trigger.attributes('style')).toContain('left: 0%;')
 
@@ -181,7 +182,7 @@ describe('Slider', () => {
   it('step', async () => {
     const wrapper = mount(() => <Slider step={5}></Slider>)
     const trigger = wrapper.find('.vxp-slider__trigger')
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -195,10 +196,10 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 2)
+    await toggleMove(wrapper.find('.vxp-slider').element, 2)
     expect(trigger.attributes('style')).toContain('left: 0%;')
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 3)
+    await toggleMove(wrapper.find('.vxp-slider').element, 3)
     expect(trigger.attributes('style')).toContain('left: 5%;')
 
     trackMock.mockRestore()
@@ -210,7 +211,7 @@ describe('Slider', () => {
     expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--vertical')
 
     const trigger = wrapper.find('.vxp-slider__trigger')
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -224,7 +225,7 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
+    await toggleMove(wrapper.find('.vxp-slider').element)
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateY(-60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
       afterTranslate('Y', 60)
@@ -239,7 +240,7 @@ describe('Slider', () => {
     const onChange = vi.fn()
     const wrapper = mount(() => <Slider reverse onInput={onInput} onChange={onChange}></Slider>)
     const trigger = wrapper.find('.vxp-slider__trigger')
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -253,7 +254,7 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, -40)
+    await toggleMove(wrapper.find('.vxp-slider').element, -40)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith(40)
     expect(onChange).toHaveBeenCalled()
@@ -275,7 +276,7 @@ describe('Slider', () => {
       <Slider value={[20, 50]} range onInput={onInput} onChange={onChange}></Slider>
     ))
 
-    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+    const trackEl = wrapper.find('.vxp-slider__track').element
 
     const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -297,7 +298,7 @@ describe('Slider', () => {
       afterTranslate('X', 70)
     )
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 30)
+    await toggleMove(wrapper.find('.vxp-slider').element, 30)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith([30, 50])
     expect(onChange).toHaveBeenCalled()
@@ -307,7 +308,7 @@ describe('Slider', () => {
       afterTranslate('X', 80)
     )
 
-    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 80)
+    await toggleMove(wrapper.find('.vxp-slider').element, 80)
     expect(onInput).toHaveBeenCalledWith([30, 80])
     expect(onChange).toHaveBeenCalledWith([30, 80])
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-20%)')
@@ -320,7 +321,7 @@ describe('Slider', () => {
 
   it('trigger-fade', async () => {
     const wrapper = mount(() => <Slider trigger-fade></Slider>)
-    const wrapperEl = wrapper.find('.vxp-slider').element as HTMLElement
+    const wrapperEl = wrapper.find('.vxp-slider').element
 
     expect(wrapper.find('.vxp-slider').classes()).toContain('vxp-slider--hide-trigger')
     await moveStart(wrapperEl, 30)
@@ -367,5 +368,39 @@ describe('Slider', () => {
       disabled: false,
       loading: false
     })
+  })
+
+  it('sync', async () => {
+    const onInput = vi.fn()
+    const onChange = vi.fn()
+    const wrapper = mount(() => <Slider sync onInput={onInput} onChange={onChange}></Slider>)
+    const trackEl = wrapper.find('.vxp-slider__track').element
+
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
+
+    await moveStart(wrapper.find('.vxp-slider').element, 40)
+    await move(40)
+
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput).toHaveBeenCalledWith(40)
+    expect(onChange).not.toHaveBeenCalled()
+    expect(wrapper.findComponent(Slider).emitted('update:value')![0][0]).toBe(40)
+
+    await moveEnd()
+    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith(40)
+    expect(wrapper.findComponent(Slider).emitted('update:value')!.length).toBe(1)
+
+    trackMock.mockRestore()
   })
 })
