@@ -157,7 +157,7 @@ export function frFRLocale() {
         time: 'heure',
         start: 'Début',
         end: 'Fin',
-        select: 'Sélectionner une'
+        select: 'Veuillez sélectionner'
       }
     },
 
@@ -183,7 +183,7 @@ export function frFRLocale() {
     upload: {
       upload: 'Télécharger des fichiers',
       uploading: 'Téléchargement',
-      dragOrClick: 'Faites glisser les fichiers ici, ou cliquez pour les '
+      dragOrClick: 'Faites glisser les fichiers ici, ou cliquez pour les télécharger'
     },
 
     video: {
