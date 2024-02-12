@@ -486,7 +486,9 @@ export default defineComponent({
       return (
         <div class={nh.be('count')}>
           {renderSlot(slots, 'count', { value: currentValue.value }, () => [
-            `${currentLength.value}/${props.maxLength}`
+            props.maxLength === Infinity
+              ? currentLength.value
+              : `${currentLength.value}/${props.maxLength}`
           ])}
         </div>
       )

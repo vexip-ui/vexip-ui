@@ -349,14 +349,22 @@ describe('Input', () => {
   })
 
   it('max length', async () => {
-    const wrapper = mount(() => <Input max-length={2}></Input>)
+    const wrapper = mount(Input, {
+      props: { maxLength: 2 }
+    })
     const input = wrapper.find('input').element
 
     expect(wrapper.find('.vxp-input__count').exists()).toBe(true)
+    expect(wrapper.find('.vxp-input__count').text()).toEqual('0/2')
 
     emitChange(input, TEXT)
     await nextTick()
     expect(getValue(wrapper.find('input'))).toEqual(TEXT.slice(0, 2))
+    expect(wrapper.find('.vxp-input__count').text()).toEqual('2/2')
+
+    await wrapper.setProps({ maxLength: Infinity })
+    await nextTick()
+    expect(wrapper.find('.vxp-input__count').text()).toEqual('2')
   })
 
   it('password', () => {
