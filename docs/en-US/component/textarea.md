@@ -34,6 +34,8 @@ By default two-way binding is based on the `change` event, adding the `sync` pro
 
 The maximum length of text can be set via the `max-length` prop.
 
+When `Infinity` is passed in, only the word count will be done.
+
 :::
 
 :::demo textarea/no-resize

@@ -34,6 +34,8 @@
 
 通过 `max-length` 属性可以设置文本的最大长度。
 
+当传入 `Infinity` 时，将会仅进行字数统计。
+
 :::
 
 :::demo textarea/no-resize
