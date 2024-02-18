@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.5.2...config@1.6.0) (2024-02-18)
+
+
+### ✨ Features
+
+* add French locale config ([#460](https://github.com/vexip-ui/vexip-ui/issues/460)) ([3115e5d](https://github.com/vexip-ui/vexip-ui/commit/3115e5db4f6581830d20e873c4ee6c5a07de08e2))
+
+
+
 ## [1.5.2](https://github.com/vexip-ui/vexip-ui/compare/config@1.5.1...config@1.5.2) (2024-01-19)
 
 
