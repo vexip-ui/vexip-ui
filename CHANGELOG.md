@@ -1,3 +1,20 @@
+## [2.3.3](https://github.com/vexip-ui/vexip-ui/compare/v2.3.2...v2.3.3) (2024-02-18)
+
+
+### ✨ Features
+
+* add French locale config ([#460](https://github.com/vexip-ui/vexip-ui/issues/460)) ([3115e5d](https://github.com/vexip-ui/vexip-ui/commit/3115e5db4f6581830d20e873c4ee6c5a07de08e2))
+* **input:** max-length support pass infinity value ([04caf23](https://github.com/vexip-ui/vexip-ui/commit/04caf23a642bb497ed77848b3d0c815b8ac60a8e))
+* **textarea:** max-length support pass infinity value ([a2fddf7](https://github.com/vexip-ui/vexip-ui/commit/a2fddf71de6173af0996daa37ffb4ab371d6af64))
+
+
+### 🐞 Bug Fixes
+
+* **input:** should reset count record when clear ([075627f](https://github.com/vexip-ui/vexip-ui/commit/075627ff3635bba04d6604da3384ed115556f4ce))
+* **masker:** unexpected show event emitting when mounted ([e68fd51](https://github.com/vexip-ui/vexip-ui/commit/e68fd51df9a57b33e0c37a5660fc1eb9e1f3c8ec)), closes [#461](https://github.com/vexip-ui/vexip-ui/issues/461)
+
+
+
 ## [2.3.2](https://github.com/vexip-ui/vexip-ui/compare/v2.3.1...v2.3.2) (2024-02-01)
 
 
