@@ -88,6 +88,8 @@ If you want to be read-only when loading, you need to add the `loading-lock` pro
 
 The max length of the content can be set via the `max-length` prop.
 
+When `Infinity` is passed in, only the word count will be done.
+
 :::
 
 :::demo input/state

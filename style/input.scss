@@ -291,7 +291,7 @@ $input: map.merge(
   }
 
   &__count {
-    margin-inline-end: 4px;
+    margin: 0 4px;
     font-size: get-css-var('input-count-font-size');
     line-height: get-css-var('input-count-line-height');
     color: get-css-var('input-count-color');

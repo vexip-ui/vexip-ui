@@ -13,7 +13,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { debounce, throttle, toNumber } from '@vexip-ui/utils'
+import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { textareaProps } from './props'
 
 defineOptions({ name: 'Textarea' })
@@ -91,6 +91,7 @@ watch(
   value => {
     currentValue.value = value
     lastValue = value
+    limitValueLength()
   }
 )
 
@@ -125,16 +126,8 @@ function handleChange(event: Event) {
     composing.value = false
   }
 
-  const value = (event.target as HTMLTextAreaElement).value
-
-  if (props.maxLength && value.length > props.maxLength) {
-    currentValue.value = value.slice(0, props.maxLength)
-  } else {
-    currentValue.value = value
-  }
-
-  currentLength.value = currentValue.value.length
-  ;(event.target as HTMLTextAreaElement).value = currentValue.value
+  currentValue.value = (event.target as HTMLTextAreaElement).value
+  limitValueLength()
 
   if (type === 'change') {
     if (lastValue === currentValue.value) return
@@ -179,6 +172,25 @@ function handleKeyPress(event: KeyboardEvent) {
 
 function handleKeyUp(event: KeyboardEvent) {
   emitEvent(props.onKeyUp, event)
+}
+
+function limitValueLength() {
+  let value = currentValue.value
+
+  if (isNull(value)) {
+    currentLength.value = 0
+
+    return
+  }
+
+  const maxLength = props.maxLength
+
+  if (maxLength && value.length > maxLength) {
+    value = value.slice(0, maxLength)
+  }
+
+  currentLength.value = value.length
+  currentValue.value = value
 }
 
 function copyValue() {
@@ -260,7 +272,7 @@ function handleCompositionEnd(event: CompositionEvent) {
       </Transition>
       <div v-if="props.maxLength > 0" :class="nh.be('count')">
         <slot name="count" :value="currentValue">
-          {{ `${currentLength}/${props.maxLength}` }}
+          {{ props.maxLength === Infinity ? currentLength : `${currentLength}/${props.maxLength}` }}
         </slot>
       </div>
     </div>

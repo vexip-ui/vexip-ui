@@ -159,14 +159,21 @@ describe('Textarea', () => {
   })
 
   it('max length', async () => {
-    const wrapper = mount(() => <Textarea max-length={2}></Textarea>)
+    const wrapper = mount(Textarea, {
+      props: { maxLength: 2 }
+    })
     const textarea = wrapper.find('textarea').element
 
     expect(wrapper.find('.vxp-textarea__count').exists()).toBe(true)
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('0/2')
 
     emitChange(textarea, TEXT)
     await nextTick()
     expect(getValue(wrapper.find('textarea'))).toEqual(TEXT.slice(0, 2))
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('2/2')
+
+    await wrapper.setProps({ maxLength: Infinity })
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('2')
   })
 
   it('rows', () => {

@@ -334,6 +334,7 @@ export default defineComponent({
       setValue('', 'change', false)
       emitEvent(props.onClear)
       nextTick(clearField)
+      currentLength.value = 0
       inputControl.value?.focus()
     }
 
@@ -414,7 +415,7 @@ export default defineComponent({
           style={{ color: props.prefixColor }}
           onClick={handlePrefixClick}
         >
-          {slots.prefix ? slots.prefix() : <Icon icon={props.prefix}></Icon>}
+          {renderSlot(slots, 'prefix', undefined, () => [<Icon icon={props.prefix}></Icon>])}
         </div>
       )
     }
@@ -431,7 +432,7 @@ export default defineComponent({
             }}
             onClick={handleSuffixClick}
           >
-            {slots.suffix ? slots.suffix() : <Icon icon={props.suffix}></Icon>}
+            {renderSlot(slots, 'suffix', undefined, () => [<Icon icon={props.suffix}></Icon>])}
           </div>
         )
       }
@@ -484,9 +485,11 @@ export default defineComponent({
     function renderCount() {
       return (
         <div class={nh.be('count')}>
-          {slots.count
-            ? renderSlot(slots, 'count', { value: currentValue.value })
-            : `${currentLength.value}/${props.maxLength}`}
+          {renderSlot(slots, 'count', { value: currentValue.value }, () => [
+            props.maxLength === Infinity
+              ? currentLength.value
+              : `${currentLength.value}/${props.maxLength}`
+          ])}
         </div>
       )
     }
@@ -502,13 +505,9 @@ export default defineComponent({
             }}
             onClick={toggleShowPassword}
           >
-            {slots.password
-              ? (
-                  renderSlot(slots, 'password', { plain: showPassword.value })
-                )
-              : (
-                <Icon {...passwordIcon.value}></Icon>
-                )}
+            {renderSlot(slots, 'password', { plain: showPassword.value }, () => [
+              <Icon {...passwordIcon.value}></Icon>
+            ])}
           </div>
         )
       }

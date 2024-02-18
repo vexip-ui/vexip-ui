@@ -154,6 +154,8 @@ async function handleClose() {
 }
 
 function afterClose() {
+  if (currentActive.value) return
+
   nextTick(() => {
     wrapShow.value = false
     emitEvent(props.onHide)
@@ -161,6 +163,8 @@ function afterClose() {
 }
 
 function afterOpen() {
+  if (!currentActive.value) return
+
   const activeEl = document && document.activeElement
 
   if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
