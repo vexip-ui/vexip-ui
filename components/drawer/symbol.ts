@@ -10,9 +10,3 @@ export interface DrawerSlotParams {
 export type DrawerCommonSLot = (params: DrawerSlotParams) => any
 
 export const drawerPlacements = Object.freeze<DrawerPlacement[]>(['top', 'right', 'bottom', 'left'])
-
-let index = 0
-
-export function getIdIndex() {
-  return index++
-}

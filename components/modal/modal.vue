@@ -15,9 +15,8 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
+import { getGlobalCount, isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
 import { modalProps, positionProp } from './props'
-import { getIdIndex } from './symbol'
 
 import type { MaskerExposed } from '@/components/masker'
 import type { ModalCommonSLot } from './symbol'
@@ -106,7 +105,7 @@ const rect = reactive({
 const maskerRect = reactive({ width: 0, height: 0 })
 const modalRect = reactive({ width: 0, height: 0 })
 
-const idIndex = `${getIdIndex()}`
+const idIndex = `${getGlobalCount()}`
 const transformed = ref(false)
 
 const masker = ref<MaskerExposed>()

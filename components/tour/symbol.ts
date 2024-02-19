@@ -41,9 +41,3 @@ export interface TourState {
 }
 
 export const TOUR_STATE = Symbol('TOUR_STATE') as InjectionKey<TourState>
-
-let index = 0
-
-export function getIdIndex() {
-  return index++
-}

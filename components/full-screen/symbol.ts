@@ -7,9 +7,3 @@ export interface FullScreenSlotParams {
   exit: () => Promise<void>,
   toggle: (type?: FullScreenType, zIndex?: number) => Promise<void>
 }
-
-let indexId = 0
-
-export function getIndexId() {
-  return `__vxp-full-screen-id-${indexId++}`
-}

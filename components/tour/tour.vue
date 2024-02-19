@@ -16,9 +16,9 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
-import { callIfFunc, decide, isClient, isFunction } from '@vexip-ui/utils'
+import { callIfFunc, decide, getGlobalCount, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
-import { TOUR_STATE, getIdIndex } from './symbol'
+import { TOUR_STATE } from './symbol'
 
 import type { BubbleExposed } from '@/components/bubble'
 import type { MaskerExposed } from '@/components/masker'
@@ -64,7 +64,7 @@ defineSlots<{
   actions: TourCommonSLot
 }>()
 
-const idIndex = `${getIdIndex()}`
+const idIndex = `${getGlobalCount()}`
 
 const nh = useNameHelper('tour')
 const locale = useLocale('tour', toRef(props, 'locale'))

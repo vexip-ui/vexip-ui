@@ -5,8 +5,9 @@ import { computed, ref, watch } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
+import { getGlobalCount } from '@vexip-ui/utils'
 import { fullScreenProps } from './props'
-import { getIndexId } from './symbol'
+// import { getIndexId } from './symbol'
 
 import type { FullScreenSlotParams, FullScreenType } from './symbol'
 
@@ -21,7 +22,7 @@ defineSlots<{ default: (params: FullScreenSlotParams) => any }>()
 
 const nh = useNameHelper('full-screen')
 
-const placeId = getIndexId()
+const placeId = `__vxp-full-screen-id-${getGlobalCount()}`
 
 const isEntered = ref(false)
 const zIndex = ref<number>()
