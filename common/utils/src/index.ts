@@ -1,6 +1,7 @@
 export * from './clipboard'
 export * from './color'
 export * from './common'
+export * from './counter'
 export * from './data'
 export * from './date'
 export * from './deep-clone'
