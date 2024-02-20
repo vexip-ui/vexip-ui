@@ -49,7 +49,7 @@ const props = useProps('radio', _props, {
 
 const emit = defineEmits(['update:value'])
 
-defineSlots<{ default: () => any }>()
+defineSlots<{ default: () => any, extra: () => any }>()
 
 const groupState = inject(GROUP_STATE, null)
 
@@ -163,6 +163,9 @@ function handleChange() {
         </div>
       </CollapseTransition>
       <slot>{{ props.label }}</slot>
+      <span :class="nh.be('extra')" @click.capture.prevent>
+        <slot name="extra"></slot>
+      </span>
     </span>
   </label>
 </template>
