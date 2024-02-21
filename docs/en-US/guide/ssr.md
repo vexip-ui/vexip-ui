@@ -72,9 +72,9 @@ function handleClick() {
 </script>
 ```
 
-### 自定义 Sass 变量
+### Custom Sass Variables
 
-The way is same to [Style Config](/zh-CN/guide/style-config.html#%E9%80%9A%E8%BF%87-sass-%E4%BF%AE%E6%94%B9), the only different is that you need to change config of Vite via `nuxt.config.ts`.
+The way is same to [Style Config](/en-US/guide/style-config.html#edit-via-sass), the only different is that you need to change config of Vite via `nuxt.config.ts`.
 
 First, you need to prepare a separate file, and use `@forward...with` to modify variables:
 
@@ -89,29 +89,30 @@ First, you need to prepare a separate file, and use `@forward...with` to modify 
 );
 ```
 
+If you also want to change the dark mode style, create a separate file similarly:
+
+```scss
+// style/dark-variables.scss
+@forward 'vexip-ui/style/dark/variables.scss' with (
+  $content-color-map: (
+    base: #fff
+  )
+);
+```
+
 Then add following in `nuxt.config.ts`:
 
 ```ts
-const vxpStylePresetRE = /vexip-ui\/style(?:\/dark)?\/preset/
-
 export default defineNuxtConfig({
   modules: [
     '@vexip-ui/nuxt'
   ],
   vexipUI: {
-    importStyle: 'sass'
-  },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: (code: string, path: string) => {
-            return vxpStylePresetRE.test(path)
-              ? code.replace('@use \'./design/variables.scss\' as *;', '@use \'@/style/variables.scss\' as *;')
-              : code
-          }
-        }
-      }
+    importStyle: 'sass',
+    // importDarkTheme: true,
+    themeVarsPath: {
+      base: '@/style/variables.scss'
+      // dark: '@/style/dark-variables.scss'
     }
   }
 })
