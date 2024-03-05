@@ -1,3 +1,20 @@
+## [2.3.4](https://github.com/vexip-ui/vexip-ui/compare/v2.3.3...v2.3.4) (2024-03-05)
+
+
+### ✨ Features
+
+* **image:** add viewer-props prop ([aac2ef2](https://github.com/vexip-ui/vexip-ui/commit/aac2ef26be94140a438b68a19999102ed196918d))
+* **radio:** add extra slot ([61a30b9](https://github.com/vexip-ui/vexip-ui/commit/61a30b937c21ed8d80dbc3618171ec3c2299eff4))
+* **utils:** add count methods ([31523dc](https://github.com/vexip-ui/vexip-ui/commit/31523dccc21a9e61608286fe5749deeba15b2c1c))
+
+
+### 🐞 Bug Fixes
+
+* avoid hydration warning for elements which have id attribute ([0c580c2](https://github.com/vexip-ui/vexip-ui/commit/0c580c2f7548b4ab1f49dc2a6eb6f099db29e6ce)), closes [#463](https://github.com/vexip-ui/vexip-ui/issues/463)
+* **upload:** cannot select file when click to upload ([bd8437a](https://github.com/vexip-ui/vexip-ui/commit/bd8437aca02a585e3d7da374b0fa27d1902b17ba)), closes [#464](https://github.com/vexip-ui/vexip-ui/issues/464)
+
+
+
 ## [2.3.3](https://github.com/vexip-ui/vexip-ui/compare/v2.3.2...v2.3.3) (2024-02-18)
 
 

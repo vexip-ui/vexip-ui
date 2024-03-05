@@ -3,8 +3,8 @@ import { computed, provide, reactive, ref, watch } from 'vue'
 
 import PopupItem from './popup-item.vue'
 import { classProp, useNameHelper } from '@vexip-ui/config'
-import { isFunction, noop } from '@vexip-ui/utils'
-import { DELETE_HANDLER, getIndex, popupPlacements } from './symbol'
+import { getGlobalCount, isFunction, noop } from '@vexip-ui/utils'
+import { DELETE_HANDLER, popupPlacements } from './symbol'
 
 import type { CSSProperties } from 'vue'
 import type { Key, PopupItemState, PopupPlacement } from './symbol'
@@ -169,7 +169,7 @@ function renderItem(options: Record<string, any>) {
   let item = options.key ? find(options.key as Key) : null
 
   if (!item?.visible) {
-    const index = getIndex()
+    const index = getGlobalCount()
     const key = (options.key as Key) ?? nh.bs(`${index}`)
 
     let currentVertical = props.startOffset

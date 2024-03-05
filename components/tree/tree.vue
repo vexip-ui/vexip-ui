@@ -21,6 +21,7 @@ import {
   debounce,
   filterTree,
   flatTree,
+  getGlobalCount,
   getLast,
   isNull,
   isPromise,
@@ -32,7 +33,7 @@ import {
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { useCascadedChecked } from './hooks'
-import { DropType, TREE_NODE_STATE, TREE_STATE, defaultKeyConfig, getIndexId } from './symbol'
+import { DropType, TREE_NODE_STATE, TREE_STATE, defaultKeyConfig } from './symbol'
 
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type {
@@ -473,6 +474,10 @@ const { updateCheckedUpward, updateCheckedDown } = useCascadedChecked({
   getNode: key => nodeMap.get(key),
   disableNode: node => node.disabled
 })
+
+function getIndexId() {
+  return `__vxp-tree-key-${getGlobalCount()}`
+}
 
 function isLeafNode(node: TreeNodeProps) {
   const isLeaf = node.isLeaf

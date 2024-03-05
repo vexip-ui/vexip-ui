@@ -782,7 +782,7 @@ export default defineComponent({
               multiple={props.multiple}
               name={props.name}
               accept={acceptString.value}
-              webkitdirectory={props.directory}
+              webkitdirectory={props.directory || undefined}
               onChange={handleInputChange}
               onSubmit={preventDefault}
             />

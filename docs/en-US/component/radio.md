@@ -128,9 +128,10 @@ type RadioRawOption =
 
 ### Radio Slots
 
-| Name    | Description                  | Parameters | Since |
-| ------- | ---------------------------- | ---------- | ----- |
-| default | Slot for radio label content | -          | -     |
+| Name    | Description                                                     | Parameters | Since   |
+| ------- | --------------------------------------------------------------- | ---------- | ------- |
+| default | Slot for radio label content                                    | -          | -       |
+| extra   | Slot for extra content, content here will not trigger the radio | -          | `2.3.4` |
 
 ### RadioGroup Props
 

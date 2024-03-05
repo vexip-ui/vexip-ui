@@ -36,6 +36,14 @@
 
 :::
 
+:::demo viewer/center-scale
+
+### 中心缩放
+
+添加 `center-scale` 属性可以使缩放始终以内容中心为基准点。
+
+:::
+
 :::demo viewer/static
 
 ### 无过渡

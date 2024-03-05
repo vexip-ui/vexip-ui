@@ -179,9 +179,3 @@ export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   checkDisabled: 'checkDisabled',
   isLeaf: 'isLeaf'
 }
-
-let idIndex = 1
-
-export function getIndexId() {
-  return `__vxp-tree-key-${idIndex++}`
-}

@@ -37,9 +37,3 @@ export const popupPlacements = Object.freeze<PopupPlacement[]>([
   'bottom-center',
   'bottom-left'
 ])
-
-let globalIndex = 0
-
-export function getIndex() {
-  return globalIndex++
-}

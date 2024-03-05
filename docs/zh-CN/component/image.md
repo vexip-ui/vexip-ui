@@ -109,26 +109,27 @@ type ImageSkeletonProps = Pick<
 
 ### Image 属性
 
-| 名称            | 类型                            | 说明                                           | 默认值    | 始于 |
-| --------------- | ------------------------------- | ---------------------------------------------- | --------- | ---- |
-| src             | `string`                        | 图片源                                         | `''`      | -    |
-| fallback-src    | `string`                        | 图片源加载失败时的回退源                       | `''`      | -    |
-| alt             | `string`                        | 图片描述                                       | `''`      | -    |
-| fit             | `ImageObjectFit`                | 设置图片如何填充，同 `CSS` 的 `object-fit`     | `'cover'` | -    |
-| width           | `string \| number`              | 图片的宽度                                     | `''`      | -    |
-| height          | `string \| number`              | 图片的高度                                     | `''`      | -    |
-| img-attrs       | `Record<string, any>`           | 设置内部 `<img>` 的属性                        | `{}`      | -    |
-| lazy            | `string`                        | 是否开启懒加载                                 | `false`   | -    |
-| root            | `unknown`                       | 同 `IntersectionObserver` 的 `root` 选项       | `null`    | -    |
-| root-margin     | `string`                        | 同 `IntersectionObserver` 的 `rootMargin` 选项 | `''`      | -    |
-| preview         | `boolean`                       | 是否可预览                                     | `false`   | -    |
-| skeleton        | `boolean \| ImageSkeletonProps` | 加载时是否填充骨架                             | `false`   | -    |
-| placeholder     | `string`                        | 加载时的占位内容                               | `''`      | -    |
-| error-tip       | `string`                        | 加载错误时的提示内容                           | `''`      | -    |
-| radius          | `number`                        | 设置图片的圆角半径                             | `0`       | -    |
-| border          | `boolean \| string`             | 是否有边框，支持传入一个颜色值指定边框颜色     | `false`   | -    |
-| preview-src     | `string`                        | 图片的预览源                                   | `''`      | -    |
-| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `null`    | -    |
+| 名称            | 类型                            | 说明                                           | 默认值    | 始于    |
+| --------------- | ------------------------------- | ---------------------------------------------- | --------- | ------- |
+| src             | `string`                        | 图片源                                         | `''`      | -       |
+| fallback-src    | `string`                        | 图片源加载失败时的回退源                       | `''`      | -       |
+| alt             | `string`                        | 图片描述                                       | `''`      | -       |
+| fit             | `ImageObjectFit`                | 设置图片如何填充，同 `CSS` 的 `object-fit`     | `'cover'` | -       |
+| width           | `string \| number`              | 图片的宽度                                     | `''`      | -       |
+| height          | `string \| number`              | 图片的高度                                     | `''`      | -       |
+| img-attrs       | `Record<string, any>`           | 设置内部 `<img>` 的属性                        | `{}`      | -       |
+| lazy            | `string`                        | 是否开启懒加载                                 | `false`   | -       |
+| root            | `unknown`                       | 同 `IntersectionObserver` 的 `root` 选项       | `null`    | -       |
+| root-margin     | `string`                        | 同 `IntersectionObserver` 的 `rootMargin` 选项 | `''`      | -       |
+| preview         | `boolean`                       | 是否可预览                                     | `false`   | -       |
+| skeleton        | `boolean \| ImageSkeletonProps` | 加载时是否填充骨架                             | `false`   | -       |
+| placeholder     | `string`                        | 加载时的占位内容                               | `''`      | -       |
+| error-tip       | `string`                        | 加载错误时的提示内容                           | `''`      | -       |
+| radius          | `number`                        | 设置图片的圆角半径                             | `0`       | -       |
+| border          | `boolean \| string`             | 是否有边框，支持传入一个颜色值指定边框颜色     | `false`   | -       |
+| preview-src     | `string`                        | 图片的预览源                                   | `''`      | -       |
+| viewer-transfer | `boolean \| string`             | 设置查看器的 `transfer` 属性                   | `null`    | -       |
+| viewer-props    | `ViewerProps`                   | 设置内部 Viewer 组件的属性                     | `{}`      | `2.3.4` |
 
 ### Image 事件
 
@@ -169,12 +170,13 @@ type ImageSkeletonProps = Pick<
 
 ### ImageViewer 属性
 
-| 名称     | 类型                 | 说明                                                          | 默认值  | 始于     |
-| -------- | -------------------- | ------------------------------------------------------------- | ------- | -------- |
-| active   | `boolean`            | 设置图片查看器是否显示，可以使用 `v-model` 双向绑定           | `false` | -        |
-| index    | `number`             | 当前查看的图片的索引，可以使用 `v-model` 双向绑定             | `0`     | -        |
-| src-list | `string \| string[]` | 查看图片的源列表                                              | `''`    | `2.2.21` |
-| transfer | `boolean \| string`  | 设置图片查看器的渲染位置，设置为 `true` 时默认渲染至 `<body>` | `false` | -        |
+| 名称         | 类型                 | 说明                                                          | 默认值  | 始于     |
+| ------------ | -------------------- | ------------------------------------------------------------- | ------- | -------- |
+| active       | `boolean`            | 设置图片查看器是否显示，可以使用 `v-model` 双向绑定           | `false` | -        |
+| index        | `number`             | 当前查看的图片的索引，可以使用 `v-model` 双向绑定             | `0`     | -        |
+| src-list     | `string \| string[]` | 查看图片的源列表                                              | `''`    | `2.2.21` |
+| transfer     | `boolean \| string`  | 设置图片查看器的渲染位置，设置为 `true` 时默认渲染至 `<body>` | `false` | -        |
+| viewer-props | `ViewerProps`        | 设置内部 Viewer 组件的属性                                    | `{}`    | `2.3.4`  |
 
 ### ImageViewer 事件
 

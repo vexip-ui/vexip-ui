@@ -18,9 +18,3 @@ export interface ModalSlotParams {
 }
 
 export type ModalCommonSLot = (params: ModalSlotParams) => any
-
-let index = 0
-
-export function getIdIndex() {
-  return index++
-}

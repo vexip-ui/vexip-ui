@@ -2,6 +2,7 @@ import { booleanProp, booleanStringProp, buildProps, eventProp } from '@vexip-ui
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ViewerProps } from '@/components/viewer'
 import type { ImageObjectFit, ImageSkeletonProps } from './symbol'
 
 export const imageProps = buildProps({
@@ -26,6 +27,7 @@ export const imageProps = buildProps({
   border: booleanStringProp,
   previewSrc: String,
   viewerTransfer: booleanStringProp,
+  viewerProps: Object as PropType<ViewerProps>,
   onLoad: eventProp<(event: Event) => void>(),
   onError: eventProp<(event: Event) => void>(),
   onPreview: eventProp<(src: string) => void>()
@@ -49,6 +51,7 @@ export const imageViewerProps = buildProps({
   index: Number,
   srcList: [String, Array] as PropType<string | string[]>,
   transfer: booleanStringProp,
+  viewerProps: Object as PropType<ViewerProps>,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, src: string) => void>(),
   onPrev: eventProp<(index: number, src: string) => void>(),

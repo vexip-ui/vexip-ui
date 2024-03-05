@@ -5,7 +5,9 @@
     </Radio>
     <Radio label="其他">
       其他
-      <Input style="margin-inline-start: 6px"></Input>
+      <template #extra>
+        <Input style="margin-inline-start: 6px"></Input>
+      </template>
     </Radio>
   </RadioGroup>
   <p style="margin-top: 10px">

@@ -19,7 +19,8 @@ const props = useProps('imageViewer', _props, {
     default: '',
     static: true
   },
-  transfer: false
+  transfer: false,
+  viewerProps: () => ({})
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
@@ -131,7 +132,7 @@ function handleHide() {
     @hide="handleHide"
   >
     <div v-show="show" :class="nh.be('wrapper')">
-      <Viewer ref="viewer">
+      <Viewer v-bind="props.viewerProps" ref="viewer">
         <slot :src="srcArray[currentIndex]">
           <img :src="srcArray[currentIndex]" />
         </slot>

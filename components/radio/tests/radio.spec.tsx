@@ -21,16 +21,18 @@ describe('Radio', () => {
     expect(wrapper.find('input[type="radio"]').exists()).toBe(true)
   })
 
-  it('slot', () => {
+  it('slots', () => {
     const wrapper = mount(() => (
       <Radio label={TEXT}>
         {{
-          default: () => <span class={'label'}></span>
+          default: () => <span class={'label'}></span>,
+          extra: () => <span class={'extra'}></span>
         }}
       </Radio>
     ))
 
     expect(wrapper.find('.label').exists()).toBe(true)
+    expect(wrapper.find('.extra').exists()).toBe(true)
     expect(wrapper.find('.vxp-radio__label').text()).toEqual('')
   })
 
@@ -99,7 +101,7 @@ describe('Radio', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Radio label={TEXT} state={state}></Radio>)
 
       expect(wrapper.find('.vxp-radio').classes()).toContain(`vxp-radio--${state}`)
@@ -201,7 +203,7 @@ describe('Radio', () => {
   })
 
   it('group state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => (
         <RadioGroup state={state}>
           <Radio label={'1'}></Radio>

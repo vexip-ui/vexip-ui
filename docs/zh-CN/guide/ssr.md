@@ -89,29 +89,30 @@ function handleClick() {
 );
 ```
 
+如果你还希望更改暗黑模式的样式，同样地创建一个单独的文件：
+
+```scss
+// style/dark-variables.scss
+@forward 'vexip-ui/style/dark/variables.scss' with (
+  $content-color-map: (
+    base: #fff
+  )
+);
+```
+
 然后在 `nuxt.config.ts` 中拓展以下内容：
 
 ```ts
-const vxpStylePresetRE = /vexip-ui\/style(?:\/dark)?\/preset/
-
 export default defineNuxtConfig({
   modules: [
     '@vexip-ui/nuxt'
   ],
   vexipUI: {
-    importStyle: 'sass'
-  },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: (code: string, path: string) => {
-            return vxpStylePresetRE.test(path)
-              ? code.replace('@use \'./design/variables.scss\' as *;', '@use \'@/style/variables.scss\' as *;')
-              : code
-          }
-        }
-      }
+    importStyle: 'sass',
+    // importDarkTheme: true,
+    themeVarsPath: {
+      base: '@/style/variables.scss'
+      // dark: '@/style/dark-variables.scss'
     }
   }
 })

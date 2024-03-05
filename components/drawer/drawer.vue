@@ -14,9 +14,9 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isPromise, toNumber } from '@vexip-ui/utils'
+import { getGlobalCount, isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
-import { drawerPlacements, getIdIndex } from './symbol'
+import { drawerPlacements } from './symbol'
 
 import type { DrawerCommonSLot } from './symbol'
 
@@ -85,7 +85,7 @@ const currentHeight = ref(props.height)
 
 const wrapper = ref<HTMLElement>()
 
-const idIndex = `${getIdIndex()}`
+const idIndex = `${getGlobalCount()}`
 
 const { target: resizer, moving: resizing } = useMoving({
   onStart: (state, event) => {
