@@ -1,3 +1,12 @@
+# [2.14.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.13.1...utils@2.14.0) (2024-03-05)
+
+
+### ✨ Features
+
+* **utils:** add count methods ([31523dc](https://github.com/vexip-ui/vexip-ui/commit/31523dccc21a9e61608286fe5749deeba15b2c1c))
+
+
+
 ## [2.13.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.13.0...utils@2.13.1) (2024-02-01)
 
 
