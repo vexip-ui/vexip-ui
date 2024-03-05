@@ -99,6 +99,8 @@ useModifier({
   target: viewer,
   passive: false,
   onKeyDown: (event, modifier) => {
+    if (moving.value) return
+
     if (modifier.up || modifier.down || modifier.left || modifier.right) {
       event.preventDefault()
 
@@ -340,7 +342,7 @@ function toggleFlipY(target = !flipY.value, emit = true) {
 }
 
 function handleZoom(ratio: number, emit = true) {
-  if (props.zoomDisabled || !container.value) return
+  if (props.zoomDisabled || !container.value || moving.value) return
 
   const containerRect = container.value.getBoundingClientRect()
   const { x, y } = zoomOrigin

@@ -44,7 +44,8 @@ const props = useProps('image', _props, {
   radius: 0,
   border: false,
   previewSrc: '',
-  viewerTransfer: null
+  viewerTransfer: null,
+  viewerProps: () => ({})
 })
 
 const groupState = inject(GROUP_STATE, null)
@@ -265,6 +266,7 @@ function handlePreview() {
     />
     <ImageViewer
       v-if="hasPreview"
+      v-bind="viewerProps"
       v-model:active="viewerActive"
       :src-list="props.previewSrc || loadSrc"
       :transfer="props.viewerTransfer"

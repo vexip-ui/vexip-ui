@@ -36,6 +36,14 @@ Toolbars can be placed in an appropriate position via the `toolbar-placement` pr
 
 :::
 
+:::demo viewer/center-scale
+
+### Center Scale
+
+Add the `center-scale` prop so that scaling is always centered on the content.
+
+:::
+
 :::demo viewer/static
 
 ### No Transition

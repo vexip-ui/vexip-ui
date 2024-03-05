@@ -109,26 +109,27 @@ type ImageSkeletonProps = Pick<
 
 ### Image Props
 
-| Name            | Type                            | Description                                                                              | Default   | Since |
-| --------------- | ------------------------------- | ---------------------------------------------------------------------------------------- | --------- | ----- |
-| src             | `string`                        | The image source                                                                         | `''`      | -     |
-| fallback-src    | `string`                        | The fallback source when the image load fails                                            | `''`      | -     |
-| alt             | `string`                        | image description                                                                        | `''`      | -     |
-| fit             | `ImageObjectFit`                | Set the image how to fill, same as `object-fit` of `css`                                 | `'cover'` | -     |
-| width           | `string \| number`              | The width of image                                                                       | `''`      | -     |
-| height          | `string \| number`              | The height of image                                                                      | `''`      | -     |
-| img-attrs       | `Record<string, any>`           | Set attributes of the inner `<img>`                                                      | `{}`      | -     |
-| lazy            | `string`                        | Whether to enable lazy load                                                              | `false`   | -     |
-| root            | `unknown`                       | Same as `root` option of `IntersectionObserver`                                          | `null`    | -     |
-| root-margin     | `string`                        | Same as `rootMargin` option of `IntersectionObserver`                                    | `''`      | -     |
-| preview         | `boolean`                       | Whether to enable preview                                                                | `false`   | -     |
-| skeleton        | `boolean \| ImageSkeletonProps` | Whether to fill a skeleton when loading                                                  | `false`   | -     |
-| placeholder     | `string`                        | The placeholder content when loading                                                     | `''`      | -     |
-| error-tip       | `string`                        | The tip content when load error                                                          | `''`      | -     |
-| radius          | `number`                        | Set the border radius of the image                                                       | `0`       | -     |
-| border          | `boolean \| string`             | Whether the image has border, support passing a color string to specify the border color | `false`   | -     |
-| preview-src     | `string`                        | The preview source of image                                                              | `''`      | -     |
-| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `null`    | -     |
+| Name            | Type                            | Description                                                                              | Default   | Since   |
+| --------------- | ------------------------------- | ---------------------------------------------------------------------------------------- | --------- | ------- |
+| src             | `string`                        | The image source                                                                         | `''`      | -       |
+| fallback-src    | `string`                        | The fallback source when the image load fails                                            | `''`      | -       |
+| alt             | `string`                        | image description                                                                        | `''`      | -       |
+| fit             | `ImageObjectFit`                | Set the image how to fill, same as `object-fit` of `css`                                 | `'cover'` | -       |
+| width           | `string \| number`              | The width of image                                                                       | `''`      | -       |
+| height          | `string \| number`              | The height of image                                                                      | `''`      | -       |
+| img-attrs       | `Record<string, any>`           | Set attributes of the inner `<img>`                                                      | `{}`      | -       |
+| lazy            | `string`                        | Whether to enable lazy load                                                              | `false`   | -       |
+| root            | `unknown`                       | Same as `root` option of `IntersectionObserver`                                          | `null`    | -       |
+| root-margin     | `string`                        | Same as `rootMargin` option of `IntersectionObserver`                                    | `''`      | -       |
+| preview         | `boolean`                       | Whether to enable preview                                                                | `false`   | -       |
+| skeleton        | `boolean \| ImageSkeletonProps` | Whether to fill a skeleton when loading                                                  | `false`   | -       |
+| placeholder     | `string`                        | The placeholder content when loading                                                     | `''`      | -       |
+| error-tip       | `string`                        | The tip content when load error                                                          | `''`      | -       |
+| radius          | `number`                        | Set the border radius of the image                                                       | `0`       | -       |
+| border          | `boolean \| string`             | Whether the image has border, support passing a color string to specify the border color | `false`   | -       |
+| preview-src     | `string`                        | The preview source of image                                                              | `''`      | -       |
+| viewer-transfer | `boolean \| string`             | Set the `transfer` prop of the image viewer                                              | `null`    | -       |
+| viewer-props    | `ViewerProps`                   | Set the props of the inner Viewer component                                              | `{}`      | `2.3.4` |
 
 ### Image Events
 
@@ -169,12 +170,13 @@ type ImageSkeletonProps = Pick<
 
 ### ImageViewer Props
 
-| Name     | Type                 | Description                                                                                               | Default | Since    |
-| -------- | -------------------- | --------------------------------------------------------------------------------------------------------- | ------- | -------- |
-| active   | `boolean`            | Set whether the image viewer is displayed, you can use `v-model` two-way binding                          | `false` | -        |
-| index    | `number`             | The index of the currently viewed image, you can use `v-model` two-way binding                            | `0`     | -        |
-| src-list | `string \| string[]` | The source list of viewed images                                                                          | `''`    | `2.2.21` |
-| transfer | `boolean \| string`  | Set the rendering position of the image viewer, when set to `true`, it will render to `<body>` by default | `false` | -        |
+| Name         | Type                 | Description                                                                                               | Default | Since    |
+| ------------ | -------------------- | --------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| active       | `boolean`            | Set whether the image viewer is displayed, you can use `v-model` two-way binding                          | `false` | -        |
+| index        | `number`             | The index of the currently viewed image, you can use `v-model` two-way binding                            | `0`     | -        |
+| src-list     | `string \| string[]` | The source list of viewed images                                                                          | `''`    | `2.2.21` |
+| transfer     | `boolean \| string`  | Set the rendering position of the image viewer, when set to `true`, it will render to `<body>` by default | `false` | -        |
+| viewer-props | `ViewerProps`        | Set the props of the inner Viewer component                                                               | `{}`    | `2.3.4`  |
 
 ### ImageViewer Events
 
