@@ -7,59 +7,7 @@
 
 :root,
 .#{$namespace}-theme-vars-base {
-  @include define-css-var('color-black', $color-black);
-  @include define-css-var('color-white', $color-white);
-
-  @each $type in $types {
-    @include define-type-color($type);
-  }
-
-  @include define-preset-values('content-color', $content-color-map);
-  @include define-preset-values('bg-color', $bg-color-map);
-  @include define-preset-values('border-color', $border-color-map);
-
-  @include define-css-var('border-width', $border-width);
-  @include define-css-var('border-style', $border-style);
-  @include define-css-var('border-shape', $border-shape);
-
-  @each $name in map.keys($border-color-map) {
-    @include define-css-var(
-      ('border', $name),
-      get-css-var('border-shape') get-css-var('border-color' $name)
-    );
-  }
-
-  @include define-preset-values('fill-color', $fill-color-map);
-  @include define-preset-values('font-family', $font-family-map);
-  @include define-preset-values('font-size', $font-size-map);
-  @include define-preset-values('line-height', $line-height-map);
-  @include define-preset-values('radius', $radius-map);
-
-  @include define-css-var('shadow-x', $shadow-x);
-  @include define-css-var('shadow-y', $shadow-y);
-  @include define-css-var('shadow-blur', $shadow-blur);
-  @include define-css-var('shadow-shape', $shadow-shape);
-  @include define-css-var('shadow-base', $shadow-base);
-
-  @include define-preset-values('shadow-color', $shadow-color-map);
-
-  @each $name in map.keys($shadow-color-map) {
-    @include define-css-var(
-      ('shadow', $name),
-      get-css-var('shadow-shape') get-css-var('shadow-color' $name)
-    );
-  }
-
-  @include define-css-var('shadow-border', $shadow-border);
-  @include define-css-var('shadow-focus', $shadow-focus);
-
-  @include define-css-var('transition-duration', $transition-duration);
-  @include define-css-var('transition-timing', $transition-timing);
-  @include define-css-var('transition-base', $transition-base);
-
-  @include define-preset-values('transition', $transition-map);
-  @include define-preset-values('z-index', $z-index-map);
-  @include define-preset-values('break-point', $break-point-map, true);
+  @include define-theme-styles;
 }
 
 body {

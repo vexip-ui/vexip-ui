@@ -1,20 +1,23 @@
 @use 'sass:map';
 
 @use '../shared/variables.scss' as *;
-@use '../design/variables.scss' as c;
 @use './variables.scss' as *;
 
 :root.dark,
-.#{c.$namespace}-theme-vars-dark {
+.#{$namespace}-theme-vars-dark {
   color-scheme: dark;
 
-  @include define-preset-values('content-color', $content-color-map);
-  @include define-preset-values('bg-color', $bg-color-map);
-  @include define-preset-values('border-color', $border-color-map);
-  @include define-preset-values('fill-color', $fill-color-map);
-  @include define-preset-values('shadow-color', $shadow-color-map);
+  @include define-theme-styles(
+    (
+      'content-color-map': $content-color-map,
+      'bg-color-map': $bg-color-map,
+      'border-color-map': $border-color-map,
+      'fill-color-map': $fill-color-map,
+      'shadow-color-map': $shadow-color-map
+    )
+  );
 
-  .#{c.$namespace}-button-vars {
+  .#{$namespace}-button-vars {
     @include define-preset-values(
       'button',
       (
@@ -24,7 +27,7 @@
     );
   }
 
-  .#{c.$namespace}-checkbox-vars {
+  .#{$namespace}-checkbox-vars {
     @include define-preset-values(
       'checkbox',
       (
@@ -33,7 +36,7 @@
     );
   }
 
-  .#{c.$namespace}-menu-vars {
+  .#{$namespace}-menu-vars {
     @include define-preset-values(
       'menu',
       (
@@ -45,7 +48,7 @@
     );
   }
 
-  .#{c.$namespace}-slider {
+  .#{$namespace}-slider {
     @include define-preset-values(
       'slider',
       (
