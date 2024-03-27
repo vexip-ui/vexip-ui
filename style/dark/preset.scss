@@ -27,6 +27,16 @@
     );
   }
 
+  .#{$namespace}-captcha-vars {
+    @include define-preset-values(
+      'captcha',
+      (
+        trigger-color: #868e96,
+        trigger-color-disabled: #adb5bd
+      )
+    );
+  }
+
   .#{$namespace}-checkbox-vars {
     @include define-preset-values(
       'checkbox',
