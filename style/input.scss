@@ -242,6 +242,7 @@ $input: map.merge(
     display: inline-flex;
     align-items: center;
     width: 100%;
+    min-width: 0;
     background-color: get-css-var('input-bg-color');
     border-radius: get-css-var('input-radius');
   }
@@ -252,6 +253,7 @@ $input: map.merge(
   &-wrapper & {
     flex: 1 0 0;
     width: auto;
+    min-width: 0;
     background-color: transparent;
     border-radius: 0;
   }

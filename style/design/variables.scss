@@ -74,8 +74,8 @@ $color-map: map.deep-merge(
   @include define-opacity-colors($type, 9);
 }
 
-@mixin define-type-color($type) {
-  $colors: map.get($color-map, $type);
+@mixin define-type-color($type, $map: $color-map) {
+  $colors: map.get($map, $type);
 
   @each $name in map.keys($colors) {
     @include define-css-var(('color', $type, $name), map.get($colors, $name));
@@ -270,3 +270,132 @@ $break-point-map: map.merge(
   ),
   $break-point-map
 );
+
+@mixin define-theme-styles($theme-config: ()) {
+  @include define-css-var(
+    'color-black',
+    get-or-default($theme-config, $color-black, 'color-black')
+  );
+  @include define-css-var(
+    'color-white',
+    get-or-default($theme-config, $color-white, 'color-white')
+  );
+
+  @each $type in $types {
+    @include define-type-color($type, get-or-default($theme-config, $color-map, 'color-map'));
+  }
+
+  @include define-preset-values(
+    'content-color',
+    get-or-default($theme-config, $content-color-map, 'content-color-map')
+  );
+  @include define-preset-values(
+    'bg-color',
+    get-or-default($theme-config, $bg-color-map, 'bg-color-map')
+  );
+  @include define-preset-values(
+    'border-color',
+    get-or-default($theme-config, $border-color-map, 'border-color-map')
+  );
+
+  @include define-css-var(
+    'border-width',
+    get-or-default($theme-config, $border-width, 'border-width')
+  );
+  @include define-css-var(
+    'border-style',
+    get-or-default($theme-config, $border-style, 'border-style')
+  );
+  @include define-css-var(
+    'border-shape',
+    get-or-default($theme-config, $border-shape, 'border-shape')
+  );
+
+  @each $name in map.keys(get-or-default($theme-config, $border-color-map, 'border-color-map')) {
+    @include define-css-var(
+      ('border', $name),
+      get-css-var('border-shape') get-css-var('border-color' $name)
+    );
+  }
+
+  @include define-preset-values(
+    'fill-color',
+    get-or-default($theme-config, $fill-color-map, 'fill-color-map')
+  );
+  @include define-preset-values(
+    'font-family',
+    get-or-default($theme-config, $font-family-map, 'font-family-map')
+  );
+  @include define-preset-values(
+    'font-size',
+    get-or-default($theme-config, $font-size-map, 'font-size-map')
+  );
+  @include define-preset-values(
+    'line-height',
+    get-or-default($theme-config, $line-height-map, 'line-height-map')
+  );
+  @include define-preset-values('radius', get-or-default($theme-config, $radius-map, 'radius-map'));
+
+  @include define-css-var('shadow-x', get-or-default($theme-config, $shadow-x, 'shadow-x'));
+  @include define-css-var('shadow-y', get-or-default($theme-config, $shadow-y, 'shadow-y'));
+  @include define-css-var(
+    'shadow-blur',
+    get-or-default($theme-config, $shadow-blur, 'shadow-blur')
+  );
+  @include define-css-var(
+    'shadow-shape',
+    get-or-default($theme-config, $shadow-shape, 'shadow-shape')
+  );
+  @include define-css-var(
+    'shadow-base',
+    get-or-default($theme-config, $shadow-base, 'shadow-base')
+  );
+
+  @include define-preset-values(
+    'shadow-color',
+    get-or-default($theme-config, $shadow-color-map, 'shadow-color-map')
+  );
+
+  @each $name in map.keys(get-or-default($theme-config, $shadow-color-map, 'shadow-color-map')) {
+    @include define-css-var(
+      ('shadow', $name),
+      get-css-var('shadow-shape') get-css-var('shadow-color' $name)
+    );
+  }
+
+  @include define-css-var(
+    'shadow-border',
+    get-or-default($theme-config, $shadow-border, 'shadow-border')
+  );
+  @include define-css-var(
+    'shadow-focus',
+    get-or-default($theme-config, $shadow-focus, 'shadow-focus')
+  );
+
+  @include define-css-var(
+    'transition-duration',
+    get-or-default($theme-config, $transition-duration, 'transition-duration')
+  );
+  @include define-css-var(
+    'transition-timing',
+    get-or-default($theme-config, $transition-timing, 'transition-timing')
+  );
+  @include define-css-var(
+    'transition-base',
+    get-or-default($theme-config, $transition-base, 'transition-base')
+  );
+
+  @include define-preset-values(
+    'transition',
+    get-or-default($theme-config, $transition-map, 'transition-map')
+  );
+  @include define-preset-values(
+    'z-index',
+    get-or-default($theme-config, $z-index-map, 'z-index-map')
+  );
+  @include define-preset-values(
+    'break-point',
+    get-or-default($theme-config, $break-point-map, 'break-point-map, true'),
+    true
+  );
+}

@@ -1,3 +1,18 @@
+## [2.3.5](https://github.com/vexip-ui/vexip-ui/compare/v2.3.4...v2.3.5) (2024-03-27)
+
+
+### 🐞 Bug Fixes
+
+* **captcha:** invisible trigger icon in dark mode ([298db53](https://github.com/vexip-ui/vexip-ui/commit/298db53fd27af553ff5522912b2e3be7a4117c5a))
+* **input:** improve style when using action slots ([dd6e7ba](https://github.com/vexip-ui/vexip-ui/commit/dd6e7ba497782fa482e81a80d9ec7f2225f9395f))
+
+
+### 🔨 Code Refactoring
+
+* more scalable theme variables config ([7228cdd](https://github.com/vexip-ui/vexip-ui/commit/7228cdd06780421a26757894ab7bada3579da5dd))
+
+
+
 ## [2.3.4](https://github.com/vexip-ui/vexip-ui/compare/v2.3.3...v2.3.4) (2024-03-05)
 
 

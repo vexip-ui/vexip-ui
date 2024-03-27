@@ -23,6 +23,16 @@
   @return var(#{to-css-var-name($name-units...)}, $default);
 }
 
+@function get-or-default($map, $default, $keys...) {
+  $value: map.get($map, $keys...);
+
+  @if not $value {
+    @return $default;
+  }
+
+  @return $value;
+}
+
 @mixin define-css-var($name-units, $value) {
   #{to-css-var-name($name-units...)}: #{$value};
 }
