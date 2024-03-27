@@ -124,6 +124,9 @@ import { defineConfig } from 'vite'
 
 const vxpStylePresetRE = /vexip-ui\/style(?:\/dark)?\/preset/
 
+const basePath = '@/style/variables.scss'
+// const darkPath = '@/style/dark-variables.scss'
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -135,9 +138,15 @@ export default defineConfig({
       scss: {
         additionalData: (code: string, path: string) => {
           // tampering references to variables file in base style
-          return vxpStylePresetRE.test(path)
-            ? code.replace('@use \'./design/variables.scss\' as *;', '@use \'@/style/variables.scss\' as *;')
-            : code
+          if (vxpStylePresetRE.test(path)) {
+            // if (path.includes('dark')) {
+            //   return code.replace('@use \'./variables.scss\' as *;', `@use '${darkPath}' as *;`)
+            // }
+
+            return code.replace('@use \'./design/variables.scss\' as *;', `@use '${basePath}' as *;`)
+          }
+
+          return code
         }
       }
     }
