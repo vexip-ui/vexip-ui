@@ -1,0 +1,15 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$fence: () !default;
+$fence: map.merge((), $fence);
+
+.#{$namespace}-fence {
+  &-vars {
+    @include define-preset-values('fence', $fence);
+  }
+
+  @include basis;
+}

@@ -98,6 +98,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Confirm' },
         { name: 'Contextmenu', since: '1.1.0' },
         { name: 'Drawer' },
+        { name: 'Fence', since: '2.4.0' },
         { name: 'Loading', since: '1.1.0' },
         { name: 'Message' },
         { name: 'Modal' },

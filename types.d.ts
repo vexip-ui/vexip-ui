@@ -37,6 +37,7 @@ declare module 'vue' {
     DropdownItem: (typeof import('vexip-ui'))['DropdownItem'],
     DropdownList: (typeof import('vexip-ui'))['DropdownList'],
     Ellipsis: (typeof import('vexip-ui'))['Ellipsis'],
+    Fence: (typeof import('vexip-ui'))['Fence'],
     Form: (typeof import('vexip-ui'))['Form'],
     FormItem: (typeof import('vexip-ui'))['FormItem'],
     FormReset: (typeof import('vexip-ui'))['FormReset'],

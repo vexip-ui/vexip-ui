@@ -42,6 +42,7 @@ const components = [
   'DropdownItem',
   'DropdownList',
   'Ellipsis',
+  'Fence',
   'Form',
   'FormItem',
   'FormReset',

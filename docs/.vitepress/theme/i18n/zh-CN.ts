@@ -163,6 +163,7 @@ export const zhCN = defineI18n({
     Confirm: '确认框',
     Contextmenu: '右键菜单',
     Drawer: '抽屉',
+    Fence: '栅栏',
     Loading: '加载',
     Message: '消息提示',
     Modal: '模态框',
