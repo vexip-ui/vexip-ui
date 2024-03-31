@@ -4,8 +4,10 @@ import type { ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const fenceProps = buildProps({
-  bool: booleanProp,
-  onClick: eventProp<(bool: boolean) => void>()
+  boxable: booleanProp,
+  onBoxStart: eventProp<(event: PointerEvent) => void>(),
+  onBox: eventProp<(event: PointerEvent) => void>(),
+  onBoxEnd: eventProp<(event: PointerEvent) => void>()
 })
 
 export type FenceProps = ExtractPropTypes<typeof fenceProps>

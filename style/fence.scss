@@ -4,7 +4,14 @@
 @use './design' as *;
 
 $fence: () !default;
-$fence: map.merge((), $fence);
+$fence: map.merge(
+  (
+    box-bg-color: get-css-var('color-primary-opacity-9'),
+    box-border: get-css-var('border-shape') get-css-var('color-primary-opacity-3'),
+    box-radius: get-css-var('radius-base')
+  ),
+  $fence
+);
 
 .#{$namespace}-fence {
   &-vars {
@@ -12,4 +19,13 @@ $fence: map.merge((), $fence);
   }
 
   @include basis;
+
+  position: relative;
+
+  &__box {
+    position: absolute;
+    background-color: get-css-var('fence-box-bg-color');
+    border: get-css-var('fence-box-border');
+    border-radius: get-css-var('fence-box-radius');
+  }
 }
