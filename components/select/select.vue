@@ -482,7 +482,7 @@ export default defineComponent({
       suffixColor: '',
       noSuffix: false,
       value: {
-        default: () => getFieldValue(null)!,
+        default: () => getFieldValue()!,
         static: true
       },
       multiple: false,

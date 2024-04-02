@@ -249,7 +249,7 @@ function getLabelWidth(width: number | 'auto') {
 
 let initialized = false
 
-function getValue(defaultValue?: unknown) {
+function getValue(defaultValue: unknown = initValue.value) {
   if (!formProps.model || !props.prop) return defaultValue
 
   try {

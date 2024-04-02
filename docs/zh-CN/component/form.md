@@ -52,6 +52,14 @@ const model = reactive({} as Model)
 
 :::
 
+:::demo form/default-value
+
+### 默认值
+
+可以通过 `default-value` 属性为每个控件指定默认值。
+
+:::
+
 :::demo form/label
 
 ### 标签对齐

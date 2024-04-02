@@ -32,14 +32,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { FileState, Upload } from 'vexip-ui'
+import type { Upload, UploadFileState } from 'vexip-ui'
 
 const listActive = ref(false)
-const files = ref<FileState[]>([])
+const files = ref<UploadFileState[]>([])
 
 const upload = ref<InstanceType<typeof Upload>>()
 
-function deleteFile(file: FileState) {
+function deleteFile(file: UploadFileState) {
   upload.value?.handleDelete(file)
 }
 </script>

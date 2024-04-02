@@ -27,7 +27,7 @@ import { ref } from 'vue'
 
 import { Check, Upload as IUpload } from '@vexip-ui/icons'
 
-import type { FileState, UploadExposed } from 'vexip-ui'
+import type { UploadExposed, UploadFileState } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 const upload = ref<UploadExposed>()
@@ -50,7 +50,7 @@ async function doUpload() {
 }
 
 // 未设置 url 时，可以通过 change 事件记录选择的文件，后续自行操作，如放入 FormData 中
-function handleChange(files: FileState[]) {
+function handleChange(files: UploadFileState[]) {
   console.info(files)
 }
 </script>

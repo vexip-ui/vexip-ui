@@ -31,7 +31,7 @@ const _props = defineProps(sliderProps)
 const props = useProps('slider', _props, {
   state: createStateProp(state),
   value: {
-    default: () => getFieldValue(0),
+    default: () => getFieldValue() ?? 0,
     static: true
   },
   min: 0,

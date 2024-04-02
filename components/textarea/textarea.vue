@@ -26,7 +26,7 @@ const props = useProps('textarea', _props, {
   state: createStateProp(state),
   locale: null,
   value: {
-    default: () => getFieldValue(''),
+    default: () => getFieldValue(),
     static: true
   },
   placeholder: null,

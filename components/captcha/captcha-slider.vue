@@ -172,7 +172,7 @@ const triggerStyle = computed(() => {
 })
 
 watch(
-  () => getFieldValue(false),
+  () => getFieldValue(),
   value => {
     if (!value) {
       reset()
@@ -197,6 +197,7 @@ defineExpose({
   isLoading,
   track,
   trigger,
+  focus,
   reset
 })
 

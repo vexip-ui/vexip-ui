@@ -10,16 +10,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { FileOptions, FileState } from 'vexip-ui'
+import type { UploadFileOptions, UploadFileState } from 'vexip-ui'
 
-const fileList = ref<FileOptions[]>([
+const fileList = ref<UploadFileOptions[]>([
   {
     name: 'qmhc.jpg',
     url: 'qmhc.jpg'
   }
 ])
 
-function beforeUpload(file: FileState) {
+function beforeUpload(file: UploadFileState) {
   console.info(file)
 }
 </script>

@@ -65,7 +65,7 @@ const props = useProps('timePicker', _props, {
   format: 'HH:mm:ss',
   separator: ':',
   value: {
-    default: () => getFieldValue(''),
+    default: () => getFieldValue(),
     static: true
   },
   filler: {

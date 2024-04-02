@@ -52,6 +52,14 @@ Form validation can be triggered manually via the `validate` method of the Form 
 
 :::
 
+:::demo form/default-value
+
+### Default Value
+
+You can specify the default value for each item via `default-value` prop.
+
+:::
+
 :::demo form/label
 
 ### Label Align

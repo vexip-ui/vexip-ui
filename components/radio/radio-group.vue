@@ -29,7 +29,7 @@ const props = useProps('radioGroup', _props, {
   size: createSizeProp(size),
   state: createStateProp(state),
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   vertical: false,

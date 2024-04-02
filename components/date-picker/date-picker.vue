@@ -77,7 +77,7 @@ const props = useProps('datePicker', _props, {
   },
   transfer: false,
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   format: 'yyyy-MM-dd HH:mm:ss',

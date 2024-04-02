@@ -62,7 +62,7 @@ const props = useProps('numberInput', _props, {
     isFunc: true
   },
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   min: -Infinity,
@@ -111,7 +111,7 @@ const icons = useIcons()
 const { timeout, interval } = useTimerRecord()
 
 const focused = ref(false)
-const currentValue = ref<string | number>(props.value)
+const currentValue = ref<string | number>(isEmpty(props.value) ? getEmptyValue() : props.value)
 const inputting = ref(false)
 const plusHolding = ref(false)
 const minusHolding = ref(false)
