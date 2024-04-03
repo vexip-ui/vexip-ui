@@ -232,6 +232,24 @@ export function leaveNumber(number: number, divideBy: number, limit = 0) {
   return remainders.reverse()
 }
 
+/**
+ * 将给定的数字转换为序数词
+ *
+ * @param number 需要转换的数字
+ *
+ * @returns 转换后的序数词
+ */
+export function ordinalNumber(number: number) {
+  if (number < 0) {
+    return `${number}th`
+  }
+
+  const suffixes = ['th', 'st', 'nd', 'rd']
+  const rest = number % 100
+
+  return `${number}${suffixes[rest] || suffixes[number % 10] || suffixes[0]}`
+}
+
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
 export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
 
