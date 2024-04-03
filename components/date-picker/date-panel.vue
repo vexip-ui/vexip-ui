@@ -173,6 +173,17 @@ const calendarValue = computed(() => {
       ? getStringValue('start')
       : ''
 })
+const weekDays = computed(() => {
+  return [
+    props.locale.week7,
+    props.locale.week1,
+    props.locale.week2,
+    props.locale.week3,
+    props.locale.week4,
+    props.locale.week5,
+    props.locale.week6
+  ].map(week => week.slice(0, 2))
+})
 
 watch(
   calendarYear,
@@ -604,6 +615,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
               :min="min"
               :max="max"
               :week-start="weekStart"
+              :week-days="weekDays"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>
