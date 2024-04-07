@@ -23,13 +23,35 @@ export function taINLocale() {
       month10: 'அக்டோபர்',
       month11: 'நவம்பர்',
       month12: 'டிசம்பர்',
-      week1: 'திங்கள்',
-      week2: 'செவ்வாய்',
-      week3: 'புதன்',
-      week4: 'வியாழன்',
-      week5: 'வெள்ளி',
-      week6: 'சனி',
-      week7: 'ஞாயிறு'
+      week1: 'Mo',
+      week2: 'Tu',
+      week3: 'We',
+      week4: 'Th',
+      week5: 'Fr',
+      week6: 'Sa',
+      week7: 'Su',
+
+      label: {
+        month1: 'ஜனவரி',
+        month2: 'பிப்ரவரி',
+        month3: 'மார்ச்',
+        month4: 'ஏப்ரல்',
+        month5: 'மே',
+        month6: 'ஜூன்',
+        month7: 'ஜூலை',
+        month8: 'ஆகஸ்ட்',
+        month9: 'செப்டம்பர்',
+        month10: 'அக்டோபர்',
+        month11: 'நவம்பர்',
+        month12: 'டிசம்பர்',
+        week1: 'திங்கள்',
+        week2: 'செவ்வாய்',
+        week3: 'புதன்',
+        week4: 'வியாழன்',
+        week5: 'வெள்ளி',
+        week6: 'சனி',
+        week7: 'ஞாயிறு'
+      }
     },
 
     captcha: {

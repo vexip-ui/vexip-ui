@@ -29,7 +29,29 @@ export function zhCNLocale() {
       week4: '四',
       week5: '五',
       week6: '六',
-      week7: '日'
+      week7: '日',
+
+      label: {
+        month1: '一月',
+        month2: '二月',
+        month3: '三月',
+        month4: '四月',
+        month5: '五月',
+        month6: '六月',
+        month7: '七月',
+        month8: '八月',
+        month9: '九月',
+        month10: '十月',
+        month11: '十一月',
+        month12: '十二月',
+        week1: '星期一',
+        week2: '星期二',
+        week3: '星期三',
+        week4: '星期四',
+        week5: '星期五',
+        week6: '星期六',
+        week7: '星期日'
+      }
     },
 
     captcha: {
