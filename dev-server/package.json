@@ -6,12 +6,12 @@
     "serve": "vite"
   },
   "dependencies": {
-    "vue": "^3.3.10",
-    "vue-router": "^4.2.5"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
     "unplugin-vue-components": "^0.26.0"
   }
 }

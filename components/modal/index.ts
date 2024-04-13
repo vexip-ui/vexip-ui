@@ -59,7 +59,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
     const vnode = createVNode(createModal, null, null)
 
     vnode.appContext = appContext || instance!.appContext
-    render(vnode, container, false)
+    render(vnode, container)
   } else {
     app = createApp(createModal)
     app.mount(container)
@@ -94,7 +94,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
 
   function destroy() {
     if (instance) {
-      container && render(null, container, false)
+      container && render(null, container)
       instance = null
     }
 

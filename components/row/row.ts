@@ -4,7 +4,7 @@ import { useNameHelper, useProps } from '@vexip-ui/config'
 import { rowProps } from './props'
 import { ROW_STATE } from './symbol'
 
-import type { RowGridAlign, RowGridJustify } from './symbol'
+import type { RowGridAlign, RowGridJustify, RowState } from './symbol'
 
 const justifyList = Object.freeze<RowGridJustify[]>([
   'start',
@@ -89,7 +89,7 @@ export default defineComponent({
       reactive({
         columnFlex,
         gap: toRef(props, 'gap')
-      })
+      }) as RowState
     )
 
     return () =>

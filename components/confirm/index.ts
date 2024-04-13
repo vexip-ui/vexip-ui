@@ -130,7 +130,7 @@ export class ConfirmManager {
         this._container = document.createElement('div')
         vnode.appContext = this._mountedApp._context
 
-        render(vnode, this._container, false)
+        render(vnode, this._container)
 
         this._instance = proxyExposed<ConfirmInstance>(vnode)
       }
