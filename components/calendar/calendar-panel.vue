@@ -321,7 +321,7 @@ function isInRange(date: Date) {
               hovered,
               isPrev,
               isNext,
-              isToday,
+              isToday: matchedToday,
               disabled,
               inRange
             }"
@@ -334,7 +334,7 @@ function isInRange(date: Date) {
               :hovered="hovered"
               :is-prev="isPrev"
               :is-next="isNext"
-              :is-today="isToday"
+              :is-today="matchedToday"
               :disabled="disabled"
               :in-range="inRange"
             ></slot>

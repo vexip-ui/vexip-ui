@@ -7,7 +7,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { range as rangeNumbers, toDate } from '@vexip-ui/utils'
+import { callIfFunc, range as rangeNumbers, toDate } from '@vexip-ui/utils'
 import { useRtl } from '@vexip-ui/hooks'
 import { datePickerTypes } from './symbol'
 
@@ -232,13 +232,9 @@ function handleClick(event: MouseEvent) {
 }
 
 function handleShortcut(index: number) {
-  let { value, name } = props.shortcuts[index]
+  const { value, name } = props.shortcuts[index]
 
-  if (typeof value === 'function') {
-    value = value()
-  }
-
-  emit('shortcut', name, value)
+  emit('shortcut', name, callIfFunc(value))
 }
 
 function handleSelectDate(date: Date) {
