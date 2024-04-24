@@ -130,6 +130,8 @@ export function zhHKLocale() {
 
     numberInput: {
       placeholder: '請輸入數字',
+      plus: '增加',
+      minus: '減少',
       outOfRange: '超出範圍'
     },
 

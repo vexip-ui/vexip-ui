@@ -130,6 +130,8 @@ export function frFRLocale() {
 
     numberInput: {
       placeholder: 'Veuillez saisir le numéro',
+      plus: 'Plus',
+      minus: 'Moins',
       outOfRange: 'En dehors de la zone définie'
     },
 

@@ -128,6 +128,8 @@ export interface LocaleConfig {
 
   numberInput: {
     placeholder: string,
+    plus: string,
+    minus: string,
     outOfRange: string
   },
 

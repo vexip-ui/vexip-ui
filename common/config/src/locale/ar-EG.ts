@@ -130,6 +130,8 @@ export function arEGLocale() {
 
     numberInput: {
       placeholder: 'ادخل قيم رقمية',
+      plus: 'زيادة',
+      minus: 'نقص',
       outOfRange: 'خارج النطاق'
     },
 

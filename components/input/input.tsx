@@ -34,6 +34,7 @@ export default defineComponent({
   setup(_props, { slots, emit, expose }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -537,6 +538,7 @@ export default defineComponent({
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
             name={props.name || props.controlAttrs?.name}
+            aria-labelledby={labelId.value}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

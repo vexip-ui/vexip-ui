@@ -130,6 +130,8 @@ export function zhCNLocale() {
 
     numberInput: {
       placeholder: '请输入数字',
+      plus: '增加',
+      minus: '减少',
       outOfRange: '超出范围'
     },
 

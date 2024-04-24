@@ -130,6 +130,8 @@ export function taINLocale() {
 
     numberInput: {
       placeholder: 'தயவுசெய்து எண் உள்ளிடவும்',
+      plus: 'கூட்டு',
+      minus: 'குறைக்க',
       outOfRange: 'வரம்புக்கு வெளியே'
     },
 

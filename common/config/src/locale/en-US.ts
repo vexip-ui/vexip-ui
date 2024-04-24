@@ -130,6 +130,8 @@ export function enUSLocale() {
 
     numberInput: {
       placeholder: 'Please input number',
+      plus: 'Plus',
+      minus: 'Minus',
       outOfRange: 'Out of range'
     },
 

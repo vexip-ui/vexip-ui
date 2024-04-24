@@ -130,6 +130,8 @@ export function deDELocale() {
 
     numberInput: {
       placeholder: 'Bitte Nummer eingeben',
+      plus: 'Plus',
+      minus: 'Minus',
       outOfRange: 'Außerhalb des definierten Bereichs'
     },
 

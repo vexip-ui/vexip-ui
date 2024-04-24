@@ -4,6 +4,8 @@
     :class="className"
     role="switch"
     :aria-checked="currentValue"
+    :aria-disabled="isDisabled"
+    :aria-labelledby="labelId"
     :style="style"
   >
     <input
@@ -76,8 +78,17 @@ export default defineComponent({
   props: switchProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<boolean>(() => input.value?.focus())
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('switch', _props, {
       size: createSizeProp(size),
@@ -176,6 +187,7 @@ export default defineComponent({
       nh,
       icons: useIcons(),
       idFor,
+      labelId,
       currentValue,
 
       className,
