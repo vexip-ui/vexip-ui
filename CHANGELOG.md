@@ -1,3 +1,23 @@
+## [2.3.6](https://github.com/vexip-ui/vexip-ui/compare/v2.3.5...v2.3.6) (2024-04-24)
+
+
+### ✨ Features
+
+* **calendar:** improve a11y of panel ([af828e1](https://github.com/vexip-ui/vexip-ui/commit/af828e1c151ee8c75778639ac8a1b4094e131479))
+* **modal:** support ractive loading when using hook ([0a97e86](https://github.com/vexip-ui/vexip-ui/commit/0a97e86244c9f4d2c6e79488be6ef36310cc2fb7))
+* **utils:** add ordinalNumber method ([652c807](https://github.com/vexip-ui/vexip-ui/commit/652c807cb785d401c16ee041f0aab9d0ea0e301c))
+* **utils:** add toAttrValue method ([d8c6603](https://github.com/vexip-ui/vexip-ui/commit/d8c66031ef230e80fb3ef38806a6456c23ac0f6c))
+
+
+### 🐞 Bug Fixes
+
+* **calendar:** improve week value style ([2a4810a](https://github.com/vexip-ui/vexip-ui/commit/2a4810ae9c29dab41f404d40d83d048774a9d6a0))
+* **date-picker:** should limit week value length ([6fee8b2](https://github.com/vexip-ui/vexip-ui/commit/6fee8b2a5db05790c7fba0442bcf5d5fff1436f9))
+* **form:** effective default value prop ([8a6e00f](https://github.com/vexip-ui/vexip-ui/commit/8a6e00f8f2f77bb3c7781de5bc5ec9b5a95ce91a)), closes [#467](https://github.com/vexip-ui/vexip-ui/issues/467)
+* **number-input:** correctly process emitted value when sync ([ad27649](https://github.com/vexip-ui/vexip-ui/commit/ad27649a558434072ce72c14eac67ea7b10069bb)), closes [#468](https://github.com/vexip-ui/vexip-ui/issues/468)
+
+
+
 ## [2.3.5](https://github.com/vexip-ui/vexip-ui/compare/v2.3.4...v2.3.5) (2024-03-27)
 
 
