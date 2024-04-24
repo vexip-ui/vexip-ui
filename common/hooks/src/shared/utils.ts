@@ -6,6 +6,7 @@ import {
   readonly,
   ref,
   renderSlot,
+  toRef,
   unref,
   watch
 } from 'vue'
@@ -15,6 +16,7 @@ import { ensureArray, isClient, noop } from '@vexip-ui/utils'
 import type {
   ComponentPublicInstance,
   MaybeRef,
+  Ref,
   Slots,
   VNode,
   VNodeChild,
@@ -135,4 +137,8 @@ export function watchPauseable(...args: Parameters<typeof watch>) {
   )
 
   return { active: readonly(active), pause, resume, stop }
+}
+
+export function pickToRefs<T extends Record<any, any>, K extends keyof T>(reactive: T, keys: K[]) {
+  return keys.map(key => toRef(reactive, key)) as { [P in K]: Ref<T[P]> }
 }
