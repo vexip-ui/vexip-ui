@@ -1,3 +1,13 @@
+# [2.15.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.14.0...utils@2.15.0) (2024-04-24)
+
+
+### ✨ Features
+
+* **utils:** add ordinalNumber method ([652c807](https://github.com/vexip-ui/vexip-ui/commit/652c807cb785d401c16ee041f0aab9d0ea0e301c))
+* **utils:** add toAttrValue method ([d8c6603](https://github.com/vexip-ui/vexip-ui/commit/d8c66031ef230e80fb3ef38806a6456c23ac0f6c))
+
+
+
 # [2.14.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.13.1...utils@2.14.0) (2024-03-05)
 
 
