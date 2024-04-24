@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { Github, Loader2, User } from 'lucide-vue-next'
+import { Hammer, User } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Switch } from '..'
 
 describe('Switch', () => {
@@ -97,11 +98,11 @@ describe('Switch', () => {
     const wrapper = mount(Switch)
 
     expect(wrapper.classes()).not.toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Loader2).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.classes()).toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('inner text', async () => {
@@ -126,21 +127,21 @@ describe('Switch', () => {
   it('icon', async () => {
     const wrapper = mount(Switch, {
       props: {
-        openIcon: Github,
+        openIcon: Hammer,
         closeIcon: User
       }
     })
 
     expect(wrapper.findComponent(User).exists()).toBe(true)
-    expect(wrapper.findComponent(Github).exists()).toBe(false)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(false)
 
     await wrapper.setProps({ value: true })
     expect(wrapper.findComponent(User).exists()).toBe(false)
-    expect(wrapper.findComponent(Github).exists()).toBe(true)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(true)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.findComponent(User).exists()).toBe(false)
-    expect(wrapper.findComponent(Github).exists()).toBe(false)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(false)
   })
 
   it('before change', async () => {

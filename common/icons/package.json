@@ -53,8 +53,7 @@
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
     "kolorist": "^1.8.0",
-    "prettier": "^3.2.5",
-    "vue": "^3.4.21"
+    "prettier": "^3.2.5"
   },
   "peerDependencies": {
     "vue": "^3.2.25"
