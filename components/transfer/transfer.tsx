@@ -55,7 +55,7 @@ export default defineComponent({
         static: true
       },
       value: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       disabled: () => disabled.value,

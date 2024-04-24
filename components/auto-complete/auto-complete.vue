@@ -51,7 +51,7 @@ const props = useProps('autoComplete', _props, {
   locale: null,
   transfer: false,
   value: {
-    default: () => getFieldValue(''),
+    default: () => getFieldValue(),
     static: true
   },
   options: {

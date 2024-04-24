@@ -36,9 +36,9 @@
     "local-pkg": "^0.5.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.3",
-    "postcss": "^8.4.32",
-    "tsup": "^8.0.1",
+    "@types/node": "^20.12.5",
+    "postcss": "^8.4.38",
+    "tsup": "^8.0.2",
     "unplugin-vue-components": "^0.26.0"
   }
 }

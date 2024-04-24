@@ -83,7 +83,7 @@ export default defineComponent({
       size: createSizeProp(size),
       state: createStateProp(state),
       value: {
-        default: () => getFieldValue(false),
+        default: () => getFieldValue(),
         static: true
       },
       disabled: () => disabled.value,

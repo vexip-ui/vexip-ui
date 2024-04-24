@@ -41,16 +41,16 @@
     "kolorist": "^1.8.0",
     "local-pkg": "^0.5.0",
     "prompts": "^2.4.2",
-    "semver": "^7.5.4",
+    "semver": "^7.6.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@pnpm/types": "^9.4.0",
+    "@pnpm/types": "^9.4.2",
     "@types/minimist": "^1.2.5",
-    "@types/node": "^20.10.3",
+    "@types/node": "^20.12.5",
     "@types/prompts": "^2.4.9",
-    "@types/semver": "^7.5.6",
+    "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.32",
-    "tsup": "^8.0.1"
+    "tsup": "^8.0.2"
   }
 }

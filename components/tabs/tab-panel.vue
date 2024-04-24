@@ -55,14 +55,14 @@ export default defineComponent({
     })
 
     if (tabsState) {
-      const state: ItemState = reactive({
+      const state = reactive({
         label: currentLabel,
         name: toRef(props, 'name'),
         icon: toRef(props, 'icon'),
         disabled: toRef(props, 'disabled'),
         closable: toRef(props, 'closable'),
         labelRenderer: null
-      })
+      }) as ItemState
 
       watch(
         () => slots.label,

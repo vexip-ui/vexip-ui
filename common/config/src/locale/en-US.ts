@@ -29,7 +29,29 @@ export function enUSLocale() {
       week4: 'Th',
       week5: 'Fr',
       week6: 'Sa',
-      week7: 'Su'
+      week7: 'Su',
+
+      label: {
+        month1: 'January',
+        month2: 'February',
+        month3: 'March',
+        month4: 'April',
+        month5: 'May',
+        month6: 'June',
+        month7: 'July',
+        month8: 'August',
+        month9: 'September',
+        month10: 'October',
+        month11: 'November',
+        month12: 'December',
+        week1: 'Monday',
+        week2: 'Tuesday',
+        week3: 'Wednesday',
+        week4: 'Thursday',
+        week5: 'Friday',
+        week6: 'Saturday',
+        week7: 'Sunday'
+      }
     },
 
     captcha: {

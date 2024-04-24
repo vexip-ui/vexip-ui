@@ -10,20 +10,20 @@
   },
   "dependencies": {
     "@vexip-ui/icons": "workspace:*",
-    "@vue/repl": "^3.0.0",
-    "fflate": "^0.8.1",
+    "@vue/repl": "^3.4.0",
+    "fflate": "^0.8.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "vexip-ui": "workspace:*",
-    "vue": "^3.3.10"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
-    "@vitejs/plugin-vue": "^4.5.1",
+    "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "vite": "^5.0.5",
-    "vue-router": "^4.2.5"
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "vite": "^5.2.8",
+    "vue-router": "^4.3.0"
   }
 }

@@ -67,7 +67,7 @@ export default defineComponent({
         static: true
       },
       fileList: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       multiple: false,

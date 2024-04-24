@@ -278,7 +278,7 @@ export default defineComponent({
       state: createStateProp(state),
       locale: null,
       value: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       visible: {

@@ -2,7 +2,7 @@
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 
-import { computed, ref, toRef, watch } from 'vue'
+import { computed, onMounted, ref, toRef, watch } from 'vue'
 
 import { useHover, useModifier, useTimerRecord } from '@vexip-ui/hooks'
 import {
@@ -62,7 +62,7 @@ const props = useProps('numberInput', _props, {
     isFunc: true
   },
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   min: -Infinity,
@@ -111,7 +111,7 @@ const icons = useIcons()
 const { timeout, interval } = useTimerRecord()
 
 const focused = ref(false)
-const currentValue = ref<string | number>(props.value)
+const currentValue = ref<string | number>(isEmpty(props.value) ? getEmptyValue() : props.value)
 const inputting = ref(false)
 const plusHolding = ref(false)
 const minusHolding = ref(false)
@@ -205,12 +205,16 @@ const hasSuffix = computed(() => {
   return !!(slots.suffix || props.suffix)
 })
 const preciseNumber = computed(() => {
-  return !inputting.value && typeof currentValue.value === 'number' && props.precision >= 0
+  return !inputting.value &&
+    typeof currentValue.value === 'number' &&
+    !Number.isNaN(currentValue.value) &&
+    props.precision >= 0
     ? toFixed(currentValue.value, props.precision)
     : currentValue.value
 })
 const formattedValue = computed(() => {
-  if (typeof preciseNumber.value !== 'number') return preciseNumber.value ?? ''
+  if (isNullOrNaN(preciseNumber.value) || typeof preciseNumber.value !== 'number')
+    return preciseNumber.value ?? ''
 
   return !inputting.value && typeof props.formatter === 'function'
     ? props.formatter(preciseNumber.value as number)
@@ -219,13 +223,6 @@ const formattedValue = computed(() => {
 const hasValue = computed(() => !!(currentValue.value || currentValue.value === 0))
 const showClear = computed(() => {
   return !props.disabled && !isReadonly.value && props.clearable && isHover.value && hasValue.value
-})
-const inputValue = computed(() => {
-  if (Number.isNaN(currentValue.value)) {
-    return ''
-  }
-
-  return inputting.value ? preciseNumber.value : formattedValue.value
 })
 
 const delay = toNumber(props.delay)
@@ -242,6 +239,15 @@ watch(
   },
   { immediate: true }
 )
+watch(inputting, value => {
+  if (!value) {
+    setInputValue(inputting.value ? currentValue.value : formattedValue.value)
+  }
+})
+
+onMounted(() => {
+  setInputValue(inputting.value ? currentValue.value : formattedValue.value)
+})
 
 defineExpose({
   idFor,
@@ -257,6 +263,12 @@ defineExpose({
   blur: () => control.value?.blur()
 })
 
+function setInputValue(value?: number | string | null) {
+  if (control.value) {
+    control.value.value = isNullOrNaN(value) ? '' : value!.toString()
+  }
+}
+
 function boundValueRange(value: number) {
   return boundRange(value, props.min, props.max)
 }
@@ -271,6 +283,8 @@ function parseValue() {
 
   currentValue.value = value
   lastValue = value
+
+  setInputValue(inputting.value ? value : formattedValue.value)
 }
 
 function focus(options?: FocusOptions) {
@@ -391,8 +405,6 @@ function handleChange(event: Event) {
     } else {
       value = floatValue.toString()
     }
-
-    ;(event.target as HTMLInputElement).value = value
   }
 
   inputting.value = type === 'input'
@@ -407,6 +419,7 @@ function setValue(value: string | number, type: InputEventType, sync = props.syn
     currentValue.value = value
   }
 
+  setInputValue(currentValue.value)
   emitChangeEvent(type, sync)
 }
 
@@ -422,15 +435,15 @@ function getEmptyValue() {
 }
 
 function emitChangeEvent(type: InputEventType, sync = props.sync) {
-  const empty = isEmpty(currentValue.value)
-  const value = empty ? getEmptyValue() : toNumber(currentValue.value)
-
   type = type === 'input' ? 'input' : 'change'
 
   if (type === 'change') {
+    const empty = isEmpty(currentValue.value)
+    const value = empty ? getEmptyValue() : toNumber(currentValue.value)
+
     let boundValue = empty ? value : boundValueRange(toNumber(value))
 
-    if (props.precision >= 0) {
+    if (!empty && props.precision >= 0) {
       boundValue = toFixed(boundValue, props.precision)
     }
 
@@ -458,14 +471,27 @@ function emitChangeEvent(type: InputEventType, sync = props.sync) {
       validateField()
     }
   } else {
-    if (sync) {
-      emit('update:value', value)
-      setFieldValue(value)
+    const value = parseFloat(currentValue.value as string)
+    const empty = Number.isNaN(value)
+
+    let boundValue = empty ? getEmptyValue() : boundValueRange(toNumber(value))
+
+    if (!empty && props.precision >= 0) {
+      boundValue = toFixed(boundValue, props.precision)
+    }
+
+    const emitUpdate = sync && !Object.is(lastValue, boundValue)
+
+    if (emitUpdate) {
+      lastValue = boundValue
+
+      emit('update:value', boundValue)
+      setFieldValue(boundValue)
     }
 
     emitEvent(props.onInput, value)
 
-    if (sync) {
+    if (emitUpdate) {
       validateField()
     }
   }
@@ -518,7 +544,6 @@ function handleKeyPress(event: KeyboardEvent) {
       v-bind="props.controlAttrs"
       ref="control"
       :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
-      :value="inputValue"
       type="text"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"

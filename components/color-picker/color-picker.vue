@@ -62,7 +62,7 @@ const props = useProps('colorPicker', _props, {
   state: createStateProp(state),
   locale: null,
   value: {
-    default: () => getFieldValue('')!,
+    default: () => getFieldValue()!,
     static: true
   },
   visible: false,

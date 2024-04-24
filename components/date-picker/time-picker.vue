@@ -27,7 +27,7 @@ import {
   usePopper,
   useSetTimeout
 } from '@vexip-ui/hooks'
-import { USE_TOUCH, boundRange, doubleDigits } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, callIfFunc, doubleDigits } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 import { TIME_REG } from './symbol'
@@ -65,7 +65,7 @@ const props = useProps('timePicker', _props, {
   format: 'HH:mm:ss',
   separator: ':',
   value: {
-    default: () => getFieldValue(''),
+    default: () => getFieldValue(),
     static: true
   },
   filler: {
@@ -618,15 +618,12 @@ function handleCancel() {
 }
 
 function handleShortcut(index: number) {
-  let { value, name } = props.shortcuts[index]
-
-  if (typeof value === 'function') {
-    value = value()
-  }
+  const { value, name } = props.shortcuts[index]
+  const parsedValue = callIfFunc(value)
 
   fallbackFocus()
-  parseValue(value)
-  emitEvent(props.onShortcut as (name: string, value: string | string[]) => void, name, value)
+  parseValue(parsedValue)
+  emitEvent(props.onShortcut as (name: string, value: string | string[]) => void, name, parsedValue)
   finishInput()
 }
 

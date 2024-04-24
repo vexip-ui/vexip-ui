@@ -23,13 +23,35 @@ export function frFRLocale() {
       month10: 'Oct',
       month11: 'Nov',
       month12: 'Déc',
-      week1: 'Lun',
-      week2: 'Mar',
-      week3: 'Mer',
-      week4: 'Jeu',
-      week5: 'Ven',
-      week6: 'Sam',
-      week7: 'Dim'
+      week1: 'Lu',
+      week2: 'Ma',
+      week3: 'Me',
+      week4: 'Je',
+      week5: 'Ve',
+      week6: 'Sa',
+      week7: 'Di',
+
+      label: {
+        month1: 'Janvier',
+        month2: 'Février',
+        month3: 'Mars',
+        month4: 'Avril',
+        month5: 'Mai',
+        month6: 'Juin',
+        month7: 'Juillet',
+        month8: 'Août',
+        month9: 'Septembre',
+        month10: 'Octobre',
+        month11: 'Novembre',
+        month12: 'Décembre',
+        week1: 'Lundi',
+        week2: 'Mardi',
+        week3: 'Mercredi',
+        week4: 'Jeudi',
+        week5: 'Vendredi',
+        week6: 'Samedi',
+        week7: 'Dimanche'
+      }
     },
 
     captcha: {

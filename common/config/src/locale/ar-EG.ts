@@ -29,7 +29,29 @@ export function arEGLocale() {
       week4: 'Th',
       week5: 'Fr',
       week6: 'Sa',
-      week7: 'Su'
+      week7: 'Su',
+
+      label: {
+        month1: 'يناير',
+        month2: 'فبراير',
+        month3: 'مارس',
+        month4: 'أبريل',
+        month5: 'مايو',
+        month6: 'يونيو',
+        month7: 'يوليو',
+        month8: 'أغسطس',
+        month9: 'سبتمبر',
+        month10: 'أكتوبر',
+        month11: 'نوفمبر',
+        month12: 'ديسمبر',
+        week1: 'الإثنين',
+        week2: 'الثلاثاء',
+        week3: 'الأربعاء',
+        week4: 'الخميس',
+        week5: 'الجمعة',
+        week6: 'السبت',
+        week7: 'الأحد'
+      }
     },
 
     captcha: {

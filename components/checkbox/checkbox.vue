@@ -62,7 +62,7 @@ export default defineComponent({
       size: createSizeProp(size),
       state: createStateProp(state),
       checked: {
-        default: () => getFieldValue(false),
+        default: () => getFieldValue(),
         static: true
       },
       label: null,
@@ -89,7 +89,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, null)
 
     const nh = useNameHelper('checkbox')
-    const currentChecked = ref(props.checked)
+    const currentChecked = ref(props.checked ?? false)
     const currentPartial = ref(props.partial)
 
     const input = ref<HTMLInputElement>()

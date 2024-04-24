@@ -24,7 +24,7 @@ const props = useProps('wheel', _props, {
   state: createStateProp(state),
   horizontal: false,
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   candidate: {

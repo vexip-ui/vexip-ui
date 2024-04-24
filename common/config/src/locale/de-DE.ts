@@ -29,7 +29,29 @@ export function deDELocale() {
       week4: 'Do',
       week5: 'Fr',
       week6: 'Sa',
-      week7: 'So'
+      week7: 'So',
+
+      label: {
+        month1: 'Januar',
+        month2: 'Februar',
+        month3: 'März',
+        month4: 'April',
+        month5: 'Mai',
+        month6: 'Juni',
+        month7: 'Juli',
+        month8: 'August',
+        month9: 'September',
+        month10: 'Oktober',
+        month11: 'November',
+        month12: 'Dezember',
+        week1: 'Montag',
+        week2: 'Dienstag',
+        week3: 'Mittwoch',
+        week4: 'Donnerstag',
+        week5: 'Freitag',
+        week6: 'Samstag',
+        week7: 'Sonntag'
+      }
     },
 
     captcha: {

@@ -1,17 +1,21 @@
-import { createApp, createVNode, getCurrentInstance, h, nextTick, ref, render } from 'vue'
+import { createApp, createVNode, getCurrentInstance, h, nextTick, ref, render, unref } from 'vue'
 
 import Component from './modal.vue'
 import { isClient, noop } from '@vexip-ui/utils'
 
-import type { App, AppContext, ComponentPublicInstance } from 'vue'
+import type { App, AppContext, ComponentPublicInstance, MaybeRef } from 'vue'
 import type { ModalProps } from './props'
 import type { ModalCommonSLot } from './symbol'
 
-export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'autoRemove'> & {
+export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'loading' | 'autoRemove'> & {
   /**
    * Specify the app context, ensue the modal using same context
    */
   appContext: AppContext,
+  /**
+   * Specify whether the modal is loading
+   */
+  loading: MaybeRef<boolean>,
   /**
    * Another way to use default slot
    */
@@ -39,6 +43,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
 
   const {
     appContext,
+    loading,
     renderer,
     headerRenderer,
     titleRenderer,
@@ -59,7 +64,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
     const vnode = createVNode(createModal, null, null)
 
     vnode.appContext = appContext || instance!.appContext
-    render(vnode, container, false)
+    render(vnode, container)
   } else {
     app = createApp(createModal)
     app.mount(container)
@@ -80,6 +85,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
         active: active.value,
         transfer: false,
         autoRemove: false,
+        loading: unref(loading),
         onHide: Array.isArray(onHide) ? [...onHide, destroy] : onHide ? [onHide, destroy] : destroy
       },
       {
@@ -94,7 +100,7 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
 
   function destroy() {
     if (instance) {
-      container && render(null, container, false)
+      container && render(null, container)
       instance = null
     }
 

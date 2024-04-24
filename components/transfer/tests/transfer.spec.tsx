@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-import { Github, Loader2 } from 'lucide-vue-next'
+import { User } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Transfer } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'
@@ -182,24 +183,24 @@ describe('Transfer', () => {
     const { source, target } = getPanels(wrapper)
 
     expect(source.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(source.findComponent(Loader2).exists()).toBe(false)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(target.findComponent(Loader2).exists()).toBe(false)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(source.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(source.findComponent(Loader2).exists()).toBe(true)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(target.findComponent(Loader2).exists()).toBe(true)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Transfer loading loading-icon={Github}></Transfer>)
+    const wrapper = mount(() => <Transfer loading loading-icon={User}></Transfer>)
     const { source, target } = getPanels(wrapper)
 
-    expect(source.findComponent(Loader2).exists()).toBe(false)
-    expect(source.findComponent(Github).exists()).toBe(true)
-    expect(target.findComponent(Loader2).exists()).toBe(false)
-    expect(target.findComponent(Github).exists()).toBe(true)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(source.findComponent(User).exists()).toBe(true)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(target.findComponent(User).exists()).toBe(true)
   })
 })

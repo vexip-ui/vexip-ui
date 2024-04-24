@@ -61,7 +61,7 @@ export default defineComponent({
         isFunc: true
       },
       value: {
-        default: () => getFieldValue(''),
+        default: () => getFieldValue(),
         static: true
       },
       placeholder: null,

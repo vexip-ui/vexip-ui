@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import type { FileOptions } from 'vexip-ui'
+import type { UploadFileOptions } from 'vexip-ui'
 
-const defaultFiles: FileOptions[] = [
+const defaultFiles: UploadFileOptions[] = [
   {
     name: 'vexip-ui.svg',
     url: 'https://www.vexipui.com/vexip-ui.svg',

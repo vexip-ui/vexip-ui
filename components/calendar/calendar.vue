@@ -180,7 +180,7 @@ function handleMonthChange(value: number) {
         </slot>
       </div>
     </template>
-    <template #item="{ selected, hovered, date, isPrev, isNext, isToday, disabled }">
+    <template #item="{ date, label, selected, hovered, isPrev, isNext, isToday, disabled }">
       <div
         :class="{
           [nh.be('date')]: true,
@@ -196,7 +196,7 @@ function handleMonthChange(value: number) {
         @keydown.space.prevent="handleClick(date)"
       >
         <div :class="nh.be('date-header')">
-          <div :class="nh.be('date-value')">
+          <div :class="nh.be('date-value')" :aria-label="label">
             {{ date.getDate() }}
           </div>
         </div>

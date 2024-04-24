@@ -13,12 +13,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { FileState } from 'vexip-ui'
+import type { UploadFileState } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 
 // response 的具体类型由后端所决定
-function handleSuccess(file: FileState, response: { id: string | null }) {
+function handleSuccess(file: UploadFileState, response: { id: string | null }) {
   // 成功回调后，可以返回文件的 id 已做后续用途
   if (response.id && !fileIds.value.includes(response.id)) {
     fileIds.value.push(response.id)
