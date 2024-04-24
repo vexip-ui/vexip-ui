@@ -15,7 +15,7 @@
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "vexip-ui": "workspace:*",
-    "vue": "^3.4.21"
+    "vue": "~3.3.13"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",

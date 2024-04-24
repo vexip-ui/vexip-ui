@@ -44,6 +44,7 @@
     "preview:playground": "pnpm -C playground preview",
     "publish:ci": "tsx scripts/publish.ts",
     "release": "tsx scripts/release.ts",
+    "sync-vue": "tsx scripts/sync-vue-version.ts",
     "test": "vitest run",
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
