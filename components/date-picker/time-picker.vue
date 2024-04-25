@@ -39,6 +39,7 @@ defineOptions({ name: 'TimePicker' })
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -695,6 +696,8 @@ function handleClickOutside() {
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-labelledby="labelId"
     @click="showPanel"
   >
     <div
@@ -730,6 +733,8 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
+          :label-by="labelId"
+          :locale="locale"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -765,6 +770,8 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
+            :label-by="labelId"
+            :locale="locale"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -826,6 +833,7 @@ function handleClickOutside() {
             props.shortcuts.length &&
             (props.shortcutsPlacement === 'top' || props.shortcutsPlacement === 'bottom')
         }"
+        :aria-labelledby="labelId"
       >
         <div
           v-if="props.shortcuts.length"

@@ -31,7 +31,9 @@ export function zhCNLocale() {
       week6: '六',
       week7: '日',
 
-      label: {
+      ariaLabel: {
+        year: '年',
+        month: '月',
         month1: '一月',
         month2: '二月',
         month3: '三月',
@@ -92,7 +94,16 @@ export function zhCNLocale() {
         select: '请选择'
       },
       startTime: '开始时间',
-      endTime: '结束时间'
+      endTime: '结束时间',
+
+      ariaLabel: {
+        quarter: '季度',
+        week: '周',
+        date: '日',
+        hour: '时',
+        minute: '分',
+        second: '秒'
+      }
     },
 
     drawer: {
@@ -130,9 +141,12 @@ export function zhCNLocale() {
 
     numberInput: {
       placeholder: '请输入数字',
-      plus: '增加',
-      minus: '减少',
-      outOfRange: '超出范围'
+      outOfRange: '超出范围',
+
+      ariaLabel: {
+        increase: '增加',
+        decrease: '减少'
+      }
     },
 
     pagination: {
@@ -182,6 +196,12 @@ export function zhCNLocale() {
         start: '开始',
         end: '结束',
         select: '请选择'
+      },
+
+      ariaLabel: {
+        hour: '时',
+        minute: '分',
+        second: '秒'
       }
     },
 

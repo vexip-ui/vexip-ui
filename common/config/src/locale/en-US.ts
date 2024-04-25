@@ -31,7 +31,9 @@ export function enUSLocale() {
       week6: 'Sa',
       week7: 'Su',
 
-      label: {
+      ariaLabel: {
+        year: 'Year',
+        month: 'Month',
         month1: 'January',
         month2: 'February',
         month3: 'March',
@@ -92,7 +94,16 @@ export function enUSLocale() {
         select: 'Please select'
       },
       startTime: 'Start Time',
-      endTime: 'End Time'
+      endTime: 'End Time',
+
+      ariaLabel: {
+        quarter: 'Quarter',
+        week: 'Week',
+        date: 'Date',
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second'
+      }
     },
 
     drawer: {
@@ -130,9 +141,12 @@ export function enUSLocale() {
 
     numberInput: {
       placeholder: 'Please input number',
-      plus: 'Plus',
-      minus: 'Minus',
-      outOfRange: 'Out of range'
+      outOfRange: 'Out of range',
+
+      ariaLabel: {
+        increase: 'Increase',
+        decrease: 'Decrease'
+      }
     },
 
     pagination: {
@@ -182,6 +196,12 @@ export function enUSLocale() {
         start: 'Start',
         end: 'End',
         select: 'Please select'
+      },
+
+      ariaLabel: {
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second'
       }
     },
 

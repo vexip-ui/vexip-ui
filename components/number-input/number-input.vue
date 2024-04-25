@@ -610,7 +610,7 @@ function handleKeyPress(event: KeyboardEvent) {
           [nh.bem('plus', 'holding')]: plusHolding
         }"
         role="button"
-        :aria-label="locale.plus"
+        :aria-label="locale.ariaLabel.increase"
         :aria-labelledby="labelId"
         :aria-controls="controlId"
         @pointerdown.prevent="handleHold('plus', $event)"
@@ -625,7 +625,7 @@ function handleKeyPress(event: KeyboardEvent) {
           [nh.bem('minus', 'disabled')]: minusDisabled,
           [nh.bem('minus', 'holding')]: minusHolding
         }"
-        :aria-label="locale.minus"
+        :aria-label="locale.ariaLabel.decrease"
         :aria-labelledby="labelId"
         :aria-controls="controlId"
         @pointerdown.prevent="handleHold('minus', $event)"

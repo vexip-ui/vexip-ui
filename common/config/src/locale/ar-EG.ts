@@ -92,7 +92,13 @@ export function arEGLocale() {
         select: 'اختر'
       },
       startTime: 'وقت البدء',
-      endTime: 'وقت الانتهاء'
+      endTime: 'وقت الانتهاء',
+      quarter: 'ربع',
+      week: 'أسبوع',
+      date: 'يوم',
+      hour: 'ساعة',
+      minute: 'دقيقة',
+      second: 'ثانية'
     },
 
     drawer: {
@@ -130,8 +136,8 @@ export function arEGLocale() {
 
     numberInput: {
       placeholder: 'ادخل قيم رقمية',
-      plus: 'زيادة',
-      minus: 'نقص',
+      increase: 'زيادة',
+      decrease: 'نقص',
       outOfRange: 'خارج النطاق'
     },
 
@@ -182,7 +188,10 @@ export function arEGLocale() {
         start: 'يبدأ بـ',
         end: 'ينتهى بـ',
         select: 'اختر'
-      }
+      },
+      hour: 'ساعة',
+      minute: 'دقيقة',
+      second: 'ثانية'
     },
 
     tour: {

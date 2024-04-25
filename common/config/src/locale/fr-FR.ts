@@ -31,7 +31,9 @@ export function frFRLocale() {
       week6: 'Sa',
       week7: 'Di',
 
-      label: {
+      ariaLabel: {
+        year: 'Année',
+        month: 'Mois',
         month1: 'Janvier',
         month2: 'Février',
         month3: 'Mars',
@@ -92,7 +94,16 @@ export function frFRLocale() {
         select: 'Sélectionner une'
       },
       startTime: 'Heure de début',
-      endTime: 'Heure de fin'
+      endTime: 'Heure de fin',
+
+      ariaLabel: {
+        quarter: 'Trimestre',
+        week: 'Semaine',
+        date: 'Jour',
+        hour: 'Heure',
+        minute: 'Minute',
+        second: 'Seconde'
+      }
     },
 
     drawer: {
@@ -130,9 +141,12 @@ export function frFRLocale() {
 
     numberInput: {
       placeholder: 'Veuillez saisir le numéro',
-      plus: 'Plus',
-      minus: 'Moins',
-      outOfRange: 'En dehors de la zone définie'
+      outOfRange: 'En dehors de la zone définie',
+
+      ariaLabel: {
+        increase: 'Augmenter',
+        decrease: 'Diminuer'
+      }
     },
 
     pagination: {
@@ -182,6 +196,12 @@ export function frFRLocale() {
         start: 'Début',
         end: 'Fin',
         select: 'Veuillez sélectionner'
+      },
+
+      ariaLabel: {
+        hour: 'Heure',
+        minute: 'Minute',
+        second: 'Seconde'
       }
     },
 

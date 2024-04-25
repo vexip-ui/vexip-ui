@@ -31,7 +31,9 @@ export function taINLocale() {
       week6: 'Sa',
       week7: 'Su',
 
-      label: {
+      ariaLabel: {
+        year: 'ஆண்டு',
+        month: 'மாதம்',
         month1: 'ஜனவரி',
         month2: 'பிப்ரவரி',
         month3: 'மார்ச்',
@@ -92,7 +94,16 @@ export function taINLocale() {
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
       },
       startTime: 'தொடக்கம் நேரம்',
-      endTime: 'முடிவு நேரம்'
+      endTime: 'முடிவு நேரம்',
+
+      ariaLabel: {
+        quarter: 'பருவம்',
+        week: 'வாரம்',
+        date: 'தேதி',
+        hour: 'மணி',
+        minute: 'நிமிடம்',
+        second: 'வினாடி'
+      }
     },
 
     drawer: {
@@ -130,9 +141,12 @@ export function taINLocale() {
 
     numberInput: {
       placeholder: 'தயவுசெய்து எண் உள்ளிடவும்',
-      plus: 'கூட்டு',
-      minus: 'குறைக்க',
-      outOfRange: 'வரம்புக்கு வெளியே'
+      outOfRange: 'வரம்புக்கு வெளியே',
+
+      ariaLabel: {
+        increase: 'அதிகரிக்க',
+        decrease: 'குறைக்க'
+      }
     },
 
     pagination: {
@@ -182,6 +196,12 @@ export function taINLocale() {
         start: 'தொடக்கம்',
         end: 'முடிவு',
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
+      },
+
+      ariaLabel: {
+        hour: 'மணி',
+        minute: 'நிமிடம்',
+        second: 'வினாடி'
       }
     },
 

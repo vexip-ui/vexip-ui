@@ -33,6 +33,8 @@ import {
   format,
   getTime,
   isLeapYear,
+  isObject,
+  mergeObjects,
   startOfMonth,
   toDate,
   toFalse
@@ -49,6 +51,7 @@ defineOptions({ name: 'DatePicker' })
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -170,11 +173,9 @@ const endInput = ref<InstanceType<typeof DateControl>>()
 const datePanel = ref<InstanceType<typeof DatePanel>>()
 
 const mergedLocale = computed(() => {
-  return {
-    ...calendarLocale.value,
-    ...datePickerLocale.value,
-    ...(props.locale ?? {})
-  }
+  const locale = mergeObjects(calendarLocale.value, datePickerLocale.value, true)
+
+  return isObject(props.locale) ? mergeObjects(locale, props.locale) : locale
 })
 const startPlaceholder = computed(() => {
   if (props.placeholder) {
@@ -1206,6 +1207,8 @@ function handleClickOutside() {
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-labelledby="labelId"
     @click="showPanel"
   >
     <div
@@ -1242,6 +1245,7 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
+          :label-by="labelId"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -1275,6 +1279,7 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
+            :label-by="labelId"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -1355,6 +1360,7 @@ function handleClickOutside() {
         :week-start="props.weekStart"
         :static-wheel="staticWheel"
         :shortcuts-placement="props.shortcutsPlacement"
+        :label-by="labelId"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

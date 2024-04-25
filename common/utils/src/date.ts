@@ -507,21 +507,15 @@ export function isLeapYear(year: number) {
 }
 
 /**
- * 获取给定的日期所在月份的第一天的开始日期
+ * 获取给定年份和月份的最后一天
  *
- * @param date 原始日期
- * @param startOn 设定一个月的第一天，默认为 1 号
+ * @param year 原始年份
+ * @param month 原始月份
  *
- * @returns 新的开始日期
+ * @returns 最后一天
  */
-export function startOfMonth(date: Dateable, startOn = 1) {
-  date = toDate(date)
-
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-
-  let lastDay
+export function getLastDayOfMonth(year: number, month: number) {
+  let lastDay: number
 
   if (month < 7) {
     if (month !== 2) {
@@ -536,6 +530,26 @@ export function startOfMonth(date: Dateable, startOn = 1) {
   } else {
     lastDay = 31 - (month % 2)
   }
+
+  return lastDay
+}
+
+/**
+ * 获取给定的日期所在月份的第一天的开始日期
+ *
+ * @param date 原始日期
+ * @param startOn 设定一个月的第一天，默认为 1 号
+ *
+ * @returns 新的开始日期
+ */
+export function startOfMonth(date: Dateable, startOn = 1) {
+  date = toDate(date)
+
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  const lastDay = getLastDayOfMonth(year, month)
 
   startOn = startOn % lastDay
 

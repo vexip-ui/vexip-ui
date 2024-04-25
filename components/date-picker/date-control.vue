@@ -2,10 +2,11 @@
 import { computed, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
-import { doubleDigits } from '@vexip-ui/utils'
+import { doubleDigits, getLastDayOfMonth } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
+import type { LocaleConfig } from '@vexip-ui/config'
 import type { DateTimeType } from './symbol'
 
 defineOptions({ name: 'DateControl' })
@@ -73,6 +74,14 @@ const props = defineProps({
   readonly: {
     type: Boolean,
     default: false
+  },
+  labelBy: {
+    type: String,
+    default: undefined
+  },
+  locale: {
+    type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
+    default: () => ({})
   }
 })
 
@@ -92,6 +101,7 @@ const nh = useNameHelper('date-picker')
 
 const wrapper = ref<HTMLElement>()
 
+const label = computed(() => props.locale.ariaLabel ?? {})
 const isActivated = computed(() => {
   return (Object.keys(props.enabled) as DateTimeType[]).every(type => {
     return !props.enabled[type] || props.activated[type]
@@ -124,6 +134,9 @@ const formattedMinute = computed(() => {
 })
 const formattedSecond = computed(() => {
   return formatValue('second')
+})
+const maxDateCount = computed(() => {
+  return getLastDayOfMonth(props.dateValue.year, props.dateValue.month)
 })
 
 defineExpose({
@@ -220,6 +233,7 @@ function handleBlur() {
   <div
     ref="wrapper"
     :class="className"
+    role="none"
     tabindex="-1"
     @keydown="handleInput"
     @blur="handleBlur"
@@ -231,35 +245,74 @@ function handleBlur() {
       <div
         v-if="enabled.year"
         :class="[nh.be('unit'), getUnitFocusClass('year')]"
+        role="spinbutton"
+        :aria-label="label.year"
+        :aria-valuenow="props.dateValue.year"
+        :aria-valuetext="formattedYear"
+        :aria-valuemin="1"
+        :aria-valuemax="9999"
+        :aria-labelledby="labelBy"
         @click="handleInputFocus('year')"
       >
         {{ formattedYear }}
       </div>
-      <div v-if="labels.year" :class="nh.be('label')" @click="handleInputFocus('year')">
+      <div
+        v-if="labels.year"
+        :class="nh.be('label')"
+        aria-hidden
+        @click="handleInputFocus('year')"
+      >
         {{ labels.year }}
       </div>
       <template v-if="enabled.month">
-        <div v-if="enabled.year" :class="nh.be('separator')">
+        <div v-if="enabled.year" :class="nh.be('separator')" aria-hidden>
           {{ dateSeparator }}
         </div>
         <div
           :class="[nh.be('unit'), getUnitFocusClass('month')]"
+          role="spinbutton"
+          :aria-label="label.month"
+          :aria-valuenow="props.dateValue.month"
+          :aria-valuetext="formattedMonth"
+          :aria-valuemin="1"
+          :aria-valuemax="12"
+          :aria-labelledby="labelBy"
           @click="handleInputFocus('month')"
         >
           {{ formattedMonth }}
         </div>
-        <div v-if="labels.month" :class="nh.be('label')" @click="handleInputFocus('month')">
+        <div
+          v-if="labels.month"
+          :class="nh.be('label')"
+          aria-hidden
+          @click="handleInputFocus('month')"
+        >
           {{ labels.month }}
         </div>
       </template>
       <template v-if="enabled.date">
-        <div v-if="enabled.month || enabled.year" :class="nh.be('separator')">
+        <div v-if="enabled.month || enabled.year" :class="nh.be('separator')" aria-hidden>
           {{ dateSeparator }}
         </div>
-        <div :class="[nh.be('unit'), getUnitFocusClass('date')]" @click="handleInputFocus('date')">
+        <div
+          :class="[nh.be('unit'), getUnitFocusClass('date')]"
+          role="spinbutton"
+          :aria-label="label.date"
+          :aria-valuenow="props.dateValue.date"
+          :aria-valuetext="formattedDate"
+          :aria-valuemin="1"
+          :aria-valuemax="maxDateCount || 31"
+          :aria-labelledby="labelBy"
+          @click="handleInputFocus('date')"
+        >
           {{ formattedDate }}
         </div>
-        <div v-if="labels.date" :class="nh.be('label')" @click="handleInputFocus('date')">
+        <div
+          v-if="labels.date"
+          :class="nh.be('label')"
+          aria-hidden
+          @click="handleInputFocus('date')"
+        >
           {{ labels.date }}
         </div>
       </template>
@@ -269,38 +322,74 @@ function handleBlur() {
         <div
           v-if="enabled.hour"
           :class="[nh.be('unit'), getUnitFocusClass('hour')]"
+          role="spinbutton"
+          :aria-label="label.hour"
+          :aria-valuenow="props.dateValue.hour"
+          :aria-valuetext="formattedHour"
+          :aria-valuemin="0"
+          :aria-valuemax="23"
+          :aria-labelledby="labelBy"
           @click="handleInputFocus('hour')"
         >
           {{ formattedHour }}
         </div>
-        <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
+        <div
+          v-if="labels.hour"
+          :class="nh.be('label')"
+          aria-hidden
+          @click="handleInputFocus('hour')"
+        >
           {{ labels.hour }}
         </div>
         <template v-if="enabled.minute">
-          <div v-if="enabled.hour" :class="nh.be('separator')">
+          <div v-if="enabled.hour" :class="nh.be('separator')" aria-hidden>
             {{ timeSeparator }}
           </div>
           <div
             :class="[nh.be('unit'), getUnitFocusClass('minute')]"
+            role="spinbutton"
+            :aria-label="label.minute"
+            :aria-valuenow="props.dateValue.minute"
+            :aria-valuetext="formattedMinute"
+            :aria-valuemin="0"
+            :aria-valuemax="59"
+            :aria-labelledby="labelBy"
             @click="handleInputFocus('minute')"
           >
             {{ formattedMinute }}
           </div>
-          <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
+          <div
+            v-if="labels.minute"
+            :class="nh.be('label')"
+            aria-hidden
+            @click="handleInputFocus('minute')"
+          >
             {{ labels.minute }}
           </div>
         </template>
         <template v-if="enabled.second">
-          <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
+          <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')" aria-hidden>
             {{ timeSeparator }}
           </div>
           <div
             :class="[nh.be('unit'), getUnitFocusClass('second')]"
+            role="spinbutton"
+            :aria-label="label.second"
+            :aria-valuenow="props.dateValue.second"
+            :aria-valuetext="formattedSecond"
+            :aria-valuemin="0"
+            :aria-valuemax="59"
+            :aria-labelledby="labelBy"
             @click="handleInputFocus('second')"
           >
             {{ formattedSecond }}
           </div>
-          <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
+          <div
+            v-if="labels.second"
+            :class="nh.be('label')"
+            aria-hidden
+            @click="handleInputFocus('second')"
+          >
             {{ labels.second }}
           </div>
         </template>

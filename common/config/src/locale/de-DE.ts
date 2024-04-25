@@ -31,7 +31,9 @@ export function deDELocale() {
       week6: 'Sa',
       week7: 'So',
 
-      label: {
+      ariaLabel: {
+        year: 'Jahr',
+        month: 'Monat',
         month1: 'Januar',
         month2: 'Februar',
         month3: 'März',
@@ -92,7 +94,16 @@ export function deDELocale() {
         select: 'Bitte auswählen'
       },
       startTime: 'Start Zeit',
-      endTime: 'Ende Zeit'
+      endTime: 'Ende Zeit',
+
+      ariaLabel: {
+        quarter: 'Quartal',
+        week: 'Woche',
+        date: 'Tag',
+        hour: 'Stunde',
+        minute: 'Minute',
+        second: 'Sekunde'
+      }
     },
 
     drawer: {
@@ -130,9 +141,12 @@ export function deDELocale() {
 
     numberInput: {
       placeholder: 'Bitte Nummer eingeben',
-      plus: 'Plus',
-      minus: 'Minus',
-      outOfRange: 'Außerhalb des definierten Bereichs'
+      outOfRange: 'Außerhalb des definierten Bereichs',
+
+      ariaLabel: {
+        increase: 'Erhöhen',
+        decrease: 'Verringern'
+      }
     },
 
     pagination: {
@@ -182,6 +196,12 @@ export function deDELocale() {
         start: 'Start',
         end: 'Ende',
         select: 'Bitte auswählen'
+      },
+
+      ariaLabel: {
+        hour: 'Stunde',
+        minute: 'Minute',
+        second: 'Sekunde'
       }
     },
 

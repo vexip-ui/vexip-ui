@@ -3,7 +3,9 @@ import type { DeepPartial } from '../types'
 export interface LocaleConfig {
   locale: string,
 
-  // if false, the spaces will be removed when make sentence
+  /**
+   * if false, the spaces will be removed when make sentence
+   */
   wordSpace: boolean,
 
   calendar: {
@@ -29,7 +31,9 @@ export interface LocaleConfig {
     week6: string,
     week7: string,
 
-    label: {
+    ariaLabel: {
+      year: string,
+      month: string,
       month1: string,
       month2: string,
       month3: string,
@@ -90,7 +94,16 @@ export interface LocaleConfig {
       select: string
     },
     startTime: string,
-    endTime: string
+    endTime: string,
+
+    ariaLabel: {
+      quarter: string,
+      week: string,
+      date: string,
+      hour: string,
+      minute: string,
+      second: string
+    }
   },
 
   drawer: {
@@ -128,9 +141,12 @@ export interface LocaleConfig {
 
   numberInput: {
     placeholder: string,
-    plus: string,
-    minus: string,
-    outOfRange: string
+    outOfRange: string,
+
+    ariaLabel: {
+      increase: string,
+      decrease: string
+    }
   },
 
   pagination: {
@@ -180,6 +196,12 @@ export interface LocaleConfig {
       start: string,
       end: string,
       select: string
+    },
+
+    ariaLabel: {
+      hour: string,
+      minute: string,
+      second: string
     }
   },
 
