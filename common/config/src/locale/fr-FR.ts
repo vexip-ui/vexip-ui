@@ -73,7 +73,11 @@ export function frFRLocale() {
 
     colorPicker: {
       confirm: 'Confirmer',
-      cancel: 'Annuler'
+      cancel: 'Annuler',
+
+      ariaLabel: {
+        clear: 'Effacer la couleur'
+      }
     },
 
     confirm: {
@@ -97,6 +101,7 @@ export function frFRLocale() {
       endTime: 'Heure de fin',
 
       ariaLabel: {
+        clear: 'Effacer la date',
         quarter: 'Trimestre',
         week: 'Semaine',
         date: 'Jour',
@@ -124,7 +129,11 @@ export function frFRLocale() {
     },
 
     input: {
-      placeholder: 'Veuillez saisir'
+      placeholder: 'Veuillez saisir',
+
+      ariaLabel: {
+        clear: 'Effacer le texte'
+      }
     },
 
     layout: {
@@ -144,6 +153,7 @@ export function frFRLocale() {
       outOfRange: 'En dehors de la zone définie',
 
       ariaLabel: {
+        clear: 'Effacer le numéro',
         increase: 'Augmenter',
         decrease: 'Diminuer'
       }
@@ -163,7 +173,11 @@ export function frFRLocale() {
 
     select: {
       placeholder: 'Veuillez sélectionner',
-      empty: 'Pas de données'
+      empty: 'Pas de données',
+
+      ariaLabel: {
+        clear: 'Effacer la sélection'
+      }
     },
 
     table: {
@@ -199,6 +213,7 @@ export function frFRLocale() {
       },
 
       ariaLabel: {
+        clear: "Effacer l'heure",
         hour: 'Heure',
         minute: 'Minute',
         second: 'Seconde'
@@ -227,7 +242,12 @@ export function frFRLocale() {
     upload: {
       upload: 'Télécharger des fichiers',
       uploading: 'Téléchargement',
-      dragOrClick: 'Faites glisser les fichiers ici, ou cliquez pour les télécharger'
+      dragOrClick: 'Faites glisser les fichiers ici, ou cliquez pour les télécharger',
+
+      ariaLabel: {
+        preview: 'Aperçu du fichier',
+        delete: 'Supprimer le fichier'
+      }
     },
 
     video: {

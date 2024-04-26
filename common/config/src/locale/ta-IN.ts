@@ -73,7 +73,11 @@ export function taINLocale() {
 
     colorPicker: {
       confirm: 'உறுதிபடுத்து',
-      cancel: 'நிராகரி'
+      cancel: 'நிராகரி',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     confirm: {
@@ -97,6 +101,7 @@ export function taINLocale() {
       endTime: 'முடிவு நேரம்',
 
       ariaLabel: {
+        clear: 'தெளிவாக்கு',
         quarter: 'பருவம்',
         week: 'வாரம்',
         date: 'தேதி',
@@ -124,7 +129,11 @@ export function taINLocale() {
     },
 
     input: {
-      placeholder: 'தயவுசெய்து உள்ளிடவும்'
+      placeholder: 'தயவுசெய்து உள்ளிடவும்',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     layout: {
@@ -144,6 +153,7 @@ export function taINLocale() {
       outOfRange: 'வரம்புக்கு வெளியே',
 
       ariaLabel: {
+        clear: 'தெளிவாக்கு',
         increase: 'அதிகரிக்க',
         decrease: 'குறைக்க'
       }
@@ -163,7 +173,11 @@ export function taINLocale() {
 
     select: {
       placeholder: 'தயவுசெய்து தேர்ந்தெடுகக்கவும்',
-      empty: 'தரவு இல்லை'
+      empty: 'தரவு இல்லை',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     table: {
@@ -199,6 +213,7 @@ export function taINLocale() {
       },
 
       ariaLabel: {
+        clear: 'தெளிவாக்கு',
         hour: 'மணி',
         minute: 'நிமிடம்',
         second: 'வினாடி'
@@ -227,7 +242,12 @@ export function taINLocale() {
     upload: {
       upload: 'கோப்புகளை பதிவேற்று',
       uploading: 'பதிவேற்றுகிறது...',
-      dragOrClick: 'கோப்புகளை இங்கே விடவும் அல்லது பதிவேற்ற அழுத்தவும்'
+      dragOrClick: 'கோப்புகளை இங்கே விடவும் அல்லது பதிவேற்ற அழுத்தவும்',
+
+      ariaLabel: {
+        preview: 'முன்னோட்டம்',
+        delete: 'கோப்பை நீக்கு'
+      }
     },
 
     video: {

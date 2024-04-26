@@ -73,7 +73,11 @@ export function deDELocale() {
 
     colorPicker: {
       confirm: 'Bestätigen',
-      cancel: 'Abbrechen'
+      cancel: 'Abbrechen',
+
+      ariaLabel: {
+        clear: 'Farbe löschen'
+      }
     },
 
     confirm: {
@@ -97,6 +101,7 @@ export function deDELocale() {
       endTime: 'Ende Zeit',
 
       ariaLabel: {
+        clear: 'Datum löschen',
         quarter: 'Quartal',
         week: 'Woche',
         date: 'Tag',
@@ -124,7 +129,11 @@ export function deDELocale() {
     },
 
     input: {
-      placeholder: 'Platzhalter'
+      placeholder: 'Platzhalter',
+
+      ariaLabel: {
+        clear: 'Löschen'
+      }
     },
 
     layout: {
@@ -144,6 +153,7 @@ export function deDELocale() {
       outOfRange: 'Außerhalb des definierten Bereichs',
 
       ariaLabel: {
+        clear: 'Löschen',
         increase: 'Erhöhen',
         decrease: 'Verringern'
       }
@@ -163,7 +173,11 @@ export function deDELocale() {
 
     select: {
       placeholder: 'Bitte auswählen',
-      empty: 'Keine Daten'
+      empty: 'Keine Daten',
+
+      ariaLabel: {
+        clear: 'Löschen'
+      }
     },
 
     table: {
@@ -199,6 +213,7 @@ export function deDELocale() {
       },
 
       ariaLabel: {
+        clear: 'Zeit löschen',
         hour: 'Stunde',
         minute: 'Minute',
         second: 'Sekunde'
@@ -227,7 +242,12 @@ export function deDELocale() {
     upload: {
       upload: 'Dateiupload',
       uploading: 'Hochladen',
-      dragOrClick: 'Ziehen Sie Dateien hierher oder klicken Sie zum Hochladen'
+      dragOrClick: 'Ziehen Sie Dateien hierher oder klicken Sie zum Hochladen',
+
+      ariaLabel: {
+        preview: 'Dateivorschau',
+        delete: 'Datei löschen'
+      }
     },
 
     video: {

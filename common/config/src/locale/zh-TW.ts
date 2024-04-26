@@ -73,7 +73,11 @@ export function zhTWLocale() {
 
     colorPicker: {
       confirm: '確定',
-      cancel: '重置'
+      cancel: '重置',
+
+      ariaLabel: {
+        clear: '清除顏色'
+      }
     },
 
     confirm: {
@@ -97,6 +101,7 @@ export function zhTWLocale() {
       endTime: '結束時間',
 
       ariaLabel: {
+        clear: '清除日期',
         quarter: '季度',
         week: '周',
         date: '日',
@@ -124,7 +129,11 @@ export function zhTWLocale() {
     },
 
     input: {
-      placeholder: '請輸入'
+      placeholder: '請輸入',
+
+      ariaLabel: {
+        clear: '清空內容'
+      }
     },
 
     layout: {
@@ -144,6 +153,7 @@ export function zhTWLocale() {
       outOfRange: '超出範圍',
 
       ariaLabel: {
+        clear: '清空數字',
         increase: '增加',
         decrease: '減少'
       }
@@ -163,7 +173,11 @@ export function zhTWLocale() {
 
     select: {
       placeholder: '請選擇',
-      empty: '暫無資料'
+      empty: '暫無資料',
+
+      ariaLabel: {
+        clear: '清空選項'
+      }
     },
 
     table: {
@@ -199,6 +213,7 @@ export function zhTWLocale() {
       },
 
       ariaLabel: {
+        clear: '清除時間',
         hour: '時',
         minute: '分',
         second: '秒'
@@ -227,7 +242,12 @@ export function zhTWLocale() {
     upload: {
       upload: '上傳檔案',
       uploading: '上傳中',
-      dragOrClick: '將檔案拖到此處, 或點選上傳'
+      dragOrClick: '將檔案拖到此處, 或點選上傳',
+
+      ariaLabel: {
+        preview: '預覽檔案',
+        delete: '刪除檔案'
+      }
     },
 
     video: {

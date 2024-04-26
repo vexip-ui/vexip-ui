@@ -73,7 +73,11 @@ export function zhCNLocale() {
 
     colorPicker: {
       confirm: '确定',
-      cancel: '重置'
+      cancel: '重置',
+
+      ariaLabel: {
+        clear: '清空颜色'
+      }
     },
 
     confirm: {
@@ -97,6 +101,7 @@ export function zhCNLocale() {
       endTime: '结束时间',
 
       ariaLabel: {
+        clear: '清空日期',
         quarter: '季度',
         week: '周',
         date: '日',
@@ -124,7 +129,11 @@ export function zhCNLocale() {
     },
 
     input: {
-      placeholder: '请输入'
+      placeholder: '请输入',
+
+      ariaLabel: {
+        clear: '清空文本'
+      }
     },
 
     layout: {
@@ -144,6 +153,7 @@ export function zhCNLocale() {
       outOfRange: '超出范围',
 
       ariaLabel: {
+        clear: '清空数字',
         increase: '增加',
         decrease: '减少'
       }
@@ -163,7 +173,11 @@ export function zhCNLocale() {
 
     select: {
       placeholder: '请选择',
-      empty: '暂无数据'
+      empty: '暂无数据',
+
+      ariaLabel: {
+        clear: '清空选项'
+      }
     },
 
     table: {
@@ -199,6 +213,7 @@ export function zhCNLocale() {
       },
 
       ariaLabel: {
+        clear: '清空时间',
         hour: '时',
         minute: '分',
         second: '秒'
@@ -227,7 +242,12 @@ export function zhCNLocale() {
     upload: {
       upload: '上传文件',
       uploading: '上传中',
-      dragOrClick: '将文件拖到此处, 或点击上传'
+      dragOrClick: '将文件拖到此处, 或点击上传',
+
+      ariaLabel: {
+        preview: '预览文件',
+        delete: '删除文件'
+      }
     },
 
     video: {
