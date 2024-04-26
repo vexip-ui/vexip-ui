@@ -17,7 +17,7 @@ import type { NumberInputControlType, NumberInputEmptyType } from './symbol'
 export const numberInputProps = buildProps({
   size: sizeProp,
   state: stateProp,
-  locale: localeProp('input'),
+  locale: localeProp('numberInput'),
   prefix: iconProp,
   prefixColor: String,
   suffix: iconProp,

@@ -3,7 +3,11 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    :aria-disabled="props.disabled ? 'true' : undefined"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="listbox"
+    :aria-labelledby="labelId"
     @click="toggleVisible"
   >
     <div
@@ -237,9 +241,15 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          tabindex="-1"
+          :aria-label="locale.ariaLabel.clear"
+          @click.stop="handleClear"
+        >
           <Icon v-bind="icons.clear" label="clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -283,7 +293,8 @@
           :items-attrs="{
             class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
             role: 'listbox',
-            ariaLabel: 'options'
+            ariaLabel: 'options',
+            ariaMultiselectable: props.multiple
           }"
         >
           <template #default="{ item: option, index }">
@@ -386,7 +397,14 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { decide, getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import {
+  decide,
+  getLast,
+  getRangeWidth,
+  isNull,
+  removeArrayItem,
+  toAttrValue
+} from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -449,6 +467,7 @@ export default defineComponent({
   setup(_props, { emit, slots }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -521,6 +540,8 @@ export default defineComponent({
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
+    const icons = useIcons()
+
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<SelectBaseValue[]>([])
@@ -1351,8 +1372,9 @@ export default defineComponent({
       props,
       nh,
       locale,
-      icons: useIcons(),
+      icons,
       idFor,
+      labelId,
       currentVisible,
       currentValues,
       currentLabels,
@@ -1387,6 +1409,7 @@ export default defineComponent({
       virtualList,
       restTip,
 
+      toAttrValue,
       getOptionFromMap,
       isSelected,
       filterOptions,

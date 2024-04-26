@@ -13,7 +13,14 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
-import { createEventEmitter, getRangeWidth, isFunction, isNull, isObject } from '@vexip-ui/utils'
+import {
+  createEventEmitter,
+  getGlobalCount,
+  getRangeWidth,
+  isFunction,
+  isNull,
+  isObject
+} from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -89,6 +96,8 @@ const locale = useLocale('form', toRef(props, 'locale'))
 const icons = useIcons()
 const wordSpace = useWordSpace()
 
+const idIndex = `${getGlobalCount()}`
+
 const initValue = ref(props.defaultValue)
 const isError = ref(false)
 const errorTip = ref('')
@@ -98,6 +107,7 @@ const labelWidth = ref(0)
 
 const labelEl = ref<HTMLInputElement>()
 
+const labelId = computed(() => nh.bs(`${idIndex}__label`))
 const isRequired = computed(() => formProps.allRequired || props.required)
 const requiredTip = computed(() => {
   return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`, wordSpace.value)
@@ -187,6 +197,7 @@ const instances = new Set<any>()
 const fieldObject = Object.freeze({
   prop: computed(() => props.prop),
   idFor: computed(() => props.prop),
+  labelId,
   state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
   disabled: computed(() => !!formProps.disabled),
   loading: computed(() => !!formProps.loading),
@@ -384,6 +395,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
     />
     <label
       v-if="hasLabel"
+      :id="labelId"
       ref="labelEl"
       :class="nh.be('label')"
       :style="{ width: labelAlign !== 'top' ? `${computedLabelWidth}px` : undefined }"

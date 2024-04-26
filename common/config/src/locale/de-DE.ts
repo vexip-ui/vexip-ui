@@ -31,7 +31,9 @@ export function deDELocale() {
       week6: 'Sa',
       week7: 'So',
 
-      label: {
+      ariaLabel: {
+        year: 'Jahr',
+        month: 'Monat',
         month1: 'Januar',
         month2: 'Februar',
         month3: 'März',
@@ -71,7 +73,11 @@ export function deDELocale() {
 
     colorPicker: {
       confirm: 'Bestätigen',
-      cancel: 'Abbrechen'
+      cancel: 'Abbrechen',
+
+      ariaLabel: {
+        clear: 'Farbe löschen'
+      }
     },
 
     confirm: {
@@ -92,7 +98,17 @@ export function deDELocale() {
         select: 'Bitte auswählen'
       },
       startTime: 'Start Zeit',
-      endTime: 'Ende Zeit'
+      endTime: 'Ende Zeit',
+
+      ariaLabel: {
+        clear: 'Datum löschen',
+        quarter: 'Quartal',
+        week: 'Woche',
+        date: 'Tag',
+        hour: 'Stunde',
+        minute: 'Minute',
+        second: 'Sekunde'
+      }
     },
 
     drawer: {
@@ -113,7 +129,11 @@ export function deDELocale() {
     },
 
     input: {
-      placeholder: 'Platzhalter'
+      placeholder: 'Platzhalter',
+
+      ariaLabel: {
+        clear: 'Löschen'
+      }
     },
 
     layout: {
@@ -130,7 +150,13 @@ export function deDELocale() {
 
     numberInput: {
       placeholder: 'Bitte Nummer eingeben',
-      outOfRange: 'Außerhalb des definierten Bereichs'
+      outOfRange: 'Außerhalb des definierten Bereichs',
+
+      ariaLabel: {
+        clear: 'Löschen',
+        increase: 'Erhöhen',
+        decrease: 'Verringern'
+      }
     },
 
     pagination: {
@@ -147,7 +173,11 @@ export function deDELocale() {
 
     select: {
       placeholder: 'Bitte auswählen',
-      empty: 'Keine Daten'
+      empty: 'Keine Daten',
+
+      ariaLabel: {
+        clear: 'Löschen'
+      }
     },
 
     table: {
@@ -180,6 +210,13 @@ export function deDELocale() {
         start: 'Start',
         end: 'Ende',
         select: 'Bitte auswählen'
+      },
+
+      ariaLabel: {
+        clear: 'Zeit löschen',
+        hour: 'Stunde',
+        minute: 'Minute',
+        second: 'Sekunde'
       }
     },
 
@@ -205,7 +242,12 @@ export function deDELocale() {
     upload: {
       upload: 'Dateiupload',
       uploading: 'Hochladen',
-      dragOrClick: 'Ziehen Sie Dateien hierher oder klicken Sie zum Hochladen'
+      dragOrClick: 'Ziehen Sie Dateien hierher oder klicken Sie zum Hochladen',
+
+      ariaLabel: {
+        preview: 'Dateivorschau',
+        delete: 'Datei löschen'
+      }
     },
 
     video: {

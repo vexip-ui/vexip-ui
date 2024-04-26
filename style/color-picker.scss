@@ -257,4 +257,8 @@ $color-picker: map.merge(
     width: auto;
     min-width: 0;
   }
+
+  &__clear {
+    @include clean-button;
+  }
 }

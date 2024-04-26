@@ -102,7 +102,7 @@ const props = defineProps({
   },
   locale: {
     type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
-    default: null
+    default: () => ({})
   },
   selectingType: {
     type: String as PropType<'start' | 'end'>,
@@ -119,6 +119,10 @@ const props = defineProps({
   shortcutsPlacement: {
     type: String as PropType<DateShortcutsPlacement>,
     default: 'left'
+  },
+  labeledBy: {
+    type: String,
+    default: undefined
   }
 })
 
@@ -486,6 +490,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
       [nh.bem('panel', 'vertical')]:
         shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
     }"
+    :aria-labelledby="labeledBy"
     @click="handleClick"
   >
     <div
@@ -507,7 +512,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
         {{ item.name }}
       </div>
     </div>
-    <div :class="nh.be('list')">
+    <div :class="nh.be('list')" role="application">
       <div :class="nh.be('panel-body')">
         <div :class="nh.be('date-panel')">
           <div :class="nh.be('header')">

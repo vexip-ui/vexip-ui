@@ -21,8 +21,17 @@ import type { ChangeEvent } from './symbol'
 
 defineOptions({ name: 'RadioGroup' })
 
-const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-  useFieldStore<string | number | boolean>(focus)
+const {
+  idFor,
+  labelId,
+  state,
+  disabled,
+  loading,
+  size,
+  validateField,
+  getFieldValue,
+  setFieldValue
+} = useFieldStore<string | number | boolean>(focus)
 
 const _props = defineProps(radioGroupProps)
 const props = useProps('radioGroup', _props, {
@@ -136,7 +145,13 @@ function focus(options?: FocusOptions) {
 </script>
 
 <template>
-  <div :id="idFor" :class="className" role="radiogroup">
+  <div
+    :id="idFor"
+    :class="className"
+    role="radiogroup"
+    :aria-orientation="vertical ? 'vertical' : 'horizontal'"
+    :aria-labelledby="labelId"
+  >
     <slot>
       <template v-for="item in props.options" :key="item">
         <Radio

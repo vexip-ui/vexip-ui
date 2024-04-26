@@ -203,4 +203,8 @@ $cascader: map.merge(
     cursor: default;
     background-color: get-css-var('cascader-pane-bg-color');
   }
+
+  &__clear {
+    @include clean-button;
+  }
 }

@@ -1,4 +1,4 @@
-import { isClient } from './common'
+import { isClient, isDefined } from './common'
 import { isValidNumber, toNumber } from './number'
 
 import type { TransferNode } from './dom-event'
@@ -270,8 +270,8 @@ export function toCssSize(value: number | string) {
  *
  * @returns 转换后的 HTML 属性值
  */
-export function toAttrValue(value: boolean): 'true' | undefined
-export function toAttrValue(value: string | number): string | undefined
-export function toAttrValue(value: string | number | boolean) {
-  return value !== false ? String(value) : undefined
+export function toAttrValue(value?: boolean | null): 'true' | undefined
+export function toAttrValue(value?: string | number | null): string | undefined
+export function toAttrValue(value?: string | number | boolean | null) {
+  return isDefined(value) && value !== false ? String(value) : undefined
 }

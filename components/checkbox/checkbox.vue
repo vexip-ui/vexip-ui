@@ -4,6 +4,7 @@
     :class="className"
     :style="style"
     :aria-disabled="isDisabled"
+    :aria-labelledby="labelId"
     @click="handleClick"
   >
     <input
@@ -55,8 +56,17 @@ export default defineComponent({
   props: checkboxProps,
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<boolean>(() => input.value?.focus())
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('checkbox', _props, {
       size: createSizeProp(size),
@@ -262,6 +272,7 @@ export default defineComponent({
       props,
       nh,
       idFor,
+      labelId,
       currentChecked,
 
       readonly,

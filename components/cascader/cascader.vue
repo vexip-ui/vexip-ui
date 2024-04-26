@@ -3,6 +3,11 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
+    :aria-labelledby="labelId"
     @click="toggleVisible()"
   >
     <div
@@ -128,9 +133,15 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          tabindex="-1"
+          :aria-label="locale.ariaLabel.clear"
+          @click.stop="handleClear"
+        >
           <Icon v-bind="icons.clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -169,6 +180,7 @@
             :is-async="isAsyncLoad"
             :merged="usingMerged"
             :no-cascaded="props.noCascaded"
+            :labeled-by="labelId"
             @select="handleOptionSelect($event, index)"
             @hover="usingHover && handlePanelOpen($event, index)"
             @check="handleOptionCheck($event)"
@@ -227,7 +239,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
-import { flatTree, getLast, isNull, isPromise, transformTree } from '@vexip-ui/utils'
+import { flatTree, getLast, isNull, isPromise, toAttrValue, transformTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -262,6 +274,7 @@ export default defineComponent({
   setup(_props, { emit, slots }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -1185,6 +1198,7 @@ export default defineComponent({
       icons,
       locale,
       idFor,
+      labelId,
       currentVisible,
       isPopperShow,
       currentValues,
@@ -1213,6 +1227,7 @@ export default defineComponent({
       popper,
       panelElList,
 
+      toAttrValue,
       handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,

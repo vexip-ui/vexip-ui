@@ -16,7 +16,7 @@ import type { ItemState, WheelOption, WheelRawOption } from './symbol'
 
 defineOptions({ name: 'Wheel' })
 
-const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+const { idFor, labelId, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
   useFieldStore<string | number>(() => wrapper.value?.focus())
 
 const _props = defineProps(wheelProps)
@@ -422,6 +422,8 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
     ref="wrapper"
     :class="className"
     tabindex="0"
+    role="group"
+    :aria-labelledby="labelId"
   >
     <div
       v-if="props.arrow"
@@ -431,11 +433,12 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
         nh.bem('arrow', 'prev'),
         prevDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
+      aria-hidden
       @click="handlePrev"
     >
       <Icon v-bind="prevIcon"></Icon>
     </div>
-    <div :class="nh.be('scroll')">
+    <div :class="nh.be('scroll')" role="none">
       <Scroll
         ref="scroll"
         inherit
@@ -491,6 +494,7 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
         nh.bem('arrow', 'next'),
         nextDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
+      aria-hidden
       @click="handleNext"
     >
       <Icon v-bind="nextIcon"></Icon>

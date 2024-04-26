@@ -31,7 +31,9 @@ export function zhHKLocale() {
       week6: '六',
       week7: '日',
 
-      label: {
+      ariaLabel: {
+        year: '年',
+        month: '月',
         month1: '一月',
         month2: '二月',
         month3: '三月',
@@ -71,7 +73,11 @@ export function zhHKLocale() {
 
     colorPicker: {
       confirm: '確定',
-      cancel: '重置'
+      cancel: '重置',
+
+      ariaLabel: {
+        clear: '清空顏色'
+      }
     },
 
     confirm: {
@@ -92,7 +98,17 @@ export function zhHKLocale() {
         select: '請選擇'
       },
       startTime: '開始時間',
-      endTime: '結束時間'
+      endTime: '結束時間',
+
+      ariaLabel: {
+        clear: '清空日期',
+        quarter: '季度',
+        week: '周',
+        date: '日',
+        hour: '時',
+        minute: '分',
+        second: '秒'
+      }
     },
 
     drawer: {
@@ -113,7 +129,11 @@ export function zhHKLocale() {
     },
 
     input: {
-      placeholder: '請輸入'
+      placeholder: '請輸入',
+
+      ariaLabel: {
+        clear: '清空文本'
+      }
     },
 
     layout: {
@@ -130,7 +150,13 @@ export function zhHKLocale() {
 
     numberInput: {
       placeholder: '請輸入數字',
-      outOfRange: '超出範圍'
+      outOfRange: '超出範圍',
+
+      ariaLabel: {
+        clear: '清空數字',
+        increase: '增加',
+        decrease: '減少'
+      }
     },
 
     pagination: {
@@ -147,7 +173,11 @@ export function zhHKLocale() {
 
     select: {
       placeholder: '請選擇',
-      empty: '暫無數據'
+      empty: '暫無數據',
+
+      ariaLabel: {
+        clear: '清空選項'
+      }
     },
 
     table: {
@@ -180,6 +210,13 @@ export function zhHKLocale() {
         start: '開始',
         end: '結束',
         select: '請選擇'
+      },
+
+      ariaLabel: {
+        clear: '清空時間',
+        hour: '時',
+        minute: '分',
+        second: '秒'
       }
     },
 
@@ -205,7 +242,12 @@ export function zhHKLocale() {
     upload: {
       upload: '上傳文件',
       uploading: '上傳中',
-      dragOrClick: '將文件拖到此處, 或點擊上傳'
+      dragOrClick: '將文件拖到此處, 或點擊上傳',
+
+      ariaLabel: {
+        preview: '預覽文件',
+        delete: '刪除文件'
+      }
     },
 
     video: {
