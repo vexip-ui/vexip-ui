@@ -36,6 +36,7 @@ import {
   isObject,
   mergeObjects,
   startOfMonth,
+  toAttrValue,
   toDate,
   toFalse
 } from '@vexip-ui/utils'
@@ -1208,6 +1209,9 @@ function handleClickOutside() {
     ref="wrapper"
     :class="className"
     role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
     :aria-labelledby="labelId"
     @click="showPanel"
   >
@@ -1245,7 +1249,7 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
-          :label-by="labelId"
+          :labeled-by="labelId"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -1279,7 +1283,7 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
-            :label-by="labelId"
+            :labeled-by="labelId"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -1309,9 +1313,15 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          tabindex="-1"
+          :aria-label="mergedLocale.ariaLabel.clear"
+          @click.stop="handleClear()"
+        >
           <Icon v-bind="icons.clear" label="clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -1360,7 +1370,7 @@ function handleClickOutside() {
         :week-start="props.weekStart"
         :static-wheel="staticWheel"
         :shortcuts-placement="props.shortcutsPlacement"
-        :label-by="labelId"
+        :labeled-by="labelId"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

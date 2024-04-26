@@ -27,7 +27,7 @@ import {
   usePopper,
   useSetTimeout
 } from '@vexip-ui/hooks'
-import { USE_TOUCH, boundRange, callIfFunc, doubleDigits } from '@vexip-ui/utils'
+import { USE_TOUCH, boundRange, callIfFunc, doubleDigits, toAttrValue } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
 import { TIME_REG } from './symbol'
@@ -697,6 +697,9 @@ function handleClickOutside() {
     ref="wrapper"
     :class="className"
     role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
     :aria-labelledby="labelId"
     @click="showPanel"
   >
@@ -733,7 +736,7 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
-          :label-by="labelId"
+          :labeled-by="labelId"
           :locale="locale"
           @input="handleInput"
           @plus="handlePlus"
@@ -770,7 +773,7 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
-            :label-by="labelId"
+            :labeled-by="labelId"
             :locale="locale"
             @input="handleInput"
             @plus="handlePlus"
@@ -801,9 +804,15 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          tabindex="-1"
+          :aria-label="locale.ariaLabel.clear"
+          @click.stop="handleClear()"
+        >
           <Icon v-bind="icons.clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"

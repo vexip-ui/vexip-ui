@@ -450,9 +450,15 @@ export default defineComponent({
     function renderSuffixAction() {
       if (showClear.value) {
         return (
-          <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
+          <button
+            key={'clear'}
+            class={[nh.be('icon'), nh.be('clear')]}
+            tabindex={-1}
+            aria-label={locale.value.ariaLabel.clear}
+            onClick={handleClear}
+          >
             <Icon {...icons.value.clear} label={'clear'}></Icon>
-          </div>
+          </button>
         )
       }
 

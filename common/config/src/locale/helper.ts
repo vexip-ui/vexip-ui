@@ -73,7 +73,11 @@ export interface LocaleConfig {
 
   colorPicker: {
     confirm: string,
-    cancel: string
+    cancel: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   confirm: {
@@ -97,6 +101,7 @@ export interface LocaleConfig {
     endTime: string,
 
     ariaLabel: {
+      clear: string,
       quarter: string,
       week: string,
       date: string,
@@ -124,7 +129,11 @@ export interface LocaleConfig {
   },
 
   input: {
-    placeholder: string
+    placeholder: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   layout: {
@@ -144,6 +153,7 @@ export interface LocaleConfig {
     outOfRange: string,
 
     ariaLabel: {
+      clear: string,
       increase: string,
       decrease: string
     }
@@ -163,7 +173,11 @@ export interface LocaleConfig {
 
   select: {
     placeholder: string,
-    empty: string
+    empty: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   table: {
@@ -199,6 +213,7 @@ export interface LocaleConfig {
     },
 
     ariaLabel: {
+      clear: string,
       hour: string,
       minute: string,
       second: string
@@ -227,7 +242,12 @@ export interface LocaleConfig {
   upload: {
     upload: string,
     uploading: string,
-    dragOrClick: string
+    dragOrClick: string,
+
+    ariaLabel: {
+      preview: string,
+      delete: string
+    }
   },
 
   video: {

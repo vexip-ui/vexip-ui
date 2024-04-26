@@ -120,7 +120,7 @@ const props = defineProps({
     type: String as PropType<DateShortcutsPlacement>,
     default: 'left'
   },
-  labelBy: {
+  labeledBy: {
     type: String,
     default: undefined
   }
@@ -490,7 +490,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
       [nh.bem('panel', 'vertical')]:
         shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
     }"
-    :aria-labelledby="labelBy"
+    :aria-labelledby="labeledBy"
     @click="handleClick"
   >
     <div

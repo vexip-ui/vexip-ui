@@ -75,7 +75,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  labelBy: {
+  labeledBy: {
     type: String,
     default: undefined
   },
@@ -251,7 +251,7 @@ function handleBlur() {
         :aria-valuetext="formattedYear"
         :aria-valuemin="1"
         :aria-valuemax="9999"
-        :aria-labelledby="labelBy"
+        :aria-labelledby="labeledBy"
         @click="handleInputFocus('year')"
       >
         {{ formattedYear }}
@@ -276,7 +276,7 @@ function handleBlur() {
           :aria-valuetext="formattedMonth"
           :aria-valuemin="1"
           :aria-valuemax="12"
-          :aria-labelledby="labelBy"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('month')"
         >
           {{ formattedMonth }}
@@ -302,7 +302,7 @@ function handleBlur() {
           :aria-valuetext="formattedDate"
           :aria-valuemin="1"
           :aria-valuemax="maxDateCount || 31"
-          :aria-labelledby="labelBy"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('date')"
         >
           {{ formattedDate }}
@@ -328,7 +328,7 @@ function handleBlur() {
           :aria-valuetext="formattedHour"
           :aria-valuemin="0"
           :aria-valuemax="23"
-          :aria-labelledby="labelBy"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('hour')"
         >
           {{ formattedHour }}
@@ -353,7 +353,7 @@ function handleBlur() {
             :aria-valuetext="formattedMinute"
             :aria-valuemin="0"
             :aria-valuemax="59"
-            :aria-labelledby="labelBy"
+            :aria-labelledby="labeledBy"
             @click="handleInputFocus('minute')"
           >
             {{ formattedMinute }}
@@ -379,7 +379,7 @@ function handleBlur() {
             :aria-valuetext="formattedSecond"
             :aria-valuemin="0"
             :aria-valuemax="59"
-            :aria-labelledby="labelBy"
+            :aria-labelledby="labeledBy"
             @click="handleInputFocus('second')"
           >
             {{ formattedSecond }}

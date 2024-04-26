@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="nh.be('panel')"
     tabindex="-1"
+    :aria-labelledby="labeledBy"
     @mouseleave="handleMouseLeave"
   >
     <VirtualList
@@ -18,7 +19,8 @@
           multiple ? nh.bem('options', 'multiple') : null,
           noCascaded ? nh.bem('options', 'no-cascaded') : null
         ],
-        role: 'listbox'
+        role: 'listbox',
+        ariaMultiselectable: multiple
       }"
       @resize="computeListHeight"
     >
@@ -150,6 +152,10 @@ export default defineComponent({
     visible: {
       type: Boolean,
       default: false
+    },
+    labeledBy: {
+      type: String,
+      default: undefined
     }
   },
   emits: ['select', 'check', 'hover', 'open', 'back', 'close'],

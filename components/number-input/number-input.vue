@@ -590,9 +590,15 @@ function handleKeyPress(event: KeyboardEvent) {
       :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
     ></div>
     <Transition :name="nh.ns('fade')" appear>
-      <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+      <button
+        v-if="showClear"
+        :class="[nh.be('icon'), nh.be('clear')]"
+        tabindex="-1"
+        :aria-label="locale.ariaLabel.clear"
+        @click.stop="handleClear"
+      >
         <Icon v-bind="icons.clear" label="clear"></Icon>
-      </div>
+      </button>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
         <Icon
           v-bind="icons.loading"

@@ -3,12 +3,13 @@
     ref="wrapper"
     :class="nh.be('palette')"
     tabindex="-1"
+    role="group"
     :style="{
       backgroundColor: `hsl(${hue}, 100%, 50%)`
     }"
   >
-    <div :class="nh.be('saturation')"></div>
-    <div :class="nh.be('value')"></div>
+    <div :class="nh.be('saturation')" role="none"></div>
+    <div :class="nh.be('value')" role="none"></div>
     <div
       :class="nh.be('palette-handler')"
       :style="{

@@ -69,7 +69,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  labelBy: {
+  labeledBy: {
     type: String,
     default: undefined
   },
@@ -227,7 +227,7 @@ function handleBlur() {
         :aria-valuetext="formattedHour"
         :aria-valuemin="0"
         :aria-valuemax="23"
-        :aria-labelledby="labelBy"
+        :aria-labelledby="labeledBy"
         @click="handleInputFocus('hour')"
       >
         {{ formattedHour }}
@@ -252,7 +252,7 @@ function handleBlur() {
           :aria-valuetext="formattedMinute"
           :aria-valuemin="0"
           :aria-valuemax="59"
-          :aria-labelledby="labelBy"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('minute')"
         >
           {{ formattedMinute }}
@@ -278,7 +278,7 @@ function handleBlur() {
           :aria-valuetext="formattedSecond"
           :aria-valuemin="0"
           :aria-valuemax="59"
-          :aria-labelledby="labelBy"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('second')"
         >
           {{ formattedSecond }}

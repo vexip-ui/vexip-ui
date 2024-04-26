@@ -32,6 +32,7 @@ const control = ref<HTMLInputElement>()
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -452,6 +453,7 @@ function handleCompositionEnd() {
     v-model:visible="currentVisible"
     :class="[nh.b(), props.inherit && nh.bm('inherit')]"
     :inherit="props.inherit"
+    :label-id="labelId"
     :list-class="nh.be('list')"
     :value="currentValue"
     :size="props.size"

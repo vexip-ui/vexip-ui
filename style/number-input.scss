@@ -30,6 +30,10 @@ $number-input: map.merge(
     color: get-css-var('number-input-control-color-out');
   }
 
+  &__clear {
+    @include clean-button;
+  }
+
   &__clear,
   &__loading {
     inset-inline-end: calc(get-css-var('input-h-padding') + 20px);
