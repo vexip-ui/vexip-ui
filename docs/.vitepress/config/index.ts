@@ -5,31 +5,26 @@ import { withPwa } from '@vite-pwa/vitepress'
 import { defineConfigWithTheme } from 'vitepress'
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { compare } from 'compare-versions'
+import { toKebabCase } from '@vexip-ui/utils'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { getComponentConfig } from './component'
+import { SITE_DESC, SITE_DESC_ZH, SITE_NAME, SITE_TITLE, SITE_TITLE_ZH } from './constant'
 import { getGuideConfig } from './guide'
 import { getHeadConfig } from './head'
 import { getUpdatedFiles } from './updated'
 import { getPwaConfig } from './pwa'
-import { toKebabCase } from '@vexip-ui/utils'
 
 import type { AsideMenuTag, ThemeConfig } from '../theme/types'
 
 compiler.parseCache.max = 10000
-
-const SITE_DESC =
-  'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good.'
-const SITE_TITLE = 'Vexip UI - Make interesting in development'
-const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
-const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
 
 export default async () => {
   const updated = await getUpdatedFiles()
 
   return withPwa(
     defineConfigWithTheme<ThemeConfig>({
-      titleTemplate: 'Vexip UI',
+      titleTemplate: SITE_NAME,
       lastUpdated: true,
       head: getHeadConfig(),
       markdown: {

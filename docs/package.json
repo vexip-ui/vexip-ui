@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "serve": "NODE_ENV=development vitepress dev"
+    "serve": "NODE_ENV=development vitepress dev --test"
   },
   "private": true,
   "dependencies": {

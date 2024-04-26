@@ -1,4 +1,10 @@
+import minimist from 'minimist'
+import { SITE_DESC, SITE_NAME } from './constant'
+
 import type { PwaOptions } from '@vite-pwa/vitepress'
+
+const args = minimist<{ pwa?: boolean }>(process.argv.slice(2))
+const devPaw = args._[0] === 'dev' && args.pwa
 
 export const getPwaConfig: Partial<PwaOptions> = {
   outDir: '.vitepress/dist',
@@ -8,10 +14,9 @@ export const getPwaConfig: Partial<PwaOptions> = {
   manifest: {
     id: '/',
     start_url: '/',
-    name: 'Vexip UI',
-    short_name: 'Vexip UI',
-    description:
-      'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good.',
+    name: SITE_NAME,
+    short_name: SITE_NAME,
+    description: SITE_DESC,
     theme_color: '#ffffff',
     icons: [
       {
@@ -42,7 +47,7 @@ export const getPwaConfig: Partial<PwaOptions> = {
     globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}']
   },
   devOptions: {
-    enabled: true,
+    enabled: devPaw,
     suppressWarnings: true,
     navigateFallback: '/'
   }
