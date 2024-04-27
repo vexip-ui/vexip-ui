@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "serve": "NODE_ENV=development vitepress dev"
+    "serve": "NODE_ENV=development vitepress dev --test"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +29,7 @@
     "@types/markdown-it-container": "^2.0.10",
     "@types/node": "^20.12.5",
     "@types/prismjs": "^1.26.3",
+    "@vite-pwa/vitepress": "^0.4.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/compiler-sfc": "3.3.4",
