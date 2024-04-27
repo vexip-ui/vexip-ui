@@ -1,6 +1,6 @@
 import type { HeadConfig } from 'vitepress'
 
-const HOST_CHECK = 'if (!location.host.includes(\'vexipui\')) return;'
+const HOST_CHECK = "if (!location.host.includes('vexipui')) return;"
 
 const LANG_SCRIPT = `
 (() => {
@@ -42,11 +42,13 @@ window._hmt = window._hmt || [];
 export function getHeadConfig(): HeadConfig[] {
   return [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/vexip-ui.svg' }],
+    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
 
     ['meta', { 'http-equiv': 'Expires', content: '0' }],
     ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache', content: 'no-cache' }],
     ['meta', { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }],
+    ['meta', { name: 'theme-color', content: '#ffffff' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'Vexip UI' }],
     ['meta', { property: 'og:url', content: 'https://www.vexipui.com/' }],

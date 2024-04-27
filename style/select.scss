@@ -240,10 +240,6 @@ $select: map.merge(
     color: get-css-var('select-check-color');
   }
 
-  // &__arrow {
-  //   transition: get-css-var('transition-transform');
-  // }
-
   &__selector--focused &__arrow {
     transform: rotate(180deg);
   }
@@ -258,5 +254,9 @@ $select: map.merge(
     white-space: nowrap;
     cursor: default;
     background-color: get-css-var('select-list-bg-color');
+  }
+
+  &__clear {
+    @include clean-button;
   }
 }

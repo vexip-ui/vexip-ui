@@ -31,7 +31,9 @@ export function enUSLocale() {
       week6: 'Sa',
       week7: 'Su',
 
-      label: {
+      ariaLabel: {
+        year: 'Year',
+        month: 'Month',
         month1: 'January',
         month2: 'February',
         month3: 'March',
@@ -71,7 +73,11 @@ export function enUSLocale() {
 
     colorPicker: {
       confirm: 'Confirm',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
+
+      ariaLabel: {
+        clear: 'Clear color'
+      }
     },
 
     confirm: {
@@ -92,7 +98,17 @@ export function enUSLocale() {
         select: 'Please select'
       },
       startTime: 'Start Time',
-      endTime: 'End Time'
+      endTime: 'End Time',
+
+      ariaLabel: {
+        clear: 'Clear date',
+        quarter: 'Quarter',
+        week: 'Week',
+        date: 'Date',
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second'
+      }
     },
 
     drawer: {
@@ -113,7 +129,11 @@ export function enUSLocale() {
     },
 
     input: {
-      placeholder: 'Please input'
+      placeholder: 'Please input',
+
+      ariaLabel: {
+        clear: 'Clear input'
+      }
     },
 
     layout: {
@@ -130,7 +150,13 @@ export function enUSLocale() {
 
     numberInput: {
       placeholder: 'Please input number',
-      outOfRange: 'Out of range'
+      outOfRange: 'Out of range',
+
+      ariaLabel: {
+        clear: 'Clear number',
+        increase: 'Increase',
+        decrease: 'Decrease'
+      }
     },
 
     pagination: {
@@ -147,7 +173,11 @@ export function enUSLocale() {
 
     select: {
       placeholder: 'Please select',
-      empty: 'No data'
+      empty: 'No data',
+
+      ariaLabel: {
+        clear: 'Clear select'
+      }
     },
 
     table: {
@@ -180,6 +210,13 @@ export function enUSLocale() {
         start: 'Start',
         end: 'End',
         select: 'Please select'
+      },
+
+      ariaLabel: {
+        clear: 'Clear time',
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second'
       }
     },
 
@@ -205,7 +242,12 @@ export function enUSLocale() {
     upload: {
       upload: 'Upload files',
       uploading: 'Uploading',
-      dragOrClick: 'Drag files here, or click to upload'
+      dragOrClick: 'Drag files here, or click to upload',
+
+      ariaLabel: {
+        preview: 'Preview file',
+        delete: 'Delete file'
+      }
     },
 
     video: {

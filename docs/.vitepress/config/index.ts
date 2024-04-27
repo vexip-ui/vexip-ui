@@ -1,138 +1,139 @@
 import * as compiler from '@vue/compiler-sfc'
 
+import { withPwa } from '@vite-pwa/vitepress'
+
 import { defineConfigWithTheme } from 'vitepress'
 import { getPackageInfoSync, resolveModule } from 'local-pkg'
 import { compare } from 'compare-versions'
+import { toKebabCase } from '@vexip-ui/utils'
 import { highlight } from '../build/highlight'
 import { markdownItSetup } from '../build/markdown'
 import { getComponentConfig } from './component'
+import { SITE_DESC, SITE_DESC_ZH, SITE_NAME, SITE_TITLE, SITE_TITLE_ZH } from './constant'
 import { getGuideConfig } from './guide'
 import { getHeadConfig } from './head'
 import { getUpdatedFiles } from './updated'
-import { toKebabCase } from '@vexip-ui/utils'
+import { getPwaConfig } from './pwa'
 
 import type { AsideMenuTag, ThemeConfig } from '../theme/types'
 
 compiler.parseCache.max = 10000
 
-const SITE_DESC =
-  'A Vue 3 UI library, highly customizability, full TypeScript, performance pretty good.'
-const SITE_TITLE = 'Vexip UI - Make interesting in development'
-const SITE_DESC_ZH = '一个 Vue 3 组件库，高度可定制化，全量 TypeScript，性能很不错。'
-const SITE_TITLE_ZH = 'Vexip UI - 创造有趣的开发体验'
-
 export default async () => {
   const updated = await getUpdatedFiles()
 
-  return defineConfigWithTheme<ThemeConfig>({
-    titleTemplate: 'Vexip UI',
-    lastUpdated: true,
-    head: getHeadConfig(),
-    markdown: {
-      highlight,
-      config: markdownItSetup
-    },
-    vue: {
-      compiler: compiler as any,
-      template: {
-        compilerOptions: {
-          isCustomElement: tag => tag === 'iconify-icon'
+  return withPwa(
+    defineConfigWithTheme<ThemeConfig>({
+      titleTemplate: SITE_NAME,
+      lastUpdated: true,
+      head: getHeadConfig(),
+      markdown: {
+        highlight,
+        config: markdownItSetup
+      },
+      vue: {
+        compiler: compiler as any,
+        template: {
+          compilerOptions: {
+            isCustomElement: tag => tag === 'iconify-icon'
+          }
         }
-      }
-    },
-    themeConfig: {
-      asideMenus: {},
-      nav: [
-        { key: 'guides', i18n: 'common.guides', link: '/guide/vexip-ui', activeMatch: '/guide/' },
-        {
-          key: 'components',
-          i18n: 'common.components',
-          link: '/component/button',
-          activeMatch: '/component/'
+      },
+      themeConfig: {
+        asideMenus: {},
+        nav: [
+          { key: 'guides', i18n: 'common.guides', link: '/guide/vexip-ui', activeMatch: '/guide/' },
+          {
+            key: 'components',
+            i18n: 'common.components',
+            link: '/component/button',
+            activeMatch: '/component/'
+          },
+          { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' },
+          {
+            key: 'ecosystem',
+            i18n: 'common.ecosystem',
+            items: [
+              {
+                key: 'official',
+                i18n: 'common.official',
+                items: [
+                  {
+                    key: 'create-vexip',
+                    text: 'Create Vexip',
+                    link: 'https://github.com/vexip-ui/create-vexip'
+                  },
+                  {
+                    key: 'nuxt-module',
+                    text: 'Vexip Nuxt Module',
+                    link: 'https://github.com/vexip-ui/nuxt'
+                  },
+                  {
+                    key: 'lint-config',
+                    text: 'Vexip Lint Config',
+                    link: 'https://github.com/vexip-ui/lint-config'
+                  }
+                ]
+              },
+              {
+                key: 'partnership',
+                i18n: 'common.partnership',
+                items: [
+                  {
+                    key: 'fantastic-admin',
+                    text: 'Fantastic-admin',
+                    link: 'https://fantastic-admin.gitee.io/'
+                  },
+                  {
+                    key: 'become-partner',
+                    i18n: 'common.becomePartner',
+                    link: 'mailto:544022268@qq.com'
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        outline: {
+          '/guide/': 2,
+          '/component/': 3
         },
-        { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' },
-        {
-          key: 'ecosystem',
-          i18n: 'common.ecosystem',
-          items: [
-            {
-              key: 'official',
-              i18n: 'common.official',
-              items: [
-                {
-                  key: 'create-vexip',
-                  text: 'Create Vexip',
-                  link: 'https://github.com/vexip-ui/create-vexip'
-                },
-                {
-                  key: 'nuxt-module',
-                  text: 'Vexip Nuxt Module',
-                  link: 'https://github.com/vexip-ui/nuxt'
-                },
-                {
-                  key: 'lint-config',
-                  text: 'Vexip Lint Config',
-                  link: 'https://github.com/vexip-ui/lint-config'
-                }
-              ]
-            },
-            {
-              key: 'partnership',
-              i18n: 'common.partnership',
-              items: [
-                {
-                  key: 'fantastic-admin',
-                  text: 'Fantastic-admin',
-                  link: 'https://fantastic-admin.gitee.io/'
-                },
-                {
-                  key: 'become-partner',
-                  i18n: 'common.becomePartner',
-                  link: 'mailto:544022268@qq.com'
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      outline: {
-        '/guide/': 2,
-        '/component/': 3
+        editLink: {
+          pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path'
+        },
+        footerLinks: []
       },
-      editLink: {
-        pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path'
-      },
-      footerLinks: []
-    },
-    locales: {
-      'en-US': {
-        label: 'English',
-        lang: 'en-US',
-        description: SITE_DESC,
-        head: [
-          ['meta', { property: 'og:description', content: SITE_DESC }],
-          ['meta', { property: 'og:title', content: SITE_TITLE }]
-        ],
-        themeConfig: {
-          asideMenus: getAsideMenus(updated['en-US']),
-          footerLinks: getFooterLinks('en-US')
+      locales: {
+        'en-US': {
+          label: 'English',
+          lang: 'en-US',
+          description: SITE_DESC,
+          head: [
+            ['meta', { property: 'og:description', content: SITE_DESC }],
+            ['meta', { property: 'og:title', content: SITE_TITLE }]
+          ],
+          themeConfig: {
+            asideMenus: getAsideMenus(updated['en-US']),
+            footerLinks: getFooterLinks('en-US')
+          }
+        },
+        'zh-CN': {
+          label: '中文',
+          lang: 'zh-CN',
+          description: SITE_DESC_ZH,
+          head: [
+            ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
+            ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
+          ],
+          themeConfig: {
+            asideMenus: getAsideMenus(updated['zh-CN']),
+            footerLinks: getFooterLinks('zh-CN')
+          }
         }
       },
-      'zh-CN': {
-        label: '中文',
-        lang: 'zh-CN',
-        description: SITE_DESC_ZH,
-        head: [
-          ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
-          ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
-        ],
-        themeConfig: {
-          asideMenus: getAsideMenus(updated['zh-CN']),
-          footerLinks: getFooterLinks('zh-CN')
-        }
-      }
-    }
-  })
+      pwa: getPwaConfig
+    })
+  )
 }
 
 let version: string | undefined

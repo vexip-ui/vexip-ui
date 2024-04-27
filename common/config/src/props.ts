@@ -166,6 +166,21 @@ export function useProps<T extends Record<string, any>>(
   }
 }
 
+export function useHookProps<T extends Record<any, any>>(
+  props: T,
+  defaults: { [K in keyof T]: T[K] | null }
+) {
+  const propsWithDefault: { [P in keyof T]?: ComputedRef<T[P]> } = {}
+
+  for (const key of Object.keys(props) as (keyof T)[]) {
+    propsWithDefault[key] = computed(() => props[key] ?? defaults[key]!)
+  }
+
+  return reactive(propsWithDefault) as {
+    [P in keyof T]-?: Exclude<T[P], undefined>
+  }
+}
+
 function toWarnPrefix(name: string) {
   return `[vexip-ui:${name.charAt(0).toLocaleUpperCase() + name.substring(1)}]`
 }
@@ -343,13 +358,12 @@ type GenerateEvent<T extends any[], Others extends any[], R = any> = T extends u
  *  | ((value: boolean) => void)
  * ```
  */
-export type EventListener<T extends AnyFunction> = Expand<
-  ForceBooleanDeep<SplitAndCombo<Parameters<T>[0]>>
-> extends infer F extends any[]
-  ? Parameters<T> extends [unknown, ...infer Others]
-    ? GenerateEvent<F, Others, ReturnType<T>>
-    : GenerateEvent<F, never, ReturnType<T>>
-  : never
+export type EventListener<T extends AnyFunction> =
+  Expand<ForceBooleanDeep<SplitAndCombo<Parameters<T>[0]>>> extends infer F extends any[]
+    ? Parameters<T> extends [unknown, ...infer Others]
+      ? GenerateEvent<F, Others, ReturnType<T>>
+      : GenerateEvent<F, never, ReturnType<T>>
+    : never
 
 const eventTypes = [Function, Array]
 
@@ -357,7 +371,10 @@ export function eventProp<F extends AnyFunction = VoidFunction>() {
   return eventTypes as PropType<MaybeArray<F>>
 }
 
-export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => void>, ...args: A) {
+export function emitEvent<A extends any[]>(
+  handlers: MaybeArray<(...args: A) => void> | undefined,
+  ...args: A
+) {
   if (Array.isArray(handlers)) {
     for (let i = 0, len = handlers.length; i < len; ++i) {
       const handler = handlers[i]

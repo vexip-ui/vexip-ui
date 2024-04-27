@@ -33,7 +33,10 @@ import {
   format,
   getTime,
   isLeapYear,
+  isObject,
+  mergeObjects,
   startOfMonth,
+  toAttrValue,
   toDate,
   toFalse
 } from '@vexip-ui/utils'
@@ -49,6 +52,7 @@ defineOptions({ name: 'DatePicker' })
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -170,11 +174,9 @@ const endInput = ref<InstanceType<typeof DateControl>>()
 const datePanel = ref<InstanceType<typeof DatePanel>>()
 
 const mergedLocale = computed(() => {
-  return {
-    ...calendarLocale.value,
-    ...datePickerLocale.value,
-    ...(props.locale ?? {})
-  }
+  const locale = mergeObjects(calendarLocale.value, datePickerLocale.value, true)
+
+  return isObject(props.locale) ? mergeObjects(locale, props.locale) : locale
 })
 const startPlaceholder = computed(() => {
   if (props.placeholder) {
@@ -1206,6 +1208,11 @@ function handleClickOutside() {
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
+    :aria-labelledby="labelId"
     @click="showPanel"
   >
     <div
@@ -1242,6 +1249,7 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
+          :labeled-by="labelId"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -1275,6 +1283,7 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
+            :labeled-by="labelId"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -1304,9 +1313,15 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          tabindex="-1"
+          :aria-label="mergedLocale.ariaLabel.clear"
+          @click.stop="handleClear()"
+        >
           <Icon v-bind="icons.clear" label="clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -1355,6 +1370,7 @@ function handleClickOutside() {
         :week-start="props.weekStart"
         :static-wheel="staticWheel"
         :shortcuts-placement="props.shortcutsPlacement"
+        :labeled-by="labelId"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

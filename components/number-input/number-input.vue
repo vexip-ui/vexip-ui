@@ -18,6 +18,7 @@ import {
 import {
   boundRange,
   debounce,
+  getGlobalCount,
   isNull,
   isValidNumber,
   minus,
@@ -37,6 +38,7 @@ defineOptions({ name: 'NumberInput' })
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -154,8 +156,11 @@ useModifier({
   }
 })
 
+const idIndex = `${getGlobalCount()}`
+
 let lastValue: number
 
+const controlId = computed(() => `${nh.bs(idIndex)}__control`)
 const outOfRange = computed(() => {
   return (
     !isNullOrNaN(currentValue.value) &&
@@ -528,6 +533,7 @@ function handleKeyPress(event: KeyboardEvent) {
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
     @click="control?.focus()"
   >
     <div
@@ -542,6 +548,7 @@ function handleKeyPress(event: KeyboardEvent) {
     </div>
     <input
       v-bind="props.controlAttrs"
+      :id="controlId"
       ref="control"
       :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       type="text"
@@ -557,6 +564,7 @@ function handleKeyPress(event: KeyboardEvent) {
       :aria-valuenow="preciseNumber"
       :aria-valuemin="props.min !== -Infinity ? props.min : undefined"
       :aria-valuemax="props.max !== Infinity ? props.max : undefined"
+      :aria-labelledby="labelId"
       @submit.prevent
       @blur="handleBlur"
       @focus="handleFocus"
@@ -582,9 +590,15 @@ function handleKeyPress(event: KeyboardEvent) {
       :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
     ></div>
     <Transition :name="nh.ns('fade')" appear>
-      <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+      <button
+        v-if="showClear"
+        :class="[nh.be('icon'), nh.be('clear')]"
+        tabindex="-1"
+        :aria-label="locale.ariaLabel.clear"
+        @click.stop="handleClear"
+      >
         <Icon v-bind="icons.clear" label="clear"></Icon>
-      </div>
+      </button>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
         <Icon
           v-bind="icons.loading"
@@ -601,6 +615,10 @@ function handleKeyPress(event: KeyboardEvent) {
           [nh.bem('plus', 'disabled')]: plusDisabled,
           [nh.bem('plus', 'holding')]: plusHolding
         }"
+        role="button"
+        :aria-label="locale.ariaLabel.increase"
+        :aria-labelledby="labelId"
+        :aria-controls="controlId"
         @pointerdown.prevent="handleHold('plus', $event)"
         @mousedown.prevent
         @touchstart.prevent
@@ -613,6 +631,9 @@ function handleKeyPress(event: KeyboardEvent) {
           [nh.bem('minus', 'disabled')]: minusDisabled,
           [nh.bem('minus', 'holding')]: minusHolding
         }"
+        :aria-label="locale.ariaLabel.decrease"
+        :aria-labelledby="labelId"
+        :aria-controls="controlId"
         @pointerdown.prevent="handleHold('minus', $event)"
         @mousedown.prevent
         @touchstart.prevent

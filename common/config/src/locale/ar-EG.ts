@@ -31,7 +31,9 @@ export function arEGLocale() {
       week6: 'Sa',
       week7: 'Su',
 
-      label: {
+      ariaLabel: {
+        year: 'سنة',
+        month: 'شهر',
         month1: 'يناير',
         month2: 'فبراير',
         month3: 'مارس',
@@ -71,7 +73,11 @@ export function arEGLocale() {
 
     colorPicker: {
       confirm: 'موافق',
-      cancel: 'الغاء'
+      cancel: 'الغاء',
+
+      ariaLabel: {
+        clear: 'مسح اللون'
+      }
     },
 
     confirm: {
@@ -92,7 +98,17 @@ export function arEGLocale() {
         select: 'اختر'
       },
       startTime: 'وقت البدء',
-      endTime: 'وقت الانتهاء'
+      endTime: 'وقت الانتهاء',
+
+      ariaLabel: {
+        clear: 'مسح التاريخ',
+        quarter: 'ربع',
+        week: 'أسبوع',
+        date: 'يوم',
+        hour: 'ساعة',
+        minute: 'دقيقة',
+        second: 'ثانية'
+      }
     },
 
     drawer: {
@@ -113,7 +129,11 @@ export function arEGLocale() {
     },
 
     input: {
-      placeholder: 'ادخل بيانات'
+      placeholder: 'ادخل بيانات',
+
+      ariaLabel: {
+        clear: 'مسح البيانات'
+      }
     },
 
     layout: {
@@ -130,7 +150,13 @@ export function arEGLocale() {
 
     numberInput: {
       placeholder: 'ادخل قيم رقمية',
-      outOfRange: 'خارج النطاق'
+      outOfRange: 'خارج النطاق',
+
+      ariaLabel: {
+        clear: 'مسح الرقم',
+        increase: 'زيادة',
+        decrease: 'نقص'
+      }
     },
 
     pagination: {
@@ -147,7 +173,11 @@ export function arEGLocale() {
 
     select: {
       placeholder: 'اختر',
-      empty: 'لا توجد بيانات'
+      empty: 'لا توجد بيانات',
+
+      ariaLabel: {
+        clear: 'مسح الاختيار'
+      }
     },
 
     table: {
@@ -180,6 +210,13 @@ export function arEGLocale() {
         start: 'يبدأ بـ',
         end: 'ينتهى بـ',
         select: 'اختر'
+      },
+
+      ariaLabel: {
+        clear: 'مسح الوقت',
+        hour: 'ساعة',
+        minute: 'دقيقة',
+        second: 'ثانية'
       }
     },
 
@@ -205,7 +242,12 @@ export function arEGLocale() {
     upload: {
       upload: 'تحميل ملفات',
       uploading: 'جار التحميل',
-      dragOrClick: 'اسحب وضع الملقات هنا, او اضغط تحميل ملفات'
+      dragOrClick: 'اسحب وضع الملقات هنا, او اضغط تحميل ملفات',
+
+      ariaLabel: {
+        preview: 'معاينة الملفات',
+        delete: 'حذف الملفات'
+      }
     },
 
     video: {

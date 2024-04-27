@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="nh.be('hue')" tabindex="-1">
+  <div
+    ref="wrapper"
+    :class="nh.be('hue')"
+    tabindex="-1"
+    role="group"
+  >
     <div :class="nh.be('hue-handler')" :style="{ left: `${currentLeft}%` }"></div>
   </div>
 </template>

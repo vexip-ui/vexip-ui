@@ -34,6 +34,7 @@ export default defineComponent({
   setup(_props, { slots, emit, expose }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -449,9 +450,15 @@ export default defineComponent({
     function renderSuffixAction() {
       if (showClear.value) {
         return (
-          <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
+          <button
+            key={'clear'}
+            class={[nh.be('icon'), nh.be('clear')]}
+            tabindex={-1}
+            aria-label={locale.value.ariaLabel.clear}
+            onClick={handleClear}
+          >
             <Icon {...icons.value.clear} label={'clear'}></Icon>
-          </div>
+          </button>
         )
       }
 
@@ -537,6 +544,7 @@ export default defineComponent({
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
             name={props.name || props.controlAttrs?.name}
+            aria-labelledby={labelId.value}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

@@ -147,6 +147,10 @@ $date-picker: map.merge(
     width: 2px;
   }
 
+  &__clear {
+    @include clean-button;
+  }
+
   &__popper {
     padding: 8px 0;
   }

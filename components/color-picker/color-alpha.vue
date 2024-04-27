@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="nh.be('alpha')" tabindex="-1">
+  <div
+    ref="wrapper"
+    :class="nh.be('alpha')"
+    tabindex="-1"
+    role="group"
+  >
     <div
       :class="nh.be('opacity')"
       :style="{

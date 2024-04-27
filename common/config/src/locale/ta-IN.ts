@@ -31,7 +31,9 @@ export function taINLocale() {
       week6: 'Sa',
       week7: 'Su',
 
-      label: {
+      ariaLabel: {
+        year: 'ஆண்டு',
+        month: 'மாதம்',
         month1: 'ஜனவரி',
         month2: 'பிப்ரவரி',
         month3: 'மார்ச்',
@@ -71,7 +73,11 @@ export function taINLocale() {
 
     colorPicker: {
       confirm: 'உறுதிபடுத்து',
-      cancel: 'நிராகரி'
+      cancel: 'நிராகரி',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     confirm: {
@@ -92,7 +98,17 @@ export function taINLocale() {
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
       },
       startTime: 'தொடக்கம் நேரம்',
-      endTime: 'முடிவு நேரம்'
+      endTime: 'முடிவு நேரம்',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு',
+        quarter: 'பருவம்',
+        week: 'வாரம்',
+        date: 'தேதி',
+        hour: 'மணி',
+        minute: 'நிமிடம்',
+        second: 'வினாடி'
+      }
     },
 
     drawer: {
@@ -113,7 +129,11 @@ export function taINLocale() {
     },
 
     input: {
-      placeholder: 'தயவுசெய்து உள்ளிடவும்'
+      placeholder: 'தயவுசெய்து உள்ளிடவும்',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     layout: {
@@ -130,7 +150,13 @@ export function taINLocale() {
 
     numberInput: {
       placeholder: 'தயவுசெய்து எண் உள்ளிடவும்',
-      outOfRange: 'வரம்புக்கு வெளியே'
+      outOfRange: 'வரம்புக்கு வெளியே',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு',
+        increase: 'அதிகரிக்க',
+        decrease: 'குறைக்க'
+      }
     },
 
     pagination: {
@@ -147,7 +173,11 @@ export function taINLocale() {
 
     select: {
       placeholder: 'தயவுசெய்து தேர்ந்தெடுகக்கவும்',
-      empty: 'தரவு இல்லை'
+      empty: 'தரவு இல்லை',
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு'
+      }
     },
 
     table: {
@@ -180,6 +210,13 @@ export function taINLocale() {
         start: 'தொடக்கம்',
         end: 'முடிவு',
         select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
+      },
+
+      ariaLabel: {
+        clear: 'தெளிவாக்கு',
+        hour: 'மணி',
+        minute: 'நிமிடம்',
+        second: 'வினாடி'
       }
     },
 
@@ -205,7 +242,12 @@ export function taINLocale() {
     upload: {
       upload: 'கோப்புகளை பதிவேற்று',
       uploading: 'பதிவேற்றுகிறது...',
-      dragOrClick: 'கோப்புகளை இங்கே விடவும் அல்லது பதிவேற்ற அழுத்தவும்'
+      dragOrClick: 'கோப்புகளை இங்கே விடவும் அல்லது பதிவேற்ற அழுத்தவும்',
+
+      ariaLabel: {
+        preview: 'முன்னோட்டம்',
+        delete: 'கோப்பை நீக்கு'
+      }
     },
 
     video: {

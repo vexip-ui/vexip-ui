@@ -66,7 +66,7 @@ defineSlots<{
 const nh = useNameHelper('calendar')
 
 const label = computed(() => {
-  const label = props.locale.label
+  const label = props.locale.ariaLabel
   const year = props.date.getFullYear()
   const month = (props.date.getMonth() + 1) as MonthIndex
   const day = props.date.getDate()

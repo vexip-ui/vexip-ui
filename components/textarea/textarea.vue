@@ -18,7 +18,7 @@ import { textareaProps } from './props'
 
 defineOptions({ name: 'Textarea' })
 
-const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+const { idFor, state, labelId, disabled, loading, validateField, getFieldValue, setFieldValue } =
   useFieldStore<string>(() => textarea.value?.focus())
 
 const _props = defineProps(textareaProps)
@@ -248,6 +248,7 @@ function handleCompositionEnd(event: CompositionEvent) {
       :placeholder="props.placeholder ?? locale.placeholder"
       :maxlength="props.maxLength > 0 ? props.maxLength : undefined"
       :name="props.name || props.controlAttrs?.name"
+      :aria-labelledby="labelId"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"

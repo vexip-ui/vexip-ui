@@ -158,6 +158,7 @@ function imageToBase64(file: UploadFileState) {
           <button
             type="button"
             :class="[nh.be('icon'), nh.be('close')]"
+            :aria-label="locale.ariaLabel.delete"
             @click="handleDelete(props.file)"
           >
             <Icon v-bind="icons.delete"></Icon>
@@ -248,6 +249,7 @@ function imageToBase64(file: UploadFileState) {
                 }
               ]"
               :disabled="!props.canPreview(props.file)"
+              :aria-label="locale.ariaLabel.preview"
               @click="handlePreview(props.file)"
             >
               <Icon v-bind="icons.preview" :scale="+(icons.preview.scale || 1) * 1.4"></Icon>
@@ -255,6 +257,7 @@ function imageToBase64(file: UploadFileState) {
             <button
               type="button"
               :class="[nh.be('icon'), nh.be('action')]"
+              :aria-label="locale.ariaLabel.delete"
               @click="handleDelete(props.file)"
             >
               <Icon v-bind="icons.delete" :scale="+(icons.delete.scale || 1) * 1.4"></Icon>

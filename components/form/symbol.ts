@@ -41,6 +41,7 @@ export interface FormItemProps {
 export interface FieldOptions {
   prop: ComputedRef<string>,
   idFor: ComputedRef<string>,
+  labelId: ComputedRef<string>,
   state: ComputedRef<ComponentState>,
   disabled: ComputedRef<boolean>,
   loading: ComputedRef<boolean>,

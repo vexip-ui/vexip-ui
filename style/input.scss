@@ -212,6 +212,10 @@ $input: map.merge(
     transition: get-css-var('transition-opacity');
   }
 
+  &__clear {
+    @include clean-button;
+  }
+
   &__clear,
   &__loading {
     position: absolute;
