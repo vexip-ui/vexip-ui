@@ -6,6 +6,7 @@ import TipContainer from './components/tip-container.vue'
 import InternalIcons from './components/internal-icons.vue'
 import InternalPrevIcons from './components/internal-prev-icons.vue'
 import IconifyDemo from './components/iconify-demo.vue'
+import HeadlessSvg from './components/headless-svg.vue'
 
 import type { App, Component } from 'vue'
 
@@ -17,7 +18,8 @@ export const components: Record<string, Component> = {
   TipContainer,
   InternalIcons,
   InternalPrevIcons,
-  IconifyDemo
+  IconifyDemo,
+  HeadlessSvg
 }
 
 export function installGlobals(app: App) {

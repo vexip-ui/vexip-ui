@@ -7,6 +7,7 @@ import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
 import inspect from 'vite-plugin-inspect'
+import svgLoader from 'vite-svg-loader'
 import { demoImports } from './.vitepress/build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
@@ -72,6 +73,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       vueJsx(),
       i18n({ include: resolve(__dirname, './vitepress/i18n') }),
       inspect(),
+      svgLoader({ defaultImport: 'component' }),
       demoImports()
     ]
   }

@@ -114,6 +114,8 @@
 
 ==!b==
 
+<HeadlessSvg name="number-input"></HeadlessSvg>
+
 :::demo number-input/headless
 
 ### 无头用法
