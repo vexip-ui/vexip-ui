@@ -1,4 +1,4 @@
-# NumberInput 数字输入框
+# NumberInput 数字输入框 ==!h==
 
 通常用在需要以更友好的交互进行数字的输入的场合。
 
@@ -105,6 +105,18 @@
 :::demo number-input/state
 
 ### 不同状态
+
+通过 `state` 可以设置不同的状态。
+
+:::
+
+## Headless
+
+==!b==
+
+:::demo number-input/headless
+
+### 无头用法
 
 通过 `state` 可以设置不同的状态。
 

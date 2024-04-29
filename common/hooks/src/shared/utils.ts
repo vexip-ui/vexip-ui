@@ -1,12 +1,15 @@
 import {
   Comment,
   Fragment,
+  computed,
   createTextVNode,
   isVNode,
+  reactive,
   readonly,
   ref,
   renderSlot,
   toRef,
+  toRefs,
   unref,
   watch
 } from 'vue'
@@ -140,5 +143,40 @@ export function watchPauseable(...args: Parameters<typeof watch>) {
 }
 
 export function pickToRefs<T extends Record<any, any>, K extends keyof T>(reactive: T, keys: K[]) {
-  return keys.map(key => toRef(reactive, key)) as { [P in K]: Ref<T[P]> }
+  return keys.reduce(
+    (picked, key) => ((picked[key] = toRef(reactive, key)), picked),
+    {} as { [P in K]: Ref<T[P]> }
+  )
+}
+
+export function withDefaults<T extends Record<string, any>, K extends keyof T>(
+  source: T,
+  defaults: { [P in K]?: T[P] | null } = {}
+) {
+  const props: {
+    [P in keyof T]?: Ref<T[P] | null | undefined>
+  } = {}
+
+  const keys = new Set<keyof T>([...Object.keys(source), ...Object.keys(defaults)])
+
+  for (const key of keys) {
+    if (key in defaults) {
+      props[key] = computed(() => source[key] ?? defaults[key as K])
+    } else {
+      props[key] = toRef(source, key)
+    }
+  }
+
+  return reactive(props) as {
+    [P in K]-?: T[P]
+  } & {
+    [P in Exclude<keyof T, K>]: T[P]
+  }
+}
+
+export function extendReactive<T extends Record<any, any>, U extends Record<any, any>>(
+  source: T,
+  extend: U
+) {
+  return reactive({ ...toRefs(source), ...toRefs(extend) }) as T & U
 }

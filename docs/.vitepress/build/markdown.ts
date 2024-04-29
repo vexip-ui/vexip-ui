@@ -160,10 +160,14 @@ function useTableWrapper(md: MarkdownIt) {
 function useTag(md: MarkdownIt) {
   const tagRE = /^==(.*)==/
   const shortcuts: Record<string, (raw: string) => [string, string]> = {
+    // beta
+    b: value => ['orange', value || 'Beta'],
     // deprecated
-    d: value => ['error', value || 'deprecated'],
+    d: value => ['error', value || 'Deprecated'],
+    // headless
+    h: value => ['info', value || 'Headless'],
     // since
-    s: value => ['warning', `Since v${value}`]
+    s: value => ['warning', value ? `Since v${value}` : '']
   }
 
   md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
@@ -182,7 +186,7 @@ function useTag(md: MarkdownIt) {
 
       ;[token.info, token.content] = shortcuts[key]?.(units[1]) ?? units
     } else if (units.length > 1) {
-      [token.info, token.content] = units
+      ;[token.info, token.content] = units
     } else {
       token.info = 'default'
       token.content = raw
@@ -198,6 +202,9 @@ function useTag(md: MarkdownIt) {
     const token = tokens[index]
     const { content, info } = token
 
-    return `<ClientOnly><Tag class="docs-tag" type="${info}" simple>${content}</Tag></ClientOnly>`
+    return (
+      content &&
+      `<ClientOnly><Tag class="docs-tag" type="${info}" simple>${content}</Tag></ClientOnly>`
+    )
   }
 }

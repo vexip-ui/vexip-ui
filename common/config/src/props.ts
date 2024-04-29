@@ -166,21 +166,6 @@ export function useProps<T extends Record<string, any>>(
   }
 }
 
-export function useHookProps<T extends Record<any, any>>(
-  props: T,
-  defaults: { [K in keyof T]: T[K] | null }
-) {
-  const propsWithDefault: { [P in keyof T]?: ComputedRef<T[P]> } = {}
-
-  for (const key of Object.keys(props) as (keyof T)[]) {
-    propsWithDefault[key] = computed(() => props[key] ?? defaults[key]!)
-  }
-
-  return reactive(propsWithDefault) as {
-    [P in keyof T]-?: Exclude<T[P], undefined>
-  }
-}
-
 function toWarnPrefix(name: string) {
   return `[vexip-ui:${name.charAt(0).toLocaleUpperCase() + name.substring(1)}]`
 }
@@ -212,6 +197,12 @@ type ExcludeProps<P, E extends string = never, I extends string = never> =
   | Exclude<E, I>
   | (P extends I ? never : P extends `on${Capitalize<string>}` ? P : never)
 type PostProps<T, E extends string> = Omit<{ [P in keyof T]: MaybeFunction<T[P]> }, E>
+
+export type PropsWithDefaults<T> = {
+  [K in keyof T as K extends `on${Capitalize<string>}` ? K : never]: T[K]
+} & {
+  [K in keyof T as K extends `on${Capitalize<string>}` ? never : K]-?: T[K]
+}
 
 /**
  * Create a configurable props
