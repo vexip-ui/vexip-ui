@@ -64,11 +64,17 @@ $form: map.merge(
     }
   }
 
+  &__placeholder,
   &__label {
     display: inline-flex;
     align-items: center;
     padding-inline-end: 8px;
     white-space: nowrap;
+  }
+
+  &__placeholder {
+    position: absolute;
+    visibility: hidden;
   }
 
   &__control {

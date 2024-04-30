@@ -13,14 +13,8 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
-import {
-  createEventEmitter,
-  getGlobalCount,
-  getRangeWidth,
-  isFunction,
-  isNull,
-  isObject
-} from '@vexip-ui/utils'
+import { useDisplay } from '@vexip-ui/hooks'
+import { createEventEmitter, getGlobalCount, isFunction, isNull, isObject } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -105,7 +99,11 @@ const validating = ref(false)
 const disabledValidate = ref(false)
 const labelWidth = ref(0)
 
-const labelEl = ref<HTMLInputElement>()
+const placeholder = useDisplay(() => {
+  if (placeholder.value) {
+    labelWidth.value = placeholder.value.offsetWidth
+  }
+})
 
 const labelId = computed(() => nh.bs(`${idIndex}__label`))
 const isRequired = computed(() => formProps.allRequired || props.required)
@@ -235,10 +233,6 @@ onMounted(() => {
 
   if (isNull(initValue.value)) {
     initValue.value = Array.isArray(value) ? Array.from(value) : value
-  }
-
-  if (labelEl.value) {
-    labelWidth.value = getRangeWidth(labelEl.value)
   }
 
   if (formFields) {
@@ -393,10 +387,14 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       :value="inputValue"
       style="display: none"
     />
+    <span v-if="hasLabel && labelAlign !== 'top'" ref="placeholder" :class="nh.be('placeholder')">
+      <slot name="label">
+        {{ props.label + (formProps.labelSuffix || '') }}
+      </slot>
+    </span>
     <label
       v-if="hasLabel"
       :id="labelId"
-      ref="labelEl"
       :class="nh.be('label')"
       :style="{ width: labelAlign !== 'top' ? `${computedLabelWidth}px` : undefined }"
       :for="props.htmlFor || props.prop"
