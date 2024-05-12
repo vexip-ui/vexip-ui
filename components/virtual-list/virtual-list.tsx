@@ -166,7 +166,7 @@ export default defineComponent({
                     </ResizeObserver>
                   )
                 })
-                : slots.empty?.()}
+                : renderSlot(slots, 'empty')}
             </ItemsTag>
           </ListTag>
         </ResizeObserver>
@@ -196,9 +196,9 @@ export default defineComponent({
           {{
             default: () => {
               if (props.disabled) {
-                return props.items.map((item, index) =>
-                  renderSlot(slots, 'default', { item, index })
-                )
+                return slots.default && props.items.length
+                  ? props.items.map((item, index) => renderSlot(slots, 'default', { item, index }))
+                  : renderSlot(slots, 'empty')
               }
 
               return renderList(renderingItems)
