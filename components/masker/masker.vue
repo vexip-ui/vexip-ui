@@ -243,22 +243,22 @@ function handleResize(entry: ResizeObserverEntry) {
           aria-hidden
         ></div>
       </ResizeObserver>
-      <span
+      <div
         ref="topTrap"
         tabindex="0"
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
-      ></span>
+      ></div>
       <Transition v-if="props.transitionName" appear :name="props.transitionName">
         <slot :show="currentActive"></slot>
       </Transition>
       <slot v-else :show="currentActive"></slot>
-      <span
+      <div
         ref="bottomTrap"
         tabindex="0"
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
-      ></span>
+      ></div>
     </div>
   </Portal>
 </template>

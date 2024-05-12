@@ -36,7 +36,8 @@ export default defineComponent({
       hideBar: false,
       lockItems: false,
       autoplay: false,
-      ignoreResize: false
+      ignoreResize: false,
+      disabled: false
     })
 
     const nh = useNameHelper('virtual-list')
@@ -97,6 +98,15 @@ export default defineComponent({
       }
     )
 
+    const className = computed(() => {
+      return [
+        nh.b(),
+        props.inherit && nh.bm('inherit'),
+        props.disabled && nh.bm('disabled'),
+        attrs.class
+      ]
+    })
+
     function onScroll(payload: ScrollPayload) {
       handleScroll()
       emitEvent(props.onScroll, payload)
@@ -119,7 +129,7 @@ export default defineComponent({
       return scroll.value?.refresh() ?? Promise.resolve()
     }
 
-    return () => {
+    function renderList(items: Record<string, any>[]) {
       const keyField = props.idKey
       const itemFixed = props.itemFixed
       const keyIndexMap = indexMap.value
@@ -128,6 +138,42 @@ export default defineComponent({
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
+      return (
+        <ResizeObserver onResize={refresh}>
+          <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
+            <ItemsTag
+              {...itemsAttrs}
+              class={[nh.be('items'), itemsClass]}
+              style={[itemsStyle.value, itemsOtherStyle]}
+            >
+              {slots.default && props.items.length
+                ? items.map(item => {
+                  const key = item[keyField]
+                  const index = keyIndexMap.get(key)
+                  const vnode = renderSlot(slots, 'default', { item, index })
+
+                  if (itemFixed) {
+                    vnode.key = key
+
+                    return vnode
+                  }
+
+                  const onResize = onItemResize.bind(null, key)
+
+                  return (
+                    <ResizeObserver key={key} onResize={onResize}>
+                      {() => vnode}
+                    </ResizeObserver>
+                  )
+                })
+                : slots.empty?.()}
+            </ItemsTag>
+          </ListTag>
+        </ResizeObserver>
+      )
+    }
+
+    return () => {
       let renderingItems = visibleItems.value
 
       if (import.meta.env.MODE === 'test') {
@@ -139,7 +185,7 @@ export default defineComponent({
         <NativeScroll
           {...attrs}
           ref={scroll}
-          class={[nh.b(), props.inherit && nh.bm('inherit'), attrs.class]}
+          class={className.value}
           inherit={props.inherit}
           use-y-bar={!props.hideBar}
           scroll-y={scrollOffset.value}
@@ -148,39 +194,15 @@ export default defineComponent({
           onResize={onResize}
         >
           {{
-            default: () => (
-              <ResizeObserver onResize={refresh}>
-                <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
-                  <ItemsTag
-                    {...itemsAttrs}
-                    class={[nh.be('items'), itemsClass]}
-                    style={[itemsStyle.value, itemsOtherStyle]}
-                  >
-                    {slots.default && props.items.length
-                      ? renderingItems.map(item => {
-                        const key = item[keyField]
-                        const index = keyIndexMap.get(key)
-                        const vnode = renderSlot(slots, 'default', { item, index })
+            default: () => {
+              if (props.disabled) {
+                return props.items.map((item, index) =>
+                  renderSlot(slots, 'default', { item, index })
+                )
+              }
 
-                        if (itemFixed) {
-                          vnode.key = key
-
-                          return vnode
-                        }
-
-                        const onResize = onItemResize.bind(null, key)
-
-                        return (
-                          <ResizeObserver key={key} onResize={onResize}>
-                            {() => vnode}
-                          </ResizeObserver>
-                        )
-                      })
-                      : slots.empty?.()}
-                  </ItemsTag>
-                </ListTag>
-              </ResizeObserver>
-            ),
+              return renderList(renderingItems)
+            },
             prefixTrap: createSlotRender(slots, ['prefix-trap', 'prefixTrap']),
             suffixTrap: createSlotRender(slots, ['suffix-trap', 'suffixTrap'])
           }}

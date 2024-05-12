@@ -39,6 +39,7 @@ Renders a list of `10000` elements with a fixed height.
 | lock-items     | `boolean`                    | Disable elements resize callback, which is used to improve performance when elements change height in transition                  | `false` | `2.1.30` |
 | autoplay       | `boolean \| number`          | Enable automatically scroll, when a number is passed in, it will be used as the number of milliseconds required for a full scroll | `false` | -        |
 | ignore-resize  | `boolean`                    | Whether to ignore elements resize                                                                                                 | `false` | `2.2.18` |
+| disabled       | `boolean`                    | Whether to disable virtual scroll, ~~it~~ will be rendering as a normal list if true                                              | `false` | `2.3.6`  |
 
 ### NativeScroll Methods
 
