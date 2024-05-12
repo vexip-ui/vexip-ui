@@ -110,6 +110,12 @@ interface AutoCompleteOptionState {
 }
 
 type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionState) => boolean
+
+interface AutoCompleteListSlotParams {
+  options: AutoCompleteOptionState[],
+  isSelected: (option: AutoCompleteOptionState) => boolean,
+  handleSelect: (option?: AutoCompleteOptionState | null) => void
+}
 ```
 
 ### AutoComplete 属性
@@ -157,11 +163,12 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 
 ### AutoComplete 插槽
 
-| 名称    | 说明                                                                                         | 参数                                                                                                                                   | 始于    |
-| ------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| default | 选项列表的插槽，使用插槽传入选项会使内置的选项过滤、按键选值等功能失效，需要手动实现这些功能 | -                                                                                                                                      | -       |
-| prefix  | 前置图标内容的插槽                                                                           | -                                                                                                                                      | -       |
-| suffix  | 后缀图标内容的插槽                                                                           | -                                                                                                                                      | -       |
-| control | 输入控件的插槽，接受 5 个参数，分别为当前值与 4 个事件回调方法                               | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -       |
-| prepend | 选项列表上方内容的插槽                                                                       | -                                                                                                                                      | `2.2.7` |
-| append  | 选项列表下方内容的插槽                                                                       | -                                                                                                                                      | `2.2.7` |
+| 名称    | 说明                   | 参数                                                                                                                                   | 始于    |
+| ------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| default | 选项列表的插槽         | -                                                                                                                                      | -       |
+| prefix  | 前置图标内容的插槽     | -                                                                                                                                      | -       |
+| suffix  | 后缀图标内容的插槽     | -                                                                                                                                      | -       |
+| control | 输入控件的插槽         | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -       |
+| prepend | 选项列表上方内容的插槽 | -                                                                                                                                      | `2.2.7` |
+| append  | 选项列表下方内容的插槽 | -                                                                                                                                      | `2.2.7` |
+| list    | 选项列表的内容插槽     | `AutoCompleteListSlotParams`                                                                                                           | `2.3.7` |
