@@ -249,10 +249,12 @@ function handleResize(entry: ResizeObserverEntry) {
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></div>
-      <Transition v-if="props.transitionName" appear :name="props.transitionName">
-        <slot :show="currentActive"></slot>
-      </Transition>
-      <slot v-else :show="currentActive"></slot>
+      <div :class="nh.be('content')" @wheel.stop>
+        <Transition v-if="props.transitionName" appear :name="props.transitionName">
+          <slot :show="currentActive"></slot>
+        </Transition>
+        <slot v-else :show="currentActive"></slot>
+      </div>
       <div
         ref="bottomTrap"
         tabindex="0"
