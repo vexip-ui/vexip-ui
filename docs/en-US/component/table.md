@@ -604,6 +604,7 @@ interface TableFootPayload {
 | data-filter     | `(data: Data) => boolean`                                     | Set the extra filter method for the data                                                                                                              | `null`         | `2.2.14` |
 | no-transition   | `boolean`                                                     | Whether to disable transition for table                                                                                                               | `false`        | `2.2.14` |
 | ellipsis        | `boolean`                                                     | Whether to use Ellipsis component for cell content                                                                                                    | `false`        | `2.2.16` |
+| min-height      | `number`                                                      | The min height of the table, should not less then `height`                                                                                            | `null`         | `2.3.7`  |
 
 ### Table Events
 

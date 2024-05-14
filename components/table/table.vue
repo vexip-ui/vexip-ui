@@ -88,6 +88,7 @@ const props = useProps('table', _props, {
   },
   width: null,
   height: null,
+  minHeight: null,
   rowClass: null,
   rowStyle: null,
   rowAttrs: null,
@@ -173,6 +174,7 @@ const nh = useNameHelper('table')
 const { timer } = useSetTimeout()
 
 const bodyHeight = ref<number | undefined>(props.height)
+const bodyMinHeight = ref(props.height || 0)
 const xScrollEnabled = ref(false)
 const yScrollEnabled = ref(false)
 const xScrollPercent = ref(0)
@@ -547,32 +549,40 @@ function computeTableWidth() {
 
 function computeBodyHeight() {
   const height = props.height
+  const minHeight = props.minHeight
   const borderWidth = props.borderWidth
 
-  if (isDefined(height)) {
-    headHeight.value = 0
-    footHeight.value = 0
+  let fixedHeight = 0
 
-    if (thead.value || aboveTfoot.value || belowTfoot.value) {
-      if (thead.value) {
-        headHeight.value = thead.value.offsetHeight
-      }
+  if (thead.value || aboveTfoot.value || belowTfoot.value) {
+    if (thead.value) {
+      fixedHeight = thead.value.offsetHeight
+    }
 
-      if (aboveTfoot.value) {
-        headHeight.value += aboveTfoot.value.offsetHeight
-      }
+    if (aboveTfoot.value) {
+      fixedHeight += aboveTfoot.value.offsetHeight
+    }
 
-      if (belowTfoot.value) {
-        footHeight.value = belowTfoot.value.offsetHeight
-      }
-
-      bodyHeight.value = height - headHeight.value - footHeight.value - 2 * borderWidth
-    } else {
-      // one row as head placeholder
-      bodyHeight.value = height - (props.rowHeight || props.rowMinHeight) - 2 * borderWidth
+    if (belowTfoot.value) {
+      fixedHeight = belowTfoot.value.offsetHeight
     }
   } else {
+    // one row as head placeholder
+    fixedHeight = props.rowHeight || props.rowMinHeight
+  }
+
+  fixedHeight += 2 * borderWidth
+
+  if (isDefined(height)) {
+    bodyHeight.value = height - fixedHeight
+  } else {
     bodyHeight.value = undefined
+  }
+
+  if (isDefined(minHeight)) {
+    bodyMinHeight.value = Math.min(minHeight, height ?? Infinity) - fixedHeight
+  } else {
+    bodyMinHeight.value = 0
   }
 }
 
@@ -943,7 +953,10 @@ function computeRenderRows(force = false) {
     return
   }
 
-  const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
+  const viewHeight = Math.max(
+    Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0),
+    bodyMinHeight.value
+  )
 
   if (!viewHeight) {
     setRenderRows(0, 0, force)
@@ -1137,9 +1150,12 @@ function renderTableSlot({ name }: { name: string }) {
       </NativeScroll>
     </div>
     <div
-      :class="nh.be('body-wrapper')"
-      :style="
-        !bodyScrollHeight && state.totalHeight
+      :class="[
+        nh.be('body-wrapper'),
+        state.totalHeight >= bodyMinHeight && nh.bem('body-wrapper', 'scrolled')
+      ]"
+      :style="{
+        ...(!bodyScrollHeight && state.totalHeight
           ? {
             height: `${state.totalHeight}px`,
             transition:
@@ -1147,8 +1163,9 @@ function renderTableSlot({ name }: { name: string }) {
                 ? undefined
                 : `height ${nh.gnv('transition-base')}`
           }
-          : undefined
-      "
+          : undefined),
+        minHeight: `${bodyMinHeight}px`
+      }"
     >
       <NativeScroll
         ref="mainScroll"
