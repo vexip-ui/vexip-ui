@@ -103,7 +103,7 @@ type TimelineItemType = 'primary' | 'info' | 'success' | 'error' | 'warning' | '
 | ------------ | --------------------------------------------------------------------------- | --------------------------- | ----- |
 | signal-click | Emitted when a timeline node signal is clicked, returns the current `label` | `(label: string \| number)` | -     |
 
-### Textarea Slots
+### TimelineItem Slots
 
 | Name    | Description                       | Parameters | Since    |
 | ------- | --------------------------------- | ---------- | -------- |
