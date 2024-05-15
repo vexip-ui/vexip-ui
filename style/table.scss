@@ -311,7 +311,7 @@ $table: map.merge(
     transition: get-css-var('transition-transform');
   }
 
-  &__body > &__group--last {
+  &__body-wrapper--scrolled &__body > &__group--last {
     margin-bottom: -1px;
 
     #{$cell},

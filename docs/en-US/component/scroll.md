@@ -2,6 +2,10 @@
 
 Used for content that needs to be displayed beyond an area, allowing users to scroll through.
 
+:::warning
+Scroll is a scrolling effect completely simulated by JavaScript. In most scenarios, you should prioritize using [NativeScroll](./native-scroll.md).
+:::
+
 ## Demos
 
 :::demo scroll/basis

@@ -136,6 +136,7 @@
         <button
           v-if="showClear"
           :class="[nh.be('icon'), nh.be('clear')]"
+          type="button"
           tabindex="-1"
           :aria-label="locale.ariaLabel.clear"
           @click.stop="handleClear"
@@ -359,6 +360,13 @@ export default defineComponent({
     const emittedValue = ref<CascaderValue | null>(null)
     const optionTree = ref<CascaderOptionState[]>(null!)
     const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
+    const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
+    const templateValues = computed(() =>
+      usingMerged.value ? mergedValues.value : currentValues.value
+    )
+    const templateLabels = computed(() =>
+      usingMerged.value ? mergedLabels.value : currentLabels.value
+    )
 
     let optionList: CascaderOptionState[] = null!
     let optionIdMap: Map<number, CascaderOptionState> = null!
@@ -469,13 +477,6 @@ export default defineComponent({
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
-    const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
-    const templateValues = computed(() =>
-      usingMerged.value ? mergedValues.value : currentValues.value
-    )
-    const templateLabels = computed(() =>
-      usingMerged.value ? mergedLabels.value : currentLabels.value
-    )
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
     const showClear = computed(() => {
@@ -726,6 +727,18 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue | null) {
+      const processMerged = () => {
+        if (usingMerged.value) {
+          if (isAsyncLoad.value) {
+            mergedValues.value = Array.from(optionIdMap.values())
+              .filter(option => option.checked)
+              .map(option => option.fullValue)
+          }
+
+          updateMergedProps()
+        }
+      }
+
       for (const option of optionList) {
         option.checked = false
         option.partial = false
@@ -734,6 +747,7 @@ export default defineComponent({
       if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
+        processMerged()
         return
       }
 
@@ -792,6 +806,8 @@ export default defineComponent({
           currentLabels.value = []
         }
       }
+
+      processMerged()
 
       if (openedIds.value.length) return
 

@@ -609,6 +609,7 @@ function blur() {
           <button
             v-if="showClear"
             :class="[nh.be('icon'), nh.be('clear')]"
+            type="button"
             tabindex="-1"
             :aria-label="locale.ariaLabel.clear"
             @click.stop="handleClear"

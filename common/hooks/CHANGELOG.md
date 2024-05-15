@@ -1,3 +1,17 @@
+# [2.5.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.4.1...hooks@2.5.0) (2024-05-12)
+
+
+### ✨ Features
+
+* **hooks:** add pickToRefs method ([623bf63](https://github.com/vexip-ui/vexip-ui/commit/623bf638e2b092a73b788b0055afdfebffa34bc9))
+
+
+### 🐞 Bug Fixes
+
+* **form:** effective default value prop ([8a6e00f](https://github.com/vexip-ui/vexip-ui/commit/8a6e00f8f2f77bb3c7781de5bc5ec9b5a95ce91a)), closes [#467](https://github.com/vexip-ui/vexip-ui/issues/467)
+
+
+
 ## [2.4.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.4.0...hooks@2.4.1) (2024-02-01)
 
 

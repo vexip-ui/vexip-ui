@@ -110,6 +110,12 @@ interface AutoCompleteOptionState {
 }
 
 type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionState) => boolean
+
+interface AutoCompleteListSlotParams {
+  options: AutoCompleteOptionState[],
+  isSelected: (option: AutoCompleteOptionState) => boolean,
+  handleSelect: (option?: AutoCompleteOptionState | null) => void
+}
 ```
 
 ### AutoComplete Props
@@ -157,11 +163,12 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 
 ### AutoComplete Slots
 
-| Name    | Description                                                                                                                                                                                      | Parameters                                                                                                                             | Since   |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| default | The slot of the option list. Using the slot to pass in options will invalidate the built-in option filtering, key selection and other functions. These functions need to be implemented manually | -                                                                                                                                      | -       |
-| prefix  | Slot to prepend icon content                                                                                                                                                                     | -                                                                                                                                      | -       |
-| suffix  | Slot for suffix icon content                                                                                                                                                                     | -                                                                                                                                      | -       |
-| control | The slot of the input control, accepts 5 parameters, which are the current value and 4 event callback methods                                                                                    | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -       |
-| prepend | Slot for before list content                                                                                                                                                                     | -                                                                                                                                      | `2.2.7` |
-| append  | Slot for after list content                                                                                                                                                                      | -                                                                                                                                      | `2.2.7` |
+| Name    | Description                      | Parameters                                                                                                                             | Since   |
+| ------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| default | The slot of the option list      | -                                                                                                                                      | -       |
+| prefix  | Slot to prepend icon content     | -                                                                                                                                      | -       |
+| suffix  | Slot for suffix icon content     | -                                                                                                                                      | -       |
+| control | The slot of the input control    | `(value: number \| string, onInput: (event: string \| Event) => void, onChange: () => void, onEnter: () => void, onClear: () => void)` | -       |
+| prepend | Slot for content before the list | -                                                                                                                                      | `2.2.7` |
+| append  | Slot for content after the list  | -                                                                                                                                      | `2.2.7` |
+| list    | Slot for list content            | `AutoCompleteListSlotParams`                                                                                                           | `2.3.7` |

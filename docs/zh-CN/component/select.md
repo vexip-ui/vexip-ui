@@ -204,6 +204,12 @@ interface SelectOptionState {
 }
 
 type SelectFilter = (value: string, options: SelectOptionState) => boolean
+
+interface SelectListSlotParams {
+  options: SelectOptionState[],
+  isSelected: (option: SelectOptionState) => boolean,
+  handleSelect: (option?: SelectOptionState | null) => void
+}
 ```
 
 ### Select 属性
@@ -282,3 +288,4 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | selected | 已选选项的回显内容的插槽                     | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
 | prepend  | 选项列表上方内容的插槽                       | -                                                                 | `2.2.7` |
 | append   | 选项列表下方内容的插槽                       | -                                                                 | `2.2.7` |
+| list     | 选项列表的内容插槽                           | `SelectListSlotParams`                                            | `2.3.7` |

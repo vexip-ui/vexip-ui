@@ -20,3 +20,9 @@ export type SelectFilter = (value: string, option: SelectOptionState) => boolean
 
 export type SelectEvent = (value: SelectBaseValue, data: any) => void
 export type ChangeEvent = (value: SelectValue, data: any | any[]) => void
+
+export interface SelectListSlotParams {
+  options: SelectOptionState[],
+  isSelected: (option: SelectOptionState) => boolean,
+  handleSelect: (option?: SelectOptionState | null) => void
+}
