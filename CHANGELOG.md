@@ -1,3 +1,7 @@
+## [2.3.8](https://github.com/vexip-ui/vexip-ui/compare/v2.3.7...v2.3.8) (2024-05-16)
+
+
+
 ## [2.3.7](https://github.com/vexip-ui/vexip-ui/compare/v2.3.6...v2.3.7) (2024-05-15)
 
 
