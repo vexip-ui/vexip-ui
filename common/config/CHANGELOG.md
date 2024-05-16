@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.7.0...config@1.8.0) (2024-05-16)
+
+
+### ✨ Features
+
+* improve form control components a11y ([#470](https://github.com/vexip-ui/vexip-ui/issues/470)) ([b9b0805](https://github.com/vexip-ui/vexip-ui/commit/b9b0805d21fe7fc9f027c20bc9868adc78c2b2db))
+
+
+
 # [1.7.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.6.0...config@1.7.0) (2024-04-24)
 
 
