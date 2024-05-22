@@ -732,6 +732,7 @@ export default defineComponent({
       return (
         <button
           class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}
+          type={'button'}
         >
           {slots.default ? (
             renderSlot(slots, 'default', {
