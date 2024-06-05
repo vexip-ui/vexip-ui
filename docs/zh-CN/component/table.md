@@ -604,6 +604,7 @@ interface TableFootPayload {
 | data-filter     | `(data: Data) => boolean`                                     | 设置额外的数据过滤方法                                        | `null`         | `2.2.14` |
 | no-transition   | `boolean`                                                     | 是否禁用表格的过渡效果                                        | `false`        | `2.2.14` |
 | ellipsis        | `boolean`                                                     | 是否为单元格内容使用省略组件                                  | `false`        | `2.2.16` |
+| min-height      | `number`                                                      | 表格的最小高度，不应大于 `height`                             | `null`         | `2.3.7`  |
 
 ### Table 事件
 

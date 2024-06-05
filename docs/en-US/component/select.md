@@ -208,6 +208,12 @@ interface SelectOptionState {
 }
 
 type SelectFilter = (value: string, options: SelectOptionState) => boolean
+
+interface SelectListSlotParams {
+  options: SelectOptionState[],
+  isSelected: (option: SelectOptionState) => boolean,
+  handleSelect: (option?: SelectOptionState | null) => void
+}
 ```
 
 ### Select Props
@@ -279,10 +285,11 @@ type SelectFilter = (value: string, options: SelectOptionState) => boolean
 | -------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
 | default  | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
 | group    | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
-| prefix   | Slot to prepend icon content                                | -                                                                 | -       |
+| prefix   | Slot for prefix icon content                                | -                                                                 | -       |
 | control  | Slot for selector main control, should not normally be used | -                                                                 | -       |
 | suffix   | Slot for suffix icon content                                | -                                                                 | -       |
 | empty    | Slot for empty option prompt content                        | -                                                                 | -       |
 | selected | Slot for selected label content                             | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
-| prepend  | Slot for before list content                                | -                                                                 | `2.2.7` |
-| append   | Slot for after list content                                 | -                                                                 | `2.2.7` |
+| prepend  | Slot for content before the list                            | -                                                                 | `2.2.7` |
+| append   | Slot for content after the list                             | -                                                                 | `2.2.7` |
+| list     | Slot for list content                                       | `SelectListSlotParams`                                            | `2.3.7` |

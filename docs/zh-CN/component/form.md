@@ -144,6 +144,14 @@ Form 和 FormItem 组件分别内置了 Row 和 Column 组件（一维栅格）�
 
 :::
 
+:::demo form/with-modal
+
+### 模态表单
+
+Form 和 Modal 结合使用可以形成模态表单。
+
+:::
+
 ## API
 
 ### 预设类型

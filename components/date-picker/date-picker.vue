@@ -46,7 +46,13 @@ import { datePickerTypes, invalidDate } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DatePickerChangeEvent, DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
+import type {
+  DatePickerChangeEvent,
+  DatePickerFormatFn,
+  DateTimeType,
+  DateType,
+  TimeType
+} from './symbol'
 
 defineOptions({ name: 'DatePicker' })
 
@@ -84,7 +90,7 @@ const props = useProps('datePicker', _props, {
     default: () => getFieldValue(),
     static: true
   },
-  format: 'yyyy-MM-dd HH:mm:ss',
+  format: 'yMd Hms',
   valueFormat: null,
   filler: {
     default: '-',
@@ -155,6 +161,7 @@ const lastValue = ref('')
 const firstSelected = ref<number[] | undefined>()
 const hoveredDate = ref(new Date())
 const staticWheel = ref(false)
+const dateUnitOrder = ref<DateType[]>([])
 
 const { timer } = useSetTimeout()
 
@@ -623,7 +630,36 @@ function parseValue<T extends Dateable | null>(value: T | T[]) {
   }
 }
 
-function parseFormat() {
+function parseDateUnitOrder() {
+  const orderSet = new Set<DateType>()
+
+  // to ignore 'xxx'
+  let inQuotation = false
+
+  for (let i = 0, len = props.format.length; i < len; ++i) {
+    const char = props.format.charAt(i)
+
+    if (char === "'") {
+      inQuotation = !inQuotation
+    } else if (!inQuotation) {
+      switch (char) {
+        case 'y':
+          orderSet.add('year')
+          break
+        case 'M':
+          orderSet.add('month')
+          break
+        case 'd':
+          orderSet.add('date')
+          break
+      }
+    }
+  }
+
+  dateUnitOrder.value = [...orderSet]
+}
+
+function parseTimeUnitEnabled() {
   const isDatetime = props.type === 'datetime'
 
   ;[startState, endState].forEach(state => {
@@ -656,6 +692,11 @@ function parseFormat() {
       }
     }
   })
+}
+
+function parseFormat() {
+  parseDateUnitOrder()
+  parseTimeUnitEnabled()
 }
 
 function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
@@ -1250,6 +1291,7 @@ function handleClickOutside() {
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
           :labeled-by="labelId"
+          :date-unit-order="dateUnitOrder"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -1284,6 +1326,7 @@ function handleClickOutside() {
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
             :labeled-by="labelId"
+            :date-unit-order="dateUnitOrder"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"

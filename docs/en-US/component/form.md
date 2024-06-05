@@ -144,6 +144,14 @@ The Form and FormItem components have most of the features of the Row and Column
 
 :::
 
+:::demo form/with-modal
+
+### Modal Form
+
+Using Form and Modal together can create a modal form.
+
+:::
+
 ## API
 
 ### Preset Types

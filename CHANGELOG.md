@@ -1,3 +1,34 @@
+## [2.3.9](https://github.com/vexip-ui/vexip-ui/compare/v2.3.8...v2.3.9) (2024-05-16)
+
+
+
+## [2.3.8](https://github.com/vexip-ui/vexip-ui/compare/v2.3.7...v2.3.8) (2024-05-16)
+
+
+
+## [2.3.7](https://github.com/vexip-ui/vexip-ui/compare/v2.3.6...v2.3.7) (2024-05-15)
+
+
+### ✨ Features
+
+* **hooks:** add pickToRefs method ([623bf63](https://github.com/vexip-ui/vexip-ui/commit/623bf638e2b092a73b788b0055afdfebffa34bc9))
+* improve form control components a11y ([#470](https://github.com/vexip-ui/vexip-ui/issues/470)) ([b9b0805](https://github.com/vexip-ui/vexip-ui/commit/b9b0805d21fe7fc9f027c20bc9868adc78c2b2db))
+* **select:** add list slot ([61ce433](https://github.com/vexip-ui/vexip-ui/commit/61ce4338efd6205183b83ff4631393f57228e735))
+* **table:** add min-height prop ([b21e99a](https://github.com/vexip-ui/vexip-ui/commit/b21e99a2a5fa8d5037cfc0f47fd35dc395910cca))
+
+
+### 🐞 Bug Fixes
+
+* **carousel:** use resize observer to observe size changed ([c62d3e6](https://github.com/vexip-ui/vexip-ui/commit/c62d3e617e9f1285cc10bad28fb8e0d001bb4565)), closes [#472](https://github.com/vexip-ui/vexip-ui/issues/472)
+* **cascader:** cannot clear value when using merge-tags ([df1d9ba](https://github.com/vexip-ui/vexip-ui/commit/df1d9baab48729caadb4b22595e926c98206dcb9)), closes [#474](https://github.com/vexip-ui/vexip-ui/issues/474)
+* correct clear button type attribute ([01b1bd4](https://github.com/vexip-ui/vexip-ui/commit/01b1bd41a2d5025859ad75f8268c2729380a1225))
+* **form:** calculate label width when firstly displayed ([61010c4](https://github.com/vexip-ui/vexip-ui/commit/61010c47ee4dc7a24ea35ece3b2ff91d8520a89d))
+* **layout:** should toggle root class name if default dark ([3c00c61](https://github.com/vexip-ui/vexip-ui/commit/3c00c61cad44aefdca83187b40de39ad7f13df31)), closes [#466](https://github.com/vexip-ui/vexip-ui/issues/466)
+* **masker:** unexpectedly prevent wheel event of content ([8722a77](https://github.com/vexip-ui/vexip-ui/commit/8722a77cd015c22211f59373283c5872a6ffa4cc))
+* **tree:** incorrect expanding transition when virtaul false ([414e415](https://github.com/vexip-ui/vexip-ui/commit/414e4151fbdfde8c98d8c175169ceb925fa23b50))
+
+
+
 ## [2.3.6](https://github.com/vexip-ui/vexip-ui/compare/v2.3.5...v2.3.6) (2024-04-24)
 
 

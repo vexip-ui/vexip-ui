@@ -52,6 +52,7 @@ export const tableProps = buildProps({
   data: Array as PropType<Data[]>,
   width: [Number, String],
   height: Number,
+  minHeight: Number,
   rowClass: [String, Object, Array, Function] as PropType<ClassType | TableRowPropFn<ClassType>>,
   rowStyle: [String, Object, Array, Function] as PropType<StyleType | TableRowPropFn<StyleType>>,
   rowAttrs: [Object, Function] as PropType<

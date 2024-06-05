@@ -2,6 +2,10 @@
 
 用于需要展示超出一个区域范围的内容，可以使用户滚动浏览。
 
+:::warning
+Scroll 是完全由 JavaScript 模拟出来的滚动，绝大部分场景下，你应该优先使用 [NativeScroll](./native-scroll.md)。
+:::
+
 ## 代码示例
 
 :::demo scroll/basis

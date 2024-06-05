@@ -18,3 +18,9 @@ export type AutoCompleteFilter = (
 
 export type ChangeEvent = (value: string | number, data: AutoCompleteRawOption) => void
 export type EnterEvent = (value: string | number) => void
+
+export interface AutoCompleteListSlotParams {
+  options: AutoCompleteOptionState[],
+  isSelected: (option: AutoCompleteOptionState) => boolean,
+  handleSelect: (option?: AutoCompleteOptionState | null) => void
+}

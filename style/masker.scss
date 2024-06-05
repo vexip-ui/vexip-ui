@@ -54,6 +54,10 @@ $masker: map.merge(
     visibility: hidden;
   }
 
+  &__content {
+    @include inner-fixed;
+  }
+
   &--disabled {
     pointer-events: none;
 

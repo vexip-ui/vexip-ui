@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { Github } from 'lucide-vue-next'
+import { User } from 'lucide-vue-next'
 import { AutoComplete } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -107,7 +107,7 @@ describe('AutoComplete', () => {
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <AutoComplete prefix={Github}>
+      <AutoComplete prefix={User}>
         {{
           prefix: () => <span class={'prefix'}></span>
         }}
@@ -115,13 +115,13 @@ describe('AutoComplete', () => {
     ))
 
     expect(wrapper.find('.vxp-select__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(Github).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <AutoComplete suffix={Github}>
+      <AutoComplete suffix={User}>
         {{
           suffix: () => <span class={'suffix'}></span>
         }}
@@ -129,7 +129,7 @@ describe('AutoComplete', () => {
     ))
 
     expect(wrapper.find('.vxp-select__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(Github).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -146,5 +146,18 @@ describe('AutoComplete', () => {
 
     expect(wrapper.find('.prepend').exists()).toBe(true)
     expect(wrapper.find('.append').exists()).toBe(true)
+  })
+
+  it('list slot', async () => {
+    const wrapper = mount(AutoComplete, {
+      props: {
+        options: OPTIONS
+      },
+      slots: {
+        list: () => <span class={'list'}></span>
+      }
+    })
+
+    expect(wrapper.find('.list').exists()).toBe(true)
   })
 })

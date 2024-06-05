@@ -453,6 +453,7 @@ export default defineComponent({
           <button
             key={'clear'}
             class={[nh.be('icon'), nh.be('clear')]}
+            type={'button'}
             tabindex={-1}
             aria-label={locale.value.ariaLabel.clear}
             onClick={handleClear}

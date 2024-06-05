@@ -7,7 +7,7 @@ import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
 import type { LocaleConfig } from '@vexip-ui/config'
-import type { DateTimeType } from './symbol'
+import type { DateTimeType, DateType } from './symbol'
 
 defineOptions({ name: 'DateControl' })
 
@@ -82,6 +82,10 @@ const props = defineProps({
   locale: {
     type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
     default: () => ({})
+  },
+  dateUnitOrder: {
+    type: Array as PropType<DateType[]>,
+    default: () => ['year', 'month', 'date']
   }
 })
 
@@ -137,6 +141,15 @@ const formattedSecond = computed(() => {
 })
 const maxDateCount = computed(() => {
   return getLastDayOfMonth(props.dateValue.year, props.dateValue.month)
+})
+const dateUnitOrder = computed(() => {
+  const [one, two, three] = props.dateUnitOrder
+
+  return {
+    [one]: -4,
+    [two]: -2,
+    [three]: 0
+  }
 })
 
 defineExpose({
@@ -252,6 +265,7 @@ function handleBlur() {
         :aria-valuemin="1"
         :aria-valuemax="9999"
         :aria-labelledby="labeledBy"
+        :style="{ order: dateUnitOrder['year'] }"
         @click="handleInputFocus('year')"
       >
         {{ formattedYear }}
@@ -260,12 +274,18 @@ function handleBlur() {
         v-if="labels.year"
         :class="nh.be('label')"
         aria-hidden
+        :style="{ order: dateUnitOrder['year'] }"
         @click="handleInputFocus('year')"
       >
         {{ labels.year }}
       </div>
       <template v-if="enabled.month">
-        <div v-if="enabled.year" :class="nh.be('separator')" aria-hidden>
+        <div
+          v-if="enabled.year"
+          :class="nh.be('separator')"
+          aria-hidden
+          style="order: -3"
+        >
           {{ dateSeparator }}
         </div>
         <div
@@ -277,6 +297,7 @@ function handleBlur() {
           :aria-valuemin="1"
           :aria-valuemax="12"
           :aria-labelledby="labeledBy"
+          :style="{ order: dateUnitOrder['month'] }"
           @click="handleInputFocus('month')"
         >
           {{ formattedMonth }}
@@ -285,13 +306,19 @@ function handleBlur() {
           v-if="labels.month"
           :class="nh.be('label')"
           aria-hidden
+          :style="{ order: dateUnitOrder['month'] }"
           @click="handleInputFocus('month')"
         >
           {{ labels.month }}
         </div>
       </template>
       <template v-if="enabled.date">
-        <div v-if="enabled.month || enabled.year" :class="nh.be('separator')" aria-hidden>
+        <div
+          v-if="enabled.month || enabled.year"
+          :class="nh.be('separator')"
+          aria-hidden
+          style="order: -1"
+        >
           {{ dateSeparator }}
         </div>
         <div
@@ -303,6 +330,7 @@ function handleBlur() {
           :aria-valuemin="1"
           :aria-valuemax="maxDateCount || 31"
           :aria-labelledby="labeledBy"
+          :style="{ order: dateUnitOrder['date'] }"
           @click="handleInputFocus('date')"
         >
           {{ formattedDate }}
@@ -311,6 +339,7 @@ function handleBlur() {
           v-if="labels.date"
           :class="nh.be('label')"
           aria-hidden
+          :style="{ order: dateUnitOrder['date'] }"
           @click="handleInputFocus('date')"
         >
           {{ labels.date }}
