@@ -110,17 +110,15 @@
 
 :::
 
-## Headless
-
-==!b==
-
-<HeadlessSvg name="number-input"></HeadlessSvg>
-
 :::demo number-input/headless
 
 ### 无头用法
 
-通过 `state` 可以设置不同的状态。
+<HeadlessSvg name="number-input"></HeadlessSvg>
+
+==!b==
+
+通过 `useNumberInput` 方法可以快速创建一个只包含逻辑的组件。
 
 :::
 
