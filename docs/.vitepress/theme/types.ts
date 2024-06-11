@@ -49,7 +49,7 @@ export interface FooterLinkGroup {
 export interface ThemeConfig {
   nav?: NavMenuItem[],
   asideMenus?: Record<string, AsideMenuItem[]>,
-  outline?: Record<string, number>,
+  outline?: Record<string, number | number[]>,
   editLink?: EditLink,
   footerLinks?: FooterLinkGroup[]
 }

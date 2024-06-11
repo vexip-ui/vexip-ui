@@ -95,8 +95,8 @@ export default async () => {
           }
         ],
         outline: {
-          '/guide/': 2,
-          '/component/': 3
+          '/guide/': [2, 3],
+          '/component/': [2, 3]
         },
         editLink: {
           pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path'
