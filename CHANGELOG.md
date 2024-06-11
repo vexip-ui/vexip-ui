@@ -1,3 +1,20 @@
+## [2.3.10](https://github.com/vexip-ui/vexip-ui/compare/v2.3.9...v2.3.10) (2024-06-11)
+
+
+### ✨ Features
+
+* **date-picker:** support custom order of date units via format prop ([37e7f9c](https://github.com/vexip-ui/vexip-ui/commit/37e7f9c34cc9e294a28051b71cc5d984af837646)), closes [#480](https://github.com/vexip-ui/vexip-ui/issues/480)
+
+
+### 🐞 Bug Fixes
+
+* add missing type attribute for buttons ([ca8c2bf](https://github.com/vexip-ui/vexip-ui/commit/ca8c2bf3388a747bd35eacfe988c082b2935f3b9))
+* **avatar:** correct text display in alive dropdown ([71c7cb4](https://github.com/vexip-ui/vexip-ui/commit/71c7cb4d70b6e6ed09dd1c5db6512c7204dc81b6)), closes [#483](https://github.com/vexip-ui/vexip-ui/issues/483)
+* **collapse:** cannot controll panels via expanded prop ([9ba993a](https://github.com/vexip-ui/vexip-ui/commit/9ba993ad4359a56fdf56fb043e9b1b32a0812b8a))
+* **masker:** correctly emit mask click event ([2323f86](https://github.com/vexip-ui/vexip-ui/commit/2323f865ffc319d0264967982fe5d02b2f99751d)), closes [#485](https://github.com/vexip-ui/vexip-ui/issues/485)
+
+
+
 ## [2.3.9](https://github.com/vexip-ui/vexip-ui/compare/v2.3.8...v2.3.9) (2024-05-16)
 
 
