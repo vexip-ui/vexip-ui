@@ -751,6 +751,7 @@ export default defineComponent({
                 nh.be('refresh'),
                 actionLocked.value && nh.bem('action', 'disabled')
               ]}
+              type={'button'}
               onClick={handleRefresh}
             >
               {renderSlot(slots, 'refresh', undefined, () => [

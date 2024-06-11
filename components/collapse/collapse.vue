@@ -19,6 +19,7 @@ import {
   reactive,
   ref,
   toRef,
+  watch,
   watchEffect
 } from 'vue'
 
@@ -140,6 +141,12 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(updateItemExpanded)
+
+      watch(currentExpanded, (prev, next) => {
+        if (!isSameExpanded(prev, next)) {
+          updateItemExpanded()
+        }
+      })
     })
 
     function registerPanel(panel: PanelState) {
@@ -152,6 +159,14 @@ export default defineComponent({
       panelStates.delete(panel)
       expandPanel(panel.label, false)
       refreshLabels()
+    }
+
+    function isSameExpanded(prev: (string | number)[], next: (string | number)[]) {
+      const prevSet = new Set(prev)
+
+      if (prevSet.size !== new Set(next).size) return false
+
+      return next.every(item => prevSet.has(item))
     }
 
     function expandPanel(label: string | number, expanded: boolean) {

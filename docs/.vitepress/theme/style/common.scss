@@ -105,7 +105,7 @@ p .vxp-linker {
     padding: 3px 5px;
     font-family: var(--vxp-font-family-mono) !important;
     background-color: var(--vxp-fill-color-background);
-    border-radius: var(--vxp-radius-small);
+    border-radius: var(--vxp-radius-base);
     transition: var(--vxp-transition-background);
   }
 
@@ -159,6 +159,10 @@ p .vxp-linker {
 
   & > div > :last-child {
     margin-bottom: 0;
+  }
+
+  .vxp-alert :not(pre) > code {
+    background-color: var(--vxp-alert-bg-color);
   }
 }
 

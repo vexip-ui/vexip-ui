@@ -55,7 +55,8 @@ $masker: map.merge(
   }
 
   &__content {
-    @include inner-fixed;
+    width: 0;
+    height: 0;
   }
 
   &--disabled {

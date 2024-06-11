@@ -111,6 +111,10 @@ After set, all components name will be prefixed with `V`.
 </template>
 ```
 
+:::info
+If you are using unplugin, you can change this via `prefix` option of VexipUIResolver.
+:::
+
 ## Internationalization
 
 The default language of Vexip UI is `'zh-CN'`. I18n can be configured by passing the `locale` option in the second parameter when calling `app.use`.
