@@ -20,6 +20,7 @@ export const menuProps = buildProps({
   router: Object as PropType<Router>,
   manualRoute: booleanProp,
   indent: [String, Number],
+  onlyOne: booleanProp,
   onSelect: eventProp<(label: string, meta: any) => void>(),
   onExpand: eventProp<(label: string, meta: any) => void>(),
   onReduce: eventProp<(label: string, meta: any) => void>()
@@ -39,6 +40,7 @@ export const menuItemProps = buildProps({
   meta: Object,
   children: Array as PropType<MenuOptions[]>,
   route: [String, Object] as PropType<RouteLocationRaw>,
+  onlyOne: booleanProp,
   onSelect: eventProp()
 })
 

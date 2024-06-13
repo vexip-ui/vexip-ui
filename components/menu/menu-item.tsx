@@ -28,7 +28,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
-import { callIfFunc } from '@vexip-ui/utils'
+import { callIfFunc, isBoolean } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
 import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
@@ -62,7 +62,8 @@ const MenuItem = defineComponent({
         default: () => [],
         static: true
       },
-      route: null
+      route: null,
+      onlyOne: null
     })
 
     const menuState = inject(MENU_STATE, null)
@@ -98,7 +99,9 @@ const MenuItem = defineComponent({
       shift: { crossAxis: true }
     })
 
-    const isGroup = computed(() => !!(slots.group || props.children?.length))
+    const onlyOne = computed(() => (isBoolean(props.onlyOne) ? props.onlyOne : menuState?.onlyOne))
+    const isOnly = computed(() => props.children?.length > (onlyOne.value ? 1 : 0))
+    const isGroup = computed(() => !!(slots.group || isOnly.value))
     const showGroup = computed(() => isGroup.value && groupExpanded.value)
     const className = computed(() => {
       return {
@@ -362,23 +365,11 @@ const MenuItem = defineComponent({
     }
 
     function renderChildren() {
-      if (!props.children?.length) {
+      if (!isOnly.value) {
         return null
       }
 
-      const renderItem = (item: MenuOptions) => (
-        <MenuItem
-          label={item.label}
-          icon={item.icon}
-          icon-props={item.iconProps}
-          disabled={item.disabled}
-          children={item.children}
-          route={item.route}
-          meta={item.meta}
-        >
-          {item.name ? callIfFunc(item.name) : item.label}
-        </MenuItem>
-      )
+      const renderItem = (item: MenuOptions) => menuState?.renderMenuItem(item)
 
       return props.children.map(child => {
         if (child.group) {
@@ -422,13 +413,11 @@ const MenuItem = defineComponent({
               >
                 {(slots.icon || props.icon) && (
                   <div class={nh.be('icon')}>
-                    {slots.icon
-                      ? (
-                          renderSlot(slots, 'icon')
-                        )
-                      : (
-                        <Icon {...props.iconProps} icon={props.icon}></Icon>
-                        )}
+                    {slots.icon ? (
+                      renderSlot(slots, 'icon')
+                    ) : (
+                      <Icon {...props.iconProps} icon={props.icon}></Icon>
+                    )}
                   </div>
                 )}
                 <span
