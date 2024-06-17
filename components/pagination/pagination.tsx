@@ -261,6 +261,7 @@ export default defineComponent({
       }
 
       currentActive.value = active
+      computePagers()
     })
 
     expose({ changeActive, handlePrev, handleNext })
