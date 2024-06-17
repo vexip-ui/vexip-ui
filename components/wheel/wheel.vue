@@ -12,7 +12,7 @@ import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState, WheelOption, WheelRawOption } from './symbol'
+import type { ItemState, WheelOption } from './symbol'
 
 defineOptions({ name: 'Wheel' })
 
@@ -45,7 +45,8 @@ const props = useProps('wheel', _props, {
     default: toFalse,
     isFunc: true
   },
-  noTransition: false
+  noTransition: false,
+  selectable: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -411,8 +412,12 @@ function handleNext() {
   }
 }
 
-function handleItemClick(value: string | number, data: WheelRawOption) {
-  emitEvent(props.onItemClick, value, data)
+function handleItemClick(option: WheelOption, index: number) {
+  if (props.selectable && !isItemDisabled(itemList.value[index])) {
+    setActive(index)
+  }
+
+  emitEvent(props.onItemClick, option.value, option.meta)
 }
 </script>
 
@@ -464,7 +469,7 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
               :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
-              @click="handleItemClick(option.value, option.meta)"
+              @click="handleItemClick(option, index)"
             >
               <slot :option="option" :index="index">
                 {{ option.label }}

@@ -163,4 +163,19 @@ describe('Wheel', () => {
     expect(wrapper.find('.vxp-wheel').classes()).toContain('vxp-wheel--horizontal')
     expect(wrapper.find('.vxp-wheel__border').classes()).toContain('vxp-wheel__border--vertical')
   })
+
+  it('selectable', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(Wheel, {
+      props: { selectable: true, options: OPTIONS, onChange }
+    })
+
+    await runScrollTimers()
+    const items = wrapper.findAll('.vxp-wheel__item')
+
+    await items[2].trigger('click')
+    expect(items[2].classes()).toContain('vxp-wheel__item--active')
+    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith(OPTIONS[2], OPTIONS[2])
+  })
 })
