@@ -147,7 +147,7 @@ function handleToggleColumn(type: TimeType) {
 }
 
 function refreshWheel() {
-  [hourWheel.value, minuteWheel.value, secondWheel.value].forEach(wheel => {
+  ;[hourWheel.value, minuteWheel.value, secondWheel.value].forEach(wheel => {
     wheel?.refreshScroll()
   })
 }

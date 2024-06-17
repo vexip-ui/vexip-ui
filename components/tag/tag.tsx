@@ -123,39 +123,35 @@ export default defineComponent({
 
       return (
         <div class={className.value} style={style.value}>
-          {props.prefix === 0 || props.prefix || slots.prefix
-            ? (
-              <span
-                class={[nh.be('unit'), nh.be('prefix')]}
-                style={{
-                  color: props.prefixColor,
-                  backgroundColor: props.prefixBg,
-                  borderColor: props.prefixBg
-                }}
-              >
-                {slots.prefix ? slots.prefix() : props.prefix}
-              </span>
-              )
-            : null}
+          {props.prefix === 0 || props.prefix || slots.prefix ? (
+            <span
+              class={[nh.be('unit'), nh.be('prefix')]}
+              style={{
+                color: props.prefixColor,
+                backgroundColor: props.prefixBg,
+                borderColor: props.prefixBg
+              }}
+            >
+              {slots.prefix ? slots.prefix() : props.prefix}
+            </span>
+          ) : null}
           <span class={[nh.be('unit'), nh.be('content')]}>
             {slots.default?.()}
             {!hasSuffix && renderClose()}
           </span>
-          {hasSuffix
-            ? (
-              <span
-                class={[nh.be('unit'), nh.be('suffix')]}
-                style={{
-                  color: props.suffixColor,
-                  backgroundColor: props.suffixBg,
-                  borderColor: props.suffixBg
-                }}
-              >
-                {slots.suffix ? slots.suffix() : props.suffix}
-                {renderClose()}
-              </span>
-              )
-            : null}
+          {hasSuffix ? (
+            <span
+              class={[nh.be('unit'), nh.be('suffix')]}
+              style={{
+                color: props.suffixColor,
+                backgroundColor: props.suffixBg,
+                borderColor: props.suffixBg
+              }}
+            >
+              {slots.suffix ? slots.suffix() : props.suffix}
+              {renderClose()}
+            </span>
+          ) : null}
         </div>
       )
     }

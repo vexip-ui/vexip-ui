@@ -160,20 +160,18 @@ export default defineComponent({
         <CustomTag class={className.value}>
           {hasTop.value && (
             <div ref={top} class={[nh.be('aside-top'), layoutState.classes.asideTop]}>
-              {slots.top
-                ? (
-                    renderSlot(slots, 'top', slotParams)
-                  )
-                : (
-                  <div class={nh.be('sign')} onClick={handleSignClick}>
-                    {props.logo && (
-                      <div class={nh.be('logo')}>
-                        <img src={props.logo} alt={'Logo'} />
-                      </div>
-                    )}
-                    {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
-                  </div>
+              {slots.top ? (
+                renderSlot(slots, 'top', slotParams)
+              ) : (
+                <div class={nh.be('sign')} onClick={handleSignClick}>
+                  {props.logo && (
+                    <div class={nh.be('logo')}>
+                      <img src={props.logo} alt={'Logo'} />
+                    </div>
                   )}
+                  {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
+                </div>
+              )}
             </div>
           )}
           <NativeScroll
@@ -182,51 +180,41 @@ export default defineComponent({
             observe-deep
             height={scrollHeight.value}
           >
-            {slots.default
-              ? (
-                  renderSlot(slots, 'default', slotParams)
-                )
-              : hasMenu.value
-                ? (
-                  <Menu
-                    ref={menu}
-                    {...(props.menuProps || {})}
-                    transfer
-                    options={props.menus}
-                    reduced={currentReduced.value}
-                    onSelect={handleMenuSelect}
-                  ></Menu>
-                  )
-                : null}
+            {slots.default ? (
+              renderSlot(slots, 'default', slotParams)
+            ) : hasMenu.value ? (
+              <Menu
+                ref={menu}
+                {...(props.menuProps || {})}
+                transfer
+                options={props.menus}
+                reduced={currentReduced.value}
+                onSelect={handleMenuSelect}
+              ></Menu>
+            ) : null}
           </NativeScroll>
           <div ref={bottom} class={[nh.be('aside-bottom'), layoutState.classes.asideBottom]}>
-            {slots.bottom
-              ? (
-                  renderSlot(slots, 'bottom', slotParams)
-                )
-              : (
-                <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
-                  {currentReduced.value
-                    ? (
-                      <Icon {...icons.value.indent}></Icon>
-                      )
-                    : (
-                      <Icon {...icons.value.outdent}></Icon>
-                      )}
-                </div>
+            {slots.bottom ? (
+              renderSlot(slots, 'bottom', slotParams)
+            ) : (
+              <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
+                {currentReduced.value ? (
+                  <Icon {...icons.value.indent}></Icon>
+                ) : (
+                  <Icon {...icons.value.outdent}></Icon>
                 )}
+              </div>
+            )}
           </div>
           <div
             class={[nh.be('expand-handler'), layoutState.classes.expandHandler]}
             onClick={() => toggleExpanded()}
           >
-            {slots.expand
-              ? (
-                  renderSlot(slots, 'expand', slotParams)
-                )
-              : (
-                <Icon {...icons.value.angleRight}></Icon>
-                )}
+            {slots.expand ? (
+              renderSlot(slots, 'expand', slotParams)
+            ) : (
+              <Icon {...icons.value.angleRight}></Icon>
+            )}
           </div>
         </CustomTag>
       )

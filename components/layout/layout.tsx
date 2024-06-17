@@ -355,34 +355,32 @@ export default defineComponent({
           onWheel={stopAndPrevent}
           onMousemove={stopAndPrevent}
         >
-          {slots.aside
-            ? (
-                renderSlot(slots, 'aside', slotParams)
-              )
-            : (
-              <LayoutAside
-                ref={aside}
-                v-model:expanded={asideExpanded.value}
-                v-model:reduced={asideReduced.value}
-                inherit
-                sign-type={currentSignType.value}
-                menus={props.menus}
-                menu-props={props.menuProps}
-                fixed={props.asideFixed}
-                onExpandedChange={toggleExpanded}
-                onReducedChange={toggleReduced}
-                onMenuSelect={handleMenuSelect}
-              >
-                {{
-                  top: createSlotRender(slots, ['aside-top', 'asideTop'], () =>
-                    !signInHeader.value ? renderSign() : null
-                  ),
-                  default: createSlotRender(slots, ['aside-main', 'asideMain']),
-                  bottom: createSlotRender(slots, ['aside-bottom', 'asideBottom']),
-                  expand: createSlotRender(slots, ['aside-expand', 'asideExpand'])
-                }}
-              </LayoutAside>
-              )}
+          {slots.aside ? (
+            renderSlot(slots, 'aside', slotParams)
+          ) : (
+            <LayoutAside
+              ref={aside}
+              v-model:expanded={asideExpanded.value}
+              v-model:reduced={asideReduced.value}
+              inherit
+              sign-type={currentSignType.value}
+              menus={props.menus}
+              menu-props={props.menuProps}
+              fixed={props.asideFixed}
+              onExpandedChange={toggleExpanded}
+              onReducedChange={toggleReduced}
+              onMenuSelect={handleMenuSelect}
+            >
+              {{
+                top: createSlotRender(slots, ['aside-top', 'asideTop'], () =>
+                  !signInHeader.value ? renderSign() : null
+                ),
+                default: createSlotRender(slots, ['aside-main', 'asideMain']),
+                bottom: createSlotRender(slots, ['aside-bottom', 'asideBottom']),
+                expand: createSlotRender(slots, ['aside-expand', 'asideExpand'])
+              }}
+            </LayoutAside>
+          )}
         </div>
       )
     }

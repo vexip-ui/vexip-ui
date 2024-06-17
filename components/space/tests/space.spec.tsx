@@ -37,7 +37,7 @@ describe('Space', () => {
   })
 
   it('justify', () => {
-    (['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
+    ;(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
       justify => {
         const wrapper = mount(() => <Space justify={justify}>{TEXT}</Space>)
 
@@ -55,7 +55,7 @@ describe('Space', () => {
   })
 
   it('justify', () => {
-    (['start', 'end', 'center', 'baseline', 'stretch'] as const).forEach(align => {
+    ;(['start', 'end', 'center', 'baseline', 'stretch'] as const).forEach(align => {
       const wrapper = mount(() => <Space align={align}>{TEXT}</Space>)
 
       if (align === 'start' || align === 'end') {

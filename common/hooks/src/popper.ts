@@ -110,7 +110,7 @@ export function usePopper(initOptions: UsePopperOptions) {
       const popperEl = unref(popper)
 
       if (wrapperEl) {
-        (wrapperEl as TransferNode).__transferElement = popperEl
+        ;(wrapperEl as TransferNode).__transferElement = popperEl
       }
     })
   }

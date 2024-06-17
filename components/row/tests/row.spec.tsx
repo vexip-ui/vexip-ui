@@ -41,7 +41,7 @@ describe('Row', () => {
   })
 
   it('justify', () => {
-    (['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
+    ;(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
       justify => {
         const wrapper = mount(() => <Row justify={justify}></Row>)
 
@@ -51,7 +51,7 @@ describe('Row', () => {
   })
 
   it('align', () => {
-    (['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
+    ;(['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
       const wrapper = mount(() => <Row align={align}></Row>)
 
       expect(wrapper.find('.vxp-row').classes()).toContain(`vxp-row--${align}`)

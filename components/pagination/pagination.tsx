@@ -461,13 +461,11 @@ export default defineComponent({
           onKeydownEnter={handlePrev}
           onKeydownSpace={handlePrev}
         >
-          {slots.prev
-            ? (
-                renderSlot(slots, 'prev', { disabled })
-              )
-            : (
-              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-              )}
+          {slots.prev ? (
+            renderSlot(slots, 'prev', { disabled })
+          ) : (
+            <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+          )}
         </Tag>
       )
     }
@@ -493,13 +491,11 @@ export default defineComponent({
           onKeydownEnter={handleNext}
           onKeydownSpace={handleNext}
         >
-          {slots.next
-            ? (
-                renderSlot(slots, 'next', { disabled })
-              )
-            : (
-              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-              )}
+          {slots.next ? (
+            renderSlot(slots, 'next', { disabled })
+          ) : (
+            <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+          )}
         </Tag>
       )
     }
@@ -532,17 +528,15 @@ export default defineComponent({
 
             return (
               <Transition name={nh.ns('fade')}>
-                {!disabled && inPrevEllipsis.value
-                  ? (
-                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-                    )
-                  : (
-                    <Icon
-                      {...icons.value.ellipsis}
-                      scale={+(icons.value.ellipsis.scale || 1)}
-                      style={'position: absolute'}
-                    ></Icon>
-                    )}
+                {!disabled && inPrevEllipsis.value ? (
+                  <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+                ) : (
+                  <Icon
+                    {...icons.value.ellipsis}
+                    scale={+(icons.value.ellipsis.scale || 1)}
+                    style={'position: absolute'}
+                  ></Icon>
+                )}
               </Transition>
             )
           })({ disabled, entered: inPrevEllipsis.value })}
@@ -578,17 +572,15 @@ export default defineComponent({
 
             return (
               <Transition name={nh.ns('fade')}>
-                {!disabled && inNextEllipsis.value
-                  ? (
-                    <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-                    )
-                  : (
-                    <Icon
-                      {...icons.value.ellipsis}
-                      scale={+(icons.value.ellipsis.scale || 1)}
-                      style={'position: absolute'}
-                    ></Icon>
-                    )}
+                {!disabled && inNextEllipsis.value ? (
+                  <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+                ) : (
+                  <Icon
+                    {...icons.value.ellipsis}
+                    scale={+(icons.value.ellipsis.scale || 1)}
+                    style={'position: absolute'}
+                  ></Icon>
+                )}
               </Transition>
             )
           })({ disabled: !nextEllipsisTarget.value, entered: inNextEllipsis.value })}

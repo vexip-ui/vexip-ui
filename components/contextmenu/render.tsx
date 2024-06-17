@@ -52,15 +52,13 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
             disabled={item.disabled}
           >
             {renderItemIcon(item, nh)}
-            {typeof item.renderer === 'function'
-              ? (
-                  item.renderer()
-                )
-              : (
-                <span class={nh.be('label')} style={{ color: item.color }}>
-                  {item.label || item.key}
-                </span>
-                )}
+            {typeof item.renderer === 'function' ? (
+              item.renderer()
+            ) : (
+              <span class={nh.be('label')} style={{ color: item.color }}>
+                {item.label || item.key}
+              </span>
+            )}
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon
@@ -102,15 +100,13 @@ export function renderItem({ config, nh }: { config: ContextmenuConfig, nh: Name
         disabled={config.disabled}
       >
         {renderItemIcon(config, nh)}
-        {typeof config.renderer === 'function'
-          ? (
-              config.renderer()
-            )
-          : (
-            <span class={nh.be('label')} style={{ color: config.color }}>
-              {config.label || config.key}
-            </span>
-            )}
+        {typeof config.renderer === 'function' ? (
+          config.renderer()
+        ) : (
+          <span class={nh.be('label')} style={{ color: config.color }}>
+            {config.label || config.key}
+          </span>
+        )}
         {renderItemShortcut(config, nh)}
       </DropdownItem>
     )

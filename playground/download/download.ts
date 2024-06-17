@@ -20,7 +20,7 @@ export async function downloadProject(store: ReplStore) {
 
   for (const name of Object.keys(pkg.dependencies)) {
     if (versions[name]) {
-      (pkg.dependencies as any)[name] = `${versions[name]}`
+      ;(pkg.dependencies as any)[name] = `${versions[name]}`
     }
   }
 

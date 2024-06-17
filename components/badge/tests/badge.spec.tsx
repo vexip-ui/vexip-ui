@@ -26,7 +26,7 @@ describe('Badge', () => {
   })
 
   it('types', () => {
-    (['error', 'primary', 'success', 'warning', 'info', 'disabled'] as const).forEach(type => {
+    ;(['error', 'primary', 'success', 'warning', 'info', 'disabled'] as const).forEach(type => {
       const wrapper = mount(() => <Badge type={type}></Badge>)
 
       if (type === 'error') {

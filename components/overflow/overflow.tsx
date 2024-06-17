@@ -228,22 +228,18 @@ export default defineComponent({
               )
             })
             : itemSlot?.()}
-          {counterVNode
-            ? (
-              <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
-              )
-            : (
-              <span ref={counter} style={{ display: 'inline-block' }}></span>
-              )}
-          {slots.suffix
-            ? (
-              <ResizeObserver onResize={refresh}>
-                <div ref={suffix} class={nh.be('suffix')}>
-                  {slots.suffix()}
-                </div>
-              </ResizeObserver>
-              )
-            : null}
+          {counterVNode ? (
+            <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
+          ) : (
+            <span ref={counter} style={{ display: 'inline-block' }}></span>
+          )}
+          {slots.suffix ? (
+            <ResizeObserver onResize={refresh}>
+              <div ref={suffix} class={nh.be('suffix')}>
+                {slots.suffix()}
+              </div>
+            </ResizeObserver>
+          ) : null}
         </CustomTag>
       )
 
