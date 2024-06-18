@@ -2,14 +2,16 @@
 import { computed } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { fenceItemProps } from './props'
+import { frameAreaItemProps } from './props'
 
-const _props = defineProps(fenceItemProps)
-const props = useProps('fence', _props, {
+defineOptions({ name: 'FrameAreaItem' })
+
+const _props = defineProps(frameAreaItemProps)
+const props = useProps('frameArea', _props, {
   bool: false
 })
 
-const nh = useNameHelper('fence')
+const nh = useNameHelper('frame-area')
 
 const className = computed(() => {
   return [nh.b(), nh.bs('vars')]

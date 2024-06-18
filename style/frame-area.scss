@@ -1,0 +1,31 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$frame-area: () !default;
+$frame-area: map.merge(
+  (
+    fence-bg-color: get-css-var('color-primary-opacity-9'),
+    fence-border: get-css-var('border-shape') get-css-var('color-primary-opacity-3'),
+    fence-radius: get-css-var('radius-base')
+  ),
+  $frame-area
+);
+
+.#{$namespace}-frame-area {
+  &-vars {
+    @include define-preset-values('frame-area', $frame-area);
+  }
+
+  @include basis;
+
+  position: relative;
+
+  &__fence {
+    position: absolute;
+    background-color: get-css-var('frame-area-fence-bg-color');
+    border: get-css-var('frame-area-fence-border');
+    border-radius: get-css-var('frame-area-fence-radius');
+  }
+}

@@ -39,7 +39,7 @@ import { Dropdown } from './dropdown'
 import { DropdownItem } from './dropdown-item'
 import { DropdownList } from './dropdown-list'
 import { Ellipsis } from './ellipsis'
-import { Fence } from './fence'
+import { FrameArea } from './frame-area'
 import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
@@ -167,7 +167,7 @@ const components = [
   DropdownItem,
   DropdownList,
   Ellipsis,
-  Fence,
+  FrameArea,
   Form,
   FormItem,
   FormReset,
@@ -309,7 +309,7 @@ export * from './dropdown'
 export * from './dropdown-item'
 export * from './dropdown-list'
 export * from './ellipsis'
-export * from './fence'
+export * from './frame-area'
 export * from './form'
 export * from './form-item'
 export * from './form-reset'

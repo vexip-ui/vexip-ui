@@ -161,7 +161,7 @@ export interface I18nConfig {
     Confirm: string,
     Contextmenu: string,
     Drawer: string,
-    Fence: string,
+    FrameArea: string,
     Loading: string,
     Message: string,
     Modal: string,

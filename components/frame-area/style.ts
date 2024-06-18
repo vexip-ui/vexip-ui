@@ -1,2 +1,2 @@
 import '@/components/preset/style'
-import '@/style/fence.scss'
+import '@/style/frame-area.scss'

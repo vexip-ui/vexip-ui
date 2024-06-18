@@ -1,5 +1,5 @@
 <template>
-  <Fence></Fence>
+  <FrameArea></FrameArea>
 </template>
 
 <script setup lang="ts"></script>

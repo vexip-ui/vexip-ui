@@ -163,7 +163,7 @@ export const enUS = defineI18n({
     Confirm: 'Confirm',
     Contextmenu: 'Contextmenu',
     Drawer: 'Drawer',
-    Fence: 'Fence',
+    FrameArea: 'FrameArea',
     Loading: 'Loading',
     Message: 'Message',
     Modal: 'Modal',
