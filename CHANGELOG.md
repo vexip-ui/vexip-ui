@@ -1,3 +1,71 @@
+## [2.3.10](https://github.com/vexip-ui/vexip-ui/compare/v2.3.9...v2.3.10) (2024-06-11)
+
+
+### ✨ Features
+
+* **date-picker:** support custom order of date units via format prop ([37e7f9c](https://github.com/vexip-ui/vexip-ui/commit/37e7f9c34cc9e294a28051b71cc5d984af837646)), closes [#480](https://github.com/vexip-ui/vexip-ui/issues/480)
+
+
+### 🐞 Bug Fixes
+
+* add missing type attribute for buttons ([ca8c2bf](https://github.com/vexip-ui/vexip-ui/commit/ca8c2bf3388a747bd35eacfe988c082b2935f3b9))
+* **avatar:** correct text display in alive dropdown ([71c7cb4](https://github.com/vexip-ui/vexip-ui/commit/71c7cb4d70b6e6ed09dd1c5db6512c7204dc81b6)), closes [#483](https://github.com/vexip-ui/vexip-ui/issues/483)
+* **collapse:** cannot controll panels via expanded prop ([9ba993a](https://github.com/vexip-ui/vexip-ui/commit/9ba993ad4359a56fdf56fb043e9b1b32a0812b8a))
+* **masker:** correctly emit mask click event ([2323f86](https://github.com/vexip-ui/vexip-ui/commit/2323f865ffc319d0264967982fe5d02b2f99751d)), closes [#485](https://github.com/vexip-ui/vexip-ui/issues/485)
+
+
+
+## [2.3.9](https://github.com/vexip-ui/vexip-ui/compare/v2.3.8...v2.3.9) (2024-05-16)
+
+
+
+## [2.3.8](https://github.com/vexip-ui/vexip-ui/compare/v2.3.7...v2.3.8) (2024-05-16)
+
+
+
+## [2.3.7](https://github.com/vexip-ui/vexip-ui/compare/v2.3.6...v2.3.7) (2024-05-15)
+
+
+### ✨ Features
+
+* **hooks:** add pickToRefs method ([623bf63](https://github.com/vexip-ui/vexip-ui/commit/623bf638e2b092a73b788b0055afdfebffa34bc9))
+* improve form control components a11y ([#470](https://github.com/vexip-ui/vexip-ui/issues/470)) ([b9b0805](https://github.com/vexip-ui/vexip-ui/commit/b9b0805d21fe7fc9f027c20bc9868adc78c2b2db))
+* **select:** add list slot ([61ce433](https://github.com/vexip-ui/vexip-ui/commit/61ce4338efd6205183b83ff4631393f57228e735))
+* **table:** add min-height prop ([b21e99a](https://github.com/vexip-ui/vexip-ui/commit/b21e99a2a5fa8d5037cfc0f47fd35dc395910cca))
+
+
+### 🐞 Bug Fixes
+
+* **carousel:** use resize observer to observe size changed ([c62d3e6](https://github.com/vexip-ui/vexip-ui/commit/c62d3e617e9f1285cc10bad28fb8e0d001bb4565)), closes [#472](https://github.com/vexip-ui/vexip-ui/issues/472)
+* **cascader:** cannot clear value when using merge-tags ([df1d9ba](https://github.com/vexip-ui/vexip-ui/commit/df1d9baab48729caadb4b22595e926c98206dcb9)), closes [#474](https://github.com/vexip-ui/vexip-ui/issues/474)
+* correct clear button type attribute ([01b1bd4](https://github.com/vexip-ui/vexip-ui/commit/01b1bd41a2d5025859ad75f8268c2729380a1225))
+* **form:** calculate label width when firstly displayed ([61010c4](https://github.com/vexip-ui/vexip-ui/commit/61010c47ee4dc7a24ea35ece3b2ff91d8520a89d))
+* **layout:** should toggle root class name if default dark ([3c00c61](https://github.com/vexip-ui/vexip-ui/commit/3c00c61cad44aefdca83187b40de39ad7f13df31)), closes [#466](https://github.com/vexip-ui/vexip-ui/issues/466)
+* **masker:** unexpectedly prevent wheel event of content ([8722a77](https://github.com/vexip-ui/vexip-ui/commit/8722a77cd015c22211f59373283c5872a6ffa4cc))
+* **tree:** incorrect expanding transition when virtaul false ([414e415](https://github.com/vexip-ui/vexip-ui/commit/414e4151fbdfde8c98d8c175169ceb925fa23b50))
+
+
+
+## [2.3.6](https://github.com/vexip-ui/vexip-ui/compare/v2.3.5...v2.3.6) (2024-04-24)
+
+
+### ✨ Features
+
+* **calendar:** improve a11y of panel ([af828e1](https://github.com/vexip-ui/vexip-ui/commit/af828e1c151ee8c75778639ac8a1b4094e131479))
+* **modal:** support ractive loading when using hook ([0a97e86](https://github.com/vexip-ui/vexip-ui/commit/0a97e86244c9f4d2c6e79488be6ef36310cc2fb7))
+* **utils:** add ordinalNumber method ([652c807](https://github.com/vexip-ui/vexip-ui/commit/652c807cb785d401c16ee041f0aab9d0ea0e301c))
+* **utils:** add toAttrValue method ([d8c6603](https://github.com/vexip-ui/vexip-ui/commit/d8c66031ef230e80fb3ef38806a6456c23ac0f6c))
+
+
+### 🐞 Bug Fixes
+
+* **calendar:** improve week value style ([2a4810a](https://github.com/vexip-ui/vexip-ui/commit/2a4810ae9c29dab41f404d40d83d048774a9d6a0))
+* **date-picker:** should limit week value length ([6fee8b2](https://github.com/vexip-ui/vexip-ui/commit/6fee8b2a5db05790c7fba0442bcf5d5fff1436f9))
+* **form:** effective default value prop ([8a6e00f](https://github.com/vexip-ui/vexip-ui/commit/8a6e00f8f2f77bb3c7781de5bc5ec9b5a95ce91a)), closes [#467](https://github.com/vexip-ui/vexip-ui/issues/467)
+* **number-input:** correctly process emitted value when sync ([ad27649](https://github.com/vexip-ui/vexip-ui/commit/ad27649a558434072ce72c14eac67ea7b10069bb)), closes [#468](https://github.com/vexip-ui/vexip-ui/issues/468)
+
+
+
 ## [2.3.5](https://github.com/vexip-ui/vexip-ui/compare/v2.3.4...v2.3.5) (2024-03-27)
 
 

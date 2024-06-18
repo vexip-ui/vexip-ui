@@ -22,13 +22,20 @@ describe('Collapse', () => {
   })
 
   it('toggle active', async () => {
-    const wrapper = mount(() => (
-      <Collapse expanded={['2']}>
-        <CollapsePanel label={'1'}>{'1'}</CollapsePanel>
-        <CollapsePanel label={'2'}>{'2'}</CollapsePanel>
-        <CollapsePanel label={'3'}>{'3'}</CollapsePanel>
-      </Collapse>
-    ))
+    const wrapper = mount(Collapse, {
+      props: {
+        expanded: ['2']
+      },
+      slots: {
+        default: () => (
+          <>
+            <CollapsePanel label={'1'}>{'1'}</CollapsePanel>
+            <CollapsePanel label={'2'}>{'2'}</CollapsePanel>
+            <CollapsePanel label={'3'}>{'3'}</CollapsePanel>
+          </>
+        )
+      }
+    })
     const panels = wrapper.findAll('.vxp-collapse__panel')
 
     expect(panels.length).toEqual(3)
@@ -37,14 +44,19 @@ describe('Collapse', () => {
     expect(panels[1].classes()).toContain('vxp-collapse__panel--expanded')
     expect(panels[1].find('.vxp-collapse__content').exists()).toBe(true)
 
+    await wrapper.setProps({ expanded: ['3'] })
+    expect(panels[1].classes()).not.toContain('vxp-collapse__panel--expanded')
+    expect(panels[2].classes()).toContain('vxp-collapse__panel--expanded')
+    expect(panels[2].find('.vxp-collapse__content').exists()).toBe(true)
+
     await panels[0].find('.vxp-collapse__header').trigger('click')
     expect(panels[0].classes()).toContain('vxp-collapse__panel--expanded')
     expect(panels[0].find('.vxp-collapse__content').exists()).toBe(true)
-    expect(panels[1].classes()).toContain('vxp-collapse__panel--expanded')
+    expect(panels[1].classes()).not.toContain('vxp-collapse__panel--expanded')
 
     await panels[1].find('.vxp-collapse__header').trigger('click')
     expect(panels[0].classes()).toContain('vxp-collapse__panel--expanded')
-    expect(panels[1].classes()).not.toContain('vxp-collapse__panel--expanded')
+    expect(panels[1].classes()).toContain('vxp-collapse__panel--expanded')
   })
 
   it('accordion', async () => {

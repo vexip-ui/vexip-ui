@@ -6,6 +6,7 @@ import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
+import type { LocaleConfig } from '@vexip-ui/config'
 import type { TimeType } from './symbol'
 
 defineOptions({ name: 'TimeControl' })
@@ -67,6 +68,14 @@ const props = defineProps({
   readonly: {
     type: Boolean,
     default: false
+  },
+  labeledBy: {
+    type: String,
+    default: undefined
+  },
+  locale: {
+    type: Object as PropType<LocaleConfig['timePicker']>,
+    default: () => ({})
   }
 })
 
@@ -87,6 +96,7 @@ const nh = useNameHelper('time-picker')
 
 const wrapper = ref<HTMLElement>()
 
+const label = computed(() => props.locale.ariaLabel ?? {})
 const isActivated = computed(() => {
   return (Object.keys(props.enabled) as TimeType[]).every(type => {
     return !props.enabled[type] || props.activated[type]
@@ -199,6 +209,7 @@ function handleBlur() {
   <div
     ref="wrapper"
     :class="[nh.be('input'), hasError && nh.bem('input', 'error')]"
+    role="none"
     tabindex="-1"
     @keydown="handleInput"
     @blur="handleBlur"
@@ -210,38 +221,74 @@ function handleBlur() {
       <div
         v-if="enabled.hour"
         :class="[nh.be('unit'), getUnitFocusClass('hour')]"
+        role="spinbutton"
+        :aria-label="label.hour"
+        :aria-valuenow="props.timeValue.hour"
+        :aria-valuetext="formattedHour"
+        :aria-valuemin="0"
+        :aria-valuemax="23"
+        :aria-labelledby="labeledBy"
         @click="handleInputFocus('hour')"
       >
         {{ formattedHour }}
       </div>
-      <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
+      <div
+        v-if="labels.hour"
+        :class="nh.be('label')"
+        aria-hidden
+        @click="handleInputFocus('hour')"
+      >
         {{ labels.hour }}
       </div>
       <template v-if="enabled.minute">
-        <div v-if="enabled.hour" :class="nh.be('separator')">
+        <div v-if="enabled.hour" :class="nh.be('separator')" aria-hidden>
           {{ separator }}
         </div>
         <div
           :class="[nh.be('unit'), getUnitFocusClass('minute')]"
+          role="spinbutton"
+          :aria-label="label.minute"
+          :aria-valuenow="props.timeValue.minute"
+          :aria-valuetext="formattedMinute"
+          :aria-valuemin="0"
+          :aria-valuemax="59"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('minute')"
         >
           {{ formattedMinute }}
         </div>
-        <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
+        <div
+          v-if="labels.minute"
+          :class="nh.be('label')"
+          aria-hidden
+          @click="handleInputFocus('minute')"
+        >
           {{ labels.minute }}
         </div>
       </template>
       <template v-if="enabled.second">
-        <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
+        <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')" aria-hidden>
           {{ separator }}
         </div>
         <div
           :class="[nh.be('unit'), getUnitFocusClass('second')]"
+          role="spinbutton"
+          :aria-label="label.second"
+          :aria-valuenow="props.timeValue.second"
+          :aria-valuetext="formattedSecond"
+          :aria-valuemin="0"
+          :aria-valuemax="59"
+          :aria-labelledby="labeledBy"
           @click="handleInputFocus('second')"
         >
           {{ formattedSecond }}
         </div>
-        <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
+        <div
+          v-if="labels.second"
+          :class="nh.be('label')"
+          aria-hidden
+          @click="handleInputFocus('second')"
+        >
           {{ labels.second }}
         </div>
       </template>

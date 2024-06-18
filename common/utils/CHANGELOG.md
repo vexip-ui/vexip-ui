@@ -1,3 +1,22 @@
+# [2.16.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.15.0...utils@2.16.0) (2024-05-16)
+
+
+### ✨ Features
+
+* improve form control components a11y ([#470](https://github.com/vexip-ui/vexip-ui/issues/470)) ([b9b0805](https://github.com/vexip-ui/vexip-ui/commit/b9b0805d21fe7fc9f027c20bc9868adc78c2b2db))
+
+
+
+# [2.15.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.14.0...utils@2.15.0) (2024-04-24)
+
+
+### ✨ Features
+
+* **utils:** add ordinalNumber method ([652c807](https://github.com/vexip-ui/vexip-ui/commit/652c807cb785d401c16ee041f0aab9d0ea0e301c))
+* **utils:** add toAttrValue method ([d8c6603](https://github.com/vexip-ui/vexip-ui/commit/d8c66031ef230e80fb3ef38806a6456c23ac0f6c))
+
+
+
 # [2.14.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.13.1...utils@2.14.0) (2024-03-05)
 
 

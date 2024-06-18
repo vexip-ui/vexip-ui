@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
-import { Loader2 } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Textarea } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -69,11 +69,11 @@ describe('Textarea', () => {
     const wrapper = mount(Textarea)
 
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Loader2).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Loader2).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {

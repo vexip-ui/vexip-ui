@@ -2,17 +2,17 @@
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { useData, useRoute } from 'vitepress'
-// import { contentUpdatedCallbacks } from 'vitepress/dist/client/app/utils'
 import { debounceFrame, isClient } from '@vexip-ui/utils'
 import { ussTocAnchor } from '../common/toc-anchor'
 
 import PageFooter from './page-footer.vue'
 
+import type { PropType } from 'vue'
 import type { RowExposed } from 'vexip-ui'
 
 const props = defineProps({
   anchorLevel: {
-    type: Number,
+    type: [Number, Array] as PropType<number | number[]>,
     default: null
   },
   active: {
@@ -39,7 +39,7 @@ const { anchors, refreshAnchor } = ussTocAnchor(
 )
 
 const refresh = debounceFrame(() => {
-  refreshAnchor(frontmatter.value.anchor || props.anchorLevel || 3)
+  refreshAnchor(frontmatter.value.anchor || props.anchorLevel || [2, 3])
 })
 
 const contentHeight = ref(1000)
@@ -108,12 +108,10 @@ function handleContentResize(entry: ResizeObserverEntry) {
           v-model:active="currentActive"
           :offset="15"
           bind-hash
+          :options="anchors"
           viewer="window"
           :style="{ visibility: !loading ? undefined : 'hidden' }"
         >
-          <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
-            {{ item.name }}
-          </AnchorLink>
         </Anchor>
       </NativeScroll>
     </Column>
@@ -152,8 +150,8 @@ function handleContentResize(entry: ResizeObserverEntry) {
 
   .toc-anchor {
     position: sticky;
-    top: calc(40px + var(--header-height));
     inset-inline-end: 10px;
+    top: calc(40px + var(--header-height));
     display: none;
     width: var(--anchor-width);
     height: 100%;

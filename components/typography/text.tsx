@@ -48,21 +48,15 @@ export default defineComponent({
       const CustomTag = props.tag || ('span' as any)
       const children = renderSlot(slots, 'default')
 
-      return props.code
-        ? (
-          <code class={className.value}>{props.delete ? <del>{children}</del> : children}</code>
-          )
-        : props.keyboard
-          ? (
-            <kbd class={className.value}>{props.delete ? <del>{children}</del> : children}</kbd>
-            )
-          : props.delete
-            ? (
-              <del class={className.value}>{children}</del>
-              )
-            : (
-              <CustomTag class={className.value}>{children}</CustomTag>
-              )
+      return props.code ? (
+        <code class={className.value}>{props.delete ? <del>{children}</del> : children}</code>
+      ) : props.keyboard ? (
+        <kbd class={className.value}>{props.delete ? <del>{children}</del> : children}</kbd>
+      ) : props.delete ? (
+        <del class={className.value}>{children}</del>
+      ) : (
+        <CustomTag class={className.value}>{children}</CustomTag>
+      )
     }
   }
 })

@@ -12,11 +12,11 @@ import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState, WheelOption, WheelRawOption } from './symbol'
+import type { ItemState, WheelOption } from './symbol'
 
 defineOptions({ name: 'Wheel' })
 
-const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+const { idFor, labelId, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
   useFieldStore<string | number>(() => wrapper.value?.focus())
 
 const _props = defineProps(wheelProps)
@@ -24,7 +24,7 @@ const props = useProps('wheel', _props, {
   state: createStateProp(state),
   horizontal: false,
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
   candidate: {
@@ -45,7 +45,8 @@ const props = useProps('wheel', _props, {
     default: toFalse,
     isFunc: true
   },
-  noTransition: false
+  noTransition: false,
+  selectable: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -411,8 +412,12 @@ function handleNext() {
   }
 }
 
-function handleItemClick(value: string | number, data: WheelRawOption) {
-  emitEvent(props.onItemClick, value, data)
+function handleItemClick(option: WheelOption, index: number) {
+  if (props.selectable && !isItemDisabled(itemList.value[index])) {
+    setActive(index)
+  }
+
+  emitEvent(props.onItemClick, option.value, option.meta)
 }
 </script>
 
@@ -422,6 +427,8 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
     ref="wrapper"
     :class="className"
     tabindex="0"
+    role="group"
+    :aria-labelledby="labelId"
   >
     <div
       v-if="props.arrow"
@@ -431,11 +438,12 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
         nh.bem('arrow', 'prev'),
         prevDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
+      aria-hidden
       @click="handlePrev"
     >
       <Icon v-bind="prevIcon"></Icon>
     </div>
-    <div :class="nh.be('scroll')">
+    <div :class="nh.be('scroll')" role="none">
       <Scroll
         ref="scroll"
         inherit
@@ -461,7 +469,7 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
               :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
-              @click="handleItemClick(option.value, option.meta)"
+              @click="handleItemClick(option, index)"
             >
               <slot :option="option" :index="index">
                 {{ option.label }}
@@ -491,6 +499,7 @@ function handleItemClick(value: string | number, data: WheelRawOption) {
         nh.bem('arrow', 'next'),
         nextDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
+      aria-hidden
       @click="handleNext"
     >
       <Icon v-bind="nextIcon"></Icon>

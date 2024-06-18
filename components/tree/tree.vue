@@ -1321,6 +1321,7 @@ const transferring = ref(false)
     :items-attrs="{ class: nh.be('list') }"
     :hide-bar="!props.useYBar"
     :ignore-resize="transferring"
+    :disabled="!props.virtual"
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"
@@ -1329,13 +1330,13 @@ const transferring = ref(false)
     @scroll="handleScroll"
   >
     <template #prefix-trap>
-      <span
+      <div
         ref="trap"
         tabindex="0"
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
         @focus="handleTreeFocus"
-      ></span>
+      ></div>
     </template>
     <template #default="{ item: node }: { item: TreeNodeProps }">
       <CollapseTransition

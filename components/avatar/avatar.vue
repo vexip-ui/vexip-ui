@@ -5,6 +5,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 import { computed, inject, ref, watch } from 'vue'
 
 import { createIconProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { useDisplay } from '@vexip-ui/hooks'
 import { avatarProps } from './props'
 import { GROUP_STATE, objectFitValues } from './symbol'
 
@@ -47,7 +48,7 @@ const loadFail = ref(false)
 const fallbackFail = ref(false)
 
 const wrapper = ref<HTMLElement>()
-const text = ref<HTMLElement>()
+const text = useDisplay(() => scaleText(true))
 
 const size = computed(() => {
   return groupState?.size ?? props.size
@@ -91,7 +92,10 @@ watch(
     scaleText()
   }
 )
-watch(() => props.gap, scaleText)
+watch(
+  () => props.gap,
+  () => scaleText()
+)
 
 defineExpose({ loadFail, fallbackFail })
 
@@ -102,11 +106,11 @@ function handleError(event: Event) {
 
 let lastText: string | null = null
 
-function scaleText() {
+function scaleText(force = false) {
   const avatarEl = wrapper.value
   const textEl = text.value
 
-  if (avatarEl && textEl && (lastText === null || lastText !== textEl.textContent)) {
+  if (avatarEl && textEl && (force || lastText === null || lastText !== textEl.textContent)) {
     lastText = textEl.textContent
 
     const { offsetWidth: avatarWidth, offsetHeight: avatarHeight } = avatarEl

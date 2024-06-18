@@ -9,7 +9,8 @@ $date-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
     color-error: get-css-var('color-error-base'),
-    unit-color: get-css-var('content-color-secondary'),
+    unit-color: get-css-var('content-color-base'),
+    unit-color-hover: get-css-var('color-primary-base'),
     unit-color-focus: get-css-var('color-white'),
     unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
     unit-bg-color-error: get-css-var('color-error-opacity-1'),
@@ -98,7 +99,12 @@ $date-picker: map.merge(
     text-align: center;
     transition: get-css-var('transition-background'), get-css-var('transition-color');
 
-    &--focused {
+    &:hover {
+      color: get-css-var('date-picker-unit-color-hover');
+    }
+
+    &--focused,
+    &--focused:hover {
       color: get-css-var('date-picker-unit-color-focus');
       background-color: get-css-var('date-picker-unit-bg-color-focus');
     }
@@ -120,6 +126,7 @@ $date-picker: map.merge(
   }
 
   &__separator {
+    line-height: 1;
     color: get-css-var('date-picker-separator-color');
     transition: get-css-var('transition-color');
   }
@@ -145,6 +152,10 @@ $date-picker: map.merge(
 
   &__pad {
     width: 2px;
+  }
+
+  &__clear {
+    @include clean-button;
   }
 
   &__popper {

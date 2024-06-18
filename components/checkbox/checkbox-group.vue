@@ -1,5 +1,10 @@
 <template>
-  <div :id="idFor" :class="className" role="group">
+  <div
+    :id="idFor"
+    :class="className"
+    role="group"
+    :aria-labelledby="labelId"
+  >
     <slot>
       <Checkbox v-if="props.control" inherit control>
         {{ controlLabel }}
@@ -58,15 +63,24 @@ export default defineComponent({
   props: checkboxGroupProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>(focus)
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<(string | number)[]>(focus)
 
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
       locale: null,
       value: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       vertical: false,
@@ -259,6 +273,7 @@ export default defineComponent({
     return {
       props,
       idFor,
+      labelId,
       className,
       controlLabel,
 

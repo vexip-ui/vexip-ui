@@ -15,9 +15,10 @@
       <div
         v-if="props.alive || props.visible"
         v-show="!props.alive || props.visible"
-        v-bind="$attrs"
         ref="wrapper"
+        v-bind="$attrs"
         :class="[nh.b(), props.to !== 'body' && nh.bm('inherit')]"
+        :role="props.role"
         :style="{ zIndex: props.to && props.visible ? zIndex : undefined }"
       >
         <slot></slot>
@@ -44,12 +45,13 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const nh = useNameHelper('popper')
-    const props = useProps('collapseTransition', _props, {
+    const props = useProps('popper', _props, {
       visible: false,
       alive: false,
       to: '',
       transition: () => nh.ns('drop'),
-      appear: false
+      appear: false,
+      role: 'dialog'
     })
     const getIndex = useZIndex()
 

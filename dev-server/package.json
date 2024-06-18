@@ -5,13 +5,10 @@
   "scripts": {
     "serve": "vite"
   },
-  "dependencies": {
-    "vue": "^3.3.10",
-    "vue-router": "^4.2.5"
-  },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "unplugin-vue-components": "^0.26.0"
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "unplugin-vue-components": "^0.26.0",
+    "vue": "~3.3.13"
   }
 }

@@ -52,6 +52,14 @@ Form validation can be triggered manually via the `validate` method of the Form 
 
 :::
 
+:::demo form/default-value
+
+### Default Value
+
+You can specify the default value for each item via `default-value` prop.
+
+:::
+
 :::demo form/label
 
 ### Label Align
@@ -133,6 +141,14 @@ Set the value of the `action` prop to use native form submission.
 ### Form Layout
 
 The Form and FormItem components have most of the features of the Row and Column components (one-dimensional grid) built in, respectively, so you can use them as if they were row layouts.
+
+:::
+
+:::demo form/with-modal
+
+### Modal Form
+
+Using Form and Modal together can create a modal form.
 
 :::
 

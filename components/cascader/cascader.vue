@@ -3,6 +3,11 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
+    :aria-labelledby="labelId"
     @click="toggleVisible()"
   >
     <div
@@ -128,9 +133,16 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          type="button"
+          tabindex="-1"
+          :aria-label="locale.ariaLabel.clear"
+          @click.stop="handleClear"
+        >
           <Icon v-bind="icons.clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -169,6 +181,7 @@
             :is-async="isAsyncLoad"
             :merged="usingMerged"
             :no-cascaded="props.noCascaded"
+            :labeled-by="labelId"
             @select="handleOptionSelect($event, index)"
             @hover="usingHover && handlePanelOpen($event, index)"
             @check="handleOptionCheck($event)"
@@ -227,7 +240,7 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
-import { flatTree, getLast, isNull, isPromise, transformTree } from '@vexip-ui/utils'
+import { flatTree, getLast, isNull, isPromise, toAttrValue, transformTree } from '@vexip-ui/utils'
 import { cascaderProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -262,6 +275,7 @@ export default defineComponent({
   setup(_props, { emit, slots }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -278,7 +292,7 @@ export default defineComponent({
       state: createStateProp(state),
       locale: null,
       value: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       visible: {
@@ -346,6 +360,13 @@ export default defineComponent({
     const emittedValue = ref<CascaderValue | null>(null)
     const optionTree = ref<CascaderOptionState[]>(null!)
     const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
+    const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
+    const templateValues = computed(() =>
+      usingMerged.value ? mergedValues.value : currentValues.value
+    )
+    const templateLabels = computed(() =>
+      usingMerged.value ? mergedLabels.value : currentLabels.value
+    )
 
     let optionList: CascaderOptionState[] = null!
     let optionIdMap: Map<number, CascaderOptionState> = null!
@@ -456,13 +477,6 @@ export default defineComponent({
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
-    const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
-    const templateValues = computed(() =>
-      usingMerged.value ? mergedValues.value : currentValues.value
-    )
-    const templateLabels = computed(() =>
-      usingMerged.value ? mergedLabels.value : currentLabels.value
-    )
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
     const showClear = computed(() => {
@@ -713,6 +727,18 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue | null) {
+      const processMerged = () => {
+        if (usingMerged.value) {
+          if (isAsyncLoad.value) {
+            mergedValues.value = Array.from(optionIdMap.values())
+              .filter(option => option.checked)
+              .map(option => option.fullValue)
+          }
+
+          updateMergedProps()
+        }
+      }
+
       for (const option of optionList) {
         option.checked = false
         option.partial = false
@@ -721,6 +747,7 @@ export default defineComponent({
       if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
+        processMerged()
         return
       }
 
@@ -779,6 +806,8 @@ export default defineComponent({
           currentLabels.value = []
         }
       }
+
+      processMerged()
 
       if (openedIds.value.length) return
 
@@ -1185,6 +1214,7 @@ export default defineComponent({
       icons,
       locale,
       idFor,
+      labelId,
       currentVisible,
       isPopperShow,
       currentValues,
@@ -1213,6 +1243,7 @@ export default defineComponent({
       popper,
       panelElList,
 
+      toAttrValue,
       handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,

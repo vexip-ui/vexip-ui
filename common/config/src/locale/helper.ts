@@ -3,7 +3,9 @@ import type { DeepPartial } from '../types'
 export interface LocaleConfig {
   locale: string,
 
-  // if false, the spaces will be removed when make sentence
+  /**
+   * if false, the spaces will be removed when make sentence
+   */
   wordSpace: boolean,
 
   calendar: {
@@ -27,7 +29,31 @@ export interface LocaleConfig {
     week4: string,
     week5: string,
     week6: string,
-    week7: string
+    week7: string,
+
+    ariaLabel: {
+      year: string,
+      month: string,
+      month1: string,
+      month2: string,
+      month3: string,
+      month4: string,
+      month5: string,
+      month6: string,
+      month7: string,
+      month8: string,
+      month9: string,
+      month10: string,
+      month11: string,
+      month12: string,
+      week1: string,
+      week2: string,
+      week3: string,
+      week4: string,
+      week5: string,
+      week6: string,
+      week7: string
+    }
   },
 
   captcha: {
@@ -47,7 +73,11 @@ export interface LocaleConfig {
 
   colorPicker: {
     confirm: string,
-    cancel: string
+    cancel: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   confirm: {
@@ -68,7 +98,17 @@ export interface LocaleConfig {
       select: string
     },
     startTime: string,
-    endTime: string
+    endTime: string,
+
+    ariaLabel: {
+      clear: string,
+      quarter: string,
+      week: string,
+      date: string,
+      hour: string,
+      minute: string,
+      second: string
+    }
   },
 
   drawer: {
@@ -89,7 +129,11 @@ export interface LocaleConfig {
   },
 
   input: {
-    placeholder: string
+    placeholder: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   layout: {
@@ -106,7 +150,13 @@ export interface LocaleConfig {
 
   numberInput: {
     placeholder: string,
-    outOfRange: string
+    outOfRange: string,
+
+    ariaLabel: {
+      clear: string,
+      increase: string,
+      decrease: string
+    }
   },
 
   pagination: {
@@ -123,7 +173,11 @@ export interface LocaleConfig {
 
   select: {
     placeholder: string,
-    empty: string
+    empty: string,
+
+    ariaLabel: {
+      clear: string
+    }
   },
 
   table: {
@@ -156,6 +210,13 @@ export interface LocaleConfig {
       start: string,
       end: string,
       select: string
+    },
+
+    ariaLabel: {
+      clear: string,
+      hour: string,
+      minute: string,
+      second: string
     }
   },
 
@@ -181,7 +242,12 @@ export interface LocaleConfig {
   upload: {
     upload: string,
     uploading: string,
-    dragOrClick: string
+    dragOrClick: string,
+
+    ariaLabel: {
+      preview: string,
+      delete: string
+    }
   },
 
   video: {

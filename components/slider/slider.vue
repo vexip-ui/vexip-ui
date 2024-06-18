@@ -24,14 +24,14 @@ const enum TriggerType {
 
 defineOptions({ name: 'Slider' })
 
-const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+const { idFor, state, labelId, disabled, loading, validateField, getFieldValue, setFieldValue } =
   useFieldStore<number | number[]>(focus)
 
 const _props = defineProps(sliderProps)
 const props = useProps('slider', _props, {
   state: createStateProp(state),
   value: {
-    default: () => getFieldValue(0),
+    default: () => getFieldValue() ?? 0,
     static: true
   },
   min: 0,
@@ -536,6 +536,8 @@ function blur() {
     :id="idFor"
     :class="className"
     tabindex="-1"
+    role="group"
+    :aria-labelledby="labelId"
     @pointerdown="handleTrackDown"
     @pointerenter="handlePointerEnter"
     @pointerleave="handlePointerLeave"

@@ -90,7 +90,7 @@ describe('Tabs', () => {
   })
 
   it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => (
         <Tabs placement={placement}>
           <TabPanel label={'1'}>{'1'}</TabPanel>

@@ -38,6 +38,14 @@
 
 :::
 
+:::demo wheel/selectable
+
+### Selectable
+
+添加 `selectable` 属性可以使得选项能被点击选取。
+
+:::
+
 :::demo wheel/horizontal
 
 ### 横向滚动
@@ -95,6 +103,7 @@ type WheelRawOption =
 | loading-lock  | `boolean`                                                    | 设置在加载中时是否为只读                         | `false`       | `2.0.0`  |
 | disabled-item | `(value: string \| number, data: WheelRawOption) => boolean` | 设置禁用的元素                                   | `() => false` | `2.0.14` |
 | no-transition | `boolean`                                                    | 是否禁用滚动过渡效果                             | `false`       | `2.2.17` |
+| selectable    | `boolean`                                                    | 设置选项是否可以被点击激活                       | `false`       | `2.3.11` |
 
 ### Wheel 事件
 

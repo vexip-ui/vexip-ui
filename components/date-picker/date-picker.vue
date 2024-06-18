@@ -33,7 +33,10 @@ import {
   format,
   getTime,
   isLeapYear,
+  isObject,
+  mergeObjects,
   startOfMonth,
+  toAttrValue,
   toDate,
   toFalse
 } from '@vexip-ui/utils'
@@ -43,12 +46,19 @@ import { datePickerTypes, invalidDate } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DatePickerChangeEvent, DatePickerFormatFn, DateTimeType, TimeType } from './symbol'
+import type {
+  DatePickerChangeEvent,
+  DatePickerFormatFn,
+  DateTimeType,
+  DateType,
+  TimeType
+} from './symbol'
 
 defineOptions({ name: 'DatePicker' })
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -77,10 +87,10 @@ const props = useProps('datePicker', _props, {
   },
   transfer: false,
   value: {
-    default: () => getFieldValue(null!),
+    default: () => getFieldValue(),
     static: true
   },
-  format: 'yyyy-MM-dd HH:mm:ss',
+  format: 'yMd Hms',
   valueFormat: null,
   filler: {
     default: '-',
@@ -151,6 +161,7 @@ const lastValue = ref('')
 const firstSelected = ref<number[] | undefined>()
 const hoveredDate = ref(new Date())
 const staticWheel = ref(false)
+const dateUnitOrder = ref<DateType[]>([])
 
 const { timer } = useSetTimeout()
 
@@ -170,11 +181,9 @@ const endInput = ref<InstanceType<typeof DateControl>>()
 const datePanel = ref<InstanceType<typeof DatePanel>>()
 
 const mergedLocale = computed(() => {
-  return {
-    ...calendarLocale.value,
-    ...datePickerLocale.value,
-    ...(props.locale ?? {})
-  }
+  const locale = mergeObjects(calendarLocale.value, datePickerLocale.value, true)
+
+  return isObject(props.locale) ? mergeObjects(locale, props.locale) : locale
 })
 const startPlaceholder = computed(() => {
   if (props.placeholder) {
@@ -621,7 +630,36 @@ function parseValue<T extends Dateable | null>(value: T | T[]) {
   }
 }
 
-function parseFormat() {
+function parseDateUnitOrder() {
+  const orderSet = new Set<DateType>()
+
+  // to ignore 'xxx'
+  let inQuotation = false
+
+  for (let i = 0, len = props.format.length; i < len; ++i) {
+    const char = props.format.charAt(i)
+
+    if (char === "'") {
+      inQuotation = !inQuotation
+    } else if (!inQuotation) {
+      switch (char) {
+        case 'y':
+          orderSet.add('year')
+          break
+        case 'M':
+          orderSet.add('month')
+          break
+        case 'd':
+          orderSet.add('date')
+          break
+      }
+    }
+  }
+
+  dateUnitOrder.value = [...orderSet]
+}
+
+function parseTimeUnitEnabled() {
   const isDatetime = props.type === 'datetime'
 
   ;[startState, endState].forEach(state => {
@@ -654,6 +692,11 @@ function parseFormat() {
       }
     }
   })
+}
+
+function parseFormat() {
+  parseDateUnitOrder()
+  parseTimeUnitEnabled()
 }
 
 function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
@@ -1206,6 +1249,11 @@ function handleClickOutside() {
     :id="idFor"
     ref="wrapper"
     :class="className"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="dialog"
+    :aria-labelledby="labelId"
     @click="showPanel"
   >
     <div
@@ -1242,6 +1290,8 @@ function handleClickOutside() {
           :has-error="startError"
           :placeholder="startPlaceholder"
           :readonly="props.unitReadonly"
+          :labeled-by="labelId"
+          :date-unit-order="dateUnitOrder"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -1275,6 +1325,8 @@ function handleClickOutside() {
             :has-error="endError"
             :placeholder="endPlaceholder"
             :readonly="props.unitReadonly"
+            :labeled-by="labelId"
+            :date-unit-order="dateUnitOrder"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -1304,9 +1356,16 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          type="button"
+          tabindex="-1"
+          :aria-label="mergedLocale.ariaLabel.clear"
+          @click.stop="handleClear()"
+        >
           <Icon v-bind="icons.clear" label="clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -1355,6 +1414,7 @@ function handleClickOutside() {
         :week-start="props.weekStart"
         :static-wheel="staticWheel"
         :shortcuts-placement="props.shortcutsPlacement"
+        :labeled-by="labelId"
         @shortcut="handleShortcut"
         @change="handlePanelChange"
         @confirm="handleEnter"

@@ -13,7 +13,8 @@ import {
   useProps,
   useWordSpace
 } from '@vexip-ui/config'
-import { createEventEmitter, getRangeWidth, isFunction, isNull, isObject } from '@vexip-ui/utils'
+import { useDisplay } from '@vexip-ui/hooks'
+import { createEventEmitter, getGlobalCount, isFunction, isNull, isObject } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -89,6 +90,8 @@ const locale = useLocale('form', toRef(props, 'locale'))
 const icons = useIcons()
 const wordSpace = useWordSpace()
 
+const idIndex = `${getGlobalCount()}`
+
 const initValue = ref(props.defaultValue)
 const isError = ref(false)
 const errorTip = ref('')
@@ -96,8 +99,13 @@ const validating = ref(false)
 const disabledValidate = ref(false)
 const labelWidth = ref(0)
 
-const labelEl = ref<HTMLInputElement>()
+const placeholder = useDisplay(() => {
+  if (placeholder.value) {
+    labelWidth.value = placeholder.value.offsetWidth
+  }
+})
 
+const labelId = computed(() => nh.bs(`${idIndex}__label`))
 const isRequired = computed(() => formProps.allRequired || props.required)
 const requiredTip = computed(() => {
   return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`, wordSpace.value)
@@ -187,6 +195,7 @@ const instances = new Set<any>()
 const fieldObject = Object.freeze({
   prop: computed(() => props.prop),
   idFor: computed(() => props.prop),
+  labelId,
   state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
   disabled: computed(() => !!formProps.disabled),
   loading: computed(() => !!formProps.loading),
@@ -226,10 +235,6 @@ onMounted(() => {
     initValue.value = Array.isArray(value) ? Array.from(value) : value
   }
 
-  if (labelEl.value) {
-    labelWidth.value = getRangeWidth(labelEl.value)
-  }
-
   if (formFields) {
     formFields.add(fieldObject)
   }
@@ -249,7 +254,7 @@ function getLabelWidth(width: number | 'auto') {
 
 let initialized = false
 
-function getValue(defaultValue?: unknown) {
+function getValue(defaultValue: unknown = initValue.value) {
   if (!formProps.model || !props.prop) return defaultValue
 
   try {
@@ -382,9 +387,14 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       :value="inputValue"
       style="display: none"
     />
+    <span v-if="hasLabel && labelAlign !== 'top'" ref="placeholder" :class="nh.be('placeholder')">
+      <slot name="label">
+        {{ props.label + (formProps.labelSuffix || '') }}
+      </slot>
+    </span>
     <label
       v-if="hasLabel"
-      ref="labelEl"
+      :id="labelId"
       :class="nh.be('label')"
       :style="{ width: labelAlign !== 'top' ? `${computedLabelWidth}px` : undefined }"
       :for="props.htmlFor || props.prop"

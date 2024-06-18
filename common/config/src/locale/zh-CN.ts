@@ -29,7 +29,31 @@ export function zhCNLocale() {
       week4: '四',
       week5: '五',
       week6: '六',
-      week7: '日'
+      week7: '日',
+
+      ariaLabel: {
+        year: '年',
+        month: '月',
+        month1: '一月',
+        month2: '二月',
+        month3: '三月',
+        month4: '四月',
+        month5: '五月',
+        month6: '六月',
+        month7: '七月',
+        month8: '八月',
+        month9: '九月',
+        month10: '十月',
+        month11: '十一月',
+        month12: '十二月',
+        week1: '星期一',
+        week2: '星期二',
+        week3: '星期三',
+        week4: '星期四',
+        week5: '星期五',
+        week6: '星期六',
+        week7: '星期日'
+      }
     },
 
     captcha: {
@@ -49,7 +73,11 @@ export function zhCNLocale() {
 
     colorPicker: {
       confirm: '确定',
-      cancel: '重置'
+      cancel: '重置',
+
+      ariaLabel: {
+        clear: '清空颜色'
+      }
     },
 
     confirm: {
@@ -70,7 +98,17 @@ export function zhCNLocale() {
         select: '请选择'
       },
       startTime: '开始时间',
-      endTime: '结束时间'
+      endTime: '结束时间',
+
+      ariaLabel: {
+        clear: '清空日期',
+        quarter: '季度',
+        week: '周',
+        date: '日',
+        hour: '时',
+        minute: '分',
+        second: '秒'
+      }
     },
 
     drawer: {
@@ -91,7 +129,11 @@ export function zhCNLocale() {
     },
 
     input: {
-      placeholder: '请输入'
+      placeholder: '请输入',
+
+      ariaLabel: {
+        clear: '清空文本'
+      }
     },
 
     layout: {
@@ -108,7 +150,13 @@ export function zhCNLocale() {
 
     numberInput: {
       placeholder: '请输入数字',
-      outOfRange: '超出范围'
+      outOfRange: '超出范围',
+
+      ariaLabel: {
+        clear: '清空数字',
+        increase: '增加',
+        decrease: '减少'
+      }
     },
 
     pagination: {
@@ -125,7 +173,11 @@ export function zhCNLocale() {
 
     select: {
       placeholder: '请选择',
-      empty: '暂无数据'
+      empty: '暂无数据',
+
+      ariaLabel: {
+        clear: '清空选项'
+      }
     },
 
     table: {
@@ -158,6 +210,13 @@ export function zhCNLocale() {
         start: '开始',
         end: '结束',
         select: '请选择'
+      },
+
+      ariaLabel: {
+        clear: '清空时间',
+        hour: '时',
+        minute: '分',
+        second: '秒'
       }
     },
 
@@ -183,7 +242,12 @@ export function zhCNLocale() {
     upload: {
       upload: '上传文件',
       uploading: '上传中',
-      dragOrClick: '将文件拖到此处, 或点击上传'
+      dragOrClick: '将文件拖到此处, 或点击上传',
+
+      ariaLabel: {
+        preview: '预览文件',
+        delete: '删除文件'
+      }
     },
 
     video: {

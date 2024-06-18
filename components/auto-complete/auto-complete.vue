@@ -19,6 +19,7 @@ import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
 import type {
+  AutoCompleteListSlotParams,
   AutoCompleteOptionState,
   AutoCompleteRawOption,
   ChangeEvent,
@@ -32,6 +33,7 @@ const control = ref<HTMLInputElement>()
 
 const {
   idFor,
+  labelId,
   state,
   disabled,
   loading,
@@ -51,7 +53,7 @@ const props = useProps('autoComplete', _props, {
   locale: null,
   transfer: false,
   value: {
-    default: () => getFieldValue(''),
+    default: () => getFieldValue(),
     static: true
   },
   options: {
@@ -94,19 +96,20 @@ const props = useProps('autoComplete', _props, {
 const emit = defineEmits(['update:value'])
 
 const slots = defineSlots<{
-  prefix: () => any,
-  control: (params: {
+  prefix?: () => any,
+  control?: (params: {
     value: string | number,
     onInput: (event: string | Event) => void,
     onChange: (valid?: boolean) => void,
     onEnter: (event: KeyboardEvent) => void,
     onClear: () => void
   }) => any,
-  suffix: () => any,
-  default: (params: { option: AutoCompleteOptionState, index: number, selected: boolean }) => any,
-  group: (params: { option: AutoCompleteOptionState, index: number }) => any,
-  prepend: () => any,
-  append: () => any
+  suffix?: () => any,
+  default?: (params: { option: AutoCompleteOptionState, index: number, selected: boolean }) => any,
+  group?: (params: { option: AutoCompleteOptionState, index: number }) => any,
+  prepend?: () => any,
+  append?: () => any,
+  list?: (params: AutoCompleteListSlotParams) => any
 }>()
 
 const locale = useLocale('input', toRef(props, 'locale'))
@@ -452,6 +455,7 @@ function handleCompositionEnd() {
     v-model:visible="currentVisible"
     :class="[nh.b(), props.inherit && nh.bm('inherit')]"
     :inherit="props.inherit"
+    :label-id="labelId"
     :list-class="nh.be('list')"
     :value="currentValue"
     :size="props.size"
@@ -537,6 +541,14 @@ function handleCompositionEnd() {
     </template>
     <template v-if="$slots.append" #append>
       <slot name="append"></slot>
+    </template>
+    <template v-if="$slots.list" #list="{ options, isSelected, handleSelect: onSelect }">
+      <slot
+        name="list"
+        :options="options"
+        :is-selected="isSelected"
+        :handle-select="onSelect"
+      ></slot>
     </template>
   </Select>
 </template>

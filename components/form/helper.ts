@@ -118,7 +118,7 @@ export function setValueByPath(
   return false
 }
 
-const defaultProp = computed(() => '')
+const defaultId = computed(() => undefined as string | undefined)
 const defaultState = computed(() => 'default' as ComponentState)
 const defaultFalse = computed(() => false)
 const defaultSize = computed(() => 'default' as ComponentSize)
@@ -126,7 +126,8 @@ const defaultSize = computed(() => 'default' as ComponentSize)
 function getEmptyActions<V = unknown>() {
   return {
     isField: false,
-    idFor: defaultProp,
+    idFor: defaultId,
+    labelId: defaultId,
     state: defaultState,
     disabled: defaultFalse,
     loading: defaultFalse,
@@ -176,6 +177,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
   return {
     isField: true,
     idFor: fieldOptions.idFor,
+    labelId: fieldOptions.labelId,
     state: fieldOptions.state,
     disabled: fieldOptions.disabled,
     loading: fieldOptions.loading,

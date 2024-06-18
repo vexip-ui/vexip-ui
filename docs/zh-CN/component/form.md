@@ -52,6 +52,14 @@ const model = reactive({} as Model)
 
 :::
 
+:::demo form/default-value
+
+### 默认值
+
+可以通过 `default-value` 属性为每个控件指定默认值。
+
+:::
+
 :::demo form/label
 
 ### 标签对齐
@@ -133,6 +141,14 @@ const model = reactive({} as Model)
 ### 表单布局
 
 Form 和 FormItem 组件分别内置了 Row 和 Column 组件（一维栅格）的大部分功能，因此你可以像使用行布局那样使用它们。
+
+:::
+
+:::demo form/with-modal
+
+### 模态表单
+
+Form 和 Modal 结合使用可以形成模态表单。
 
 :::
 

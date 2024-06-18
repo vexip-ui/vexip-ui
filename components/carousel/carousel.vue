@@ -5,62 +5,64 @@
     role="list"
     :style="style"
   >
-    <div
-      :style="{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: props.vertical ? 'column' : 'row',
-        width: '100%'
-      }"
-    >
+    <ResizeObserver @resize="refresh">
       <div
-        v-if="props.arrow !== 'none'"
-        ref="prev"
-        :class="[
-          nh.bem('arrow', props.arrow),
-          nh.bem('arrow', 'prev'),
-          arrowActive ? nh.bem('arrow', 'show') : ''
-        ]"
+        :style="{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: props.vertical ? 'column' : 'row',
+          width: '100%'
+        }"
       >
         <div
-          :class="{
-            [nh.be('handler')]: true,
-            [nh.bem('handler', 'disabled')]: disabledPrev
-          }"
-          @click="handlePrevClick"
+          v-if="props.arrow !== 'none'"
+          ref="prev"
+          :class="[
+            nh.bem('arrow', props.arrow),
+            nh.bem('arrow', 'prev'),
+            arrowActive ? nh.bem('arrow', 'show') : ''
+          ]"
         >
-          <slot name="prev-arrow" :disabled="disabledPrev">
-            <Icon v-bind="arrowIcons[0]" :scale="+(arrowIcons[0].scale || 1) * 1.5"></Icon>
-          </slot>
+          <div
+            :class="{
+              [nh.be('handler')]: true,
+              [nh.bem('handler', 'disabled')]: disabledPrev
+            }"
+            @click="handlePrevClick"
+          >
+            <slot name="prev-arrow" :disabled="disabledPrev">
+              <Icon v-bind="arrowIcons[0]" :scale="+(arrowIcons[0].scale || 1) * 1.5"></Icon>
+            </slot>
+          </div>
         </div>
-      </div>
-      <div :class="nh.be('list')" :style="listStyle">
-        <div :class="nh.be('track')" :style="trackStyle" @transitionend.self="handleAfterMove">
-          <slot></slot>
+        <div :class="nh.be('list')" :style="listStyle">
+          <div :class="nh.be('track')" :style="trackStyle" @transitionend.self="handleAfterMove">
+            <slot></slot>
+          </div>
         </div>
-      </div>
-      <div
-        v-if="props.arrow !== 'none'"
-        ref="next"
-        :class="[
-          nh.bem('arrow', props.arrow),
-          nh.bem('arrow', 'next'),
-          arrowActive ? nh.bem('arrow', 'show') : ''
-        ]"
-      >
         <div
-          :class="{
-            [nh.be('handler')]: true,
-            [nh.bem('handler', 'disabled')]: disabledNext
-          }"
-          @click="handleNextClick"
+          v-if="props.arrow !== 'none'"
+          ref="next"
+          :class="[
+            nh.bem('arrow', props.arrow),
+            nh.bem('arrow', 'next'),
+            arrowActive ? nh.bem('arrow', 'show') : ''
+          ]"
         >
-          <slot name="next-arrow" :disabled="disabledNext">
-            <Icon v-bind="arrowIcons[1]" :scale="+(arrowIcons[1].scale || 1) * 1.5"></Icon>
-          </slot>
+          <div
+            :class="{
+              [nh.be('handler')]: true,
+              [nh.bem('handler', 'disabled')]: disabledNext
+            }"
+            @click="handleNextClick"
+          >
+            <slot name="next-arrow" :disabled="disabledNext">
+              <Icon v-bind="arrowIcons[1]" :scale="+(arrowIcons[1].scale || 1) * 1.5"></Icon>
+            </slot>
+          </div>
         </div>
       </div>
-    </div>
+    </ResizeObserver>
     <div v-if="props.pointer !== 'none'" :class="nh.bem('pointers', props.pointer)">
       <div
         v-for="index in itemStates.size"
@@ -86,18 +88,9 @@
 
 <script lang="ts">
 import { Icon } from '@/components/icon'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import {
-  computed,
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  provide,
-  reactive,
-  ref,
-  toRef,
-  watch
-} from 'vue'
+import { computed, defineComponent, onMounted, provide, reactive, ref, toRef, watch } from 'vue'
 
 import { emitEvent, useHoverDelay, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useHover, useRtl, useSetTimeout } from '@vexip-ui/hooks'
@@ -110,7 +103,8 @@ import type { CarouselState, ItemState } from './symbol'
 export default defineComponent({
   name: 'Carousel',
   components: {
-    Icon
+    Icon,
+    ResizeObserver
   },
   props: carouselProps,
   emits: ['update:active'],
@@ -283,8 +277,6 @@ export default defineComponent({
 
     isLocked.value = true
 
-    let observer: MutationObserver | null
-
     onMounted(() => {
       computeItemRect()
       handleWheel(props.active - props.activeOffset)
@@ -296,27 +288,6 @@ export default defineComponent({
 
         setAutoplay()
       }, 0)
-
-      window.addEventListener('resize', refresh)
-
-      if (wrapper.value) {
-        observer = new MutationObserver(() => {
-          refresh()
-        })
-
-        observer.observe(wrapper.value, {
-          attributes: true,
-          childList: true,
-          characterData: true,
-          attributeFilter: ['style']
-        })
-      }
-    })
-
-    onBeforeUnmount(() => {
-      observer?.disconnect()
-      observer = null
-      window.removeEventListener('resize', refresh)
     })
 
     function increaseItem(item: ItemState) {

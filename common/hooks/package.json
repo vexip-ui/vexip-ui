@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/hooks",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
@@ -36,7 +36,7 @@
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.3.10"
+    "vue": "~3.3.13"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

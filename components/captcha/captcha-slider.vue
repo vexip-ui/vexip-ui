@@ -19,7 +19,7 @@ import { captchaSliderProps } from './props'
 
 defineOptions({ name: 'CaptchaSlider' })
 
-const { idFor, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
+const { idFor, labelId, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
   useFieldStore<boolean>(focus)
 
 const _props = defineProps(captchaSliderProps)
@@ -172,7 +172,7 @@ const triggerStyle = computed(() => {
 })
 
 watch(
-  () => getFieldValue(false),
+  () => getFieldValue(),
   value => {
     if (!value) {
       reset()
@@ -197,6 +197,7 @@ defineExpose({
   isLoading,
   track,
   trigger,
+  focus,
   reset
 })
 
@@ -229,6 +230,8 @@ function focus(options?: FocusOptions) {
     ref="wrapper"
     :class="className"
     tabindex="-1"
+    role="group"
+    :aria-labelledby="labelId"
   >
     <div
       :class="{

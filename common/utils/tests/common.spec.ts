@@ -199,7 +199,6 @@ describe('number', () => {
 
   it('isRegExp', () => {
     expect(isRegExp(/1/)).toBe(true)
-    // eslint-disable-next-line prefer-regex-literals
     expect(isRegExp(new RegExp('1'))).toBe(true)
     expect(isRegExp({})).toBe(false)
   })

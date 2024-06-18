@@ -3,8 +3,8 @@ import container from 'markdown-it-container'
 import tableSort from 'markdown-it-table-sort'
 
 import type MarkdownIt from 'markdown-it'
-import type Token from 'markdown-it/lib/token'
-import type StateCore from 'markdown-it/lib/rules_core/state_core'
+import type Token from 'markdown-it/lib/token.mjs'
+import type StateCore from 'markdown-it/lib/rules_core/state_core.mjs'
 
 export function markdownItSetup(md: MarkdownIt) {
   md.use(anchor, { permalink: true, renderPermalink })
@@ -24,7 +24,10 @@ function renderPermalink(
 ) {
   const [startToken, contentToken] = state.tokens.slice(index, index + 2)
 
-  startToken.attrs = [['class', 'anchor']]
+  startToken.attrs = [
+    ['class', 'anchor'],
+    ['data-anchor', '']
+  ]
 
   if (startToken.tag !== 'h2' && startToken.tag !== 'h3') return
 
@@ -34,7 +37,8 @@ function renderPermalink(
     Object.assign(new state.Token('', 'span', 1), {
       attrs: [
         ['id', id],
-        ['class', 'anchor__title']
+        ['class', 'anchor__title'],
+        ['data-level', startToken.tag[1]]
       ]
     }),
     Object.assign(new state.Token('html_block', '', 0), { content: contentToken.content }),
@@ -182,7 +186,7 @@ function useTag(md: MarkdownIt) {
 
       ;[token.info, token.content] = shortcuts[key]?.(units[1]) ?? units
     } else if (units.length > 1) {
-      [token.info, token.content] = units
+      ;[token.info, token.content] = units
     } else {
       token.info = 'default'
       token.content = raw

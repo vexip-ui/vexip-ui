@@ -15,7 +15,6 @@ export function useManualRef() {
       }
 
       return {
-        // eslint-disable-next-line no-sequences
         get: () => (track(), value),
         set: newValue => {
           if (newValue === value) return

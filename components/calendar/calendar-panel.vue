@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from 'vue'
 
-import { useHover } from '@vexip-ui/hooks'
+import CalendarCell from './calendar-cell.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { useHover } from '@vexip-ui/hooks'
 import {
   debounceMinor,
   differenceDays,
@@ -62,9 +63,10 @@ defineSlots<{
   header: () => any,
   week: (params: { label: string, index: number, week: number }) => any,
   item: (params: {
+    date: Date,
+    label: string,
     selected: boolean,
     hovered: boolean,
-    date: Date,
     isPrev: boolean,
     isNext: boolean,
     isToday: boolean,
@@ -213,7 +215,7 @@ function isToday(date: Date) {
   return differenceDays(date, props.today) === 0
 }
 
-function handleClick(date: Date) {
+function handleSelect(date: Date) {
   if (isDisabled(date)) {
     return
   }
@@ -274,9 +276,12 @@ function isInRange(date: Date) {
 </script>
 
 <template>
-  <div :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]">
+  <div
+    :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]"
+    role="grid"
+  >
     <slot name="header"></slot>
-    <div :class="[nh.be('row'), nh.bem('row', 'week')]">
+    <div :class="[nh.be('row'), nh.bem('row', 'week')]" aria-hidden>
       <div v-for="week in 7" :key="week" :class="[nh.be('cell'), nh.be('cell-week')]">
         <slot
           name="week"
@@ -292,45 +297,49 @@ function isInRange(date: Date) {
     </div>
     <div ref="body" :class="nh.be('body')">
       <div v-for="row in 6" :key="row" :class="nh.be('row')">
-        <div
+        <CalendarCell
           v-for="cell in 7"
           :key="(row - 1) * 7 + cell"
-          :class="nh.be('cell')"
-          @mouseenter="handleHover(dateRange[(row - 1) * 7 + cell - 1])"
+          :date="dateRange[(row - 1) * 7 + cell - 1]"
+          :locale="locale"
+          :selected="isSelected(dateRange[(row - 1) * 7 + cell - 1])"
+          :hovered="isHovered(dateRange[(row - 1) * 7 + cell - 1])"
+          :is-prev="isPrevMonth(dateRange[(row - 1) * 7 + cell - 1])"
+          :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
+          :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
+          :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
+          :in-range="props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+          @hover="handleHover"
+          @select="handleSelect"
         >
-          <slot
-            name="item"
-            :selected="isSelected(dateRange[(row - 1) * 7 + cell - 1])"
-            :hovered="isHovered(dateRange[(row - 1) * 7 + cell - 1])"
-            :date="dateRange[(row - 1) * 7 + cell - 1]"
-            :is-prev="isPrevMonth(dateRange[(row - 1) * 7 + cell - 1])"
-            :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
-            :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
-            :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
-            :in-range="props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+          <template
+            v-if="$slots.item"
+            #default="{
+              date,
+              label,
+              selected,
+              hovered,
+              isPrev,
+              isNext,
+              isToday: matchedToday,
+              disabled,
+              inRange
+            }"
           >
-            <div
-              :class="{
-                [nh.be('index')]: true,
-                [nh.bem('index', 'selected')]: isSelected(dateRange[(row - 1) * 7 + cell - 1]),
-                [nh.bem('index', 'prev')]: isPrevMonth(dateRange[(row - 1) * 7 + cell - 1]),
-                [nh.bem('index', 'next')]: isNextMonth(dateRange[(row - 1) * 7 + cell - 1]),
-                [nh.bem('index', 'today')]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
-                [nh.bem('index', 'disabled')]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
-                [nh.bem('index', 'in-range')]:
-                  props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])
-              }"
-              tabindex="0"
-              @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
-              @keydown.enter.prevent="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
-              @keydown.space.prevent="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
-            >
-              <div :class="nh.be('index-inner')">
-                {{ dateRange[(row - 1) * 7 + cell - 1].getDate() }}
-              </div>
-            </div>
-          </slot>
-        </div>
+            <slot
+              name="item"
+              :date="date"
+              :label="label"
+              :selected="selected"
+              :hovered="hovered"
+              :is-prev="isPrev"
+              :is-next="isNext"
+              :is-today="matchedToday"
+              :disabled="disabled"
+              :in-range="inRange"
+            ></slot>
+          </template>
+        </CalendarCell>
       </div>
     </div>
     <slot name="footer"></slot>

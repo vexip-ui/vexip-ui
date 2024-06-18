@@ -782,4 +782,17 @@ describe('Select', () => {
     expect(wrapper.find('.prepend').exists()).toBe(true)
     expect(wrapper.find('.append').exists()).toBe(true)
   })
+
+  it('list slot', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        options: OPTIONS
+      },
+      slots: {
+        list: () => <span class={'list'}></span>
+      }
+    })
+
+    expect(wrapper.find('.list').exists()).toBe(true)
+  })
 })

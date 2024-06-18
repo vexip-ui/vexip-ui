@@ -56,15 +56,13 @@ export default defineComponent({
                 ]}
               >
                 <div class={[nh.be('link-name'), nh.bem('link-name', 'group')]}>
-                  {group.to
-                    ? (
-                      <Linker icon={group.icon} to={group.to} target={group.target}>
-                        {group.name}
-                      </Linker>
-                      )
-                    : (
-                        [group.icon && <Icon icon={group.icon}></Icon>, group.name]
-                      )}
+                  {group.to ? (
+                    <Linker icon={group.icon} to={group.to} target={group.target}>
+                      {group.name}
+                    </Linker>
+                  ) : (
+                    [group.icon && <Icon icon={group.icon}></Icon>, group.name]
+                  )}
                   {group.subname && <div class={nh.be('link-subname')}>{`- ${group.subname}`}</div>}
                 </div>
                 {group.children?.length

@@ -111,6 +111,10 @@ createApp(App).use(install, { prefix: 'V' })
 </template>
 ```
 
+:::info
+如果你使用了 unplugin 则可以通过 VexipUIResolver 的 `prefix` 选项进行修改。
+:::
+
 ## 国际化
 
 Vexip UI 的默认语言为 `'zh-CN'`，在调用 `app.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。

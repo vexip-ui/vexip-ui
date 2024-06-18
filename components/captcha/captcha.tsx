@@ -49,7 +49,7 @@ export default defineComponent({
   props: captchaProps,
   emits: ['update:visible'],
   setup(_props, { slots, expose }) {
-    const { idFor, disabled, loading, validateField, setFieldValue } = useFieldStore<
+    const { idFor, labelId, disabled, loading, validateField, setFieldValue } = useFieldStore<
       number | number[]
     >(focus)
 
@@ -730,7 +730,14 @@ export default defineComponent({
 
     function renderPanel() {
       return (
-        <div ref={wrapper} id={idFor.value} class={className.value} tabindex={-1}>
+        <div
+          ref={wrapper}
+          id={idFor.value}
+          class={className.value}
+          tabindex={-1}
+          role={'application'}
+          aria-labelledby={labelId.value}
+        >
           <div class={nh.be('header')}>
             <div class={nh.be('title')}>
               {renderSlot(slots, 'title', { success: isSuccess.value }, () => [
@@ -744,6 +751,7 @@ export default defineComponent({
                 nh.be('refresh'),
                 actionLocked.value && nh.bem('action', 'disabled')
               ]}
+              type={'button'}
               onClick={handleRefresh}
             >
               {renderSlot(slots, 'refresh', undefined, () => [

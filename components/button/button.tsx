@@ -238,45 +238,39 @@ export default defineComponent({
     function renderLoadingIcon() {
       return (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-          {slots.loading
-            ? (
-                slots.loading()
-              )
-            : (
-              <Icon
-                {...icons.value.loading}
-                effect={props.loadingEffect || icons.value.loading.effect}
-                icon={props.loadingIcon || icons.value.loading.icon}
-                label={'loading'}
-              ></Icon>
-              )}
+          {slots.loading ? (
+            slots.loading()
+          ) : (
+            <Icon
+              {...icons.value.loading}
+              effect={props.loadingEffect || icons.value.loading.effect}
+              icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
+            ></Icon>
+          )}
         </div>
       )
     }
 
     function renderSingleIcon() {
-      return props.loading
-        ? (
-            renderLoadingIcon()
-          )
-        : (
-          <div class={nh.be('icon')}>
-            {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
-          </div>
-          )
+      return props.loading ? (
+        renderLoadingIcon()
+      ) : (
+        <div class={nh.be('icon')}>
+          {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
+        </div>
+      )
     }
 
     function renderCollapseIcon() {
       if (props.icon || slots.icon) {
-        return props.loading
-          ? (
-              renderLoadingIcon()
-            )
-          : (
-            <div class={nh.be('icon')}>
-              {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
-            </div>
-            )
+        return props.loading ? (
+          renderLoadingIcon()
+        ) : (
+          <div class={nh.be('icon')}>
+            {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
+          </div>
+        )
       }
 
       return (

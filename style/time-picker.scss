@@ -134,6 +134,10 @@ $time-picker: map.merge(
     color: get-css-var('time-picker-color-disabled');
   }
 
+  &__clear {
+    @include clean-button;
+  }
+
   &__popper {
     padding: 8px 0;
   }

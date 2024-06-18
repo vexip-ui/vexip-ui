@@ -122,7 +122,8 @@ $upload: map.merge(
       border-color: get-css-var('upload-panel-b-color-hover');
     }
 
-    &:focus {
+    &:focus,
+    &:focus-within {
       border-color: get-css-var('upload-panel-b-color-focus');
     }
 
@@ -139,6 +140,8 @@ $upload: map.merge(
   }
 
   &__image-action {
+    @include clean-button;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -146,6 +149,7 @@ $upload: map.merge(
     width: get-css-var('upload-thumb-size');
     height: get-css-var('upload-thumb-size');
     color: get-css-var('upload-thumb-color');
+    cursor: inherit;
 
     &--disabled {
       color: get-css-var('content-color-disabled');
@@ -431,13 +435,10 @@ $upload: map.merge(
   }
 
   &__action {
+    @include clean-button;
+
     position: relative;
-    padding: 0;
     margin: 0 4px;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    outline: 0;
 
     &--disabled {
       color: get-css-var('upload-action-color-disabled');
@@ -499,13 +500,10 @@ $upload: map.merge(
   }
 
   &__close {
+    @include clean-button;
+
     position: absolute;
     inset-inline-end: 0;
-    padding: 0;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    outline: 0;
 
     &:hover,
     &:focus {

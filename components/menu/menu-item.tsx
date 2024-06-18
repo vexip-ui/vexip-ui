@@ -422,13 +422,11 @@ const MenuItem = defineComponent({
               >
                 {(slots.icon || props.icon) && (
                   <div class={nh.be('icon')}>
-                    {slots.icon
-                      ? (
-                          renderSlot(slots, 'icon')
-                        )
-                      : (
-                        <Icon {...props.iconProps} icon={props.icon}></Icon>
-                        )}
+                    {slots.icon ? (
+                      renderSlot(slots, 'icon')
+                    ) : (
+                      <Icon {...props.iconProps} icon={props.icon}></Icon>
+                    )}
                   </div>
                 )}
                 <span

@@ -1,9 +1,149 @@
+<script setup lang="ts">
+import { Icon } from '@/components/icon'
+import { useFieldStore } from '@/components/form'
+
+import { computed, ref, watch } from 'vue'
+
+import {
+  createIconProp,
+  createSizeProp,
+  createStateProp,
+  emitEvent,
+  useIcons,
+  useNameHelper,
+  useProps
+} from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
+import { switchProps } from './props'
+
+defineOptions({ name: 'Switch' })
+
+const {
+  idFor,
+  labelId,
+  state,
+  disabled,
+  loading,
+  size,
+  validateField,
+  getFieldValue,
+  setFieldValue
+} = useFieldStore<boolean>(() => input.value?.focus())
+
+const _props = defineProps(switchProps)
+const props = useProps('switch', _props, {
+  size: createSizeProp(size),
+  state: createStateProp(state),
+  value: {
+    default: () => getFieldValue(),
+    static: true
+  },
+  disabled: () => disabled.value,
+  openColor: '',
+  closeColor: '',
+  loading: () => loading.value,
+  loadingIcon: createIconProp(),
+  loadingEffect: null,
+  openIcon: createIconProp(),
+  closeIcon: createIconProp(),
+  openText: '',
+  closeText: '',
+  onBeforeChange: {
+    default: null,
+    isFunc: true
+  },
+  rectangle: false,
+  name: {
+    default: '',
+    static: true
+  }
+})
+
+const emit = defineEmits(['update:value'])
+
+const nh = useNameHelper('switch')
+const icons = useIcons()
+const currentValue = ref(props.value)
+
+const input = ref<HTMLInputElement>()
+
+const className = computed(() => {
+  return [
+    nh.b(),
+    nh.bs('vars'),
+    {
+      [nh.bm('inherit')]: props.inherit,
+      [nh.bm('open')]: currentValue.value,
+      [nh.bm(props.size)]: props.size !== 'default',
+      [nh.bm(props.state)]: props.state !== 'default',
+      [nh.bm('disabled')]: props.disabled,
+      [nh.bm('loading')]: props.loading,
+      [nh.bm('rectangle')]: props.rectangle
+    }
+  ]
+})
+const style = computed(() => {
+  return {
+    backgroundColor: currentValue.value ? props.openColor : props.closeColor
+  }
+})
+const signalStyle = computed(() => {
+  return {
+    color: currentValue.value ? props.openColor : props.closeColor
+  }
+})
+const isDisabled = computed(() => {
+  return props.disabled || props.loading
+})
+
+watch(
+  () => props.value,
+  value => {
+    currentValue.value = value
+  }
+)
+
+defineExpose({
+  idFor,
+  labelId,
+  currentValue,
+  input,
+  focus: (options?: FocusOptions) => input.value?.focus(options),
+  blur: () => input.value?.blur()
+})
+
+async function handleChange(checked = !currentValue.value) {
+  if (checked === currentValue.value) return
+
+  let result: unknown = true
+
+  if (typeof props.onBeforeChange === 'function') {
+    result = props.onBeforeChange(checked)
+
+    if (isPromise(result)) {
+      result = await result
+    }
+  }
+
+  if (result !== false) {
+    currentValue.value = checked
+
+    emit('update:value', checked)
+    setFieldValue(checked)
+    emitEvent(props.onChange, checked)
+    validateField()
+  }
+}
+</script>
+
 <template>
   <label
     :id="idFor"
     :class="className"
     role="switch"
     :aria-checked="currentValue"
+    :aria-disabled="isDisabled"
+    :aria-labelledby="labelId"
     :style="style"
   >
     <input
@@ -17,7 +157,7 @@
       @change="handleChange()"
       @click.stop
     />
-    <span :class="nh.be('placeholder')">
+    <span :class="nh.be('placeholder')" aria-hidden>
       <span :class="nh.be('open-text')">
         <slot name="open">{{ props.openText }}</slot>
       </span>
@@ -49,147 +189,3 @@
     </span>
   </label>
 </template>
-
-<script lang="ts">
-import { Icon } from '@/components/icon'
-import { useFieldStore } from '@/components/form'
-
-import { computed, defineComponent, ref, watch } from 'vue'
-
-import {
-  createIconProp,
-  createSizeProp,
-  createStateProp,
-  emitEvent,
-  useIcons,
-  useNameHelper,
-  useProps
-} from '@vexip-ui/config'
-import { isPromise } from '@vexip-ui/utils'
-import { switchProps } from './props'
-
-export default defineComponent({
-  name: 'Switch',
-  components: {
-    Icon
-  },
-  props: switchProps,
-  emits: ['update:value'],
-  setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<boolean>(() => input.value?.focus())
-
-    const props = useProps('switch', _props, {
-      size: createSizeProp(size),
-      state: createStateProp(state),
-      value: {
-        default: () => getFieldValue(false),
-        static: true
-      },
-      disabled: () => disabled.value,
-      openColor: '',
-      closeColor: '',
-      loading: () => loading.value,
-      loadingIcon: createIconProp(),
-      loadingEffect: null,
-      openIcon: createIconProp(),
-      closeIcon: createIconProp(),
-      openText: '',
-      closeText: '',
-      onBeforeChange: {
-        default: null,
-        isFunc: true
-      },
-      rectangle: false,
-      name: {
-        default: '',
-        static: true
-      }
-    })
-
-    const nh = useNameHelper('switch')
-    const currentValue = ref(props.value)
-
-    const input = ref<HTMLInputElement>()
-
-    const className = computed(() => {
-      return [
-        nh.b(),
-        nh.bs('vars'),
-        {
-          [nh.bm('inherit')]: props.inherit,
-          [nh.bm('open')]: currentValue.value,
-          [nh.bm(props.size)]: props.size !== 'default',
-          [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading,
-          [nh.bm('rectangle')]: props.rectangle
-        }
-      ]
-    })
-    const style = computed(() => {
-      return {
-        backgroundColor: currentValue.value ? props.openColor : props.closeColor
-      }
-    })
-    const signalStyle = computed(() => {
-      return {
-        color: currentValue.value ? props.openColor : props.closeColor
-      }
-    })
-    const isDisabled = computed(() => {
-      return props.disabled || props.loading
-    })
-
-    watch(
-      () => props.value,
-      value => {
-        currentValue.value = value
-      }
-    )
-
-    async function handleChange(checked = !currentValue.value) {
-      if (checked === currentValue.value) return
-
-      let result: unknown = true
-
-      if (typeof props.onBeforeChange === 'function') {
-        result = props.onBeforeChange(checked)
-
-        if (isPromise(result)) {
-          result = await result
-        }
-      }
-
-      if (result !== false) {
-        currentValue.value = checked
-
-        emit('update:value', checked)
-        setFieldValue(checked)
-        emitEvent(props.onChange, checked)
-        validateField()
-      }
-    }
-
-    return {
-      props,
-      nh,
-      icons: useIcons(),
-      idFor,
-      currentValue,
-
-      className,
-      style,
-      signalStyle,
-      isDisabled,
-
-      input,
-
-      handleChange,
-
-      focus: (options?: FocusOptions) => input.value?.focus(options),
-      blur: () => input.value?.blur()
-    }
-  }
-})
-</script>

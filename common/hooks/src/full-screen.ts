@@ -99,7 +99,6 @@ if (isClient && map) {
   document.addEventListener(
     EVENT,
     () => {
-      debugger
       states.forEach(state => {
         state.value = false
       })
@@ -155,7 +154,6 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
 
     if (el) {
       if (force || !document[ELEMENT]) {
-        debugger
         await el[REQUEST]()
         full.value = true
 
@@ -170,7 +168,6 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
     const el = unrefElement(target)
 
     if (force || (document[ELEMENT] && document[ELEMENT] === el)) {
-      debugger
       await document[EXIT]()
       full.value = false
 

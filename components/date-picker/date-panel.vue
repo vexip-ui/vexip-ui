@@ -7,7 +7,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { range as rangeNumbers, toDate } from '@vexip-ui/utils'
+import { callIfFunc, range as rangeNumbers, toDate } from '@vexip-ui/utils'
 import { useRtl } from '@vexip-ui/hooks'
 import { datePickerTypes } from './symbol'
 
@@ -102,7 +102,7 @@ const props = defineProps({
   },
   locale: {
     type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
-    default: null
+    default: () => ({})
   },
   selectingType: {
     type: String as PropType<'start' | 'end'>,
@@ -119,6 +119,10 @@ const props = defineProps({
   shortcutsPlacement: {
     type: String as PropType<DateShortcutsPlacement>,
     default: 'left'
+  },
+  labeledBy: {
+    type: String,
+    default: undefined
   }
 })
 
@@ -173,6 +177,17 @@ const calendarValue = computed(() => {
       ? getStringValue('start')
       : ''
 })
+const weekDays = computed(() => {
+  return [
+    props.locale.week7,
+    props.locale.week1,
+    props.locale.week2,
+    props.locale.week3,
+    props.locale.week4,
+    props.locale.week5,
+    props.locale.week6
+  ].map(week => week.slice(0, 2))
+})
 
 watch(
   calendarYear,
@@ -221,13 +236,9 @@ function handleClick(event: MouseEvent) {
 }
 
 function handleShortcut(index: number) {
-  let { value, name } = props.shortcuts[index]
+  const { value, name } = props.shortcuts[index]
 
-  if (typeof value === 'function') {
-    value = value()
-  }
-
-  emit('shortcut', name, value)
+  emit('shortcut', name, callIfFunc(value))
 }
 
 function handleSelectDate(date: Date) {
@@ -479,6 +490,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
       [nh.bem('panel', 'vertical')]:
         shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
     }"
+    :aria-labelledby="labeledBy"
     @click="handleClick"
   >
     <div
@@ -500,7 +512,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
         {{ item.name }}
       </div>
     </div>
-    <div :class="nh.be('list')">
+    <div :class="nh.be('list')" role="application">
       <div :class="nh.be('panel-body')">
         <div :class="nh.be('date-panel')">
           <div :class="nh.be('header')">
@@ -604,6 +616,7 @@ function refreshCalendar(valueType: 'start' | 'end') {
               :min="min"
               :max="max"
               :week-start="weekStart"
+              :week-days="weekDays"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>

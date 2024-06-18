@@ -80,7 +80,7 @@ $calendar: map.merge(
       display: flex;
       align-items: center;
       justify-content: center;
-      width: get-css-var('calendar-index-size');
+      min-width: get-css-var('calendar-index-size');
       height: get-css-var('calendar-index-size');
     }
   }

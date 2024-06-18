@@ -10,6 +10,7 @@ import {
   computed,
   defineComponent,
   onBeforeMount,
+  onMounted,
   reactive,
   ref,
   renderSlot,
@@ -143,6 +144,10 @@ export default defineComponent({
       { immediate: true }
     )
 
+    onMounted(() => {
+      toggleTheme(isDark.value)
+    })
+
     onBeforeMount(() => {
       watch(
         () => props.color,
@@ -265,13 +270,11 @@ export default defineComponent({
           >
             {{
               icon: () =>
-                isDark.value
-                  ? (
-                    <Icon {...icons.value.dark}></Icon>
-                    )
-                  : (
-                    <Icon {...icons.value.light}></Icon>
-                    )
+                isDark.value ? (
+                  <Icon {...icons.value.dark}></Icon>
+                ) : (
+                  <Icon {...icons.value.light}></Icon>
+                )
             }}
           </Switch>
         </div>
@@ -397,66 +400,56 @@ export default defineComponent({
         <CustomTag class={className.value}>
           {hasLeft.value && (
             <div class={[nh.be('header-left'), layoutState.classes.headerLeft]}>
-              {slots.left
-                ? (
-                    renderSlot(slots, 'left', slotParams)
-                  )
-                : props.signType === 'header'
-                  ? (
-                    <div class={nh.be('sign')} onClick={handleSignClick}>
-                      {props.logo && (
-                        <div class={nh.be('logo')}>
-                          <img src={props.logo} alt={'Logo'} />
-                        </div>
-                      )}
-                      {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
+              {slots.left ? (
+                renderSlot(slots, 'left', slotParams)
+              ) : props.signType === 'header' ? (
+                <div class={nh.be('sign')} onClick={handleSignClick}>
+                  {props.logo && (
+                    <div class={nh.be('logo')}>
+                      <img src={props.logo} alt={'Logo'} />
                     </div>
-                    )
-                  : null}
+                  )}
+                  {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
+                </div>
+              ) : null}
             </div>
           )}
           <div class={[nh.be('header-main'), layoutState.classes.headerMain]}>
-            {slots.default
-              ? (
-                  renderSlot(slots, 'default', slotParams)
-                )
-              : hasMenu.value
-                ? (
-                  <Menu
-                    ref={menu}
-                    {...(props.menuProps || {})}
-                    horizontal
-                    transfer
-                    options={props.menus}
-                    onSelect={handleMenuSelect}
-                  ></Menu>
-                  )
-                : null}
+            {slots.default ? (
+              renderSlot(slots, 'default', slotParams)
+            ) : hasMenu.value ? (
+              <Menu
+                ref={menu}
+                {...(props.menuProps || {})}
+                horizontal
+                transfer
+                options={props.menus}
+                onSelect={handleMenuSelect}
+              ></Menu>
+            ) : null}
           </div>
           {slots.right && (
             <div class={[nh.be('header-right'), layoutState.classes.headerRight]}>
               {renderSlot(slots, 'right', slotParams)}
             </div>
           )}
-          {slots.user
-            ? (
-                renderSlot(slots, 'user', slotParams)
-              )
-            : (
-              <Dropdown
-                class={[nh.be('user'), layoutState.classes.headerUser]}
-                transfer
-                placement={isRtl.value ? 'bottom-start' : 'bottom-end'}
-                visible={currentUserDropped.value}
-                trigger={'custom'}
-                onClickOutside={() => toggleUserDropped(false)}
-              >
-                {{
-                  default: renderUserAvatar,
-                  drop: renderUserDrop
-                }}
-              </Dropdown>
-              )}
+          {slots.user ? (
+            renderSlot(slots, 'user', slotParams)
+          ) : (
+            <Dropdown
+              class={[nh.be('user'), layoutState.classes.headerUser]}
+              transfer
+              placement={isRtl.value ? 'bottom-start' : 'bottom-end'}
+              visible={currentUserDropped.value}
+              trigger={'custom'}
+              onClickOutside={() => toggleUserDropped(false)}
+            >
+              {{
+                default: renderUserAvatar,
+                drop: renderUserDrop
+              }}
+            </Dropdown>
+          )}
         </CustomTag>
       )
     }

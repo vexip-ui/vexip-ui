@@ -21,7 +21,7 @@ import {
   usePopper,
   useSetTimeout
 } from '@vexip-ui/hooks'
-import { isElement } from '@vexip-ui/utils'
+import { getGlobalCount, isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -65,6 +65,9 @@ export default defineComponent({
       virtual: null,
       shift: false
     })
+
+    const idIndex = `${getGlobalCount()}`
+    const tooltipId = computed(() => nh.bs(idIndex))
 
     const hoverDelay = useHoverDelay()
     const { timer } = useSetTimeout()
@@ -298,7 +301,7 @@ export default defineComponent({
     }
 
     return () => {
-      const CustomTag = props.wrapper
+      const Wrapper = props.wrapper
         ? ((props.wrapper === true ? 'span' : props.wrapper) as any)
         : null
       const triggers = slots.trigger?.(slotParams)
@@ -308,11 +311,13 @@ export default defineComponent({
         if (!triggerVNode) return null
 
         if (triggerVNode.type === TEXT_VNODE) {
-          return CustomTag ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
+          return Wrapper ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
         }
 
-        if (!CustomTag) {
-          triggerVNode.props = mergeProps(triggerVNode.props || {}, attrs)
+        if (!Wrapper) {
+          triggerVNode.props = mergeProps(triggerVNode.props || {}, attrs, {
+            'aria-describedby': tooltipId.value
+          })
         }
 
         return triggerVNode
@@ -320,22 +325,22 @@ export default defineComponent({
 
       return [
         triggerVNode &&
-          (CustomTag
-            ? (
-              <CustomTag
-                {...attrs}
-                ref={originalTrigger}
-                class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
-              >
-                {triggers}
-              </CustomTag>
-              )
-            : (
-              <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
-              )),
+          (Wrapper ? (
+            <Wrapper
+              {...attrs}
+              ref={originalTrigger}
+              class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
+              aria-describedby={tooltipId.value}
+            >
+              {triggers}
+            </Wrapper>
+          ) : (
+            <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
+          )),
         !props.disabled && (props.tipAlive || rendering.value) && (
           <Popper
             ref={popper}
+            id={tooltipId.value}
             class={{
               [nh.be('popper')]: true,
               [nh.bs('vars')]: true,

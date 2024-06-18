@@ -114,7 +114,7 @@ describe('Checkbox', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Checkbox state={state}></Checkbox>)
 
       expect(wrapper.find('.vxp-checkbox').classes()).toContain(`vxp-checkbox--${state}`)
@@ -259,7 +259,7 @@ describe('Checkbox', () => {
   })
 
   it('group state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => (
         <CheckboxGroup state={state}>
           <Checkbox></Checkbox>

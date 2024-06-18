@@ -3,7 +3,11 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    :aria-disabled="props.disabled ? 'true' : undefined"
+    role="group"
+    :aria-disabled="toAttrValue(props.disabled)"
+    :aria-expanded="toAttrValue(currentVisible)"
+    aria-haspopup="listbox"
+    :aria-labelledby="labelId"
     @click="toggleVisible"
   >
     <div
@@ -237,9 +241,16 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <Transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <button
+          v-if="showClear"
+          :class="[nh.be('icon'), nh.be('clear')]"
+          type="button"
+          tabindex="-1"
+          :aria-label="locale.ariaLabel.clear"
+          @click.stop="handleClear"
+        >
           <Icon v-bind="icons.clear" label="clear"></Icon>
-        </div>
+        </button>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
           <Icon
             v-bind="icons.loading"
@@ -260,87 +271,95 @@
       @click.stop="focus"
       @after-leave="currentFilter = ''"
     >
-      <div
-        :class="[
-          nh.be('list'),
-          ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
-          props.listClass
-        ]"
+      <slot
+        name="list"
+        :options="totalOptions"
+        :is-selected="isSelected"
+        :handle-select="handleSelect"
       >
-        <slot v-if="$slots.prepend" name="prepend"></slot>
-        <VirtualList
-          ref="virtualList"
-          inherit
-          :style="{
-            height: undefined,
-            maxHeight: `${props.maxListHeight}px`
-          }"
-          :items="totalOptions"
-          :item-size="32"
-          use-y-bar
-          :height="'100%'"
-          id-key="value"
-          :items-attrs="{
-            class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-            role: 'listbox',
-            ariaLabel: 'options'
-          }"
+        <div
+          :class="[
+            nh.be('list'),
+            ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
+            props.listClass
+          ]"
         >
-          <template #default="{ item: option, index }">
-            <li
-              v-if="option.group"
-              :class="[nh.ns('option-vars'), nh.be('group')]"
-              :title="option.label"
-            >
-              <slot name="group" :option="option" :index="index">
-                <div
-                  :class="[nh.be('label'), nh.bem('label', 'group')]"
-                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                >
-                  {{ option.label }}
-                </div>
-              </slot>
-            </li>
-            <Option
-              v-else
-              :label="option.label"
-              :value="option.value"
-              :disabled="option.disabled || (limited && !isSelected(option))"
-              :divided="option.divided"
-              :no-title="option.title"
-              :hitting="option.hitting"
-              :selected="isSelected(option)"
-              no-hover
-              @select="handleSelect(option)"
-              @mousemove="updateHitting(index, false)"
-            >
-              <slot :option="option" :index="index" :selected="isSelected(option)">
-                <span
-                  :class="nh.be('label')"
-                  :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                >
-                  {{ option.label }}
-                </span>
-                <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                  <Icon
-                    v-if="isSelected(option)"
-                    v-bind="icons.check"
-                    :class="nh.be('check')"
-                  ></Icon>
-                </Transition>
-              </slot>
-            </Option>
-          </template>
-          <template #empty>
-            <div :class="nh.be('empty')">
-              <slot name="empty">
-                {{ props.emptyText ?? locale.empty }}
-              </slot>
-            </div>
-          </template>
-        </VirtualList>
-        <slot v-if="$slots.append" name="append"></slot>
-      </div>
+          <slot v-if="$slots.prepend" name="prepend"></slot>
+          <VirtualList
+            ref="virtualList"
+            inherit
+            :style="{
+              height: undefined,
+              maxHeight: `${props.maxListHeight}px`
+            }"
+            :items="totalOptions"
+            :item-size="32"
+            use-y-bar
+            :height="'100%'"
+            id-key="value"
+            :items-attrs="{
+              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+              role: 'listbox',
+              ariaLabel: 'options',
+              ariaMultiselectable: props.multiple
+            }"
+          >
+            <template #default="{ item: option, index }">
+              <li
+                v-if="option.group"
+                :class="[nh.ns('option-vars'), nh.be('group')]"
+                :title="option.label"
+              >
+                <slot name="group" :option="option" :index="index">
+                  <div
+                    :class="[nh.be('label'), nh.bem('label', 'group')]"
+                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                  >
+                    {{ option.label }}
+                  </div>
+                </slot>
+              </li>
+              <Option
+                v-else
+                :label="option.label"
+                :value="option.value"
+                :disabled="option.disabled || (limited && !isSelected(option))"
+                :divided="option.divided"
+                :no-title="option.title"
+                :hitting="option.hitting"
+                :selected="isSelected(option)"
+                no-hover
+                @select="handleSelect(option)"
+                @mousemove="updateHitting(index, false)"
+              >
+                <slot :option="option" :index="index" :selected="isSelected(option)">
+                  <span
+                    :class="nh.be('label')"
+                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                  >
+                    {{ option.label }}
+                  </span>
+                  <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                    <Icon
+                      v-if="isSelected(option)"
+                      v-bind="icons.check"
+                      :class="nh.be('check')"
+                    ></Icon>
+                  </Transition>
+                </slot>
+              </Option>
+            </template>
+            <template #empty>
+              <div :class="nh.be('empty')">
+                <slot name="empty">
+                  {{ props.emptyText ?? locale.empty }}
+                </slot>
+              </div>
+            </template>
+          </VirtualList>
+          <slot v-if="$slots.append" name="append"></slot>
+        </div>
+      </slot>
     </Popper>
   </div>
 </template>
@@ -386,7 +405,14 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { decide, getLast, getRangeWidth, isNull, removeArrayItem } from '@vexip-ui/utils'
+import {
+  decide,
+  getLast,
+  getRangeWidth,
+  isNull,
+  removeArrayItem,
+  toAttrValue
+} from '@vexip-ui/utils'
 import { selectProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -449,6 +475,7 @@ export default defineComponent({
   setup(_props, { emit, slots }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -482,7 +509,7 @@ export default defineComponent({
       suffixColor: '',
       noSuffix: false,
       value: {
-        default: () => getFieldValue(null)!,
+        default: () => getFieldValue()!,
         static: true
       },
       multiple: false,
@@ -521,6 +548,8 @@ export default defineComponent({
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
+    const icons = useIcons()
+
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<SelectBaseValue[]>([])
@@ -1351,8 +1380,9 @@ export default defineComponent({
       props,
       nh,
       locale,
-      icons: useIcons(),
+      icons,
       idFor,
+      labelId,
       currentVisible,
       currentValues,
       currentLabels,
@@ -1387,6 +1417,7 @@ export default defineComponent({
       virtualList,
       restTip,
 
+      toAttrValue,
       getOptionFromMap,
       isSelected,
       filterOptions,

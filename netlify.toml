@@ -3,3 +3,12 @@
 [build]
   publish = "docs/.vitepress/dist"
   command = "pnpm run build:common && pnpm run build:scripts && pnpm run build && pnpm run build:meta && pnpm run build:docs"
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+
+[[headers]]
+  for = "/vite-plugin-pwa.excalidraw"
+  [headers.values]
+    Content-Type = "application/json; charset=UTF-8"

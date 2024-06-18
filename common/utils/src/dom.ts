@@ -1,4 +1,4 @@
-import { isClient } from './common'
+import { isClient, isDefined } from './common'
 import { isValidNumber, toNumber } from './number'
 
 import type { TransferNode } from './dom-event'
@@ -256,7 +256,22 @@ export function getRangeWidth(el: HTMLElement | null) {
  * 给定的值如果为合法数字，则将转换为像素值
  *
  * @param value 需要判断的值
+ *
+ * @returns 转换后的像素值
  */
 export function toCssSize(value: number | string) {
   return isValidNumber(value, true) ? `${toNumber(value)}px` : String(value).trim()
+}
+
+/**
+ * 将指定的值转换为 HTML 属性值
+ *
+ * @param value 需要转换的值
+ *
+ * @returns 转换后的 HTML 属性值
+ */
+export function toAttrValue(value?: boolean | null): 'true' | undefined
+export function toAttrValue(value?: string | number | null): string | undefined
+export function toAttrValue(value?: string | number | boolean | null) {
+  return isDefined(value) && value !== false ? String(value) : undefined
 }

@@ -44,8 +44,16 @@ export default defineComponent({
   props: transferProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      validateField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
@@ -55,7 +63,7 @@ export default defineComponent({
         static: true
       },
       value: {
-        default: () => getFieldValue([]),
+        default: () => getFieldValue(),
         static: true
       },
       disabled: () => disabled.value,
@@ -294,7 +302,12 @@ export default defineComponent({
 
     return () => {
       return (
-        <div id={idFor.value} class={className.value}>
+        <div
+          id={idFor.value}
+          class={className.value}
+          role={'application'}
+          aria-labelledby={labelId.value}
+        >
           <TransferPanel
             ref={source}
             v-model:selected={sourceSelected.value}

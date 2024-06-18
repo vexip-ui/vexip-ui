@@ -129,7 +129,9 @@ export default defineComponent({
           [
             [
               () => modifier.up,
-              () => (currentVolume.value = Math.min(1, currentVolume.value + 0.05))
+              () => {
+                currentVolume.value = Math.min(1, currentVolume.value + 0.05)
+              }
             ],
             [
               () => modifier.down,
@@ -277,7 +279,7 @@ export default defineComponent({
     onMounted(() => {
       nextTick(() => {
         if (isClient && !videoRef.value && screen.value?.wrapper) {
-          video.value = screen.value.wrapper.querySelector('video')
+          video.value = (screen.value.wrapper as HTMLElement).querySelector('video') ?? undefined
         }
 
         if (videoRef.value && currentTime.value > 0) {
