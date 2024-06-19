@@ -39,11 +39,12 @@ import { Dropdown } from './dropdown'
 import { DropdownItem } from './dropdown-item'
 import { DropdownList } from './dropdown-list'
 import { Ellipsis } from './ellipsis'
-import { FrameArea } from './frame-area'
 import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
 import { FormSubmit } from './form-submit'
+import { FrameArea } from './frame-area'
+import { FrameAreaItem } from './frame-area-item'
 import { FullScreen } from './full-screen'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
@@ -167,11 +168,12 @@ const components = [
   DropdownItem,
   DropdownList,
   Ellipsis,
-  FrameArea,
   Form,
   FormItem,
   FormReset,
   FormSubmit,
+  FrameArea,
+  FrameAreaItem,
   FullScreen,
   Grid,
   Highlight,
@@ -309,11 +311,12 @@ export * from './dropdown'
 export * from './dropdown-item'
 export * from './dropdown-list'
 export * from './ellipsis'
-export * from './frame-area'
 export * from './form'
 export * from './form-item'
 export * from './form-reset'
 export * from './form-submit'
+export * from './frame-area'
+export * from './frame-area-item'
 export * from './full-screen'
 export * from './grid'
 export * from './highlight'

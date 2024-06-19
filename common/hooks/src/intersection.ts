@@ -95,7 +95,7 @@ export function useIntersection(options: UseIntersectionOptions) {
   getCurrentScope() && onScopeDispose(disconnect)
 
   function normalizeMargin(margin?: string) {
-    if (!margin || !margin.trim()) return '_'
+    if (!margin || !margin.trim()) return '0px 0px 0px 0px'
 
     const parts = margin.trim().split(spaceRE, 4)
     parts.length = 4

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, provide, reactive } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { frameAreaProps } from './props'
+import { FRAME_AREA_STATE } from './symbol'
 
 defineOptions({ name: 'FrameArea' })
 
@@ -14,7 +15,8 @@ const props = useProps('frameArea', _props, {
 
 const nh = useNameHelper('frame-area')
 
-const fenceRect = reactive({
+const fenceState = reactive({
+  fencing: false,
   top: 0,
   left: 0,
   width: 0,
@@ -30,21 +32,24 @@ const { target: wrapper, moving: fencing } = useMoving({
 
     const rect = wrapper.value.getBoundingClientRect()
 
-    console.log(state.clientX, rect.left)
-    fenceRect.left = state.clientX - rect.left
-    fenceRect.top = state.clientY - rect.top
-    fenceRect.width = 0
-    fenceRect.height = 0
+    fenceState.left = state.clientX - rect.left
+    fenceState.top = state.clientY - rect.top
+    fenceState.width = 0
+    fenceState.height = 0
+
+    fenceState.fencing = true
 
     emitEvent(props.onFenceStart, event)
   },
   onMove: (state, event) => {
-    fenceRect.width = state.deltaX
-    fenceRect.height = state.deltaY
+    fenceState.width = state.deltaX
+    fenceState.height = state.deltaY
 
     emitEvent(props.onFence, event)
   },
-  onEnd: (state, event) => {
+  onEnd: (_, event) => {
+    fenceState.fencing = false
+
     emitEvent(props.onFenceEnd, event)
   }
 })
@@ -53,11 +58,13 @@ const className = computed(() => {
   return [nh.b(), nh.bs('vars')]
 })
 const fenceStyle = computed(() => ({
-  top: `${fenceRect.top}px`,
-  left: `${fenceRect.left}px`,
-  width: `${fenceRect.width}px`,
-  height: `${fenceRect.height}px`
+  top: `${fenceState.top}px`,
+  left: `${fenceState.left}px`,
+  width: `${fenceState.width}px`,
+  height: `${fenceState.height}px`
 }))
+
+provide(FRAME_AREA_STATE, fenceState)
 </script>
 
 <template>
