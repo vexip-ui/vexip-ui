@@ -38,13 +38,15 @@ const getIndex = useZIndex()
 const currentActive = ref(props.active)
 // If initial active, we should set a valid index as initial value
 const zIndex = ref(props.active ? getIndex() : 0)
-const wrapShow = ref(props.active)
+const wrapperShow = ref(props.active)
 
 const wrapper = ref<HTMLElement>()
 const topTrap = ref<HTMLElement>()
 const bottomTrap = ref<HTMLElement>()
 
-let showing = false
+let maskShow = false
+let contentShow = false
+let stable = false
 let prevFocusedEl: HTMLElement | null = null
 
 const transferTo = computed(() => {
@@ -74,13 +76,13 @@ watch(
     currentActive.value = value
 
     if (value) {
-      wrapShow.value = value
+      wrapperShow.value = value
     }
   }
 )
 watch(currentActive, value => {
   if (!value) {
-    showing = false
+    stable = false
 
     if (prevFocusedEl) {
       prevFocusedEl.focus()
@@ -91,7 +93,7 @@ watch(currentActive, value => {
     zIndex.value = getIndex()
   }
 
-  if (!props.maskTransition) {
+  if ((!props.maskTransition || props.disabled) && !props.transitionName) {
     value ? afterOpen() : afterClose()
   }
 })
@@ -112,7 +114,7 @@ watch(
 defineExpose({
   currentActive,
   zIndex,
-  wrapShow,
+  wrapperShow,
   wrapper,
   topTrap,
   bottomTrap
@@ -153,15 +155,6 @@ async function handleClose() {
   }
 }
 
-function afterClose() {
-  if (currentActive.value) return
-
-  nextTick(() => {
-    wrapShow.value = false
-    emitEvent(props.onHide)
-  })
-}
-
 function afterOpen() {
   if (!currentActive.value) return
 
@@ -172,9 +165,46 @@ function afterOpen() {
   }
 
   nextTick(() => {
-    showing = true
+    stable = true
     emitEvent(props.onShow)
   })
+}
+
+function afterClose() {
+  if (currentActive.value) return
+
+  nextTick(() => {
+    wrapperShow.value = false
+    emitEvent(props.onHide)
+  })
+}
+
+function afterMaskOpen() {
+  if (!currentActive.value) return
+
+  maskShow = true
+  ;(!props.transitionName || contentShow) && afterOpen()
+}
+
+function afterMaskClose() {
+  if (currentActive.value) return
+
+  maskShow = false
+  ;(!props.transitionName || !contentShow) && afterClose()
+}
+
+function afterContentOpen() {
+  if (!currentActive.value) return
+
+  contentShow = true
+  ;(!props.maskTransition || props.disabled || maskShow) && afterOpen()
+}
+
+function afterContentClose() {
+  if (currentActive.value) return
+
+  contentShow = false
+  ;(!props.maskTransition || props.disabled || !maskShow) && afterClose()
 }
 
 function handleMaskClick(event: MouseEvent) {
@@ -185,7 +215,7 @@ function handleMaskClick(event: MouseEvent) {
 function handleFocusIn(event: FocusEvent) {
   const target = event.target as HTMLElement
 
-  if (!showing || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
+  if (!stable || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
     return
   }
 
@@ -208,7 +238,7 @@ function handleResize(entry: ResizeObserverEntry) {
 </script>
 
 <template>
-  <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
+  <Portal v-if="!props.autoRemove || wrapperShow" :to="transferTo">
     <div
       v-bind="$attrs"
       ref="wrapper"
@@ -216,8 +246,8 @@ function handleResize(entry: ResizeObserverEntry) {
       tabindex="-1"
       :style="{
         zIndex,
-        pointerEvents: wrapShow ? undefined : 'none',
-        visibility: wrapShow ? undefined : 'hidden'
+        pointerEvents: wrapperShow ? undefined : 'none',
+        visibility: wrapperShow ? undefined : 'hidden'
       }"
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
@@ -227,8 +257,8 @@ function handleResize(entry: ResizeObserverEntry) {
           v-if="!props.disabled"
           appear
           :name="props.maskTransition"
-          @after-enter="afterOpen"
-          @after-leave="afterClose"
+          @after-enter="afterMaskOpen"
+          @after-leave="afterMaskClose"
         >
           <div v-show="currentActive" :class="nh.be('mask')" @click="handleMaskClick">
             <slot name="mask">
@@ -249,8 +279,14 @@ function handleResize(entry: ResizeObserverEntry) {
         aria-hidden="true"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></div>
-      <div :class="nh.be('content')" @wheel.stop>
-        <Transition v-if="props.transitionName" appear :name="props.transitionName">
+      <div :class="nh.be('content')" @wheel.stop.prevent>
+        <Transition
+          v-if="props.transitionName"
+          appear
+          :name="props.transitionName"
+          @after-enter="afterContentOpen"
+          @after-leave="afterContentClose"
+        >
           <slot :show="currentActive"></slot>
         </Transition>
         <slot v-else :show="currentActive"></slot>

@@ -117,8 +117,7 @@ $image: map.merge(
     @include basis;
 
     &__wrapper {
-      width: 100%;
-      height: 100%;
+      @include inner-fixed;
     }
 
     &__close {
