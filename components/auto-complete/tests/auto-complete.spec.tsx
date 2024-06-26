@@ -68,7 +68,7 @@ describe('AutoComplete', () => {
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(true)
 
-    wrapper.getComponent(Select).vm.handleClear()
+    wrapper.vm.select?.handleClear()
     await nextTick()
 
     expect(handleClear).toHaveBeenCalled()

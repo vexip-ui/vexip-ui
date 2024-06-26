@@ -206,6 +206,8 @@ export default defineComponent({
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      idFor,
+      labelId,
       focused,
       currentValue,
       showPassword,
