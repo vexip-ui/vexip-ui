@@ -41,6 +41,8 @@ $number-input: map.merge(
 
   &__plus,
   &__minus {
+    @include clean-button;
+
     position: absolute;
     inset-inline-end: 0;
     display: flex;

@@ -47,6 +47,7 @@
     "sass": "^1.74.1",
     "vite": "^5.2.8",
     "vite-plugin-inspect": "^0.8.3",
+    "vite-svg-loader": "^5.1.0",
     "vitepress": "1.0.2"
   }
 }

@@ -123,7 +123,10 @@ const defaultState = computed(() => 'default' as ComponentState)
 const defaultFalse = computed(() => false)
 const defaultSize = computed(() => 'default' as ComponentSize)
 
-function getEmptyActions<V = unknown>() {
+/**
+ * @internal
+ */
+export function getNoopFieldStore<V = unknown>() {
   return {
     isField: false,
     idFor: defaultId,
@@ -148,12 +151,12 @@ function getEmptyActions<V = unknown>() {
 export function useFieldStore<V = unknown>(onFocus?: () => void) {
   const instance = getCurrentInstance()
 
-  if (!instance) return getEmptyActions<V>()
+  if (!instance) return getNoopFieldStore<V>()
 
   const fieldOptions = inject(FIELD_OPTIONS, null)
 
   if (!fieldOptions) {
-    return getEmptyActions<V>()
+    return getNoopFieldStore<V>()
   }
 
   // Block the provided if there are dependencies between control components.

@@ -1,0 +1,44 @@
+<svg viewBox="0 0 295 99" fill="none">
+  <path d="M180.5 32V62" stroke="var(--vxp-color-primary-base)" stroke-opacity="0.7" />
+  <path d="M181 46.5H199" stroke="var(--vxp-color-primary-base)" stroke-opacity="0.7" />
+  <path d="M187 52.5L190 55.5L193 52.5" stroke="var(--vxp-color-primary-base)" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M193 40.5L190 37.5L187 40.5" stroke="var(--vxp-color-primary-base)" stroke-linecap="round" stroke-linejoin="round" />
+  <path
+    d="M167.775 45.265L164.265 48.775M164.265 45.265L167.775 48.775M171.87 47.02C171.87 50.2509 169.251 52.87 166.02 52.87C162.789 52.87 160.17 50.2509 160.17 47.02C160.17 43.7891 162.789 41.17 166.02 41.17C169.251 41.17 171.87 43.7891 171.87 47.02Z"
+    stroke="var(--vxp-color-primary-base)" stroke-opacity="0.7" stroke-width="1.17" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="0.5" y="31.5" width="199" height="31" rx="3.5" stroke="var(--vxp-color-primary-base)" stroke-opacity="0.7" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    letter-spacing="0em">
+    <tspan x="8" y="51.3636">6666</tspan>
+  </text>
+  <ellipse cx="195.5" cy="35.4375" rx="1.5" ry="1.5625" fill="var(--vxp-color-primary-base)" />
+  <path d="M195.5 34.9167L195.5 13.9167" stroke="var(--vxp-color-primary-base)" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    font-style="italic" letter-spacing="0em">
+    <tspan x="163.338" y="10.8636">Plus button</tspan>
+  </text>
+  <ellipse cx="66.5" cy="45.4375" rx="1.5" ry="1.5625" fill="var(--vxp-color-primary-base)" />
+  <path d="M66.5 44.9167L66.5 23.9167" stroke="var(--vxp-color-primary-base)" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    font-style="italic" letter-spacing="0em">
+    <tspan x="45.2168" y="20.8636">Control</tspan>
+  </text>
+  <circle cx="27.5" cy="62.5" r="1.5" fill="var(--vxp-color-primary-base)" />
+  <line x1="27.5" y1="63" x2="27.5" y2="84" stroke="var(--vxp-color-primary-base)" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    font-style="italic" letter-spacing="0em">
+    <tspan x="3.3125" y="95.8636">Wrapper</tspan>
+  </text>
+  <circle cx="196.5" cy="55.5" r="1.5" fill="var(--vxp-color-primary-base)" />
+  <path d="M197 55.5H218" stroke="var(--vxp-color-primary-base)" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    font-style="italic" letter-spacing="0em">
+    <tspan x="221" y="59.8636">Minus button</tspan>
+  </text>
+  <circle cx="163.5" cy="52.5" r="1.5" fill="var(--vxp-color-primary-base)" />
+  <line x1="163.5" y1="53" x2="163.5" y2="74" stroke="var(--vxp-color-primary-base)" />
+  <text fill="var(--vxp-color-primary-base)" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="12"
+    font-style="italic" letter-spacing="0em">
+    <tspan x="128.268" y="85.8636">Clear button</tspan>
+  </text>
+</svg>

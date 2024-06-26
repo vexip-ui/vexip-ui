@@ -1,4 +1,4 @@
-# NumberInput 数字输入框
+# NumberInput 数字输入框 ==!h==
 
 通常用在需要以更友好的交互进行数字的输入的场合。
 
@@ -107,6 +107,18 @@
 ### 不同状态
 
 通过 `state` 可以设置不同的状态。
+
+:::
+
+:::demo number-input/headless
+
+### 无头用法
+
+<HeadlessSvg name="number-input"></HeadlessSvg>
+
+==!b==
+
+通过 `useNumberInput` 方法可以快速创建一个只包含逻辑的组件。
 
 :::
 

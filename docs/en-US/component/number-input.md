@@ -110,6 +110,18 @@ Different states can be set via `state`.
 
 :::
 
+:::demo number-input/headless
+
+### Headless Usage
+
+<HeadlessSvg name="number-input"></HeadlessSvg>
+
+==!b==
+
+The `useNumberInput` method allows you to quickly create a component that contains only logic.
+
+:::
+
 ## API
 
 ### Preset Types
