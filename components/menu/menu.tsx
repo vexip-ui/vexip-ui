@@ -16,7 +16,7 @@ import {
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { callIfFunc, isDefined } from '@vexip-ui/utils'
+import { callIfFunc, isBoolean, isDefined } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
@@ -62,7 +62,8 @@ export default defineComponent({
       },
       router: null,
       manualRoute: false,
-      indent: null
+      indent: null,
+      onlyOne: false
     })
 
     const nh = useNameHelper('menu')
@@ -134,6 +135,8 @@ export default defineComponent({
         tooltipReverse: toRef(props, 'tooltipReverse'),
         transfer: toRef(props, 'transfer'),
         trigger: toRef(props, 'trigger'),
+        onlyOne: toRef(props, 'onlyOne'),
+        renderMenuItem,
         markerType,
         handleSelect,
         handleExpand,
@@ -317,7 +320,20 @@ export default defineComponent({
       }
     }
 
-    function renderMenuItem(item: MenuOptions) {
+    function renderMenuItem(menuItem: MenuOptions) {
+      const item =
+        (isBoolean(menuItem.onlyOne) ? menuItem.onlyOne : props.onlyOne) &&
+        menuItem.children?.length === 1
+          ? {
+              ...menuItem,
+              ...menuItem.children[0],
+              meta: {
+                _parent: menuItem.meta,
+                ...menuItem.children[0].meta
+              }
+            }
+          : menuItem
+
       return (
         <MenuItem
           label={item.label}
@@ -327,6 +343,7 @@ export default defineComponent({
           children={item.children}
           route={item.route}
           meta={item.meta}
+          only-one={item.onlyOne}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
