@@ -5,7 +5,7 @@
   <Select
     multiple
     clearable
-    :filter="fitler"
+    :filter="filter"
     :options="options"
   ></Select>
 </template>
@@ -18,7 +18,7 @@ const options = Array.from({ length: 12 }, (_, i) => ({
   value: i + 1
 }))
 
-const fitler: SelectFilter = (filterValue, option) => {
+const filter: SelectFilter = (filterValue, option) => {
   return option.label.toLocaleLowerCase().includes(filterValue.toLocaleUpperCase())
 }
 </script>

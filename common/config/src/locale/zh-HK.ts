@@ -174,6 +174,7 @@ export function zhHKLocale() {
     select: {
       placeholder: '請選擇',
       empty: '暫無數據',
+      search: '搜索選項',
 
       ariaLabel: {
         clear: '清空選項'

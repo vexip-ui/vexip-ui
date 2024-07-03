@@ -174,6 +174,7 @@ export function frFRLocale() {
     select: {
       placeholder: 'Veuillez sélectionner',
       empty: 'Pas de données',
+      search: 'Rechercher des options',
 
       ariaLabel: {
         clear: 'Effacer la sélection'

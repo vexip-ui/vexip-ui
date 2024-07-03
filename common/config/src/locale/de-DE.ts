@@ -174,6 +174,7 @@ export function deDELocale() {
     select: {
       placeholder: 'Bitte auswählen',
       empty: 'Keine Daten',
+      search: 'Suche Optionen',
 
       ariaLabel: {
         clear: 'Löschen'

@@ -1,4 +1,5 @@
 import { Icon } from '@/components/icon'
+import { Input } from '@/components/input'
 import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
@@ -51,6 +52,7 @@ import {
 import { selectProps } from './props'
 
 import type { InputHTMLAttributes } from 'vue'
+import type { InputExposed } from '@/components/input'
 import type { PopperExposed } from '@/components/popper'
 import type { TooltipExposed } from '@/components/tooltip'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -170,7 +172,8 @@ export default defineComponent({
         static: true
       },
       popperAlive: null,
-      countLimit: 0
+      countLimit: 0,
+      filterPosition: 'in-control'
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -215,11 +218,14 @@ export default defineComponent({
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
     const wrapper = useClickOutside(handleClickOutside)
-    const input = ref<HTMLInputElement>()
+    const nativeInput = ref<HTMLInputElement>()
+    const filterInput = ref<InputExposed>()
     const device = ref<HTMLElement>()
     const virtualList = ref<VirtualListExposed>()
     const popper = ref<PopperExposed>()
     const restTip = ref<TooltipExposed>()
+
+    const input = computed(() => filterInput.value?.input ?? nativeInput.value)
 
     const { reference, transferTo, updatePopper } = usePopper({
       placement,
@@ -482,6 +488,14 @@ export default defineComponent({
       )
     })
     const showPlaceholder = computed(() => {
+      if (props.filterPosition !== 'in-control') {
+        return (
+          !hasValue.value &&
+          !previewOption.value &&
+          !!(props.placeholder ?? locale.value.placeholder)
+        )
+      }
+
       // 采用反推，出现下列情况时不显示：
       // 1. 开始组合（如输入了任意拼音）
       // 2. 有值且 未开预览/多选模式/未打开列表
@@ -530,7 +544,7 @@ export default defineComponent({
         fitPopperWidth()
       }
 
-      syncInputValue()
+      nextTick(syncInputValue)
     })
     watch(
       () => props.value,
@@ -784,9 +798,11 @@ export default defineComponent({
       handleChange(option)
 
       if (props.multiple) {
-        currentFilter.value = ''
+        if (props.filterPosition === 'in-control') {
+          currentFilter.value = ''
+          syncInputValue()
+        }
 
-        syncInputValue()
         requestAnimationFrame(updatePopper)
       } else {
         setVisible(false)
@@ -1044,7 +1060,7 @@ export default defineComponent({
       return (
         <input
           {...attrs}
-          ref={input}
+          ref={nativeInput}
           class={[nh.be('input'), attrs.class, currentVisible.value && nh.bem('input', 'visible')]}
           disabled={props.disabled}
           autocomplete={'off'}
@@ -1096,10 +1112,11 @@ export default defineComponent({
       return (
         <>
           {props.filter &&
+            props.filterPosition === 'in-control' &&
             renderFilterInput({ style: { opacity: currentVisible.value ? undefined : '0%' } })}
           {(props.noPreview || !currentVisible.value) &&
             hasValue &&
-            !currentFilter.value &&
+            (props.filterPosition !== 'in-control' || !currentFilter.value) &&
             renderSingleSelected()}
         </>
       )
@@ -1188,7 +1205,7 @@ export default defineComponent({
                 )
             }}
           </Overflow>
-          {props.filter && (
+          {props.filter && props.filterPosition === 'in-control' && (
             <div class={nh.be('anchor')} style={{ width: `${anchorWidth.value}px` }}>
               {renderFilterInput({ class: nh.bem('input', 'multiple') })}
               <span ref={device} class={nh.be('device')} aria-hidden>
@@ -1320,6 +1337,38 @@ export default defineComponent({
       )
     }
 
+    function renderInListFilter() {
+      if (!props.filter) return null
+
+      return (
+        <div class={nh.be('filter')}>
+          <Input
+            ref={filterInput}
+            class={nh.be('filter-input')}
+            transparent
+            disabled={props.disabled}
+            placeholder={locale.value.search}
+            autocomplete={false}
+            tabindex={-1}
+            role={'combobox'}
+            aria-autocomplete={'list'}
+            name={props.name}
+            onInput={handleFilterInput}
+            onKeydown={handleFilterKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onCompositionstart={() => (composing.value = true)}
+            onCompositionend={handleCompositionEnd}
+            onChange={handleCompositionEnd}
+          >
+            {{
+              suffix: () => <Icon {...icons.value.search}></Icon>
+            }}
+          </Input>
+        </div>
+      )
+    }
+
     function renderPopper() {
       return (
         <Popper
@@ -1343,6 +1392,7 @@ export default defineComponent({
                 props.listClass
               ]}
             >
+              {props.filterPosition === 'in-list' && renderInListFilter()}
               {slots.prepend?.()}
               {renderVirtualList()}
               {slots.append?.()}
