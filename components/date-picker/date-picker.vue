@@ -789,7 +789,11 @@ function emitChange() {
       } else if (props.type !== 'datetime') {
         emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()
       } else {
-        emitValues[i] = new Date(values[i]).getTime()
+        const state = i === 0 ? startState : endState
+        const value = Object.keys(state.dateValue).map(key => {
+          return state.enabled[key as DateTimeType] ? state.dateValue[key as DateTimeType] : 0
+        })
+        emitValues[i] = new Date(...(value as [number])).getTime()
       }
 
       formattedValues[i] = formatValue(emitValues[i], i === 0 ? 'start' : 'end')
