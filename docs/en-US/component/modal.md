@@ -162,6 +162,7 @@ interface ModalSlotParams {
 | undivided       | `boolean`                         | Remove the dividing lines between parts of the modal                                                                                                                                                                    | `false`          | `2.2.6`  |
 | x-offset        | `number`                          | Set the horizontal offset of the modal, which do not effect the position props                                                                                                                                          | `0`              | `2.2.11` |
 | y-offset        | `number`                          | Set the vertical offset of the modal, which do not effect the position props                                                                                                                                            | `0`              | `2.2.11` |
+| disable-esc     | `boolean`                         | Set whether to disable close via using the ESC key                                                                                                                                                                      | `false`          | `2.3.11` |
 
 ### Modal Events
 

@@ -28,10 +28,16 @@ const props = useProps('masker', _props, {
   },
   transfer: false,
   autoRemove: false,
-  permeable: false
+  permeable: false,
+  disableEsc: false
 })
 
 const emit = defineEmits(['update:active'])
+
+const slots = defineSlots<{
+  mask?: () => any,
+  default?: (params: { show: boolean }) => any
+}>()
 
 const getIndex = useZIndex()
 
@@ -183,14 +189,14 @@ function afterMaskOpen() {
   if (!currentActive.value) return
 
   maskShow = true
-  ;(!props.transitionName || contentShow) && afterOpen()
+  ;(!props.transitionName || !slots.default || contentShow) && afterOpen()
 }
 
 function afterMaskClose() {
   if (currentActive.value) return
 
   maskShow = false
-  ;(!props.transitionName || !contentShow) && afterClose()
+  ;(!props.transitionName || !slots.default || !contentShow) && afterClose()
 }
 
 function afterContentOpen() {
@@ -235,6 +241,13 @@ function handleFocusIn(event: FocusEvent) {
 function handleResize(entry: ResizeObserverEntry) {
   emitEvent(props.onResize, entry)
 }
+
+function handleEscape(event: KeyboardEvent) {
+  if (!props.disableEsc) {
+    event.preventDefault()
+    handleClose()
+  }
+}
 </script>
 
 <template>
@@ -250,7 +263,7 @@ function handleResize(entry: ResizeObserverEntry) {
         visibility: wrapperShow ? undefined : 'hidden'
       }"
       @focusin="handleFocusIn"
-      @keydown.escape.prevent="handleClose"
+      @keydown.escape="handleEscape"
     >
       <ResizeObserver @resize="handleResize">
         <Transition

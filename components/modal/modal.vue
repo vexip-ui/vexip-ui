@@ -65,7 +65,8 @@ const props = useProps('modal', _props, {
   actionSize: createSizeProp('small'),
   undivided: false,
   xOffset: 0,
-  yOffset: 0
+  yOffset: 0,
+  disableEsc: false
 })
 
 const emit = defineEmits(['update:active'])
@@ -518,6 +519,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
     :on-before-close="handleMaskClose"
     :transfer="props.transfer"
     :auto-remove="props.autoRemove"
+    :disable-esc="props.disableEsc"
     @show="handleShow"
     @hide="handleHide"
     @resize="handleResize"

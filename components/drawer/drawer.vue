@@ -61,7 +61,8 @@ const props = useProps('drawer', _props, {
   confirmType: 'primary',
   cancelType: 'default',
   actionSize: createSizeProp('small'),
-  undivided: false
+  undivided: false,
+  disableEsc: false
 })
 
 const emit = defineEmits(['update:active'])
@@ -302,6 +303,7 @@ function handleCancel() {
     :on-before-close="handleMaskClose"
     :transfer="props.transfer"
     :auto-remove="props.autoRemove"
+    :disable-esc="props.disableEsc"
     @show="handleShow"
     @hide="handleHide"
   >

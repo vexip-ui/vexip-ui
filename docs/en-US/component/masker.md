@@ -34,6 +34,7 @@ Through the `mask` slot, you can customize the mask layer, for example to make a
 | transfer        | `boolean \| string`         | Set the rendering position of the mask, when set to `true`, it will render to `<body>` by default                                               | `false`      | -        |
 | auto-remove     | `boolean`                   | Set whether to automatically remove when not active                                                                                             | `false`      | `2.0.13` |
 | permeable       | `boolean`                   | Set whether `wheel` event is permeable                                                                                                          | `false`      | `2.1.29` |
+| disable-esc     | `boolean`                   | Set whether to disable close via using the ESC key                                                                                              | `false`      | `2.3.11` |
 
 ### Masker Events
 
