@@ -174,6 +174,7 @@ export interface LocaleConfig {
   select: {
     placeholder: string,
     empty: string,
+    search: string,
 
     ariaLabel: {
       clear: string

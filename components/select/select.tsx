@@ -1,371 +1,5 @@
-<template>
-  <div
-    :id="idFor"
-    ref="wrapper"
-    :class="className"
-    role="group"
-    :aria-disabled="toAttrValue(props.disabled)"
-    :aria-expanded="toAttrValue(currentVisible)"
-    aria-haspopup="listbox"
-    :aria-labelledby="labelId"
-    @click="toggleVisible"
-  >
-    <div
-      ref="reference"
-      :class="selectorClass"
-      tabindex="0"
-      @focus="handleFocus"
-      @blur=";(!props.filter || !currentVisible) && handleBlur($event)"
-    >
-      <div
-        v-if="hasPrefix"
-        :class="[nh.be('icon'), nh.be('prefix')]"
-        :style="{ color: props.prefixColor }"
-      >
-        <slot name="prefix">
-          <Icon :icon="props.prefix"></Icon>
-        </slot>
-      </div>
-      <div :class="nh.be('control')">
-        <slot name="control">
-          <template v-if="props.multiple">
-            <Overflow
-              inherit
-              :class="[nh.be('tags')]"
-              :items="currentValues"
-              :max-count="props.maxTagCount"
-              :style="{
-                maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
-              }"
-              @rest-change="restTagCount = $event"
-            >
-              <template #default="{ item: value, index }">
-                <Tag
-                  inherit
-                  :class="nh.be('tag')"
-                  :type="props.tagType"
-                  closable
-                  :disabled="props.disabled"
-                  @click.stop="toggleVisible"
-                  @close="handleTagClose(value)"
-                >
-                  <span :class="nh.be('label')">
-                    <slot name="selected" :option="getOptionFromMap(value)">
-                      {{ currentLabels[index] }}
-                    </slot>
-                  </span>
-                </Tag>
-              </template>
-              <template #counter="{ count }">
-                <Tag
-                  v-if="props.noRestTip"
-                  inherit
-                  :class="[nh.be('tag'), nh.be('counter')]"
-                  :type="props.tagType"
-                  :disabled="props.disabled"
-                  @click.stop="toggleVisible"
-                >
-                  {{ `+${count}` }}
-                </Tag>
-                <span v-else>
-                  <Tooltip
-                    ref="restTip"
-                    inherit
-                    :transfer="false"
-                    :visible="restTipShow"
-                    trigger="custom"
-                    placement="top-end"
-                    :tip-class="nh.be('rest-tip')"
-                    @click.stop="toggleShowRestTip"
-                  >
-                    <template #trigger>
-                      <Tag
-                        inherit
-                        :class="[nh.be('tag'), nh.be('counter')]"
-                        :type="props.tagType"
-                        :disabled="props.disabled"
-                      >
-                        {{ `+${count}` }}
-                      </Tag>
-                    </template>
-                    <NativeScroll inherit use-y-bar>
-                      <template v-for="(value, index) in currentValues" :key="index">
-                        <Tag
-                          v-if="index >= currentValues.length - restTagCount"
-                          inherit
-                          :class="nh.be('tag')"
-                          closable
-                          :type="props.tagType"
-                          :disabled="props.disabled"
-                          @close="handleRestTagClose(value)"
-                        >
-                          <span :class="nh.be('label')">
-                            <slot name="selected" :option="getOptionFromMap(value)">
-                              {{ currentLabels[index] }}
-                            </slot>
-                          </span>
-                        </Tag>
-                      </template>
-                    </NativeScroll>
-                  </Tooltip>
-                </span>
-              </template>
-              <!-- <template v-if="!limited && previewOption" #suffix>
-                <Tag
-                  inherit
-                  :class="[
-                    nh.be('tag'),
-                    nh.bem('tag', 'preview'),
-                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
-                  ]"
-                  :type="props.tagType"
-                  closable
-                >
-                  <slot name="selected" :preview="true" :option="previewOption">
-                    {{ previewOption.label }}
-                  </slot>
-                </Tag>
-              </template> -->
-            </Overflow>
-            <div
-              v-if="props.filter"
-              :class="nh.be('anchor')"
-              :style="{
-                width: `${anchorWidth}px`
-              }"
-            >
-              <input
-                ref="input"
-                :class="[
-                  nh.be('input'),
-                  nh.bem('input', 'multiple'),
-                  currentVisible && nh.bem('input', 'visible')
-                ]"
-                :disabled="props.disabled"
-                autocomplete="off"
-                tabindex="-1"
-                role="combobox"
-                aria-autocomplete="list"
-                :name="props.name"
-                @submit.prevent
-                @input="handleFilterInput"
-                @keydown="handleFilterKeyDown"
-                @focus="handleFocus($event)"
-                @blur="handleBlur($event)"
-                @compositionstart="composing = true"
-                @compositionend="handleCompositionEnd"
-                @change="handleCompositionEnd"
-              />
-              <span ref="device" :class="nh.be('device')" aria-hidden="true">
-                {{ currentFilter }}
-              </span>
-            </div>
-          </template>
-          <template v-else>
-            <input
-              v-if="props.filter"
-              ref="input"
-              :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
-              :disabled="props.disabled"
-              autocomplete="off"
-              tabindex="-1"
-              role="combobox"
-              aria-autocomplete="list"
-              :name="props.name"
-              :style="{
-                opacity: currentVisible ? undefined : '0%'
-              }"
-              @submit.prevent
-              @input="handleFilterInput"
-              @focus="handleFocus($event)"
-              @blur="handleBlur($event)"
-              @compositionstart="composing = true"
-              @compositionend="handleCompositionEnd"
-              @change="handleCompositionEnd"
-            />
-            <span
-              v-if="(props.noPreview || !currentVisible) && hasValue && !currentFilter"
-              :class="{
-                [nh.be('selected')]: true,
-                [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
-              }"
-            >
-              <slot
-                v-if="getOptionFromMap(currentValues[0])"
-                name="selected"
-                :option="getOptionFromMap(currentValues[0])"
-              >
-                {{ currentLabels[0] }}
-              </slot>
-              <template v-else>
-                {{ currentLabels[0] }}
-              </template>
-            </span>
-          </template>
-          <span v-if="showPlaceholder" :class="nh.be('placeholder')">
-            <slot
-              v-if="previewOption"
-              name="selected"
-              :preview="true"
-              :option="previewOption"
-            >
-              {{ previewOption.label }}
-            </slot>
-            <template v-else>
-              {{ props.placeholder ?? locale.placeholder }}
-            </template>
-          </span>
-        </slot>
-      </div>
-      <div
-        v-if="!props.noSuffix"
-        :class="[nh.be('icon'), nh.be('suffix')]"
-        :style="{
-          color: props.suffixColor,
-          opacity: showClear || props.loading ? '0%' : ''
-        }"
-      >
-        <slot name="suffix">
-          <Icon
-            v-if="props.suffix"
-            :icon="props.suffix"
-            :class="{
-              [nh.be('arrow')]: !props.staticSuffix
-            }"
-          ></Icon>
-          <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
-        </slot>
-      </div>
-      <div
-        v-else-if="props.clearable || props.loading"
-        :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
-      ></div>
-      <Transition :name="nh.ns('fade')" appear>
-        <button
-          v-if="showClear"
-          :class="[nh.be('icon'), nh.be('clear')]"
-          type="button"
-          tabindex="-1"
-          :aria-label="locale.ariaLabel.clear"
-          @click.stop="handleClear"
-        >
-          <Icon v-bind="icons.clear" label="clear"></Icon>
-        </button>
-        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon
-            v-bind="icons.loading"
-            :effect="props.loadingEffect || icons.loading.effect"
-            :icon="props.loadingIcon || icons.loading.icon"
-            label="loading"
-          ></Icon>
-        </div>
-      </Transition>
-    </div>
-    <Popper
-      ref="popper"
-      :class="[nh.be('popper'), nh.bs('vars')]"
-      :visible="currentVisible"
-      :to="transferTo"
-      :transition="props.transitionName"
-      :alive="props.popperAlive ?? !transferTo"
-      @click.stop="focus"
-      @after-leave="currentFilter = ''"
-    >
-      <slot
-        name="list"
-        :options="totalOptions"
-        :is-selected="isSelected"
-        :handle-select="handleSelect"
-      >
-        <div
-          :class="[
-            nh.be('list'),
-            ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
-            props.listClass
-          ]"
-        >
-          <slot v-if="$slots.prepend" name="prepend"></slot>
-          <VirtualList
-            ref="virtualList"
-            inherit
-            :style="{
-              height: undefined,
-              maxHeight: `${props.maxListHeight}px`
-            }"
-            :items="totalOptions"
-            :item-size="32"
-            use-y-bar
-            :height="'100%'"
-            id-key="value"
-            :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-              role: 'listbox',
-              ariaLabel: 'options',
-              ariaMultiselectable: props.multiple
-            }"
-          >
-            <template #default="{ item: option, index }">
-              <li
-                v-if="option.group"
-                :class="[nh.ns('option-vars'), nh.be('group')]"
-                :title="option.label"
-              >
-                <slot name="group" :option="option" :index="index">
-                  <div
-                    :class="[nh.be('label'), nh.bem('label', 'group')]"
-                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </div>
-                </slot>
-              </li>
-              <Option
-                v-else
-                :label="option.label"
-                :value="option.value"
-                :disabled="option.disabled || (limited && !isSelected(option))"
-                :divided="option.divided"
-                :no-title="option.title"
-                :hitting="option.hitting"
-                :selected="isSelected(option)"
-                no-hover
-                @select="handleSelect(option)"
-                @mousemove="updateHitting(index, false)"
-              >
-                <slot :option="option" :index="index" :selected="isSelected(option)">
-                  <span
-                    :class="nh.be('label')"
-                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </span>
-                  <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                    <Icon
-                      v-if="isSelected(option)"
-                      v-bind="icons.check"
-                      :class="nh.be('check')"
-                    ></Icon>
-                  </Transition>
-                </slot>
-              </Option>
-            </template>
-            <template #empty>
-              <div :class="nh.be('empty')">
-                <slot name="empty">
-                  {{ props.emptyText ?? locale.empty }}
-                </slot>
-              </div>
-            </template>
-          </VirtualList>
-          <slot v-if="$slots.append" name="append"></slot>
-        </div>
-      </slot>
-    </Popper>
-  </div>
-</template>
-
-<script lang="ts">
 import { Icon } from '@/components/icon'
+import { Input } from '@/components/input'
 import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
@@ -376,12 +10,14 @@ import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
 
 import {
+  Transition,
   computed,
   defineComponent,
   nextTick,
   onMounted,
   reactive,
   ref,
+  renderSlot,
   toRef,
   watch,
   watchEffect
@@ -415,6 +51,8 @@ import {
 } from '@vexip-ui/utils'
 import { selectProps } from './props'
 
+import type { InputHTMLAttributes } from 'vue'
+import type { InputExposed } from '@/components/input'
 import type { PopperExposed } from '@/components/popper'
 import type { TooltipExposed } from '@/components/tooltip'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -460,19 +98,9 @@ function isSameValue(newValue: SelectValue, oldValue: SelectValue) {
 
 export default defineComponent({
   name: 'Select',
-  components: {
-    Icon,
-    NativeScroll,
-    Option,
-    Overflow,
-    Popper,
-    Tag,
-    Tooltip,
-    VirtualList
-  },
   props: selectProps,
   emits: ['update:value', 'update:visible', 'update:label'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { emit, slots, expose }) {
     const {
       idFor,
       labelId,
@@ -544,7 +172,8 @@ export default defineComponent({
         static: true
       },
       popperAlive: null,
-      countLimit: 0
+      countLimit: 0,
+      filterPosition: 'in-control'
     })
 
     const locale = useLocale('select', toRef(props, 'locale'))
@@ -589,11 +218,14 @@ export default defineComponent({
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
     const wrapper = useClickOutside(handleClickOutside)
-    const input = ref<HTMLInputElement>()
+    const nativeInput = ref<HTMLInputElement>()
+    const filterInput = ref<InputExposed>()
     const device = ref<HTMLElement>()
     const virtualList = ref<VirtualListExposed>()
     const popper = ref<PopperExposed>()
     const restTip = ref<TooltipExposed>()
+
+    const input = computed(() => filterInput.value?.input ?? nativeInput.value)
 
     const { reference, transferTo, updatePopper } = usePopper({
       placement,
@@ -798,6 +430,7 @@ export default defineComponent({
       }
     })
     const readonly = computed(() => props.loading && props.loadingLock)
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
     const selectorClass = computed(() => {
       const baseCls = nh.be('selector')
 
@@ -815,7 +448,6 @@ export default defineComponent({
       }
     })
     const hasValue = computed(() => !isNull(currentValues.value[0]))
-    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
     const showDynamic = computed(() => {
       return !!(
         props.filter &&
@@ -856,6 +488,14 @@ export default defineComponent({
       )
     })
     const showPlaceholder = computed(() => {
+      if (props.filterPosition !== 'in-control') {
+        return (
+          !hasValue.value &&
+          !previewOption.value &&
+          !!(props.placeholder ?? locale.value.placeholder)
+        )
+      }
+
       // 采用反推，出现下列情况时不显示：
       // 1. 开始组合（如输入了任意拼音）
       // 2. 有值且 未开预览/多选模式/未打开列表
@@ -904,7 +544,7 @@ export default defineComponent({
         fitPopperWidth()
       }
 
-      syncInputValue()
+      nextTick(syncInputValue)
     })
     watch(
       () => props.value,
@@ -1158,9 +798,11 @@ export default defineComponent({
       handleChange(option)
 
       if (props.multiple) {
-        currentFilter.value = ''
+        if (props.filterPosition === 'in-control') {
+          currentFilter.value = ''
+          syncInputValue()
+        }
 
-        syncInputValue()
         requestAnimationFrame(updatePopper)
       } else {
         setVisible(false)
@@ -1214,7 +856,9 @@ export default defineComponent({
       }
     }
 
-    function toggleVisible() {
+    function toggleVisible(event?: Event) {
+      event?.stopPropagation()
+
       if (props.disabled || readonly.value) return
 
       setVisible(!currentVisible.value)
@@ -1230,7 +874,9 @@ export default defineComponent({
       }
     }
 
-    function handleClear() {
+    function handleClear(event?: MouseEvent) {
+      event?.stopPropagation()
+
       if (props.disabled || readonly.value) return
 
       if (props.clearable) {
@@ -1353,7 +999,9 @@ export default defineComponent({
       }
     }
 
-    function toggleShowRestTip() {
+    function toggleShowRestTip(event?: Event) {
+      event?.stopPropagation()
+
       if (!currentVisible.value) {
         restTipShow.value = !restTipShow.value
 
@@ -1376,38 +1024,18 @@ export default defineComponent({
       }
     }
 
-    return {
-      props,
-      nh,
-      locale,
-      icons,
+    expose({
       idFor,
       labelId,
       currentVisible,
       currentValues,
       currentLabels,
-      transferTo,
-      // listHeight,
       optionStates,
       isHover,
       currentFilter,
-      anchorWidth,
-      restTagCount,
-      restTipShow,
       composing,
-
-      className,
-      selectorClass,
-      hasValue,
-      hasPrefix,
       visibleOptions,
       totalOptions,
-      showClear,
-      normalOptions,
-      optionParentMap,
-      previewOption,
-      limited,
-      showPlaceholder,
 
       wrapper,
       reference,
@@ -1417,29 +1045,421 @@ export default defineComponent({
       virtualList,
       restTip,
 
-      toAttrValue,
-      getOptionFromMap,
       isSelected,
-      filterOptions,
+      getOptionFromMap,
       updateHitting,
-      handleTagClose,
-      handleRestTagClose,
-      handleSelect,
-      toggleVisible,
       handleClear,
-      handleFocus,
-      handleBlur,
-      handleFilterInput,
-      handleCompositionEnd,
-      handleFilterKeyDown,
-      toggleShowRestTip,
-
       focus,
       blur: () => {
         input.value?.blur()
         reference.value?.blur()
       }
+    })
+
+    function renderFilterInput(attrs: InputHTMLAttributes = {}) {
+      return (
+        <input
+          {...attrs}
+          ref={nativeInput}
+          class={[nh.be('input'), attrs.class, currentVisible.value && nh.bem('input', 'visible')]}
+          disabled={props.disabled}
+          autocomplete={'off'}
+          tabindex={-1}
+          role={'combobox'}
+          aria-autocomplete={'list'}
+          name={props.name}
+          onSubmit={e => e.preventDefault()}
+          onInput={handleFilterInput}
+          onKeydown={handleFilterKeyDown}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onCompositionstart={() => (composing.value = true)}
+          onCompositionend={handleCompositionEnd}
+          onChange={handleCompositionEnd}
+        />
+      )
     }
+
+    function renderLabel(value: SelectBaseValue, index: number) {
+      return (
+        <span class={nh.be('label')}>
+          {renderSlot(slots, 'selected', { option: getOptionFromMap(value) }, () => [
+            currentLabels.value[index]
+          ])}
+        </span>
+      )
+    }
+
+    function renderSingleSelected() {
+      const option = getOptionFromMap(currentValues.value[0])
+
+      return (
+        <span
+          class={{
+            [nh.be('selected')]: true,
+            [nh.bem('selected', 'placeholder')]:
+              props.filter && currentVisible.value && hasValue.value
+          }}
+        >
+          {option
+            ? renderSlot(slots, 'selected', { option }, () => [currentLabels.value[0]])
+            : currentLabels.value[0]}
+        </span>
+      )
+    }
+
+    function renderSingleControl() {
+      return (
+        <>
+          {props.filter &&
+            props.filterPosition === 'in-control' &&
+            renderFilterInput({ style: { opacity: currentVisible.value ? undefined : '0%' } })}
+          {(props.noPreview || !currentVisible.value) &&
+            hasValue &&
+            (props.filterPosition !== 'in-control' || !currentFilter.value) &&
+            renderSingleSelected()}
+        </>
+      )
+    }
+
+    function renderMultipleControl() {
+      return (
+        <>
+          <Overflow
+            inherit
+            class={[nh.be('tags')]}
+            items={currentValues.value}
+            max-count={props.maxTagCount}
+            style={{
+              maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth.value}px)`
+            }}
+            onRestChange={(count: number) => (restTagCount.value = count)}
+          >
+            {{
+              default: ({ item: value, index }: { item: SelectBaseValue, index: number }) => (
+                <Tag
+                  inherit
+                  class={nh.be('tag')}
+                  type={props.tagType}
+                  closable
+                  disabled={props.disabled}
+                  onClick={toggleVisible}
+                  onClose={() => handleTagClose(value)}
+                >
+                  {renderLabel(value, index)}
+                </Tag>
+              ),
+              count: ({ count }: { count: number }) =>
+                props.noRestTip ? (
+                  <Tag
+                    inherit
+                    class={[nh.be('tag'), nh.be('counter')]}
+                    type={props.tagType}
+                    disabled={props.disabled}
+                    onClick={toggleVisible}
+                  >
+                    {`+${count}`}
+                  </Tag>
+                ) : (
+                  <Tooltip
+                    ref={restTip}
+                    inherit
+                    transfer={false}
+                    visible={restTipShow.value}
+                    trigger={'custom'}
+                    placement={'top-end'}
+                    tip-class={nh.be('rest-tip')}
+                    onClick={toggleShowRestTip}
+                  >
+                    {{
+                      trigger: () => (
+                        <Tag
+                          inherit
+                          class={[nh.be('tag'), nh.be('counter')]}
+                          type={props.tagType}
+                          disabled={props.disabled}
+                        >
+                          {`+${count}`}
+                        </Tag>
+                      ),
+                      default: () => (
+                        <NativeScroll inherit use-y-bar>
+                          {currentValues.value.map((value, index) =>
+                            index >= currentValues.value.length - restTagCount.value ? (
+                              <Tag
+                                inherit
+                                class={nh.be('tag')}
+                                closable
+                                type={props.tagType}
+                                disabled={props.disabled}
+                                onClose={() => handleRestTagClose(value)}
+                              >
+                                {renderLabel(value, index)}
+                              </Tag>
+                            ) : null
+                          )}
+                        </NativeScroll>
+                      )
+                    }}
+                  </Tooltip>
+                )
+            }}
+          </Overflow>
+          {props.filter && props.filterPosition === 'in-control' && (
+            <div class={nh.be('anchor')} style={{ width: `${anchorWidth.value}px` }}>
+              {renderFilterInput({ class: nh.bem('input', 'multiple') })}
+              <span ref={device} class={nh.be('device')} aria-hidden>
+                {{ currentFilter }}
+              </span>
+            </div>
+          )}
+        </>
+      )
+    }
+
+    function renderPlaceholder() {
+      if (!showPlaceholder.value) return null
+
+      return (
+        <span class={nh.be('placeholder')}>
+          {previewOption.value
+            ? renderSlot(slots, 'selected', { option: previewOption.value, preview: true })
+            : props.placeholder ?? locale.value.placeholder}
+        </span>
+      )
+    }
+
+    function renderClearOrLoading() {
+      return (
+        <Transition name={nh.ns('fade')} appear>
+          {showClear.value ? (
+            <button
+              class={[nh.be('icon'), nh.be('clear')]}
+              type={'button'}
+              tabindex={-1}
+              aria-label={locale.value.ariaLabel.clear}
+              onClick={handleClear}
+            >
+              <Icon {...icons.value.clear} label={locale.value.ariaLabel.clear}></Icon>
+            </button>
+          ) : props.loading ? (
+            <div class={[nh.be('icon'), nh.be('loading')]}>
+              <Icon
+                {...icons.value.loading}
+                effect={props.loadingEffect || icons.value.loading.effect}
+                icon={props.loadingIcon || icons.value.loading.icon}
+                label={'loading'}
+              ></Icon>
+            </div>
+          ) : null}
+        </Transition>
+      )
+    }
+
+    function renderVirtualList() {
+      return (
+        <VirtualList
+          ref={virtualList}
+          inherit
+          style={{
+            height: undefined,
+            maxHeight: `${props.maxListHeight}px`
+          }}
+          items={totalOptions.value}
+          item-size={32}
+          use-y-bar
+          height={'100%'}
+          id-key={'value'}
+          items-attrs={{
+            class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+            role: 'listbox',
+            ariaLabel: 'options',
+            ariaMultiselectable: props.multiple
+          }}
+        >
+          {{
+            default: ({ item: option, index }: { item: SelectOptionState, index: number }) => {
+              if (option.group) {
+                return (
+                  <li class={[nh.ns('option-vars'), nh.be('group')]} title={option.label}>
+                    {renderSlot(slots, 'group', { option, index }, () => [
+                      <div
+                        class={[nh.be('label'), nh.bem('label', 'group')]}
+                        style={{ paddingInlineStart: `${option.depth * 6}px` }}
+                      >
+                        {option.label}
+                      </div>
+                    ])}
+                  </li>
+                )
+              }
+
+              const selected = isSelected(option)
+
+              return (
+                <Option
+                  label={option.label}
+                  value={option.value}
+                  disabled={option.disabled || (limited.value && !selected)}
+                  divided={option.divided}
+                  no-title={option.title}
+                  hitting={option.hitting}
+                  selected={selected}
+                  no-hover
+                  onSelect={() => handleSelect(option)}
+                  onMousemove={() => updateHitting(index, false)}
+                >
+                  {renderSlot(slots, 'default', { option, index, selected }, () => [
+                    <span
+                      class={nh.be('label')}
+                      style={{ paddingInlineStart: `${option.depth * 6}px` }}
+                    >
+                      {option.label}
+                    </span>,
+                    props.optionCheck && (
+                      <Transition name={nh.ns('fade')} appear>
+                        {selected && <Icon {...icons.value.check} class={nh.be('check')}></Icon>}
+                      </Transition>
+                    )
+                  ])}
+                </Option>
+              )
+            },
+            empty: () => (
+              <div class={nh.be('empty')}>
+                {renderSlot(slots, 'empty', undefined, () => [
+                  props.emptyText ?? locale.value.empty
+                ])}
+              </div>
+            )
+          }}
+        </VirtualList>
+      )
+    }
+
+    function renderInListFilter() {
+      if (!props.filter) return null
+
+      return (
+        <div class={nh.be('filter')}>
+          <Input
+            ref={filterInput}
+            class={nh.be('filter-input')}
+            transparent
+            disabled={props.disabled}
+            placeholder={locale.value.search}
+            autocomplete={false}
+            tabindex={-1}
+            role={'combobox'}
+            aria-autocomplete={'list'}
+            name={props.name}
+            onInput={handleFilterInput}
+            onKeydown={handleFilterKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onCompositionstart={() => (composing.value = true)}
+            onCompositionend={handleCompositionEnd}
+            onChange={handleCompositionEnd}
+          >
+            {{
+              suffix: () => <Icon {...icons.value.search}></Icon>
+            }}
+          </Input>
+        </div>
+      )
+    }
+
+    function renderPopper() {
+      return (
+        <Popper
+          ref={popper}
+          class={[nh.be('popper'), nh.bs('vars')]}
+          visible={currentVisible.value}
+          to={transferTo.value}
+          transition={props.transitionName}
+          alive={props.popperAlive ?? !transferTo.value}
+          onClick={(e: MouseEvent) => {
+            e.stopPropagation()
+            focus()
+          }}
+          onAfterLeave={() => (currentFilter.value = '')}
+        >
+          {renderSlot(slots, 'list', { options: totalOptions, isSelected, handleSelect }, () => [
+            <div
+              class={[
+                nh.be('list'),
+                (slots.prepend || slots.append) && nh.bem('list', 'with-extra'),
+                props.listClass
+              ]}
+            >
+              {props.filterPosition === 'in-list' && renderInListFilter()}
+              {slots.prepend?.()}
+              {renderVirtualList()}
+              {slots.append?.()}
+            </div>
+          ])}
+        </Popper>
+      )
+    }
+
+    return () => (
+      <div
+        ref={wrapper}
+        id={idFor.value}
+        class={className.value}
+        role={'group'}
+        aria-disabled={toAttrValue(props.disabled)}
+        aria-expanded={toAttrValue(currentVisible.value)}
+        aria-haspopup={'listbox'}
+        aria-labelledby={labelId.value}
+        onClick={toggleVisible}
+      >
+        <div
+          ref={reference}
+          class={selectorClass.value}
+          tabindex={0}
+          onFocus={handleFocus}
+          onBlur={e => (!props.filter || !currentVisible.value) && handleBlur(e)}
+        >
+          {hasPrefix.value && (
+            <div class={[nh.be('icon'), nh.be('prefix')]} style={{ color: props.prefixColor }}>
+              {renderSlot(slots, 'prefix', undefined, () => [<Icon icon={props.prefix}></Icon>])}
+            </div>
+          )}
+          <div class={nh.be('control')}>
+            {renderSlot(slots, 'control', undefined, () => [
+              props.multiple ? renderMultipleControl() : renderSingleControl(),
+              renderPlaceholder()
+            ])}
+          </div>
+          {!props.noSuffix ? (
+            <div
+              class={[nh.be('icon'), nh.be('suffix')]}
+              style={{
+                color: props.suffixColor,
+                opacity: showClear.value || props.loading ? '0%' : ''
+              }}
+            >
+              {renderSlot(slots, 'suffix', undefined, () => [
+                props.suffix ? (
+                  <Icon
+                    icon={props.suffix}
+                    class={{
+                      [nh.be('arrow')]: !props.staticSuffix
+                    }}
+                  ></Icon>
+                ) : (
+                  <Icon {...icons.value.angleDown} class={nh.be('arrow')}></Icon>
+                )
+              ])}
+            </div>
+          ) : props.clearable || props.loading ? (
+            <div class={[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]}></div>
+          ) : null}
+          {renderClearOrLoading()}
+        </div>
+        {renderPopper()}
+      </div>
+    )
   }
 })
-</script>

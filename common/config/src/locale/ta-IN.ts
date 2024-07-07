@@ -174,6 +174,7 @@ export function taINLocale() {
     select: {
       placeholder: 'தயவுசெய்து தேர்ந்தெடுகக்கவும்',
       empty: 'தரவு இல்லை',
+      search: 'தேடு அல்லது உள்ளிடு',
 
       ariaLabel: {
         clear: 'தெளிவாக்கு'

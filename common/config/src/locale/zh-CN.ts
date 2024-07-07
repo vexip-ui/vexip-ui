@@ -174,6 +174,7 @@ export function zhCNLocale() {
     select: {
       placeholder: '请选择',
       empty: '暂无数据',
+      search: '搜索选项',
 
       ariaLabel: {
         clear: '清空选项'

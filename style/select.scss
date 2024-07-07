@@ -13,7 +13,9 @@ $select: map.merge(
     list-radius: get-css-var('radius-base'),
     list-shadow: get-css-var('shadow-base'),
     check-color: get-css-var('color-primary-base'),
-    empty-color: get-css-var('content-color-placeholder')
+    empty-color: get-css-var('content-color-placeholder'),
+    filter-height: 32px,
+    filter-divider: get-css-var('border-shape') get-css-var('border-color-light-2')
   ),
   $select
 );
@@ -29,7 +31,7 @@ $select: map.merge(
   width: 100%;
   cursor: pointer;
 
-  &--filter {
+  &--filterable {
     cursor: text;
   }
 
@@ -205,6 +207,11 @@ $select: map.merge(
         padding: 0;
       }
     }
+  }
+
+  &__filter {
+    padding: 0 6px;
+    border-bottom: get-css-var('select-filter-divider');
   }
 
   &__options {

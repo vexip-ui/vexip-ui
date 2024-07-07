@@ -18,6 +18,7 @@ import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { autoCompleteProps } from './props'
 
+import type { SelectExposed } from '@/components/select'
 import type {
   AutoCompleteListSlotParams,
   AutoCompleteOptionState,
@@ -28,7 +29,7 @@ import type {
 
 defineOptions({ name: 'AutoComplete' })
 
-const select = ref<InstanceType<typeof Select>>()
+const select = ref<SelectExposed>()
 const control = ref<HTMLInputElement>()
 
 const {
