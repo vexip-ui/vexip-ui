@@ -120,7 +120,7 @@ export function zhTWLocale() {
       submit: '提交',
       reset: '重置',
       notNullable: '不可為空',
-      validateFail: '驗證未透過'
+      validateFail: '驗證未通過'
     },
 
     image: {
@@ -174,6 +174,7 @@ export function zhTWLocale() {
     select: {
       placeholder: '請選擇',
       empty: '暫無資料',
+      search: '搜索選項',
 
       ariaLabel: {
         clear: '清空選項'

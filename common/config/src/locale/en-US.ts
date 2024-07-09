@@ -174,6 +174,7 @@ export function enUSLocale() {
     select: {
       placeholder: 'Please select',
       empty: 'No data',
+      search: 'Search options',
 
       ariaLabel: {
         clear: 'Clear select'

@@ -33,7 +33,7 @@ describe('Divider', () => {
   })
 
   it('text position', () => {
-    (['center', 'left', 'right'] as const).forEach(position => {
+    ;(['center', 'left', 'right'] as const).forEach(position => {
       const wrapper = mount(() => <Divider text-position={position}>{TEXT}</Divider>)
 
       if (position === 'center') {

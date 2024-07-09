@@ -582,30 +582,7 @@ function getCurrentState() {
 }
 
 function rawValueToDate(value: Dateable, defaultValue = new Date(props.today)) {
-  let date!: Date
-
-  if (typeof value === 'number') {
-    if (props.type === 'year') {
-      if (value < 3000) {
-        date = new Date(value, 1)
-      } else {
-        date = toDate(value)
-      }
-    } else if (props.type === 'month') {
-      if (value < 300000) {
-        const year = Math.floor(value / 100)
-        const month = value - year * 100
-
-        date = new Date(year, month - 1)
-      } else {
-        date = toDate(value)
-      }
-    } else {
-      date = toDate(value)
-    }
-  } else {
-    date = toDate(value)
-  }
+  let date = toDate(value)
 
   if (Number.isNaN(date.getTime())) {
     date = defaultValue

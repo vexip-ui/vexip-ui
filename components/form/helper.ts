@@ -1,10 +1,10 @@
 import { computed, getCurrentInstance, inject, onBeforeUnmount, provide } from 'vue'
 
-import { isNull, noop } from '@vexip-ui/utils'
+import { isNull, noop, toFalse } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
+import type { ComputedRef } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
-import type { FieldOptions } from './symbol'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)
@@ -118,12 +118,27 @@ export function setValueByPath(
   return false
 }
 
+export interface FormFieldStore<V = unknown> {
+  isField: boolean,
+  idFor: ComputedRef<string | undefined>,
+  labelId: ComputedRef<string | undefined>,
+  state: ComputedRef<ComponentState>,
+  disabled: ComputedRef<boolean>,
+  loading: ComputedRef<boolean>,
+  size: ComputedRef<ComponentSize>,
+  validateField: () => Promise<string[] | null>,
+  clearField: (defaultValue?: V) => void,
+  resetField: () => boolean,
+  getFieldValue: (defaultValue?: V) => V,
+  setFieldValue: (value: V, strict?: boolean) => void
+}
+
 const defaultId = computed(() => undefined as string | undefined)
 const defaultState = computed(() => 'default' as ComponentState)
 const defaultFalse = computed(() => false)
 const defaultSize = computed(() => 'default' as ComponentSize)
 
-function getEmptyActions<V = unknown>() {
+function getEmptyActions<V>() {
   return {
     isField: false,
     idFor: defaultId,
@@ -132,12 +147,12 @@ function getEmptyActions<V = unknown>() {
     disabled: defaultFalse,
     loading: defaultFalse,
     size: defaultSize,
-    validateField: noop as FieldOptions['validate'],
-    clearField: noop as FieldOptions['clearError'],
-    resetField: noop as FieldOptions['reset'],
-    getFieldValue: (v => v) as (defaultValue?: V) => V,
-    setFieldValue: noop as (value: V, strict?: boolean) => void
-  }
+    validateField: noop,
+    clearField: noop,
+    resetField: toFalse,
+    getFieldValue: v => v,
+    setFieldValue: noop
+  } as FormFieldStore<V>
 }
 
 /**
@@ -145,7 +160,7 @@ function getEmptyActions<V = unknown>() {
  *
  * @param onFocus a focus method for focusing when label is clicked
  */
-export function useFieldStore<V = unknown>(onFocus?: () => void) {
+export function useFieldStore<V = unknown>(onFocus?: () => void): FormFieldStore<V> {
   const instance = getCurrentInstance()
 
   if (!instance) return getEmptyActions<V>()

@@ -38,6 +38,14 @@ The passed options are disabled via the `disabled` option.
 
 :::
 
+:::demo wheel/selectable
+
+### Selectable
+
+Add the `selectable` prop makes the options can be clicked to active.
+
+:::
+
 :::demo wheel/horizontal
 
 ### Horizontal Wheel
@@ -95,6 +103,7 @@ type WheelRawOption =
 | loading-lock  | `boolean`                                                    | Set whether to be read-only when loading                                               | `false`       | `2.0.0`  |
 | disabled-item | `(value: string \| number, data: WheelRawOption) => boolean` | Set disabled items                                                                     | `() => false` | `2.0.14` |
 | no-transition | `boolean`                                                    | Whether to disable scroll transition effect                                            | `false`       | `2.2.17` |
+| selectable    | `boolean`                                                    | Sets whether the options can be active by clicking                                     | `false`       | `2.3.11` |
 
 ### Wheel Events
 

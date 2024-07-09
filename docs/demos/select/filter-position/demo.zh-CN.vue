@@ -1,5 +1,10 @@
 <template>
-  <Select filter :options="options"></Select>
+  <Select
+    filter
+    clearable
+    :options="options"
+    filter-position="in-list"
+  ></Select>
   <br />
   <br />
   <Select
@@ -7,6 +12,7 @@
     clearable
     :filter="filter"
     :options="options"
+    filter-position="in-list"
   ></Select>
 </template>
 
@@ -14,7 +20,7 @@
 import type { SelectFilter } from 'vexip-ui'
 
 const options = Array.from({ length: 12 }, (_, i) => ({
-  label: `Option ${i + 1}`,
+  label: `选项${i + 1}`,
   value: i + 1
 }))
 

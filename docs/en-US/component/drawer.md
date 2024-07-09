@@ -134,6 +134,7 @@ interface DrawerSlotParams {
 | cancel-type     | `ButtonType`                                | Set the cancel button type                                                                                                                                           | `'default'`      | `2.2.6`  |
 | action-size     | `'small' \| 'default' \| 'large'`           | Set size of the confirm and cancel buttons                                                                                                                           | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                                   | Remove the dividing lines between parts of the drawer                                                                                                                | `false`          | `2.2.6`  |
+| disable-esc     | `boolean`                                   | Set whether to disable close via using the ESC key                                                                                                                   | `false`          | `2.3.11` |
 
 ### Drawer Events
 

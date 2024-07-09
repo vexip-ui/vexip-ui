@@ -506,55 +506,53 @@ export default defineComponent({
     function renderHeader() {
       return (
         <div ref={header} class={nh.be('header')}>
-          {slots.header
-            ? (
-                renderSlot(slots, 'header', slotParams)
-              )
-            : (
-              <>
-                <Checkbox
-                  inherit
-                  control
-                  class={nh.be('checkbox')}
-                  state={props.deepState ? props.state : undefined}
-                  checked={allSelected.value}
-                  partial={partial.value}
-                  disabled={props.disabled}
-                  tab-index={-1}
-                  onClick={toggleSelectAll}
-                ></Checkbox>
-                <div
-                  class={[nh.be('reverse'), props.disabled && nh.bem('reverse', 'disabled')]}
-                  title={props.locale.reverse}
-                  onClick={handleReverse}
-                >
-                  <Icon
-                    {...icons.value.retweet}
-                    scale={+(icons.value.retweet.scale || 1) * 1.2}
-                  ></Icon>
-                </div>
-                <div class={nh.be('counter')}>
-                  {`${currentSelected.value.size}/${visibleOptions.value.length}`}
-                </div>
-                {(props.title || slots.title) && (
-                  <span class={nh.be('title')}>
-                    {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
-                  </span>
-                )}
-                <CollapseTransition appear horizontal fade-effect>
-                  {props.loading && (
-                    <div class={nh.be('loading')}>
-                      <Icon
-                        {...icons.value.loading}
-                        effect={props.loadingEffect || icons.value.loading.effect}
-                        icon={props.loadingIcon || icons.value.loading.icon}
-                        label={'loading'}
-                      ></Icon>
-                    </div>
-                  )}
-                </CollapseTransition>
-              </>
+          {slots.header ? (
+            renderSlot(slots, 'header', slotParams)
+          ) : (
+            <>
+              <Checkbox
+                inherit
+                control
+                class={nh.be('checkbox')}
+                state={props.deepState ? props.state : undefined}
+                checked={allSelected.value}
+                partial={partial.value}
+                disabled={props.disabled}
+                tab-index={-1}
+                onClick={toggleSelectAll}
+              ></Checkbox>
+              <div
+                class={[nh.be('reverse'), props.disabled && nh.bem('reverse', 'disabled')]}
+                title={props.locale.reverse}
+                onClick={handleReverse}
+              >
+                <Icon
+                  {...icons.value.retweet}
+                  scale={+(icons.value.retweet.scale || 1) * 1.2}
+                ></Icon>
+              </div>
+              <div class={nh.be('counter')}>
+                {`${currentSelected.value.size}/${visibleOptions.value.length}`}
+              </div>
+              {(props.title || slots.title) && (
+                <span class={nh.be('title')}>
+                  {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
+                </span>
               )}
+              <CollapseTransition appear horizontal fade-effect>
+                {props.loading && (
+                  <div class={nh.be('loading')}>
+                    <Icon
+                      {...icons.value.loading}
+                      effect={props.loadingEffect || icons.value.loading.effect}
+                      icon={props.loadingIcon || icons.value.loading.icon}
+                      label={'loading'}
+                    ></Icon>
+                  </div>
+                )}
+              </CollapseTransition>
+            </>
+          )}
         </div>
       )
     }
@@ -592,17 +590,13 @@ export default defineComponent({
         return (
           <ResizeObserver throttle onResize={computePageSize}>
             <ul ref={body} class={nh.be('body')} role={'listbox'}>
-              {slots.body
-                ? (
-                    renderSlot(slots, 'body', slotParams)
-                  )
-                : pagedOptions.value.length
-                  ? (
-                      pagedOptions.value.map((option, index) => renderOption({ option, index }))
-                    )
-                  : (
-                    <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
-                    )}
+              {slots.body ? (
+                renderSlot(slots, 'body', slotParams)
+              ) : pagedOptions.value.length ? (
+                pagedOptions.value.map((option, index) => renderOption({ option, index }))
+              ) : (
+                <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+              )}
             </ul>
           </ResizeObserver>
         )
@@ -635,41 +629,39 @@ export default defineComponent({
 
       return (
         <div ref={footer} class={nh.be('footer')}>
-          {slots.footer
-            ? (
-                renderSlot(slots, 'footer', slotParams)
-              )
-            : (
-              <div class={nh.be('pagination')}>
-                <Icon
-                  {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
-                  class={[
-                    nh.be('page-plus'),
-                    currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
-                  ]}
-                  onClick={() => handlePageChange(currentPage.value - 1)}
-                ></Icon>
-                <NumberInput
-                  inherit
-                  value={currentPage.value}
-                  class={nh.be('page-input')}
-                  size={'small'}
-                  min={1}
-                  max={totalPages.value}
-                  onChange={handlePageChange}
-                ></NumberInput>
-                <span style={'margin: 0 4px'}>{'/'}</span>
-                <span>{totalPages.value}</span>
-                <Icon
-                  {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
-                  class={[
-                    nh.be('page-minus'),
-                    currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
-                  ]}
-                  onClick={() => handlePageChange(currentPage.value + 1)}
-                ></Icon>
-              </div>
-              )}
+          {slots.footer ? (
+            renderSlot(slots, 'footer', slotParams)
+          ) : (
+            <div class={nh.be('pagination')}>
+              <Icon
+                {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
+                class={[
+                  nh.be('page-plus'),
+                  currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
+                ]}
+                onClick={() => handlePageChange(currentPage.value - 1)}
+              ></Icon>
+              <NumberInput
+                inherit
+                value={currentPage.value}
+                class={nh.be('page-input')}
+                size={'small'}
+                min={1}
+                max={totalPages.value}
+                onChange={handlePageChange}
+              ></NumberInput>
+              <span style={'margin: 0 4px'}>{'/'}</span>
+              <span>{totalPages.value}</span>
+              <Icon
+                {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
+                class={[
+                  nh.be('page-minus'),
+                  currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
+                ]}
+                onClick={() => handlePageChange(currentPage.value + 1)}
+              ></Icon>
+            </div>
+          )}
         </div>
       )
     }

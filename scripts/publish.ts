@@ -22,7 +22,7 @@ async function main() {
   if (target?.startsWith('v')) {
     inputPkg = 'vexip-ui'
   } else if (target?.includes('@')) {
-    [inputPkg] = target.split('@')
+    ;[inputPkg] = target.split('@')
 
     if (['hooks', 'icons', 'plugins', 'scripts', 'utils'].includes(inputPkg)) {
       inputPkg = `common/${inputPkg}`

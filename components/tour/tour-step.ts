@@ -47,7 +47,7 @@ export default defineComponent({
       watch(
         () => props[key],
         value => {
-          (options[key as keyof TourStepOptions] as any) = value
+          ;(options[key as keyof TourStepOptions] as any) = value
         },
         { immediate: true, deep: deepProps.includes(key) }
       )

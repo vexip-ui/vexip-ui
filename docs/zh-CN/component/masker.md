@@ -34,6 +34,7 @@
 | transfer        | `boolean \| string`         | 设置遮罩的渲染位置，设置为 `true` 时默认渲染至 `<body>`                     | `false`      | -        |
 | auto-remove     | `boolean`                   | 设置不显示时是否自动移除                                                    | `false`      | `2.0.13` |
 | permeable       | `boolean`                   | 设置 `wheel` 事件是否可以穿透                                               | `false`      | `2.1.29` |
+| disable-esc     | `boolean`                   | 是否禁止使用 ESC 键关闭                                                     | `false`      | `2.3.11` |
 
 ### Masker 事件
 

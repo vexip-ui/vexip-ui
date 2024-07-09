@@ -25,7 +25,17 @@ export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<stri
     if (!commit) return {}
 
     commitLog = (
-      await execa('git', ['log', `${commit}..`, '--name-only', '--oneline'], { stdio: 'pipe' })
+      await execa(
+        'git',
+        [
+          'log',
+          `${commit}..`,
+          '--name-only',
+          '--oneline',
+          ...['feat', 'fix', 'refactor', 'docs'].map(type => ['--grep', `^${type}`]).flat(1)
+        ],
+        { stdio: 'pipe' }
+      )
     ).stdout
   } catch (e) {
     return {}

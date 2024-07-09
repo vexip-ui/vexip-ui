@@ -22,6 +22,7 @@ import type {
   SelectBaseValue,
   SelectEvent,
   SelectFilter,
+  SelectFilterPosition,
   SelectKeyConfig,
   SelectRawOption
 } from './symbol'
@@ -83,6 +84,7 @@ export const selectProps = buildProps({
   name: String,
   popperAlive: booleanProp,
   countLimit: Number,
+  filterPosition: String as PropType<SelectFilterPosition>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

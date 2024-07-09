@@ -119,7 +119,7 @@ describe('Masker', () => {
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
-    wrapper.vm.wrapShow = false
+    wrapper.vm.wrapperShow = false
     await nextTick()
 
     expect(wrapper.find('.vxp-masker').exists()).toBe(false)

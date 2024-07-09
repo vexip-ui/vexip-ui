@@ -122,7 +122,7 @@ function handleHide() {
 <template>
   <Masker
     v-slot="{ show }"
-    v-model:active="currentActive"
+    :active="currentActive"
     :inherit="props.inherit"
     :class="className"
     closable
@@ -130,6 +130,7 @@ function handleHide() {
     :transfer="props.transfer"
     @show="handleShow"
     @hide="handleHide"
+    @toggle="setActive"
   >
     <div v-show="show" :class="nh.be('wrapper')">
       <Viewer v-bind="props.viewerProps" ref="viewer">

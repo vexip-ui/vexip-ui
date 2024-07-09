@@ -14,6 +14,7 @@ export const maskerProps = buildProps({
   transfer: booleanStringProp,
   autoRemove: booleanProp,
   permeable: booleanProp,
+  disableEsc: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onHide: eventProp(),

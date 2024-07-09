@@ -174,6 +174,7 @@ export function arEGLocale() {
     select: {
       placeholder: 'اختر',
       empty: 'لا توجد بيانات',
+      search: 'بحث الخيارات',
 
       ariaLabel: {
         clear: 'مسح الاختيار'

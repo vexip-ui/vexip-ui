@@ -9,7 +9,7 @@ describe('Popup', () => {
   })
 
   it('placement', () => {
-    (
+    ;(
       [
         'top-right',
         'top-center',

@@ -58,6 +58,7 @@ export const modalProps = buildProps({
   undivided: booleanProp,
   xOffset: positionType,
   yOffset: positionType,
+  disableEsc: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onConfirm: eventProp(),
   onCancel: eventProp(),

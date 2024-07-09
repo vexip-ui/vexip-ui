@@ -56,7 +56,7 @@ describe('Grid', () => {
   })
 
   it('justify', () => {
-    (['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
+    ;(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
       justify => {
         const wrapper = mount(() => <Grid justify={justify}></Grid>)
 
@@ -66,7 +66,7 @@ describe('Grid', () => {
   })
 
   it('align', () => {
-    (['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
+    ;(['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
       const wrapper = mount(() => <Grid align={align}></Grid>)
 
       if (align !== 'stretch') {

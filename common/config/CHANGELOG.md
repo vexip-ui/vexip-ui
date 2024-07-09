@@ -1,3 +1,17 @@
+## [1.8.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.8.0...config@1.8.1) (2024-07-09)
+
+
+### ✨ Features
+
+* **select:** support customize filter input position ([#495](https://github.com/vexip-ui/vexip-ui/issues/495)) ([95487a5](https://github.com/vexip-ui/vexip-ui/commit/95487a5e15d0b98f64075efce3fc6485f73634c8))
+
+
+### 🐞 Bug Fixes
+
+* **config:** zh-TW locale typo ([#496](https://github.com/vexip-ui/vexip-ui/issues/496)) ([826dd4c](https://github.com/vexip-ui/vexip-ui/commit/826dd4c1d1415e7b5cef0c3b3746628204f22e40))
+
+
+
 # [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.7.0...config@1.8.0) (2024-05-16)
 
 

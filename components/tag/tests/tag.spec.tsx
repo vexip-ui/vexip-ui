@@ -26,7 +26,7 @@ describe('Tag', () => {
   })
 
   it('type', async () => {
-    (['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Tag type={type}></Tag>)
 
       expect(wrapper.find('.vxp-tag').classes()).toContain(`vxp-tag--${type}`)

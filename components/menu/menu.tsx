@@ -335,15 +335,13 @@ export default defineComponent({
 
     function renderMenus() {
       return menus.value.map(menu =>
-        menu.group
-          ? (
-            <MenuGroup key={menu.label} label={menu.name ? callIfFunc(menu.name) : menu.label}>
-              {menu.children?.length ? menu.children.map(renderMenuItem) : null}
-            </MenuGroup>
-            )
-          : (
-              renderMenuItem(menu)
-            )
+        menu.group ? (
+          <MenuGroup key={menu.label} label={menu.name ? callIfFunc(menu.name) : menu.label}>
+            {menu.children?.length ? menu.children.map(renderMenuItem) : null}
+          </MenuGroup>
+        ) : (
+          renderMenuItem(menu)
+        )
       )
     }
 

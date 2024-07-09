@@ -72,7 +72,7 @@ describe('Typography', () => {
   })
 
   it('title level', () => {
-    ([1, 2, 3, 4, 5, 6] as const).forEach(level => {
+    ;([1, 2, 3, 4, 5, 6] as const).forEach(level => {
       const wrapper = mount(() => <Title level={level}></Title>)
 
       expect(wrapper.find('.vxp-title').element.tagName).toEqual(`H${level}`)
