@@ -1,3 +1,23 @@
+## [2.3.11](https://github.com/vexip-ui/vexip-ui/compare/v2.3.10...v2.3.11) (2024-07-09)
+
+
+### ✨ Features
+
+* add disable-esc prop for Drawer, Masker and Modal ([bea6539](https://github.com/vexip-ui/vexip-ui/commit/bea6539b33ff789f64e60095bf486560475e428f))
+* **select:** support customize filter input position ([#495](https://github.com/vexip-ui/vexip-ui/issues/495)) ([95487a5](https://github.com/vexip-ui/vexip-ui/commit/95487a5e15d0b98f64075efce3fc6485f73634c8))
+* **wheel:** add selectable prop ([19b2eb3](https://github.com/vexip-ui/vexip-ui/commit/19b2eb346216cdb0f6b0ae3b8331d83bd49a4d8e))
+
+
+### 🐞 Bug Fixes
+
+* **config:** zh-TW locale typo ([#496](https://github.com/vexip-ui/vexip-ui/issues/496)) ([826dd4c](https://github.com/vexip-ui/vexip-ui/commit/826dd4c1d1415e7b5cef0c3b3746628204f22e40))
+* **date-picker:** correctly parse value in year and month modes ([1bf1712](https://github.com/vexip-ui/vexip-ui/commit/1bf1712f90b8cf3cb874f970f923ad366ea0e16c))
+* **image:** cannot re-open viewer after closing via esc ([a6f397b](https://github.com/vexip-ui/vexip-ui/commit/a6f397b779622343d8a96922d9b82ddffb2b9ffc))
+* **masker:** correctly process hide when mask is disabled ([fbe7b07](https://github.com/vexip-ui/vexip-ui/commit/fbe7b07a0f4c0165b97b37c2f00ac7d1b9263bd2))
+* **pagination:** correctly show pagers after changing page size ([#491](https://github.com/vexip-ui/vexip-ui/issues/491)) ([d1e341a](https://github.com/vexip-ui/vexip-ui/commit/d1e341a00c54fb5372bb67b57ce411427da5a810))
+
+
+
 ## [2.3.10](https://github.com/vexip-ui/vexip-ui/compare/v2.3.9...v2.3.10) (2024-06-11)
 
 
