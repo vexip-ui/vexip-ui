@@ -138,6 +138,7 @@ export default defineComponent({
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
+      console.log(slots.default && props.items.length)
       return (
         <ResizeObserver onResize={refresh}>
           <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
@@ -197,7 +198,14 @@ export default defineComponent({
             default: () => {
               if (props.disabled) {
                 return slots.default && props.items.length
-                  ? props.items.map((item, index) => renderSlot(slots, 'default', { item, index }))
+                  ? props.items.map((item, index) => {
+                    const key = item[props.idKey]
+                    const vnode = renderSlot(slots, 'default', { item, index })
+
+                    vnode.key = key
+
+                    return vnode
+                  })
                   : renderSlot(slots, 'empty')
               }
 
