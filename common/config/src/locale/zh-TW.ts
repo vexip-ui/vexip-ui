@@ -120,7 +120,7 @@ export function zhTWLocale() {
       submit: '提交',
       reset: '重置',
       notNullable: '不可為空',
-      validateFail: '驗證未透過'
+      validateFail: '驗證未通過'
     },
 
     image: {
