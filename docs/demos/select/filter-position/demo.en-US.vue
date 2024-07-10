@@ -1,12 +1,18 @@
 <template>
-  <Select filter :options="options"></Select>
+  <Select
+    filter
+    clearable
+    :options="options"
+    filter-position="in-list"
+  ></Select>
   <br />
   <br />
   <Select
     multiple
     clearable
-    :filter="fitler"
+    :filter="filter"
     :options="options"
+    filter-position="in-list"
   ></Select>
 </template>
 
@@ -18,7 +24,7 @@ const options = Array.from({ length: 12 }, (_, i) => ({
   value: i + 1
 }))
 
-const fitler: SelectFilter = (filterValue, option) => {
+const filter: SelectFilter = (filterValue, option) => {
   return option.label.toLocaleLowerCase().includes(filterValue.toLocaleUpperCase())
 }
 </script>

@@ -138,7 +138,6 @@ export default defineComponent({
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
-      console.log(slots.default && props.items.length)
       return (
         <ResizeObserver onResize={refresh}>
           <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>

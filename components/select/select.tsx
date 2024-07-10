@@ -544,7 +544,11 @@ export default defineComponent({
         fitPopperWidth()
       }
 
-      nextTick(syncInputValue)
+      if (props.filterPosition !== 'in-control') {
+        requestAnimationFrame(syncInputValue)
+      } else {
+        syncInputValue()
+      }
     })
     watch(
       () => props.value,
@@ -1352,7 +1356,6 @@ export default defineComponent({
             tabindex={-1}
             role={'combobox'}
             aria-autocomplete={'list'}
-            name={props.name}
             onInput={handleFilterInput}
             onKeydown={handleFilterKeyDown}
             onFocus={handleFocus}
