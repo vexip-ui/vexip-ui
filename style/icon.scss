@@ -8,6 +8,8 @@
   overflow: visible;
   transition: get-css-var('transition-transform');
   transform-origin: 50% 50%;
+  vertical-align: middle;
+  margin-bottom: 0.125em;
 
   & > g {
     display: flex;
@@ -18,7 +20,6 @@
     width: 1em;
     height: 1em;
     line-height: 1;
-    vertical-align: -0.125em;
     fill: currentcolor;
 
     &.lucide {
