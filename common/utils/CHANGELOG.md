@@ -1,3 +1,12 @@
+## [2.16.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.0...utils@2.16.1) (2024-07-28)
+
+
+### 🐞 Bug Fixes
+
+* **image:** ignore use img loading in SSR ([7629400](https://github.com/vexip-ui/vexip-ui/commit/7629400393073d4c8cd45f3147cc469fe8c2d52f))
+
+
+
 # [2.16.0](https://github.com/vexip-ui/vexip-ui/compare/utils@2.15.0...utils@2.16.0) (2024-05-16)
 
 
