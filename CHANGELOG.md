@@ -1,3 +1,13 @@
+## [2.3.13](https://github.com/vexip-ui/vexip-ui/compare/v2.3.11...v2.3.13) (2024-07-28)
+
+
+### 🐞 Bug Fixes
+
+* **image:** ignore use img loading in SSR ([7629400](https://github.com/vexip-ui/vexip-ui/commit/7629400393073d4c8cd45f3147cc469fe8c2d52f))
+* **virtual-list:** ensure bind key for items when disabled ([76aeb87](https://github.com/vexip-ui/vexip-ui/commit/76aeb870834acd38889c3cdcce3b35e1e0bee096)), closes [#492](https://github.com/vexip-ui/vexip-ui/issues/492)
+
+
+
 ## [2.3.11](https://github.com/vexip-ui/vexip-ui/compare/v2.3.10...v2.3.11) (2024-07-09)
 
 

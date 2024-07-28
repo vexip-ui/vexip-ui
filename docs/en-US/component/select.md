@@ -88,6 +88,14 @@ Add the `ignore-case` prop to ignore case when using built-in filter methods.
 
 :::
 
+:::demo select/filter-position
+
+### Filter Position
+
+You can change the position of the filter input via `filter-position` prop.
+
+:::
+
 :::demo select/remote
 
 ### Remote Mode
@@ -208,6 +216,7 @@ interface SelectOptionState {
 }
 
 type SelectFilter = (value: string, options: SelectOptionState) => boolean
+type SelectFilterPosition = 'in-control' | 'in-list'
 
 interface SelectListSlotParams {
   options: SelectOptionState[],
@@ -262,6 +271,7 @@ interface SelectListSlotParams {
 | name            | `string`                                         | set `name` attribute of internal `<input>`, only effect when using filter                                                                                     | `''`           | `2.2.2`  |
 | popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                    | `null`         | `2.2.3`  |
 | count-limit     | `number`                                         | Limit the maximum count of options for multiple selection, no limit when it is `0`                                                                            | `0`            | `2.2.3`  |
+| filter-position | `SelectFilterPosition`                           | Set position of the filter input                                                                                                                              | `'in-control'` | `2.3.11` |
 
 ### Select Events
 
