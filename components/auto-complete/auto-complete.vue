@@ -547,8 +547,8 @@ function handleCompositionEnd() {
       <slot
         name="list"
         :options="options"
-        :is-selected="isSelected"
-        :handle-select="onSelect"
+        :is-selected="isSelected as AutoCompleteListSlotParams['isSelected']"
+        :handle-select="onSelect as AutoCompleteListSlotParams['handleSelect']"
       ></slot>
     </template>
   </Select>

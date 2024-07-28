@@ -49,6 +49,7 @@ import type {
   SelectBaseValue,
   SelectEvent,
   SelectKeyConfig,
+  SelectListSlotParams,
   SelectOptionState,
   SelectValue
 } from './symbol'
@@ -170,11 +171,7 @@ const slots = defineSlots<{
   prefix: () => any,
   suffix: () => any,
   control: () => any,
-  list: (params: {
-    options: SelectOptionState[],
-    isSelected: (option: SelectOptionState) => boolean,
-    handleSelect: (option?: SelectOptionState | null) => void
-  }) => any,
+  list: (params: SelectListSlotParams) => any,
   prepend: () => any,
   append: () => any,
   default: (params: { option: SelectOptionState, index: number, selected: boolean }) => any,
