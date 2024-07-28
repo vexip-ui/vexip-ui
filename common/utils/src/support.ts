@@ -40,7 +40,7 @@ let imgLoadingSupported: boolean | null = null
  */
 export function supportImgLoading() {
   if (!isClient) {
-    return true
+    return false
   }
 
   if (imgLoadingSupported === null) {

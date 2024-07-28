@@ -12,7 +12,7 @@ import { GROUP_STATE, objectFitValues } from './symbol'
 
 import type { ImageState } from './symbol'
 
-const useImageLoading = supportImgLoading()
+const useImgLoading = supportImgLoading()
 
 defineOptions({ name: 'Image' })
 
@@ -53,9 +53,9 @@ const groupState = inject(GROUP_STATE, null)
 const nh = useNameHelper('image')
 const locale = useLocale('image')
 
-const shouldLoad = ref(useImageLoading)
-const loading = ref(shouldLoad.value)
-const loadSrc = ref('')
+const showImg = ref(useImgLoading)
+const loading = ref(showImg.value)
+const currentSrc = ref('')
 const loadFail = ref(false)
 const fallbackFail = ref(false)
 const viewerActive = ref(false)
@@ -95,8 +95,8 @@ const style = computed(() => {
   return style
 })
 const imageSrc = computed(() => props.src || (props.imgAttrs?.src as string))
-const imageLoading = computed(() => {
-  return hidden.value || (useImageLoading && props.lazy) ? 'lazy' : undefined
+const imgLoading = computed(() => {
+  return hidden.value || (useImgLoading && props.lazy) ? 'lazy' : undefined
 })
 const skeletonProps = computed(() => {
   return typeof props.skeleton === 'object'
@@ -105,8 +105,8 @@ const skeletonProps = computed(() => {
 })
 
 watch(imageSrc, value => {
-  loading.value = shouldLoad.value
-  loadSrc.value = value
+  loading.value = showImg.value
+  currentSrc.value = value
   loadFail.value = false
   fallbackFail.value = false
 })
@@ -116,16 +116,16 @@ watch(
     fallbackFail.value = false
 
     if (loadFail.value) {
-      loading.value = shouldLoad.value
-      loadSrc.value = value
+      loading.value = showImg.value
+      currentSrc.value = value
     }
   }
 )
 
-loadSrc.value = imageSrc.value
+currentSrc.value = imageSrc.value
 
 const state: ImageState = reactive({
-  src: computed(() => props.previewSrc || loadSrc.value),
+  src: computed(() => props.previewSrc || currentSrc.value),
   index: 0,
   total: 0
 })
@@ -143,7 +143,7 @@ if (groupState) {
   })
 }
 
-if (!useImageLoading) {
+if (!useImgLoading) {
   let disconnect: (() => void) | undefined
 
   const stopWatch = watchEffect(() => {
@@ -163,7 +163,7 @@ if (!useImageLoading) {
         handler: () => {
           disconnect?.()
           disconnect = undefined
-          shouldLoad.value = true
+          showImg.value = true
           loading.value = true
         }
       }).disconnect
@@ -187,21 +187,21 @@ defineExpose({
 function handleLoad(event: Event) {
   loading.value = false
 
-  if (!props.fallbackSrc || loadSrc.value !== props.fallbackSrc) {
+  if (!props.fallbackSrc || currentSrc.value !== props.fallbackSrc) {
     emitEvent(props.onLoad, event)
   }
 }
 
 function handleError(event: Event) {
   if (props.fallbackSrc) {
-    if (loadSrc.value === props.fallbackSrc) {
+    if (currentSrc.value === props.fallbackSrc) {
       loading.value = false
       fallbackFail.value = true
 
       return
     }
 
-    loadSrc.value = props.fallbackSrc
+    currentSrc.value = props.fallbackSrc
   } else {
     loading.value = false
   }
@@ -216,7 +216,7 @@ function handlePreview() {
       viewerActive.value = true
     }
 
-    emitEvent(props.onPreview, props.previewSrc || loadSrc.value)
+    emitEvent(props.onPreview, props.previewSrc || currentSrc.value)
     return
   }
 
@@ -251,14 +251,14 @@ function handlePreview() {
       </span>
     </slot>
     <img
-      v-if="shouldLoad && !showError"
+      v-if="showImg && !showError"
       v-bind="props.imgAttrs"
       :class="nh.be('img')"
-      :src="loadSrc"
+      :src="currentSrc"
       :alt="props.alt"
       :width="props.width || undefined"
       :height="props.height || undefined"
-      :loading="imageLoading"
+      :loading="imgLoading"
       :aria-label="props.alt"
       @load="handleLoad"
       @error="handleError"
@@ -268,7 +268,7 @@ function handlePreview() {
       v-if="hasPreview"
       v-bind="viewerProps"
       v-model:active="viewerActive"
-      :src-list="props.previewSrc || loadSrc"
+      :src-list="props.previewSrc || currentSrc"
       :transfer="props.viewerTransfer"
     >
       <template #default="{ src }">
