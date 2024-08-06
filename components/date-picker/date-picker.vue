@@ -737,7 +737,6 @@ function emitChange() {
   if (lastValue.value !== getStringValue()) {
     lastValue.value = getStringValue()
 
-    const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
     const emitValues: number[] = []
     const formattedValues: unknown[] = []
 
@@ -758,16 +757,8 @@ function emitChange() {
           : timestamp => timestamp
 
     for (let i = 0; i < 2; ++i) {
-      if (props.type === 'year') {
-        emitValues[i] = new Date(
-          i === 0 ? startState.dateValue.year : endState.dateValue.year,
-          0
-        ).getTime()
-      } else if (props.type !== 'datetime') {
-        emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()
-      } else {
-        emitValues[i] = new Date(values[i]).getTime()
-      }
+      const state = i === 0 ? startState : endState
+      emitValues[i] = normalizeState(state)
 
       formattedValues[i] = formatValue(emitValues[i], i === 0 ? 'start' : 'end')
 
@@ -784,6 +775,27 @@ function emitChange() {
     emitEvent(props.onChange as DatePickerChangeEvent, emitValue)
     validateField()
   }
+}
+
+function normalizeState(state: ReturnType<typeof createDateState>) {
+  const newDateValue = {
+    ...state.dateValue
+  }
+
+  Object.keys(newDateValue).forEach(key => {
+    const unit = key as keyof typeof newDateValue
+
+    if (!state.enabled[unit]) {
+      newDateValue[unit] = unit === 'date' ? 1 : 0
+    } else if (unit === 'month') {
+      // month starts with zero
+      newDateValue[unit] -= 1
+    }
+  })
+
+  const params = Object.values(newDateValue)
+
+  return new Date(...(params as [number])).getTime()
 }
 
 function finishInput(shouldChange = true) {
