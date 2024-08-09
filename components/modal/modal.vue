@@ -4,7 +4,7 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
 import {
   createSizeProp,
@@ -112,6 +112,8 @@ const transformed = ref(false)
 const masker = ref<MaskerExposed>()
 const wrapper = ref<HTMLElement>()
 const footer = ref<HTMLElement>()
+
+const rendered = ref(false)
 
 const uselessTop = computed(() => {
   return props.top === 'auto' && isSpecified(props.bottom) && isSpecified(props.height)
@@ -314,6 +316,9 @@ for (const style of Object.keys(rect) as Array<keyof typeof rect>) {
 watch(
   () => props.active,
   value => {
+    if (value) {
+      rendered.value = true
+    }
     currentActive.value = value
   }
 )
@@ -354,6 +359,11 @@ defineExpose({
   handleConfirm,
   handleCancel,
   handleClose
+})
+onMounted(() => {
+  if (props.active) {
+    rendered.value = true
+  }
 })
 
 const slotParams = shallowReadonly(
@@ -563,6 +573,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
               </slot>
             </div>
             <div
+              v-if="rendered"
               :id="bodyId"
               :class="nh.be('content')"
               :style="{
