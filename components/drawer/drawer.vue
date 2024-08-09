@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 
-import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
 import {
   createSizeProp,
@@ -87,6 +87,7 @@ const currentHeight = ref(props.height)
 const wrapper = ref<HTMLElement>()
 
 const idIndex = `${getGlobalCount()}`
+const rendered = ref(false)
 
 const { target: resizer, moving: resizing } = useMoving({
   onStart: (state, event) => {
@@ -200,6 +201,10 @@ const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 watch(
   () => props.active,
   value => {
+    console.log(value, 'value')
+    if (value) {
+      rendered.value = true
+    }
     currentActive.value = value
   }
 )
@@ -215,6 +220,11 @@ watch(
     currentHeight.value = value
   }
 )
+onMounted(() => {
+  if (props.active) {
+    rendered.value = true
+  }
+})
 
 defineExpose({
   resizing,
@@ -341,7 +351,7 @@ function handleCancel() {
             </button>
           </slot>
         </div>
-        <div :id="bodyId" :class="nh.be('content')">
+        <div v-if="rendered" :id="bodyId" :class="nh.be('content')">
           <slot v-bind="slotParams"></slot>
         </div>
         <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
