@@ -1,7 +1,7 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 /* stylelint-disable length-zero-no-unit */
 $timeline: () !default;
@@ -9,18 +9,18 @@ $timeline: map.merge(
   (
     item-span: 20px,
     item-span-pending: 36px,
-    pointer-color: get-css-var('color-primary-base'),
-    pointer-bg-color: get-css-var('color-white'),
+    pointer-color: get-css-var("color-primary-base"),
+    pointer-bg-color: get-css-var("color-white"),
     pointer-b-width: 2px,
-    pointer-b-color: get-css-var('color-primary-base'),
-    pointer-b-color-disabled: get-css-var('content-color-disabled'),
+    pointer-b-color: get-css-var("color-primary-base"),
+    pointer-b-color-disabled: get-css-var("content-color-disabled"),
     pointer-size: 12px,
     line-width: 2px,
     line-style: solid,
     line-style-pending: dashed,
-    line-color: get-css-var('border-color-light-2'),
+    line-color: get-css-var("border-color-light-2"),
     line-inset-start: 0px,
-    line-inset-end: 0px
+    line-inset-end: 0px,
   ),
   $timeline
 );
@@ -28,20 +28,20 @@ $timeline: map.merge(
 
 .#{$namespace}-timeline {
   &-vars {
-    @include define-preset-values('timeline', $timeline);
+    @include define-preset-values("timeline", $timeline);
   }
 
   @mixin define-timeline-style($style-map) {
-    @include define-preset-style('timeline', $style-map);
+    @include define-preset-style("timeline", $style-map);
   }
 
-  @include basis;
+  $side-pad: calc(#{get-css-var("timeline-pointer-size")} * 0.5);
 
-  $side-pad: calc(#{get-css-var('timeline-pointer-size')} * 0.5);
-
-  display: inline-flex;
-  flex-direction: column;
-  padding-inline-start: $side-pad;
+  @include basis {
+    display: inline-flex;
+    flex-direction: column;
+    padding-inline-start: $side-pad;
+  }
 
   &--horizontal {
     flex-direction: row;
@@ -68,19 +68,19 @@ $timeline: map.merge(
     position: relative;
     display: flex;
     align-items: flex-start;
-    padding-bottom: get-css-var('timeline-item-span');
+    padding-bottom: get-css-var("timeline-item-span");
 
     &:last-child {
       padding-bottom: 0;
     }
 
     @each $type in $types {
-      @if $type != 'primary' {
+      @if $type != "primary" {
         &--#{$type} {
           @include define-timeline-style(
             (
-              pointer-color: 'color' $type 'base',
-              pointer-b-color: 'color' $type 'base'
+              pointer-color: "color" $type "base",
+              pointer-b-color: "color" $type "base",
             )
           );
         }
@@ -89,7 +89,7 @@ $timeline: map.merge(
   }
 
   &--horizontal &__item {
-    padding-inline-end: get-css-var('timeline-item-span');
+    padding-inline-end: get-css-var("timeline-item-span");
     padding-bottom: 0;
   }
 
@@ -115,7 +115,7 @@ $timeline: map.merge(
     }
   }
 
-  $pointer-size: get-css-var('timeline-pointer-size');
+  $pointer-size: get-css-var("timeline-pointer-size");
 
   &__signal {
     position: absolute;
@@ -168,17 +168,18 @@ $timeline: map.merge(
   &__pointer {
     width: 100%;
     height: 100%;
-    color: get-css-var('timeline-pointer-color');
-    background-color: get-css-var('timeline-pointer-bg-color');
-    border: get-css-var('timeline-pointer-b-width') solid get-css-var('timeline-pointer-b-color');
+    color: get-css-var("timeline-pointer-color");
+    background-color: get-css-var("timeline-pointer-bg-color");
+    border: get-css-var("timeline-pointer-b-width") solid
+      get-css-var("timeline-pointer-b-color");
     border-radius: 50%;
   }
 
   &__item--disabled &__pointer {
-    border-color: get-css-var('timeline-pointer-b-color-disabled');
+    border-color: get-css-var("timeline-pointer-b-color-disabled");
   }
 
-  $line-width: get-css-var('timeline-line-width');
+  $line-width: get-css-var("timeline-line-width");
 
   &__line {
     position: absolute;
@@ -189,15 +190,16 @@ $timeline: map.merge(
     flex-direction: column;
     align-items: center;
     width: 0;
-    padding-top: calc($pointer-size + get-css-var('timeline-line-inset-start'));
-    padding-bottom: get-css-var('timeline-line-inset-end');
+    padding-top: calc($pointer-size + get-css-var("timeline-line-inset-start"));
+    padding-bottom: get-css-var("timeline-line-inset-end");
 
     &::after {
       height: 100%;
-      content: '';
-      border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
+      content: "";
+      border: 0 get-css-var("timeline-line-style")
+        get-css-var("timeline-line-color");
       border-inline-start-width: $line-width;
-      transition: get-css-var('transition-border');
+      transition: get-css-var("transition-border");
     }
   }
 
@@ -207,8 +209,10 @@ $timeline: map.merge(
     width: 100%;
     height: 0;
     padding: 0;
-    padding-inline: calc($pointer-size + get-css-var('timeline-line-inset-start'))
-      get-css-var('timeline-line-inset-end');
+    padding-inline: calc(
+        $pointer-size + get-css-var("timeline-line-inset-start")
+      )
+      get-css-var("timeline-line-inset-end");
 
     &::after {
       width: 100%;
@@ -322,15 +326,15 @@ $timeline: map.merge(
   $line: #{&}__line;
 
   &--pending &__item:nth-last-child(2) {
-    padding-bottom: get-css-var('timeline-item-span-pending');
+    padding-bottom: get-css-var("timeline-item-span-pending");
 
     #{$line}::after {
-      border-style: get-css-var('timeline-line-style-pending');
+      border-style: get-css-var("timeline-line-style-pending");
     }
   }
 
   &--horizontal#{&}--pending &__item:nth-last-child(2) {
-    padding-inline-end: get-css-var('timeline-item-span-pending');
+    padding-inline-end: get-css-var("timeline-item-span-pending");
     padding-bottom: 0;
   }
 }

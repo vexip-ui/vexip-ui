@@ -1,7 +1,7 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 // $types: primary info success warning error;
 
@@ -9,48 +9,48 @@ $linker: () !default;
 $linker: map.merge(
   (
     color: inherit,
-    color-hover: get-css-var('color-primary-light-1'),
-    color-active: get-css-var('color-primary-dark-1'),
-    color-disabled: get-css-var('content-color-disabled'),
+    color-hover: get-css-var("color-primary-light-1"),
+    color-active: get-css-var("color-primary-dark-1"),
+    color-disabled: get-css-var("content-color-disabled"),
     series-span: 8px,
-    underline-height: 1px
+    underline-height: 1px,
   ),
   $linker
 );
 
 .#{$namespace}-linker {
   &-vars {
-    @include define-preset-values('linker', $linker);
+    @include define-preset-values("linker", $linker);
   }
 
   @mixin define-linker-style($style-map) {
-    @include define-preset-style('linker', $style-map);
+    @include define-preset-style("linker", $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: get-css-var('linker-color');
-  text-decoration: none;
-  vertical-align: inherit;
-  cursor: pointer;
-  outline: 0;
-  transition: get-css-var('transition-color');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: get-css-var("linker-color");
+    text-decoration: none;
+    vertical-align: inherit;
+    cursor: pointer;
+    outline: 0;
+    transition: get-css-var("transition-color");
+  }
 
   & + & {
-    margin-inline-start: get-css-var('linker-series-span');
+    margin-inline-start: get-css-var("linker-series-span");
   }
 
   &:hover,
   &:focus {
-    color: get-css-var('linker-color-hover');
+    color: get-css-var("linker-color-hover");
     text-decoration: none;
   }
 
   &:active {
-    color: get-css-var('linker-color-active');
+    color: get-css-var("linker-color-active");
   }
 
   &--underline {
@@ -59,11 +59,12 @@ $linker: map.merge(
       inset-inline-start: 0;
       right: 0;
       bottom: 0;
-      height: get-css-var('linker-underline-height');
-      content: '';
-      background-color: get-css-var('linker-color-hover');
+      height: get-css-var("linker-underline-height");
+      content: "";
+      background-color: get-css-var("linker-color-hover");
       opacity: 0%;
-      transition: get-css-var('transition-background'), get-css-var('transition-opacity');
+      transition: get-css-var("transition-background"),
+        get-css-var("transition-opacity");
     }
 
     &:hover::after {
@@ -71,7 +72,7 @@ $linker: map.merge(
     }
 
     &:active::after {
-      background-color: get-css-var('linker-color-active');
+      background-color: get-css-var("linker-color-active");
     }
   }
 
@@ -82,7 +83,7 @@ $linker: map.merge(
     &:hover,
     &:focus,
     &:active {
-      color: get-css-var('linker-color-disabled');
+      color: get-css-var("linker-color-disabled");
     }
 
     &:hover::after {
@@ -98,10 +99,10 @@ $linker: map.merge(
     &--#{$type} {
       @include define-linker-style(
         (
-          color: 'color' $type 'base',
-          color-hover: 'color' $type 'light-2',
-          color-active: 'color' $type 'dark-1',
-          color-disabled: 'color' $type 'opacity-5'
+          color: "color" $type "base",
+          color-hover: "color" $type "light-2",
+          color-active: "color" $type "dark-1",
+          color-disabled: "color" $type "opacity-5",
         )
       );
     }

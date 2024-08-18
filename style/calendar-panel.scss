@@ -1,51 +1,52 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $calendar-panel: () !default;
 $calendar-panel: map.merge(
   (
-    index-color-hover: get-css-var('content-color-base'),
-    index-color-selected: get-css-var('color-white'),
-    index-color-outside: get-css-var('content-color-disabled'),
-    index-color-today: get-css-var('color-primary-base'),
-    index-color-disabled: get-css-var('content-color-humble'),
+    index-color-hover: get-css-var("content-color-base"),
+    index-color-selected: get-css-var("color-white"),
+    index-color-outside: get-css-var("content-color-disabled"),
+    index-color-today: get-css-var("color-primary-base"),
+    index-color-disabled: get-css-var("content-color-humble"),
     index-bg-color: transparent,
     index-bg-color-week: transparent,
-    index-bg-color-hover: get-css-var('color-primary-opacity-7'),
-    index-bg-color-selected: get-css-var('color-primary-base'),
-    index-bg-color-disabled: get-css-var('calendar-index-bg-color'),
-    index-bg-color-today: get-css-var('calendar-index-bg-color'),
-    index-bg-color-outside: get-css-var('calendar-index-bg-color'),
+    index-bg-color-hover: get-css-var("color-primary-opacity-7"),
+    index-bg-color-selected: get-css-var("color-primary-base"),
+    index-bg-color-disabled: get-css-var("calendar-index-bg-color"),
+    index-bg-color-today: get-css-var("calendar-index-bg-color"),
+    index-bg-color-outside: get-css-var("calendar-index-bg-color"),
     index-b-width: 0,
-    index-b-style: get-css-var('border-style'),
-    index-b-color: get-css-var('border-color-base'),
-    index-b-color-selected: get-css-var('color-primary-opacity-2'),
-    index-b-color-disabled: get-css-var('border-color-opacity-2'),
-    index-b-color-outside: get-css-var('border-color-opacity-1'),
+    index-b-style: get-css-var("border-style"),
+    index-b-color: get-css-var("border-color-base"),
+    index-b-color-selected: get-css-var("color-primary-opacity-2"),
+    index-b-color-disabled: get-css-var("border-color-opacity-2"),
+    index-b-color-outside: get-css-var("border-color-opacity-1"),
     index-size: 28px,
-    index-border: get-css-var('calendar-index-b-width') get-css-var('calendar-index-b-style')
-      get-css-var('calendar-index-b-color'),
-    index-radius: get-css-var('radius-base'),
-    range-bg-color: get-css-var('color-primary-opacity-8'),
-    range-opacity: 60%
+    index-border: get-css-var("calendar-index-b-width")
+      get-css-var("calendar-index-b-style")
+      get-css-var("calendar-index-b-color"),
+    index-radius: get-css-var("radius-base"),
+    range-bg-color: get-css-var("color-primary-opacity-8"),
+    range-opacity: 60%,
   ),
   $calendar-panel
 );
 
 .#{$namespace}-calendar {
   &-vars {
-    @include define-preset-values('calendar', $calendar-panel);
+    @include define-preset-values("calendar", $calendar-panel);
   }
 
   &__panel {
-    @include basis;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include basis {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &__action {
@@ -67,12 +68,12 @@ $calendar-panel: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('calendar-index-size');
-    height: get-css-var('calendar-index-size');
+    width: get-css-var("calendar-index-size");
+    height: get-css-var("calendar-index-size");
     cursor: pointer;
     user-select: none;
     background-color: transparent;
-    border-radius: get-css-var('calendar-index-radius');
+    border-radius: get-css-var("calendar-index-radius");
     outline: 0;
 
     &-inner {
@@ -82,47 +83,48 @@ $calendar-panel: map.merge(
       justify-content: center;
       width: 100%;
       height: 100%;
-      background-color: get-css-var('calendar-index-bg-color');
-      border: get-css-var('calendar-index-border');
-      border-radius: get-css-var('calendar-index-radius');
-      transition: get-css-var('transition-color'), get-css-var('transition-background');
+      background-color: get-css-var("calendar-index-bg-color");
+      border: get-css-var("calendar-index-border");
+      border-radius: get-css-var("calendar-index-radius");
+      transition: get-css-var("transition-color"),
+        get-css-var("transition-background");
     }
 
     &--today &-inner {
-      color: get-css-var('calendar-index-color-today');
-      background-color: get-css-var('calendar-index-bg-color-today');
-      border-color: get-css-var('calendar-index-b-color-today');
+      color: get-css-var("calendar-index-color-today");
+      background-color: get-css-var("calendar-index-bg-color-today");
+      border-color: get-css-var("calendar-index-b-color-today");
     }
 
     &--prev &-inner,
     &--next &-inner {
-      color: get-css-var('calendar-index-color-outside');
-      background-color: get-css-var('calendar-index-bg-color-outside');
-      border-color: get-css-var('calendar-index-b-color-outside');
+      color: get-css-var("calendar-index-color-outside");
+      background-color: get-css-var("calendar-index-bg-color-outside");
+      border-color: get-css-var("calendar-index-b-color-outside");
     }
 
     &:hover &-inner,
     &:focus &-inner {
-      color: get-css-var('calendar-index-color-hover');
-      background-color: get-css-var('calendar-index-bg-color-hover');
-      border-color: get-css-var('calendar-index-b-color-hover');
+      color: get-css-var("calendar-index-color-hover");
+      background-color: get-css-var("calendar-index-bg-color-hover");
+      border-color: get-css-var("calendar-index-b-color-hover");
     }
 
     &--selected &-inner,
     &--selected:hover &-inner,
     &--selected:focus &-inner {
-      color: get-css-var('calendar-index-color-selected');
-      background-color: get-css-var('calendar-index-bg-color-selected');
-      border-color: get-css-var('calendar-index-b-color-selected');
+      color: get-css-var("calendar-index-color-selected");
+      background-color: get-css-var("calendar-index-bg-color-selected");
+      border-color: get-css-var("calendar-index-b-color-selected");
     }
 
     &--disabled &-inner,
     &--disabled:hover &-inner,
     &--disabled:focus &-inner {
-      color: get-css-var('calendar-index-color-disabled');
+      color: get-css-var("calendar-index-color-disabled");
       cursor: not-allowed;
-      background-color: get-css-var('calendar-index-bg-color-disabled');
-      border-color: get-css-var('calendar-index-b-color-disabled');
+      background-color: get-css-var("calendar-index-bg-color-disabled");
+      border-color: get-css-var("calendar-index-b-color-disabled");
     }
 
     &::before {
@@ -130,9 +132,9 @@ $calendar-panel: map.merge(
       inset: 2px -2px;
       display: none;
       pointer-events: none;
-      content: '';
-      background-color: get-css-var('calendar-range-bg-color');
-      opacity: get-css-var('calendar-range-opacity');
+      content: "";
+      background-color: get-css-var("calendar-range-bg-color");
+      opacity: get-css-var("calendar-range-opacity");
     }
 
     &--in-range {
@@ -146,7 +148,7 @@ $calendar-panel: map.merge(
     cursor: default;
 
     &:hover {
-      background-color: get-css-var('calendar-index-bg-color-week');
+      background-color: get-css-var("calendar-index-bg-color-week");
     }
 
     &::before,

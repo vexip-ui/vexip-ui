@@ -1,40 +1,41 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $anchor: () !default;
 $anchor: map.merge(
   (
-    link-color: get-css-var('content-color-base'),
-    link-color-hover: get-css-var('color-primary-light-1'),
-    link-color-active: get-css-var('color-primary-base'),
+    link-color: get-css-var("content-color-base"),
+    link-color-hover: get-css-var("color-primary-light-1"),
+    link-color-active: get-css-var("color-primary-base"),
     track-width: 2px,
     track-style: solid,
-    track-color: get-css-var('border-color-light-2'),
-    track: get-css-var('anchor-track-width') get-css-var('anchor-track-style')
-      get-css-var('anchor-track-color'),
-    track-color-active: get-css-var('anchor-link-color-active'),
+    track-color: get-css-var("border-color-light-2"),
+    track: get-css-var("anchor-track-width") get-css-var("anchor-track-style")
+      get-css-var("anchor-track-color"),
+    track-color-active: get-css-var("anchor-link-color-active"),
     pointer-size: 8px,
-    pointer-bg-color: get-css-var('color-white'),
-    pointer-b-color: get-css-var('anchor-link-color-active'),
-    pointer-border: get-css-var('border-shape') get-css-var('anchor-pointer-b-color')
+    pointer-bg-color: get-css-var("color-white"),
+    pointer-b-color: get-css-var("anchor-link-color-active"),
+    pointer-border: get-css-var("border-shape")
+      get-css-var("anchor-pointer-b-color"),
   ),
   $anchor
 );
 
 .#{$namespace}-anchor {
   &-vars {
-    @include define-preset-values('anchor', $anchor);
+    @include define-preset-values("anchor", $anchor);
   }
 
-  @include basis;
-
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding-inline-start: calc(get-css-var('anchor-pointer-size') * 0.5);
-  vertical-align: middle;
+  @include basis {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-inline-start: calc(get-css-var("anchor-pointer-size") * 0.5);
+    vertical-align: middle;
+  }
 
   &__list {
     padding: 0;
@@ -47,34 +48,35 @@ $anchor: map.merge(
 
   &__link {
     padding: 4px 14px;
-    margin-inline-start: calc(get-css-var('anchor-track-width') * -1);
-    color: get-css-var('anchor-link-color');
+    margin-inline-start: calc(get-css-var("anchor-track-width") * -1);
+    color: get-css-var("anchor-link-color");
     text-decoration: none;
     cursor: pointer;
-    border-inline-start: get-css-var('anchor-track');
-    transition: get-css-var('transition-color'), get-css-var('transition-border');
+    border-inline-start: get-css-var("anchor-track");
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-border");
 
     &:hover {
-      color: get-css-var('anchor-link-color-hover');
+      color: get-css-var("anchor-link-color-hover");
     }
 
     &--active {
-      color: get-css-var('anchor-link-color-active');
+      color: get-css-var("anchor-link-color-active");
     }
   }
 
   &--no-marker &__link--active {
-    border-inline-start-color: get-css-var('track-color-active');
+    border-inline-start-color: get-css-var("track-color-active");
   }
 
   &__marker {
     position: absolute;
-    inset-inline-start: calc(get-css-var('anchor-pointer-size') * 0.5 - 1px);
+    inset-inline-start: calc(get-css-var("anchor-pointer-size") * 0.5 - 1px);
     display: flex;
     align-items: center;
     justify-content: center;
     will-change: top;
-    transition: top get-css-var('transition-base');
+    transition: top get-css-var("transition-base");
     transform: translate3d(-50%, -50%, 0);
 
     @include rtl {
@@ -83,10 +85,10 @@ $anchor: map.merge(
   }
 
   &__pointer {
-    width: get-css-var('anchor-pointer-size');
-    height: get-css-var('anchor-pointer-size');
-    background-color: get-css-var('anchor-pointer-bg-color');
-    border: get-css-var('anchor-pointer-border');
-    border-radius: get-css-var('anchor-pointer-size');
+    width: get-css-var("anchor-pointer-size");
+    height: get-css-var("anchor-pointer-size");
+    background-color: get-css-var("anchor-pointer-bg-color");
+    border: get-css-var("anchor-pointer-border");
+    border-radius: get-css-var("anchor-pointer-size");
   }
 }

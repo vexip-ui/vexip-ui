@@ -1,77 +1,77 @@
-@use 'sass:color';
-@use 'sass:map';
+@use "sass:color";
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 // $types: primary info success error warning;
 
 $tag: () !default;
 $tag: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    color-disabled: get-css-var('content-color-disabled'),
-    bg-color: get-css-var('fill-color-background'),
-    bg-color-disabled: get-css-var('fill-color-background'),
-    b-color: get-css-var('border-color-base'),
-    b-color-disabled: get-css-var('border-color-light-2'),
+    color: get-css-var("content-color-base"),
+    color-disabled: get-css-var("content-color-disabled"),
+    bg-color: get-css-var("fill-color-background"),
+    bg-color-disabled: get-css-var("fill-color-background"),
+    b-color: get-css-var("border-color-base"),
+    b-color-disabled: get-css-var("border-color-light-2"),
     v-padding: 0,
     h-padding: 8px,
-    radius: get-css-var('radius-base'),
+    radius: get-css-var("radius-base"),
     series-span: 4px,
-    small-font-size: get-css-var('font-size-secondary'),
-    default-font-size: get-css-var('font-size-base'),
-    large-font-size: get-css-var('font-size-primary'),
-    close-color: get-css-var('content-color-secondary'),
-    d-color: get-css-var('border-color-light-1')
+    small-font-size: get-css-var("font-size-secondary"),
+    default-font-size: get-css-var("font-size-base"),
+    large-font-size: get-css-var("font-size-primary"),
+    close-color: get-css-var("content-color-secondary"),
+    d-color: get-css-var("border-color-light-1"),
   ),
   $tag
 );
 
 .#{$namespace}-tag {
   &-vars {
-    @include define-preset-values('tag', $tag);
+    @include define-preset-values("tag", $tag);
   }
 
   @mixin define-tag-style($style-map) {
-    @include define-preset-style('tag', $style-map);
+    @include define-preset-style("tag", $style-map);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    font-size: get-css-var("tag-default-font-size");
+    color: get-css-var("tag-color");
+    white-space: nowrap;
+    transition: get-css-var("transition-color");
+  }
 
-  $radius: get-css-var('tag-radius');
-
-  position: relative;
-  display: inline-flex;
-  font-size: get-css-var('tag-default-font-size');
-  color: get-css-var('tag-color');
-  white-space: nowrap;
-  transition: get-css-var('transition-color');
+  $radius: get-css-var("tag-radius");
 
   & + & {
-    margin-inline-start: get-css-var('tag-series-span');
+    margin-inline-start: get-css-var("tag-series-span");
   }
 
   &--small {
-    font-size: get-css-var('tag-small-font-size');
+    font-size: get-css-var("tag-small-font-size");
   }
 
   &--large {
-    font-size: get-css-var('tag-large-font-size');
+    font-size: get-css-var("tag-large-font-size");
   }
 
   &--circle {
     @include define-preset-values(
-      'tag',
+      "tag",
       (
         h-padding: 12px,
-        radius: 14px
+        radius: 14px,
       )
     );
   }
 
   &--disabled {
-    color: get-css-var('tag-color-disabled');
+    color: get-css-var("tag-color-disabled");
     cursor: not-allowed;
   }
 
@@ -79,29 +79,30 @@ $tag: map.merge(
     display: flex;
     align-items: center;
     max-width: 100%;
-    padding: get-css-var('tag-v-padding') get-css-var('tag-h-padding');
-    background-color: get-css-var('tag-bg-color');
-    border: get-css-var('border-shape') get-css-var('tag-b-color');
-    border-inline-start-color: get-css-var('tag-d-color');
+    padding: get-css-var("tag-v-padding") get-css-var("tag-h-padding");
+    background-color: get-css-var("tag-bg-color");
+    border: get-css-var("border-shape") get-css-var("tag-b-color");
+    border-inline-start-color: get-css-var("tag-d-color");
     border-inline-end-width: 0;
-    transition: get-css-var('transition-background'), get-css-var('transition-border');
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-border");
 
     &:first-child {
-      border-inline-start-color: get-css-var('tag-b-color');
+      border-inline-start-color: get-css-var("tag-b-color");
 
       @include logical-radius($radius null null $radius);
     }
 
     &:last-child {
-      border-inline-end-width: get-css-var('border-width');
+      border-inline-end-width: get-css-var("border-width");
 
       @include logical-radius(null $radius $radius null);
     }
   }
 
   &--disabled &__unit {
-    background-color: get-css-var('tag-bg-color-disabled');
-    border-color: get-css-var('tag-b-color-disabled');
+    background-color: get-css-var("tag-bg-color-disabled");
+    border-color: get-css-var("tag-b-color-disabled");
   }
 
   &__close {
@@ -113,13 +114,13 @@ $tag: map.merge(
     height: 12px;
     padding: 0;
     margin-inline-start: 4px;
-    color: get-css-var('tag-close-color');
+    color: get-css-var("tag-close-color");
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
     opacity: 60%;
-    transition: get-css-var('transition-opacity');
+    transition: get-css-var("transition-opacity");
 
     &:hover,
     &:focus {
@@ -141,11 +142,11 @@ $tag: map.merge(
     &--#{$type} {
       @include define-tag-style(
         (
-          color: 'color-white',
-          bg-color: 'color' $type 'base',
-          b-color: 'color' $type 'base',
-          close-color: 'color-white',
-          d-color: 'color' $type 'light-3'
+          color: "color-white",
+          bg-color: "color" $type "base",
+          b-color: "color" $type "base",
+          close-color: "color-white",
+          d-color: "color" $type "light-3",
         )
       );
     }
@@ -154,8 +155,8 @@ $tag: map.merge(
     &--simple#{&}--#{$type} {
       @include define-tag-style(
         (
-          color: 'color' $type 'base',
-          close-color: 'color' $type 'base'
+          color: "color" $type "base",
+          close-color: "color" $type "base",
         )
       );
     }
@@ -163,22 +164,22 @@ $tag: map.merge(
     &--simple#{&}--#{$type} {
       @include define-tag-style(
         (
-          bg-color: 'color' $type 'opacity-8'
+          bg-color: "color" $type "opacity-8",
         )
       );
     }
   }
 
   $preset-color-map: (
-    'lime': rgb(18 228 83),
-    'pink': rgb(240 101 149),
-    'magenta': rgb(235 47 150),
-    'tomato': rgb(250 99 99),
-    'orange': rgb(255 146 43),
-    'cyan': rgb(19 194 194),
-    'navy': rgb(47 65 224),
-    'gold': rgb(236 202 11),
-    'purple': rgb(114 46 209)
+    "lime": rgb(18 228 83),
+    "pink": rgb(240 101 149),
+    "magenta": rgb(235 47 150),
+    "tomato": rgb(250 99 99),
+    "orange": rgb(255 146 43),
+    "cyan": rgb(19 194 194),
+    "navy": rgb(47 65 224),
+    "gold": rgb(236 202 11),
+    "purple": rgb(114 46 209),
   );
 
   @each $name in map-keys($preset-color-map) {
@@ -188,25 +189,28 @@ $tag: map.merge(
       &--#{$name} {
         @include define-tag-style(
           (
-            color: 'color-white',
-            close-color: 'color-white',
-            d-color: 'color' $color 'light-2'
+            color: "color-white",
+            close-color: "color-white",
+            d-color: "color" $color "light-2",
           )
         );
 
-        @include define-css-var('tag-bg-color', $color);
-        @include define-css-var('tag-b-color', $color);
-        @include define-css-var('tag-d-color', color.mix($color-white, $color, 30%));
+        @include define-css-var("tag-bg-color", $color);
+        @include define-css-var("tag-b-color", $color);
+        @include define-css-var(
+          "tag-d-color",
+          color.mix($color-white, $color, 30%)
+        );
       }
 
       &--border#{&}--#{$name},
       &--simple#{&}--#{$name} {
-        @include define-css-var('tag-color', $color);
-        @include define-css-var('tag-close-color', $color);
+        @include define-css-var("tag-color", $color);
+        @include define-css-var("tag-close-color", $color);
       }
 
       &--simple#{&}--#{$name} {
-        @include define-css-var('tag-bg-color', rgba($color, 20%));
+        @include define-css-var("tag-bg-color", rgba($color, 20%));
       }
     }
   }

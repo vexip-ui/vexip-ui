@@ -1,69 +1,72 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $option: () !default;
 $option: map.merge(
   (
-    color: get-css-var('content-color-base'),
+    color: get-css-var("content-color-base"),
     // color-hover: get-css-var('option-color'),
-    color-hitting: get-css-var('color-primary-base'),
-    color-selected: get-css-var('color-primary-base'),
-    color-disabled: get-css-var('fill-color-disabled'),
+    color-hitting: get-css-var("color-primary-base"),
+    color-selected: get-css-var("color-primary-base"),
+    color-disabled: get-css-var("fill-color-disabled"),
     bg-color: transparent,
-    bg-color-hover: get-css-var('fill-color-humble'),
-    bg-color-hitting: get-css-var('option-bg-color-hover'),
-    bg-color-selected: get-css-var('color-primary-opacity-8'),
-    bg-color-disabled: get-css-var('option-bg-color'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('option-d-color'),
-    group-color: get-css-var('content-color-secondary'),
-    group-font-size: get-css-var('font-size-secondary'),
+    bg-color-hover: get-css-var("fill-color-humble"),
+    bg-color-hitting: get-css-var("option-bg-color-hover"),
+    bg-color-selected: get-css-var("color-primary-opacity-8"),
+    bg-color-disabled: get-css-var("option-bg-color"),
+    d-color: get-css-var("border-color-light-2"),
+    divider: get-css-var("border-shape") get-css-var("option-d-color"),
+    group-color: get-css-var("content-color-secondary"),
+    group-font-size: get-css-var("font-size-secondary"),
     label-v-padding: 5px,
     label-h-padding: 16px,
-    min-height: 32px
+    min-height: 32px,
   ),
   $option
 );
 
 .#{$namespace}-option {
   &-vars {
-    @include define-preset-values('option', $option);
+    @include define-preset-values("option", $option);
   }
 
-  $label-v-padding: get-css-var('option-label-v-padding');
-  $label-h-padding: get-css-var('option-label-h-padding');
+  $label-v-padding: get-css-var("option-label-v-padding");
+  $label-h-padding: get-css-var("option-label-h-padding");
   $label-padding: $label-v-padding $label-h-padding;
 
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
-  min-height: get-css-var('option-min-height');
-  padding: $label-padding;
-  color: get-css-var('option-color');
-  white-space: nowrap;
-  list-style: none;
-  cursor: pointer;
-  background-color: get-css-var('option-bg-color');
-  transition: get-css-var('transition-color'), get-css-var('transition-background');
+  & {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    min-height: get-css-var("option-min-height");
+    padding: $label-padding;
+    color: get-css-var("option-color");
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    background-color: get-css-var("option-bg-color");
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-background");
+  }
 
   &:not(#{&}--no-hover):hover {
     // color: get-css-var('option-color-hover');
-    background-color: get-css-var('option-bg-color-hover');
+    background-color: get-css-var("option-bg-color-hover");
   }
 
   &--hitting {
-    color: get-css-var('option-color-hitting');
-    background-color: get-css-var('option-bg-color-hitting');
+    color: get-css-var("option-color-hitting");
+    background-color: get-css-var("option-bg-color-hitting");
   }
 
   &--selected {
     &,
     &:hover,
     &:not(#{&}--no-hover):hover {
-      color: get-css-var('option-color-selected');
-      background-color: get-css-var('option-bg-color-selected');
+      color: get-css-var("option-color-selected");
+      background-color: get-css-var("option-bg-color-selected");
     }
   }
 
@@ -72,8 +75,8 @@ $option: map.merge(
 
     &,
     &:hover {
-      color: get-css-var('option-color-disabled');
-      background-color: get-css-var('option-bg-color');
+      color: get-css-var("option-color-disabled");
+      background-color: get-css-var("option-bg-color");
     }
   }
 
@@ -90,8 +93,8 @@ $option: map.merge(
       margin: 0;
       margin-inline: calc(#{$label-h-padding} * -1);
       pointer-events: none;
-      content: '';
-      border-bottom: get-css-var('option-divider');
+      content: "";
+      border-bottom: get-css-var("option-divider");
     }
   }
 
@@ -103,8 +106,8 @@ $option: map.merge(
 
       &__label {
         padding: $label-padding;
-        font-size: get-css-var('option-group-font-size');
-        color: get-css-var('option-group-color');
+        font-size: get-css-var("option-group-font-size");
+        color: get-css-var("option-group-color");
       }
 
       &__list {
@@ -124,9 +127,9 @@ $option: map.merge(
           left: 0;
           display: block;
           height: 1px;
-          font-size: get-css-var('option-group-font-size');
-          content: '';
-          background-color: get-css-var('option-d-color');
+          font-size: get-css-var("option-group-font-size");
+          content: "";
+          background-color: get-css-var("option-d-color");
         }
       }
     }

@@ -1,15 +1,16 @@
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 .#{$namespace}-ellipsis {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  @include inherit-color;
 
   &__tip {
     padding: 8px 14px 10px;

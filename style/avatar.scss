@@ -1,48 +1,48 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $avatar: () !default;
 $avatar: map.merge(
   (
-    color: get-css-var('color-white'),
-    bg-color: get-css-var('fill-color-secondary'),
-    b-color: get-css-var('border-color-base'),
-    b-width: get-css-var('border-width'),
-    b-style: get-css-var('border-style'),
+    color: get-css-var("color-white"),
+    bg-color: get-css-var("fill-color-secondary"),
+    b-color: get-css-var("border-color-base"),
+    b-width: get-css-var("border-width"),
+    b-style: get-css-var("border-style"),
     size: 32px,
-    radius: get-css-var('radius-base'),
+    radius: get-css-var("radius-base"),
     series-span: 8px,
-    image-fit: 'cover',
-    group-offset: -8px
+    image-fit: "cover",
+    group-offset: -8px,
   ),
   $avatar
 );
 
 .#{$namespace}-avatar {
   &-vars {
-    @include define-preset-values('avatar', $avatar);
+    @include define-preset-values("avatar", $avatar);
   }
 
-  @include basis;
-
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: get-css-var('avatar-size');
-  height: get-css-var('avatar-size');
-  overflow: hidden;
-  line-height: 1;
-  color: get-css-var('avatar-color');
-  vertical-align: middle;
-  user-select: none;
-  background-color: get-css-var('avatar-bg-color');
-  border-radius: get-css-var('avatar-radius');
+  @include basis {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var("avatar-size");
+    height: get-css-var("avatar-size");
+    overflow: hidden;
+    line-height: 1;
+    color: get-css-var("avatar-color");
+    vertical-align: middle;
+    user-select: none;
+    background-color: get-css-var("avatar-bg-color");
+    border-radius: get-css-var("avatar-radius");
+  }
 
   & + & {
-    margin-inline-start: get-css-var('avatar-series-span');
+    margin-inline-start: get-css-var("avatar-series-span");
   }
 
   &--circle {
@@ -50,31 +50,31 @@ $avatar: map.merge(
   }
 
   &--border {
-    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
-      get-css-var('avatar-b-color');
+    border: get-css-var("avatar-b-width") get-css-var("avatar-b-style")
+      get-css-var("avatar-b-color");
   }
 
   &--small {
     @include define-preset-values(
-      'avatar',
+      "avatar",
       (
-        size: 26px
+        size: 26px,
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      'avatar',
+      "avatar",
       (
-        size: 40px
+        size: 40px,
       )
     );
   }
 
   &__image {
     height: 100%;
-    object-fit: get-css-var('avatar-image-fit');
+    object-fit: get-css-var("avatar-image-fit");
     pointer-events: none;
   }
 
@@ -87,9 +87,9 @@ $avatar: map.merge(
 
   @at-root {
     &-group {
-      @include basis;
-
-      display: inline-flex;
+      @include basis {
+        display: inline-flex;
+      }
 
       &--vertical {
         flex-direction: column;
@@ -97,19 +97,19 @@ $avatar: map.merge(
 
       &__item {
         position: relative;
-        background-color: get-css-var('bg-color-base');
+        background-color: get-css-var("bg-color-base");
 
         &--rest {
           cursor: pointer;
         }
 
         &:not(:first-child) {
-          margin-inline-start: get-css-var('avatar-group-offset');
+          margin-inline-start: get-css-var("avatar-group-offset");
         }
 
         & > #{$self} {
-          border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
-            get-css-var('avatar-b-color');
+          border: get-css-var("avatar-b-width") get-css-var("avatar-b-style")
+            get-css-var("avatar-b-color");
         }
       }
 
@@ -121,7 +121,7 @@ $avatar: map.merge(
       &--vertical &__item {
         &:not(:first-child) {
           margin-inline-start: 0;
-          margin-top: get-css-var('avatar-group-offset');
+          margin-top: get-css-var("avatar-group-offset");
         }
       }
 

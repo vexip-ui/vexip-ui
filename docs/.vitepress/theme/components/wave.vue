@@ -46,6 +46,8 @@ function animateWave() {
 
   // 创建静态的曲线
   function drawWave(offsetX = 0) {
+    if (!axisLength) return
+
     canvasPen.save() // 存放贝塞尔曲线的各个点
     canvasPen.beginPath() // 创建贝塞尔点
 
@@ -94,7 +96,7 @@ watch(() => props.reverse, refresh)
 
 onMounted(() => {
   isMounted = true
-  refresh()
+  requestAnimationFrame(refresh)
 })
 onBeforeUnmount(() => cancelAnimate?.())
 
@@ -121,7 +123,7 @@ export default {
 </script>
 
 <template>
-  <ResizeObserver throttle @resize="refresh">
+  <ResizeObserver @resize="refresh">
     <canvas v-bind="$attrs" ref="canvas" class="wave"></canvas>
   </ResizeObserver>
 </template>

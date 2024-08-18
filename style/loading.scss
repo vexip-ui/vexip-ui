@@ -1,43 +1,47 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $loading: () !default;
 $loading: map.merge(
   (
-    z-index: get-css-var('z-index-popup'),
-    filler-bg-color: get-css-var('color-primary-base')
+    z-index: get-css-var("z-index-popup"),
+    filler-bg-color: get-css-var("color-primary-base"),
   ),
   $loading
 );
 
 .#{$namespace}-loading {
   &-vars {
-    @include define-preset-values('loading', $loading);
+    @include define-preset-values("loading", $loading);
   }
 
-  @include basis;
-
-  position: fixed;
-  inset-inline-start: 0;
-  z-index: get-css-var('loading-z-index');
-  width: 100%;
+  @include basis {
+    position: fixed;
+    inset-inline-start: 0;
+    z-index: get-css-var("loading-z-index");
+    width: 100%;
+  }
 
   &__filler {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    background-color: get-css-var('loading-filler-bg-color');
+    background-color: get-css-var("loading-filler-bg-color");
     will-change: transform;
-    transition: get-css-var('transition-background'), get-css-var('transition-transform');
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-transform");
   }
 
   $types: success error warning;
 
   @each $type in $types {
     &--#{$type} &__filler {
-      @include define-css-var('loading-filler-bg-color', get-css-var('color' $type 'base'));
+      @include define-css-var(
+        "loading-filler-bg-color",
+        get-css-var("color" $type "base")
+      );
     }
   }
 }

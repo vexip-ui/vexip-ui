@@ -1,48 +1,48 @@
-@use 'sass:math';
-@use 'sass:map';
+@use "sass:math";
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $calendar: () !default;
 $calendar: map.merge(
   (
     header-height: 50px,
-    date-color-today: get-css-var('color-primary-base'),
-    date-color-outside: get-css-var('content-color-disabled'),
-    date-color-disabled: get-css-var('content-color-humble'),
+    date-color-today: get-css-var("color-primary-base"),
+    date-color-outside: get-css-var("content-color-disabled"),
+    date-color-disabled: get-css-var("content-color-humble"),
     date-bg-color: transparent,
-    date-bg-color-hover: get-css-var('color-primary-opacity-9'),
-    date-bg-color-selected: get-css-var('color-primary-opacity-8'),
-    date-bg-color-disabled: get-css-var('calendar-date-bg-color'),
-    date-bg-color-outside: get-css-var('calendar-date-bg-color'),
+    date-bg-color-hover: get-css-var("color-primary-opacity-9"),
+    date-bg-color-selected: get-css-var("color-primary-opacity-8"),
+    date-bg-color-disabled: get-css-var("calendar-date-bg-color"),
+    date-bg-color-outside: get-css-var("calendar-date-bg-color"),
     date-b-width: 2px,
-    date-b-style: get-css-var('border-style'),
-    date-b-color: get-css-var('border-color-base'),
-    date-b-color-selected: get-css-var('color-primary-light-2'),
-    date-b-color-disabled: get-css-var('border-color-light-2'),
-    date-b-color-outside: get-css-var('border-color-light-1'),
-    date-border: get-css-var('calendar-date-b-width') get-css-var('calendar-date-b-style')
-      get-css-var('calendar-date-b-color'),
+    date-b-style: get-css-var("border-style"),
+    date-b-color: get-css-var("border-color-base"),
+    date-b-color-selected: get-css-var("color-primary-light-2"),
+    date-b-color-disabled: get-css-var("border-color-light-2"),
+    date-b-color-outside: get-css-var("border-color-light-1"),
+    date-border: get-css-var("calendar-date-b-width")
+      get-css-var("calendar-date-b-style") get-css-var("calendar-date-b-color"),
     content-height: 90px,
     content-v-padding: 4px,
-    content-h-padding: 4px
+    content-h-padding: 4px,
   ),
   $calendar
 );
 
-@use './calendar-panel.scss' with (
+@use "./calendar-panel.scss" with (
   $calendar-panel: $calendar
 );
 
 .#{$namespace}-calendar {
-  @include basis(false);
-
-  width: 100%;
+  @include basis(false) {
+    width: 100%;
+  }
 
   &__header {
     width: 100%;
-    height: get-css-var('calendar-header-height');
+    height: get-css-var("calendar-header-height");
     padding-bottom: 10px;
   }
 
@@ -80,8 +80,8 @@ $calendar: map.merge(
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: get-css-var('calendar-index-size');
-      height: get-css-var('calendar-index-size');
+      min-width: get-css-var("calendar-index-size");
+      height: get-css-var("calendar-index-size");
     }
   }
 
@@ -90,34 +90,34 @@ $calendar: map.merge(
     padding: 4px 4px 0;
     margin: 0 2px;
     cursor: pointer;
-    background-color: get-css-var('calendar-date-bg-color');
-    border-top: get-css-var('calendar-date-border');
+    background-color: get-css-var("calendar-date-bg-color");
+    border-top: get-css-var("calendar-date-border");
     outline: 0;
-    transition: get-css-var('transition-color'), get-css-var('transition-background'),
-      get-css-var('transition-border');
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-background"), get-css-var("transition-border");
 
     &:hover,
     &:focus {
-      background-color: get-css-var('calendar-date-bg-color-hover');
+      background-color: get-css-var("calendar-date-bg-color-hover");
     }
 
     &--today {
-      color: get-css-var('calendar-date-color-today');
+      color: get-css-var("calendar-date-color-today");
     }
 
     &--prev,
     &--next {
-      color: get-css-var('calendar-date-color-outside');
-      background-color: get-css-var('calendar-date-bg-color-outside');
-      border-top-color: get-css-var('calendar-date-b-color-outside');
+      color: get-css-var("calendar-date-color-outside");
+      background-color: get-css-var("calendar-date-bg-color-outside");
+      border-top-color: get-css-var("calendar-date-b-color-outside");
     }
 
     &--selected {
       &,
       &:hover,
       &:focus {
-        background-color: get-css-var('calendar-date-bg-color-selected');
-        border-top-color: get-css-var('calendar-date-b-color-selected');
+        background-color: get-css-var("calendar-date-bg-color-selected");
+        border-top-color: get-css-var("calendar-date-b-color-selected");
       }
     }
 
@@ -125,10 +125,10 @@ $calendar: map.merge(
       &,
       &:hover,
       &:focus {
-        color: get-css-var('calendar-date-color-disabled');
+        color: get-css-var("calendar-date-color-disabled");
         cursor: not-allowed;
-        background-color: get-css-var('calendar-date-bg-color-disabled');
-        border-top-color: get-css-var('calendar-date-b-color-disabled');
+        background-color: get-css-var("calendar-date-bg-color-disabled");
+        border-top-color: get-css-var("calendar-date-b-color-disabled");
       }
     }
 
@@ -136,7 +136,7 @@ $calendar: map.merge(
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      height: get-css-var('calendar-index-size');
+      height: get-css-var("calendar-index-size");
       user-select: none;
     }
 
@@ -144,12 +144,13 @@ $calendar: map.merge(
       display: flex;
       align-items: center;
       justify-content: center;
-      width: get-css-var('calendar-index-size');
+      width: get-css-var("calendar-index-size");
     }
 
     &-content {
-      height: get-css-var('calendar-content-height');
-      padding: get-css-var('calendar-content-v-padding') get-css-var('calendar-content-h-padding');
+      height: get-css-var("calendar-content-height");
+      padding: get-css-var("calendar-content-v-padding")
+        get-css-var("calendar-content-h-padding");
       overflow: auto;
     }
   }

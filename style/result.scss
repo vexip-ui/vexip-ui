@@ -1,6 +1,6 @@
-@use 'sass:map';
-@use './shared' as *;
-@use './design' as *;
+@use "sass:map";
+@use "./shared" as *;
+@use "./design" as *;
 
 $result: () !default;
 $result: map.merge(
@@ -10,45 +10,45 @@ $result: map.merge(
     title-margin-top: 16px,
     description-font-size: 14px,
     description-margin-top: 4px,
-    extra-margin-top: 24px
+    extra-margin-top: 24px,
   ),
   $result
 );
 
 .#{$namespace}-result {
   &-vars {
-    @include define-preset-values('result', $result);
+    @include define-preset-values("result", $result);
   }
 
   @mixin define-result-style($style-map) {
-    @include define-preset-style('result', $style-map);
+    @include define-preset-style("result", $style-map);
   }
 
-  @include basis;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  @include basis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
   &--small {
     @include define-preset-values(
-      'result',
+      "result",
       (
         icon-font-size: 36px,
         title-font-size: 16px,
-        description-font-size: 12px
+        description-font-size: 12px,
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      'result',
+      "result",
       (
         icon-font-size: 84px,
         title-font-size: 28px,
-        description-font-size: 16px
+        description-font-size: 16px,
       )
     );
   }
@@ -56,30 +56,30 @@ $result: map.merge(
   &__icon {
     display: flex;
     align-items: center;
-    font-size: get-css-var('result-icon-font-size');
-    color: get-css-var('result-icon-color');
+    font-size: get-css-var("result-icon-font-size");
+    color: get-css-var("result-icon-color");
   }
 
   &__title {
-    margin-top: get-css-var('result-title-margin-top');
-    font-size: get-css-var('result-title-font-size');
+    margin-top: get-css-var("result-title-margin-top");
+    font-size: get-css-var("result-title-font-size");
   }
 
   &__description {
-    margin-top: get-css-var('result-description-margin-top');
-    font-size: get-css-var('result-description-font-size');
+    margin-top: get-css-var("result-description-margin-top");
+    font-size: get-css-var("result-description-font-size");
   }
 
   &__extra {
-    margin-top: get-css-var('result-extra-margin-top');
+    margin-top: get-css-var("result-extra-margin-top");
   }
 
   @each $type in $types {
     &--#{$type} {
       @include define-result-style(
         (
-          bg-color: 'color' $type 'opacity-8',
-          icon-color: 'color' $type 'dark-2'
+          bg-color: "color" $type "opacity-8",
+          icon-color: "color" $type "dark-2",
         )
       );
     }

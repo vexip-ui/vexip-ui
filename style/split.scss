@@ -1,31 +1,36 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $split: () !default;
 $split: map.merge(
   (
-    handler-bg-color: get-css-var('fill-color-humble'),
+    handler-bg-color: get-css-var("fill-color-humble"),
     handler-z-index: 10,
     handler-size: 6px,
-    button-color: get-css-var('color-white'),
-    button-bg-color: get-css-var('border-color-light-2'),
-    button-bg-color-hover: get-css-var('color-primary-base'),
+    button-color: get-css-var("color-white"),
+    button-bg-color: get-css-var("border-color-light-2"),
+    button-bg-color-hover: get-css-var("color-primary-base"),
     button-size: 24px,
-    guide-bg-color: get-css-var('border-color-light-1'),
+    guide-bg-color: get-css-var("border-color-light-1"),
     guide-opacity: 50%,
-    pointer-bg-color: get-css-var('border-color-base')
+    pointer-bg-color: get-css-var("border-color-base"),
   ),
   $split
 );
 
 .#{$namespace}-split {
   &-vars {
-    @include define-preset-values('split', $split);
+    @include define-preset-values("split", $split);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
   @include inherit-color;
 
   $pane: #{&}__panel;
@@ -36,16 +41,12 @@ $split: map.merge(
   $guide: #{&}__guide;
   $pointer: #{&}__pointer;
 
-  $handler-size: get-css-var('split-handler-size');
-  $handler-size-h: calc(get-css-var('split-handler-size') * 0.5);
-  $button-position: calc(get-css-var('split-handler-size') * -1);
-  $button-margin: calc(get-css-var('split-handler-size') * 0.5 + 2px);
-  $button-color: get-css-var('split-button-bg-color');
-  $button-hover-color: get-css-var('split-button-bg-color-hover');
-
-  position: relative;
-  width: 100%;
-  height: 100%;
+  $handler-size: get-css-var("split-handler-size");
+  $handler-size-h: calc(get-css-var("split-handler-size") * 0.5);
+  $button-position: calc(get-css-var("split-handler-size") * -1);
+  $button-margin: calc(get-css-var("split-handler-size") * 0.5 + 2px);
+  $button-color: get-css-var("split-button-bg-color");
+  $button-hover-color: get-css-var("split-button-bg-color-hover");
 
   &__panel {
     position: absolute;
@@ -53,7 +54,7 @@ $split: map.merge(
 
   &__trigger {
     position: absolute;
-    z-index: get-css-var('split-handler-z-index');
+    z-index: get-css-var("split-handler-z-index");
     transform: translate(-50%, -50%);
   }
 
@@ -61,9 +62,10 @@ $split: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: get-css-var('split-handler-bg-color');
-    border: 0 solid get-css-var('split-handler-b-color');
-    transition: get-css-var('transition-background'), get-css-var('transition-transform');
+    background-color: get-css-var("split-handler-bg-color");
+    border: 0 solid get-css-var("split-handler-b-color");
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-transform");
   }
 
   &__button {
@@ -72,19 +74,19 @@ $split: map.merge(
     align-items: center;
     justify-content: center;
     padding: 0;
-    color: get-css-var('split-button-color');
+    color: get-css-var("split-button-color");
     cursor: pointer;
     background-color: $button-color;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-background');
+    transition: get-css-var("transition-background");
 
     &::before,
     &::after {
       position: absolute;
-      content: '';
+      content: "";
       border: calc(#{$handler-size} * 0.5) solid transparent;
-      transition: get-css-var('transition-border');
+      transition: get-css-var("transition-border");
     }
 
     &--left-full {
@@ -211,16 +213,16 @@ $split: map.merge(
 
   &__guide {
     position: absolute;
-    z-index: calc(get-css-var('split-handler-z-index') + 1);
+    z-index: calc(get-css-var("split-handler-z-index") + 1);
     display: none;
     pointer-events: none;
-    background-color: get-css-var('split-guide-bg-color');
-    opacity: get-css-var('split-guide-opacity');
+    background-color: get-css-var("split-guide-bg-color");
+    opacity: get-css-var("split-guide-opacity");
   }
 
   &__pointer {
     pointer-events: none;
-    background-color: get-css-var('split-pointer-bg-color');
+    background-color: get-css-var("split-pointer-bg-color");
   }
 
   &--moving {
@@ -245,8 +247,8 @@ $split: map.merge(
       pointer-events: none;
       transition: {
         property: top, right, bottom, left;
-        timing-function: get-css-var('transition-timing');
-        duration: get-css-var('transition-duration');
+        timing-function: get-css-var("transition-timing");
+        duration: get-css-var("transition-duration");
       }
     }
 
@@ -416,7 +418,7 @@ $split: map.merge(
 
       #{$button} {
         width: 100%;
-        height: get-css-var('split-button-size');
+        height: get-css-var("split-button-size");
       }
 
       #{$pointer} {
@@ -465,7 +467,7 @@ $split: map.merge(
       }
 
       #{$button} {
-        width: get-css-var('split-button-size');
+        width: get-css-var("split-button-size");
         height: 100%;
       }
 

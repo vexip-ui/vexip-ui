@@ -10,8 +10,13 @@ import { useRtl } from '@vexip-ui/hooks'
 import { getLast, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ColumnWithKey, SummaryWithKey, TableRowState, TableTypeColumn } from './symbol'
+import type { PropType, StyleValue } from 'vue'
+import type {
+  ColumnWithKey,
+  SummaryWithKey,
+  TableRowState,
+  TableTypeColumn
+} from './symbol'
 
 defineOptions({ name: 'TableFootCell' })
 
@@ -66,8 +71,12 @@ const columns = computed(() => {
 })
 // We use 'a' and 'b' to distinguish above and below
 const prefix = computed(() => (props.above ? 'af' : 'bf'))
-const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
-const heights = computed(() => (props.above ? getters.topFixedHeights : getters.bottomFixedHeights))
+const summaries = computed(() =>
+  props.above ? state.aboveSummaries : state.belowSummaries
+)
+const heights = computed(() =>
+  props.above ? getters.topFixedHeights : getters.bottomFixedHeights
+)
 const className = computed(() => {
   let customClass = null
 
@@ -88,7 +97,8 @@ const className = computed(() => {
     nh.be('foot-cell'),
     {
       [nh.bem('foot-cell', 'typed')]: typed,
-      [nh.bem('foot-cell', 'center')]: typed || props.column.textAlign === 'center',
+      [nh.bem('foot-cell', 'center')]:
+        typed || props.column.textAlign === 'center',
       [nh.bem('foot-cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('foot-cell', 'last')]: inLast.value
     },
@@ -126,14 +136,19 @@ const style = computed(() => {
         ? getters.rightFixedWidths
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
-  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
-  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
-  const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
+  const padLeft =
+    columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight =
+    getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const width =
+    totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined
 
   if (rowSpan > 1) {
-    height = heights.value[props.summaryIndex + rowSpan] - heights.value[props.summaryIndex]
+    height =
+      heights.value[props.summaryIndex + rowSpan] -
+      heights.value[props.summaryIndex]
   }
 
   return [
@@ -145,16 +160,20 @@ const style = computed(() => {
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
-        !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
+        !state.border &&
+        colSpan > 1 &&
+        props.colIndex + colSpan >= totalWidths.length - 1
           ? 0
           : undefined,
       borderBottomWidth:
-        rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
+        rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length
+          ? 0
+          : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
         (props.column.index ? padLeft : 0) + totalWidths[props.colIndex]
       }px, 0, 0)`
     }
-  ]
+  ] as StyleValue
 })
 const attrs = computed(() => {
   let customAttrs: Record<string, any>
@@ -208,7 +227,8 @@ function handleCellResize(entry: ResizeObserverEntry) {
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) +
+      state.borderWidth
   )
 }
 </script>
@@ -250,13 +270,23 @@ function handleCellResize(entry: ResizeObserverEntry) {
         >
           <Renderer
             :renderer="summary.renderer"
-            :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
+            :data="{
+              column,
+              index: column.index,
+              rows: state.data,
+              meta: summaryData,
+            }"
           ></Renderer>
         </Ellipsis>
         <Renderer
           v-else
           :renderer="summary.renderer"
-          :data="{ column, index: column.index, rows: state.data, meta: summaryData }"
+          :data="{
+            column,
+            index: column.index,
+            rows: state.data,
+            meta: summaryData,
+          }"
         ></Renderer>
       </span>
     </ResizeObserver>

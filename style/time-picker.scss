@@ -1,50 +1,49 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
-@use './input.scss' as input;
+@use "./shared" as *;
+@use "./design" as *;
+@use "./input.scss" as input;
 
 $time-picker: () !default;
 $time-picker: map.merge(
   (
-    color-disabled: get-css-var('input-control-color-disabled'),
-    color-error: get-css-var('color-error-base'),
-    unit-color: get-css-var('content-color-secondary'),
-    unit-color-focus: get-css-var('color-white'),
-    unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
-    unit-bg-color-error: get-css-var('color-error-opacity-1'),
-    separator-color: get-css-var('content-color-disabled'),
-    exchange-color: get-css-var('content-color-third'),
-    exchange-color-hover: get-css-var('color-primary-base'),
-    pane-bg-color: get-css-var('bg-color-base'),
-    pane-radius: get-css-var('radius-base'),
-    pane-shadow: get-css-var('shadow-base'),
-    shortcut-bg-color: get-css-var('fill-color-background'),
-    shortcut-bg-color-hover: get-css-var('fill-color-hover'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('time-picker-d-color'),
+    color-disabled: get-css-var("input-control-color-disabled"),
+    color-error: get-css-var("color-error-base"),
+    unit-color: get-css-var("content-color-secondary"),
+    unit-color-focus: get-css-var("color-white"),
+    unit-bg-color-focus: get-css-var("color-primary-opacity-1"),
+    unit-bg-color-error: get-css-var("color-error-opacity-1"),
+    separator-color: get-css-var("content-color-disabled"),
+    exchange-color: get-css-var("content-color-third"),
+    exchange-color-hover: get-css-var("color-primary-base"),
+    pane-bg-color: get-css-var("bg-color-base"),
+    pane-radius: get-css-var("radius-base"),
+    pane-shadow: get-css-var("shadow-base"),
+    shortcut-bg-color: get-css-var("fill-color-background"),
+    shortcut-bg-color-hover: get-css-var("fill-color-hover"),
+    d-color: get-css-var("border-color-light-2"),
+    divider: get-css-var("border-shape") get-css-var("time-picker-d-color"),
     wheel-v-padding: 8px,
     wheel-h-padding: 12px,
-    option-color-disabled: get-css-var('content-color-disabled')
+    option-color-disabled: get-css-var("content-color-disabled"),
   ),
   $time-picker
 );
 
 .#{$namespace}-time-picker {
   &-vars {
-    @include define-preset-values('time-picker', $time-picker);
+    @include define-preset-values("time-picker", $time-picker);
   }
 
-  @include basis;
-
-  display: inline-flex;
-  width: 100%;
+  @include basis {
+    display: inline-flex;
+    width: 100%;
+    user-select: none;
+  }
 
   @include input.handler(#{&}__selector);
 
-  $wheel: '#{$namespace}-wheel';
-
-  user-select: none;
+  $wheel: "#{$namespace}-wheel";
 
   &__selector {
     cursor: pointer;
@@ -66,13 +65,13 @@ $time-picker: map.merge(
     outline: 0;
 
     &--error {
-      color: get-css-var('time-picker-color-error');
+      color: get-css-var("time-picker-color-error");
     }
   }
 
   &__placeholder {
     overflow: hidden;
-    color: get-css-var('input-placeholder-color');
+    color: get-css-var("input-placeholder-color");
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
@@ -81,57 +80,59 @@ $time-picker: map.merge(
 
   &__unit {
     padding: 0 2px;
-    color: get-css-var('time-picker-unit-color');
+    color: get-css-var("time-picker-unit-color");
     text-align: center;
-    transition: get-css-var('transition-background'), get-css-var('transition-color');
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-color");
 
     &--focused {
-      color: get-css-var('time-picker-unit-color-focus');
-      background-color: get-css-var('time-picker-unit-bg-color-focus');
+      color: get-css-var("time-picker-unit-color-focus");
+      background-color: get-css-var("time-picker-unit-bg-color-focus");
     }
   }
 
   &__input--error &__unit {
-    color: get-css-var('time-picker-color-error');
+    color: get-css-var("time-picker-color-error");
 
     &--focused {
-      color: get-css-var('time-picker-unit-color-focus');
-      background-color: get-css-var('time-picker-unit-bg-color-error');
+      color: get-css-var("time-picker-unit-color-focus");
+      background-color: get-css-var("time-picker-unit-bg-color-error");
     }
   }
 
   &__label {
     text-align: center;
     user-select: none;
-    transition: get-css-var('transition-background'), get-css-var('transition-color');
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-color");
   }
 
   &__separator {
-    color: get-css-var('time-picker-separator-color');
-    transition: get-css-var('transition-color');
+    color: get-css-var("time-picker-separator-color");
+    transition: get-css-var("transition-color");
   }
 
   &__input--error &__separator {
-    color: get-css-var('time-picker-color-error');
+    color: get-css-var("time-picker-color-error");
   }
 
   &--disabled &__separator {
-    color: get-css-var('time-picker-color-disabled');
+    color: get-css-var("time-picker-color-disabled");
   }
 
   &__exchange {
     display: flex;
     align-items: center;
     padding: 0 4px;
-    color: get-css-var('time-picker-exchange-color');
+    color: get-css-var("time-picker-exchange-color");
 
     &--enabled:hover {
-      color: get-css-var('time-picker-exchange-color-hover');
+      color: get-css-var("time-picker-exchange-color-hover");
     }
   }
 
   &--disabled &__exchange {
-    color: get-css-var('time-picker-color-disabled');
+    color: get-css-var("time-picker-color-disabled");
   }
 
   &__clear {
@@ -146,9 +147,9 @@ $time-picker: map.merge(
     display: flex;
     justify-content: center;
     min-width: 152px;
-    background-color: get-css-var('time-picker-pane-bg-color');
-    border-radius: get-css-var('time-picker-pane-radius');
-    box-shadow: get-css-var('time-picker-pane-shadow');
+    background-color: get-css-var("time-picker-pane-bg-color");
+    border-radius: get-css-var("time-picker-pane-radius");
+    box-shadow: get-css-var("time-picker-pane-shadow");
 
     &--vertical {
       flex-direction: column;
@@ -165,8 +166,8 @@ $time-picker: map.merge(
     flex-direction: column;
     align-items: flex-start;
     padding: 6px 0;
-    background-color: get-css-var('time-picker-shortcut-bg-color');
-    border-inline-end: get-css-var('time-picker-divider');
+    background-color: get-css-var("time-picker-shortcut-bg-color");
+    border-inline-end: get-css-var("time-picker-divider");
 
     &--top,
     &--bottom {
@@ -188,10 +189,10 @@ $time-picker: map.merge(
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    transition: get-css-var('transition-background');
+    transition: get-css-var("transition-background");
 
     &:hover {
-      background-color: get-css-var('time-picker-shortcut-bg-color-hover');
+      background-color: get-css-var("time-picker-shortcut-bg-color-hover");
     }
   }
 
@@ -203,14 +204,15 @@ $time-picker: map.merge(
   &__wheels {
     display: flex;
     gap: 6px;
-    padding: get-css-var('time-picker-wheel-v-padding') get-css-var('time-picker-wheel-h-padding');
+    padding: get-css-var("time-picker-wheel-v-padding")
+      get-css-var("time-picker-wheel-h-padding");
   }
 
   &__wheel {
     display: flex;
 
     .#{$wheel}__item:hover {
-      color: get-css-var('wheel-item-color-active-hover');
+      color: get-css-var("wheel-item-color-active-hover");
     }
   }
 
@@ -233,8 +235,8 @@ $time-picker: map.merge(
   }
 
   &__option--disabled {
-    color: get-css-var('time-picker-option-color-disabled');
-    transition: get-css-var('transition-color');
+    color: get-css-var("time-picker-option-color-disabled");
+    transition: get-css-var("transition-color");
   }
 
   &__action {
@@ -242,6 +244,6 @@ $time-picker: map.merge(
     justify-content: flex-end;
     width: 100%;
     padding: 6px 8px;
-    border-top: get-css-var('time-picker-divider');
+    border-top: get-css-var("time-picker-divider");
   }
 }

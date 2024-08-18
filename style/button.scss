@@ -1,30 +1,30 @@
-@use 'sass:color';
-@use 'sass:map';
+@use "sass:color";
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $button: () !default;
 $button: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    color-hover: get-css-var('color-primary-light-2'),
-    color-focus: get-css-var('color-primary-light-2'),
-    color-active: get-css-var('color-primary-dark-1'),
-    color-disabled: get-css-var('content-color-disabled'),
-    bg-color: get-css-var('fill-color-base'),
-    bg-color-hover: get-css-var('button-bg-color'),
-    bg-color-focus: get-css-var('button-bg-color'),
-    bg-color-active: get-css-var('button-bg-color'),
-    bg-color-disabled: get-css-var('fill-color-background'),
-    b-color: get-css-var('border-color-base'),
-    b-color-hover: get-css-var('color-primary-light-2'),
-    b-color-focus: get-css-var('color-primary-light-2'),
-    b-color-active: get-css-var('color-primary-dark-1'),
-    b-color-disabled: get-css-var('border-color-light-1'),
-    border: get-css-var('border-shape') get-css-var('button-b-color'),
-    radius: get-css-var('radius-base'),
-    pulse-s-color: get-css-var('color-primary-base'),
+    color: get-css-var("content-color-base"),
+    color-hover: get-css-var("color-primary-light-2"),
+    color-focus: get-css-var("color-primary-light-2"),
+    color-active: get-css-var("color-primary-dark-1"),
+    color-disabled: get-css-var("content-color-disabled"),
+    bg-color: get-css-var("fill-color-base"),
+    bg-color-hover: get-css-var("button-bg-color"),
+    bg-color-focus: get-css-var("button-bg-color"),
+    bg-color-active: get-css-var("button-bg-color"),
+    bg-color-disabled: get-css-var("fill-color-background"),
+    b-color: get-css-var("border-color-base"),
+    b-color-hover: get-css-var("color-primary-light-2"),
+    b-color-focus: get-css-var("color-primary-light-2"),
+    b-color-active: get-css-var("color-primary-dark-1"),
+    b-color-disabled: get-css-var("border-color-light-1"),
+    border: get-css-var("border-shape") get-css-var("button-b-color"),
+    radius: get-css-var("radius-base"),
+    pulse-s-color: get-css-var("color-primary-base"),
     pulse-opacity: 60%,
     pulse-size: 6px,
     pulse-duration: 800ms,
@@ -32,20 +32,20 @@ $button: map.merge(
     height: 32px,
     v-padding: 0,
     h-padding: 14px,
-    font-size: get-css-var('font-size-base'),
+    font-size: get-css-var("font-size-base"),
     series-span: 8px,
     icon-span: 6px,
     d-color-typed: rgba($color-white, 50%),
-    badge-color: get-css-var('color-white'),
-    badge-bg-color: get-css-var('color-error-base'),
-    badge-b-color: get-css-var('color-error-base')
+    badge-color: get-css-var("color-white"),
+    badge-bg-color: get-css-var("color-error-base"),
+    badge-b-color: get-css-var("color-error-base"),
   ),
   $button
 );
 
 .#{$namespace}-button {
   &-vars {
-    @include define-preset-values('button', $button);
+    @include define-preset-values("button", $button);
   }
 
   $self: &;
@@ -64,56 +64,57 @@ $button: map.merge(
   }
 
   @mixin define-button-style($style-map) {
-    @include define-preset-style('button', $style-map);
+    @include define-preset-style("button", $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: get-css-var('button-height');
-  padding: get-css-var('button-v-padding') get-css-var('button-h-padding');
-  font-weight: 400;
-  line-height: 1;
-  color: get-css-var('button-color');
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  background-color: get-css-var('button-bg-color');
-  border: get-css-var('button-border');
-  border-radius: get-css-var('button-radius');
-  outline: 0;
-  transition: get-css-var('transition-color'), get-css-var('transition-background'),
-    get-css-var('transition-border'), get-css-var('transition-shadow');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: get-css-var("button-height");
+    padding: get-css-var("button-v-padding") get-css-var("button-h-padding");
+    font-weight: 400;
+    line-height: 1;
+    color: get-css-var("button-color");
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: get-css-var("button-bg-color");
+    border: get-css-var("button-border");
+    border-radius: get-css-var("button-radius");
+    outline: 0;
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-background"), get-css-var("transition-border"),
+      get-css-var("transition-shadow");
+  }
 
   &:hover {
-    color: get-css-var('button-color-hover');
-    background-color: get-css-var('button-bg-color-hover');
-    border-color: get-css-var('button-b-color-hover');
+    color: get-css-var("button-color-hover");
+    background-color: get-css-var("button-bg-color-hover");
+    border-color: get-css-var("button-b-color-hover");
     outline: 0;
   }
 
   &:focus {
-    color: get-css-var('button-color-focus');
-    background-color: get-css-var('button-bg-color-focus');
-    border-color: get-css-var('button-b-color-focus');
+    color: get-css-var("button-color-focus");
+    background-color: get-css-var("button-bg-color-focus");
+    border-color: get-css-var("button-b-color-focus");
     outline: 0;
   }
 
   &:active {
-    color: get-css-var('button-color-active');
-    background-color: get-css-var('button-bg-color-active');
-    border-color: get-css-var('button-b-color-active');
+    color: get-css-var("button-color-active");
+    background-color: get-css-var("button-bg-color-active");
+    border-color: get-css-var("button-b-color-active");
   }
 
-  @include disabled('') {
-    color: get-css-var('button-color-disabled');
+  @include disabled("") {
+    color: get-css-var("button-color-disabled");
     cursor: not-allowed;
-    background-color: get-css-var('button-bg-color-disabled');
-    border-color: get-css-var('button-b-color-disabled');
+    background-color: get-css-var("button-bg-color-disabled");
+    border-color: get-css-var("button-b-color-disabled");
   }
 
   &--block {
@@ -122,25 +123,25 @@ $button: map.merge(
   }
 
   &:not(#{&}--block) + &:not(#{&}--block) {
-    margin-inline-start: get-css-var('button-series-span');
+    margin-inline-start: get-css-var("button-series-span");
   }
 
   &--small {
     @include define-preset-values(
-      'button',
+      "button",
       (
         height: 24px,
-        h-padding: 10px
+        h-padding: 10px,
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      'button',
+      "button",
       (
         height: 40px,
-        h-padding: 20px
+        h-padding: 20px,
       )
     );
   }
@@ -150,11 +151,11 @@ $button: map.merge(
     inset: 0;
     display: block;
     pointer-events: none;
-    content: '';
+    content: "";
     background-color: transparent;
     border-radius: inherit;
-    animation-duration: get-css-var('button-pulse-duration');
-    animation-timing-function: get-css-var('button-pulse-timing');
+    animation-duration: get-css-var("button-pulse-duration");
+    animation-timing-function: get-css-var("button-pulse-timing");
     animation-iteration-count: 1;
   }
 
@@ -165,17 +166,18 @@ $button: map.merge(
 
     @keyframes #{$namespace}-button-pulse {
       0% {
-        box-shadow: 0 0 1px 0 get-css-var('button-pulse-s-color');
+        box-shadow: 0 0 1px 0 get-css-var("button-pulse-s-color");
       }
 
       100% {
-        box-shadow: 0 0 1px get-css-var('button-pulse-size') get-css-var('button-pulse-s-color');
+        box-shadow: 0 0 1px get-css-var("button-pulse-size")
+          get-css-var("button-pulse-s-color");
       }
     }
 
     @keyframes #{$namespace}-button-pulse-opacity {
       0% {
-        opacity: get-css-var('button-pulse-opacity');
+        opacity: get-css-var("button-pulse-opacity");
       }
 
       100% {
@@ -215,7 +217,7 @@ $button: map.merge(
 
   &--ghost {
     @include define-preset-values(
-      'button',
+      "button",
       (
         color: rgba($color-white, 0.8),
         bg-color: transparent,
@@ -223,19 +225,19 @@ $button: map.merge(
         bg-color-focus: transparent,
         bg-color-active: transparent,
         bg-color-disabled: transparent,
-        b-color: rgba($color-white, 0.6)
+        b-color: rgba($color-white, 0.6),
       )
     );
 
     @include define-button-style(
       (
-        color-hover: 'color-primary-base',
-        color-focus: 'color-primary-base',
-        color-active: 'color-primary-base',
-        color-disabled: 'content-color-disabled',
-        b-color-hover: 'color-primary-base',
-        b-color-active: 'color-primary-base',
-        b-color-disabled: 'content-color-disabled'
+        color-hover: "color-primary-base",
+        color-focus: "color-primary-base",
+        color-active: "color-primary-base",
+        color-disabled: "content-color-disabled",
+        b-color-hover: "color-primary-base",
+        b-color-active: "color-primary-base",
+        b-color-disabled: "content-color-disabled",
       )
     );
   }
@@ -244,29 +246,29 @@ $button: map.merge(
     border-color: transparent;
   }
 
-  $d-color: get-css-var('button-d-color-typed');
+  $d-color: get-css-var("button-d-color-typed");
 
   @each $type in $types {
     @at-root {
       &--#{$type} {
         @include define-button-style(
           (
-            color: 'color-white',
-            color-hover: 'color-white',
-            color-focus: 'color-white',
-            color-active: 'color-white',
-            color-disabled: 'content-color-disabled',
-            bg-color: 'color' $type 'base',
-            bg-color-hover: 'color' $type 'light-2',
-            bg-color-focus: 'color' $type 'light-2',
-            bg-color-active: 'color' $type 'dark-1',
-            bg-color-disabled: 'fill-color-background',
-            b-color: 'color' $type 'base',
-            b-color-hover: 'color' $type 'light-2',
-            b-color-focus: 'color' $type 'light-2',
-            b-color-active: 'color' $type 'dark-1',
-            b-color-disabled: 'border-color-light-1',
-            pulse-s-color: 'color' $type 'dark-1'
+            color: "color-white",
+            color-hover: "color-white",
+            color-focus: "color-white",
+            color-active: "color-white",
+            color-disabled: "content-color-disabled",
+            bg-color: "color" $type "base",
+            bg-color-hover: "color" $type "light-2",
+            bg-color-focus: "color" $type "light-2",
+            bg-color-active: "color" $type "dark-1",
+            bg-color-disabled: "fill-color-background",
+            b-color: "color" $type "base",
+            b-color-hover: "color" $type "light-2",
+            b-color-focus: "color" $type "light-2",
+            b-color-active: "color" $type "dark-1",
+            b-color-disabled: "border-color-light-1",
+            pulse-s-color: "color" $type "dark-1",
           )
         );
       }
@@ -274,45 +276,45 @@ $button: map.merge(
       &--#{$type}#{&}--simple {
         @include define-button-style(
           (
-            color: 'color' $type 'base',
-            color-hover: 'color' $type 'base',
-            color-focus: 'color-white',
-            color-active: 'color-white',
-            color-disabled: 'content-color-disabled',
-            bg-color: 'color' $type 'opacity-8',
-            bg-color-hover: 'color' $type 'opacity-7',
-            bg-color-focus: 'color' $type 'opacity-3',
-            bg-color-active: 'color' $type 'opacity-3',
-            bg-color-disabled: 'fill-color-background',
-            b-color: 'color' $type 'opacity-4',
-            b-color-hover: 'color' $type 'opacity-4',
-            b-color-focus: 'color' $type 'opacity-3',
-            b-color-active: 'color' $type 'opacity-3',
-            b-color-disabled: 'border-color-light-1'
+            color: "color" $type "base",
+            color-hover: "color" $type "base",
+            color-focus: "color-white",
+            color-active: "color-white",
+            color-disabled: "content-color-disabled",
+            bg-color: "color" $type "opacity-8",
+            bg-color-hover: "color" $type "opacity-7",
+            bg-color-focus: "color" $type "opacity-3",
+            bg-color-active: "color" $type "opacity-3",
+            bg-color-disabled: "fill-color-background",
+            b-color: "color" $type "opacity-4",
+            b-color-hover: "color" $type "opacity-4",
+            b-color-focus: "color" $type "opacity-3",
+            b-color-active: "color" $type "opacity-3",
+            b-color-disabled: "border-color-light-1",
           )
         );
       }
 
       &--#{$type}#{&}--ghost {
         @include define-preset-values(
-          'button',
+          "button",
           (
             bg-color: transparent,
             bg-color-hover: rgba($color-white, 0.1),
             bg-color-focus: rgba($color-white, 0.1),
             bg-color-active: rgba($color-white, 0.2),
-            bg-color-disabled: transparent
+            bg-color-disabled: transparent,
           )
         );
 
         @include define-button-style(
           (
-            color: 'color' $type 'base',
-            color-hover: 'color' $type 'base',
-            color-focus: 'color' $type 'base',
-            color-active: 'color' $type 'base',
-            color-disabled: 'content-color-disabled',
-            b-color-disabled: 'content-color-disabled'
+            color: "color" $type "base",
+            color-hover: "color" $type "base",
+            color-focus: "color" $type "base",
+            color-active: "color" $type "base",
+            color-disabled: "content-color-disabled",
+            b-color-disabled: "content-color-disabled",
           )
         );
       }
@@ -321,10 +323,10 @@ $button: map.merge(
       &--#{$type}#{&}--dashed {
         @include define-button-style(
           (
-            color: 'color' $type 'base',
-            color-hover: 'color' $type 'light-2',
-            color-focus: 'color' $type 'light-2',
-            color-active: 'color' $type 'dark-1'
+            color: "color" $type "base",
+            color-hover: "color" $type "light-2",
+            color-focus: "color" $type "light-2",
+            color-active: "color" $type "dark-1",
           )
         );
       }
@@ -356,7 +358,7 @@ $button: map.merge(
   }
 
   &--circle {
-    border-radius: get-css-var('button-height');
+    border-radius: get-css-var("button-height");
   }
 
   &--loading {
@@ -369,22 +371,22 @@ $button: map.merge(
       inset: -1px;
       z-index: 1;
       pointer-events: none;
-      content: '';
-      background-color: get-css-var('color-white');
+      content: "";
+      background-color: get-css-var("color-white");
       border-radius: inherit;
       opacity: 25%;
-      transition: get-css-var('transition-opacity');
+      transition: get-css-var("transition-opacity");
     }
   }
 
   &__icon {
     display: flex;
     align-items: center;
-    margin-inline-end: get-css-var('button-icon-span');
+    margin-inline-end: get-css-var("button-icon-span");
   }
 
   &--icon-only {
-    width: get-css-var('button-height');
+    width: get-css-var("button-height");
     padding: 0;
   }
 
@@ -393,11 +395,11 @@ $button: map.merge(
   }
 
   &--icon-only#{&}--small {
-    width: get-css-var('button-height');
+    width: get-css-var("button-height");
   }
 
   &--icon-only#{&}--large {
-    width: get-css-var('button-height');
+    width: get-css-var("button-height");
   }
 
   &__badge {
@@ -405,9 +407,10 @@ $button: map.merge(
     pointer-events: none;
 
     .#{$namespace}-badge__content {
-      color: get-css-var('button-badge-color');
-      background-color: get-css-var('button-badge-bg-color');
-      box-shadow: get-css-var('shadow-border') get-css-var('button-badge-b-color');
+      color: get-css-var("button-badge-color");
+      background-color: get-css-var("button-badge-bg-color");
+      box-shadow: get-css-var("shadow-border")
+        get-css-var("button-badge-b-color");
     }
   }
 
@@ -415,9 +418,9 @@ $button: map.merge(
     &__badge--#{$type} {
       @include define-button-style(
         (
-          badge-color: 'button-bg-color',
-          badge-bg-color: 'button-color',
-          badge-b-color: 'button-color'
+          badge-color: "button-bg-color",
+          badge-bg-color: "button-color",
+          badge-b-color: "button-color",
         )
       );
     }
@@ -425,8 +428,8 @@ $button: map.merge(
     &--ghost &__badge--#{$type} {
       @include define-button-style(
         (
-          badge-color: 'button-color',
-          badge-bg-color: transparent
+          badge-color: "button-color",
+          badge-bg-color: transparent,
         )
       );
     }
@@ -436,7 +439,7 @@ $button: map.merge(
     &--dashed &__badge--#{$type} {
       @include define-button-style(
         (
-          badge-color: 'color-white'
+          badge-color: "color-white",
         )
       );
     }
@@ -445,25 +448,25 @@ $button: map.merge(
   &__badge--disabled .#{$namespace}-badge__content {
     @include define-button-style(
       (
-        badge-color: 'button-color-disabled',
-        badge-bg-color: 'button-bg-color-disabled',
-        badge-b-color: 'button-b-color-disabled'
+        badge-color: "button-color-disabled",
+        badge-bg-color: "button-bg-color-disabled",
+        badge-b-color: "button-b-color-disabled",
       )
     );
   }
 
   @at-root {
     &-group {
-      @include basis;
-
-      display: inline-flex;
-      align-items: center;
+      @include basis {
+        display: inline-flex;
+        align-items: center;
+      }
 
       #{$self} {
         @include define-preset-values(
-          'button',
+          "button",
           (
-            series-span: 0
+            series-span: 0,
           )
         );
 
@@ -482,13 +485,17 @@ $button: map.merge(
         &--first {
           margin-inline-end: 0;
 
-          @include logical-radius(get-css-var('button-radius') 0 0 get-css-var('button-radius'));
+          @include logical-radius(
+            get-css-var("button-radius") 0 0 get-css-var("button-radius")
+          );
         }
 
         &--last {
           margin-inline-end: 0;
 
-          @include logical-radius(0 get-css-var('button-radius') get-css-var('button-radius') 0);
+          @include logical-radius(
+            0 get-css-var("button-radius") get-css-var("button-radius") 0
+          );
         }
 
         &:not(#{$self}--last) {
@@ -503,11 +510,15 @@ $button: map.merge(
       &--circle {
         #{$self} {
           &--first {
-            @include logical-radius(get-css-var('button-height') 0 0 get-css-var('button-height'));
+            @include logical-radius(
+              get-css-var("button-height") 0 0 get-css-var("button-height")
+            );
           }
 
           &--last {
-            @include logical-radius(0 get-css-var('button-height') get-css-var('button-height') 0);
+            @include logical-radius(
+              0 get-css-var("button-height") get-css-var("button-height") 0
+            );
           }
         }
       }

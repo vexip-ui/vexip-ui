@@ -1,88 +1,89 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $switch: () !default;
 $switch: map.merge(
   (
-    bg-color: get-css-var('fill-color-secondary'),
-    bg-color-open: get-css-var('color-primary-base'),
-    bg-color-disabled: get-css-var('fill-color-disabled'),
+    bg-color: get-css-var("fill-color-secondary"),
+    bg-color-open: get-css-var("color-primary-base"),
+    bg-color-disabled: get-css-var("fill-color-disabled"),
     opacity-disabled: 60%,
-    opacity-loading: get-css-var('switch-opacity-disabled'),
-    s-color-focus: get-css-var('color-primary-opacity-6'),
-    label-color: get-css-var('color-white'),
+    opacity-loading: get-css-var("switch-opacity-disabled"),
+    s-color-focus: get-css-var("color-primary-opacity-6"),
+    label-color: get-css-var("color-white"),
     height: 22px,
-    signal-size: calc(get-css-var('switch-height') - 4px),
-    signal-bg-color: get-css-var('color-white'),
+    signal-size: calc(get-css-var("switch-height") - 4px),
+    signal-bg-color: get-css-var("color-white"),
     series-span: 8px,
-    icon-color: get-css-var('color-black'),
-    icon-color-loading: get-css-var('color-primary-base'),
+    icon-color: get-css-var("color-black"),
+    icon-color-loading: get-css-var("color-primary-base"),
     circle-opacity: 0,
-    radius-rectangle: get-css-var('radius-base')
+    radius-rectangle: get-css-var("radius-base"),
   ),
   $switch
 );
 
 .#{$namespace}-switch {
   &-vars {
-    @include define-preset-values('switch', $switch);
+    @include define-preset-values("switch", $switch);
   }
 
   @mixin define-switch-style($style-map) {
-    @include define-preset-style('switch', $style-map);
+    @include define-preset-style("switch", $style-map);
   }
 
-  $height: get-css-var('switch-height');
-  $signal: get-css-var('switch-signal-size');
+  $height: get-css-var("switch-height");
+  $signal: get-css-var("switch-signal-size");
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  background-color: get-css-var('switch-bg-color');
-  border-radius: $height;
-  transition: get-css-var('transition-background'), get-css-var('transition-border'),
-    get-css-var('transition-shadow'), get-css-var('transition-opacity');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: get-css-var("switch-bg-color");
+    border-radius: $height;
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-border"), get-css-var("transition-shadow"),
+      get-css-var("transition-opacity");
+  }
 
   &--small {
     @include define-preset-values(
-      'switch',
+      "switch",
       (
-        height: 18px
+        height: 18px,
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      'switch',
+      "switch",
       (
-        height: 26px
+        height: 26px,
       )
     );
   }
 
   & + & {
-    margin-inline-start: get-css-var('switch-series-span');
+    margin-inline-start: get-css-var("switch-series-span");
   }
 
   &:focus-within {
-    box-shadow: get-css-var('shadow-focus') get-css-var('switch-s-color-focus');
+    box-shadow: get-css-var("shadow-focus") get-css-var("switch-s-color-focus");
   }
 
   &--loading {
     cursor: default;
-    opacity: get-css-var('switch-opacity-loading');
+    opacity: get-css-var("switch-opacity-loading");
   }
 
   &--open {
-    background-color: get-css-var('switch-bg-color-open');
+    background-color: get-css-var("switch-bg-color-open");
   }
 
   &__placeholder {
@@ -105,9 +106,9 @@ $switch: map.merge(
     justify-content: center;
     padding-inline: calc(#{$height} + 2px) calc(#{$height} * 0.5 - 1px);
     line-height: 1;
-    color: get-css-var('switch-label-color');
+    color: get-css-var("switch-label-color");
     border-radius: $height;
-    transition: padding get-css-var('transition-base');
+    transition: padding get-css-var("transition-base");
   }
 
   &--open &__label {
@@ -128,30 +129,32 @@ $switch: map.merge(
     justify-content: center;
     width: $signal;
     height: $signal;
-    background-color: get-css-var('switch-signal-bg-color');
+    background-color: get-css-var("switch-signal-bg-color");
     border-radius: 50%;
     transition:
-      inset-inline-start get-css-var('transition-base'),
-      get-css-var('transition-transform');
+      inset-inline-start get-css-var("transition-base"),
+      get-css-var("transition-transform");
     will-change: inset-inline-start;
 
     .#{$namespace}-icon {
-      color: get-css-var('switch-icon-color');
+      color: get-css-var("switch-icon-color");
     }
   }
 
   &--open &__signal {
-    inset-inline-start: calc(100% - #{$signal} - (#{$height} - #{$signal}) * 0.5);
+    inset-inline-start: calc(
+      100% - #{$signal} - (#{$height} - #{$signal}) * 0.5
+    );
   }
 
   &--loading &__signal .#{$namespace}-icon {
-    color: get-css-var('switch-icon-color-loading');
+    color: get-css-var("switch-icon-color-loading");
   }
 
   &--rectangle,
   &--rectangle &__label,
   &--rectangle &__signal {
-    border-radius: get-css-var('switch-radius-rectangle');
+    border-radius: get-css-var("switch-radius-rectangle");
   }
 
   $states: success, error, warning;
@@ -160,10 +163,10 @@ $switch: map.merge(
     &--#{$state} {
       @include define-switch-style(
         (
-          bg-color: 'color' $state 'light-1',
-          bg-color-open: 'color' $state 'light-1',
-          s-color-focus: 'color' $state 'opacity-6',
-          circle-opacity: 80%
+          bg-color: "color" $state "light-1",
+          bg-color-open: "color" $state "light-1",
+          s-color-focus: "color" $state "opacity-6",
+          circle-opacity: 80%,
         )
       );
     }
@@ -171,8 +174,8 @@ $switch: map.merge(
 
   &--disabled {
     cursor: not-allowed;
-    background-color: get-css-var('switch-bg-color-disabled');
-    opacity: get-css-var('switch-opacity-disabled');
+    background-color: get-css-var("switch-bg-color-disabled");
+    opacity: get-css-var("switch-opacity-disabled");
   }
 
   &--disabled &__signal {

@@ -11,7 +11,9 @@ import { demoImports } from './.vitepress/build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
 
-const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
+const pkg = JSON.parse(
+  readFileSync(resolve(__dirname, '../package.json'), 'utf-8')
+)
 
 export default defineConfig(({ command }: ConfigEnv): any => {
   const isServe = command === 'serve'
@@ -31,7 +33,10 @@ export default defineConfig(({ command }: ConfigEnv): any => {
     resolve: {
       alias: [
         { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
-        { find: /^@vp\/(.+)/, replacement: resolve(__dirname, '.vitepress/$1') },
+        {
+          find: /^@vp\/(.+)/,
+          replacement: resolve(__dirname, '.vitepress/$1')
+        },
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
@@ -44,7 +49,9 @@ export default defineConfig(({ command }: ConfigEnv): any => {
     optimizeDeps: {
       include: [
         '@vexip-ui/icons',
-        ...Object.keys(pkg.dependencies).filter((dep: string) => !dep.includes('vexip-ui'))
+        ...Object.keys(pkg.dependencies).filter(
+          (dep: string) => !dep.includes('vexip-ui')
+        )
       ]
     },
     esbuild: {
@@ -56,7 +63,7 @@ export default defineConfig(({ command }: ConfigEnv): any => {
       host: '0.0.0.0'
     },
     build: {
-      // sourcemap: true,
+      sourcemap: true,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 10 * 1024
     },

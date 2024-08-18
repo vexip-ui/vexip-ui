@@ -1,22 +1,18 @@
-@use 'sass:map';
-@use 'sass:math';
-@use 'sass:list';
+@use "sass:map";
+@use "sass:math";
+@use "sass:list";
 
-@use './variables.scss' as *;
-
-@mixin inherit-basis {
-  font-family: inherit;
-  font-size: inherit;
-  font-variant-numeric: inherit;
-  line-height: inherit;
-}
+@use "./variables.scss" as *;
 
 @mixin basis($inherit: true) {
-  font-family: get-css-var('font-family-base');
-  font-size: get-css-var('font-size-base');
-  font-variant-numeric: tabular-nums;
-  line-height: get-css-var('line-height-base');
-  color: get-css-var('content-color-base');
+  & {
+    font-family: get-css-var("font-family-base");
+    font-size: get-css-var("font-size-base");
+    font-variant-numeric: tabular-nums;
+    line-height: get-css-var("line-height-base");
+    color: get-css-var("content-color-base");
+    @content;
+  }
 
   &,
   *,
@@ -27,7 +23,10 @@
 
   @if $inherit {
     &--inherit {
-      @include inherit-basis;
+      font-family: inherit;
+      font-size: inherit;
+      font-variant-numeric: inherit;
+      line-height: inherit;
     }
   }
 }
@@ -39,30 +38,39 @@
 }
 
 @mixin fixed {
-  position: fixed;
-  inset: 0;
+  & {
+    position: fixed;
+    inset: 0;
+    @content;
+  }
 }
 
 @mixin inner-fixed {
-  position: absolute;
-  inset: 0;
+  & {
+    position: absolute;
+    inset: 0;
+    @content;
+  }
 }
 
 @mixin clear-both {
   &::before,
   &::after {
     display: table;
-    content: '';
+    content: "";
   }
 }
 
 @mixin clean-button {
-  padding: 0;
-  appearance: none;
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-  outline: 0;
+  & {
+    padding: 0;
+    appearance: none;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    @content;
+  }
 }
 
 @mixin query-media($point) {
@@ -80,7 +88,7 @@
 
   @at-root {
     html.rtl,
-    html[dir='rtl'] {
+    html[dir="rtl"] {
       #{$self} {
         @content;
       }
@@ -89,7 +97,10 @@
 }
 
 @mixin around-border($border-color, $border-radius, $duration: 2000ms) {
-  position: relative;
+  & {
+    position: relative;
+    @content;
+  }
 
   &::before {
     position: absolute;
@@ -98,16 +109,20 @@
     width: calc(100% + 8px);
     height: calc(100% + 8px);
     pointer-events: none;
-    content: '';
-    border: get-css-var('border-shape') $border-color;
+    content: "";
+    border: get-css-var("border-shape") $border-color;
     border-radius: $border-radius;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     animation: vxp-border-clip $duration infinite linear;
   }
 }
 
 @mixin round-border($border-color, $duration: 2000ms) {
-  position: relative;
+  & {
+    position: relative;
+    @content;
+  }
 
   &::before {
     position: absolute;
@@ -117,27 +132,32 @@
     height: calc(100% + 8px);
     clip-path: inset(0 0 50% 50%);
     pointer-events: none;
-    content: '';
-    border: get-css-var('border-shape') $border-color;
+    content: "";
+    border: get-css-var("border-shape") $border-color;
     border-radius: 50%;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     transform-origin: 50% 50%;
     animation: vxp-border-round $duration infinite linear;
   }
 }
 
 @mixin h-moving-border($border-color, $duration: 2000ms) {
-  position: relative;
-  will-change: inset;
+  & {
+    position: relative;
+    will-change: inset;
+    @content;
+  }
 
   &::before {
     position: absolute;
     inset: -4px 25% auto;
     width: auto;
     height: 0;
-    content: '';
-    border-top: get-css-var('border-shape') $border-color;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    content: "";
+    border-top: get-css-var("border-shape") $border-color;
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     animation: vxp-h-moving-border $duration infinite;
   }
 
@@ -146,25 +166,30 @@
     inset: auto 25% -4px;
     width: auto;
     height: 0;
-    content: '';
-    border-top: get-css-var('border-shape') $border-color;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    content: "";
+    border-top: get-css-var("border-shape") $border-color;
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     animation: vxp-h-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }
 
 @mixin v-moving-border($border-color, $duration: 2000ms) {
-  position: relative;
-  will-change: inset;
+  & {
+    position: relative;
+    will-change: inset;
+    @content;
+  }
 
   &::before {
     position: absolute;
     inset: 25% auto 25% -4px;
     width: 0;
     height: auto;
-    content: '';
-    border-inline-start: get-css-var('border-shape') $border-color;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    content: "";
+    border-inline-start: get-css-var("border-shape") $border-color;
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     animation: vxp-v-moving-border $duration infinite;
   }
 
@@ -173,9 +198,10 @@
     inset: 25% -4px 25% auto;
     width: 0;
     height: auto;
-    content: '';
-    border-inline-start: get-css-var('border-shape') $border-color;
-    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    content: "";
+    border-inline-start: get-css-var("border-shape") $border-color;
+    transition: get-css-var("transition-border"),
+      get-css-var("transition-opacity");
     animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }

@@ -1,34 +1,35 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $scroll: () !default;
 $scroll: map.merge(
   (
     move-duration: 180ms,
-    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
+    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1),
   ),
   $scroll
 );
 
 .#{$namespace}-scroll {
   &-vars {
-    @include define-preset-values('scroll', $scroll);
+    @include define-preset-values("scroll", $scroll);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    overflow: hidden;
+  }
 
-  position: relative;
-  overflow: hidden;
+  @include inherit-color;
 
   &__wrapper {
     position: relative;
     vertical-align: top;
     will-change: transform;
-    transition-timing-function: get-css-var('scroll-move-timing');
-    transition-duration: get-css-var('scroll-move-duration');
+    transition-timing-function: get-css-var("scroll-move-timing");
+    transition-duration: get-css-var("scroll-move-duration");
     transition-property: transform;
 
     @include clear-both;
@@ -80,10 +81,10 @@ $scroll: map.merge(
   }
 
   &--both > &__bar--horizontal {
-    width: calc(100% - get-css-var('scrollbar-width') + 1px);
+    width: calc(100% - get-css-var("scrollbar-width") + 1px);
   }
 
   &--both > &__bar--vertical {
-    height: calc(100% - get-css-var('scrollbar-width') + 1px);
+    height: calc(100% - get-css-var("scrollbar-width") + 1px);
   }
 }

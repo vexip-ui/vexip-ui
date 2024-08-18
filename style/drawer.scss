@@ -1,40 +1,41 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $drawer: () !default;
 $drawer: map.merge(
   (
-    z-index: get-css-var('z-index-masker'),
-    bg-color: get-css-var('bg-color-base'),
-    s-color: get-css-var('shadow-color-base'),
+    z-index: get-css-var("z-index-masker"),
+    bg-color: get-css-var("bg-color-base"),
+    s-color: get-css-var("shadow-color-base"),
     header-v-padding: 10px,
     header-h-padding: 14px,
-    title-color: get-css-var('content-color-primary'),
-    d-color: get-css-var('border-color-light-2'),
-    title-font-size: get-css-var('font-size-primary'),
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base'),
+    title-color: get-css-var("content-color-primary"),
+    d-color: get-css-var("border-color-light-2"),
+    title-font-size: get-css-var("font-size-primary"),
+    close-color: get-css-var("content-color-placeholder"),
+    close-color-hover: get-css-var("content-color-base"),
     title-weight: 500,
     handler-bg-color-hover: rgba($color-black, 0.15),
     handler-width: 5px,
     footer-v-padding: 10px,
-    footer-h-padding: 16px
+    footer-h-padding: 16px,
   ),
   $drawer
 );
 
 .#{$namespace}-drawer {
   &-vars {
-    @include define-preset-values('drawer', $drawer);
+    @include define-preset-values("drawer", $drawer);
   }
 
-  @include basis;
-  @include inherit-color;
-  @include fixed;
+  @include basis {
+    z-index: get-css-var("drawer-z-index");
+  }
 
-  z-index: get-css-var('drawer-z-index');
+  @include fixed;
+  @include inherit-color;
 
   &--inner {
     position: absolute;
@@ -45,7 +46,7 @@ $drawer: map.merge(
     position: absolute;
     display: flex;
     flex-direction: column;
-    background-color: get-css-var('drawer-bg-color');
+    background-color: get-css-var("drawer-bg-color");
     border: 0;
     transform: translateZ(0);
 
@@ -65,7 +66,7 @@ $drawer: map.merge(
     }
 
     $hide-mask: #{&}--hide-mask;
-    $shadow: get-css-var('shadow-blur') get-css-var('drawer-s-color');
+    $shadow: get-css-var("shadow-blur") get-css-var("drawer-s-color");
 
     &--top {
       top: 0;
@@ -113,8 +114,9 @@ $drawer: map.merge(
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: get-css-var('drawer-header-v-padding') get-css-var('drawer-header-h-padding');
-    border-bottom: get-css-var('border-shape') get-css-var('drawer-d-color');
+    padding: get-css-var("drawer-header-v-padding")
+      get-css-var("drawer-header-h-padding");
+    border-bottom: get-css-var("border-shape") get-css-var("drawer-d-color");
   }
 
   &--undivided &__header {
@@ -123,9 +125,9 @@ $drawer: map.merge(
 
   &__title {
     flex: 1 0 0;
-    font-size: get-css-var('drawer-title-font-size');
-    font-weight: get-css-var('drawer-title-weight');
-    color: get-css-var('drawer-title-color');
+    font-size: get-css-var("drawer-title-font-size");
+    font-weight: get-css-var("drawer-title-weight");
+    color: get-css-var("drawer-title-color");
   }
 
   &__content {
@@ -142,8 +144,9 @@ $drawer: map.merge(
     flex-shrink: 0;
     align-items: center;
     justify-content: flex-end;
-    padding: get-css-var('drawer-footer-v-padding') get-css-var('drawer-footer-h-padding');
-    border-top: get-css-var('border-shape') get-css-var('drawer-d-color');
+    padding: get-css-var("drawer-footer-v-padding")
+      get-css-var("drawer-footer-h-padding");
+    border-top: get-css-var("border-shape") get-css-var("drawer-d-color");
   }
 
   &--undivided &__footer {
@@ -156,34 +159,34 @@ $drawer: map.merge(
     height: 24px;
     padding: 0;
     margin-inline-start: 6px;
-    color: get-css-var('drawer-close-color');
+    color: get-css-var("drawer-close-color");
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('drawer-close-color-hover');
+      color: get-css-var("drawer-close-color-hover");
     }
   }
 
   &__handler {
-    $offset: calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px);
+    $offset: calc(get-css-var("drawer-handler-width") * -0.5 + 0.5px);
 
     position: absolute;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: get-css-var('transition-background');
+    transition: get-css-var("transition-background");
 
     &--top,
     &--bottom {
       right: 0;
       left: 0;
-      height: get-css-var('drawer-handler-width');
+      height: get-css-var("drawer-handler-width");
       cursor: ns-resize;
     }
 
@@ -191,7 +194,7 @@ $drawer: map.merge(
     &--left {
       top: 0;
       bottom: 0;
-      width: get-css-var('drawer-handler-width');
+      width: get-css-var("drawer-handler-width");
       cursor: ew-resize;
     }
 
@@ -213,7 +216,7 @@ $drawer: map.merge(
 
     &:hover,
     &--resizing {
-      background-color: get-css-var('drawer-handler-bg-color-hover');
+      background-color: get-css-var("drawer-handler-bg-color-hover");
     }
   }
 }

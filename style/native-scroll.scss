@@ -1,12 +1,13 @@
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 .#{$namespace}-native-scroll {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    overflow: hidden;
+  }
 
-  position: relative;
-  overflow: hidden;
+  @include inherit-color;
 
   &__wrapper {
     position: relative;
@@ -58,10 +59,10 @@
   }
 
   &--both > &__bar--horizontal {
-    width: calc(100% - get-css-var('scrollbar-width') + 1px);
+    width: calc(100% - get-css-var("scrollbar-width") + 1px);
   }
 
   &--both > &__bar--vertical {
-    height: calc(100% - get-css-var('scrollbar-width') + 1px);
+    height: calc(100% - get-css-var("scrollbar-width") + 1px);
   }
 }

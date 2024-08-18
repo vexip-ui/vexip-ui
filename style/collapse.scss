@@ -1,64 +1,66 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $collapse: () !default;
 $collapse: map.merge(
   (
     header-color: inherit,
-    header-color-hover: get-css-var('color-primary-base'),
-    header-color-disabled: get-css-var('content-color-disabled'),
+    header-color-hover: get-css-var("color-primary-base"),
+    header-color-disabled: get-css-var("content-color-disabled"),
     header-bg-color: transparent,
-    header-bg-color-card: get-css-var('fill-color-background'),
-    arrow-color: get-css-var('content-color-secondary'),
-    arrow-color-hover: get-css-var('color-primary-base'),
-    arrow-color-disabled: get-css-var('content-color-humble'),
-    content-color-disabled: get-css-var('content-color-disabled'),
+    header-bg-color-card: get-css-var("fill-color-background"),
+    arrow-color: get-css-var("content-color-secondary"),
+    arrow-color-hover: get-css-var("color-primary-base"),
+    arrow-color-disabled: get-css-var("content-color-humble"),
+    content-color-disabled: get-css-var("content-color-disabled"),
     content-v-padding: 10px,
     content-h-padding: 16px,
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('collapse-d-color'),
-    b-color: get-css-var('border-color-base'),
-    border: get-css-var('border-shape') get-css-var('collapse-b-color'),
-    radius: get-css-var('radius-base')
+    d-color: get-css-var("border-color-light-2"),
+    divider: get-css-var("border-shape") get-css-var("collapse-d-color"),
+    b-color: get-css-var("border-color-base"),
+    border: get-css-var("border-shape") get-css-var("collapse-b-color"),
+    radius: get-css-var("radius-base"),
   ),
   $collapse
 );
 
 .#{$namespace}-collapse {
   &-vars {
-    @include define-preset-values('collapse', $collapse);
+    @include define-preset-values("collapse", $collapse);
   }
-
-  @include basis;
-  @include inherit-color;
 
   $header: #{&}__header;
   $arrow: #{&}__arrow;
   $content: #{&}__content;
-  $divider: get-css-var('collapse-divider');
-  $radius: get-css-var('collapse-radius');
+  $divider: get-css-var("collapse-divider");
+  $radius: get-css-var("collapse-radius");
 
-  $content-padding: get-css-var('collapse-content-v-padding')
-    get-css-var('collapse-content-h-padding');
+  $content-padding: get-css-var("collapse-content-v-padding")
+    get-css-var("collapse-content-h-padding");
 
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  border-top: $divider;
+  @include basis {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    border-top: $divider;
+  }
+
+  @include inherit-color;
 
   @at-root {
     &__panel {
-      @include basis;
-      @include inherit-color;
+      @include basis {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        border-top: $divider;
+        border-bottom: $divider;
+      }
 
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      border-top: $divider;
-      border-bottom: $divider;
+      @include inherit-color;
 
       &--card {
         #{$header} {
@@ -73,7 +75,7 @@ $collapse: map.merge(
 
       &--expanded#{&}--card {
         #{$header} {
-          border-bottom-color: get-css-var('collapse-d-color');
+          border-bottom-color: get-css-var("collapse-d-color");
           border-radius: $radius $radius 0 0;
         }
       }
@@ -95,8 +97,9 @@ $collapse: map.merge(
     align-items: center;
     justify-content: center;
     margin: 0;
-    color: get-css-var('collapse-arrow-color');
-    transition: get-css-var('transition-color'), get-css-var('transition-transform');
+    color: get-css-var("collapse-arrow-color");
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-transform");
     transform: translate(-50%, -50%);
 
     @include rtl {
@@ -111,19 +114,19 @@ $collapse: map.merge(
     width: 100%;
     padding: 8px 14px;
     line-height: inherit;
-    color: get-css-var('collapse-header-color');
+    color: get-css-var("collapse-header-color");
     cursor: pointer;
-    background-color: get-css-var('collapse-header-bg-color');
+    background-color: get-css-var("collapse-header-bg-color");
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('collapse-header-color-hover');
+      color: get-css-var("collapse-header-color-hover");
 
       #{$arrow} {
-        color: get-css-var('collapse-arrow-color-hover');
+        color: get-css-var("collapse-arrow-color-hover");
       }
     }
   }
@@ -171,10 +174,10 @@ $collapse: map.merge(
     &,
     &:hover,
     &:focus {
-      color: get-css-var('collapse-header-color-disabled');
+      color: get-css-var("collapse-header-color-disabled");
 
       #{$arrow} {
-        color: get-css-var('collapse-arrow-color-disabled');
+        color: get-css-var("collapse-arrow-color-disabled");
       }
     }
   }
@@ -197,22 +200,22 @@ $collapse: map.merge(
   }
 
   &__panel--disabled &__content {
-    color: get-css-var('collapse-content-color-disabled');
+    color: get-css-var("collapse-content-color-disabled");
   }
 
   &--card,
   &__panel--card {
-    border: get-css-var('collapse-border');
+    border: get-css-var("collapse-border");
     border-radius: $radius;
 
     #{$header} {
-      background-color: get-css-var('collapse-header-bg-color-card');
-      border-bottom: get-css-var('border-shape') transparent;
+      background-color: get-css-var("collapse-header-bg-color-card");
+      border-bottom: get-css-var("border-shape") transparent;
     }
   }
 
   &--card &__panel {
-    border-color: get-css-var('collapse-d-color');
+    border-color: get-css-var("collapse-d-color");
 
     &:first-child #{$header} {
       border-radius: $radius $radius 0 0;
@@ -229,7 +232,7 @@ $collapse: map.merge(
 
   &--card &__panel--expanded {
     #{$header} {
-      border-bottom-color: get-css-var('collapse-d-color');
+      border-bottom-color: get-css-var("collapse-d-color");
     }
 
     #{$content} {

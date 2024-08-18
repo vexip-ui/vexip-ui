@@ -1,100 +1,103 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $breadcrumb: () !default;
 $breadcrumb: map.merge(
   (
-    b-color: get-css-var('border-color-base'),
-    b-color-hover: get-css-var('color-primary-light-1'),
-    border-shape: get-css-var('border-shape'),
-    radius: get-css-var('radius-base'),
+    b-color: get-css-var("border-color-base"),
+    b-color-hover: get-css-var("color-primary-light-1"),
+    border-shape: get-css-var("border-shape"),
+    radius: get-css-var("radius-base"),
     v-padding: 4px,
     h-padding: 8px,
     v-padding-border: 4px,
     h-padding-border: 8px,
-    padding-border: get-css-var('breadcrumb-v-padding-border')
-      get-css-var('breadcrumb-h-padding-border'),
+    padding-border: get-css-var("breadcrumb-v-padding-border")
+      get-css-var("breadcrumb-h-padding-border"),
     item-bg-color: transparent,
-    item-bg-color-hover: get-css-var('color-primary-opacity-9'),
+    item-bg-color-hover: get-css-var("color-primary-opacity-9"),
     item-b-color: transparent,
-    item-b-color-hover: get-css-var('color-primary-opacity-6'),
-    item-radius: get-css-var('radius-small'),
+    item-b-color-hover: get-css-var("color-primary-opacity-6"),
+    item-radius: get-css-var("radius-small"),
     label-color: inherit,
-    label-color-hover: get-css-var('color-primary-base'),
-    separator-color: get-css-var('content-color-placeholder'),
-    separator-color-hover: get-css-var('color-primary-base')
+    label-color-hover: get-css-var("color-primary-base"),
+    separator-color: get-css-var("content-color-placeholder"),
+    separator-color-hover: get-css-var("color-primary-base"),
   ),
   $breadcrumb
 );
 
 .#{$namespace}-breadcrumb {
   &-vars {
-    @include define-preset-values('breadcrumb', $breadcrumb);
+    @include define-preset-values("breadcrumb", $breadcrumb);
   }
 
-  $border-a: get-css-var('breadcrumb-border-shape');
+  $border-a: get-css-var("breadcrumb-border-shape");
 
-  @include basis;
-
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: get-css-var('breadcrumb-v-padding') get-css-var('breadcrumb-h-padding');
-  margin: 0;
-  list-style: none;
+  @include basis {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: get-css-var("breadcrumb-v-padding")
+      get-css-var("breadcrumb-h-padding");
+    margin: 0;
+    list-style: none;
+  }
 
   &--border {
-    padding: get-css-var('breadcrumb-padding-border');
-    border: $border-a get-css-var('breadcrumb-b-color');
-    border-radius: get-css-var('breadcrumb-radius');
-    transition: get-css-var('transition-border');
+    padding: get-css-var("breadcrumb-padding-border");
+    border: $border-a get-css-var("breadcrumb-b-color");
+    border-radius: get-css-var("breadcrumb-radius");
+    transition: get-css-var("transition-border");
 
     &:hover {
-      border-color: get-css-var('breadcrumb-b-color-hover');
+      border-color: get-css-var("breadcrumb-b-color-hover");
     }
   }
 
   &__item {
     display: flex;
     align-items: center;
-    background-color: get-css-var('breadcrumb-item-bg-color');
-    border: $border-a get-css-var('breadcrumb-item-b-color');
-    border-radius: get-css-var('breadcrumb-item-radius');
-    transition: get-css-var('transition-background'), get-css-var('transition-border');
+    background-color: get-css-var("breadcrumb-item-bg-color");
+    border: $border-a get-css-var("breadcrumb-item-b-color");
+    border-radius: get-css-var("breadcrumb-item-radius");
+    transition: get-css-var("transition-background"),
+      get-css-var("transition-border");
   }
 
   &--border &__item:hover {
-    background-color: get-css-var('breadcrumb-item-bg-color-hover');
-    border-color: get-css-var('breadcrumb-item-b-color-hover');
+    background-color: get-css-var("breadcrumb-item-bg-color-hover");
+    border-color: get-css-var("breadcrumb-item-b-color-hover");
   }
 
   &__label {
     padding: 0 6px;
-    color: get-css-var('breadcrumb-label-color');
+    color: get-css-var("breadcrumb-label-color");
     text-decoration: none;
     cursor: pointer;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('breadcrumb-label-color-hover');
+      color: get-css-var("breadcrumb-label-color-hover");
     }
   }
 
   &__separator {
     display: inline-flex;
     padding: 0 6px;
-    color: get-css-var('breadcrumb-separator-color');
+    color: get-css-var("breadcrumb-separator-color");
     cursor: pointer;
     user-select: none;
     border-inline: $border-a transparent;
-    transition: get-css-var('transition-color'), get-css-var('transition-border');
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-border");
 
     &:hover {
-      color: get-css-var('breadcrumb-separator-color-hover');
+      color: get-css-var("breadcrumb-separator-color-hover");
     }
   }
 
@@ -103,6 +106,6 @@ $breadcrumb: map.merge(
   }
 
   &--border &__item:hover &__separator {
-    border-inline-start-color: get-css-var('breadcrumb-item-b-color-hover');
+    border-inline-start-color: get-css-var("breadcrumb-item-b-color-hover");
   }
 }

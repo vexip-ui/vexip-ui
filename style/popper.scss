@@ -1,14 +1,15 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 .#{$namespace}-popper {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: absolute;
+    z-index: get-css-var("z-index-popper");
+    display: flex;
+    padding: 5px 0;
+  }
 
-  position: absolute;
-  z-index: get-css-var('z-index-popper');
-  display: flex;
-  padding: 5px 0;
+  @include inherit-color;
 }

@@ -1,28 +1,28 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $contextmenu: () !default;
 $contextmenu: map.merge(
   (
-    z-index: get-css-var('z-index-popper'),
-    icon-color: get-css-var('content-color-secondary'),
-    shortcut-color: get-css-var('content-color-disabled'),
-    shortcut-offset: 30px
+    z-index: get-css-var("z-index-popper"),
+    icon-color: get-css-var("content-color-secondary"),
+    shortcut-color: get-css-var("content-color-disabled"),
+    shortcut-offset: 30px,
   ),
   $contextmenu
 );
 
 .#{$namespace}-contextmenu {
   &-vars {
-    @include define-preset-values('contextmenu', $contextmenu);
+    @include define-preset-values("contextmenu", $contextmenu);
   }
 
-  @include basis;
-
-  position: fixed;
-  z-index: get-css-var('contextmenu-z-index');
+  @include basis {
+    position: fixed;
+    z-index: get-css-var("contextmenu-z-index");
+  }
 
   & &__item {
     position: relative;
@@ -57,12 +57,12 @@ $contextmenu: map.merge(
     align-items: center;
     justify-content: center;
     width: 16px;
-    color: get-css-var('contextmenu-icon-color');
+    color: get-css-var("contextmenu-icon-color");
   }
 
   &__shortcut {
-    margin-inline-start: get-css-var('contextmenu-shortcut-offset');
-    color: get-css-var('contextmenu-shortcut-color');
+    margin-inline-start: get-css-var("contextmenu-shortcut-offset");
+    color: get-css-var("contextmenu-shortcut-color");
   }
 
   &__arrow {

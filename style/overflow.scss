@@ -1,21 +1,22 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $overflow: () !default;
 $overflow: map.merge((), $overflow);
 
 .#{$namespace}-overflow {
   &-vars {
-    @include define-preset-values('overflow', $overflow);
+    @include define-preset-values("overflow", $overflow);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    display: flex;
+    width: 100%;
+  }
 
-  display: flex;
-  width: 100%;
+  @include inherit-color;
 
   &--manual {
     flex-wrap: wrap;

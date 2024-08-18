@@ -1,31 +1,32 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $row: () !default;
 $row: map.merge(
   (
     v-gap: 0,
     h-gap: 0,
-    column-display: block
+    column-display: block,
   ),
   $row
 );
 
 .#{$namespace}-row {
   &-vars {
-    @include define-preset-values('row', $row);
+    @include define-preset-values("row", $row);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    row-gap: get-css-var("row-v-gap");
+    margin-inline: calc(-0.5 * get-css-var("row-h-gap"));
+  }
 
-  position: relative;
-  display: flex;
-  flex-flow: row wrap;
-  row-gap: get-css-var('row-v-gap');
-  margin-inline: calc(-0.5 * get-css-var('row-h-gap')) calc(-0.5 * get-css-var('row-h-gap'));
+  @include inherit-color;
 
   &--start {
     justify-content: flex-start;

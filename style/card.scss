@@ -1,49 +1,50 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $card: () !default;
 $card: map.merge(
   (
-    bg-color: get-css-var('bg-color-base'),
-    b-color: get-css-var('border-color-light-1'),
-    border: get-css-var('border-shape') get-css-var('card-b-color'),
-    radius: get-css-var('radius-base'),
-    s-color: get-css-var('shadow-color-base'),
-    shadow: get-css-var('shadow-shape') get-css-var('card-s-color'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('card-d-color'),
-    title-font-size: get-css-var('font-size-primary'),
+    bg-color: get-css-var("bg-color-base"),
+    b-color: get-css-var("border-color-light-1"),
+    border: get-css-var("border-shape") get-css-var("card-b-color"),
+    radius: get-css-var("radius-base"),
+    s-color: get-css-var("shadow-color-base"),
+    shadow: get-css-var("shadow-shape") get-css-var("card-s-color"),
+    d-color: get-css-var("border-color-light-2"),
+    divider: get-css-var("border-shape") get-css-var("card-d-color"),
+    title-font-size: get-css-var("font-size-primary"),
     body-v-padding: 14px,
-    body-h-padding: 16px
+    body-h-padding: 16px,
   ),
   $card
 );
 
 .#{$namespace}-card {
   &-vars {
-    @include define-preset-values('card', $card);
+    @include define-preset-values("card", $card);
   }
 
-  @include basis;
+  @include basis {
+    display: flex;
+    flex-direction: column;
+    background-color: get-css-var("card-bg-color");
+    border: get-css-var("card-border");
+    border-radius: get-css-var("card-radius");
+    box-shadow: 0 0 0 transparent;
+    transition: get-css-var("transition-shadow");
+  }
+
   @include inherit-color;
 
-  display: flex;
-  flex-direction: column;
-  background-color: get-css-var('card-bg-color');
-  border: get-css-var('card-border');
-  border-radius: get-css-var('card-radius');
-  box-shadow: 0 0 0 transparent;
-  transition: get-css-var('transition-shadow');
-
   &--shadow-always {
-    box-shadow: get-css-var('card-shadow');
+    box-shadow: get-css-var("card-shadow");
   }
 
   &--shadow-hover {
     &:hover {
-      box-shadow: get-css-var('card-shadow');
+      box-shadow: get-css-var("card-shadow");
     }
   }
 
@@ -54,16 +55,17 @@ $card: map.merge(
     justify-content: space-between;
     min-height: 0;
     padding: 14px 16px;
-    border-bottom: get-css-var('card-divider');
+    border-bottom: get-css-var("card-divider");
   }
 
   &__title {
-    font-size: get-css-var('card-title-font-size');
+    font-size: get-css-var("card-title-font-size");
   }
 
   &__content {
     flex: 1 0 auto;
     min-height: 0;
-    padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding');
+    padding: get-css-var("card-body-v-padding")
+      get-css-var("card-body-h-padding");
   }
 }

@@ -1,12 +1,13 @@
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 .#{$namespace}-grid {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    display: grid;
+  }
 
-  position: relative;
-  display: grid;
+  @include inherit-color;
 
   &--dense {
     grid-auto-flow: row dense;

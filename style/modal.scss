@@ -1,44 +1,45 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $modal: () !default;
 $modal: map.merge(
   (
-    z-index: get-css-var('masker-z-index'),
-    bg-color: get-css-var('bg-color-base'),
-    radius: get-css-var('radius-base'),
-    s-color: get-css-var('shadow-color-base'),
-    shadow: get-css-var('shadow-shape') get-css-var('modal-s-color'),
-    d-color: get-css-var('border-color-light-2'),
-    title-font-size: get-css-var('font-size-primary'),
+    z-index: get-css-var("masker-z-index"),
+    bg-color: get-css-var("bg-color-base"),
+    radius: get-css-var("radius-base"),
+    s-color: get-css-var("shadow-color-base"),
+    shadow: get-css-var("shadow-shape") get-css-var("modal-s-color"),
+    d-color: get-css-var("border-color-light-2"),
+    title-font-size: get-css-var("font-size-primary"),
     title-weight: 500,
-    title-color: get-css-var('content-color-primary'),
+    title-color: get-css-var("content-color-primary"),
     header-v-padding: 8px,
     header-h-padding: 14px,
     body-v-padding: 14px,
     body-h-padding: 14px,
-    body-line-height: get-css-var('line-height-base'),
+    body-line-height: get-css-var("line-height-base"),
     footer-v-padding: 10px,
     footer-h-padding: 16px,
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base'),
-    resizer-color: get-css-var('border-color-light-1')
+    close-color: get-css-var("content-color-placeholder"),
+    close-color-hover: get-css-var("content-color-base"),
+    resizer-color: get-css-var("border-color-light-1"),
   ),
   $modal
 );
 
 .#{$namespace}-modal {
   &-vars {
-    @include define-preset-values('modal', $modal);
+    @include define-preset-values("modal", $modal);
   }
 
-  @include basis;
-  @include inherit-color;
-  @include fixed;
+  @include basis {
+    z-index: get-css-var("modal-z-index");
+  }
 
-  z-index: get-css-var('modal-z-index');
+  @include fixed;
+  @include inherit-color;
 
   &--inner {
     position: absolute;
@@ -58,10 +59,10 @@ $modal: map.merge(
     flex-direction: column;
     max-width: calc(100vw - 28px);
     pointer-events: auto;
-    background-color: get-css-var('modal-bg-color');
+    background-color: get-css-var("modal-bg-color");
     border: 0;
-    border-radius: get-css-var('modal-radius');
-    box-shadow: get-css-var('modal-shadow');
+    border-radius: get-css-var("modal-radius");
+    box-shadow: get-css-var("modal-shadow");
     transform: translateZ(0);
 
     &--dragging,
@@ -83,8 +84,9 @@ $modal: map.merge(
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding');
-    border-bottom: get-css-var('border-shape') get-css-var('modal-d-color');
+    padding: get-css-var("modal-header-v-padding")
+      get-css-var("modal-header-h-padding");
+    border-bottom: get-css-var("border-shape") get-css-var("modal-d-color");
   }
 
   &--draggable &__header {
@@ -98,9 +100,9 @@ $modal: map.merge(
 
   &__title {
     flex: 1 0 0;
-    font-size: get-css-var('modal-title-font-size');
-    font-weight: get-css-var('modal-title-weight');
-    color: get-css-var('modal-title-color');
+    font-size: get-css-var("modal-title-font-size");
+    font-weight: get-css-var("modal-title-weight");
+    color: get-css-var("modal-title-color");
   }
 
   &__content {
@@ -108,8 +110,9 @@ $modal: map.merge(
     flex: auto;
     min-width: 0;
     min-height: 0;
-    padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding');
-    line-height: get-css-var('modal-body-line-height');
+    padding: get-css-var("modal-body-v-padding")
+      get-css-var("modal-body-h-padding");
+    line-height: get-css-var("modal-body-line-height");
   }
 
   &__footer {
@@ -118,8 +121,9 @@ $modal: map.merge(
     flex-shrink: 0;
     align-items: center;
     justify-content: flex-end;
-    padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding');
-    border-top: get-css-var('border-shape') get-css-var('modal-d-color');
+    padding: get-css-var("modal-footer-v-padding")
+      get-css-var("modal-footer-h-padding");
+    border-top: get-css-var("border-shape") get-css-var("modal-d-color");
   }
 
   &--undivided &__footer {
@@ -132,16 +136,16 @@ $modal: map.merge(
     height: 24px;
     padding: 0;
     margin-inline-start: 6px;
-    color: get-css-var('modal-close-color');
+    color: get-css-var("modal-close-color");
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('modal-close-color-hover');
+      color: get-css-var("modal-close-color-hover");
     }
   }
 
@@ -155,12 +159,12 @@ $modal: map.merge(
     background-image: linear-gradient(
       -45deg,
       transparent calc(30% - 1px),
-      get-css-var('modal-resizer-color') 30%,
+      get-css-var("modal-resizer-color") 30%,
       transparent calc(30% + 1px),
       transparent calc(50% - 1px),
-      get-css-var('modal-resizer-color') 50%,
+      get-css-var("modal-resizer-color") 50%,
       transparent calc(50% + 1px)
     );
-    border-radius: 0 0 get-css-var('modal-radius') 0;
+    border-radius: 0 0 get-css-var("modal-radius");
   }
 }

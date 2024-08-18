@@ -1,66 +1,66 @@
-@use 'sass:map';
+@use "sass:map";
 
-@use './shared' as *;
-@use './design' as *;
+@use "./shared" as *;
+@use "./design" as *;
 
 $upload: () !default;
 $upload: map.merge(
   (
-    color-success: get-css-var('color-success-base'),
-    color-fail: get-css-var('color-error-base'),
-    color-loading: get-css-var('content-color-disabled'),
-    panel-bg-color: get-css-var('fill-color-base'),
-    panel-b-width: get-css-var('border-width'),
+    color-success: get-css-var("color-success-base"),
+    color-fail: get-css-var("color-error-base"),
+    color-loading: get-css-var("content-color-disabled"),
+    panel-bg-color: get-css-var("fill-color-base"),
+    panel-b-width: get-css-var("border-width"),
     panel-b-style: dashed,
-    panel-b-color: get-css-var('border-color-base'),
-    panel-b-color-hover: get-css-var('color-primary-base'),
-    panel-b-color-focus: get-css-var('upload-panel-b-color-hover'),
-    panel-b-color-over: get-css-var('color-primary-base'),
-    panel-b-color-disabled: get-css-var('border-color-light-2'),
-    panel-radius: get-css-var('radius-base'),
-    cloud-color: get-css-var('content-color-secondary'),
-    cloud-color-over: get-css-var('color-primary-base'),
-    cloud-color-disabled: get-css-var('content-color-disabled'),
+    panel-b-color: get-css-var("border-color-base"),
+    panel-b-color-hover: get-css-var("color-primary-base"),
+    panel-b-color-focus: get-css-var("upload-panel-b-color-hover"),
+    panel-b-color-over: get-css-var("color-primary-base"),
+    panel-b-color-disabled: get-css-var("border-color-light-2"),
+    panel-radius: get-css-var("radius-base"),
+    cloud-color: get-css-var("content-color-secondary"),
+    cloud-color-over: get-css-var("color-primary-base"),
+    cloud-color-disabled: get-css-var("content-color-disabled"),
     file-bg-color: transparent,
-    file-bg-color-hover: get-css-var('fill-color-hover'),
-    file-b-color: get-css-var('border-color-base'),
-    file-b-color-success: get-css-var('color-success-base'),
-    file-b-color-fail: get-css-var('color-error-base'),
-    file-radius: get-css-var('radius-base'),
-    mask-bg-color: get-css-var('color-black'),
+    file-bg-color-hover: get-css-var("fill-color-hover"),
+    file-b-color: get-css-var("border-color-base"),
+    file-b-color-success: get-css-var("color-success-base"),
+    file-b-color-fail: get-css-var("color-error-base"),
+    file-radius: get-css-var("radius-base"),
+    mask-bg-color: get-css-var("color-black"),
     mask-opacity: 45%,
-    action-color: get-css-var('content-color-third'),
-    action-color-hover: get-css-var('content-color-primary'),
-    action-color-disabled: get-css-var('content-color-disabled'),
-    thumb-color: get-css-var('content-color-secondary'),
+    action-color: get-css-var("content-color-third"),
+    action-color-hover: get-css-var("content-color-primary"),
+    action-color-disabled: get-css-var("content-color-disabled"),
+    thumb-color: get-css-var("content-color-secondary"),
     thumb-size: 70px,
     thumb-action-color: rgba(255, 255, 255, 70%),
     thumb-action-color-hover: rgba(255, 255, 255, 100%),
     thumb-action-color-disabled: rgba(255, 255, 255, 30%),
     card-thumb-size: 56px,
-    card-action-color: get-css-var('content-color-secondary'),
-    card-action-color-hover: get-css-var('color-primary-base'),
-    card-action-color-disabled: get-css-var('content-color-disabled'),
-    percentage-color: get-css-var('content-color-secondary')
+    card-action-color: get-css-var("content-color-secondary"),
+    card-action-color-hover: get-css-var("color-primary-base"),
+    card-action-color-disabled: get-css-var("content-color-disabled"),
+    percentage-color: get-css-var("content-color-secondary"),
   ),
   $upload
 );
 
 .#{$namespace}-upload {
   &-vars {
-    @include define-preset-values('upload', $upload);
+    @include define-preset-values("upload", $upload);
   }
 
   @mixin define-upload-style($style-map) {
-    @include define-preset-style('upload', $style-map);
+    @include define-preset-style("upload", $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   &--to-add {
     flex-direction: column-reverse;
@@ -76,11 +76,11 @@ $upload: map.merge(
     &--#{$state} {
       @include define-upload-style(
         (
-          panel-b-color: 'color' $state 'opacity-3',
-          panel-b-color-hover: 'color' $state 'base',
-          panel-b-color-over: 'color' $state 'base',
-          cloud-color: 'color' $state 'opacity-2',
-          cloud-color-over: 'color' $state 'base'
+          panel-b-color: "color" $state "opacity-3",
+          panel-b-color-hover: "color" $state "base",
+          panel-b-color-over: "color" $state "base",
+          cloud-color: "color" $state "opacity-2",
+          cloud-color-over: "color" $state "base",
         )
       );
     }
@@ -111,48 +111,49 @@ $upload: map.merge(
     overflow: hidden;
     vertical-align: middle;
     cursor: pointer;
-    border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
-      get-css-var('upload-panel-b-color');
-    border-radius: get-css-var('upload-file-radius');
+    border: get-css-var("upload-panel-b-width")
+      get-css-var("upload-panel-b-style") get-css-var("upload-panel-b-color");
+    border-radius: get-css-var("upload-file-radius");
     outline: 0;
-    transition: get-css-var('transition-color'), get-css-var('transition-border');
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-border");
 
     &:hover,
     &--drag-over {
-      border-color: get-css-var('upload-panel-b-color-hover');
+      border-color: get-css-var("upload-panel-b-color-hover");
     }
 
     &:focus,
     &:focus-within {
-      border-color: get-css-var('upload-panel-b-color-focus');
+      border-color: get-css-var("upload-panel-b-color-focus");
     }
 
     &--disabled {
-      color: get-css-var('content-color-disabled');
+      color: get-css-var("content-color-disabled");
       cursor: not-allowed;
 
       &,
       &:hover,
       &:focus {
-        border-color: get-css-var('upload-panel-b-color-disabled');
+        border-color: get-css-var("upload-panel-b-color-disabled");
       }
     }
   }
 
   &__image-action {
-    @include clean-button;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: get-css-var('upload-thumb-size');
-    height: get-css-var('upload-thumb-size');
-    color: get-css-var('upload-thumb-color');
-    cursor: inherit;
+    @include clean-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: get-css-var("upload-thumb-size");
+      height: get-css-var("upload-thumb-size");
+      color: get-css-var("upload-thumb-color");
+      cursor: inherit;
+    }
 
     &--disabled {
-      color: get-css-var('content-color-disabled');
+      color: get-css-var("content-color-disabled");
     }
   }
 
@@ -166,29 +167,30 @@ $upload: map.merge(
     padding: 20px;
     overflow: hidden;
     cursor: pointer;
-    background-color: get-css-var('upload-panel-bg-color');
-    border: get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
-      get-css-var('upload-panel-b-color');
-    border-radius: get-css-var('upload-panel-radius');
+    background-color: get-css-var("upload-panel-bg-color");
+    border: get-css-var("upload-panel-b-width")
+      get-css-var("upload-panel-b-style") get-css-var("upload-panel-b-color");
+    border-radius: get-css-var("upload-panel-radius");
     outline: 0;
-    transition: get-css-var('transition-color'), get-css-var('transition-border');
+    transition: get-css-var("transition-color"),
+      get-css-var("transition-border");
 
     &:hover {
-      border-color: get-css-var('upload-panel-b-color-hover');
+      border-color: get-css-var("upload-panel-b-color-hover");
     }
 
     &:focus {
-      border-color: get-css-var('upload-panel-b-color-focus');
+      border-color: get-css-var("upload-panel-b-color-focus");
     }
 
     &--disabled {
-      color: get-css-var('content-color-disabled');
+      color: get-css-var("content-color-disabled");
       cursor: not-allowed;
 
       &,
       &:hover,
       &:focus {
-        border-color: get-css-var('upload-panel-b-color-disabled');
+        border-color: get-css-var("upload-panel-b-color-disabled");
       }
     }
   }
@@ -198,34 +200,34 @@ $upload: map.merge(
   }
 
   &__control--drag-over &__drag-panel {
-    border-color: get-css-var('upload-panel-b-color-over');
+    border-color: get-css-var("upload-panel-b-color-over");
 
     &--disabled {
-      border-color: get-css-var('upload-panel-b-color-disabled');
+      border-color: get-css-var("upload-panel-b-color-disabled");
     }
   }
 
   &__cloud {
-    color: get-css-var('upload-cloud-color');
-    transition: get-css-var('transition-color');
+    color: get-css-var("upload-cloud-color");
+    transition: get-css-var("transition-color");
 
     &--disabled {
-      color: get-css-var('upload-cloud-color-disabled');
+      color: get-css-var("upload-cloud-color-disabled");
     }
   }
 
   &__control--drag-over &__cloud,
   &__image-control--drag-over &__cloud {
-    color: get-css-var('upload-cloud-color-over');
+    color: get-css-var("upload-cloud-color-over");
 
     &--disabled {
-      color: get-css-var('upload-cloud-color-disabled');
+      color: get-css-var("upload-cloud-color-disabled");
     }
   }
 
   &__loading-icon {
     pointer-events: none;
-    transition: get-css-var('transition-opacity');
+    transition: get-css-var("transition-opacity");
   }
 
   &__tip {
@@ -238,14 +240,14 @@ $upload: map.merge(
   }
 
   &__files {
-    @include basis;
-
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 0;
-    margin: 0;
+    @include basis {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
   }
 
   &--image &__files {
@@ -263,28 +265,29 @@ $upload: map.merge(
   }
 
   &__file {
-    @include basis;
-
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    list-style: none;
-    border-radius: get-css-var('upload-file-radius');
-    transition: get-css-var('transition-transform'), get-css-var('transition-opacity');
+    @include basis {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      list-style: none;
+      border-radius: get-css-var("upload-file-radius");
+      transition: get-css-var("transition-transform"),
+        get-css-var("transition-opacity");
+    }
 
     &--name {
       justify-content: space-between;
       width: 100%;
       padding: 3px 6px;
       margin-bottom: 3px;
-      background-color: get-css-var('upload-file-bg-color');
-      transition: get-css-var('transition-background');
+      background-color: get-css-var("upload-file-bg-color");
+      transition: get-css-var("transition-background");
 
       &:hover,
       &:focus,
       &:focus-within {
-        background-color: get-css-var('upload-file-bg-color-hover');
+        background-color: get-css-var("upload-file-bg-color-hover");
       }
 
       &:last-child {
@@ -296,8 +299,8 @@ $upload: map.merge(
     &--card {
       padding: 6px;
       margin-bottom: 6px;
-      border: get-css-var('border-shape') get-css-var('upload-file-b-color');
-      transition: get-css-var('transition-border');
+      border: get-css-var("border-shape") get-css-var("upload-file-b-color");
+      transition: get-css-var("transition-border");
     }
 
     &--thumbnail {
@@ -306,12 +309,12 @@ $upload: map.merge(
 
     &--thumbnail#{&}--success,
     &--card#{&}--success {
-      border-color: get-css-var('upload-file-b-color-success');
+      border-color: get-css-var("upload-file-b-color-success");
     }
 
     &--thumbnail#{&}--fail,
     &--card#{&}--fail {
-      border-color: get-css-var('upload-file-b-color-fail');
+      border-color: get-css-var("upload-file-b-color-fail");
     }
 
     &--card {
@@ -323,15 +326,15 @@ $upload: map.merge(
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
   }
 
   &__file--success &__filename {
-    color: get-css-var('upload-color-success');
+    color: get-css-var("upload-color-success");
   }
 
   &__file--fail &__filename {
-    color: get-css-var('upload-color-fail');
+    color: get-css-var("upload-color-fail");
   }
 
   &__label {
@@ -363,17 +366,17 @@ $upload: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    color: get-css-var('upload-thumb-color');
+    color: get-css-var("upload-thumb-color");
   }
 
   &__file--thumbnail &__thumbnail {
-    width: get-css-var('upload-thumb-size');
-    height: get-css-var('upload-thumb-size');
+    width: get-css-var("upload-thumb-size");
+    height: get-css-var("upload-thumb-size");
   }
 
   &__file--card &__thumbnail {
-    width: get-css-var('upload-card-thumb-size');
-    height: get-css-var('upload-card-thumb-size');
+    width: get-css-var("upload-card-thumb-size");
+    height: get-css-var("upload-card-thumb-size");
     margin-inline-end: 14px;
   }
 
@@ -381,8 +384,8 @@ $upload: map.merge(
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: calc(100% - #{get-css-var('upload-card-thumb-size')} - 14px);
-    padding-inline-end: calc(#{get-css-var('upload-card-thumb-size')} + 14px);
+    width: calc(100% - #{get-css-var("upload-card-thumb-size")} - 14px);
+    padding-inline-end: calc(#{get-css-var("upload-card-thumb-size")} + 14px);
   }
 
   &__file--card &__filename {
@@ -410,7 +413,7 @@ $upload: map.merge(
     width: 100%;
     height: 100%;
     opacity: 0%;
-    transition: get-css-var('transition-opacity');
+    transition: get-css-var("transition-opacity");
   }
 
   &__file--thumbnail &__mask {
@@ -419,8 +422,8 @@ $upload: map.merge(
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: get-css-var('upload-mask-bg-color');
-    opacity: get-css-var('upload-mask-opacity');
+    background-color: get-css-var("upload-mask-bg-color");
+    opacity: get-css-var("upload-mask-opacity");
   }
 
   &__card:hover &__actions,
@@ -435,47 +438,47 @@ $upload: map.merge(
   }
 
   &__action {
-    @include clean-button;
-
-    position: relative;
-    margin: 0 4px;
+    @include clean-button {
+      position: relative;
+      margin: 0 4px;
+    }
 
     &--disabled {
-      color: get-css-var('upload-action-color-disabled');
+      color: get-css-var("upload-action-color-disabled");
       cursor: not-allowed;
     }
   }
 
   &__file--thumbnail &__action {
-    color: get-css-var('upload-thumb-action-color');
+    color: get-css-var("upload-thumb-action-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-thumb-action-color-hover');
+      color: get-css-var("upload-thumb-action-color-hover");
     }
 
     &--disabled {
       &,
       &:hover,
       &:focus {
-        color: get-css-var('upload-thumb-action-color-disabled');
+        color: get-css-var("upload-thumb-action-color-disabled");
       }
     }
   }
 
   &__file--card &__action {
-    color: get-css-var('upload-card-action-color');
+    color: get-css-var("upload-card-action-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-card-action-color-hover');
+      color: get-css-var("upload-card-action-color-hover");
     }
 
     &--disabled {
       &,
       &:hover,
       &:focus {
-        color: get-css-var('upload-card-action-color-disabled');
+        color: get-css-var("upload-card-action-color-disabled");
       }
     }
   }
@@ -484,7 +487,7 @@ $upload: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: get-css-var('transition-color');
+    transition: get-css-var("transition-color");
   }
 
   &__file-icon {
@@ -500,14 +503,14 @@ $upload: map.merge(
   }
 
   &__close {
-    @include clean-button;
-
-    position: absolute;
-    inset-inline-end: 0;
+    @include clean-button {
+      position: absolute;
+      inset-inline-end: 0;
+    }
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-action-color-hover');
+      color: get-css-var("upload-action-color-hover");
     }
   }
 
@@ -519,24 +522,24 @@ $upload: map.merge(
   }
 
   &__file:hover &__close {
-    color: get-css-var('upload-action-color');
+    color: get-css-var("upload-action-color");
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-action-color-hover');
+      color: get-css-var("upload-action-color-hover");
     }
   }
 
   &__success {
-    color: get-css-var('upload-color-success');
+    color: get-css-var("upload-color-success");
   }
 
   &__fail {
-    color: get-css-var('upload-color-fail');
+    color: get-css-var("upload-color-fail");
   }
 
   &__loading {
-    color: get-css-var('upload-color-loading');
+    color: get-css-var("upload-color-loading");
   }
 
   &__progress {
@@ -548,7 +551,7 @@ $upload: map.merge(
 
   &__file--name &__progress {
     position: absolute;
-    inset-inline: 6px 6px;
+    inset-inline: 6px;
     bottom: 0;
   }
 
@@ -564,6 +567,6 @@ $upload: map.merge(
   }
 
   &__percentage {
-    color: get-css-var('upload-percentage-color');
+    color: get-css-var("upload-percentage-color");
   }
 }
