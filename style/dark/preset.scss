@@ -41,7 +41,7 @@
     @include define-preset-values(
       'checkbox',
       (
-        signal-bg-color-disabled: get-css-var('fill-color-hover')
+        signal-bg-color-disabled: value('fill-color-hover')
       )
     );
   }
@@ -51,8 +51,8 @@
       'menu',
       (
         label-color-dark: #495057,
-        label-color-hover-dark: get-css-var('color-primary-base'),
-        label-color-visible-dark: get-css-var('color-white'),
+        label-color-hover-dark: value('color-primary-base'),
+        label-color-visible-dark: value('color-white'),
         label-color-disabled-dark: #adb5bd
       )
     );

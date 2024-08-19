@@ -1,26 +1,26 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $space: () !default;
 $space: map.merge(
   (
     v-gap: 8px,
-    h-gap: 12px,
+    h-gap: 12px
   ),
   $space
 );
 
 .#{$namespace}-space {
   &-vars {
-    @include define-preset-values("space", $space);
+    @include define-preset-values('space', $space);
   }
 
   @include basis {
     display: flex;
     flex-wrap: wrap;
-    gap: get-css-var("space-v-gap") get-css-var("space-h-gap");
+    gap: value('space-v-gap') value('space-h-gap');
   }
 
   @include inherit-color;
@@ -43,20 +43,20 @@ $space: map.merge(
 
   &--small {
     @include define-preset-values(
-      "space",
+      'space',
       (
         v-gap: 4px,
-        h-gap: 8px,
+        h-gap: 8px
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      "space",
+      'space',
       (
         v-gap: 12px,
-        h-gap: 16px,
+        h-gap: 16px
       )
     );
   }

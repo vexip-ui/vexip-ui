@@ -1,33 +1,31 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $layout: () !default;
 $layout: map.merge(
   (
     view-height: 100vh,
-    aside-z-index: calc(#{get-css-var("z-index-popper")} + 100),
+    aside-z-index: calc(#{value('z-index-popper')} + 100),
     aside-width: 240px,
-    aside-bg-color: get-css-var("bg-color-base"),
-    aside-b-color: get-css-var("border-color-light-2"),
-    aside-border: get-css-var("border-shape")
-      get-css-var("layout-aside-b-color"),
-    header-z-index: calc(#{get-css-var("z-index-popper")} + 100),
+    aside-bg-color: value('bg-color-base'),
+    aside-b-color: value('border-color-light-2'),
+    aside-border: value('border-shape') value('layout-aside-b-color'),
+    header-z-index: calc(#{value('z-index-popper')} + 100),
     header-height: 55px,
-    header-bg-color: get-css-var("bg-color-base"),
-    header-b-color: get-css-var("border-color-light-2"),
-    header-border: get-css-var("border-shape")
-      get-css-var("layout-header-b-color"),
+    header-bg-color: value('bg-color-base'),
+    header-b-color: value('border-color-light-2'),
+    header-border: value('border-shape') value('layout-header-b-color'),
     main-bg-color: transparent,
-    footer-bg-color: get-css-var("fill-color-background"),
+    footer-bg-color: value('fill-color-background')
   ),
   $layout
 );
 
 .#{$namespace}-layout {
   &-vars {
-    @include define-preset-values("layout", $layout);
+    @include define-preset-values('layout', $layout);
   }
 
   @include basis {
@@ -40,10 +38,10 @@ $layout: map.merge(
   &__wrapper {
     position: relative;
     display: flex;
-    min-height: get-css-var("layout-view-height");
+    min-height: value('layout-view-height');
 
     &--fixed {
-      height: get-css-var("layout-view-height");
+      height: value('layout-view-height');
     }
   }
 
@@ -57,7 +55,7 @@ $layout: map.merge(
     inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    z-index: get-css-var("layout-aside-z-index");
+    z-index: value('layout-aside-z-index');
     display: flex;
     pointer-events: none;
   }
@@ -70,17 +68,17 @@ $layout: map.merge(
       left: 0;
       display: flex;
       flex-direction: column;
-      width: get-css-var("layout-aside-width");
-      max-height: get-css-var("layout-view-height");
+      width: value('layout-aside-width');
+      max-height: value('layout-view-height');
       pointer-events: all;
-      background-color: get-css-var("layout-aside-bg-color");
-      border-inline-end: get-css-var("layout-aside-border");
+      background-color: value('layout-aside-bg-color');
+      border-inline-end: value('layout-aside-border');
       will-change: width, transform;
       transition:
-        width get-css-var("transition-base"),
-        get-css-var("transition-background"),
-        get-css-var("transition-border"),
-        get-css-var("transition-transform");
+        width value('transition-base'),
+        value('transition-background'),
+        value('transition-border'),
+        value('transition-transform');
       transform: translateX(-100%);
     }
 
@@ -112,12 +110,8 @@ $layout: map.merge(
     }
 
     &--no-sign#{&}--fixed {
-      top: get-css-var("layout-header-height");
-      max-height: calc(
-        #{get-css-var("layout-view-height")} - #{get-css-var(
-            "layout-header-height"
-          )}
-      );
+      top: value('layout-header-height');
+      max-height: calc(#{value('layout-view-height')} - #{value('layout-header-height')});
     }
 
     &-top {
@@ -151,15 +145,11 @@ $layout: map.merge(
   &__section {
     position: relative;
     width: 100%;
-    min-height: calc(
-      #{get-css-var("layout-view-height")} - #{get-css-var(
-          "layout-header-height"
-        )}
-    );
-    transition: padding-inline-start get-css-var("transition-base");
+    min-height: calc(#{value('layout-view-height')} - #{value('layout-header-height')});
+    transition: padding-inline-start value('transition-base');
 
     &--away {
-      padding-inline-start: get-css-var("layout-aside-width");
+      padding-inline-start: value('layout-aside-width');
     }
 
     &--away#{&}--reduced {
@@ -184,19 +174,19 @@ $layout: map.merge(
       position: sticky;
       inset-inline-start: 0;
       top: 0;
-      z-index: get-css-var("layout-header-z-index");
+      z-index: value('layout-header-z-index');
       display: flex;
       align-items: center;
       width: 100%;
-      height: get-css-var("layout-header-height");
+      height: value('layout-header-height');
       padding: 0 16px;
-      background-color: get-css-var("layout-header-bg-color");
-      border-bottom: get-css-var("layout-header-border");
+      background-color: value('layout-header-bg-color');
+      border-bottom: value('layout-header-border');
       transition:
-        height get-css-var("transition-base"),
-        get-css-var("transition-background"),
-        get-css-var("transition-border"),
-        get-css-var("transition-transform");
+        height value('transition-base'),
+        value('transition-background'),
+        value('transition-border'),
+        value('transition-transform');
     }
 
     @include inherit-color;
@@ -236,13 +226,13 @@ $layout: map.merge(
       height: 100%;
 
       & > .#{$namespace}-menu__item {
-        height: get-css-var("layout-header-height");
+        height: value('layout-header-height');
       }
     }
   }
 
   &__scrollbar {
-    top: get-css-var("layout-header-height");
+    top: value('layout-header-height');
   }
 
   &--no-header &__scrollbar {
@@ -254,7 +244,7 @@ $layout: map.merge(
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-color: get-css-var("layout-main-bg-color");
+    background-color: value('layout-main-bg-color');
 
     &--fixed {
       height: calc(100% - var(--vxp-layout-header-height));
@@ -268,7 +258,7 @@ $layout: map.merge(
       flex-direction: column;
       align-items: center;
       width: 100%;
-      background-color: get-css-var("layout-footer-bg-color");
+      background-color: value('layout-footer-bg-color');
     }
 
     @include inherit-color;
@@ -277,21 +267,21 @@ $layout: map.merge(
   &__sign {
     display: flex;
     align-items: center;
-    height: get-css-var("layout-header-height");
+    height: value('layout-header-height');
     cursor: pointer;
-    transition: height get-css-var("transition-base");
+    transition: height value('transition-base');
 
     &-name {
       width: calc(100% - 64px);
       overflow: hidden;
-      font-size: get-css-var("font-size-primary");
+      font-size: value('font-size-primary');
       font-weight: bold;
       white-space: nowrap;
       user-select: none;
       opacity: 100%;
       transition:
-        width get-css-var("transition-base"),
-        get-css-var("transition-opacity");
+        width value('transition-base'),
+        value('transition-opacity');
     }
   }
 
@@ -305,7 +295,7 @@ $layout: map.merge(
   }
 
   &--header-main &__sign {
-    min-width: get-css-var("layout-aside-width");
+    min-width: value('layout-aside-width');
   }
 
   &--no-aside &__sign {
@@ -335,7 +325,7 @@ $layout: map.merge(
     width: 100%;
     height: 48px;
     cursor: pointer;
-    border-top: get-css-var("layout-aside-border");
+    border-top: value('layout-aside-border');
   }
 
   &__expand-handler {
@@ -347,11 +337,11 @@ $layout: map.merge(
     justify-content: center;
     width: 20px;
     height: 30px;
-    color: get-css-var("content-color-third");
+    color: value('content-color-third');
     cursor: pointer;
-    border: get-css-var("layout-aside-border");
+    border: value('layout-aside-border');
     border-inline-start-color: transparent;
-    border-radius: 0 get-css-var("radius-base") get-css-var("radius-base") 0;
+    border-radius: 0 value('radius-base') value('radius-base') 0;
   }
 
   &__aside--fixed &__expand-handler {
@@ -389,14 +379,14 @@ $layout: map.merge(
         display: block;
         width: 100%;
         height: 0;
-        content: "";
-        border-bottom: get-css-var("dropdown-divider");
+        content: '';
+        border-bottom: value('dropdown-divider');
       }
     }
 
     &-email {
       margin-top: 2px;
-      color: get-css-var("content-color-secondary");
+      color: value('content-color-secondary');
     }
 
     &-action {
@@ -423,8 +413,8 @@ $layout: map.merge(
       display: block;
       width: 100%;
       height: 0;
-      content: "";
-      border-bottom: get-css-var("dropdown-divider");
+      content: '';
+      border-bottom: value('dropdown-divider');
     }
 
     &-label {
@@ -451,9 +441,9 @@ $layout: map.merge(
     margin-inline-end: 16px;
     overflow: hidden;
     cursor: pointer;
-    background-color: get-css-var("fill-color-humble");
-    border-radius: get-css-var("radius-small");
-    box-shadow: get-css-var("shadow-base");
+    background-color: value('fill-color-humble');
+    border-radius: value('radius-small');
+    box-shadow: value('shadow-base');
 
     &:last-child {
       margin-inline-end: 0;
@@ -465,8 +455,8 @@ $layout: map.merge(
       top: 0;
       bottom: 0;
       width: 30%;
-      content: "";
-      background-color: get-css-var("content-color-reverse");
+      content: '';
+      background-color: value('content-color-reverse');
     }
 
     &::after {
@@ -474,18 +464,18 @@ $layout: map.merge(
       inset-inline: 0;
       top: 0;
       height: 25%;
-      content: "";
-      background-color: get-css-var("content-color-base");
+      content: '';
+      background-color: value('content-color-base');
     }
 
     &--aside {
       &::before {
         z-index: 1;
-        background-color: get-css-var("content-color-base");
+        background-color: value('content-color-base');
       }
 
       &::after {
-        background-color: get-css-var("content-color-reverse");
+        background-color: value('content-color-reverse');
       }
     }
 
@@ -493,20 +483,20 @@ $layout: map.merge(
       position: absolute;
       inset-inline-end: 3px;
       bottom: 3px;
-      color: get-css-var("color-primary-base");
+      color: value('color-primary-base');
     }
   }
 
   &__theme-mode {
-    border: get-css-var("border-base");
+    border: value('border-base');
 
     &--dark {
       @include define-preset-values(
-        "switch",
+        'switch',
         (
-          bg-color-open: get-css-var("fill-color-background"),
-          signal-bg-color: get-css-var("color-black"),
-          icon-color: get-css-var("content-color-secondary"),
+          bg-color-open: value('fill-color-background'),
+          signal-bg-color: value('color-black'),
+          icon-color: value('content-color-secondary')
         )
       );
     }
@@ -520,9 +510,9 @@ $layout: map.merge(
     height: 20px;
     margin-inline-end: 8px;
     margin-bottom: 6px;
-    color: get-css-var("color-white");
+    color: value('color-white');
     cursor: pointer;
-    border-radius: get-css-var("radius-small");
+    border-radius: value('radius-small');
 
     &:last-child {
       margin-inline-end: 0;
@@ -532,7 +522,7 @@ $layout: map.merge(
   &__copyright {
     width: 100%;
     padding: 16px 0 22px;
-    color: get-css-var("content-color-secondary");
+    color: value('content-color-secondary');
     text-align: center;
   }
 
@@ -544,7 +534,7 @@ $layout: map.merge(
       display: flex;
       justify-content: space-between;
       padding: 0 8px;
-      border-bottom: get-css-var("border-light-2");
+      border-bottom: value('border-light-2');
     }
 
     &--vertical &-row {
@@ -582,12 +572,12 @@ $layout: map.merge(
       display: flex;
       align-items: center;
       margin-bottom: 16px;
-      font-size: get-css-var("font-size-primary");
+      font-size: value('font-size-primary');
     }
 
     &-subname {
       margin-inline-start: 6px;
-      color: get-css-var("content-color-disabled");
+      color: value('content-color-disabled');
     }
   }
 }

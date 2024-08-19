@@ -1,5 +1,5 @@
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 .#{$namespace}-tabs {
   @include basis {
@@ -29,7 +29,7 @@
     flex: auto;
     min-width: 0;
     min-height: 0;
-    transition: get-css-var("transition-transform");
+    transition: value('transition-transform');
   }
 
   $header: #{&}__header;

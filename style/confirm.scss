@@ -6,12 +6,12 @@
 $confirm: () !default;
 $confirm: map.merge(
   (
-    title-font-size: get-css-var('font-size-primary'),
+    title-font-size: value('font-size-primary'),
     title-weight: 500,
-    title-color: get-css-var('content-color-primary'),
-    icon-color: get-css-var('color-warning-base'),
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base'),
+    title-color: value('content-color-primary'),
+    icon-color: value('color-warning-base'),
+    close-color: value('content-color-placeholder'),
+    close-color-hover: value('content-color-base'),
     header-padding: 8px,
     body-padding: 14px 8px,
     body-padding-with-title: 8px,
@@ -42,14 +42,14 @@ $confirm: map.merge(
     position: relative;
     display: flex;
     align-items: center;
-    padding: get-css-var('confirm-header-v-padding') get-css-var('confirm-header-h-padding');
+    padding: value('confirm-header-v-padding') value('confirm-header-h-padding');
   }
 
   &__title {
     flex: 1 0 0;
-    font-size: get-css-var('modal-title-font-size');
-    font-weight: get-css-var('modal-title-weight');
-    color: get-css-var('modal-title-color');
+    font-size: value('modal-title-font-size');
+    font-weight: value('modal-title-weight');
+    color: value('modal-title-color');
   }
 
   &__body {
@@ -57,15 +57,15 @@ $confirm: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: get-css-var('confirm-body-v-padding') get-css-var('confirm-body-h-padding');
+    padding: value('confirm-body-v-padding') value('confirm-body-h-padding');
 
     // &--with-title {
-    //   padding: get-css-var('confirm-body-padding-with-title');
+    //   padding: value('confirm-body-padding-with-title');
     // }
 
     &--no-title {
       padding-top: calc(
-        #{get-css-var('confirm-header-v-padding')} * 0.5 + #{get-css-var('confirm-body-v-padding')}
+        #{value('confirm-header-v-padding')} * 0.5 + #{value('confirm-body-v-padding')}
       );
     }
 
@@ -83,14 +83,14 @@ $confirm: map.merge(
     align-items: center;
     justify-content: center;
     margin-inline-end: 4px;
-    color: get-css-var('confirm-icon-color');
+    color: value('confirm-icon-color');
   }
 
   &__footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: get-css-var('confirm-footer-v-padding') get-css-var('confirm-footer-h-padding');
+    padding: value('confirm-footer-v-padding') value('confirm-footer-h-padding');
 
     &--left {
       justify-content: flex-start;
@@ -116,16 +116,16 @@ $confirm: map.merge(
     height: 24px;
     padding: 0;
     margin-inline-start: 6px;
-    color: get-css-var('confirm-close-color');
+    color: value('confirm-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('confirm-close-color-hover');
+      color: value('confirm-close-color-hover');
     }
   }
 }

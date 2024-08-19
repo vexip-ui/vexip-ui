@@ -1,5 +1,5 @@
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 .#{$namespace}-grid {
   @include basis {

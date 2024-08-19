@@ -1,43 +1,43 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $tree: () !default;
 $tree: map.merge(
   (
     label-color: inherit,
-    label-color-hover: get-css-var("tree-label-color"),
-    label-color-focus: get-css-var("tree-label-color-hover"),
-    label-color-selected: get-css-var("tree-label-color-hover"),
-    label-color-secondary: get-css-var("content-color-secondary"),
-    label-color-disabled: get-css-var("content-color-disabled"),
-    label-color-readonly: get-css-var("tree-label-color"),
+    label-color-hover: value('tree-label-color'),
+    label-color-focus: value('tree-label-color-hover'),
+    label-color-selected: value('tree-label-color-hover'),
+    label-color-secondary: value('content-color-secondary'),
+    label-color-disabled: value('content-color-disabled'),
+    label-color-readonly: value('tree-label-color'),
     label-bg-color: transparent,
-    label-bg-color-hover: get-css-var("fill-color-hover"),
-    label-bg-color-focus: get-css-var("tree-label-bg-color-hover"),
-    label-bg-color-selected: get-css-var("color-primary-opacity-8"),
-    label-bg-color-disabled: get-css-var("tree-label-bg-color"),
-    label-bg-color-readonly: get-css-var("tree-label-bg-color"),
-    label-radius: get-css-var("radius-base"),
+    label-bg-color-hover: value('fill-color-hover'),
+    label-bg-color-focus: value('tree-label-bg-color-hover'),
+    label-bg-color-selected: value('color-primary-opacity-8'),
+    label-bg-color-disabled: value('tree-label-bg-color'),
+    label-bg-color-readonly: value('tree-label-bg-color'),
+    label-radius: value('radius-base'),
     label-gap: 6px,
     node-span: 4px,
     arrow-size: 22px,
     arrow-color: inherit,
-    arrow-color-disabled: get-css-var("content-color-disabled"),
-    indicator-color: get-css-var("color-primary-base"),
+    arrow-color-disabled: value('content-color-disabled'),
+    indicator-color: value('color-primary-base'),
     indent-width: 16px,
     depth: -1,
     // link-line-index: -1,
-    link-line-type: "dashed",
-    link-line-color: get-css-var("border-color-base"),
+    link-line-type: 'dashed',
+    link-line-color: value('border-color-base')
   ),
   $tree
 );
 
 .#{$namespace}-tree {
   &-vars {
-    @include define-preset-values("tree", $tree);
+    @include define-preset-values('tree', $tree);
   }
 
   @include basis {
@@ -46,41 +46,32 @@ $tree: map.merge(
 
   @include inherit-color;
 
-  $arrow-s: get-css-var("tree-arrow-size");
-  $indent-w: get-css-var("tree-indent-width");
-  $depth: get-css-var("tree-depth");
+  $arrow-s: value('tree-arrow-size');
+  $indent-w: value('tree-indent-width');
+  $depth: value('tree-depth');
 
   $link-line: #{&}__link-line;
 
   &__link-line {
     position: absolute;
     pointer-events: none;
-    border: 0 get-css-var("tree-link-line-type")
-      get-css-var("tree-link-line-color");
+    border: 0 value('tree-link-line-type') value('tree-link-line-color');
 
     &--vertical {
-      inset-inline-start: calc(
-        #{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px
-      );
+      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
       top: 0;
       bottom: 0;
       border-inline-start-width: 1px;
-      transform: translateX(
-        calc(-1 * #{get-css-var("tree-link-line-index")} * #{$indent-w})
-      );
+      transform: translateX(calc(-1 * #{value('tree-link-line-index')} * #{$indent-w}));
 
       @include rtl {
-        transform: translateX(
-          calc(#{get-css-var("tree-link-line-index")} * #{$indent-w})
-        );
+        transform: translateX(calc(#{value('tree-link-line-index')} * #{$indent-w}));
       }
     }
 
     &--horizontal {
-      inset-inline-start: calc(
-        #{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px
-      );
-      bottom: calc(50% - #{get-css-var("tree-node-span")});
+      inset-inline-start: calc(#{$arrow-s} * 0.5 + #{$indent-w} * (#{$depth} - 1) - 1px);
+      bottom: calc(50% - #{value('tree-node-span')});
       width: calc(#{$indent-w} * 0.5);
       border-bottom-width: 1px;
     }
@@ -98,12 +89,11 @@ $tree: map.merge(
     padding-inline-start: calc(#{$depth} * #{$indent-w});
 
     &--effect {
-      transition: get-css-var("transition-color"),
-        get-css-var("transition-background");
+      transition: value('transition-color'), value('transition-background');
 
       &:hover {
-        color: get-css-var("tree-label-color-hover");
-        background-color: get-css-var("tree-label-bg-color-hover");
+        color: value('tree-label-color-hover');
+        background-color: value('tree-label-bg-color-hover');
       }
     }
   }
@@ -113,18 +103,17 @@ $tree: map.merge(
     flex-grow: 1;
     align-items: center;
     padding: 0 4px;
-    color: get-css-var("tree-label-color");
+    color: value('tree-label-color');
     cursor: pointer;
-    background-color: get-css-var("tree-label-bg-color");
-    border-radius: get-css-var("tree-label-radius");
+    background-color: value('tree-label-bg-color');
+    border-radius: value('tree-label-radius');
 
     &--effect {
-      transition: get-css-var("transition-color"),
-        get-css-var("transition-background");
+      transition: value('transition-color'), value('transition-background');
 
       &:hover {
-        color: get-css-var("tree-label-color-hover");
-        background-color: get-css-var("tree-label-bg-color-hover");
+        color: value('tree-label-color-hover');
+        background-color: value('tree-label-bg-color-hover');
       }
     }
   }
@@ -133,7 +122,7 @@ $tree: map.merge(
   $label: #{&}__label;
 
   &__node {
-    padding-top: get-css-var("tree-node-span");
+    padding-top: value('tree-node-span');
     list-style: none;
     outline: 0;
 
@@ -142,7 +131,7 @@ $tree: map.merge(
     }
 
     &--last #{$link-line}--first {
-      bottom: calc(50% - #{get-css-var("tree-node-span")});
+      bottom: calc(50% - #{value('tree-node-span')});
     }
 
     &--no-arrow #{$link-line}--horizontal {
@@ -158,8 +147,8 @@ $tree: map.merge(
 
     &--focused {
       @include effect {
-        color: get-css-var("tree-label-color-focus");
-        background-color: get-css-var("tree-label-bg-color-focus");
+        color: value('tree-label-color-focus');
+        background-color: value('tree-label-bg-color-focus');
       }
     }
 
@@ -167,8 +156,8 @@ $tree: map.merge(
       @include effect {
         &,
         &:hover {
-          color: get-css-var("tree-label-color-selected");
-          background-color: get-css-var("tree-label-bg-color-selected");
+          color: value('tree-label-color-selected');
+          background-color: value('tree-label-bg-color-selected');
         }
       }
     }
@@ -177,7 +166,7 @@ $tree: map.merge(
       @include effect {
         &,
         &:hover {
-          color: get-css-var("tree-label-color-secondary");
+          color: value('tree-label-color-secondary');
         }
       }
     }
@@ -185,9 +174,9 @@ $tree: map.merge(
     // &--disabled,
     // &--disabled:hover {
     //   @include effect {
-    //     color: get-css-var('tree-label-color-disabled');
+    //     color: value('tree-label-color-disabled');
     //     cursor: default;
-    //     background-color: get-css-var('tree-label-bg-color-disabled');
+    //     background-color: value('tree-label-bg-color-disabled');
     //   }
     // }
 
@@ -195,9 +184,9 @@ $tree: map.merge(
       @include effect {
         &,
         &:hover {
-          color: get-css-var("tree-label-color-readonly");
+          color: value('tree-label-color-readonly');
           cursor: default;
-          background-color: get-css-var("tree-label-bg-color-readonly");
+          background-color: value('tree-label-bg-color-readonly');
         }
       }
     }
@@ -215,18 +204,18 @@ $tree: map.merge(
   &__content--effect#{&}__content--disabled {
     &,
     &:hover {
-      color: get-css-var("tree-label-color-disabled");
+      color: value('tree-label-color-disabled');
       cursor: default;
-      background-color: get-css-var("tree-label-bg-color-disabled");
+      background-color: value('tree-label-bg-color-disabled');
     }
   }
 
   &__label--effect#{&}__label--disabled {
     &,
     &:hover {
-      color: get-css-var("tree-label-color-disabled");
+      color: value('tree-label-color-disabled');
       cursor: default;
-      background-color: get-css-var("tree-label-bg-color-disabled");
+      background-color: value('tree-label-bg-color-disabled');
     }
   }
 
@@ -246,23 +235,23 @@ $tree: map.merge(
   }
 
   &__prefix {
-    margin-inline-end: get-css-var("tree-label-gap");
+    margin-inline-end: value('tree-label-gap');
   }
 
   &__suffix {
-    margin-inline-start: get-css-var("tree-label-gap");
+    margin-inline-start: value('tree-label-gap');
   }
 
   &__arrow {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var("tree-arrow-size");
-    height: get-css-var("tree-arrow-size");
+    width: value('tree-arrow-size');
+    height: value('tree-arrow-size');
     margin-inline-end: 2px;
-    color: get-css-var("tree-arrow-color");
+    color: value('tree-arrow-color');
     cursor: pointer;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &--transparent {
       visibility: hidden;
@@ -278,7 +267,7 @@ $tree: map.merge(
     }
 
     &--disabled {
-      color: get-css-var("tree-arrow-color-disabled");
+      color: value('tree-arrow-color-disabled');
       cursor: not-allowed;
     }
   }
@@ -297,6 +286,6 @@ $tree: map.merge(
     inset-inline: 0;
     height: 1px;
     will-change: top, inset-inline-start;
-    background-color: get-css-var("tree-indicator-color");
+    background-color: value('tree-indicator-color');
   }
 }

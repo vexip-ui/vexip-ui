@@ -3,19 +3,19 @@
 
 .#{$namespace}-popup {
   // position: fixed;
-  // z-index: get-css-var('z-index-popup');
+  // z-index: value('z-index-popup');
   width: 0;
   height: 0;
   padding: 0;
   margin: 0;
-  font-size: get-css-var('font-size-base');
+  font-size: value('font-size-base');
 
   &__item {
     position: fixed;
-    z-index: get-css-var('z-index-popup');
+    z-index: value('z-index-popup');
     display: flex;
     // stylelint-disable-next-line declaration-property-value-disallowed-list
-    transition: all get-css-var('transition-base');
+    transition: all value('transition-base');
 
     &-inner {
       position: relative;

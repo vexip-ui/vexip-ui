@@ -1,7 +1,7 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $skeleton: () !default;
 $skeleton: map.merge(
@@ -9,59 +9,59 @@ $skeleton: map.merge(
     width: 100%,
     height: 1em,
     spread: 0,
-    color: get-css-var("content-color-placeholder"),
-    bg-color: get-css-var("fill-color-hover"),
+    color: value('content-color-placeholder'),
+    bg-color: value('fill-color-hover'),
     shine-color: rgba(125, 125, 125, 20%),
-    radius: get-css-var("radius-base"),
-    activated-dir: 1,
+    radius: value('radius-base'),
+    activated-dir: 1
   ),
   $skeleton
 );
 
 .#{$namespace}-skeleton {
   &-vars {
-    @include define-preset-values("skeleton", $skeleton);
+    @include define-preset-values('skeleton', $skeleton);
   }
 
   @include basis {
     position: relative;
     display: inline-block;
-    width: get-css-var("skeleton-width");
-    height: get-css-var("skeleton-height");
-    margin-bottom: get-css-var("skeleton-spread");
+    width: value('skeleton-width');
+    height: value('skeleton-height');
+    margin-bottom: value('skeleton-spread');
     overflow: hidden;
-    color: get-css-var("skeleton-color");
-    background-color: get-css-var("skeleton-bg-color");
-    border-radius: get-css-var("skeleton-radius");
+    color: value('skeleton-color');
+    background-color: value('skeleton-bg-color');
+    border-radius: value('skeleton-radius');
   }
 
   @include rtl {
-    @include define-css-var("skeleton-activated-dir", -1);
+    @include define-css-var('skeleton-activated-dir', -1);
   }
 
   &--default {
     @include define-preset-values(
-      "skeleton",
+      'skeleton',
       (
-        height: 32px,
+        height: 32px
       )
     );
   }
 
   &--small {
     @include define-preset-values(
-      "skeleton",
+      'skeleton',
       (
-        height: 24px,
+        height: 24px
       )
     );
   }
 
   &--large {
     @include define-preset-values(
-      "skeleton",
+      'skeleton',
       (
-        height: 40px,
+        height: 40px
       )
     );
   }
@@ -75,7 +75,7 @@ $skeleton: map.merge(
   }
 
   &--circle {
-    width: get-css-var("skeleton-height");
+    width: value('skeleton-height');
     border-radius: 50%;
   }
 
@@ -91,15 +91,11 @@ $skeleton: map.merge(
 
   @keyframes #{$namespace}-skeleton-loading {
     0% {
-      transform: translate(
-        calc(#{get-css-var("skeleton-activated-dir")} * -37.5%)
-      );
+      transform: translate(calc(#{value('skeleton-activated-dir')} * -37.5%));
     }
 
     100% {
-      transform: translate(
-        calc(#{get-css-var("skeleton-activated-dir")} * 37.5%)
-      );
+      transform: translate(calc(#{value('skeleton-activated-dir')} * 37.5%));
     }
   }
 
@@ -107,11 +103,11 @@ $skeleton: map.merge(
     position: absolute;
     inset: 0 -150%;
     pointer-events: none;
-    content: "";
+    content: '';
     background-image: linear-gradient(
       to right,
       transparent 25%,
-      get-css-var("skeleton-shine-color") 37%,
+      value('skeleton-shine-color') 37%,
       transparent 63%
     );
     animation: #{$namespace}-skeleton-loading 2000ms ease infinite;

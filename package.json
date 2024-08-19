@@ -2,10 +2,10 @@
   "name": "vexip-ui",
   "version": "2.3.13",
   "type": "module",
+  "packageManager": "pnpm@8.2.0",
   "license": "MIT",
   "author": "qmhc",
   "description": "A Vue 3 UI library, Highly customizability, full TypeScript, performance pretty good",
-  "packageManager": "pnpm@8.2.0",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
     "deploy:docs": "tsx scripts/deploy-docs.ts",
@@ -115,6 +115,9 @@
     "meta-data.json",
     "types.d.ts"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "keywords": [
     "flex",
     "components",
@@ -133,9 +136,6 @@
     "url": "https://github.com/vexip-ui/vexip-ui/issues"
   },
   "homepage": "https://www.vexipui.com",
-  "engines": {
-    "node": ">=18"
-  },
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
     "@vexip-ui/config": "workspace:*",
@@ -210,12 +210,12 @@
   },
   "pnpm": {
     "peerDependencyRules": {
+      "allowAny": [
+        "@csstools/*"
+      ],
       "ignoreMissing": [
         "@algolia/client-search",
         "vue"
-      ],
-      "allowAny": [
-        "@csstools/*"
       ]
     },
     "patchedDependencies": {

@@ -1,53 +1,53 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
-@use "./input.scss" as input;
+@use './shared' as *;
+@use './design' as *;
+@use './input.scss' as input;
 
 $date-picker: () !default;
 $date-picker: map.merge(
   (
-    color-disabled: get-css-var("input-control-color-disabled"),
-    color-error: get-css-var("color-error-base"),
-    unit-color: get-css-var("content-color-base"),
-    unit-color-hover: get-css-var("color-primary-base"),
-    unit-color-focus: get-css-var("color-white"),
-    unit-bg-color-focus: get-css-var("color-primary-opacity-1"),
-    unit-bg-color-error: get-css-var("color-error-opacity-1"),
+    color-disabled: value('input-control-color-disabled'),
+    color-error: value('color-error-base'),
+    unit-color: value('content-color-base'),
+    unit-color-hover: value('color-primary-base'),
+    unit-color-focus: value('color-white'),
+    unit-bg-color-focus: value('color-primary-opacity-1'),
+    unit-bg-color-error: value('color-error-opacity-1'),
     unit-h-padding: 1px,
-    separator-color: get-css-var("content-color-disabled"),
-    exchange-color: get-css-var("content-color-third"),
-    panel-bg-color: get-css-var("bg-color-base"),
-    panel-border-radius: get-css-var("radius-base"),
-    panel-shadow: get-css-var("shadow-base"),
-    shortcut-bg-color: get-css-var("fill-color-background"),
-    shortcut-bg-color-hover: get-css-var("fill-color-hover"),
-    d-color: get-css-var("border-color-light-2"),
-    arrow-color: get-css-var("content-color-third"),
-    arrow-color-hover: get-css-var("color-primary-base"),
-    header-color-hover: get-css-var("color-primary-base"),
+    separator-color: value('content-color-disabled'),
+    exchange-color: value('content-color-third'),
+    panel-bg-color: value('bg-color-base'),
+    panel-border-radius: value('radius-base'),
+    panel-shadow: value('shadow-base'),
+    shortcut-bg-color: value('fill-color-background'),
+    shortcut-bg-color-hover: value('fill-color-hover'),
+    d-color: value('border-color-light-2'),
+    arrow-color: value('content-color-third'),
+    arrow-color-hover: value('color-primary-base'),
+    header-color-hover: value('color-primary-base'),
     header-height: 36px,
-    item-color-hover: get-css-var("calendar-index-color-hover"),
-    item-color-selected: get-css-var("calendar-index-color-selected"),
-    item-color-today: get-css-var("calendar-index-color-today"),
-    item-color-outside: get-css-var("calendar-index-color-outside"),
-    item-color-disabled: get-css-var("calendar-index-color-disabled"),
-    item-bg-color: get-css-var("calendar-index-bg-color"),
-    item-bg-color-hover: get-css-var("calendar-index-bg-color-hover"),
-    item-bg-color-selected: get-css-var("calendar-index-bg-color-selected"),
-    item-bg-color-disabled: get-css-var("calendar-index-bg-color-disabled"),
-    item-bg-color-today: get-css-var("calendar-index-bg-color-today"),
-    item-bg-color-outside: get-css-var("calendar-index-bg-color-outside"),
-    item-radius: get-css-var("calendar-index-radius"),
-    range-bg-color: get-css-var("calendar-range-bg-color"),
-    range-opacity: get-css-var("calendar-range-opacity"),
+    item-color-hover: value('calendar-index-color-hover'),
+    item-color-selected: value('calendar-index-color-selected'),
+    item-color-today: value('calendar-index-color-today'),
+    item-color-outside: value('calendar-index-color-outside'),
+    item-color-disabled: value('calendar-index-color-disabled'),
+    item-bg-color: value('calendar-index-bg-color'),
+    item-bg-color-hover: value('calendar-index-bg-color-hover'),
+    item-bg-color-selected: value('calendar-index-bg-color-selected'),
+    item-bg-color-disabled: value('calendar-index-bg-color-disabled'),
+    item-bg-color-today: value('calendar-index-bg-color-today'),
+    item-bg-color-outside: value('calendar-index-bg-color-outside'),
+    item-radius: value('calendar-index-radius'),
+    range-bg-color: value('calendar-range-bg-color'),
+    range-opacity: value('calendar-range-opacity')
   ),
   $date-picker
 );
 
 .#{$namespace}-date-picker {
   &-vars {
-    @include define-preset-values("date-picker", $date-picker);
+    @include define-preset-values('date-picker', $date-picker);
   }
 
   @include basis {
@@ -58,7 +58,7 @@ $date-picker: map.merge(
 
   @include input.handler(#{&}__selector);
 
-  $wheel: "#{$namespace}-wheel";
+  $wheel: '#{$namespace}-wheel';
 
   &__selector {
     cursor: pointer;
@@ -80,13 +80,13 @@ $date-picker: map.merge(
     outline: 0;
 
     &--error {
-      color: get-css-var("date-picker-color-error");
+      color: value('date-picker-color-error');
     }
   }
 
   &__placeholder {
     overflow: hidden;
-    color: get-css-var("input-placeholder-color");
+    color: value('input-placeholder-color');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
@@ -94,62 +94,60 @@ $date-picker: map.merge(
   }
 
   &__unit {
-    padding: 0 get-css-var("date-picker-unit-h-padding");
-    color: get-css-var("date-picker-unit-color");
+    padding: 0 value('date-picker-unit-h-padding');
+    color: value('date-picker-unit-color');
     text-align: center;
-    transition: get-css-var("transition-background"),
-      get-css-var("transition-color");
+    transition: value('transition-background'), value('transition-color');
 
     &:hover {
-      color: get-css-var("date-picker-unit-color-hover");
+      color: value('date-picker-unit-color-hover');
     }
 
     &--focused,
     &--focused:hover {
-      color: get-css-var("date-picker-unit-color-focus");
-      background-color: get-css-var("date-picker-unit-bg-color-focus");
+      color: value('date-picker-unit-color-focus');
+      background-color: value('date-picker-unit-bg-color-focus');
     }
   }
 
   &__input--error &__unit {
-    color: get-css-var("date-picker-color-error");
+    color: value('date-picker-color-error');
 
     &--focused {
-      color: get-css-var("date-picker-unit-color-focus");
-      background-color: get-css-var("date-picker-unit-bg-color-error");
+      color: value('date-picker-unit-color-focus');
+      background-color: value('date-picker-unit-bg-color-error');
     }
   }
 
   &__label {
     text-align: center;
     user-select: none;
-    transition: get-css-var("transition-background"),
-      get-css-var("transition-color");
+    transition: value('transition-background'), value('transition-color');
   }
 
   &__separator {
     line-height: 1;
-    color: get-css-var("date-picker-separator-color");
-    transition: get-css-var("transition-color");
+    color: value('date-picker-separator-color');
+    transition: value('transition-color');
   }
 
   &__input--error &__separator {
-    color: get-css-var("date-picker-color-error");
+    color: value('date-picker-color-error');
   }
 
   &--disabled &__separator {
-    color: get-css-var("date-picker-color-disabled");
+    color: value('date-picker-color-disabled');
   }
 
   &__exchange {
     display: flex;
     align-items: center;
     padding: 0 4px;
-    color: get-css-var("date-picker-exchange-color");
+    color: value('date-picker-exchange-color');
   }
 
   &--disabled &__exchange {
-    color: get-css-var("date-picker-color-disabled");
+    color: value('date-picker-color-disabled');
   }
 
   &__pad {
@@ -166,9 +164,9 @@ $date-picker: map.merge(
 
   &__panel {
     display: flex;
-    background-color: get-css-var("date-picker-panel-bg-color");
-    border-radius: get-css-var("date-picker-panel-border-radius");
-    box-shadow: get-css-var("date-picker-panel-shadow");
+    background-color: value('date-picker-panel-bg-color');
+    border-radius: value('date-picker-panel-border-radius');
+    box-shadow: value('date-picker-panel-shadow');
 
     &--vertical {
       flex-direction: column;
@@ -189,9 +187,8 @@ $date-picker: map.merge(
     flex-direction: column;
     align-items: flex-start;
     padding: 6px 0;
-    background-color: get-css-var("date-picker-shortcut-bg-color");
-    border-inline-end: get-css-var("border-shape")
-      get-css-var("date-picker-d-color");
+    background-color: value('date-picker-shortcut-bg-color');
+    border-inline-end: value('border-shape') value('date-picker-d-color');
 
     &--top,
     &--bottom {
@@ -213,10 +210,10 @@ $date-picker: map.merge(
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    transition: get-css-var("transition-background");
+    transition: value('transition-background');
 
     &:hover {
-      background-color: get-css-var("date-picker-shortcut-bg-color-hover");
+      background-color: value('date-picker-shortcut-bg-color-hover');
     }
   }
 
@@ -231,10 +228,9 @@ $date-picker: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: get-css-var("date-picker-header-height");
+    height: value('date-picker-header-height');
     padding: 0 16px;
-    border-bottom: get-css-var("border-shape")
-      get-css-var("date-picker-d-color");
+    border-bottom: value('border-shape') value('date-picker-d-color');
 
     &--time {
       padding: 0;
@@ -258,12 +254,12 @@ $date-picker: map.merge(
     display: flex;
     justify-content: center;
     width: 14px;
-    color: get-css-var("date-picker-arrow-color");
+    color: value('date-picker-arrow-color');
     cursor: pointer;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover {
-      color: get-css-var("date-picker-arrow-color-hover");
+      color: value('date-picker-arrow-color-hover');
     }
   }
 
@@ -298,10 +294,10 @@ $date-picker: map.merge(
       // here is header items style
       margin: 0 3px;
       cursor: pointer;
-      transition: get-css-var("transition-color");
+      transition: value('transition-color');
 
       &:hover {
-        color: get-css-var("date-picker-header-color-hover");
+        color: value('date-picker-header-color-hover');
       }
     }
 
@@ -320,7 +316,7 @@ $date-picker: map.merge(
       width: 56px;
       height: 28px;
       background-color: transparent;
-      border-radius: get-css-var("date-picker-item-radius");
+      border-radius: value('date-picker-item-radius');
 
       &::before {
         position: absolute;
@@ -329,9 +325,9 @@ $date-picker: map.merge(
         display: none;
         height: 24px;
         pointer-events: none;
-        content: "";
-        background-color: get-css-var("date-picker-range-bg-color");
-        opacity: get-css-var("date-picker-range-opacity");
+        content: '';
+        background-color: value('date-picker-range-bg-color');
+        opacity: value('date-picker-range-opacity');
       }
 
       // ensure content above the range mask
@@ -342,15 +338,14 @@ $date-picker: map.merge(
         justify-content: center;
         width: 100%;
         height: 100%;
-        background-color: get-css-var("date-picker-item-bg-color");
-        border-radius: get-css-var("date-picker-item-radius");
-        transition: get-css-var("transition-color"),
-          get-css-var("transition-background");
+        background-color: value('date-picker-item-bg-color');
+        border-radius: value('date-picker-item-radius');
+        transition: value('transition-color'), value('transition-background');
       }
     }
 
-    $label: "#{&}-label";
-    $label-i: "#{&}-label-inner";
+    $label: '#{&}-label';
+    $label-i: '#{&}-label-inner';
 
     &-item {
       position: relative;
@@ -363,8 +358,8 @@ $date-picker: map.merge(
         &,
         &:hover {
           #{$label-i} {
-            color: get-css-var("date-picker-item-color-today");
-            background-color: get-css-var("date-picker-item-bg-color-today");
+            color: value('date-picker-item-color-today');
+            background-color: value('date-picker-item-bg-color-today');
           }
         }
       }
@@ -374,23 +369,23 @@ $date-picker: map.merge(
         &,
         &:hover {
           #{$label-i} {
-            color: get-css-var("date-picker-item-color-outside");
-            background-color: get-css-var("date-picker-item-bg-color-outside");
+            color: value('date-picker-item-color-outside');
+            background-color: value('date-picker-item-bg-color-outside');
           }
         }
       }
 
       &:hover #{$label-i} {
-        color: get-css-var("date-picker-item-color-hover");
-        background-color: get-css-var("date-picker-item-bg-color-hover");
+        color: value('date-picker-item-color-hover');
+        background-color: value('date-picker-item-bg-color-hover');
       }
 
       &--selected {
         &,
         &:hover {
           #{$label-i} {
-            color: get-css-var("date-picker-item-color-selected");
-            background-color: get-css-var("date-picker-item-bg-color-selected");
+            color: value('date-picker-item-color-selected');
+            background-color: value('date-picker-item-bg-color-selected');
           }
         }
       }
@@ -399,9 +394,9 @@ $date-picker: map.merge(
         &,
         &:hover {
           #{$label-i} {
-            color: get-css-var("date-picker-item-color-disabled");
+            color: value('date-picker-item-color-disabled');
             cursor: not-allowed;
-            background-color: get-css-var("date-picker-item-bg-color-disabled");
+            background-color: value('date-picker-item-bg-color-disabled');
           }
         }
       }
@@ -426,14 +421,13 @@ $date-picker: map.merge(
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-inline-start: get-css-var("border-shape")
-      get-css-var("date-picker-d-color");
+    border-inline-start: value('border-shape') value('date-picker-d-color');
   }
 
   &__wheel {
     display: flex;
     gap: 6px;
-    height: calc(100% - #{get-css-var("date-picker-header-height")});
+    height: calc(100% - #{value('date-picker-header-height')});
     padding: 0 10px;
 
     // .#{$namespace}-wheel__list {
@@ -452,7 +446,7 @@ $date-picker: map.merge(
     justify-content: flex-end;
     width: 100%;
     padding: 6px 8px;
-    border-top: get-css-var("border-shape") get-css-var("date-picker-d-color");
+    border-top: value('border-shape') value('date-picker-d-color');
   }
 
   &--no-hour {

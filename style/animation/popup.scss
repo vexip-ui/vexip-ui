@@ -32,7 +32,7 @@ $-popup-types: (
       &-leave-active {
         pointer-events: none;
         user-select: none;
-        animation-duration: get-css-var('transition-duration');
+        animation-duration: value('transition-duration');
       }
 
       &-enter-active {

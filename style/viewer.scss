@@ -1,39 +1,39 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $viewer: () !default;
 $viewer: map.merge(
   (
     b-color: transparent,
-    border: get-css-var("border-shape") get-css-var("viewer-b-color"),
-    radius: get-css-var("radius-base"),
+    border: value('border-shape') value('viewer-b-color'),
+    radius: value('radius-base'),
     v-padding: 0,
     h-padding: 0,
-    toolbar-bg-color: get-css-var("bg-color-reverse"),
-    toolbar-radius: get-css-var("radius-base"),
+    toolbar-bg-color: value('bg-color-reverse'),
+    toolbar-radius: value('radius-base'),
     toolbar-v-padding: 8px,
     toolbar-h-padding: 8px,
     action-size: 24px,
-    action-color: get-css-var("bg-color-base"),
-    action-color-hover: get-css-var("color-primary-base"),
+    action-color: value('bg-color-base'),
+    action-color-hover: value('color-primary-base')
   ),
   $viewer
 );
 
 .#{$namespace}-viewer {
   &-vars {
-    @include define-preset-values("viewer", $viewer);
+    @include define-preset-values('viewer', $viewer);
   }
 
   @include basis {
     position: relative;
     width: 100%;
     height: 100%;
-    padding: get-css-var("viewer-v-padding") get-css-var("viewer-h-padding");
-    border: get-css-var("viewer-border");
-    border-radius: get-css-var("viewer-radius");
+    padding: value('viewer-v-padding') value('viewer-h-padding');
+    border: value('viewer-border');
+    border-radius: value('viewer-radius');
   }
 
   &__container {
@@ -52,7 +52,7 @@ $viewer: map.merge(
     display: flex;
     pointer-events: none;
     user-select: none;
-    transition: get-css-var("transition-transform");
+    transition: value('transition-transform');
   }
 
   &--moving &__content {
@@ -64,8 +64,8 @@ $viewer: map.merge(
     transition-duration: 0ms;
   }
 
-  $v-padding: get-css-var("viewer-toolbar-v-padding");
-  $h-padding: get-css-var("viewer-toolbar-h-padding");
+  $v-padding: value('viewer-toolbar-v-padding');
+  $h-padding: value('viewer-toolbar-h-padding');
 
   &__toolbar {
     position: absolute;
@@ -73,10 +73,10 @@ $viewer: map.merge(
     align-items: center;
     justify-content: center;
     padding: 6px 10px;
-    background-color: get-css-var("viewer-toolbar-bg-color");
-    border-radius: get-css-var("viewer-toolbar-radius");
+    background-color: value('viewer-toolbar-bg-color');
+    border-radius: value('viewer-toolbar-radius');
     opacity: 0%;
-    transition: get-css-var("transition-opacity");
+    transition: value('transition-opacity');
 
     &--active {
       opacity: 100%;
@@ -144,7 +144,7 @@ $viewer: map.merge(
     }
 
     .#{$namespace}-divider {
-      border-color: get-css-var("viewer-action-color");
+      border-color: value('viewer-action-color');
       opacity: 70%;
 
       &--horizontal {
@@ -162,19 +162,19 @@ $viewer: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var("viewer-action-size");
-    height: get-css-var("viewer-action-size");
+    width: value('viewer-action-size');
+    height: value('viewer-action-size');
     padding: 0;
-    color: get-css-var("viewer-action-color");
+    color: value('viewer-action-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("viewer-action-color-hover");
+      color: value('viewer-action-color-hover');
     }
   }
 }

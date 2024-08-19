@@ -1,43 +1,43 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $menu: () !default;
 $menu: map.merge(
   (
     bg-color: transparent,
-    bg-color-hover: get-css-var("fill-color-hover"),
-    bg-color-selected: get-css-var("color-primary-opacity-8"),
-    b-color: get-css-var("border-color-light-2"),
-    d-color: get-css-var("border-color-light-1"),
-    o-color: get-css-var("color-primary-opacity-6"),
+    bg-color-hover: value('fill-color-hover'),
+    bg-color-selected: value('color-primary-opacity-8'),
+    b-color: value('border-color-light-2'),
+    d-color: value('border-color-light-1'),
+    o-color: value('color-primary-opacity-6'),
     item-x-span: 8px,
     item-y-span: 4px,
-    label-color: get-css-var("content-color-base"),
-    label-color-hover: get-css-var("menu-label-color"),
-    label-color-visible: get-css-var("color-primary-base"),
-    label-color-selected: get-css-var("color-primary-base"),
-    label-color-disabled: get-css-var("content-color-disabled"),
-    marker-bg-color: get-css-var("color-primary-base"),
-    popper-bg-color: get-css-var("bg-color-base"),
-    popper-b-color: get-css-var("border-color-light-2"),
-    popper-radius: get-css-var("radius-base"),
-    popper-s-color: get-css-var("shadow-color-base"),
-    group-color: get-css-var("content-color-secondary"),
+    label-color: value('content-color-base'),
+    label-color-hover: value('menu-label-color'),
+    label-color-visible: value('color-primary-base'),
+    label-color-selected: value('color-primary-base'),
+    label-color-disabled: value('content-color-disabled'),
+    marker-bg-color: value('color-primary-base'),
+    popper-bg-color: value('bg-color-base'),
+    popper-b-color: value('border-color-light-2'),
+    popper-radius: value('radius-base'),
+    popper-s-color: value('shadow-color-base'),
+    group-color: value('content-color-secondary'),
     group-span: 6px,
-    indent-width: 20px,
+    indent-width: 20px
   ),
   $menu
 );
 
 .#{$namespace}-menu {
   &-vars {
-    @include define-preset-values("menu", $menu);
+    @include define-preset-values('menu', $menu);
   }
 
   @mixin define-menu-style($style-map) {
-    @include define-preset-style("menu", $style-map);
+    @include define-preset-style('menu', $style-map);
   }
 
   @include basis {
@@ -46,12 +46,12 @@ $menu: map.merge(
     width: 100%;
     padding: 0;
     margin: 0;
-    background-color: get-css-var("menu-bg-color");
-    border-inline-end: get-css-var("border-shape") get-css-var("menu-b-color");
+    background-color: value('menu-bg-color');
+    border-inline-end: value('border-shape') value('menu-b-color');
     outline: 0;
     transition:
-      width get-css-var("transition-base"),
-      get-css-var("transition-shadow");
+      width value('transition-base'),
+      value('transition-shadow');
   }
 
   &--horizontal {
@@ -63,7 +63,7 @@ $menu: map.merge(
   &::before,
   &::after {
     display: table;
-    content: "";
+    content: '';
   }
 
   &::after {
@@ -71,7 +71,7 @@ $menu: map.merge(
   }
 
   &--reduced {
-    width: calc(get-css-var("menu-indent-width") * 2 + 24px);
+    width: calc(value('menu-indent-width') * 2 + 24px);
   }
 
   &__popper {
@@ -94,7 +94,7 @@ $menu: map.merge(
 
   &__item {
     padding: 0;
-    margin-top: get-css-var("menu-item-y-span");
+    margin-top: value('menu-item-y-span');
     list-style: none;
     background-color: transparent !important;
 
@@ -113,7 +113,7 @@ $menu: map.merge(
 
     #{$self}--horizontal & {
       padding: 0;
-      padding-inline: calc(#{get-css-var("menu-item-x-span")} * 0.5);
+      padding-inline: calc(#{value('menu-item-x-span')} * 0.5);
       margin-top: 0;
     }
 
@@ -134,16 +134,16 @@ $menu: map.merge(
     height: 100%;
     padding: 10px 0;
     padding-inline: 20px;
-    color: get-css-var("menu-label-color");
+    color: value('menu-label-color');
     cursor: pointer;
     user-select: none;
-    background-color: get-css-var("menu-bg-color");
+    background-color: value('menu-bg-color');
     outline: 0;
     transition:
-      padding-inline-start get-css-var("transition-base"),
-      get-css-var("transition-color"),
-      get-css-var("transition-background"),
-      get-css-var("transition-shadow");
+      padding-inline-start value('transition-base'),
+      value('transition-color'),
+      value('transition-background'),
+      value('transition-shadow');
 
     &::after {
       position: absolute;
@@ -152,10 +152,10 @@ $menu: map.merge(
       bottom: 0;
       display: block;
       width: 3px;
-      content: "";
-      background-color: get-css-var("menu-marker-bg-color");
+      content: '';
+      background-color: value('menu-marker-bg-color');
       opacity: 0%;
-      transition: get-css-var("transition-opacity");
+      transition: value('transition-opacity');
 
       #{$popper} & {
         display: none;
@@ -187,15 +187,15 @@ $menu: map.merge(
     }
 
     &:hover {
-      color: get-css-var("menu-label-color-hover");
+      color: value('menu-label-color-hover');
     }
 
     &:hover,
     #{$popper} #{$item}--group-visible > & {
-      background-color: get-css-var("menu-bg-color-hover");
+      background-color: value('menu-bg-color-hover');
 
       #{$self}--horizontal & {
-        background-color: get-css-var("menu-bg-color");
+        background-color: value('menu-bg-color');
 
         &::after {
           opacity: 100%;
@@ -203,7 +203,7 @@ $menu: map.merge(
       }
 
       #{$popper} & {
-        background-color: get-css-var("menu-bg-color-hover");
+        background-color: value('menu-bg-color-hover');
       }
 
       #{$item}--disabled &::after {
@@ -212,7 +212,7 @@ $menu: map.merge(
     }
 
     #{$item}--son-selected > & {
-      color: get-css-var("menu-label-color-selected");
+      color: value('menu-label-color-selected');
 
       #{$self}--horizontal &::after {
         opacity: 100%;
@@ -233,12 +233,12 @@ $menu: map.merge(
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 2px get-css-var("menu-o-color");
+      box-shadow: 0 0 0 2px value('menu-o-color');
     }
 
     #{$item}--selected & {
-      color: get-css-var("menu-label-color-selected");
-      background-color: get-css-var("menu-bg-color-selected");
+      color: value('menu-label-color-selected');
+      background-color: value('menu-bg-color-selected');
 
       &::after {
         opacity: 100%;
@@ -246,16 +246,16 @@ $menu: map.merge(
 
       #{$self}--horizontal > &,
       #{$self}--horizontal :not(#{$popper}) & {
-        background-color: get-css-var("menu-bg-color");
+        background-color: value('menu-bg-color');
       }
     }
 
     #{$item}--disabled & {
       &,
       &:hover {
-        color: get-css-var("menu-label-color-disabled");
+        color: value('menu-label-color-disabled');
         cursor: not-allowed;
-        background-color: get-css-var("menu-bg-color");
+        background-color: value('menu-bg-color');
       }
     }
   }
@@ -267,7 +267,7 @@ $menu: map.merge(
     justify-content: center;
     min-width: 14px;
     margin-inline-end: 10px;
-    transition: margin get-css-var("transition-base");
+    transition: margin value('transition-base');
 
     #{$self}--reduced & {
       margin: 0;
@@ -290,8 +290,8 @@ $menu: map.merge(
     white-space: nowrap;
     opacity: 100%;
     transition:
-      width get-css-var("transition-base"),
-      get-css-var("transition-opacity");
+      width value('transition-base'),
+      value('transition-opacity');
 
     &--in-group {
       padding-inline-end: 20px;
@@ -329,8 +329,7 @@ $menu: map.merge(
     position: absolute;
     inset-inline-end: 22px;
     opacity: 100%;
-    transition: get-css-var("transition-opacity"),
-      get-css-var("transition-transform");
+    transition: value('transition-opacity'), value('transition-transform');
 
     &--visible {
       transform: rotate(180deg);
@@ -380,10 +379,10 @@ $menu: map.merge(
       min-width: 70px;
       padding: 5px 0;
       user-select: none;
-      background-color: get-css-var("menu-popper-bg-color");
-      border: get-css-var("border-shape") get-css-var("menu-popper-b-color");
-      border-radius: get-css-var("menu-popper-radius");
-      box-shadow: get-css-var("shadow-shape") get-css-var("menu-popper-s-color");
+      background-color: value('menu-popper-bg-color');
+      border: value('border-shape') value('menu-popper-b-color');
+      border-radius: value('menu-popper-radius');
+      box-shadow: value('shadow-shape') value('menu-popper-s-color');
     }
   }
 
@@ -396,18 +395,17 @@ $menu: map.merge(
     padding: 10px 0;
     padding-inline: 20px;
     cursor: pointer;
-    background-color: get-css-var("menu-bg-color");
-    transition: get-css-var("transition-color"),
-      get-css-var("transition-background");
+    background-color: value('menu-bg-color');
+    transition: value('transition-color'), value('transition-background');
 
     &--selected {
-      color: get-css-var("menu-label-color-hover");
+      color: value('menu-label-color-hover');
     }
   }
 
   @at-root {
     &-group {
-      margin-top: get-css-var("menu-group-span");
+      margin-top: value('menu-group-span');
       white-space: nowrap;
       list-style: none;
       user-select: none;
@@ -419,8 +417,8 @@ $menu: map.merge(
 
       &__label {
         position: relative;
-        color: get-css-var("menu-group-color");
-        background-color: get-css-var("menu-bg-color");
+        color: value('menu-group-color');
+        background-color: value('menu-bg-color');
 
         &::before {
           position: absolute;
@@ -428,10 +426,10 @@ $menu: map.merge(
           top: 50%;
           width: 24px;
           height: 1px;
-          content: "";
-          background-color: get-css-var("menu-d-color");
+          content: '';
+          background-color: value('menu-d-color');
           opacity: 0%;
-          transition: get-css-var("transition-opacity");
+          transition: value('transition-opacity');
           transform: translate(-50%, -50%);
         }
       }
@@ -439,8 +437,8 @@ $menu: map.merge(
       &__title {
         display: inline-block;
         padding: 8px 20px;
-        font-size: get-css-var("font-size-secondary");
-        transition: get-css-var("transition-opacity");
+        font-size: value('font-size-secondary');
+        transition: value('transition-opacity');
 
         #{$self}--horizontal & {
           display: none;

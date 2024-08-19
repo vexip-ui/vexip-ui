@@ -1,25 +1,25 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $checkbox: () !default;
 $checkbox: map.merge(
   (
     label-color: inherit,
-    label-color-checked: get-css-var("color-primary-base"),
-    label-color-disabled: get-css-var("content-color-disabled"),
-    b-color: get-css-var("border-color-base"),
-    b-color-hover: get-css-var("color-primary-base"),
-    b-color-checked: get-css-var("color-primary-base"),
-    b-color-disabled: get-css-var("fill-color-disabled"),
-    signal-bg-color: get-css-var("fill-color-base"),
-    signal-bg-color-checked: get-css-var("color-primary-base"),
-    signal-bg-color-disabled: get-css-var("fill-color-background"),
-    signal-check-color: get-css-var("color-white"),
-    radius: get-css-var("radius-base"),
-    signal-radius: get-css-var("radius-small"),
-    s-color-focus: get-css-var("color-primary-opacity-6"),
+    label-color-checked: value('color-primary-base'),
+    label-color-disabled: value('content-color-disabled'),
+    b-color: value('border-color-base'),
+    b-color-hover: value('color-primary-base'),
+    b-color-checked: value('color-primary-base'),
+    b-color-disabled: value('fill-color-disabled'),
+    signal-bg-color: value('fill-color-base'),
+    signal-bg-color-checked: value('color-primary-base'),
+    signal-bg-color-disabled: value('fill-color-background'),
+    signal-check-color: value('color-white'),
+    radius: value('radius-base'),
+    signal-radius: value('radius-small'),
+    s-color-focus: value('color-primary-opacity-6'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
     signal-size: 18px,
@@ -27,18 +27,18 @@ $checkbox: map.merge(
     signal-large-size: 22px,
     signal-large-thick: 3px,
     series-h-span: 10px,
-    series-v-span: 6px,
+    series-v-span: 6px
   ),
   $checkbox
 );
 
 .#{$namespace}-checkbox {
   &-vars {
-    @include define-preset-values("checkbox", $checkbox);
+    @include define-preset-values('checkbox', $checkbox);
   }
 
   @mixin define-checkbox-style($style-map) {
-    @include define-preset-style("checkbox", $style-map);
+    @include define-preset-style('checkbox', $style-map);
   }
 
   @include basis {
@@ -49,22 +49,22 @@ $checkbox: map.merge(
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
-    transition: get-css-var("transition-background"),
-      get-css-var("transition-border"), get-css-var("transition-shadow");
+    transition: value('transition-background'), value('transition-border'),
+      value('transition-shadow');
   }
 
   &--border {
     padding: 8px 10px;
-    border: get-css-var("border-shape") get-css-var("checkbox-b-color");
-    border-radius: get-css-var("checkbox-radius");
+    border: value('border-shape') value('checkbox-b-color');
+    border-radius: value('checkbox-radius');
 
     &:hover {
-      border-color: get-css-var("checkbox-b-color-hover");
+      border-color: value('checkbox-b-color-hover');
     }
   }
 
   &--checked#{&}--border {
-    border-color: get-css-var("checkbox-b-color-checked");
+    border-color: value('checkbox-b-color-checked');
   }
 
   &--loading {
@@ -74,13 +74,13 @@ $checkbox: map.merge(
   &__signal {
     position: relative;
     display: inline-block;
-    width: get-css-var("checkbox-signal-size");
-    height: get-css-var("checkbox-signal-size");
-    background-color: get-css-var("checkbox-signal-bg-color");
-    border: get-css-var("border-shape") get-css-var("checkbox-b-color");
-    border-radius: get-css-var("checkbox-signal-radius");
-    transition: get-css-var("transition-background"),
-      get-css-var("transition-border"), get-css-var("transition-shadow");
+    width: value('checkbox-signal-size');
+    height: value('checkbox-signal-size');
+    background-color: value('checkbox-signal-bg-color');
+    border: value('border-shape') value('checkbox-b-color');
+    border-radius: value('checkbox-signal-radius');
+    transition: value('transition-background'), value('transition-border'),
+      value('transition-shadow');
 
     &::before {
       position: absolute;
@@ -88,8 +88,8 @@ $checkbox: map.merge(
       width: auto;
       height: 0;
       pointer-events: none;
-      content: "";
-      border-top: get-css-var("border-shape") get-css-var("checkbox-b-color");
+      content: '';
+      border-top: value('border-shape') value('checkbox-b-color');
       opacity: 0%;
     }
 
@@ -103,47 +103,44 @@ $checkbox: map.merge(
       top: calc(50% - 1px);
       left: 50%;
       width: calc(
-        get-css-var("checkbox-signal-size") * 0.25 +
-          get-css-var("checkbox-signal-thick") * 0.5 - 0.5px
+        value('checkbox-signal-size') * 0.25 + value('checkbox-signal-thick') * 0.5 - 0.5px
       );
-      height: calc(get-css-var("checkbox-signal-size") * 0.5);
-      content: "";
+      height: calc(value('checkbox-signal-size') * 0.5);
+      content: '';
       background-color: transparent;
-      border: solid get-css-var("checkbox-signal-check-color");
-      border-width: 0 get-css-var("checkbox-signal-thick")
-        get-css-var("checkbox-signal-thick") 0;
+      border: solid value('checkbox-signal-check-color');
+      border-width: 0 value('checkbox-signal-thick') value('checkbox-signal-thick') 0;
       opacity: 0%;
       transition:
-        width get-css-var("transition-base"),
-        height get-css-var("transition-base"),
-        get-css-var("transition-background"),
-        get-css-var("transition-opacity"),
-        get-css-var("transition-transform");
+        width value('transition-base'),
+        height value('transition-base'),
+        value('transition-background'),
+        value('transition-opacity'),
+        value('transition-transform');
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }
   }
 
   &:focus-within &__signal {
-    box-shadow: get-css-var("shadow-focus")
-      get-css-var("checkbox-s-color-focus");
+    box-shadow: value('shadow-focus') value('checkbox-s-color-focus');
   }
 
   @mixin small-signal {
     @include define-preset-values(
-      "checkbox",
+      'checkbox',
       (
         signal-size: 14px,
-        signal-thick: 1px,
+        signal-thick: 1px
       )
     );
   }
 
   @mixin large-signal {
     @include define-preset-values(
-      "checkbox",
+      'checkbox',
       (
         signal-size: 22px,
-        signal-thick: 3px,
+        signal-thick: 3px
       )
     );
   }
@@ -158,24 +155,24 @@ $checkbox: map.merge(
 
   &__label {
     margin-inline-start: 6px;
-    color: get-css-var("checkbox-label-color");
-    transition: get-css-var("transition-color");
+    color: value('checkbox-label-color');
+    transition: value('transition-color');
   }
 
   &:hover &__signal {
     &,
     &::before {
-      border-color: get-css-var("checkbox-b-color-hover");
+      border-color: value('checkbox-b-color-hover');
     }
   }
 
   @mixin partial-signal {
-    background-color: get-css-var("checkbox-signal-bg-color-checked");
-    border-color: get-css-var("checkbox-b-color-checked");
+    background-color: value('checkbox-signal-bg-color-checked');
+    border-color: value('checkbox-b-color-checked');
 
     &::after {
       top: 50%;
-      width: calc(get-css-var("checkbox-signal-size") * 0.5);
+      width: calc(value('checkbox-signal-size') * 0.5);
       height: 1px;
       opacity: 100%;
       transform: translate(-50%, -50%) scale(1);
@@ -187,11 +184,11 @@ $checkbox: map.merge(
   }
 
   &--checked &__signal {
-    background-color: get-css-var("checkbox-signal-bg-color-checked");
+    background-color: value('checkbox-signal-bg-color-checked');
 
     &,
     &::before {
-      border-color: get-css-var("checkbox-b-color-checked");
+      border-color: value('checkbox-b-color-checked');
     }
 
     &::after {
@@ -201,7 +198,7 @@ $checkbox: map.merge(
   }
 
   &--checked &__label {
-    color: get-css-var("checkbox-label-color-checked");
+    color: value('checkbox-label-color-checked');
   }
 
   $states: success, error, warning;
@@ -210,12 +207,12 @@ $checkbox: map.merge(
     &--#{$state} {
       @include define-checkbox-style(
         (
-          label-color-checked: "color" $state "base",
-          b-color: "color" $state "base",
-          b-color-hover: "color" $state "base",
-          b-color-checked: "color" $state "base",
-          signal-bg-color-checked: "color" $state "base",
-          s-color-focus: "color" $state "opacity-6",
+          label-color-checked: 'color' $state 'base',
+          b-color: 'color' $state 'base',
+          b-color-hover: 'color' $state 'base',
+          b-color-checked: 'color' $state 'base',
+          signal-bg-color-checked: 'color' $state 'base',
+          s-color-focus: 'color' $state 'opacity-6'
         )
       );
     }
@@ -227,30 +224,30 @@ $checkbox: map.merge(
 
     &,
     &:hover {
-      border-color: get-css-var("checkbox-b-color-disabled");
+      border-color: value('checkbox-b-color-disabled');
     }
   }
 
   &--disabled &__signal,
   &--disabled:hover &__signal {
-    background-color: get-css-var("checkbox-signal-bg-color-disabled");
+    background-color: value('checkbox-signal-bg-color-disabled');
 
     &,
     &::before {
-      border-color: get-css-var("checkbox-b-color-disabled");
+      border-color: value('checkbox-b-color-disabled');
     }
 
     &::after {
-      border-color: get-css-var("checkbox-b-color-disabled");
+      border-color: value('checkbox-b-color-disabled');
     }
   }
 
   &--disabled &__label {
-    color: get-css-var("checkbox-label-color-disabled");
+    color: value('checkbox-label-color-disabled');
   }
 
   &--disabled#{&}--checked &__signal {
-    background-color: get-css-var("checkbox-signal-bg-color-disabled");
+    background-color: value('checkbox-signal-bg-color-disabled');
   }
 
   &__input {
@@ -277,12 +274,12 @@ $checkbox: map.merge(
     }
 
     &-group & {
-      margin-inline-end: get-css-var("checkbox-series-h-span");
+      margin-inline-end: value('checkbox-series-h-span');
     }
 
     &-group--vertical & {
       margin-inline-end: 0;
-      margin-bottom: get-css-var("checkbox-series-v-span");
+      margin-bottom: value('checkbox-series-v-span');
 
       &:last-child {
         margin-bottom: 0;
@@ -291,22 +288,22 @@ $checkbox: map.merge(
 
     &-group--border & {
       padding: 8px 10px;
-      border: get-css-var("border-shape") get-css-var("checkbox-b-color");
-      border-radius: get-css-var("checkbox-radius");
+      border: value('border-shape') value('checkbox-b-color');
+      border-radius: value('checkbox-radius');
 
       &:hover {
-        border-color: get-css-var("checkbox-b-color-hover");
+        border-color: value('checkbox-b-color-hover');
       }
 
       &--checked {
-        border-color: get-css-var("checkbox-b-color-checked");
+        border-color: value('checkbox-b-color-checked');
       }
     }
 
     &-group--border &--disabled {
       &,
       &:hover {
-        border-color: get-css-var("checkbox-b-color-disabled");
+        border-color: value('checkbox-b-color-disabled');
       }
     }
 
@@ -315,24 +312,24 @@ $checkbox: map.merge(
 
       &,
       &:hover {
-        border-color: get-css-var("checkbox-b-color-disabled");
+        border-color: value('checkbox-b-color-disabled');
       }
 
       &__signal {
-        border-color: get-css-var("checkbox-b-color-disabled") !important;
+        border-color: value('checkbox-b-color-disabled') !important;
 
         &::after {
-          background-color: get-css-var("checkbox-b-color-disabled");
+          background-color: value('checkbox-b-color-disabled');
         }
       }
 
       &__label {
-        color: get-css-var("checkbox-label-color-disabled");
+        color: value('checkbox-label-color-disabled');
       }
     }
 
     &-group--disabled &--checked &__signal {
-      background-color: get-css-var("checkbox-b-color-disabled");
+      background-color: value('checkbox-b-color-disabled');
     }
 
     &-group--small & {

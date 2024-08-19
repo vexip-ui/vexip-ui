@@ -1,25 +1,25 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $masker: () !default;
 $masker: map.merge(
   (
-    z-index: get-css-var("z-index-masker"),
-    bg-color: get-css-var("color-black"),
-    opacity: 45%,
+    z-index: value('z-index-masker'),
+    bg-color: value('color-black'),
+    opacity: 45%
   ),
   $masker
 );
 
 .#{$namespace}-masker {
   &-vars {
-    @include define-preset-values("masker", $masker);
+    @include define-preset-values('masker', $masker);
   }
 
   @include basis {
-    z-index: get-css-var("masker-z-index");
+    z-index: value('masker-z-index');
   }
 
   @include fixed;
@@ -32,7 +32,7 @@ $masker: map.merge(
 
   &__mask {
     @include fixed {
-      color: get-css-var("masker-bg-color");
+      color: value('masker-bg-color');
       transform: translateZ(0);
     }
 
@@ -40,7 +40,7 @@ $masker: map.merge(
       width: 100%;
       height: 100%;
       background-color: currentcolor;
-      opacity: get-css-var("masker-opacity");
+      opacity: value('masker-opacity');
     }
   }
 

@@ -1,14 +1,14 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $overflow: () !default;
 $overflow: map.merge((), $overflow);
 
 .#{$namespace}-overflow {
   &-vars {
-    @include define-preset-values("overflow", $overflow);
+    @include define-preset-values('overflow', $overflow);
   }
 
   @include basis {

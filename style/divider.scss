@@ -1,40 +1,40 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $divider: () !default;
 $divider: map.merge(
   (
-    b-color: get-css-var("border-color-light-2"),
-    border: get-css-var("border-shape") get-css-var("divider-b-color"),
+    b-color: value('border-color-light-2'),
+    border: value('border-shape') value('divider-b-color'),
     v-margin: 24px,
     v-margin-text: 14px,
     h-margin: 8px,
-    text-color: get-css-var("content-color-base"),
+    text-color: value('content-color-base'),
     text-v-padding: 0,
     text-h-padding: 14px,
-    text-size-primary: get-css-var("font-size-primary"),
+    text-size-primary: value('font-size-primary')
   ),
   $divider
 );
 
 .#{$namespace}-divider {
   &-vars {
-    @include define-preset-values("divider", $divider);
+    @include define-preset-values('divider', $divider);
   }
 
   @include basis {
     display: flex;
     padding: 0;
-    border-top: get-css-var("divider-border");
+    border-top: value('divider-border');
   }
 
   @include inherit-color;
 
   &--horizontal {
     width: 100%;
-    margin: get-css-var("divider-v-margin") 0;
+    margin: value('divider-v-margin') 0;
     clear: both;
   }
 
@@ -42,14 +42,14 @@ $divider: map.merge(
     position: relative;
     display: inline-block;
     height: 14px;
-    margin: 0 get-css-var("divider-h-margin");
+    margin: 0 value('divider-h-margin');
     vertical-align: middle;
-    border-inline-start: get-css-var("divider-border");
+    border-inline-start: value('divider-border');
     border-top: 0;
   }
 
   &--with-text {
-    margin: get-css-var("divider-v-margin-text") 0;
+    margin: value('divider-v-margin-text') 0;
     text-align: center;
     white-space: nowrap;
     border-top: 0;
@@ -59,8 +59,8 @@ $divider: map.merge(
       position: relative;
       top: 50%;
       width: 50%;
-      content: "";
-      border-top: get-css-var("divider-border");
+      content: '';
+      border-top: value('divider-border');
       transform: translateY(50%);
     }
   }
@@ -95,15 +95,14 @@ $divider: map.merge(
 
   &__text {
     display: inline-block;
-    padding: get-css-var("divider-text-v-padding")
-      get-css-var("divider-text-h-padding");
-    color: get-css-var("divider-text-color");
+    padding: value('divider-text-v-padding') value('divider-text-h-padding');
+    color: value('divider-text-color');
     text-align: center;
     white-space: nowrap;
   }
 
   &--primary &__text {
-    font-size: get-css-var("divider-text-size-primary");
+    font-size: value('divider-text-size-primary');
     font-weight: 500;
   }
 }

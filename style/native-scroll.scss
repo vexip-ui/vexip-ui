@@ -1,5 +1,5 @@
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 .#{$namespace}-native-scroll {
   @include basis {
@@ -59,10 +59,10 @@
   }
 
   &--both > &__bar--horizontal {
-    width: calc(100% - get-css-var("scrollbar-width") + 1px);
+    width: calc(100% - value('scrollbar-width') + 1px);
   }
 
   &--both > &__bar--vertical {
-    height: calc(100% - get-css-var("scrollbar-width") + 1px);
+    height: calc(100% - value('scrollbar-width') + 1px);
   }
 }

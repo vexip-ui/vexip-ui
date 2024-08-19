@@ -7,19 +7,19 @@
 $tooltip: () !default;
 $tooltip: map.merge(
   (
-    bg-color: get-css-var('bg-color-base'),
-    bg-color-dark: get-css-var('fill-color-reverse'),
-    s-color: get-css-var('shadow-color-base'),
-    s-color-dark: get-css-var('bg-color-reverse'),
-    shadow: get-css-var('shadow-shape') get-css-var('tooltip-s-color'),
-    shadow-dark: get-css-var('tooltip-shadow'),
+    bg-color: value('bg-color-base'),
+    bg-color-dark: value('fill-color-reverse'),
+    s-color: value('shadow-color-base'),
+    s-color-dark: value('bg-color-reverse'),
+    shadow: value('shadow-shape') value('tooltip-s-color'),
+    shadow-dark: value('tooltip-shadow'),
     min-width: 60px,
     min-height: 30px,
     v-padding: 8px,
     h-padding: 14px,
-    content-color: get-css-var('content-color-base'),
-    content-color-dark: get-css-var('bg-color-base'),
-    radius: get-css-var('radius-base'),
+    content-color: value('content-color-base'),
+    content-color-dark: value('bg-color-base'),
+    radius: value('radius-base'),
     arrow-size: 7px,
     arrow-v-offset: 16px,
     arrow-h-offset: 28px
@@ -43,16 +43,16 @@ $tooltip: map.merge(
 
   &__tip {
     position: relative;
-    min-width: get-css-var('tooltip-min-width');
-    min-height: get-css-var('tooltip-min-height');
-    padding: get-css-var('tooltip-v-padding') get-css-var('tooltip-h-padding');
-    background-color: get-css-var('tooltip-bg-color');
-    border-radius: get-css-var('tooltip-radius');
-    box-shadow: get-css-var('tooltip-shadow');
+    min-width: value('tooltip-min-width');
+    min-height: value('tooltip-min-height');
+    padding: value('tooltip-v-padding') value('tooltip-h-padding');
+    background-color: value('tooltip-bg-color');
+    border-radius: value('tooltip-radius');
+    box-shadow: value('tooltip-shadow');
 
     #{$popper}--dark & {
-      color: get-css-var('tooltip-color-dark');
-      box-shadow: get-css-var('tooltip-shadow-dark');
+      color: value('tooltip-color-dark');
+      box-shadow: value('tooltip-shadow-dark');
     }
   }
 
@@ -73,7 +73,7 @@ $tooltip: map.merge(
   }
 
   // arrow size
-  $size: get-css-var('tooltip-arrow-size');
+  $size: value('tooltip-arrow-size');
   $s-pad: 6px;
   $l-pad: calc(#{math.round($s-pad * 0.5)} + #{$size});
 
@@ -188,8 +188,8 @@ $tooltip: map.merge(
       }
     }
 
-    $v-offset: get-css-var('tooltip-arrow-v-offset');
-    $h-offset: get-css-var('tooltip-arrow-h-offset');
+    $v-offset: value('tooltip-arrow-v-offset');
+    $h-offset: value('tooltip-arrow-h-offset');
 
     &[data-popper-placement='top'] > #{$arrow} {
       left: 50%;
@@ -311,15 +311,15 @@ $tooltip: map.merge(
 
   @include theme(
     'light',
-    get-css-var('tooltip-content-color'),
-    get-css-var('tooltip-s-color'),
-    get-css-var('tooltip-bg-color')
+    value('tooltip-content-color'),
+    value('tooltip-s-color'),
+    value('tooltip-bg-color')
   );
 
   @include theme(
     'dark',
-    get-css-var('tooltip-content-color-dark'),
-    get-css-var('tooltip-s-color-dark'),
-    get-css-var('tooltip-bg-color-dark')
+    value('tooltip-content-color-dark'),
+    value('tooltip-s-color-dark'),
+    value('tooltip-bg-color-dark')
   );
 }

@@ -9,26 +9,26 @@ $tour: map.merge(
   (
     min-width: 360px,
     max-width: 520px,
-    title-font-size: get-css-var('font-size-primary'),
+    title-font-size: value('font-size-primary'),
     title-weight: 500,
-    title-color: get-css-var('content-color-primary'),
+    title-color: value('content-color-primary'),
     header-v-padding: 8px,
     header-h-padding: 14px,
     body-v-padding: 4px,
     body-h-padding: 14px,
     footer-v-padding: 10px,
     footer-h-padding: 14px,
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base'),
+    close-color: value('content-color-placeholder'),
+    close-color-hover: value('content-color-base'),
     dot-size: 6px,
-    dot-bg: get-css-var('fill-color-secondary'),
-    dot-bg-active: get-css-var('color-primary-base'),
+    dot-bg: value('fill-color-secondary'),
+    dot-bg-active: value('color-primary-base'),
     dot-span: 6px,
     bar-width: 12px,
     bar-height: 4px,
     bar-width-active: 20px,
-    bar-bg: get-css-var('fill-color-secondary'),
-    bar-bg-active: get-css-var('color-primary-base'),
+    bar-bg: value('fill-color-secondary'),
+    bar-bg-active: value('color-primary-base'),
     bar-span: 3px
   ),
   $tour
@@ -91,8 +91,8 @@ $tour: map.merge(
   }
 
   &__step {
-    min-width: get-css-var('tour-min-width');
-    max-width: get-css-var('tour-max-width');
+    min-width: value('tour-min-width');
+    max-width: value('tour-max-width');
     padding: 4px 0;
   }
 
@@ -101,14 +101,14 @@ $tour: map.merge(
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: get-css-var('tour-header-v-padding') get-css-var('tour-header-h-padding');
+    padding: value('tour-header-v-padding') value('tour-header-h-padding');
   }
 
   &__title {
     flex: 1 0 0;
-    font-size: get-css-var('tour-title-font-size');
-    font-weight: get-css-var('tour-title-weight');
-    color: get-css-var('tour-title-color');
+    font-size: value('tour-title-font-size');
+    font-weight: value('tour-title-weight');
+    color: value('tour-title-color');
   }
 
   &__close {
@@ -117,16 +117,16 @@ $tour: map.merge(
     height: 24px;
     padding: 0;
     margin-inline-start: 6px;
-    color: get-css-var('tour-close-color');
+    color: value('tour-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('tour-close-color-hover');
+      color: value('tour-close-color-hover');
     }
   }
 
@@ -135,7 +135,7 @@ $tour: map.merge(
     flex: auto;
     min-width: 0;
     min-height: 0;
-    padding: get-css-var('tour-body-v-padding') get-css-var('tour-body-h-padding');
+    padding: value('tour-body-v-padding') value('tour-body-h-padding');
   }
 
   &__footer {
@@ -144,7 +144,7 @@ $tour: map.merge(
     flex-shrink: 0;
     align-items: center;
     justify-content: flex-end;
-    padding: get-css-var('tour-footer-v-padding') get-css-var('tour-footer-h-padding');
+    padding: value('tour-footer-v-padding') value('tour-footer-h-padding');
   }
 
   &__sign {
@@ -152,32 +152,32 @@ $tour: map.merge(
     align-items: center;
 
     &--count {
-      line-height: get-css-var('line-height-secondary');
+      line-height: value('line-height-secondary');
     }
   }
 
   &__sign-dot {
-    width: get-css-var('tour-dot-size');
-    height: get-css-var('tour-dot-size');
-    margin-inline-end: get-css-var('tour-dot-span');
-    background-color: get-css-var('tour-dot-bg');
+    width: value('tour-dot-size');
+    height: value('tour-dot-size');
+    margin-inline-end: value('tour-dot-span');
+    background-color: value('tour-dot-bg');
     border-radius: 50%;
 
     &--active {
-      background-color: get-css-var('tour-dot-bg-active');
+      background-color: value('tour-dot-bg-active');
     }
   }
 
   &__sign-bar {
-    width: get-css-var('tour-bar-width');
-    height: get-css-var('tour-bar-height');
-    margin-inline-end: get-css-var('tour-bar-span');
-    background-color: get-css-var('tour-bar-bg');
-    border-radius: get-css-var('tour-bar-height');
+    width: value('tour-bar-width');
+    height: value('tour-bar-height');
+    margin-inline-end: value('tour-bar-span');
+    background-color: value('tour-bar-bg');
+    border-radius: value('tour-bar-height');
 
     &--active {
-      width: get-css-var('tour-bar-width-active');
-      background-color: get-css-var('tour-dot-bg-active');
+      width: value('tour-bar-width-active');
+      background-color: value('tour-dot-bg-active');
     }
   }
 
@@ -186,13 +186,13 @@ $tour: map.merge(
   }
 
   &__action {
-    line-height: get-css-var('line-height-secondary');
+    line-height: value('line-height-secondary');
   }
 
   @each $type in $types {
     @at-root {
       &__bubble--#{$type} &__action {
-        color: get-css-var('color-#{$type}-base');
+        color: value('color-#{$type}-base');
         border-color: $color-white;
 
         &:hover {
@@ -225,6 +225,6 @@ $tour: map.merge(
 
   &__hollow--active {
     /* stylelint-disable-next-line declaration-property-value-disallowed-list */
-    transition: all get-css-var('transition-base');
+    transition: all value('transition-base');
   }
 }

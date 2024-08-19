@@ -120,7 +120,7 @@ $border-color-map: map.merge(
 
 $border-width: 1px !default;
 $border-style: solid !default;
-$border-shape: get-css-var('border-width') get-css-var('border-style') !default;
+$border-shape: value('border-width') value('border-style') !default;
 
 $fill-color-map: () !default;
 $fill-color-map: map.merge(
@@ -206,25 +206,25 @@ $shadow-color-map: map.merge(
 $shadow-x: 0 !default;
 $shadow-y: 0 !default;
 $shadow-blur: 6px !default;
-$shadow-shape: get-css-var('shadow-x') get-css-var('shadow-y') get-css-var('shadow-blur') !default;
-$shadow-base: get-css-var('shadow-shape') get-css-var('border-color-base') !default;
+$shadow-shape: value('shadow-x') value('shadow-y') value('shadow-blur') !default;
+$shadow-base: value('shadow-shape') value('border-color-base') !default;
 
 $shadow-border: 0 0 0 1px !default;
 $shadow-focus: 0 0 2px 2px !default;
 
 $transition-duration: 250ms !default;
 $transition-timing: ease !default;
-$transition-base: get-css-var('transition-duration') get-css-var('transition-timing') !default;
+$transition-base: value('transition-duration') value('transition-timing') !default;
 
 $transition-map: () !default;
 $transition-map: map.merge(
   (
-    color: color get-css-var('transition-base'),
-    background: background-color get-css-var('transition-base'),
-    border: border-color get-css-var('transition-base'),
-    shadow: box-shadow get-css-var('transition-base'),
-    opacity: opacity get-css-var('transition-base'),
-    transform: transform get-css-var('transition-base')
+    color: color value('transition-base'),
+    background: background-color value('transition-base'),
+    border: border-color value('transition-base'),
+    shadow: box-shadow value('transition-base'),
+    opacity: opacity value('transition-base'),
+    transform: transform value('transition-base')
   ),
   $transition-map
 );
@@ -314,7 +314,7 @@ $break-point-map: map.merge(
   @each $name in map.keys(get-or-default($theme-config, $border-color-map, 'border-color-map')) {
     @include define-css-var(
       ('border', $name),
-      get-css-var('border-shape') get-css-var('border-color' $name)
+      value('border-shape') value('border-color' $name)
     );
   }
 
@@ -359,7 +359,7 @@ $break-point-map: map.merge(
   @each $name in map.keys(get-or-default($theme-config, $shadow-color-map, 'shadow-color-map')) {
     @include define-css-var(
       ('shadow', $name),
-      get-css-var('shadow-shape') get-css-var('shadow-color' $name)
+      value('shadow-shape') value('shadow-color' $name)
     );
   }
 

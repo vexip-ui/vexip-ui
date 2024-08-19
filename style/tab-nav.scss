@@ -1,39 +1,39 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $tab-nav: () !default;
 $tab-nav: map.merge(
   (
-    d-color: get-css-var("border-color-light-2"),
-    color: get-css-var("content-color-base"),
-    color-hover: get-css-var("color-primary-base"),
-    color-active: get-css-var("tab-nav-color-hover"),
-    color-disabled: get-css-var("content-color-disabled"),
-    card-color: get-css-var("tab-nav-color"),
-    card-color-hover: get-css-var("tab-nav-color-hover"),
-    card-color-active: get-css-var("tab-nav-color-active"),
-    card-color-disabled: get-css-var("tab-nav-color-disabled"),
-    card-bg-color: get-css-var("fill-color-background"),
+    d-color: value('border-color-light-2'),
+    color: value('content-color-base'),
+    color-hover: value('color-primary-base'),
+    color-active: value('tab-nav-color-hover'),
+    color-disabled: value('content-color-disabled'),
+    card-color: value('tab-nav-color'),
+    card-color-hover: value('tab-nav-color-hover'),
+    card-color-active: value('tab-nav-color-active'),
+    card-color-disabled: value('tab-nav-color-disabled'),
+    card-bg-color: value('fill-color-background'),
     card-bg-color-active: transparent,
-    card-bg-color-disabled: get-css-var("tab-nav-card-bg-color"),
-    card-b-color: get-css-var("tab-nav-d-color"),
-    card-b-color-active: get-css-var("tab-nav-color-active"),
-    card-b-color-disabled: get-css-var("tab-nav-card-b-color"),
-    card-radius: get-css-var("radius-base"),
+    card-bg-color-disabled: value('tab-nav-card-bg-color'),
+    card-b-color: value('tab-nav-d-color'),
+    card-b-color-active: value('tab-nav-color-active'),
+    card-b-color-disabled: value('tab-nav-card-b-color'),
+    card-radius: value('radius-base'),
     item-pad-size: 4px,
-    marker-bg-color: get-css-var("tab-nav-color-active"),
+    marker-bg-color: value('tab-nav-color-active'),
     marker-size: 2px,
     v-padding: 8px,
-    h-padding: 16px,
+    h-padding: 16px
   ),
   $tab-nav
 );
 
 .#{$namespace}-tab-nav {
   &-vars {
-    @include define-preset-values("tab-nav", $tab-nav);
+    @include define-preset-values('tab-nav', $tab-nav);
   }
 
   @include basis {
@@ -79,7 +79,7 @@ $tab-nav: map.merge(
     display: flex;
     flex: 0 0 auto;
     align-items: center;
-    border: 0 solid get-css-var("tab-nav-d-color");
+    border: 0 solid value('tab-nav-d-color');
 
     &--suffix {
       flex: 1 0 auto;
@@ -101,7 +101,7 @@ $tab-nav: map.merge(
 
   &__prefix,
   &__suffix {
-    padding: get-css-var("tab-nav-v-padding") get-css-var("tab-nav-h-padding");
+    padding: value('tab-nav-v-padding') value('tab-nav-h-padding');
   }
 
   &--top &__prefix,
@@ -128,25 +128,25 @@ $tab-nav: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: get-css-var("tab-nav-v-padding") get-css-var("tab-nav-h-padding");
-    color: get-css-var("tab-nav-color");
+    padding: value('tab-nav-v-padding') value('tab-nav-h-padding');
+    color: value('tab-nav-color');
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-    border: 0 solid get-css-var("tab-nav-d-color");
+    border: 0 solid value('tab-nav-d-color');
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("tab-nav-color-hover");
+      color: value('tab-nav-color-hover');
     }
 
     &--active {
       &,
       &:hover,
       &:focus {
-        color: get-css-var("tab-nav-color-active");
+        color: value('tab-nav-color-active');
       }
     }
 
@@ -154,33 +154,33 @@ $tab-nav: map.merge(
       &,
       &:hover,
       &:focus {
-        color: get-css-var("tab-nav-color-disabled");
+        color: value('tab-nav-color-disabled');
         cursor: not-allowed;
       }
     }
   }
 
-  $content-radius: get-css-var("tab-nav-card-radius");
+  $content-radius: value('tab-nav-card-radius');
 
   &--card &__content {
-    color: get-css-var("tab-nav-card-color");
-    background-color: get-css-var("tab-nav-card-bg-color");
-    border: get-css-var("border-shape") get-css-var("tab-nav-card-b-color");
-    transition: get-css-var("transition-color"),
-      get-css-var("transition-background"), get-css-var("transition-border");
+    color: value('tab-nav-card-color');
+    background-color: value('tab-nav-card-bg-color');
+    border: value('border-shape') value('tab-nav-card-b-color');
+    transition: value('transition-color'), value('transition-background'),
+      value('transition-border');
 
     &:hover,
     &:focus {
-      color: get-css-var("tab-nav-card-color-hover");
+      color: value('tab-nav-card-color-hover');
     }
 
     &--active {
       &,
       &:hover,
       &:focus {
-        color: get-css-var("tab-nav-card-color-active");
-        background-color: get-css-var("tab-nav-card-bg-color-active");
-        border-color: get-css-var("tab-nav-card-b-color-active");
+        color: value('tab-nav-card-color-active');
+        background-color: value('tab-nav-card-bg-color-active');
+        border-color: value('tab-nav-card-b-color-active');
       }
     }
 
@@ -188,9 +188,9 @@ $tab-nav: map.merge(
       &,
       &:hover,
       &:focus {
-        color: get-css-var("tab-nav-card-color-disabled");
-        background-color: get-css-var("tab-nav-card-bg-color-disabled");
-        border-color: get-css-var("tab-nav-card-b-color-disabled");
+        color: value('tab-nav-card-color-disabled');
+        background-color: value('tab-nav-card-bg-color-disabled');
+        border-color: value('tab-nav-card-b-color-disabled');
       }
     }
   }
@@ -202,36 +202,36 @@ $tab-nav: map.merge(
     justify-content: center;
     padding: 0 12px;
     line-height: inherit;
-    color: get-css-var("tab-nav-color");
+    color: value('tab-nav-color');
     cursor: pointer;
     user-select: none;
     background-color: transparent;
-    border: 0 solid get-css-var("tab-nav-d-color");
+    border: 0 solid value('tab-nav-d-color');
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("tab-nav-color-hover");
+      color: value('tab-nav-color-hover');
     }
   }
 
   &--card &__add {
-    color: get-css-var("tab-nav-card-color");
-    background-color: get-css-var("tab-nav-card-bg-color");
-    border: get-css-var("border-shape") get-css-var("tab-nav-card-b-color");
+    color: value('tab-nav-card-color');
+    background-color: value('tab-nav-card-bg-color');
+    border: value('border-shape') value('tab-nav-card-b-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("tab-nav-card-color-hover");
+      color: value('tab-nav-card-color-hover');
     }
   }
 
   &__pad {
     display: none;
-    width: get-css-var("tab-nav-item-pad-size");
+    width: value('tab-nav-item-pad-size');
     pointer-events: none;
-    border: 0 solid get-css-var("tab-nav-d-color");
+    border: 0 solid value('tab-nav-d-color');
   }
 
   &--card &__pad {
@@ -241,7 +241,7 @@ $tab-nav: map.merge(
   &--right &__pad,
   &--left &__pad {
     width: auto;
-    height: get-css-var("tab-nav-item-pad-size");
+    height: value('tab-nav-item-pad-size');
   }
 
   &__item:nth-child(1) &__pad {
@@ -252,10 +252,10 @@ $tab-nav: map.merge(
     position: absolute;
     pointer-events: none;
     transition:
-      top get-css-var("transition-base"),
-      left get-css-var("transition-base"),
-      width get-css-var("transition-base"),
-      height get-css-var("transition-base");
+      top value('transition-base'),
+      left value('transition-base'),
+      width value('transition-base'),
+      height value('transition-base');
   }
 
   $card: #{&}--card;
@@ -391,13 +391,13 @@ $tab-nav: map.merge(
 
   &__marker {
     width: 100%;
-    height: get-css-var("tab-nav-marker-size");
-    background-color: get-css-var("tab-nav-marker-bg-color");
+    height: value('tab-nav-marker-size');
+    background-color: value('tab-nav-marker-bg-color');
   }
 
   &--right &__marker,
   &--left &__marker {
-    width: get-css-var("tab-nav-marker-size");
+    width: value('tab-nav-marker-size');
     height: 100%;
   }
 
@@ -421,11 +421,11 @@ $tab-nav: map.merge(
     border: 0;
     border-radius: 50%;
     outline: 0;
-    transition: get-css-var("transition-background");
+    transition: value('transition-background');
 
     &:hover,
     &:focus {
-      background-color: get-css-var("color-primary-opacity-9");
+      background-color: value('color-primary-opacity-9');
     }
   }
 }

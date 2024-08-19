@@ -15,7 +15,7 @@
   @return $name;
 }
 
-@function get-css-var($name-units, $default: null) {
+@function value($name-units, $default: null) {
   @if not $default {
     @return var(#{to-css-var-name($name-units...)});
   }
@@ -51,7 +51,7 @@
     $style-units: map.get($style-map, $name);
 
     @if list.length($style-units) != 0 {
-      @include define-css-var(($base-name, $name), get-css-var($style-units));
+      @include define-css-var(($base-name, $name), value($style-units));
     }
   }
 }

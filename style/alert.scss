@@ -1,33 +1,33 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $alert: () !default;
 $alert: map.merge(
   (
-    bg-color: get-css-var("fill-color-background"),
-    b-color: get-css-var("border-color-base"),
-    border: get-css-var("border-shape") get-css-var("alert-b-color"),
-    radius: get-css-var("radius-base"),
-    icon-color: get-css-var("content-color-primary"),
-    text-color: get-css-var("content-color-base"),
-    title-font-size: get-css-var("font-size-primary"),
-    title-color: get-css-var("content-color-primary"),
-    close-color: get-css-var("content-color-placeholder"),
-    close-color-hover: get-css-var("content-color-normal"),
-    icon-width: 40px,
+    bg-color: value('fill-color-background'),
+    b-color: value('border-color-base'),
+    border: value('border-shape') value('alert-b-color'),
+    radius: value('radius-base'),
+    icon-color: value('content-color-primary'),
+    text-color: value('content-color-base'),
+    title-font-size: value('font-size-primary'),
+    title-color: value('content-color-primary'),
+    close-color: value('content-color-placeholder'),
+    close-color-hover: value('content-color-normal'),
+    icon-width: 40px
   ),
   $alert
 );
 
 .#{$namespace}-alert {
   &-vars {
-    @include define-preset-values("alert", $alert);
+    @include define-preset-values('alert', $alert);
   }
 
   @mixin define-alert-style($style-map) {
-    @include define-preset-style("alert", $style-map);
+    @include define-preset-style('alert', $style-map);
   }
 
   @include basis {
@@ -36,9 +36,9 @@ $alert: map.merge(
     align-items: center;
     padding: 8px 14px;
     margin-bottom: 14px;
-    background-color: get-css-var("alert-bg-color");
-    border: get-css-var("alert-border");
-    border-radius: get-css-var("alert-radius");
+    background-color: value('alert-bg-color');
+    border: value('alert-border');
+    border-radius: value('alert-radius');
   }
 
   &--has-title {
@@ -46,11 +46,11 @@ $alert: map.merge(
   }
 
   &--has-icon {
-    padding-inline-start: get-css-var("alert-icon-width");
+    padding-inline-start: value('alert-icon-width');
   }
 
   &--has-icon#{&}--has-title {
-    @include define-css-var("alert-icon-width", 56px);
+    @include define-css-var('alert-icon-width', 56px);
   }
 
   &--no-border {
@@ -64,7 +64,7 @@ $alert: map.merge(
   }
 
   &--colorful-text {
-    color: get-css-var("alert-text-color");
+    color: value('alert-text-color');
   }
 
   &__wrapper {
@@ -77,8 +77,8 @@ $alert: map.merge(
 
   &__title {
     margin-bottom: 4px;
-    font-size: get-css-var("alert-title-font-size");
-    color: get-css-var("alert-title-color");
+    font-size: value('alert-title-font-size');
+    color: value('alert-title-color');
   }
 
   &__icon {
@@ -89,8 +89,8 @@ $alert: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var("alert-icon-width");
-    color: get-css-var("alert-icon-color");
+    width: value('alert-icon-width');
+    color: value('alert-icon-color');
   }
 
   &--has-title &__icon {
@@ -104,16 +104,16 @@ $alert: map.merge(
     align-items: center;
     padding: 3px 0;
     margin-inline-start: 6px;
-    color: get-css-var("alert-close-color");
+    color: value('alert-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("alert-close-color-hover");
+      color: value('alert-close-color-hover');
     }
   }
 
@@ -152,9 +152,9 @@ $alert: map.merge(
     &--#{$type} {
       @include define-alert-style(
         (
-          bg-color: "color" $type "opacity-8",
-          b-color: "color" $type "opacity-5",
-          icon-color: "color" $type "dark-2",
+          bg-color: 'color' $type 'opacity-8',
+          b-color: 'color' $type 'opacity-5',
+          icon-color: 'color' $type 'dark-2'
         )
       );
     }
@@ -162,8 +162,8 @@ $alert: map.merge(
     &--colorful-text#{&}--#{$type} {
       @include define-alert-style(
         (
-          text-color: "color" $type "dark-2",
-          title-color: "color" $type "dark-2",
+          text-color: 'color' $type 'dark-2',
+          title-color: 'color' $type 'dark-2'
         )
       );
     }

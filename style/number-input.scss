@@ -7,7 +7,7 @@
 $number-input: () !default;
 $number-input: map.merge(
   (
-    control-color-out: get-css-var('color-error-base')
+    control-color-out: value('color-error-base')
   ),
   $number-input
 );
@@ -22,12 +22,12 @@ $number-input: map.merge(
 
   @at-root {
     & {
-      padding-inline-end: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-end: calc(value('input-h-padding') + 20px);
     }
   }
 
   &--out-of-range &__control {
-    color: get-css-var('number-input-control-color-out');
+    color: value('number-input-control-color-out');
   }
 
   &__clear {
@@ -36,7 +36,7 @@ $number-input: map.merge(
 
   &__clear,
   &__loading {
-    inset-inline-end: calc(get-css-var('input-h-padding') + 20px);
+    inset-inline-end: calc(value('input-h-padding') + 20px);
   }
 
   &__plus,
@@ -48,13 +48,13 @@ $number-input: map.merge(
     justify-content: center;
     width: 20px;
     height: 50%;
-    color: get-css-var('input-icon-color');
+    color: value('input-icon-color');
     cursor: pointer;
     user-select: none;
-    border: get-css-var('input-border');
+    border: value('input-border');
     border-width: 0;
-    border-inline-start-width: get-css-var('border-width');
-    transition: get-css-var('transition-color');
+    border-inline-start-width: value('border-width');
+    transition: value('transition-color');
 
     .#{$namespace}-icon {
       pointer-events: none;
@@ -62,13 +62,13 @@ $number-input: map.merge(
 
     &:hover,
     &--holding {
-      color: get-css-var('input-icon-color-hover');
+      color: value('input-icon-color-hover');
     }
 
     &--disabled {
       &,
       &:hover {
-        color: get-css-var('input-control-color-disabled');
+        color: value('input-control-color-disabled');
         cursor: not-allowed;
       }
     }
@@ -91,26 +91,26 @@ $number-input: map.merge(
   $plus: #{&}__plus;
   $minus: #{&}__minus;
 
-  $padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+  $padding: value('input-v-padding') value('input-h-padding');
 
   &--control-fade {
     padding: $padding;
     transition:
-      padding get-css-var('transition-base'),
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+      padding value('transition-base'),
+      value('transition-background'),
+      value('transition-border'),
+      value('transition-shadow');
 
     #{$plus},
     #{$minus} {
       opacity: 0%;
-      transition: get-css-var('transition-color'), get-css-var('transition-opacity');
+      transition: value('transition-color'), value('transition-opacity');
     }
 
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-inline-end: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-end: calc(value('input-h-padding') + 20px);
 
       #{$plus},
       #{$minus} {
@@ -121,18 +121,18 @@ $number-input: map.merge(
 
   &--control-left {
     padding: $padding;
-    padding-inline-start: calc(get-css-var('input-h-padding') + 20px);
+    padding-inline-start: calc(value('input-h-padding') + 20px);
 
     #{$clear},
     #{$loading} {
       inset-block-end: auto;
-      inset-inline-start: calc(get-css-var('input-h-padding') + 20px);
+      inset-inline-start: calc(value('input-h-padding') + 20px);
     }
 
     #{$plus},
     #{$minus} {
       inset-inline: 0 auto;
-      border-inline-width: 0 get-css-var('border-width');
+      border-inline-width: 0 value('border-width');
     }
   }
 
@@ -142,7 +142,7 @@ $number-input: map.merge(
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-inline-start: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-start: calc(value('input-h-padding') + 20px);
     }
   }
 

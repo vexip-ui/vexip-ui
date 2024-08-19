@@ -1,8 +1,8 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
-@use "./input.scss" as input;
+@use './shared' as *;
+@use './design' as *;
+@use './input.scss' as input;
 
 $cascader: () !default;
 $cascader: map.merge(
@@ -10,22 +10,21 @@ $cascader: map.merge(
     pane-height: 200px,
     pane-min-width: 180px,
     pane-max-width: 280px,
-    pane-bg-color: get-css-var("bg-color-base"),
-    pane-b-color: get-css-var("border-color-light-2"),
-    pane-border: get-css-var("border-shape")
-      get-css-var("cascader-pane-b-color"),
-    pane-radius: get-css-var("radius-base"),
-    pane-shadow: get-css-var("shadow-base"),
-    check-color: get-css-var("color-primary-base"),
-    empty-color: get-css-var("content-color-placeholder"),
-    option-color-error: get-css-var("color-error-opacity-2"),
+    pane-bg-color: value('bg-color-base'),
+    pane-b-color: value('border-color-light-2'),
+    pane-border: value('border-shape') value('cascader-pane-b-color'),
+    pane-radius: value('radius-base'),
+    pane-shadow: value('shadow-base'),
+    check-color: value('color-primary-base'),
+    empty-color: value('content-color-placeholder'),
+    option-color-error: value('color-error-opacity-2')
   ),
   $cascader
 );
 
 .#{$namespace}-cascader {
   &-vars {
-    @include define-preset-values("cascader", $cascader);
+    @include define-preset-values('cascader', $cascader);
   }
 
   @include basis {
@@ -36,10 +35,10 @@ $cascader: map.merge(
   @include input.handler(#{&}__selector);
 
   &--multiple &__selector {
-    @include define-css-var("input-v-padding", 2px);
+    @include define-css-var('input-v-padding', 2px);
 
     height: auto;
-    min-height: get-css-var("input-height");
+    min-height: value('input-height');
   }
 
   &__control,
@@ -70,7 +69,7 @@ $cascader: map.merge(
 
   &__selector &__tooltip {
     position: relative;
-    height: calc(get-css-var("input-height") - 8px);
+    height: calc(value('input-height') - 8px);
 
     .#{$namespace}-tooltip__trigger {
       display: flex;
@@ -79,7 +78,7 @@ $cascader: map.merge(
 
   &__selector &__tag {
     position: relative;
-    height: calc(get-css-var("input-height") - 8px);
+    height: calc(value('input-height') - 8px);
     margin: 2px 4px;
     margin-inline-start: 0;
     font-size: 12px;
@@ -118,7 +117,7 @@ $cascader: map.merge(
   &__placeholder {
     position: absolute;
     overflow: hidden;
-    color: get-css-var("input-placeholder-color");
+    color: value('input-placeholder-color');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
@@ -128,12 +127,12 @@ $cascader: map.merge(
   &__panels {
     position: relative;
     display: flex;
-    height: get-css-var("cascader-pane-height");
-    background-color: get-css-var("cascader-pane-bg-color");
-    border: get-css-var("cascader-pane-border");
-    border-radius: get-css-var("cascader-pane-radius");
-    box-shadow: get-css-var("cascader-pane-shadow");
-    transition: width get-css-var("transition-base");
+    height: value('cascader-pane-height');
+    background-color: value('cascader-pane-bg-color');
+    border: value('cascader-pane-border');
+    border-radius: value('cascader-pane-radius');
+    box-shadow: value('cascader-pane-shadow');
+    transition: width value('transition-base');
 
     &--empty {
       height: auto;
@@ -143,13 +142,13 @@ $cascader: map.merge(
 
   &__panel {
     display: inline-block;
-    min-width: get-css-var("cascader-pane-min-width");
-    max-width: get-css-var("cascader-pane-max-width");
+    min-width: value('cascader-pane-min-width');
+    max-width: value('cascader-pane-max-width');
     height: 100%;
     outline: 0;
 
     &:not(:first-child) {
-      border-inline-start: get-css-var("cascader-pane-border");
+      border-inline-start: value('cascader-pane-border');
     }
   }
 
@@ -159,18 +158,17 @@ $cascader: map.merge(
     padding: 0;
     margin: 0;
 
-    &--multiple
-      .#{$namespace}-option--selected:not(.#{$namespace}-option--hitting),
+    &--multiple .#{$namespace}-option--selected:not(.#{$namespace}-option--hitting),
     &--no-cascaded .#{$namespace}-option--selected {
       background-color: transparent;
 
       &:hover {
-        background-color: get-css-var("option-bg-color-hover");
+        background-color: value('option-bg-color-hover');
       }
     }
 
     .#{$namespace}-option--error {
-      color: get-css-var("cascader-option-color-error");
+      color: value('cascader-option-color-error');
     }
   }
 
@@ -200,10 +198,10 @@ $cascader: map.merge(
     justify-content: center;
     width: 100%;
     padding: 3px 16px;
-    color: get-css-var("cascader-empty-color");
+    color: value('cascader-empty-color');
     white-space: nowrap;
     cursor: default;
-    background-color: get-css-var("cascader-pane-bg-color");
+    background-color: value('cascader-pane-bg-color');
   }
 
   &__clear {

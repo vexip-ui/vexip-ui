@@ -7,15 +7,15 @@
     height: 100%;
     padding: 0;
     font-size: inherit;
-    line-height: get-css-var('input-line-height');
-    color: get-css-var('input-control-color');
+    line-height: value('input-line-height');
+    color: value('input-control-color');
     background-color: transparent;
     border: 0;
-    border-radius: get-css-var('input-radius');
+    border-radius: value('input-radius');
     outline: 0;
 
     &::placeholder {
-      color: get-css-var('input-placeholder-color');
+      color: value('input-placeholder-color');
     }
   }
 }

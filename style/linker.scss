@@ -1,7 +1,7 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 // $types: primary info success warning error;
 
@@ -9,48 +9,48 @@ $linker: () !default;
 $linker: map.merge(
   (
     color: inherit,
-    color-hover: get-css-var("color-primary-light-1"),
-    color-active: get-css-var("color-primary-dark-1"),
-    color-disabled: get-css-var("content-color-disabled"),
+    color-hover: value('color-primary-light-1'),
+    color-active: value('color-primary-dark-1'),
+    color-disabled: value('content-color-disabled'),
     series-span: 8px,
-    underline-height: 1px,
+    underline-height: 1px
   ),
   $linker
 );
 
 .#{$namespace}-linker {
   &-vars {
-    @include define-preset-values("linker", $linker);
+    @include define-preset-values('linker', $linker);
   }
 
   @mixin define-linker-style($style-map) {
-    @include define-preset-style("linker", $style-map);
+    @include define-preset-style('linker', $style-map);
   }
 
   @include basis {
     position: relative;
     display: inline-flex;
     align-items: center;
-    color: get-css-var("linker-color");
+    color: value('linker-color');
     text-decoration: none;
     vertical-align: inherit;
     cursor: pointer;
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
   }
 
   & + & {
-    margin-inline-start: get-css-var("linker-series-span");
+    margin-inline-start: value('linker-series-span');
   }
 
   &:hover,
   &:focus {
-    color: get-css-var("linker-color-hover");
+    color: value('linker-color-hover');
     text-decoration: none;
   }
 
   &:active {
-    color: get-css-var("linker-color-active");
+    color: value('linker-color-active');
   }
 
   &--underline {
@@ -59,12 +59,11 @@ $linker: map.merge(
       inset-inline-start: 0;
       right: 0;
       bottom: 0;
-      height: get-css-var("linker-underline-height");
-      content: "";
-      background-color: get-css-var("linker-color-hover");
+      height: value('linker-underline-height');
+      content: '';
+      background-color: value('linker-color-hover');
       opacity: 0%;
-      transition: get-css-var("transition-background"),
-        get-css-var("transition-opacity");
+      transition: value('transition-background'), value('transition-opacity');
     }
 
     &:hover::after {
@@ -72,7 +71,7 @@ $linker: map.merge(
     }
 
     &:active::after {
-      background-color: get-css-var("linker-color-active");
+      background-color: value('linker-color-active');
     }
   }
 
@@ -83,7 +82,7 @@ $linker: map.merge(
     &:hover,
     &:focus,
     &:active {
-      color: get-css-var("linker-color-disabled");
+      color: value('linker-color-disabled');
     }
 
     &:hover::after {
@@ -99,10 +98,10 @@ $linker: map.merge(
     &--#{$type} {
       @include define-linker-style(
         (
-          color: "color" $type "base",
-          color-hover: "color" $type "light-2",
-          color-active: "color" $type "dark-1",
-          color-disabled: "color" $type "opacity-5",
+          color: 'color' $type 'base',
+          color-hover: 'color' $type 'light-2',
+          color-active: 'color' $type 'dark-1',
+          color-disabled: 'color' $type 'opacity-5'
         )
       );
     }

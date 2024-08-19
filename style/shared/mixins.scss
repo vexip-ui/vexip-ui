@@ -1,16 +1,16 @@
-@use "sass:map";
-@use "sass:math";
-@use "sass:list";
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:list';
 
-@use "./variables.scss" as *;
+@use './variables.scss' as *;
 
 @mixin basis($inherit: true) {
   & {
-    font-family: get-css-var("font-family-base");
-    font-size: get-css-var("font-size-base");
+    font-family: value('font-family-base');
+    font-size: value('font-size-base');
     font-variant-numeric: tabular-nums;
-    line-height: get-css-var("line-height-base");
-    color: get-css-var("content-color-base");
+    line-height: value('line-height-base');
+    color: value('content-color-base');
     @content;
   }
 
@@ -57,7 +57,7 @@
   &::before,
   &::after {
     display: table;
-    content: "";
+    content: '';
   }
 }
 
@@ -88,7 +88,7 @@
 
   @at-root {
     html.rtl,
-    html[dir="rtl"] {
+    html[dir='rtl'] {
       #{$self} {
         @content;
       }
@@ -109,11 +109,10 @@
     width: calc(100% + 8px);
     height: calc(100% + 8px);
     pointer-events: none;
-    content: "";
-    border: get-css-var("border-shape") $border-color;
+    content: '';
+    border: value('border-shape') $border-color;
     border-radius: $border-radius;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    transition: value('transition-border'), value('transition-opacity');
     animation: vxp-border-clip $duration infinite linear;
   }
 }
@@ -132,11 +131,10 @@
     height: calc(100% + 8px);
     clip-path: inset(0 0 50% 50%);
     pointer-events: none;
-    content: "";
-    border: get-css-var("border-shape") $border-color;
+    content: '';
+    border: value('border-shape') $border-color;
     border-radius: 50%;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    transition: value('transition-border'), value('transition-opacity');
     transform-origin: 50% 50%;
     animation: vxp-border-round $duration infinite linear;
   }
@@ -154,10 +152,9 @@
     inset: -4px 25% auto;
     width: auto;
     height: 0;
-    content: "";
-    border-top: get-css-var("border-shape") $border-color;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    content: '';
+    border-top: value('border-shape') $border-color;
+    transition: value('transition-border'), value('transition-opacity');
     animation: vxp-h-moving-border $duration infinite;
   }
 
@@ -166,10 +163,9 @@
     inset: auto 25% -4px;
     width: auto;
     height: 0;
-    content: "";
-    border-top: get-css-var("border-shape") $border-color;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    content: '';
+    border-top: value('border-shape') $border-color;
+    transition: value('transition-border'), value('transition-opacity');
     animation: vxp-h-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }
@@ -186,10 +182,9 @@
     inset: 25% auto 25% -4px;
     width: 0;
     height: auto;
-    content: "";
-    border-inline-start: get-css-var("border-shape") $border-color;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    content: '';
+    border-inline-start: value('border-shape') $border-color;
+    transition: value('transition-border'), value('transition-opacity');
     animation: vxp-v-moving-border $duration infinite;
   }
 
@@ -198,10 +193,9 @@
     inset: 25% -4px 25% auto;
     width: 0;
     height: auto;
-    content: "";
-    border-inline-start: get-css-var("border-shape") $border-color;
-    transition: get-css-var("transition-border"),
-      get-css-var("transition-opacity");
+    content: '';
+    border-inline-start: value('border-shape') $border-color;
+    transition: value('transition-border'), value('transition-opacity');
     animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }

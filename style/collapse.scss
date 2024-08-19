@@ -1,44 +1,43 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $collapse: () !default;
 $collapse: map.merge(
   (
     header-color: inherit,
-    header-color-hover: get-css-var("color-primary-base"),
-    header-color-disabled: get-css-var("content-color-disabled"),
+    header-color-hover: value('color-primary-base'),
+    header-color-disabled: value('content-color-disabled'),
     header-bg-color: transparent,
-    header-bg-color-card: get-css-var("fill-color-background"),
-    arrow-color: get-css-var("content-color-secondary"),
-    arrow-color-hover: get-css-var("color-primary-base"),
-    arrow-color-disabled: get-css-var("content-color-humble"),
-    content-color-disabled: get-css-var("content-color-disabled"),
+    header-bg-color-card: value('fill-color-background'),
+    arrow-color: value('content-color-secondary'),
+    arrow-color-hover: value('color-primary-base'),
+    arrow-color-disabled: value('content-color-humble'),
+    content-color-disabled: value('content-color-disabled'),
     content-v-padding: 10px,
     content-h-padding: 16px,
-    d-color: get-css-var("border-color-light-2"),
-    divider: get-css-var("border-shape") get-css-var("collapse-d-color"),
-    b-color: get-css-var("border-color-base"),
-    border: get-css-var("border-shape") get-css-var("collapse-b-color"),
-    radius: get-css-var("radius-base"),
+    d-color: value('border-color-light-2'),
+    divider: value('border-shape') value('collapse-d-color'),
+    b-color: value('border-color-base'),
+    border: value('border-shape') value('collapse-b-color'),
+    radius: value('radius-base')
   ),
   $collapse
 );
 
 .#{$namespace}-collapse {
   &-vars {
-    @include define-preset-values("collapse", $collapse);
+    @include define-preset-values('collapse', $collapse);
   }
 
   $header: #{&}__header;
   $arrow: #{&}__arrow;
   $content: #{&}__content;
-  $divider: get-css-var("collapse-divider");
-  $radius: get-css-var("collapse-radius");
+  $divider: value('collapse-divider');
+  $radius: value('collapse-radius');
 
-  $content-padding: get-css-var("collapse-content-v-padding")
-    get-css-var("collapse-content-h-padding");
+  $content-padding: value('collapse-content-v-padding') value('collapse-content-h-padding');
 
   @include basis {
     display: flex;
@@ -75,7 +74,7 @@ $collapse: map.merge(
 
       &--expanded#{&}--card {
         #{$header} {
-          border-bottom-color: get-css-var("collapse-d-color");
+          border-bottom-color: value('collapse-d-color');
           border-radius: $radius $radius 0 0;
         }
       }
@@ -97,9 +96,8 @@ $collapse: map.merge(
     align-items: center;
     justify-content: center;
     margin: 0;
-    color: get-css-var("collapse-arrow-color");
-    transition: get-css-var("transition-color"),
-      get-css-var("transition-transform");
+    color: value('collapse-arrow-color');
+    transition: value('transition-color'), value('transition-transform');
     transform: translate(-50%, -50%);
 
     @include rtl {
@@ -114,19 +112,19 @@ $collapse: map.merge(
     width: 100%;
     padding: 8px 14px;
     line-height: inherit;
-    color: get-css-var("collapse-header-color");
+    color: value('collapse-header-color');
     cursor: pointer;
-    background-color: get-css-var("collapse-header-bg-color");
+    background-color: value('collapse-header-bg-color');
     border: 0;
     outline: 0;
-    transition: get-css-var("transition-color");
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var("collapse-header-color-hover");
+      color: value('collapse-header-color-hover');
 
       #{$arrow} {
-        color: get-css-var("collapse-arrow-color-hover");
+        color: value('collapse-arrow-color-hover');
       }
     }
   }
@@ -174,10 +172,10 @@ $collapse: map.merge(
     &,
     &:hover,
     &:focus {
-      color: get-css-var("collapse-header-color-disabled");
+      color: value('collapse-header-color-disabled');
 
       #{$arrow} {
-        color: get-css-var("collapse-arrow-color-disabled");
+        color: value('collapse-arrow-color-disabled');
       }
     }
   }
@@ -200,22 +198,22 @@ $collapse: map.merge(
   }
 
   &__panel--disabled &__content {
-    color: get-css-var("collapse-content-color-disabled");
+    color: value('collapse-content-color-disabled');
   }
 
   &--card,
   &__panel--card {
-    border: get-css-var("collapse-border");
+    border: value('collapse-border');
     border-radius: $radius;
 
     #{$header} {
-      background-color: get-css-var("collapse-header-bg-color-card");
-      border-bottom: get-css-var("border-shape") transparent;
+      background-color: value('collapse-header-bg-color-card');
+      border-bottom: value('border-shape') transparent;
     }
   }
 
   &--card &__panel {
-    border-color: get-css-var("collapse-d-color");
+    border-color: value('collapse-d-color');
 
     &:first-child #{$header} {
       border-radius: $radius $radius 0 0;
@@ -232,7 +230,7 @@ $collapse: map.merge(
 
   &--card &__panel--expanded {
     #{$header} {
-      border-bottom-color: get-css-var("collapse-d-color");
+      border-bottom-color: value('collapse-d-color');
     }
 
     #{$content} {

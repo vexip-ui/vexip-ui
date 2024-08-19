@@ -1,35 +1,35 @@
-@use "sass:map";
+@use 'sass:map';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $badge: () !default;
 $badge: map.merge(
   (
-    color: get-css-var("color-white"),
-    bg-color: get-css-var("color-error-base"),
-    b-color: get-css-var("color-error-opacity-8"),
-    line-height: get-css-var("line-height-secondary"),
+    color: value('color-white'),
+    bg-color: value('color-error-base'),
+    b-color: value('color-error-opacity-8'),
+    line-height: value('line-height-secondary'),
     height: 16px,
     v-padding: 0,
     h-padding: 6px,
     family: #{Helvetica,
-    "Microsoft YaHei",
+    'Microsoft YaHei',
     SimSun,
     sans-serif},
-    font-size: get-css-var("font-size-secondary"),
-    dot-size: 7px,
+    font-size: value('font-size-secondary'),
+    dot-size: 7px
   ),
   $badge
 );
 
 .#{$namespace}-badge {
   &-vars {
-    @include define-preset-values("badge", $badge);
+    @include define-preset-values('badge', $badge);
   }
 
   @mixin define-badge-style($style-map) {
-    @include define-preset-style("badge", $style-map);
+    @include define-preset-style('badge', $style-map);
   }
 
   $types: primary info success warning;
@@ -54,18 +54,18 @@ $badge: map.merge(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: get-css-var("badge-height");
-    padding: get-css-var("badge-v-padding") get-css-var("badge-h-padding");
-    font-family: get-css-var("badge-family");
-    font-size: get-css-var("badge-font-size");
-    line-height: get-css-var("badge-line-height");
-    color: get-css-var("badge-color");
+    height: value('badge-height');
+    padding: value('badge-v-padding') value('badge-h-padding');
+    font-family: value('badge-family');
+    font-size: value('badge-font-size');
+    line-height: value('badge-line-height');
+    color: value('badge-color');
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-    background-color: get-css-var("badge-bg-color");
-    border-radius: calc(get-css-var("badge-height") * 0.5);
-    box-shadow: get-css-var("shadow-border") get-css-var("badge-b-color");
+    background-color: value('badge-bg-color');
+    border-radius: calc(value('badge-height') * 0.5);
+    box-shadow: value('shadow-border') value('badge-b-color');
     transform-origin: center center;
 
     &--fixed {
@@ -83,8 +83,8 @@ $badge: map.merge(
       &--#{$type} {
         @include define-badge-style(
           (
-            bg-color: "color" $type "base",
-            b-color: "color" $type "opacity-8",
+            bg-color: 'color' $type 'base',
+            b-color: 'color' $type 'opacity-8'
           )
         );
       }
@@ -93,16 +93,16 @@ $badge: map.merge(
     &--disabled {
       @include define-badge-style(
         (
-          bg-color: "content-color-disabled",
-          b-color: "border-color-light-2",
+          bg-color: 'content-color-disabled',
+          b-color: 'border-color-light-2'
         )
       );
     }
   }
 
   &--is-dot &__content {
-    width: get-css-var("badge-dot-size");
-    height: get-css-var("badge-dot-size");
+    width: value('badge-dot-size');
+    height: value('badge-dot-size');
     padding: 0;
     border-radius: 50%;
   }

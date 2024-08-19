@@ -1,25 +1,25 @@
-@use "sass:map";
-@use "sass:math";
+@use 'sass:map';
+@use 'sass:math';
 
-@use "./shared" as *;
-@use "./design" as *;
+@use './shared' as *;
+@use './design' as *;
 
 $column: () !default;
 $column: map.merge(
   (
-    display: block,
+    display: block
   ),
   $column
 );
 
 .#{$namespace}-column {
   &-vars {
-    @include define-preset-values("column", $column);
+    @include define-preset-values('column', $column);
   }
 
   @include basis {
     position: relative;
-    display: get-css-var("column-display");
+    display: value('column-display');
     max-width: 100%;
   }
 
@@ -28,9 +28,9 @@ $column: map.merge(
   &--flex {
     // display: flex;
     @include define-preset-values(
-      "column",
+      'column',
       (
-        display: flex,
+        display: flex
       )
     );
   }
@@ -79,7 +79,7 @@ $column: map.merge(
     $size: (math.div(1, 24) * $i * 100) * 1%;
 
     &--#{$i} {
-      display: if($i == 0, none, get-css-var("column-display"));
+      display: if($i == 0, none, value('column-display'));
       flex: 0 0 $size;
       max-width: $size;
     }
@@ -111,7 +111,7 @@ $column: map.merge(
         $size: (math.div(1, 24) * $i * 100) * 1%;
 
         &--#{$point}-#{$i} {
-          display: get-css-var("column-display");
+          display: value('column-display');
           flex: 0 0 $size;
           max-width: $size;
         }
