@@ -14,6 +14,7 @@ $date-picker: map.merge(
     unit-color-focus: get-css-var("color-white"),
     unit-bg-color-focus: get-css-var("color-primary-opacity-1"),
     unit-bg-color-error: get-css-var("color-error-opacity-1"),
+    unit-h-padding: 1px,
     separator-color: get-css-var("content-color-disabled"),
     exchange-color: get-css-var("content-color-third"),
     panel-bg-color: get-css-var("bg-color-base"),
@@ -93,7 +94,7 @@ $date-picker: map.merge(
   }
 
   &__unit {
-    padding: 0 2px;
+    padding: 0 get-css-var("date-picker-unit-h-padding");
     color: get-css-var("date-picker-unit-color");
     text-align: center;
     transition: get-css-var("transition-background"),
