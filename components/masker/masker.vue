@@ -289,7 +289,7 @@ function handleEscape(event: KeyboardEvent) {
       <div
         ref="topTrap"
         tabindex="0"
-        aria-hidden="true"
+        role="none"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></div>
       <div :class="nh.be('content')" @wheel.stop.prevent>
@@ -307,7 +307,7 @@ function handleEscape(event: KeyboardEvent) {
       <div
         ref="bottomTrap"
         tabindex="0"
-        aria-hidden="true"
+        role="none"
         style="width: 0; height: 0; overflow: hidden; outline: none"
       ></div>
     </div>

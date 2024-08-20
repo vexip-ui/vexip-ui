@@ -581,7 +581,7 @@ function parseAndTransformData() {
         const oldNode = oldDataMap.get(item)
         const id = oldNode?.id ?? getIndexId()
         const node = props.cacheNode
-          ? oldNode ?? createNodeItem(item)
+          ? (oldNode ?? createNodeItem(item))
           : createNodeItem(item, oldNode)
 
         node.id = id
@@ -599,7 +599,9 @@ function parseAndTransformData() {
     for (let i = 0, len = data.length; i < len; ++i) {
       const item = data[i]
       const oldNode = oldDataMap.get(item) ?? oldIdMap.get(item[idKey])
-      const node = props.cacheNode ? oldNode ?? createNodeItem(item) : createNodeItem(item, oldNode)
+      const node = props.cacheNode
+        ? (oldNode ?? createNodeItem(item))
+        : createNodeItem(item, oldNode)
 
       nodeMap.set(node.id, node)
       nodes.push(node)
@@ -1333,7 +1335,7 @@ const transferring = ref(false)
       <div
         ref="trap"
         tabindex="0"
-        aria-hidden="true"
+        role="none"
         style="width: 0; height: 0; overflow: hidden; outline: none"
         @focus="handleTreeFocus"
       ></div>
