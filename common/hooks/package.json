@@ -1,7 +1,9 @@
 {
   "name": "@vexip-ui/hooks",
   "version": "2.5.0",
+  "type": "module",
   "license": "MIT",
+  "private": false,
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
@@ -9,7 +11,6 @@
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
   },
-  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -20,23 +21,22 @@
       "import": "./dist/index.mjs"
     }
   },
-  "private": false,
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/hooks#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/hooks"
   },
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/hooks#readme",
   "dependencies": {
     "@floating-ui/dom": "^1.5.3",
     "@juggle/resize-observer": "^3.4.0",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "~3.3.13"
+    "vue": "^3.4.38"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

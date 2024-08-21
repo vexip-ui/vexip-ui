@@ -28,7 +28,7 @@ describe('Ellipsis', () => {
   })
 
   it('tooltip visible', async () => {
-    const wrapper = mount(() => <Ellipsis>{TEXT}</Ellipsis>)
+    const wrapper = mount(() => <Ellipsis transfer={false}>{TEXT}</Ellipsis>)
     const rectMock = vi
       .spyOn(wrapper.find('.vxp-ellipsis').element, 'getBoundingClientRect')
       .mockImplementation(() => ({
@@ -46,7 +46,7 @@ describe('Ellipsis', () => {
     // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(false)
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)
 
-    wrapper.find('.vxp-ellipsis').trigger('mouseenter')
+    await wrapper.find('.vxp-ellipsis').trigger('mouseenter')
     vi.runOnlyPendingTimers()
     await nextTick()
     // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(true)
@@ -54,7 +54,7 @@ describe('Ellipsis', () => {
     expect(wrapper.find('.vxp-tooltip__popper').exists()).toBe(true)
     expect(wrapper.find('.vxp-tooltip__popper').text()).toBe(TEXT)
 
-    wrapper.find('.vxp-ellipsis').trigger('mouseleave')
+    await wrapper.find('.vxp-ellipsis').trigger('mouseleave')
     vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.findComponent(Ellipsis).vm.visible).toBe(false)

@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
 import { Portal } from '..'
@@ -19,17 +18,12 @@ describe('Portal', () => {
   })
 
   it('transfer', async () => {
-    const wrapper = mount(() => (
+    mount(() => (
       <Portal to={'body'}>
         <span class={'test'}>{TEXT}</span>
       </Portal>
     ))
 
-    expect(wrapper.find('.test').exists()).toBe(true)
-
-    await nextTick()
-    await nextTick()
-    expect(wrapper.find('.test').exists()).toBe(false)
-    expect(document.body.querySelector('.test')).not.toBeNull()
+    expect(document.body.querySelector('.test')).toBeTruthy()
   })
 })

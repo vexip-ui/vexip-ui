@@ -1,4 +1,4 @@
-import * as compiler from '@vue/compiler-sfc'
+// import * as compiler from '@vue/compiler-sfc'
 
 import { withPwa } from '@vite-pwa/vitepress'
 
@@ -17,7 +17,7 @@ import { getPwaConfig } from './pwa'
 
 import type { AsideMenuTag, ThemeConfig } from '../theme/types'
 
-compiler.parseCache.max = 10000
+// compiler.parseCache.max = 10000
 
 export default async () => {
   const updated = await getUpdatedFiles()
@@ -32,7 +32,7 @@ export default async () => {
         config: markdownItSetup
       },
       vue: {
-        compiler: compiler as any,
+        // compiler: compiler as any,
         template: {
           compilerOptions: {
             isCustomElement: tag => tag === 'iconify-icon'
