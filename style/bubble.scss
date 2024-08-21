@@ -7,11 +7,11 @@
 $bubble: () !default;
 $bubble: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    bg-color: get-css-var('bg-color-base'),
-    b-color: get-css-var('border-color-base'),
-    s-color: get-css-var('shadow-color-base'),
-    radius: get-css-var('radius-base'),
+    color: value('content-color-base'),
+    bg-color: value('bg-color-base'),
+    b-color: value('border-color-base'),
+    s-color: value('shadow-color-base'),
+    radius: value('radius-base'),
     min-width: 60px,
     min-height: 30px,
     content-v-padding: 8px,
@@ -32,24 +32,24 @@ $bubble: map.merge(
     @include define-preset-style('bubble', $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  color: get-css-var('bubble-color');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    color: value('bubble-color');
+  }
 
   &__content {
     position: relative;
-    min-width: get-css-var('bubble-min-width');
-    min-height: get-css-var('bubble-min-height');
-    padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
+    min-width: value('bubble-min-width');
+    min-height: value('bubble-min-height');
+    padding: value('bubble-content-v-padding') value('bubble-content-h-padding');
     color: inherit;
     word-break: break-all;
-    background-color: get-css-var('bubble-bg-color');
-    border: get-css-var('border-shape') get-css-var('bubble-b-color');
-    border-radius: get-css-var('bubble-radius');
+    background-color: value('bubble-bg-color');
+    border: value('border-shape') value('bubble-b-color');
+    border-radius: value('bubble-radius');
   }
 
   &--background &__content {
@@ -58,7 +58,7 @@ $bubble: map.merge(
 
   &--shadow &__content {
     border: 0;
-    box-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color');
+    box-shadow: value('shadow-shape') value('bubble-s-color');
   }
 
   &__arrow {
@@ -113,14 +113,14 @@ $bubble: map.merge(
     @include with-bg;
   }
 
-  $size: get-css-var('bubble-arrow-size');
+  $size: value('bubble-arrow-size');
   $s-pad: 6px;
   $l-pad: calc(#{math.round($s-pad * 0.5)} + #{$size});
 
-  $bg-color: get-css-var('bubble-bg-color');
-  $border-color: get-css-var('bubble-b-color');
-  $v-offset: get-css-var('bubble-arrow-v-offset');
-  $h-offset: get-css-var('bubble-arrow-h-offset');
+  $bg-color: value('bubble-bg-color');
+  $border-color: value('bubble-b-color');
+  $v-offset: value('bubble-arrow-v-offset');
+  $h-offset: value('bubble-arrow-h-offset');
 
   &--top,
   &--top-start,
@@ -147,21 +147,21 @@ $bubble: map.merge(
   }
 
   &--top > &__arrow {
-    @include top-arrow;
-
     left: calc(50% - #{$size});
+
+    @include top-arrow;
   }
 
   &--top-start > &__arrow {
-    @include top-arrow;
-
     left: calc(#{$h-offset} - #{$size});
+
+    @include top-arrow;
   }
 
   &--top-end > &__arrow {
-    @include top-arrow;
-
     left: calc(100% - #{$h-offset} - #{$size});
+
+    @include top-arrow;
   }
 
   &--bottom,
@@ -189,21 +189,21 @@ $bubble: map.merge(
   }
 
   &--bottom > &__arrow {
-    @include bottom-arrow;
-
     left: calc(50% - #{$size});
+
+    @include bottom-arrow;
   }
 
   &--bottom-start > &__arrow {
-    @include bottom-arrow;
-
     left: calc(#{$h-offset} - #{$size});
+
+    @include bottom-arrow;
   }
 
   &--bottom-end > &__arrow {
-    @include bottom-arrow;
-
     left: calc(100% - #{$h-offset} - #{$size});
+
+    @include bottom-arrow;
   }
 
   &--left,
@@ -237,21 +237,21 @@ $bubble: map.merge(
   }
 
   &--left > &__arrow {
-    @include left-arrow;
-
     top: calc(50% - #{$size});
+
+    @include left-arrow;
   }
 
   &--left-start > &__arrow {
-    @include left-arrow;
-
     top: calc(#{$v-offset} - #{$size});
+
+    @include left-arrow;
   }
 
   &--left-end > &__arrow {
-    @include left-arrow;
-
     top: calc(100% - #{$v-offset} - #{$size});
+
+    @include left-arrow;
   }
 
   &--right,
@@ -285,20 +285,20 @@ $bubble: map.merge(
   }
 
   &--right > &__arrow {
-    @include right-arrow;
-
     top: calc(50% - #{$size});
+
+    @include right-arrow;
   }
 
   &--right-start > &__arrow {
-    @include right-arrow;
-
     top: calc($v-offset - #{$size});
+
+    @include right-arrow;
   }
 
   &--right-end > &__arrow {
-    @include right-arrow;
-
     top: calc(100% - #{$v-offset} - #{$size});
+
+    @include right-arrow;
   }
 }

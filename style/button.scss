@@ -7,24 +7,24 @@
 $button: () !default;
 $button: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    color-hover: get-css-var('color-primary-light-2'),
-    color-focus: get-css-var('color-primary-light-2'),
-    color-active: get-css-var('color-primary-dark-1'),
-    color-disabled: get-css-var('content-color-disabled'),
-    bg-color: get-css-var('fill-color-base'),
-    bg-color-hover: get-css-var('button-bg-color'),
-    bg-color-focus: get-css-var('button-bg-color'),
-    bg-color-active: get-css-var('button-bg-color'),
-    bg-color-disabled: get-css-var('fill-color-background'),
-    b-color: get-css-var('border-color-base'),
-    b-color-hover: get-css-var('color-primary-light-2'),
-    b-color-focus: get-css-var('color-primary-light-2'),
-    b-color-active: get-css-var('color-primary-dark-1'),
-    b-color-disabled: get-css-var('border-color-light-1'),
-    border: get-css-var('border-shape') get-css-var('button-b-color'),
-    radius: get-css-var('radius-base'),
-    pulse-s-color: get-css-var('color-primary-base'),
+    color: value('content-color-base'),
+    color-hover: value('color-primary-light-2'),
+    color-focus: value('color-primary-light-2'),
+    color-active: value('color-primary-dark-1'),
+    color-disabled: value('content-color-disabled'),
+    bg-color: value('fill-color-base'),
+    bg-color-hover: value('button-bg-color'),
+    bg-color-focus: value('button-bg-color'),
+    bg-color-active: value('button-bg-color'),
+    bg-color-disabled: value('fill-color-background'),
+    b-color: value('border-color-base'),
+    b-color-hover: value('color-primary-light-2'),
+    b-color-focus: value('color-primary-light-2'),
+    b-color-active: value('color-primary-dark-1'),
+    b-color-disabled: value('border-color-light-1'),
+    border: value('border-shape') value('button-b-color'),
+    radius: value('radius-base'),
+    pulse-s-color: value('color-primary-base'),
     pulse-opacity: 60%,
     pulse-size: 6px,
     pulse-duration: 800ms,
@@ -32,13 +32,13 @@ $button: map.merge(
     height: 32px,
     v-padding: 0,
     h-padding: 14px,
-    font-size: get-css-var('font-size-base'),
+    font-size: value('font-size-base'),
     series-span: 8px,
     icon-span: 6px,
     d-color-typed: rgba($color-white, 50%),
-    badge-color: get-css-var('color-white'),
-    badge-bg-color: get-css-var('color-error-base'),
-    badge-b-color: get-css-var('color-error-base')
+    badge-color: value('color-white'),
+    badge-bg-color: value('color-error-base'),
+    badge-b-color: value('color-error-base')
   ),
   $button
 );
@@ -67,53 +67,53 @@ $button: map.merge(
     @include define-preset-style('button', $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: get-css-var('button-height');
-  padding: get-css-var('button-v-padding') get-css-var('button-h-padding');
-  font-weight: 400;
-  line-height: 1;
-  color: get-css-var('button-color');
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  background-color: get-css-var('button-bg-color');
-  border: get-css-var('button-border');
-  border-radius: get-css-var('button-radius');
-  outline: 0;
-  transition: get-css-var('transition-color'), get-css-var('transition-background'),
-    get-css-var('transition-border'), get-css-var('transition-shadow');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: value('button-height');
+    padding: value('button-v-padding') value('button-h-padding');
+    font-weight: 400;
+    line-height: 1;
+    color: value('button-color');
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: value('button-bg-color');
+    border: value('button-border');
+    border-radius: value('button-radius');
+    outline: 0;
+    transition: value('transition-color'), value('transition-background'),
+      value('transition-border'), value('transition-shadow');
+  }
 
   &:hover {
-    color: get-css-var('button-color-hover');
-    background-color: get-css-var('button-bg-color-hover');
-    border-color: get-css-var('button-b-color-hover');
+    color: value('button-color-hover');
+    background-color: value('button-bg-color-hover');
+    border-color: value('button-b-color-hover');
     outline: 0;
   }
 
   &:focus {
-    color: get-css-var('button-color-focus');
-    background-color: get-css-var('button-bg-color-focus');
-    border-color: get-css-var('button-b-color-focus');
+    color: value('button-color-focus');
+    background-color: value('button-bg-color-focus');
+    border-color: value('button-b-color-focus');
     outline: 0;
   }
 
   &:active {
-    color: get-css-var('button-color-active');
-    background-color: get-css-var('button-bg-color-active');
-    border-color: get-css-var('button-b-color-active');
+    color: value('button-color-active');
+    background-color: value('button-bg-color-active');
+    border-color: value('button-b-color-active');
   }
 
   @include disabled('') {
-    color: get-css-var('button-color-disabled');
+    color: value('button-color-disabled');
     cursor: not-allowed;
-    background-color: get-css-var('button-bg-color-disabled');
-    border-color: get-css-var('button-b-color-disabled');
+    background-color: value('button-bg-color-disabled');
+    border-color: value('button-b-color-disabled');
   }
 
   &--block {
@@ -122,7 +122,7 @@ $button: map.merge(
   }
 
   &:not(#{&}--block) + &:not(#{&}--block) {
-    margin-inline-start: get-css-var('button-series-span');
+    margin-inline-start: value('button-series-span');
   }
 
   &--small {
@@ -153,8 +153,8 @@ $button: map.merge(
     content: '';
     background-color: transparent;
     border-radius: inherit;
-    animation-duration: get-css-var('button-pulse-duration');
-    animation-timing-function: get-css-var('button-pulse-timing');
+    animation-duration: value('button-pulse-duration');
+    animation-timing-function: value('button-pulse-timing');
     animation-iteration-count: 1;
   }
 
@@ -165,17 +165,17 @@ $button: map.merge(
 
     @keyframes #{$namespace}-button-pulse {
       0% {
-        box-shadow: 0 0 1px 0 get-css-var('button-pulse-s-color');
+        box-shadow: 0 0 1px 0 value('button-pulse-s-color');
       }
 
       100% {
-        box-shadow: 0 0 1px get-css-var('button-pulse-size') get-css-var('button-pulse-s-color');
+        box-shadow: 0 0 1px value('button-pulse-size') value('button-pulse-s-color');
       }
     }
 
     @keyframes #{$namespace}-button-pulse-opacity {
       0% {
-        opacity: get-css-var('button-pulse-opacity');
+        opacity: value('button-pulse-opacity');
       }
 
       100% {
@@ -244,7 +244,7 @@ $button: map.merge(
     border-color: transparent;
   }
 
-  $d-color: get-css-var('button-d-color-typed');
+  $d-color: value('button-d-color-typed');
 
   @each $type in $types {
     @at-root {
@@ -356,7 +356,7 @@ $button: map.merge(
   }
 
   &--circle {
-    border-radius: get-css-var('button-height');
+    border-radius: value('button-height');
   }
 
   &--loading {
@@ -370,21 +370,21 @@ $button: map.merge(
       z-index: 1;
       pointer-events: none;
       content: '';
-      background-color: get-css-var('color-white');
+      background-color: value('color-white');
       border-radius: inherit;
       opacity: 25%;
-      transition: get-css-var('transition-opacity');
+      transition: value('transition-opacity');
     }
   }
 
   &__icon {
     display: flex;
     align-items: center;
-    margin-inline-end: get-css-var('button-icon-span');
+    margin-inline-end: value('button-icon-span');
   }
 
   &--icon-only {
-    width: get-css-var('button-height');
+    width: value('button-height');
     padding: 0;
   }
 
@@ -393,11 +393,11 @@ $button: map.merge(
   }
 
   &--icon-only#{&}--small {
-    width: get-css-var('button-height');
+    width: value('button-height');
   }
 
   &--icon-only#{&}--large {
-    width: get-css-var('button-height');
+    width: value('button-height');
   }
 
   &__badge {
@@ -405,9 +405,9 @@ $button: map.merge(
     pointer-events: none;
 
     .#{$namespace}-badge__content {
-      color: get-css-var('button-badge-color');
-      background-color: get-css-var('button-badge-bg-color');
-      box-shadow: get-css-var('shadow-border') get-css-var('button-badge-b-color');
+      color: value('button-badge-color');
+      background-color: value('button-badge-bg-color');
+      box-shadow: value('shadow-border') value('button-badge-b-color');
     }
   }
 
@@ -454,10 +454,10 @@ $button: map.merge(
 
   @at-root {
     &-group {
-      @include basis;
-
-      display: inline-flex;
-      align-items: center;
+      @include basis {
+        display: inline-flex;
+        align-items: center;
+      }
 
       #{$self} {
         @include define-preset-values(
@@ -482,13 +482,13 @@ $button: map.merge(
         &--first {
           margin-inline-end: 0;
 
-          @include logical-radius(get-css-var('button-radius') 0 0 get-css-var('button-radius'));
+          @include logical-radius(value('button-radius') 0 0 value('button-radius'));
         }
 
         &--last {
           margin-inline-end: 0;
 
-          @include logical-radius(0 get-css-var('button-radius') get-css-var('button-radius') 0);
+          @include logical-radius(0 value('button-radius') value('button-radius') 0);
         }
 
         &:not(#{$self}--last) {
@@ -503,11 +503,11 @@ $button: map.merge(
       &--circle {
         #{$self} {
           &--first {
-            @include logical-radius(get-css-var('button-height') 0 0 get-css-var('button-height'));
+            @include logical-radius(value('button-height') 0 0 value('button-height'));
           }
 
           &--last {
-            @include logical-radius(0 get-css-var('button-height') get-css-var('button-height') 0);
+            @include logical-radius(0 value('button-height') value('button-height') 0);
           }
         }
       }

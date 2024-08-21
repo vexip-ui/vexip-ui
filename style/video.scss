@@ -7,28 +7,28 @@ $video: () !default;
 $video: map.merge(
   (
     bg-color: #111,
-    state-color: get-css-var('content-color-third'),
-    loading-color: get-css-var('content-color-third'),
+    state-color: value('content-color-third'),
+    loading-color: value('content-color-third'),
     controls-bg-color: unset,
     controls-bg-image: linear-gradient(to top, rgba(#111, 75%) 0%, transparent 100%),
     progress-height: 3px,
     progress-pad: 5px,
     progress-segment-bg-color: rgba(#fff, 35%),
-    progress-filler-bg-color: get-css-var('color-primary-base'),
-    progress-trigger-radius: get-css-var('radius-base'),
+    progress-filler-bg-color: value('color-primary-base'),
+    progress-trigger-radius: value('radius-base'),
     progress-trigger-width: 14px,
     progress-trigger-height: 10px,
-    progress-indicator-color: get-css-var('color-primary-base'),
+    progress-indicator-color: value('color-primary-base'),
     progress-indicator-size: 4px,
     control-color: rgba(#fff, 85%),
     control-color-active: #fff,
     control-color-disabled: rgba(#fff, 50%),
     control-bg-color: rgba(#000, 75%),
-    control-radius: get-css-var('radius-small'),
-    control-shadow: get-css-var('shadow-shape') #000,
+    control-radius: value('radius-small'),
+    control-shadow: value('shadow-shape') #000,
     control-option-bg-color-hover: rgba(#fff, 15%),
     control-option-bg-color-active: rgba(#fff, 15%),
-    timer-radius: get-css-var('radius-small')
+    timer-radius: value('radius-small')
   ),
   $video
 );
@@ -38,26 +38,26 @@ $video: map.merge(
     @include define-preset-values('video', $video);
   }
 
-  @include basis;
-
-  position: relative;
-  width: 100%;
-  height: 100%;
-  outline-color: transparent;
+  @include basis {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    outline-color: transparent;
+  }
 
   &__main {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: get-css-var('video-bg-color');
+    background-color: value('video-bg-color');
   }
 
   &__player {
     display: flex;
     width: 100%;
     height: 100%;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
 
     &--flipped {
       transform: scale(-1, 1);
@@ -89,7 +89,7 @@ $video: map.merge(
     position: absolute;
     top: 50%;
     left: 50%;
-    color: get-css-var('video-state-color');
+    color: value('video-state-color');
     pointer-events: none;
     transform: translate(-50%, -50%);
   }
@@ -98,7 +98,7 @@ $video: map.merge(
     position: absolute;
     top: 50%;
     left: 50%;
-    color: get-css-var('video-loading-color');
+    color: value('video-loading-color');
     pointer-events: none;
     transform: translate(-50%, -50%);
   }
@@ -129,23 +129,21 @@ $video: map.merge(
     display: flex;
     flex-direction: column;
     padding: 16px 0 4px;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
 
     &::before {
       position: absolute;
       inset: 0;
       pointer-events: none;
       content: '';
-      background-color: get-css-var('video-controls-bg-color');
-      background-image: get-css-var('video-controls-bg-image');
-      transition: get-css-var('transition-opacity');
+      background-color: value('video-controls-bg-color');
+      background-image: value('video-controls-bg-image');
+      transition: value('transition-opacity');
     }
 
     &--collapsed {
       transform: translateY(
-          calc(
-            #{get-css-var('video-progress-pad')} + #{get-css-var('video-progress-height')} + 43px
-          )
+          calc(#{value('video-progress-pad')} + #{value('video-progress-height')} + 43px)
         )
         translateZ(0);
 
@@ -194,7 +192,7 @@ $video: map.merge(
     position: relative;
     width: 100%;
     padding: 0 10px;
-    transition: padding get-css-var('transition-base');
+    transition: padding value('transition-base');
 
     &--disabled {
       pointer-events: none;
@@ -202,7 +200,7 @@ $video: map.merge(
 
     &-segment {
       height: 100%;
-      padding: get-css-var('video-progress-pad') 0;
+      padding: value('video-progress-pad') 0;
     }
 
     &-track {
@@ -210,8 +208,8 @@ $video: map.merge(
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: get-css-var('video-progress-segment-bg-color');
-      border-radius: get-css-var('video-progress-height');
+      background-color: value('video-progress-segment-bg-color');
+      border-radius: value('video-progress-height');
     }
 
     &-filler {
@@ -219,17 +217,16 @@ $video: map.merge(
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: get-css-var('video-progress-filler-bg-color');
-      border-radius: get-css-var('video-progress-height');
-      transition: get-css-var('transition-background');
+      background-color: value('video-progress-filler-bg-color');
+      border-radius: value('video-progress-height');
+      transition: value('transition-background');
     }
 
     &-slider {
       @include define-preset-values(
         'slider',
         (
-          track-height:
-            calc(#{get-css-var('video-progress-height')} + #{get-css-var('video-progress-pad')} * 2),
+          track-height: calc(#{value('video-progress-height')} + #{value('video-progress-pad')} * 2),
           handler-size: 13px,
           handler-scale-hover: 1,
           handler-scale-focus: 1,
@@ -242,11 +239,11 @@ $video: map.merge(
 
     &-trigger {
       position: relative;
-      width: get-css-var('video-progress-trigger-width');
-      height: get-css-var('video-progress-trigger-height');
+      width: value('video-progress-trigger-width');
+      height: value('video-progress-trigger-height');
       background-color: #fff;
-      border: 2px solid get-css-var('video-progress-filler-bg-color');
-      border-radius: get-css-var('video-progress-trigger-radius');
+      border: 2px solid value('video-progress-filler-bg-color');
+      border-radius: value('video-progress-trigger-radius');
     }
 
     .#{$namespace}-slider {
@@ -271,19 +268,19 @@ $video: map.merge(
       left: 0;
       pointer-events: none;
       opacity: 0%;
-      transition: get-css-var('transition-opacity');
+      transition: value('transition-opacity');
 
       &--active {
         opacity: 100%;
       }
 
-      $size: get-css-var('video-progress-indicator-size');
+      $size: value('video-progress-indicator-size');
       $pos: calc(
-        100% - #{$size} * 0.5 - #{get-css-var('video-progress-pad')} + #{get-css-var(
+        100% - #{$size} * 0.5 - #{value('video-progress-pad')} + #{value(
             'video-progress-trigger-height'
           )} * 0.25
       );
-      $color: get-css-var('video-progress-indicator-color');
+      $color: value('video-progress-indicator-color');
 
       &::before,
       &::after {
@@ -317,10 +314,10 @@ $video: map.merge(
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: calc(5px + get-css-var('video-progress-pad'));
+    margin-bottom: calc(5px + value('video-progress-pad'));
     pointer-events: none;
     opacity: 0%;
-    transition: get-css-var('transition-opacity');
+    transition: value('transition-opacity');
 
     &--active {
       opacity: 100%;
@@ -349,10 +346,10 @@ $video: map.merge(
       align-items: center;
       padding: 6px;
       line-height: 1;
-      color: get-css-var('video-control-color');
-      background-color: get-css-var('video-control-bg-color');
-      border-radius: get-css-var('video-control-radius');
-      box-shadow: get-css-var('video-control-shadow');
+      color: value('video-control-color');
+      background-color: value('video-control-bg-color');
+      border-radius: value('video-control-radius');
+      box-shadow: value('video-control-shadow');
     }
 
     &--has-image &-time {
@@ -368,19 +365,19 @@ $video: map.merge(
     min-width: 32px;
     height: 100%;
     line-height: 1;
-    color: get-css-var('video-control-color');
-    transition: get-css-var('transition-color');
+    color: value('video-control-color');
+    transition: value('transition-color');
 
     &:hover,
     &:focus-within {
-      color: get-css-var('video-control-color-active');
+      color: value('video-control-color-active');
     }
 
     &--disabled {
       &,
       &:hover,
       &:focus-within {
-        color: get-css-var('video-control-color-disabled');
+        color: value('video-control-color-disabled');
         cursor: not-allowed;
       }
     }
@@ -409,11 +406,11 @@ $video: map.merge(
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: calc(5px + get-css-var('video-progress-pad'));
-      color: get-css-var('video-control-color');
-      background-color: get-css-var('video-control-bg-color');
-      border-radius: get-css-var('video-control-radius');
-      box-shadow: get-css-var('video-control-shadow');
+      margin-bottom: calc(5px + value('video-progress-pad'));
+      color: value('video-control-color');
+      background-color: value('video-control-bg-color');
+      border-radius: value('video-control-radius');
+      box-shadow: value('video-control-shadow');
     }
 
     &-tip {
@@ -443,24 +440,24 @@ $video: map.merge(
 
     &-option {
       justify-content: center;
-      color: get-css-var('video-control-color');
+      color: value('video-control-color');
       text-align: center;
       background-color: transparent;
 
       &:hover {
-        color: get-css-var('video-control-color-active');
-        background-color: get-css-var('video-control-option-bg-color-hover');
+        color: value('video-control-color-active');
+        background-color: value('video-control-option-bg-color-hover');
       }
 
       &--selected {
-        color: get-css-var('video-control-color-active');
-        background-color: get-css-var('video-control-option-bg-color-active');
+        color: value('video-control-color-active');
+        background-color: value('video-control-option-bg-color-active');
       }
 
       &--disabled {
         &,
         &:hover {
-          color: get-css-var('video-control-color-disabled');
+          color: value('video-control-color-disabled');
           background-color: transparent;
         }
       }
@@ -482,7 +479,7 @@ $video: map.merge(
       overflow: hidden;
       color: inherit;
       background-color: rgba(#fff, 30%);
-      border-radius: get-css-var('video-timer-radius');
+      border-radius: value('video-timer-radius');
 
       .#{$namespace}-input__control {
         color: inherit;

@@ -6,19 +6,19 @@
 $text: () !default;
 $text: map.merge(
   (
-    font-family-mono: get-css-var('font-family-mono'),
+    font-family-mono: value('font-family-mono'),
     font-weight-strong: 600,
     font-weight-thin: 300,
-    color: get-css-var('content-color-base'),
-    color-disabled: get-css-var('content-color-disabled'),
-    color-marked: get-css-var('content-color-base'),
-    color-reversed: get-css-var('bg-color-base'),
-    mark-color: get-css-var('fill-color-hover'),
-    code-bg-color: get-css-var('fill-color-humble'),
-    code-radius: get-css-var('radius-small'),
-    keyboard-bg-color: get-css-var('fill-color-background'),
-    keyboard-b-color: get-css-var('border-color-light-1'),
-    keyboard-radius: get-css-var('radius-base')
+    color: value('content-color-base'),
+    color-disabled: value('content-color-disabled'),
+    color-marked: value('content-color-base'),
+    color-reversed: value('bg-color-base'),
+    mark-color: value('fill-color-hover'),
+    code-bg-color: value('fill-color-humble'),
+    code-radius: value('radius-small'),
+    keyboard-bg-color: value('fill-color-background'),
+    keyboard-b-color: value('border-color-light-1'),
+    keyboard-radius: value('radius-base')
   ),
   $text
 );
@@ -32,10 +32,10 @@ $text: map.merge(
     @include define-preset-style('text', $style-map);
   }
 
-  @include basis;
-
-  color: get-css-var('text-color');
-  transition: get-css-var('transition-color'), get-css-var('transition-background');
+  @include basis {
+    color: value('text-color');
+    transition: value('transition-color'), value('transition-background');
+  }
 
   @each $type in $types {
     &--#{$type} {
@@ -49,7 +49,7 @@ $text: map.merge(
   }
 
   &--strong {
-    font-weight: get-css-var('text-font-weight-strong');
+    font-weight: value('text-font-weight-strong');
   }
 
   &--italic {
@@ -62,38 +62,38 @@ $text: map.merge(
 
   &--mark {
     padding: 0 1px;
-    color: get-css-var('text-color-marked');
-    background-color: get-css-var('text-mark-color');
+    color: value('text-color-marked');
+    background-color: value('text-mark-color');
   }
 
   &--reversed {
-    color: get-css-var('text-color-reversed');
+    color: value('text-color-reversed');
   }
 
   &--disabled {
-    color: get-css-var('text-color-disabled');
+    color: value('text-color-disabled');
   }
 
   &--thin {
-    font-weight: get-css-var('text-font-weight-thin');
+    font-weight: value('text-font-weight-thin');
   }
 
   &--code {
     padding: 3px 5px 2px;
-    font-family: get-css-var('text-font-family-mono');
-    background-color: get-css-var('text-code-bg-color');
-    border-radius: get-css-var('text-code-radius');
+    font-family: value('text-font-family-mono');
+    background-color: value('text-code-bg-color');
+    border-radius: value('text-code-radius');
   }
 
   &--keyboard {
     display: inline-flex;
     align-items: center;
     padding: 4px 5px;
-    font-family: get-css-var('text-font-family-mono');
+    font-family: value('text-font-family-mono');
     line-height: 1;
-    background-color: get-css-var('text-keyboard-bg-color');
-    border: get-css-var('border-shape') get-css-var('text-keyboard-b-color');
-    border-radius: get-css-var('text-keyboard-radius');
+    background-color: value('text-keyboard-bg-color');
+    border: value('border-shape') value('text-keyboard-b-color');
+    border-radius: value('text-keyboard-radius');
   }
 }
 
@@ -104,13 +104,13 @@ $title: map.merge(
     font-size-level-2: 30px,
     font-size-level-3: 24px,
     font-size-level-4: 20px,
-    font-size-level-5: get-css-var('font-size-primary'),
-    font-size-level-6: get-css-var('font-size-base'),
+    font-size-level-5: value('font-size-primary'),
+    font-size-level-6: value('font-size-base'),
     font-weight: 600,
     font-weight-thin: 300,
-    color: get-css-var('content-color-primary'),
+    color: value('content-color-primary'),
     marker-width: 4px,
-    marker-color: get-css-var('content-color-placeholder'),
+    marker-color: value('content-color-placeholder'),
     marker-offset: 16px
   ),
   $title
@@ -125,13 +125,13 @@ $title: map.merge(
     @include define-preset-style('title', $style-map);
   }
 
-  @include basis;
-
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  font-weight: get-css-var('title-font-weight');
-  color: get-css-var('title-color');
-  transition: get-css-var('transition-color');
+  @include basis {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: value('title-font-weight');
+    color: value('title-color');
+    transition: value('transition-color');
+  }
 
   @each $type in $types {
     &--#{$type} {
@@ -156,12 +156,12 @@ $title: map.merge(
   }
 
   &--thin {
-    font-weight: get-css-var('title-font-weight-thin');
+    font-weight: value('title-font-weight-thin');
   }
 
   @for $i from 1 through 6 {
     @at-root h#{$i}#{&} {
-      font-size: get-css-var('title-font-size-level-#{$i}');
+      font-size: value('title-font-size-level-#{$i}');
     }
   }
 
@@ -170,18 +170,18 @@ $title: map.merge(
 
     &::before {
       position: absolute;
-      inset-inline-start: calc(get-css-var('title-marker-offset') * -1);
+      inset-inline-start: calc(value('title-marker-offset') * -1);
       top: 0;
       bottom: 0;
-      width: get-css-var('title-marker-width');
+      width: value('title-marker-width');
       content: '';
-      background-color: get-css-var('title-marker-color');
-      transition: get-css-var('transition-background');
+      background-color: value('title-marker-color');
+      transition: value('transition-background');
     }
   }
 
   &--marker#{&}--aligned {
-    padding-inline-start: get-css-var('title-marker-offset');
+    padding-inline-start: value('title-marker-offset');
 
     &::before {
       inset-inline-start: 0;
@@ -192,10 +192,10 @@ $title: map.merge(
 $blockquote: () !default;
 $blockquote: map.merge(
   (
-    color: get-css-var('content-color-base'),
+    color: value('content-color-base'),
     padding-inline-start: 10px,
     marker-width: 4px,
-    marker-color: get-css-var('border-color-base')
+    marker-color: value('border-color-base')
   ),
   $blockquote
 );
@@ -209,14 +209,13 @@ $blockquote: map.merge(
     @include define-preset-style('blockquote', $style-map);
   }
 
-  @include basis;
-
-  padding-inline-start: get-css-var('blockquote-padding-inline-start');
-  margin: 1em 0;
-  color: get-css-var('blockquote-color');
-  border-inline-start: get-css-var('blockquote-marker-width') solid
-    get-css-var('blockquote-marker-color');
-  transition: get-css-var('transition-color');
+  @include basis {
+    padding-inline-start: value('blockquote-padding-inline-start');
+    margin: 1em 0;
+    color: value('blockquote-color');
+    border-inline-start: value('blockquote-marker-width') solid value('blockquote-marker-color');
+    transition: value('transition-color');
+  }
 
   @each $type in $types {
     &--#{$type} {
@@ -232,9 +231,9 @@ $blockquote: map.merge(
 
 .#{$namespace}-ol,
 .#{$namespace}-ul {
-  @include basis;
-
-  padding: 0;
+  @include basis {
+    padding: 0;
+  }
 
   & > li {
     padding-inline-start: 4px;

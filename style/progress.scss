@@ -6,12 +6,12 @@
 $progress: () !default;
 $progress: map.merge(
   (
-    track-bg-color: get-css-var('fill-color-humble'),
-    filler-bg-color: get-css-var('color-primary-base'),
+    track-bg-color: value('fill-color-humble'),
+    filler-bg-color: value('color-primary-base'),
     info-color: inherit,
-    info-color-inside: get-css-var('color-white'),
+    info-color-inside: value('color-white'),
     info-color-bubble: inherit,
-    percentage-font-size: get-css-var('font-size-secondary'),
+    percentage-font-size: value('font-size-secondary'),
     activated-color: rgba(#fff, 0.4),
     activated-dir: 1,
     animation-duration: 2400ms,
@@ -29,24 +29,24 @@ $progress: map.merge(
     @include define-preset-style('progress', $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+  }
 
   &__track {
     position: relative;
     width: 100%;
     overflow: hidden;
     line-height: 1;
-    background-color: get-css-var('progress-track-bg-color');
+    background-color: value('progress-track-bg-color');
   }
 
-  $percent-translate: translateX(calc(#{get-css-var('progress-percentage')} * 1% - 100%));
-  $percent-translate-rtl: translateX(calc(100% - #{get-css-var('progress-percentage')} * 1%));
-  $activated-scale: scaleX(calc(#{get-css-var('progress-percentage')} * 0.01));
+  $percent-translate: translateX(calc(#{value('progress-percentage')} * 1% - 100%));
+  $percent-translate-rtl: translateX(calc(100% - #{value('progress-percentage')} * 1%));
+  $activated-scale: scaleX(calc(#{value('progress-percentage')} * 0.01));
 
   &__filler {
     position: relative;
@@ -55,9 +55,9 @@ $progress: map.merge(
     justify-content: flex-end;
     width: 100%;
     height: 100%;
-    background-color: get-css-var('progress-filler-bg-color');
+    background-color: value('progress-filler-bg-color');
     will-change: transform;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
     transform: $percent-translate;
 
     @include rtl {
@@ -71,9 +71,9 @@ $progress: map.merge(
     height: 100%;
     pointer-events: none;
     content: '';
-    background-color: get-css-var('progress-activated-color');
+    background-color: value('progress-activated-color');
     transform-origin: right;
-    animation: #{$namespace}-progress-flowing get-css-var('progress-animation-duration') get-css-var(
+    animation: #{$namespace}-progress-flowing value('progress-animation-duration') value(
         'progress-animation-timing'
       ) infinite;
 
@@ -88,9 +88,7 @@ $progress: map.merge(
     0% {
       opacity: 100%;
       transform: translateX(
-          calc(
-            #{get-css-var('progress-percentage')} * #{get-css-var('progress-activated-dir')} * -1%
-          )
+          calc(#{value('progress-percentage')} * #{value('progress-activated-dir')} * -1%)
         )
         scaleX(0);
     }
@@ -110,7 +108,7 @@ $progress: map.merge(
     display: flex;
     align-items: center;
     margin-inline-start: 8px;
-    color: get-css-var('progress-info-color');
+    color: value('progress-info-color');
     pointer-events: none;
   }
 
@@ -123,8 +121,8 @@ $progress: map.merge(
     width: 100%;
     padding-inline-end: 8px;
     margin: 0;
-    color: get-css-var('progress-info-color-inside');
-    transition: get-css-var('transition-transform');
+    color: value('progress-info-color-inside');
+    transition: value('transition-transform');
     transform: $percent-translate;
 
     @include rtl {
@@ -139,7 +137,7 @@ $progress: map.merge(
     min-height: auto;
     padding: 1px 4px;
     margin: 0;
-    color: get-css-var('progress-info-color-bubble');
+    color: value('progress-info-color-bubble');
   }
 
   &--info--none &__info {
@@ -147,7 +145,7 @@ $progress: map.merge(
   }
 
   &__percentage {
-    font-size: get-css-var('progress-percentage-font-size');
+    font-size: value('progress-percentage-font-size');
     pointer-events: auto;
   }
 
@@ -158,7 +156,7 @@ $progress: map.merge(
     bottom: 0;
     width: 100%;
     pointer-events: none;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
     transform: $percent-translate;
 
     @include rtl {

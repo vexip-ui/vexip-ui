@@ -31,7 +31,10 @@ export default defineConfig(({ command }: ConfigEnv): any => {
     resolve: {
       alias: [
         { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
-        { find: /^@vp\/(.+)/, replacement: resolve(__dirname, '.vitepress/$1') },
+        {
+          find: /^@vp\/(.+)/,
+          replacement: resolve(__dirname, '.vitepress/$1')
+        },
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,

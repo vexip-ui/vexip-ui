@@ -6,22 +6,22 @@
 $slider: () !default;
 $slider: map.merge(
   (
-    track-bg-color: get-css-var('fill-color-humble'),
-    track-bg-color-hover: get-css-var('fill-color-hover'),
-    track-bg-color-disabled: get-css-var('slider-track-bg-color'),
+    track-bg-color: value('fill-color-humble'),
+    track-bg-color-hover: value('fill-color-hover'),
+    track-bg-color-disabled: value('slider-track-bg-color'),
     track-height: 4px,
-    filler-bg-color: get-css-var('color-primary-opacity-2'),
-    filler-bg-color-hover: get-css-var('color-primary-base'),
-    filler-bg-color-disabled: get-css-var('fill-color-disabled'),
+    filler-bg-color: value('color-primary-opacity-2'),
+    filler-bg-color-hover: value('color-primary-base'),
+    filler-bg-color-disabled: value('fill-color-disabled'),
     handler-size: 16px,
-    handler-bg-color: get-css-var('color-white'),
+    handler-bg-color: value('color-white'),
     handler-b-width: 2px,
-    handler-b-color: get-css-var('color-primary-base'),
-    handler-b-color-disabled: get-css-var('fill-color-disabled'),
-    handler-s-color: get-css-var('color-primary-light-6'),
+    handler-b-color: value('color-primary-base'),
+    handler-b-color-disabled: value('fill-color-disabled'),
+    handler-s-color: value('color-primary-light-6'),
     handler-shadow: unset,
     handler-shadow-hover: unset,
-    handler-shadow-focus: 0 0 4px 1px get-css-var('slider-handler-s-color'),
+    handler-shadow-focus: 0 0 4px 1px value('slider-handler-s-color'),
     handler-shadow-disabled: unset,
     handler-scale-hover: 1.25,
     handler-scale-focus: 1.25,
@@ -40,17 +40,14 @@ $slider: map.merge(
     @include define-preset-style('slider', $style-map);
   }
 
-  @include basis;
+  @include basis {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+  }
 
-  $padding: max(
-    0px,
-    calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5)
-  );
-  $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
-
-  display: flex;
-  width: 100%;
-  cursor: pointer;
+  $padding: max(0px, calc((value('slider-handler-size') - value('slider-track-height')) * 0.5));
+  $margin: calc(value('slider-handler-size') * 0.5 + 1px);
 
   &--vertical {
     display: inline-flex;
@@ -59,21 +56,21 @@ $slider: map.merge(
   }
 
   &--with-marker {
-    margin-bottom: get-css-var('slider-marker-pad');
+    margin-bottom: value('slider-marker-pad');
   }
 
   &--flip-marker {
-    margin-top: get-css-var('slider-marker-pad');
+    margin-top: value('slider-marker-pad');
     margin-bottom: 0;
   }
 
   &--vertical#{&}--with-marker {
-    margin-inline-end: get-css-var('slider-marker-pad');
+    margin-inline-end: value('slider-marker-pad');
     margin-bottom: 0;
   }
 
   &--vertical#{&}--flip-marker {
-    margin-inline: get-css-var('slider-marker-pad') 0;
+    margin-inline: value('slider-marker-pad') 0;
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -90,7 +87,7 @@ $slider: map.merge(
     position: relative;
     display: flex;
     flex-direction: column;
-    width: calc(100% - get-css-var('slider-handler-size') - 2px);
+    width: calc(100% - value('slider-handler-size') - 2px);
     padding: $padding 0;
     margin: 0 $margin;
     cursor: pointer;
@@ -99,7 +96,7 @@ $slider: map.merge(
   &--vertical &__container {
     flex-direction: row;
     width: auto;
-    height: calc(100% - get-css-var('slider-handler-size') - 2px);
+    height: calc(100% - value('slider-handler-size') - 2px);
     padding: 0 $padding;
     margin: $margin 0;
   }
@@ -112,20 +109,20 @@ $slider: map.merge(
     display: flex;
     align-items: flex-start;
     width: 100%;
-    height: get-css-var('slider-track-height');
+    height: value('slider-track-height');
     overflow: hidden;
-    background-color: get-css-var('slider-track-bg-color');
-    border-radius: get-css-var('slider-track-height');
-    transition: get-css-var('transition-background');
+    background-color: value('slider-track-bg-color');
+    border-radius: value('slider-track-height');
+    transition: value('transition-background');
   }
 
   &:hover &__track,
   &--sliding &__track {
-    background-color: get-css-var('slider-track-bg-color-hover');
+    background-color: value('slider-track-bg-color-hover');
   }
 
   &--vertical &__track {
-    width: get-css-var('slider-track-height');
+    width: value('slider-track-height');
     height: 100%;
   }
 
@@ -137,7 +134,7 @@ $slider: map.merge(
   &--disabled &__track,
   &--disabled:hover &__track,
   &--disabled#{&}--sliding &__track {
-    background-color: get-css-var('slider-track-bg-color-disabled');
+    background-color: value('slider-track-bg-color-disabled');
   }
 
   &__filler {
@@ -145,23 +142,23 @@ $slider: map.merge(
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: get-css-var('slider-track-height');
+    border-radius: value('slider-track-height');
 
     &::after {
       position: absolute;
       inset: 0;
       content: '';
-      background-color: get-css-var('slider-filler-bg-color');
-      border-radius: get-css-var('slider-track-height');
-      transition: get-css-var('transition-background');
-      transform: get-css-var('slider-filler-after-transform');
+      background-color: value('slider-filler-bg-color');
+      border-radius: value('slider-track-height');
+      transition: value('transition-background');
+      transform: value('slider-filler-after-transform');
     }
   }
 
   &:hover &__filler,
   &--sliding &__filler {
     &::after {
-      background-color: get-css-var('slider-filler-bg-color-hover');
+      background-color: value('slider-filler-bg-color-hover');
     }
   }
 
@@ -169,11 +166,11 @@ $slider: map.merge(
   &--disabled:hover &__filler,
   &--disabled#{&}--sliding &__filler {
     &::after {
-      background-color: get-css-var('slider-filler-bg-color-disabled');
+      background-color: value('slider-filler-bg-color-disabled');
     }
   }
 
-  $handler-size: get-css-var('slider-handler-size');
+  $handler-size: value('slider-handler-size');
 
   &__trigger {
     position: absolute;
@@ -182,7 +179,7 @@ $slider: map.merge(
     justify-content: center;
     width: $handler-size;
     height: $handler-size;
-    transition: get-css-var('transition-opacity');
+    transition: value('transition-opacity');
 
     .#{$namespace}-tooltip {
       line-height: 1;
@@ -202,18 +199,18 @@ $slider: map.merge(
   }
 
   &__handler {
-    @include round-border(get-css-var('slider-handler-b-color'));
-
-    width: $handler-size;
-    height: $handler-size;
-    cursor: pointer;
-    background-color: get-css-var('slider-handler-bg-color');
-    border: get-css-var('slider-handler-b-width') solid get-css-var('slider-handler-b-color');
-    border-radius: $handler-size;
-    outline: 0;
-    box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-border'), get-css-var('transition-shadow'),
-      get-css-var('transition-transform');
+    @include round-border(value('slider-handler-b-color')) {
+      width: $handler-size;
+      height: $handler-size;
+      cursor: pointer;
+      background-color: value('slider-handler-bg-color');
+      border: value('slider-handler-b-width') solid value('slider-handler-b-color');
+      border-radius: $handler-size;
+      outline: 0;
+      box-shadow: value('slider-handler-shadow');
+      transition: value('transition-border'), value('transition-shadow'),
+        value('transition-transform');
+    }
 
     &::before {
       inset-inline-start: 2px;
@@ -235,22 +232,22 @@ $slider: map.merge(
     align-items: center;
     justify-content: center;
     outline: 0;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
 
     &:hover {
-      transform: scale(get-css-var('slider-handler-scale-hover'));
+      transform: scale(value('slider-handler-scale-hover'));
 
       #{$handler} {
-        box-shadow: get-css-var('slider-handler-shadow-hover');
+        box-shadow: value('slider-handler-shadow-hover');
       }
     }
 
     &:focus,
     &--sliding {
-      transform: scale(get-css-var('slider-handler-scale-focus'));
+      transform: scale(value('slider-handler-scale-focus'));
 
       #{$handler} {
-        box-shadow: get-css-var('slider-handler-shadow-focus');
+        box-shadow: value('slider-handler-shadow-focus');
       }
     }
 
@@ -262,7 +259,7 @@ $slider: map.merge(
   &--disabled &__button {
     #{$handler} {
       cursor: not-allowed;
-      border-color: get-css-var('slider-handler-b-color-disabled');
+      border-color: value('slider-handler-b-color-disabled');
     }
 
     &,
@@ -270,13 +267,13 @@ $slider: map.merge(
       transform: scale(1);
 
       #{$handler} {
-        box-shadow: get-css-var('slider-handler-shadow-disabled');
+        box-shadow: value('slider-handler-shadow-disabled');
       }
     }
   }
 
   &--disabled#{&}--sliding &__button &__handler {
-    box-shadow: get-css-var('slider-handler-shadow-disabled');
+    box-shadow: value('slider-handler-shadow-disabled');
   }
 
   &__tip {
@@ -285,7 +282,7 @@ $slider: map.merge(
     user-select: none;
   }
 
-  $marker-size: get-css-var('slider-marker-size');
+  $marker-size: value('slider-marker-size');
 
   &__point {
     position: absolute;
@@ -296,22 +293,21 @@ $slider: map.merge(
   &__dot {
     width: $marker-size;
     height: $marker-size;
-    background-color: get-css-var('slider-handler-bg-color');
-    border: get-css-var('slider-handler-b-width') solid
-      get-css-var('slider-handler-b-color-disabled');
+    background-color: value('slider-handler-bg-color');
+    border: value('slider-handler-b-width') solid value('slider-handler-b-color-disabled');
     border-radius: $marker-size;
-    transition: get-css-var('transition-border');
+    transition: value('transition-border');
   }
 
   &__point--in-range &__dot {
-    border-color: get-css-var('slider-handler-b-color');
+    border-color: value('slider-handler-b-color');
   }
 
   &--disabled &__point &__dot {
-    border-color: get-css-var('slider-handler-b-color-disabled');
+    border-color: value('slider-handler-b-color-disabled');
   }
 
-  $markers-pos: calc(get-css-var('slider-handler-size') + 6px);
+  $markers-pos: calc(value('slider-handler-size') + 6px);
 
   &__markers {
     position: absolute;

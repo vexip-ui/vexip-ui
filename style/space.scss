@@ -17,12 +17,13 @@ $space: map.merge(
     @include define-preset-values('space', $space);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: value('space-v-gap') value('space-h-gap');
+  }
 
-  display: flex;
-  flex-wrap: wrap;
-  gap: get-css-var('space-v-gap') get-css-var('space-h-gap');
+  @include inherit-color;
 
   &--inline {
     display: inline-flex;

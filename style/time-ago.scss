@@ -2,8 +2,9 @@
 @use './design' as *;
 
 .#{$namespace}-time-ago {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    display: inline-block;
+  }
 
-  display: inline-block;
+  @include inherit-color;
 }

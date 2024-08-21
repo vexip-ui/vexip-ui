@@ -6,15 +6,15 @@
 $toast: () !default;
 $toast: map.merge(
   (
-    z-index: get-css-var('z-index-masker'),
+    z-index: value('z-index-masker'),
     min-width: 100px,
     max-width: 90%,
     min-height: 100px,
     v-padding: 16px,
     h-padding: 16px,
-    color: get-css-var('color-white'),
-    bg-color: get-css-var('color-black'),
-    radius: get-css-var('radius-large'),
+    color: value('color-white'),
+    bg-color: value('color-black'),
+    radius: value('radius-large'),
     opacity: 70%
   ),
   $toast
@@ -25,16 +25,16 @@ $toast: map.merge(
     @include define-preset-values('toast', $toast);
   }
 
-  @include basis;
-
-  position: fixed;
-  inset: 0;
-  z-index: get-css-var('z-index-masker');
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  @include basis {
+    position: fixed;
+    inset: 0;
+    z-index: value('z-index-masker');
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
 
   &--text-only {
     @include define-preset-values(
@@ -62,15 +62,15 @@ $toast: map.merge(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: get-css-var('toast-min-width');
-    max-width: get-css-var('toast-max-width');
-    min-height: get-css-var('toast-min-height');
-    padding: get-css-var('toast-v-padding') get-css-var('toast-h-padding');
-    color: get-css-var('toast-color');
+    min-width: value('toast-min-width');
+    max-width: value('toast-max-width');
+    min-height: value('toast-min-height');
+    padding: value('toast-v-padding') value('toast-h-padding');
+    color: value('toast-color');
     user-select: none;
     background-color: transparent;
-    border-radius: get-css-var('toast-radius');
-    transition: get-css-var('transition-color'), get-css-var('transition-background');
+    border-radius: value('toast-radius');
+    transition: value('transition-color'), value('transition-background');
 
     &--top {
       position: absolute;
@@ -87,14 +87,14 @@ $toast: map.merge(
     }
 
     &::before {
-      @include inner-fixed;
-
-      z-index: -1;
-      pointer-events: none;
-      content: '';
-      background-color: get-css-var('toast-bg-color');
-      border-radius: get-css-var('toast-radius');
-      opacity: get-css-var('toast-opacity');
+      @include inner-fixed {
+        z-index: -1;
+        pointer-events: none;
+        content: '';
+        background-color: value('toast-bg-color');
+        border-radius: value('toast-radius');
+        opacity: value('toast-opacity');
+      }
     }
   }
 

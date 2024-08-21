@@ -6,17 +6,17 @@
 $dropdown: () !default;
 $dropdown: map.merge(
   (
-    color-selected: get-css-var('color-primary-base'),
-    color-disabled: get-css-var('content-color-disabled'),
-    bg-color: get-css-var('bg-color-base'),
-    bg-color-hover: get-css-var('fill-color-hover'),
-    bg-color-active: get-css-var('dropdown-bg-color-hover'),
-    b-color: get-css-var('border-color-light-2'),
-    radius: get-css-var('radius-base'),
-    s-color: get-css-var('shadow-color-base'),
-    shadow: get-css-var('shadow-shape') get-css-var('dropdown-s-color'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('dropdown-d-color')
+    color-selected: value('color-primary-base'),
+    color-disabled: value('content-color-disabled'),
+    bg-color: value('bg-color-base'),
+    bg-color-hover: value('fill-color-hover'),
+    bg-color-active: value('dropdown-bg-color-hover'),
+    b-color: value('border-color-light-2'),
+    radius: value('radius-base'),
+    s-color: value('shadow-color-base'),
+    shadow: value('shadow-shape') value('dropdown-s-color'),
+    d-color: value('border-color-light-2'),
+    divider: value('border-shape') value('dropdown-d-color')
   ),
   $dropdown
 );
@@ -26,10 +26,11 @@ $dropdown: map.merge(
     @include define-preset-values('dropdown', $dropdown);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    display: inline-block;
+  }
 
-  display: inline-block;
+  @include inherit-color;
 
   &__trigger {
     display: flex;
@@ -52,10 +53,10 @@ $dropdown: map.merge(
     padding: 5px 0;
     margin: 0;
     user-select: none;
-    background-color: get-css-var('dropdown-bg-color');
-    border: get-css-var('border-shape') get-css-var('dropdown-b-color');
-    border-radius: get-css-var('dropdown-radius');
-    box-shadow: get-css-var('dropdown-shadow');
+    background-color: value('dropdown-bg-color');
+    border: value('border-shape') value('dropdown-b-color');
+    border-radius: value('dropdown-radius');
+    box-shadow: value('dropdown-shadow');
   }
 
   &__item {
@@ -69,19 +70,19 @@ $dropdown: map.merge(
     cursor: pointer;
     background-color: transparent;
     outline: 0;
-    transition: get-css-var('transition-background');
+    transition: value('transition-background');
 
     &:hover,
     &:focus {
-      background-color: get-css-var('dropdown-bg-color-hover');
+      background-color: value('dropdown-bg-color-hover');
     }
 
     &--selected {
-      color: get-css-var('dropdown-color-selected');
+      color: value('dropdown-color-selected');
     }
 
     &--disabled {
-      color: get-css-var('dropdown-color-disabled');
+      color: value('dropdown-color-disabled');
       cursor: not-allowed;
 
       &:hover,
@@ -101,7 +102,7 @@ $dropdown: map.merge(
         width: 100%;
         height: 0;
         content: '';
-        border-bottom: get-css-var('dropdown-divider');
+        border-bottom: value('dropdown-divider');
       }
     }
   }
@@ -111,6 +112,6 @@ $dropdown: map.merge(
   }
 
   &__trigger--active &__item {
-    background-color: get-css-var('dropdown-bg-color-active');
+    background-color: value('dropdown-bg-color-active');
   }
 }

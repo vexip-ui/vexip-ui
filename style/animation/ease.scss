@@ -18,14 +18,14 @@ $-name: '#{$namespace}-ease';
     &-enter-active {
       animation: {
         name: #{$-name}-in;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
 
     &-leave-active {
       animation: {
         name: #{$-name}-out;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
   }

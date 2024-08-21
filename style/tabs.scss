@@ -2,13 +2,14 @@
 @use './design' as *;
 
 .#{$namespace}-tabs {
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  @include inherit-color;
 
   &__header {
     display: flex;
@@ -28,7 +29,7 @@
     flex: auto;
     min-width: 0;
     min-height: 0;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
   }
 
   $header: #{&}__header;

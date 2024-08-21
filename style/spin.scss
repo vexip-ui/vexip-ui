@@ -6,12 +6,12 @@
 $spin: () !default;
 $spin: map.merge(
   (
-    z-index: get-css-var('z-index-masker'),
-    mask-bg-color: get-css-var('bg-color-base'),
+    z-index: value('z-index-masker'),
+    mask-bg-color: value('bg-color-base'),
     mask-opacity: 40%,
-    icon-color: get-css-var('color-primary-base'),
-    tip-color: get-css-var('color-primary-base'),
-    tip-font-size: get-css-var('font-size-secondary')
+    icon-color: value('color-primary-base'),
+    tip-color: value('color-primary-base'),
+    tip-font-size: value('font-size-secondary')
   ),
   $spin
 );
@@ -21,15 +21,15 @@ $spin: map.merge(
     @include define-preset-values('spin', $spin);
   }
 
-  @include basis;
-
-  position: relative;
+  @include basis {
+    position: relative;
+  }
 
   &--inner,
   &__loading {
     position: absolute;
     inset: 0;
-    z-index: get-css-var('spin-z-index');
+    z-index: value('spin-z-index');
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,20 +44,20 @@ $spin: map.merge(
   &__mask {
     position: absolute;
     inset: 0;
-    background-color: get-css-var('spin-mask-bg-color');
-    opacity: get-css-var('spin-mask-opacity');
+    background-color: value('spin-mask-bg-color');
+    opacity: value('spin-mask-opacity');
   }
 
   &__icon {
     position: relative;
-    color: get-css-var('spin-icon-color');
+    color: value('spin-icon-color');
   }
 
   &__tip {
     position: relative;
     padding-top: 3px;
-    font-size: get-css-var('spin-tip-font-size');
-    color: get-css-var('spin-tip-color');
+    font-size: value('spin-tip-font-size');
+    color: value('spin-tip-color');
     user-select: none;
   }
 }

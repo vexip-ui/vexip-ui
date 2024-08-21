@@ -6,9 +6,9 @@
 $contextmenu: () !default;
 $contextmenu: map.merge(
   (
-    z-index: get-css-var('z-index-popper'),
-    icon-color: get-css-var('content-color-secondary'),
-    shortcut-color: get-css-var('content-color-disabled'),
+    z-index: value('z-index-popper'),
+    icon-color: value('content-color-secondary'),
+    shortcut-color: value('content-color-disabled'),
     shortcut-offset: 30px
   ),
   $contextmenu
@@ -19,10 +19,10 @@ $contextmenu: map.merge(
     @include define-preset-values('contextmenu', $contextmenu);
   }
 
-  @include basis;
-
-  position: fixed;
-  z-index: get-css-var('contextmenu-z-index');
+  @include basis {
+    position: fixed;
+    z-index: value('contextmenu-z-index');
+  }
 
   & &__item {
     position: relative;
@@ -57,12 +57,12 @@ $contextmenu: map.merge(
     align-items: center;
     justify-content: center;
     width: 16px;
-    color: get-css-var('contextmenu-icon-color');
+    color: value('contextmenu-icon-color');
   }
 
   &__shortcut {
-    margin-inline-start: get-css-var('contextmenu-shortcut-offset');
-    color: get-css-var('contextmenu-shortcut-color');
+    margin-inline-start: value('contextmenu-shortcut-offset');
+    color: value('contextmenu-shortcut-color');
   }
 
   &__arrow {

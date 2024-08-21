@@ -7,23 +7,23 @@ $pagination: () !default;
 $pagination: map.merge(
   (
     color: inherit,
-    color-hover: get-css-var('color-primary-base'),
-    color-focus: get-css-var('pagination-color-hover'),
-    color-disabled: get-css-var('content-color-disabled'),
-    color-active: get-css-var('pagination-color-hover'),
-    bg-color: get-css-var('fill-color-background'),
-    bg-color-hover: get-css-var('color-primary-opacity-8'),
-    bg-color-focus: get-css-var('pagination-bg-color-hover'),
-    bg-color-disabled: get-css-var('pagination-bg-color'),
-    bg-color-active: get-css-var('color-primary-base'),
-    b-color: get-css-var('border-color-base'),
-    b-color-hover: get-css-var('color-primary-base'),
-    b-color-focus: get-css-var('pagination-b-color-hover'),
-    b-color-disabled: get-css-var('fill-color-disabled'),
-    b-color-active: get-css-var('pagination-b-color-hover'),
-    s-color-focus: get-css-var('color-primary-opacity-6'),
-    border: get-css-var('border-shape') get-css-var('pagination-b-color'),
-    radius: get-css-var('radius-base'),
+    color-hover: value('color-primary-base'),
+    color-focus: value('pagination-color-hover'),
+    color-disabled: value('content-color-disabled'),
+    color-active: value('pagination-color-hover'),
+    bg-color: value('fill-color-background'),
+    bg-color-hover: value('color-primary-opacity-8'),
+    bg-color-focus: value('pagination-bg-color-hover'),
+    bg-color-disabled: value('pagination-bg-color'),
+    bg-color-active: value('color-primary-base'),
+    b-color: value('border-color-base'),
+    b-color-hover: value('color-primary-base'),
+    b-color-focus: value('pagination-b-color-hover'),
+    b-color-disabled: value('fill-color-disabled'),
+    b-color-active: value('pagination-b-color-hover'),
+    s-color-focus: value('color-primary-opacity-6'),
+    border: value('border-shape') value('pagination-b-color'),
+    radius: value('radius-base'),
     size: 32px,
     item-span: 6px,
     plugin-span: 10px
@@ -40,10 +40,10 @@ $pagination: map.merge(
     @include define-preset-style('pagination', $style-map);
   }
 
-  @include basis;
-
-  display: inline-flex;
-  align-items: center;
+  @include basis {
+    display: inline-flex;
+    align-items: center;
+  }
 
   &--small {
     @include define-css-var('pagination-size', 28px);
@@ -63,9 +63,9 @@ $pagination: map.merge(
   $item: #{&}__item;
 
   @mixin item-disabled {
-    color: get-css-var('pagination-color-disabled');
+    color: value('pagination-color-disabled');
     cursor: not-allowed;
-    border-color: get-css-var('pagination-b-color-disabled');
+    border-color: value('pagination-b-color-disabled');
     box-shadow: none;
   }
 
@@ -74,38 +74,38 @@ $pagination: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: get-css-var('pagination-size');
-    height: get-css-var('pagination-size');
+    min-width: value('pagination-size');
+    height: value('pagination-size');
     padding: 0 6px;
-    margin-inline-end: get-css-var('pagination-item-span');
+    margin-inline-end: value('pagination-item-span');
     list-style: none;
     cursor: pointer;
     user-select: none;
-    border: get-css-var('pagination-border');
-    border-radius: get-css-var('pagination-radius');
+    border: value('pagination-border');
+    border-radius: value('pagination-radius');
     outline: 0;
-    transition: get-css-var('transition-color'), get-css-var('transition-background'),
-      get-css-var('transition-border'), get-css-var('transition-shadow');
+    transition: value('transition-color'), value('transition-background'),
+      value('transition-border'), value('transition-shadow');
 
     &:last-of-type {
       margin-inline-start: 0;
     }
 
     &:hover {
-      color: get-css-var('pagination-color-hover');
-      border-color: get-css-var('pagination-b-color-hover');
+      color: value('pagination-color-hover');
+      border-color: value('pagination-b-color-hover');
     }
 
     &:focus,
     &:focus-within {
-      color: get-css-var('pagination-color-focus');
-      border-color: get-css-var('pagination-b-color-focus');
-      box-shadow: get-css-var('shadow-focus') get-css-var('pagination-s-color-focus');
+      color: value('pagination-color-focus');
+      border-color: value('pagination-b-color-focus');
+      box-shadow: value('shadow-focus') value('pagination-s-color-focus');
     }
 
     &--active {
-      color: get-css-var('pagination-color-active');
-      border-color: get-css-var('pagination-b-color-active');
+      color: value('pagination-color-active');
+      border-color: value('pagination-b-color-active');
     }
 
     &--disabled {
@@ -118,21 +118,21 @@ $pagination: map.merge(
       }
 
       &#{$item}--active {
-        background-color: get-css-var('pagination-bg-color-disabled');
+        background-color: value('pagination-bg-color-disabled');
       }
     }
   }
 
   &--background &__item {
-    background-color: get-css-var('pagination-bg-color');
+    background-color: value('pagination-bg-color');
 
     &:hover {
-      background-color: get-css-var('pagination-bg-color-hover');
+      background-color: value('pagination-bg-color-hover');
     }
 
     &:focus,
     &:focus-within {
-      background-color: get-css-var('pagination-bg-color-focus');
+      background-color: value('pagination-bg-color-focus');
     }
 
     &--active {
@@ -148,7 +148,7 @@ $pagination: map.merge(
       &,
       &:hover,
       &:focus {
-        background-color: get-css-var('pagination-bg-color-active');
+        background-color: value('pagination-bg-color-active');
       }
     }
 
@@ -157,7 +157,7 @@ $pagination: map.merge(
       &:hover,
       &:focus,
       &:focus-within {
-        background-color: get-css-var('pagination-bg-color-disabled');
+        background-color: value('pagination-bg-color-disabled');
       }
     }
   }
@@ -180,7 +180,7 @@ $pagination: map.merge(
 
     &-input {
       min-width: 60px;
-      height: get-css-var('pagination-size');
+      height: value('pagination-size');
       margin: 0 4px;
       user-select: auto;
     }
@@ -193,7 +193,7 @@ $pagination: map.merge(
       width: 100%;
 
       .#{$namespace}-select__selector {
-        height: get-css-var('pagination-size');
+        height: value('pagination-size');
       }
     }
   }
@@ -205,10 +205,10 @@ $pagination: map.merge(
   & > &__jump,
   & > &__size,
   & > &__total {
-    margin-inline-start: get-css-var('pagination-plugin-span');
+    margin-inline-start: value('pagination-plugin-span');
 
     &--prefix {
-      margin-inline: 0 get-css-var('pagination-plugin-span');
+      margin-inline: 0 value('pagination-plugin-span');
     }
   }
 }

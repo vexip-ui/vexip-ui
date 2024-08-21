@@ -7,17 +7,17 @@ $message: () !default;
 $message: map.merge(
   (
     color: inherit,
-    bg-color: get-css-var('bg-color-base'),
-    b-color: get-css-var('border-color-light-2'),
-    radius: get-css-var('radius-base'),
-    s-color: get-css-var('shadow-color-base'),
-    shadow: get-css-var('shadow-shape') get-css-var('message-s-color'),
+    bg-color: value('bg-color-base'),
+    b-color: value('border-color-light-2'),
+    radius: value('radius-base'),
+    s-color: value('shadow-color-base'),
+    shadow: value('shadow-shape') value('message-s-color'),
     v-padding: 8px,
     h-padding: 10px,
     mask-bg-color: transparent,
-    icon-color: get-css-var('message-color'),
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base')
+    icon-color: value('message-color'),
+    close-color: value('content-color-placeholder'),
+    close-color-hover: value('content-color-base')
   ),
   $message
 );
@@ -31,11 +31,11 @@ $message: map.merge(
     @include define-preset-style('message', $style-map);
   }
 
-  @include basis;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include basis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   $icon: #{&}__icon;
   $close: #{&}__close;
@@ -48,7 +48,7 @@ $message: map.merge(
     display: flex;
     align-items: center;
     margin-inline-end: 8px;
-    color: get-css-var('message-icon-color');
+    color: value('message-icon-color');
   }
 
   &__close {
@@ -56,35 +56,35 @@ $message: map.merge(
     align-items: center;
     padding: 0;
     margin-inline-start: 14px;
-    color: get-css-var('message-close-color');
+    color: value('message-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('message-close-color-hover');
+      color: value('message-close-color-hover');
     }
   }
 
   &__item {
     display: flex;
-    padding: get-css-var('message-v-padding') get-css-var('message-h-padding');
-    color: get-css-var('message-color');
-    background-color: get-css-var('message-bg-color');
-    border: get-css-var('border-shape') get-css-var('message-b-color');
-    border-radius: get-css-var('message-radius');
-    box-shadow: get-css-var('message-shadow');
+    padding: value('message-v-padding') value('message-h-padding');
+    color: value('message-color');
+    background-color: value('message-bg-color');
+    border: value('border-shape') value('message-b-color');
+    border-radius: value('message-radius');
+    box-shadow: value('message-shadow');
 
     &::before {
-      @include inner-fixed;
-
-      pointer-events: none;
-      background-color: get-css-var('message-mask-bg-color');
-      border-radius: get-css-var('message-radius');
-      opacity: 80%;
+      @include inner-fixed {
+        pointer-events: none;
+        background-color: value('message-mask-bg-color');
+        border-radius: value('message-radius');
+        opacity: 80%;
+      }
     }
 
     &--background::before {

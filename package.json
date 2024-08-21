@@ -1,11 +1,11 @@
 {
   "name": "vexip-ui",
-  "version": "2.3.13",
+  "version": "2.3.14",
   "type": "module",
+  "packageManager": "pnpm@8.2.0",
   "license": "MIT",
   "author": "qmhc",
   "description": "A Vue 3 UI library, Highly customizability, full TypeScript, performance pretty good",
-  "packageManager": "pnpm@8.2.0",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
     "deploy:docs": "tsx scripts/deploy-docs.ts",
@@ -115,6 +115,9 @@
     "meta-data.json",
     "types.d.ts"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "keywords": [
     "flex",
     "components",
@@ -133,9 +136,6 @@
     "url": "https://github.com/vexip-ui/vexip-ui/issues"
   },
   "homepage": "https://www.vexipui.com",
-  "engines": {
-    "node": ">=18"
-  },
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
     "@vexip-ui/config": "workspace:*",
@@ -158,11 +158,11 @@
     "@vexip-ui/commitlint-config": "^0.5.0",
     "@vexip-ui/eslint-config": "^0.12.1",
     "@vexip-ui/icons": "workspace:*",
-    "@vexip-ui/prettier-config": "^0.2.0",
+    "@vexip-ui/prettier-config": "^1.0.0",
     "@vexip-ui/scripts": "workspace:*",
     "@vexip-ui/stylelint-config": "^1.1.0",
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue-jsx": "^4.0.1",
     "@vitest/coverage-v8": "1.1.3",
     "@vue/test-utils": "^2.4.5",
     "conventional-changelog-angular": "7.0.0",
@@ -189,33 +189,33 @@
     "minimist": "^1.2.8",
     "npm-run-all": "^4.1.5",
     "pinst": "^3.0.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "prompts": "^2.4.2",
     "rimraf": "^5.0.5",
     "rollup-plugin-visualizer": "5.9.2",
-    "sass": "^1.74.1",
+    "sass": "^1.77.8",
     "semver": "^7.6.0",
-    "stylelint": "^16.3.1",
-    "stylelint-prettier": "^5.0.0",
+    "stylelint": "^16.8.2",
+    "stylelint-prettier": "^5.0.2",
     "tsx": "^4.7.2",
     "typescript": "5.4.4",
-    "vite": "^5.2.8",
-    "vite-plugin-dts": "^3.8.2",
+    "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.0.3",
     "vitest": "1.1.3",
-    "vue": "~3.3.13",
-    "vue-router": "^4.3.0"
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
   },
   "peerDependencies": {
     "vue": "^3.2.25"
   },
   "pnpm": {
     "peerDependencyRules": {
+      "allowAny": [
+        "@csstools/*"
+      ],
       "ignoreMissing": [
         "@algolia/client-search",
         "vue"
-      ],
-      "allowAny": [
-        "@csstools/*"
       ]
     },
     "patchedDependencies": {

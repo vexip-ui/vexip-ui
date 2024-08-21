@@ -49,7 +49,9 @@ describe('FullScreen', () => {
     const vm = wrapper.findComponent(FullScreen).vm
 
     await vm.enter()
-    expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+    ).toBe(true)
     expect(vm.full).toEqual('window')
     await vm.exit()
     expect(wrapper.find('.vxp-full-screen').classes()).not.toContain('vxp-full-screen--full')
@@ -69,7 +71,9 @@ describe('FullScreen', () => {
     const { toggle } = wrapper.findComponent(FullScreen).vm
 
     await toggle()
-    expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+    ).toBe(true)
     await toggle()
     expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
   })
@@ -81,7 +85,7 @@ describe('FullScreen', () => {
 
     expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
     await enter('window', 1)
-    expect(wrapper.find('.vxp-full-screen').attributes().style).toContain(
+    expect(document.body.querySelector<HTMLElement>('.vxp-full-screen')?.style.cssText).toContain(
       '--vxp-full-screen-z-index: 1;'
     )
     await exit()
@@ -94,7 +98,9 @@ describe('FullScreen', () => {
     const vm = wrapper.findComponent(FullScreen).vm
 
     await vm.toggle()
-    expect(wrapper.find('.vxp-full-screen').classes()).toContain('vxp-full-screen--full')
+    expect(
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+    ).toBe(true)
     expect(vm.full).toBe('window')
 
     await vm.toggle('browser')

@@ -7,15 +7,15 @@
 $select: () !default;
 $select: map.merge(
   (
-    list-bg-color: get-css-var('bg-color-base'),
-    list-b-color: get-css-var('border-color-light-2'),
-    list-border: get-css-var('border-shape') get-css-var('select-list-b-color'),
-    list-radius: get-css-var('radius-base'),
-    list-shadow: get-css-var('shadow-base'),
-    check-color: get-css-var('color-primary-base'),
-    empty-color: get-css-var('content-color-placeholder'),
+    list-bg-color: value('bg-color-base'),
+    list-b-color: value('border-color-light-2'),
+    list-border: value('border-shape') value('select-list-b-color'),
+    list-radius: value('radius-base'),
+    list-shadow: value('shadow-base'),
+    check-color: value('color-primary-base'),
+    empty-color: value('content-color-placeholder'),
     filter-height: 32px,
-    filter-divider: get-css-var('border-shape') get-css-var('border-color-light-2')
+    filter-divider: value('border-shape') value('border-color-light-2')
   ),
   $select
 );
@@ -25,11 +25,11 @@ $select: map.merge(
     @include define-preset-values('select', $select);
   }
 
-  @include basis;
-
-  display: inline-flex;
-  width: 100%;
-  cursor: pointer;
+  @include basis {
+    display: inline-flex;
+    width: 100%;
+    cursor: pointer;
+  }
 
   &--filterable {
     cursor: text;
@@ -49,7 +49,7 @@ $select: map.merge(
     @include define-css-var('input-v-padding', 2px);
 
     height: auto;
-    min-height: get-css-var('input-height');
+    min-height: value('input-height');
   }
 
   &__control,
@@ -83,7 +83,7 @@ $select: map.merge(
 
   &__tag {
     max-width: 100%;
-    height: calc(get-css-var('input-height') - 8px);
+    height: calc(value('input-height') - 8px);
     margin: 2px 4px;
     margin-inline-start: 0;
     pointer-events: auto;
@@ -122,7 +122,7 @@ $select: map.merge(
     position: relative;
     display: inline-block;
     max-width: 100%;
-    height: calc(get-css-var('input-height') - 8px);
+    height: calc(value('input-height') - 8px);
     margin: 2px 4px;
     margin-inline-start: 0;
   }
@@ -149,7 +149,7 @@ $select: map.merge(
     }
 
     &::placeholder {
-      color: get-css-var('input-placeholder-color');
+      color: value('input-placeholder-color');
     }
   }
 
@@ -175,7 +175,7 @@ $select: map.merge(
 
   &__selected--placeholder,
   &__placeholder {
-    color: get-css-var('input-placeholder-color');
+    color: value('input-placeholder-color');
   }
 
   &--multiple#{&}--filter &__placeholder {
@@ -191,10 +191,10 @@ $select: map.merge(
     flex-direction: column;
     width: 100%;
     user-select: none;
-    background-color: get-css-var('select-list-bg-color');
-    border: get-css-var('select-list-border');
-    border-radius: get-css-var('select-list-radius');
-    box-shadow: get-css-var('select-list-shadow');
+    background-color: value('select-list-bg-color');
+    border: value('select-list-border');
+    border-radius: value('select-list-radius');
+    box-shadow: value('select-list-shadow');
 
     .#{$namespace}-native-scroll__wrapper {
       padding: 5px 0;
@@ -211,7 +211,7 @@ $select: map.merge(
 
   &__filter {
     padding: 0 6px;
-    border-bottom: get-css-var('select-filter-divider');
+    border-bottom: value('select-filter-divider');
   }
 
   &__options {
@@ -228,7 +228,7 @@ $select: map.merge(
   }
 
   &__group {
-    padding: get-css-var('option-label-v-padding') get-css-var('option-label-h-padding');
+    padding: value('option-label-v-padding') value('option-label-h-padding');
   }
 
   &__label {
@@ -238,13 +238,13 @@ $select: map.merge(
     white-space: nowrap;
 
     &--group {
-      font-size: get-css-var('option-group-font-size');
-      color: get-css-var('option-group-color');
+      font-size: value('option-group-font-size');
+      color: value('option-group-color');
     }
   }
 
   &__check {
-    color: get-css-var('select-check-color');
+    color: value('select-check-color');
   }
 
   &__selector--focused &__arrow {
@@ -257,10 +257,10 @@ $select: map.merge(
     justify-content: center;
     width: 100%;
     padding: 3px 16px;
-    color: get-css-var('select-empty-color');
+    color: value('select-empty-color');
     white-space: nowrap;
     cursor: default;
-    background-color: get-css-var('select-list-bg-color');
+    background-color: value('select-list-bg-color');
   }
 
   &__clear {

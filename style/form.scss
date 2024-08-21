@@ -6,11 +6,11 @@
 $form: () !default;
 $form: map.merge(
   (
-    error-color: get-css-var('color-error-light-1'),
-    error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-opacity-6'),
-    asterisk-color: get-css-var('color-error-base'),
-    asterisk-family: get-css-var('font-family-base'),
-    tip-color: get-css-var('color-error-base')
+    error-color: value('color-error-light-1'),
+    error-shadow: value('box-shaodw-focus') value('color-error-opacity-6'),
+    asterisk-color: value('color-error-base'),
+    asterisk-family: value('font-family-base'),
+    tip-color: value('color-error-base')
   ),
   $form
 );
@@ -20,10 +20,11 @@ $form: map.merge(
     @include define-preset-values('form', $form);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+  }
 
-  position: relative;
+  @include inherit-color;
 
   &--inline {
     display: inline-flex;
@@ -31,12 +32,12 @@ $form: map.merge(
   }
 
   &__item {
-    @include basis;
-
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 28px;
+    @include basis {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 28px;
+    }
 
     &--action {
       justify-content: center;
@@ -138,8 +139,8 @@ $form: map.merge(
 
   @mixin asterisk {
     display: inline-block;
-    font-family: get-css-var('form-asterisk-family');
-    color: get-css-var('form-asterisk-color');
+    font-family: value('form-asterisk-family');
+    color: value('form-asterisk-color');
     content: '*';
     user-select: none;
   }
@@ -167,7 +168,7 @@ $form: map.merge(
     top: 100%;
     left: 0;
     padding-top: 3px;
-    color: get-css-var('form-tip-color');
+    color: value('form-tip-color');
     white-space: nowrap;
     user-select: none;
   }

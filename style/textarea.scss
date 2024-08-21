@@ -9,10 +9,10 @@ $textarea: map.merge(
   (
     min-height: 32px,
     resize: vertical,
-    count-color: get-css-var('input-count-color'),
-    count-color-disabled: get-css-var('input-count-color-disabled'),
-    count-font-size: get-css-var('input-count-font-size'),
-    count-line-height: get-css-var('input-count-line-height')
+    count-color: value('input-count-color'),
+    count-color-disabled: value('input-count-color-disabled'),
+    count-font-size: value('input-count-font-size'),
+    count-line-height: value('input-count-line-height')
   ),
   $textarea
 );
@@ -27,19 +27,19 @@ $textarea: map.merge(
 
   @at-root & {
     height: auto;
-    min-height: get-css-var('textarea-min-height');
+    min-height: value('textarea-min-height');
     padding: 0;
     overflow: hidden;
   }
 
   &__control {
     height: auto;
-    padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+    padding: value('input-v-padding') value('input-h-padding');
     overflow: hidden auto;
     font-family: inherit;
     font-feature-settings: 'tnum';
     font-variant-numeric: inherit;
-    resize: get-css-var('textarea-resize');
+    resize: value('textarea-resize');
   }
 
   &--no-resize &__control {
@@ -61,22 +61,22 @@ $textarea: map.merge(
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: get-css-var('input-icon-color');
+    color: value('input-icon-color');
     pointer-events: none;
     user-select: none;
   }
 
   &__count {
     margin-inline-start: 4px;
-    font-size: get-css-var('textarea-count-font-size');
-    line-height: get-css-var('textarea-count-line-height');
-    color: get-css-var('textarea-count-color');
+    font-size: value('textarea-count-font-size');
+    line-height: value('textarea-count-line-height');
+    color: value('textarea-count-color');
     pointer-events: none;
     user-select: none;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
   }
 
   &--disabled &__count {
-    color: get-css-var('textarea-count-color-disabled');
+    color: value('textarea-count-color-disabled');
   }
 }

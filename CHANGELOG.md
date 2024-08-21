@@ -1,3 +1,14 @@
+## [2.3.14](https://github.com/vexip-ui/vexip-ui/compare/v2.3.13...v2.3.14) (2024-08-21)
+
+
+### 🐞 Bug Fixes
+
+* **date-picker:** adjust unit horizontal padding ([adaf8a4](https://github.com/vexip-ui/vexip-ui/commit/adaf8a4363bb0e459c6910fd4575be6d1095696f))
+* **portal:** correctly render content only once ([9cd9c6d](https://github.com/vexip-ui/vexip-ui/commit/9cd9c6d555d90bdfd87d6af23d169791faa99ab4)), closes [#502](https://github.com/vexip-ui/vexip-ui/issues/502)
+* remove aria-hidden form tabable elements ([6cde713](https://github.com/vexip-ui/vexip-ui/commit/6cde7138401019ff6140f99bd98a042bd876b50a))
+
+
+
 ## [2.3.13](https://github.com/vexip-ui/vexip-ui/compare/v2.3.11...v2.3.13) (2024-07-28)
 
 

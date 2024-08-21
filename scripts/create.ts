@@ -8,7 +8,11 @@ import minimist from 'minimist'
 import prompts from 'prompts'
 import { logger } from '@vexip-ui/scripts'
 import { toCamelCase, toCapitalCase, toKebabCase } from '@vexip-ui/utils'
-import { components as allComponents, prettierConfig, rootDir } from './constant'
+import {
+  components as allComponents,
+  prettierConfig,
+  rootDir
+} from './constant'
 import pkg from '../package.json'
 
 const args = minimist(process.argv.slice(2))
@@ -89,14 +93,19 @@ async function create(name: string) {
   if (name.match(/[A-Z]/)) {
     capitalCaseName = name.replace(/-/g, '')
     kebabCaseName = toKebabCase(capitalCaseName)
-    camelCaseName = capitalCaseName.charAt(0).toLowerCase() + capitalCaseName.slice(1)
+    camelCaseName =
+      capitalCaseName.charAt(0).toLowerCase() + capitalCaseName.slice(1)
   } else {
     kebabCaseName = name
     capitalCaseName = toCapitalCase(name)
     camelCaseName = toCamelCase(name)
   }
 
-  const generatedFiles: Array<{ filePath: string, source: string, convert?: boolean }> = [
+  const generatedFiles: Array<{
+    filePath: string,
+    source: string,
+    convert?: boolean
+  }> = [
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),
       source: `
@@ -144,7 +153,12 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
+      filePath: path.resolve(
+        rootDir,
+        'components',
+        kebabCaseName,
+        `${kebabCaseName}.vue`
+      ),
       source: `
         <script setup lang="ts">
         import { computed } from 'vue'
@@ -197,7 +211,12 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests/ssr.spec.tsx'),
+      filePath: path.resolve(
+        rootDir,
+        'components',
+        kebabCaseName,
+        'tests/ssr.spec.tsx'
+      ),
       source: `
         /**
          * @vitest-environment node
@@ -240,12 +259,18 @@ async function create(name: string) {
             @include define-preset-values('${kebabCaseName}', $${kebabCaseName});
           }
 
-          @include basis;
+          @include basis {
+            // root styles
+          }
         }
       `
     },
     {
-      filePath: path.resolve(rootDir, 'docs/zh-CN/component', `${kebabCaseName}.md`),
+      filePath: path.resolve(
+        rootDir,
+        'docs/zh-CN/component',
+        `${kebabCaseName}.md`
+      ),
       source: `
         # ${cname} ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
@@ -280,7 +305,11 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'docs/en-US/component', `${kebabCaseName}.md`),
+      filePath: path.resolve(
+        rootDir,
+        'docs/en-US/component',
+        `${kebabCaseName}.md`
+      ),
       source: `
         # ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
@@ -315,7 +344,12 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.zh-CN.vue'),
+      filePath: path.resolve(
+        rootDir,
+        'docs/demos',
+        kebabCaseName,
+        'basis/demo.zh-CN.vue'
+      ),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
@@ -325,7 +359,12 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.en-US.vue'),
+      filePath: path.resolve(
+        rootDir,
+        'docs/demos',
+        kebabCaseName,
+        'basis/demo.en-US.vue'
+      ),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
@@ -349,7 +388,10 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(filePath, await format(source, { ...prettierConfig, parser: 'scss' }))
+        await fs.writeFile(
+          filePath,
+          await format(source, { ...prettierConfig, parser: 'scss' })
+        )
         await stylelint.lint({
           cwd: rootDir,
           fix: true,
@@ -361,7 +403,7 @@ async function create(name: string) {
           await format(
             source
               .split('\n')
-              .map(line => line.trim())
+              .map((line) => line.trim())
               .join('\n'),
             { ...prettierConfig, parser: 'markdown' }
           )
@@ -413,24 +455,44 @@ async function getConvertCompTypeFiles(): Promise<
   const capitalCaseName = toCapitalCase(name)
   const capitalCaseCompType = toCapitalCase(compType)
 
-  const compConfigPath = path.resolve(rootDir, 'docs/.vitepress/config/component.ts')
-  const i18nUsPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/en-US.ts')
-  const i18nCnPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/zh-CN.ts')
-  const i18nHelperPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/helper.ts')
+  const compConfigPath = path.resolve(
+    rootDir,
+    'docs/.vitepress/config/component.ts'
+  )
+  const i18nUsPath = path.resolve(
+    rootDir,
+    'docs/.vitepress/theme/i18n/en-US.ts'
+  )
+  const i18nCnPath = path.resolve(
+    rootDir,
+    'docs/.vitepress/theme/i18n/zh-CN.ts'
+  )
+  const i18nHelperPath = path.resolve(
+    rootDir,
+    'docs/.vitepress/theme/i18n/helper.ts'
+  )
 
-  const compConfigSource = (await fs.readFile(compConfigPath, 'utf-8')).split('\n')
+  const compConfigSource = (await fs.readFile(compConfigPath, 'utf-8')).split(
+    '\n'
+  )
   const i18nUsSource = (await fs.readFile(i18nUsPath, 'utf-8')).split('\n')
   const i18nCnSource = (await fs.readFile(i18nCnPath, 'utf-8')).split('\n')
-  const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split('\n')
+  const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split(
+    '\n'
+  )
 
-  const compConfigIndex = compConfigSource.findIndex(i => i.includes(`name: '${compType}'`)) + 2
+  const compConfigIndex =
+    compConfigSource.findIndex((i) => i.includes(`name: '${compType}'`)) + 2
   const compConfigEndIndex = compConfigSource.findIndex(
     (item, index) => index > compConfigIndex && item.includes(']')
   )
-  const i18nUsIndex = i18nUsSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
-  const i18nCnIndex = i18nCnSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nUsIndex =
+    i18nUsSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nCnIndex =
+    i18nCnSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) + 1
   const i18nHelperIndex =
-    i18nHelperSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+    i18nHelperSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) +
+    1
 
   compConfigSource.splice(
     compConfigIndex,
@@ -459,15 +521,27 @@ async function getConvertCompTypeFiles(): Promise<
     ...convertCompConfig
   )
 
-  i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
+  i18nUsSource.splice(
+    i18nUsIndex,
+    0,
+    `${capitalCaseName}: '${capitalCaseName}',`
+  )
   i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${cname}',`)
   i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: string,`)
 
   return [
-    { filePath: compConfigPath, source: compConfigSource.join('\n'), convert: true },
+    {
+      filePath: compConfigPath,
+      source: compConfigSource.join('\n'),
+      convert: true
+    },
     { filePath: i18nUsPath, source: i18nUsSource.join('\n'), convert: true },
     { filePath: i18nCnPath, source: i18nCnSource.join('\n'), convert: true },
-    { filePath: i18nHelperPath, source: i18nHelperSource.join('\n'), convert: true }
+    {
+      filePath: i18nHelperPath,
+      source: i18nHelperSource.join('\n'),
+      convert: true
+    }
   ]
 }
 
@@ -480,7 +554,7 @@ function getSinceVersion() {
   return splitStr.join('.')
 }
 
-main().catch(error => {
+main().catch((error) => {
   logger.error(error)
   process.exit(1)
 })

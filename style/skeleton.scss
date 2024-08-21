@@ -9,10 +9,10 @@ $skeleton: map.merge(
     width: 100%,
     height: 1em,
     spread: 0,
-    color: get-css-var('content-color-placeholder'),
-    bg-color: get-css-var('fill-color-hover'),
+    color: value('content-color-placeholder'),
+    bg-color: value('fill-color-hover'),
     shine-color: rgba(125, 125, 125, 20%),
-    radius: get-css-var('radius-base'),
+    radius: value('radius-base'),
     activated-dir: 1
   ),
   $skeleton
@@ -23,17 +23,17 @@ $skeleton: map.merge(
     @include define-preset-values('skeleton', $skeleton);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-block;
-  width: get-css-var('skeleton-width');
-  height: get-css-var('skeleton-height');
-  margin-bottom: get-css-var('skeleton-spread');
-  overflow: hidden;
-  color: get-css-var('skeleton-color');
-  background-color: get-css-var('skeleton-bg-color');
-  border-radius: get-css-var('skeleton-radius');
+  @include basis {
+    position: relative;
+    display: inline-block;
+    width: value('skeleton-width');
+    height: value('skeleton-height');
+    margin-bottom: value('skeleton-spread');
+    overflow: hidden;
+    color: value('skeleton-color');
+    background-color: value('skeleton-bg-color');
+    border-radius: value('skeleton-radius');
+  }
 
   @include rtl {
     @include define-css-var('skeleton-activated-dir', -1);
@@ -75,7 +75,7 @@ $skeleton: map.merge(
   }
 
   &--circle {
-    width: get-css-var('skeleton-height');
+    width: value('skeleton-height');
     border-radius: 50%;
   }
 
@@ -91,11 +91,11 @@ $skeleton: map.merge(
 
   @keyframes #{$namespace}-skeleton-loading {
     0% {
-      transform: translate(calc(#{get-css-var('skeleton-activated-dir')} * -37.5%));
+      transform: translate(calc(#{value('skeleton-activated-dir')} * -37.5%));
     }
 
     100% {
-      transform: translate(calc(#{get-css-var('skeleton-activated-dir')} * 37.5%));
+      transform: translate(calc(#{value('skeleton-activated-dir')} * 37.5%));
     }
   }
 
@@ -107,7 +107,7 @@ $skeleton: map.merge(
     background-image: linear-gradient(
       to right,
       transparent 25%,
-      get-css-var('skeleton-shine-color') 37%,
+      value('skeleton-shine-color') 37%,
       transparent 63%
     );
     animation: #{$namespace}-skeleton-loading 2000ms ease infinite;

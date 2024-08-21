@@ -9,9 +9,9 @@ $linker: () !default;
 $linker: map.merge(
   (
     color: inherit,
-    color-hover: get-css-var('color-primary-light-1'),
-    color-active: get-css-var('color-primary-dark-1'),
-    color-disabled: get-css-var('content-color-disabled'),
+    color-hover: value('color-primary-light-1'),
+    color-active: value('color-primary-dark-1'),
+    color-disabled: value('content-color-disabled'),
     series-span: 8px,
     underline-height: 1px
   ),
@@ -27,30 +27,30 @@ $linker: map.merge(
     @include define-preset-style('linker', $style-map);
   }
 
-  @include basis;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: get-css-var('linker-color');
-  text-decoration: none;
-  vertical-align: inherit;
-  cursor: pointer;
-  outline: 0;
-  transition: get-css-var('transition-color');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: value('linker-color');
+    text-decoration: none;
+    vertical-align: inherit;
+    cursor: pointer;
+    outline: 0;
+    transition: value('transition-color');
+  }
 
   & + & {
-    margin-inline-start: get-css-var('linker-series-span');
+    margin-inline-start: value('linker-series-span');
   }
 
   &:hover,
   &:focus {
-    color: get-css-var('linker-color-hover');
+    color: value('linker-color-hover');
     text-decoration: none;
   }
 
   &:active {
-    color: get-css-var('linker-color-active');
+    color: value('linker-color-active');
   }
 
   &--underline {
@@ -59,11 +59,11 @@ $linker: map.merge(
       inset-inline-start: 0;
       right: 0;
       bottom: 0;
-      height: get-css-var('linker-underline-height');
+      height: value('linker-underline-height');
       content: '';
-      background-color: get-css-var('linker-color-hover');
+      background-color: value('linker-color-hover');
       opacity: 0%;
-      transition: get-css-var('transition-background'), get-css-var('transition-opacity');
+      transition: value('transition-background'), value('transition-opacity');
     }
 
     &:hover::after {
@@ -71,7 +71,7 @@ $linker: map.merge(
     }
 
     &:active::after {
-      background-color: get-css-var('linker-color-active');
+      background-color: value('linker-color-active');
     }
   }
 
@@ -82,7 +82,7 @@ $linker: map.merge(
     &:hover,
     &:focus,
     &:active {
-      color: get-css-var('linker-color-disabled');
+      color: value('linker-color-disabled');
     }
 
     &:hover::after {

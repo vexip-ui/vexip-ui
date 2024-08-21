@@ -9,21 +9,21 @@
 $tag: () !default;
 $tag: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    color-disabled: get-css-var('content-color-disabled'),
-    bg-color: get-css-var('fill-color-background'),
-    bg-color-disabled: get-css-var('fill-color-background'),
-    b-color: get-css-var('border-color-base'),
-    b-color-disabled: get-css-var('border-color-light-2'),
+    color: value('content-color-base'),
+    color-disabled: value('content-color-disabled'),
+    bg-color: value('fill-color-background'),
+    bg-color-disabled: value('fill-color-background'),
+    b-color: value('border-color-base'),
+    b-color-disabled: value('border-color-light-2'),
     v-padding: 0,
     h-padding: 8px,
-    radius: get-css-var('radius-base'),
+    radius: value('radius-base'),
     series-span: 4px,
-    small-font-size: get-css-var('font-size-secondary'),
-    default-font-size: get-css-var('font-size-base'),
-    large-font-size: get-css-var('font-size-primary'),
-    close-color: get-css-var('content-color-secondary'),
-    d-color: get-css-var('border-color-light-1')
+    small-font-size: value('font-size-secondary'),
+    default-font-size: value('font-size-base'),
+    large-font-size: value('font-size-primary'),
+    close-color: value('content-color-secondary'),
+    d-color: value('border-color-light-1')
   ),
   $tag
 );
@@ -37,27 +37,27 @@ $tag: map.merge(
     @include define-preset-style('tag', $style-map);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    font-size: value('tag-default-font-size');
+    color: value('tag-color');
+    white-space: nowrap;
+    transition: value('transition-color');
+  }
 
-  $radius: get-css-var('tag-radius');
-
-  position: relative;
-  display: inline-flex;
-  font-size: get-css-var('tag-default-font-size');
-  color: get-css-var('tag-color');
-  white-space: nowrap;
-  transition: get-css-var('transition-color');
+  $radius: value('tag-radius');
 
   & + & {
-    margin-inline-start: get-css-var('tag-series-span');
+    margin-inline-start: value('tag-series-span');
   }
 
   &--small {
-    font-size: get-css-var('tag-small-font-size');
+    font-size: value('tag-small-font-size');
   }
 
   &--large {
-    font-size: get-css-var('tag-large-font-size');
+    font-size: value('tag-large-font-size');
   }
 
   &--circle {
@@ -71,7 +71,7 @@ $tag: map.merge(
   }
 
   &--disabled {
-    color: get-css-var('tag-color-disabled');
+    color: value('tag-color-disabled');
     cursor: not-allowed;
   }
 
@@ -79,29 +79,29 @@ $tag: map.merge(
     display: flex;
     align-items: center;
     max-width: 100%;
-    padding: get-css-var('tag-v-padding') get-css-var('tag-h-padding');
-    background-color: get-css-var('tag-bg-color');
-    border: get-css-var('border-shape') get-css-var('tag-b-color');
-    border-inline-start-color: get-css-var('tag-d-color');
+    padding: value('tag-v-padding') value('tag-h-padding');
+    background-color: value('tag-bg-color');
+    border: value('border-shape') value('tag-b-color');
+    border-inline-start-color: value('tag-d-color');
     border-inline-end-width: 0;
-    transition: get-css-var('transition-background'), get-css-var('transition-border');
+    transition: value('transition-background'), value('transition-border');
 
     &:first-child {
-      border-inline-start-color: get-css-var('tag-b-color');
+      border-inline-start-color: value('tag-b-color');
 
       @include logical-radius($radius null null $radius);
     }
 
     &:last-child {
-      border-inline-end-width: get-css-var('border-width');
+      border-inline-end-width: value('border-width');
 
       @include logical-radius(null $radius $radius null);
     }
   }
 
   &--disabled &__unit {
-    background-color: get-css-var('tag-bg-color-disabled');
-    border-color: get-css-var('tag-b-color-disabled');
+    background-color: value('tag-bg-color-disabled');
+    border-color: value('tag-b-color-disabled');
   }
 
   &__close {
@@ -113,13 +113,13 @@ $tag: map.merge(
     height: 12px;
     padding: 0;
     margin-inline-start: 4px;
-    color: get-css-var('tag-close-color');
+    color: value('tag-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
     opacity: 60%;
-    transition: get-css-var('transition-opacity');
+    transition: value('transition-opacity');
 
     &:hover,
     &:focus {

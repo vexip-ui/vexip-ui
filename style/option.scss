@@ -6,20 +6,20 @@
 $option: () !default;
 $option: map.merge(
   (
-    color: get-css-var('content-color-base'),
-    // color-hover: get-css-var('option-color'),
-    color-hitting: get-css-var('color-primary-base'),
-    color-selected: get-css-var('color-primary-base'),
-    color-disabled: get-css-var('fill-color-disabled'),
+    color: value('content-color-base'),
+    // color-hover: value('option-color'),
+    color-hitting: value('color-primary-base'),
+    color-selected: value('color-primary-base'),
+    color-disabled: value('fill-color-disabled'),
     bg-color: transparent,
-    bg-color-hover: get-css-var('fill-color-humble'),
-    bg-color-hitting: get-css-var('option-bg-color-hover'),
-    bg-color-selected: get-css-var('color-primary-opacity-8'),
-    bg-color-disabled: get-css-var('option-bg-color'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('option-d-color'),
-    group-color: get-css-var('content-color-secondary'),
-    group-font-size: get-css-var('font-size-secondary'),
+    bg-color-hover: value('fill-color-humble'),
+    bg-color-hitting: value('option-bg-color-hover'),
+    bg-color-selected: value('color-primary-opacity-8'),
+    bg-color-disabled: value('option-bg-color'),
+    d-color: value('border-color-light-2'),
+    divider: value('border-shape') value('option-d-color'),
+    group-color: value('content-color-secondary'),
+    group-font-size: value('font-size-secondary'),
     label-v-padding: 5px,
     label-h-padding: 16px,
     min-height: 32px
@@ -32,38 +32,40 @@ $option: map.merge(
     @include define-preset-values('option', $option);
   }
 
-  $label-v-padding: get-css-var('option-label-v-padding');
-  $label-h-padding: get-css-var('option-label-h-padding');
+  $label-v-padding: value('option-label-v-padding');
+  $label-h-padding: value('option-label-h-padding');
   $label-padding: $label-v-padding $label-h-padding;
 
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
-  min-height: get-css-var('option-min-height');
-  padding: $label-padding;
-  color: get-css-var('option-color');
-  white-space: nowrap;
-  list-style: none;
-  cursor: pointer;
-  background-color: get-css-var('option-bg-color');
-  transition: get-css-var('transition-color'), get-css-var('transition-background');
+  & {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    min-height: value('option-min-height');
+    padding: $label-padding;
+    color: value('option-color');
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    background-color: value('option-bg-color');
+    transition: value('transition-color'), value('transition-background');
+  }
 
   &:not(#{&}--no-hover):hover {
-    // color: get-css-var('option-color-hover');
-    background-color: get-css-var('option-bg-color-hover');
+    // color: value('option-color-hover');
+    background-color: value('option-bg-color-hover');
   }
 
   &--hitting {
-    color: get-css-var('option-color-hitting');
-    background-color: get-css-var('option-bg-color-hitting');
+    color: value('option-color-hitting');
+    background-color: value('option-bg-color-hitting');
   }
 
   &--selected {
     &,
     &:hover,
     &:not(#{&}--no-hover):hover {
-      color: get-css-var('option-color-selected');
-      background-color: get-css-var('option-bg-color-selected');
+      color: value('option-color-selected');
+      background-color: value('option-bg-color-selected');
     }
   }
 
@@ -72,8 +74,8 @@ $option: map.merge(
 
     &,
     &:hover {
-      color: get-css-var('option-color-disabled');
-      background-color: get-css-var('option-bg-color');
+      color: value('option-color-disabled');
+      background-color: value('option-bg-color');
     }
   }
 
@@ -91,7 +93,7 @@ $option: map.merge(
       margin-inline: calc(#{$label-h-padding} * -1);
       pointer-events: none;
       content: '';
-      border-bottom: get-css-var('option-divider');
+      border-bottom: value('option-divider');
     }
   }
 
@@ -103,8 +105,8 @@ $option: map.merge(
 
       &__label {
         padding: $label-padding;
-        font-size: get-css-var('option-group-font-size');
-        color: get-css-var('option-group-color');
+        font-size: value('option-group-font-size');
+        color: value('option-group-color');
       }
 
       &__list {
@@ -124,9 +126,9 @@ $option: map.merge(
           left: 0;
           display: block;
           height: 1px;
-          font-size: get-css-var('option-group-font-size');
+          font-size: value('option-group-font-size');
           content: '';
-          background-color: get-css-var('option-d-color');
+          background-color: value('option-d-color');
         }
       }
     }

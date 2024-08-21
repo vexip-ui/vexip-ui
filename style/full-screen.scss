@@ -5,7 +5,7 @@
 $full-screen: () !default;
 $full-screen: map.merge(
   (
-    z-index: get-css-var(z-index-full),
+    z-index: value(z-index-full),
     inset: 0,
     width: 100vw,
     height: 100vh
@@ -23,9 +23,9 @@ $full-screen: map.merge(
 
   &--full {
     position: fixed !important;
-    inset: get-css-var(full-screen-inset) !important;
-    z-index: get-css-var(full-screen-z-index) !important;
-    width: get-css-var(full-screen-width) !important;
-    height: get-css-var(full-screen-height) !important;
+    inset: value(full-screen-inset) !important;
+    z-index: value(full-screen-z-index) !important;
+    width: value(full-screen-width) !important;
+    height: value(full-screen-height) !important;
   }
 }

@@ -6,20 +6,20 @@
 $carousel: () !default;
 $carousel: map.merge(
   (
-    handler-color: get-css-var('bg-color-base'),
-    handler-bg-color: get-css-var('content-color-base'),
+    handler-color: value('bg-color-base'),
+    handler-bg-color: value('content-color-base'),
     handler-opacity: 50%,
     handler-opacity-hover: 80%,
     handler-opacity-disabled: 30%,
     handler-size: 40px,
-    pointer-bg-color: get-css-var('content-color-secondary'),
+    pointer-bg-color: value('content-color-secondary'),
     pointer-width: 16px,
     pointer-width-active: 24px,
     pointer-height: 3px,
-    pointer-radius: get-css-var('radius-small'),
+    pointer-radius: value('radius-small'),
     pointer-opacity: 50%,
     pointer-opacity-hover: 80%,
-    pointer-opacity-active: get-css-var('carousel-pointer-opacity-hover'),
+    pointer-opacity-active: value('carousel-pointer-opacity-hover'),
     pointer-opacity-disabled: 30%
   ),
   $carousel
@@ -30,14 +30,15 @@ $carousel: map.merge(
     @include define-preset-values('carousel', $carousel);
   }
 
-  @include basis;
-  @include inherit-color;
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    user-select: none;
+  }
 
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  width: 100%;
-  user-select: none;
+  @include inherit-color;
 
   &--vertical {
     flex-direction: row;
@@ -53,7 +54,7 @@ $carousel: map.merge(
     display: flex;
     width: 100%;
     height: 100%;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
   }
 
   &--vertical &__track {
@@ -89,7 +90,7 @@ $carousel: map.merge(
       top: 0;
       bottom: 0;
       opacity: 0%;
-      transition: get-css-var('transition-opacity');
+      transition: value('transition-opacity');
     }
 
     &--prev {
@@ -129,18 +130,18 @@ $carousel: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('carousel-handler-size');
-    height: get-css-var('carousel-handler-size');
-    color: get-css-var('carousel-handler-color');
+    width: value('carousel-handler-size');
+    height: value('carousel-handler-size');
+    color: value('carousel-handler-color');
     pointer-events: auto;
     cursor: pointer;
-    background-color: get-css-var('carousel-handler-bg-color');
+    background-color: value('carousel-handler-bg-color');
     border-radius: 50%;
-    opacity: get-css-var('carousel-handler-opacity');
-    transition: get-css-var('transition-opacity');
+    opacity: value('carousel-handler-opacity');
+    transition: value('transition-opacity');
 
     &:hover {
-      opacity: get-css-var('carousel-handler-opacity-hover');
+      opacity: value('carousel-handler-opacity-hover');
     }
 
     &--disabled {
@@ -148,7 +149,7 @@ $carousel: map.merge(
 
       &,
       &:hover {
-        opacity: get-css-var('carousel-handler-opacity-disabled');
+        opacity: value('carousel-handler-opacity-disabled');
       }
     }
   }
@@ -214,24 +215,24 @@ $carousel: map.merge(
 
     &-inner {
       display: inline-block;
-      width: get-css-var('carousel-pointer-width');
-      height: get-css-var('carousel-pointer-height');
+      width: value('carousel-pointer-width');
+      height: value('carousel-pointer-height');
       margin: 1px 0 2px;
-      background-color: get-css-var('carousel-pointer-bg-color');
-      border-radius: get-css-var('carousel-pointer-radius');
-      opacity: get-css-var('carousel-pointer-opacity');
+      background-color: value('carousel-pointer-bg-color');
+      border-radius: value('carousel-pointer-radius');
+      opacity: value('carousel-pointer-opacity');
       transition:
-        width get-css-var('transition-base'),
-        get-css-var('transition-opacity');
+        width value('transition-base'),
+        value('transition-opacity');
     }
 
     &:hover &-inner {
-      opacity: get-css-var('carousel-pointer-opacity-hover');
+      opacity: value('carousel-pointer-opacity-hover');
     }
 
     &--active &-inner {
-      width: get-css-var('carousel-pointer-width-active');
-      opacity: get-css-var('carousel-pointer-opacity-active');
+      width: value('carousel-pointer-width-active');
+      opacity: value('carousel-pointer-opacity-active');
     }
 
     $inner: #{&}-inner;
@@ -242,30 +243,30 @@ $carousel: map.merge(
       &,
       &:hover {
         #{$inner} {
-          opacity: get-css-var('carousel-pointer-opacity-disabled');
+          opacity: value('carousel-pointer-opacity-disabled');
         }
       }
     }
 
     &--disabled#{&}--active {
       #{$inner} {
-        opacity: get-css-var('carousel-pointer-opacity-disabled');
+        opacity: value('carousel-pointer-opacity-disabled');
       }
     }
   }
 
   &--vertical &__pointer {
     &-inner {
-      width: get-css-var('carousel-pointer-height');
-      height: get-css-var('carousel-pointer-width');
+      width: value('carousel-pointer-height');
+      height: value('carousel-pointer-width');
       margin: 0 2px 1px 0;
       transition:
-        height get-css-var('transition-base'),
-        get-css-var('transition-opacity');
+        height value('transition-base'),
+        value('transition-opacity');
     }
 
     &--active .#{$namespace}-carousel__pointer-inner {
-      height: get-css-var('carousel-pointer-width-active');
+      height: value('carousel-pointer-width-active');
     }
   }
 }

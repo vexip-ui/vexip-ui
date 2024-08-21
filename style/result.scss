@@ -24,12 +24,12 @@ $result: map.merge(
     @include define-preset-style('result', $style-map);
   }
 
-  @include basis;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  @include basis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
   &--small {
     @include define-preset-values(
@@ -56,22 +56,22 @@ $result: map.merge(
   &__icon {
     display: flex;
     align-items: center;
-    font-size: get-css-var('result-icon-font-size');
-    color: get-css-var('result-icon-color');
+    font-size: value('result-icon-font-size');
+    color: value('result-icon-color');
   }
 
   &__title {
-    margin-top: get-css-var('result-title-margin-top');
-    font-size: get-css-var('result-title-font-size');
+    margin-top: value('result-title-margin-top');
+    font-size: value('result-title-font-size');
   }
 
   &__description {
-    margin-top: get-css-var('result-description-margin-top');
-    font-size: get-css-var('result-description-font-size');
+    margin-top: value('result-description-margin-top');
+    font-size: value('result-description-font-size');
   }
 
   &__extra {
-    margin-top: get-css-var('result-extra-margin-top');
+    margin-top: value('result-extra-margin-top');
   }
 
   @each $type in $types {

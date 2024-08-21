@@ -1,5 +1,7 @@
 import './style/index.scss'
 
+import { version } from 'vue'
+
 import { withBase } from 'vitepress'
 import { Loading, install as VexipUI } from 'vexip-ui'
 import { isClient, isColor } from '@vexip-ui/utils'
@@ -15,6 +17,12 @@ import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 import type { App, Ref } from 'vue'
 import type { Router } from 'vitepress'
 
+declare global {
+  interface Window {
+    vueVersion: string
+  }
+}
+
 export default {
   Layout,
   enhanceApp({ app, router }: { app: App, router: Router }) {
@@ -24,6 +32,10 @@ export default {
     syncDirection()
     enhanceApp(app)
     enhanceRouter(router)
+
+    if (isClient) {
+      window.vueVersion = version
+    }
   }
 }
 

@@ -6,12 +6,12 @@
   align-items: center;
   justify-content: center;
   overflow: visible;
-  transition: get-css-var('transition-transform');
+  transition: value('transition-transform');
   transform-origin: 50% 50%;
 
   & > g {
     display: flex;
-    transform: rotate(get-css-var('icon-rotate', 0));
+    transform: rotate(value('icon-rotate', 0));
   }
 
   svg {
@@ -28,15 +28,15 @@
   }
 
   &--flip-horizontal > g {
-    transform: scale(-1, 1) rotate(get-css-var('icon-rotate', 0));
+    transform: scale(-1, 1) rotate(value('icon-rotate', 0));
   }
 
   &--flip-vertical > g {
-    transform: scale(1, -1) rotate(get-css-var('icon-rotate', 0));
+    transform: scale(1, -1) rotate(value('icon-rotate', 0));
   }
 
   &--flip-both > g {
-    transform: scale(-1, -1) rotate(get-css-var('icon-rotate', 0));
+    transform: scale(-1, -1) rotate(value('icon-rotate', 0));
   }
 
   &--spin-in > g {
