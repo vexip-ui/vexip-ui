@@ -2,7 +2,7 @@
   "name": "vexip-ui",
   "version": "2.3.14",
   "type": "module",
-  "packageManager": "pnpm@8.2.0",
+  "packageManager": "pnpm@9.9.0",
   "license": "MIT",
   "author": "qmhc",
   "description": "A Vue 3 UI library, Highly customizability, full TypeScript, performance pretty good",
@@ -200,7 +200,7 @@
     "tsx": "^4.7.2",
     "typescript": "5.4.4",
     "vite": "^5.4.1",
-    "vite-plugin-dts": "^4.0.3",
+    "vite-plugin-dts": "^4.1.0",
     "vitest": "1.1.3",
     "vue": "^3.4.38",
     "vue-router": "^4.4.3"
