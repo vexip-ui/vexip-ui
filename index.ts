@@ -14,7 +14,8 @@ export {
   taINLocale,
   zhCNLocale,
   zhHKLocale,
-  zhTWLocale
+  zhTWLocale,
+  faIRLocale
 } from '@vexip-ui/config'
 
 export type {
