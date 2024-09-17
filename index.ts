@@ -10,12 +10,12 @@ export {
   arEGLocale,
   deDELocale,
   enUSLocale,
+  faIRLocale,
   frFRLocale,
   taINLocale,
   zhCNLocale,
   zhHKLocale,
-  zhTWLocale,
-  faIRLocale
+  zhTWLocale
 } from '@vexip-ui/config'
 
 export type {
