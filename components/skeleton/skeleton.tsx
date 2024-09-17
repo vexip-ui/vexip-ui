@@ -100,31 +100,30 @@ export default defineComponent({
     }
 
     function renderSkeleton() {
-      if (!loading.value) {
-        return renderSlot(slots, 'default')
-      }
+      const Wrapper = tag.value || 'div'
 
-      return h(
-        tag.value || 'div',
-        {
-          ...attrs,
-          class: [className.value, attrs.class],
-          style: [style.value, attrs.style]
-        },
-        props.image
-          ? [
+      return (
+        <Wrapper
+          {...attrs}
+          class={[className.value, attrs.class]}
+          style={[style.value, attrs.style]}
+        >
+          {props.image ? (
             <Icon
-              key={1}
               {...icons.value.image}
               icon={props.imageIcon || icons.value.image.icon}
               scale={props.iconScale}
             ></Icon>
-            ]
-          : []
+          ) : null}
+        </Wrapper>
       )
     }
 
     return () => {
+      if (!loading.value) {
+        return renderSlot(slots, 'default')
+      }
+
       if (props.repeat > 1) {
         return Array.from({ length: props.repeat }, () => renderSkeleton())
       }
