@@ -10,6 +10,7 @@ export {
   arEGLocale,
   deDELocale,
   enUSLocale,
+  faIRLocale,
   frFRLocale,
   taINLocale,
   zhCNLocale,
