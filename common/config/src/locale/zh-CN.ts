@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * Chinese (Simplified) locale config
+ * Chinese (Simplified) locale config.
+ *
+ * @author @qmhc
  */
 export function zhCNLocale() {
   return defineLocaleConfig({

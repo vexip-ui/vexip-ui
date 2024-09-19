@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * English locale config
+ * English locale config.
+ *
+ * @author @qmhc
  */
 export function enUSLocale() {
   return defineLocaleConfig({

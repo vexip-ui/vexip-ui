@@ -1,12 +1,15 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * Persian (Farsi) locale config
+ * Persian (Farsi) locale config.
+ *
+ * @author @alphaelf
  */
 export function faIRLocale() {
   return defineLocaleConfig({
     locale: 'fa-IR',
     wordSpace: true,
+
     calendar: {
       year: '',
       month: '',

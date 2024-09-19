@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * French locale config
+ * French locale config.
+ *
+ * @author @Nalca
  */
 export function frFRLocale() {
   return defineLocaleConfig({
