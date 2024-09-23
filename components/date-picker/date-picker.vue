@@ -49,6 +49,7 @@ import type { Dateable } from '@vexip-ui/utils'
 import type {
   DatePickerChangeEvent,
   DatePickerFormatFn,
+  DatePickerSlots,
   DateTimeType,
   DateType,
   TimeType
@@ -139,11 +140,7 @@ const props = useProps('datePicker', _props, {
 
 const emit = defineEmits(['update:value', 'update:formatted-value', 'update:visible'])
 
-const slots = defineSlots<{
-  prefix: () => any,
-  exchange: () => any,
-  suffix: () => any
-}>()
+const slots = defineSlots<DatePickerSlots>()
 
 const calendarLocale = useLocale('calendar')
 const datePickerLocale = useLocale('datePicker')
@@ -1398,7 +1395,23 @@ function handleClickOutside() {
         @cancel="handleCancel"
         @hover="handleDateHover"
         @time-change="handleTimeChange"
-      ></DatePanel>
+      >
+        <template v-if="$slots.panelTitle" #title="titleParams">
+          <slot name="panelTitle" v-bind="titleParams"></slot>
+        </template>
+        <template v-if="$slots.panelYear" #year="yearParams">
+          <slot name="panelYear" v-bind="yearParams"></slot>
+        </template>
+        <template v-if="$slots.panelMonth" #month="monthParams">
+          <slot name="panelMonth" v-bind="monthParams"></slot>
+        </template>
+        <template v-if="$slots.panelWeek" #week="weekParams">
+          <slot name="panelWeek" v-bind="weekParams"></slot>
+        </template>
+        <template v-if="$slots.panelDate" #date="dateParams">
+          <slot name="panelDate" v-bind="dateParams"></slot>
+        </template>
+      </DatePanel>
     </Popper>
   </div>
 </template>

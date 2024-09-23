@@ -221,8 +221,13 @@ interface DateShortcut {
 
 ### DatePicker 插槽
 
-| 名称     | 说明                             | 参数 | 始于     |
-| -------- | -------------------------------- | ---- | -------- |
-| prefix   | 前缀内容的插槽，一般为单个图标   | -    | -        |
-| suffix   | 后缀内容的插槽，一般为单个图标   | -    | -        |
-| exchange | 开启范围选择时，中间分隔符的插槽 | -    | `2.0.14` |
+| 名称       | 说明                             | 参数                                                                                                                                                          | 始于     |
+| ---------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| prefix     | 前缀内容的插槽，一般为单个图标   | -                                                                                                                                                             | -        |
+| suffix     | 后缀内容的插槽，一般为单个图标   | -                                                                                                                                                             | -        |
+| exchange   | 开启范围选择时，中间分隔符的插槽 | -                                                                                                                                                             | `2.0.14` |
+| panelTitle | 日期面板的标题的插槽             | `{ panel: DateType, yearStart: number, year: number, month: number, togglePanel: (panel: DateType) => void }`                                                 | `2.3.15` |
+| panelYear  | 年份面板的选项的插槽             | `{ year: number, selected: boolean, isNext: boolean, disabled: boolean, inRange: boolean }`                                                                   | `2.3.15` |
+| panelMonth | 月份面板的选项的插槽             | `{ year: number, month: number, selected: boolean, disabled: boolean, inRange: boolean }`                                                                     | `2.3.15` |
+| panelWeek  | 日历面板的周标识的插槽           | `{ label: string, index: number, week: number }`                                                                                                              | `2.3.15` |
+| panelDate  | 日历面板的日期选项插槽           | `{ date: Date, label: string, selected: boolean, hovered: boolean, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean, inRange: boolean }` | `2.3.15` |

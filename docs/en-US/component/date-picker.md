@@ -221,8 +221,13 @@ interface DateShortcut {
 
 ### DatePicker Slots
 
-| Name     | Description                                                       | Parameters | Since    |
-| -------- | ----------------------------------------------------------------- | ---------- | -------- |
-| prefix   | Slot for prefix content, usually a single icon                    | -          | -        |
-| suffix   | Slot for suffix content, usually a single icon                    | -          | -        |
-| exchange | The slot for the middle separator when range selection is enabled | -          | `2.0.14` |
+| Name       | Description                                                       | Parameters                                                                                                                                                    | Since    |
+| ---------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| prefix     | Slot for prefix content, usually a single icon                    | -                                                                                                                                                             | -        |
+| suffix     | Slot for suffix content, usually a single icon                    | -                                                                                                                                                             | -        |
+| exchange   | The slot for the middle separator when range selection is enabled | -                                                                                                                                                             | `2.0.14` |
+| panelTitle | Slot for the title of date panel                                  | `{ panel: DateType, yearStart: number, year: number, month: number, togglePanel: (panel: DateType) => void }`                                                 | `2.3.15` |
+| panelYear  | Slot for the option of year panel                                 | `{ year: number, selected: boolean, isNext: boolean, disabled: boolean, inRange: boolean }`                                                                   | `2.3.15` |
+| panelMonth | Slot for the option of month panel                                | `{ year: number, month: number, selected: boolean, disabled: boolean, inRange: boolean }`                                                                     | `2.3.15` |
+| panelWeek  | Slot for the week part item of calendar panel                     | `{ label: string, index: number, week: number }`                                                                                                              | `2.3.15` |
+| panelDate  | Slot for the date option of calendar panel                        | `{ date: Date, label: string, selected: boolean, hovered: boolean, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean, inRange: boolean }` | `2.3.15` |
