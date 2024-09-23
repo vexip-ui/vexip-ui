@@ -9,6 +9,8 @@ import CalendarPanel from './calendar-panel.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { calendarProps } from './props'
 
+import type { CalendarSlots } from './symbol'
+
 defineOptions({ name: 'Calendar' })
 
 const _props = defineProps(calendarProps)
@@ -43,20 +45,7 @@ const props = useProps('calendar', _props, {
 
 const emit = defineEmits(['update:value', 'update:year', 'update:month'])
 
-defineSlots<{
-  header: () => any,
-  title: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  content: (params: {
-    selected: boolean,
-    hovered: boolean,
-    date: Date,
-    isPrev: boolean,
-    isNext: boolean,
-    isToday: boolean,
-    disabled: boolean
-  }) => any
-}>()
+defineSlots<CalendarSlots>()
 
 const nh = useNameHelper('calendar')
 const locale = useLocale('calendar', toRef(props, 'locale'))
@@ -196,9 +185,20 @@ function handleMonthChange(value: number) {
         @keydown.space.prevent="handleClick(date)"
       >
         <div :class="nh.be('date-header')">
-          <div :class="nh.be('date-value')" :aria-label="label">
-            {{ date.getDate() }}
-          </div>
+          <slot
+            name="date"
+            :selected="selected"
+            :hovered="hovered"
+            :date="date"
+            :is-prev="isPrev"
+            :is-next="isNext"
+            :is-today="isToday"
+            :disabled="disabled"
+          >
+            <div :class="nh.be('date-value')" :aria-label="label">
+              {{ date.getDate() }}
+            </div>
+          </slot>
         </div>
         <div :class="nh.be('date-content')">
           <slot

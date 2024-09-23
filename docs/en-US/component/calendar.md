@@ -55,9 +55,10 @@ If you think the native scroll bar is not cool, you can add a scroll component b
 
 ### Calendar Slots
 
-| Name    | Description                                                                                                | Parameters                                                                                                 | Since |
-| ------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| header  | The header content slot of the calendar, which will replace the entire header of the calendar when used    | -                                                                                                          | -     |
-| title   | Calendar's title content slot                                                                              | -                                                                                                          | -     |
-| week    | Slot for calendar week number content, `week` parameter is the week number after `week-start` is processed | `{ label: string, index: number, week: number }`                                                           | -     |
-| content | Calendar cell content slot                                                                                 | `{ selected: boolean, date: Date, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean }` | -     |
+| Name    | Description                                                                                                | Parameters                                                                                                 | Since    |
+| ------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------- |
+| header  | The header content slot of the calendar, which will replace the entire header of the calendar when used    | -                                                                                                          | -        |
+| title   | Calendar's title content slot                                                                              | -                                                                                                          | -        |
+| week    | Slot for calendar week number content, `week` parameter is the week number after `week-start` is processed | `{ label: string, index: number, week: number }`                                                           | -        |
+| date    | Calendar cell date value slot                                                                              | `{ selected: boolean, date: Date, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean }` | `2.3.15` |
+| content | Calendar cell content slot                                                                                 | `{ selected: boolean, date: Date, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean }` | -        |

@@ -16,7 +16,7 @@ import {
 import { calendarPanelProps } from './props'
 
 import type { Dateable } from '@vexip-ui/utils'
-import type { WeekIndex } from './symbol'
+import type { CalendarPanelSlots, WeekIndex } from './symbol'
 
 defineOptions({ name: 'CalendarPanel' })
 
@@ -59,22 +59,7 @@ const props = useProps('calendarBase', _props, {
 
 const emit = defineEmits(['update:value'])
 
-defineSlots<{
-  header: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  item: (params: {
-    date: Date,
-    label: string,
-    selected: boolean,
-    hovered: boolean,
-    isPrev: boolean,
-    isNext: boolean,
-    isToday: boolean,
-    disabled: boolean,
-    inRange: boolean
-  }) => any,
-  footer: () => any
-}>()
+defineSlots<CalendarPanelSlots>()
 
 const nh = useNameHelper('calendar')
 
