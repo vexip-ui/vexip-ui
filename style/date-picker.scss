@@ -163,6 +163,7 @@ $date-picker: map.merge(
   }
 
   &__panel {
+    position: relative;
     display: flex;
     background-color: value('date-picker-panel-bg-color');
     border-radius: value('date-picker-panel-border-radius');
@@ -183,16 +184,43 @@ $date-picker: map.merge(
   }
 
   &__shortcuts {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 6px 0;
+    overflow: auto;
+    vertical-align: top;
     background-color: value('date-picker-shortcut-bg-color');
     border-inline-end: value('border-shape') value('date-picker-d-color');
+    scrollbar-width: none;
+
+    @include clear-both;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &--top {
+      bottom: auto;
+    }
+
+    &--right {
+      left: auto;
+    }
+
+    &--bottom {
+      top: auto;
+    }
+
+    &--left {
+      right: auto;
+    }
 
     &--top,
     &--bottom {
-      flex-flow: row wrap;
+      flex-direction: row;
       justify-content: center;
       padding: 0 6px;
     }
@@ -204,6 +232,7 @@ $date-picker: map.merge(
   }
 
   &__shortcut {
+    flex-shrink: 0;
     width: 100%;
     padding: 6px 14px;
     overflow: hidden;

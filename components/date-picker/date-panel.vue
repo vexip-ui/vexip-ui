@@ -2,8 +2,9 @@
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
+import { ResizeObserver } from '@/components/resize-observer'
 
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
@@ -157,6 +158,22 @@ const hoveredYear = ref(0) // 0 is no hover (falsy)
 const hoveredMonth = ref(0) // 0 is no hover (falsy)
 const yearRange = ref<number[]>([])
 
+const shortcutsRect = reactive({ width: 0, height: 0 })
+
+const panelStyle = computed(() => {
+  const { width, height } = shortcutsRect
+
+  switch (props.shortcutsPlacement) {
+    case 'top':
+      return { paddingTop: `${height}px` }
+    case 'right':
+      return { paddingRight: `${width}px` }
+    case 'bottom':
+      return { paddingBottom: `${height}px` }
+    default:
+      return { paddingLeft: `${width}px` }
+  }
+})
 const startActivated = computed(() => {
   const activated = props.startActivated
 
@@ -167,7 +184,6 @@ const endActivated = computed(() => {
 
   return activated.year && activated.month && activated.date
 })
-
 const isDatetime = computed(() => {
   return props.type === 'datetime'
 })
@@ -484,6 +500,18 @@ function refreshCalendar(valueType: 'start' | 'end') {
     calendarMonth.value = props.endActivated.month ? props.endValue.month : today.getMonth() + 1
   }
 }
+
+function handleShortcutsResize(entry: ResizeObserverEntry) {
+  const box = entry.borderBoxSize?.[0]
+
+  if (box) {
+    shortcutsRect.width = box.inlineSize
+    shortcutsRect.height = box.blockSize
+  } else {
+    shortcutsRect.width = entry.contentRect.width
+    shortcutsRect.height = entry.contentRect.height
+  }
+}
 </script>
 
 <template>
@@ -494,27 +522,29 @@ function refreshCalendar(valueType: 'start' | 'end') {
         shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
     }"
     :aria-labelledby="labeledBy"
+    :style="panelStyle"
     @click="handleClick"
   >
-    <div
-      v-if="shortcuts.length"
-      :class="[
-        nh.be('list'),
-        nh.bem('list', 'sub'),
-        nh.be('shortcuts'),
-        nh.bem('shortcuts', shortcutsPlacement)
-      ]"
-    >
+    <ResizeObserver v-if="shortcuts.length" :on-resize="handleShortcutsResize">
       <div
-        v-for="(item, index) in shortcuts"
-        :key="index"
-        :class="nh.be('shortcut')"
-        :title="item.name"
-        @click="handleShortcut(index)"
+        :class="[
+          nh.be('list'),
+          nh.bem('list', 'sub'),
+          nh.be('shortcuts'),
+          nh.bem('shortcuts', shortcutsPlacement)
+        ]"
       >
-        {{ item.name }}
+        <div
+          v-for="(item, index) in shortcuts"
+          :key="index"
+          :class="nh.be('shortcut')"
+          :title="item.name"
+          @click="handleShortcut(index)"
+        >
+          {{ item.name }}
+        </div>
       </div>
-    </div>
+    </ResizeObserver>
     <div :class="nh.be('list')" role="application">
       <div :class="nh.be('panel-body')">
         <div :class="nh.be('date-panel')">
