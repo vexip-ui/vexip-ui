@@ -2,9 +2,9 @@ export type WeekIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7
 export type MonthIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
 export interface CalendarPanelSlots {
-  header: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  item: (params: {
+  header?: () => any,
+  week?: (params: { label: string, index: number, week: number }) => any,
+  item?: (params: {
     date: Date,
     label: string,
     selected: boolean,
@@ -15,14 +15,14 @@ export interface CalendarPanelSlots {
     disabled: boolean,
     inRange: boolean
   }) => any,
-  footer: () => any
+  footer?: () => any
 }
 
 export interface CalendarSlots {
-  header: () => any,
-  title: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  date: (params: {
+  header?: () => any,
+  title?: () => any,
+  week?: (params: { label: string, index: number, week: number }) => any,
+  date?: (params: {
     date: Date,
     selected: boolean,
     hovered: boolean,
@@ -31,7 +31,7 @@ export interface CalendarSlots {
     isToday: boolean,
     disabled: boolean
   }) => any,
-  content: (params: {
+  content?: (params: {
     selected: boolean,
     hovered: boolean,
     date: Date,

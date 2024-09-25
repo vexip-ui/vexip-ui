@@ -17,6 +17,7 @@ import type { Dateable } from '@vexip-ui/utils'
 import type {
   DatePickerChangeEvent,
   DatePickerFormatFn,
+  DatePickerSlots,
   DatePickerType,
   DateShortcut,
   DateShortcutsPlacement,
@@ -78,6 +79,7 @@ export const datePickerProps = buildProps({
   weekStart: Number,
   popperAlive: booleanProp,
   shortcutsPlacement: String as PropType<DateShortcutsPlacement>,
+  slots: Object as PropType<DatePickerSlots>,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),

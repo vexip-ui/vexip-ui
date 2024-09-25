@@ -31,7 +31,7 @@ export interface WheelState {
 }
 
 export interface WheelSlots {
-  default: (params: { option: WheelOption, index: number }) => any
+  default?: (params: { option: WheelOption, index: number }) => any
 }
 
 export const WHEEL_STATE: InjectionKey<WheelState> = Symbol('WHEEL_STATE')

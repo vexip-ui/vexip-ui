@@ -61,44 +61,44 @@ export const invalidDate = new Date('')
 export const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
 
 export interface TimeWheelSlots {
-  hour: WheelSlots['default'],
-  minute: WheelSlots['default'],
-  second: WheelSlots['default']
+  hour?: WheelSlots['default'],
+  minute?: WheelSlots['default'],
+  second?: WheelSlots['default']
 }
 
 export interface DatePanelSlots {
-  title: (params: {
+  title?: (params: {
     panel: DateType,
     yearStart: number,
     year: number,
     month: number,
     togglePanel: (panel: DateType) => void
   }) => any,
-  year: (params: {
+  year?: (params: {
     year: number,
     selected: boolean,
     isNext: boolean,
     disabled: boolean,
     inRange: boolean
   }) => any,
-  month: (params: {
+  month?: (params: {
     year: number,
     month: number,
     selected: boolean,
     disabled: boolean,
     inRange: boolean
   }) => any,
-  week: CalendarPanelSlots['week'],
-  date: CalendarPanelSlots['item']
+  week?: CalendarPanelSlots['week'],
+  date?: CalendarPanelSlots['item']
 }
 
 export interface DatePickerSlots {
-  prefix: () => any,
-  suffix: () => any,
-  exchange: () => any,
-  panelTitle: DatePanelSlots['title'],
-  panelYear: DatePanelSlots['year'],
-  panelMonth: DatePanelSlots['month'],
-  panelWeek: DatePanelSlots['week'],
-  panelDate: DatePanelSlots['date']
+  prefix?: () => any,
+  suffix?: () => any,
+  exchange?: () => any,
+  panelTitle?: DatePanelSlots['title'],
+  panelYear?: DatePanelSlots['year'],
+  panelMonth?: DatePanelSlots['month'],
+  panelWeek?: DatePanelSlots['week'],
+  panelDate?: DatePanelSlots['date']
 }
