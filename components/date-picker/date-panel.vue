@@ -683,7 +683,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
               <template v-if="$slots.week" #week="weekParams">
                 <slot name="week" v-bind="weekParams"></slot>
               </template>
-              <template v-if="$slots.date" #item="itemParams">
+              <template v-if="$slots.date" #itemContent="itemParams">
                 <slot name="date" v-bind="itemParams"></slot>
               </template>
             </CalendarPanel>

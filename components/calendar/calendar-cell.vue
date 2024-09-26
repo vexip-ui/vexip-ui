@@ -50,6 +50,17 @@ const props = defineProps({
 const emit = defineEmits(['select', 'hover'])
 
 defineSlots<{
+  item: (params: {
+    date: Date,
+    label: string,
+    selected: boolean,
+    hovered: boolean,
+    isPrev: boolean,
+    isNext: boolean,
+    isToday: boolean,
+    disabled: boolean,
+    inRange: boolean
+  }) => any,
   default: (params: {
     date: Date,
     label: string,
@@ -85,6 +96,7 @@ const label = computed(() => {
     @mouseenter="emit('hover', date)"
   >
     <slot
+      name="item"
       :date="date"
       :label="label"
       :selected="selected"
@@ -113,9 +125,21 @@ const label = computed(() => {
         @keydown.enter.prevent="emit('select', date)"
         @keydown.space.prevent="emit('select', date)"
       >
-        <div :class="nh.be('index-inner')">
-          {{ date.getDate() }}
-        </div>
+        <slot
+          :date="date"
+          :label="label"
+          :selected="selected"
+          :hovered="hovered"
+          :is-prev="isPrev"
+          :is-next="isNext"
+          :is-today="isToday"
+          :disabled="disabled"
+          :in-range="inRange"
+        >
+          <div :class="nh.be('index-inner')">
+            {{ date.getDate() }}
+          </div>
+        </slot>
       </div>
     </slot>
   </div>

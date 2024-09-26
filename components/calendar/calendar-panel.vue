@@ -313,7 +313,7 @@ function isInRange(date: Date) {
         >
           <template
             v-if="$slots.item || props.slots.item"
-            #default="{
+            #item="{
               date,
               label,
               selected,
@@ -351,6 +351,11 @@ function isInRange(date: Date) {
                   inRange
                 }"
               ></Renderer>
+            </slot>
+          </template>
+          <template v-if="$slots.itemContent || props.slots.itemContent" #default="cellParams">
+            <slot name="itemContent" v-bind="cellParams">
+              <Renderer :renderer="props.slots.itemContent" :data="cellParams"></Renderer>
             </slot>
           </template>
         </CalendarCell>

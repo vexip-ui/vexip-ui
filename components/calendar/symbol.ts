@@ -15,6 +15,17 @@ export interface CalendarPanelSlots {
     disabled: boolean,
     inRange: boolean
   }) => any,
+  itemContent?: (params: {
+    date: Date,
+    label: string,
+    selected: boolean,
+    hovered: boolean,
+    isPrev: boolean,
+    isNext: boolean,
+    isToday: boolean,
+    disabled: boolean,
+    inRange: boolean
+  }) => any,
   footer?: () => any
 }
 
