@@ -1,3 +1,17 @@
+# [1.9.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.8.1...config@1.9.0) (2024-09-27)
+
+
+### ✨ Features
+
+* **config:** add persian (farsi) locale ([#508](https://github.com/vexip-ui/vexip-ui/issues/508)) ([95975b2](https://github.com/vexip-ui/vexip-ui/commit/95975b2b1a084462bf0c236550da04a49f782c70))
+
+
+### 🐞 Bug Fixes
+
+* **portal:** correctly render content only once ([9cd9c6d](https://github.com/vexip-ui/vexip-ui/commit/9cd9c6d555d90bdfd87d6af23d169791faa99ab4)), closes [#502](https://github.com/vexip-ui/vexip-ui/issues/502)
+
+
+
 ## [1.8.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.8.0...config@1.8.1) (2024-07-09)
 
 
