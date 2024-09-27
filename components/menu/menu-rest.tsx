@@ -146,6 +146,7 @@ export default defineComponent({
           children={item.children}
           route={item.route}
           meta={item.meta}
+          only-one={item.onlyOne}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
