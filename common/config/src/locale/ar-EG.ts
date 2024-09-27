@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * Arabic locale config
+ * Arabic locale config.
+ *
+ * @author @ahmedoashery
  */
 export function arEGLocale() {
   return defineLocaleConfig({

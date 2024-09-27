@@ -14,6 +14,7 @@
   </Skeleton>
   <Skeleton :loading="loading" activated :repeat="2">
     <div>Some content</div>
+    <div>Some content</div>
   </Skeleton>
   <Skeleton :loading="loading" activated width="67%">
     <div>Some content</div>

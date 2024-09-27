@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { addDays } from '@vexip-ui/utils'
+import { addDays, addWeeks } from '@vexip-ui/utils'
 
 const options = ['top', 'right', 'bottom', 'left'] as const
 const placement = ref(options[3])
@@ -35,7 +35,11 @@ const placement = ref(options[3])
 const singleShortcuts = [
   { name: '今天', value: Date.now() },
   { name: '昨天', value: () => new Date(Date.now() - 24 * 60 * 60_000) },
-  { name: '劳动节', value: () => new Date(new Date().getFullYear(), 4, 1) }
+  { name: '劳动节', value: () => new Date(new Date().getFullYear(), 4, 1) },
+  ...Array.from({ length: 9 }).map((_, i) => ({
+    name: `${i + 1}周后`,
+    value: addWeeks(Date.now(), i + 1)
+  }))
 ]
 
 const multipleShortcuts = [

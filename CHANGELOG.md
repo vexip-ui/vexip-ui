@@ -1,3 +1,21 @@
+## [2.3.15](https://github.com/vexip-ui/vexip-ui/compare/v2.3.14...v2.3.15) (2024-09-27)
+
+
+### ✨ Features
+
+* add slots prop for Calendar & DatePicker ([56bdd5a](https://github.com/vexip-ui/vexip-ui/commit/56bdd5ab6e4b20cce60ea93588369373bb3d3ac6))
+* **calendar:** add date slot ([228645a](https://github.com/vexip-ui/vexip-ui/commit/228645aeb4496edb9e137df3186b517a92aee52e))
+* **config:** add persian (farsi) locale ([#508](https://github.com/vexip-ui/vexip-ui/issues/508)) ([95975b2](https://github.com/vexip-ui/vexip-ui/commit/95975b2b1a084462bf0c236550da04a49f782c70))
+* **date-picker:** support slots for panel's title and content ([4f7755c](https://github.com/vexip-ui/vexip-ui/commit/4f7755cce657576443d846c40f45cc6e293bf186))
+
+
+### 🐞 Bug Fixes
+
+* **date-picker:** shortcuts list should be scrollable ([1e40697](https://github.com/vexip-ui/vexip-ui/commit/1e40697739daef4b9709c5805df89b40148a8080))
+* **skeleton:** correctly render content of default slot ([c7a171c](https://github.com/vexip-ui/vexip-ui/commit/c7a171cb744ea26af0573fdf88377ff3d8194d22)), closes [#507](https://github.com/vexip-ui/vexip-ui/issues/507)
+
+
+
 ## [2.3.14](https://github.com/vexip-ui/vexip-ui/compare/v2.3.13...v2.3.14) (2024-08-21)
 
 

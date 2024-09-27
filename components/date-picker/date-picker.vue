@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
 import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
@@ -49,6 +50,7 @@ import type { Dateable } from '@vexip-ui/utils'
 import type {
   DatePickerChangeEvent,
   DatePickerFormatFn,
+  DatePickerSlots,
   DateTimeType,
   DateType,
   TimeType
@@ -134,16 +136,13 @@ const props = useProps('datePicker', _props, {
   unitReadonly: false,
   weekStart: null,
   popperAlive: null,
-  shortcutsPlacement: 'left'
+  shortcutsPlacement: 'left',
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value', 'update:formatted-value', 'update:visible'])
 
-const slots = defineSlots<{
-  prefix: () => any,
-  exchange: () => any,
-  suffix: () => any
-}>()
+const slots = defineSlots<DatePickerSlots>()
 
 const calendarLocale = useLocale('calendar')
 const datePickerLocale = useLocale('datePicker')
@@ -1246,7 +1245,9 @@ function handleClickOutside() {
         :style="{ color: props.prefixColor }"
       >
         <slot name="prefix">
-          <Icon :icon="props.prefix"></Icon>
+          <Renderer :renderer="props.slots.prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div :class="nh.be('control')">
@@ -1282,7 +1283,9 @@ function handleClickOutside() {
         <template v-if="props.range">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
-              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
+              <Renderer :renderer="props.slots.exchange">
+                <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
+              </Renderer>
             </slot>
           </div>
           <DateControl
@@ -1325,7 +1328,9 @@ function handleClickOutside() {
         }"
       >
         <slot name="suffix">
-          <Icon v-bind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
+          <Renderer :renderer="props.slots.suffix">
+            <Icon v-bind="icons.calendar" :icon="props.suffix || icons.calendar.icon"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div
@@ -1398,7 +1403,33 @@ function handleClickOutside() {
         @cancel="handleCancel"
         @hover="handleDateHover"
         @time-change="handleTimeChange"
-      ></DatePanel>
+      >
+        <template v-if="$slots.panelTitle || props.slots.panelTitle" #title="titleParams">
+          <slot name="panelTitle" v-bind="titleParams">
+            <Renderer :renderer="props.slots.panelTitle" :data="titleParams"></Renderer>
+          </slot>
+        </template>
+        <template v-if="$slots.panelYear || props.slots.panelYear" #year="yearParams">
+          <slot name="panelYear" v-bind="yearParams">
+            <Renderer :renderer="props.slots.panelYear" :data="yearParams"></Renderer>
+          </slot>
+        </template>
+        <template v-if="$slots.panelMonth || props.slots.panelMonth" #month="monthParams">
+          <slot name="panelMonth" v-bind="monthParams">
+            <Renderer :renderer="props.slots.panelMonth" :data="monthParams"></Renderer>
+          </slot>
+        </template>
+        <template v-if="$slots.panelWeek || props.slots.panelWeek" #week="weekParams">
+          <slot name="panelWeek" v-bind="weekParams">
+            <Renderer :renderer="props.slots.panelWeek" :data="weekParams"></Renderer>
+          </slot>
+        </template>
+        <template v-if="$slots.panelDate || props.slots.panelDate" #date="dateParams">
+          <slot name="panelDate" v-bind="dateParams">
+            <Renderer :renderer="props.slots.panelDate" :data="dateParams"></Renderer>
+          </slot>
+        </template>
+      </DatePanel>
     </Popper>
   </div>
 </template>

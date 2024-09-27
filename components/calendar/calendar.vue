@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
+import { Renderer } from '@/components/renderer'
 import { Row } from '@/components/row'
 
 import { ref, toRef, watch } from 'vue'
@@ -8,6 +9,8 @@ import { ref, toRef, watch } from 'vue'
 import CalendarPanel from './calendar-panel.vue'
 import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import { calendarProps } from './props'
+
+import type { CalendarSlots } from './symbol'
 
 defineOptions({ name: 'Calendar' })
 
@@ -38,25 +41,13 @@ const props = useProps('calendar', _props, {
   disabledDate: {
     default: () => false,
     isFunc: true
-  }
+  },
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value', 'update:year', 'update:month'])
 
-defineSlots<{
-  header: () => any,
-  title: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  content: (params: {
-    selected: boolean,
-    hovered: boolean,
-    date: Date,
-    isPrev: boolean,
-    isNext: boolean,
-    isToday: boolean,
-    disabled: boolean
-  }) => any
-}>()
+defineSlots<CalendarSlots>()
 
 const nh = useNameHelper('calendar')
 const locale = useLocale('calendar', toRef(props, 'locale'))
@@ -139,31 +130,35 @@ function handleMonthChange(value: number) {
   >
     <template #header>
       <slot name="header">
-        <Row inherit :class="nh.be('header')" align="middle">
-          <Column flex="auto">
-            <slot name="title"></slot>
-          </Column>
-          <Column :class="nh.be('actions')" flex="0">
-            <NumberInput
-              :value="calendarYear"
-              inherit
-              :class="nh.be('year-input')"
-              :min="1970"
-              :max="2300"
-              :formatter="formatYearInput"
-              @change="handleYearChange"
-            ></NumberInput>
-            <NumberInput
-              :value="calendarMonth"
-              inherit
-              :class="nh.be('month-input')"
-              :min="1"
-              :max="12"
-              :formatter="formatMonthInput"
-              @change="handleMonthChange"
-            ></NumberInput>
-          </Column>
-        </Row>
+        <Renderer :renderer="props.slots.header">
+          <Row inherit :class="nh.be('header')" align="middle">
+            <Column flex="auto">
+              <slot name="title">
+                <Renderer :renderer="props.slots.title"></Renderer>
+              </slot>
+            </Column>
+            <Column :class="nh.be('actions')" flex="0">
+              <NumberInput
+                :value="calendarYear"
+                inherit
+                :class="nh.be('year-input')"
+                :min="1970"
+                :max="2300"
+                :formatter="formatYearInput"
+                @change="handleYearChange"
+              ></NumberInput>
+              <NumberInput
+                :value="calendarMonth"
+                inherit
+                :class="nh.be('month-input')"
+                :min="1"
+                :max="12"
+                :formatter="formatMonthInput"
+                @change="handleMonthChange"
+              ></NumberInput>
+            </Column>
+          </Row>
+        </Renderer>
       </slot>
     </template>
     <template #week="{ label, index, week }">
@@ -174,9 +169,11 @@ function handleMonthChange(value: number) {
           :index="index"
           :week="week"
         >
-          <div :class="nh.be('week-value')">
-            {{ label }}
-          </div>
+          <Renderer :renderer="props.slots.week" :data="{ label, index, week }">
+            <div :class="nh.be('week-value')">
+              {{ label }}
+            </div>
+          </Renderer>
         </slot>
       </div>
     </template>
@@ -196,9 +193,25 @@ function handleMonthChange(value: number) {
         @keydown.space.prevent="handleClick(date)"
       >
         <div :class="nh.be('date-header')">
-          <div :class="nh.be('date-value')" :aria-label="label">
-            {{ date.getDate() }}
-          </div>
+          <slot
+            name="date"
+            :selected="selected"
+            :hovered="hovered"
+            :date="date"
+            :is-prev="isPrev"
+            :is-next="isNext"
+            :is-today="isToday"
+            :disabled="disabled"
+          >
+            <Renderer
+              :renderer="props.slots.date"
+              :data="{ selected, hovered, date, isPrev, isNext, isToday, disabled }"
+            >
+              <div :class="nh.be('date-value')" :aria-label="label">
+                {{ date.getDate() }}
+              </div>
+            </Renderer>
+          </slot>
         </div>
         <div :class="nh.be('date-content')">
           <slot
@@ -210,7 +223,12 @@ function handleMonthChange(value: number) {
             :is-next="isNext"
             :is-today="isToday"
             :disabled="disabled"
-          ></slot>
+          >
+            <Renderer
+              :renderer="props.slots.content"
+              :data="{ selected, hovered, date, isPrev, isNext, isToday, disabled }"
+            ></Renderer>
+          </slot>
         </div>
       </div>
     </template>

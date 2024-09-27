@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * German locale config
+ * German locale config.
+ *
+ * @author @Andrek18
  */
 export function deDELocale() {
   return defineLocaleConfig({

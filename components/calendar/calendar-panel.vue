@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Renderer } from '@/components/renderer'
+
 import { computed, ref, toRef, watch } from 'vue'
 
 import CalendarCell from './calendar-cell.vue'
@@ -16,7 +18,7 @@ import {
 import { calendarPanelProps } from './props'
 
 import type { Dateable } from '@vexip-ui/utils'
-import type { WeekIndex } from './symbol'
+import type { CalendarPanelSlots, WeekIndex } from './symbol'
 
 defineOptions({ name: 'CalendarPanel' })
 
@@ -54,27 +56,13 @@ const props = useProps('calendarBase', _props, {
   },
   min: null,
   max: null,
-  range: null
+  range: null,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
 
-defineSlots<{
-  header: () => any,
-  week: (params: { label: string, index: number, week: number }) => any,
-  item: (params: {
-    date: Date,
-    label: string,
-    selected: boolean,
-    hovered: boolean,
-    isPrev: boolean,
-    isNext: boolean,
-    isToday: boolean,
-    disabled: boolean,
-    inRange: boolean
-  }) => any,
-  footer: () => any
-}>()
+defineSlots<CalendarPanelSlots>()
 
 const nh = useNameHelper('calendar')
 
@@ -280,7 +268,9 @@ function isInRange(date: Date) {
     :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]"
     role="grid"
   >
-    <slot name="header"></slot>
+    <slot name="header">
+      <Renderer :renderer="props.slots.header"></Renderer>
+    </slot>
     <div :class="[nh.be('row'), nh.bem('row', 'week')]" aria-hidden>
       <div v-for="week in 7" :key="week" :class="[nh.be('cell'), nh.be('cell-week')]">
         <slot
@@ -289,9 +279,18 @@ function isInRange(date: Date) {
           :index="week - 1"
           :week="(week - 1 + props.weekStart) % 7"
         >
-          <div :class="nh.be('index')">
-            {{ getWeekLabel((week - 1 + props.weekStart) % 7) }}
-          </div>
+          <Renderer
+            :renderer="props.slots.week"
+            :data="{
+              label: getWeekLabel((week - 1 + props.weekStart) % 7),
+              index: week - 1,
+              week: (week - 1 + props.weekStart) % 7
+            }"
+          >
+            <div :class="nh.be('index')">
+              {{ getWeekLabel((week - 1 + props.weekStart) % 7) }}
+            </div>
+          </Renderer>
         </slot>
       </div>
     </div>
@@ -313,8 +312,8 @@ function isInRange(date: Date) {
           @select="handleSelect"
         >
           <template
-            v-if="$slots.item"
-            #default="{
+            v-if="$slots.item || props.slots.item"
+            #item="{
               date,
               label,
               selected,
@@ -337,11 +336,33 @@ function isInRange(date: Date) {
               :is-today="matchedToday"
               :disabled="disabled"
               :in-range="inRange"
-            ></slot>
+            >
+              <Renderer
+                :renderer="props.slots.item"
+                :data="{
+                  date,
+                  label,
+                  selected,
+                  hovered,
+                  isPrev,
+                  isNext,
+                  isToday: matchedToday,
+                  disabled,
+                  inRange
+                }"
+              ></Renderer>
+            </slot>
+          </template>
+          <template v-if="$slots.itemContent || props.slots.itemContent" #default="cellParams">
+            <slot name="itemContent" v-bind="cellParams">
+              <Renderer :renderer="props.slots.itemContent" :data="cellParams"></Renderer>
+            </slot>
           </template>
         </CalendarCell>
       </div>
     </div>
-    <slot name="footer"></slot>
+    <slot name="footer">
+      <Renderer :renderer="props.slots.footer"></Renderer>
+    </slot>
   </div>
 </template>

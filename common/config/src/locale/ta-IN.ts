@@ -1,7 +1,9 @@
 import { defineLocaleConfig } from './helper'
 
 /**
- * Tamil locale config
+ * Tamil locale config.
+ *
+ * @author @thearasu
  */
 export function taINLocale() {
   return defineLocaleConfig({

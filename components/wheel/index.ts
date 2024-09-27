@@ -8,4 +8,4 @@ export { wheelProps } from './props'
 export type WheelExposed = ComponentPublicInstance & InstanceType<typeof Wheel>
 
 export type { WheelProps, WheelCProps } from './props'
-export type { WheelRawOption } from './symbol'
+export type { WheelRawOption, WheelSlots } from './symbol'

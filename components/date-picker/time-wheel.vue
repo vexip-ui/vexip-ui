@@ -8,7 +8,7 @@ import { USE_TOUCH, doubleDigits, range } from '@vexip-ui/utils'
 
 import type { WheelExposed } from '@/components/wheel'
 import type { PropType } from 'vue'
-import type { DisabledTime, TimeType } from './symbol'
+import type { DisabledTime, TimeType, TimeWheelSlots } from './symbol'
 
 defineOptions({ name: 'TimeWheel' })
 
@@ -68,6 +68,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'])
+
+defineSlots<TimeWheelSlots>()
 
 const nh = useNameHelper('time-picker')
 
@@ -159,6 +161,7 @@ function refreshWheel() {
       ref="hourWheel"
       v-model:value="currentHour"
       inherit
+      :class="nh.be('hour-wheel')"
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
@@ -170,14 +173,17 @@ function refreshWheel() {
       @keydown.stop
       @item-click="currentHour = $event"
     >
-      <template #default="{ option }">
+      <template #default="{ option, index }">
         <span
           :class="[
             nh.be('option'),
+            nh.be('hour'),
             isHourDisabled(option.value as number) && nh.bem('option', 'disabled')
           ]"
         >
-          {{ doubleDigits(option.value as number) }}
+          <slot name="hour" :option="option" :index="index">
+            {{ doubleDigits(option.value as number) }}
+          </slot>
         </span>
       </template>
     </Wheel>
@@ -185,6 +191,7 @@ function refreshWheel() {
       ref="minuteWheel"
       v-model:value="currentMinute"
       inherit
+      :class="nh.be('minute-wheel')"
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
@@ -196,14 +203,17 @@ function refreshWheel() {
       @keydown.stop
       @item-click="currentMinute = $event"
     >
-      <template #default="{ option }">
+      <template #default="{ option, index }">
         <span
           :class="[
             nh.be('option'),
+            nh.be('minute'),
             isMinuteDisabled(option.value as number) && nh.bem('option', 'disabled')
           ]"
         >
-          {{ doubleDigits(option.value as number) }}
+          <slot name="minute" :option="option" :index="index">
+            {{ doubleDigits(option.value as number) }}
+          </slot>
         </span>
       </template>
     </Wheel>
@@ -211,6 +221,7 @@ function refreshWheel() {
       ref="secondWheel"
       v-model:value="currentSecond"
       inherit
+      :class="nh.be('second-wheel')"
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
@@ -222,14 +233,17 @@ function refreshWheel() {
       @keydown.stop
       @item-click="currentSecond = $event"
     >
-      <template #default="{ option }">
+      <template #default="{ option, index }">
         <span
           :class="[
             nh.be('option'),
+            nh.be('second'),
             isSecondDisabled(option.value as number) && nh.bem('option', 'disabled')
           ]"
         >
-          {{ doubleDigits(option.value as number) }}
+          <slot name="second" :option="option" :index="index">
+            {{ doubleDigits(option.value as number) }}
+          </slot>
         </span>
       </template>
     </Wheel>
