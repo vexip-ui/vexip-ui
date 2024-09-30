@@ -5,6 +5,7 @@ import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
 import { Popper } from '@/components/popper'
+import { Renderer } from '@/components/renderer'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
@@ -49,8 +50,8 @@ import type {
   SelectBaseValue,
   SelectEvent,
   SelectKeyConfig,
-  SelectListSlotParams,
   SelectOptionState,
+  SelectSlots,
   SelectValue
 } from './symbol'
 
@@ -161,23 +162,13 @@ const props = useProps('select', _props, {
   },
   popperAlive: null,
   countLimit: 0,
-  filterPosition: 'in-control'
+  filterPosition: 'in-control',
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value', 'update:visible', 'update:label'])
 
-const slots = defineSlots<{
-  selected: (params: { option: SelectOptionState | null, preview?: boolean }) => any,
-  prefix: () => any,
-  suffix: () => any,
-  control: () => any,
-  list: (params: SelectListSlotParams) => any,
-  prepend: () => any,
-  append: () => any,
-  default: (params: { option: SelectOptionState, index: number, selected: boolean }) => any,
-  group: (params: { option: SelectOptionState, index: number }) => any,
-  empty: () => any
-}>()
+const slots = defineSlots<SelectSlots>()
 
 const locale = useLocale('select', toRef(props, 'locale'))
 const icons = useIcons()
@@ -450,7 +441,7 @@ const selectorClass = computed(() => {
   }
 })
 const hasValue = computed(() => !isNull(currentValues.value[0]))
-const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const showDynamic = computed(() => {
   return !!(
     props.filter &&
@@ -1073,202 +1064,211 @@ function focus(options?: FocusOptions) {
         :style="{ color: props.prefixColor }"
       >
         <slot name="prefix">
-          <Icon :icon="props.prefix"></Icon>
+          <Renderer :renderer="props.slots.prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div :class="nh.be('control')">
         <slot name="control">
-          <template v-if="props.multiple">
-            <Overflow
-              inherit
-              :class="[nh.be('tags')]"
-              :items="currentValues"
-              :max-count="props.maxTagCount"
-              :style="{
-                maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
-              }"
-              @rest-change="restTagCount = $event"
-            >
-              <template #default="{ item: value, index }">
-                <Tag
-                  inherit
-                  :class="nh.be('tag')"
-                  :type="props.tagType"
-                  closable
-                  :disabled="props.disabled"
-                  @click.stop="toggleVisible"
-                  @close="handleTagClose(value)"
-                >
-                  <span :class="nh.be('label')">
-                    <slot name="selected" :option="getOptionFromMap(value)">
-                      {{ currentLabels[index] }}
-                    </slot>
-                  </span>
-                </Tag>
-              </template>
-              <template #counter="{ count }">
-                <Tag
-                  v-if="props.noRestTip"
-                  inherit
-                  :class="[nh.be('tag'), nh.be('counter')]"
-                  :type="props.tagType"
-                  :disabled="props.disabled"
-                  @click.stop="toggleVisible"
-                >
-                  {{ `+${count}` }}
-                </Tag>
-                <span v-else>
-                  <Tooltip
-                    ref="restTip"
+          <Renderer :renderer="props.slots.control">
+            <template v-if="props.multiple">
+              <Overflow
+                inherit
+                :class="[nh.be('tags')]"
+                :items="currentValues"
+                :max-count="props.maxTagCount"
+                :style="{
+                  maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
+                }"
+                @rest-change="restTagCount = $event"
+              >
+                <template #default="{ item: value, index }">
+                  <Tag
                     inherit
-                    :transfer="false"
-                    :visible="restTipShow"
-                    trigger="custom"
-                    placement="top-end"
-                    :tip-class="nh.be('rest-tip')"
-                    @click.stop="toggleShowRestTip"
+                    :class="nh.be('tag')"
+                    :type="props.tagType"
+                    closable
+                    :disabled="props.disabled"
+                    @click.stop="toggleVisible"
+                    @close="handleTagClose(value)"
                   >
-                    <template #trigger>
-                      <Tag
-                        inherit
-                        :class="[nh.be('tag'), nh.be('counter')]"
-                        :type="props.tagType"
-                        :disabled="props.disabled"
-                      >
-                        {{ `+${count}` }}
-                      </Tag>
-                    </template>
-                    <NativeScroll inherit use-y-bar>
-                      <template v-for="(value, index) in currentValues" :key="index">
+                    <span :class="nh.be('label')">
+                      <slot name="selected" :option="getOptionFromMap(value)">
+                        {{ currentLabels[index] }}
+                      </slot>
+                    </span>
+                  </Tag>
+                </template>
+                <template #counter="{ count }">
+                  <Tag
+                    v-if="props.noRestTip"
+                    inherit
+                    :class="[nh.be('tag'), nh.be('counter')]"
+                    :type="props.tagType"
+                    :disabled="props.disabled"
+                    @click.stop="toggleVisible"
+                  >
+                    {{ `+${count}` }}
+                  </Tag>
+                  <span v-else>
+                    <Tooltip
+                      ref="restTip"
+                      inherit
+                      :transfer="false"
+                      :visible="restTipShow"
+                      trigger="custom"
+                      placement="top-end"
+                      :tip-class="nh.be('rest-tip')"
+                      @click.stop="toggleShowRestTip"
+                    >
+                      <template #trigger>
                         <Tag
-                          v-if="index >= currentValues.length - restTagCount"
                           inherit
-                          :class="nh.be('tag')"
-                          closable
+                          :class="[nh.be('tag'), nh.be('counter')]"
                           :type="props.tagType"
                           :disabled="props.disabled"
-                          @close="handleRestTagClose(value)"
                         >
-                          <span :class="nh.be('label')">
-                            <slot name="selected" :option="getOptionFromMap(value)">
-                              {{ currentLabels[index] }}
-                            </slot>
-                          </span>
+                          {{ `+${count}` }}
                         </Tag>
                       </template>
-                    </NativeScroll>
-                  </Tooltip>
-                </span>
-              </template>
-              <!-- <template v-if="!limited && previewOption" #suffix>
-                <Tag
-                  inherit
+                      <NativeScroll inherit use-y-bar>
+                        <template v-for="(value, index) in currentValues" :key="index">
+                          <Tag
+                            v-if="index >= currentValues.length - restTagCount"
+                            inherit
+                            :class="nh.be('tag')"
+                            closable
+                            :type="props.tagType"
+                            :disabled="props.disabled"
+                            @close="handleRestTagClose(value)"
+                          >
+                            <span :class="nh.be('label')">
+                              <slot name="selected" :option="getOptionFromMap(value)">
+                                {{ currentLabels[index] }}
+                              </slot>
+                            </span>
+                          </Tag>
+                        </template>
+                      </NativeScroll>
+                    </Tooltip>
+                  </span>
+                </template>
+                <!-- <template v-if="!limited && previewOption" #suffix>
+                  <Tag
+                    inherit
+                    :class="[
+                      nh.be('tag'),
+                      nh.bem('tag', 'preview'),
+                      currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
+                    ]"
+                    :type="props.tagType"
+                    closable
+                  >
+                    <slot name="selected" :preview="true" :option="previewOption">
+                      {{ previewOption.label }}
+                    </slot>
+                  </Tag>
+                </template> -->
+              </Overflow>
+              <div
+                v-if="props.filter && props.filterPosition === 'in-control'"
+                :class="nh.be('anchor')"
+                :style="{
+                  width: `${anchorWidth}px`
+                }"
+              >
+                <input
+                  ref="nativeInput"
                   :class="[
-                    nh.be('tag'),
-                    nh.bem('tag', 'preview'),
-                    currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
+                    nh.be('input'),
+                    nh.bem('input', 'multiple'),
+                    currentVisible && nh.bem('input', 'visible')
                   ]"
-                  :type="props.tagType"
-                  closable
-                >
-                  <slot name="selected" :preview="true" :option="previewOption">
-                    {{ previewOption.label }}
-                  </slot>
-                </Tag>
-              </template> -->
-            </Overflow>
-            <div
-              v-if="props.filter && props.filterPosition === 'in-control'"
-              :class="nh.be('anchor')"
-              :style="{
-                width: `${anchorWidth}px`
-              }"
-            >
+                  :disabled="props.disabled"
+                  autocomplete="off"
+                  tabindex="-1"
+                  role="combobox"
+                  aria-autocomplete="list"
+                  :name="props.name"
+                  @submit.prevent
+                  @input="handleFilterInput"
+                  @keydown="handleFilterKeyDown"
+                  @focus="handleFocus($event)"
+                  @blur="handleBlur($event)"
+                  @compositionstart="composing = true"
+                  @compositionend="handleCompositionEnd"
+                  @change="handleCompositionEnd"
+                />
+                <span ref="device" :class="nh.be('device')" aria-hidden="true">
+                  {{ currentFilter }}
+                </span>
+              </div>
+            </template>
+            <template v-else>
               <input
+                v-if="props.filter && props.filterPosition === 'in-control'"
                 ref="nativeInput"
-                :class="[
-                  nh.be('input'),
-                  nh.bem('input', 'multiple'),
-                  currentVisible && nh.bem('input', 'visible')
-                ]"
+                :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
                 :disabled="props.disabled"
                 autocomplete="off"
                 tabindex="-1"
                 role="combobox"
                 aria-autocomplete="list"
                 :name="props.name"
+                :style="{
+                  opacity: currentVisible ? undefined : '0%'
+                }"
                 @submit.prevent
                 @input="handleFilterInput"
-                @keydown="handleFilterKeyDown"
                 @focus="handleFocus($event)"
                 @blur="handleBlur($event)"
                 @compositionstart="composing = true"
                 @compositionend="handleCompositionEnd"
                 @change="handleCompositionEnd"
               />
-              <span ref="device" :class="nh.be('device')" aria-hidden="true">
-                {{ currentFilter }}
-              </span>
-            </div>
-          </template>
-          <template v-else>
-            <input
-              v-if="props.filter && props.filterPosition === 'in-control'"
-              ref="nativeInput"
-              :class="[nh.be('input'), currentVisible && nh.bem('input', 'visible')]"
-              :disabled="props.disabled"
-              autocomplete="off"
-              tabindex="-1"
-              role="combobox"
-              aria-autocomplete="list"
-              :name="props.name"
-              :style="{
-                opacity: currentVisible ? undefined : '0%'
-              }"
-              @submit.prevent
-              @input="handleFilterInput"
-              @focus="handleFocus($event)"
-              @blur="handleBlur($event)"
-              @compositionstart="composing = true"
-              @compositionend="handleCompositionEnd"
-              @change="handleCompositionEnd"
-            />
-            <span
-              v-if="
-                (props.noPreview || !currentVisible) &&
-                  hasValue &&
-                  (props.filterPosition !== 'in-control' || !currentFilter)
-              "
-              :class="{
-                [nh.be('selected')]: true,
-                [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
-              }"
-            >
-              <slot
-                v-if="getOptionFromMap(currentValues[0])"
-                name="selected"
-                :option="getOptionFromMap(currentValues[0])"
+              <span
+                v-if="
+                  (props.noPreview || !currentVisible) &&
+                    hasValue &&
+                    (props.filterPosition !== 'in-control' || !currentFilter)
+                "
+                :class="{
+                  [nh.be('selected')]: true,
+                  [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
+                }"
               >
-                {{ currentLabels[0] }}
+                <slot
+                  v-if="getOptionFromMap(currentValues[0])"
+                  name="selected"
+                  :option="getOptionFromMap(currentValues[0])"
+                >
+                  {{ currentLabels[0] }}
+                </slot>
+                <template v-else>
+                  {{ currentLabels[0] }}
+                </template>
+              </span>
+            </template>
+            <span v-if="showPlaceholder" :class="nh.be('placeholder')">
+              <slot
+                v-if="previewOption"
+                name="selected"
+                :preview="true"
+                :option="previewOption"
+              >
+                <Renderer
+                  :renderer="props.slots.selected"
+                  :data="{ preview: true, option: previewOption }"
+                >
+                  {{ previewOption.label }}
+                </Renderer>
               </slot>
               <template v-else>
-                {{ currentLabels[0] }}
+                {{ props.placeholder ?? locale.placeholder }}
               </template>
             </span>
-          </template>
-          <span v-if="showPlaceholder" :class="nh.be('placeholder')">
-            <slot
-              v-if="previewOption"
-              name="selected"
-              :preview="true"
-              :option="previewOption"
-            >
-              {{ previewOption.label }}
-            </slot>
-            <template v-else>
-              {{ props.placeholder ?? locale.placeholder }}
-            </template>
-          </span>
+          </Renderer>
         </slot>
       </div>
       <div
@@ -1280,14 +1280,16 @@ function focus(options?: FocusOptions) {
         }"
       >
         <slot name="suffix">
-          <Icon
-            v-if="props.suffix"
-            :icon="props.suffix"
-            :class="{
-              [nh.be('arrow')]: !props.staticSuffix
-            }"
-          ></Icon>
-          <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
+          <Renderer :renderer="props.slots.suffix">
+            <Icon
+              v-if="props.suffix"
+              :icon="props.suffix"
+              :class="{
+                [nh.be('arrow')]: !props.staticSuffix
+              }"
+            ></Icon>
+            <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div
@@ -1331,112 +1333,130 @@ function focus(options?: FocusOptions) {
         :is-selected="isSelected"
         :handle-select="handleSelect"
       >
-        <div
-          :class="[
-            nh.be('list'),
-            ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
-            props.listClass
-          ]"
+        <Renderer
+          :renderer="props.slots.list"
+          :data="{ options: totalOptions, isSelected, handleSelect }"
         >
-          <div v-if="props.filter && props.filterPosition === 'in-list'" :class="nh.be('filter')">
-            <Input
-              ref="filterInput"
-              :class="nh.be('filter-input')"
-              transparent
-              :disabled="props.disabled"
-              :placeholder="locale.search"
-              :autocomplete="false"
-              :tabindex="-1"
-              role="combobox"
-              aria-autocomplete="list"
-              @input="handleFilterInput"
-              @keydown="handleFilterKeyDown"
-              @focus="handleFocus"
-              @blur="handleBlur"
-              @compositionstart="composing = true"
-              @compositionend="handleCompositionEnd"
-              @change="handleCompositionEnd"
-            >
-              <template #suffix>
-                <Icon v-bind="icons.search"></Icon>
-              </template>
-            </Input>
-          </div>
-          <slot v-if="$slots.prepend" name="prepend"></slot>
-          <VirtualList
-            ref="virtualList"
-            inherit
-            :style="{
-              height: undefined,
-              maxHeight: `${props.maxListHeight}px`
-            }"
-            :items="totalOptions"
-            :item-size="32"
-            use-y-bar
-            :height="'100%'"
-            id-key="value"
-            :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-              role: 'listbox',
-              ariaLabel: 'options',
-              ariaMultiselectable: props.multiple
-            }"
+          <div
+            :class="[
+              nh.be('list'),
+              ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
+              props.listClass
+            ]"
           >
-            <template #default="{ item: option, index }">
-              <li
-                v-if="option.group"
-                :class="[nh.ns('option-vars'), nh.be('group')]"
-                :title="option.label"
+            <div v-if="props.filter && props.filterPosition === 'in-list'" :class="nh.be('filter')">
+              <Input
+                ref="filterInput"
+                :class="nh.be('filter-input')"
+                transparent
+                :disabled="props.disabled"
+                :placeholder="locale.search"
+                :autocomplete="false"
+                :tabindex="-1"
+                role="combobox"
+                aria-autocomplete="list"
+                @input="handleFilterInput"
+                @keydown="handleFilterKeyDown"
+                @focus="handleFocus"
+                @blur="handleBlur"
+                @compositionstart="composing = true"
+                @compositionend="handleCompositionEnd"
+                @change="handleCompositionEnd"
               >
-                <slot name="group" :option="option" :index="index">
-                  <div
-                    :class="[nh.be('label'), nh.bem('label', 'group')]"
-                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </div>
-                </slot>
-              </li>
-              <Option
-                v-else
-                :label="option.label"
-                :value="option.value"
-                :disabled="option.disabled || (limited && !isSelected(option))"
-                :divided="option.divided"
-                :no-title="option.title"
-                :hitting="option.hitting"
-                :selected="isSelected(option)"
-                no-hover
-                @select="handleSelect(option)"
-                @mousemove="updateHitting(index, false)"
-              >
-                <slot :option="option" :index="index" :selected="isSelected(option)">
-                  <span
-                    :class="nh.be('label')"
-                    :style="{ paddingInlineStart: `${option.depth * 6}px` }"
-                  >
-                    {{ option.label }}
-                  </span>
-                  <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
-                    <Icon
-                      v-if="isSelected(option)"
-                      v-bind="icons.check"
-                      :class="nh.be('check')"
-                    ></Icon>
-                  </Transition>
-                </slot>
-              </Option>
-            </template>
-            <template #empty>
-              <div :class="nh.be('empty')">
-                <slot name="empty">
-                  {{ props.emptyText ?? locale.empty }}
-                </slot>
-              </div>
-            </template>
-          </VirtualList>
-          <slot v-if="$slots.append" name="append"></slot>
-        </div>
+                <template #suffix>
+                  <Icon v-bind="icons.search"></Icon>
+                </template>
+              </Input>
+            </div>
+            <slot v-if="$slots.prepend || props.slots.prepend" name="prepend">
+              <Renderer :renderer="props.slots.prepend"></Renderer>
+            </slot>
+            <VirtualList
+              ref="virtualList"
+              inherit
+              :style="{
+                height: undefined,
+                maxHeight: `${props.maxListHeight}px`
+              }"
+              :items="totalOptions"
+              :item-size="32"
+              use-y-bar
+              :height="'100%'"
+              id-key="value"
+              :items-attrs="{
+                class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+                role: 'listbox',
+                ariaLabel: 'options',
+                ariaMultiselectable: props.multiple
+              }"
+            >
+              <template #default="{ item: option, index }">
+                <li
+                  v-if="option.group"
+                  :class="[nh.ns('option-vars'), nh.be('group')]"
+                  :title="option.label"
+                >
+                  <slot name="group" :option="option" :index="index">
+                    <Renderer :renderer="props.slots.group" :data="{ option, index }">
+                      <div
+                        :class="[nh.be('label'), nh.bem('label', 'group')]"
+                        :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                      >
+                        {{ option.label }}
+                      </div>
+                    </Renderer>
+                  </slot>
+                </li>
+                <Option
+                  v-else
+                  :label="option.label"
+                  :value="option.value"
+                  :disabled="option.disabled || (limited && !isSelected(option))"
+                  :divided="option.divided"
+                  :no-title="option.title"
+                  :hitting="option.hitting"
+                  :selected="isSelected(option)"
+                  no-hover
+                  @select="handleSelect(option)"
+                  @mousemove="updateHitting(index, false)"
+                >
+                  <slot :option="option" :index="index" :selected="isSelected(option)">
+                    <Renderer
+                      :renderer="props.slots.default"
+                      :data="{ option, index, selected: isSelected(option) }"
+                    >
+                      <span
+                        :class="nh.be('label')"
+                        :style="{ paddingInlineStart: `${option.depth * 6}px` }"
+                      >
+                        {{ option.label }}
+                      </span>
+                      <Transition v-if="props.optionCheck" :name="nh.ns('fade')" appear>
+                        <Icon
+                          v-if="isSelected(option)"
+                          v-bind="icons.check"
+                          :class="nh.be('check')"
+                        ></Icon>
+                      </Transition>
+                    </Renderer>
+                  </slot>
+                </Option>
+              </template>
+              <template #empty>
+                <div :class="nh.be('empty')">
+                  <slot name="empty">
+                    <Renderer :renderer="props.slots.empty">
+                      {{ props.emptyText ?? locale.empty }}
+                    </Renderer>
+                  </slot>
+                </div>
+              </template>
+            </VirtualList>
+            <slot v-if="$slots.append || props.slots.append" name="append">
+              <Renderer :renderer="props.slots.append"></Renderer>
+            </slot>
+          </div>
+        </Renderer>
       </slot>
     </Popper>
   </div>

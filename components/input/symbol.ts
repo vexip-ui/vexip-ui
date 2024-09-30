@@ -17,3 +17,14 @@ export interface InputExposed extends ComponentPublicInstance {
 }
 
 export type ChangeEvent = (value: string | number) => void
+
+export interface InputSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  before?: () => any,
+  after?: () => any,
+  beforeAction?: () => any,
+  afterAction?: () => any,
+  count?: (params: { value: string }) => any,
+  password?: (params: { plain: boolean }) => any
+}

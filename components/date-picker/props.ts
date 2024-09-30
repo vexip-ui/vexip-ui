@@ -23,6 +23,7 @@ import type {
   DateShortcutsPlacement,
   DateTimeType,
   TimePickerChangeEvent,
+  TimePickerSlots,
   TimeShortcut,
   TimeShortcutsPlacement,
   TimeType
@@ -147,6 +148,8 @@ export const timePickerProps = buildProps({
   unitReadonly: booleanProp,
   popperAlive: booleanProp,
   shortcutsPlacement: String as PropType<TimeShortcutsPlacement>,
+  placeholder: [String, Array] as PropType<string | string[]>,
+  slots: Object as PropType<TimePickerSlots>,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),
@@ -160,8 +163,7 @@ export const timePickerProps = buildProps({
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: TimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp(),
-  placeholder: [String, Array] as PropType<string | string[]>
+  onOutsideClose: eventProp()
 })
 
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>
