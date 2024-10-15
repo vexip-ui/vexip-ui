@@ -156,6 +156,7 @@ interface LayoutHeaderAction {
   name?: string,
   disabled?: boolean,
   divided?: boolean,
+  hidden?: boolean,
   meta?: Record<string, any>
 }
 
