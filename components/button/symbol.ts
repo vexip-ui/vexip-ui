@@ -17,6 +17,12 @@ export interface ButtonGroupState {
   refreshIndexes: () => void
 }
 
+export interface ButtonSlots {
+  default?: () => any,
+  icon?: () => any,
+  loading?: () => any
+}
+
 export const GROUP_STATE: InjectionKey<ButtonGroupState> = Symbol('GROUP_STATE')
 
 export const buttonTypes = Object.freeze<ButtonType[]>([

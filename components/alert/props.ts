@@ -2,7 +2,7 @@ import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { AlertType } from './symbol'
+import type { AlertSlots, AlertType } from './symbol'
 
 export const alertProps = buildProps({
   type: String as PropType<AlertType>,
@@ -20,6 +20,7 @@ export const alertProps = buildProps({
   scroll: booleanProp,
   scrollSpeed: Number,
   color: String,
+  slots: Object as PropType<AlertSlots>,
   onClose: eventProp(),
   onHide: eventProp(),
   onScrollEnd: eventProp()
