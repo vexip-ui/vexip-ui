@@ -238,25 +238,26 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### Layout 插槽
 
-| 名称             | 说明                                                                                    | 参数                     | 始于    |
-| ---------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------- |
-| sign             | 标语的内容插槽，默认情况下会根据 `sign-type` 作用在 `header-left` 或 `aside-top` 插槽上 | `LayoutSlotParams`       | -       |
-| header           | 头部的内容插槽，使用它将覆盖整个头部                                                    | `LayoutSlotParams`       | -       |
-| header-left      | 头部左侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
-| header-main      | 头部中央的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
-| header-right     | 头部右侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
-| header-user      | 头部用户的内容插槽                                                                      | `LayoutHeaderSlotParams` | -       |
-| header-avatar    | 头部用户头像的内容插槽                                                                  | `LayoutHeaderSlotParams` | `2.0.7` |
-| aside            | 标语的内容插槽，使用他将覆盖整个边栏                                                    | `LayoutSlotParams`       | -       |
-| aside-top        | 边栏上部的内容插槽                                                                      | `LayoutSlotParams`       | -       |
-| aside-main       | 边栏中央的内容插槽                                                                      | `LayoutSlotParams`       | -       |
-| aside-bottom     | 边栏下部的内容插槽                                                                      | `LayoutSlotParams`       | -       |
-| aside-expand     | 边栏触发收起弹出的手柄的插槽                                                            | `LayoutSlotParams`       | -       |
-| default          | 主页面的内容插槽，使用它将覆盖整个主页面                                                | `LayoutSlotParams`       | -       |
-| main             | 主页面的内容插槽                                                                        | -                        | -       |
-| footer           | 页脚的内容插槽，使用它将覆盖整个页脚                                                    | `LayoutSlotParams`       | -       |
-| footer-links     | 页脚链接的内容插槽                                                                      | -                        | -       |
-| footer-copyright | 页脚版权信息的内容插槽                                                                  | -                        | -       |
+| 名称             | 说明                                                                                    | 参数                     | 始于     |
+| ---------------- | --------------------------------------------------------------------------------------- | ------------------------ | -------- |
+| sign             | 标语的内容插槽，默认情况下会根据 `sign-type` 作用在 `header-left` 或 `aside-top` 插槽上 | `LayoutSlotParams`       | -        |
+| header           | 头部的内容插槽，使用它将覆盖整个头部                                                    | `LayoutSlotParams`       | -        |
+| header-left      | 头部左侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -        |
+| header-main      | 头部中央的内容插槽                                                                      | `LayoutHeaderSlotParams` | -        |
+| header-right     | 头部右侧的内容插槽                                                                      | `LayoutHeaderSlotParams` | -        |
+| header-user      | 头部用户的内容插槽                                                                      | `LayoutHeaderSlotParams` | -        |
+| header-avatar    | 头部用户头像的内容插槽                                                                  | `LayoutHeaderSlotParams` | `2.0.7`  |
+| aside            | 标语的内容插槽，使用他将覆盖整个边栏                                                    | `LayoutSlotParams`       | -        |
+| aside-top        | 边栏上部的内容插槽                                                                      | `LayoutSlotParams`       | -        |
+| aside-main       | 边栏中央的内容插槽                                                                      | `LayoutSlotParams`       | -        |
+| aside-bottom     | 边栏下部的内容插槽                                                                      | `LayoutSlotParams`       | -        |
+| aside-expand     | 边栏触发收起弹出的手柄的插槽                                                            | `LayoutSlotParams`       | -        |
+| default          | 主页面的内容插槽，使用它将覆盖整个主页面                                                | `LayoutSlotParams`       | -        |
+| main             | 主页面的内容插槽                                                                        | -                        | -        |
+| footer           | 页脚的内容插槽，使用它将覆盖整个页脚                                                    | `LayoutSlotParams`       | -        |
+| footer-links     | 页脚链接的内容插槽                                                                      | -                        | -        |
+| footer-copyright | 页脚版权信息的内容插槽                                                                  | -                        | -        |
+| masker           | 侧边栏展开时遮罩的内容插槽                                                              | `LayoutSlotParams`       | `2.3.16` |
 
 ### Layout 方法
 

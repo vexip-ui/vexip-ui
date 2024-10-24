@@ -316,12 +316,6 @@ function refreshScroll() {
         </ConfigProvider>
         <div id="transfer-place"></div>
       </template>
-      <Masker
-        v-model:active="expanded"
-        class="global-masker"
-        closable
-        :auto-remove="false"
-      ></Masker>
     </template>
 
     <template #footer-copyright>

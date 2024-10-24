@@ -7,7 +7,7 @@ $layout: () !default;
 $layout: map.merge(
   (
     view-height: 100vh,
-    aside-z-index: calc(#{value('z-index-popper')} + 100),
+    aside-z-index: calc(#{value('z-index-popper')} + 101),
     aside-width: 240px,
     aside-bg-color: value('bg-color-base'),
     aside-b-color: value('border-color-light-2'),
@@ -339,8 +339,8 @@ $layout: map.merge(
     height: 30px;
     color: value('content-color-third');
     cursor: pointer;
+    background-color: value('layout-aside-bg-color');
     border: value('layout-aside-border');
-    border-inline-start-color: transparent;
     border-radius: 0 value('radius-base') value('radius-base') 0;
   }
 
