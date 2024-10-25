@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Renderer } from '@/components/renderer'
+
 import { computed } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
@@ -15,7 +17,8 @@ const props = useProps('card', _props, {
     default: 'always' as CardShadowType,
     validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value)
   },
-  contentStyle: () => ({})
+  contentStyle: () => ({}),
+  slots: () => ({})
 })
 
 const slots = defineSlots<{
@@ -37,8 +40,8 @@ const className = computed(() => {
     }
   ]
 })
-const hasTitle = computed(() => !!slots.title || props.title)
-const hasExtra = computed(() => !!slots.extra)
+const hasTitle = computed(() => !!(slots.title || props.title || props.slots.title))
+const hasExtra = computed(() => !!(slots.extra || props.slots.extra))
 const hasHeader = computed(() => !!slots.header || hasTitle.value || hasExtra.value)
 </script>
 
@@ -46,18 +49,26 @@ const hasHeader = computed(() => !!slots.header || hasTitle.value || hasExtra.va
   <article :class="className">
     <div v-if="hasHeader" :class="nh.be('header')">
       <slot name="header">
-        <div v-if="hasTitle" :class="nh.be('title')">
-          <slot name="title">
-            {{ props.title }}
-          </slot>
-        </div>
-        <div v-if="hasExtra" :class="nh.be('extra')">
-          <slot name="extra"></slot>
-        </div>
+        <Renderer :renderer="props.slots.header">
+          <div v-if="hasTitle" :class="nh.be('title')">
+            <slot name="title">
+              <Renderer :renderer="props.slots.title">
+                {{ props.title }}
+              </Renderer>
+            </slot>
+          </div>
+          <div v-if="hasExtra" :class="nh.be('extra')">
+            <slot name="extra">
+              <Renderer :renderer="props.slots.extra"></Renderer>
+            </slot>
+          </div>
+        </Renderer>
       </slot>
     </div>
     <div :class="nh.be('content')" :style="props.contentStyle">
-      <slot></slot>
+      <slot>
+        <Renderer :renderer="props.slots.default"></Renderer>
+      </slot>
     </div>
   </article>
 </template>
