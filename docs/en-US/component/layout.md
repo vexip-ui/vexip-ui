@@ -114,7 +114,7 @@ After adding, the internal scroll component will be disabled, the layout will fo
 
 ```ts
 import type { Router } from 'vue-router'
-import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
+import type { BreakPoint, IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'
@@ -139,6 +139,7 @@ type LayoutSection =
   | 'scrollbar'
 
 type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
+type LayoutMediaJudger = (breakpoint: BreakPoint) => boolean
 
 interface LayoutMenuProps {
   accordion?: boolean,

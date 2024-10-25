@@ -4,7 +4,7 @@
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
-    header-fixed="min"
+    header-fixed="(min-width: 1000px)"
     aside-fixed="min"
   >
     <template #main>
