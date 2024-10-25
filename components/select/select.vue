@@ -599,6 +599,7 @@ defineExpose({
   virtualList,
   restTip,
 
+  updatePopper,
   isSelected,
   getOptionFromMap,
   updateHitting,
