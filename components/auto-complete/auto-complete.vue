@@ -252,6 +252,7 @@ function handleInputInternal(event: string | Event) {
 
   emitEvent(props.onInput, value)
   nextTick(testOptionCanDrop)
+  select.value?.updatePopper()
 }
 
 const delay = toNumber(props.delay)

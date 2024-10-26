@@ -255,10 +255,11 @@ function handleEscape(event: KeyboardEvent) {
     <div
       v-bind="$attrs"
       ref="wrapper"
-      :class="className"
+      :class="[className, $attrs.class]"
       tabindex="-1"
       :style="{
         zIndex,
+        ...($attrs.style || {}),
         pointerEvents: wrapperShow ? undefined : 'none',
         visibility: wrapperShow ? undefined : 'hidden'
       }"

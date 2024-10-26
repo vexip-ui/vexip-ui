@@ -590,6 +590,7 @@ defineExpose({
   virtualList,
   restTip,
 
+  updatePopper,
   isSelected,
   getOptionFromMap,
   updateHitting,
@@ -681,6 +682,7 @@ function initHittingIndex() {
 }
 
 function setVisible(visible: boolean) {
+  console.trace('1')
   if (currentVisible.value === visible) return
 
   currentVisible.value = visible
@@ -1009,7 +1011,12 @@ function handleCompositionEnd() {
 function handleFilterKeyDown(event: KeyboardEvent) {
   if (!input.value) return
 
-  if (event.key === 'Backspace' && !input.value.value && !isNull(getLast(currentValues.value))) {
+  if (
+    props.filterPosition !== 'in-list' &&
+    event.key === 'Backspace' &&
+    !input.value.value &&
+    !isNull(getLast(currentValues.value))
+  ) {
     event.stopPropagation()
     handleTagClose(getLast(currentValues.value))
   }

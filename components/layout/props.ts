@@ -2,16 +2,26 @@ import { booleanProp, booleanStringProp, buildProps, eventProp, localeProp } fro
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { BreakPoint } from '@/components/grid'
 import type { MenuOptions } from '@/components/menu'
 import type {
   LayoutConfig,
   LayoutFooterLink,
   LayoutHeaderAction,
   LayoutInnerClass,
+  LayoutMediaJudger,
   LayoutMenuProps,
   LayoutSignType,
   LayoutUser
 } from './symbol'
+
+const breakpointProp = {
+  type: [String, Boolean, Function] as PropType<
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    boolean | BreakPoint | LayoutMediaJudger | (string & {})
+  >,
+  default: null
+}
 
 export const layoutProps = buildProps({
   locale: localeProp('layout'),
@@ -29,14 +39,14 @@ export const layoutProps = buildProps({
   reduced: booleanProp,
   avatarCircle: booleanProp,
   signType: String as PropType<LayoutSignType>,
-  headerFixed: booleanStringProp,
-  asideFixed: booleanStringProp,
+  headerFixed: breakpointProp,
+  asideFixed: breakpointProp,
   copyright: String,
   links: Array as PropType<LayoutFooterLink[]>,
   colors: Array as PropType<string[]>,
   color: String,
-  miniHeaderSign: booleanStringProp,
-  verticalLinks: booleanStringProp,
+  miniHeaderSign: breakpointProp,
+  verticalLinks: breakpointProp,
   darkMode: booleanProp,
   fixedMain: booleanProp,
   fitWindow: booleanProp,

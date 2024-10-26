@@ -1,3 +1,5 @@
+import { currentBreakPoint } from '@/components/grid'
+
 import { computed, inject, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from 'vue'
 
 import { adjustAlpha, isClient, mixColor, noop, parseColorToRgba, toFixed } from '@vexip-ui/utils'
@@ -5,7 +7,8 @@ import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'
 import type { Color } from '@vexip-ui/utils'
-import type { LayoutState } from './symbol'
+import type { BreakPoint } from '@/components/grid'
+import type { LayoutMediaJudger, LayoutState } from './symbol'
 
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
@@ -70,9 +73,9 @@ export function useLayoutState() {
   )
 }
 
-const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
+const breakPoints = Object.freeze<BreakPoint[]>(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
-export function useMediaQuery(query: Ref<string | boolean>) {
+export function useMediaQuery(query: Ref<boolean | string | LayoutMediaJudger>) {
   const matched = ref(false)
   const updateTrigger = ref(0)
 
@@ -81,8 +84,11 @@ export function useMediaQuery(query: Ref<string | boolean>) {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     updateTrigger.value
 
-    if (breakPoints.includes(query.value as any)) {
+    if (typeof query.value !== 'function' && breakPoints.includes(query.value as any)) {
       const usedQuery = query.value === 'xs' ? 'sm' : query.value
+
+      if (usedQuery === currentBreakPoint.value) return true
+
       const media =
         computedStyle && computedStyle.getPropertyValue(`--vxp-break-point-${usedQuery}`).trim()
 
@@ -108,6 +114,11 @@ export function useMediaQuery(query: Ref<string | boolean>) {
 
     if (computedQuery.value === 'max') {
       matched.value = true
+      return
+    }
+
+    if (typeof computedQuery.value === 'function') {
+      matched.value = computedQuery.value(currentBreakPoint.value)
       return
     }
 

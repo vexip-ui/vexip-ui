@@ -114,7 +114,7 @@ After adding, the internal scroll component will be disabled, the layout will fo
 
 ```ts
 import type { Router } from 'vue-router'
-import type { IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
+import type { BreakPoint, IconMinorProps, MenuGroupType, MenuMarkerType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color' | 'theme'
@@ -139,6 +139,7 @@ type LayoutSection =
   | 'scrollbar'
 
 type LayoutInnerClass = Partial<Record<LayoutSection, ClassType>>
+type LayoutMediaJudger = (breakpoint: BreakPoint) => boolean
 
 interface LayoutMenuProps {
   accordion?: boolean,
@@ -156,6 +157,7 @@ interface LayoutHeaderAction {
   name?: string,
   disabled?: boolean,
   divided?: boolean,
+  hidden?: boolean,
   meta?: Record<string, any>
 }
 
@@ -237,25 +239,26 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 
 ### Layout Slots
 
-| Name             | Description                                                                                     | Parameters                                                                                                                                              | Since   |
-| ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| sign             | Slot for the sign, by default on the `header-left` or `aside-top` slot depending on `sign-type` | `LayoutSlotParams`                                                                                                                                      | -       |
-| header           | Slot of the header, use it to cover the entire header                                           | `LayoutSlotParams`                                                                                                                                      | -       |
-| header-left      | Slot for the left of header                                                                     | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -       |
-| header-main      | Slot for the center of header                                                                   | `LayoutHeaderSlotParams`                                                                                                                                | -       |
-| header-right     | Slot for the right of header                                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -       |
-| header-user      | Slot for the user dropdown of header                                                            | `LayoutHeaderSlotParams`                                                                                                                                | -       |
-| header-avatar    | Slot for the user avatar of header                                                              | `LayoutHeaderSlotParams`                                                                                                                                | `2.0.7` |
-| aside            | Slot for aside, using it will cover the entire aside                                            | `LayoutSlotParams`                                                                                                                                      | -       |
-| aside-top        | Slot for the top of aside                                                                       | `LayoutSlotParams`                                                                                                                                      | -       |
-| aside-main       | Slot for the center of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -       |
-| aside-bottom     | Slot for the bottom of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -       |
-| aside-expand     | Slot of handler that trigger aside expanded                                                     | `LayoutSlotParams`                                                                                                                                      | -       |
-| default          | Slot for the main page, use it to cover the entire main page                                    | `LayoutSlotParams`                                                                                                                                      | -       |
-| main             | Slot for the main page                                                                          | -                                                                                                                                                       | -       |
-| footer           | Slot for footer , use it to cover the entire footer                                             | `LayoutSlotParams`                                                                                                                                      | -       |
-| footer-links     | Slot for footer links                                                                           | -                                                                                                                                                       | -       |
-| footer-copyright | Slot for footer copyright information                                                           | -                                                                                                                                                       | -       |
+| Name             | Description                                                                                     | Parameters                                                                                                                                              | Since    |
+| ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| sign             | Slot for the sign, by default on the `header-left` or `aside-top` slot depending on `sign-type` | `LayoutSlotParams`                                                                                                                                      | -        |
+| header           | Slot of the header, use it to cover the entire header                                           | `LayoutSlotParams`                                                                                                                                      | -        |
+| header-left      | Slot for the left of header                                                                     | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -        |
+| header-main      | Slot for the center of header                                                                   | `LayoutHeaderSlotParams`                                                                                                                                | -        |
+| header-right     | Slot for the right of header                                                                    | `{ reduced: boolean, toggleReduce: (target: boolean) => void, handleColorChange: (color: string) => void, toggleUserDrop: (target: boolean) = > void }` | -        |
+| header-user      | Slot for the user dropdown of header                                                            | `LayoutHeaderSlotParams`                                                                                                                                | -        |
+| header-avatar    | Slot for the user avatar of header                                                              | `LayoutHeaderSlotParams`                                                                                                                                | `2.0.7`  |
+| aside            | Slot for aside, using it will cover the entire aside                                            | `LayoutSlotParams`                                                                                                                                      | -        |
+| aside-top        | Slot for the top of aside                                                                       | `LayoutSlotParams`                                                                                                                                      | -        |
+| aside-main       | Slot for the center of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -        |
+| aside-bottom     | Slot for the bottom of aside                                                                    | `LayoutSlotParams`                                                                                                                                      | -        |
+| aside-expand     | Slot of handler that trigger aside expanded                                                     | `LayoutSlotParams`                                                                                                                                      | -        |
+| default          | Slot for the main page, use it to cover the entire main page                                    | `LayoutSlotParams`                                                                                                                                      | -        |
+| main             | Slot for the main page                                                                          | -                                                                                                                                                       | -        |
+| footer           | Slot for footer , use it to cover the entire footer                                             | `LayoutSlotParams`                                                                                                                                      | -        |
+| footer-links     | Slot for footer links                                                                           | -                                                                                                                                                       | -        |
+| footer-copyright | Slot for footer copyright information                                                           | -                                                                                                                                                       | -        |
+| masker           | Slot for masker which shows when the aside is expanded                                          | `LayoutSlotParams`                                                                                                                                      | `2.3.16` |
 
 ### Layout Methods
 
