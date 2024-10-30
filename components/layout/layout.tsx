@@ -1,3 +1,4 @@
+import { Masker } from '@/components/masker'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
 
@@ -13,7 +14,7 @@ import {
   watch
 } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { createSlotRender, useMounted } from '@vexip-ui/hooks'
 import { getYBorder, isClient, runQueueFrame } from '@vexip-ui/utils'
 import LayoutMain from './layout-main'
@@ -74,7 +75,8 @@ export default defineComponent({
       fixedMain: false,
       fitWindow: false,
       innerClasses: () => ({}),
-      noHeader: false
+      noHeader: false,
+      noMasker: false
     })
 
     const nh = useNameHelper('layout')
@@ -142,6 +144,9 @@ export default defineComponent({
       }
     })
 
+    const getIndex = useZIndex()
+    const zIndex = ref(asideExpanded.value ? getIndex() : 0)
+
     const slotParams = shallowReadonly(
       reactive({
         expanded: asideExpanded,
@@ -164,6 +169,11 @@ export default defineComponent({
         asideExpanded.value = value
       }
     )
+    watch(asideExpanded, value => {
+      if (state.useExpand && value) {
+        zIndex.value = getIndex()
+      }
+    })
     watch(
       () => props.reduced,
       value => {
@@ -352,6 +362,7 @@ export default defineComponent({
             !expandMatched.value && nh.bem('sidebar', 'away'),
             props.innerClasses.sidebar
           ]}
+          style={{ zIndex: state.useExpand ? zIndex.value + 1 : undefined }}
           onWheel={stopAndPrevent}
           onMousemove={stopAndPrevent}
         >
@@ -419,6 +430,27 @@ export default defineComponent({
       )
     }
 
+    function renderMasker() {
+      if (props.noMasker) return null
+
+      if (slots.masker) {
+        return renderSlot(slots, 'masker', slotParams)
+      }
+
+      return (
+        <Masker
+          v-model:active={asideExpanded.value}
+          class={nh.be('masker')}
+          inner
+          closable
+          auto-remove={false}
+          transfer={false}
+          style={{ zIndex: zIndex.value }}
+          onToggle={toggleExpanded}
+        ></Masker>
+      )
+    }
+
     function renderWrapper() {
       const CustomTag = (props.tag || 'section') as any
 
@@ -449,6 +481,7 @@ export default defineComponent({
             {renderMain()}
             {props.footer && renderFooter()}
           </section>
+          {renderMasker()}
         </CustomTag>
       )
     }

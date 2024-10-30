@@ -101,7 +101,7 @@ export default defineComponent({
         ] as LayoutHeaderAction[]
       }
 
-      return props.actions
+      return props.actions.filter(action => !action.hidden)
     })
     const hasLeft = computed(() => {
       return !!(props.logo || props.signName || slots.left)
