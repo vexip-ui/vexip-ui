@@ -75,7 +75,8 @@ export default defineComponent({
       fixedMain: false,
       fitWindow: false,
       innerClasses: () => ({}),
-      noHeader: false
+      noHeader: false,
+      noMasker: false
     })
 
     const nh = useNameHelper('layout')
@@ -430,6 +431,8 @@ export default defineComponent({
     }
 
     function renderMasker() {
+      if (props.noMasker) return null
+
       if (slots.masker) {
         return renderSlot(slots, 'masker', slotParams)
       }

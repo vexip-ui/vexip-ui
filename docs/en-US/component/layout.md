@@ -221,7 +221,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | fixed-main       | `boolean`                | Set whether the main is fixed                                                                                                                           | `false`                                                              | `2.1.14` |
 | fit-window       | `boolean`                | When enabled, layout will fit the browser window and remove built-in scroll                                                                             | `false`                                                              | `2.1.24` |
 | inner-classes    | `LayoutInnerClass`       | Set custom class names for inner elements                                                                                                               | `{}`                                                                 | `2.1.24` |
-| no-header        | `boolean`                | Set whether to disable the header                                                                                                                       | `false`                                                              | `2.2.7`  |
+| no-masker        | `boolean`                | Set whether to disable the masker when the aside is fixed and expanded                                                                                  | `false`                                                              | `2.3.16` |
 
 ### Layout Events
 

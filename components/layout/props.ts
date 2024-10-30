@@ -52,6 +52,7 @@ export const layoutProps = buildProps({
   fitWindow: booleanProp,
   innerClasses: Object as PropType<LayoutInnerClass>,
   noHeader: booleanProp,
+  noMasker: booleanProp,
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
