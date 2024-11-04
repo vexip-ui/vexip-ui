@@ -431,7 +431,7 @@ export default defineComponent({
     }
 
     function renderMasker() {
-      if (props.noMasker) return null
+      if (props.noMasker || !state.useExpand) return null
 
       if (slots.masker) {
         return renderSlot(slots, 'masker', slotParams)
@@ -443,7 +443,7 @@ export default defineComponent({
           class={nh.be('masker')}
           inner
           closable
-          auto-remove={false}
+          auto-remove
           transfer={false}
           style={{ zIndex: zIndex.value }}
           onToggle={toggleExpanded}
