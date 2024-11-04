@@ -1,3 +1,12 @@
+## [2.3.17](https://github.com/vexip-ui/vexip-ui/compare/v2.3.16...v2.3.17) (2024-11-04)
+
+
+### 🐞 Bug Fixes
+
+* **layout:** improve masker render logic in SSR ([116a031](https://github.com/vexip-ui/vexip-ui/commit/116a0311dd6cd7d7474f62a5d0a364c70e701c07))
+
+
+
 ## [2.3.16](https://github.com/vexip-ui/vexip-ui/compare/v2.3.15...v2.3.16) (2024-10-30)
 
 
