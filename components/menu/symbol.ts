@@ -68,6 +68,6 @@ export interface MenuItemExposed extends ComponentPublicInstance {
   handleMouseLeave: () => void
 }
 
-export const MENU_ITEM_STATE: InjectionKey<MenuItemState> = Symbol('MENU_ITEM_STATE')
-export const MENU_GROUP_STATE: InjectionKey<MenuGroupState> = Symbol('MENU_GROUP_STATE')
-export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')
+export const MENU_ITEM_STATE = '__VXP_MENU_ITEM_STATE' as unknown as InjectionKey<MenuItemState>
+export const MENU_GROUP_STATE = '__VXP_MENU_GROUP_STATE' as unknown as InjectionKey<MenuGroupState>
+export const MENU_STATE = '__VXP_MENU_STATE' as unknown as InjectionKey<MenuState>

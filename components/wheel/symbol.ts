@@ -34,4 +34,4 @@ export interface WheelSlots {
   default?: (params: { option: WheelOption, index: number }) => any
 }
 
-export const WHEEL_STATE: InjectionKey<WheelState> = Symbol('WHEEL_STATE')
+export const WHEEL_STATE = '__VXP_WHEEL_STATE' as unknown as InjectionKey<WheelState>

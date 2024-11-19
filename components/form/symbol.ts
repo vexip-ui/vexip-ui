@@ -68,12 +68,12 @@ export interface FormActions {
 }
 
 // form
-export const FORM_PROPS: InjectionKey<Partial<FormProps>> = Symbol('FORM_PROPS')
-export const FORM_FIELDS: InjectionKey<Set<FieldOptions>> = Symbol('FORM_FIELDS')
-export const FORM_ACTIONS: InjectionKey<FormActions> = Symbol('FORM_ACTIONS')
+export const FORM_PROPS = '__VXP_FORM_PROPS' as unknown as InjectionKey<Partial<FormProps>>
+export const FORM_FIELDS = '__VXP_FORM_FIELDS' as unknown as InjectionKey<Set<FieldOptions>>
+export const FORM_ACTIONS = '__VXP_FORM_ACTIONS' as unknown as InjectionKey<FormActions>
 
 // form-item
-export const FIELD_OPTIONS: InjectionKey<FieldOptions> = Symbol('FIELD_OPTIONS')
+export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions>
 
 export const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
 export const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])

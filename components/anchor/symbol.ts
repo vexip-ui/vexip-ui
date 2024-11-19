@@ -22,5 +22,5 @@ export interface AnchorState {
 }
 
 export const baseIndentWidth = 14 // px
-export const LINK_STATE: InjectionKey<AnchorLinkState> = Symbol('ANCHOR_LINK_STATE')
-export const ANCHOR_STATE: InjectionKey<AnchorState> = Symbol('ANCHOR_STATE')
+export const LINK_STATE = '__VXP_ANCHOR_LINK_STATE' as unknown as InjectionKey<AnchorLinkState>
+export const ANCHOR_STATE = '__VXP_ANCHOR_STATE' as unknown as InjectionKey<AnchorState>

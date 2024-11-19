@@ -33,4 +33,4 @@ export interface TabNavState {
 
 export type ChangeEvent = (label: string | number) => void
 
-export const TAB_NAV_STATE: InjectionKey<TabNavState> = Symbol('TAB_NAV_STATE')
+export const TAB_NAV_STATE = '__VXP_TAB_NAV_STATE' as unknown as InjectionKey<TabNavState>

@@ -25,7 +25,7 @@ export interface GroupState {
   handlePreview: (item: ImageState) => void
 }
 
-export const GROUP_STATE: InjectionKey<GroupState> = Symbol('IMAGE_GROUP_STATE')
+export const GROUP_STATE = '__VXP_IMAGE_GROUP_STATE' as unknown as InjectionKey<GroupState>
 
 export const objectFitValues = Object.freeze<ImageObjectFit[]>([
   'fill',

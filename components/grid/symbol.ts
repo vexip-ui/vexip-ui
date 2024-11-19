@@ -30,4 +30,4 @@ export interface CellOptions {
   bottom?: number | string
 }
 
-export const GRID_STATE: InjectionKey<GridState> = Symbol('GRID_STATE')
+export const GRID_STATE = '__VXP_GRID_STATE' as unknown as InjectionKey<GridState>

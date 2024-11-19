@@ -11,4 +11,4 @@ export interface GroupState {
   loading: boolean
 }
 
-export const GROUP_STATE: InjectionKey<GroupState> = Symbol('GROUP_STATE')
+export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<GroupState>

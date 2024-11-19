@@ -9,7 +9,7 @@ export interface AvatarGroupState {
   size: number | ComponentSize
 }
 
-export const GROUP_STATE: InjectionKey<AvatarGroupState> = Symbol('GROUP_STATE')
+export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<AvatarGroupState>
 
 export const objectFitValues = Object.freeze<AvatarObjectFit[]>([
   'fill',

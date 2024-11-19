@@ -17,4 +17,4 @@ export interface CollapseState {
   refreshLabels: () => void
 }
 
-export const COLLAPSE_STATE: InjectionKey<CollapseState> = Symbol('COLLAPSE_STATE')
+export const COLLAPSE_STATE = '__VXP_COLLAPSE_STATE' as unknown as InjectionKey<CollapseState>
