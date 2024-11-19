@@ -58,7 +58,7 @@ export default defineComponent({
       passive: false,
       onKeyDown: (event, modifier) => {
         if (modifier.left || modifier.right) {
-          if (!wrapper.value) return
+          if (!wrapper.value || ![...panelStates].find(({ tab }) => tab === event.target)) return
 
           const tabs = Array.from(wrapper.value.querySelectorAll(nh.cbe('header'))) as HTMLElement[]
 

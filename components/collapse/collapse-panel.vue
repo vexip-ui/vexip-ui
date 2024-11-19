@@ -144,12 +144,6 @@ export default defineComponent({
         }
       )
 
-      // if (props.label || props.label === 0) {
-      //   currentLabel.value = props.label
-      // } else {
-      //   currentLabel.value = randomString()
-      // }
-
       collapseState.registerPanel(state)
 
       onBeforeUnmount(() => {
