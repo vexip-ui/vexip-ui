@@ -17,7 +17,7 @@ export interface ButtonGroupState {
   refreshIndexes: () => void
 }
 
-export const GROUP_STATE: InjectionKey<ButtonGroupState> = Symbol('GROUP_STATE')
+export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<ButtonGroupState>
 
 export const buttonTypes = Object.freeze<ButtonType[]>([
   'default',

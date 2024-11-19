@@ -84,4 +84,4 @@ export const videoDefaultShortcuts = Object.freeze({
   'full-browser': 'F'
 })
 
-export const VIDEO_STATE: InjectionKey<VideoState> = Symbol('VIDEO_STATE')
+export const VIDEO_STATE = '__VXP_VIDEO_STATE' as unknown as InjectionKey<VideoState>

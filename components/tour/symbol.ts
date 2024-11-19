@@ -40,4 +40,4 @@ export interface TourState {
   decreaseStep(step: TourStepOptions): void
 }
 
-export const TOUR_STATE = Symbol('TOUR_STATE') as InjectionKey<TourState>
+export const TOUR_STATE = '___VXP_TOUR_STATE' as unknown as InjectionKey<TourState>

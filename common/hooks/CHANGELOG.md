@@ -1,3 +1,17 @@
+# [2.6.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.5.0...hooks@2.6.0) (2024-11-19)
+
+
+### ✨ Features
+
+* **hooks:** add strictTarget option for useModifier ([c873769](https://github.com/vexip-ui/vexip-ui/commit/c873769cf9ff1d949f7c56fa232c9e261c25f301))
+
+
+### 🐞 Bug Fixes
+
+* **portal:** correctly render content only once ([9cd9c6d](https://github.com/vexip-ui/vexip-ui/commit/9cd9c6d555d90bdfd87d6af23d169791faa99ab4)), closes [#502](https://github.com/vexip-ui/vexip-ui/issues/502)
+
+
+
 # [2.5.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.4.1...hooks@2.5.0) (2024-05-12)
 
 

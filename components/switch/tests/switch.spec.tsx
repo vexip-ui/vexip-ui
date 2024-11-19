@@ -157,15 +157,19 @@ describe('Switch', () => {
     await wrapper.find('input').trigger('change')
     expect(wrapper.classes()).toContain('vxp-switch--open')
 
+    let resolveRef: (value: boolean) => void
+    onBeforeChange.mockReset()
     onBeforeChange.mockImplementation(
       () =>
         new Promise(resolve => {
-          nextTick(() => resolve(true))
+          resolveRef = resolve
         })
     )
     await wrapper.find('input').trigger('change')
     await nextTick()
     expect(wrapper.classes()).toContain('vxp-switch--open')
+    resolveRef!(true)
+    await nextTick()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-switch--open')
   })

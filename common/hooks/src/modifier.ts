@@ -40,6 +40,10 @@ export interface UseModifierOptions {
    */
   passive?: boolean,
   /**
+   * 是否严格匹配目标元素
+   */
+  strictTarget?: boolean,
+  /**
    * 键按下的事件回调函数
    */
   onKeyDown?: (event: KeyboardEvent, modifier: ModifierState) => void,
@@ -70,6 +74,7 @@ export function useModifier(options: UseModifierOptions = {}) {
     autoReset = true,
     capture = false,
     passive = true,
+    strictTarget = false,
     onKeyDown = noop,
     onKeyUp = noop
   } = options
@@ -153,6 +158,10 @@ export function useModifier(options: UseModifierOptions = {}) {
     target,
     'keydown',
     (event: KeyboardEvent) => {
+      if (strictTarget && event.target !== unref(target)) {
+        return
+      }
+
       updateModifier(event, true)
       onKeyDown(event, modifierProxy)
     },
@@ -162,6 +171,10 @@ export function useModifier(options: UseModifierOptions = {}) {
     target,
     'keyup',
     (event: KeyboardEvent) => {
+      if (strictTarget && event.target !== unref(target)) {
+        return
+      }
+
       updateModifier(event, false)
       onKeyUp(event, modifierProxy)
     },

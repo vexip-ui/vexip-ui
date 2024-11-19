@@ -370,7 +370,7 @@ watch(expandedNodeIds, (value, prev) => {
         const addedNodes = flatNodes(children, value)
 
         baseNodes.splice(index + 1, 0, {
-          id: Symbol(''),
+          id: Symbol('TreeNodePlaceholder'),
           collapse: true,
           type,
           height: virtual ? addedNodes.length * nodeHeight : undefined,

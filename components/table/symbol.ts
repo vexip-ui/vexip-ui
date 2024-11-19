@@ -221,7 +221,7 @@ export interface TableColumnGroupOptions {
   children: TableColumnOptions<any, any>[]
 }
 export interface ColumnGroupWithKey extends TableColumnGroupOptions {
-  key: symbol,
+  key: Key,
   headSpan: number,
   rowSpan: number,
   /** @internal */
@@ -503,16 +503,17 @@ export const DEFAULT_KEY_FIELD = 'id'
 /**
  * 表格状态管理
  */
-export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
+export const TABLE_STORE = '__VXP_TABLE_STORE' as unknown as InjectionKey<TableStore>
 /**
  * 表格组件的顶层 Api
  */
-export const TABLE_ACTIONS: InjectionKey<TableActions> = Symbol('TABLE_ACTIONS')
-export const TABLE_SLOTS: InjectionKey<Slots> = Symbol('TABLE_SLOTS')
+export const TABLE_ACTIONS = '__VXP_TABLE_ACTIONS' as unknown as InjectionKey<TableActions>
+export const TABLE_SLOTS = '__VXP_TABLE_SLOTS' as unknown as InjectionKey<Slots>
 export const TABLE_HEAD_PREFIX = '__vxp-table-head-'
 export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
 
-export const COLUMN_GROUP_ACTIONS: InjectionKey<ColumnGroupActions> = Symbol('COLUMN_GROUP_ACTIONS')
+export const COLUMN_GROUP_ACTIONS =
+  '__VXP_COLUMN_GROUP_ACTIONS' as unknown as InjectionKey<ColumnGroupActions>
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']
 

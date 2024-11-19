@@ -1,6 +1,7 @@
 <template>
   <Collapse v-model:expanded="expanded">
     <CollapsePanel title="Panel 1">
+      <Input></Input>
       <p>Some content to fill</p>
       <p>Some content to fill</p>
     </CollapsePanel>

@@ -248,8 +248,8 @@ import type { CascaderKeyConfig, CascaderOptionState, CascaderValue, Data } from
 
 type ChangeListener = (value: CascaderValue, data: Data[] | Data[][]) => void
 
-const ID_KEY = Symbol('ID_KEY')
-const PARENT_KEY = Symbol('PARENT_KEY')
+const ID_KEY = '___VXP_CASCADER_ID_KEY'
+const PARENT_KEY = '___VXP_CASCADER_PARENT_KEY'
 
 const defaultKeyConfig: Required<CascaderKeyConfig> = {
   value: 'value',

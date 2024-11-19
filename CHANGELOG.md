@@ -1,3 +1,17 @@
+## [2.3.18](https://github.com/vexip-ui/vexip-ui/compare/v2.3.17...v2.3.18) (2024-11-19)
+
+
+### ✨ Features
+
+* **hooks:** add strictTarget option for useModifier ([c873769](https://github.com/vexip-ui/vexip-ui/commit/c873769cf9ff1d949f7c56fa232c9e261c25f301))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** unexpected prevent under elements' keyboard events ([26120e1](https://github.com/vexip-ui/vexip-ui/commit/26120e17d3c85d78e6b9f0ea5ddadd03ec8cba27))
+
+
+
 ## [2.3.17](https://github.com/vexip-ui/vexip-ui/compare/v2.3.16...v2.3.17) (2024-11-04)
 
 

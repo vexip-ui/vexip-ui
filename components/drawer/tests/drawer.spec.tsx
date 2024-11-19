@@ -220,14 +220,18 @@ describe('Drawer', () => {
     await openAndClose()
     expect(wrapper.vm.currentActive).toBe(true)
 
+    let resolveRef: (value: boolean) => void
+    onBeforeClose.mockReset()
     onBeforeClose.mockImplementation(
       () =>
         new Promise(resolve => {
-          nextTick(() => nextTick(() => resolve(true)))
+          resolveRef = resolve
         })
     )
     await openAndClose()
     expect(wrapper.vm.currentActive).toBe(true)
+    resolveRef!(true)
+    await nextTick()
     await nextTick()
     expect(wrapper.vm.currentActive).toBe(false)
   })

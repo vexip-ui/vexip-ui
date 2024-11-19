@@ -28,4 +28,4 @@ export interface GroupState {
   replaceValue(prevValue: string | number, newValue: string | number): void
 }
 
-export const GROUP_STATE: InjectionKey<GroupState> = Symbol('CHECKBOX_GROUP_STATE')
+export const GROUP_STATE = '__VXP_CHECKBOX_GROUP_STATE' as unknown as InjectionKey<GroupState>
