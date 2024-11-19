@@ -88,14 +88,19 @@ describe('Masker', () => {
     await openAndClose()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
 
+    let resolveRef: (value: boolean) => void
+    onBeforeClose.mockReset()
     onBeforeClose.mockImplementation(
       () =>
         new Promise(resolve => {
-          nextTick(() => resolve(true))
+          resolveRef = resolve
         })
     )
     await openAndClose()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
+    resolveRef!(true)
+    await nextTick()
+    await nextTick()
     await nextTick()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
   })
