@@ -2,7 +2,12 @@ import { booleanNumberProp, booleanProp, buildProps, eventProp } from '@vexip-ui
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { CarouselArrowTrigger, CarouselArrowType, CarouselPointerType } from './symbol'
+import type {
+  CarouselArrowTrigger,
+  CarouselArrowType,
+  CarouselPointerType,
+  CarouselSlots
+} from './symbol'
 
 export const carouselProps = buildProps({
   active: Number,
@@ -18,6 +23,7 @@ export const carouselProps = buildProps({
   activeOffset: Number,
   height: [Number, String],
   ignoreHover: booleanProp,
+  slots: Object as PropType<CarouselSlots>,
   onChange: eventProp<(active: number) => void>(),
   onPrev: eventProp<(active: number) => void>(),
   onNext: eventProp<(active: number) => void>(),

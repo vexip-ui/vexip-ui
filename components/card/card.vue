@@ -6,7 +6,7 @@ import { computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { cardProps } from './props'
 
-import type { CardShadowType } from './symbol'
+import type { CardShadowType, CardSlots } from './symbol'
 
 defineOptions({ name: 'Card' })
 
@@ -21,12 +21,7 @@ const props = useProps('card', _props, {
   slots: () => ({})
 })
 
-const slots = defineSlots<{
-  default: () => any,
-  header: () => any,
-  title: () => any,
-  extra: () => any
-}>()
+const slots = defineSlots<CardSlots>()
 
 const nh = useNameHelper('card')
 

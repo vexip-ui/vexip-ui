@@ -31,13 +31,17 @@
             @click="handlePrevClick"
           >
             <slot name="prev-arrow" :disabled="disabledPrev">
-              <Icon v-bind="arrowIcons[0]" :scale="+(arrowIcons[0].scale || 1) * 1.5"></Icon>
+              <Renderer :renderer="props.slots.prevArrow" :data="{ disabled: disabledPrev }">
+                <Icon v-bind="arrowIcons[0]" :scale="+(arrowIcons[0].scale || 1) * 1.5"></Icon>
+              </Renderer>
             </slot>
           </div>
         </div>
         <div :class="nh.be('list')" :style="listStyle">
           <div :class="nh.be('track')" :style="trackStyle" @transitionend.self="handleAfterMove">
-            <slot></slot>
+            <slot>
+              <Renderer :renderer="props.slots.default"></Renderer>
+            </slot>
           </div>
         </div>
         <div
@@ -57,7 +61,9 @@
             @click="handleNextClick"
           >
             <slot name="next-arrow" :disabled="disabledNext">
-              <Icon v-bind="arrowIcons[1]" :scale="+(arrowIcons[1].scale || 1) * 1.5"></Icon>
+              <Renderer :renderer="props.slots.nextArrow" :data="{ disabled: disabledNext }">
+                <Icon v-bind="arrowIcons[1]" :scale="+(arrowIcons[1].scale || 1) * 1.5"></Icon>
+              </Renderer>
             </slot>
           </div>
         </div>
@@ -79,7 +85,12 @@
           name="pointer"
           :active="index - 1 === (currentActive + props.activeOffset) % itemStates.size"
         >
-          <span :class="nh.be('pointer-inner')"></span>
+          <Renderer
+            :renderer="props.slots.pointer"
+            :data="{ active: index - 1 === (currentActive + props.activeOffset) % itemStates.size }"
+          >
+            <span :class="nh.be('pointer-inner')"></span>
+          </Renderer>
         </slot>
       </div>
     </div>
@@ -88,6 +99,7 @@
 
 <script lang="ts">
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, defineComponent, onMounted, provide, reactive, ref, toRef, watch } from 'vue'
@@ -104,6 +116,7 @@ export default defineComponent({
   name: 'Carousel',
   components: {
     Icon,
+    Renderer,
     ResizeObserver
   },
   props: carouselProps,
@@ -140,7 +153,8 @@ export default defineComponent({
       speed: 300,
       activeOffset: 0,
       height: null,
-      ignoreHover: false
+      ignoreHover: false,
+      slots: () => ({})
     })
 
     const nh = useNameHelper('carousel')
