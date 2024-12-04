@@ -20,7 +20,7 @@ export interface AvatarGroupSlots {
   tip?: (params: { options: AvatarOption[], count: number }) => any
 }
 
-export const GROUP_STATE: InjectionKey<AvatarGroupState> = Symbol('GROUP_STATE')
+export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<AvatarGroupState>
 
 export const objectFitValues = Object.freeze<AvatarObjectFit[]>([
   'fill',

@@ -155,8 +155,8 @@ export interface TreeState {
   handleLabelClick(node: TreeNodeProps): void
 }
 
-export const TREE_STATE: InjectionKey<TreeState> = Symbol('TREE_STATE')
-export const TREE_NODE_STATE: InjectionKey<TreeNodeState> = Symbol('TREE_NODE_STATE')
+export const TREE_STATE = '__VXP_TREE_STATE' as unknown as InjectionKey<TreeState>
+export const TREE_NODE_STATE = '__VXP_TREE_NODE_STATE' as unknown as InjectionKey<TreeNodeState>
 
 export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   id: 'id',

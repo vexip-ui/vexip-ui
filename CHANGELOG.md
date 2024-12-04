@@ -1,3 +1,44 @@
+## [2.3.18](https://github.com/vexip-ui/vexip-ui/compare/v2.3.17...v2.3.18) (2024-11-19)
+
+
+### ✨ Features
+
+* **hooks:** add strictTarget option for useModifier ([c873769](https://github.com/vexip-ui/vexip-ui/commit/c873769cf9ff1d949f7c56fa232c9e261c25f301))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** unexpected prevent under elements' keyboard events ([26120e1](https://github.com/vexip-ui/vexip-ui/commit/26120e17d3c85d78e6b9f0ea5ddadd03ec8cba27))
+
+
+
+## [2.3.17](https://github.com/vexip-ui/vexip-ui/compare/v2.3.16...v2.3.17) (2024-11-04)
+
+
+### 🐞 Bug Fixes
+
+* **layout:** improve masker render logic in SSR ([116a031](https://github.com/vexip-ui/vexip-ui/commit/116a0311dd6cd7d7474f62a5d0a364c70e701c07))
+
+
+
+## [2.3.16](https://github.com/vexip-ui/vexip-ui/compare/v2.3.15...v2.3.16) (2024-10-30)
+
+
+### ✨ Features
+
+* **layout:** add hidden option for layout header action ([e4cee23](https://github.com/vexip-ui/vexip-ui/commit/e4cee2321afe6f430b33367be874bfafdf0c2690))
+* **layout:** add masker when fixed aside is expanded ([fe0c1e2](https://github.com/vexip-ui/vexip-ui/commit/fe0c1e27d622410dd099c3c42be900039a11a083))
+* **layout:** add no-masker prop ([c602a11](https://github.com/vexip-ui/vexip-ui/commit/c602a11c0a8134da8fd0c1c1b91cc5a7c729ea23))
+* **layout:** support functionally judge break point ([7d54e14](https://github.com/vexip-ui/vexip-ui/commit/7d54e148c73f27b85dc6e9a6e9f85e93f8f3d6c1))
+
+
+### 🐞 Bug Fixes
+
+* **auto-complete:** correctly update list popper position when inputting ([2415ec2](https://github.com/vexip-ui/vexip-ui/commit/2415ec24b3b1239e9d5dde950eed87954e098f70))
+* **select:** unexpected close list when filter in list and backspace down ([9f0cfe5](https://github.com/vexip-ui/vexip-ui/commit/9f0cfe541b853004dbe470d7bc3215a82a3e08c0))
+
+
+
 ## [2.3.15](https://github.com/vexip-ui/vexip-ui/compare/v2.3.14...v2.3.15) (2024-09-27)
 
 

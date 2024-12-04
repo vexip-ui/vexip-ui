@@ -20,7 +20,7 @@ export interface TimelineState {
   handleSignalClick: (label: string | number) => void
 }
 
-export const TIMELINE_STATE: InjectionKey<TimelineState> = Symbol('TIMELINE_STATE')
+export const TIMELINE_STATE = '__VXP_TIMELINE_STATE' as unknown as InjectionKey<TimelineState>
 
 export const timelineItemTypes = Object.freeze<TimelineItemType[]>([
   'primary',

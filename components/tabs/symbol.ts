@@ -17,4 +17,4 @@ export interface TabsState {
   refreshLabels: () => void
 }
 
-export const TABS_STATE: InjectionKey<TabsState> = Symbol('TABS_STATE')
+export const TABS_STATE = '__VXP_TABS_STATE' as unknown as InjectionKey<TabsState>

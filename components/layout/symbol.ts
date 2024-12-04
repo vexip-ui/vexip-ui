@@ -122,4 +122,4 @@ export interface LayoutAsideExposed extends ComponentPublicInstance {
   expandMenuByLabel: (label: string) => void
 }
 
-export const LAYOUT_STATE = Symbol('LAYOUT_STATE') as InjectionKey<LayoutState>
+export const LAYOUT_STATE = '___VXP_LAYOUT_STATE' as unknown as InjectionKey<LayoutState>

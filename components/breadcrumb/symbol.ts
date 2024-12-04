@@ -29,4 +29,4 @@ export interface BreadcrumbSlots {
   separator?: (params: { label: string | number }) => any
 }
 
-export const BREADCRUMB_STATE: InjectionKey<BreadcrumbState> = Symbol('BREADCRUMB_STATE')
+export const BREADCRUMB_STATE = '__VXP_BREADCRUMB_STATE' as unknown as InjectionKey<BreadcrumbState>

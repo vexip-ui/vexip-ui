@@ -222,6 +222,7 @@ interface LayoutHeaderSlotParams extends LayoutSlotParams {
 | fit-window       | `boolean`                | 开启后将适应浏览器窗口并移除内置得滚动                                                                      | `false`                                                              | `2.1.24` |
 | inner-classes    | `LayoutInnerClass`       | 设置内部元素的自定义类名                                                                                    | `{}`                                                                 | `2.1.24` |
 | no-header        | `boolean`                | 设置是否禁用头部                                                                                            | `false`                                                              | `2.2.7`  |
+| no-masker        | `boolean`                | 设置在边栏固定后，边栏展开时是否禁用遮罩                                                                    | `false`                                                              | `2.3.16` |
 
 ### Layout 事件
 

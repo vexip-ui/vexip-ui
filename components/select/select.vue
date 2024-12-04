@@ -682,7 +682,6 @@ function initHittingIndex() {
 }
 
 function setVisible(visible: boolean) {
-  console.trace('1')
   if (currentVisible.value === visible) return
 
   currentVisible.value = visible

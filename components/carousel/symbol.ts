@@ -19,4 +19,4 @@ export interface CarouselState {
   handleSelect: (label: number) => void
 }
 
-export const CAROUSEL_STATE: InjectionKey<CarouselState> = Symbol('CAROUSEL_STATE')
+export const CAROUSEL_STATE = '__VXP_CAROUSEL_STATE' as unknown as InjectionKey<CarouselState>

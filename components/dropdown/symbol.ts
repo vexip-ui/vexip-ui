@@ -11,5 +11,5 @@ export interface DropdownState {
   handleTriggerLeave: () => void
 }
 
-export const SELECT_HANDLER: InjectionKey<SelectHandler> = Symbol('SELECT_HANDLER')
-export const DROPDOWN_STATE: InjectionKey<DropdownState> = Symbol('DROPDOWN_STATE')
+export const SELECT_HANDLER = '__VXP_SELECT_HANDLER' as unknown as InjectionKey<SelectHandler>
+export const DROPDOWN_STATE = '__VXP_DROPDOWN_STATE' as unknown as InjectionKey<DropdownState>
