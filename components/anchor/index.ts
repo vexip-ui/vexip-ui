@@ -8,4 +8,4 @@ export { anchorProps } from './props'
 export type AnchorExposed = ComponentPublicInstance & InstanceType<typeof Anchor>
 
 export type { AnchorProps, AnchorCProps } from './props'
-export type { AnchorLinkOptions } from './symbol'
+export type { AnchorLinkOptions, AnchorSlots } from './symbol'

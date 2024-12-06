@@ -1,5 +1,6 @@
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
 
@@ -48,11 +49,6 @@ function getDefaultFileState(): UploadFileState {
 
 export default defineComponent({
   name: 'Upload',
-  components: {
-    Button,
-    Icon,
-    UploadList
-  },
   props: uploadProps,
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
@@ -133,7 +129,8 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      slots: () => ({})
     })
 
     const nh = useNameHelper('upload')
@@ -696,9 +693,11 @@ export default defineComponent({
               )
             }}
           </Button>
-          {slots.tip
-            ? renderSlot(slots, 'tip')
-            : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+          {renderSlot(slots, 'tip', undefined, () => [
+            <Renderer renderer={props.slots.tip}>
+              {props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+            </Renderer>
+          ])}
         </>
       ) : (
         <div
@@ -711,11 +710,11 @@ export default defineComponent({
             class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
             scale={+(icons.value.uploadCloud.scale || 1) * 4}
           />
-          {slots.tip ? (
-            renderSlot(slots, 'tip')
-          ) : (
-            <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
-          )}
+          {renderSlot(slots, 'tip', undefined, () => [
+            <Renderer renderer={props.slots.tip}>
+              <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
+            </Renderer>
+          ])}
           <Icon
             {...icons.value.loading}
             class={nh.be('loading-icon')}
@@ -734,31 +733,37 @@ export default defineComponent({
           class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}
           type={'button'}
         >
-          {slots.default ? (
-            renderSlot(slots, 'default', {
+          {renderSlot(
+            slots,
+            'default',
+            {
               isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
-            })
-          ) : (
-            <>
-              {props.loading ? (
-                <Icon
-                  {...icons.value.loading}
-                  class={nh.be('loading-icon')}
-                  effect={props.loadingEffect || icons.value.loading.effect}
-                  icon={props.loadingIcon || icons.value.loading.icon}
-                  label={'loading'}
-                  style={{ marginBottom: '6px' }}
-                />
-              ) : (
-                <Icon
-                  {...icons.value.plus}
-                  class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-                  scale={+(icons.value.plus.scale || 1) * 1.2}
-                  style={{ marginBottom: '6px' }}
-                />
-              )}
-              <span>{props.buttonLabel ?? locale.value.upload}</span>
-            </>
+            },
+            () => [
+              <Renderer
+                renderer={props.slots.default}
+                data={{ isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value }}
+              >
+                {props.loading ? (
+                  <Icon
+                    {...icons.value.loading}
+                    class={nh.be('loading-icon')}
+                    effect={props.loadingEffect || icons.value.loading.effect}
+                    icon={props.loadingIcon || icons.value.loading.icon}
+                    label={'loading'}
+                    style={{ marginBottom: '6px' }}
+                  />
+                ) : (
+                  <Icon
+                    {...icons.value.plus}
+                    class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                    scale={+(icons.value.plus.scale || 1) * 1.2}
+                    style={{ marginBottom: '6px' }}
+                  />
+                )}
+                <span>{props.buttonLabel ?? locale.value.upload}</span>
+              </Renderer>
+            ]
           )}
         </button>
       )
@@ -793,11 +798,23 @@ export default defineComponent({
           )}
           {props.image
             ? renderImageAction()
-            : slots.default
-              ? renderSlot(slots, 'default', {
+            : renderSlot(
+              slots,
+              'default',
+              {
                 isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
-              })
-              : renderNormalAction()}
+              },
+              () => [
+                <Renderer
+                  renderer={props.slots.default}
+                  data={{
+                    isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+                  }}
+                >
+                  {renderNormalAction()}
+                </Renderer>
+              ]
+            )}
         </HtmlTag>
       )
     }
