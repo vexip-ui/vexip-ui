@@ -1,5 +1,6 @@
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
 import {
@@ -23,11 +24,11 @@ import {
   useProps
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
-import { useRtl } from '@vexip-ui/hooks'
+import { createSlotRender, useRtl } from '@vexip-ui/hooks'
 import TransferPanel from './transfer-panel'
 import { transferProps } from './props'
 
-import type { TransferKeyConfig, TransferOptionState } from './symbol'
+import type { TransferKeyConfig, TransferOptionState, TransferSlots } from './symbol'
 
 const defaultKeyConfig: Required<TransferKeyConfig> = {
   value: 'value',
@@ -37,10 +38,6 @@ const defaultKeyConfig: Required<TransferKeyConfig> = {
 
 export default defineComponent({
   name: 'Transfer',
-  components: {
-    Button,
-    TransferPanel
-  },
   props: transferProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
@@ -82,7 +79,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: createIconProp(),
       loadingLock: false,
-      loadingEffect: null
+      loadingEffect: null,
+      slots: () => ({})
     })
 
     const { isRtl } = useRtl()
@@ -290,14 +288,20 @@ export default defineComponent({
       target.value?.$el.blur()
     }
 
-    function createSlotRender(names: string[]) {
-      for (const name of names) {
-        if (slots[name]) {
-          return (params: any) => renderSlot(slots, name, params)
+    function getSlotRender(names: string[]) {
+      return createSlotRender(slots, names, params => {
+        let renderer: unknown
+        for (const name of names) {
+          renderer = props.slots[name as keyof TransferSlots]
+          if (typeof renderer === 'function') {
+            break
+          }
         }
-      }
 
-      return null
+        return typeof renderer === 'function' ? (
+          <Renderer renderer={renderer} data={params}></Renderer>
+        ) : null
+      })
     }
 
     return () => {
@@ -333,17 +337,17 @@ export default defineComponent({
             onSwitch={() => handlePanelFocus('target')}
           >
             {{
-              header: createSlotRender(['source-header', 'sourceHeader', 'header']),
-              title: createSlotRender(['source-title', 'sourceTitle', 'title']),
-              body: createSlotRender(['source-body', 'sourceBody', 'body']),
-              footer: createSlotRender(['source-footer', 'sourceFooter', 'footer']),
-              option: createSlotRender(['source-option', 'sourceOption', 'option'])
+              header: getSlotRender(['source-header', 'sourceHeader', 'header']),
+              title: getSlotRender(['source-title', 'sourceTitle', 'title']),
+              body: getSlotRender(['source-body', 'sourceBody', 'body']),
+              footer: getSlotRender(['source-footer', 'sourceFooter', 'footer']),
+              option: getSlotRender(['source-option', 'sourceOption', 'option']),
+              label: getSlotRender(['source-label', 'sourceLabel', 'label'])
             }}
           </TransferPanel>
           <div class={nh.be('actions')}>
-            {slots.actions
-              ? renderSlot(slots, 'actions', { handleToTarget, handleToSource })
-              : [
+            {renderSlot(slots, 'actions', { handleToTarget, handleToSource }, () => [
+              <Renderer renderer={props.slots.actions} data={{ handleToTarget, handleToSource }}>
                 <Button
                   key={1}
                   inherit
@@ -365,7 +369,7 @@ export default defineComponent({
                       ></Icon>
                     )
                   }}
-                </Button>,
+                </Button>
                 <Button
                   key={2}
                   inherit
@@ -388,7 +392,8 @@ export default defineComponent({
                     )
                   }}
                 </Button>
-                ]}
+              </Renderer>
+            ])}
           </div>
           <TransferPanel
             ref={target}
@@ -415,11 +420,12 @@ export default defineComponent({
             onSwitch={() => handlePanelFocus('source')}
           >
             {{
-              header: createSlotRender(['target-header', 'targetHeader', 'header']),
-              title: createSlotRender(['target-title', 'targetTitle', 'title']),
-              body: createSlotRender(['target-body', 'targetBody', 'body']),
-              footer: createSlotRender(['target-footer', 'targetFooter', 'footer']),
-              option: createSlotRender(['target-option', 'targetOption', 'option'])
+              header: getSlotRender(['target-header', 'targetHeader', 'header']),
+              title: getSlotRender(['target-title', 'targetTitle', 'title']),
+              body: getSlotRender(['target-body', 'targetBody', 'body']),
+              footer: getSlotRender(['target-footer', 'targetFooter', 'footer']),
+              option: getSlotRender(['target-option', 'targetOption', 'option']),
+              label: getSlotRender(['target-label', 'targetLabel', 'label'])
             }}
           </TransferPanel>
         </div>

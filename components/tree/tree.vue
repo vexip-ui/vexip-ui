@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
+import { Renderer } from '@/components/renderer'
 import { VirtualList } from '@/components/virtual-list'
 
 import {
@@ -43,7 +44,8 @@ import type {
   TreeCollapseProps,
   TreeNodeInstance,
   TreeNodeProps,
-  TreeNodeState
+  TreeNodeState,
+  TreeSlots
 } from './symbol'
 
 defineOptions({ name: 'Tree' })
@@ -107,8 +109,11 @@ const props = useProps('tree', _props, {
   noTransition: false,
   arrowIcon: createIconProp(),
   blockEffect: false,
-  filterLeaf: false
+  filterLeaf: false,
+  slots: () => ({})
 })
+
+const slots = defineSlots<TreeSlots>()
 
 const nh = useNameHelper('tree')
 const locale = useLocale('tree', toRef(props, 'locale'))
@@ -1359,46 +1364,68 @@ const transferring = ref(false)
             v-bind="toNodeProps(innerNode.data, innerNode)"
             :node="innerNode"
           >
-            <template #default="payload">
-              <slot name="node" v-bind="payload"></slot>
+            <template v-if="slots.node || props.slots.node" #default="payload">
+              <slot name="node" v-bind="payload">
+                <Renderer :renderer="props.slots.node" :data="payload"></Renderer>
+              </slot>
             </template>
-            <template v-if="$slots.arrow" #arrow="payload">
-              <slot name="arrow" v-bind="payload"></slot>
+            <template v-if="slots.arrow || props.slots.arrow" #arrow="payload">
+              <slot name="arrow" v-bind="payload">
+                <Renderer :renderer="props.slots.arrow" :data="payload"></Renderer>
+              </slot>
             </template>
-            <template #label="payload">
-              <slot name="label" v-bind="payload"></slot>
+            <template v-if="slots.label || props.slots.label" #label="payload">
+              <slot name="label" v-bind="payload">
+                <Renderer :renderer="props.slots.label" :data="payload"></Renderer>
+              </slot>
             </template>
-            <template v-if="$slots.prefix" #prefix="payload">
-              <slot name="prefix" v-bind="payload"></slot>
+            <template v-if="slots.prefix || props.slots.prefix" #prefix="payload">
+              <slot name="prefix" v-bind="payload">
+                <Renderer :renderer="props.slots.prefix" :data="payload"></Renderer>
+              </slot>
             </template>
-            <template v-if="$slots.suffix" #suffix="payload">
-              <slot name="suffix" v-bind="payload"></slot>
+            <template v-if="slots.suffix || props.slots.suffix" #suffix="payload">
+              <slot name="suffix" v-bind="payload">
+                <Renderer :renderer="props.slots.suffix" :data="payload"></Renderer>
+              </slot>
             </template>
           </TreeNode>
         </div>
       </CollapseTransition>
       <TreeNode v-else v-bind="toNodeProps(node.data, node)" :node="node">
-        <template #default="payload">
-          <slot name="node" v-bind="payload"></slot>
+        <template v-if="slots.node || props.slots.node" #default="payload">
+          <slot name="node" v-bind="payload">
+            <Renderer :renderer="props.slots.node" :data="payload"></Renderer>
+          </slot>
         </template>
-        <template v-if="$slots.arrow" #arrow="payload">
-          <slot name="arrow" v-bind="payload"></slot>
+        <template v-if="slots.arrow || props.slots.arrow" #arrow="payload">
+          <slot name="arrow" v-bind="payload">
+            <Renderer :renderer="props.slots.arrow" :data="payload"></Renderer>
+          </slot>
         </template>
-        <template #label="payload">
-          <slot name="label" v-bind="payload"></slot>
+        <template v-if="slots.label || props.slots.label" #label="payload">
+          <slot name="label" v-bind="payload">
+            <Renderer :renderer="props.slots.label" :data="payload"></Renderer>
+          </slot>
         </template>
-        <template v-if="$slots.prefix" #prefix="payload">
-          <slot name="prefix" v-bind="payload"></slot>
+        <template v-if="slots.prefix || props.slots.prefix" #prefix="payload">
+          <slot name="prefix" v-bind="payload">
+            <Renderer :renderer="props.slots.prefix" :data="payload"></Renderer>
+          </slot>
         </template>
-        <template v-if="$slots.suffix" #suffix="payload">
-          <slot name="suffix" v-bind="payload"></slot>
+        <template v-if="slots.suffix || props.slots.suffix" #suffix="payload">
+          <slot name="suffix" v-bind="payload">
+            <Renderer :renderer="props.slots.suffix" :data="payload"></Renderer>
+          </slot>
         </template>
       </TreeNode>
     </template>
     <template #empty>
       <div :class="nh.be('empty-tip')">
         <slot name="empty">
-          {{ props.emptyText ?? locale.empty }}
+          <Renderer :renderer="props.slots.empty">
+            {{ props.emptyText ?? locale.empty }}
+          </Renderer>
         </slot>
       </div>
     </template>
