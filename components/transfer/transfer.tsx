@@ -289,8 +289,9 @@ export default defineComponent({
     }
 
     function getSlotRender(names: string[]) {
-      return createSlotRender(slots, names, params => {
-        let renderer: unknown
+      let renderer: unknown = createSlotRender(slots, names)
+
+      if (!renderer) {
         for (const name of names) {
           renderer = props.slots[name as keyof TransferSlots]
           if (typeof renderer === 'function') {
@@ -298,10 +299,12 @@ export default defineComponent({
           }
         }
 
-        return typeof renderer === 'function' ? (
-          <Renderer renderer={renderer} data={params}></Renderer>
-        ) : null
-      })
+        return typeof renderer === 'function'
+          ? (params: any) => <Renderer renderer={renderer as any} data={params}></Renderer>
+          : null
+      }
+
+      return null
     }
 
     return () => {

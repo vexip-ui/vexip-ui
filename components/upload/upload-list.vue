@@ -34,7 +34,7 @@ const props = useProps('uploadList', _props, {
   slots: () => ({})
 })
 
-defineSlots<UploadListSlots>()
+const slots = defineSlots<UploadListSlots>()
 
 const nh = useNameHelper('upload')
 const transitionName = computed(() => nh.ns('fade'))
@@ -71,7 +71,7 @@ function handlePreview(file: UploadFileState) {
         @delete="handleDelete"
         @preview="handlePreview"
       >
-        <template v-if="$slots.item || props.slots.item" #default="{ file, status, percentage }">
+        <template v-if="slots.item || props.slots.item" #default="{ file, status, percentage }">
           <slot
             name="item"
             :file="file"
@@ -88,7 +88,7 @@ function handlePreview(file: UploadFileState) {
             ></Renderer>
           </slot>
         </template>
-        <template v-if="$slots.icon || props.slots.icon" #icon="{ file, status, percentage }">
+        <template v-if="slots.icon || props.slots.icon" #icon="{ file, status, percentage }">
           <slot
             name="icon"
             :file="file"
