@@ -324,6 +324,11 @@ watch(expandedNodeIds, (value, prev) => {
   }
 
   if (addedId == null && removedId == null) return
+  if (
+    (addedId && !nodeMap.get(addedId)?.children?.length) ||
+    (removedId && !nodeMap.get(removedId)?.children?.length)
+  )
+    return
 
   clearTimeout(timer.expand)
 
