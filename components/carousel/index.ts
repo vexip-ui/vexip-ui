@@ -8,4 +8,9 @@ export { carouselProps } from './props'
 export type CarouselExposed = ComponentPublicInstance & InstanceType<typeof Carousel>
 
 export type { CarouselProps, CarouselCProps } from './props'
-export type { CarouselArrowType, CarouselArrowTrigger, CarouselPointerType } from './symbol'
+export type {
+  CarouselArrowType,
+  CarouselArrowTrigger,
+  CarouselPointerType,
+  CarouselSlots
+} from './symbol'

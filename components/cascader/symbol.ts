@@ -27,3 +27,27 @@ export interface CascaderOptionState {
   childrenLoaded: boolean,
   data: Data
 }
+
+export interface CascaderPanelSlots {
+  default?: (params: {
+    option: CascaderOptionState,
+    index: number,
+    canCheck: boolean,
+    hasChild: boolean
+  }) => any,
+  label?: (params: {
+    option: CascaderOptionState,
+    index: number,
+    selected: boolean,
+    canCheck: boolean,
+    hasChild: boolean,
+    handleSelect: () => void
+  }) => any
+}
+
+export interface CascaderSlots extends CascaderPanelSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  control?: () => any,
+  empty?: () => any
+}
