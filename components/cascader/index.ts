@@ -8,4 +8,4 @@ export { cascaderProps } from './props'
 export type CascaderExposed = ComponentPublicInstance & InstanceType<typeof Cascader>
 
 export type { CascaderProps, CascaderCProps } from './props'
-export type { CascaderKeyConfig } from './symbol'
+export type { CascaderKeyConfig, CascaderSlots } from './symbol'
