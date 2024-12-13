@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'TourStep',
   props: tourStepProps,
   setup(_props, { slots }) {
-    const props = useProps('tableColumn', _props, {
+    const props = useProps('tourStep', _props, {
       target: {
         default: null,
         static: true
