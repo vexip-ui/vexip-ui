@@ -2,6 +2,7 @@
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
 
 import { computed, nextTick, onMounted, ref, toRef, watch, watchEffect } from 'vue'
 
@@ -21,8 +22,8 @@ import { autoCompleteProps } from './props'
 import type { SelectExposed } from '@/components/select'
 import type {
   AutoCompleteListSlotParams,
-  AutoCompleteOptionState,
   AutoCompleteRawOption,
+  AutoCompleteSlots,
   ChangeEvent,
   EnterEvent
 } from './symbol'
@@ -91,27 +92,13 @@ const props = useProps('autoComplete', _props, {
     default: '',
     static: true
   },
-  popperAlive: null
+  popperAlive: null,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
 
-const slots = defineSlots<{
-  prefix?: () => any,
-  control?: (params: {
-    value: string | number,
-    onInput: (event: string | Event) => void,
-    onChange: (valid?: boolean) => void,
-    onEnter: (event: KeyboardEvent) => void,
-    onClear: () => void
-  }) => any,
-  suffix?: () => any,
-  default?: (params: { option: AutoCompleteOptionState, index: number, selected: boolean }) => any,
-  group?: (params: { option: AutoCompleteOptionState, index: number }) => any,
-  prepend?: () => any,
-  append?: () => any,
-  list?: (params: AutoCompleteListSlotParams) => any
-}>()
+const slots = defineSlots<AutoCompleteSlots>()
 
 const locale = useLocale('input', toRef(props, 'locale'))
 
@@ -129,8 +116,8 @@ let lastInput = String(lastValue)
 const isReadonly = computed(() => props.loading && props.loadingLock)
 const optionStates = computed(() => select.value?.optionStates || [])
 const filteredOptions = computed(() => select.value?.visibleOptions || [])
-const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
-const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
+const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
+const hasSuffix = computed(() => !!(slots.suffix || props.suffix || props.slots.suffix))
 
 watch(
   () => props.value,
@@ -491,7 +478,9 @@ function handleCompositionEnd() {
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
-        <Icon :icon="props.prefix"></Icon>
+        <Renderer :renderer="props.slots.prefix">
+          <Icon :icon="props.prefix"></Icon>
+        </Renderer>
       </slot>
     </template>
     <template #control>
@@ -503,54 +492,87 @@ function handleCompositionEnd() {
         :on-enter="handleEnter"
         :on-clear="handleClear"
       >
-        <input
-          ref="control"
-          :class="nh.be('input')"
-          :autofocus="props.autofocus"
-          :spellcheck="props.spellcheck"
-          :disabled="props.disabled"
-          :placeholder="props.placeholder ?? locale.placeholder"
-          :readonly="isReadonly"
-          :name="props.name"
-          autocomplete="off"
-          tabindex="-1"
-          role="combobox"
-          aria-autocomplete="list"
-          @submit.prevent
-          @input="handleInput"
-          @keydown="handleKeyDown"
-          @focus="handleFocus($event)"
-          @blur="handleBlur($event)"
-          @compositionstart="composing = true"
-          @compositionend="handleCompositionEnd"
-          @change="handleCompositionEnd"
-        />
+        <Renderer
+          :renderer="props.slots.control"
+          :data="{
+            value: currentValue,
+            onInput: handleInput,
+            onChange: handleChange,
+            onEnter: handleEnter,
+            onClear: handleClear
+          }"
+        >
+          <input
+            ref="control"
+            :class="nh.be('input')"
+            :autofocus="props.autofocus"
+            :spellcheck="props.spellcheck"
+            :disabled="props.disabled"
+            :placeholder="props.placeholder ?? locale.placeholder"
+            :readonly="isReadonly"
+            :name="props.name"
+            autocomplete="off"
+            tabindex="-1"
+            role="combobox"
+            aria-autocomplete="list"
+            @submit.prevent
+            @input="handleInput"
+            @keydown="handleKeyDown"
+            @focus="handleFocus($event)"
+            @blur="handleBlur($event)"
+            @compositionstart="composing = true"
+            @compositionend="handleCompositionEnd"
+            @change="handleCompositionEnd"
+          />
+        </Renderer>
       </slot>
     </template>
     <template v-if="hasSuffix" #suffix>
       <slot name="suffix">
-        <Icon :icon="props.suffix"></Icon>
+        <Renderer :renderer="props.slots.suffix">
+          <Icon :icon="props.suffix"></Icon>
+        </Renderer>
       </slot>
     </template>
-    <template v-if="$slots.default" #default="{ option, index, selected }">
-      <slot :option="option" :index="index" :selected="selected"></slot>
+    <template v-if="$slots.default || props.slots.default" #default="{ option, index, selected }">
+      <slot :option="option" :index="index" :selected="selected">
+        <Renderer :renderer="props.slots.default" :data="{ option, index, selected }"></Renderer>
+      </slot>
     </template>
-    <template v-if="$slots.group" #group="{ option, index }">
-      <slot name="group" :option="option" :index="index"></slot>
+    <template v-if="$slots.group || props.slots.group" #group="{ option, index }">
+      <slot name="group" :option="option" :index="index">
+        <Renderer :renderer="props.slots.group" :data="{ option, index }"></Renderer>
+      </slot>
     </template>
-    <template v-if="$slots.prepend" #prepend>
-      <slot name="prepend"></slot>
+    <template v-if="$slots.prepend || props.slots.prepend" #prepend>
+      <slot name="prepend">
+        <Renderer :renderer="props.slots.prepend"></Renderer>
+      </slot>
     </template>
-    <template v-if="$slots.append" #append>
-      <slot name="append"></slot>
+    <template v-if="$slots.append || props.slots.append" #append>
+      <slot name="append">
+        <Renderer :renderer="props.slots.append"></Renderer>
+      </slot>
     </template>
-    <template v-if="$slots.list" #list="{ options, isSelected, handleSelect: onSelect }">
+    <template
+      v-if="$slots.list || props.slots.list"
+      #list="{ options, isSelected, handleSelect: onSelect }"
+    >
       <slot
         name="list"
         :options="options"
         :is-selected="isSelected as AutoCompleteListSlotParams['isSelected']"
         :handle-select="onSelect as AutoCompleteListSlotParams['handleSelect']"
-      ></slot>
+      >
+        <Renderer
+          :renderer="props.slots.list"
+          :data="{
+            options,
+            isSelected,
+            handleSelect: onSelect
+          }"
+        ></Renderer>
+      </slot>
     </template>
   </Select>
 </template>

@@ -3,6 +3,7 @@ import { Icon } from '@/components/icon'
 import { Spin } from '@/components/spin'
 import { Tooltip } from '@/components/tooltip'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
 
 import {
   Transition,
@@ -103,7 +104,8 @@ export default defineComponent({
       hollowShape: {
         default: squarePath,
         isFunc: true
-      }
+      },
+      slots: () => ({})
     })
 
     const nh = useNameHelper('captcha')
@@ -663,8 +665,8 @@ export default defineComponent({
                 onClick={stopPropagation}
               >
                 {isSuccess.value
-                  ? props.successTip ?? locale.value.success
-                  : props.failTip ?? locale.value.fail}
+                  ? (props.successTip ?? locale.value.success)
+                  : (props.failTip ?? locale.value.fail)}
               </div>
             )}
           </Transition>
@@ -694,7 +696,9 @@ export default defineComponent({
           {{
             tip: () =>
               renderSlot(slots, 'tip', { success: isSuccess.value }, () => [
-                props.tip ?? locale.value.slide
+                <Renderer renderer={props.slots.tip} data={{ success: isSuccess.value }}>
+                  {props.tip ?? locale.value.slide}
+                </Renderer>
               ])
           }}
         </CaptchaSlider>
@@ -706,17 +710,21 @@ export default defineComponent({
         <div class={nh.be('text-list')}>
           <div class={nh.be('tip')}>
             {renderSlot(slots, 'tip', { success: isSuccess.value }, () => [
-              props.tip ?? locale.value.pointInOrder
+              <Renderer renderer={props.slots.tip} data={{ success: isSuccess.value }}>
+                {props.tip ?? locale.value.pointInOrder}
+              </Renderer>
             ])}
           </div>
           <span>{':'}</span>
-          {renderSlot(slots, 'texts', { texts: toRef(props, 'texts') }, () =>
-            props.texts.map((text, index) => (
-              <span key={index} class={nh.be('text')}>
-                {text}
-              </span>
-            ))
-          )}
+          {renderSlot(slots, 'texts', { texts: toRef(props, 'texts') }, () => [
+            <Renderer renderer={props.slots.texts} data={{ texts: toRef(props, 'texts') }}>
+              {props.texts.map((text, index) => (
+                <span key={index} class={nh.be('text')}>
+                  {text}
+                </span>
+              ))}
+            </Renderer>
+          ])}
         </div>
       )
     }
@@ -741,7 +749,9 @@ export default defineComponent({
           <div class={nh.be('header')}>
             <div class={nh.be('title')}>
               {renderSlot(slots, 'title', { success: isSuccess.value }, () => [
-                props.title ?? locale.value.doCaptcha
+                <Renderer renderer={props.slots.title} data={{ success: isSuccess.value }}>
+                  {props.title ?? locale.value.doCaptcha}
+                </Renderer>
               ])}
             </div>
             <span role={'none'} style={'flex: auto'}></span>
@@ -755,17 +765,21 @@ export default defineComponent({
               onClick={handleRefresh}
             >
               {renderSlot(slots, 'refresh', undefined, () => [
-                <Icon
-                  {...icons.value.refresh}
-                  icon={props.refreshIcon || icons.value.refresh.icon}
-                ></Icon>
+                <Renderer renderer={props.slots.refresh}>
+                  <Icon
+                    {...icons.value.refresh}
+                    icon={props.refreshIcon || icons.value.refresh.icon}
+                  ></Icon>
+                </Renderer>
               ])}
             </button>
           </div>
           <Spin active={isLoading.value || slider.value?.isLoading} delay={false}>
             {{
               default: renderImage,
-              icon: createSlotRender(slots, ['loading-icon', 'loadingIcon'])
+              icon: createSlotRender(slots, ['loading-icon', 'loadingIcon'], () => (
+                <Renderer renderer={props.slots.loadingIcon}></Renderer>
+              ))
             }}
           </Spin>
           {renderFooter()}
@@ -779,17 +793,23 @@ export default defineComponent({
         'trigger',
         { visible: visible.value, success: isSuccess.value },
         () => [
-          <Button
-            class={[nh.be('button'), isSuccess.value && nh.bem('button', 'success')]}
-            type={isSuccess.value ? 'success' : 'primary'}
-            size={props.triggerSize}
-            block
-            loading={visible.value && !isSuccess.value}
-            icon={isSuccess.value ? icons.value.success.icon : null}
-            onClick={handleTrigger}
+          <Renderer
+            renderer={props.slots.trigger}
+            data={{ visible: visible.value, success: isSuccess.value }}
           >
-            {props.triggerText ?? (isSuccess.value ? locale.value.completed : locale.value.trigger)}
-          </Button>
+            <Button
+              class={[nh.be('button'), isSuccess.value && nh.bem('button', 'success')]}
+              type={isSuccess.value ? 'success' : 'primary'}
+              size={props.triggerSize}
+              block
+              loading={visible.value && !isSuccess.value}
+              icon={isSuccess.value ? icons.value.success.icon : null}
+              onClick={handleTrigger}
+            >
+              {props.triggerText ??
+                (isSuccess.value ? locale.value.completed : locale.value.trigger)}
+            </Button>
+          </Renderer>
         ]
       )
     }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 
 import { computed, onMounted, ref, watch } from 'vue'
 
@@ -8,6 +9,8 @@ import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { adjustAlpha, getRangeWidth, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { alertProps } from './props'
 import { alertTypes } from './symbol'
+
+import type { AlertSlots } from './symbol'
 
 defineOptions({ name: 'Alert' })
 
@@ -30,15 +33,11 @@ const props = useProps('alert', _props, {
   manual: false,
   scroll: false,
   scrollSpeed: 1,
-  color: null
+  color: null,
+  slots: () => ({})
 })
 
-const slots = defineSlots<{
-  default: () => any,
-  title: () => any,
-  close: () => any,
-  icon: () => any
-}>()
+const slots = defineSlots<AlertSlots>()
 
 const nh = useNameHelper('alert')
 const icons = useIcons()
@@ -175,7 +174,9 @@ function handleScrollEnd() {
       <div :class="nh.be('wrapper')">
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
-            {{ title }}
+            <Renderer :renderer="props.slots.title">
+              {{ title }}
+            </Renderer>
           </slot>
         </div>
         <div ref="content" :class="[nh.be('content'), props.scroll && nh.bem('content', 'scroll')]">
@@ -186,9 +187,13 @@ function handleScrollEnd() {
             :style="scrollStyle"
             @transitionend="handleScrollEnd"
           >
-            <slot></slot>
+            <slot>
+              <Renderer :renderer="props.slots.default"></Renderer>
+            </slot>
           </span>
-          <slot v-else></slot>
+          <slot v-else>
+            <Renderer :renderer="props.slots.default"></Renderer>
+          </slot>
         </div>
       </div>
       <button
@@ -198,16 +203,20 @@ function handleScrollEnd() {
         @click="handleClose"
       >
         <slot name="close">
-          <Icon v-bind="icons.close" label="close"></Icon>
+          <Renderer :renderer="props.slots.close">
+            <Icon v-bind="icons.close" label="close"></Icon>
+          </Renderer>
         </slot>
       </button>
       <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
-          <Icon
-            v-bind="iconComp"
-            :scale="hasTitle ? 2 : 1"
-            :style="{ color: props.iconColor }"
-          ></Icon>
+          <Renderer :renderer="props.slots.icon">
+            <Icon
+              v-bind="iconComp"
+              :scale="hasTitle ? 2 : 1"
+              :style="{ color: props.iconColor }"
+            ></Icon>
+          </Renderer>
         </slot>
       </div>
     </div>

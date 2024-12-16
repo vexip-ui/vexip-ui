@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
 
 import { computed, nextTick, ref, watch } from 'vue'
 
@@ -16,6 +17,8 @@ import {
 import { useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { captchaSliderProps } from './props'
+
+import type { CaptchaSliderSlots } from './symbol'
 
 defineOptions({ name: 'CaptchaSlider' })
 
@@ -43,8 +46,11 @@ const props = useProps('captcha', _props, {
   onBeforeTest: {
     default: null,
     isFunc: true
-  }
+  },
+  slots: () => ({})
 })
+
+defineSlots<CaptchaSliderSlots>()
 
 const nh = useNameHelper('captcha')
 const locale = useLocale('captcha')
@@ -251,7 +257,9 @@ function focus(options?: FocusOptions) {
       :style="tipStyle"
     >
       <slot name="tip" :success="isSuccess">
-        {{ isSuccess ? props.successTip ?? locale.success : props.tip ?? locale.slideEnd }}
+        <Renderer :renderer="props.slots.tip" :data="{ success: isSuccess }">
+          {{ isSuccess ? (props.successTip ?? locale.success) : (props.tip ?? locale.slideEnd) }}
+        </Renderer>
       </slot>
     </div>
     <div ref="track" :class="nh.be('track')">
@@ -268,14 +276,16 @@ function focus(options?: FocusOptions) {
         @transitionend="afterReset"
       >
         <slot name="trigger" :success="isSuccess">
-          <Icon v-if="isSuccess" v-bind="icons.check"></Icon>
-          <Icon
-            v-else-if="isLoading"
-            v-bind="icons.loading"
-            :effect="props.loadingEffect || icons.loading.effect"
-            :icon="props.loadingIcon || icons.loading.icon"
-          ></Icon>
-          <Icon v-else v-bind="icons.anglesRight"></Icon>
+          <Renderer :renderer="props.slots.trigger" :data="{ success: isSuccess }">
+            <Icon v-if="isSuccess" v-bind="icons.check"></Icon>
+            <Icon
+              v-else-if="isLoading"
+              v-bind="icons.loading"
+              :effect="props.loadingEffect || icons.loading.effect"
+              :icon="props.loadingIcon || icons.loading.icon"
+            ></Icon>
+            <Icon v-else v-bind="icons.anglesRight"></Icon>
+          </Renderer>
         </slot>
       </div>
     </div>

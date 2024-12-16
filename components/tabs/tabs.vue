@@ -1,3 +1,126 @@
+<script setup lang="ts">
+import { Renderer } from '@/components/renderer'
+import { TabNav } from '@/components/tab-nav'
+import { TabNavItem } from '@/components/tab-nav-item'
+
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { debounceMinor, isFunction, isNull } from '@vexip-ui/utils'
+import { tabsProps } from './props'
+import { TABS_STATE } from './symbol'
+
+import type { ItemState, TabsSlots } from './symbol'
+
+type ChangeEvent = (label: string | number) => void
+
+defineOptions({ name: 'Tabs' })
+
+const _props = defineProps(tabsProps)
+const props = useProps('tabs', _props, {
+  active: {
+    default: null,
+    static: true
+  },
+  card: false,
+  align: 'left',
+  placement: 'top',
+  closable: false,
+  showAdd: false
+})
+
+const emit = defineEmits(['update:active'])
+
+defineSlots<TabsSlots>()
+
+const nh = useNameHelper('tabs')
+
+const currentActive = ref(props.active)
+const currentIndex = ref(0)
+const itemStates = reactive(new Set<ItemState>())
+const isTransition = ref(false)
+
+const itemList = computed(() => Array.from(itemStates))
+
+const refreshLabels = debounceMinor(() => {
+  itemList.value.forEach((item, index) => {
+    if (isNull(item.label)) {
+      item.label = index + 1
+    }
+  })
+
+  if (itemList.value.length >= 1 && isActiveEmpty()) {
+    currentActive.value = itemList.value[0].label
+  }
+})
+const computeIndex = debounceMinor(() => {
+  const index = itemList.value.findIndex(item => item.label === currentActive.value)
+
+  if (~index) {
+    currentIndex.value = index
+  }
+})
+
+provide(
+  TABS_STATE,
+  reactive({
+    currentActive,
+    handleActive,
+    increaseItem,
+    decreaseItem,
+    refreshLabels
+  })
+)
+
+watch(
+  () => props.active,
+  value => {
+    currentActive.value = value
+  }
+)
+
+onMounted(computeIndex)
+
+defineExpose({
+  currentActive,
+  isTransition,
+  itemList,
+  handleActive,
+  handleAdd,
+  handleClose
+})
+
+function isActiveEmpty() {
+  return isNull(currentActive.value) || currentActive.value === ''
+}
+
+function increaseItem(item: ItemState) {
+  itemStates.add(item)
+  refreshLabels()
+}
+
+function decreaseItem(item: ItemState) {
+  itemStates.delete(item)
+  refreshLabels()
+}
+
+function handleActive(label: string | number) {
+  currentActive.value = label
+
+  computeIndex()
+  emit('update:active', label)
+  emitEvent(props.onChange as ChangeEvent, label)
+}
+
+function handleAdd() {
+  emitEvent(props.onAdd)
+}
+
+function handleClose(label: string | number) {
+  emitEvent(props.onClose as ChangeEvent, label)
+}
+</script>
+
 <template>
   <div :class="[nh.b(), nh.bm(props.placement), props.inherit && nh.bm('inherit')]">
     <div :class="nh.be('header')">
@@ -53,140 +176,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Renderer } from '@/components/renderer'
-import { TabNav } from '@/components/tab-nav'
-import { TabNavItem } from '@/components/tab-nav-item'
-
-import { computed, defineComponent, onMounted, provide, reactive, ref, watch } from 'vue'
-
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
-import { debounceMinor, isFunction, isNull } from '@vexip-ui/utils'
-import { tabsProps } from './props'
-import { TABS_STATE } from './symbol'
-
-import type { ItemState } from './symbol'
-
-type ChangeEvent = (label: string | number) => void
-
-export default defineComponent({
-  name: 'Tabs',
-  components: {
-    Renderer,
-    TabNav,
-    TabNavItem
-  },
-  props: tabsProps,
-  emits: ['update:active'],
-  setup(_props, { emit }) {
-    const props = useProps('tabs', _props, {
-      active: {
-        default: null,
-        static: true
-      },
-      card: false,
-      align: 'left',
-      placement: 'top',
-      closable: false,
-      showAdd: false
-    })
-
-    const currentActive = ref(props.active)
-    const currentIndex = ref(0)
-    const itemStates = reactive(new Set<ItemState>())
-    const isTransition = ref(false)
-
-    const mainStyle = computed(() => {
-      return {
-        transform: `translateX(-${currentIndex.value}00%) translateZ(0)`
-      }
-    })
-    const itemList = computed(() => Array.from(itemStates))
-
-    const refreshLabels = debounceMinor(() => {
-      itemList.value.forEach((item, index) => {
-        if (isNull(item.label)) {
-          item.label = index + 1
-        }
-      })
-
-      if (itemList.value.length >= 1 && isActiveEmpty()) {
-        currentActive.value = itemList.value[0].label
-      }
-    })
-    const computeIndex = debounceMinor(() => {
-      const index = itemList.value.findIndex(item => item.label === currentActive.value)
-
-      if (~index) {
-        currentIndex.value = index
-      }
-    })
-
-    provide(
-      TABS_STATE,
-      reactive({
-        currentActive,
-        handleActive,
-        increaseItem,
-        decreaseItem,
-        refreshLabels
-      })
-    )
-
-    watch(
-      () => props.active,
-      value => {
-        currentActive.value = value
-      }
-    )
-
-    onMounted(computeIndex)
-
-    function isActiveEmpty() {
-      return isNull(currentActive.value) || currentActive.value === ''
-    }
-
-    function increaseItem(item: ItemState) {
-      itemStates.add(item)
-      refreshLabels()
-    }
-
-    function decreaseItem(item: ItemState) {
-      itemStates.delete(item)
-      refreshLabels()
-    }
-
-    function handleActive(label: string | number) {
-      currentActive.value = label
-
-      computeIndex()
-      emit('update:active', label)
-      emitEvent(props.onChange as ChangeEvent, label)
-    }
-
-    function handleAdd() {
-      emitEvent(props.onAdd)
-    }
-
-    function handleClose(label: string | number) {
-      emitEvent(props.onClose as ChangeEvent, label)
-    }
-
-    return {
-      props,
-      nh: useNameHelper('tabs'),
-      currentActive,
-      isTransition,
-
-      mainStyle,
-      itemList,
-
-      isFunction,
-      handleActive,
-      handleAdd,
-      handleClose
-    }
-  }
-})
-</script>

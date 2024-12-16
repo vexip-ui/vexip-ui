@@ -11,6 +11,9 @@ export type {
   UploadFileOptions,
   UploadOptions,
   UploadExposed,
+  UploadSlots,
+  UploadListSlots,
+  UploadFileSlots,
 
   // deprecated
   SourceFile,

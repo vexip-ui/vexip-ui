@@ -17,6 +17,7 @@ import type {
   AutoCompleteFilter,
   AutoCompleteKeyConfig,
   AutoCompleteRawOption,
+  AutoCompleteSlots,
   ChangeEvent,
   EnterEvent
 } from './symbol'
@@ -56,6 +57,7 @@ export const autoCompleteProps = buildProps({
   showEmpty: booleanProp,
   name: String,
   popperAlive: booleanProp,
+  slots: Object as PropType<AutoCompleteSlots>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onSelect: eventProp<EventListener<ChangeEvent>>(),

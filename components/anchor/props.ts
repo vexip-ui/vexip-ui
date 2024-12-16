@@ -2,7 +2,7 @@ import { booleanProp, buildProps, eventProp, wrapProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { AnchorLinkOptions } from './symbol'
+import type { AnchorLinkOptions, AnchorSlots } from './symbol'
 
 export const anchorProps = buildProps({
   active: String,
@@ -14,6 +14,7 @@ export const anchorProps = buildProps({
   options: Array as PropType<AnchorLinkOptions[]>,
   bindHash: booleanProp,
   forceActive: booleanProp,
+  slots: Object as PropType<AnchorSlots>,
   onChange: eventProp<(value: string) => void>()
 })
 

@@ -228,11 +228,12 @@ async function toggleExpanded(able = !props.node.expanded) {
   }
 }
 
-function handleToggleSelect(able = !props.node.selected) {
+async function handleToggleSelect(able = !props.node.selected) {
   if (isDisabled.value || props.node.selectDisabled) return
 
   if (treeState.floorSelect) {
-    return toggleExpanded()
+    await toggleExpanded()
+    return
   }
 
   setValue('selected', !isReadonly.value && able)

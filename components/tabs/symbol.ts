@@ -17,4 +17,14 @@ export interface TabsState {
   refreshLabels: () => void
 }
 
+export interface TabsSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  add?: () => any,
+  /**
+   * @internal
+   */
+  default?: () => any
+}
+
 export const TABS_STATE = '__VXP_TABS_STATE' as unknown as InjectionKey<TabsState>

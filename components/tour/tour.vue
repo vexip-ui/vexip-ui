@@ -22,7 +22,7 @@ import { TOUR_STATE } from './symbol'
 
 import type { BubbleExposed } from '@/components/bubble'
 import type { MaskerExposed } from '@/components/masker'
-import type { TourCommonSLot, TourStepOptions } from './symbol'
+import type { TourSlots, TourStepOptions } from './symbol'
 
 defineOptions({
   name: 'Tour',
@@ -48,21 +48,13 @@ const props = useProps('tour', _props, {
   padding: 10,
   closable: true,
   permeable: false,
-  transfer: false
+  transfer: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
 
-defineSlots<{
-  default: () => any,
-  header: TourCommonSLot,
-  title: TourCommonSLot,
-  close: TourCommonSLot,
-  body: TourCommonSLot,
-  footer: TourCommonSLot,
-  sign: TourCommonSLot,
-  actions: TourCommonSLot
-}>()
+defineSlots<TourSlots>()
 
 const idIndex = `${getGlobalCount()}`
 
@@ -341,77 +333,91 @@ function handleClose() {
           <template v-else>
             <div :class="nh.be('header')">
               <slot name="header" v-bind="slotParams">
-                <div :class="nh.be('title')">
-                  <slot name="title" v-bind="slotParams">
-                    {{ currentStep.title ?? getStepByWord(locale.stepCount, currentIndex) }}
-                  </slot>
-                </div>
-                <button
-                  v-if="props.closable"
-                  type="button"
-                  :class="nh.be('close')"
-                  @click="handleClose"
-                >
-                  <slot name="close" v-bind="slotParams">
-                    <Icon
-                      v-bind="icons.close"
-                      :scale="+(icons.close.scale || 1) * 1.2"
-                      label="close"
-                    ></Icon>
-                  </slot>
-                </button>
+                <Renderer :renderer="props.slots.header" :data="slotParams">
+                  <div :class="nh.be('title')">
+                    <slot name="title" v-bind="slotParams">
+                      <Renderer :renderer="props.slots.title" :data="slotParams">
+                        {{ currentStep.title ?? getStepByWord(locale.stepCount, currentIndex) }}
+                      </Renderer>
+                    </slot>
+                  </div>
+                  <button
+                    v-if="props.closable"
+                    type="button"
+                    :class="nh.be('close')"
+                    @click="handleClose"
+                  >
+                    <slot name="close" v-bind="slotParams">
+                      <Renderer :renderer="props.slots.close" :data="slotParams">
+                        <Icon
+                          v-bind="icons.close"
+                          :scale="+(icons.close.scale || 1) * 1.2"
+                          label="close"
+                        ></Icon>
+                      </Renderer>
+                    </slot>
+                  </button>
+                </Renderer>
               </slot>
             </div>
             <div :class="nh.be('content')">
               <slot name="body" v-bind="slotParams">
-                {{ currentStep.content }}
+                <Renderer :renderer="props.slots.body" :data="slotParams">
+                  {{ currentStep.content }}
+                </Renderer>
               </slot>
             </div>
             <div :class="nh.be('footer')">
               <slot name="footer" v-bind="slotParams">
-                <div :class="[nh.be('sign'), nh.bem('sign', props.signType)]">
-                  <slot name="sign" v-bind="slotParams">
-                    <template v-if="props.signType === 'count'">
-                      <span>{{ currentIndex + 1 }}</span>
-                      <span :class="nh.be('count-sep')">/</span>
-                      <span>{{ allSteps.length }}</span>
-                    </template>
-                    <template v-else>
-                      <span
-                        v-for="n in allSteps.length"
-                        :key="n"
-                        :class="[
-                          nh.be(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`),
-                          n - 1 === currentIndex &&
-                            nh.bem(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`, 'active')
-                        ]"
-                      ></span>
-                    </template>
+                <Renderer :renderer="props.slots.footer" :data="slotParams">
+                  <div :class="[nh.be('sign'), nh.bem('sign', props.signType)]">
+                    <slot name="sign" v-bind="slotParams">
+                      <Renderer :renderer="props.slots.sign" :data="slotParams">
+                        <template v-if="props.signType === 'count'">
+                          <span>{{ currentIndex + 1 }}</span>
+                          <span :class="nh.be('count-sep')">/</span>
+                          <span>{{ allSteps.length }}</span>
+                        </template>
+                        <template v-else>
+                          <span
+                            v-for="n in allSteps.length"
+                            :key="n"
+                            :class="[
+                              nh.be(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`),
+                              n - 1 === currentIndex &&
+                                nh.bem(`sign-${props.signType === 'dot' ? 'dot' : 'bar'}`, 'active')
+                            ]"
+                          ></span>
+                        </template>
+                      </Renderer>
+                    </slot>
+                  </div>
+                  <span style="flex: auto" role="none"></span>
+                  <slot name="actions" v-bind="slotParams">
+                    <Renderer :renderer="props.slots.actions" :data="slotParams">
+                      <Button
+                        v-if="currentIndex > 0"
+                        inherit
+                        :class="[nh.be('action'), nh.bem('action', 'prev')]"
+                        size="small"
+                        :text="!!type"
+                        @click="prev"
+                      >
+                        {{ locale.prev }}
+                      </Button>
+                      <Button
+                        v-if="currentIndex <= allSteps.length - 1"
+                        inherit
+                        :class="[nh.be('action'), nh.bem('action', 'next')]"
+                        :type="type ? 'default' : 'primary'"
+                        size="small"
+                        @click="next()"
+                      >
+                        {{ currentIndex === allSteps.length - 1 ? locale.done : locale.next }}
+                      </Button>
+                    </Renderer>
                   </slot>
-                </div>
-                <span style="flex: auto" role="none"></span>
-                <slot name="actions" v-bind="slotParams">
-                  <Button
-                    v-if="currentIndex > 0"
-                    inherit
-                    :class="[nh.be('action'), nh.bem('action', 'prev')]"
-                    size="small"
-                    :text="!!type"
-                    @click="prev"
-                  >
-                    {{ locale.prev }}
-                  </Button>
-                  <Button
-                    v-if="currentIndex <= allSteps.length - 1"
-                    inherit
-                    :class="[nh.be('action'), nh.bem('action', 'next')]"
-                    :type="type ? 'default' : 'primary'"
-                    size="small"
-                    @click="next()"
-                  >
-                    {{ currentIndex === allSteps.length - 1 ? locale.done : locale.next }}
-                  </Button>
-                </slot>
+                </Renderer>
               </slot>
             </div>
           </template>

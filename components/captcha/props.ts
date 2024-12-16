@@ -11,7 +11,13 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
 import type { CaptchaHollowProcess, CaptchaHollowType } from './hollow-paths'
-import type { CaptchaBeforeTest, CaptchaType, SuccessEvent } from './symbol'
+import type {
+  CaptchaBeforeTest,
+  CaptchaSliderSlots,
+  CaptchaSlots,
+  CaptchaType,
+  SuccessEvent
+} from './symbol'
 
 export const captchaProps = buildProps({
   type: String as PropType<CaptchaType>,
@@ -38,6 +44,7 @@ export const captchaProps = buildProps({
   transfer: booleanStringProp,
   hideDelay: Number,
   hollowShape: [String, Function] as PropType<CaptchaHollowType | CaptchaHollowProcess>,
+  slots: Object as PropType<CaptchaSlots>,
   onSuccess: eventProp<EventListener<SuccessEvent>>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),
@@ -61,6 +68,7 @@ export const captchaSliderProps = buildProps({
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   onBeforeTest: Function as PropType<(percent: number, matched: boolean) => unknown>,
+  slots: Object as PropType<CaptchaSliderSlots>,
   onSuccess: eventProp<(percent: number) => void>(),
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),

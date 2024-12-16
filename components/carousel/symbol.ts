@@ -19,4 +19,11 @@ export interface CarouselState {
   handleSelect: (label: number) => void
 }
 
+export interface CarouselSlots {
+  default?: () => any,
+  prevArrow?: (params: { disabled: boolean }) => any,
+  nextArrow?: (params: { disabled: boolean }) => any,
+  pointer?: (params: { active: boolean }) => any
+}
+
 export const CAROUSEL_STATE = '__VXP_CAROUSEL_STATE' as unknown as InjectionKey<CarouselState>

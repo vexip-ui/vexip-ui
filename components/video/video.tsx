@@ -1,6 +1,7 @@
 import { FullScreen } from '@/components/full-screen'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
+import { Renderer } from '@/components/renderer'
 
 import {
   Transition,
@@ -63,7 +64,8 @@ export default defineComponent({
       loading: false,
       loadingIcon: null,
       loadingEffect: null,
-      shortcuts: () => ({})
+      shortcuts: () => ({}),
+      slots: () => ({})
     })
 
     const nh = useNameHelper('video')
@@ -729,9 +731,13 @@ export default defineComponent({
               </video>
             ])}
           </div>
-          {!hasPlayed.value && (props.poster || slots.poster) && (
+          {!hasPlayed.value && (props.poster || slots.poster || props.slots.poster) && (
             <div class={nh.be('poster')}>
-              {renderSlot(slots, 'poster', {}, () => [<img src={props.poster} />])}
+              {renderSlot(slots, 'poster', undefined, () => [
+                <Renderer renderer={props.slots.poster}>
+                  <img src={props.poster} />
+                </Renderer>
+              ])}
             </div>
           )}
           <Transition name={nh.bs('state-effect')} onAfterLeave={() => (stateHidden.value = true)}>

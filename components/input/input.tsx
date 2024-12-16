@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
 
 import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef, watch } from 'vue'
 
@@ -89,7 +90,8 @@ export default defineComponent({
       name: {
         default: '',
         static: true
-      }
+      },
+      slots: () => ({})
     })
 
     const initValue = toNotNullString(props.value)
@@ -112,10 +114,24 @@ export default defineComponent({
     let lastValue = props.value
 
     const hasBefore = computed(() => {
-      return !!(slots.before || slots.beforeAction || slots['before-action'] || props.before)
+      return !!(
+        slots.before ||
+        slots.beforeAction ||
+        slots['before-action'] ||
+        props.before ||
+        props.slots.before ||
+        props.slots.beforeAction
+      )
     })
     const hasAfter = computed(() => {
-      return !!(slots.after || slots.afterAction || slots['after-action'] || props.after)
+      return !!(
+        slots.after ||
+        slots.afterAction ||
+        slots['after-action'] ||
+        props.after ||
+        props.slots.after ||
+        props.slots.afterAction
+      )
     })
     const basisClass = computed(() => {
       return {
@@ -137,8 +153,8 @@ export default defineComponent({
           [nh.bm('readonly')]: readonly.value,
           [nh.bm('loading')]: props.loading,
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('before')]: slots.beforeAction || slots['before-action'],
-          [nh.bm('after')]: slots.afterAction || slots['after-action'],
+          [nh.bm('before')]: slots.beforeAction || slots['before-action'] || props.slots.before,
+          [nh.bm('after')]: slots.afterAction || slots['after-action'] || props.slots.after,
           [nh.bm('transparent')]: props.transparent,
           [nh.bm('plain-password')]: props.plainPassword
         }
@@ -153,8 +169,8 @@ export default defineComponent({
         [nh.bm('transparent')]: props.transparent
       }
     })
-    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
-    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix || props.slots.suffix))
     const inputType = computed(() => {
       const type = props.type
 
@@ -418,7 +434,11 @@ export default defineComponent({
           style={{ color: props.prefixColor }}
           onClick={handlePrefixClick}
         >
-          {renderSlot(slots, 'prefix', undefined, () => [<Icon icon={props.prefix}></Icon>])}
+          {renderSlot(slots, 'prefix', undefined, () => [
+            <Renderer renderer={props.slots.prefix}>
+              <Icon icon={props.prefix}></Icon>
+            </Renderer>
+          ])}
         </div>
       )
     }
@@ -435,7 +455,11 @@ export default defineComponent({
             }}
             onClick={handleSuffixClick}
           >
-            {renderSlot(slots, 'suffix', undefined, () => [<Icon icon={props.suffix}></Icon>])}
+            {renderSlot(slots, 'suffix', undefined, () => [
+              <Renderer renderer={props.slots.suffix}>
+                <Icon icon={props.suffix}></Icon>
+              </Renderer>
+            ])}
           </div>
         )
       }
@@ -496,9 +520,11 @@ export default defineComponent({
       return (
         <div class={nh.be('count')}>
           {renderSlot(slots, 'count', { value: currentValue.value }, () => [
-            props.maxLength === Infinity
-              ? currentLength.value
-              : `${currentLength.value}/${props.maxLength}`
+            <Renderer renderer={props.slots.count} data={{ value: currentValue.value }}>
+              {props.maxLength === Infinity
+                ? currentLength.value
+                : `${currentLength.value}/${props.maxLength}`}
+            </Renderer>
           ])}
         </div>
       )
@@ -516,7 +542,9 @@ export default defineComponent({
             onClick={toggleShowPassword}
           >
             {renderSlot(slots, 'password', { plain: showPassword.value }, () => [
-              <Icon {...passwordIcon.value}></Icon>
+              <Renderer renderer={props.slots.password} data={{ plain: showPassword.value }}>
+                <Icon {...passwordIcon.value}></Icon>
+              </Renderer>
             ])}
           </div>
         )
@@ -567,7 +595,8 @@ export default defineComponent({
     }
 
     function renderAside(type: 'before' | 'after') {
-      const buttonSlot = slots[`${type}Action`] || slots[`${type}-action`]
+      const buttonSlot =
+        slots[`${type}Action`] || slots[`${type}-action`] || props.slots[`${type}Action`]
 
       if (buttonSlot) {
         return (
@@ -581,7 +610,15 @@ export default defineComponent({
         )
       }
 
-      return <div class={nh.be(type)}>{slots[type] ? slots[type]!() : props[type]}</div>
+      return (
+        <div class={nh.be(type)}>
+          {slots[type] ? (
+            slots[type]!()
+          ) : (
+            <Renderer renderer={props.slots[type]}>{props[type]}</Renderer>
+          )}
+        </div>
+      )
     }
 
     return () => {

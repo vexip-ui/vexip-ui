@@ -17,5 +17,6 @@ export type {
   VideoPlaybackRate,
   VideoControlType,
   VideoControlOption,
-  VideoSegment
+  VideoSegment,
+  VideoSlots
 } from './symbol'
