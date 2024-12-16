@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, renderSlot } from 'vue'
 
 import { createSizeProp, emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { adjustAlpha, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
@@ -51,7 +52,8 @@ export default defineComponent({
       suffix: '',
       suffixBg: '',
       suffixColor: '',
-      disabled: false
+      disabled: false,
+      slots: () => ({})
     })
 
     const nh = useNameHelper('tag')
@@ -119,11 +121,12 @@ export default defineComponent({
     }
 
     return () => {
-      const hasSuffix = props.suffix === 0 || props.suffix || slots.suffix
+      const hasPrefix = !!(props.prefix === 0 || props.prefix || slots.prefix || props.slots.prefix)
+      const hasSuffix = !!(props.suffix === 0 || props.suffix || slots.suffix || props.slots.suffix)
 
       return (
         <div class={className.value} style={style.value}>
-          {props.prefix === 0 || props.prefix || slots.prefix ? (
+          {hasPrefix ? (
             <span
               class={[nh.be('unit'), nh.be('prefix')]}
               style={{
@@ -132,11 +135,15 @@ export default defineComponent({
                 borderColor: props.prefixBg
               }}
             >
-              {slots.prefix ? slots.prefix() : props.prefix}
+              {renderSlot(slots, 'prefix', undefined, () => [
+                <Renderer renderer={props.slots.prefix}>{props.prefix}</Renderer>
+              ])}
             </span>
           ) : null}
           <span class={[nh.be('unit'), nh.be('content')]}>
-            {slots.default?.()}
+            {renderSlot(slots, 'default', undefined, () => [
+              <Renderer renderer={props.slots.default}></Renderer>
+            ])}
             {!hasSuffix && renderClose()}
           </span>
           {hasSuffix ? (
@@ -148,7 +155,9 @@ export default defineComponent({
                 borderColor: props.suffixBg
               }}
             >
-              {slots.suffix ? slots.suffix() : props.suffix}
+              {renderSlot(slots, 'suffix', undefined, () => [
+                <Renderer renderer={props.slots.suffix}>{props.suffix}</Renderer>
+              ])}
               {renderClose()}
             </span>
           ) : null}

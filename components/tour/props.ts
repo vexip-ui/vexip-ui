@@ -3,7 +3,7 @@ import { booleanProp, booleanStringProp, buildProps, eventProp, localeProp } fro
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { TourSignType, TourStepOptions, TourStepRenderFn, TourType } from './symbol'
+import type { TourSignType, TourSlots, TourStepOptions, TourStepRenderFn, TourType } from './symbol'
 
 export const tourProps = buildProps({
   locale: localeProp('tour'),
@@ -17,6 +17,7 @@ export const tourProps = buildProps({
   closable: booleanProp,
   permeable: booleanProp,
   transfer: booleanStringProp,
+  slots: Object as PropType<TourSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onClose: eventProp(),

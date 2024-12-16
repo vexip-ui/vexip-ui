@@ -16,5 +16,6 @@ export type {
   TourPayload,
   TourStepOptions,
   TourStepRenderFn,
-  TourSlotParams
+  TourSlotParams,
+  TourSlots
 } from './symbol'
