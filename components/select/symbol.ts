@@ -41,3 +41,13 @@ export interface SelectSlots {
   group?: (params: { option: SelectOptionState, index: number }) => any,
   empty?: () => any
 }
+
+export const defaultKeyConfig: Required<SelectKeyConfig> = Object.freeze({
+  value: 'value',
+  label: 'label',
+  disabled: 'disabled',
+  divided: 'divided',
+  title: 'title',
+  group: 'group',
+  children: 'children'
+})

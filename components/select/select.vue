@@ -40,6 +40,7 @@ import {
   toAttrValue
 } from '@vexip-ui/utils'
 import { selectProps } from './props'
+import { defaultKeyConfig } from './symbol'
 
 import type { InputExposed } from '@/components/input'
 import type { PopperExposed } from '@/components/popper'
@@ -49,21 +50,10 @@ import type {
   ChangeEvent,
   SelectBaseValue,
   SelectEvent,
-  SelectKeyConfig,
   SelectOptionState,
   SelectSlots,
   SelectValue
 } from './symbol'
-
-const defaultKeyConfig: Required<SelectKeyConfig> = {
-  value: 'value',
-  label: 'label',
-  disabled: 'disabled',
-  divided: 'divided',
-  title: 'title',
-  group: 'group',
-  children: 'children'
-}
 
 function isSameValue(newValue: SelectValue, oldValue: SelectValue) {
   const isNewArray = Array.isArray(newValue)
@@ -1101,7 +1091,12 @@ function focus(options?: FocusOptions) {
                   >
                     <span :class="nh.be('label')">
                       <slot name="selected" :option="getOptionFromMap(value)">
-                        {{ currentLabels[index] }}
+                        <Renderer
+                          :renderer="props.slots.selected"
+                          :data="{ option: getOptionFromMap(value) }"
+                        >
+                          {{ currentLabels[index] }}
+                        </Renderer>
                       </slot>
                     </span>
                   </Tag>
@@ -1151,7 +1146,12 @@ function focus(options?: FocusOptions) {
                           >
                             <span :class="nh.be('label')">
                               <slot name="selected" :option="getOptionFromMap(value)">
-                                {{ currentLabels[index] }}
+                                <Renderer
+                                  :renderer="props.slots.selected"
+                                  :data="{ option: getOptionFromMap(value) }"
+                                >
+                                  {{ currentLabels[index] }}
+                                </Renderer>
                               </slot>
                             </span>
                           </Tag>
@@ -1160,22 +1160,6 @@ function focus(options?: FocusOptions) {
                     </Tooltip>
                   </span>
                 </template>
-                <!-- <template v-if="!limited && previewOption" #suffix>
-                  <Tag
-                    inherit
-                    :class="[
-                      nh.be('tag'),
-                      nh.bem('tag', 'preview'),
-                      currentValues.includes(previewOption.value) && nh.bem('tag', 'deleted')
-                    ]"
-                    :type="props.tagType"
-                    closable
-                  >
-                    <slot name="selected" :preview="true" :option="previewOption">
-                      {{ previewOption.label }}
-                    </slot>
-                  </Tag>
-                </template> -->
               </Overflow>
               <div
                 v-if="props.filter && props.filterPosition === 'in-control'"
@@ -1249,7 +1233,12 @@ function focus(options?: FocusOptions) {
                   name="selected"
                   :option="getOptionFromMap(currentValues[0])"
                 >
-                  {{ currentLabels[0] }}
+                  <Renderer
+                    :renderer="props.slots.selected"
+                    :data="{ option: getOptionFromMap(currentValues[0]) }"
+                  >
+                    {{ currentLabels[0] }}
+                  </Renderer>
                 </slot>
                 <template v-else>
                   {{ currentLabels[0] }}
@@ -1346,7 +1335,7 @@ function focus(options?: FocusOptions) {
           <div
             :class="[
               nh.be('list'),
-              ($slots.prepend || $slots.append) && nh.bem('list', 'with-extra'),
+              (slots.prepend || slots.append) && nh.bem('list', 'with-extra'),
               props.listClass
             ]"
           >
@@ -1374,7 +1363,7 @@ function focus(options?: FocusOptions) {
                 </template>
               </Input>
             </div>
-            <slot v-if="$slots.prepend || props.slots.prepend" name="prepend">
+            <slot v-if="slots.prepend || props.slots.prepend" name="prepend">
               <Renderer :renderer="props.slots.prepend"></Renderer>
             </slot>
             <VirtualList
@@ -1458,7 +1447,7 @@ function focus(options?: FocusOptions) {
                 </div>
               </template>
             </VirtualList>
-            <slot v-if="$slots.append || props.slots.append" name="append">
+            <slot v-if="slots.append || props.slots.append" name="append">
               <Renderer :renderer="props.slots.append"></Renderer>
             </slot>
           </div>
