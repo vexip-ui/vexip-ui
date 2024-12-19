@@ -26,12 +26,13 @@ const props = useProps('tabs', _props, {
   align: 'left',
   placement: 'top',
   closable: false,
-  showAdd: false
+  showAdd: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active'])
 
-defineSlots<TabsSlots>()
+const slots = defineSlots<TabsSlots>()
 
 const nh = useNameHelper('tabs')
 
@@ -136,8 +137,10 @@ function handleClose(label: string | number) {
         @add="handleAdd"
         @close="handleClose"
       >
-        <template v-if="$slots.prefix" #prefix>
-          <slot name="prefix"></slot>
+        <template v-if="slots.prefix || props.slots.prefix" #prefix>
+          <slot name="prefix">
+            <Renderer :renderer="props.slots.prefix"></Renderer>
+          </slot>
         </template>
         <TabNavItem
           v-for="(item, index) in itemList"
@@ -157,11 +160,20 @@ function handleClose(label: string | number) {
             {{ item.name || item.label }}
           </template>
         </TabNavItem>
-        <template v-if="$slots.suffix" #suffix>
-          <slot name="suffix"></slot>
+        <template v-if="slots.suffix || props.slots.suffix" #suffix>
+          <slot name="suffix">
+            <Renderer :renderer="props.slots.suffix"></Renderer>
+          </slot>
         </template>
-        <template v-if="$slots.add">
-          <slot name="add"></slot>
+        <template v-if="slots.add || props.slots.add">
+          <slot name="add">
+            <Renderer :renderer="props.slots.add"></Renderer>
+          </slot>
+        </template>
+        <template v-if="slots.marker || props.slots.marker">
+          <slot name="marker">
+            <Renderer :renderer="props.slots.marker"></Renderer>
+          </slot>
         </template>
       </TabNav>
     </div>
