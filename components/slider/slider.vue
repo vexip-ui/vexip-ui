@@ -183,11 +183,15 @@ const endTriggerStyle = computed(() => {
 })
 const isDisabled = computed(() => props.disabled || readonly.value)
 
-let lastValue: number | number[]
-let lastInputValue: number | number[]
-
 parseValue(props.value)
 verifyValue()
+
+let lastValue: number | number[] = props.range
+  ? truthValue.value[0] > truthValue.value[1]
+    ? [truthValue.value[1], truthValue.value[0]]
+    : [truthValue.value[0], truthValue.value[1]]
+  : truthValue.value[1]
+let lastInputValue: number | number[] = Array.isArray(lastValue) ? [...lastValue] : lastValue
 
 watch(
   () => props.value,
@@ -404,6 +408,7 @@ function handleTrackDown(event: PointerEvent) {
 
   computePointedValue(event)
   verifyValue()
+  emitChange('input')
 
   document.addEventListener('pointermove', handleMove)
   document.addEventListener('pointerup', handleMoveEnd)
