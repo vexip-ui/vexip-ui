@@ -383,7 +383,7 @@ export default defineComponent({
         }
       }
 
-      emitEvent(props.onCompositionStart, event)
+      emitEvent(props.onCompositionEnd, event)
     }
 
     function copyValue() {
