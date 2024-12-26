@@ -143,7 +143,7 @@ const props = useProps('select', _props, {
   maxTagCount: 0,
   noRestTip: false,
   tagType: null,
-  noPreview: true,
+  noPreview: false,
   remote: false,
   fitPopper: false,
   name: {
