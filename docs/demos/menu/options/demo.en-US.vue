@@ -45,18 +45,31 @@ const options: MenuOptions[] = [
       {
         label: '4',
         name: () => 'Menu 4',
-        icon: () => h(Icon, { icon: User })
+        icon: () => h(Icon, { icon: User }),
+        meta: {
+          parent: true,
+          label: '4'
+        }
       },
       {
         label: '5',
         name: 'Menu 5',
-        icon: Marker
+        icon: Marker,
+        children: [{ label: '5-1', name: 'Child Menu 5-1', meta: { child: true } }]
+      },
+      {
+        label: '6',
+        name: 'Menu 6',
+        icon: Marker,
+        meta: { parent: true },
+        onlyOne: true,
+        children: [{ label: '6-1', name: 'Child Menu 6-1', meta: { child: true } }]
       }
     ]
   }
 ]
 
-function handleSelect(label: string) {
-  console.info(label)
+function handleSelect(label: string, meta: object) {
+  console.info(label, meta)
 }
 </script>
