@@ -39,6 +39,7 @@ import type {
   TableKeyConfig,
   TableRowPayload,
   TableRowPropFn,
+  TableSlots,
   TableSorterOptions,
   TableSorterProfile,
   TableSummaryOptions,
@@ -119,6 +120,7 @@ export const tableProps = buildProps({
   dataFilter: Function as PropType<(data: Data) => boolean>,
   noTransition: booleanProp,
   ellipsis: booleanProp,
+  slots: Object as PropType<TableSlots>,
   onScroll:
     eventProp<
       (payload: { type: 'horizontal' | 'vertical', client: number, percent: number }) => void

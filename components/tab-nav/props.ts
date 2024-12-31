@@ -2,7 +2,13 @@ import { booleanProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
-import type { ChangeEvent, TabNavAlign, TabNavOptions, TabNavPlacement } from './symbol'
+import type {
+  ChangeEvent,
+  TabNavAlign,
+  TabNavOptions,
+  TabNavPlacement,
+  TabNavSlots
+} from './symbol'
 
 export const tabNavProps = buildProps({
   active: [String, Number],
@@ -12,6 +18,7 @@ export const tabNavProps = buildProps({
   placement: String as PropType<TabNavPlacement>,
   closable: booleanProp,
   showAdd: booleanProp,
+  slots: Object as PropType<TabNavSlots>,
   onChange: eventProp<EventListener<ChangeEvent>>(),
   onAdd: eventProp(),
   onClose: eventProp<EventListener<ChangeEvent>>()

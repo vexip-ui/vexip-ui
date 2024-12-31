@@ -12,7 +12,8 @@ import type {
   TreeNodeKeyConfig,
   TreeNodePostCreate,
   TreeNodeProps,
-  TreeNodeRenderFn
+  TreeNodeRenderFn,
+  TreeSlots
 } from './symbol'
 
 export const treeProps = buildProps({
@@ -57,6 +58,7 @@ export const treeProps = buildProps({
   arrowIcon: iconProp,
   blockEffect: booleanProp,
   filterLeaf: booleanProp,
+  slots: Object as PropType<TreeSlots>,
   onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
   onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),

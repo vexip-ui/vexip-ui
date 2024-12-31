@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
 import { computed, onMounted, ref, toRef, watch } from 'vue'
@@ -28,6 +29,8 @@ import {
   toNumber
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
+
+import type { NumberInputSlots } from './symbol'
 
 type InputEventType = 'input' | 'change'
 
@@ -96,15 +99,13 @@ const props = useProps('numberInput', _props, {
   name: {
     default: '',
     static: true
-  }
+  },
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
 
-const slots = defineSlots<{
-  prefix: () => any,
-  suffix: () => any
-}>()
+const slots = defineSlots<NumberInputSlots>()
 
 const nh = useNameHelper('number-input')
 const locale = useLocale('numberInput', toRef(props, 'locale'))
@@ -204,10 +205,10 @@ const className = computed(() => {
   ]
 })
 const hasPrefix = computed(() => {
-  return !!(slots.prefix || props.prefix)
+  return !!(slots.prefix || props.prefix || props.slots.prefix)
 })
 const hasSuffix = computed(() => {
-  return !!(slots.suffix || props.suffix)
+  return !!(slots.suffix || props.suffix || props.slots.suffix)
 })
 const preciseNumber = computed(() => {
   return !inputting.value &&
@@ -543,7 +544,9 @@ function handleKeyPress(event: KeyboardEvent) {
       @click="handlePrefixClick"
     >
       <slot name="prefix">
-        <Icon :icon="props.prefix"></Icon>
+        <Renderer :renderer="props.slots.prefix">
+          <Icon :icon="props.prefix"></Icon>
+        </Renderer>
       </slot>
     </div>
     <input
@@ -582,7 +585,9 @@ function handleKeyPress(event: KeyboardEvent) {
       @click="handleSuffixClick"
     >
       <slot name="suffix">
-        <Icon :icon="props.suffix"></Icon>
+        <Renderer :renderer="props.slots.suffix">
+          <Icon :icon="props.suffix"></Icon>
+        </Renderer>
       </slot>
     </div>
     <div

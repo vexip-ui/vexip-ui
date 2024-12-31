@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ImageViewer } from '@/components/image-viewer'
+import { Renderer } from '@/components/renderer'
 import { Skeleton } from '@/components/skeleton'
 
 import { computed, inject, onBeforeUnmount, reactive, ref, watch, watchEffect } from 'vue'
@@ -10,7 +11,7 @@ import { isClient, supportImgLoading, toCssSize } from '@vexip-ui/utils'
 import { imageProps } from './props'
 import { GROUP_STATE, objectFitValues } from './symbol'
 
-import type { ImageState } from './symbol'
+import type { ImageSlots, ImageState } from './symbol'
 
 const useImgLoading = supportImgLoading()
 
@@ -45,8 +46,11 @@ const props = useProps('image', _props, {
   border: false,
   previewSrc: '',
   viewerTransfer: null,
-  viewerProps: () => ({})
+  viewerProps: () => ({}),
+  slots: () => ({})
 })
+
+const slots = defineSlots<ImageSlots>()
 
 const groupState = inject(GROUP_STATE, null)
 
@@ -233,22 +237,26 @@ function handlePreview() {
     :style="style"
   >
     <slot v-if="loading" name="placeholder">
-      <Skeleton
-        v-if="props.skeleton"
-        v-bind="skeletonProps"
-        :class="nh.be('skeleton')"
-        image
-      ></Skeleton>
-      <template v-else>
-        <span :class="nh.be('placeholder')">
-          {{ props.placeholder || locale.placeholder }}
-        </span>
-      </template>
+      <Renderer :renderer="props.slots.placeholder">
+        <Skeleton
+          v-if="props.skeleton"
+          v-bind="skeletonProps"
+          :class="nh.be('skeleton')"
+          image
+        ></Skeleton>
+        <template v-else>
+          <span :class="nh.be('placeholder')">
+            {{ props.placeholder || locale.placeholder }}
+          </span>
+        </template>
+      </Renderer>
     </slot>
     <slot v-else-if="showError" name="error">
-      <span :class="nh.be('error')">
-        {{ props.errorTip || props.alt || locale.error }}
-      </span>
+      <Renderer :renderer="props.slots.error">
+        <span :class="nh.be('error')">
+          {{ props.errorTip || props.alt || locale.error }}
+        </span>
+      </Renderer>
     </slot>
     <img
       v-if="showImg && !showError"
@@ -271,8 +279,10 @@ function handlePreview() {
       :src-list="props.previewSrc || currentSrc"
       :transfer="props.viewerTransfer"
     >
-      <template #default="{ src }">
-        <slot v-if="$slots.preview" name="preview" :src="src"></slot>
+      <template v-if="slots.preview || props.slots.preview" #default="{ src }">
+        <slot name="preview" :src="src">
+          <Renderer :renderer="props.slots.preview" :data="{ src }"></Renderer>
+        </slot>
       </template>
     </ImageViewer>
   </div>

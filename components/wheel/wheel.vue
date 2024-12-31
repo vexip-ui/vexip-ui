@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon/'
+import { Renderer } from '@/components/renderer'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
 
@@ -12,7 +13,7 @@ import { USE_TOUCH, boundRange, debounce, debounceMinor, toFalse } from '@vexip-
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { ItemState, WheelOption } from './symbol'
+import type { ItemState, WheelOption, WheelSlots } from './symbol'
 
 defineOptions({ name: 'Wheel' })
 
@@ -46,12 +47,13 @@ const props = useProps('wheel', _props, {
     isFunc: true
   },
   noTransition: false,
-  selectable: false
+  selectable: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
 
-defineSlots<{ default: (params: { option: WheelOption, index: number }) => any }>()
+defineSlots<WheelSlots>()
 
 const nh = useNameHelper('wheel')
 const icons = useIcons()
@@ -472,7 +474,9 @@ function handleItemClick(option: WheelOption, index: number) {
               @click="handleItemClick(option, index)"
             >
               <slot :option="option" :index="index">
-                {{ option.label }}
+                <Renderer :renderer="props.slots.default" :data="{ option, index }">
+                  {{ option.label }}
+                </Renderer>
               </slot>
             </WheelItem>
           </template>

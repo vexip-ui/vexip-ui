@@ -155,6 +155,15 @@ export interface TreeState {
   handleLabelClick(node: TreeNodeProps): void
 }
 
+export interface TreeSlots {
+  node?: (params: TreeNodeSlotParams) => any,
+  arrow?: (params: TreeCommonSlotParams) => any,
+  label?: (params: TreeCommonSlotParams) => any,
+  prefix?: (params: TreeCommonSlotParams) => any,
+  suffix?: (params: TreeCommonSlotParams) => any,
+  empty?: () => any
+}
+
 export const TREE_STATE = '__VXP_TREE_STATE' as unknown as InjectionKey<TreeState>
 export const TREE_NODE_STATE = '__VXP_TREE_NODE_STATE' as unknown as InjectionKey<TreeNodeState>
 

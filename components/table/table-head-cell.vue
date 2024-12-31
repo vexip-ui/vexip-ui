@@ -12,12 +12,7 @@ import { useIcons, useNameHelper } from '@vexip-ui/config'
 import TableIcon from './table-icon.vue'
 import { useMoving, useRtl } from '@vexip-ui/hooks'
 import { getLast, isFunction, nextFrameOnce } from '@vexip-ui/utils'
-import {
-  TABLE_ACTIONS,
-  TABLE_HEAD_PREFIX,
-  TABLE_STORE,
-  columnTypes
-} from './symbol'
+import { TABLE_ACTIONS, TABLE_HEAD_PREFIX, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType, StyleValue } from 'vue'
 import type { MovingState } from '@vexip-ui/hooks'
@@ -57,7 +52,6 @@ const props = defineProps({
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
 const tableActions = inject(TABLE_ACTIONS)!
-// const tableSlots = inject(TABLE_SLOTS)!
 
 const nh = useNameHelper('table')
 const locale = toRef(state, 'locale')
@@ -80,9 +74,7 @@ const columns = computed(() => {
 })
 const cellSpan = computed(() => {
   return (
-    state.cellSpanMap
-      .get(props.fixed || 'default')!
-      .get(`h${props.rowIndex},${props.index}`) || {
+    state.cellSpanMap.get(props.fixed || 'default')!.get(`h${props.rowIndex},${props.index}`) || {
       colSpan: 1,
       rowSpan: 1
     }
@@ -99,16 +91,13 @@ const minWidth = 10
 let currentWidth = 0
 
 function processColResize(payload: MovingState, lazy = false) {
-  const width = Math.max(
-    currentWidth + (payload.isRtl ? -1 : 1) * payload.deltaX,
-    minWidth
-  )
+  const width = Math.max(currentWidth + (payload.isRtl ? -1 : 1) * payload.deltaX, minWidth)
 
   !lazy &&
     mutations.handleColumnResize(
       state.columns
         .slice(props.column.index, props.column.index + cellSpan.value.colSpan)
-        .map((column) => column.key),
+        .map(column => column.key),
       width
     )
 
@@ -136,10 +125,7 @@ const { target: resizer } = useMoving({
     })
   },
   onMove: (payload, event) => {
-    payload.xEnd = Math.max(
-      payload.xStart - currentWidth + minWidth,
-      payload.xEnd
-    )
+    payload.xEnd = Math.max(payload.xStart - currentWidth + minWidth, payload.xEnd)
 
     mutations.setResizeLeft(payload.xEnd)
     tableActions.emitColResize('Move', {
@@ -156,9 +142,7 @@ const { target: resizer } = useMoving({
   }
 })
 
-const typed = computed(() =>
-  columnTypes.includes((props.column as TableTypeColumn).type)
-)
+const typed = computed(() => columnTypes.includes((props.column as TableTypeColumn).type))
 const className = computed(() => {
   let customClass = null
 
@@ -177,8 +161,7 @@ const className = computed(() => {
     {
       [nh.bem('head-cell', 'group')]: isGroup.value,
       [nh.bem('head-cell', 'typed')]: typed.value,
-      [nh.bem('head-cell', 'center')]:
-        typed.value || props.column.textAlign === 'center',
+      [nh.bem('head-cell', 'center')]: typed.value || props.column.textAlign === 'center',
       [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
       [nh.bem('head-cell', 'last')]: inLast.value
     },
@@ -206,14 +189,9 @@ const style = computed(() => {
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
   const noFixed = !getters.hasFixedColumn
-  const padLeft =
-    noFixed || columns.value[0]?.fixed === 'left'
-      ? state.sidePadding[0] || 0
-      : 0
+  const padLeft = noFixed || columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
   const padRight =
-    noFixed || getLast(columns.value)?.fixed === 'right'
-      ? state.sidePadding[1] || 0
-      : 0
+    noFixed || getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
   const width = totalWidths[props.index + colSpan] - totalWidths[props.index]
 
   let height: number | undefined
@@ -222,9 +200,7 @@ const style = computed(() => {
     height = 0
 
     for (let i = 0; i < rowSpan; ++i) {
-      height +=
-        state.rowMap.get(`${TABLE_HEAD_PREFIX}${props.rowIndex + i}`)?.height ??
-        0
+      height += state.rowMap.get(`${TABLE_HEAD_PREFIX}${props.rowIndex + i}`)?.height ?? 0
     }
   }
 
@@ -237,9 +213,7 @@ const style = computed(() => {
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
-        !state.border &&
-        colSpan > 1 &&
-        props.index + colSpan >= totalWidths.length - 1
+        !state.border && colSpan > 1 && props.index + colSpan >= totalWidths.length - 1
           ? 0
           : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
@@ -264,9 +238,7 @@ const attrs = computed(() => {
   return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
 })
 const sorter = computed(() => {
-  return (
-    state.sorters.get(props.column.key) || ({} as ParsedTableSorterOptions)
-  )
+  return state.sorters.get(props.column.key) || ({} as ParsedTableSorterOptions)
 })
 const filter = computed(() => {
   return state.filters.get(props.column.key) || ({} as ParsedFilterOptions)
@@ -406,8 +378,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) +
-      state.borderWidth
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
   )
 }
 </script>
@@ -501,7 +472,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             <span
               :class="{
                 [nh.bem('sorter', 'asc')]: true,
-                [nh.bem('sorter', 'active')]: sorter.type === 'asc',
+                [nh.bem('sorter', 'active')]: sorter.type === 'asc'
               }"
               @click="handleSortAsc()"
             >
@@ -510,7 +481,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             <span
               :class="{
                 [nh.bem('sorter', 'desc')]: true,
-                [nh.bem('sorter', 'active')]: sorter.type === 'desc',
+                [nh.bem('sorter', 'active')]: sorter.type === 'desc'
               }"
               @click="handleSortDesc()"
             >
@@ -532,12 +503,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
               :class="{
                 [nh.be('filter')]: true,
                 [nh.bem('filter', 'visible')]: filterVisible,
-                [nh.bem('filter', 'active')]: filter.active,
+                [nh.bem('filter', 'active')]: filter.active
               }"
               :tip-class="{
                 [nh.be('filter-wrapper')]: true,
                 [nh.bs('vars')]: true,
-                [nh.bem('filter-wrapper', 'multiple')]: filter.multiple,
+                [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
               }"
             >
               <template #trigger>
@@ -581,7 +552,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
                 <div
                   :class="{
                     [nh.be('filter-item')]: true,
-                    [nh.bem('filter-item', 'active')]: !filter.active,
+                    [nh.bem('filter-item', 'active')]: !filter.active
                   }"
                   @click="handleResetFilter"
                 >
@@ -592,7 +563,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
                   :key="item.value"
                   :class="{
                     [nh.be('filter-item')]: true,
-                    [nh.bem('filter-item', 'active')]: item.active,
+                    [nh.bem('filter-item', 'active')]: item.active
                   }"
                   @click="handleFilterItemSelect(item.value, !item.active)"
                 >

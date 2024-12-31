@@ -3,7 +3,13 @@ import { booleanProp, booleanStringProp, buildProps, eventProp } from '@vexip-ui
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ViewerProps } from '@/components/viewer'
-import type { ImageObjectFit, ImageSkeletonProps } from './symbol'
+import type {
+  ImageGroupSlots,
+  ImageObjectFit,
+  ImageSkeletonProps,
+  ImageSlots,
+  ImageViewerSlots
+} from './symbol'
 
 export const imageProps = buildProps({
   src: String,
@@ -28,6 +34,7 @@ export const imageProps = buildProps({
   previewSrc: String,
   viewerTransfer: booleanStringProp,
   viewerProps: Object as PropType<ViewerProps>,
+  slots: Object as PropType<ImageSlots>,
   onLoad: eventProp<(event: Event) => void>(),
   onError: eventProp<(event: Event) => void>(),
   onPreview: eventProp<(src: string) => void>()
@@ -40,6 +47,7 @@ export const imageGroupProps = buildProps({
   showAll: booleanProp,
   preview: booleanProp,
   viewerTransfer: booleanStringProp,
+  slots: Object as PropType<ImageGroupSlots>,
   onPreview: eventProp<(src: string, srcList: string[]) => void>()
 })
 
@@ -52,6 +60,7 @@ export const imageViewerProps = buildProps({
   srcList: [String, Array] as PropType<string | string[]>,
   transfer: booleanStringProp,
   viewerProps: Object as PropType<ViewerProps>,
+  slots: Object as PropType<ImageViewerSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, src: string) => void>(),
   onPrev: eventProp<(index: number, src: string) => void>(),

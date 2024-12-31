@@ -3,6 +3,7 @@ import { booleanProp, buildProps, classProp, eventProp, iconProp } from '@vexip-
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { SpinSlots } from './symbol'
 
 export const spinProps = buildProps({
   active: booleanProp,
@@ -18,6 +19,7 @@ export const spinProps = buildProps({
   maskClass: classProp,
   transitionName: String,
   iconEffect: String as PropType<IconEffect>,
+  slots: Object as PropType<SpinSlots>,
   onMaskClick: eventProp<(event: MouseEvent) => void>(),
   onShow: eventProp(),
   onHide: eventProp()

@@ -2,6 +2,7 @@
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
+import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
@@ -19,7 +20,7 @@ import { getGlobalCount, isNull, isPromise, isValidNumber, toNumber } from '@vex
 import { modalProps, positionProp } from './props'
 
 import type { MaskerExposed } from '@/components/masker'
-import type { ModalCommonSLot } from './symbol'
+import type { ModalSlots } from './symbol'
 
 defineOptions({ name: 'Modal' })
 
@@ -66,18 +67,13 @@ const props = useProps('modal', _props, {
   undivided: false,
   xOffset: 0,
   yOffset: 0,
-  disableEsc: false
+  disableEsc: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active'])
 
-const slots = defineSlots<{
-  header: ModalCommonSLot,
-  title: ModalCommonSLot,
-  close: ModalCommonSLot,
-  default: ModalCommonSLot,
-  footer: ModalCommonSLot
-}>()
+const slots = defineSlots<ModalSlots>()
 
 const locale = useLocale('modal', toRef(props, 'locale'))
 const icons = useIcons()
@@ -296,8 +292,8 @@ const transformOrigin = computed(() => {
 
   return `${origin.x} ${origin.y}`
 })
-const hasTitle = computed(() => {
-  return !!(slots.header || slots.title || props.title)
+const hasHeader = computed(() => {
+  return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
 const titleId = computed(() => `${nh.bs(idIndex)}__title`)
 const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
@@ -536,30 +532,36 @@ function handleModalResize(entry: ResizeObserverEntry) {
             :aria-labelledby="titleId"
             :aria-describedby="bodyId"
           >
-            <div v-if="hasTitle" ref="header" :class="nh.be('header')">
+            <div v-if="hasHeader" ref="header" :class="nh.be('header')">
               <slot name="header" v-bind="slotParams">
-                <div :id="titleId" :class="nh.be('title')">
-                  <slot name="title" v-bind="slotParams">
-                    {{ props.title }}
-                  </slot>
-                </div>
-                <button
-                  v-if="props.closable"
-                  type="button"
-                  :class="nh.be('close')"
-                  @pointerdown.stop
-                  @mousedown.stop
-                  @touchstart.stop
-                  @click="handleClose(false)"
-                >
-                  <slot name="close" v-bind="slotParams">
-                    <Icon
-                      v-bind="icons.close"
-                      :scale="+(icons.close.scale || 1) * 1.2"
-                      label="close"
-                    ></Icon>
-                  </slot>
-                </button>
+                <Renderer :renderer="props.slots.header" :data="slotParams">
+                  <div :id="titleId" :class="nh.be('title')">
+                    <slot name="title" v-bind="slotParams">
+                      <Renderer :renderer="props.slots.title" :data="slotParams">
+                        {{ props.title }}
+                      </Renderer>
+                    </slot>
+                  </div>
+                  <button
+                    v-if="props.closable"
+                    type="button"
+                    :class="nh.be('close')"
+                    @pointerdown.stop
+                    @mousedown.stop
+                    @touchstart.stop
+                    @click="handleClose(false)"
+                  >
+                    <slot name="close" v-bind="slotParams">
+                      <Renderer :renderer="props.slots.close" :data="slotParams">
+                        <Icon
+                          v-bind="icons.close"
+                          :scale="+(icons.close.scale || 1) * 1.2"
+                          label="close"
+                        ></Icon>
+                      </Renderer>
+                    </slot>
+                  </button>
+                </Renderer>
               </slot>
             </div>
             <div
@@ -569,30 +571,34 @@ function handleModalResize(entry: ResizeObserverEntry) {
                 overflow: resizing ? 'hidden' : undefined
               }"
             >
-              <slot v-bind="slotParams"></slot>
+              <slot v-bind="slotParams">
+                <Renderer :renderer="props.slots.default" :data="slotParams"></Renderer>
+              </slot>
             </div>
             <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
               <slot name="footer" v-bind="slotParams">
-                <Button
-                  :class="[nh.be('button'), nh.bem('button', 'cancel')]"
-                  inherit
-                  text
-                  :type="props.cancelType"
-                  :size="props.actionSize"
-                  @click="handleCancel"
-                >
-                  {{ props.cancelText || locale.cancel }}
-                </Button>
-                <Button
-                  :class="[nh.be('button'), nh.bem('button', 'confirm')]"
-                  inherit
-                  :type="props.confirmType"
-                  :size="props.actionSize"
-                  :loading="props.loading"
-                  @click="handleConfirm"
-                >
-                  {{ props.confirmText || locale.confirm }}
-                </Button>
+                <Renderer :renderer="props.slots.footer" :data="slotParams">
+                  <Button
+                    :class="[nh.be('button'), nh.bem('button', 'cancel')]"
+                    inherit
+                    text
+                    :type="props.cancelType"
+                    :size="props.actionSize"
+                    @click="handleCancel"
+                  >
+                    {{ props.cancelText || locale.cancel }}
+                  </Button>
+                  <Button
+                    :class="[nh.be('button'), nh.bem('button', 'confirm')]"
+                    inherit
+                    :type="props.confirmType"
+                    :size="props.actionSize"
+                    :loading="props.loading"
+                    @click="handleConfirm"
+                  >
+                    {{ props.confirmText || locale.confirm }}
+                  </Button>
+                </Renderer>
               </slot>
             </div>
             <div v-if="props.resizable" ref="resizer" :class="nh.be('resizer')"></div>

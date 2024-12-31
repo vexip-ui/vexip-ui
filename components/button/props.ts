@@ -3,7 +3,7 @@ import { booleanProp, buildProps, eventProp, iconProp, sizeProp } from '@vexip-u
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ButtonAttrType, ButtonType } from './symbol'
+import type { ButtonAttrType, ButtonSlots, ButtonType } from './symbol'
 
 export const buttonProps = buildProps({
   size: sizeProp,
@@ -24,6 +24,7 @@ export const buttonProps = buildProps({
   tag: String,
   noPulse: booleanProp,
   badge: [String, Number],
+  slots: Object as PropType<ButtonSlots>,
   onClick: eventProp<(event: MouseEvent) => void>()
 })
 

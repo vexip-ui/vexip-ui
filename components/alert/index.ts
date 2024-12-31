@@ -8,4 +8,4 @@ export { alertProps } from './props'
 export type AlertExposed = ComponentPublicInstance & InstanceType<typeof Alert>
 
 export type { AlertProps, AlertCProps } from './props'
-export type { AlertType } from './symbol'
+export type { AlertType, AlertSlots } from './symbol'

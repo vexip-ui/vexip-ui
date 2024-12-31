@@ -483,22 +483,22 @@ export default defineComponent({
           aria-disabled={disabled ? 'true' : undefined}
           onClick={() => toggleSelect(option)}
         >
-          {slots.option
-            ? renderSlot(slots, 'option', { type: props.type, option, index })
-            : [
-              <Checkbox
-                key={1}
-                class={nh.be('checkbox')}
-                state={props.deepState ? props.state : undefined}
-                checked={currentSelected.value.has(option.value)}
-                disabled={disabled}
-                tab-index={-1}
-                onClick={handleCheck}
-              ></Checkbox>,
-              <span key={2} class={nh.be('label')}>
-                {slots.label ? renderSlot(slots, 'label', { option, index }) : option.label}
-              </span>
-              ]}
+          {renderSlot(slots, 'option', { type: props.type, option, index }, () => [
+            <Checkbox
+              key={1}
+              class={nh.be('checkbox')}
+              state={props.deepState ? props.state : undefined}
+              checked={currentSelected.value.has(option.value)}
+              disabled={disabled}
+              tab-index={-1}
+              onClick={handleCheck}
+            ></Checkbox>,
+            <span key={2} class={nh.be('label')}>
+              {renderSlot(slots, 'label', { type: props.type, option, index }, () => [
+                option.label
+              ])}
+            </span>
+          ])}
         </li>
       )
     }
@@ -506,9 +506,7 @@ export default defineComponent({
     function renderHeader() {
       return (
         <div ref={header} class={nh.be('header')}>
-          {slots.header ? (
-            renderSlot(slots, 'header', slotParams)
-          ) : (
+          {renderSlot(slots, 'header', slotParams, () => [
             <>
               <Checkbox
                 inherit
@@ -536,7 +534,7 @@ export default defineComponent({
               </div>
               {(props.title || slots.title) && (
                 <span class={nh.be('title')}>
-                  {slots.title ? renderSlot(slots, 'title', slotParams) : props.title}
+                  {renderSlot(slots, 'title', slotParams, () => [props.title])}
                 </span>
               )}
               <CollapseTransition appear horizontal fade-effect>
@@ -552,7 +550,7 @@ export default defineComponent({
                 )}
               </CollapseTransition>
             </>
-          )}
+          ])}
         </div>
       )
     }
@@ -590,13 +588,13 @@ export default defineComponent({
         return (
           <ResizeObserver throttle onResize={computePageSize}>
             <ul ref={body} class={nh.be('body')} role={'listbox'}>
-              {slots.body ? (
-                renderSlot(slots, 'body', slotParams)
-              ) : pagedOptions.value.length ? (
-                pagedOptions.value.map((option, index) => renderOption({ option, index }))
-              ) : (
-                <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
-              )}
+              {renderSlot(slots, 'body', slotParams, () => [
+                pagedOptions.value.length ? (
+                  pagedOptions.value.map((option, index) => renderOption({ option, index }))
+                ) : (
+                  <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+                )
+              ])}
             </ul>
           </ResizeObserver>
         )
@@ -629,9 +627,7 @@ export default defineComponent({
 
       return (
         <div ref={footer} class={nh.be('footer')}>
-          {slots.footer ? (
-            renderSlot(slots, 'footer', slotParams)
-          ) : (
+          {renderSlot(slots, 'footer', slotParams, () => [
             <div class={nh.be('pagination')}>
               <Icon
                 {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
@@ -661,7 +657,7 @@ export default defineComponent({
                 onClick={() => handlePageChange(currentPage.value + 1)}
               ></Icon>
             </div>
-          )}
+          ])}
         </div>
       )
     }

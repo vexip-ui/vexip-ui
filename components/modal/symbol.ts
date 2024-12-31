@@ -17,4 +17,12 @@ export interface ModalSlotParams {
   handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 
-export type ModalCommonSLot = (params: ModalSlotParams) => any
+export type ModalCommonSlot = (params: ModalSlotParams) => any
+
+export interface ModalSlots {
+  header?: ModalCommonSlot,
+  title?: ModalCommonSlot,
+  close?: ModalCommonSlot,
+  default?: ModalCommonSlot,
+  footer?: ModalCommonSlot
+}

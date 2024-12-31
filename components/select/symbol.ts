@@ -28,3 +28,26 @@ export interface SelectListSlotParams {
   isSelected: (option: SelectOptionState) => boolean,
   handleSelect: (option?: SelectOptionState | null) => void
 }
+
+export interface SelectSlots {
+  selected?: (params: { option: SelectOptionState | null, preview?: boolean }) => any,
+  prefix?: () => any,
+  suffix?: () => any,
+  control?: () => any,
+  list?: (params: SelectListSlotParams) => any,
+  prepend?: () => any,
+  append?: () => any,
+  default?: (params: { option: SelectOptionState, index: number, selected: boolean }) => any,
+  group?: (params: { option: SelectOptionState, index: number }) => any,
+  empty?: () => any
+}
+
+export const defaultKeyConfig: Required<SelectKeyConfig> = Object.freeze({
+  value: 'value',
+  label: 'label',
+  disabled: 'disabled',
+  divided: 'divided',
+  title: 'title',
+  group: 'group',
+  children: 'children'
+})

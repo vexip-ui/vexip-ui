@@ -16,9 +16,12 @@ import type {
   BeforeUpload,
   RenderFn,
   UploadFileOptions,
+  UploadFileSlots,
   UploadFileState,
   UploadHttpError,
-  UploadListType
+  UploadListSlots,
+  UploadListType,
+  UploadSlots
 } from './symbol'
 
 export const uploadProps = buildProps({
@@ -60,6 +63,7 @@ export const uploadProps = buildProps({
   canPreview: Function as PropType<(file: UploadFileState) => boolean>,
   listStyle: styleProp,
   name: String,
+  slots: Object as PropType<UploadSlots>,
   onExceed: eventProp<(files: UploadFileState[]) => void>(),
   onChange: eventProp<(files: UploadFileState[]) => void>(),
   onFilterError: eventProp<(files: UploadFileState) => void>(),
@@ -87,6 +91,7 @@ export const uploadListProps = buildProps({
   style: styleProp,
   precision: Number,
   canPreview: Function as PropType<(file: UploadFileState) => boolean>,
+  slots: Object as PropType<UploadListSlots>,
   onDelete: eventProp<(file: UploadFileState) => void>(),
   onPreview: eventProp<(file: UploadFileState) => void>()
 })
@@ -103,6 +108,7 @@ export const uploadFileProps = buildProps({
   selectToAdd: booleanProp,
   precision: Number,
   canPreview: Function as PropType<(file: UploadFileState) => boolean>,
+  slots: Object as PropType<UploadFileSlots>,
   onDelete: eventProp<(file: UploadFileState) => void>(),
   onPreview: eventProp<(file: UploadFileState) => void>()
 })

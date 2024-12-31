@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
+import { Renderer } from '@/components/renderer'
 
 import { computed, provide, reactive, toRef, watch } from 'vue'
 
@@ -8,7 +9,13 @@ import { callIfFunc, debounceMinor, isNull } from '@vexip-ui/utils'
 import { breadcrumbProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { BreadcrumbItemState, BreadcrumbOptions, BreadcrumbState, SelectEvent } from './symbol'
+import type {
+  BreadcrumbItemState,
+  BreadcrumbOptions,
+  BreadcrumbSlots,
+  BreadcrumbState,
+  SelectEvent
+} from './symbol'
 
 defineOptions({ name: 'Breadcrumb' })
 
@@ -20,14 +27,11 @@ const props = useProps('breadcrumb', _props, {
     default: () => [],
     static: true
   },
-  router: null
+  router: null,
+  slots: () => ({})
 })
 
-const slots = defineSlots<{
-  default: () => any,
-  item: (params: { option: BreadcrumbOptions, index: number }) => any,
-  separator: (params: { label: string | number }) => any
-}>()
+const slots = defineSlots<BreadcrumbSlots>()
 
 const nh = useNameHelper('breadcrumb')
 const itemStates = new Set<BreadcrumbItemState>()
@@ -91,9 +95,13 @@ const state: BreadcrumbState = reactive({
 provide(BREADCRUMB_STATE, state)
 
 watch(
-  () => slots.separator,
-  value => {
-    state.separatorRenderer = value ? data => value(data) : null
+  [() => slots.separator, () => props.slots.separator],
+  ([slotValue, propValue]) => {
+    state.separatorRenderer = slotValue
+      ? data => slotValue(data)
+      : propValue
+        ? data => propValue(data)
+        : null
   },
   { immediate: true }
 )
@@ -120,15 +128,19 @@ function handleSeparatorClick(label: string | number) {
 <template>
   <ol :class="className">
     <slot>
-      <BreadcrumbItem
-        v-for="(option, index) in normalizedOptions"
-        :key="option.label"
-        :label="option.label"
-      >
-        <slot name="item" :option="option" :index="index">
-          {{ option.name ? callIfFunc(option.name) : option.label }}
-        </slot>
-      </BreadcrumbItem>
+      <Renderer :renderer="props.slots.default">
+        <BreadcrumbItem
+          v-for="(option, index) in normalizedOptions"
+          :key="option.label"
+          :label="option.label"
+        >
+          <slot name="item" :option="option" :index="index">
+            <Renderer :renderer="props.slots.item" :data="{ option, index }">
+              {{ option.name ? callIfFunc(option.name) : option.label }}
+            </Renderer>
+          </slot>
+        </BreadcrumbItem>
+      </Renderer>
     </slot>
   </ol>
 </template>

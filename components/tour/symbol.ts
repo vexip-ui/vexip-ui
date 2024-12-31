@@ -40,4 +40,18 @@ export interface TourState {
   decreaseStep(step: TourStepOptions): void
 }
 
+export interface TourSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  header?: TourCommonSLot,
+  title?: TourCommonSLot,
+  close?: TourCommonSLot,
+  body?: TourCommonSLot,
+  footer?: TourCommonSLot,
+  sign?: TourCommonSLot,
+  actions?: TourCommonSLot
+}
+
 export const TOUR_STATE = '___VXP_TOUR_STATE' as unknown as InjectionKey<TourState>

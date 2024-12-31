@@ -12,7 +12,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ButtonType } from '@/components/button'
-import type { PositionPayload, SizePayload } from './symbol'
+import type { ModalSlots, PositionPayload, SizePayload } from './symbol'
 
 const positionType = [Number, String]
 
@@ -59,6 +59,7 @@ export const modalProps = buildProps({
   xOffset: positionType,
   yOffset: positionType,
   disableEsc: booleanProp,
+  slots: Object as PropType<ModalSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onConfirm: eventProp(),
   onCancel: eventProp(),

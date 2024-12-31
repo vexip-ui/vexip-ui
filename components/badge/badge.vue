@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { Renderer } from '@/components/renderer'
+
 import { computed } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { badgeProps } from './props'
 import { badgeTypes } from './symbol'
+
+import type { BadgeSlots } from './symbol'
 
 defineOptions({ name: 'Badge' })
 
@@ -20,13 +24,11 @@ const props = useProps('badge', _props, {
     default: 'error',
     validator: value => badgeTypes.includes(value)
   },
-  color: null
+  color: null,
+  slots: () => ({})
 })
 
-const slots = defineSlots<{
-  default: () => any,
-  content: (params: { content: number | string }) => any
-}>()
+const slots = defineSlots<BadgeSlots>()
 
 const nh = useNameHelper('badge')
 
@@ -68,7 +70,9 @@ function handleBadgeClick(event: MouseEvent) {
 
 <template>
   <div :class="className">
-    <slot></slot>
+    <slot>
+      <Renderer :renderer="props.slots.default"></Renderer>
+    </slot>
     <Transition :name="transitionName">
       <sup
         v-show="showSub"
@@ -82,7 +86,9 @@ function handleBadgeClick(event: MouseEvent) {
         @click="handleBadgeClick"
       >
         <slot name="content" :content="renderContent">
-          {{ renderContent }}
+          <Renderer :renderer="props.slots.content" :data="{ content: renderContent }">
+            {{ renderContent }}
+          </Renderer>
         </slot>
       </sup>
     </Transition>

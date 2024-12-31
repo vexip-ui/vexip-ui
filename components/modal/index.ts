@@ -5,7 +5,7 @@ import { isClient, noop } from '@vexip-ui/utils'
 
 import type { App, AppContext, ComponentPublicInstance, MaybeRef } from 'vue'
 import type { ModalProps } from './props'
-import type { ModalCommonSLot } from './symbol'
+import type { ModalCommonSlot } from './symbol'
 
 export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'loading' | 'autoRemove'> & {
   /**
@@ -19,23 +19,23 @@ export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'loading' | 
   /**
    * Another way to use default slot
    */
-  renderer: ModalCommonSLot,
+  renderer: ModalCommonSlot,
   /**
    * Another way to use header slot
    */
-  headerRenderer: ModalCommonSLot,
+  headerRenderer: ModalCommonSlot,
   /**
    * Another way to use title slot
    */
-  titleRenderer: ModalCommonSLot,
+  titleRenderer: ModalCommonSlot,
   /**
    * Another way to use close slot
    */
-  closeRenderer: ModalCommonSLot,
+  closeRenderer: ModalCommonSlot,
   /**
    * Another way to use footer slot
    */
-  footerRenderer: ModalCommonSLot
+  footerRenderer: ModalCommonSlot
 }
 
 export function useModal(options: Partial<ModalOptions> = {}): () => Promise<void> {

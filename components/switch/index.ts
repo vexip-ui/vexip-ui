@@ -8,3 +8,4 @@ export { switchProps } from './props'
 export type SwitchExposed = ComponentPublicInstance & InstanceType<typeof Switch>
 
 export type { SwitchProps, SwitchCProps } from './props'
+export type { SwitchSlots } from './symbol'

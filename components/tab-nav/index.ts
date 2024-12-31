@@ -8,4 +8,4 @@ export { tabNavProps } from './props'
 export type TabNavExposed = ComponentPublicInstance & InstanceType<typeof TabNav>
 
 export type { TabNavProps, TabNavCProps } from './props'
-export type { TabNavAlign, TabNavPlacement, TabNavOptions } from './symbol'
+export type { TabNavAlign, TabNavPlacement, TabNavOptions, TabNavSlots } from './symbol'

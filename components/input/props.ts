@@ -12,7 +12,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
-import type { ChangeEvent, InputType } from './symbol'
+import type { ChangeEvent, InputSlots, InputType } from './symbol'
 
 export const inputProps = buildProps({
   size: sizeProp,
@@ -50,6 +50,7 @@ export const inputProps = buildProps({
   sync: booleanProp,
   controlAttrs: Object as PropType<Record<string, any>>,
   name: String,
+  slots: Object as PropType<InputSlots>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<EventListener<ChangeEvent>>(),

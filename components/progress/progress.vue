@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Bubble } from '@/components/bubble'
+import { Renderer } from '@/components/renderer'
 
 import { computed } from 'vue'
 
@@ -30,7 +31,8 @@ const props = useProps('progress', _props, {
   strokeColor: {
     default: null,
     validator: value => !(Array.isArray(value) && (!value[0] || !value[1]))
-  }
+  },
+  slots: () => ({})
 })
 
 const nh = useNameHelper('progress')
@@ -109,9 +111,11 @@ defineExpose({ percentValue })
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
       <div v-if="props.infoType === 'inside'" :class="nh.be('info')">
         <slot>
-          <span :class="nh.be('percentage')">
-            {{ `${percentValue}%` }}
-          </span>
+          <Renderer :renderer="props.slots.default">
+            <span :class="nh.be('percentage')">
+              {{ `${percentValue}%` }}
+            </span>
+          </Renderer>
         </slot>
       </div>
     </div>
@@ -124,17 +128,21 @@ defineExpose({ percentValue })
         :content-class="nh.be('info')"
       >
         <slot>
-          <span :class="nh.be('percentage')">
-            {{ `${percentValue}%` }}
-          </span>
+          <Renderer :renderer="props.slots.default">
+            <span :class="nh.be('percentage')">
+              {{ `${percentValue}%` }}
+            </span>
+          </Renderer>
         </slot>
       </Bubble>
     </div>
     <div v-else-if="props.infoType === 'outside'" :class="nh.be('info')">
       <slot>
-        <span :class="nh.be('percentage')">
-          {{ `${percentValue}%` }}
-        </span>
+        <Renderer :renderer="props.slots.default">
+          <span :class="nh.be('percentage')">
+            {{ `${percentValue}%` }}
+          </span>
+        </Renderer>
       </slot>
     </div>
   </div>

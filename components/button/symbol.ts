@@ -17,6 +17,12 @@ export interface ButtonGroupState {
   refreshIndexes: () => void
 }
 
+export interface ButtonSlots {
+  default?: () => any,
+  icon?: () => any,
+  loading?: () => any
+}
+
 export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<ButtonGroupState>
 
 export const buttonTypes = Object.freeze<ButtonType[]>([

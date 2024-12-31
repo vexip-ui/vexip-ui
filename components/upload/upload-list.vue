@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Renderer } from '@/components/renderer'
 import { UploadFile } from '@/components/upload-file'
 
 import { computed } from 'vue'
@@ -7,7 +8,7 @@ import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { uploadListProps } from './props'
 import { uploadListTypes } from './symbol'
 
-import type { UploadFileState, UploadStatus } from './symbol'
+import type { UploadFileState, UploadListSlots } from './symbol'
 
 defineOptions({ name: 'UploadList' })
 
@@ -28,15 +29,12 @@ const props = useProps('uploadList', _props, {
   },
   loadingText: null,
   style: null,
-  precision: 2
+  precision: 2,
   // 'canPreview' using UploadFile default
+  slots: () => ({})
 })
 
-defineSlots<{
-  item: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
-  icon: (params: { file: UploadFileState }) => any,
-  suffix: () => any
-}>()
+const slots = defineSlots<UploadListSlots>()
 
 const nh = useNameHelper('upload')
 const transitionName = computed(() => nh.ns('fade'))
@@ -73,19 +71,37 @@ function handlePreview(file: UploadFileState) {
         @delete="handleDelete"
         @preview="handlePreview"
       >
-        <template #default="{ file, status, percentage }">
+        <template v-if="slots.item || props.slots.item" #default="{ file, status, percentage }">
           <slot
             name="item"
             :file="file"
             :status="status"
             :percentage="percentage"
-          ></slot>
+          >
+            <Renderer
+              :renderer="props.slots.item"
+              :data="{
+                file,
+                status,
+                percentage
+              }"
+            ></Renderer>
+          </slot>
         </template>
-        <template #icon="{ file }">
-          <slot name="icon" :file="file"></slot>
+        <template v-if="slots.icon || props.slots.icon" #icon="{ file, status, percentage }">
+          <slot
+            name="icon"
+            :file="file"
+            :status="status"
+            :percentage="percentage"
+          >
+            <Renderer :renderer="props.slots.icon" :data="{ file, status, percentage }"></Renderer>
+          </slot>
         </template>
       </UploadFile>
     </Transition>
-    <slot name="suffix"></slot>
+    <slot name="suffix">
+      <Renderer :renderer="props.slots.suffix"></Renderer>
+    </slot>
   </ul>
 </template>

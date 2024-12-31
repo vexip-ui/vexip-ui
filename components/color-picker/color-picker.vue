@@ -3,6 +3,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Popper } from '@/components/popper'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
 import { computed, nextTick, ref, toRef, watch } from 'vue'
@@ -38,8 +39,8 @@ import { colorPickerProps } from './props'
 import { defaultShortcuts, getDefaultHsv } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
-import type { Color, HSLAColor, HSVAColor, HSVColor, RGBAColor, RGBColor } from '@vexip-ui/utils'
-import type { ColorFormat } from './symbol'
+import type { Color, HSLAColor, HSVAColor, HSVColor, RGBAColor } from '@vexip-ui/utils'
+import type { ColorFormat, ColorPrickerSlots } from './symbol'
 
 defineOptions({ name: 'ColorPicker' })
 
@@ -98,17 +99,13 @@ const props = useProps('colorPicker', _props, {
   loadingEffect: null,
   popperAlive: null,
   showLabel: false,
-  labelFormat: null
+  labelFormat: null,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value', 'update:visible'])
 
-const slots = defineSlots<{
-  control: (params: { color: RGBColor, alpha: number, empty: boolean }) => any,
-  prefix: () => any,
-  suffix: () => any,
-  label: (params: { color: RGBColor, alpha: number, empty: boolean, label: string }) => any
-}>()
+const slots = defineSlots<ColorPrickerSlots>()
 
 const icons = useIcons()
 const locale = useLocale('colorPicker', toRef(props, 'locale'))
@@ -194,7 +191,7 @@ const rgb = computed(() => {
   const { h, s, v } =
     currentValue.value && currentVisible.value
       ? currentValue.value
-      : lastValue.value ?? { h: 0, s: 0, v: 0 }
+      : (lastValue.value ?? { h: 0, s: 0, v: 0 })
 
   return hsvToRgb(h, s, v)
 })
@@ -216,7 +213,7 @@ const shortcutList = computed(() => {
 
   return defaultShortcuts
 })
-const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const showClear = computed(() => {
   return !props.disabled && !readonly.value && props.clearable && isHover.value && !isEmpty.value
 })
@@ -547,83 +544,97 @@ function blur() {
         :alpha="currentAlpha"
         :empty="isEmpty"
       >
-        <div
-          v-if="hasPrefix"
-          :class="[nh.be('icon'), nh.be('prefix')]"
-          :style="{ color: props.prefixColor }"
+        <Renderer
+          :renderer="props.slots.control"
+          :data="{ color: rgb, alpha: currentAlpha, empty: isEmpty }"
         >
-          <slot name="prefix">
-            <Icon :icon="props.prefix"></Icon>
-          </slot>
-        </div>
-        <div :class="nh.be('control')">
-          <div :class="[nh.be('marker'), showLabel && nh.bem('marker', 'with-label')]">
-            <Icon v-if="!currentVisible && isEmpty" v-bind="icons.close"></Icon>
-            <div
-              v-else
-              :style="{
-                width: '100%',
-                height: '100%',
-                backgroundColor: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
-                  currentVisible ? currentAlpha : lastValue.a
-                })`
-              }"
-            ></div>
-          </div>
-          <div v-if="showLabel" :class="nh.be('label')">
-            <slot
-              name="label"
-              :color="rgb"
-              :alpha="currentAlpha"
-              :empty="isEmpty"
-              :label="labelColor"
-            >
-              {{ labelColor }}
+          <div
+            v-if="hasPrefix"
+            :class="[nh.be('icon'), nh.be('prefix')]"
+            :style="{ color: props.prefixColor }"
+          >
+            <slot name="prefix">
+              <Renderer :renderer="props.slots.prefix">
+                <Icon :icon="props.prefix"></Icon>
+              </Renderer>
             </slot>
           </div>
-        </div>
-        <div
-          v-if="!props.noSuffix"
-          :class="[nh.be('icon'), nh.be('suffix')]"
-          :style="{
-            color: props.suffixColor,
-            opacity: showClear || props.loading ? '0%' : ''
-          }"
-        >
-          <slot name="suffix">
-            <Icon
-              v-if="props.suffix"
-              :icon="props.suffix"
-              :class="{
-                [nh.be('arrow')]: !props.staticSuffix
-              }"
-            ></Icon>
-            <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
-          </slot>
-        </div>
-        <div
-          v-else-if="props.clearable || props.loading"
-          :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
-        ></div>
-        <Transition :name="nh.ns('fade')" appear>
-          <button
-            v-if="showClear"
-            :class="[nh.be('icon'), nh.be('clear')]"
-            type="button"
-            tabindex="-1"
-            :aria-label="locale.ariaLabel.clear"
-            @click.stop="handleClear"
-          >
-            <Icon v-bind="icons.clear"></Icon>
-          </button>
-          <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-            <Icon
-              v-bind="icons.loading"
-              :effect="props.loadingEffect || icons.loading.effect"
-              :icon="props.loadingIcon || icons.loading.icon"
-            ></Icon>
+          <div :class="nh.be('control')">
+            <div :class="[nh.be('marker'), showLabel && nh.bem('marker', 'with-label')]">
+              <Icon v-if="!currentVisible && isEmpty" v-bind="icons.close"></Icon>
+              <div
+                v-else
+                :style="{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
+                    currentVisible ? currentAlpha : lastValue.a
+                  })`
+                }"
+              ></div>
+            </div>
+            <div v-if="showLabel" :class="nh.be('label')">
+              <slot
+                name="label"
+                :color="rgb"
+                :alpha="currentAlpha"
+                :empty="isEmpty"
+                :label="labelColor"
+              >
+                <Renderer
+                  :renderer="props.slots.label"
+                  :data="{ color: rgb, alpha: currentAlpha, empty: isEmpty, label: labelColor }"
+                >
+                  {{ labelColor }}
+                </Renderer>
+              </slot>
+            </div>
           </div>
-        </Transition>
+          <div
+            v-if="!props.noSuffix"
+            :class="[nh.be('icon'), nh.be('suffix')]"
+            :style="{
+              color: props.suffixColor,
+              opacity: showClear || props.loading ? '0%' : ''
+            }"
+          >
+            <slot name="suffix">
+              <Renderer :renderer="props.slots.suffix">
+                <Icon
+                  v-if="props.suffix"
+                  :icon="props.suffix"
+                  :class="{
+                    [nh.be('arrow')]: !props.staticSuffix
+                  }"
+                ></Icon>
+                <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
+              </Renderer>
+            </slot>
+          </div>
+          <div
+            v-else-if="props.clearable || props.loading"
+            :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+          ></div>
+          <Transition :name="nh.ns('fade')" appear>
+            <button
+              v-if="showClear"
+              :class="[nh.be('icon'), nh.be('clear')]"
+              type="button"
+              tabindex="-1"
+              :aria-label="locale.ariaLabel.clear"
+              @click.stop="handleClear"
+            >
+              <Icon v-bind="icons.clear"></Icon>
+            </button>
+            <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+              <Icon
+                v-bind="icons.loading"
+                :effect="props.loadingEffect || icons.loading.effect"
+                :icon="props.loadingIcon || icons.loading.icon"
+              ></Icon>
+            </div>
+          </Transition>
+        </Renderer>
       </slot>
     </div>
     <Popper

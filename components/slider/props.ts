@@ -2,7 +2,7 @@ import { booleanProp, booleanStringProp, buildProps, eventProp, stateProp } from
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { SliderRawMarkers, SliderTipProps } from './symbol'
+import type { SliderRawMarkers, SliderSlots, SliderTipProps } from './symbol'
 
 export const sliderProps = buildProps({
   state: stateProp,
@@ -25,6 +25,7 @@ export const sliderProps = buildProps({
   triggerFade: booleanProp,
   tipProps: Object as PropType<SliderTipProps>,
   sync: booleanProp,
+  slots: Object as PropType<SliderSlots>,
   onChange: eventProp<(value: number | number[]) => void>(),
   onInput: eventProp<(value: number | number[]) => void>()
 })

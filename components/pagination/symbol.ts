@@ -7,3 +7,9 @@ export interface PaginationExposed extends ComponentPublicInstance {
   handlePrev: () => void,
   handleNext: () => void
 }
+
+export interface PaginationSlots {
+  prev?: (params: { disabled: boolean }) => any,
+  next?: (params: { disabled: boolean }) => any,
+  item?: (params: { page: number, disabled: boolean, active: boolean }) => any
+}

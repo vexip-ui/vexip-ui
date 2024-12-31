@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ImageViewer } from '@/components/image-viewer'
+import { Renderer } from '@/components/renderer'
 
 import { computed, provide, reactive, ref, toRef } from 'vue'
 
@@ -8,7 +9,7 @@ import { debounceMinor } from '@vexip-ui/utils'
 import { imageGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { ImageState } from './symbol'
+import type { ImageGroupSlots, ImageState } from './symbol'
 
 defineOptions({ name: 'ImageGroup' })
 
@@ -16,8 +17,11 @@ const _props = defineProps(imageGroupProps)
 const props = useProps('imageGroup', _props, {
   showAll: false,
   preview: false,
-  viewerTransfer: null
+  viewerTransfer: null,
+  slots: () => ({})
 })
+
+const slots = defineSlots<ImageGroupSlots>()
 
 const nh = useNameHelper('image-group')
 
@@ -86,8 +90,10 @@ function handlePreview(item: ImageState) {
       :src-list="srcList"
       :transfer="props.viewerTransfer"
     >
-      <template #default="{ src }">
-        <slot v-if="$slots.preview" name="preview" :src="src"></slot>
+      <template v-if="slots.preview || props.slots.preview" #default="{ src }">
+        <slot name="preview" :src="src">
+          <Renderer :renderer="props.slots.preview" :data="{ src }"></Renderer>
+        </slot>
       </template>
     </ImageViewer>
   </div>
