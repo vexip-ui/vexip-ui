@@ -7,6 +7,15 @@ export interface DrawerSlotParams {
   handleClose: (isConfirm?: boolean) => Promise<unknown>
 }
 
-export type DrawerCommonSLot = (params: DrawerSlotParams) => any
+export type DrawerCommonSlot = (params: DrawerSlotParams) => any
+
+export interface DrawerSlots {
+  header?: DrawerCommonSlot,
+  title?: DrawerCommonSlot,
+  close?: DrawerCommonSlot,
+  default?: DrawerCommonSlot,
+  footer?: DrawerCommonSlot,
+  handler?: DrawerCommonSlot
+}
 
 export const drawerPlacements = Object.freeze<DrawerPlacement[]>(['top', 'right', 'bottom', 'left'])

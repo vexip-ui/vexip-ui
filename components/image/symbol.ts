@@ -25,6 +25,27 @@ export interface GroupState {
   handlePreview: (item: ImageState) => void
 }
 
+export interface ImageSlots {
+  placeholder?: () => any,
+  error?: () => any,
+  preview?: (params: { src: string }) => any
+}
+
+export interface ImageGroupSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  preview?: (params: { src: string }) => any
+}
+
+export interface ImageViewerSlots {
+  default?: (params: { src: string }) => any,
+  prev?: (params: { disabled: boolean }) => any,
+  next?: (params: { disabled: boolean }) => any,
+  close?: () => any
+}
+
 export const GROUP_STATE = '__VXP_IMAGE_GROUP_STATE' as unknown as InjectionKey<GroupState>
 
 export const objectFitValues = Object.freeze<ImageObjectFit[]>([
