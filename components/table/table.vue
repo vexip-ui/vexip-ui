@@ -1196,7 +1196,7 @@ function renderTableSlot({ name }: { name: string }) {
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="left">
-            <template #empty="{ isFixed }">
+            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
               <slot name="empty" :is-fixed="isFixed">
                 <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
               </slot>
@@ -1204,7 +1204,7 @@ function renderTableSlot({ name }: { name: string }) {
           </TableBody>
         </div>
         <TableBody>
-          <template #empty="{ isFixed }">
+          <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
             <slot name="empty" :is-fixed="isFixed">
               <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
             </slot>
@@ -1219,7 +1219,7 @@ function renderTableSlot({ name }: { name: string }) {
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="right">
-            <template #empty="{ isFixed }">
+            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
               <slot name="empty" :is-fixed="isFixed">
                 <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
               </slot>

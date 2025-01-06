@@ -30,7 +30,8 @@ const props = useProps('tabNav', _props, {
   align: 'left',
   placement: 'top',
   closable: false,
-  showAdd: false
+  showAdd: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active'])
