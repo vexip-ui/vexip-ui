@@ -8,3 +8,4 @@ export { spinProps } from './props'
 export type SpinExposed = ComponentPublicInstance & InstanceType<typeof Spin>
 
 export type { SpinProps, SpinCProps } from './props'
+export type { SpinSlots } from './symbol'

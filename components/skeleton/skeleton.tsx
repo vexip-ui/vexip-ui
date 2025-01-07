@@ -1,6 +1,6 @@
 import { Icon } from '@/components/icon'
 
-import { computed, defineComponent, h, inject, renderSlot } from 'vue'
+import { computed, defineComponent, inject, renderSlot } from 'vue'
 
 import { createIconProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonProps } from './props'

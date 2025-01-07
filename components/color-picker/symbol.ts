@@ -1,6 +1,15 @@
 import { rgbToHsv } from '@vexip-ui/utils'
 
+import type { RGBColor } from '@vexip-ui/utils'
+
 export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
+
+export interface ColorPrickerSlots {
+  control?: (params: { color: RGBColor, alpha: number, empty: boolean }) => any,
+  prefix?: () => any,
+  suffix?: () => any,
+  label?: (params: { color: RGBColor, alpha: number, empty: boolean, label: string }) => any
+}
 
 export const defaultShortcuts = Object.freeze([
   '#2d8cf0',

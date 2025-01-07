@@ -41,5 +41,13 @@ export interface SliderTriggerParams {
 }
 
 export type SliderCommonSlot = (params: SliderSlotParams) => any
-export type SliderTriggerSlot = (params: SliderTriggerParams) => any
 export type SliderMarkerSlot = (params: SliderMarkerSlotParams) => any
+export type SliderTriggerSlot = (params: SliderTriggerParams) => any
+
+export interface SliderSlots {
+  filler?: SliderCommonSlot,
+  point?: SliderMarkerSlot,
+  marker?: SliderMarkerSlot,
+  trigger?: SliderTriggerSlot,
+  tip?: SliderTriggerSlot
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
 import { computed, ref, watch } from 'vue'
@@ -15,6 +16,8 @@ import {
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { switchProps } from './props'
+
+import type { SwitchSlots } from './symbol'
 
 defineOptions({ name: 'Switch' })
 
@@ -56,10 +59,13 @@ const props = useProps('switch', _props, {
   name: {
     default: '',
     static: true
-  }
+  },
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
+
+defineSlots<SwitchSlots>()
 
 const nh = useNameHelper('switch')
 const icons = useIcons()
@@ -159,32 +165,44 @@ async function handleChange(checked = !currentValue.value) {
     />
     <span :class="nh.be('placeholder')" aria-hidden>
       <span :class="nh.be('open-text')">
-        <slot name="open">{{ props.openText }}</slot>
+        <slot name="open">
+          <Renderer :renderer="props.slots.open">{{ props.openText }}</Renderer>
+        </slot>
       </span>
       <span :class="nh.be('close-text')">
-        <slot name="close">{{ props.closeText }}</slot>
+        <slot name="close">
+          <Renderer :renderer="props.slots.open">{{ props.closeText }}</Renderer>
+        </slot>
       </span>
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon
-          v-bind="icons.loading"
-          :effect="props.loadingEffect || icons.loading.effect"
-          :icon="props.loadingIcon || icons.loading.icon"
-          label="loading"
-        ></Icon>
+        <Renderer :renderer="props.slots.loading">
+          <Icon
+            v-bind="icons.loading"
+            :effect="props.loadingEffect || icons.loading.effect"
+            :icon="props.loadingIcon || icons.loading.icon"
+            label="loading"
+          ></Icon>
+        </Renderer>
       </slot>
       <slot v-else name="icon" :value="currentValue">
-        <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
-        <Icon v-else-if="!currentValue && props.closeIcon" :icon="props.closeIcon"></Icon>
+        <Renderer :renderer="props.slots.icon" :data="{ value: currentValue }">
+          <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
+          <Icon v-else-if="!currentValue && props.closeIcon" :icon="props.closeIcon"></Icon>
+        </Renderer>
       </slot>
     </span>
     <span :class="nh.be('label')">
       <span v-if="currentValue" :class="nh.be('open-text')">
-        <slot name="open">{{ props.openText }}</slot>
+        <slot name="open">
+          <Renderer :renderer="props.slots.open">{{ props.openText }}</Renderer>
+        </slot>
       </span>
       <span v-else :class="nh.be('close-text')">
-        <slot name="close">{{ props.closeText }}</slot>
+        <slot name="close">
+          <Renderer :renderer="props.slots.open">{{ props.closeText }}</Renderer>
+        </slot>
       </span>
     </span>
   </label>

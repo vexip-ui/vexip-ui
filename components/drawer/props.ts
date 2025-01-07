@@ -11,7 +11,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ButtonType } from '@/components/button'
-import type { DrawerPlacement } from './symbol'
+import type { DrawerPlacement, DrawerSlots } from './symbol'
 
 export const drawerProps = buildProps({
   locale: localeProp('drawer'),
@@ -38,6 +38,7 @@ export const drawerProps = buildProps({
   actionSize: sizeProp,
   undivided: booleanProp,
   disableEsc: booleanProp,
+  slots: Object as PropType<DrawerSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onShow: eventProp(),

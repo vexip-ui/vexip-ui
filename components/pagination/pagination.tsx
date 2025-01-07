@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
+import { Renderer } from '@/components/renderer'
 import { Select } from '@/components/select'
 
 import {
@@ -78,7 +79,8 @@ export default defineComponent({
       },
       noTitle: false,
       itemTag: 'li',
-      listTag: null
+      listTag: null,
+      slots: () => ({})
     })
 
     const { isRtl } = useRtl()
@@ -462,11 +464,11 @@ export default defineComponent({
           onKeydownEnter={handlePrev}
           onKeydownSpace={handlePrev}
         >
-          {slots.prev ? (
-            renderSlot(slots, 'prev', { disabled })
-          ) : (
-            <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-          )}
+          {renderSlot(slots, 'prev', { disabled }, () => [
+            <Renderer renderer={props.slots.prev} data={{ disabled }}>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+            </Renderer>
+          ])}
         </Tag>
       )
     }
@@ -492,11 +494,11 @@ export default defineComponent({
           onKeydownEnter={handleNext}
           onKeydownSpace={handleNext}
         >
-          {slots.next ? (
-            renderSlot(slots, 'next', { disabled })
-          ) : (
-            <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-          )}
+          {renderSlot(slots, 'next', { disabled }, () => [
+            <Renderer renderer={props.slots.next} data={{ disabled }}>
+              <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
+            </Renderer>
+          ])}
         </Tag>
       )
     }
@@ -611,7 +613,11 @@ export default defineComponent({
           onKeydownEnter={() => changeActive(page)}
           onKeydownSpace={() => changeActive(page)}
         >
-          {slots.item ? renderSlot(slots, 'item', { page, disabled, active }) : `${page}`}
+          {renderSlot(slots, 'item', { page, disabled, active }, () => [
+            <Renderer renderer={props.slots.item} data={{ page, disabled, active }}>
+              {page}
+            </Renderer>
+          ])}
         </Tag>
       )
     }

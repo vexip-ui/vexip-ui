@@ -28,6 +28,7 @@ export type {
   TableKeyConfig,
   TableIconName,
   TableIcons,
+  TableSlots,
   TableRowPropFn,
   TableRowDropType,
   TableColumnType,

@@ -24,7 +24,8 @@ import type {
   SelectFilter,
   SelectFilterPosition,
   SelectKeyConfig,
-  SelectRawOption
+  SelectRawOption,
+  SelectSlots
 } from './symbol'
 
 type CustomChangeEvent =
@@ -85,6 +86,7 @@ export const selectProps = buildProps({
   popperAlive: booleanProp,
   countLimit: Number,
   filterPosition: String as PropType<SelectFilterPosition>,
+  slots: Object as PropType<SelectSlots>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

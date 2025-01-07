@@ -33,4 +33,22 @@ export interface TabNavState {
 
 export type ChangeEvent = (label: string | number) => void
 
+export interface TabNavSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  add?: () => any,
+  marker?: () => any,
+  /**
+   * @internal
+   */
+  default?: () => any
+}
+
 export const TAB_NAV_STATE = '__VXP_TAB_NAV_STATE' as unknown as InjectionKey<TabNavState>
+
+export const trackStyleMap = Object.freeze({
+  top: ['left', 'width'],
+  right: ['top', 'height'],
+  bottom: ['left', 'width'],
+  left: ['top', 'height']
+} as const)

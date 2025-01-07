@@ -14,7 +14,7 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
-import type { CascaderKeyConfig, CascaderValue, Data } from './symbol'
+import type { CascaderKeyConfig, CascaderSlots, CascaderValue, Data } from './symbol'
 
 type ChangeEvent =
   | ((value: CascaderValue, data: Data[] | Data[][]) => void)
@@ -63,6 +63,7 @@ export const cascaderProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   popperAlive: booleanProp,
+  slots: Object as PropType<CascaderSlots>,
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(fullValue: string, data: Data) => void>(),
   onCancel: eventProp<(fullValue: string, data: Data) => void>(),

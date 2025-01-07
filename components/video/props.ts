@@ -11,7 +11,8 @@ import type {
   // VideoKernel,
   VideoPlaybackRate,
   VideoSegment,
-  VideoShortcutOptions
+  VideoShortcutOptions,
+  VideoSlots
 } from './symbol'
 
 export const videoProps = buildProps({
@@ -32,6 +33,7 @@ export const videoProps = buildProps({
   loadingIcon: Object,
   loadingEffect: String as PropType<IconEffect>,
   shortcuts: Object as PropType<VideoShortcutOptions>,
+  slots: Object as PropType<VideoSlots>,
   onPlay: eventProp(),
   onPause: eventProp(),
   onEnded: eventProp(),

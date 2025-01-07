@@ -88,6 +88,22 @@ export interface UploadExposed extends ComponentPublicInstance {
   blur: () => void
 }
 
+export interface UploadListSlots {
+  item?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
+  icon?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
+  suffix?: () => any
+}
+
+export interface UploadFileSlots {
+  default?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
+  icon?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any
+}
+
+export interface UploadSlots extends Omit<UploadListSlots, 'suffix'> {
+  default?: (params: { isDragOver: boolean }) => any,
+  tip?: () => any
+}
+
 export const uploadListTypes = Object.freeze<UploadListType[]>([
   'name',
   'detail',

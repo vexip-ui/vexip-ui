@@ -18,3 +18,9 @@ export interface CollapseState {
 }
 
 export const COLLAPSE_STATE = '__VXP_COLLAPSE_STATE' as unknown as InjectionKey<CollapseState>
+
+let idCount = 0
+
+export function getIndexId() {
+  return idCount++
+}

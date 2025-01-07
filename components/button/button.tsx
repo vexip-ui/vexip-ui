@@ -2,8 +2,9 @@ import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
+import { Renderer } from '@/components/renderer'
 
-import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref, renderSlot } from 'vue'
 
 import {
   createIconProp,
@@ -48,7 +49,8 @@ export default defineComponent({
       block: false,
       tag: 'button',
       noPulse: false,
-      badge: null
+      badge: null,
+      slots: () => ({})
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -60,7 +62,7 @@ export default defineComponent({
     const isLast = ref(false)
 
     const isIconOnly = computed(() => {
-      return !slots.default
+      return !slots.default && !props.slots.default
     })
     const type = computed(() => {
       return props.type ?? groupState?.type ?? 'default'
@@ -238,16 +240,16 @@ export default defineComponent({
     function renderLoadingIcon() {
       return (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-          {slots.loading ? (
-            slots.loading()
-          ) : (
-            <Icon
-              {...icons.value.loading}
-              effect={props.loadingEffect || icons.value.loading.effect}
-              icon={props.loadingIcon || icons.value.loading.icon}
-              label={'loading'}
-            ></Icon>
-          )}
+          {renderSlot(slots, 'loading', undefined, () => [
+            <Renderer renderer={props.slots.loading}>
+              <Icon
+                {...icons.value.loading}
+                effect={props.loadingEffect || icons.value.loading.effect}
+                icon={props.loadingIcon || icons.value.loading.icon}
+                label={'loading'}
+              ></Icon>
+            </Renderer>
+          ])}
         </div>
       )
     }
@@ -257,18 +259,26 @@ export default defineComponent({
         renderLoadingIcon()
       ) : (
         <div class={nh.be('icon')}>
-          {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
+          {renderSlot(slots, 'icon', undefined, () => [
+            <Renderer renderer={props.slots.icon}>
+              {props.icon ? <Icon icon={props.icon}></Icon> : null}
+            </Renderer>
+          ])}
         </div>
       )
     }
 
     function renderCollapseIcon() {
-      if (props.icon || slots.icon) {
+      if (props.icon || slots.icon || props.slots.icon) {
         return props.loading ? (
           renderLoadingIcon()
         ) : (
           <div class={nh.be('icon')}>
-            {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
+            {renderSlot(slots, 'icon', undefined, () => [
+              <Renderer renderer={props.slots.icon}>
+                <Icon icon={props.icon}></Icon>
+              </Renderer>
+            ])}
           </div>
         )
       }
@@ -311,7 +321,10 @@ export default defineComponent({
           onAnimationend={handleAnimationEnd}
         >
           {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
-          {!isIconOnly.value && slots.default ? slots.default() : null}
+          {!isIconOnly.value &&
+            renderSlot(slots, 'default', undefined, () => [
+              <Renderer renderer={props.slots.default}></Renderer>
+            ])}
           {!isIconOnly.value && (props.badge || props.badge === 0) ? renderBadge() : null}
         </Button>
       )

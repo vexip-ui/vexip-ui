@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
+import { Renderer } from '@/components/renderer'
 
 import { computed, inject, ref, watch } from 'vue'
 
@@ -32,7 +33,8 @@ const props = useProps('avatar', _props, {
   iconScale: 1.4,
   fallbackSrc: '',
   color: null,
-  background: null
+  background: null,
+  slots: () => ({})
 })
 
 defineSlots<{
@@ -156,12 +158,16 @@ function handleClick(event: MouseEvent) {
     />
     <template v-else-if="icon || $slots.icon">
       <slot name="icon">
-        <Icon :class="nh.be('icon')" :icon="icon" :scale="props.iconScale"></Icon>
+        <Renderer :renderer="props.slots.icon">
+          <Icon :class="nh.be('icon')" :icon="icon" :scale="props.iconScale"></Icon>
+        </Renderer>
       </slot>
     </template>
     <ResizeObserver v-else :on-resize="scaleText">
       <span ref="text" :class="nh.be('text')">
-        <slot></slot>
+        <slot>
+          <Renderer :renderer="props.slots.default"></Renderer>
+        </slot>
       </span>
     </ResizeObserver>
   </div>

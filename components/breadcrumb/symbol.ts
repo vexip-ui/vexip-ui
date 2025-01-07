@@ -23,4 +23,10 @@ export interface BreadcrumbState {
 
 export type SelectEvent = (label: string | number) => void
 
+export interface BreadcrumbSlots {
+  default?: () => any,
+  item?: (params: { option: BreadcrumbOptions, index: number }) => any,
+  separator?: (params: { label: string | number }) => any
+}
+
 export const BREADCRUMB_STATE = '__VXP_BREADCRUMB_STATE' as unknown as InjectionKey<BreadcrumbState>

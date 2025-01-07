@@ -102,3 +102,9 @@ export interface DatePickerSlots {
   panelWeek?: DatePanelSlots['week'],
   panelDate?: DatePanelSlots['date']
 }
+
+export interface TimePickerSlots {
+  prefix?: () => any,
+  exchange?: () => any,
+  suffix?: () => any
+}

@@ -1,4 +1,5 @@
 import type { InjectionKey } from 'vue'
+import type { TabNavSlots } from '@/components/tab-nav'
 
 export interface ItemState {
   label: string | number,
@@ -16,5 +17,7 @@ export interface TabsState {
   handleActive: (label: string | number) => void,
   refreshLabels: () => void
 }
+
+export interface TabsSlots extends TabNavSlots {}
 
 export const TABS_STATE = '__VXP_TABS_STATE' as unknown as InjectionKey<TabsState>
