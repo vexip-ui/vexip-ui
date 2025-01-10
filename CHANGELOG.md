@@ -1,3 +1,23 @@
+## [2.3.19](https://github.com/vexip-ui/vexip-ui/compare/v2.3.18...v2.3.19) (2025-01-10)
+
+
+### ✨ Features
+
+* add slots prop for components whick most likely to be used slots ([#521](https://github.com/vexip-ui/vexip-ui/issues/521)) ([2134c5e](https://github.com/vexip-ui/vexip-ui/commit/2134c5e23879b8569feadf623f01d7690f3170a7))
+* **tree:** auto remove arrow when no child after async load ([bd1d6b4](https://github.com/vexip-ui/vexip-ui/commit/bd1d6b453b2b445b701866193b67c85fa217ab26))
+
+
+### 🐞 Bug Fixes
+
+* correct disabled unit color of DatePicker & TimePicker ([dc88a93](https://github.com/vexip-ui/vexip-ui/commit/dc88a9331dad66540666a3a64192240bff839faa)), closes [#526](https://github.com/vexip-ui/vexip-ui/issues/526)
+* **layout:** unexpected set local storage item ([b832a9d](https://github.com/vexip-ui/vexip-ui/commit/b832a9d62ef89c8483fa6d2d439d22d541784e53)), closes [#524](https://github.com/vexip-ui/vexip-ui/issues/524)
+* **select:** correct default value of no-preview prop ([fab3b19](https://github.com/vexip-ui/vexip-ui/commit/fab3b19b3ac0dc8fd26857b87a3c985bd4d8e375))
+* **slider:** should emit input event when pointer down on track ([525c61b](https://github.com/vexip-ui/vexip-ui/commit/525c61b390b523a397f457237aac00edc12c8c1e)), closes [#522](https://github.com/vexip-ui/vexip-ui/issues/522)
+* **tour:** incorrect mapping item props name ([fc7e707](https://github.com/vexip-ui/vexip-ui/commit/fc7e707d81e969e561332eb09f50eccd61e3fe9d))
+* **tree:** async loading breaks expandable when no node are added ([503344d](https://github.com/vexip-ui/vexip-ui/commit/503344dad2876f98b84ffd1aae321a8e016c0a4e)), closes [#520](https://github.com/vexip-ui/vexip-ui/issues/520)
+
+
+
 ## [2.3.18](https://github.com/vexip-ui/vexip-ui/compare/v2.3.17...v2.3.18) (2024-11-19)
 
 
