@@ -102,7 +102,9 @@ You can change the position of the filter input via `filter-position` prop.
 
 In normal mode, values not included in the options will be ignored.
 
-Add the `remote` props to enable remote mode, in which values will be cached and filtered to only dispatch events.
+By adding the `remote` prop, you can enable remote mode. In this mode, values not included in the options will still be cached.
+
+In remote mode, only `filter-input` event will be dispatched when the user inputs, and the component will not perform any internal filtering.
 
 :::
 
