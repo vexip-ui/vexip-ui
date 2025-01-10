@@ -32,6 +32,7 @@ export interface CascaderPanelSlots {
   default?: (params: {
     option: CascaderOptionState,
     index: number,
+    selected: boolean,
     canCheck: boolean,
     hasChild: boolean
   }) => any,
