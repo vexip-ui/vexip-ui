@@ -2,7 +2,7 @@ import { booleanProp, buildProps, eventProp, localeProp, sizeProp } from '@vexip
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { PaginationPlugin } from './symbol'
+import type { PaginationPlugin, PaginationSlots } from './symbol'
 
 export const paginationProps = buildProps({
   size: sizeProp,
@@ -22,6 +22,7 @@ export const paginationProps = buildProps({
   noTitle: booleanProp,
   itemTag: String,
   listTag: String,
+  slots: Object as PropType<PaginationSlots>,
   onChange: eventProp<(page: number) => void>(),
   onPageSizeChange: eventProp<(size: number) => void>()
 })

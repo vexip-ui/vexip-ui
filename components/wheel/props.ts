@@ -2,7 +2,7 @@ import { booleanProp, booleanStringProp, buildProps, eventProp, stateProp } from
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { WheelRawOption } from './symbol'
+import type { WheelRawOption, WheelSlots } from './symbol'
 
 export const wheelProps = buildProps({
   state: stateProp,
@@ -22,6 +22,7 @@ export const wheelProps = buildProps({
   disabledItem: Function as PropType<(value: string | number, data: WheelRawOption) => boolean>,
   noTransition: booleanProp,
   selectable: booleanProp,
+  slots: Object as PropType<WheelSlots>,
   onChange: eventProp<(value: string | number, data: WheelRawOption) => void>(),
   onPrev: eventProp<(value: string | number, data: WheelRawOption) => void>(),
   onNext: eventProp<(value: string | number, data: WheelRawOption) => void>(),

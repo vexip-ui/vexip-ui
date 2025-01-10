@@ -228,11 +228,12 @@ async function toggleExpanded(able = !props.node.expanded) {
   }
 }
 
-function handleToggleSelect(able = !props.node.selected) {
+async function handleToggleSelect(able = !props.node.selected) {
   if (isDisabled.value || props.node.selectDisabled) return
 
   if (treeState.floorSelect) {
-    return toggleExpanded()
+    await toggleExpanded()
+    return
   }
 
   setValue('selected', !isReadonly.value && able)
@@ -253,10 +254,15 @@ function asyncLoadCallback(success = true) {
   setValue('loading', false)
   setValue('expanded', success !== false)
 
-  if (success) {
+  if (success !== false) {
     setValue('loaded', true)
     setValue('loadFail', false)
-    treeState.handleNodeExpand(props.node)
+
+    if (props.node.children?.length) {
+      treeState.handleNodeExpand(props.node)
+    } else {
+      setValue('arrow', false)
+    }
   } else {
     setValue('loadFail', true)
   }

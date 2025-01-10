@@ -13,7 +13,7 @@ import type { LayoutMediaJudger, LayoutState } from './symbol'
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
 
-export function computeSeriesColors(value: Color, storageName = '') {
+export function computeSeriesColors(value: Color) {
   if (!rootEl || !rootStyle) return
 
   const colors: Record<string, string[]> = {
@@ -48,7 +48,6 @@ export function computeSeriesColors(value: Color, storageName = '') {
   }
 
   style.setProperty('--vxp-color-primary-base', `${value}`)
-  storageName && localStorage.setItem(storageName, `${value}`)
 
   return colors
 }

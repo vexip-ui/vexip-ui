@@ -21,12 +21,7 @@ import TableSummary from './table-summary'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import TableFoot from './table-foot.vue'
-import {
-  emitEvent,
-  useLocale,
-  useNameHelper,
-  useProps
-} from '@vexip-ui/config'
+import { emitEvent, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   debounce,
   debounceMinor,
@@ -44,11 +39,9 @@ import { tableProps } from './props'
 import { useStore } from './store'
 import { DropType, TABLE_ACTIONS, TABLE_SLOTS, TABLE_STORE } from './symbol'
 
+import type { Slots } from 'vue'
 import type { StyleType } from '@vexip-ui/config'
-import type {
-  NativeScrollExposed,
-  NativeScrollPayload
-} from '@/components/native-scroll'
+import type { NativeScrollExposed, NativeScrollPayload } from '@/components/native-scroll'
 import type { ScrollbarExposed } from '@/components/scrollbar'
 import type {
   Key,
@@ -65,6 +58,7 @@ import type {
   TableRowInstance,
   TableRowPayload,
   TableRowState,
+  TableSlots,
   TableSummaryOptions
 } from './symbol'
 
@@ -109,16 +103,16 @@ const props = useProps('table', _props, {
   rowDraggable: false,
   rowHeight: {
     default: null,
-    validator: (value) => value > 0
+    validator: value => value > 0
   },
   rowMinHeight: {
     default: 36,
-    validator: (value) => value > 0
+    validator: value => value > 0
   },
   virtual: false,
   bufferCount: {
     default: 5,
-    validator: (value) => value >= 0
+    validator: value => value >= 0
   },
   scrollClass: () => ({}),
   expandRenderer: {
@@ -127,14 +121,14 @@ const props = useProps('table', _props, {
   },
   currentPage: {
     default: 1,
-    validator: (value) => value > 0,
+    validator: value => value > 0,
     static: true
   },
   pageSize: 0,
   transparent: false,
   tooltipTheme: {
     default: 'dark',
-    validator: (value) => ['light', 'dark'].includes(value)
+    validator: value => ['light', 'dark'].includes(value)
   },
   tooltipWidth: 500,
   singleSorter: false,
@@ -167,16 +161,14 @@ const props = useProps('table', _props, {
     isFunc: true
   },
   noTransition: false,
-  ellipsis: false
+  ellipsis: false,
+  slots: () => ({})
 })
 
 // only for dnd end payload
 const emit = defineEmits(['update:data'])
 
-const slots = defineSlots<{
-  default: () => any,
-  empty: (params: { isFixed: boolean }) => any
-}>()
+const slots = defineSlots<TableSlots>()
 
 const nh = useNameHelper('table')
 const { timer } = useSetTimeout()
@@ -191,9 +183,7 @@ const headHeight = ref(0)
 const footHeight = ref(0)
 const indicatorShow = ref(false)
 const indicatorType = ref(DropType.BEFORE)
-const tempColumns = reactive(
-  new Set<TableColumnGroupOptions | TableColumnOptions>()
-)
+const tempColumns = reactive(new Set<TableColumnGroupOptions | TableColumnOptions>())
 const tempSummaries = reactive(new Set<TableSummaryOptions>())
 const tableWidth = ref<number | string>()
 const hasDragColumn = ref(false)
@@ -297,8 +287,8 @@ provide(TABLE_ACTIONS, {
   emitHeadEvent,
   emitColResize,
   emitFootEvent,
-  hasIcon: (name) => !!props.icons[name],
-  getIcon: (name) => props.icons[name],
+  hasIcon: name => !!props.icons[name],
+  getIcon: name => props.icons[name],
   renderTableSlot,
   runInLocked,
   updateColumns: () => debounceMinor(updateColumns),
@@ -306,13 +296,11 @@ provide(TABLE_ACTIONS, {
   updateSummaries: () => debounceMinor(updateSummaries),
   setSummaryProp
 })
-provide(TABLE_SLOTS, slots)
+provide(TABLE_SLOTS, slots as Slots)
 
 const { state, getters, mutations } = store
 
-const mergedLocked = computed(
-  () => props.noTransition || state.locked || state.barScrolling
-)
+const mergedLocked = computed(() => props.noTransition || state.locked || state.barScrolling)
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -338,9 +326,7 @@ const style = computed(() => {
 
   const style: StyleType = {
     [nh.cv('row-indent-width')]:
-      typeof props.rowIndent === 'number'
-        ? `${props.rowIndent}px`
-        : props.rowIndent,
+      typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
     [nh.cv('b-width')]: `${props.borderWidth}px`,
     [nh.cv('expanded-width')]: `${bodyWidth.value}px`
   }
@@ -381,27 +367,18 @@ const yBarLength = computed(() => {
   const { totalHeight } = state
 
   if (bodyScrollHeight.value && totalHeight) {
-    return (
-      Math.max(Math.min((bodyScrollHeight.value / totalHeight) * 100, 99), 5) ||
-      35
-    )
+    return Math.max(Math.min((bodyScrollHeight.value / totalHeight) * 100, 99), 5) || 35
   }
 
   return 35
 })
 const totalWidths = computed(() => {
   return (
-    (getLast(getters.totalWidths) || 0) +
-    (state.sidePadding[0] || 0) +
-    (state.sidePadding[1] || 0)
+    (getLast(getters.totalWidths) || 0) + (state.sidePadding[0] || 0) + (state.sidePadding[1] || 0)
   )
 })
-const leftFixedActive = computed(
-  () => xScrollEnabled.value && xScrollPercent.value > 0
-)
-const rightFixedActive = computed(
-  () => xScrollEnabled.value && xScrollPercent.value < 100
-)
+const leftFixedActive = computed(() => xScrollEnabled.value && xScrollPercent.value > 0)
+const rightFixedActive = computed(() => xScrollEnabled.value && xScrollPercent.value < 100)
 
 const {
   setColumns,
@@ -443,7 +420,7 @@ watch([() => props.height, () => props.borderWidth], () => {
 watch(locale, setLocale, { deep: true })
 watch(
   () => props.virtual,
-  (value) => {
+  value => {
     setVirtual(value)
     setData(props.data)
     refreshPercentScroll()
@@ -451,7 +428,7 @@ watch(
 )
 watch(
   keyConfig,
-  (config) => {
+  config => {
     setKeyConfig(config)
     setData(props.data)
   },
@@ -459,7 +436,7 @@ watch(
 )
 watch(
   () => props.disabledTree,
-  (value) => {
+  value => {
     setDisabledTree(value)
     setData(props.data)
   }
@@ -565,8 +542,7 @@ function computeTableWidth() {
   }
 
   nextTick(() => {
-    mainScroll.value?.content &&
-      setTableWidth(mainScroll.value.content.offsetWidth)
+    mainScroll.value?.content && setTableWidth(mainScroll.value.content.offsetWidth)
     refreshXScroll()
   })
 }
@@ -622,13 +598,7 @@ function handleMainScroll(payload: NativeScrollPayload) {
   }
 }
 
-function handleXScroll({
-  clientX,
-  percentX
-}: {
-  clientX: number,
-  percentX: number
-}) {
+function handleXScroll({ clientX, percentX }: { clientX: number, percentX: number }) {
   if (state.barScrolling) return
 
   xScrollPercent.value = percentX
@@ -641,13 +611,7 @@ function handleXScroll({
   })
 }
 
-function handleYScroll({
-  clientY,
-  percentY
-}: {
-  clientY: number,
-  percentY: number
-}) {
+function handleYScroll({ clientY, percentY }: { clientY: number, percentY: number }) {
   if (state.barScrolling) return
 
   yScrollPercent.value = percentY
@@ -668,8 +632,7 @@ function handleXBarScroll(percent: number) {
 
 function handleYBarScroll(percent: number) {
   const { totalHeight } = state
-  const client =
-    (percent * (totalHeight - (bodyScrollHeight.value ?? 0))) / 100
+  const client = (percent * (totalHeight - (bodyScrollHeight.value ?? 0))) / 100
 
   yScrollPercent.value = percent
   setBodyYScroll(client)
@@ -761,8 +724,8 @@ function emitRowFilter() {
   const { columns, filters } = state
   const columnMap = listToMap(columns, 'key')
   const profiles = Array.from(filters.keys())
-    .filter((key) => filters.get(key)!.active)
-    .map((key) => {
+    .filter(key => filters.get(key)!.active)
+    .map(key => {
       const column = columnMap[key as string]
 
       return {
@@ -777,7 +740,7 @@ function emitRowFilter() {
   emitEvent(
     props.onRowFilter,
     profiles,
-    getters.filteredData.map((row) => row.data)
+    getters.filteredData.map(row => row.data)
   )
 }
 
@@ -785,8 +748,8 @@ function emitRowSort() {
   const { columns, sorters } = state
   const columnMap = listToMap(columns, 'key')
   const profiles = Array.from(sorters.keys())
-    .filter((key) => sorters.get(key)!.type)
-    .map((key) => {
+    .filter(key => sorters.get(key)!.type)
+    .map(key => {
       const column = columnMap[key as string]
       const sorter = sorters.get(key)!
 
@@ -803,7 +766,7 @@ function emitRowSort() {
   emitEvent(
     props.onRowSort,
     profiles,
-    getters.sortedData.map((row) => row.data)
+    getters.sortedData.map(row => row.data)
   )
 }
 
@@ -900,7 +863,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
     }
 
     currentKey = draggingRow.key
-    removeArrayItem(parent.children, (item) => item.key === currentKey)
+    removeArrayItem(parent.children, item => item.key === currentKey)
 
     if (!parent.children?.length) {
       parent.treeExpanded = false
@@ -929,14 +892,10 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
       } as TableRowState
     }
 
-    const index = parent.children.findIndex((row) => row.key === currentKey)
+    const index = parent.children.findIndex(row => row.key === currentKey)
 
     if (~index) {
-      parent.children.splice(
-        +(dropType === DropType.AFTER) + index,
-        0,
-        draggingRow
-      )
+      parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingRow)
 
       draggingRow.parent = parent.key
     }
@@ -1040,7 +999,7 @@ async function runInLocked(handler = noop, delay = 250) {
   setLocked(true)
   await handler()
 
-  return new Promise<void>((resolve) => {
+  return new Promise<void>(resolve => {
     timer.locked = setTimeout(() => {
       setLocked(false)
       resolve()
@@ -1055,11 +1014,7 @@ function refreshPercentScroll() {
     const { totalHeight, bodyYScroll } = state
 
     yScrollPercent.value = Math.max(
-      Math.min(
-        (bodyYScroll / (totalHeight - (bodyScrollHeight.value ?? 0) || 1)) *
-          100,
-        100
-      ),
+      Math.min((bodyYScroll / (totalHeight - (bodyScrollHeight.value ?? 0) || 1)) * 100, 100),
       0
     )
     syncBarScroll()
@@ -1094,10 +1049,7 @@ function setRowChecked(keyOrData: Key | Record<any, any>, checked?: boolean) {
   handleCheck(row.key, checked ?? !row.checked)
 }
 
-function setRowTreeExpanded(
-  keyOrData: Key | Record<any, any>,
-  expanded?: boolean
-) {
+function setRowTreeExpanded(keyOrData: Key | Record<any, any>, expanded?: boolean) {
   const row = queryRow(keyOrData)
 
   if (!row) return
@@ -1107,7 +1059,7 @@ function setRowTreeExpanded(
 }
 
 function renderTableSlot({ name }: { name: string }) {
-  return renderSlot(slots, name)
+  return renderSlot(slots as Slots, name)
 }
 </script>
 
@@ -1125,10 +1077,7 @@ function renderTableSlot({ name }: { name: string }) {
         v-for="(column, index) in props.columns"
         :key="(column as TableColumnOptions).key ?? `__inner-column-${index}`"
       >
-        <TableColumnGroup
-          v-if="'children' in column"
-          v-bind="column"
-        ></TableColumnGroup>
+        <TableColumnGroup v-if="'children' in column" v-bind="column"></TableColumnGroup>
         <TableColumn v-else v-bind="column" :id-key="column.key"></TableColumn>
       </template>
       <TableSummary
@@ -1152,7 +1101,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive,
+            [nh.bem('fixed', 'active')]: leftFixedActive
           }"
         >
           <TableHead fixed="left"></TableHead>
@@ -1162,7 +1111,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive,
+            [nh.bem('fixed', 'active')]: rightFixedActive
           }"
         >
           <TableHead fixed="right"></TableHead>
@@ -1187,7 +1136,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive,
+            [nh.bem('fixed', 'active')]: leftFixedActive
           }"
         >
           <TableFoot fixed="left" above></TableFoot>
@@ -1197,7 +1146,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive,
+            [nh.bem('fixed', 'active')]: rightFixedActive
           }"
         >
           <TableFoot fixed="right" above></TableFoot>
@@ -1207,8 +1156,7 @@ function renderTableSlot({ name }: { name: string }) {
     <div
       :class="[
         nh.be('body-wrapper'),
-        state.totalHeight >= bodyMinHeight &&
-          nh.bem('body-wrapper', 'scrolled'),
+        state.totalHeight >= bodyMinHeight && nh.bem('body-wrapper', 'scrolled')
       ]"
       :style="{
         ...(!bodyScrollHeight && state.totalHeight
@@ -1217,10 +1165,10 @@ function renderTableSlot({ name }: { name: string }) {
             transition:
               props.noTransition || state.locked
                 ? undefined
-                : `height ${nh.gnv('transition-base')}`,
+                : `height ${nh.gnv('transition-base')}`
           }
           : undefined),
-        minHeight: `${bodyMinHeight}px`,
+        minHeight: `${bodyMinHeight}px`
       }"
     >
       <NativeScroll
@@ -1243,32 +1191,38 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive,
+            [nh.bem('fixed', 'active')]: leftFixedActive
           }"
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="left">
-            <template #empty="{ isFixed }">
-              <slot name="empty" :is-fixed="isFixed"></slot>
+            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
+              <slot name="empty" :is-fixed="isFixed">
+                <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+              </slot>
             </template>
           </TableBody>
         </div>
         <TableBody>
-          <template #empty="{ isFixed }">
-            <slot name="empty" :is-fixed="isFixed"></slot>
+          <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
+            <slot name="empty" :is-fixed="isFixed">
+              <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+            </slot>
           </template>
         </TableBody>
         <div
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive,
+            [nh.bem('fixed', 'active')]: rightFixedActive
           }"
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="right">
-            <template #empty="{ isFixed }">
-              <slot name="empty" :is-fixed="isFixed"></slot>
+            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
+              <slot name="empty" :is-fixed="isFixed">
+                <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+              </slot>
             </template>
           </TableBody>
         </div>
@@ -1294,7 +1248,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive,
+            [nh.bem('fixed', 'active')]: leftFixedActive
           }"
         >
           <TableFoot fixed="left"></TableFoot>
@@ -1304,7 +1258,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive,
+            [nh.bem('fixed', 'active')]: rightFixedActive
           }"
         >
           <TableFoot fixed="right"></TableFoot>
@@ -1346,7 +1300,7 @@ function renderTableSlot({ name }: { name: string }) {
       :class="[
         nh.be('indicator'),
         indicatorType === 'before' && nh.bem('indicator', 'before'),
-        indicatorType === 'after' && nh.bem('indicator', 'after'),
+        indicatorType === 'after' && nh.bem('indicator', 'after')
       ]"
     ></div>
     <div

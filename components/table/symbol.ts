@@ -39,6 +39,14 @@ export interface TableKeyConfig {
   treeExpanded?: string
 }
 
+export interface TableSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  empty?: (params: { isFixed: boolean }) => any
+}
+
 export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number

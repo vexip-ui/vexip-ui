@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AnchorLink } from '@/components/anchor-link'
+import { Renderer } from '@/components/renderer'
 
 import {
   getCurrentInstance,
@@ -23,7 +24,7 @@ import { ANCHOR_STATE } from './symbol'
 import type { ComponentInternalInstance } from 'vue'
 import type { NativeScrollExposed } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { AnchorLinkState, AnchorState } from './symbol'
+import type { AnchorLinkState, AnchorSlots, AnchorState } from './symbol'
 
 type ScrollType = NativeScrollExposed & InstanceType<typeof Scroll>
 
@@ -50,10 +51,13 @@ const props = useProps('anchor', _props, {
     static: true
   },
   bindHash: false,
-  forceActive: false
+  forceActive: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active'])
+
+defineSlots<AnchorSlots>()
 
 const currentActive = ref(props.active)
 const animating = ref(false)
@@ -366,15 +370,17 @@ function computeMarkerPosition() {
   >
     <ul :class="nh.be('list')">
       <slot>
-        <AnchorLink
-          v-for="link in props.options"
-          :key="link.to"
-          :to="link.to"
-          :title="link.title"
-          :children="link.children"
-        >
-          {{ link.label }}
-        </AnchorLink>
+        <Renderer :renderer="props.slots.default">
+          <AnchorLink
+            v-for="link in props.options"
+            :key="link.to"
+            :to="link.to"
+            :title="link.title"
+            :children="link.children"
+          >
+            {{ link.label }}
+          </AnchorLink>
+        </Renderer>
       </slot>
     </ul>
     <Transition appear :name="props.markerTransition">
@@ -384,7 +390,9 @@ function computeMarkerPosition() {
         :style="{ top: `${markerTop}px` }"
       >
         <slot name="marker">
-          <div :class="nh.be('pointer')"></div>
+          <Renderer :renderer="props.slots.marker">
+            <div :class="nh.be('pointer')"></div>
+          </Renderer>
         </slot>
       </div>
     </Transition>

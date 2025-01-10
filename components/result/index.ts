@@ -8,4 +8,4 @@ export { resultProps } from './props'
 export type ResultExposed = ComponentPublicInstance & InstanceType<typeof Result>
 
 export type { ResultProps, ResultCProps } from './props'
-export type { ResultType } from './symbol'
+export type { ResultType, ResultSlots } from './symbol'

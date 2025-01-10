@@ -3,6 +3,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
 
 import { computed, nextTick, reactive, ref, toRef, watch } from 'vue'
 
@@ -33,7 +34,7 @@ import { useColumn, useTimeBound } from './helper'
 import { TIME_REG } from './symbol'
 
 import type { PopperExposed } from '@/components/popper'
-import type { TimePickerChangeEvent, TimeType } from './symbol'
+import type { TimePickerChangeEvent, TimePickerSlots, TimeType } from './symbol'
 
 defineOptions({ name: 'TimePicker' })
 
@@ -107,16 +108,13 @@ const props = useProps('timePicker', _props, {
   placeholder: null,
   unitReadonly: false,
   popperAlive: null,
-  shortcutsPlacement: 'left'
+  shortcutsPlacement: 'left',
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value', 'update:visible'])
 
-const slots = defineSlots<{
-  prefix: () => any,
-  exchange: () => any,
-  suffix: () => any
-}>()
+const slots = defineSlots<TimePickerSlots>()
 
 const locale = useLocale('timePicker', toRef(props, 'locale'))
 const icons = useIcons()
@@ -201,9 +199,7 @@ const selectorClass = computed(() => {
     [`${baseCls}--${props.state}`]: props.state !== 'default'
   }
 })
-const hasPrefix = computed(() => {
-  return !!(slots.prefix || props.prefix)
-})
+const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const currentValue = computed(() => {
   const values = [startState, endState].map(state => {
     return Object.values(state.timeValue).map(doubleDigits).join(':')
@@ -716,7 +712,9 @@ function handleClickOutside() {
         :style="{ color: props.prefixColor }"
       >
         <slot name="prefix">
-          <Icon :icon="props.prefix"></Icon>
+          <Renderer :renderer="props.slots.prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div :class="nh.be('control')">
@@ -754,7 +752,9 @@ function handleClickOutside() {
             @click="handleExchangeClick"
           >
             <slot name="exchange">
-              <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
+              <Renderer :renderer="props.slots.exchange">
+                <Icon v-bind="icons.exchange" style="padding-top: 1px"></Icon>
+              </Renderer>
             </slot>
           </div>
           <TimeControl
@@ -796,7 +796,9 @@ function handleClickOutside() {
         }"
       >
         <slot name="suffix">
-          <Icon v-bind="icons.clock" :icon="props.suffix || icons.clock.icon"></Icon>
+          <Renderer :renderer="props.slots.suffix">
+            <Icon v-bind="icons.clock" :icon="props.suffix || icons.clock.icon"></Icon>
+          </Renderer>
         </slot>
       </div>
       <div

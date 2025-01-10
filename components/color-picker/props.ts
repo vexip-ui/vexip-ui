@@ -14,7 +14,7 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Color, HSLAColor, HSVAColor, RGBAColor } from '@vexip-ui/utils'
-import type { ColorFormat } from './symbol'
+import type { ColorFormat, ColorPrickerSlots } from './symbol'
 
 type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 
@@ -52,6 +52,7 @@ export const colorPickerProps = buildProps({
   popperAlive: booleanProp,
   showLabel: booleanProp,
   labelFormat: String as PropType<ColorFormat>,
+  slots: Object as PropType<ColorPrickerSlots>,
   onToggle: eventProp<(visible: boolean) => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),

@@ -12,6 +12,7 @@ $date-picker: map.merge(
     unit-color: value('content-color-base'),
     unit-color-hover: value('color-primary-base'),
     unit-color-focus: value('color-white'),
+    unit-color-disabled: value('input-control-color-disabled'),
     unit-bg-color-focus: value('color-primary-opacity-1'),
     unit-bg-color-error: value('color-error-opacity-1'),
     unit-h-padding: 1px,
@@ -108,6 +109,10 @@ $date-picker: map.merge(
       color: value('date-picker-unit-color-focus');
       background-color: value('date-picker-unit-bg-color-focus');
     }
+  }
+
+  &--disabled &__unit {
+    color: value('date-picker-unit-color-disabled');
   }
 
   &__input--error &__unit {

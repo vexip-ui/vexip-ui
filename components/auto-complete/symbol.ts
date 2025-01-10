@@ -24,3 +24,20 @@ export interface AutoCompleteListSlotParams {
   isSelected: (option: AutoCompleteOptionState) => boolean,
   handleSelect: (option?: AutoCompleteOptionState | null) => void
 }
+
+export interface AutoCompleteSlots {
+  prefix?: () => any,
+  control?: (params: {
+    value: string | number,
+    onInput: (event: string | Event) => void,
+    onChange: (valid?: boolean) => void,
+    onEnter: (event: KeyboardEvent) => void,
+    onClear: () => void
+  }) => any,
+  suffix?: () => any,
+  default?: (params: { option: AutoCompleteOptionState, index: number, selected: boolean }) => any,
+  group?: (params: { option: AutoCompleteOptionState, index: number }) => any,
+  prepend?: () => any,
+  append?: () => any,
+  list?: (params: AutoCompleteListSlotParams) => any
+}

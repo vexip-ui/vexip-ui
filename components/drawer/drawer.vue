@@ -2,6 +2,7 @@
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
+import { Renderer } from '@/components/renderer'
 
 import { computed, nextTick, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
@@ -18,7 +19,7 @@ import { getGlobalCount, isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
 import { drawerPlacements } from './symbol'
 
-import type { DrawerCommonSLot } from './symbol'
+import type { DrawerSlots } from './symbol'
 
 defineOptions({ name: 'Drawer' })
 
@@ -62,19 +63,13 @@ const props = useProps('drawer', _props, {
   cancelType: 'default',
   actionSize: createSizeProp('small'),
   undivided: false,
-  disableEsc: false
+  disableEsc: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active'])
 
-const slots = defineSlots<{
-  header: DrawerCommonSLot,
-  title: DrawerCommonSLot,
-  close: DrawerCommonSLot,
-  default: DrawerCommonSLot,
-  footer: DrawerCommonSLot,
-  handler: DrawerCommonSLot
-}>()
+const slots = defineSlots<DrawerSlots>()
 
 const nh = useNameHelper('drawer')
 const icons = useIcons()
@@ -192,7 +187,7 @@ const wrapperStyle = computed(() => {
   }
 })
 const hasTitle = computed(() => {
-  return !!(slots.header || slots.title || props.title)
+  return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
 const titleId = computed(() => `${nh.bs(idIndex)}__title`)
 const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
@@ -320,52 +315,62 @@ function handleCancel() {
       >
         <div v-if="hasTitle" :class="nh.be('header')">
           <slot name="header" v-bind="slotParams">
-            <div :id="titleId" :class="nh.be('title')">
-              <slot name="title" v-bind="slotParams">
-                {{ props.title }}
-              </slot>
-            </div>
-            <button
-              v-if="props.closable"
-              type="button"
-              :class="nh.be('close')"
-              @click="handleClose()"
-            >
-              <slot name="close" v-bind="slotParams">
-                <Icon
-                  v-bind="icons.close"
-                  :scale="+(icons.close.scale || 1) * 1.2"
-                  label="close"
-                ></Icon>
-              </slot>
-            </button>
+            <Renderer :renderer="props.slots.header" :data="slotParams">
+              <div :id="titleId" :class="nh.be('title')">
+                <slot name="title" v-bind="slotParams">
+                  <Renderer :renderer="props.slots.title" :data="slotParams">
+                    {{ props.title }}
+                  </Renderer>
+                </slot>
+              </div>
+              <button
+                v-if="props.closable"
+                type="button"
+                :class="nh.be('close')"
+                @click="handleClose()"
+              >
+                <slot name="close" v-bind="slotParams">
+                  <Renderer :renderer="props.slots.close" :data="slotParams">
+                    <Icon
+                      v-bind="icons.close"
+                      :scale="+(icons.close.scale || 1) * 1.2"
+                      label="close"
+                    ></Icon>
+                  </Renderer>
+                </slot>
+              </button>
+            </Renderer>
           </slot>
         </div>
         <div :id="bodyId" :class="nh.be('content')">
-          <slot v-bind="slotParams"></slot>
+          <slot v-bind="slotParams">
+            <Renderer :renderer="props.slots.default" :data="slotParams"></Renderer>
+          </slot>
         </div>
-        <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
+        <div v-if="props.footer || slots.footer || props.slots.footer" :class="nh.be('footer')">
           <slot name="footer" v-bind="slotParams">
-            <Button
-              :class="[nh.be('button'), nh.bem('button', 'cancel')]"
-              inherit
-              text
-              :type="props.cancelType"
-              :size="props.actionSize"
-              @click="handleCancel"
-            >
-              {{ props.cancelText || locale.cancel }}
-            </Button>
-            <Button
-              :class="[nh.be('button'), nh.bem('button', 'confirm')]"
-              inherit
-              :type="props.confirmType"
-              :size="props.actionSize"
-              :loading="props.loading"
-              @click="handleConfirm"
-            >
-              {{ props.confirmText || locale.confirm }}
-            </Button>
+            <Renderer :renderer="props.slots.footer" :data="slotParams">
+              <Button
+                :class="[nh.be('button'), nh.bem('button', 'cancel')]"
+                inherit
+                text
+                :type="props.cancelType"
+                :size="props.actionSize"
+                @click="handleCancel"
+              >
+                {{ props.cancelText || locale.cancel }}
+              </Button>
+              <Button
+                :class="[nh.be('button'), nh.bem('button', 'confirm')]"
+                inherit
+                :type="props.confirmType"
+                :size="props.actionSize"
+                :loading="props.loading"
+                @click="handleConfirm"
+              >
+                {{ props.confirmText || locale.confirm }}
+              </Button>
+            </Renderer>
           </slot>
         </div>
         <div
@@ -379,7 +384,9 @@ function handleCancel() {
             }
           ]"
         >
-          <slot name="handler" v-bind="slotParams"></slot>
+          <slot name="handler" v-bind="slotParams">
+            <Renderer :renderer="props.slots.handler" :data="slotParams"></Renderer>
+          </slot>
         </div>
       </section>
     </template>

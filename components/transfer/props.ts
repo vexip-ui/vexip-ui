@@ -10,7 +10,7 @@ import {
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TransferFilter, TransferKeyConfig } from './symbol'
+import type { TransferFilter, TransferKeyConfig, TransferSlots } from './symbol'
 
 export type RawOption = string | Record<string, any>
 export type Values = (string | number)[]
@@ -43,6 +43,7 @@ export const transferProps = buildProps({
   loadingIcon: iconProp,
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
+  slots: Object as PropType<TransferSlots>,
   onChange: eventProp<(values: Values) => void>(),
   onSelect: eventProp<SelectHandler>()
 })

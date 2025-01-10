@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
+import { Renderer } from '@/components/renderer'
 import { Viewer } from '@/components/viewer'
 
 import { computed, ref, watch } from 'vue'
@@ -8,6 +9,8 @@ import { computed, ref, watch } from 'vue'
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { boundRange, ensureArray, isDefined } from '@vexip-ui/utils'
 import { imageViewerProps } from './props'
+
+import type { ImageViewerSlots } from './symbol'
 
 defineOptions({ name: 'ImageViewer' })
 
@@ -20,10 +23,13 @@ const props = useProps('imageViewer', _props, {
     static: true
   },
   transfer: false,
-  viewerProps: () => ({})
+  viewerProps: () => ({}),
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
+
+defineSlots<ImageViewerSlots>()
 
 const nh = useNameHelper('image-viewer')
 const icons = useIcons()
@@ -135,7 +141,9 @@ function handleHide() {
     <div v-show="show" :class="nh.be('wrapper')">
       <Viewer v-bind="props.viewerProps" ref="viewer">
         <slot :src="srcArray[currentIndex]">
-          <img :src="srcArray[currentIndex]" />
+          <Renderer :renderer="props.slots.default" :data="{ src: srcArray[currentIndex] }">
+            <img :src="srcArray[currentIndex]" />
+          </Renderer>
         </slot>
       </Viewer>
       <template v-if="srcArray.length > 1">
@@ -145,13 +153,15 @@ function handleHide() {
           @click.stop="handlePrev"
         >
           <slot name="prev" :disabled="prevDisabled">
-            <div :class="nh.be('prev-handler')">
-              <Icon
-                v-bind="icons.angleLeft"
-                :scale="+(icons.angleLeft.scale || 1) * 1.4"
-                label="prev"
-              ></Icon>
-            </div>
+            <Renderer :renderer="props.slots.prev" :data="{ disabled: prevDisabled }">
+              <div :class="nh.be('prev-handler')">
+                <Icon
+                  v-bind="icons.angleLeft"
+                  :scale="+(icons.angleLeft.scale || 1) * 1.4"
+                  label="prev"
+                ></Icon>
+              </div>
+            </Renderer>
           </slot>
         </button>
         <button
@@ -159,26 +169,30 @@ function handleHide() {
           :class="[nh.be('next'), nextDisabled && nh.bem('next', 'disabled')]"
           @click.stop="handleNext"
         >
-          <slot name="next" :disabled="prevDisabled">
-            <div :class="nh.be('next-handler')">
-              <Icon
-                v-bind="icons.angleRight"
-                :scale="+(icons.angleRight.scale || 1) * 1.4"
-                label="next"
-              ></Icon>
-            </div>
+          <slot name="next" :disabled="nextDisabled">
+            <Renderer :renderer="props.slots.next" :data="{ disabled: nextDisabled }">
+              <div :class="nh.be('next-handler')">
+                <Icon
+                  v-bind="icons.angleRight"
+                  :scale="+(icons.angleRight.scale || 1) * 1.4"
+                  label="next"
+                ></Icon>
+              </div>
+            </Renderer>
           </slot>
         </button>
       </template>
       <button type="button" :class="nh.be('close')" @click.stop="handleClose">
         <slot name="close">
-          <div :class="nh.be('close-handler')">
-            <Icon
-              v-bind="icons.close"
-              :scale="+(icons.close.scale || 1) * 1.4"
-              label="close"
-            ></Icon>
-          </div>
+          <Renderer :renderer="props.slots.close">
+            <div :class="nh.be('close-handler')">
+              <Icon
+                v-bind="icons.close"
+                :scale="+(icons.close.scale || 1) * 1.4"
+                label="close"
+              ></Icon>
+            </div>
+          </Renderer>
         </slot>
       </button>
     </div>

@@ -9,10 +9,13 @@ $time-picker: map.merge(
   (
     color-disabled: value('input-control-color-disabled'),
     color-error: value('color-error-base'),
-    unit-color: value('content-color-secondary'),
+    unit-color: value('content-color-base'),
+    unit-color-hover: value('color-primary-base'),
     unit-color-focus: value('color-white'),
+    unit-color-disabled: value('input-control-color-disabled'),
     unit-bg-color-focus: value('color-primary-opacity-1'),
     unit-bg-color-error: value('color-error-opacity-1'),
+    unit-h-padding: 2px,
     separator-color: value('content-color-disabled'),
     exchange-color: value('content-color-third'),
     exchange-color-hover: value('color-primary-base'),
@@ -79,15 +82,24 @@ $time-picker: map.merge(
   }
 
   &__unit {
-    padding: 0 2px;
+    padding: 0 value('time-picker-unit-h-padding');
     color: value('time-picker-unit-color');
     text-align: center;
     transition: value('transition-background'), value('transition-color');
 
-    &--focused {
+    &:hover {
+      color: value('time-picker-unit-color-hover');
+    }
+
+    &--focused,
+    &--focused:hover {
       color: value('time-picker-unit-color-focus');
       background-color: value('time-picker-unit-bg-color-focus');
     }
+  }
+
+  &--disabled &__unit {
+    color: value('time-picker-unit-color-disabled');
   }
 
   &__input--error &__unit {

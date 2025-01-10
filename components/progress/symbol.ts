@@ -11,6 +11,10 @@ export type ProgressStrokeColor =
   | [string, string]
   | ((percentage: number) => string | [string, string])
 
+export interface ProgressSlots {
+  default?: () => any
+}
+
 export const infoTypes = Object.freeze<ProgressInfoType[]>([
   'outside',
   'inside',

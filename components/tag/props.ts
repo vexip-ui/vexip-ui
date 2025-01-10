@@ -2,7 +2,7 @@ import { booleanProp, buildProps, eventProp, sizeProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TagType } from './symbol'
+import type { TagSlots, TagType } from './symbol'
 
 export const tagProps = buildProps({
   size: sizeProp,
@@ -19,6 +19,7 @@ export const tagProps = buildProps({
   suffixBg: String,
   suffixColor: String,
   disabled: booleanProp,
+  slots: Object as PropType<TagSlots>,
   onClose: eventProp()
 })
 

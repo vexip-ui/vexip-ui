@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
 
-import { computed, ref, watch } from 'vue'
+import { computed, reactive, ref, shallowReadonly, toRef, watch } from 'vue'
 
 import SliderTrigger from './slider-trigger.vue'
 import {
@@ -15,7 +16,7 @@ import { useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
-import type { SliderCommonSlot, SliderMarker, SliderMarkerSlot, SliderTriggerSlot } from './symbol'
+import type { SliderMarker, SliderSlots } from './symbol'
 
 const enum TriggerType {
   START = 0,
@@ -54,18 +55,13 @@ const props = useProps('slider', _props, {
   flipMarker: false,
   triggerFade: false,
   tipProps: () => ({}),
-  sync: false
+  sync: false,
+  slots: () => ({})
 })
 
 const emit = defineEmits(['update:value'])
 
-defineSlots<{
-  filler: SliderCommonSlot,
-  trigger: SliderTriggerSlot,
-  tip: SliderTriggerSlot,
-  point: SliderMarkerSlot,
-  marker: SliderMarkerSlot
-}>()
+const slots = defineSlots<SliderSlots>()
 
 const nh = useNameHelper('slider')
 const hoverDelay = useHoverDelay()
@@ -183,11 +179,25 @@ const endTriggerStyle = computed(() => {
 })
 const isDisabled = computed(() => props.disabled || readonly.value)
 
-let lastValue: number | number[]
-let lastInputValue: number | number[]
+const commonSlotParams = shallowReadonly(
+  reactive({
+    values: truthValue,
+    sliding: sliding,
+    percent: triggerPercent,
+    disabled: toRef(props, 'disabled'),
+    loading: toRef(props, 'loading')
+  })
+)
 
 parseValue(props.value)
 verifyValue()
+
+let lastValue: number | number[] = props.range
+  ? truthValue.value[0] > truthValue.value[1]
+    ? [truthValue.value[1], truthValue.value[0]]
+    : [truthValue.value[0], truthValue.value[1]]
+  : truthValue.value[1]
+let lastInputValue: number | number[] = Array.isArray(lastValue) ? [...lastValue] : lastValue
 
 watch(
   () => props.value,
@@ -404,6 +414,7 @@ function handleTrackDown(event: PointerEvent) {
 
   computePointedValue(event)
   verifyValue()
+  emitChange('input')
 
   document.addEventListener('pointermove', handleMove)
   document.addEventListener('pointerup', handleMoveEnd)
@@ -545,15 +556,10 @@ function blur() {
   >
     <div :class="nh.be('container')">
       <div ref="track" :class="nh.be('track')">
-        <slot
-          name="filler"
-          :values="truthValue"
-          :sliding="sliding"
-          :percent="triggerPercent"
-          :disabled="props.disabled"
-          :loading="props.loading"
-        >
-          <div :class="nh.be('filler')" :style="fillerStyle"></div>
+        <slot name="filler" v-bind="commonSlotParams">
+          <Renderer :renderer="props.slots.filler" :data="commonSlotParams">
+            <div :class="nh.be('filler')" :style="fillerStyle"></div>
+          </Renderer>
         </slot>
       </div>
       <template v-if="markerList.length">
@@ -566,16 +572,22 @@ function blur() {
           >
             <slot
               name="point"
-              :values="truthValue"
-              :sliding="sliding"
-              :percent="triggerPercent"
+              v-bind="commonSlotParams"
               :marker="marker"
               :marker-value="value"
               :in-range="isValueInRange(value)"
-              :disabled="props.disabled"
-              :loading="props.loading"
             >
-              <span :class="nh.be('dot')"></span>
+              <Renderer
+                :renderer="props.slots.point"
+                :data="{
+                  ...commonSlotParams,
+                  marker,
+                  markerValue: value,
+                  inRange: isValueInRange(value)
+                }"
+              >
+                <span :class="nh.be('dot')"></span>
+              </Renderer>
             </slot>
           </div>
         </div>
@@ -588,16 +600,22 @@ function blur() {
             >
               <slot
                 name="marker"
-                :values="truthValue"
-                :sliding="sliding"
-                :percent="triggerPercent"
+                v-bind="commonSlotParams"
                 :marker="marker"
                 :marker-value="value"
                 :in-range="isValueInRange(value)"
-                :disabled="props.disabled"
-                :loading="props.loading"
               >
-                {{ marker.label }}
+                <Renderer
+                  :renderer="props.slots.marker"
+                  :data="{
+                    ...commonSlotParams,
+                    marker,
+                    markerValue: value,
+                    inRange: isValueInRange(value)
+                  }"
+                >
+                  {{ marker.label }}
+                </Renderer>
               </slot>
             </div>
           </template>
@@ -623,7 +641,7 @@ function blur() {
         @key-minus="handleMinus(0, $event)"
       >
         <slot
-          v-if="$slots.trigger"
+          v-if="slots.trigger || props.slots.trigger"
           name="trigger"
           type="start"
           :value="truthValue[0]"
@@ -631,8 +649,20 @@ function blur() {
           :percent="triggerPercent[0]"
           :disabled="props.disabled"
           :loading="props.loading"
-        ></slot>
-        <template #tip>
+        >
+          <Renderer
+            :renderer="props.slots.trigger"
+            :data="{
+              type: 'start',
+              value: truthValue[0],
+              sliding: sliding[0],
+              percent: triggerPercent[0],
+              disabled: props.disabled,
+              loading: props.loading
+            }"
+          ></Renderer>
+        </slot>
+        <template v-if="slots.tip || props.slots.tip" #tip>
           <slot
             name="tip"
             type="start"
@@ -642,7 +672,19 @@ function blur() {
             :disabled="props.disabled"
             :loading="props.loading"
           >
-            {{ truthValue[0] }}
+            <Renderer
+              :renderer="props.slots.tip"
+              :data="{
+                type: 'start',
+                value: truthValue[0],
+                sliding: sliding[0],
+                percent: triggerPercent[0],
+                disabled: props.disabled,
+                loading: props.loading
+              }"
+            >
+              {{ truthValue[0] }}
+            </Renderer>
           </slot>
         </template>
       </SliderTrigger>
@@ -665,7 +707,7 @@ function blur() {
         @key-minus="handleMinus(1, $event)"
       >
         <slot
-          v-if="$slots.trigger"
+          v-if="slots.trigger || props.slots.trigger"
           name="trigger"
           type="end"
           :value="truthValue[1]"
@@ -673,8 +715,20 @@ function blur() {
           :percent="triggerPercent[1]"
           :disabled="props.disabled"
           :loading="props.loading"
-        ></slot>
-        <template #tip>
+        >
+          <Renderer
+            :renderer="props.slots.trigger"
+            :data="{
+              type: 'end',
+              value: truthValue[1],
+              sliding: sliding[1],
+              percent: triggerPercent[1],
+              disabled: props.disabled,
+              loading: props.loading
+            }"
+          ></Renderer>
+        </slot>
+        <template v-if="slots.tip || props.slots.tip" #tip>
           <slot
             name="tip"
             type="end"
@@ -684,7 +738,19 @@ function blur() {
             :disabled="props.disabled"
             :loading="props.loading"
           >
-            {{ truthValue[1] }}
+            <Renderer
+              :renderer="props.slots.tip"
+              :data="{
+                type: 'end',
+                value: truthValue[1],
+                sliding: sliding[1],
+                percent: triggerPercent[1],
+                disabled: props.disabled,
+                loading: props.loading
+              }"
+            >
+              {{ truthValue[1] }}
+            </Renderer>
           </slot>
         </template>
       </SliderTrigger>

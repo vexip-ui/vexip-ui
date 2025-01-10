@@ -60,6 +60,10 @@ export interface VideoState {
   addShortcut: (key: string, cb: () => void) => () => void
 }
 
+export interface VideoSlots {
+  poster?: () => any
+}
+
 const defaultLayout: Required<VideoControlLayout> = {
   left: ['play-prev', 'play', 'play-next', 'refresh', 'timer'],
   center: [],

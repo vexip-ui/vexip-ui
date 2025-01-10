@@ -12,5 +12,6 @@ export type {
   AutoCompleteKeyConfig,
   AutoCompleteRawOption,
   AutoCompleteFilter,
-  AutoCompleteListSlotParams
+  AutoCompleteListSlotParams,
+  AutoCompleteSlots
 } from './symbol'
