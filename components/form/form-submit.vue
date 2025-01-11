@@ -36,10 +36,10 @@ const props = useProps('form-submit', _props, {
   }
 })
 
-defineSlots<{
-  default: () => any,
-  icon: () => any,
-  loading: () => any
+const slots = defineSlots<{
+  default?: () => any,
+  icon?: () => any,
+  loading?: () => any
 }>()
 
 const fieldActions = inject(FIELD_OPTIONS, null)
@@ -125,10 +125,10 @@ async function handleSubmit() {
     <slot>
       {{ props.label || locale.submit }}
     </slot>
-    <template v-if="$slots.icon" #icon>
+    <template v-if="slots.icon" #icon>
       <slot name="icon"></slot>
     </template>
-    <template v-if="$slots.loading" #loading>
+    <template v-if="slots.loading" #loading>
       <slot name="loading"></slot>
     </template>
     <button

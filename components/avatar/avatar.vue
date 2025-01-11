@@ -37,9 +37,9 @@ const props = useProps('avatar', _props, {
   slots: () => ({})
 })
 
-defineSlots<{
-  default: () => any,
-  icon: () => any
+const slots = defineSlots<{
+  default?: () => any,
+  icon?: () => any
 }>()
 
 const groupState = inject(GROUP_STATE, null)
@@ -156,7 +156,7 @@ function handleClick(event: MouseEvent) {
       :alt="props.alt"
       @error="fallbackFail = true"
     />
-    <template v-else-if="icon || $slots.icon">
+    <template v-else-if="icon || slots.icon">
       <slot name="icon">
         <Renderer :renderer="props.slots.icon">
           <Icon :class="nh.be('icon')" :icon="icon" :scale="props.iconScale"></Icon>

@@ -35,10 +35,10 @@ const props = useProps('formReset', _props, {
   }
 })
 
-defineSlots<{
-  default: () => any,
-  icon: () => any,
-  loading: () => any
+const slots = defineSlots<{
+  default?: () => any,
+  icon?: () => any,
+  loading?: () => any
 }>()
 
 const actions = inject(FORM_ACTIONS, null)
@@ -94,10 +94,10 @@ async function handleReset() {
     <slot>
       {{ props.label || locale.reset }}
     </slot>
-    <template v-if="$slots.icon" #icon>
+    <template v-if="slots.icon" #icon>
       <slot name="icon"></slot>
     </template>
-    <template v-if="$slots.loading" #loading>
+    <template v-if="slots.loading" #loading>
       <slot name="loading"></slot>
     </template>
   </Button>
