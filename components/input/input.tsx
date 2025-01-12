@@ -200,6 +200,13 @@ export default defineComponent({
         !props.disabled && !readonly.value && props.clearable && hasValue.value && isHover.value
       )
     })
+    const autoComplete = computed(() => {
+      return typeof props.autocomplete === 'boolean'
+        ? props.autocomplete
+          ? 'on'
+          : 'off'
+        : props.autocomplete
+    })
 
     watch(
       () => props.value,
@@ -568,7 +575,7 @@ export default defineComponent({
             class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
             autofocus={props.autofocus}
-            autocomplete={props.autocomplete ? 'on' : 'off'}
+            autocomplete={autoComplete.value}
             spellcheck={props.spellcheck}
             disabled={props.disabled}
             readonly={readonly.value || undefined}

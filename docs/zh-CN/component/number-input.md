@@ -135,7 +135,7 @@ type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 | placeholder    | `string`                                         | 设置输入框的占位符                                                                           | `''`        | -        |
 | autofocus      | `boolean`                                        | 设置输入框的自动聚焦                                                                         | `false`     | -        |
 | spellcheck     | `boolean`                                        | 设置输入框的拼写检查                                                                         | `false`     | -        |
-| autocomplete   | `boolean`                                        | 设置输入框的自动完成                                                                         | `false`     | -        |
+| autocomplete   | `boolean \| string`                              | 设置输入框的自动完成，布尔值将会被解析为 `'on'` 或 `'off'`                                   | `false`     | -        |
 | precision      | `number`                                         | 用于设置值的精度 (小数位数) ，-1 时不做处理                                                  | `-1`        | -        |
 | readonly       | `boolean`                                        | 设置输入框的只读属性                                                                         | `false`     | -        |
 | step           | `number`                                         | 用于设置增减按钮单次变化的幅度                                                               | `1`         | -        |

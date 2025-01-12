@@ -85,6 +85,13 @@ const className = computed(() => {
     [nh.bm(props.state)]: props.state !== 'default'
   }
 })
+const autoComplete = computed(() => {
+  return typeof props.autocomplete === 'boolean'
+    ? props.autocomplete
+      ? 'on'
+      : 'off'
+    : props.autocomplete
+})
 
 watch(
   () => props.value,
@@ -241,7 +248,7 @@ function handleCompositionEnd(event: CompositionEvent) {
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
-      :autocomplete="props.autocomplete ? 'on' : 'off'"
+      :autocomplete="autoComplete"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
       :readonly="isReadonly"
