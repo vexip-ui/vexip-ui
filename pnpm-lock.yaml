@@ -96,7 +96,7 @@ importers:
         version: 4.0.1(vite@5.4.11(@types/node@20.12.5)(sass@1.77.8)(terser@5.30.4))(vue@3.4.38(typescript@5.4.4))
       '@vitest/coverage-v8':
         specifier: ^2.1.5
-        version: 2.1.5(vitest@2.1.5(@types/node@20.12.5)(happy-dom@12.10.3)(sass@1.77.8)(terser@5.30.4))
+        version: 2.1.5(vitest@2.1.5(@types/node@20.12.5)(happy-dom@15.10.2)(sass@1.77.8)(terser@5.30.4))
       '@vue/test-utils':
         specifier: ^2.4.5
         version: 2.4.5
@@ -140,8 +140,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       happy-dom:
-        specifier: 12.10.3
-        version: 12.10.3
+        specifier: 15.10.2
+        version: 15.10.2
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -210,7 +210,7 @@ importers:
         version: 4.5.0(@types/node@20.12.5)(rollup@2.79.1)(typescript@5.4.4)(vite@5.4.11(@types/node@20.12.5)(sass@1.77.8)(terser@5.30.4))
       vitest:
         specifier: ^2.1.5
-        version: 2.1.5(@types/node@20.12.5)(happy-dom@12.10.3)(sass@1.77.8)(terser@5.30.4)
+        version: 2.1.5(@types/node@20.12.5)(happy-dom@15.10.2)(sass@1.77.8)(terser@5.30.4)
       vue:
         specifier: ^3.4.38
         version: 3.4.38(typescript@5.4.4)
@@ -3616,9 +3616,6 @@ packages:
     resolution: {integrity: sha512-6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
 
-  css.escape@1.5.1:
-    resolution: {integrity: sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==}
-
   cssdb@7.9.0:
     resolution: {integrity: sha512-WPMT9seTQq6fPAa1yN4zjgZZeoTriSN2LqW9C+otjar12DQIWA4LuSfFrvFJiKp4oD0xIk1vumDLw8K9ur4NBw==}
 
@@ -4427,8 +4424,9 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  happy-dom@12.10.3:
-    resolution: {integrity: sha512-JzUXOh0wdNGY54oKng5hliuBkq/+aT1V3YpTM+lrN/GoLQTANZsMaIvmHiHe612rauHvPJnDZkZ+5GZR++1Abg==}
+  happy-dom@15.10.2:
+    resolution: {integrity: sha512-NbA5XrSovenJIIcfixCREX3ZnV7yHP4phhbfuxxf4CPn+LZpz/jIM9EqJ2DrPwgVDSMoAKH3pZwQvkbsSiCrUw==}
+    engines: {node: '>=18.0.0'}
 
   has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
@@ -6981,10 +6979,6 @@ packages:
   webpack-virtual-modules@0.5.0:
     resolution: {integrity: sha512-kyDivFZ7ZM0BVOUteVbDFhlRt7Ah/CSPwJdi8hBpkK7QLumUqdLtVfm/PX/hkcnrvr0i77fO5+TjZ94Pe+C9iw==}
 
-  whatwg-encoding@2.0.0:
-    resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}
-    engines: {node: '>=12'}
-
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
     engines: {node: '>=12'}
@@ -9503,7 +9497,7 @@ snapshots:
       vite: 5.4.11(@types/node@20.12.5)(sass@1.77.8)(terser@5.30.4)
       vue: 3.4.38(typescript@5.4.4)
 
-  '@vitest/coverage-v8@2.1.5(vitest@2.1.5(@types/node@20.12.5)(happy-dom@12.10.3)(sass@1.77.8)(terser@5.30.4))':
+  '@vitest/coverage-v8@2.1.5(vitest@2.1.5(@types/node@20.12.5)(happy-dom@15.10.2)(sass@1.77.8)(terser@5.30.4))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -9517,7 +9511,7 @@ snapshots:
       std-env: 3.8.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.5(@types/node@20.12.5)(happy-dom@12.10.3)(sass@1.77.8)(terser@5.30.4)
+      vitest: 2.1.5(@types/node@20.12.5)(happy-dom@15.10.2)(sass@1.77.8)(terser@5.30.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -10415,8 +10409,6 @@ snapshots:
     dependencies:
       mdn-data: 2.0.30
       source-map-js: 1.2.0
-
-  css.escape@1.5.1: {}
 
   cssdb@7.9.0: {}
 
@@ -11494,13 +11486,10 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.17.4
 
-  happy-dom@12.10.3:
+  happy-dom@15.10.2:
     dependencies:
-      css.escape: 1.5.1
       entities: 4.5.0
-      iconv-lite: 0.6.3
       webidl-conversions: 7.0.0
-      whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
 
   has-bigints@1.0.2: {}
@@ -14112,7 +14101,7 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@2.1.5(@types/node@20.12.5)(happy-dom@12.10.3)(sass@1.77.8)(terser@5.30.4):
+  vitest@2.1.5(@types/node@20.12.5)(happy-dom@15.10.2)(sass@1.77.8)(terser@5.30.4):
     dependencies:
       '@vitest/expect': 2.1.5
       '@vitest/mocker': 2.1.5(vite@5.4.11(@types/node@20.12.5)(sass@1.77.8)(terser@5.30.4))
@@ -14136,7 +14125,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.12.5
-      happy-dom: 12.10.3
+      happy-dom: 15.10.2
     transitivePeerDependencies:
       - less
       - lightningcss
@@ -14213,10 +14202,6 @@ snapshots:
   webpack-sources@3.2.3: {}
 
   webpack-virtual-modules@0.5.0: {}
-
-  whatwg-encoding@2.0.0:
-    dependencies:
-      iconv-lite: 0.6.3
 
   whatwg-mimetype@3.0.0: {}
 
