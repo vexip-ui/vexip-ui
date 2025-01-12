@@ -1,3 +1,17 @@
+## [2.3.20](https://github.com/vexip-ui/vexip-ui/compare/v2.3.19...v2.3.20) (2025-01-12)
+
+
+### ✨ Features
+
+* normalize input autocomplete prop ([c6dbf8a](https://github.com/vexip-ui/vexip-ui/commit/c6dbf8a3d898a0f7e295855487d79d8551c9d518)), closes [#529](https://github.com/vexip-ui/vexip-ui/issues/529)
+
+
+### 🐞 Bug Fixes
+
+* **tab-nav:** add missing component dependencies ([9aa925c](https://github.com/vexip-ui/vexip-ui/commit/9aa925c689726e2ceac68929718552bb4ef09f96)), closes [#528](https://github.com/vexip-ui/vexip-ui/issues/528)
+
+
+
 ## [2.3.19](https://github.com/vexip-ui/vexip-ui/compare/v2.3.18...v2.3.19) (2025-01-10)
 
 
