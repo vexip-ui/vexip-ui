@@ -188,8 +188,8 @@ importers:
         specifier: ^1.77.8
         version: 1.77.8
       semver:
-        specifier: ^7.6.3
-        version: 7.6.3
+        specifier: ^7.6.1
+        version: 7.6.1
       stylelint:
         specifier: ^16.8.2
         version: 16.8.2(typescript@5.4.4)
@@ -6106,6 +6106,11 @@ packages:
 
   semver@7.6.0:
     resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.6.1:
+    resolution: {integrity: sha512-f/vbBsu+fOiYt+lmwZV0rVwJScl46HppnOA1ZvIuBWKOTlllpyJ3bfVax76/OrhCH38dyxoDIA8K7uB963IYgA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -13198,6 +13203,8 @@ snapshots:
   semver@7.6.0:
     dependencies:
       lru-cache: 6.0.0
+
+  semver@7.6.1: {}
 
   semver@7.6.3: {}
 
