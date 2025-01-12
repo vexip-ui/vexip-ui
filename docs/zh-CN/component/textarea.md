@@ -77,7 +77,7 @@
 | no-resize      | `boolean`                                        | 是否禁用缩放功能                                                                             | `false`              | -        |
 | autofocus      | `boolean`                                        | 设置输入框的自动聚焦                                                                         | `false`              | -        |
 | spellcheck     | `boolean`                                        | 设置输入框的拼写检查                                                                         | `false`              | -        |
-| autocomplete   | `boolean`                                        | 设置输入框的自动完成                                                                         | `false`              | -        |
+| autocomplete   | `boolean \| string`                              | 设置输入框的自动完成，布尔值将会被解析为 `'on'` 或 `'off'`                                   | `false`              | -        |
 | readonly       | `boolean`                                        | 设置输入框的只读属性                                                                         | `false`              | -        |
 | disabled       | `boolean`                                        | 设置是否禁用输入框                                                                           | `false`              | -        |
 | debounce       | `boolean`                                        | 为 `input` 事件开启防抖，默认情况下为节流，非响应式属性                                      | `false`              | -        |

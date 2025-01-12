@@ -1,5 +1,6 @@
 import {
   booleanProp,
+  booleanStringProp,
   buildProps,
   classProp,
   eventProp,
@@ -32,7 +33,7 @@ export const numberInputProps = buildProps({
   placeholder: String,
   autofocus: booleanProp,
   spellcheck: booleanProp,
-  autocomplete: booleanProp,
+  autocomplete: booleanStringProp,
   precision: Number,
   readonly: booleanProp,
   step: Number,

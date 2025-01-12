@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { Scroll } from '@/components/scroll'
 import { TabNavItem } from '@/components/tab-nav-item'

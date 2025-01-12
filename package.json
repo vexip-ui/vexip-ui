@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.3.19",
+  "version": "2.3.20",
   "type": "module",
   "packageManager": "pnpm@9.9.0",
   "license": "MIT",
@@ -143,7 +143,8 @@
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.2.1",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/types": "^19.5.0",
     "@juggle/resize-observer": "^3.4.0",
     "@types/eslint": "^8.56.7",
     "@types/fs-extra": "^11.0.4",
@@ -200,7 +201,7 @@
     "tsx": "^4.7.2",
     "typescript": "5.4.4",
     "vite": "^5.4.6",
-    "vite-plugin-dts": "^4.1.0",
+    "vite-plugin-dts": "^4.5.0",
     "vitest": "^2.1.5",
     "vue": "^3.4.38",
     "vue-router": "^4.4.3"

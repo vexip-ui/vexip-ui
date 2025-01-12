@@ -126,7 +126,7 @@
 | placeholder    | `string`                                                 | 设置输入框的占位符                                                                           | `''`        | -        |
 | autofocus      | `boolean`                                                | 设置输入框的自动聚焦                                                                         | `false`     | -        |
 | spellcheck     | `boolean`                                                | 设置输入框的拼写检查                                                                         | `false`     | -        |
-| autocomplete   | `boolean`                                                | 设置输入框的自动完成                                                                         | `false`     | -        |
+| autocomplete   | `boolean \| string`                                      | 设置输入框的自动完成，布尔值将会被解析为 `'on'` 或 `'off'`                                   | `false`     | -        |
 | readonly       | `boolean`                                                | 设置输入框的只读属性                                                                         | `false`     | -        |
 | disabled       | `boolean`                                                | 设置是否禁用输入框                                                                           | `false`     | -        |
 | control-class  | `ClassType`                                              | 设置输入框控件元素的类名                                                                     | `null`      | `2.1.25` |

@@ -75,10 +75,10 @@ const props = useProps('formItem', _props, {
 })
 
 const slots = defineSlots<{
-  default: () => any,
-  help: () => any,
-  label: () => any,
-  error: (params: { tip: string }) => any
+  default?: () => any,
+  help?: () => any,
+  label?: () => any,
+  error?: (params: { tip: string }) => any
 }>()
 
 const formProps = inject(FORM_PROPS, {})
@@ -130,7 +130,7 @@ const allRules = computed(() => {
 })
 const currentValue = computed(getValue)
 const isValidateAll = computed(() => {
-  return isNull(props.validateAll) ? formProps.validateAll ?? false : props.validateAll
+  return isNull(props.validateAll) ? (formProps.validateAll ?? false) : props.validateAll
 })
 const useAsterisk = computed(() => {
   if (props.hideAsterisk === true || formProps.hideAsterisk) {
@@ -400,7 +400,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       :for="props.htmlFor || props.prop"
       @click="handleLabelClick"
     >
-      <Tooltip v-if="props.help || $slots.help" transfer>
+      <Tooltip v-if="props.help || slots.help" transfer>
         <template #trigger>
           <Icon v-bind="icons.help" :class="nh.be('help')"></Icon>
         </template>

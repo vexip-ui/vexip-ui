@@ -1,5 +1,6 @@
 import {
   booleanProp,
+  booleanStringProp,
   buildProps,
   classProp,
   eventProp,
@@ -21,7 +22,7 @@ export const textareaProps = buildProps({
   noResize: booleanProp,
   autofocus: booleanProp,
   spellcheck: booleanProp,
-  autocomplete: booleanProp,
+  autocomplete: booleanStringProp,
   readonly: booleanProp,
   disabled: booleanProp,
   debounce: booleanProp,

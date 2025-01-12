@@ -230,6 +230,13 @@ const hasValue = computed(() => !!(currentValue.value || currentValue.value === 
 const showClear = computed(() => {
   return !props.disabled && !isReadonly.value && props.clearable && isHover.value && hasValue.value
 })
+const autoComplete = computed(() => {
+  return typeof props.autocomplete === 'boolean'
+    ? props.autocomplete
+      ? 'on'
+      : 'off'
+    : props.autocomplete
+})
 
 const delay = toNumber(props.delay)
 const handleInput = props.debounce
@@ -556,7 +563,7 @@ function handleKeyPress(event: KeyboardEvent) {
       :class="[nh.be('control'), props.controlAttrs?.class, props.controlClass]"
       type="text"
       :autofocus="props.autofocus"
-      :autocomplete="props.autocomplete ? 'on' : 'off'"
+      :autocomplete="autoComplete"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
       :readonly="isReadonly"

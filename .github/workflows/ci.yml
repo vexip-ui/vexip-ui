@@ -70,14 +70,5 @@ jobs:
       - name: Build common packages
         run: pnpm run build:common
 
-      - name: Test BEM
-        run: pnpm -C common/bem-helper test
-
-      - name: Test utils
-        run: pnpm -C common/utils test
-
-      - name: Test plugins
-        run: pnpm -C common/plugins test
-
       - name: Test
         run: pnpm run test
