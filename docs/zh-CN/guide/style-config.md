@@ -64,7 +64,7 @@ import 'vexip-ui/style/dark/index.scss' // 不需要暗黑主题时无需引入
 - `s-color` 为用于阴影颜色的变量
 - `state` 是可选部分，为用于组件或要素在特定状态下的变量
 
-还有部分的变量是作用于布局上的，与该规则有出入。其余的一些变量出于语义化也会与该规则有不同。
+> 还有部分的变量是作用于布局上的，与该规则有出入，其余的一些变量出于语义化的考虑也会与该规则有不同。
 
 你只需要按照你喜欢的方式修改这些 css 变量即可。
 
@@ -110,6 +110,19 @@ createApp(App).use(install).mount('#app')
   $color-map: (
     primary: (
       base: #845ef7
+    )
+  )
+);
+```
+
+如果你还同时想独立地修改暗黑模式的预设变量，还需额外再创建一个文件：
+
+```scss
+// style/dark-variables.scss
+@forward 'vexip-ui/style/dark/variables.scss' with (
+  $color-map: (
+    primary: (
+      base: #654ea7
     )
   )
 );

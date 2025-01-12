@@ -65,7 +65,7 @@ The regular names of preset variables in components mostly follow rule `--[prefi
 - `s-color` is a variable for the shadow color
 - `state` optional, is a variable for a component or feature in a specific state
 
-There are also some variables that are used on layout, which are inconsistent with this rule. Some of the remaining variables will also difference from this rule due to semantics.
+> There are also some variables that are used on layout, which are inconsistent with this rule. Some of the remaining variables will also difference from this rule due to semantics.
 
 You can change these css variables by any way you like.
 
@@ -111,6 +111,19 @@ First, you need to prepare a separate file, and use `@forward...with` to modify 
   $color-map: (
     primary: (
       base: #845ef7
+    )
+  )
+);
+```
+
+If you also want to independently modify the preset variables for the dark mode, you need to create an additional file:
+
+```scss
+// style/dark-variables.scss
+@forward 'vexip-ui/style/dark/variables.scss' with (
+  $color-map: (
+    primary: (
+      base: #654ea7
     )
   )
 );
