@@ -8765,7 +8765,7 @@ snapshots:
   '@intlify/bundle-utils@8.0.0(vue-i18n@9.14.0(vue@3.4.38(typescript@5.7.2)))':
     dependencies:
       '@intlify/message-compiler': 9.8.0
-      '@intlify/shared': 9.8.0
+      '@intlify/shared': 9.14.0
       acorn: 8.10.0
       escodegen: 2.1.0
       estree-walker: 2.0.2
