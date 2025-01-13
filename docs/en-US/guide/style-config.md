@@ -167,6 +167,10 @@ export default defineConfig({
 })
 ```
 
+:::info
+If you are using unplugin-vue-components, don't forget to specify the `importStyle: 'sass'` option for VexipUIResolver.
+:::
+
 ## Transition Effects
 
 After import style, you can directly use some transition effects built in Vexip UI:
