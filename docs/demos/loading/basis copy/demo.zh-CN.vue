@@ -1,6 +1,9 @@
 <template>
-  <Button type="primary" :loading="loading" @click="doLoading">
-    Loading
+  <Button type="primary" :loading="loading" @click="doLoading()">
+    上方加载
+  </Button>
+  <Button type="primary" :loading="loading" @click="doLoading('bottom')">
+    下方加载
   </Button>
 </template>
 
@@ -16,10 +19,10 @@ export default defineComponent({
     }
   },
   methods: {
-    doLoading() {
+    doLoading(position: 'top' | 'bottom' = 'top') {
       clearTimeout(this.timer)
       this.loading = true
-      Loading.open(10)
+      Loading.open({ percent: 0, position })
 
       this.timer = setTimeout(() => {
         Loading.open(100)

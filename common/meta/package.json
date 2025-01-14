@@ -1,16 +1,16 @@
 {
   "name": "@vexip-ui/meta",
+  "private": true,
   "author": "winchesHe",
   "scripts": {
     "build": "run-p build:contributors build:components",
-    "build:contributors": "tsx scripts/contributors.ts",
     "build:components": "tsx scripts/components.ts",
+    "build:contributors": "tsx scripts/contributors.ts",
     "dev": "DEV=\"1\" pnpm run build"
   },
-  "private": true,
   "devDependencies": {
     "@vexip-ui/scripts": "workspace:*",
     "@vexip-ui/utils": "workspace:*",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.4.7"
   }
 }

@@ -77,7 +77,7 @@ describe('Anchor', () => {
     const viewer = createEl(0, 'viewer')
     viewer.appendChild(createEl(20, 'a'))
     viewer.appendChild(createEl(40, 'b'))
-    document.appendChild(viewer)
+    document.body.appendChild(viewer)
 
     Object.defineProperty(viewer, 'scrollHeight', {
       configurable: true,

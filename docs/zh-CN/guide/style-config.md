@@ -166,6 +166,10 @@ export default defineConfig({
 })
 ```
 
+:::info
+如果你正在使用 unplugin-vue-components，请不要忘记给 VexipUIResolver 指定 `importStyle: 'sass'` 选项。
+:::
+
 ## 过渡效果
 
 在引入了样式之后，可以直接使用 Vexip UI 内置的一些过渡效果：

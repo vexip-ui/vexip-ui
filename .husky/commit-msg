@@ -1,7 +1,5 @@
-#!/bin/sh
 huskyDir=$(dirname "$0")
 
-. "$huskyDir/_/husky.sh"
 . "$huskyDir/scripts/common.sh"
 
 npx --no-install commitlint --edit "$1"

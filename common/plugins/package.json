@@ -1,15 +1,15 @@
 {
   "name": "@vexip-ui/plugins",
-  "version": "1.6.0",
+  "version": "1.7.0",
+  "type": "module",
   "license": "MIT",
-  "anchor": "qmhc",
+  "private": false,
   "scripts": {
     "build": "tsx scripts/build.ts",
     "test": "vitest run",
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
   },
-  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,25 +20,25 @@
       "import": "./dist/index.js"
     }
   },
-  "private": false,
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/plugins#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/plugins"
   },
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/plugins#readme",
   "dependencies": {
     "@vexip-ui/utils": "workspace:*",
-    "compare-versions": "^6.1.0",
-    "local-pkg": "^0.5.0"
+    "compare-versions": "^6.1.1",
+    "local-pkg": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.5",
-    "postcss": "^8.4.38",
-    "tsup": "^8.0.2",
-    "unplugin-vue-components": "^0.26.0"
-  }
+    "@types/node": "^22.10.6",
+    "postcss": "^8.5.0",
+    "tsup": "^8.3.5",
+    "unplugin-vue-components": "^28.0.0"
+  },
+  "anchor": "qmhc"
 }

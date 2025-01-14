@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use 'sass:list';
 @use 'sass:meta';
+@use 'sass:list';
 
 @function to-css-var-name($name-units...) {
   // variable prefix is fixed to '--vxp'

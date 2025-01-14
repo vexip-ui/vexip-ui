@@ -1,16 +1,17 @@
 {
   "name": "@vexip-ui/scripts",
-  "version": "1.1.4",
+  "version": "1.2.0",
+  "type": "module",
   "license": "MIT",
+  "private": false,
   "author": "qmhc",
   "scripts": {
     "build": "tsx scripts/build.ts"
   },
-  "type": "module",
   "bin": {
     "vexip": "bin/vexip.js",
-    "vxp": "bin/vexip.js",
     "vexip-cli": "bin/vexip.js",
+    "vxp": "bin/vexip.js",
     "vxp-cli": "bin/vexip.js"
   },
   "main": "dist/index.cjs",
@@ -23,34 +24,33 @@
       "import": "./dist/index.js"
     }
   },
-  "private": false,
   "files": [
     "bin",
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/scripts"
   },
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts#readme",
   "dependencies": {
     "@vexip-ui/utils": "workspace:*",
-    "compare-versions": "^6.1.0",
-    "execa": "^8.0.1",
+    "compare-versions": "^6.1.1",
+    "execa": "^9.5.2",
     "kolorist": "^1.8.0",
-    "local-pkg": "^0.5.0",
+    "local-pkg": "^1.0.0",
     "prompts": "^2.4.2",
-    "semver": "^7.6.0",
+    "semver": "^7.6.3",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@pnpm/types": "^9.4.2",
+    "@pnpm/types": "^12.2.0",
     "@types/minimist": "^1.2.5",
-    "@types/node": "^20.12.5",
+    "@types/node": "^22.10.6",
     "@types/prompts": "^2.4.9",
     "@types/semver": "^7.5.8",
-    "@types/yargs": "^17.0.32",
-    "tsup": "^8.0.2"
+    "@types/yargs": "^17.0.33",
+    "tsup": "^8.3.5"
   }
 }

@@ -27,7 +27,9 @@ export interface PopupItemState extends Record<string, unknown> {
   onLeave: () => void
 }
 
-export const DELETE_HANDLER = '__VXP_DELETE_HANDLER' as unknown as InjectionKey<(key: Key) => void>
+export const DELETE_HANDLER = '__VXP_POPUP_DELETE_HANDLER' as unknown as InjectionKey<
+  (key: Key) => void
+>
 
 export const popupPlacements = Object.freeze<PopupPlacement[]>([
   'top-right',

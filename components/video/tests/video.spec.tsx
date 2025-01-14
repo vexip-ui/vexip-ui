@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 
 import { globalIcons } from '@vexip-ui/config'
-import { Github } from 'lucide-vue-next'
+import { Activity } from 'lucide-vue-next'
 import { Video } from '..'
 
 describe('Video', () => {
@@ -130,13 +130,13 @@ describe('Video', () => {
 
   it('loading icon', async () => {
     const wrapper = mount(Video, {
-      props: { loading: true, loadingIcon: Github }
+      props: { loading: true, loadingIcon: Activity }
     })
     wrapper.vm.stateHidden = true
     await nextTick()
 
     expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
-    expect(wrapper.findComponent(Github).exists()).toBe(true)
+    expect(wrapper.findComponent(Activity).exists()).toBe(true)
   })
 
   it('player slot', async () => {

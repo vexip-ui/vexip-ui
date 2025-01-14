@@ -11,7 +11,7 @@
   ],
   "*.{css,scss,html}": [
     "prettier --write",
-    "stylelint --fix"
+    "stylelint --fix \"strict\""
   ],
   "*.md": [
     "prettier --write"
@@ -19,6 +19,6 @@
   "*.vue": [
     "prettier --write",
     "eslint --fix",
-    "stylelint --fix"
+    "stylelint --fix \"strict\""
   ]
 }

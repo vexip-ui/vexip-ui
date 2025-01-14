@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:meta';
 @use 'sass:list';
 
 @use './variables.scss' as *;
@@ -75,7 +76,7 @@
 
 @mixin query-media($point) {
   @if map.has-key($break-point-map, $point) {
-    @media screen and #{inspect(map.get($break-point-map, $point))} {
+    @media screen and #{meta.inspect(map.get($break-point-map, $point))} {
       @content;
     }
   } @else {

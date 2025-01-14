@@ -1,3 +1,9 @@
+## 2.7.0 (2025-01-14)
+
+* build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))
+
+
+
 # [2.6.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.5.0...hooks@2.6.0) (2024-11-19)
 
 

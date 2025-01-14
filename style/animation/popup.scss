@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 @use '../design/variables.scss' as *;
 @use '../shared/variables.scss' as *;
 
@@ -10,7 +12,7 @@ $-popup-types: (
 
 @mixin -start($type) {
   opacity: 0%;
-  transform: translate#{map-get($-popup-types, $type)} translateZ(0);
+  transform: translate#{map.get($-popup-types, $type)} translateZ(0);
 }
 
 @mixin -end($type) {
@@ -23,7 +25,7 @@ $-popup-types: (
   }
 }
 
-@each $type in map-keys($map: $-popup-types) {
+@each $type in map.keys($map: $-popup-types) {
   $root-name: #{$namespace}-popup-#{$type};
 
   .#{$root-name} {

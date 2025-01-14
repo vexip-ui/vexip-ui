@@ -181,7 +181,7 @@ $tag: map.merge(
     'purple': rgb(114 46 209)
   );
 
-  @each $name in map-keys($preset-color-map) {
+  @each $name in map.keys($preset-color-map) {
     $color: map.get($preset-color-map, $name);
 
     @at-root {

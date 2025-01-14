@@ -28,13 +28,19 @@ The `maxPercent` option can be used to set the maximum progress of this call. Af
 
 :::
 
+:::demo loading/position
+
+### Loading Position
+
+Setting the `position` option can change the position of the progress bar.
+
+:::
+
 :::demo loading/state
 
 ### Loading State
 
 Setting the `state` option can change the state of the progress bar.
-
-Also, this example shows how to use the Loading component in a composition API.
 
 :::
 

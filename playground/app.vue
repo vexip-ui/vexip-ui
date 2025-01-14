@@ -76,6 +76,7 @@ async function handleKeyDown(event: KeyboardEvent) {
 
 <style lang="scss">
 @use 'sass:map';
+@use 'sass:meta';
 @use './style.scss' as *;
 
 body {
@@ -131,7 +132,7 @@ body {
     }
   }
 
-  @media #{inspect($lg)} {
+  @media #{meta.inspect($lg)} {
     .left,
     .right {
       width: 100% !important;

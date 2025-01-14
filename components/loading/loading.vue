@@ -69,9 +69,9 @@ function startLoading(options: LoadingOptions) {
 
   const setLoading = () => {
     percent.value = boundRange(options.percent, 0, 100)
-    state.value = options.state ?? 'default'
+    state.value = options.state ?? state.value
     strokeWidth.value = boundRange(options.strokeWidth ?? 2, 1, 10)
-    position.value = options.position ?? 'top'
+    position.value = options.position ?? position.value
     maxPercent = boundRange(options.maxPercent ?? 95, percent.value, 95)
 
     if (percent.value === 100) {
