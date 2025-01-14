@@ -1,3 +1,9 @@
+## <small>2.3.22 (2025-01-14)</small>
+
+* build(meta): specify exports field for package.json ([bdb90fe](https://github.com/vexip-ui/vexip-ui/commit/bdb90fe))
+
+
+
 ## <small>2.3.21 (2025-01-14)</small>
 
 * release(config): v1.10.0 ([4467b0a](https://github.com/vexip-ui/vexip-ui/commit/4467b0a))
