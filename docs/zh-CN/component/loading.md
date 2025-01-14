@@ -28,13 +28,19 @@
 
 :::
 
+:::demo loading/position
+
+### 加载位置
+
+设置 `position` 选项可以改变进度条的位置。
+
+:::
+
 :::demo loading/state
 
 ### 加载状态
 
 设置 `state` 选项可以改变进度条的状态。
-
-同时，这个例子展示了如何在组合式 Api 中使用 Loading 组件。
 
 :::
 

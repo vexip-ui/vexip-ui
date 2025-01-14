@@ -13,7 +13,7 @@ import { Radio } from '..'
 describe('SSR for Radio', () => {
   it('render', async () => {
     try {
-      await renderToString(createSSRApp(() => <Radio></Radio>))
+      await renderToString(createSSRApp(() => <Radio label={'1'}></Radio>))
     } catch (error) {
       expect(error).toBeFalsy()
     }

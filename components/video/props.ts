@@ -1,4 +1,4 @@
-import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { FullScreenType } from '@/components/full-screen'
@@ -30,7 +30,7 @@ export const videoProps = buildProps({
   video: Object as PropType<HTMLVideoElement>,
   segments: Array as PropType<(number | VideoSegment)[]>,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingEffect: String as PropType<IconEffect>,
   shortcuts: Object as PropType<VideoShortcutOptions>,
   slots: Object as PropType<VideoSlots>,

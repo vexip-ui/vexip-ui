@@ -78,7 +78,7 @@ export default defineComponent({
       default: false
     },
     loadingIcon: {
-      type: Object,
+      type: [Object, Function],
       default: null
     },
     loadingLock: {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NativeScroll } from '@/components/native-scroll'
+import { Renderer } from '@/components/renderer'
 import { Scrollbar } from '@/components/scrollbar'
 
 import {

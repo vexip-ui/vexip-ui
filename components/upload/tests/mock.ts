@@ -1,17 +1,11 @@
 import { nextTick } from 'vue'
+import { vi } from 'vitest'
 
 import type { DOMWrapper } from '@vue/test-utils'
 import type { UploadSourceFile } from '../symbol'
 
-const getMockFile = (element: Element, files: File[]) => {
-  Object.defineProperty(element, 'files', {
-    get() {
-      return files
-    },
-    set() {
-      return true
-    }
-  })
+const getMockFile = (element: HTMLInputElement, files: File[]) => {
+  vi.spyOn(element, 'files', 'get').mockReturnValue(files as unknown as FileList)
 }
 
 export const getXhr = (type: 'success' | 'error' | 'abort') => {
