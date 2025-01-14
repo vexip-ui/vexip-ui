@@ -430,7 +430,9 @@ const selectorClass = computed(() => {
     [`${baseCls}--transparent`]: props.transparent
   }
 })
-const hasValue = computed(() => !isNull(currentValues.value[0]))
+const hasValue = computed(
+  () => !isNull(currentValues.value[0]) && (props.multiple || currentValues.value[0] !== '')
+)
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const showDynamic = computed(() => {
   return !!(
