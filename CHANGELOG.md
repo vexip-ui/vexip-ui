@@ -1,3 +1,16 @@
+## <small>2.3.21 (2025-01-14)</small>
+
+* release(config): v1.10.0 ([4467b0a](https://github.com/vexip-ui/vexip-ui/commit/4467b0a))
+* release(hooks): v2.7.0 ([600b693](https://github.com/vexip-ui/vexip-ui/commit/600b693))
+* release(plugins): v1.7.0 ([6eb92ca](https://github.com/vexip-ui/vexip-ui/commit/6eb92ca))
+* release(scripts): v1.2.0 ([6402a21](https://github.com/vexip-ui/vexip-ui/commit/6402a21))
+* fix: ensure each injection key is unique ([04c50f3](https://github.com/vexip-ui/vexip-ui/commit/04c50f3)), closes [#530](https://github.com/vexip-ui/vexip-ui/issues/530)
+* fix(select): correct placeholder display with remote ([29222fc](https://github.com/vexip-ui/vexip-ui/commit/29222fc)), closes [#531](https://github.com/vexip-ui/vexip-ui/issues/531)
+* build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))
+* docs: improve style config guide document ([b6f0f46](https://github.com/vexip-ui/vexip-ui/commit/b6f0f46))
+
+
+
 ## [2.3.20](https://github.com/vexip-ui/vexip-ui/compare/v2.3.19...v2.3.20) (2025-01-12)
 
 
