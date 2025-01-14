@@ -521,7 +521,7 @@ export const TABLE_HEAD_PREFIX = '__vxp-table-head-'
 export const TABLE_FOOT_PREFIX = '__vxp-table-foot-'
 
 export const COLUMN_GROUP_ACTIONS =
-  '__VXP_COLUMN_GROUP_ACTIONS' as unknown as InjectionKey<ColumnGroupActions>
+  '__VXP_TABLE_COLUMN_GROUP_ACTIONS' as unknown as InjectionKey<ColumnGroupActions>
 
 export const columnTypes: TableColumnType[] = ['order', 'selection', 'expand', 'drag']
 

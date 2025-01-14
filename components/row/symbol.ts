@@ -31,4 +31,4 @@ export interface ColumnOptions {
 
 export const breakPoints = Object.freeze<BreakPoint[]>(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
-export const ROW_STATE = '__VXP_ROW_STATE' as unknown as InjectionKey<RowState>
+export const ROW_STATE = '__VXP_GRID_ROW_STATE' as unknown as InjectionKey<RowState>

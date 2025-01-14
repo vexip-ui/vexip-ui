@@ -23,7 +23,7 @@ export interface ButtonSlots {
   loading?: () => any
 }
 
-export const GROUP_STATE = '__VXP_GROUP_STATE' as unknown as InjectionKey<ButtonGroupState>
+export const GROUP_STATE = '__VXP_BUTTON_GROUP_STATE' as unknown as InjectionKey<ButtonGroupState>
 
 export const buttonTypes = Object.freeze<ButtonType[]>([
   'default',
