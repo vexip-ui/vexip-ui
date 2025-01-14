@@ -1,3 +1,10 @@
+## 1.7.0 (2025-01-14)
+
+* build: upgrade dev dependencies ([c4be7dd](https://github.com/vexip-ui/vexip-ui/commit/c4be7dd))
+* build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))
+
+
+
 # [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.1...plugins@1.6.0) (2023-12-13)
 
 
