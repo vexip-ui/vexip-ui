@@ -202,7 +202,11 @@ const selectorClass = computed(() => {
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const currentValue = computed(() => {
   const values = [startState, endState].map(state => {
-    return Object.values(state.timeValue).map(doubleDigits).join(':')
+    return Object.keys(state.timeValue)
+      .filter(key => state.enabled[key as TimeType])
+      .map(unit => state.timeValue[unit as TimeType])
+      .map(doubleDigits)
+      .join(':')
   })
 
   return props.range ? values : values[0]
