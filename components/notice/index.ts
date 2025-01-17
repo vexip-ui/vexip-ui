@@ -281,7 +281,7 @@ export class NoticeManager {
       ...this.defaults,
       ...options,
       key,
-      type,
+      type: type ?? options.type,
       onClose,
       onEnter,
       onLeave

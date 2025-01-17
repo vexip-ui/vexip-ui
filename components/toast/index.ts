@@ -177,7 +177,7 @@ export class ToastManager {
     this._timer && clearTimeout(this._timer)
 
     const options = typeof content === 'string' ? { content, duration: _duration } : content
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
+    const convenienceOptions = type ? (conveniences[type] ?? {}) : {}
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -193,7 +193,7 @@ export class ToastManager {
       ...this.defaults,
       ...convenienceOptions,
       ...options,
-      type,
+      type: type ?? options.type,
       onClose
     }
 

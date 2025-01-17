@@ -6,7 +6,7 @@
 
 ### Basis Usage
 
-Open a plain text toast reminder with the `open` method.
+Open a toast reminder with the `open` method.
 
 This method can receive a string or object, which will be used as the toast content when passing in the string, and the incoming object can control the toast properties in a finer-grained manner.
 
@@ -16,7 +16,7 @@ This method can receive a string or object, which will be used as the toast cont
 
 ### Toast Types
 
-The toast with preset type can be opened by calling different methods.
+The toast with preset type can be quickly opened by calling different methods.
 
 There are currently four built-in preset types in the component, which are opened by calling `success`, `warning`, `error` and `loading` respectively.
 

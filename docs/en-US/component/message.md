@@ -8,7 +8,7 @@ It is often used to globally display some lightweight interactive feedback infor
 
 ### Basis Usage
 
-Open a plain text message reminder with the `open` method.
+Open a message reminder with the `open` method.
 
 This method can receive a string or object, which will be used as the message content when passing in the string, and the incoming object can control the message properties in a finer-grained manner.
 
@@ -18,7 +18,7 @@ This method can receive a string or object, which will be used as the message co
 
 ### Message Types
 
-The messages with preset type can be opened by calling different methods.
+The messages with preset type can be quickly opened by calling different methods.
 
 There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
 
