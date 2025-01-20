@@ -1,9 +1,9 @@
-import { computed, reactive, ref, unref } from 'vue'
+import { computed, isRef, reactive, ref, unref } from 'vue'
 
 import { noop } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
-import type { Ref } from 'vue'
+import type { MaybeRef, Ref } from 'vue'
 
 export type ModifierState = Readonly<
   Omit<Record<string, boolean>, 'activeKeys'> & {
@@ -17,6 +17,10 @@ export interface UseModifierOptions {
    * 作用的目标元素的 Ref
    */
   target?: Ref<HTMLElement | null | undefined>,
+  /**
+   * 是否禁用整个 hook 的事件处理
+   */
+  disabled?: MaybeRef<boolean>,
   /**
    * 配置键名的别名，会与默认别名动态合并
    */
@@ -80,6 +84,7 @@ export function useModifier(options: UseModifierOptions = {}) {
   } = options
 
   const target = options.target || ref(null)
+  const disabled = isRef(options.disabled) ? options.disabled : ref(options.disabled || false)
   const aliasMap = { ...defaultAliasMap, ...(options.aliasMap || {}) }
   const activeKeys = reactive(new Set<string>())
   const metaDeps = new Set<string>()
@@ -165,7 +170,7 @@ export function useModifier(options: UseModifierOptions = {}) {
       updateModifier(event, true)
       onKeyDown(event, modifierProxy)
     },
-    { capture, passive }
+    { capture, passive, disabled }
   )
   useListener(
     target,
@@ -178,11 +183,11 @@ export function useModifier(options: UseModifierOptions = {}) {
       updateModifier(event, false)
       onKeyUp(event, modifierProxy)
     },
-    { capture, passive }
+    { capture, passive, disabled }
   )
 
   if (autoReset) {
-    useListener(target, 'blur', resetAll, { capture, passive })
+    useListener(target, 'blur', resetAll, { capture, passive, disabled })
   }
 
   return { target, modifier: modifierProxy as ModifierState }
