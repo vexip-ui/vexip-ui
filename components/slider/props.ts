@@ -25,6 +25,7 @@ export const sliderProps = buildProps({
   triggerFade: booleanProp,
   tipProps: Object as PropType<SliderTipProps>,
   sync: booleanProp,
+  rangeDraggable: booleanProp,
   slots: Object as PropType<SliderSlots>,
   onChange: eventProp<(value: number | number[]) => void>(),
   onInput: eventProp<(value: number | number[]) => void>()

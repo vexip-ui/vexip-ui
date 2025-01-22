@@ -12,7 +12,7 @@ import {
   useNameHelper,
   useProps
 } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/hooks'
+import { useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
 import { sliderProps } from './props'
 
@@ -56,6 +56,7 @@ const props = useProps('slider', _props, {
   triggerFade: false,
   tipProps: () => ({}),
   sync: false,
+  rangeDraggable: false,
   slots: () => ({})
 })
 
@@ -110,6 +111,7 @@ const markerList = computed(() => {
 })
 const hasMarkerLabel = computed(() => !!markerList.value.find(({ marker }) => marker.label))
 const readonly = computed(() => props.loading && props.loadingLock)
+const canDragRange = computed(() => props.range && props.rangeDraggable)
 const className = computed(() => {
   return {
     [nh.b()]: true,
@@ -124,7 +126,8 @@ const className = computed(() => {
     [nh.bm('reverse')]: props.reverse,
     [nh.bm('with-marker')]: hasMarkerLabel.value,
     [nh.bm('flip-marker')]: props.flipMarker,
-    [nh.bm('hide-trigger')]: props.triggerFade && !triggerShow.value
+    [nh.bm('hide-trigger')]: props.triggerFade && !triggerShow.value,
+    [nh.bm('range-draggable')]: canDragRange.value
   }
 })
 const stepDigit = computed(() => decimalLength(props.step))
@@ -144,17 +147,12 @@ const triggerPercent = computed(() => {
 })
 const fillerStyle = computed(() => {
   const { vertical, reverse } = props
-  const offset = Math.max(triggerPercent.value[0], triggerPercent.value[1]) - 100
-  const afterOffset = Math.min(triggerPercent.value[0], triggerPercent.value[1]) - offset
 
   return {
-    [nh.cv('filler-after-transform')]: `translate${vertical ? 'Y' : 'X'}(${
-      reverse ? -afterOffset : afterOffset
-    }%) translateZ(0)`,
-    transform: `
-      translate${vertical ? 'Y' : 'X'}(${reverse ? -offset : offset}%)
-      translateZ(0)
-    `
+    [vertical ? (reverse ? 'bottom' : 'top') : reverse ? 'right' : 'left']:
+      `${Math.min(triggerPercent.value[0], triggerPercent.value[1])}%`,
+    [vertical ? 'height' : 'width']:
+      `${Math.abs(triggerPercent.value[0] - triggerPercent.value[1])}%`
   }
 })
 const startTriggerStyle = computed(() => {
@@ -188,6 +186,57 @@ const commonSlotParams = shallowReadonly(
     loading: toRef(props, 'loading')
   })
 )
+
+const { target: filler } = useMoving({
+  disabled: computed(() => !canDragRange.value || isDisabled.value),
+  onStart: (state, event) => {
+    if (!track.value || event.button > 0) {
+      return false
+    }
+
+    clearTimeout(timer.sliding)
+    event.stopPropagation()
+    event.preventDefault()
+
+    trackRect = track.value.getBoundingClientRect()
+    state.startValue = stepOneValue.value[TriggerType.START]
+    state.endValue = stepOneValue.value[TriggerType.END]
+    state.valueDiff = (state.endValue as number) - (state.startValue as number)
+  },
+  onMove: (state, event) => {
+    if (!trackRect) {
+      return
+    }
+
+    event.preventDefault()
+
+    const vertical = props.vertical
+    const reverse = props.reverse
+    const delta = vertical ? state.deltaY : state.deltaX
+
+    for (let i = 0; i < 2; ++i) {
+      const type = i ? TriggerType.END : TriggerType.START
+      stepOneValue.value[type] =
+        (reverse ? -1 : 1) *
+          (delta / trackRect[vertical ? 'height' : 'width']) *
+          stepOneTotal.value +
+        Number(state[i ? 'endValue' : 'startValue'])
+    }
+
+    verifyValue()
+
+    if (stepOneValue.value[TriggerType.START] === stepOneMin.value) {
+      stepOneValue.value[TriggerType.END] =
+        stepOneValue.value[TriggerType.START] + (state.valueDiff as number)
+    } else if (stepOneValue.value[TriggerType.END] === stepOneMax.value) {
+      stepOneValue.value[TriggerType.START] =
+        stepOneValue.value[TriggerType.END] - (state.valueDiff as number)
+    }
+
+    emitChange('input')
+  },
+  onEnd: () => emitChange()
+})
 
 parseValue(props.value)
 verifyValue()
@@ -555,13 +604,14 @@ function blur() {
     @touchstart="disableEvent"
   >
     <div :class="nh.be('container')">
-      <div ref="track" :class="nh.be('track')">
-        <slot name="filler" v-bind="commonSlotParams">
-          <Renderer :renderer="props.slots.filler" :data="commonSlotParams">
-            <div :class="nh.be('filler')" :style="fillerStyle"></div>
-          </Renderer>
-        </slot>
-      </div>
+      <div ref="track" :class="nh.be('track')"></div>
+      <slot name="filler" v-bind="commonSlotParams">
+        <Renderer :renderer="props.slots.filler" :data="commonSlotParams">
+          <div ref="filler" :class="nh.be('filler')" :style="fillerStyle">
+            <div :class="nh.be('filler-inner')"></div>
+          </div>
+        </Renderer>
+      </slot>
       <template v-if="markerList.length">
         <div :class="nh.be('points')">
           <div
