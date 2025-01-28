@@ -120,7 +120,7 @@ If you also want to independently modify the preset variables for the dark mode,
 
 ```scss
 // style/dark-variables.scss
-@forward 'vexip-ui/style/dark/variables.scss' with (
+@forward 'vexip-ui/style/dark/variables' with (
   $color-map: (
     primary: (
       base: #654ea7

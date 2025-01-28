@@ -11,7 +11,7 @@ import cleanCSS from 'gulp-clean-css'
 const rootDir = resolve(fileURLToPath(import.meta.url), '..')
 
 const { dest, parallel, series, src } = gulp
-const { existsSync, emptyDir, mkdirSync } = fs
+const { existsSync, emptyDirSync, mkdirSync } = fs
 
 const cssDir = resolve(rootDir, 'css')
 const themesDir = resolve(rootDir, 'themes')
@@ -59,5 +59,5 @@ export default parallel(series(buildStyle, buildDark), buildThemes)
  * @param {string} dir
  */
 function ensureEmptyDir(dir) {
-  existsSync(dir) ? emptyDir(dir) : mkdirSync(dir)
+  existsSync(dir) ? emptyDirSync(dir) : mkdirSync(dir)
 }
