@@ -38,10 +38,6 @@ async function toggleMove(el: Element, value = 40) {
   await moveEnd()
 }
 
-function afterTranslate(xy: 'X' | 'Y', value: number) {
-  return `--vxp-slider-filler-after-transform: translate${xy}(${value}%) translateZ(0);`
-}
-
 describe('Slider', () => {
   it('render', () => {
     const wrapper = mount(Slider)
@@ -58,16 +54,17 @@ describe('Slider', () => {
       props: { value: 40 }
     })
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 60)
+      'left: 0%; width: 40%;'
+    )
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      'left: 0%; width: 40%;'
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 40%;')
 
     await wrapper.setProps({ value: 60 })
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-40%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 40)
+      'left: 0%; width: 60%;'
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 60%;')
   })
@@ -76,9 +73,8 @@ describe('Slider', () => {
     const wrapper = mount(() => <Slider value={65} min={50} max={200}></Slider>)
 
     await nextTick()
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-90%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 90)
+      'left: 0%; width: 10%;'
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 10%;')
   })
@@ -109,9 +105,8 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(40)
     expect(wrapper.findComponent(Slider).emitted('update:value')![0][0]).toBe(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 60)
+      'left: 0%; width: 40%;'
     )
     expect(trigger.attributes('style')).toContain('left: 40%;')
 
@@ -226,9 +221,8 @@ describe('Slider', () => {
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element)
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateY(-60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('Y', 60)
+      'top: 0%; height: 40%;'
     )
     expect(trigger.attributes('style')).toContain('top: 40%;')
 
@@ -260,9 +254,8 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(60%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', -60)
+      'right: 0%; width: 40%;'
     )
     expect(trigger.attributes('style')).toContain('right: 40%;')
 
@@ -293,9 +286,8 @@ describe('Slider', () => {
     const triggers = wrapper.findAll('.vxp-slider__trigger')
 
     expect(triggers.length).toEqual(2)
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-50%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 70)
+      'left: 20%; width: 30%;'
     )
 
     await toggleMove(wrapper.find('.vxp-slider').element, 30)
@@ -303,17 +295,15 @@ describe('Slider', () => {
     expect(onInput).toHaveBeenCalledWith([30, 50])
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([30, 50])
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-50%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 80)
+      'left: 30%; width: 20%;'
     )
 
     await toggleMove(wrapper.find('.vxp-slider').element, 80)
     expect(onInput).toHaveBeenCalledWith([30, 80])
     expect(onChange).toHaveBeenCalledWith([30, 80])
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(-20%)')
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      afterTranslate('X', 50)
+      'left: 30%; width: 50%;'
     )
 
     trackMock.mockRestore()
