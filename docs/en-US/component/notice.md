@@ -8,7 +8,7 @@ It is often used to globally display some heavyweight interactive feedback infor
 
 ### Basis Usage
 
-Open a text-only notice with the `open` method.
+Open a notice with the `open` method.
 
 This method can receive a string or object, which will be used as the notice content when passed in. The passed object can control the notice attribute in a finer-grained manner. For specific optional attributes, please refer to the api description.
 
@@ -20,7 +20,7 @@ Depending on the presence or absence of the `title` and `content` options, the c
 
 ### Notice Types
 
-The notice with preset type can be opened by calling different methods.
+The notice with preset type can be quickly opened by calling different methods.
 
 There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.
 

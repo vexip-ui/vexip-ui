@@ -36,6 +36,10 @@ export interface UseMovingOptions {
    */
   lazy?: MaybeRef<boolean>,
   /**
+   * 是否禁用整个 hook 的事件处理
+   */
+  disabled?: MaybeRef<boolean>,
+  /**
    * 事件的 capture 选项
    *
    * @default true
@@ -78,7 +82,8 @@ export function useMoving(options: UseMovingOptions) {
   const target = options.target || ref(null)
   const x = isRef(options.x) ? options.x : ref(0)
   const y = isRef(options.y) ? options.y : ref(0)
-  const lazy = isRef(options.lazy) ? options.lazy : ref(false)
+  const lazy = isRef(options.lazy) ? options.lazy : ref(options.lazy || false)
+  const disabled = isRef(options.disabled) ? options.disabled : ref(options.disabled || false)
 
   const { capture = true, stopMouse = true, stopTouch = true } = options
 
@@ -112,6 +117,8 @@ export function useMoving(options: UseMovingOptions) {
   })
 
   function start(event: PointerEvent) {
+    if (disabled.value) return
+
     Object.assign(internalState, {
       xStart: x.value,
       yStart: y.value,
@@ -134,6 +141,8 @@ export function useMoving(options: UseMovingOptions) {
   }
 
   function move(event: PointerEvent) {
+    if (disabled.value) return
+
     disableEvent(event)
     throttleMove(event)
   }
@@ -141,6 +150,8 @@ export function useMoving(options: UseMovingOptions) {
   function end(event: PointerEvent) {
     document.removeEventListener('pointermove', move, { capture })
     document.removeEventListener('pointerup', end, { capture })
+
+    if (disabled.value) return
 
     updateState(event)
 
@@ -177,6 +188,7 @@ export function useMoving(options: UseMovingOptions) {
     moving: computed(() => moving.value),
     x,
     y,
-    lazy
+    lazy,
+    disabled
   }
 }

@@ -41,13 +41,12 @@ $color-map: map.deep-merge(
     $color-map: map.deep-merge(
       (
         $type: (
-          '#{$mode}-#{$i}':
-            color.mix(
-              $mixed-color,
-              map.get($color-map, $type, 'base'),
-              math.percentage(math.div($i, 10))
-            )
-        )
+            '#{$mode}-#{$i}': color.mix(
+                $mixed-color,
+                map.get($color-map, $type, 'base'),
+                math.percentage(math.div($i, 10))
+              )
+          )
       ),
       $color-map
     ) !global;
@@ -59,9 +58,11 @@ $color-map: map.deep-merge(
     $color-map: map.deep-merge(
       (
         $type: (
-          'opacity-#{$i}':
-            rgba(map.get($color-map, $type, 'base'), math.percentage(math.div(10 - $i, 10)))
-        )
+            'opacity-#{$i}': rgba(
+                map.get($color-map, $type, 'base'),
+                math.percentage(math.div(10 - $i, 10))
+              )
+          )
       ),
       $color-map
     ) !global;
@@ -77,8 +78,10 @@ $color-map: map.deep-merge(
 @mixin define-type-color($type, $map: $color-map) {
   $colors: map.get($map, $type);
 
-  @each $name in map.keys($colors) {
-    @include define-css-var(('color', $type, $name), map.get($colors, $name));
+  @if $colors {
+    @each $name in map.keys($colors) {
+      @include define-css-var(('color', $type, $name), map.get($colors, $name));
+    }
   }
 }
 
@@ -312,10 +315,7 @@ $break-point-map: map.merge(
   );
 
   @each $name in map.keys(get-or-default($theme-config, $border-color-map, 'border-color-map')) {
-    @include define-css-var(
-      ('border', $name),
-      value('border-shape') value('border-color' $name)
-    );
+    @include define-css-var(('border', $name), value('border-shape') value('border-color' $name));
   }
 
   @include define-preset-values(
@@ -357,10 +357,7 @@ $break-point-map: map.merge(
   );
 
   @each $name in map.keys(get-or-default($theme-config, $shadow-color-map, 'shadow-color-map')) {
-    @include define-css-var(
-      ('shadow', $name),
-      value('shadow-shape') value('shadow-color' $name)
-    );
+    @include define-css-var(('shadow', $name), value('shadow-shape') value('shadow-color' $name));
   }
 
   @include define-css-var(
@@ -395,7 +392,7 @@ $break-point-map: map.merge(
   );
   @include define-preset-values(
     'break-point',
-    get-or-default($theme-config, $break-point-map, 'break-point-map, true'),
+    get-or-default($theme-config, $break-point-map, 'break-point-map'),
     true
   );
 }

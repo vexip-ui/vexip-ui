@@ -9,11 +9,30 @@
 
   @include define-theme-styles(
     (
+      'color-black': $color-black,
+      'color-white': $color-white,
+      'color-map': $color-map,
       'content-color-map': $content-color-map,
       'bg-color-map': $bg-color-map,
+      'border-width': $border-width,
+      'border-style': $border-style,
       'border-color-map': $border-color-map,
       'fill-color-map': $fill-color-map,
-      'shadow-color-map': $shadow-color-map
+      'font-family-map': $font-family-map,
+      'font-size-map': $font-size-map,
+      'line-height-map': $line-height-map,
+      'radius-map': $radius-map,
+      'shadow-x': $shadow-x,
+      'shadow-y': $shadow-y,
+      'shadow-blur': $shadow-blur,
+      'shadow-color-map': $shadow-color-map,
+      'shadow-border': $shadow-border,
+      'shadow-focus': $shadow-focus,
+      'transition-duration': $transition-duration,
+      'transition-timing': $transition-timing,
+      'transition-map': $transition-map,
+      'z-index-map': $z-index-map,
+      'break-point-map': $break-point-map
     )
   );
 

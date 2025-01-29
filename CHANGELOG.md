@@ -1,3 +1,16 @@
+## <small>2.3.23 (2025-01-29)</small>
+
+* release(hooks): v2.8.0 ([0fdcb35](https://github.com/vexip-ui/vexip-ui/commit/0fdcb35))
+* fix(style): ensure dark style variables can be override (#537) ([8cda8bb](https://github.com/vexip-ui/vexip-ui/commit/8cda8bb)), closes [#537](https://github.com/vexip-ui/vexip-ui/issues/537)
+* test(slider): adjust unit tests ([cb91840](https://github.com/vexip-ui/vexip-ui/commit/cb91840))
+* feat: open method support type option for Message, Notice and Toast ([d4c2524](https://github.com/vexip-ui/vexip-ui/commit/d4c2524)), closes [#532](https://github.com/vexip-ui/vexip-ui/issues/532)
+* feat(hooks): useListener support disabled option ([a92674b](https://github.com/vexip-ui/vexip-ui/commit/a92674b))
+* feat(hooks): useModifier support disabled option ([3f1f6a5](https://github.com/vexip-ui/vexip-ui/commit/3f1f6a5))
+* feat(hooks): useMoving support disabled option ([e039307](https://github.com/vexip-ui/vexip-ui/commit/e039307))
+* feat(slider): support range-draggable prop ([a8a320e](https://github.com/vexip-ui/vexip-ui/commit/a8a320e)), closes [#523](https://github.com/vexip-ui/vexip-ui/issues/523)
+
+
+
 ## <small>2.3.22 (2025-01-14)</small>
 
 * build(meta): specify exports field for package.json ([bdb90fe](https://github.com/vexip-ui/vexip-ui/commit/bdb90fe))

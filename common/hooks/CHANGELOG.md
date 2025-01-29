@@ -1,3 +1,11 @@
+## 2.8.0 (2025-01-29)
+
+* feat(hooks): useListener support disabled option ([a92674b](https://github.com/vexip-ui/vexip-ui/commit/a92674b))
+* feat(hooks): useModifier support disabled option ([3f1f6a5](https://github.com/vexip-ui/vexip-ui/commit/3f1f6a5))
+* feat(hooks): useMoving support disabled option ([e039307](https://github.com/vexip-ui/vexip-ui/commit/e039307))
+
+
+
 ## 2.7.0 (2025-01-14)
 
 * build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))

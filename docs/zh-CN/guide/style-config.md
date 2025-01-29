@@ -119,7 +119,7 @@ createApp(App).use(install).mount('#app')
 
 ```scss
 // style/dark-variables.scss
-@forward 'vexip-ui/style/dark/variables.scss' with (
+@forward 'vexip-ui/style/dark/variables' with (
   $color-map: (
     primary: (
       base: #654ea7

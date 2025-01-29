@@ -366,7 +366,6 @@ function handleZoom(ratio: number, emit = true) {
 async function toggleFull(isFull = !full.value, emit = true) {
   isFull ? await enterFull() : await exitFull()
 
-  console.log(full.value, state.full)
   emit && emitEvent(props.onFull, isFull, state)
 }
 
