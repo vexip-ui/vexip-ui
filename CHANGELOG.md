@@ -1,32 +1,32 @@
-## <small>2.3.23 (2025-01-29)</small>
-
-* release(hooks): v2.8.0 ([0fdcb35](https://github.com/vexip-ui/vexip-ui/commit/0fdcb35))
-* fix(style): ensure dark style variables can be override (#537) ([8cda8bb](https://github.com/vexip-ui/vexip-ui/commit/8cda8bb)), closes [#537](https://github.com/vexip-ui/vexip-ui/issues/537)
-* test(slider): adjust unit tests ([cb91840](https://github.com/vexip-ui/vexip-ui/commit/cb91840))
-* feat: open method support type option for Message, Notice and Toast ([d4c2524](https://github.com/vexip-ui/vexip-ui/commit/d4c2524)), closes [#532](https://github.com/vexip-ui/vexip-ui/issues/532)
-* feat(hooks): useListener support disabled option ([a92674b](https://github.com/vexip-ui/vexip-ui/commit/a92674b))
-* feat(hooks): useModifier support disabled option ([3f1f6a5](https://github.com/vexip-ui/vexip-ui/commit/3f1f6a5))
-* feat(hooks): useMoving support disabled option ([e039307](https://github.com/vexip-ui/vexip-ui/commit/e039307))
-* feat(slider): support range-draggable prop ([a8a320e](https://github.com/vexip-ui/vexip-ui/commit/a8a320e)), closes [#523](https://github.com/vexip-ui/vexip-ui/issues/523)
+## [2.3.23](https://github.com/vexip-ui/vexip-ui/compare/v2.3.22...v2.3.23) (2025-01-29)
 
 
+### ✨ Features
 
-## <small>2.3.22 (2025-01-14)</small>
+* **hooks:** useListener support disabled option ([a92674b](https://github.com/vexip-ui/vexip-ui/commit/a92674b6b30c22d68c8375210f1f2b57575b1faf))
+* **hooks:** useModifier support disabled option ([3f1f6a5](https://github.com/vexip-ui/vexip-ui/commit/3f1f6a5649fdc593205c0ccdc62638cfcb33bc2c))
+* **hooks:** useMoving support disabled option ([e039307](https://github.com/vexip-ui/vexip-ui/commit/e039307e7bd818edbc20e20abfaa1dff0ba8a351))
+* open method support type option for Message, Notice and Toast ([d4c2524](https://github.com/vexip-ui/vexip-ui/commit/d4c25247551e34d690d704b9d895fa455b032d81)), closes [#532](https://github.com/vexip-ui/vexip-ui/issues/532)
+* **slider:** support range-draggable prop ([a8a320e](https://github.com/vexip-ui/vexip-ui/commit/a8a320e2c10d8770184194ff8dcd6ab0dad35a45)), closes [#523](https://github.com/vexip-ui/vexip-ui/issues/523)
 
-* build(meta): specify exports field for package.json ([bdb90fe](https://github.com/vexip-ui/vexip-ui/commit/bdb90fe))
+
+### 🐞 Bug Fixes
+
+* **style:** ensure dark style variables can be override ([#537](https://github.com/vexip-ui/vexip-ui/issues/537)) ([8cda8bb](https://github.com/vexip-ui/vexip-ui/commit/8cda8bb59467b2df96fa5e3c59d6deaaa442809c))
 
 
 
-## <small>2.3.21 (2025-01-14)</small>
+## [2.3.22](https://github.com/vexip-ui/vexip-ui/compare/v2.3.21...v2.3.22) (2025-01-14)
 
-* release(config): v1.10.0 ([4467b0a](https://github.com/vexip-ui/vexip-ui/commit/4467b0a))
-* release(hooks): v2.7.0 ([600b693](https://github.com/vexip-ui/vexip-ui/commit/600b693))
-* release(plugins): v1.7.0 ([6eb92ca](https://github.com/vexip-ui/vexip-ui/commit/6eb92ca))
-* release(scripts): v1.2.0 ([6402a21](https://github.com/vexip-ui/vexip-ui/commit/6402a21))
-* fix: ensure each injection key is unique ([04c50f3](https://github.com/vexip-ui/vexip-ui/commit/04c50f3)), closes [#530](https://github.com/vexip-ui/vexip-ui/issues/530)
-* fix(select): correct placeholder display with remote ([29222fc](https://github.com/vexip-ui/vexip-ui/commit/29222fc)), closes [#531](https://github.com/vexip-ui/vexip-ui/issues/531)
-* build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))
-* docs: improve style config guide document ([b6f0f46](https://github.com/vexip-ui/vexip-ui/commit/b6f0f46))
+
+
+## [2.3.21](https://github.com/vexip-ui/vexip-ui/compare/v2.3.20...v2.3.21) (2025-01-14)
+
+
+### 🐞 Bug Fixes
+
+* ensure each injection key is unique ([04c50f3](https://github.com/vexip-ui/vexip-ui/commit/04c50f393f45128d88a953d65a54f431f6b23e34)), closes [#530](https://github.com/vexip-ui/vexip-ui/issues/530)
+* **select:** correct placeholder display with remote ([29222fc](https://github.com/vexip-ui/vexip-ui/commit/29222fcc20d247a70cb71efaa568f0d0015a1a96)), closes [#531](https://github.com/vexip-ui/vexip-ui/issues/531)
 
 
 
