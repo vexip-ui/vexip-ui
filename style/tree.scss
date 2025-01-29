@@ -285,7 +285,7 @@ $tree: map.merge(
     position: absolute;
     inset-inline: 0;
     height: 1px;
-    will-change: top, inset-inline-start;
     background-color: value('tree-indicator-color');
+    will-change: top, inset-inline-start;
   }
 }

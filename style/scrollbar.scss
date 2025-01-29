@@ -109,12 +109,12 @@ $scrollbar: map.merge(
     cursor: pointer;
     background-color: value('scrollbar-bar-bg-color');
     border-radius: calc(value('scrollbar-width') * 0.5);
-    will-change: transform;
     transition:
       width value('transition-base'),
       height value('transition-base'),
       value('transition-opacity'),
       transform value('scrollbar-move-duration') value('scrollbar-move-timing');
+    will-change: transform;
   }
 
   &--fade &__bar {

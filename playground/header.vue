@@ -423,7 +423,7 @@ async function formatCodes() {
 
     &:hover,
     &:focus {
-      color: var(var(--vxp-content-color-base));
+      color: var(--vxp-content-color-base);
     }
   }
 
@@ -482,7 +482,7 @@ async function formatCodes() {
 
     &:hover,
     &:focus {
-      color: var(var(--vxp-content-color-base));
+      color: var(--vxp-content-color-base);
     }
   }
 

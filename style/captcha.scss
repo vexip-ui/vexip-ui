@@ -113,10 +113,10 @@ $captcha: map.merge(
     position: absolute;
     top: 0;
     height: 100%;
-    will-change: left;
     pointer-events: none;
     transition: value('captcha-trigger-transition');
     transform: translate3d(-50%, 0, 0);
+    will-change: left;
   }
 
   &__image-tip {
@@ -236,10 +236,10 @@ $captcha: map.merge(
     inset: 0;
     background-color: value('captcha-filler-bg-color');
     border-radius: value('captcha-trigger-radius');
-    will-change: transform;
     transition: value('transition-background'), value('captcha-filler-transition');
     transform: scaleX(0);
     transform-origin: 0 50%;
+    will-change: transform;
 
     &--success {
       background-color: value('captcha-filler-bg-color-success');
@@ -304,11 +304,11 @@ $captcha: map.merge(
     cursor: move;
     background-color: value('captcha-trigger-bg-color');
     border-radius: value('captcha-trigger-radius');
-    will-change: left;
     outline: 0;
     box-shadow: value('shadow-base');
     transition: value('transition-color'), value('captcha-trigger-transition');
     transform: translate3d(-50%, 0, 0);
+    will-change: left;
 
     &:hover,
     &:focus,

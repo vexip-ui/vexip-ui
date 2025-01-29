@@ -73,13 +73,13 @@ $layout: map.merge(
       pointer-events: all;
       background-color: value('layout-aside-bg-color');
       border-inline-end: value('layout-aside-border');
-      will-change: width, transform;
       transition:
         width value('transition-base'),
         value('transition-background'),
         value('transition-border'),
         value('transition-transform');
       transform: translateX(-100%);
+      will-change: width, transform;
     }
 
     @include inherit-color;

@@ -56,9 +56,9 @@ $progress: map.merge(
     width: 100%;
     height: 100%;
     background-color: value('progress-filler-bg-color');
-    will-change: transform;
     transition: value('transition-transform');
     transform: $percent-translate;
+    will-change: transform;
 
     @include rtl {
       transform: $percent-translate-rtl;
@@ -73,9 +73,8 @@ $progress: map.merge(
     content: '';
     background-color: value('progress-activated-color');
     transform-origin: right;
-    animation: #{$namespace}-progress-flowing value('progress-animation-duration') value(
-        'progress-animation-timing'
-      ) infinite;
+    animation: #{$namespace}-progress-flowing value('progress-animation-duration')
+      value('progress-animation-timing') infinite;
 
     @include rtl {
       @include define-css-var('progress-activated-dir', -1);

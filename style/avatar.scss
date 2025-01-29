@@ -73,8 +73,8 @@ $avatar: map.merge(
 
   &__image {
     height: 100%;
-    object-fit: value('avatar-image-fit');
     pointer-events: none;
+    object-fit: value('avatar-image-fit');
   }
 
   &__text {

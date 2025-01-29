@@ -1,9 +1,9 @@
 @use 'sass:map';
 
-@use './shared/variables.scss' as *;
-@use './design/variables.scss' as *;
+@use './shared/variables' as *;
+@use './design/variables' as *;
 @use './animation';
-@use './icon.scss';
+@use './icon';
 
 :root,
 .#{$namespace}-theme-vars-base {
