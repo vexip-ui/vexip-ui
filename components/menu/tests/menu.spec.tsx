@@ -255,6 +255,51 @@ describe('Menu', () => {
     expect(wrapper.findAll('.vxp-menu__item')[3].classes()).toContain('vxp-menu__item--disabled')
   })
 
+  it.only('use onlyOne', async () => {
+    const options = [
+      {
+        label: 'g1',
+        group: true,
+        children: [
+          {
+            label: '1',
+            name: 'l1',
+            icon: Home,
+            children: [
+              { label: '1-1', meta: { foo: '1-1' } },
+              { label: '1-2', meta: { foo: '1-2' } }
+            ]
+          },
+          {
+            label: '2',
+            name: 'l2',
+            icon: Home,
+            children: [{ label: '2-1', meta: { foo: '2-1' } }]
+          },
+          {
+            label: '3',
+            name: 'l3',
+            icon: Home,
+            onlyOne: false,
+            children: [{ label: '3-1', meta: { foo: '3-1' } }]
+          }
+        ]
+      },
+      {
+        label: '2',
+        icon: User,
+        disabled: true
+      }
+    ]
+    const wrapper = mount(() => <Menu options={options} onlyOne></Menu>)
+
+    const items = wrapper.findAll('.vxp-menu__item')
+
+    expect(items[3].find('.vxp-menu__list').exists()).toBe(false)
+    expect(items[3].text()).toBe('2-1')
+    expect(items[5].exists()).toBe(true)
+  })
+
   it('use router', async () => {
     const testRoute = {
       path: 'c1',
