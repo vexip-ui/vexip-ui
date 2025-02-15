@@ -83,8 +83,8 @@ export default defineComponent({
       return marginLeft + marginRight
     }
 
-    function computeHorizontalPadding(el: HTMLElement) {
-      const style = getComputedStyle(el)
+    function computeHorizontalPadding(elOrStyle: HTMLElement | CSSStyleDeclaration) {
+      const style = elOrStyle instanceof Element ? getComputedStyle(elOrStyle) : elOrStyle
       const paddingLeft = parseFloat(style.paddingLeft) || 0
       const paddingRight = parseFloat(style.paddingRight) || 0
 
@@ -131,10 +131,12 @@ export default defineComponent({
       }
 
       const suffixEl = suffix.value
-      const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
+      const style = getComputedStyle(wrapper.value)
+      const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(style)
+      const gap = parseFloat(style.columnGap) || 0
       const childWidths: number[] = []
 
-      let totalWidth = suffixEl ? suffixEl.offsetWidth : 0
+      let totalWidth = suffixEl ? suffixEl.offsetWidth + computeHorizontalMargin(suffixEl) + gap : 0
 
       const counterMargin = computeHorizontalMargin(counterEl)
       const length = childCount - (suffixEl ? 2 : 1)
@@ -151,7 +153,7 @@ export default defineComponent({
           toggleDisplay(child, true)
         }
 
-        const childWidth = computeOuterWidth(child)
+        const childWidth = computeOuterWidth(child) + gap
 
         totalWidth += childWidth
         childWidths[i] = childWidth
