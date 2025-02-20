@@ -3,11 +3,11 @@
 
 @use './shared' as *;
 @use './design' as *;
-@use './button.scss';
-@use './ellipsis.scss';
-@use './scroll.scss';
-@use './checkbox.scss';
-@use './tooltip.scss';
+@use './button';
+@use './ellipsis';
+@use './scroll';
+@use './checkbox';
+@use './tooltip';
 
 $table: () !default;
 $table: map.merge(
@@ -269,8 +269,8 @@ $table: map.merge(
     z-index: 1;
     width: value('table-expanded-width');
     min-width: 100%;
-    will-change: height;
     background-color: value('table-expanded-bg-color');
+    will-change: height;
 
     &--fixed {
       transform: translateX(
@@ -376,11 +376,11 @@ $table: map.merge(
     #{$cell},
     #{$head-cell},
     #{$foot-cell} {
-      will-change: width, transform;
       transition:
         width value('transition-base'),
         value('transition-background'),
         value('transition-transform');
+      will-change: width, transform;
     }
   }
 
@@ -678,8 +678,8 @@ $table: map.merge(
     left: 0;
     z-index: 10;
     height: 1px;
-    will-change: top;
     pointer-events: none;
+    will-change: top;
 
     &::after {
       position: absolute;
@@ -705,9 +705,9 @@ $table: map.merge(
     top: 0;
     bottom: 0;
     z-index: 10;
-    will-change: left;
     pointer-events: none;
     border-inline-start: value('border-shape') value('table-indicator-color');
+    will-change: left;
   }
 
   &__empty {

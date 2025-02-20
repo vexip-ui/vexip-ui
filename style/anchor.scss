@@ -72,9 +72,9 @@ $anchor: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    will-change: top;
     transition: top value('transition-base');
     transform: translate3d(-50%, -50%, 0);
+    will-change: top;
 
     @include rtl {
       transform: translate3d(50%, -50%, 0);

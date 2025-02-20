@@ -29,8 +29,8 @@ $loading: map.merge(
     height: 100%;
     pointer-events: none;
     background-color: value('loading-filler-bg-color');
-    will-change: transform;
     transition: value('transition-background'), value('transition-transform');
+    will-change: transform;
   }
 
   $types: success error warning;

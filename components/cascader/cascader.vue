@@ -1213,12 +1213,12 @@ function handlePanelsEnter() {
             @back="handlePanelBack"
             @close="currentVisible = false"
           >
-            <template #default="payload">
+            <template v-if="slots.default || props.slots.default" #default="payload">
               <slot v-bind="payload">
                 <Renderer :renderer="props.slots.default" :data="payload"></Renderer>
               </slot>
             </template>
-            <template #label="payload">
+            <template v-if="slots.label || props.slots.label" #label="payload">
               <slot name="label" v-bind="payload">
                 <Renderer :renderer="props.slots.label" :data="payload"></Renderer>
               </slot>

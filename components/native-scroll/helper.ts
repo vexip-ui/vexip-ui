@@ -16,15 +16,23 @@ export function animateScrollTo(options: {
 
   if (!el) return
 
+  const end = () => {
+    typeof callback === 'function' && callback()
+  }
+
   if (duration <= 0) {
     el.scrollTo(xTo, yTo)
+    end()
     return
   }
 
   const xDistance = xTo - xFrom
   const yDistance = yTo - yFrom
 
-  if (!xDistance && !yDistance) return
+  if (!xDistance && !yDistance) {
+    end()
+    return
+  }
 
   const xStep = Math.ceil((xDistance / duration) * 16)
   const yStep = Math.ceil((yDistance / duration) * 16)
@@ -47,7 +55,7 @@ export function animateScrollTo(options: {
     el.scrollTo(currentX, currentY)
 
     if ((!xDistance || currentX === xTo) && (!yDistance || currentY === yTo)) {
-      typeof callback === 'function' && callback()
+      end()
     } else {
       requestAnimationFrame(scroll)
     }

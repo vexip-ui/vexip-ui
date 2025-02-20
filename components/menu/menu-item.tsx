@@ -116,7 +116,8 @@ const MenuItem = defineComponent({
       }
 
       const indentWidth = nh.gcv('indent-width')
-      const multiplier = indent.value + (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25
+      const multiplier =
+        indent.value + (menuState?.isReduced ? 0 : (groupState?.indent ?? 0)) * 0.25
 
       return {
         paddingInlineStart:
@@ -140,7 +141,7 @@ const MenuItem = defineComponent({
     const tooltipReverse = computed(() => !!menuState?.tooltipReverse)
     const isHorizontal = computed(() => menuState?.horizontal && !parentItemState)
     const transition = computed(() => {
-      return props.transitionName ?? isHorizontal.value ? nh.ns('drop') : nh.ns('zoom')
+      return (props.transitionName ?? isHorizontal.value) ? nh.ns('drop') : nh.ns('zoom')
     })
     const dropTrigger = computed(() => props.trigger || menuState?.trigger || 'hover')
 
@@ -497,4 +498,5 @@ const MenuItem = defineComponent({
   }
 })
 
+// eslint-disable-next-line vue/require-direct-export
 export default MenuItem

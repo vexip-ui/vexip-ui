@@ -27,10 +27,10 @@ $scroll: map.merge(
   &__wrapper {
     position: relative;
     vertical-align: top;
-    will-change: transform;
     transition-timing-function: value('scroll-move-timing');
     transition-duration: value('scroll-move-duration');
     transition-property: transform;
+    will-change: transform;
 
     @include clear-both;
   }
