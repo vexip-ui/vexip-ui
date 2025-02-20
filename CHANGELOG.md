@@ -1,3 +1,18 @@
+## [2.3.24](https://github.com/vexip-ui/vexip-ui/compare/v2.3.23...v2.3.24) (2025-02-20)
+
+
+### ✨ Features
+
+* **overflow:** support gap style ([0e55867](https://github.com/vexip-ui/vexip-ui/commit/0e5586761d045000059be3a03068966c73e1e54b))
+
+
+### 🐞 Bug Fixes
+
+* **cascader:** unexpected render slots ([6983ac2](https://github.com/vexip-ui/vexip-ui/commit/6983ac2c7f716a509bd196abfb1f3eb41d634831))
+* **native-scroll:** correctly end pending when no scroll effect ([fd7cef5](https://github.com/vexip-ui/vexip-ui/commit/fd7cef5654c41cb1a472117a1e2f6afd68f5c57a)), closes [#539](https://github.com/vexip-ui/vexip-ui/issues/539)
+
+
+
 ## [2.3.23](https://github.com/vexip-ui/vexip-ui/compare/v2.3.22...v2.3.23) (2025-01-29)
 
 
