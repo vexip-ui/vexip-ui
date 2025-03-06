@@ -175,7 +175,7 @@ export interface TableSelectionColumn<D = Data, Val extends string | number = st
   extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer' | 'headRenderer'> {
   key?: keyof D,
   type: 'selection',
-  checkboxSize?: ComponentSize,
+  selectionSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 

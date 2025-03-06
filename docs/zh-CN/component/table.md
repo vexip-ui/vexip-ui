@@ -386,28 +386,32 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
 }
 
 interface TableOrderColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
 interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer' | 'headRenderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer' | 'headRenderer'> {
+  key?: keyof D,
   type: 'selection',
-  checkboxSize?: ComponentSize,
+  selectionSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
 interface TableExpandColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'expand',
   disableRow?: (data: Data) => boolean,
   renderer?: ExpandRenderFn<D>
 }
 
 interface TableDragColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'drag',
   disableRow?: (data: Data) => boolean
 }
@@ -670,36 +674,37 @@ interface TableFootPayload {
 
 ### TableColumn 属性
 
-| 名称             | 类型                                   | 说明                                                               | 默认值      | 始于     |
-| ---------------- | -------------------------------------- | ------------------------------------------------------------------ | ----------- | -------- |
-| name             | `string`                               | 列的名称                                                           | `''`        | -        |
-| key \| id-key    | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                     | `null`      | -        |
-| accessor         | `(data: any, rowIndex: number) => any` | 该列的数据读取方法                                                 | `null`      | -        |
-| fixed            | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧 | `false`     | -        |
-| class            | `ClassType`                            | 该列单元格的自定义类名                                             | `null`      | `2.1.19` |
-| style            | `StyleType`                            | 该列单元格的自定义样式                                             | `null`      | `2.0.1`  |
-| attrs            | `Record<string, any>`                  | 该列单元格的自定义属性                                             | `null`      | `2.0.1`  |
-| type             | `TableColumnType`                      | 设置内置特定类型列                                                 | `null`      | -        |
-| width            | `number`                               | 设置列宽                                                           | `null`      | -        |
-| filter           | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                     | `null`      | -        |
-| sorter           | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                     | `null`      | -        |
-| order            | `number`                               | 列的渲染顺序                                                       | `0`         | -        |
-| renderer         | `ColumnRenderFn`                       | 自定义渲染函数，若 `type` 为 `'expand'` 时则为 `ExpandRenderFn`    | `null`      | -        |
-| head-renderer    | `HeadRenderFn`                         | 自定义头部渲染函数                                                 | `null`      | -        |
-| filter-renderer  | `FilterRenderFn`                       | 自定义过滤器渲染函数                                               | `null`      | `2.1.18` |
-| ellipsis         | `boolean`                              | 是否为单元格内容使用省略组件                                       | `false`     | `2.2.12` |
-| checkbox-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | -        |
-| disable-row      | `(data: Data) => boolean`              | 设置禁用行的回调函数                                               | `null`      | -        |
-| truth-index      | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引            | `false`     | -        |
-| order-label      | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                | `null`      | -        |
-| meta             | `any`                                  | 设置列的元数据                                                     | `null`      | `2.1.24` |
-| text-align       | `TableTextAlign`                       | 设置列的横向对其方式                                               | `'left'`    | `2.1.19` |
-| head-span        | `number`                               | 设置头部跨度                                                       | `1`         | `2.1.24` |
-| cell-span        | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                           | `null`      | `2.1.24` |
-| no-summary       | `boolean`                              | 是否禁用自动计算列值的总结数据                                     | `false`     | `2.1.24` |
-| summary-renderer | `ColumnSummaryRenderFn`                | 自定义尾部渲染函数                                                 | `null`      | `2.1.24` |
-| indented         | `boolean`                              | 指定为树形表格的缩进列                                             | `false`     | `2.2.6`  |
-| formatter        | `(value: any) => unknown`              | 设置单元格内容的格式化方法                                         | `null`      | `2.2.13` |
+| 名称              | 类型                                   | 说明                                                               | 默认值      | 始于     |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------ | ----------- | -------- |
+| name              | `string`                               | 列的名称                                                           | `''`        | -        |
+| key \| id-key     | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                     | `null`      | -        |
+| accessor          | `(data: any, rowIndex: number) => any` | 该列的数据读取方法                                                 | `null`      | -        |
+| fixed             | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧 | `false`     | -        |
+| class             | `ClassType`                            | 该列单元格的自定义类名                                             | `null`      | `2.1.19` |
+| style             | `StyleType`                            | 该列单元格的自定义样式                                             | `null`      | `2.0.1`  |
+| attrs             | `Record<string, any>`                  | 该列单元格的自定义属性                                             | `null`      | `2.0.1`  |
+| type              | `TableColumnType`                      | 设置内置特定类型列                                                 | `null`      | -        |
+| width             | `number`                               | 设置列宽                                                           | `null`      | -        |
+| filter            | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                     | `null`      | -        |
+| sorter            | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                     | `null`      | -        |
+| order             | `number`                               | 列的渲染顺序                                                       | `0`         | -        |
+| renderer          | `ColumnRenderFn`                       | 自定义渲染函数，若 `type` 为 `'expand'` 时则为 `ExpandRenderFn`    | `null`      | -        |
+| head-renderer     | `HeadRenderFn`                         | 自定义头部渲染函数                                                 | `null`      | -        |
+| filter-renderer   | `FilterRenderFn`                       | 自定义过滤器渲染函数                                               | `null`      | `2.1.18` |
+| ellipsis          | `boolean`                              | 是否为单元格内容使用省略组件                                       | `false`     | `2.2.12` |
+| ~~checkbox-size~~ | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | -        |
+| selection-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | `2.3.25` |
+| disable-row       | `(data: Data) => boolean`              | 设置禁用行的回调函数                                               | `null`      | -        |
+| truth-index       | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引            | `false`     | -        |
+| order-label       | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                | `null`      | -        |
+| meta              | `any`                                  | 设置列的元数据                                                     | `null`      | `2.1.24` |
+| text-align        | `TableTextAlign`                       | 设置列的横向对其方式                                               | `'left'`    | `2.1.19` |
+| head-span         | `number`                               | 设置头部跨度                                                       | `1`         | `2.1.24` |
+| cell-span         | `ColumnCellSpanFn<any>`                | 设置单元格跨度的回调函数                                           | `null`      | `2.1.24` |
+| no-summary        | `boolean`                              | 是否禁用自动计算列值的总结数据                                     | `false`     | `2.1.24` |
+| summary-renderer  | `ColumnSummaryRenderFn`                | 自定义尾部渲染函数                                                 | `null`      | `2.1.24` |
+| indented          | `boolean`                              | 指定为树形表格的缩进列                                             | `false`     | `2.2.6`  |
+| formatter         | `(value: any) => unknown`              | 设置单元格内容的格式化方法                                         | `null`      | `2.2.13` |
 
 ### TableColumn 插槽
 

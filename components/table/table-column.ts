@@ -9,7 +9,7 @@ import {
 } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, warnOnce } from '@vexip-ui/utils'
 import { tableColumnProps } from './props'
 import { COLUMN_GROUP_ACTIONS, TABLE_ACTIONS, columnTypes, noopFormatter } from './symbol'
 
@@ -90,7 +90,14 @@ export default defineComponent({
         static: true
       },
       ellipsis: null,
-      checkboxSize: createSizeProp(),
+      checkboxSize: {
+        ...createSizeProp(),
+        default: null
+      },
+      selectionSize: {
+        ...createSizeProp(),
+        default: null
+      },
       disableRow: {
         default: null,
         isFunc: true
@@ -119,12 +126,31 @@ export default defineComponent({
       }
     })
 
+    const selectionSize = computed(() => {
+      if (props.checkboxSize) {
+        warnOnce("'checkboxSize' has been deprecated, please use 'selectionSize' instead.")
+      }
+
+      return props.selectionSize ?? props.checkboxSize ?? 'default'
+    })
+
     const tableAction = inject(TABLE_ACTIONS, null)
     const parentActions = inject(COLUMN_GROUP_ACTIONS, null)
     const options = reactive({}) as ColumnWithKey
 
     for (const key of propKeys) {
       if (ignoredProps.includes(key)) continue
+
+      if (key === 'selectionSize' || key === 'checkboxSize') {
+        ;(options as any).selectionSize = selectionSize.value
+
+        watch(selectionSize, value => {
+          ;(options as any).selectionSize = value
+          tableAction?.setColumnProp(options.key, 'selectionSize', value)
+        })
+
+        continue
+      }
 
       const aliasKey = (aliases[key] || key) as keyof ColumnWithKey
 

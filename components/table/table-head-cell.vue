@@ -423,7 +423,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
         :checked="state.checkedAll"
         :partial="state.partial"
         :disabled="checkboxDisabled"
-        :size="column.checkboxSize || 'default'"
+        :size="column.selectionSize || 'default'"
         @click.prevent="handleCheckAllRow"
       ></Checkbox>
     </div>

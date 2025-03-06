@@ -386,28 +386,32 @@ interface TableBaseColumn<D = Data, Val extends string | number = string | numbe
 }
 
 interface TableOrderColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
 interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer' | 'headRenderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer' | 'headRenderer'> {
+  key?: keyof D,
   type: 'selection',
-  checkboxSize?: ComponentSize,
+  selectionSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
 interface TableExpandColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'expand',
   disableRow?: (data: Data) => boolean,
   renderer?: ExpandRenderFn<D>
 }
 
 interface TableDragColumn<D = Data, Val extends string | number = string | number>
-  extends Omit<TableBaseColumn<D, Val>, 'type' | 'renderer'> {
+  extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
+  key?: keyof D,
   type: 'drag',
   disableRow?: (data: Data) => boolean
 }
@@ -670,36 +674,37 @@ interface TableFootPayload {
 
 ### TableColumn Props
 
-| Name             | Type                                   | Description                                                                                                       | Default     | Since    |
-| ---------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
-| name             | `string`                               | The name of the column                                                                                            | `''`        | -        |
-| key \| id-key    | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                       | `''`        | -        |
-| accessor         | `(data: any, rowIndex: number) => any` | Set data access method of this column                                                                             | `null`      | -        |
-| fixed            | `boolean \| 'left' \| 'right'`         | Whether to fix the column, the optional values ​​are `left`, `right`, when set to `true`, it is fixed to the left | `false`     | -        |
-| class            | `ClassType`                            | Custom class name for the cell in this column                                                                     | `null`      | `2.1.19` |
-| style            | `StyleType`                            | Custom style for the cell in this column                                                                          | `null`      | `2.0.1`  |
-| attrs            | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                     | `null`      | `2.0.1`  |
-| type             | `TableColumnType`                      | Set built-in type of the column                                                                                   | `null`      | -        |
-| width            | `number`                               | Set column width                                                                                                  | `null`      | -        |
-| filter           | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                   | `null`      | -        |
-| sorter           | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                               | `null`      | -        |
-| order            | `number`                               | The rendering order of the column                                                                                 | `0`         | -        |
-| renderer         | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                               | `null`      | -        |
-| head-renderer    | `HeadRenderFn`                         | Custom head render function                                                                                       | `null`      | -        |
-| filter-renderer  | `FilterRenderFn`                       | Custom filter render function                                                                                     | `null`      | `2.1.18` |
-| ellipsis         | `boolean`                              | Whether to use Ellipsis component for cell content                                                                | `false`     | `2.2.12` |
-| checkbox-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | -        |
-| disable-row      | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                        | `null`      | -        |
-| truth-index      | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                              | `false`     | -        |
-| order-label      | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                           | `null`      | -        |
-| meta             | `any`                                  | Set the column metadata                                                                                           | `null`      | `2.1.24` |
-| text-align       | `TableTextAlign`                       | Set the horizontal alignment of the column                                                                        | `'left'`    | `2.1.19` |
-| head-span        | `number`                               | Set the head span                                                                                                 | `1`         | `2.1.24` |
-| cell-span        | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                        | `null`      | `2.1.24` |
-| no-summary       | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                           | `false`     | `2.1.24` |
-| summary-renderer | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                    | `null`      | `2.1.24` |
-| indented         | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
-| formatter        | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
+| Name              | Type                                   | Description                                                                                                       | Default     | Since    |
+| ----------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| name              | `string`                               | The name of the column                                                                                            | `''`        | -        |
+| key \| id-key     | `string \| number`                     | Unique index of the column, use `id-key` instead when using template column                                       | `''`        | -        |
+| accessor          | `(data: any, rowIndex: number) => any` | Set data access method of this column                                                                             | `null`      | -        |
+| fixed             | `boolean \| 'left' \| 'right'`         | Whether to fix the column, the optional values ​​are `left`, `right`, when set to `true`, it is fixed to the left | `false`     | -        |
+| class             | `ClassType`                            | Custom class name for the cell in this column                                                                     | `null`      | `2.1.19` |
+| style             | `StyleType`                            | Custom style for the cell in this column                                                                          | `null`      | `2.0.1`  |
+| attrs             | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                     | `null`      | `2.0.1`  |
+| type              | `TableColumnType`                      | Set built-in type of the column                                                                                   | `null`      | -        |
+| width             | `number`                               | Set column width                                                                                                  | `null`      | -        |
+| filter            | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                   | `null`      | -        |
+| sorter            | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                               | `null`      | -        |
+| order             | `number`                               | The rendering order of the column                                                                                 | `0`         | -        |
+| renderer          | `ColumnRenderFn`                       | Custom render function, is `ExpandRenderFn` if `type` is `'expand'`                                               | `null`      | -        |
+| head-renderer     | `HeadRenderFn`                         | Custom head render function                                                                                       | `null`      | -        |
+| filter-renderer   | `FilterRenderFn`                       | Custom filter render function                                                                                     | `null`      | `2.1.18` |
+| ellipsis          | `boolean`                              | Whether to use Ellipsis component for cell content                                                                | `false`     | `2.2.12` |
+| ~~checkbox-size~~ | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | -        |
+| selection-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | `2.3.25` |
+| disable-row       | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                        | `null`      | -        |
+| truth-index       | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                              | `false`     | -        |
+| order-label       | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                           | `null`      | -        |
+| meta              | `any`                                  | Set the column metadata                                                                                           | `null`      | `2.1.24` |
+| text-align        | `TableTextAlign`                       | Set the horizontal alignment of the column                                                                        | `'left'`    | `2.1.19` |
+| head-span         | `number`                               | Set the head span                                                                                                 | `1`         | `2.1.24` |
+| cell-span         | `ColumnCellSpanFn<any>`                | Set the callback function to set cell span                                                                        | `null`      | `2.1.24` |
+| no-summary        | `boolean`                              | Whether to disable automatic calculation of summary data for the column                                           | `false`     | `2.1.24` |
+| summary-renderer  | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                    | `null`      | `2.1.24` |
+| indented          | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
+| formatter         | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
 
 ### TableColumn Slots
 

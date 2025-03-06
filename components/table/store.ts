@@ -592,7 +592,7 @@ export function useStore(options: StoreOptions) {
             break
           }
           case 'selection': {
-            column.checkboxSize = column.checkboxSize || 'default'
+            column.selectionSize = column.selectionSize || 'default'
 
             if (typeof column.disableRow !== 'function') {
               column.disableRow = toFalse

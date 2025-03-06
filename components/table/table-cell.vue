@@ -314,7 +314,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
         inherit
         :class="nh.be('selection')"
         :checked="row.checked"
-        :size="column.checkboxSize || 'default'"
+        :size="column.selectionSize || 'default'"
         :disabled="getters.disableCheckRows.has(row.key)"
         :partial="row.partial"
         :control="!!row.children?.length"

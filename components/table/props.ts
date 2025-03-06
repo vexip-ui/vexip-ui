@@ -190,6 +190,7 @@ export const tableColumnProps = buildProps({
   order: Number,
   ellipsis: booleanProp,
   checkboxSize: sizeProp,
+  selectionSize: sizeProp,
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
