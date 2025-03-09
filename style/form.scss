@@ -56,9 +56,9 @@ $form: map.merge(
   }
 
   &--inline &__item {
-    flex: 1;
+    flex: 1 0 auto;
     width: auto;
-    min-width: 0;
+    min-width: 40px;
 
     &--action {
       flex: 0 0 auto;

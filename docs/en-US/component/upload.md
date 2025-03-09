@@ -64,6 +64,18 @@ If you want to append those selected files to the file list, you can add the `se
 
 :::
 
+:::demo upload/custom-fetch
+
+### Custom Fetch
+
+==!s|2.3.25==
+
+By using the `custom-fetch` prop, you can set a custom upload method.
+
+This demo changes the component's upload method to use `fetch` to implement.
+
+:::
+
 :::demo upload/separation
 
 ### List Separation
@@ -121,9 +133,13 @@ interface UploadFileState {
   percentage: number,
   source: UploadSourceFile,
   path: string,
+  /**
+   * @deprecated
+   */
   xhr: XMLHttpRequest | null,
   response: any,
-  error: UploadHttpError | null
+  error: UploadHttpError | null,
+  abort: () => void
 }
 
 type UploadFileOptions = Partial<Omit<UploadFileState, 'xhr' | 'response' | 'error'>>
@@ -134,50 +150,67 @@ type BeforeUpload = (file: UploadFileState, files: UploadFileState[]) => MaybePr
   | void
 >
 type BeforeSelect = (file: UploadFileState, files: UploadFileState[]) => MaybePromise<boolean | void>
+
+interface UploadFetchOptions {
+  url: string,
+  file: UploadSourceFile,
+  headers?: Record<string, string>,
+  withCredentials?: boolean,
+  data?: Record<string, string | Blob>,
+  field?: string,
+  pathField?: string,
+  onProgress?: (percent: number) => void,
+  onSuccess?: (response: any) => void,
+  onError?: (error: UploadHttpError) => void,
+  onAbort?: () => void
+}
+
+type UploadFetchMethod = (options: UploadFetchOptions) => () => void
 ```
 
 ### Upload Props
 
-| Name             | Type                                             | Description                                                                                                                                                                                         | Default            | Since   |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------- |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'` | the state of upload                                                                                                                                                                                 | `'default'`        | `2.0.0` |
-| url              | `string`                                         | The file upload destination url                                                                                                                                                                     | `''`               | -       |
-| file-list        | `UploadFileState[]`                              | Set the file list of upload, can use `v-model` for two-way binding                                                                                                                                  | `[]`               | `2.0.0` |
-| multiple         | `boolean`                                        | Set whether to select multiple files                                                                                                                                                                | `false`            | -       |
-| tip              | `string`                                         | Set the upload tip                                                                                                                                                                                  | `''`               | -       |
-| loading-text     | `string`                                         | Set the text prompt when loading                                                                                                                                                                    | `locale.uploading` | -       |
-| list-type        | `UploadListType`                                 | Set the type of file list                                                                                                                                                                           | `'name'`           | -       |
-| select-to-add    | `boolean`                                        | Set whether to select files in incremental mode                                                                                                                                                     | `false`            | -       |
-| block            | `boolean`                                        | Whether it is a block-level element, the width becomes `100%` after setting                                                                                                                         | `false`            | -       |
-| accept           | `string \| string[]`                             | The `accept` attribute of the native `<input>`, when an array is passed in, it will be automatically connected with `,`                                                                             | `null`             | -       |
-| filter           | `string \| string[]`                             | Set file type filter, filter by file extension                                                                                                                                                      | `''`               | -       |
-| max-size         | `number`                                         | Set the max size of uploaded files                                                                                                                                                                  | `null`             | -       |
-| field            | `string`                                         | The field that sets the file in the request form data                                                                                                                                               | `'file'`           | -       |
-| data             | `Record<string, string \| Blob>`                 | Set the data to upload with the file, in the form of `key-value`                                                                                                                                    | `{}`               | -       |
-| headers          | `Record<string, string>`                         | Set request headers for upload request                                                                                                                                                              | `{}`               | -       |
-| with-credentials | `boolean`                                        | Set whether upload request carries cookie information                                                                                                                                               | `false`            | -       |
-| manual           | `boolean`                                        | Set whether to not automatically initiate upload after file selection                                                                                                                               | `false`            | -       |
-| hidden-files     | `boolean`                                        | Set whether to hide the file list                                                                                                                                                                   | `false`            | -       |
-| hidden-icon      | `boolean`                                        | Set whether to hide the file icon                                                                                                                                                                   | `false`            | -       |
-| count-limit      | `number`                                         | Set the max number of files to upload when multiple files are selected. When it is `0`, there is no limit                                                                                           | `0`                | -       |
-| allow-drag       | `boolean`                                        | Set whether to allow uploading by dragging files                                                                                                                                                    | `false`            | -       |
-| on-before-upload | `BeforeUpload`                                   | Set the callback before file upload, support async function and Promise, the return value of `false` will prevent the upload, return `Blob` or `File` to overwrite the source file                  | `null`             | -       |
-| on-before-select | `BeforeSelect`                                   | Set the callback before select file, supports async functions and Promise, the return value of `false` will prevent select                                                                          | `null`             | -       |
-| icon-renderer    | `(data: { file: UploadFileState }) => any`       | The render method of the file icon                                                                                                                                                                  | `null`             | -       |
-| directory        | `boolean`                                        | Set whether to enable folder uploading. Note that when using click upload, only folders can be forced to be uploaded. At the same time, this feature requires browsers to support `webkitdirectory` | `false`            | -       |
-| path-field       | `string`                                         | Set the field of the file path in the request form data, enable the relative location of the file after the folder is uploaded                                                                      | `'path'`           | -       |
-| disabled-click   | `boolean`                                        | Set whether to disable click to upload, if disabled, drag and drop upload will be enabled by default                                                                                                | `false`            | -       |
-| button-label     | `string`                                         | Set the text content of the built-in upload button                                                                                                                                                  | `locale.upload`    | `2.0.0` |
-| disabled         | `boolean`                                        | Set whether the upload is disabled                                                                                                                                                                  | `false`            | `2.0.0` |
-| loading          | `boolean`                                        | Set whether is loading                                                                                                                                                                              | `false`            | `2.0.0` |
-| loading-icon     | `VueComponent`                                   | Set the loading icon                                                                                                                                                                                | `Spinner`          | `2.0.0` |
-| loading-lock     | `boolean`                                        | Set whether to be read-only when loading                                                                                                                                                            | `false`            | `2.0.0` |
-| loading-effect   | `string`                                         | Set the effect animation for the loading icon                                                                                                                                                       | `false`            | `2.0.0` |
-| default-files    | `UploadFileOptions`                              | Set static file list                                                                                                                                                                                | `[]`               | `2.0.0` |
-| can-preview      | `(file: UploadFileState) => boolean>`            | Determine whether the file can be previewed                                                                                                                                                         | `isImage`          | `2.0.0` |
-| image            | `boolean`                                        | Whether to enable image upload mode, `list-type` prop will be invalid after enable                                                                                                                  | `false`            | `2.0.8` |
-| locale           | `LocaleConfig['upload']`                         | Set the locale config                                                                                                                                                                               | `null`             | `2.1.0` |
-| name             | `string`                                         | set `name` attribute of internal `<input>`                                                                                                                                                          | `''`               | `2.2.2` |
+| Name             | Type                                             | Description                                                                                                                                                                                         | Default            | Since    |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------- |
+| state            | `'default' \| 'success' \| 'error' \| 'warning'` | the state of upload                                                                                                                                                                                 | `'default'`        | `2.0.0`  |
+| url              | `string`                                         | The file upload destination url                                                                                                                                                                     | `''`               | -        |
+| file-list        | `UploadFileState[]`                              | Set the file list of upload, can use `v-model` for two-way binding                                                                                                                                  | `[]`               | `2.0.0`  |
+| multiple         | `boolean`                                        | Set whether to select multiple files                                                                                                                                                                | `false`            | -        |
+| tip              | `string`                                         | Set the upload tip                                                                                                                                                                                  | `''`               | -        |
+| loading-text     | `string`                                         | Set the text prompt when loading                                                                                                                                                                    | `locale.uploading` | -        |
+| list-type        | `UploadListType`                                 | Set the type of file list                                                                                                                                                                           | `'name'`           | -        |
+| select-to-add    | `boolean`                                        | Set whether to select files in incremental mode                                                                                                                                                     | `false`            | -        |
+| block            | `boolean`                                        | Whether it is a block-level element, the width becomes `100%` after setting                                                                                                                         | `false`            | -        |
+| accept           | `string \| string[]`                             | The `accept` attribute of the native `<input>`, when an array is passed in, it will be automatically connected with `,`                                                                             | `null`             | -        |
+| filter           | `string \| string[]`                             | Set file type filter, filter by file extension                                                                                                                                                      | `''`               | -        |
+| max-size         | `number`                                         | Set the max size of uploaded files                                                                                                                                                                  | `null`             | -        |
+| field            | `string`                                         | The field that sets the file in the request form data                                                                                                                                               | `'file'`           | -        |
+| data             | `Record<string, string \| Blob>`                 | Set the data to upload with the file, in the form of `key-value`                                                                                                                                    | `{}`               | -        |
+| headers          | `Record<string, string>`                         | Set request headers for upload request                                                                                                                                                              | `{}`               | -        |
+| with-credentials | `boolean`                                        | Set whether upload request carries cookie information                                                                                                                                               | `false`            | -        |
+| manual           | `boolean`                                        | Set whether to not automatically initiate upload after file selection                                                                                                                               | `false`            | -        |
+| hidden-files     | `boolean`                                        | Set whether to hide the file list                                                                                                                                                                   | `false`            | -        |
+| hidden-icon      | `boolean`                                        | Set whether to hide the file icon                                                                                                                                                                   | `false`            | -        |
+| count-limit      | `number`                                         | Set the max number of files to upload when multiple files are selected. When it is `0`, there is no limit                                                                                           | `0`                | -        |
+| allow-drag       | `boolean`                                        | Set whether to allow uploading by dragging files                                                                                                                                                    | `false`            | -        |
+| on-before-upload | `BeforeUpload`                                   | Set the callback before file upload, support async function and Promise, the return value of `false` will prevent the upload, return `Blob` or `File` to overwrite the source file                  | `null`             | -        |
+| on-before-select | `BeforeSelect`                                   | Set the callback before select file, supports async functions and Promise, the return value of `false` will prevent select                                                                          | `null`             | -        |
+| icon-renderer    | `(data: { file: UploadFileState }) => any`       | The render method of the file icon                                                                                                                                                                  | `null`             | -        |
+| directory        | `boolean`                                        | Set whether to enable folder uploading. Note that when using click upload, only folders can be forced to be uploaded. At the same time, this feature requires browsers to support `webkitdirectory` | `false`            | -        |
+| path-field       | `string`                                         | Set the field of the file path in the request form data, enable the relative location of the file after the folder is uploaded                                                                      | `'path'`           | -        |
+| disabled-click   | `boolean`                                        | Set whether to disable click to upload, if disabled, drag and drop upload will be enabled by default                                                                                                | `false`            | -        |
+| button-label     | `string`                                         | Set the text content of the built-in upload button                                                                                                                                                  | `locale.upload`    | `2.0.0`  |
+| disabled         | `boolean`                                        | Set whether the upload is disabled                                                                                                                                                                  | `false`            | `2.0.0`  |
+| loading          | `boolean`                                        | Set whether is loading                                                                                                                                                                              | `false`            | `2.0.0`  |
+| loading-icon     | `VueComponent`                                   | Set the loading icon                                                                                                                                                                                | `Spinner`          | `2.0.0`  |
+| loading-lock     | `boolean`                                        | Set whether to be read-only when loading                                                                                                                                                            | `false`            | `2.0.0`  |
+| loading-effect   | `string`                                         | Set the effect animation for the loading icon                                                                                                                                                       | `false`            | `2.0.0`  |
+| default-files    | `UploadFileOptions`                              | Set static file list                                                                                                                                                                                | `[]`               | `2.0.0`  |
+| can-preview      | `(file: UploadFileState) => boolean>`            | Determine whether the file can be previewed                                                                                                                                                         | `isImage`          | `2.0.0`  |
+| image            | `boolean`                                        | Whether to enable image upload mode, `list-type` prop will be invalid after enable                                                                                                                  | `false`            | `2.0.8`  |
+| locale           | `LocaleConfig['upload']`                         | Set the locale config                                                                                                                                                                               | `null`             | `2.1.0`  |
+| name             | `string`                                         | Set `name` attribute of internal `<input>`                                                                                                                                                          | `''`               | `2.2.2`  |
+| custom-fetch     | `UploadFetchMethod`                              | Custom the fetch method, needs return an abort method                                                                                                                                               | `null`             | `2.3.25` |
 
 ### Upload Events
 

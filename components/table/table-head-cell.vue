@@ -415,18 +415,20 @@ function handleCellResize(entry: ResizeObserverEntry) {
       role="none"
       aria-hidden
     ></div>
-    <div v-if="isSelection(column)" :class="nh.be('content')">
-      <Checkbox
-        inherit
-        control
-        :class="nh.be('selection')"
-        :checked="state.checkedAll"
-        :partial="state.partial"
-        :disabled="checkboxDisabled"
-        :size="column.checkboxSize || 'default'"
-        @click.prevent="handleCheckAllRow"
-      ></Checkbox>
-    </div>
+    <template v-if="isSelection(column)">
+      <div v-if="!column.singleSelect" :class="nh.be('content')">
+        <Checkbox
+          inherit
+          control
+          :class="nh.be('selection')"
+          :checked="state.checkedAll"
+          :partial="state.partial"
+          :disabled="checkboxDisabled"
+          :size="column.selectionSize || 'default'"
+          @click.prevent="handleCheckAllRow"
+        ></Checkbox>
+      </div>
+    </template>
     <ResizeObserver
       v-else
       :disabled="column.ellipsis ?? state.ellipsis"

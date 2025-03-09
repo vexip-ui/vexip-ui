@@ -43,7 +43,8 @@ function getDefaultFileState(): UploadFileState {
     path: '',
     xhr: null,
     response: null,
-    error: null
+    error: null,
+    abort: noop
   }
 }
 
@@ -129,6 +130,10 @@ export default defineComponent({
       name: {
         default: '',
         static: true
+      },
+      customFetch: {
+        default: null,
+        isFunc: true
       },
       slots: () => ({})
     })
@@ -425,7 +430,7 @@ export default defineComponent({
       const { url, headers, withCredentials, data, field, pathField } = props
 
       return await new Promise((resolve, reject) => {
-        file.xhr = upload({
+        file.abort = (props.customFetch || upload)({
           url,
           headers,
           withCredentials,
@@ -483,10 +488,7 @@ export default defineComponent({
     function handleDelete(file: UploadFileState) {
       file.status = StatusType.DELETE
 
-      if (file.xhr) {
-        file.xhr.abort()
-      }
-
+      file.abort?.()
       syncInputFiles()
       emitEvent(props.onDelete, file)
       emitChangeEvent()

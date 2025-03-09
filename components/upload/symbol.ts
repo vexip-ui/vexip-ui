@@ -31,12 +31,16 @@ export interface UploadFileState {
   source: UploadSourceFile | null,
   url: string | null,
   path: string,
+  /**
+   * @deprecated
+   */
   xhr: XMLHttpRequest | null,
   response: any,
-  error: UploadHttpError | null
+  error: UploadHttpError | null,
+  abort: () => void
 }
 
-export type UploadFileOptions = Partial<Omit<UploadFileState, 'xhr' | 'response' | 'error'>>
+export type UploadFileOptions = Partial<Omit<UploadFileState, 'response' | 'error' | 'abort'>>
 
 type MaybePromise<T> = T | Promise<T>
 
@@ -50,7 +54,7 @@ export type BeforeSelect = (
 ) => MaybePromise<boolean | void>
 export type RenderFn = (data: { file: UploadFileState }) => any
 
-export interface UploadOptions {
+export interface UploadFetchOptions {
   url: string,
   file: UploadSourceFile,
   headers?: Record<string, string>,
@@ -63,6 +67,12 @@ export interface UploadOptions {
   onError?: (error: UploadHttpError) => void,
   onAbort?: () => void
 }
+
+/**
+ * Should return an abort method.
+ */
+export type UploadFetchMethod = (options: UploadFetchOptions) => () => void
+
 export interface DirectoryEntity {
   name: string,
   fullPath: string,

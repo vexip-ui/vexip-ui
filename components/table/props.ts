@@ -190,6 +190,7 @@ export const tableColumnProps = buildProps({
   order: Number,
   ellipsis: booleanProp,
   checkboxSize: sizeProp,
+  selectionSize: sizeProp,
   disableRow: Function as PropType<(data: Data) => boolean>,
   truthIndex: booleanProp,
   orderLabel: Function as PropType<(index: number) => string | number>,
@@ -200,7 +201,8 @@ export const tableColumnProps = buildProps({
   noSummary: booleanProp,
   summaryRenderer: Function as PropType<ColumnSummaryRenderFn>,
   indented: booleanProp,
-  formatter: Function as PropType<(value: any) => unknown>
+  formatter: Function as PropType<(value: any) => unknown>,
+  singleSelect: booleanProp
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>

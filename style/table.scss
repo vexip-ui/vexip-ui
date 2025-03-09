@@ -421,6 +421,10 @@ $table: map.merge(
 
   &__selection {
     margin: 0;
+
+    .#{$namespace}-radio__label {
+      display: none;
+    }
   }
 
   &__expand,

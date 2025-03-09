@@ -1,6 +1,6 @@
-import { has, isDefined } from '@vexip-ui/utils'
+import { has, isDefined, noop } from '@vexip-ui/utils'
 
-import type { UploadHttpError, UploadOptions } from './symbol'
+import type { UploadFetchOptions, UploadHttpError } from './symbol'
 
 function getError(url: string, xhr: XMLHttpRequest) {
   const message = `fail to post ${url} ${xhr.status}'`
@@ -28,9 +28,9 @@ function getBody(xhr: XMLHttpRequest) {
   }
 }
 
-export function upload(options: UploadOptions) {
+export function upload(options: UploadFetchOptions) {
   if (typeof XMLHttpRequest === 'undefined') {
-    return null
+    return noop
   }
 
   const xhr = new XMLHttpRequest()
@@ -103,5 +103,5 @@ export function upload(options: UploadOptions) {
 
   xhr.send(formData)
 
-  return xhr
+  return () => xhr.abort()
 }
