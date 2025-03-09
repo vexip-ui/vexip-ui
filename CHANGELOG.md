@@ -1,3 +1,19 @@
+## [2.3.25](https://github.com/vexip-ui/vexip-ui/compare/v2.3.24...v2.3.25) (2025-03-09)
+
+
+### ✨ Features
+
+* **table:** add single-select prop for selection column ([21c1168](https://github.com/vexip-ui/vexip-ui/commit/21c1168438e983bded1da3e17d71a6617825b178)), closes [#541](https://github.com/vexip-ui/vexip-ui/issues/541)
+* **table:** rename checkbox-size prop to selection-size for column ([5901582](https://github.com/vexip-ui/vexip-ui/commit/5901582bfd38a637945430c171b204d51ef78aca))
+* **upload:** support customize upload method ([92750b5](https://github.com/vexip-ui/vexip-ui/commit/92750b5cf4577142fcfe071e797d2b1eabaf3c30)), closes [#533](https://github.com/vexip-ui/vexip-ui/issues/533)
+
+
+### 🐞 Bug Fixes
+
+* **form:** should auto wrap with inline mode ([59415e5](https://github.com/vexip-ui/vexip-ui/commit/59415e5a6a91ee5f4eed037b6b470211aca3ee80)), closes [#546](https://github.com/vexip-ui/vexip-ui/issues/546)
+
+
+
 ## [2.3.24](https://github.com/vexip-ui/vexip-ui/compare/v2.3.23...v2.3.24) (2025-02-20)
 
 
