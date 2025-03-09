@@ -130,7 +130,6 @@ $radio: map.merge(
       display: inline-block;
       width: value('radio-signal-size');
       height: value('radio-signal-size');
-      margin-inline-end: 6px;
       background-color: value('radio-signal-bg-color');
       border: value('border-shape') value('radio-b-color');
       border-radius: 50%;
@@ -223,9 +222,14 @@ $radio: map.merge(
   &__label {
     display: inline-flex;
     align-items: center;
+    margin-inline-start: 6px;
     color: value('radio-label-color');
     white-space: nowrap;
     transition: value('transition-color');
+  }
+
+  &--button &__label {
+    margin-inline-start: 0;
   }
 
   &--button:hover &__label,
@@ -431,6 +435,10 @@ $radio: map.merge(
 
       &__signal {
         display: none;
+      }
+
+      &__label {
+        margin-inline-start: 0;
       }
     }
 

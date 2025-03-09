@@ -201,7 +201,8 @@ export const tableColumnProps = buildProps({
   noSummary: booleanProp,
   summaryRenderer: Function as PropType<ColumnSummaryRenderFn>,
   indented: booleanProp,
-  formatter: Function as PropType<(value: any) => unknown>
+  formatter: Function as PropType<(value: any) => unknown>,
+  singleSelect: booleanProp
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>

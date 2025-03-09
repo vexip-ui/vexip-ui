@@ -78,6 +78,18 @@
 
 :::
 
+:::demo table/single-selection
+
+### 单选框列
+
+==!s|2.3.25==
+
+如果希望整个表格只可选一行数据，可以在上面示例的基础上，为 `'selection'` 列添加 `single-select` 属性。
+
+需要注意的是，添加后复选框将变为单选框。
+
+:::
+
 :::demo table/order
 
 ### 序号列
@@ -693,7 +705,7 @@ interface TableFootPayload {
 | filter-renderer   | `FilterRenderFn`                       | 自定义过滤器渲染函数                                               | `null`      | `2.1.18` |
 | ellipsis          | `boolean`                              | 是否为单元格内容使用省略组件                                       | `false`     | `2.2.12` |
 | ~~checkbox-size~~ | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | -        |
-| selection-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                        | `'default'` | `2.3.25` |
+| selection-size    | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置选择框大小                        | `'default'` | `2.3.25` |
 | disable-row       | `(data: Data) => boolean`              | 设置禁用行的回调函数                                               | `null`      | -        |
 | truth-index       | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引            | `false`     | -        |
 | order-label       | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                | `null`      | -        |
@@ -705,6 +717,7 @@ interface TableFootPayload {
 | summary-renderer  | `ColumnSummaryRenderFn`                | 自定义尾部渲染函数                                                 | `null`      | `2.1.24` |
 | indented          | `boolean`                              | 指定为树形表格的缩进列                                             | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | 设置单元格内容的格式化方法                                         | `null`      | `2.2.13` |
+| single-select     | `boolean`                              | 当 `type` 为 `'selection'` 时设置是否为单选                        | `false`     | `2.3.25` |
 
 ### TableColumn 插槽
 

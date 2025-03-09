@@ -1231,12 +1231,19 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function handleCheck(key: Key, checked: boolean) {
+  function handleCheck(key: Key, checked: boolean, single = false) {
     const { rowMap, noCascaded } = state
     const { disableCheckRows } = getters
     const row = rowMap.get(key)
 
-    if (row && !disableCheckRows.has(key)) {
+    if (!row) return
+
+    if (single) {
+      clearCheckAll(true)
+      row.checked = !!checked
+    }
+
+    if (!disableCheckRows.has(key)) {
       row.checked = !!checked
       row.partial = false
     }
@@ -1281,20 +1288,24 @@ export function useStore(options: StoreOptions) {
     computePartial()
   }
 
-  function clearCheckAll() {
+  function clearCheckAll(includeDisabled = false) {
     const { rowData } = state
     const { disableCheckRows } = getters
 
     for (const row of rowData) {
-      if (!disableCheckRows.has(row.key)) {
+      if (includeDisabled || !disableCheckRows.has(row.key)) {
         row.checked = false
+      }
+
+      if (includeDisabled) {
+        row.partial = false
       }
     }
 
     state.checkedAll = false
     state.partial = false
 
-    computePartial()
+    !includeDisabled && computePartial()
   }
 
   function computePartial() {

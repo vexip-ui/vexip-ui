@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
+import { Radio } from '@/components/radio'
 import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 
@@ -240,12 +241,12 @@ function handleContextmenu(event: MouseEvent) {
   tableActions?.emitCellEvent('Contextmenu', buildEventPayload(event))
 }
 
-function handleCheckRow(row: TableRowState, event: MouseEvent) {
+function handleCheckRow(row: TableRowState, event: MouseEvent, single = false) {
   if (!getters.disableCheckRows.has(row.key)) {
     const checked = !row.checked
     const { data, key, index } = row
 
-    mutations.handleCheck(key, checked)
+    mutations.handleCheck(key, checked, single)
     tableActions.emitRowCheck({ row: data, key, index, event, checked })
   }
 }
@@ -309,17 +310,29 @@ function handleCellResize(entry: ResizeObserverEntry) {
       aria-hidden
     ></div>
     <div v-if="isTypeColumn(column)" :class="nh.be('content')">
-      <Checkbox
-        v-if="isSelectionColumn(column)"
-        inherit
-        :class="nh.be('selection')"
-        :checked="row.checked"
-        :size="column.selectionSize || 'default'"
-        :disabled="getters.disableCheckRows.has(row.key)"
-        :partial="row.partial"
-        :control="!!row.children?.length"
-        @click.prevent.stop="handleCheckRow(row, $event)"
-      ></Checkbox>
+      <template v-if="isSelectionColumn(column)">
+        <Radio
+          v-if="column.singleSelect"
+          inherit
+          :label="row.key"
+          :value="row.checked ? row.key : null"
+          :class="nh.be('selection')"
+          :size="column.selectionSize || 'default'"
+          :disabled="getters.disableCheckRows.has(row.key)"
+          @click.prevent.stop="handleCheckRow(row, $event, true)"
+        ></Radio>
+        <Checkbox
+          v-else
+          inherit
+          :class="nh.be('selection')"
+          :checked="row.checked"
+          :size="column.selectionSize || 'default'"
+          :disabled="getters.disableCheckRows.has(row.key)"
+          :partial="row.partial"
+          :control="!!row.children?.length"
+          @click.prevent.stop="handleCheckRow(row, $event)"
+        ></Checkbox>
+      </template>
       <span v-else-if="isOrderColumn(column)" :class="nh.be('order')">
         {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
       </span>

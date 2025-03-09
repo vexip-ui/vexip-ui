@@ -78,6 +78,18 @@ After getting the component instance, you can call the `getSelected` method to g
 
 :::
 
+:::demo table/single-selection
+
+### Radio Column
+
+==!s|2.3.25==
+
+If you want to only allow selecting one row of table, you can add the `single-select` prop to the `'selection'` column based on the above demo.
+
+Note that after adding it, the checkboxes will become radio buttons.
+
+:::
+
 :::demo table/order
 
 ### Order Column
@@ -693,7 +705,7 @@ interface TableFootPayload {
 | filter-renderer   | `FilterRenderFn`                       | Custom filter render function                                                                                     | `null`      | `2.1.18` |
 | ellipsis          | `boolean`                              | Whether to use Ellipsis component for cell content                                                                | `false`     | `2.2.12` |
 | ~~checkbox-size~~ | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | -        |
-| selection-size    | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                | `'default'` | `2.3.25` |
+| selection-size    | `'small' \| 'default' \| 'large'`      | Set the selection size when `type` is `'selection'`                                                               | `'default'` | `2.3.25` |
 | disable-row       | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                        | `null`      | -        |
 | truth-index       | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                              | `false`     | -        |
 | order-label       | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                           | `null`      | -        |
@@ -705,6 +717,7 @@ interface TableFootPayload {
 | summary-renderer  | `ColumnSummaryRenderFn`                | Custom summary render function                                                                                    | `null`      | `2.1.24` |
 | indented          | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
+| single-select     | `boolean`                              | Set whether is single selection when `type` is `'selection'`                                                      | `false`     | `2.3.25` |
 
 ### TableColumn Slots
 

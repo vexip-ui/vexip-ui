@@ -123,7 +123,8 @@ export default defineComponent({
       formatter: {
         default: null,
         isFunc: true
-      }
+      },
+      singleSelect: false
     })
 
     const selectionSize = computed(() => {
