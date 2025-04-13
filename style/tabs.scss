@@ -66,12 +66,14 @@
   }
 
   &__panel {
-    display: none;
+    position: absolute;
     flex-shrink: 0;
     width: 100%;
+    opacity: 0%;
 
     &--active {
-      display: block;
+      position: relative;
+      opacity: 100%;
     }
   }
 }
