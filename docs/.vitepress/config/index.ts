@@ -49,7 +49,7 @@ export default async () => {
             link: '/component/button',
             activeMatch: '/component/'
           },
-          { key: 'playground', i18n: 'common.playground', link: 'https://playground.vexipui.com' },
+          { key: 'playground', i18n: 'common.playground', link: 'https://play.vexipui.com' },
           {
             key: 'ecosystem',
             i18n: 'common.ecosystem',
@@ -257,7 +257,7 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         },
         {
           text: 'Vexip SFC Playground',
-          link: 'https://playground.vexipui.com/'
+          link: 'https://play.vexipui.com/'
         },
         {
           text: 'Grid Layout Plus',
