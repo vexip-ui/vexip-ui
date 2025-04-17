@@ -88,21 +88,22 @@ interface MenuOptions {
 
 ### Menu Props
 
-| Name          | Type                                               | Description                                                                                                                 | Default      | Since   |
-| ------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
-| active        | `string`                                           | Set the default active menu                                                                                                 | `null`       | -       |
-| accordion     | `boolean`                                          | Set whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                         | `0`          | -       |
-| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | Set the marker type of the selected menu                                                                                    | `'right'`    | -       |
-| reduced       | `boolean`                                          | Set whether the menu is reduced                                                                                             | `false`      | -       |
-| horizontal    | `boolean`                                          | Set whether the menu is horizontal                                                                                          | `false`      | -       |
-| group-type    | `'collapse' \| 'dropdown'`                         | Submenu form in expanded state                                                                                              | `'collapse'` | -       |
-| theme         | `'light' \| 'dark'`                                | set the theme of the menu                                                                                                   | `'light'`    | -       |
-| tooltip-theme | `'light' \| 'dark'`                                | Set the theme of the menu bubble tip                                                                                        | `'dark'`     | -       |
-| transfer      | `boolean \| string`                                | Set the `transfer` property of the MenuItem under it, the priority is higher when the MenuItem sets this property alone     | `false`      | -       |
-| options       | `MenuOptions[]`                                    | Set configuration of the menu                                                                                               | `[]`         | `2.0.0` |
-| router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to parse first | `null`       | `2.0.0` |
-| manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled               | `false`      | `2.0.0` |
-| indent        | `string \| number`                                 | Set the base indentation distance of each label menu item                                                                   | `null`       | `2.1.2` |
+| Name          | Type                                               | Description                                                                                                                 | Default      | Since    |
+| ------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- |
+| active        | `string`                                           | Set the default active menu                                                                                                 | `null`       | -        |
+| accordion     | `boolean`                                          | Set whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                         | `0`          | -        |
+| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | Set the marker type of the selected menu                                                                                    | `'right'`    | -        |
+| reduced       | `boolean`                                          | Set whether the menu is reduced                                                                                             | `false`      | -        |
+| horizontal    | `boolean`                                          | Set whether the menu is horizontal                                                                                          | `false`      | -        |
+| group-type    | `'collapse' \| 'dropdown'`                         | Submenu form in expanded state                                                                                              | `'collapse'` | -        |
+| theme         | `'light' \| 'dark'`                                | set the theme of the menu                                                                                                   | `'light'`    | -        |
+| tooltip-theme | `'light' \| 'dark'`                                | Set the theme of the menu bubble tip                                                                                        | `'dark'`     | -        |
+| transfer      | `boolean \| string`                                | Set the `transfer` property of the MenuItem under it, the priority is higher when the MenuItem sets this property alone     | `false`      | -        |
+| options       | `MenuOptions[]`                                    | Set configuration of the menu                                                                                               | `[]`         | `2.0.0`  |
+| router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to parse first | `null`       | `2.0.0`  |
+| manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled               | `false`      | `2.0.0`  |
+| indent        | `string \| number`                                 | Set the base indentation distance of each label menu item                                                                   | `null`       | `2.1.2`  |
+| onlyOne       | `boolean`                                          | When `options` has only one item in `children`, the only item overrides the parent item                                     | `false`      | `2.3.12` |
 
 ### Menu Events
 
@@ -112,6 +113,8 @@ interface MenuOptions {
 | expand | Emitted when the menu is expanded (submenu), returns the label of the menu of the expanded group         | `(label: string, meta: Record<string, any>)` | -     |
 | reduce | Emitted when the menu is collapsed group (submenu), returns the label of the menu in the collapsed group | `(label: string, meta: Record<string, any>)` | -     |
 
+> `_parent` in `meta` is the original parent `meta`
+
 ### Menu Methods
 
 | Name              | Description                            | Parameters                | Since   |
@@ -120,17 +123,18 @@ interface MenuOptions {
 
 ### MenuItem Props
 
-| Name            | Type                  | Description                                                                                                                                                                                                              | Default | Since   |
-| --------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | ------- |
-| label           | `string`              | Unique identifier for the menu                                                                                                                                                                                           | `null`  | -       |
-| icon            | `string`              | Set the icon of the menu, the icon of the menu shrinking state needs to be set through this property or the slot with the same name                                                                                      | `null`  | -       |
-| icon-props      | `IconProps`           | Set the props of the menu icon                                                                                                                                                                                           | `null`  | `2.0.0` |
-| disabled        | `boolean`             | Set whether the menu is disabled                                                                                                                                                                                         | `false` | -       |
-| transfer        | `boolean \| string`   | When the child element is in the drop-down state, set the rendering position of its child element. When set to `true`, it will render to `<body>` by default                                                             | `false` | -       |
-| transition-name | `string`              | When the child element is in the drop-down state, set the transition effect of the child element. If it is not set, it will take the value of `'vxp-drop'` or `'vxp-zoom'` according to whether it is a horizontal menu. | `null`  | -       |
-| meta            | `Record<string, any>` | Set meta data of the menu                                                                                                                                                                                                | `null`  | `2.0.0` |
-| children        | `MenuOptions[]`       | Set configuration of the menu children                                                                                                                                                                                   | `[]`    | `2.0.0` |
-| route           | `RouteLocationRaw`    | Set the route associated with the menu. If the Router object is set, it will automatically handle the change of the route by default                                                                                     | `null`  | `2.0.0` |
+| Name            | Type                  | Description                                                                                                                                                                                                              | Default | Since    |
+| --------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | -------- |
+| label           | `string`              | Unique identifier for the menu                                                                                                                                                                                           | `null`  | -        |
+| icon            | `string`              | Set the icon of the menu, the icon of the menu shrinking state needs to be set through this property or the slot with the same name                                                                                      | `null`  | -        |
+| icon-props      | `IconProps`           | Set the props of the menu icon                                                                                                                                                                                           | `null`  | `2.0.0`  |
+| disabled        | `boolean`             | Set whether the menu is disabled                                                                                                                                                                                         | `false` | -        |
+| transfer        | `boolean \| string`   | When the child element is in the drop-down state, set the rendering position of its child element. When set to `true`, it will render to `<body>` by default                                                             | `false` | -        |
+| transition-name | `string`              | When the child element is in the drop-down state, set the transition effect of the child element. If it is not set, it will take the value of `'vxp-drop'` or `'vxp-zoom'` according to whether it is a horizontal menu. | `null`  | -        |
+| meta            | `Record<string, any>` | Set meta data of the menu                                                                                                                                                                                                | `null`  | `2.0.0`  |
+| children        | `MenuOptions[]`       | Set configuration of the menu children                                                                                                                                                                                   | `[]`    | `2.0.0`  |
+| route           | `RouteLocationRaw`    | Set the route associated with the menu. If the Router object is set, it will automatically handle the change of the route by default                                                                                     | `null`  | `2.0.0`  |
+| onlyOne         | `boolean`             | When `children` has only one item, the only child item overrides the parent item; it has higher priority than `menu.onlyOne`                                                                                             | `null`  | `2.3.12` |
 
 ### MenuItem Slots
 

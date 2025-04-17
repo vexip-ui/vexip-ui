@@ -1,4 +1,4 @@
-import type { ComponentPublicInstance, InjectionKey } from 'vue'
+import type { ComponentPublicInstance, InjectionKey, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 
@@ -14,6 +14,7 @@ export interface MenuOptions {
   group?: boolean,
   meta?: Record<string, any>,
   route?: RouteLocationRaw,
+  onlyOne?: boolean,
   children?: MenuOptions[]
 }
 
@@ -46,6 +47,8 @@ export interface MenuState {
   isReduced: boolean,
   transfer: boolean | string,
   trigger: 'hover' | 'click',
+  onlyOne: boolean,
+  renderMenuItem(item: MenuOptions): VNode,
   markerType: MenuMarkerType,
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
