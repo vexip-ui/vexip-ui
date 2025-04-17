@@ -1,12 +1,12 @@
 import { ref } from 'vue'
 
 const cdnStoreKey = 'vexip-sfc-playground-prefer-cdn'
-const cdn = ref(localStorage.getItem(cdnStoreKey) || 'unpkg')
+const cdn = ref(localStorage.getItem(cdnStoreKey) || 'jsdelivr')
 
 export const cdnTemplates: Record<string, string> = {
   unpkg: 'https://unpkg.com/{pkg}@{version}/{path}',
-  jsdelivr: 'https://fastly.jsdelivr.net/npm/{pkg}@{version}/{path}',
-  elemecdn: 'https://npm.elemecdn.com/{pkg}@{version}/{path}'
+  jsdelivr: 'https://fastly.jsdelivr.net/npm/{pkg}@{version}/{path}'
+  // elemecdn: 'https://npm.elemecdn.com/{pkg}@{version}/{path}'
 }
 
 export function getCdn() {
