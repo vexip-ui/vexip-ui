@@ -74,7 +74,7 @@ yarn add vexip-ui
 
 Open a [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
 
-If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
+If you take maybe some bugs, please use the [Vexip UI Playground](https://play.vexipui.com/) to provide a minimal reproduction.
 
 ## Contributing
 

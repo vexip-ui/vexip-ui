@@ -39,7 +39,7 @@ const nh = useNameHelper('tabs')
 const currentActive = ref(props.active)
 const currentIndex = ref(0)
 const itemStates = reactive(new Set<ItemState>())
-const isTransition = ref(false)
+const inTransition = ref(false)
 
 const itemList = computed(() => Array.from(itemStates))
 
@@ -84,7 +84,7 @@ onMounted(computeIndex)
 
 defineExpose({
   currentActive,
-  isTransition,
+  inTransition,
   itemList,
   handleActive,
   handleAdd,
@@ -180,9 +180,9 @@ function handleClose(label: string | number) {
     <div
       :class="{
         [nh.be('main')]: true,
-        [nh.bem('main', 'transition')]: isTransition
+        [nh.bem('main', 'transition')]: inTransition
       }"
-      @transitionend="isTransition = false"
+      @transitionend="inTransition = false"
     >
       <slot></slot>
     </div>

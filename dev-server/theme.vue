@@ -343,7 +343,7 @@
           <br />
           <br />
         </template>
-        <template v-for="(meta, index) in paginationMeta" :key="index">
+        <template v-for="(meta, _index) in paginationMeta" :key="_index">
           <Pagination
             page-jump
             page-total
@@ -478,16 +478,7 @@ import { defineFilter } from '../components/table'
 
 document.title = 'theme dev | Vexip UI'
 
-const buttonTypes = [
-  'default',
-  'primary',
-  'dashed',
-  'text',
-  'info',
-  'success',
-  'warning',
-  'error'
-] as const
+const buttonTypes = ['default', 'primary', 'info', 'success', 'warning', 'error'] as const
 const buttonMeta = [
   { ghost: false, simple: false, disabled: false },
   { ghost: false, simple: false, disabled: true },
@@ -714,7 +705,7 @@ const tableFilter = defineFilter({
 })
 
 const timelineMeta = [
-  { date: '2022-05-24', content: 'Nice Day', type: 'default' as const },
+  { date: '2022-05-24', content: 'Nice Day', type: 'primary' as const },
   { date: '2022-05-25', content: 'Nice Day', type: 'success' as const },
   { date: '2022-05-26', content: 'Nice Day', type: 'warning' as const },
   { date: '2022-05-27', content: 'Nice Day', type: 'error' as const },

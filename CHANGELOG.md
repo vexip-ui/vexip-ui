@@ -1,3 +1,13 @@
+## [2.3.26](https://github.com/vexip-ui/vexip-ui/compare/v2.3.25...v2.3.26) (2025-04-17)
+
+
+### 🐞 Bug Fixes
+
+* **tabs:** improve the combination with table ([ced8467](https://github.com/vexip-ui/vexip-ui/commit/ced84671c9aa2a52ff2408bba08a76054462ff95)), closes [#547](https://github.com/vexip-ui/vexip-ui/issues/547)
+* **virtual-list:** should sync scroll position after refresh ([4c41cc6](https://github.com/vexip-ui/vexip-ui/commit/4c41cc6ac945f33ca60f6bb06a249cb7f6c55bca)), closes [#551](https://github.com/vexip-ui/vexip-ui/issues/551)
+
+
+
 ## [2.3.25](https://github.com/vexip-ui/vexip-ui/compare/v2.3.24...v2.3.25) (2025-03-09)
 
 

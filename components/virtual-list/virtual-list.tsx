@@ -125,8 +125,9 @@ export default defineComponent({
       }
     }
 
-    function refresh() {
-      return scroll.value?.refresh() ?? Promise.resolve()
+    async function refresh() {
+      await scroll.value?.refresh()
+      handleScroll()
     }
 
     function renderList(items: Record<string, any>[]) {

@@ -1,8 +1,6 @@
 import { strFromU8, strToU8, zlibSync } from 'fflate'
 
-const playgroundUrl = import.meta.env.DEV
-  ? 'http://localhost:6012/'
-  : 'https://playground.vexipui.com/'
+const playgroundUrl = import.meta.env.DEV ? 'http://localhost:6012/' : 'https://play.vexipui.com/'
 
 function utoa(data: string): string {
   const buffer = strToU8(data)

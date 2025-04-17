@@ -61,7 +61,7 @@ yarn add vexip-ui
 
 创建一个 [issue](https://github.com/vexip-ui/vexip-ui/issues) 来寻求帮助。
 
-如果你遇到一些可能是 bug 的问题, 可以用 [Vexip UI Playground](https://playground.vexipui.com/) 来提供一个最小的复现。
+如果你遇到一些可能是 bug 的问题, 可以用 [Vexip UI Playground](https://play.vexipui.com/) 来提供一个最小的复现。
 
 你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
 
