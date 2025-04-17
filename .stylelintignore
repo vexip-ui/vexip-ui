@@ -17,3 +17,4 @@ node_modules
 *.md
 
 common/icons/vue
+dev-server/play*.vue
