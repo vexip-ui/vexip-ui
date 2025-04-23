@@ -25,7 +25,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
   }
 
   const { cloneObject = noop } = options
-  const temp = {} as any
+  const temp = Object.create(null) as any
 
   // 循环数组栈
   const loopList: Array<{

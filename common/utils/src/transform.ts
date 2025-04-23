@@ -620,7 +620,7 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
     Object.keys(target).forEach(key => {
       if (isObject(target[key])) {
         if (!isObject(source[key])) {
-          source[key] = {}
+          source[key] = Object.create(null)
         }
 
         loop.push({
