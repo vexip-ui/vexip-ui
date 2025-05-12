@@ -9,11 +9,13 @@ export interface PublishOptions {
 }
 
 export async function publish(options: PublishOptions) {
-  const { pkg, rawPkg, pkgPath, pkgDir } = getPkgInfo(options.pkgDir, true)
+  const { pkg, rawPkg, pkgPath, pkgDir, pkgName } = getPkgInfo(options.pkgDir, true)
   const { engines, ...copiedPkg } = pkg
 
   logger.withStartLn(() =>
-    logger.infoText(options.isDryRun ? 'Dry run publish...' : 'Publishing package...')
+    logger.infoText(
+      options.isDryRun ? `Dry run publish ${pkgName}...` : `Publishing package ${pkgName}...`
+    )
   )
 
   await writeFile(pkgPath, JSON.stringify(copiedPkg, null, 2), 'utf-8')

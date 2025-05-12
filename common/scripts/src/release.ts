@@ -21,6 +21,7 @@ export interface ReleaseOptions {
    * @default true
    */
   updateVersion?: boolean,
+  updateVersionByType?: 'patch' | 'minor' | 'major',
   /**
    * @default true
    */
@@ -62,6 +63,11 @@ export async function release(options: ReleaseOptions) {
 
   if (options.updateVersion === false) {
     version = pkg.version || '1.0.0'
+  } else if (options.updateVersionByType) {
+    version = updateVersionByType(pkg.version || '0.0.0', {
+      type: options.updateVersionByType,
+      preId: options.preId
+    })
   } else {
     version = await selectNextVersion(pkg.version || '0.0.0', {
       preId: options.preId,
@@ -168,6 +174,23 @@ export async function release(options: ReleaseOptions) {
   })
 }
 
+function updateVersionByType(
+  currentVersion: string,
+  options: {
+    type: 'patch' | 'minor' | 'major',
+    preId?: string
+  }
+) {
+  const preId = String(options.preId || (semver.prerelease(currentVersion)?.[0] ?? ''))
+  const version = semver.inc(currentVersion, `${preId ? 'pre' : ''}${options.type}`, preId)
+
+  if (!version) {
+    throw new Error(`Invalid target version: ${version}`)
+  }
+
+  return version
+}
+
 export interface ChooseVersionOptions {
   preId?: string,
   selectMessage?: string,
@@ -187,16 +210,16 @@ export async function selectNextVersion(
     ...(preId ? (['prepatch', 'preminor', 'premajor', 'prerelease'] as const) : [])
   ]
 
-  const inc = (i: ReleaseType) => semver.inc(currentVersion, i, preId)
+  const inc = (type: ReleaseType) => semver.inc(currentVersion, type, preId)
 
   const { release } = await prompts({
     type: 'select',
     name: 'release',
     message: options.selectMessage || 'Select version:',
     choices: versionIncrements
-      .map(i => `${i} (${inc(i)})`)
+      .map(type => `${type} (${inc(type)})`)
       .concat(['custom'])
-      .map(i => ({ title: i, value: i }))
+      .map(type => ({ title: type, value: type }))
   })
 
   const version =

@@ -1,4 +1,4 @@
-import { dirname, resolve } from 'node:path'
+import { basename, dirname, resolve } from 'node:path'
 import { existsSync, lstatSync, readFileSync, readdirSync, rmdirSync, unlinkSync } from 'node:fs'
 import { createServer } from 'node:net'
 
@@ -184,6 +184,7 @@ export function getPkgInfo(pkgDir: string, errorIfPrivate = false) {
 
   const rawPkg = readFileSync(pkgPath, 'utf-8')
   const pkg = JSON.parse(rawPkg) as ProjectManifest
+  const pkgName = pkg.name || basename(pkgDir)
 
   if (errorIfPrivate && pkg.private) {
     throw new Error(`Package from '${pkgDir}' is private`)
@@ -193,6 +194,7 @@ export function getPkgInfo(pkgDir: string, errorIfPrivate = false) {
     pkgDir,
     pkgPath,
     pkg,
-    rawPkg
+    rawPkg,
+    pkgName
   }
 }
