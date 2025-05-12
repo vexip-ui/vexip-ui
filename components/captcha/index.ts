@@ -7,5 +7,5 @@ export type {
   CaptchaBeforeTest,
   CaptchaExposed,
   CaptchaSlots,
-  CaptchaSliderSlots
+  CaptchaSliderSlots,
 } from './symbol'

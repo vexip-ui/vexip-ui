@@ -30,8 +30,8 @@ describe('Tabs', () => {
             <TabPanel label={'1'}>{'1'}</TabPanel>
             <TabPanel label={'2'}>{'2'}</TabPanel>
           </>
-        )
-      }
+        ),
+      },
     })
     const panels = wrapper.findAll('.vxp-tabs__panel')
 

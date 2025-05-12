@@ -58,14 +58,14 @@ describe('postcss-transform-logical', () => {
       check(
         ...buildStyle(
           `border-inline-${unit}: 10px`,
-          `border-left-${unit}: 10px; border-right-${unit}: 10px`
-        )
+          `border-left-${unit}: 10px; border-right-${unit}: 10px`,
+        ),
       )
       check(
         ...buildStyle(
           `border-block-${unit}: 10px`,
-          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`
-        )
+          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`,
+        ),
       )
     })
 
@@ -121,14 +121,14 @@ describe('postcss-transform-logical', () => {
       check(
         ...style(
           `border-inline-${unit}: 10px`,
-          `border-left-${unit}: 10px; border-right-${unit}: 10px`
-        )
+          `border-left-${unit}: 10px; border-right-${unit}: 10px`,
+        ),
       )
       check(
         ...style(
           `border-block-${unit}: 10px`,
-          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`
-        )
+          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`,
+        ),
       )
     })
 
@@ -184,14 +184,14 @@ describe('postcss-transform-logical', () => {
       check(
         ...style(
           `border-inline-${unit}: 10px`,
-          `border-right-${unit}: 10px; border-left-${unit}: 10px`
-        )
+          `border-right-${unit}: 10px; border-left-${unit}: 10px`,
+        ),
       )
       check(
         ...style(
           `border-block-${unit}: 10px`,
-          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`
-        )
+          `border-top-${unit}: 10px; border-bottom-${unit}: 10px`,
+        ),
       )
     })
 
@@ -214,22 +214,22 @@ describe('postcss-transform-logical', () => {
     check(
       ...buildStyle(
         'inset-inline: calc(1px + 2px)',
-        'left: calc(1px + 2px); right: calc(1px + 2px)'
-      )
+        'left: calc(1px + 2px); right: calc(1px + 2px)',
+      ),
     )
     check(...buildStyle('inset-inline: calc(1px + 2px) 3px', 'left: calc(1px + 2px); right: 3px'))
     check(...buildStyle('inset-inline: 1px calc(2 * 2px)', 'left: 1px; right: calc(2 * 2px)'))
     check(
       ...buildStyle(
         'inset-inline: calc(1px + 2px) calc(2 * 2px)',
-        'left: calc(1px + 2px); right: calc(2 * 2px)'
-      )
+        'left: calc(1px + 2px); right: calc(2 * 2px)',
+      ),
     )
     check(
       ...buildStyle(
         'inset-inline: calc(1px + var(--offset)) 3px',
-        'left: calc(1px + var(--offset)); right: 3px'
-      )
+        'left: calc(1px + var(--offset)); right: 3px',
+      ),
     )
   })
 })

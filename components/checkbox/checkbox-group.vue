@@ -10,7 +10,7 @@ import {
   emitEvent,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import {
   adjustAlpha,
@@ -18,7 +18,7 @@ import {
   isClient,
   isDefined,
   isObject,
-  parseColorToRgba
+  parseColorToRgba,
 } from '@vexip-ui/utils'
 import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
@@ -37,7 +37,7 @@ const {
   size,
   validateField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<(string | number)[]>(focus)
 
 const _props = defineProps(checkboxGroupProps)
@@ -47,20 +47,20 @@ const props = useProps('checkboxGroup', _props, {
   locale: null,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   vertical: false,
   disabled: () => disabled.value,
   border: false,
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   loading: () => loading.value,
   control: null,
   loadingLock: false,
   color: null,
-  stateColor: false
+  stateColor: false,
 })
 
 const emit = defineEmits(['update:value'])
@@ -85,8 +85,8 @@ const className = computed(() => {
       [nh.bm('loading')]: props.loading,
       [nh.bm(props.size)]: props.size !== 'default',
       [nh.bm('border')]: props.border,
-      [nh.bm(props.state)]: props.state !== 'default'
-    }
+      [nh.bm(props.state)]: props.state !== 'default',
+    },
   ]
 })
 const controlLabel = computed(() => {
@@ -99,7 +99,7 @@ const colorMap = computed(() => {
 
   return {
     base: baseColor.toString(),
-    opacity6: adjustAlpha(baseColor, 0.4).toString()
+    opacity6: adjustAlpha(baseColor, 0.4).toString(),
   }
 })
 
@@ -143,8 +143,8 @@ provide(
     decreaseControl,
     handleControlChange,
     setItemChecked,
-    replaceValue
-  })
+    replaceValue,
+  }),
 )
 
 watch(
@@ -161,7 +161,7 @@ watch(
       valueMap.set(value, checkedValues.has(value))
       checked && currentValues.value.push(value)
     })
-  }
+  },
 )
 watch(currentValues, () => {
   updateControl()
@@ -170,7 +170,7 @@ watch(currentValues, () => {
 function increaseItem(
   value: string | number,
   checked: boolean,
-  input: Ref<HTMLElement | null | undefined>
+  input: Ref<HTMLElement | null | undefined>,
 ) {
   valueMap.set(value, checked)
   inputSet.add(input)
@@ -248,7 +248,7 @@ defineExpose({
     for (const input of inputSet) {
       input.value?.blur()
     }
-  }
+  },
 })
 </script>
 

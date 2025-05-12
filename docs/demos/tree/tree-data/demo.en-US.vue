@@ -10,22 +10,22 @@ const data = [
     children: [
       {
         label: 'Invertebrate',
-        children: [{ label: 'Earthworm' }, { label: 'Jellyfish' }]
+        children: [{ label: 'Earthworm' }, { label: 'Jellyfish' }],
       },
       {
         label: 'Vertebrate',
         children: [
           {
             label: 'Bird',
-            children: [{ label: 'Magpie' }, { label: 'Kestrel' }]
+            children: [{ label: 'Magpie' }, { label: 'Kestrel' }],
           },
           {
             label: 'Mammal',
-            children: [{ label: 'Pangolin' }]
-          }
-        ]
-      }
-    ]
-  }
+            children: [{ label: 'Pangolin' }],
+          },
+        ],
+      },
+    ],
+  },
 ]
 </script>

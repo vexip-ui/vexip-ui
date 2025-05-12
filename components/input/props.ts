@@ -7,7 +7,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -64,7 +64,7 @@ export const inputProps = buildProps({
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
   onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
   onCompositionStart: eventProp<(event: CompositionEvent) => void>(),
-  onCompositionEnd: eventProp<(event: CompositionEvent) => void>()
+  onCompositionEnd: eventProp<(event: CompositionEvent) => void>(),
 })
 
 export type InputProps = ExtractPropTypes<typeof inputProps>

@@ -10,22 +10,22 @@ const data = [
     children: [
       {
         label: '无脊椎动物',
-        children: [{ label: '蚯蚓' }, { label: '水母' }]
+        children: [{ label: '蚯蚓' }, { label: '水母' }],
       },
       {
         label: '脊椎动物',
         children: [
           {
             label: '鸟类',
-            children: [{ label: '喜鹊' }, { label: '红隼' }]
+            children: [{ label: '喜鹊' }, { label: '红隼' }],
           },
           {
             label: '哺乳动物',
-            children: [{ label: '穿山甲' }]
-          }
-        ]
-      }
-    ]
-  }
+            children: [{ label: '穿山甲' }],
+          },
+        ],
+      },
+    ],
+  },
 ]
 </script>

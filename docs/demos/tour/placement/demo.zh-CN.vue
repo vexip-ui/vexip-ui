@@ -21,17 +21,17 @@ const steps: TourStepOptions[] = [
   {
     target: '#start-2',
     title: '开始漫游',
-    content: '默认情况漫游提示会在下方'
+    content: '默认情况漫游提示会在下方',
   },
   {
     target: '#button-2',
     title: '一个按钮',
     content: '你也可以将它方在目标的右边或其他方位',
-    placement: 'right'
+    placement: 'right',
   },
   {
     title: '居中',
-    content: '如果你不指定目标，那么它会在中间'
-  }
+    content: '如果你不指定目标，那么它会在中间',
+  },
 ]
 </script>

@@ -11,7 +11,7 @@ async function confirm() {
   const isConfirm = await Confirm.open({
     content: '确认删除吗？',
     confirmType: 'error',
-    cancelType: 'success'
+    cancelType: 'success',
   })
 
   if (isConfirm) {

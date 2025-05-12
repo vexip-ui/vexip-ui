@@ -22,7 +22,7 @@ describe('SSR for Menu', () => {
             </MenuGroup>
             <MenuItem>{'2'}</MenuItem>
           </Menu>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

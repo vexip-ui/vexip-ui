@@ -11,7 +11,7 @@ describe('FullScreen', () => {
 
     expect(wrapper.find('.vxp-full-screen').classes()).toStrictEqual([
       'vxp-full-screen',
-      'vxp-full-screen-vars'
+      'vxp-full-screen-vars',
     ])
   })
 
@@ -26,7 +26,7 @@ describe('FullScreen', () => {
                 <button type={'button'} class={'exit'} onClick={() => exit()}></button>
               </>
             )
-          }
+          },
         }}
       </FullScreen>
     ))
@@ -50,7 +50,7 @@ describe('FullScreen', () => {
 
     await vm.enter()
     expect(
-      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full'),
     ).toBe(true)
     expect(vm.full).toEqual('window')
     await vm.exit()
@@ -72,7 +72,7 @@ describe('FullScreen', () => {
 
     await toggle()
     expect(
-      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full'),
     ).toBe(true)
     await toggle()
     expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
@@ -86,7 +86,7 @@ describe('FullScreen', () => {
     expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
     await enter('window', 1)
     expect(document.body.querySelector<HTMLElement>('.vxp-full-screen')?.style.cssText).toContain(
-      '--vxp-full-screen-z-index: 1;'
+      '--vxp-full-screen-z-index: 1;',
     )
     await exit()
     expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
@@ -99,7 +99,7 @@ describe('FullScreen', () => {
 
     await vm.toggle()
     expect(
-      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full')
+      document.body.querySelector('.vxp-full-screen')?.classList.contains('vxp-full-screen--full'),
     ).toBe(true)
     expect(vm.full).toBe('window')
 

@@ -14,8 +14,8 @@ const options = Array.from({ length: 3 }, (_, index) => ({
     `选项${index + 1}-1`,
     { value: `选项${index + 1}-2`, disabled: true },
     `选项${index + 1}-3`,
-    `选项${index + 1}-4`
-  ]
+    `选项${index + 1}-4`,
+  ],
 }))
 </script>
 

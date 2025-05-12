@@ -33,14 +33,14 @@ config.global.stubs = {
     inheritAttrs: false,
     setup(_, { slots }) {
       return () => slots.default?.()
-    }
+    },
   },
   TransitionGroup: {
     inheritAttrs: false,
     setup(_, { slots }) {
       return () => slots.default?.()
-    }
-  }
+    },
+  },
 }
 
 vi.stubGlobal('ResizeObserver', ResizeObserver)

@@ -10,13 +10,13 @@ const _props = defineProps(highlightProps)
 const props = useProps('highlight', _props, {
   content: {
     default: '',
-    static: true
+    static: true,
   },
   keyWords: {
     default: () => [],
-    static: true
+    static: true,
   },
-  ignoreCase: false
+  ignoreCase: false,
 })
 
 const nh = useNameHelper('highlight')
@@ -30,7 +30,7 @@ const splitRE = computed(() => {
 
   return new RegExp(
     `(${keyWords.sort((p, n) => n.length - p.length).join('|')})`,
-    `${props.ignoreCase ? 'i' : ''}g`
+    `${props.ignoreCase ? 'i' : ''}g`,
   )
 })
 const renderTexts = computed(() => {

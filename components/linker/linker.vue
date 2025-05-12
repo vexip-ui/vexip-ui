@@ -14,7 +14,7 @@ const linkerTypes = Object.freeze<LinkerType[]>([
   'success',
   'error',
   'warning',
-  'info'
+  'info',
 ])
 
 defineOptions({ name: 'Linker' })
@@ -23,16 +23,16 @@ const _props = defineProps(linkerProps)
 const props = useProps('linker', _props, {
   to: {
     default: null,
-    static: true
+    static: true,
   },
   type: {
     default: 'default' as LinkerType,
-    validator: (value: LinkerType) => linkerTypes.includes(value)
+    validator: (value: LinkerType) => linkerTypes.includes(value),
   },
   icon: createIconProp(),
   underline: false,
   disabled: false,
-  target: '_blank'
+  target: '_blank',
 })
 
 const nh = useNameHelper('linker')
@@ -44,7 +44,7 @@ const className = computed(() => {
     [nh.bm('inherit')]: props.inherit,
     [nh.bm(props.type)]: props.type !== 'default',
     [nh.bm('disabled')]: props.disabled,
-    [nh.bm('underline')]: props.underline
+    [nh.bm('underline')]: props.underline,
   }
 })
 

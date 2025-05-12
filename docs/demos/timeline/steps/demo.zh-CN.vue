@@ -51,7 +51,7 @@ const steps = [{ text: '第一步的描述' }, { text: '第二步的描述' }, {
 function getStateClass(index: number) {
   return {
     finished: currentStep.value > index,
-    'in-progress': currentStep.value === index
+    'in-progress': currentStep.value === index,
   }
 }
 </script>

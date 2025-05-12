@@ -6,7 +6,7 @@ import {
   eventProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -30,7 +30,7 @@ export const checkboxProps = buildProps({
   color: String,
   stateColor: booleanProp,
   onChange: eventProp<(checked: boolean) => void>(),
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
@@ -59,7 +59,7 @@ export const checkboxGroupProps = buildProps({
   control: booleanStringProp,
   color: String,
   stateColor: booleanProp,
-  onChange: eventProp<(value: (string | number)[]) => void>()
+  onChange: eventProp<(value: (string | number)[]) => void>(),
 })
 
 export type CheckboxGroupProps = ExtractPropTypes<typeof checkboxGroupProps>

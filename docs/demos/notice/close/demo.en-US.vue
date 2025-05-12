@@ -14,7 +14,7 @@ function sendNotice() {
   Notice.info({
     title: 'Notice Title',
     content: 'A closable notice',
-    closable: true
+    closable: true,
   })
 }
 </script>

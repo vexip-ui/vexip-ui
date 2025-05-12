@@ -33,7 +33,7 @@ describe('Scrollbar', () => {
         } else {
           expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('width: 35%;')
         }
-      })
+      }),
     )
   })
 
@@ -54,13 +54,13 @@ describe('Scrollbar', () => {
     const wrapper = mount(Scrollbar, {
       props: {
         barLength: 20,
-        scroll: 20
-      }
+        scroll: 20,
+      },
     })
 
     await nextTick()
     expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain(
-      'transform: translate3d(0, 80%, 0);'
+      'transform: translate3d(0, 80%, 0);',
     )
   })
 
@@ -73,8 +73,8 @@ describe('Scrollbar', () => {
         barLength: 20,
         onScrollStart,
         onScroll,
-        onScrollEnd
-      }
+        onScrollEnd,
+      },
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -88,7 +88,7 @@ describe('Scrollbar', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -99,7 +99,7 @@ describe('Scrollbar', () => {
       height: 20,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -139,8 +139,8 @@ describe('Scrollbar', () => {
         trackSpeed: 2,
         onScrollStart,
         onScroll,
-        onScrollEnd
-      }
+        onScrollEnd,
+      },
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -154,7 +154,7 @@ describe('Scrollbar', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -165,7 +165,7 @@ describe('Scrollbar', () => {
       height: 20,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any

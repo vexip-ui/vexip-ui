@@ -23,7 +23,7 @@ describe('Drawer', () => {
     const wrapper = mount(() => (
       <Drawer title={TEXT}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Drawer>
     ))
@@ -37,7 +37,7 @@ describe('Drawer', () => {
     const wrapper = mount(() => (
       <Drawer title={TEXT}>
         {{
-          close: () => <span class={'close'}></span>
+          close: () => <span class={'close'}></span>,
         }}
       </Drawer>
     ))
@@ -72,8 +72,8 @@ describe('Drawer', () => {
       props: {
         active: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
     const mask = wrapper.find('.vxp-masker__mask')
 
@@ -95,7 +95,7 @@ describe('Drawer', () => {
       const wrapper = mount(() => <Drawer placement={placement}></Drawer>)
 
       expect(wrapper.find('.vxp-drawer__wrapper').classes()).toContain(
-        `vxp-drawer__wrapper--${placement}`
+        `vxp-drawer__wrapper--${placement}`,
       )
     })
   })
@@ -189,8 +189,8 @@ describe('Drawer', () => {
       props: {
         active: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
@@ -202,7 +202,7 @@ describe('Drawer', () => {
   it('before close', async () => {
     const onBeforeClose = vi.fn()
     const wrapper = mount(Drawer, {
-      props: { closable: true, onBeforeClose }
+      props: { closable: true, onBeforeClose },
     })
 
     const openAndClose = async () => {
@@ -226,7 +226,7 @@ describe('Drawer', () => {
       () =>
         new Promise(resolve => {
           resolveRef = resolve
-        })
+        }),
     )
     await openAndClose()
     expect(wrapper.vm.currentActive).toBe(true)

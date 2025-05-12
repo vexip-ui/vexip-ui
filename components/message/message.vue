@@ -20,7 +20,7 @@ const predefinedIcons = computed(() => ({
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,
-  error: icons.value.error
+  error: icons.value.error,
 }))
 
 const placement = ref<MessagePlacement>('top')
@@ -52,8 +52,8 @@ defineExpose(
     add,
     remove,
     clear,
-    config
-  })
+    config,
+  }),
 )
 </script>
 

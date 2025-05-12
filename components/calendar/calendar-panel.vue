@@ -13,7 +13,7 @@ import {
   rangeDate,
   startOfDay,
   startOfWeek,
-  toFalse
+  toFalse,
 } from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'
 
@@ -27,37 +27,37 @@ const props = useProps('calendarBase', _props, {
   locale: null,
   value: {
     default: null,
-    static: true
+    static: true,
   },
   year: () => new Date().getFullYear(),
   month: {
     default: () => new Date().getMonth() + 1,
-    validator: value => value > 0 && value <= 12
+    validator: value => value > 0 && value <= 12,
   },
   weekDays: {
     default: null,
-    validator: value => !value || value.length === 0 || value.length === 7
+    validator: value => !value || value.length === 0 || value.length === 7,
   },
   weekStart: {
     default: 0,
-    validator: value => value >= 0 && value < 7
+    validator: value => value >= 0 && value < 7,
   },
   today: {
     default: () => new Date(),
-    validator: value => !Number.isNaN(+new Date(value))
+    validator: value => !Number.isNaN(+new Date(value)),
   },
   disabledDate: {
     default: toFalse,
-    isFunc: true
+    isFunc: true,
   },
   valueType: {
     default: 'start',
-    validator: value => value === 'start' || value === 'end'
+    validator: value => value === 'start' || value === 'end',
   },
   min: null,
   max: null,
   range: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -110,7 +110,7 @@ defineExpose({
   isNextMonth,
   isDisabled,
   isToday,
-  isInRange
+  isInRange,
 })
 
 function getWeekLabel(index: number) {
@@ -120,7 +120,7 @@ function getWeekLabel(index: number) {
 function setDateRange() {
   dateRange.value = rangeDate(
     startOfWeek(new Date(props.year, props.month - 1, 1), props.weekStart),
-    42
+    42,
   )
 }
 

@@ -31,7 +31,7 @@ onMounted(() => {
   barLength.value = boundRange(
     (pane.value.offsetHeight / (pane.value.scrollHeight || 1)) * 100,
     5,
-    99
+    99,
   )
 })
 

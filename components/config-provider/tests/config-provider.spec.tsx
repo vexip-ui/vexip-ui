@@ -17,8 +17,8 @@ describe('ConfigProvider', () => {
   it('provide props', () => {
     const props: any = {
       input: {
-        size: 'large'
-      }
+        size: 'large',
+      },
     }
     const wrapper = mount(() => (
       <ConfigProvider props={props}>
@@ -32,8 +32,8 @@ describe('ConfigProvider', () => {
   it('provide locale', () => {
     const locale = {
       input: {
-        placeholder: 'test'
-      }
+        placeholder: 'test',
+      },
     }
     const wrapper = mount(() => (
       <ConfigProvider locale={locale}>
@@ -46,7 +46,7 @@ describe('ConfigProvider', () => {
 
   it('provide icons', () => {
     const icons = {
-      loading: User
+      loading: User,
     }
     const wrapper = mount(() => (
       <ConfigProvider icons={icons}>

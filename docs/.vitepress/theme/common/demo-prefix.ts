@@ -129,7 +129,7 @@ const components = [
   'H5',
   'H6',
   'P',
-  'Strong'
+  'Strong',
 ]
 
 const prefixKey = 'vexip-docs-prefer-demo-prefix'

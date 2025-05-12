@@ -40,7 +40,7 @@ export const scrollModes = Object.freeze<ScrollMode[]>([
   'horizontal',
   'horizontal-exact',
   'vertical',
-  'both'
+  'both',
 ])
 
 export const MOVE_EVENT = USE_TOUCH ? 'touchmove' : 'mousemove'

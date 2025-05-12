@@ -11,7 +11,7 @@ export const affixProps = buildProps({
   target: [String, Object, Function] as PropType<unknown>,
 
   onScroll: eventProp(),
-  onChange: eventProp()
+  onChange: eventProp(),
 })
 
 export type AffixProps = ExtractPropTypes<typeof affixProps>

@@ -15,17 +15,17 @@ const _props = defineProps(badgeProps)
 const props = useProps('badge', _props, {
   content: {
     default: null,
-    static: true
+    static: true,
   },
   max: 0,
   disabled: false,
   isDot: false,
   type: {
     default: 'error',
-    validator: value => badgeTypes.includes(value)
+    validator: value => badgeTypes.includes(value),
   },
   color: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<BadgeSlots>()
@@ -41,7 +41,7 @@ const className = computed(() => {
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
     [nh.bm('not-wrapper')]: !hasSlot.value,
-    [nh.bm('is-dot')]: props.isDot
+    [nh.bm('is-dot')]: props.isDot,
   }
 })
 const renderContent = computed(() => {

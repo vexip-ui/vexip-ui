@@ -29,7 +29,7 @@ const loading = ref(true)
 
 const store = useReplStore({
   serializedState: hash,
-  versions
+  versions,
 })
 
 const dark = computed(() => store.dark.value)
@@ -38,8 +38,8 @@ const dark = computed(() => store.dark.value)
 const sfcOptions = {
   script: {
     // refTransform: true,
-    reactivityTransform: true
-  }
+    reactivityTransform: true,
+  },
 }
 
 store.init().then(() => {

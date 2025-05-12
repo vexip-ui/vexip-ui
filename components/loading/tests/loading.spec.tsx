@@ -22,7 +22,7 @@ function createLoading() {
       app?.use(Loading)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Loading
@@ -100,7 +100,7 @@ describe('Loading', () => {
         } else {
           expect(wrapper.find('.vxp-loading').classes()).toContain(`vxp-loading--${state}`)
         }
-      })
+      }),
     )
   })
 

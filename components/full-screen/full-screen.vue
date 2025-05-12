@@ -15,7 +15,7 @@ defineOptions({ name: 'FullScreen' })
 
 const _props = defineProps(fullScreenProps)
 const props = useProps('fullScreen', _props, {
-  tag: 'div'
+  tag: 'div',
 })
 
 defineSlots<{ default: (params: FullScreenSlotParams) => any }>()
@@ -36,7 +36,7 @@ const {
   enter: browserEnter,
   exit: browserExit,
   target: wrapper,
-  full: browserFull
+  full: browserFull,
 } = useFullScreen()
 
 watch(browserFull, value => {
@@ -89,7 +89,7 @@ defineExpose({
   wrapper,
   enter,
   exit,
-  toggle
+  toggle,
 })
 </script>
 

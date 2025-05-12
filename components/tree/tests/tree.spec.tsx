@@ -12,18 +12,18 @@ describe('Tree', () => {
         id: 1,
         label: 'n1',
         parent: 0,
-        expanded: true
+        expanded: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => <Tree data={data}></Tree>)
 
@@ -44,9 +44,9 @@ describe('Tree', () => {
       {
         label: 'n1',
         expanded: true,
-        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }]
+        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }],
       },
-      { label: 'n5' }
+      { label: 'n5' },
     ]
     const wrapper = mount(() => <Tree data={data} no-build-tree></Tree>)
 
@@ -66,12 +66,12 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
+        label: 'n1',
       },
       {
         id: 2,
-        label: 'n2'
-      }
+        label: 'n2',
+      },
     ]
     const wrapper = mount(() => (
       <Tree data={data} onNodeSelect={onNodeSelect} onNodeCancel={onNodeCancel}></Tree>
@@ -98,12 +98,12 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
+        label: 'n1',
       },
       {
         id: 2,
-        label: 'n2'
-      }
+        label: 'n2',
+      },
     ]
     const wrapper = mount(() => <Tree data={data} multiple></Tree>)
 
@@ -123,8 +123,8 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const wrapper = mount(() => <Tree data={data} onNodeClick={onNodeClick}></Tree>)
 
@@ -137,8 +137,8 @@ describe('Tree', () => {
   it('empty', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyText: 'empty'
-      }
+        emptyText: 'empty',
+      },
     })
 
     expect(wrapper.find('.vxp-tree__empty-tip').exists()).toBe(true)
@@ -148,11 +148,11 @@ describe('Tree', () => {
   it('empty slot', async () => {
     const wrapper = mount(Tree, {
       props: {
-        emptyText: 'empty'
+        emptyText: 'empty',
       },
       slots: {
-        empty: () => <span class={'empty'}></span>
-      }
+        empty: () => <span class={'empty'}></span>,
+      },
     })
 
     expect(wrapper.find('.vxp-tree__empty-tip').exists()).toBe(true)
@@ -164,8 +164,8 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const wrapper = mount(() => <Tree data={data} checkbox></Tree>)
 
@@ -180,18 +180,18 @@ describe('Tree', () => {
         id: 1,
         label: 'n1',
         parent: 0,
-        expanded: true
+        expanded: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => <Tree data={data} checkbox onNodeChange={onNodeChange}></Tree>)
 
@@ -207,7 +207,7 @@ describe('Tree', () => {
     expect(onNodeChange).toHaveBeenCalledWith(
       data[0],
       expect.objectContaining({ data: data[0] }),
-      true
+      true,
     )
     expect(vm.getCheckedNodes().length).toBe(3)
     expect(vm.getCheckedNodeData().length).toBe(3)
@@ -225,18 +225,18 @@ describe('Tree', () => {
         id: 1,
         label: 'n1',
         parent: 0,
-        expanded: true
+        expanded: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => <Tree data={data} checkbox no-cascaded></Tree>)
 
@@ -252,8 +252,8 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const wrapper = mount(() => <Tree data={data} checkbox suffix-checkbox></Tree>)
 
@@ -269,18 +269,18 @@ describe('Tree', () => {
       {
         id: 1,
         label: 'n1',
-        parent: 0
+        parent: 0,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => (
       <Tree
@@ -315,18 +315,18 @@ describe('Tree', () => {
       {
         id: 1,
         label: 'n1',
-        parent: 0
+        parent: 0,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => (
       <Tree
@@ -365,13 +365,13 @@ describe('Tree', () => {
       {
         id: 1,
         label: 'n1',
-        disabled: true
+        disabled: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => (
       <Tree
@@ -416,13 +416,13 @@ describe('Tree', () => {
         label: 'n1',
         selectDisabled: true,
         expandDisabled: true,
-        checkDisabled: true
+        checkDisabled: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => (
       <Tree
@@ -457,8 +457,8 @@ describe('Tree', () => {
       {
         id: 1,
         label: 'n1',
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => <Tree data={data} draggable></Tree>)
 
@@ -472,21 +472,21 @@ describe('Tree', () => {
         id: 1,
         label: 'n1',
         parent: 0,
-        expanded: true
+        expanded: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(Tree, {
-      props: { data, filter: '2' }
+      props: { data, filter: '2' },
     })
 
     await nextTick()
@@ -507,21 +507,21 @@ describe('Tree', () => {
         id: 1,
         label: 'n1',
         parent: 0,
-        expanded: true
+        expanded: true,
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
+        parent: 1,
       },
       {
         id: 3,
         label: 'n3',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(Tree, {
-      props: { data, filterLeaf: true, filter: '1' }
+      props: { data, filterLeaf: true, filter: '1' },
     })
 
     await nextTick()
@@ -539,8 +539,8 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const wrapper = mount(() => <Tree data={data} on-async-load={onAsyncLoad}></Tree>)
 
@@ -554,19 +554,19 @@ describe('Tree', () => {
       {
         key: 1,
         name: 'n1',
-        open: true
+        open: true,
       },
       {
         key: 2,
         name: 'n2',
-        parentKey: 1
-      }
+        parentKey: 1,
+      },
     ]
     const config = {
       id: 'key',
       label: 'name',
       parent: 'parentKey',
-      expanded: 'open'
+      expanded: 'open',
     }
     const wrapper = mount(() => <Tree data={data} key-config={config}></Tree>)
 
@@ -581,8 +581,8 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const postCreate = (node: any) => {
       node.selected = true
@@ -597,15 +597,15 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
-      }
+        label: 'n1',
+      },
     ]
     const wrapper = mount(() => (
       <Tree data={data}>
         {{
           label: ({ data }: any) => <span class={'label'}>{data.label}</span>,
           prefix: () => <span class={'prefix'}></span>,
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </Tree>
     ))
@@ -621,13 +621,13 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
+        label: 'n1',
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => <Tree data={data} arrow-icon={User}></Tree>)
 
@@ -639,18 +639,18 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
+        label: 'n1',
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(() => (
       <Tree data={data}>
         {{
-          arrow: () => <span class={'arrow'}></span>
+          arrow: () => <span class={'arrow'}></span>,
         }}
       </Tree>
     ))
@@ -663,16 +663,16 @@ describe('Tree', () => {
     const data = [
       {
         id: 1,
-        label: 'n1'
+        label: 'n1',
       },
       {
         id: 2,
         label: 'n2',
-        parent: 1
-      }
+        parent: 1,
+      },
     ]
     const wrapper = mount(Tree, {
-      props: { data }
+      props: { data },
     })
 
     await nextTick()
@@ -689,9 +689,9 @@ describe('Tree', () => {
       {
         label: 'n1',
         expanded: true,
-        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }]
+        children: [{ label: 'n2', expanded: true, children: [{ label: 'n3' }] }, { label: 'n4' }],
       },
-      { label: 'n5' }
+      { label: 'n5' },
     ]
 
     const wrapper = mount(() => <Tree data={data} no-build-tree></Tree>)
@@ -709,7 +709,7 @@ describe('Tree', () => {
       { label: 'n2' },
       { label: 'n3' },
       { label: 'n4' },
-      { label: 'n5' }
+      { label: 'n5' },
     ])
   })
 })

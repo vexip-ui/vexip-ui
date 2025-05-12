@@ -16,7 +16,7 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import {
@@ -25,7 +25,7 @@ import {
   useHoverDelay,
   useIcons,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { useClickOutside, usePopper, useRtl, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
@@ -49,7 +49,7 @@ const MenuItem = defineComponent({
     const props = useProps('menuItem', _props, {
       label: {
         default: null,
-        static: true
+        static: true,
       },
       icon: createIconProp(),
       iconProps: null,
@@ -60,9 +60,9 @@ const MenuItem = defineComponent({
       meta: null,
       children: {
         default: () => [],
-        static: true
+        static: true,
       },
-      route: null
+      route: null,
     })
 
     const menuState = inject(MENU_STATE, null)
@@ -95,7 +95,7 @@ const MenuItem = defineComponent({
       transfer,
       wrapper,
       popper: computed(() => popper.value?.wrapper),
-      shift: { crossAxis: true }
+      shift: { crossAxis: true },
     })
 
     const isGroup = computed(() => !!(slots.group || props.children?.length))
@@ -107,7 +107,7 @@ const MenuItem = defineComponent({
         [`${baseClass}--group-visible`]: showGroup.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
-        [`${baseClass}--son-selected`]: sonSelected.value
+        [`${baseClass}--son-selected`]: sonSelected.value,
       }
     })
     const labelStyle = computed(() => {
@@ -123,7 +123,7 @@ const MenuItem = defineComponent({
         paddingInlineStart:
           parentItemState && parentItemState.isUsePopper
             ? undefined
-            : `calc(${indentWidth} * ${multiplier})`
+            : `calc(${indentWidth} * ${multiplier})`,
       }
     })
     const isUsePopper = computed(() => {
@@ -158,7 +158,7 @@ const MenuItem = defineComponent({
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
     })
 
     provide(MENU_ITEM_STATE, itemState)
@@ -171,7 +171,7 @@ const MenuItem = defineComponent({
           updatePopper()
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(selected, value => {
       if (value) {
@@ -194,7 +194,7 @@ const MenuItem = defineComponent({
       value => {
         placement.value = value ? 'bottom' : isRtl.value ? 'left-start' : 'right-start'
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     if (menuState) {
@@ -203,7 +203,7 @@ const MenuItem = defineComponent({
         () => {
           selected.value = props.label === menuState.currentActive
         },
-        { immediate: true }
+        { immediate: true },
       )
 
       if (typeof menuState.increaseItem === 'function') {
@@ -230,7 +230,7 @@ const MenuItem = defineComponent({
       isUsePopper,
       handleSelect,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
     })
 
     function updateSonSelected(selected: boolean, upstream = true) {
@@ -410,7 +410,7 @@ const MenuItem = defineComponent({
                 class={{
                   [nh.be('label')]: true,
                   [nh.bem('label', `marker-${markerType.value}`)]: true,
-                  [nh.bem('label', 'in-popper')]: parentItemState?.isUsePopper
+                  [nh.bem('label', 'in-popper')]: parentItemState?.isUsePopper,
                 }}
                 role={'menuitem'}
                 tabindex={0}
@@ -433,7 +433,7 @@ const MenuItem = defineComponent({
                 <span
                   class={{
                     [nh.be('title')]: true,
-                    [nh.bem('title', 'in-group')]: !isHorizontal.value && isGroup.value
+                    [nh.bem('title', 'in-group')]: !isHorizontal.value && isGroup.value,
                   }}
                 >
                   {slots.default ? renderSlot(slots, 'default') : props.label}
@@ -444,7 +444,7 @@ const MenuItem = defineComponent({
                     class={{
                       [nh.be('arrow')]: true,
                       [nh.bem('arrow', 'visible')]: groupExpanded.value,
-                      [nh.bem('arrow', '')]: sonSelected.value
+                      [nh.bem('arrow', '')]: sonSelected.value,
                     }}
                   ></Icon>
                 )}
@@ -454,7 +454,7 @@ const MenuItem = defineComponent({
               <span class={nh.be('tooltip-title')}>
                 {slots.default ? renderSlot(slots, 'default') : props.label}
               </span>
-            )
+            ),
           }}
         </Tooltip>
       )
@@ -477,7 +477,7 @@ const MenuItem = defineComponent({
               class={[
                 nh.be('popper'),
                 nh.bs('vars'),
-                isHorizontal.value && nh.bem('popper', 'drop')
+                isHorizontal.value && nh.bem('popper', 'drop'),
               ]}
               visible={popperShow.value && showGroup.value}
               alive={!transferTo.value || popperShow.value}
@@ -495,7 +495,7 @@ const MenuItem = defineComponent({
         </li>
       )
     }
-  }
+  },
 })
 
 // eslint-disable-next-line vue/require-direct-export

@@ -15,10 +15,10 @@ const props = useProps('card', _props, {
   title: '',
   shadow: {
     default: 'always' as CardShadowType,
-    validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value)
+    validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value),
   },
   contentStyle: () => ({}),
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<CardSlots>()
@@ -31,8 +31,8 @@ const className = computed(() => {
     nh.bs('vars'),
     nh.bm(`shadow-${props.shadow}`),
     {
-      [nh.bm('inherit')]: props.inherit
-    }
+      [nh.bm('inherit')]: props.inherit,
+    },
   ]
 })
 const hasTitle = computed(() => !!(slots.title || props.title || props.slots.title))

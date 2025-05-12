@@ -38,12 +38,12 @@ const singleShortcuts = [
   { name: '劳动节', value: () => new Date(new Date().getFullYear(), 4, 1) },
   ...Array.from({ length: 9 }).map((_, i) => ({
     name: `${i + 1}周后`,
-    value: addWeeks(Date.now(), i + 1)
-  }))
+    value: addWeeks(Date.now(), i + 1),
+  })),
 ]
 
 const multipleShortcuts = [
   { name: '三天后', value: [Date.now(), addDays(Date.now(), 3)] },
-  { name: '一周', value: () => [Date.now(), addDays(Date.now(), 7)] }
+  { name: '一周', value: () => [Date.now(), addDays(Date.now(), 7)] },
 ]
 </script>

@@ -6,7 +6,7 @@ import IconLoadingSvg from './icon-loading-svg.vue'
 const { locale } = useI18n({ useScope: 'global' })
 
 const icons = {
-  loading: IconLoadingSvg
+  loading: IconLoadingSvg,
 }
 </script>
 

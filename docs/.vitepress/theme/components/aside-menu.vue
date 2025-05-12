@@ -41,7 +41,7 @@ const flattedMenus = computed(() => {
   return flatTree(menus.value, {
     keyField: 'key',
     childField: 'items',
-    parentField: '' as any
+    parentField: '' as any,
   }).filter(menu => !menu.items?.length && menu.link)
 })
 const hasGroup = computed(() => !!menus.value.find(menu => menu.items?.length))
@@ -50,14 +50,14 @@ watch(
   () => route.path,
   value => {
     const activeMenu = flattedMenus.value.find(menu =>
-      matchPath(value, `/${locale.value}${menu.link}`)
+      matchPath(value, `/${locale.value}${menu.link}`),
     )
 
     if (activeMenu) {
       currentMenu.value = activeMenu.key
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function selectMenu(label: string, meta: AsideMenuItem) {

@@ -14,7 +14,7 @@ const justifyList = Object.freeze<SpaceJustify[]>([
   'center',
   'space-around',
   'space-between',
-  'space-evenly'
+  'space-evenly',
 ])
 const alignList = Object.freeze<SpaceAlign[]>(['start', 'end', 'center', 'baseline', 'stretch'])
 
@@ -34,16 +34,16 @@ export default defineComponent({
       tag: 'div',
       align: {
         default: 'stretch',
-        validator: value => alignList.includes(value)
+        validator: value => alignList.includes(value),
       },
       justify: {
         default: 'start',
-        validator: value => justifyList.includes(value)
+        validator: value => justifyList.includes(value),
       },
       noWrap: false,
       size: 'default',
       itemStyle: null,
-      gapDisabled: !useFlexGap
+      gapDisabled: !useFlexGap,
     })
 
     const nh = useNameHelper('space')
@@ -53,7 +53,7 @@ export default defineComponent({
       mhh: `calc(var(${nh.cv('h-gap')}) * -0.5)`,
       v: `var(${nh.cv('v-gap')})`,
       hv: `calc(var(${nh.cv('v-gap')}) * 0.5)`,
-      mhv: `calc(var(${nh.cv('v-gap')}) * -0.5)`
+      mhv: `calc(var(${nh.cv('v-gap')}) * -0.5)`,
     }
 
     const className = computed(() => {
@@ -64,7 +64,7 @@ export default defineComponent({
         [nh.bm('inline')]: props.inline,
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('no-wrap')]: props.vertical || props.noWrap,
-        [nh.bm('no-gap')]: props.gapDisabled
+        [nh.bm('no-gap')]: props.gapDisabled,
       }
 
       if (typeof props.size === 'string' && props.size !== 'default') {
@@ -78,7 +78,7 @@ export default defineComponent({
 
       const style: Record<string, string> = {
         alignItems: parseFlexStyle(align),
-        justifyContent: parseFlexStyle(justify)
+        justifyContent: parseFlexStyle(justify),
       }
 
       if (typeof size !== 'string') {
@@ -123,7 +123,7 @@ export default defineComponent({
                   ? ''
                   : props.vertical
                     ? {
-                        marginBottom: index !== lastIndex ? varMap.v : undefined
+                        marginBottom: index !== lastIndex ? varMap.v : undefined,
                       }
                     : {
                         paddingTop: varMap.hv,
@@ -139,8 +139,8 @@ export default defineComponent({
                           ? notBetween || index !== 0
                             ? varMap.hh
                             : undefined
-                          : undefined
-                      }
+                          : undefined,
+                      },
               ]}
             >
               {vnode}
@@ -149,5 +149,5 @@ export default defineComponent({
         </CustomTag>
       )
     }
-  }
+  },
 })

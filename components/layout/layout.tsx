@@ -11,7 +11,7 @@ import {
   renderSlot,
   shallowReadonly,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
@@ -30,7 +30,7 @@ import type {
   LayoutAsideExposed,
   LayoutConfig,
   LayoutHeaderExposed,
-  LayoutSignType
+  LayoutSignType,
 } from './symbol'
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
     'update:reduced',
     'update:sign-type',
     'update:color',
-    'update:dark-mode'
+    'update:dark-mode',
   ],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
@@ -51,7 +51,7 @@ export default defineComponent({
       tag: 'section',
       menus: {
         default: () => [],
-        static: true
+        static: true,
       },
       menuProps: null,
       logo: '',
@@ -76,7 +76,7 @@ export default defineComponent({
       fitWindow: false,
       innerClasses: () => ({}),
       noHeader: false,
-      noMasker: false
+      noMasker: false,
     })
 
     const nh = useNameHelper('layout')
@@ -111,7 +111,7 @@ export default defineComponent({
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside),
       classes: toRef(props, 'innerClasses'),
-      changeInLock
+      changeInLock,
     })
 
     const className = computed(() => {
@@ -124,8 +124,8 @@ export default defineComponent({
           [nh.bm('no-header')]: props.noHeader,
           [nh.bm('header-main')]: currentSignType.value === 'header',
           [nh.bm('locked')]: !isMounted.value || locked.value,
-          [nh.bm('fit-window')]: props.fitWindow
-        }
+          [nh.bm('fit-window')]: props.fitWindow,
+        },
       ]
     })
     const rootEl = computed(() => {
@@ -140,7 +140,7 @@ export default defineComponent({
 
     const style = computed(() => {
       return {
-        [nh.cv('view-height')]: props.fitWindow ? '100vh' : viewHeight.value
+        [nh.cv('view-height')]: props.fitWindow ? '100vh' : viewHeight.value,
       }
     })
 
@@ -152,8 +152,8 @@ export default defineComponent({
         expanded: asideExpanded,
         reduced: asideReduced,
         toggleExpanded,
-        toggleReduced
-      })
+        toggleReduced,
+      }),
     )
 
     provide(LAYOUT_STATE, state)
@@ -167,7 +167,7 @@ export default defineComponent({
       () => props.expanded,
       value => {
         asideExpanded.value = value
-      }
+      },
     )
     watch(asideExpanded, value => {
       if (state.useExpand && value) {
@@ -178,7 +178,7 @@ export default defineComponent({
       () => props.reduced,
       value => {
         asideReduced.value = value
-      }
+      },
     )
     // watch(
     //   () => props.noAside,
@@ -194,7 +194,7 @@ export default defineComponent({
       () => props.color,
       value => {
         currentColor.value = value || props.colors?.[0] || getBaseColor()
-      }
+      },
     )
     watch(currentColor, value => {
       emit('update:color', value)
@@ -204,7 +204,7 @@ export default defineComponent({
       () => props.darkMode,
       value => {
         isDark.value = value
-      }
+      },
     )
 
     function getBaseColor() {
@@ -265,7 +265,7 @@ export default defineComponent({
       cancelChange = runQueueFrame([
         () => (locked.value = true),
         doChange,
-        () => (locked.value = false)
+        () => (locked.value = false),
       ])
     }
 
@@ -296,7 +296,7 @@ export default defineComponent({
                 <img src={props.logo} alt={'Logo'} />
               </div>
             ),
-            showSignName && <span class={nh.be('sign-name')}>{props.signName}</span>
+            showSignName && <span class={nh.be('sign-name')}>{props.signName}</span>,
           ]}
         </div>
       )
@@ -334,17 +334,17 @@ export default defineComponent({
           onToggleTheme={handleToggleTheme}
           {...{
             onWheel: stopAndPrevent,
-            onMousemove: stopAndPrevent
+            onMousemove: stopAndPrevent,
           }}
         >
           {{
             left: createSlotRender(slots, ['header-left', 'headerLeft'], () =>
-              signInHeader.value ? renderSign() : null
+              signInHeader.value ? renderSign() : null,
             ),
             default: createSlotRender(slots, ['header-main', 'headerMain']),
             right: createSlotRender(slots, ['header-right', 'headerRight']),
             user: createSlotRender(slots, ['header-user', 'headerUser']),
-            avatar: createSlotRender(slots, ['header-avatar', 'headerAvatar'])
+            avatar: createSlotRender(slots, ['header-avatar', 'headerAvatar']),
           }}
         </LayoutHeader>
       )
@@ -360,7 +360,7 @@ export default defineComponent({
           class={[
             nh.be('sidebar'),
             !expandMatched.value && nh.bem('sidebar', 'away'),
-            props.innerClasses.sidebar
+            props.innerClasses.sidebar,
           ]}
           style={{ zIndex: state.useExpand ? zIndex.value + 1 : undefined }}
           onWheel={stopAndPrevent}
@@ -384,11 +384,11 @@ export default defineComponent({
             >
               {{
                 top: createSlotRender(slots, ['aside-top', 'asideTop'], () =>
-                  !signInHeader.value ? renderSign() : null
+                  !signInHeader.value ? renderSign() : null,
                 ),
                 default: createSlotRender(slots, ['aside-main', 'asideMain']),
                 bottom: createSlotRender(slots, ['aside-bottom', 'asideBottom']),
-                expand: createSlotRender(slots, ['aside-expand', 'asideExpand'])
+                expand: createSlotRender(slots, ['aside-expand', 'asideExpand']),
               }}
             </LayoutAside>
           )}
@@ -404,7 +404,7 @@ export default defineComponent({
       return (
         <LayoutMain fixed={props.fixedMain}>
           {{
-            default: createSlotRender(slots, ['main'])
+            default: createSlotRender(slots, ['main']),
           }}
         </LayoutMain>
       )
@@ -424,7 +424,7 @@ export default defineComponent({
         >
           {{
             links: createSlotRender(slots, ['footer-links', 'footerLinks']),
-            copyright: createSlotRender(slots, ['footer-copyright', 'footerCopyright'])
+            copyright: createSlotRender(slots, ['footer-copyright', 'footerCopyright']),
           }}
         </LayoutFooter>
       )
@@ -459,7 +459,7 @@ export default defineComponent({
           class={[
             nh.be('wrapper'),
             props.fixedMain && nh.bem('wrapper', 'fixed'),
-            props.innerClasses.wrapper
+            props.innerClasses.wrapper,
           ]}
         >
           {currentSignType.value === 'header' && renderHeader()}
@@ -472,9 +472,9 @@ export default defineComponent({
                 [nh.bem('section', 'away')]: expandMatched.value,
                 [nh.bem('section', 'reduced')]: asideReduced.value,
                 [nh.bem('section', 'locked')]: locked.value,
-                [nh.bem('section', 'fixed')]: props.fixedMain
+                [nh.bem('section', 'fixed')]: props.fixedMain,
               },
-              props.innerClasses.section
+              props.innerClasses.section,
             ]}
           >
             {currentSignType.value === 'aside' && renderHeader()}
@@ -512,5 +512,5 @@ export default defineComponent({
         </NativeScroll>
       )
     }
-  }
+  },
 })

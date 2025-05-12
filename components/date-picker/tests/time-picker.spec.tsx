@@ -24,7 +24,7 @@ function nextFrame() {
 describe('TimePicker', () => {
   it('render', () => {
     const wrapper = mount(TimePicker, {
-      props: { visible: true }
+      props: { visible: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-time-picker-vars')
@@ -40,7 +40,7 @@ describe('TimePicker', () => {
 
   it('transfer', async () => {
     const wrapper = mount(TimePicker, {
-      props: { visible: true, transfer: true }
+      props: { visible: true, transfer: true },
     })
 
     await nextTick()
@@ -53,7 +53,7 @@ describe('TimePicker', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(TimePicker, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
     // const units = wrapper.findAll('.vxp-time-picker__unit')
@@ -98,7 +98,7 @@ describe('TimePicker', () => {
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(TimePicker, {
-      props: { onEnter, onCancel }
+      props: { onEnter, onCancel },
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
     const input = wrapper.find('.vxp-time-picker__input')
@@ -136,13 +136,13 @@ describe('TimePicker', () => {
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-time-picker__popper').attributes('style') || '').not.toContain(
-      'display: none;'
+      'display: none;',
     )
   })
 
   it('popper will be removed when alive false', async () => {
     const wrapper = mount(TimePicker, {
-      props: { popperAlive: false }
+      props: { popperAlive: false },
     })
 
     expect(wrapper.find('.vxp-time-picker__popper').exists()).toBe(false)
@@ -168,7 +168,7 @@ describe('TimePicker', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(TimePicker, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -190,7 +190,7 @@ describe('TimePicker', () => {
 
   it('value', async () => {
     const wrapper = mount(TimePicker, {
-      props: { value: '09:24:47' }
+      props: { value: '09:24:47' },
     })
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
@@ -211,7 +211,7 @@ describe('TimePicker', () => {
 
   it('falsy value', async () => {
     const wrapper = mount(TimePicker, {
-      props: { value: '09:24:47' }
+      props: { value: '09:24:47' },
     })
 
     const selector = wrapper.find('.vxp-time-picker__selector')
@@ -284,7 +284,7 @@ describe('TimePicker', () => {
     const wrapper = mount(() => (
       <TimePicker prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </TimePicker>
     ))
@@ -315,7 +315,7 @@ describe('TimePicker', () => {
     const wrapper = mount(() => (
       <TimePicker suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </TimePicker>
     ))
@@ -329,7 +329,7 @@ describe('TimePicker', () => {
     const wrapper = mount(() => <TimePicker size={'large'}></TimePicker>)
 
     expect(wrapper.find('.vxp-time-picker__selector').classes()).toContain(
-      'vxp-time-picker__selector--large'
+      'vxp-time-picker__selector--large',
     )
   })
 
@@ -338,7 +338,7 @@ describe('TimePicker', () => {
       const wrapper = mount(() => <TimePicker state={state}></TimePicker>)
 
       expect(wrapper.find('.vxp-time-picker__selector').classes()).toContain(
-        `vxp-time-picker__selector--${state}`
+        `vxp-time-picker__selector--${state}`,
       )
     })
   })
@@ -377,7 +377,7 @@ describe('TimePicker', () => {
 
     const onChange = vi.fn()
     const wrapper = mount(TimePicker, {
-      props: { onChange }
+      props: { onChange },
     })
 
     await wrapper.trigger('click')
@@ -391,8 +391,8 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker, {
       props: {
         clearable: true,
-        onClear
-      }
+        onClear,
+      },
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
 
@@ -422,7 +422,7 @@ describe('TimePicker', () => {
   it('click unit', async () => {
     const onChangeCol = vi.fn()
     const wrapper = mount(TimePicker, {
-      props: { value: '09:24:47', onChangeCol }
+      props: { value: '09:24:47', onChangeCol },
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
 
@@ -456,8 +456,8 @@ describe('TimePicker', () => {
         onInput,
         onPlus,
         onMinus,
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
 
     await wrapper.trigger('click')
@@ -517,8 +517,8 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker, {
       props: {
         value: '12:24:36',
-        steps: [2, 3, 4]
-      }
+        steps: [2, 3, 4],
+      },
     })
 
     await wrapper.trigger('click')
@@ -542,8 +542,8 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker, {
       props: {
         value: '09:24:47',
-        ctrlSteps: [2, 3, 4]
-      }
+        ctrlSteps: [2, 3, 4],
+      },
     })
 
     await wrapper.trigger('click')
@@ -568,10 +568,10 @@ describe('TimePicker', () => {
     const onShortcut = vi.fn()
     const shortcuts = [
       { name: 'morning', value: '08:00:00' },
-      { name: 'noon', value: fnValue }
+      { name: 'noon', value: fnValue },
     ]
     const wrapper = mount(TimePicker, {
-      props: { shortcuts, onShortcut }
+      props: { shortcuts, onShortcut },
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
 
@@ -602,12 +602,12 @@ describe('TimePicker', () => {
     ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const shortcuts = [{ name: 'morning', value: '08:00:00' }]
       const wrapper = mount(TimePicker, {
-        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+        props: { visible: true, shortcuts, shortcutsPlacement: placement },
       })
 
       expect(wrapper.find('.vxp-time-picker__shortcuts').exists()).toBe(true)
       expect(wrapper.find('.vxp-time-picker__shortcuts').classes()).toContain(
-        `vxp-time-picker__shortcuts--${placement}`
+        `vxp-time-picker__shortcuts--${placement}`,
       )
     })
   })
@@ -622,8 +622,8 @@ describe('TimePicker', () => {
       props: {
         range: true,
         onChange,
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
 
     await wrapper.trigger('click')
@@ -670,8 +670,8 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker, {
       props: {
         value: '12:14:26',
-        min: '11:20:30'
-      }
+        min: '11:20:30',
+      },
     })
 
     await wrapper.trigger('click')
@@ -689,8 +689,8 @@ describe('TimePicker', () => {
     const wrapper = mount(TimePicker, {
       props: {
         value: '10:22:46',
-        max: '11:20:30'
-      }
+        max: '11:20:30',
+      },
     })
 
     await wrapper.trigger('click')
@@ -709,8 +709,8 @@ describe('TimePicker', () => {
       props: {
         value: '10:22:46',
         min: '12:00:00',
-        max: '11:20:30'
-      }
+        max: '11:20:30',
+      },
     })
 
     await wrapper.trigger('click')
@@ -727,8 +727,8 @@ describe('TimePicker', () => {
   it('placeholder', async () => {
     const wrapper = mount(TimePicker, {
       props: {
-        placeholder: 'test'
-      }
+        placeholder: 'test',
+      },
     })
 
     expect(wrapper.find('.vxp-time-picker__placeholder').exists()).toBe(true)

@@ -15,7 +15,7 @@ interface LoadingRecord {
 
 function createSpin(
   el: HTMLElement & { __loading?: LoadingRecord },
-  binding: DirectiveBinding<boolean | SpinProps>
+  binding: DirectiveBinding<boolean | SpinProps>,
 ) {
   const props: SpinProps = isObject(binding.value)
     ? { ...binding.value }
@@ -29,7 +29,7 @@ function createSpin(
   el.__loading = {
     spin,
     props,
-    originPosition: position
+    originPosition: position,
   }
 
   if (position === 'static') {
@@ -70,5 +70,5 @@ export const vLoading: ObjectDirective<
 
     render(null, el)
     delete el.__loading
-  }
+  },
 }

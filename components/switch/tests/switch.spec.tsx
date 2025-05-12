@@ -18,7 +18,7 @@ describe('Switch', () => {
 
   it('size', async () => {
     const wrapper = mount(Switch, {
-      props: { size: 'large' }
+      props: { size: 'large' },
     })
 
     expect(wrapper.classes()).toContain('vxp-switch--large')
@@ -42,7 +42,7 @@ describe('Switch', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onChange }
+      props: { onChange },
     })
 
     await wrapper.find('input').trigger('change')
@@ -59,7 +59,7 @@ describe('Switch', () => {
   it('disabled', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onChange }
+      props: { onChange },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-switch--disabled')
@@ -84,8 +84,8 @@ describe('Switch', () => {
     const wrapper = mount(Switch, {
       props: {
         openColor: 'green',
-        closeColor: 'red'
-      }
+        closeColor: 'red',
+      },
     })
 
     expect(wrapper.attributes('style')).toContain('background-color: red;')
@@ -109,8 +109,8 @@ describe('Switch', () => {
     const wrapper = mount(Switch, {
       props: {
         openText: 'open',
-        closeText: 'close'
-      }
+        closeText: 'close',
+      },
     })
     const label = wrapper.find('.vxp-switch__label')
 
@@ -128,8 +128,8 @@ describe('Switch', () => {
     const wrapper = mount(Switch, {
       props: {
         openIcon: Hammer,
-        closeIcon: User
-      }
+        closeIcon: User,
+      },
     })
 
     expect(wrapper.findComponent(User).exists()).toBe(true)
@@ -147,7 +147,7 @@ describe('Switch', () => {
   it('before change', async () => {
     const onBeforeChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onBeforeChange }
+      props: { onBeforeChange },
     })
 
     await wrapper.find('input').trigger('change')
@@ -163,7 +163,7 @@ describe('Switch', () => {
       () =>
         new Promise(resolve => {
           resolveRef = resolve
-        })
+        }),
     )
     await wrapper.find('input').trigger('change')
     await nextTick()

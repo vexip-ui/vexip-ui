@@ -36,7 +36,7 @@ describe('Textarea', () => {
 
   it('value', async () => {
     const wrapper = mount(Textarea, {
-      props: { value: TEXT }
+      props: { value: TEXT },
     })
 
     expect(getValue(wrapper.find('textarea'))).toEqual(TEXT)
@@ -88,7 +88,7 @@ describe('Textarea', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onChange }
+      props: { onChange },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -101,7 +101,7 @@ describe('Textarea', () => {
   it('input event', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onInput }
+      props: { onInput },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -114,7 +114,7 @@ describe('Textarea', () => {
   it('input throttle', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onInput }
+      props: { onInput },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -133,7 +133,7 @@ describe('Textarea', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const textarea = wrapper.find('textarea')
 
@@ -160,7 +160,7 @@ describe('Textarea', () => {
 
   it('max length', async () => {
     const wrapper = mount(Textarea, {
-      props: { maxLength: 2 }
+      props: { maxLength: 2 },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -193,7 +193,7 @@ describe('Textarea', () => {
 
   it('sync', async () => {
     const wrapper = mount(Textarea, {
-      props: { sync: true }
+      props: { sync: true },
     })
     const textarea = wrapper.find('textarea').element
 

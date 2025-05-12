@@ -67,15 +67,15 @@ const data = ref(
       job: `Job ${index}`,
       value: String(Math.round(1000 * Math.random())),
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 
 const filter = defineTableFilter({
   options: Array.from({ length: 5 }, (_, index) => ({
     label: `Includes ${index * 2}`,
-    value: `${index * 2}`
+    value: `${index * 2}`,
   })),
   multiple: true,
   method: (values, row: { value: string }) => {
@@ -86,6 +86,6 @@ const filter = defineTableFilter({
     }
 
     return false
-  }
+  },
 })
 </script>

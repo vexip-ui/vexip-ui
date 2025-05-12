@@ -20,7 +20,7 @@ export const tagProps = buildProps({
   suffixColor: String,
   disabled: booleanProp,
   slots: Object as PropType<TagSlots>,
-  onClose: eventProp()
+  onClose: eventProp(),
 })
 
 export type TagProps = ExtractPropTypes<typeof tagProps>

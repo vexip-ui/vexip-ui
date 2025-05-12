@@ -18,21 +18,21 @@ const props = useProps('progress', _props, {
   percentage: {
     default: 0,
     validator: value => value >= 0 && value <= 100,
-    static: true
+    static: true,
   },
   state: createStateProp(),
   strokeWidth: 8,
   infoType: {
     default: 'outside',
-    validator: value => infoTypes.includes(value)
+    validator: value => infoTypes.includes(value),
   },
   precision: 2,
   activated: false,
   strokeColor: {
     default: null,
-    validator: value => !(Array.isArray(value) && (!value[0] || !value[1]))
+    validator: value => !(Array.isArray(value) && (!value[0] || !value[1])),
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const nh = useNameHelper('progress')
@@ -45,8 +45,8 @@ const className = computed(() => {
     {
       [nh.bm('inherit')]: props.inherit,
       [nh.bm(props.state)]: props.state !== 'default',
-      [nh.bm('activated')]: props.activated
-    }
+      [nh.bm('activated')]: props.activated,
+    },
   ]
 })
 const style = computed(() => {
@@ -55,12 +55,12 @@ const style = computed(() => {
 const trackStyle = computed(() => {
   return {
     height: `${props.strokeWidth}px`,
-    borderRadius: `${props.strokeWidth}px`
+    borderRadius: `${props.strokeWidth}px`,
   }
 })
 const fillerStyle = computed(() => {
   const style: CSSProperties = {
-    borderRadius: `${props.strokeWidth}px`
+    borderRadius: `${props.strokeWidth}px`,
   }
 
   const strokeColor = callIfFunc(props.strokeColor, props.percentage)
@@ -89,7 +89,7 @@ const bubbleStyle = computed(() => {
   const type = bubbleType.value === 'top' ? 'bottom' : 'top'
 
   return {
-    [type]: `${props.strokeWidth}px`
+    [type]: `${props.strokeWidth}px`,
   }
 })
 const percentValue = computed(() => toFixed(props.percentage, props.precision))

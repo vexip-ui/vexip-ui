@@ -18,13 +18,13 @@ const _props = defineProps(alertProps)
 const props = useProps('alert', _props, {
   type: {
     default: 'primary',
-    validator: value => alertTypes.includes(value)
+    validator: value => alertTypes.includes(value),
   },
   title: '',
   colorfulText: false,
   icon: {
     isFunc: true,
-    default: false
+    default: false,
   },
   closable: false,
   iconColor: '',
@@ -34,7 +34,7 @@ const props = useProps('alert', _props, {
   scroll: false,
   scrollSpeed: 1,
   color: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<AlertSlots>()
@@ -48,7 +48,7 @@ const predefinedIcons = computed(() => ({
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,
-  error: icons.value.error
+  error: icons.value.error,
 }))
 
 const closed = ref(false)
@@ -77,7 +77,7 @@ const className = computed(() => {
     [nh.bm('has-icon')]: hasIcon.value,
     [nh.bm('closable')]: props.closable,
     [nh.bm('no-border')]: !props.banner && props.noBorder,
-    [nh.bm('banner')]: props.banner
+    [nh.bm('banner')]: props.banner,
   }
 })
 const style = computed(() => {
@@ -94,9 +94,9 @@ const style = computed(() => {
     ...(props.colorfulText
       ? {
           'text-color': mixColor(black, baseColor, 0.2).toString(),
-          'title-color': mixColor(black, baseColor, 0.2).toString()
+          'title-color': mixColor(black, baseColor, 0.2).toString(),
         }
-      : {})
+      : {}),
   })
 })
 const iconComp = computed(() => {
@@ -110,7 +110,7 @@ const scrollStyle = computed(() => {
   return {
     width: `${scrollWidth.value}px`,
     transitionDuration: `${scrollDuration.value}ms`,
-    transform: `translateX(${scrollOffset.value}px)`
+    transform: `translateX(${scrollOffset.value}px)`,
   }
 })
 
@@ -118,7 +118,7 @@ watch(
   () => props.scroll,
   value => {
     value && startScroll()
-  }
+  },
 )
 
 onMounted(() => {

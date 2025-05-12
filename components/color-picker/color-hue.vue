@@ -24,8 +24,8 @@ export default defineComponent({
       default: 0,
       validator: (value: number) => {
         return value >= 0 && value <= 360
-      }
-    }
+      },
+    },
   },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
@@ -50,7 +50,7 @@ export default defineComponent({
           prevLeft = currentLeft.value
           handleChange()
         }
-      }
+      },
     })
 
     const { moving: editing } = useMoving({
@@ -82,7 +82,7 @@ export default defineComponent({
       },
       onEnd: () => {
         emit('edit-end')
-      }
+      },
     })
 
     watch(
@@ -91,7 +91,7 @@ export default defineComponent({
         currentLeft.value = (value / 360) * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function verifyPosition() {
@@ -107,8 +107,8 @@ export default defineComponent({
       currentLeft,
       editing,
 
-      wrapper
+      wrapper,
     }
-  }
+  },
 })
 </script>

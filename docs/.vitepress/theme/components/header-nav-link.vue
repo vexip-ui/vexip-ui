@@ -7,8 +7,8 @@ import type { NavMenuItem } from '../types'
 const props = defineProps({
   menu: {
     type: Object as PropType<NavMenuItem>,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 })
 
 const { t } = useI18n({ useScope: 'global' })

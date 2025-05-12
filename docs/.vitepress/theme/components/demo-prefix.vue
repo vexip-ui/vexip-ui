@@ -8,8 +8,8 @@ import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
 defineProps({
   inputClass: {
     type: [String, Array, Object],
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { t } = useI18n({ useScope: 'global' })

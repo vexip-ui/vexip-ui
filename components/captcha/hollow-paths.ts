@@ -69,7 +69,7 @@ export const shieldPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =
     x - halfSide + side * 0.3,
     y - halfSide * 0.5 + side * 0.1,
     x - halfSide,
-    y - halfSide * 0.7
+    y - halfSide * 0.7,
   )
   ctx.bezierCurveTo(x - halfSide, y + side * 0.3, x - side * 0.1, y + halfSide, x, y + halfSide)
   ctx.bezierCurveTo(
@@ -78,7 +78,7 @@ export const shieldPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =
     x + halfSide,
     y + side * 0.3,
     x + halfSide,
-    y - halfSide * 0.7
+    y - halfSide * 0.7,
   )
   ctx.bezierCurveTo(
     x + halfSide - side * 0.3,
@@ -86,7 +86,7 @@ export const shieldPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =
     x,
     y - halfSide + side * 0.05,
     x,
-    y - halfSide
+    y - halfSide,
   )
 
   return [x - halfSide - 2, y - halfSide - 2, side + 4, side + 4]
@@ -103,7 +103,7 @@ export const heartPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =>
     x - side * 0.1,
     y - halfSide,
     x - halfSide * 0.5,
-    y - halfSide
+    y - halfSide,
   )
   ctx.bezierCurveTo(
     x - halfSide * 0.5 - side * 0.1,
@@ -111,7 +111,7 @@ export const heartPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =>
     x - halfSide,
     y - side * 0.4,
     x - halfSide,
-    y - side * 0.2
+    y - side * 0.2,
   )
   ctx.bezierCurveTo(
     x - halfSide,
@@ -119,7 +119,7 @@ export const heartPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =>
     x - side * 0.05,
     y + halfSide * 0.8,
     x,
-    y + halfSide * 0.8
+    y + halfSide * 0.8,
   )
   ctx.bezierCurveTo(
     x + side * 0.05,
@@ -127,7 +127,7 @@ export const heartPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =>
     x + halfSide,
     y + side * 0.2,
     x + halfSide,
-    y - side * 0.2
+    y - side * 0.2,
   )
   ctx.bezierCurveTo(
     x + halfSide,
@@ -135,7 +135,7 @@ export const heartPath: CaptchaHollowProcess = ({ ctx, x, y, width, height }) =>
     x + halfSide * 0.5 + side * 0.1,
     y - halfSide,
     x + halfSide * 0.5,
-    y - halfSide
+    y - halfSide,
   )
   ctx.bezierCurveTo(x + side * 0.1, y - halfSide, x, y - side * 0.4, x, y - side * 0.25)
 

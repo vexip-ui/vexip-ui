@@ -11,8 +11,8 @@ export const rowProps = buildProps({
   align: String as PropType<RowGridAlign>,
   columnFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type RowProps = ExtractPropTypes<typeof rowProps>
@@ -36,8 +36,8 @@ export const columnProps = buildProps({
   flex: [Number, String],
   useFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type ColumnProps = ExtractPropTypes<typeof columnProps>

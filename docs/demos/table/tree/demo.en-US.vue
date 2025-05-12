@@ -49,7 +49,7 @@ function mockData(size = 5) {
       name: `Name ${idStart}`,
       member: 3 + Math.round(Math.random() * 7),
       found: randomDate(),
-      progress: 10 + Math.round(Math.random() * 90)
+      progress: 10 + Math.round(Math.random() * 90),
     })
   }
 
@@ -60,7 +60,7 @@ function randomDate() {
   const startDate = new Date('2000-01-01')
   const endDate = new Date()
   const randomDate = new Date(
-    startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random()
+    startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random(),
   )
 
   return formatDate(randomDate)

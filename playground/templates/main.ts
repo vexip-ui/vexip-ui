@@ -8,7 +8,7 @@ const Repl = {
   name: 'Repl',
   setup() {
     return () => h('div', [h(App), h(ThemeSwitch)])
-  }
+  },
 }
 
 const mount = () => {

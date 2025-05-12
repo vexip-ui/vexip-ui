@@ -21,7 +21,7 @@ import type { SelectFilter } from 'vexip-ui'
 
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `Option ${i + 1}`,
-  value: i + 1
+  value: i + 1,
 }))
 
 const filter: SelectFilter = (filterValue, option) => {

@@ -25,19 +25,19 @@ const steps: TourStepOptions[] = [
     target: '#start-7',
     title: 'Start Tour',
     content:
-      'Although you already know its purpose, I still tell you that after clicking it, you can start tour'
+      'Although you already know its purpose, I still tell you that after clicking it, you can start tour',
   },
   {
     target: '#button-7',
     title: 'A Button',
     content: 'A button and it just sits there',
-    type: 'success'
+    type: 'success',
   },
   {
     target: '#another-button-7',
     title: 'Another Button',
     content: 'Another button and it just sits there too',
-    type: 'error'
-  }
+    type: 'error',
+  },
 ]
 </script>

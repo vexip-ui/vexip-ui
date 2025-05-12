@@ -27,7 +27,7 @@ describe('SSR for Checkbox', () => {
             <Checkbox></Checkbox>
             <Checkbox></Checkbox>
           </CheckboxGroup>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

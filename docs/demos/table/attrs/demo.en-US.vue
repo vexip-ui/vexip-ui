@@ -33,18 +33,18 @@ const data = Array.from({ length: 5 }, (_, index) => {
     job: `Job ${index}`,
     age: 20 + index,
     email: `email${index}@vexip.ui`,
-    address: `Address ${index}`
+    address: `Address ${index}`,
   }
 })
 
 const headClass: TableHeadPropFn = ({ index }) => `head-${index}`
 
 const headStyle: TableHeadPropFn = ({ index }) => ({
-  color: `var(--vxp-color-error-opacity-${index + 1})`
+  color: `var(--vxp-color-error-opacity-${index + 1})`,
 })
 
 const hadeAttrs: TableHeadPropFn = ({ index }) => ({
-  'data-index': index
+  'data-index': index,
 })
 
 const cellClass: TableCellPropFn<ItemType<typeof data>> = ({ rowIndex, columnIndex }) =>

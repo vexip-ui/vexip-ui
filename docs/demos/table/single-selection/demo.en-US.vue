@@ -27,7 +27,7 @@ const data = Array.from({ length: 5 }, (_, index) => {
     job: `Job ${index}`,
     age: 20 + index,
     email: `email${index}@vexip.ui`,
-    address: `Address ${index}`
+    address: `Address ${index}`,
   }
 })
 

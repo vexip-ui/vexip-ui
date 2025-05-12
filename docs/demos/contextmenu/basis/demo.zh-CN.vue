@@ -18,11 +18,11 @@ export default defineComponent({
         clientX: event.clientX,
         clientY: event.clientY,
         appear: true,
-        configs: [{ key: '选项1' }, { key: '选项2' }, { key: '选项3' }, { key: '选项4' }]
+        configs: [{ key: '选项1' }, { key: '选项2' }, { key: '选项3' }, { key: '选项4' }],
       })
 
       console.info(selectedKeys)
-    }
-  }
+    },
+  },
 })
 </script>

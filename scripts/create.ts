@@ -8,11 +8,7 @@ import minimist from 'minimist'
 import prompts from 'prompts'
 import { logger } from '@vexip-ui/scripts'
 import { toCamelCase, toCapitalCase, toKebabCase } from '@vexip-ui/utils'
-import {
-  components as allComponents,
-  prettierConfig,
-  rootDir
-} from './constant'
+import { components as allComponents, prettierConfig, rootDir } from './constant'
 import pkg from '../package.json'
 
 const args = minimist(process.argv.slice(2))
@@ -32,8 +28,8 @@ const compType = (
       { title: 'Form (表单)', value: 'form' },
       { title: 'Data (数据)', value: 'data' },
       { title: 'Effect (反应)', value: 'effect' },
-      { title: 'Else (其他)', value: 'else' }
-    ]
+      { title: 'Else (其他)', value: 'else' },
+    ],
   })
 ).compType
 
@@ -45,7 +41,7 @@ async function main() {
       await prompts({
         type: 'text',
         name: 'component',
-        message: 'Input a component name:'
+        message: 'Input a component name:',
       })
     ).component
   }
@@ -57,7 +53,7 @@ async function main() {
       await prompts({
         type: 'text',
         name: 'component',
-        message: 'Input Chinese name of the component:'
+        message: 'Input Chinese name of the component:',
       })
     ).component
 
@@ -65,7 +61,7 @@ async function main() {
       cname = cname || `[${name} 中文]`
 
       logger.warningText(
-        `Get empty Chinese name, you can globally replace '${cname}' with the Chinese name afterwards`
+        `Get empty Chinese name, you can globally replace '${cname}' with the Chinese name afterwards`,
       )
     }
 
@@ -93,8 +89,7 @@ async function create(name: string) {
   if (name.match(/[A-Z]/)) {
     capitalCaseName = name.replace(/-/g, '')
     kebabCaseName = toKebabCase(capitalCaseName)
-    camelCaseName =
-      capitalCaseName.charAt(0).toLowerCase() + capitalCaseName.slice(1)
+    camelCaseName = capitalCaseName.charAt(0).toLowerCase() + capitalCaseName.slice(1)
   } else {
     kebabCaseName = name
     capitalCaseName = toCapitalCase(name)
@@ -119,21 +114,21 @@ async function create(name: string) {
         export type ${capitalCaseName}Exposed = ComponentPublicInstance & InstanceType<typeof ${capitalCaseName}>
 
         export type { ${capitalCaseName}Props, ${capitalCaseName}CProps } from './props'
-      `
+      `,
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'style.ts'),
       source: `
         import '@/components/preset/style'
         import '@/style/${kebabCaseName}.scss'
-      `
+      `,
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'css.ts'),
       source: `
         import '@/components/preset/css'
         import '@/css/${kebabCaseName}.css'
-      `
+      `,
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'props.ts'),
@@ -150,15 +145,10 @@ async function create(name: string) {
 
         export type ${capitalCaseName}Props = ExtractPropTypes<typeof ${camelCaseName}Props>
         export type ${capitalCaseName}CProps = ConfigurableProps<ExtractPropTypes<typeof ${camelCaseName}Props>>
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'components',
-        kebabCaseName,
-        `${kebabCaseName}.vue`
-      ),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
       source: `
         <script setup lang="ts">
         import { computed } from 'vue'
@@ -186,7 +176,7 @@ async function create(name: string) {
         <template>
           <div :class="className" @click="handleClick"></div>
         </template>
-      `
+      `,
     },
     {
       filePath: path.resolve(
@@ -194,7 +184,7 @@ async function create(name: string) {
         'components',
         kebabCaseName,
         'tests',
-        `${kebabCaseName}.spec.tsx`
+        `${kebabCaseName}.spec.tsx`,
       ),
       source: `
         import { describe, it, expect } from 'vitest'
@@ -208,15 +198,10 @@ async function create(name: string) {
             expect(wrapper.classes()).toContain('vxp-${kebabCaseName}-vars')
           })
         })
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'components',
-        kebabCaseName,
-        'tests/ssr.spec.tsx'
-      ),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests/ssr.spec.tsx'),
       source: `
         /**
          * @vitest-environment node
@@ -238,7 +223,7 @@ async function create(name: string) {
             }
           })
         })
-      `
+      `,
     },
     {
       filePath: path.resolve(rootDir, 'style', `${kebabCaseName}.scss`),
@@ -263,14 +248,10 @@ async function create(name: string) {
             // root styles
           }
         }
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'docs/zh-CN/component',
-        `${kebabCaseName}.md`
-      ),
+      filePath: path.resolve(rootDir, 'docs/zh-CN/component', `${kebabCaseName}.md`),
       source: `
         # ${cname} ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
@@ -302,14 +283,10 @@ async function create(name: string) {
 
         | 名称 | 说明 | 参数 | 始于 |
         | ---- | --- | ---- | ---- |
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'docs/en-US/component',
-        `${kebabCaseName}.md`
-      ),
+      filePath: path.resolve(rootDir, 'docs/en-US/component', `${kebabCaseName}.md`),
       source: `
         # ${capitalCaseName} ^[Since v${getSinceVersion()}](!s)
 
@@ -341,39 +318,29 @@ async function create(name: string) {
 
         | Name | Description | Parameters | Since |
         | ---- | ----------- | ---------- | ----- |
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'docs/demos',
-        kebabCaseName,
-        'basis/demo.zh-CN.vue'
-      ),
+      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.zh-CN.vue'),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
         </template>
 
         <script setup lang="ts"></script>
-      `
+      `,
     },
     {
-      filePath: path.resolve(
-        rootDir,
-        'docs/demos',
-        kebabCaseName,
-        'basis/demo.en-US.vue'
-      ),
+      filePath: path.resolve(rootDir, 'docs/demos', kebabCaseName, 'basis/demo.en-US.vue'),
       source: `
         <template>
           <${capitalCaseName}></${capitalCaseName}>
         </template>
 
         <script setup lang="ts"></script>
-      `
+      `,
     },
-    ...(await getConvertCompTypeFiles())
+    ...(await getConvertCompTypeFiles()),
   ]
 
   const shouldLintFiles: string[] = []
@@ -388,14 +355,11 @@ async function create(name: string) {
       await fs.ensureDir(path.dirname(filePath))
 
       if (filePath.match(/\.(s|p)?css$/)) {
-        await fs.writeFile(
-          filePath,
-          await format(source, { ...prettierConfig, parser: 'scss' })
-        )
+        await fs.writeFile(filePath, await format(source, { ...prettierConfig, parser: 'scss' }))
         await stylelint.lint({
           cwd: rootDir,
           fix: true,
-          files: filePath
+          files: filePath,
         })
       } else if (filePath.endsWith('.md')) {
         await fs.writeFile(
@@ -403,18 +367,18 @@ async function create(name: string) {
           await format(
             source
               .split('\n')
-              .map((line) => line.trim())
+              .map(line => line.trim())
               .join('\n'),
-            { ...prettierConfig, parser: 'markdown' }
-          )
+            { ...prettierConfig, parser: 'markdown' },
+          ),
         )
       } else if (filePath.endsWith('.json')) {
         await fs.writeFile(
           filePath,
           await format(source, {
             ...prettierConfig,
-            parser: 'json'
-          })
+            parser: 'json',
+          }),
         )
       } else {
         if (filePath.endsWith('.vue')) {
@@ -422,16 +386,16 @@ async function create(name: string) {
             filePath,
             await format(source, {
               ...prettierConfig,
-              parser: 'vue'
-            })
+              parser: 'vue',
+            }),
           )
         } else {
           await fs.writeFile(
             filePath,
             await format(source, {
               ...prettierConfig,
-              parser: 'typescript'
-            })
+              parser: 'typescript',
+            }),
           )
         }
 
@@ -439,7 +403,7 @@ async function create(name: string) {
       }
 
       logger.infoText(`generated ${filePath}`)
-    })
+    }),
   )
 
   logger.withStartLn(() => logger.infoText('Linting files...'))
@@ -455,49 +419,29 @@ async function getConvertCompTypeFiles(): Promise<
   const capitalCaseName = toCapitalCase(name)
   const capitalCaseCompType = toCapitalCase(compType)
 
-  const compConfigPath = path.resolve(
-    rootDir,
-    'docs/.vitepress/config/component.ts'
-  )
-  const i18nUsPath = path.resolve(
-    rootDir,
-    'docs/.vitepress/theme/i18n/en-US.ts'
-  )
-  const i18nCnPath = path.resolve(
-    rootDir,
-    'docs/.vitepress/theme/i18n/zh-CN.ts'
-  )
-  const i18nHelperPath = path.resolve(
-    rootDir,
-    'docs/.vitepress/theme/i18n/helper.ts'
-  )
+  const compConfigPath = path.resolve(rootDir, 'docs/.vitepress/config/component.ts')
+  const i18nUsPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/en-US.ts')
+  const i18nCnPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/zh-CN.ts')
+  const i18nHelperPath = path.resolve(rootDir, 'docs/.vitepress/theme/i18n/helper.ts')
 
-  const compConfigSource = (await fs.readFile(compConfigPath, 'utf-8')).split(
-    '\n'
-  )
+  const compConfigSource = (await fs.readFile(compConfigPath, 'utf-8')).split('\n')
   const i18nUsSource = (await fs.readFile(i18nUsPath, 'utf-8')).split('\n')
   const i18nCnSource = (await fs.readFile(i18nCnPath, 'utf-8')).split('\n')
-  const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split(
-    '\n'
-  )
+  const i18nHelperSource = (await fs.readFile(i18nHelperPath, 'utf-8')).split('\n')
 
-  const compConfigIndex =
-    compConfigSource.findIndex((i) => i.includes(`name: '${compType}'`)) + 2
+  const compConfigIndex = compConfigSource.findIndex(i => i.includes(`name: '${compType}'`)) + 2
   const compConfigEndIndex = compConfigSource.findIndex(
-    (item, index) => index > compConfigIndex && item.includes(']')
+    (item, index) => index > compConfigIndex && item.includes(']'),
   )
-  const i18nUsIndex =
-    i18nUsSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) + 1
-  const i18nCnIndex =
-    i18nCnSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nUsIndex = i18nUsSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
+  const i18nCnIndex = i18nCnSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
   const i18nHelperIndex =
-    i18nHelperSource.findIndex((i) => i.includes(`// ${capitalCaseCompType}`)) +
-    1
+    i18nHelperSource.findIndex(i => i.includes(`// ${capitalCaseCompType}`)) + 1
 
   compConfigSource.splice(
     compConfigIndex,
     0,
-    `{ name: '${capitalCaseName}', since: '${getSinceVersion()}' },`
+    `{ name: '${capitalCaseName}', since: '${getSinceVersion()}' },`,
   )
 
   const convertCompConfig = compConfigSource
@@ -518,14 +462,10 @@ async function getConvertCompTypeFiles(): Promise<
   compConfigSource.splice(
     compConfigIndex,
     compConfigEndIndex - compConfigIndex + 1,
-    ...convertCompConfig
+    ...convertCompConfig,
   )
 
-  i18nUsSource.splice(
-    i18nUsIndex,
-    0,
-    `${capitalCaseName}: '${capitalCaseName}',`
-  )
+  i18nUsSource.splice(i18nUsIndex, 0, `${capitalCaseName}: '${capitalCaseName}',`)
   i18nCnSource.splice(i18nCnIndex, 0, `${capitalCaseName}: '${cname}',`)
   i18nHelperSource.splice(i18nHelperIndex, 0, `${capitalCaseName}: string,`)
 
@@ -533,15 +473,15 @@ async function getConvertCompTypeFiles(): Promise<
     {
       filePath: compConfigPath,
       source: compConfigSource.join('\n'),
-      convert: true
+      convert: true,
     },
     { filePath: i18nUsPath, source: i18nUsSource.join('\n'), convert: true },
     { filePath: i18nCnPath, source: i18nCnSource.join('\n'), convert: true },
     {
       filePath: i18nHelperPath,
       source: i18nHelperSource.join('\n'),
-      convert: true
-    }
+      convert: true,
+    },
   ]
 }
 
@@ -554,7 +494,7 @@ function getSinceVersion() {
   return splitStr.join('.')
 }
 
-main().catch((error) => {
+main().catch(error => {
   logger.error(error)
   process.exit(1)
 })

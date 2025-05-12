@@ -90,7 +90,7 @@ describe('performance', () => {
     let i = 1
 
     const fn = vi.fn(
-      () => new Promise<number>(resolve => Promise.resolve().then(() => resolve(i++)))
+      () => new Promise<number>(resolve => Promise.resolve().then(() => resolve(i++))),
     )
     const dfn = debounceFrame(fn)
 

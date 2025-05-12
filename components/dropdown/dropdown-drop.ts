@@ -9,5 +9,5 @@ export default defineComponent({
     dropdownState && provide(SELECT_HANDLER, dropdownState.handleSelect)
 
     return () => renderSlot(slots, 'default')
-  }
+  },
 })

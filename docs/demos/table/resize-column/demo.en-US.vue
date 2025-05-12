@@ -36,7 +36,7 @@ const data = Array.from({ length: 5 }, (_, index) => {
     desc:
       'xxx-'.repeat(1 + Math.round(3 * Math.random())) +
       '' +
-      'x'.repeat(5 + Math.round(10 * Math.random()))
+      'x'.repeat(5 + Math.round(10 * Math.random())),
   }
 })
 </script>

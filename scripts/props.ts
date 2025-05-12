@@ -24,7 +24,7 @@ async function main() {
     'H5',
     'H6',
     'P',
-    'Strong'
+    'Strong',
   ]
 
   const existsCProps = new Set<string>()
@@ -90,7 +90,7 @@ async function main() {
   await writeFile(
     propsPath,
     await format(props, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
+    'utf-8',
   )
 
   await ESLint.outputFixes(await eslint.lintFiles(propsPath))

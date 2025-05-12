@@ -25,7 +25,7 @@ function create(index: number) {
     job: `Job ${index}`,
     age: 20 + index,
     email: `email${index}@vexip.ui`,
-    address: `Address ${index}`
+    address: `Address ${index}`,
   }
 }
 

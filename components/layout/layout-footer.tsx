@@ -15,7 +15,7 @@ export default defineComponent({
       tag: 'footer',
       copyright: '',
       links: () => [],
-      verticalLinks: 'md'
+      verticalLinks: 'md',
     })
 
     const nh = useNameHelper('layout')
@@ -27,9 +27,9 @@ export default defineComponent({
         nh.be('footer'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
-          [nh.bem('footer', 'inherit')]: layoutState.isLayout || props.inherit
+          [nh.bem('footer', 'inherit')]: layoutState.isLayout || props.inherit,
         },
-        layoutState.classes.footer
+        layoutState.classes.footer,
       ]
     })
 
@@ -43,7 +43,7 @@ export default defineComponent({
           class={[
             nh.be('links'),
             !horizontalMatched.value && nh.bem('links', 'vertical'),
-            layoutState.classes.footerLinks
+            layoutState.classes.footerLinks,
           ]}
         >
           <div class={nh.be('links-row')}>
@@ -52,7 +52,7 @@ export default defineComponent({
                 key={index}
                 class={[
                   nh.be('link-group'),
-                  !horizontalMatched.value && nh.bem('link-group', 'vertical')
+                  !horizontalMatched.value && nh.bem('link-group', 'vertical'),
                 ]}
               >
                 <div class={[nh.be('link-name'), nh.bem('link-name', 'group')]}>
@@ -96,5 +96,5 @@ export default defineComponent({
         </CustomTag>
       )
     }
-  }
+  },
 })

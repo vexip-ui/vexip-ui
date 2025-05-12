@@ -22,7 +22,7 @@ import type {
   ParsedTableSorterOptions,
   TableRowState,
   TableSelectionColumn,
-  TableTypeColumn
+  TableTypeColumn,
 } from './symbol'
 
 defineOptions({ name: 'TableHeadCell' })
@@ -30,24 +30,24 @@ defineOptions({ name: 'TableHeadCell' })
 const props = defineProps({
   column: {
     type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
+    default: () => ({}),
   },
   index: {
     type: Number,
-    default: -1
+    default: -1,
   },
   row: {
     type: Object as PropType<TableRowState>,
-    default: () => ({})
+    default: () => ({}),
   },
   rowIndex: {
     type: Number,
-    default: 0
+    default: 0,
   },
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
@@ -76,7 +76,7 @@ const cellSpan = computed(() => {
   return (
     state.cellSpanMap.get(props.fixed || 'default')!.get(`h${props.rowIndex},${props.index}`) || {
       colSpan: 1,
-      rowSpan: 1
+      rowSpan: 1,
     }
   )
 })
@@ -98,7 +98,7 @@ function processColResize(payload: MovingState, lazy = false) {
       state.columns
         .slice(props.column.index, props.column.index + cellSpan.value.colSpan)
         .map(column => column.key),
-      width
+      width,
     )
 
   return width
@@ -121,7 +121,7 @@ const { target: resizer } = useMoving({
     mutations.setResizeLeft(payload.xStart)
     tableActions.emitColResize('Start', {
       ...buildEventPayload(event),
-      width: currentWidth
+      width: currentWidth,
     })
   },
   onMove: (payload, event) => {
@@ -130,16 +130,16 @@ const { target: resizer } = useMoving({
     mutations.setResizeLeft(payload.xEnd)
     tableActions.emitColResize('Move', {
       ...buildEventPayload(event),
-      width: processColResize(payload, state.colResizable !== 'responsive')
+      width: processColResize(payload, state.colResizable !== 'responsive'),
     })
   },
   onEnd: (payload, event) => {
     mutations.setColumnResizing(false)
     tableActions.emitColResize('End', {
       ...buildEventPayload(event),
-      width: processColResize(payload)
+      width: processColResize(payload),
     })
-  }
+  },
 })
 
 const typed = computed(() => columnTypes.includes((props.column as TableTypeColumn).type))
@@ -150,7 +150,7 @@ const className = computed(() => {
     customClass = state.headClass({
       column: props.column,
       index: props.column.colIndex,
-      rowIndex: props.rowIndex
+      rowIndex: props.rowIndex,
     })
   } else {
     customClass = state.headClass
@@ -163,10 +163,10 @@ const className = computed(() => {
       [nh.bem('head-cell', 'typed')]: typed.value,
       [nh.bem('head-cell', 'center')]: typed.value || props.column.textAlign === 'center',
       [nh.bem('head-cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('head-cell', 'last')]: inLast.value
+      [nh.bem('head-cell', 'last')]: inLast.value,
     },
     props.column.class,
-    customClass
+    customClass,
   ]
 })
 const customStyle = computed(() => {
@@ -174,7 +174,7 @@ const customStyle = computed(() => {
     return state.headStyle({
       column: props.column,
       index: props.column.colIndex,
-      rowIndex: props.rowIndex
+      rowIndex: props.rowIndex,
     })
   }
 
@@ -218,8 +218,8 @@ const style = computed(() => {
           : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
         (props.column.index ? padLeft : 0) + totalWidths[props.index]
-      }px, 0, 0)`
-    }
+      }px, 0, 0)`,
+    },
   ] as StyleValue
 })
 const attrs = computed(() => {
@@ -229,7 +229,7 @@ const attrs = computed(() => {
     customAttrs = state.headAttrs({
       column: props.column,
       index: props.column.colIndex,
-      rowIndex: props.rowIndex
+      rowIndex: props.rowIndex,
     })
   } else {
     customAttrs = state.headAttrs
@@ -277,7 +277,7 @@ function buildEventPayload(event: Event) {
   return {
     column: props.column,
     index: props.column.colIndex,
-    event
+    event,
   }
 }
 
@@ -326,7 +326,7 @@ function handleFilterItemSelect(value: string | number, active: boolean) {
     key: props.column.key,
     value,
     active,
-    disableOthers: true
+    disableOthers: true,
   })
   handleFilter(value)
   filterVisible.value = false
@@ -337,7 +337,7 @@ function handleFilterCheck(value: string | number, checked: boolean) {
   mutations.toggleFilterItemActive({
     key: props.column.key,
     value,
-    active: checked
+    active: checked,
   })
 }
 
@@ -364,7 +364,7 @@ function handleResetFilter() {
   mutations.toggleFilterItemActive({
     key: props.column.key,
     value: null,
-    disableOthers: true
+    disableOthers: true,
   })
   tableActions.emitRowFilter()
 }
@@ -378,7 +378,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth,
   )
 }
 </script>

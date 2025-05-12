@@ -26,6 +26,6 @@ const options = [
   { name: 'User 2', icon: User },
   { name: 'User 3', text: 'Qmhc' },
   { name: 'User 4', text: 'Qmhc' },
-  { name: 'User 5', text: 'Qmhc' }
+  { name: 'User 5', text: 'Qmhc' },
 ]
 </script>

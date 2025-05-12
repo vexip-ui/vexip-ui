@@ -54,8 +54,8 @@ export function arEGLocale() {
         week4: 'الخميس',
         week5: 'الجمعة',
         week6: 'السبت',
-        week7: 'الأحد'
-      }
+        week7: 'الأحد',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function arEGLocale() {
       doCaptcha: 'يرجى إكمال كلمة التحقق أدناه',
       pointInOrder: 'يرجى الإشارة بالترتيب',
       trigger: 'انقر لتشغيل كلمة التحقق',
-      completed: 'تم الانتهاء من التحقق'
+      completed: 'تم الانتهاء من التحقق',
     },
 
     checkbox: {
-      all: 'الكل'
+      all: 'الكل',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function arEGLocale() {
       cancel: 'الغاء',
 
       ariaLabel: {
-        clear: 'مسح اللون'
-      }
+        clear: 'مسح اللون',
+      },
     },
 
     confirm: {
       confirm: 'موافق',
-      cancel: 'الغاء'
+      cancel: 'الغاء',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function arEGLocale() {
         datetime: 'تاريخ',
         start: 'يبدأ بـ',
         end: 'ينتهى بـ',
-        select: 'اختر'
+        select: 'اختر',
       },
       startTime: 'وقت البدء',
       endTime: 'وقت الانتهاء',
@@ -109,45 +109,45 @@ export function arEGLocale() {
         date: 'يوم',
         hour: 'ساعة',
         minute: 'دقيقة',
-        second: 'ثانية'
-      }
+        second: 'ثانية',
+      },
     },
 
     drawer: {
       confirm: 'موافق',
-      cancel: 'الغاء'
+      cancel: 'الغاء',
     },
 
     form: {
       submit: 'ارسال',
       reset: 'اعادة',
       notNullable: 'مطلوب',
-      validateFail: 'قيم خاطئة'
+      validateFail: 'قيم خاطئة',
     },
 
     image: {
       placeholder: 'جار التحميل...',
-      error: 'خطأ فى التحميل'
+      error: 'خطأ فى التحميل',
     },
 
     input: {
       placeholder: 'ادخل بيانات',
 
       ariaLabel: {
-        clear: 'مسح البيانات'
-      }
+        clear: 'مسح البيانات',
+      },
     },
 
     layout: {
       signOut: 'تسجيل خروج',
       signType: 'نوع الانتقال',
       majorColor: 'اللون الاساسى',
-      themeMode: 'وضع اللون'
+      themeMode: 'وضع اللون',
     },
 
     modal: {
       confirm: 'موافق',
-      cancel: 'الغاء'
+      cancel: 'الغاء',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function arEGLocale() {
       ariaLabel: {
         clear: 'مسح الرقم',
         increase: 'زيادة',
-        decrease: 'نقص'
-      }
+        decrease: 'نقص',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function arEGLocale() {
       next: 'التالى',
       total: 'الاجمالى',
       jumpTo: 'انتقال الى',
-      itemUnit: 'عنصر | عناصر'
+      itemUnit: 'عنصر | عناصر',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function arEGLocale() {
       search: 'بحث الخيارات',
 
       ariaLabel: {
-        clear: 'مسح الاختيار'
-      }
+        clear: 'مسح الاختيار',
+      },
     },
 
     table: {
       empty: 'لا توجد بيانات',
       filterConfirm: 'موافق',
       filterReset: 'اعادة',
-      filterAll: 'الكل'
+      filterAll: 'الكل',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function arEGLocale() {
       lastMonth: 'الشهر الماضى',
       months: 'شهور',
       lastYear: 'السنة الماضية',
-      years: 'سنوات'
+      years: 'سنوات',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function arEGLocale() {
         time: 'وقت',
         start: 'يبدأ بـ',
         end: 'ينتهى بـ',
-        select: 'اختر'
+        select: 'اختر',
       },
 
       ariaLabel: {
         clear: 'مسح الوقت',
         hour: 'ساعة',
         minute: 'دقيقة',
-        second: 'ثانية'
-      }
+        second: 'ثانية',
+      },
     },
 
     tour: {
       prev: 'السابق',
       next: 'التالى',
       done: 'اكتمل',
-      stepCount: 'خطوة {n}'
+      stepCount: 'خطوة {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function arEGLocale() {
       target: 'وجهة',
       empty: 'لا توجد بيانات',
       reverse: 'عكس الاختيار',
-      search: 'بحث (Ctrl + F)'
+      search: 'بحث (Ctrl + F)',
     },
 
     tree: {
-      empty: 'لا توجد بيانات'
+      empty: 'لا توجد بيانات',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function arEGLocale() {
 
       ariaLabel: {
         preview: 'معاينة الملفات',
-        delete: 'حذف الملفات'
-      }
+        delete: 'حذف الملفات',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function arEGLocale() {
       fullWindowExit: 'يتم إنهاء صفحة الويب في وضع ملء الشاشة',
       fullScreen: 'شاشة كاملة',
       fullScreenExit: 'خروج من شاشة كاملة',
-      chapterCount: '{n} الفصل'
+      chapterCount: '{n} الفصل',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function arEGLocale() {
       zoomOut: 'تصغير',
       fullScreen: 'شاشة كاملة',
       fullScreenExit: 'خروج من شاشة كاملة',
-      reset: 'اعادة'
-    }
+      reset: 'اعادة',
+    },
   })
 }

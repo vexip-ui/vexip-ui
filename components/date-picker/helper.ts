@@ -88,7 +88,7 @@ export function handleKeyEnter(event: KeyboardEvent) {
 
 export function useColumn<T extends string>(
   colTypes: T[],
-  currentColumn = ref(colTypes[0]) as Ref<T | null>
+  currentColumn = ref(colTypes[0]) as Ref<T | null>,
 ) {
   const columnTypes = Array.from(colTypes)
   const columnCount = columnTypes.length
@@ -96,7 +96,7 @@ export function useColumn<T extends string>(
     columnTypes.reduce((prev, current) => {
       prev[current] = false
       return prev
-    }, {} as any)
+    }, {} as any),
   ) as Record<T, boolean>
 
   function findEnabledColumn(types: T[]) {
@@ -144,7 +144,7 @@ export function useColumn<T extends string>(
     currentColumn,
     enabled,
     resetColumn,
-    enterColumn
+    enterColumn,
   }
 }
 
@@ -173,7 +173,7 @@ export function useTimeBound(originMin: Ref<string>, originMax: Ref<string>) {
   const isTimeDisabled: Required<DisabledTime> = {
     hour: isHourDisabled,
     minute: (hour, minute) => isMinuteDisabled(hour, minute) !== DisabledType.FALSE,
-    second: (hour, minute, second) => isSecondDisabled(hour, minute, second) !== DisabledType.FALSE
+    second: (hour, minute, second) => isSecondDisabled(hour, minute, second) !== DisabledType.FALSE,
   }
 
   function isHourDisabled(hour: number) {
@@ -246,6 +246,6 @@ export function useTimeBound(originMin: Ref<string>, originMax: Ref<string>) {
     minUnits,
     maxUnits,
     reversed,
-    isTimeDisabled
+    isTimeDisabled,
   }
 }

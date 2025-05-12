@@ -54,8 +54,8 @@ export function zhCNLocale() {
         week4: '星期四',
         week5: '星期五',
         week6: '星期六',
-        week7: '星期日'
-      }
+        week7: '星期日',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function zhCNLocale() {
       doCaptcha: '请完成下面的验证',
       pointInOrder: '请按顺序点击',
       trigger: '点击进行验证',
-      completed: '已完成验证'
+      completed: '已完成验证',
     },
 
     checkbox: {
-      all: '全选'
+      all: '全选',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function zhCNLocale() {
       cancel: '重置',
 
       ariaLabel: {
-        clear: '清空颜色'
-      }
+        clear: '清空颜色',
+      },
     },
 
     confirm: {
       confirm: '确认',
-      cancel: '取消'
+      cancel: '取消',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function zhCNLocale() {
         datetime: '日期时间',
         start: '开始',
         end: '结束',
-        select: '请选择'
+        select: '请选择',
       },
       startTime: '开始时间',
       endTime: '结束时间',
@@ -109,45 +109,45 @@ export function zhCNLocale() {
         date: '日',
         hour: '时',
         minute: '分',
-        second: '秒'
-      }
+        second: '秒',
+      },
     },
 
     drawer: {
       confirm: '确认',
-      cancel: '取消'
+      cancel: '取消',
     },
 
     form: {
       submit: '提交',
       reset: '重置',
       notNullable: '不可为空',
-      validateFail: '验证未通过'
+      validateFail: '验证未通过',
     },
 
     image: {
       placeholder: '加载中...',
-      error: '加载失败'
+      error: '加载失败',
     },
 
     input: {
       placeholder: '请输入',
 
       ariaLabel: {
-        clear: '清空文本'
-      }
+        clear: '清空文本',
+      },
     },
 
     layout: {
       signOut: '注销',
       signType: '导航模式',
       majorColor: '主题颜色',
-      themeMode: '主题模式'
+      themeMode: '主题模式',
     },
 
     modal: {
       confirm: '确认',
-      cancel: '取消'
+      cancel: '取消',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function zhCNLocale() {
       ariaLabel: {
         clear: '清空数字',
         increase: '增加',
-        decrease: '减少'
-      }
+        decrease: '减少',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function zhCNLocale() {
       next: '向后',
       total: '共',
       jumpTo: '跳转',
-      itemUnit: '条'
+      itemUnit: '条',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function zhCNLocale() {
       search: '搜索选项',
 
       ariaLabel: {
-        clear: '清空选项'
-      }
+        clear: '清空选项',
+      },
     },
 
     table: {
       empty: '暂无数据',
       filterConfirm: '筛选',
       filterReset: '重置',
-      filterAll: '全部'
+      filterAll: '全部',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function zhCNLocale() {
       lastMonth: '上个月',
       months: '个月',
       lastYear: '去年',
-      years: '年'
+      years: '年',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function zhCNLocale() {
         time: '时间',
         start: '开始',
         end: '结束',
-        select: '请选择'
+        select: '请选择',
       },
 
       ariaLabel: {
         clear: '清空时间',
         hour: '时',
         minute: '分',
-        second: '秒'
-      }
+        second: '秒',
+      },
     },
 
     tour: {
       prev: '上一步',
       next: '下一步',
       done: '完成',
-      stepCount: '第 {n} 步'
+      stepCount: '第 {n} 步',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function zhCNLocale() {
       target: '目标',
       empty: '暂无数据',
       reverse: '反选',
-      search: '搜索 (Ctrl + F)'
+      search: '搜索 (Ctrl + F)',
     },
 
     tree: {
-      empty: '暂无数据'
+      empty: '暂无数据',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function zhCNLocale() {
 
       ariaLabel: {
         preview: '预览文件',
-        delete: '删除文件'
-      }
+        delete: '删除文件',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function zhCNLocale() {
       fullWindowExit: '退出网页全屏',
       fullScreen: '进入全屏',
       fullScreenExit: '退出全屏',
-      chapterCount: '第 {n} 章'
+      chapterCount: '第 {n} 章',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function zhCNLocale() {
       zoomOut: '缩小',
       fullScreen: '进入全屏',
       fullScreenExit: '退出全屏',
-      reset: '重置'
-    }
+      reset: '重置',
+    },
   })
 }

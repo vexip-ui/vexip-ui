@@ -16,19 +16,19 @@ const defaultFiles: UploadFileOptions[] = [
   {
     name: 'vexip-ui.svg',
     url: 'https://www.vexipui.com/vexip-ui.svg',
-    status: 'success'
+    status: 'success',
   },
   {
     name: 'vexip-ui.svg',
     url: 'https://www.vexipui.com/vexip-ui.svg',
-    status: 'fail'
+    status: 'fail',
   },
   {
     name: 'vexip-ui.svg',
     url: 'https://www.vexipui.com/vexip-ui.svg',
     percentage: 66,
-    status: 'uploading'
-  }
+    status: 'uploading',
+  },
 ]
 </script>
 

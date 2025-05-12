@@ -23,7 +23,7 @@ describe('Spin', () => {
 
   it('active', async () => {
     const wrapper = mount(Spin, {
-      props: { active: true }
+      props: { active: true },
     })
 
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
@@ -36,7 +36,7 @@ describe('Spin', () => {
 
   it('delay', async () => {
     const wrapper = mount(Spin, {
-      props: { delay: 10 }
+      props: { delay: 10 },
     })
 
     await wrapper.setProps({ active: true })
@@ -81,7 +81,7 @@ describe('Spin', () => {
       <Spin active tip={'tip'}>
         {{
           default: () => <div class={'content'}>{'content'}</div>,
-          tip: () => <div class={'tip'}></div>
+          tip: () => <div class={'tip'}></div>,
         }}
       </Spin>
     ))
@@ -105,13 +105,13 @@ describe('Spin', () => {
     const wrapper = mount({
       template: '<div v-loading="loading"></div>',
       directives: {
-        loading
+        loading,
       },
       data() {
         return {
-          loading: true
+          loading: true,
         }
-      }
+      },
     })
 
     await nextTick()

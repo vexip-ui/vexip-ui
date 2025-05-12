@@ -19,35 +19,35 @@ const columns = reactive(
     { type: 'selection' },
     {
       type: 'order',
-      name: '#'
+      name: '#',
     },
     {
       name: 'First Name',
-      key: 'firstName'
+      key: 'firstName',
     },
     {
       name: 'Last Name',
-      key: 'lastName'
+      key: 'lastName',
     },
     {
       name: 'Job',
-      key: 'job'
+      key: 'job',
     },
     {
       name: 'Value',
       key: 'value',
       sorter: {
-        type: 'desc'
-      }
+        type: 'desc',
+      },
     },
     {
       name: 'Age',
       key: 'age',
       sorter: {
-        type: 'asc'
-      }
-    }
-  ])
+        type: 'asc',
+      },
+    },
+  ]),
 )
 
 const data = Array.from({ length: 5 }, (_, index) => {
@@ -60,7 +60,7 @@ const data = Array.from({ length: 5 }, (_, index) => {
     age: 20 + Math.round(40 * Math.random()),
     value: index % 2,
     email: `email${index}@vexip.ui`,
-    address: `Address ${index}`
+    address: `Address ${index}`,
   }
 })
 

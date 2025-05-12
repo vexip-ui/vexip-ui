@@ -15,7 +15,7 @@ const justifyList = Object.freeze<GridJustify[]>([
   'center',
   'space-around',
   'space-between',
-  'space-evenly'
+  'space-evenly',
 ])
 const alignList = Object.freeze<GridAlign[]>(['top', 'middle', 'bottom', 'stretch'])
 
@@ -33,13 +33,13 @@ export default defineComponent({
       dense: false,
       justify: {
         default: 'start',
-        validator: value => justifyList.includes(value)
+        validator: value => justifyList.includes(value),
       },
       align: {
         default: 'stretch',
-        validator: value => alignList.includes(value)
+        validator: value => alignList.includes(value),
       },
-      cellFlex: false
+      cellFlex: false,
     })
 
     const nh = useNameHelper('grid')
@@ -50,7 +50,7 @@ export default defineComponent({
         [nh.bm(props.justify)]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.align)]: props.align !== 'stretch',
-        [nh.bm('dense')]: props.dense
+        [nh.bm('dense')]: props.dense,
       }
     })
     const style = computed(() => {
@@ -82,13 +82,13 @@ export default defineComponent({
       if (props.cellFlex === true) {
         return {
           justify: 'start',
-          align: 'top'
+          align: 'top',
         } as const
       } else if (props.cellFlex) {
         return {
           justify: 'start',
           align: 'top',
-          ...props.cellFlex
+          ...props.cellFlex,
         } as const
       }
 
@@ -158,11 +158,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default?.()
-        }
+          default: () => slots.default?.(),
+        },
       )
-  }
+  },
 })

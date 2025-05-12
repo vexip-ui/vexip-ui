@@ -11,40 +11,40 @@ import type { MonthIndex, WeekIndex } from './symbol'
 const props = defineProps({
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   locale: {
     type: Object as PropType<LocaleConfig['calendar']>,
-    required: true
+    required: true,
   },
   selected: {
     type: Boolean,
-    default: false
+    default: false,
   },
   hovered: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isPrev: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isNext: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isToday: {
     type: Boolean,
-    default: false
+    default: false,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   inRange: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['select', 'hover'])

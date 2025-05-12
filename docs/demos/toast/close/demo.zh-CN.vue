@@ -10,7 +10,7 @@ import { Toast } from 'vexip-ui'
 function showToast() {
   Toast.error({
     content: '点击关闭',
-    closable: true
+    closable: true,
   })
 }
 </script>

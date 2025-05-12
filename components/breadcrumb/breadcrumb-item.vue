@@ -32,12 +32,12 @@ watch(
   value => {
     currentLabel.value = value
     breadcrumbState?.refreshLabels()
-  }
+  },
 )
 
 if (breadcrumbState) {
   const state: BreadcrumbItemState = reactive({
-    label: currentLabel
+    label: currentLabel,
   })
 
   watch(
@@ -45,14 +45,14 @@ if (breadcrumbState) {
     value => {
       separator.value = value
     },
-    { immediate: true }
+    { immediate: true },
   )
   watch(
     () => breadcrumbState.separatorRenderer,
     value => {
       separatorRenderer.value = value
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   breadcrumbState.increaseItem(state)

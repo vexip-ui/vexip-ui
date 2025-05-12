@@ -13,5 +13,5 @@ export const alertTypes = Object.freeze<AlertType[]>([
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])

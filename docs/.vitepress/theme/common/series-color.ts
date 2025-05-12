@@ -11,13 +11,13 @@ export function computeSeriesColors(value: Color) {
   const colors: Record<string, string[]> = {
     light: [],
     opacity: [],
-    dark: []
+    dark: [],
   }
   const black = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-black') || { r: 0, g: 0, b: 0, a: 1 }
+    rootStyle.getPropertyValue('--vxp-color-black') || { r: 0, g: 0, b: 0, a: 1 },
   )
   const white = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-white') || { r: 255, g: 255, b: 255, a: 1 }
+    rootStyle.getPropertyValue('--vxp-color-white') || { r: 255, g: 255, b: 255, a: 1 },
   )
   const style = rootEl.style
 

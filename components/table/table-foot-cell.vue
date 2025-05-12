@@ -11,44 +11,39 @@ import { getLast, isFunction } from '@vexip-ui/utils'
 import { TABLE_ACTIONS, TABLE_STORE, columnTypes } from './symbol'
 
 import type { PropType, StyleValue } from 'vue'
-import type {
-  ColumnWithKey,
-  SummaryWithKey,
-  TableRowState,
-  TableTypeColumn
-} from './symbol'
+import type { ColumnWithKey, SummaryWithKey, TableRowState, TableTypeColumn } from './symbol'
 
 defineOptions({ name: 'TableFootCell' })
 
 const props = defineProps({
   row: {
     type: Object as PropType<TableRowState>,
-    default: () => ({})
+    default: () => ({}),
   },
   column: {
     type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
+    default: () => ({}),
   },
   colIndex: {
     type: Number,
-    default: -1
+    default: -1,
   },
   summary: {
     type: Object as PropType<SummaryWithKey>,
-    default: () => ({})
+    default: () => ({}),
   },
   summaryIndex: {
     type: Number,
-    default: -1
+    default: -1,
   },
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
+    default: null,
   },
   above: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
@@ -71,12 +66,8 @@ const columns = computed(() => {
 })
 // We use 'a' and 'b' to distinguish above and below
 const prefix = computed(() => (props.above ? 'af' : 'bf'))
-const summaries = computed(() =>
-  props.above ? state.aboveSummaries : state.belowSummaries
-)
-const heights = computed(() =>
-  props.above ? getters.topFixedHeights : getters.bottomFixedHeights
-)
+const summaries = computed(() => (props.above ? state.aboveSummaries : state.belowSummaries))
+const heights = computed(() => (props.above ? getters.topFixedHeights : getters.bottomFixedHeights))
 const className = computed(() => {
   let customClass = null
 
@@ -85,7 +76,7 @@ const className = computed(() => {
       column: props.column,
       columnIndex: props.column.index,
       summary: props.summary,
-      summaryIndex: props.summaryIndex
+      summaryIndex: props.summaryIndex,
     })
   } else {
     customClass = state.footClass
@@ -97,13 +88,12 @@ const className = computed(() => {
     nh.be('foot-cell'),
     {
       [nh.bem('foot-cell', 'typed')]: typed,
-      [nh.bem('foot-cell', 'center')]:
-        typed || props.column.textAlign === 'center',
+      [nh.bem('foot-cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('foot-cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('foot-cell', 'last')]: inLast.value
+      [nh.bem('foot-cell', 'last')]: inLast.value,
     },
     props.column.class,
-    customClass
+    customClass,
   ]
 })
 const cellSpan = computed(() => {
@@ -112,7 +102,7 @@ const cellSpan = computed(() => {
       .get(props.fixed || 'default')!
       .get(`${prefix.value}${props.summaryIndex},${props.column.index}`) || {
       colSpan: 1,
-      rowSpan: 1
+      rowSpan: 1,
     }
   )
 })
@@ -122,7 +112,7 @@ const customStyle = computed(() => {
       column: props.column,
       columnIndex: props.column.index,
       summary: props.summary,
-      summaryIndex: props.summaryIndex
+      summaryIndex: props.summaryIndex,
     })
   }
 
@@ -136,19 +126,14 @@ const style = computed(() => {
         ? getters.rightFixedWidths
         : getters.normalWidths
   const { colSpan, rowSpan } = cellSpan.value
-  const padLeft =
-    columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
-  const padRight =
-    getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
-  const width =
-    totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const width = totalWidths[props.colIndex + colSpan] - totalWidths[props.colIndex]
 
   let height: number | undefined
 
   if (rowSpan > 1) {
-    height =
-      heights.value[props.summaryIndex + rowSpan] -
-      heights.value[props.summaryIndex]
+    height = heights.value[props.summaryIndex + rowSpan] - heights.value[props.summaryIndex]
   }
 
   return [
@@ -160,19 +145,15 @@ const style = computed(() => {
       height: height ? `${height}px` : undefined,
       visibility: props.column.fixed && !props.fixed ? 'hidden' : undefined,
       borderRightWidth:
-        !state.border &&
-        colSpan > 1 &&
-        props.colIndex + colSpan >= totalWidths.length - 1
+        !state.border && colSpan > 1 && props.colIndex + colSpan >= totalWidths.length - 1
           ? 0
           : undefined,
       borderBottomWidth:
-        rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length
-          ? 0
-          : undefined,
+        rowSpan > 1 && props.summaryIndex + rowSpan >= summaries.value.length ? 0 : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
         (props.column.index ? padLeft : 0) + totalWidths[props.colIndex]
-      }px, 0, 0)`
-    }
+      }px, 0, 0)`,
+    },
   ] as StyleValue
 })
 const attrs = computed(() => {
@@ -183,7 +164,7 @@ const attrs = computed(() => {
       column: props.column,
       columnIndex: props.column.index,
       summary: props.summary,
-      summaryIndex: props.summaryIndex
+      summaryIndex: props.summaryIndex,
     })
   } else {
     customAttrs = state.footAttrs
@@ -199,7 +180,7 @@ function buildEventPayload(event: Event) {
     columnIndex: props.column.index,
     summary: props.summary,
     summaryIndex: props.summaryIndex,
-    event
+    event,
   }
 }
 
@@ -227,8 +208,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
   mutations.setCellHeight(
     props.row.key,
     props.column.key,
-    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) +
-      state.borderWidth
+    (entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height) + state.borderWidth,
   )
 }
 </script>
@@ -274,7 +254,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
               column,
               index: column.index,
               rows: state.data,
-              meta: summaryData,
+              meta: summaryData
             }"
           ></Renderer>
         </Ellipsis>
@@ -285,7 +265,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             column,
             index: column.index,
             rows: state.data,
-            meta: summaryData,
+            meta: summaryData
           }"
         ></Renderer>
       </span>

@@ -34,7 +34,7 @@ const typography = [
   'H5',
   'H6',
   'P',
-  'Strong'
+  'Strong',
 ]
 
 export default defineConfig(async (): Promise<UserConfig> => {
@@ -57,7 +57,7 @@ export default defineConfig(async (): Promise<UserConfig> => {
       if ((await stat(path)).isDirectory() && existsSync(`${path}/index.ts`)) {
         directives.push(f)
       }
-    })
+    }),
   ])
 
   return {
@@ -67,31 +67,31 @@ export default defineConfig(async (): Promise<UserConfig> => {
       __DEMOS__: demos,
       __VERSION__: JSON.stringify('*'),
       __THEME__: JSON.stringify(process.env.THEME === 'true'),
-      __PORT__: JSON.stringify(port)
+      __PORT__: JSON.stringify(port),
     },
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
-          replacement: resolve(__dirname, '../common/$1/src')
+          replacement: resolve(__dirname, '../common/$1/src'),
         },
-        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
-      ]
+        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') },
+      ],
     },
     server: {
       port,
       fs: {
-        allow: ['..']
-      }
+        allow: ['..'],
+      },
     },
     optimizeDeps: {
-      include: ['../components', '@vexip-ui/icons']
+      include: ['../components', '@vexip-ui/icons'],
     },
     css: {
       postcss: {
-        plugins: [autoprefixer]
-      }
+        plugins: [autoprefixer],
+      },
     },
     plugins: [
       vue(),
@@ -107,10 +107,10 @@ export default defineConfig(async (): Promise<UserConfig> => {
               if (components.includes(kebabName)) {
                 return {
                   name,
-                  from: `@/components/${kebabName}/index.ts`
+                  from: `@/components/${kebabName}/index.ts`,
                 }
               }
-            }
+            },
           },
           {
             type: 'directive',
@@ -120,15 +120,15 @@ export default defineConfig(async (): Promise<UserConfig> => {
               if (directives.includes(kebabName)) {
                 return {
                   name: `v${name}`,
-                  from: `@/directives/${kebabName}/index.ts`
+                  from: `@/directives/${kebabName}/index.ts`,
                 }
               }
-            }
-          }
+            },
+          },
         ],
-        exclude: ['../components/**']
-      })
-    ]
+        exclude: ['../components/**'],
+      }),
+    ],
   }
 })
 

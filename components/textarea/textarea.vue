@@ -11,7 +11,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
 import { textareaProps } from './props'
@@ -27,7 +27,7 @@ const props = useProps('textarea', _props, {
   locale: null,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   placeholder: null,
   rows: 2,
@@ -49,8 +49,8 @@ const props = useProps('textarea', _props, {
   controlAttrs: null,
   name: {
     default: '',
-    static: true
-  }
+    static: true,
+  },
 })
 
 const emit = defineEmits(['update:value'])
@@ -82,7 +82,7 @@ const className = computed(() => {
     [nh.bm('readonly')]: isReadonly.value,
     [nh.bm('loading')]: props.loading,
     [nh.bm('no-resize')]: props.noResize,
-    [nh.bm(props.state)]: props.state !== 'default'
+    [nh.bm(props.state)]: props.state !== 'default',
   }
 })
 const autoComplete = computed(() => {
@@ -99,7 +99,7 @@ watch(
     currentValue.value = value
     lastValue = value
     limitValueLength()
-  }
+  },
 )
 
 defineExpose({
@@ -111,7 +111,7 @@ defineExpose({
   textarea,
   copyValue,
   focus: (options?: FocusOptions) => textarea.value?.focus(options),
-  blur: () => textarea.value?.blur()
+  blur: () => textarea.value?.blur(),
 })
 
 function handleFocus(event: FocusEvent) {

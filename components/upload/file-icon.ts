@@ -19,7 +19,7 @@ iconConfig.set('fileVideo', [
   'avi',
   '3gp',
   'amv',
-  'dmv'
+  'dmv',
 ])
 // iconConfig.set('filePdf', ['pdf'])
 iconConfig.set('fileImage', [
@@ -43,7 +43,7 @@ iconConfig.set('fileImage', [
   'ai',
   'raw',
   'wmf',
-  'webp'
+  'webp',
 ])
 // iconConfig.set('fileExcel', ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'])
 iconConfig.set(
@@ -65,7 +65,7 @@ iconConfig.set(
       'yml',
       'yaml',
       'ts',
-      'tsx'
+      'tsx',
     ],
     ['js', 'jsx', 'mjs', 'cjs', 'ts', 'tsx', 'mts', 'cts'],
     ['css', 'styl', 'pcss'],
@@ -74,8 +74,8 @@ iconConfig.set(
     ['java', 'class', 'jsp'],
     ['vue'],
     ['html', 'htm'],
-    ['py', 'pyc', 'pyw', 'pyo', 'pyd']
-  ].flat()
+    ['py', 'pyc', 'pyw', 'pyo', 'pyd'],
+  ].flat(),
 )
 iconConfig.set('fileAudio', [
   'cd',
@@ -93,7 +93,7 @@ iconConfig.set('fileAudio', [
   'amr',
   'ape',
   'flac',
-  'aac'
+  'aac',
 ])
 iconConfig.set('fileZip', [
   'rar',
@@ -108,15 +108,15 @@ iconConfig.set('fileZip', [
   'uue',
   'bz2',
   'jar',
-  'iso'
+  'iso',
 ])
 iconConfig.set(
   'fileText',
   [
     ['doc', 'docx'],
     ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam', 'csv'],
-    ['pdf', 'txt', 'md']
-  ].flat()
+    ['pdf', 'txt', 'md'],
+  ].flat(),
 )
 iconConfig.set('file', ['default'])
 

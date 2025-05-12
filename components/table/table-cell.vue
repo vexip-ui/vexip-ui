@@ -21,7 +21,7 @@ import type {
   TableOrderColumn,
   TableRowState,
   TableSelectionColumn,
-  TableTypeColumn
+  TableTypeColumn,
 } from './symbol'
 
 defineOptions({ name: 'TableCell' })
@@ -29,24 +29,24 @@ defineOptions({ name: 'TableCell' })
 const props = defineProps({
   row: {
     type: Object as PropType<TableRowState>,
-    default: () => ({})
+    default: () => ({}),
   },
   rowIndex: {
     type: Number,
-    default: -1
+    default: -1,
   },
   column: {
     type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
+    default: () => ({}),
   },
   colIndex: {
     type: Number,
-    default: -1
+    default: -1,
   },
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
@@ -71,7 +71,7 @@ const className = computed(() => {
       row: props.row.data,
       rowIndex: props.rowIndex,
       column: props.column,
-      columnIndex: props.column.index
+      columnIndex: props.column.index,
     })
   } else {
     customClass = state.cellClass
@@ -85,10 +85,10 @@ const className = computed(() => {
       [nh.bem('cell', 'typed')]: typed,
       [nh.bem('cell', 'center')]: typed || props.column.textAlign === 'center',
       [nh.bem('cell', 'right')]: props.column.textAlign === 'right',
-      [nh.bem('cell', 'last')]: inLast.value
+      [nh.bem('cell', 'last')]: inLast.value,
     },
     props.column.class,
-    customClass
+    customClass,
   ]
 })
 const columns = computed(() => {
@@ -111,7 +111,7 @@ const customStyle = computed(() => {
       row: props.row.data,
       rowIndex: props.rowIndex,
       column: props.column,
-      columnIndex: props.column.index
+      columnIndex: props.column.index,
     })
   }
 
@@ -155,8 +155,8 @@ const style = computed(() => {
         rowSpan > 1 && props.rowIndex + rowSpan >= getters.processedData.length ? 0 : undefined,
       transform: `translate3d(${isRtl.value ? '-' : ''}${
         (props.column.index ? padLeft : 0) + totalWidths[props.colIndex]
-      }px, 0, 0)`
-    }
+      }px, 0, 0)`,
+    },
   ]
 })
 const attrs = computed(() => {
@@ -167,7 +167,7 @@ const attrs = computed(() => {
       row: props.row.data,
       rowIndex: props.rowIndex,
       column: props.column,
-      columnIndex: props.colIndex
+      columnIndex: props.colIndex,
     })
   } else {
     customAttrs = state.cellAttrs
@@ -217,7 +217,7 @@ function buildEventPayload(event: Event) {
     rowIndex: props.rowIndex,
     column: props.column,
     columnIndex: props.colIndex,
-    event
+    event,
   }
 }
 

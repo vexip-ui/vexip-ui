@@ -23,7 +23,7 @@ export const switchProps = buildProps({
   rectangle: booleanProp,
   name: String,
   slots: Object as PropType<SwitchSlots>,
-  onChange: eventProp<(value: boolean) => void>()
+  onChange: eventProp<(value: boolean) => void>(),
 })
 
 export type SwitchProps = ExtractPropTypes<typeof switchProps>

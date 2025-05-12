@@ -18,7 +18,7 @@ export const getXhr = (type: 'success' | 'error' | 'abort') => {
     upload = {
       onprogress(event: { loaded: number, total: number }) {
         return event
-      }
+      },
     }
 
     open() {
@@ -44,7 +44,7 @@ export const getXhr = (type: 'success' | 'error' | 'abort') => {
       this.onload()
       this.upload.onprogress({
         loaded: 50,
-        total: 100
+        total: 100,
       })
     }
 

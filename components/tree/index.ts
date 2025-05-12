@@ -16,5 +16,5 @@ export type {
   TreeNodePostCreate,
   TreeNodeRenderFn,
   TreeCommonSlotParams,
-  TreeNodeSlotParams
+  TreeNodeSlotParams,
 } from './symbol'

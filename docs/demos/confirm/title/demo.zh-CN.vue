@@ -14,7 +14,7 @@ async function confirm() {
     closable: true,
     contentAlign: 'left',
     actionsAlign: 'right',
-    confirmType: 'primary'
+    confirmType: 'primary',
   })
 
   if (isConfirm) {

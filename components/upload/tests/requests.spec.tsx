@@ -25,8 +25,8 @@ describe('Successful Requests', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange
-      }
+        onChange,
+      },
     })
 
     const input = wrapper.find('input')
@@ -41,8 +41,8 @@ describe('Successful Requests', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange
-      }
+        onChange,
+      },
     })
 
     const input = wrapper.find('input')
@@ -58,8 +58,8 @@ describe('Successful Requests', () => {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
         onChange,
-        withCredentials: true
-      }
+        withCredentials: true,
+      },
     })
 
     const input = wrapper.find('input')
@@ -76,9 +76,9 @@ describe('Successful Requests', () => {
         url: '//jsonplaceholder.typicode.com/posts/',
         onChange,
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+          'Content-Type': 'application/json',
+        },
+      },
     })
 
     const input = wrapper.find('input')
@@ -95,9 +95,9 @@ describe('Successful Requests', () => {
         url: '//jsonplaceholder.typicode.com/posts/',
         onChange,
         data: {
-          name: 'test'
-        }
-      }
+          name: 'test',
+        },
+      },
     })
 
     const input = wrapper.find('input')
@@ -118,8 +118,8 @@ describe('Failed Requests', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onError
-      }
+        onError,
+      },
     })
 
     const input = wrapper.find('input')
@@ -144,8 +144,8 @@ describe('Interrupted Requests', () => {
           if (files[0].status === 'pending') {
             done()
           }
-        }
-      }
+        },
+      },
     })
 
     const input = wrapper.find('input')

@@ -28,9 +28,9 @@ function sendCustomizedIconNotice() {
     icon: () => {
       return h(Icon, {
         icon: Share,
-        flip: 'horizontal'
+        flip: 'horizontal',
       })
-    }
+    },
   })
 }
 </script>

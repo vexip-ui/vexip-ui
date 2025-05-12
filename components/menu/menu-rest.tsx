@@ -18,8 +18,8 @@ export default defineComponent({
   props: {
     menus: {
       type: Array as PropType<MenuOptions[]>,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   setup(props) {
     const menuState = inject(MENU_STATE, null)
@@ -41,7 +41,7 @@ export default defineComponent({
       placement: ref('bottom'),
       transfer,
       wrapper,
-      popper: computed(() => popper.value?.wrapper)
+      popper: computed(() => popper.value?.wrapper),
     })
 
     const itemState = reactive({
@@ -57,7 +57,7 @@ export default defineComponent({
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
     })
 
     provide(MENU_ITEM_STATE, itemState)
@@ -183,5 +183,5 @@ export default defineComponent({
         </div>
       )
     }
-  }
+  },
 })

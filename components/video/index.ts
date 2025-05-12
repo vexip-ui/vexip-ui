@@ -18,5 +18,5 @@ export type {
   VideoControlType,
   VideoControlOption,
   VideoSegment,
-  VideoSlots
+  VideoSlots,
 } from './symbol'

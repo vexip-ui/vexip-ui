@@ -40,7 +40,7 @@ describe('Ellipsis', () => {
         height: 0,
         right: 0,
         bottom: 0,
-        toJSON: noop
+        toJSON: noop,
       }))
 
     // expect(wrapper.findComponent(Ellipsis).vm.active).toBe(false)
@@ -74,7 +74,7 @@ describe('Ellipsis', () => {
 
     Object.defineProperty(wrapper.find('.vxp-ellipsis').element, 'scrollHeight', {
       configurable: true,
-      get: () => 10
+      get: () => 10,
     })
 
     wrapper.find('.vxp-ellipsis').trigger('mouseenter')

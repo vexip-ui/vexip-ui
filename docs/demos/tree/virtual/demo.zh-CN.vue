@@ -54,7 +54,7 @@ function mockTreeData(maxDepth = 3): Node[] {
     return {
       label: `节点 ${maxDepth}-${index + 1}`,
       expanded: maxDepth > 2,
-      children: mockTreeData(maxDepth - 1)
+      children: mockTreeData(maxDepth - 1),
     }
   })
 }

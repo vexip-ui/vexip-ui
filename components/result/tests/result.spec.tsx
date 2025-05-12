@@ -9,7 +9,7 @@ const typeIconMap = {
   info: globalIcons.value.info.icon,
   success: globalIcons.value.success.icon,
   warning: globalIcons.value.warning.icon,
-  error: globalIcons.value.error.icon
+  error: globalIcons.value.error.icon,
 }
 
 const TEXT = 'Text'
@@ -51,7 +51,7 @@ describe('Result', () => {
           description: () => TEXT,
           title: () => TEXT,
           icon: () => TEXT,
-          extra: () => TEXT
+          extra: () => TEXT,
         }}
       </Result>
     ))

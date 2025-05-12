@@ -7,29 +7,29 @@ import type { PropsOptions } from '@/components/props'
 export const configProviderProps = wrapProps({
   props: {
     type: Object as PropType<PropsOptions>,
-    default: () => ({})
+    default: () => ({}),
   },
   locale: {
     type: Object as PropType<LocaleOptions>,
-    default: () => ({})
+    default: () => ({}),
   },
   icons: {
     type: Object as PropType<IconsOptions>,
-    default: () => ({})
+    default: () => ({}),
   },
   zIndex: {
     type: Number,
-    default: null
+    default: null,
   },
   theme: {
     // eslint-disable-next-line @typescript-eslint/ban-types
     type: String as PropType<'base' | 'dark' | (string & {})>,
-    default: null
+    default: null,
   },
   hoverDelay: {
     type: Number,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type ConfigProviderProps = ExtractPropTypes<typeof configProviderProps>

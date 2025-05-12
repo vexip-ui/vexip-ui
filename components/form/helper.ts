@@ -16,7 +16,7 @@ import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 export function getValueByPath<T = unknown>(
   obj: Record<string, any>,
   path: string | string[],
-  strict = false
+  strict = false,
 ): T | null {
   if (!obj || !path) return null
 
@@ -69,7 +69,7 @@ export function setValueByPath(
   obj: Record<string, any>,
   path: string | string[],
   value: unknown,
-  strict = false
+  strict = false,
 ): boolean {
   if (!obj || !path) return false
 
@@ -151,7 +151,7 @@ function getEmptyActions<V>() {
     clearField: noop,
     resetField: toFalse,
     getFieldValue: v => v,
-    setFieldValue: noop
+    setFieldValue: noop,
   } as FormFieldStore<V>
 }
 
@@ -201,6 +201,6 @@ export function useFieldStore<V = unknown>(onFocus?: () => void): FormFieldStore
     clearField,
     resetField: fieldOptions.reset,
     getFieldValue: fieldOptions.getValue as (defaultValue?: V) => V,
-    setFieldValue: fieldOptions.setValue as (value: V, strict?: boolean) => void
+    setFieldValue: fieldOptions.setValue as (value: V, strict?: boolean) => void,
   }
 }

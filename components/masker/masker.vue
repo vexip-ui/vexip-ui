@@ -15,7 +15,7 @@ const _props = defineProps(maskerProps)
 const props = useProps('masker', _props, {
   active: {
     default: false,
-    static: true
+    static: true,
   },
   closable: false,
   inner: false,
@@ -24,12 +24,12 @@ const props = useProps('masker', _props, {
   disabled: false,
   onBeforeClose: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   transfer: false,
   autoRemove: false,
   permeable: false,
-  disableEsc: false
+  disableEsc: false,
 })
 
 const emit = defineEmits(['update:active'])
@@ -71,8 +71,8 @@ const className = computed(() => {
     {
       [nh.bm('inherit')]: transferTo.value !== 'body' && props.inherit,
       [nh.bm('inner')]: props.inner,
-      [nh.bm('disabled')]: props.disabled
-    }
+      [nh.bm('disabled')]: props.disabled,
+    },
   ]
 })
 
@@ -84,7 +84,7 @@ watch(
     if (value) {
       wrapperShow.value = value
     }
-  }
+  },
 )
 watch(currentActive, value => {
   if (!value) {
@@ -114,7 +114,7 @@ watch(
       }
     }
   },
-  { immediate: true, flush: 'post' }
+  { immediate: true, flush: 'post' },
 )
 
 defineExpose({
@@ -123,7 +123,7 @@ defineExpose({
   wrapperShow,
   wrapper,
   topTrap,
-  bottomTrap
+  bottomTrap,
 })
 
 function disableWheel(event: WheelEvent) {

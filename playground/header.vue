@@ -152,7 +152,7 @@ import {
   Moon,
   Rocket,
   ShareNodes,
-  Sun
+  Sun,
 } from '@vexip-ui/icons'
 import { cdnTemplates, getCdn, setCdn } from './cdn'
 import { locale } from './locale'
@@ -175,12 +175,12 @@ interface RepoMeta {
 const props = defineProps({
   store: {
     type: Object as PropType<ReplStore>,
-    required: true
+    required: true,
   },
   versions: {
     type: Object as PropType<Record<string, string>>,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 })
 
 const { dark } = props.store
@@ -209,7 +209,7 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     versions: [props.versions['vexip-ui'] || __VERSION__],
     active: props.versions['vexip-ui'] || __VERSION__,
     loading: false,
-    loaded: false
+    loaded: false,
   },
   vue: {
     owner: 'vuejs',
@@ -218,7 +218,7 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     versions: [props.versions.vue || __VUE_VERSION__],
     active: props.versions.vue || __VUE_VERSION__,
     loading: false,
-    loaded: false
+    loaded: false,
   },
   typescript: {
     owner: 'microsoft',
@@ -227,8 +227,8 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     versions: [props.versions.typescript || __TS_VERSION__],
     active: props.versions.typescript || __TS_VERSION__,
     loading: false,
-    loaded: false
-  }
+    loaded: false,
+  },
 })
 
 const versionsMap = computed(() => {
@@ -264,7 +264,7 @@ async function initRepoVersions(meta: RepoMeta) {
 
 async function fetchVersions(owner: string, repo: string, maxCount = 30) {
   const response = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100`
+    `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100`,
   )
   const releases = (await response.json()) as any[]
   const filteredVersions: string[] = []
@@ -300,7 +300,7 @@ async function copyLink() {
   await navigator.clipboard.writeText(location.href)
   Message.success({
     content: 'Sharable URL has been copied to clipboard.',
-    background: !dark.value
+    background: !dark.value,
   })
 }
 
@@ -309,7 +309,7 @@ async function download() {
     content: locale.doDownload,
     confirmType: 'primary',
     confirmText: locale.download,
-    cancelText: locale.cancel
+    cancelText: locale.cancel,
   })
 
   if (result) {

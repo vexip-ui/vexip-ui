@@ -59,7 +59,7 @@ import { reactive } from 'vue'
 
 const providedProps = {
   default: { clearable: true },
-  formItem: { required: true }
+  formItem: { required: true },
 }
 
 const formModel = reactive({})
@@ -76,7 +76,7 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
       value: `${prefix}-${i}`,
       label: `${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 

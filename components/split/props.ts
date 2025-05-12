@@ -16,7 +16,7 @@ export const splitProps = buildProps({
   onReset: eventProp(),
   onMoveStart: eventProp<(value: number) => void>(),
   onMove: eventProp<(value: number) => void>(),
-  onMoveEnd: eventProp<(value: number) => void>()
+  onMoveEnd: eventProp<(value: number) => void>(),
 })
 
 export type SplitProps = ExtractPropTypes<typeof splitProps>

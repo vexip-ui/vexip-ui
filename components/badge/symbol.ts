@@ -11,5 +11,5 @@ export const badgeTypes = Object.freeze<BadgeType[]>([
   'success',
   'warning',
   'info',
-  'disabled'
+  'disabled',
 ])

@@ -29,14 +29,14 @@ const active = ref(1)
 const tabs = ref([
   { label: 1, name: 'Tab 1', content: 'Some content for tab 1.', static: true },
   { label: 2, name: 'Tab 2', content: 'Some content for tab 2.' },
-  { label: 3, name: 'Tab 3', content: 'Some content for tab 3.' }
+  { label: 3, name: 'Tab 3', content: 'Some content for tab 3.' },
 ])
 
 function addTab() {
   tabs.value.push({
     label: labelCount,
     name: `Tab ${labelCount}`,
-    content: `Some content for tab ${labelCount++}.`
+    content: `Some content for tab ${labelCount++}.`,
   })
 }
 

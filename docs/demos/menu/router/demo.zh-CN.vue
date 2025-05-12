@@ -25,7 +25,7 @@ const router = createRouter({
       meta: {
         label: '1',
         name: '菜单 1',
-        icon: EnvelopesBulk
+        icon: EnvelopesBulk,
       },
       children: [
         {
@@ -33,18 +33,18 @@ const router = createRouter({
           component: {},
           meta: {
             label: '1-1',
-            name: '子菜单 1'
-          }
+            name: '子菜单 1',
+          },
         },
         {
           path: 'c2',
           component: {},
           meta: {
             label: '1-2',
-            name: '子菜单 2'
-          }
-        }
-      ]
+            name: '子菜单 2',
+          },
+        },
+      ],
     },
     {
       path: '/m2',
@@ -52,8 +52,8 @@ const router = createRouter({
       meta: {
         label: '2',
         name: '菜单 2',
-        icon: City
-      }
+        icon: City,
+      },
     },
     {
       path: '/m3',
@@ -61,8 +61,8 @@ const router = createRouter({
       meta: {
         label: '3',
         name: '菜单 3',
-        icon: ChartPie
-      }
+        icon: ChartPie,
+      },
     },
     {
       path: '/m4',
@@ -70,17 +70,17 @@ const router = createRouter({
       meta: {
         label: '4',
         name: '菜单 4',
-        icon: User
-      }
+        icon: User,
+      },
     },
     {
       path: '/m5',
       component: {},
       meta: {
-        menu: false
-      }
-    }
-  ]
+        menu: false,
+      },
+    },
+  ],
 })
 
 // 模拟 push 方法

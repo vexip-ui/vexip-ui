@@ -259,7 +259,7 @@ const SIZE_UNIT_WITH_AUTO = Object.freeze([
   'MB',
   'GB',
   'TB',
-  'AUTO'
+  'AUTO',
 ] as Uppercase<SizeUnitWithAuto>[])
 
 /**
@@ -285,7 +285,7 @@ export function formatByteSize(
   byte: number,
   unit: SizeUnitWithAuto = 'AUTO',
   joinUtil: number | boolean = false,
-  precision?: number
+  precision?: number,
 ) {
   if (typeof precision === 'undefined') {
     if (typeof joinUtil === 'number') {

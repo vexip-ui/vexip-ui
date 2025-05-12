@@ -15,7 +15,7 @@ export function useScrollWrapper({
   scrollY,
   onResize,
   onBeforeRefresh,
-  onAfterRefresh
+  onAfterRefresh,
 }: {
   mode: Ref<NativeScrollMode>,
   disabled: Ref<boolean>,
@@ -40,7 +40,7 @@ export function useScrollWrapper({
     scrollWidth: 0,
     offsetWidth: 0,
     scrollHeight: 0,
-    offsetHeight: 0
+    offsetHeight: 0,
   })
 
   // 当前滚动位置
@@ -114,7 +114,7 @@ export function useScrollWrapper({
       content.el.scrollTo({
         top: y.value,
         left: isRtl.value ? -x.value : x.value,
-        behavior: 'instant'
+        behavior: 'instant',
       })
     }
 
@@ -203,7 +203,7 @@ export function useScrollWrapper({
         xTo: boundRange(clientX, 0, xScrollLimit.value),
         yFrom: y.value,
         yTo: boundRange(clientY, 0, yScrollLimit.value),
-        callback: resolve
+        callback: resolve,
       })
     })
   }
@@ -262,6 +262,6 @@ export function useScrollWrapper({
     scrollTo,
     scrollBy,
     scrollToElement,
-    triggerUpdate
+    triggerUpdate,
   }
 }

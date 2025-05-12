@@ -6,33 +6,33 @@ export const optionProps = wrapProps({
   value: valueProp,
   label: {
     type: String,
-    default: ''
+    default: '',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   divided: {
     type: Boolean,
-    default: false
+    default: false,
   },
   title: {
     type: String,
-    default: ''
+    default: '',
   },
   hitting: {
     type: Boolean,
-    default: false
+    default: false,
   },
   noHover: {
     type: Boolean,
-    default: false
+    default: false,
   },
   selected: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  onSelect: eventProp()
+  onSelect: eventProp(),
 })
 
 export type OptionProps = ExtractPropTypes<typeof optionProps>
@@ -40,12 +40,12 @@ export type OptionProps = ExtractPropTypes<typeof optionProps>
 export const optionGroupProps = wrapProps({
   label: {
     type: String,
-    default: ''
+    default: '',
   },
   divided: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 export type OptionGroupProps = ExtractPropTypes<typeof optionGroupProps>

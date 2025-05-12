@@ -263,7 +263,7 @@ const components = [
   P,
   Strong,
   // directives
-  installDirectives
+  installDirectives,
 ]
 
 export const install = buildInstall(components)

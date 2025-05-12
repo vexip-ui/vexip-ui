@@ -11,7 +11,7 @@ const content = ref(
   'A non-negative integer specifying a limit on the number of substrings to be ' +
     'included in the array. If provided, splits the string at each occurrence ' +
     'of the specified separator, but stops when limit entries have been placed in' +
-    ' the array. Any leftover text is not included in the array at all.'
+    ' the array. Any leftover text is not included in the array at all.',
 )
 const keyWords = ref(['the array', 'included', 'separator'])
 </script>

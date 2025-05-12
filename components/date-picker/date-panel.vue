@@ -24,7 +24,7 @@ import type {
   DateTimeType,
   DateType,
   DisabledTime,
-  TimeType
+  TimeType,
 } from './symbol'
 
 defineOptions({ name: 'DatePanel' })
@@ -32,100 +32,100 @@ defineOptions({ name: 'DatePanel' })
 const props = defineProps({
   type: {
     default: 'date' as DatePickerType,
-    validator: (value: DatePickerType) => datePickerTypes.includes(value)
+    validator: (value: DatePickerType) => datePickerTypes.includes(value),
   },
   enabled: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   startValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default: null
+    default: null,
   },
   endValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default: null
+    default: null,
   },
   shortcuts: {
     type: Array as PropType<DateShortcut[]>,
-    default: () => []
+    default: () => [],
   },
   confirmText: {
     type: String,
-    default: null
+    default: null,
   },
   cancelText: {
     type: String,
-    default: null
+    default: null,
   },
   today: {
     type: [Number, String, Date] as PropType<Dateable>,
-    default: () => new Date()
+    default: () => new Date(),
   },
   disabledDate: {
     type: Function as PropType<(date: Date) => boolean>,
-    default: () => false
+    default: () => false,
   },
   noAction: {
     type: Boolean,
-    default: false
+    default: false,
   },
   steps: {
     type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
+    default: () => [1, 1, 1],
   },
   range: {
     type: Boolean,
-    default: false
+    default: false,
   },
   startActivated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   endActivated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   min: {
     type: [Number, String, Date] as PropType<Dateable>,
-    default: null
+    default: null,
   },
   max: {
     type: [Number, String, Date] as PropType<Dateable>,
-    default: null
+    default: null,
   },
   disabledTime: {
     type: Object as PropType<DisabledTime>,
-    default: () => ({})
+    default: () => ({}),
   },
   hasError: {
     type: Boolean,
-    default: false
+    default: false,
   },
   locale: {
     type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
-    default: () => ({})
+    default: () => ({}),
   },
   selectingType: {
     type: String as PropType<'start' | 'end'>,
-    default: 'start'
+    default: 'start',
   },
   weekStart: {
     type: Number,
-    default: null
+    default: null,
   },
   staticWheel: {
     type: Boolean,
-    default: false
+    default: false,
   },
   shortcutsPlacement: {
     type: String as PropType<DateShortcutsPlacement>,
-    default: 'left'
+    default: 'left',
   },
   labeledBy: {
     type: String,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 const emit = defineEmits([
@@ -137,7 +137,7 @@ const emit = defineEmits([
   'confirm',
   'hover',
   'type-change',
-  'time-change'
+  'time-change',
 ])
 
 defineSlots<DatePanelSlots>()
@@ -150,7 +150,7 @@ const today = toDate(props.today)
 const monthRange = rangeNumbers(12, 1, 1)
 
 const currentPanel = ref<DateType>(
-  props.type === 'year' ? 'year' : props.type === 'month' ? 'month' : 'date'
+  props.type === 'year' ? 'year' : props.type === 'month' ? 'month' : 'date',
 )
 const calendarYear = ref(today.getFullYear())
 const calendarMonth = ref(today.getMonth() + 1) // 1 ~ 12
@@ -204,7 +204,7 @@ const weekDays = computed(() => {
     props.locale.week3,
     props.locale.week4,
     props.locale.week5,
-    props.locale.week6
+    props.locale.week6,
   ].map(week => week.slice(0, 2))
 })
 
@@ -213,7 +213,7 @@ watch(
   value => {
     yearRange.value = rangeNumbers(12, Math.floor(value / 10) * 10, 1)
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 onMounted(() => {

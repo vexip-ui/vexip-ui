@@ -9,7 +9,7 @@ import {
   localeProp,
   sizeProp,
   stateProp,
-  valuesProp
+  valuesProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -25,7 +25,7 @@ import type {
   SelectFilterPosition,
   SelectKeyConfig,
   SelectRawOption,
-  SelectSlots
+  SelectSlots,
 } from './symbol'
 
 type CustomChangeEvent =
@@ -71,7 +71,7 @@ export const selectProps = buildProps({
   keyConfig: Object as PropType<SelectKeyConfig>,
   filter: {
     type: [Boolean, Function] as PropType<boolean | SelectFilter>,
-    default: null
+    default: null,
   },
   ignoreCase: booleanProp,
   creatable: booleanProp,
@@ -96,7 +96,7 @@ export const selectProps = buildProps({
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp(),
-  onFilterInput: eventProp<(value: string) => void>()
+  onFilterInput: eventProp<(value: string) => void>(),
 })
 
 export type SelectProps = ExtractPropTypes<typeof selectProps>

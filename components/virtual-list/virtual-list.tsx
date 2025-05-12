@@ -14,7 +14,7 @@ export default defineComponent({
   name: 'VirtualList',
   components: {
     NativeScroll,
-    ResizeObserver
+    ResizeObserver,
   },
   inheritAttrs: false,
   props: virtualListProps,
@@ -23,7 +23,7 @@ export default defineComponent({
     const props = useProps('virtualList', _props, {
       items: {
         default: () => [],
-        static: true
+        static: true,
       },
       itemSize: 36,
       itemFixed: false,
@@ -37,7 +37,7 @@ export default defineComponent({
       lockItems: false,
       autoplay: false,
       ignoreResize: false,
-      disabled: false
+      disabled: false,
     })
 
     const nh = useNameHelper('virtual-list')
@@ -63,7 +63,7 @@ export default defineComponent({
       scrollToKey,
       scrollToIndex,
       ensureIndexInView,
-      ensureKeyInView
+      ensureKeyInView,
     } = useVirtual({
       items,
       itemSize,
@@ -72,7 +72,7 @@ export default defineComponent({
       bufferSize,
       wrapper,
       defaultKeyAt: props.defaultKeyAt,
-      autoResize: false
+      autoResize: false,
     })
 
     expose({
@@ -88,14 +88,14 @@ export default defineComponent({
       scrollToIndex,
       ensureIndexInView,
       ensureKeyInView,
-      refresh
+      refresh,
     })
 
     watch(
       () => props.items.length,
       () => {
         nextTick(refresh)
-      }
+      },
     )
 
     const className = computed(() => {
@@ -103,7 +103,7 @@ export default defineComponent({
         nh.b(),
         props.inherit && nh.bm('inherit'),
         props.disabled && nh.bm('disabled'),
-        attrs.class
+        attrs.class,
       ]
     })
 
@@ -212,10 +212,10 @@ export default defineComponent({
               return renderList(renderingItems)
             },
             prefixTrap: createSlotRender(slots, ['prefix-trap', 'prefixTrap']),
-            suffixTrap: createSlotRender(slots, ['suffix-trap', 'suffixTrap'])
+            suffixTrap: createSlotRender(slots, ['suffix-trap', 'suffixTrap']),
           }}
         </NativeScroll>
       )
     }
-  }
+  },
 })

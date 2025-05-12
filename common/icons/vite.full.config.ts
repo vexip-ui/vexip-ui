@@ -16,15 +16,15 @@ export default defineConfig(() => {
       lib: {
         entry: resolve(__dirname, 'vue/index.ts'),
         formats: ['es', 'cjs'],
-        fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`
+        fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
       },
       rollupOptions: {
-        external: ['vue']
+        external: ['vue'],
       },
       commonjsOptions: {
-        sourceMap: false
-      }
+        sourceMap: false,
+      },
     },
-    plugins: [vue()]
+    plugins: [vue()],
   }
 })

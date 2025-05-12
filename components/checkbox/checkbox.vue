@@ -8,7 +8,7 @@ import {
   createStateProp,
   emitEvent,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { adjustAlpha, isDefined, isFunction, parseColorToRgba } from '@vexip-ui/utils'
 import { checkboxProps } from './props'
@@ -25,7 +25,7 @@ const {
   size,
   validateField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<boolean>(() => input.value?.focus())
 
 const _props = defineProps(checkboxProps)
@@ -34,12 +34,12 @@ const props = useProps('checkbox', _props, {
   state: createStateProp(state),
   checked: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   label: null,
   value: {
     default: null,
-    static: true
+    static: true,
   },
   labelClass: null,
   disabled: () => disabled.value,
@@ -51,10 +51,10 @@ const props = useProps('checkbox', _props, {
   loadingLock: false,
   name: {
     default: '',
-    static: true
+    static: true,
   },
   color: null,
-  stateColor: false
+  stateColor: false,
 })
 
 const emit = defineEmits(['update:checked'])
@@ -73,7 +73,7 @@ const input = ref<HTMLInputElement>()
 
 const controlState = reactive({
   checked: currentChecked,
-  partial: currentPartial
+  partial: currentPartial,
 })
 
 const computedSize = computed(() => groupState?.size || props.size)
@@ -96,8 +96,8 @@ const className = computed(() => {
       [nh.bm(computedSize.value)]: computedSize.value !== 'default',
       [nh.bm('border')]: props.border,
       [nh.bm('partial')]: props.control && currentPartial.value,
-      [nh.bm(computedState.value)]: computedState.value !== 'default'
-    }
+      [nh.bm(computedState.value)]: computedState.value !== 'default',
+    },
   ]
 })
 const colorMap = computed(() => {
@@ -107,7 +107,7 @@ const colorMap = computed(() => {
 
   return {
     base: baseColor.toString(),
-    opacity6: adjustAlpha(baseColor, 0.4).toString()
+    opacity6: adjustAlpha(baseColor, 0.4).toString(),
   }
 })
 const style = computed<Record<string, string>>(() => {
@@ -121,7 +121,7 @@ const style = computed<Record<string, string>>(() => {
     'b-color-hover': base,
     'b-color-checked': base,
     'signal-bg-color-checked': base,
-    's-color-focus': opacity6
+    's-color-focus': opacity6,
   })
 })
 const hasLabel = computed(() => {
@@ -135,13 +135,13 @@ watch(
   () => props.checked,
   value => {
     setCurrentChecked(value)
-  }
+  },
 )
 watch(
   () => props.partial,
   value => {
     currentPartial.value = value
-  }
+  },
 )
 
 if (groupState) {
@@ -166,7 +166,7 @@ if (groupState) {
         groupState.decreaseControl(controlState)
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
   watch(
     () => groupState.currentValues,
@@ -175,7 +175,7 @@ if (groupState) {
         setCurrentChecked(value.includes(currentValue.value))
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   onMounted(() => {
@@ -200,7 +200,7 @@ defineExpose({
   currentChecked,
   input,
   focus: (options?: FocusOptions) => input.value?.focus(options),
-  blur: () => input.value?.blur()
+  blur: () => input.value?.blur(),
 })
 
 function emitCheckEvent() {

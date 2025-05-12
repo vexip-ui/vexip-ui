@@ -6,5 +6,5 @@ export const bubbleTypes = Object.freeze<BubbleType[]>([
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])

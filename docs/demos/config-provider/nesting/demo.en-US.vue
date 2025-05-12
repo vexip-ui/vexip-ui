@@ -19,14 +19,14 @@ import { ref } from 'vue'
 const outerProps = ref({
   tag: {
     simple: true,
-    circle: true
-  }
+    circle: true,
+  },
 })
 
 const innerProps = ref({
   tag: {
     closable: true,
-    circle: false
-  }
+    circle: false,
+  },
 })
 </script>

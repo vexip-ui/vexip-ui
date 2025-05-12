@@ -12,7 +12,7 @@ export const timelineProps = buildProps({
   flip: booleanProp,
   horizontal: booleanProp,
   alternate: booleanProp,
-  onSignalClick: eventProp<(label: string | number) => void>()
+  onSignalClick: eventProp<(label: string | number) => void>(),
 })
 
 export type TimelineProps = ExtractPropTypes<typeof timelineProps>
@@ -25,7 +25,7 @@ export const timelineItemProps = buildProps({
   dashed: booleanProp,
   lineColor: String,
   spacing: [Number, String],
-  onSignalClick: eventProp<(label: string | number) => void>()
+  onSignalClick: eventProp<(label: string | number) => void>(),
 })
 
 export type TimelineItemProps = ExtractPropTypes<typeof timelineItemProps>

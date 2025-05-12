@@ -18,8 +18,8 @@ function showCustomizedIconToast() {
     content: '函数渲染图标',
     icon: () =>
       h(Icon, {
-        icon: Share
-      })
+        icon: Share,
+      }),
   })
 }
 </script>

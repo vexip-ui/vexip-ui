@@ -14,7 +14,7 @@ function sendNotice() {
   Notice.info({
     title: '提示的标题',
     content: '一条可关闭的提示消息',
-    closable: true
+    closable: true,
   })
 }
 </script>

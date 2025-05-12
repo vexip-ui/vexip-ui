@@ -113,7 +113,7 @@ import type {
   StrongCProps,
   TextCProps,
   TitleCProps,
-  ULCProps
+  ULCProps,
 } from './typography'
 
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'

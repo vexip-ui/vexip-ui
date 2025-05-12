@@ -12,11 +12,11 @@ const props = useProps('divider', _props, {
   vertical: false,
   textPosition: {
     default: 'center',
-    validator: value => ['center', 'left', 'right'].includes(value)
+    validator: value => ['center', 'left', 'right'].includes(value),
   },
   primary: false,
   dashed: false,
-  margin: null
+  margin: null,
 })
 
 const slots = defineSlots<{ default: () => any }>()
@@ -35,8 +35,8 @@ const className = computed(() => {
       [nh.bm('dashed')]: props.dashed,
       [nh.bm('with-text')]: !props.vertical && hasText.value,
       [nh.bm(`with-text-${props.textPosition}`)]:
-        !props.vertical && hasText.value && props.textPosition !== 'center'
-    }
+        !props.vertical && hasText.value && props.textPosition !== 'center',
+    },
   ]
 })
 const margin = computed(() => toCssSize(props.margin))
@@ -46,11 +46,11 @@ const style = computed(() => {
   return props.vertical
     ? {
         marginRight: margin.value,
-        marginLeft: margin.value
+        marginLeft: margin.value,
       }
     : {
         marginTop: margin.value,
-        marginBottom: margin.value
+        marginBottom: margin.value,
       }
 })
 </script>

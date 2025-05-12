@@ -63,7 +63,7 @@ export function toCapitalCase<T extends string>(value: T) {
 
   return (value.charAt(0).toLocaleUpperCase() + value.slice(1)).replace(
     /[^\w]/g,
-    ''
+    '',
   ) as CapitalCase<T>
 }
 

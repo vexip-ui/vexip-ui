@@ -13,7 +13,7 @@ const icons = globalIcons.value
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 const LONG_OPTIONS = [
-  'Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Option 1'
+  'Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Option 1',
 ]
 
 function getValue(wrapper: DOMWrapper<Element>) {
@@ -32,7 +32,7 @@ function nextFrame() {
 describe('Select', () => {
   it('render', () => {
     const wrapper = mount(Select, {
-      props: { visible: true, options: OPTIONS }
+      props: { visible: true, options: OPTIONS },
     })
 
     expect(wrapper.classes()).toContain('vxp-select-vars')
@@ -45,7 +45,7 @@ describe('Select', () => {
 
   it('has empty', async () => {
     const wrapper = mount(Select, {
-      props: { visible: true, options: OPTIONS }
+      props: { visible: true, options: OPTIONS },
     })
 
     expect(wrapper.find('.vxp-select__empty').exists()).toBe(false)
@@ -58,8 +58,8 @@ describe('Select', () => {
     const wrapper = mount(Select, {
       props: { visible: true, options: [] },
       slots: {
-        empty: () => <span class={'empty'}></span>
-      }
+        empty: () => <span class={'empty'}></span>,
+      },
     })
 
     expect(wrapper.find('.empty').exists()).toBe(true)
@@ -67,7 +67,7 @@ describe('Select', () => {
 
   it('transfer', async () => {
     const wrapper = mount(Select, {
-      props: { visible: true, transfer: true, options: OPTIONS }
+      props: { visible: true, transfer: true, options: OPTIONS },
     })
 
     await nextTick()
@@ -82,8 +82,8 @@ describe('Select', () => {
         visible: true,
         value: OPTIONS[0],
         options: OPTIONS,
-        placeholder: TEXT
-      }
+        placeholder: TEXT,
+      },
     })
 
     await nextTick()
@@ -123,7 +123,7 @@ describe('Select', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Select, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const selector = wrapper.find('.vxp-select__selector')
 
@@ -176,7 +176,7 @@ describe('Select', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(Select, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -198,20 +198,20 @@ describe('Select', () => {
 
   it('popper show', async () => {
     const wrapper = mount(Select, {
-      props: { options: OPTIONS }
+      props: { options: OPTIONS },
     })
 
     expect(wrapper.find('.vxp-select__popper').attributes('style')).toContain('display: none;')
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-select__popper').attributes('style') || '').not.toContain(
-      'display: none;'
+      'display: none;',
     )
   })
 
   it('popper will be removed when alive false', async () => {
     const wrapper = mount(Select, {
-      props: { popperAlive: false, options: OPTIONS }
+      props: { popperAlive: false, options: OPTIONS },
     })
 
     expect(wrapper.find('.vxp-select__popper').exists()).toBe(false)
@@ -235,8 +235,8 @@ describe('Select', () => {
         visible: true,
         value: OPTIONS.slice(0, 2),
         multiple: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
     let tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
 
@@ -278,7 +278,7 @@ describe('Select', () => {
     const wrapper = mount(() => (
       <Select prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </Select>
     ))
@@ -309,7 +309,7 @@ describe('Select', () => {
     const wrapper = mount(() => (
       <Select suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </Select>
     ))
@@ -330,7 +330,7 @@ describe('Select', () => {
       const wrapper = mount(() => <Select state={state}></Select>)
 
       expect(wrapper.find('.vxp-select__selector').classes()).toContain(
-        `vxp-select__selector--${state}`
+        `vxp-select__selector--${state}`,
       )
     })
   })
@@ -371,8 +371,8 @@ describe('Select', () => {
         visible: true,
         options: OPTIONS,
         onChange,
-        onSelect
-      }
+        onSelect,
+      },
     })
 
     await wrapper.find('.vxp-option').trigger('click')
@@ -400,8 +400,8 @@ describe('Select', () => {
         options: OPTIONS,
         onChange,
         onSelect,
-        onCancel
-      }
+        onCancel,
+      },
     })
 
     const options = wrapper.findAll('.vxp-option')
@@ -440,8 +440,8 @@ describe('Select', () => {
         options: OPTIONS,
         countLimit: 1,
         onChange,
-        onSelect
-      }
+        onSelect,
+      },
     })
 
     const options = wrapper.findAll('.vxp-option')
@@ -464,8 +464,8 @@ describe('Select', () => {
         clearable: true,
         options: OPTIONS,
         placeholder: TEXT,
-        onClear
-      }
+        onClear,
+      },
     })
     const selector = wrapper.find('.vxp-select__selector')
 
@@ -487,8 +487,8 @@ describe('Select', () => {
       props: {
         filter: true,
         visible: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
 
     expect(wrapper.find('input').exists()).toBe(true)
@@ -516,9 +516,9 @@ describe('Select', () => {
         filter: true,
         options: [
           { value: 0, label: 'Op 1' },
-          { value: 1, label: 'Op 2' }
-        ]
-      }
+          { value: 1, label: 'Op 2' },
+        ],
+      },
     })
     const input = wrapper.find('input').element
 
@@ -534,8 +534,8 @@ describe('Select', () => {
         visible: true,
         filter: true,
         creatable: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
     const input = wrapper.find('input').element
 
@@ -569,8 +569,8 @@ describe('Select', () => {
         visible: true,
         filter: true,
         clearable: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
     const selector = wrapper.find('.vxp-select__selector')
     const input = wrapper.find('.vxp-select__input')
@@ -587,8 +587,8 @@ describe('Select', () => {
     const wrapper = mount(Select, {
       props: {
         filter: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
 
     await nextTick()
@@ -604,8 +604,8 @@ describe('Select', () => {
         visible: true,
         filter: true,
         multiple: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
 
     await wrapper.setProps({ value: [OPTIONS[0], OPTIONS[1]] })
@@ -618,8 +618,8 @@ describe('Select', () => {
     const wrapper = mount(Select, {
       props: {
         visible: true,
-        options: OPTIONS
-      }
+        options: OPTIONS,
+      },
     })
 
     const options = wrapper.findAll('.vxp-option')
@@ -646,14 +646,14 @@ describe('Select', () => {
         options: [
           {
             l: 'l',
-            v: 'v'
-          }
+            v: 'v',
+          },
         ],
         keyConfig: {
           label: 'l',
-          value: 'v'
-        }
-      }
+          value: 'v',
+        },
+      },
     })
 
     await nextTick()
@@ -664,7 +664,7 @@ describe('Select', () => {
   it('remote', async () => {
     const onFilterInput = vi.fn((value: string) => {
       wrapper.setProps({
-        options: OPTIONS.filter(o => o.includes(value))
+        options: OPTIONS.filter(o => o.includes(value)),
       })
     })
     const wrapper = mount(Select, {
@@ -673,8 +673,8 @@ describe('Select', () => {
         options: [],
         multiple: true,
         filter: true,
-        onFilterInput
-      }
+        onFilterInput,
+      },
     })
     const input = wrapper.find('input').element
 
@@ -711,8 +711,8 @@ describe('Select', () => {
       props: {
         visible: true,
         options: LONG_OPTIONS,
-        fitPopper: true
-      }
+        fitPopper: true,
+      },
     })
     let widthMock = vi
       .spyOn(wrapper.element as HTMLElement, 'offsetWidth', 'get')
@@ -721,12 +721,12 @@ describe('Select', () => {
     await nextFrame()
 
     expect(parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.width)).toBe(
-      100
+      100,
     )
     widthMock.mockRestore()
 
     await wrapper.setProps({
-      fitPopper: false
+      fitPopper: false,
     })
     widthMock = vi.spyOn(wrapper.element as HTMLElement, 'offsetWidth', 'get').mockReturnValue(400)
 
@@ -735,12 +735,12 @@ describe('Select', () => {
     await nextFrame()
 
     expect(
-      parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.minWidth)
+      parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.minWidth),
     ).toBe(400)
     widthMock.mockRestore()
 
     await wrapper.setProps({
-      fitPopper: 200
+      fitPopper: 200,
     })
 
     await wrapper.trigger('click')
@@ -748,7 +748,7 @@ describe('Select', () => {
     await nextFrame()
 
     expect(parseInt((wrapper.find('.vxp-select__popper').element as HTMLElement).style.width)).toBe(
-      200
+      200,
     )
     widthMock.mockRestore()
   })
@@ -757,11 +757,11 @@ describe('Select', () => {
     const wrapper = mount(Select, {
       props: {
         value: OPTIONS[0],
-        options: OPTIONS
+        options: OPTIONS,
       },
       slots: {
-        selected: ({ option }: any) => '1' + option.label
-      }
+        selected: ({ option }: any) => '1' + option.label,
+      },
     })
 
     expect(wrapper.find('.vxp-select__control').text()).toEqual('1' + OPTIONS[0])
@@ -771,12 +771,12 @@ describe('Select', () => {
     const wrapper = mount(Select, {
       props: {
         value: OPTIONS[0],
-        options: OPTIONS
+        options: OPTIONS,
       },
       slots: {
         prepend: () => <span class={'prepend'}></span>,
-        append: () => <span class={'append'}></span>
-      }
+        append: () => <span class={'append'}></span>,
+      },
     })
 
     expect(wrapper.find('.prepend').exists()).toBe(true)
@@ -786,11 +786,11 @@ describe('Select', () => {
   it('list slot', async () => {
     const wrapper = mount(Select, {
       props: {
-        options: OPTIONS
+        options: OPTIONS,
       },
       slots: {
-        list: () => <span class={'list'}></span>
-      }
+        list: () => <span class={'list'}></span>,
+      },
     })
 
     expect(wrapper.find('.list').exists()).toBe(true)

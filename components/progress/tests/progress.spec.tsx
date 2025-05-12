@@ -39,7 +39,7 @@ describe('Progress', () => {
 
         expect(wrapper.classes()).toContain(`vxp-progress--info-${type}`)
         expect(wrapper.find('.vxp-progress__percentage').exists()).toBe(type !== 'none')
-      }
+      },
     )
   })
 
@@ -59,20 +59,20 @@ describe('Progress', () => {
     const strokeColor = vi.fn()
     const wrapper = mount(Progress, {
       props: {
-        strokeColor: 'red'
-      }
+        strokeColor: 'red',
+      },
     })
 
     expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-      'background-color: red;'
+      'background-color: red;',
     )
 
     await wrapper.setProps({
-      strokeColor: ['red', 'yellow']
+      strokeColor: ['red', 'yellow'],
     })
 
     expect(wrapper.vm.fillerStyle).toMatchObject({
-      backgroundImage: 'linear-gradient(to right, red 0%, yellow 100%)'
+      backgroundImage: 'linear-gradient(to right, red 0%, yellow 100%)',
     })
 
     await wrapper.setProps({ strokeColor })

@@ -38,24 +38,24 @@ const props = useProps('uploadFile', _props, {
   locale: null,
   file: {
     default: () => ({}) as UploadFileState,
-    static: true
+    static: true,
   },
   iconRenderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   listType: {
     default: 'name',
-    validator: value => uploadListTypes.includes(value)
+    validator: value => uploadListTypes.includes(value),
   },
   loadingText: null,
   selectToAdd: false,
   precision: 2,
   canPreview: {
     default: isImage,
-    isFunc: true
+    isFunc: true,
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 defineSlots<UploadFileSlots>()
@@ -75,8 +75,8 @@ const slotParams = shallowReadonly(
   reactive({
     file: toRef(props, 'file'),
     status,
-    percentage
-  })
+    percentage,
+  }),
 )
 
 function getFileExtension(file: UploadFileState) {

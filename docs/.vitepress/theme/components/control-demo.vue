@@ -31,24 +31,24 @@ import type { ComponentSize, ComponentState } from 'vexip-ui'
 const props = defineProps({
   value: {
     type: String,
-    default: ''
+    default: '',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   state: {
     type: String as PropType<ComponentState>,
-    default: 'default'
+    default: 'default',
   },
   size: {
     type: String as PropType<ComponentSize>,
-    default: 'default'
-  }
+    default: 'default',
+  },
 })
 const emit = defineEmits(['change', 'update:value'])
 
@@ -61,7 +61,7 @@ defineExpose({ focus })
 
 watch(
   () => props.value,
-  value => (currentValue.value = value)
+  value => (currentValue.value = value),
 )
 
 function handleChange(event: Event) {

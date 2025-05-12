@@ -20,7 +20,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import {
   getLast,
@@ -33,7 +33,7 @@ import {
   rgbToHsv,
   rgbaToHex,
   toAttrValue,
-  toFixed
+  toFixed,
 } from '@vexip-ui/utils'
 import { colorPickerProps } from './props'
 import { defaultShortcuts, getDefaultHsv } from './symbol'
@@ -54,7 +54,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<Color | null>(() => reference.value?.focus())
 
 const nh = useNameHelper('color-picker')
@@ -66,12 +66,12 @@ const props = useProps('colorPicker', _props, {
   locale: null,
   value: {
     default: () => getFieldValue()!,
-    static: true
+    static: true,
   },
   visible: false,
   format: {
     default: 'rgb',
-    validator: value => ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
+    validator: value => ['rgb', 'hsl', 'hsv', 'hex'].includes(value),
   },
   alpha: false,
   disabled: () => disabled.value,
@@ -80,7 +80,7 @@ const props = useProps('colorPicker', _props, {
   shortcut: false,
   placement: {
     default: 'bottom',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: false,
   outsideClose: true,
@@ -100,7 +100,7 @@ const props = useProps('colorPicker', _props, {
   popperAlive: null,
   showLabel: false,
   labelFormat: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value', 'update:visible'])
@@ -137,7 +137,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
-  isDrop: true
+  isDrop: true,
 })
 const { isHover } = useHover(reference)
 
@@ -149,14 +149,14 @@ const unitList = computed(() => {
     shortcutEl.value,
     input.value,
     cancel.value,
-    confirm.value
+    confirm.value,
   ].filter(Boolean) as any[]
 })
 
 const lastValue = ref<HSVAColor>({
   ...currentValue.value,
   a: currentAlpha.value,
-  format: 'hsva'
+  format: 'hsva',
 })
 
 const className = computed(() => {
@@ -170,7 +170,7 @@ const className = computed(() => {
     [nh.bm('disabled')]: props.disabled,
     [nh.bm('alpha')]: props.alpha,
     [nh.bm(props.size)]: props.size !== 'default',
-    [nh.bm(props.state)]: props.state !== 'default'
+    [nh.bm(props.state)]: props.state !== 'default',
   }
 })
 const readonly = computed(() => props.loading && props.loadingLock)
@@ -184,7 +184,7 @@ const selectorClass = computed(() => {
     [`${baseCls}--loading`]: props.loading,
     [`${baseCls}--${props.size}`]: props.size !== 'default',
     [`${baseCls}--focused`]: currentVisible.value,
-    [`${baseCls}--${props.state}`]: props.state !== 'default'
+    [`${baseCls}--${props.state}`]: props.state !== 'default',
   }
 })
 const rgb = computed(() => {
@@ -228,7 +228,7 @@ watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 watch(currentVisible, value => {
   value && updatePopper()
@@ -238,7 +238,7 @@ watch(
   value => {
     parseValue(value)
     lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -246,7 +246,7 @@ watch(
     if (value) {
       setVisible(false)
     }
-  }
+  },
 )
 
 defineExpose({
@@ -263,7 +263,7 @@ defineExpose({
   popper,
   toggleVisible,
   focus,
-  blur
+  blur,
 })
 
 function parseValue(value: Color | null) {

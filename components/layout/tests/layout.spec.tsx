@@ -19,15 +19,15 @@ describe('Layout', () => {
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
         icon: Home,
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -35,12 +35,12 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         menus={menus}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
@@ -68,13 +68,13 @@ describe('Layout', () => {
       {
         label: 'action1',
         icon: Github,
-        name: 'Action 1'
+        name: 'Action 1',
       },
       {
         label: 'action2',
         icon: Home,
-        name: 'Action 2'
-      }
+        name: 'Action 2',
+      },
     ]
     const onUserAction = vi.fn()
     const wrapper = mount(() => (
@@ -83,13 +83,13 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         actions={actions}
         onUserAction={onUserAction}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
@@ -108,7 +108,7 @@ describe('Layout', () => {
     expect(profile.querySelector('.vxp-layout__user-name')!.textContent).toEqual('VexipUI')
     expect(profile.querySelector('.vxp-layout__user-email')).not.toBeNull()
     expect(profile.querySelector('.vxp-layout__user-email')!.textContent).toEqual(
-      'email@vexip-ui.com'
+      'email@vexip-ui.com',
     )
 
     const userActions = document.querySelectorAll('.vxp-layout__user-action')
@@ -128,13 +128,13 @@ describe('Layout', () => {
         name: 'Group',
         children: [
           { name: 'Github', icon: Github },
-          { name: 'City', icon: Home }
-        ]
+          { name: 'City', icon: Home },
+        ],
       },
       {
         name: 'Group',
-        children: [{ name: 'Link' }, { name: 'Link' }]
-      }
+        children: [{ name: 'Link' }, { name: 'Link' }],
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -142,14 +142,14 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         footer
         copyright={'copyright'}
         links={links}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
@@ -182,15 +182,15 @@ describe('Layout', () => {
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
         icon: Home,
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -198,13 +198,13 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         menus={menus}
         no-aside
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
@@ -225,15 +225,15 @@ describe('Layout', () => {
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
         icon: Home,
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -241,13 +241,13 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         menus={menus}
         no-header
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
@@ -271,7 +271,7 @@ describe('Layout', () => {
           asideBottom: () => <div class={'aside-bottom'}></div>,
           main: () => <div class={'main'}></div>,
           footerLinks: () => <div class={'footer-links'}></div>,
-          footerCopyright: () => <div class={'footer-copyright'}></div>
+          footerCopyright: () => <div class={'footer-copyright'}></div>,
         }}
       </Layout>
     ))

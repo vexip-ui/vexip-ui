@@ -18,12 +18,12 @@ const props = useProps('result', _props, {
   size: createSizeProp(),
   type: {
     default: 'primary',
-    validator: value => resultTypes.includes(value)
+    validator: value => resultTypes.includes(value),
   },
   icon: createIconProp(),
   iconColor: '',
   description: '',
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<ResultSlots>()
@@ -36,7 +36,7 @@ const predefinedIcons = computed(() => ({
   info: icons.value.info,
   success: icons.value.success,
   warning: icons.value.warning,
-  error: icons.value.error
+  error: icons.value.error,
 }))
 
 const iconComp = computed(() => {
@@ -45,7 +45,7 @@ const iconComp = computed(() => {
 const hasTitle = computed(() => !!(slots.title || props.title || props.slots.title))
 const hasIcon = computed(() => !!(slots.icon || props.type || props.icon || props.slots.icon))
 const hasDescription = computed(
-  () => !!(slots.description || props.description || props.slots.description)
+  () => !!(slots.description || props.description || props.slots.description),
 )
 const className = computed(() => {
   return {
@@ -53,13 +53,13 @@ const className = computed(() => {
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
     [nh.bm(props.type)]: props.type,
-    [nh.bm(props.size)]: props.size !== 'default'
+    [nh.bm(props.size)]: props.size !== 'default',
   }
 })
 const style = computed(() => {
   if (props.iconColor) {
     return nh.cvm({
-      'icon-color': props.iconColor
+      'icon-color': props.iconColor,
     })
   }
 

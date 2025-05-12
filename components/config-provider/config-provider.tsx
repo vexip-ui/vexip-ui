@@ -6,7 +6,7 @@ import {
   configLocale,
   configProps,
   configZIndex,
-  useNameHelper
+  useNameHelper,
 } from '@vexip-ui/config'
 import { configProviderProps } from './props'
 
@@ -35,5 +35,5 @@ export default defineComponent({
 
       return renderSlot(slots, 'default')
     }
-  }
+  },
 })

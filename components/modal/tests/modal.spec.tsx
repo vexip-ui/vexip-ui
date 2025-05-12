@@ -33,7 +33,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Modal>
     ))
@@ -47,7 +47,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          close: () => <span class={'close'}></span>
+          close: () => <span class={'close'}></span>,
         }}
       </Modal>
     ))
@@ -60,7 +60,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          header: () => <span class={'header'}></span>
+          header: () => <span class={'header'}></span>,
         }}
       </Modal>
     ))
@@ -74,7 +74,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal>
         {{
-          footer: () => <span class={'footer'}></span>
+          footer: () => <span class={'footer'}></span>,
         }}
       </Modal>
     ))
@@ -127,8 +127,8 @@ describe('Modal', () => {
         onToggle,
         onClose,
         onConfirm,
-        onCancel
-      }
+        onCancel,
+      },
     })
     const buttons = wrapper.findAllComponents('.vxp-button')
 
@@ -282,8 +282,8 @@ describe('Modal', () => {
         right: 10,
         width: 100,
         bottom: 10,
-        height: 100
-      }
+        height: 100,
+      },
     })
     const modal = wrapper.find('.vxp-modal__wrapper')
 
@@ -322,8 +322,8 @@ describe('Modal', () => {
       props: {
         active: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
@@ -335,7 +335,7 @@ describe('Modal', () => {
   it('before close', async () => {
     const onBeforeClose = vi.fn()
     const wrapper = mount(Modal, {
-      props: { closable: true, onBeforeClose }
+      props: { closable: true, onBeforeClose },
     })
 
     const openAndClose = async () => {
@@ -359,7 +359,7 @@ describe('Modal', () => {
       () =>
         new Promise(resolve => {
           resolveRef = resolve
-        })
+        }),
     )
     await openAndClose()
     expect(wrapper.vm.currentActive).toBe(true)

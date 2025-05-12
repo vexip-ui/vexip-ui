@@ -15,12 +15,12 @@
 import { reactive } from 'vue'
 
 const formModel = reactive({
-  values: [5, 6]
+  values: [5, 6],
 })
 
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `Option ${i + 1}`,
-  value: i + 1
+  value: i + 1,
 }))
 </script>
 

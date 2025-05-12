@@ -24,7 +24,7 @@ export {
   h5Props,
   h6Props,
   pProps,
-  strongProps
+  strongProps,
 } from './props'
 
 export type TitleExposed = ComponentPublicInstance & InstanceType<typeof Title>
@@ -67,6 +67,6 @@ export type {
   OLProps,
   OLCProps,
   ULProps,
-  ULCProps
+  ULCProps,
 } from './props'
 export type { TypographyType, TitleLevel } from './symbol'

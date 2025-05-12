@@ -7,7 +7,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -66,7 +66,7 @@ export const numberInputProps = buildProps({
   onSuffixClick: eventProp<(event: MouseEvent) => void>(),
   onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-  onKeyUp: eventProp<(event: KeyboardEvent) => void>()
+  onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
 })
 
 export type NumberInputProps = ExtractPropTypes<typeof numberInputProps>

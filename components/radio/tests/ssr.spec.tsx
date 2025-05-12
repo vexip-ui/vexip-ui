@@ -27,7 +27,7 @@ describe('SSR for Radio', () => {
             <Radio label={'1'}></Radio>
             <Radio label={'2'}></Radio>
           </RadioGroup>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

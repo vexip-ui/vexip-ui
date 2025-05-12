@@ -10,7 +10,7 @@ import {
   renderSlot,
   shallowReadonly,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
@@ -19,7 +19,7 @@ import {
   useClickOutside,
   useListener,
   usePopper,
-  useSetTimeout
+  useSetTimeout,
 } from '@vexip-ui/hooks'
 import { getGlobalCount, isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
@@ -41,7 +41,7 @@ export default defineComponent({
         default: 'hover',
         validator: value => {
           return ['hover', 'click', 'focus', 'hover-focus', 'custom'].includes(value)
-        }
+        },
       },
       wrapper: false,
       noArrow: false,
@@ -49,7 +49,7 @@ export default defineComponent({
       visible: false,
       placement: {
         default: 'top',
-        validator: value => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value),
       },
       outsideClose: true,
       noHover: false,
@@ -63,7 +63,7 @@ export default defineComponent({
       reverse: false,
       width: 'auto',
       virtual: null,
-      shift: false
+      shift: false,
     })
 
     const idIndex = `${getGlobalCount()}`
@@ -102,8 +102,8 @@ export default defineComponent({
               left: virtual.x,
               top: virtual.y,
               width: 0,
-              height: 0
-            })
+              height: 0,
+            }),
           } as VirtualElement
         }
       }
@@ -138,7 +138,7 @@ export default defineComponent({
       reference,
       shift,
       wrapper: originalTrigger,
-      popper: popperEl
+      popper: popperEl,
     })
 
     useClickOutside(handleClickOutside, originalTrigger)
@@ -179,7 +179,7 @@ export default defineComponent({
           rendering.value = true
           updatePopper()
         }
-      }
+      },
     )
     watch(
       () => props.disabled,
@@ -187,7 +187,7 @@ export default defineComponent({
         if (value) {
           toggleVisible(false)
         }
-      }
+      },
     )
 
     expose({ rendering, trigger: triggerEl, toggleVisible, updatePopper })
@@ -316,7 +316,7 @@ export default defineComponent({
 
         if (!Wrapper) {
           triggerVNode.props = mergeProps(triggerVNode.props || {}, attrs, {
-            'aria-describedby': tooltipId.value
+            'aria-describedby': tooltipId.value,
           })
         }
 
@@ -346,7 +346,7 @@ export default defineComponent({
               [nh.bs('vars')]: true,
               [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
               [nh.bem('popper', 'no-hover')]: props.noHover,
-              [nh.bem('popper', 'no-arrow')]: props.noArrow
+              [nh.bem('popper', 'no-arrow')]: props.noArrow,
             }}
             appear
             visible={currentVisible.value}
@@ -364,8 +364,8 @@ export default defineComponent({
             </div>
             {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
           </Popper>
-        )
+        ),
       ]
     }
-  }
+  },
 })

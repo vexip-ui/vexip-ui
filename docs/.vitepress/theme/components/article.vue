@@ -13,16 +13,16 @@ import type { RowExposed } from 'vexip-ui'
 const props = defineProps({
   anchorLevel: {
     type: [Number, Array] as PropType<number | number[]>,
-    default: null
+    default: null,
   },
   active: {
     type: String,
-    default: ''
+    default: '',
   },
   loading: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['update:active', 'resize'])
 
@@ -35,7 +35,7 @@ const wrapperEl = computed(() => wrapper.value?.$el)
 const currentActive = ref(props.active)
 const { anchors, refreshAnchor } = ussTocAnchor(
   frontmatter.value.anchor || props.anchorLevel || 3,
-  wrapperEl
+  wrapperEl,
 )
 
 const refresh = debounceFrame(() => {
@@ -48,14 +48,14 @@ const contentStyle = computed(() => ({
   height: `${contentHeight.value}px`,
   paddingTop: '80px',
   paddingInlineStart: '50px',
-  marginInlineEnd: '-50px'
+  marginInlineEnd: '-50px',
 }))
 
 watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 watch(currentActive, value => {
   emit('update:active', value)

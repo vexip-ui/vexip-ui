@@ -21,9 +21,9 @@ const items = ref(
   Array.from({ length: 10000 }, (_, index) => {
     return {
       id: index,
-      value: `元素${index}`
+      value: `元素${index}`,
     }
-  })
+  }),
 )
 </script>
 

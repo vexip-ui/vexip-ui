@@ -8,7 +8,7 @@ import {
   ref,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -24,16 +24,16 @@ const _props = defineProps(scrollbarProps)
 const props = useProps('scrollbar', _props, {
   placement: {
     default: 'right',
-    validator: value => scrollbarPlacements.includes(value)
+    validator: value => scrollbarPlacements.includes(value),
   },
   scroll: {
     default: 0,
     validator: value => value >= 0 && value <= 100,
-    static: true
+    static: true,
   },
   barLength: {
     default: 35,
-    validator: value => value > 0 && value < 100
+    validator: value => value > 0 && value < 100,
   },
   width: null,
   appear: false,
@@ -46,8 +46,8 @@ const props = useProps('scrollbar', _props, {
   useTrack: false,
   trackSpeed: {
     default: 2,
-    validator: value => value > 0 && value < 10
-  }
+    validator: value => value > 0 && value < 10,
+  },
 })
 
 const nh = useNameHelper('scrollbar')
@@ -93,7 +93,7 @@ const { tracking, handleMouseDown: handleTrackMouseDown } = useTrack({
   onScroll: scroll => {
     triggerUpdate()
     emitEvent(props.onScroll, scroll)
-  }
+  },
 })
 
 const className = computed(() => {
@@ -107,15 +107,15 @@ const className = computed(() => {
       [nh.bm('scrolling')]: scrolling.value,
       [nh.bm('tracking')]: tracking.value,
       [nh.bm('active')]: active.value,
-      [nh.bm('disabled')]: props.disabled
-    }
+      [nh.bm('disabled')]: props.disabled,
+    },
   ]
 })
 const style = computed<Record<string, string>>(() => {
   return {
     [nh.cv('bar-bg-color')]: props.barColor,
     [nh.cv('track-bg-color')]: props.trackColor,
-    [nh.cv('width')]: props.width ? `${props.width}px` : null!
+    [nh.cv('width')]: props.width ? `${props.width}px` : null!,
   }
 })
 
@@ -124,7 +124,7 @@ watch(
   value => {
     currentScroll.value = value
     triggerUpdate()
-  }
+  },
 )
 watchEffect(() => {
   if (!bar.value) return
@@ -226,7 +226,7 @@ defineExpose({
   container,
   bar,
   track,
-  handleScroll
+  handleScroll,
 })
 
 let length: number

@@ -8,7 +8,7 @@ import type { TabsSlots } from './symbol'
 
 export const tabsProps = wrapProps({
   ...omitProps(tabNavProps, ['options']),
-  slots: Object as PropType<TabsSlots>
+  slots: Object as PropType<TabsSlots>,
 })
 
 export type TabsProps = ExtractPropTypes<typeof tabsProps>
@@ -18,8 +18,8 @@ export const tabPanelProps = wrapProps({
   ...tabNavItemProps,
   name: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 export type TabPanelProps = ExtractPropTypes<typeof tabPanelProps>

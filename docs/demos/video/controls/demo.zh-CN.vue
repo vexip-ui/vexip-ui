@@ -18,6 +18,6 @@ import type { VideoControlLayout } from 'vexip-ui'
 const controlLayout: VideoControlLayout = {
   left: ['play', 'timer', 'volume'],
   center: ['input'],
-  right: ['playback-rate', 'pip', 'full-window', 'full-browser']
+  right: ['playback-rate', 'pip', 'full-window', 'full-browser'],
 }
 </script>

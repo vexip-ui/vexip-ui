@@ -17,7 +17,7 @@ export const enum StatusType {
   UPLOADING = 'uploading',
   FAIL = 'fail',
   SUCCESS = 'success',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }
 
 export interface UploadFileState {
@@ -118,7 +118,7 @@ export const uploadListTypes = Object.freeze<UploadListType[]>([
   'name',
   'detail',
   'thumbnail',
-  'card'
+  'card',
 ])
 
 /**

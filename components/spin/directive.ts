@@ -27,7 +27,7 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
       el.__loading = {
         spin,
         props,
-        originPosition: position
+        originPosition: position,
       }
 
       if (position === 'static') {
@@ -58,5 +58,5 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
 
     render(null, el)
     delete el.__loading
-  }
+  },
 }

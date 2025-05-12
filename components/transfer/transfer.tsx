@@ -11,7 +11,7 @@ import {
   renderSlot,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import {
@@ -21,7 +21,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { createSlotRender, useRtl } from '@vexip-ui/hooks'
@@ -33,7 +33,7 @@ import type { TransferKeyConfig, TransferOptionState, TransferSlots } from './sy
 const defaultKeyConfig: Required<TransferKeyConfig> = {
   value: 'value',
   label: 'label',
-  disabled: 'disabled'
+  disabled: 'disabled',
 }
 
 export default defineComponent({
@@ -49,7 +49,7 @@ export default defineComponent({
       loading,
       validateField,
       getFieldValue,
-      setFieldValue
+      setFieldValue,
     } = useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
@@ -57,11 +57,11 @@ export default defineComponent({
       locale: null,
       options: {
         default: () => [],
-        static: true
+        static: true,
       },
       value: {
         default: () => getFieldValue(),
-        static: true
+        static: true,
       },
       disabled: () => disabled.value,
       paged: false,
@@ -70,7 +70,7 @@ export default defineComponent({
       keyConfig: () => ({}),
       optionHeight: {
         default: 32,
-        validator: value => value > 0
+        validator: value => value > 0,
       },
       ignoreCase: false,
       sourceTitle: null,
@@ -80,7 +80,7 @@ export default defineComponent({
       loadingIcon: createIconProp(),
       loadingLock: false,
       loadingEffect: null,
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const { isRtl } = useRtl()
@@ -165,7 +165,7 @@ export default defineComponent({
           label,
           hidden: oldState?.hidden ?? false,
           hitting: oldState?.hitting ?? false,
-          data: option
+          data: option,
         })
 
         map.set(value, optionState)
@@ -185,8 +185,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('readonly')]: readonly.value,
-          [nh.bm('loading')]: props.loading
-        }
+          [nh.bm('loading')]: props.loading,
+        },
       ]
     })
     const actionType = computed(() => {
@@ -208,7 +208,7 @@ export default defineComponent({
       value => {
         emittedValue = value
         currentValue.value = new Set(emittedValue)
-      }
+      },
     )
 
     expose({
@@ -220,7 +220,7 @@ export default defineComponent({
       blur: () => {
         source.value?.$el?.blur()
         target.value?.$el?.blur()
-      }
+      },
     })
 
     function getFilterMethod(type: 'source' | 'target') {
@@ -265,11 +265,11 @@ export default defineComponent({
     function handleSelect(type: 'source' | 'target') {
       const selected = {
         source: Array.from(sourceSelected.value),
-        target: Array.from(targetSelected.value)
+        target: Array.from(targetSelected.value),
       }
       const data = {
         source: selected.source.map(value => optionValueMap.get(value)?.data ?? ''),
-        target: selected.target.map(value => optionValueMap.get(value)?.data ?? '')
+        target: selected.target.map(value => optionValueMap.get(value)?.data ?? ''),
       }
 
       emitEvent(props.onSelect, type, selected, data)
@@ -345,7 +345,7 @@ export default defineComponent({
               body: getSlotRender(['source-body', 'sourceBody', 'body']),
               footer: getSlotRender(['source-footer', 'sourceFooter', 'footer']),
               option: getSlotRender(['source-option', 'sourceOption', 'option']),
-              label: getSlotRender(['source-label', 'sourceLabel', 'label'])
+              label: getSlotRender(['source-label', 'sourceLabel', 'label']),
             }}
           </TransferPanel>
           <div class={nh.be('actions')}>
@@ -370,7 +370,7 @@ export default defineComponent({
                         {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                         label={isRtl.value ? 'to left' : 'to right'}
                       ></Icon>
-                    )
+                    ),
                   }}
                 </Button>
                 <Button
@@ -392,10 +392,10 @@ export default defineComponent({
                         {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
                         label={isRtl.value ? 'to right' : 'to left'}
                       ></Icon>
-                    )
+                    ),
                   }}
                 </Button>
-              </Renderer>
+              </Renderer>,
             ])}
           </div>
           <TransferPanel
@@ -428,11 +428,11 @@ export default defineComponent({
               body: getSlotRender(['target-body', 'targetBody', 'body']),
               footer: getSlotRender(['target-footer', 'targetFooter', 'footer']),
               option: getSlotRender(['target-option', 'targetOption', 'option']),
-              label: getSlotRender(['target-label', 'targetLabel', 'label'])
+              label: getSlotRender(['target-label', 'targetLabel', 'label']),
             }}
           </TransferPanel>
         </div>
       )
     }
-  }
+  },
 })

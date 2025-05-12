@@ -10,7 +10,7 @@ export function handleLastScroller(target: MaybeRef<HTMLElement | null | undefin
   if (lastScroller !== unref(target)) {
     if (lastScroller && lastScroller !== window && lastScroller !== document.documentElement) {
       const targetAffix = (lastScroller as HTMLElement).querySelector(
-        '.vxp-affix--fixed'
+        '.vxp-affix--fixed',
       ) as HTMLElement
 
       if (targetAffix) {

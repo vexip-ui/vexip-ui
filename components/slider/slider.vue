@@ -10,7 +10,7 @@ import {
   emitEvent,
   useHoverDelay,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { decimalLength, throttle, toFixed } from '@vexip-ui/utils'
@@ -20,7 +20,7 @@ import type { SliderMarker, SliderSlots } from './symbol'
 
 const enum TriggerType {
   START = 0,
-  END = 1
+  END = 1,
 }
 
 defineOptions({ name: 'Slider' })
@@ -33,13 +33,13 @@ const props = useProps('slider', _props, {
   state: createStateProp(state),
   value: {
     default: () => getFieldValue() ?? 0,
-    static: true
+    static: true,
   },
   min: 0,
   max: 100,
   step: {
     default: 1,
-    validator: value => value > 0
+    validator: value => value > 0,
   },
   vertical: false,
   hideTip: false,
@@ -57,7 +57,7 @@ const props = useProps('slider', _props, {
   tipProps: () => ({}),
   sync: false,
   rangeDraggable: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -101,7 +101,7 @@ const markerList = computed(() => {
       if (!Number.isNaN(number)) {
         list.push({
           value: number,
-          marker: typeof marker === 'string' ? { label: marker } : marker
+          marker: typeof marker === 'string' ? { label: marker } : marker,
         })
       }
     }
@@ -127,7 +127,7 @@ const className = computed(() => {
     [nh.bm('with-marker')]: hasMarkerLabel.value,
     [nh.bm('flip-marker')]: props.flipMarker,
     [nh.bm('hide-trigger')]: props.triggerFade && !triggerShow.value,
-    [nh.bm('range-draggable')]: canDragRange.value
+    [nh.bm('range-draggable')]: canDragRange.value,
   }
 })
 const stepDigit = computed(() => decimalLength(props.step))
@@ -138,7 +138,7 @@ const stepOneMax = computed(() => Math.floor(Math.max(props.min, props.max) / pr
 const truthValue = computed(() => {
   return [
     toFixed(stepOneValue.value[0] * props.step, stepDigit.value),
-    toFixed(stepOneValue.value[1] * props.step, stepDigit.value)
+    toFixed(stepOneValue.value[1] * props.step, stepDigit.value),
   ]
 })
 const stepOneTotal = computed(() => stepOneMax.value - stepOneMin.value || 1)
@@ -152,7 +152,7 @@ const fillerStyle = computed(() => {
     [vertical ? (reverse ? 'bottom' : 'top') : reverse ? 'right' : 'left']:
       `${Math.min(triggerPercent.value[0], triggerPercent.value[1])}%`,
     [vertical ? 'height' : 'width']:
-      `${Math.abs(triggerPercent.value[0] - triggerPercent.value[1])}%`
+      `${Math.abs(triggerPercent.value[0] - triggerPercent.value[1])}%`,
   }
 })
 const startTriggerStyle = computed(() => {
@@ -162,7 +162,7 @@ const startTriggerStyle = computed(() => {
     [reverse ? 'bottom' : 'top']: vertical ? `${triggerPercent.value[0]}%` : '50%',
     [reverse ? 'right' : 'left']: vertical ? '50%' : `${triggerPercent.value[0]}%`,
     zIndex: triggerType.value === TriggerType.START ? 1 : undefined,
-    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
+    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`,
   }
 })
 const endTriggerStyle = computed(() => {
@@ -172,7 +172,7 @@ const endTriggerStyle = computed(() => {
     [reverse ? 'bottom' : 'top']: vertical ? `${triggerPercent.value[1]}%` : '50%',
     [reverse ? 'right' : 'left']: vertical ? '50%' : `${triggerPercent.value[1]}%`,
     zIndex: triggerType.value === TriggerType.END ? 1 : undefined,
-    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
+    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`,
   }
 })
 const isDisabled = computed(() => props.disabled || readonly.value)
@@ -183,8 +183,8 @@ const commonSlotParams = shallowReadonly(
     sliding: sliding,
     percent: triggerPercent,
     disabled: toRef(props, 'disabled'),
-    loading: toRef(props, 'loading')
-  })
+    loading: toRef(props, 'loading'),
+  }),
 )
 
 const { target: filler } = useMoving({
@@ -235,7 +235,7 @@ const { target: filler } = useMoving({
 
     emitChange('input')
   },
-  onEnd: () => emitChange()
+  onEnd: () => emitChange(),
 })
 
 parseValue(props.value)
@@ -257,14 +257,14 @@ watch(
 
     parseValue(value)
     verifyValue()
-  }
+  },
 )
 watch(
   () => props.step,
   () => {
     parseValue(props.value)
     verifyValue()
-  }
+  },
 )
 
 defineExpose({
@@ -275,7 +275,7 @@ defineExpose({
   endTrigger,
   isValueInRange,
   focus,
-  blur
+  blur,
 })
 
 function toPercent(value: string | number) {
@@ -501,7 +501,7 @@ function getPointStyle(value: number | string) {
   return {
     [reverse ? 'bottom' : 'top']: vertical ? `${value}%` : '50%',
     [reverse ? 'right' : 'left']: vertical ? '50%' : `${value}%`,
-    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
+    transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`,
   }
 }
 
@@ -512,7 +512,7 @@ function getMarkerStyle(value: number | string) {
   return {
     [reverse ? 'bottom' : 'top']: vertical ? `${value}%` : undefined,
     [reverse ? 'right' : 'left']: vertical ? undefined : `${value}%`,
-    transform: `translate${vertical ? 'Y' : 'X'}(${reverse ? '' : '-'}50%)`
+    transform: `translate${vertical ? 'Y' : 'X'}(${reverse ? '' : '-'}50%)`,
   }
 }
 

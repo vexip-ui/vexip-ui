@@ -8,5 +8,5 @@ export type {
   TransferExposed,
   TransferSlots,
   TransferPanelSlotParams,
-  TransferOptionSlotParams
+  TransferOptionSlotParams,
 } from './symbol'

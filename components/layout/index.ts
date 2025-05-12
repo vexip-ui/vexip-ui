@@ -13,5 +13,5 @@ export type {
   LayoutFooterLink,
   LayoutExposed,
   LayoutSlotParams,
-  LayoutHeaderSlotParams
+  LayoutHeaderSlotParams,
 } from './symbol'

@@ -14,8 +14,8 @@ defineOptions({ name: 'VideoVolume' })
 const props = defineProps({
   volume: {
     type: Number,
-    default: 1
-  }
+    default: 1,
+  },
 })
 
 const emit = defineEmits(['change'])
@@ -41,7 +41,7 @@ watch(
   () => props.volume,
   value => {
     currentVolume.value = value
-  }
+  },
 )
 
 defineExpose({ toggleMute })

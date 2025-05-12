@@ -6,7 +6,7 @@ import {
   eventProp,
   iconProp,
   localeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -45,7 +45,7 @@ export const textareaProps = buildProps({
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
   onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
   onCompositionStart: eventProp<(event: CompositionEvent) => void>(),
-  onCompositionEnd: eventProp<(event: CompositionEvent) => void>()
+  onCompositionEnd: eventProp<(event: CompositionEvent) => void>(),
 })
 
 export type TextareaProps = ExtractPropTypes<typeof textareaProps>

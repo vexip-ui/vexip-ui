@@ -40,7 +40,7 @@ const recordMap = ref(new Map<string, Record>())
 recordMap.value
   .set(
     'This Computer',
-    reactive({ visible: false, children: ['System (C:)', 'Document (D:)', 'Software (E:)'] })
+    reactive({ visible: false, children: ['System (C:)', 'Document (D:)', 'Software (E:)'] }),
   )
   .set('Document (D:)', reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] }))
   .set('vexip-ui', reactive({ visible: false, children: [] }))

@@ -20,7 +20,7 @@ async function main() {
     'common/icons',
     'dev-server',
     'docs',
-    'playground'
+    'playground',
   ]
 
   let changed = false

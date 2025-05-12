@@ -29,7 +29,7 @@ export default defineComponent({
       xl: null,
       xxl: null,
       flex: null,
-      useFlex: null
+      useFlex: null,
     })
 
     const rowState = inject(ROW_STATE, null)
@@ -44,15 +44,15 @@ export default defineComponent({
           ? props.useFlex === true
             ? { justify: 'start', align: 'top' }
             : props.useFlex
-          : {})
+          : {}),
       }
       const className: ClassType = [
         nh.b(),
         nh.bs('vars'),
         {
           [nh.bm('flex')]: columnFlex,
-          [nh.bm('inherit')]: rowState || props.inherit
-        }
+          [nh.bm('inherit')]: rowState || props.inherit,
+        },
       ]
 
       if (columnFlex) {
@@ -63,7 +63,7 @@ export default defineComponent({
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
           className.push(
-            prop === 'span' ? nh.bm(`${props[prop]}`) : nh.bm(`${prop}-${props[prop]}`)
+            prop === 'span' ? nh.bm(`${props[prop]}`) : nh.bm(`${prop}-${props[prop]}`),
           )
         }
       })
@@ -120,11 +120,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default && slots.default()
-        }
+          default: () => slots.default && slots.default(),
+        },
       )
-  }
+  },
 })

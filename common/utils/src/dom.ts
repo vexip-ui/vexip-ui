@@ -10,7 +10,7 @@ const TABABLE_SELECTOR = [
   'select',
   'textarea',
   '[tabindex]',
-  '[contenteditable]'
+  '[contenteditable]',
 ]
   .map(s => `${s}:not(:disabled):not([disabled])`)
   .join(', ')
@@ -129,7 +129,7 @@ export function queryTabables(root?: HTMLElement, includeDisabled = false) {
   const isDis = includeDisabled ? () => false : isDisabled
 
   return queryAll(TABABLE_SELECTOR, root).filter(
-    el => isVisible(el) && el.tabIndex > -1 && !isDis(el)
+    el => isVisible(el) && el.tabIndex > -1 && !isDis(el),
   )
 }
 

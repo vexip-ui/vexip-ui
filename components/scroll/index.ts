@@ -13,5 +13,5 @@ export type {
   ScrollPayload,
   BarScrollPayload,
   ScrollState,
-  ScrollSlotParams
+  ScrollSlotParams,
 } from './symbol'

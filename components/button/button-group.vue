@@ -15,9 +15,9 @@ const props = useProps('buttonGroup', _props, {
   size: null,
   type: {
     default: 'default' as ButtonType,
-    validator: (value: ButtonType) => buttonTypes.includes(value)
+    validator: (value: ButtonType) => buttonTypes.includes(value),
   },
-  circle: false
+  circle: false,
 })
 
 defineSlots<{ default: () => any }>()
@@ -32,7 +32,7 @@ const className = computed(() => {
   return {
     [nh.b()]: true,
     [nh.bm('inherit')]: props.inherit,
-    [nh.bm('circle')]: props.circle
+    [nh.bm('circle')]: props.circle,
   }
 })
 const itemList = computed(() => Array.from(itemStates))
@@ -53,8 +53,8 @@ provide(
     type,
     increaseItem,
     decreaseItem,
-    refreshIndexes
-  })
+    refreshIndexes,
+  }),
 )
 
 function increaseItem(item: ButtonState) {

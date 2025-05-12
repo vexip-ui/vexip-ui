@@ -10,13 +10,13 @@ const bin = (name: string) => resolve(rootDir, 'node_modules/.bin/' + name)
 
 async function main() {
   await execa(bin('tsup-node'), ['src/index.ts', '--dts', '--format', 'cjs,esm'], {
-    stdio: 'inherit'
+    stdio: 'inherit',
   })
 
   console.log()
 
   await execa(bin('tsup-node'), ['--entry.cli', 'src/cli/index.ts', '--dts', '--format', 'esm'], {
-    stdio: 'inherit'
+    stdio: 'inherit',
   })
 }
 

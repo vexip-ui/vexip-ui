@@ -15,7 +15,7 @@ export async function downloadProject(store: ReplStore) {
   const versions: Record<string, string> = {
     vue: __VUE_VERSION__,
     'vexip-ui': __VERSION__,
-    ...store.versions
+    ...store.versions,
   }
 
   for (const name of Object.keys(pkg.dependencies)) {

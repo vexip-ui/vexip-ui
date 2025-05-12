@@ -20,14 +20,14 @@ const _props = defineProps(tabsProps)
 const props = useProps('tabs', _props, {
   active: {
     default: null,
-    static: true
+    static: true,
   },
   card: false,
   align: 'left',
   placement: 'top',
   closable: false,
   showAdd: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -69,15 +69,15 @@ provide(
     handleActive,
     increaseItem,
     decreaseItem,
-    refreshLabels
-  })
+    refreshLabels,
+  }),
 )
 
 watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 
 onMounted(computeIndex)
@@ -88,7 +88,7 @@ defineExpose({
   itemList,
   handleActive,
   handleAdd,
-  handleClose
+  handleClose,
 })
 
 function isActiveEmpty() {

@@ -17,7 +17,7 @@ export const popperProps = buildProps({
   onBeforeLeave: eventProp<(el: Element) => void>(),
   onLeave: eventProp<(el: Element) => void>(),
   onAfterLeave: eventProp<(el: Element) => void>(),
-  onLeaveCancelled: eventProp<(el: Element) => void>()
+  onLeaveCancelled: eventProp<(el: Element) => void>(),
 })
 
 export type PopperProps = ExtractPropTypes<typeof popperProps>

@@ -16,7 +16,7 @@ export const textProps = buildProps({
   disabled: booleanProp,
   keyboard: booleanProp,
   thin: booleanProp,
-  reversed: booleanProp
+  reversed: booleanProp,
 })
 
 export type TextProps = ExtractPropTypes<typeof textProps>
@@ -39,7 +39,7 @@ export const titleProps = buildProps({
   marker: booleanProp,
   aligned: booleanProp,
   thin: booleanProp,
-  markerType: String
+  markerType: String,
 })
 
 export type TitleProps = ExtractPropTypes<typeof titleProps>
@@ -72,21 +72,21 @@ export type H5CProps = HCProps
 export type H6CProps = HCProps
 
 export const blockquoteProps = buildProps({
-  type: String as PropType<TypographyType>
+  type: String as PropType<TypographyType>,
 })
 
 export type BlockquoteProps = ExtractPropTypes<typeof blockquoteProps>
 export type BlockquoteCProps = ConfigurableProps<BlockquoteProps>
 
 export const olProps = buildProps({
-  type: String as PropType<'a' | 'A' | 'i' | 'I' | '1'>
+  type: String as PropType<'a' | 'A' | 'i' | 'I' | '1'>,
 })
 
 export type OLProps = ExtractPropTypes<typeof olProps>
 export type OLCProps = ConfigurableProps<OLProps>
 
 export const ulProps = buildProps({
-  listStyle: String
+  listStyle: String,
 })
 
 export type ULProps = ExtractPropTypes<typeof ulProps>

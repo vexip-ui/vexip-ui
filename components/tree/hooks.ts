@@ -67,6 +67,6 @@ export function useCascadedChecked<T extends CascadedNode>(options: {
 
   return {
     updateCheckedUpward,
-    updateCheckedDown
+    updateCheckedDown,
   }
 }

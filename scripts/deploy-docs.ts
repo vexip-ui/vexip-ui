@@ -10,9 +10,9 @@ async function main() {
     headers: {
       Accept: 'application/vnd.github.v3+json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
     },
-    body: JSON.stringify({ base: deployBranch, head: mainBranch })
+    body: JSON.stringify({ base: deployBranch, head: mainBranch }),
   })
 
   await response.json()

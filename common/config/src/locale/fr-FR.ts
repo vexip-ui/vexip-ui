@@ -54,8 +54,8 @@ export function frFRLocale() {
         week4: 'Jeudi',
         week5: 'Vendredi',
         week6: 'Samedi',
-        week7: 'Dimanche'
-      }
+        week7: 'Dimanche',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function frFRLocale() {
       doCaptcha: 'Veuillez compléter le captcha ci-dessous',
       pointInOrder: "Veuillez indiquer dans l'ordre",
       trigger: 'Cliquer pour déclencher le captcha',
-      completed: 'Captcha complété'
+      completed: 'Captcha complété',
     },
 
     checkbox: {
-      all: 'Tous'
+      all: 'Tous',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function frFRLocale() {
       cancel: 'Annuler',
 
       ariaLabel: {
-        clear: 'Effacer la couleur'
-      }
+        clear: 'Effacer la couleur',
+      },
     },
 
     confirm: {
       confirm: 'Confirmer',
-      cancel: 'Annuler'
+      cancel: 'Annuler',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function frFRLocale() {
         datetime: 'date & heure',
         start: 'Début',
         end: 'Fin',
-        select: 'Sélectionner une'
+        select: 'Sélectionner une',
       },
       startTime: 'Heure de début',
       endTime: 'Heure de fin',
@@ -109,45 +109,45 @@ export function frFRLocale() {
         date: 'Jour',
         hour: 'Heure',
         minute: 'Minute',
-        second: 'Seconde'
-      }
+        second: 'Seconde',
+      },
     },
 
     drawer: {
       confirm: 'Confirmer',
-      cancel: 'Annuler'
+      cancel: 'Annuler',
     },
 
     form: {
       submit: 'Soumettre',
       reset: 'Réinitialiser',
       notNullable: 'Ne doit pas être vide',
-      validateFail: 'Echec de la validation'
+      validateFail: 'Echec de la validation',
     },
 
     image: {
       placeholder: 'Chargement...',
-      error: 'Echec du chargement'
+      error: 'Echec du chargement',
     },
 
     input: {
       placeholder: 'Veuillez saisir',
 
       ariaLabel: {
-        clear: 'Effacer le texte'
-      }
+        clear: 'Effacer le texte',
+      },
     },
 
     layout: {
       signOut: 'Se déconnecter',
       signType: 'Type de navigation',
       majorColor: 'Couleur principale',
-      themeMode: 'Thème de couleur'
+      themeMode: 'Thème de couleur',
     },
 
     modal: {
       confirm: 'Confirmer',
-      cancel: 'Annuler'
+      cancel: 'Annuler',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function frFRLocale() {
       ariaLabel: {
         clear: 'Effacer le numéro',
         increase: 'Augmenter',
-        decrease: 'Diminuer'
-      }
+        decrease: 'Diminuer',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function frFRLocale() {
       next: 'Suivant',
       total: 'Total',
       jumpTo: 'Sauter vers',
-      itemUnit: 'Objet | Objets'
+      itemUnit: 'Objet | Objets',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function frFRLocale() {
       search: 'Rechercher des options',
 
       ariaLabel: {
-        clear: 'Effacer la sélection'
-      }
+        clear: 'Effacer la sélection',
+      },
     },
 
     table: {
       empty: 'Pas de données',
       filterConfirm: 'Filtrer',
       filterReset: 'Effacer les filtres',
-      filterAll: 'Tous'
+      filterAll: 'Tous',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function frFRLocale() {
       lastMonth: 'Le mois dernier',
       months: 'Mois',
       lastYear: "L'année dernière",
-      years: 'Années'
+      years: 'Années',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function frFRLocale() {
         time: 'heure',
         start: 'Début',
         end: 'Fin',
-        select: 'Veuillez sélectionner'
+        select: 'Veuillez sélectionner',
       },
 
       ariaLabel: {
         clear: "Effacer l'heure",
         hour: 'Heure',
         minute: 'Minute',
-        second: 'Seconde'
-      }
+        second: 'Seconde',
+      },
     },
 
     tour: {
       prev: 'Précédent',
       next: 'Suivant',
       done: 'Prêt',
-      stepCount: 'Étape {n}'
+      stepCount: 'Étape {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function frFRLocale() {
       target: 'Cible',
       empty: 'Pas de données',
       reverse: 'Inverser la sélection',
-      search: 'Rechercher (Ctrl + F)'
+      search: 'Rechercher (Ctrl + F)',
     },
 
     tree: {
-      empty: 'Pas de données'
+      empty: 'Pas de données',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function frFRLocale() {
 
       ariaLabel: {
         preview: 'Aperçu du fichier',
-        delete: 'Supprimer le fichier'
-      }
+        delete: 'Supprimer le fichier',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function frFRLocale() {
       fullWindowExit: 'Quitter la fenêtre pleine',
       fullScreen: 'Plein écran',
       fullScreenExit: 'Quitter le plein écran',
-      chapterCount: 'Chapitre {n}'
+      chapterCount: 'Chapitre {n}',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function frFRLocale() {
       zoomOut: 'Zoom arrière',
       fullScreen: 'Plein écran',
       fullScreenExit: 'Quitter le plein écran',
-      reset: 'Réinitialiser'
-    }
+      reset: 'Réinitialiser',
+    },
   })
 }

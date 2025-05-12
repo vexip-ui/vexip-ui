@@ -15,5 +15,5 @@ export type {
   ViewerActionName,
   ViewerActionLayout,
   ViewerState,
-  ViewerToolbarAction
+  ViewerToolbarAction,
 } from './symbol'

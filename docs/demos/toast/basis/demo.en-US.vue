@@ -11,7 +11,7 @@ export default defineComponent({
   methods: {
     toast() {
       this.$toast.open('Some tips')
-    }
-  }
+    },
+  },
 })
 </script>

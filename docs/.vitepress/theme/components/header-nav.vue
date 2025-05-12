@@ -21,7 +21,7 @@ const menus = computed(() => theme.value.nav as NavMenuItem[])
 
 watchEffect(() => {
   const matchedMenu = menus.value.find(menu =>
-    matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`)
+    matchPath(route.path, `/${locale.value}${menu.activeMatch || menu.link}`),
   )
 
   currentMenu.value = matchedMenu ? matchedMenu.key : ''

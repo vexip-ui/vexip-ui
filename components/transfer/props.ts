@@ -4,7 +4,7 @@ import {
   eventProp,
   iconProp,
   localeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -30,7 +30,7 @@ export const transferProps = buildProps({
   paged: booleanProp,
   filter: {
     type: [Boolean, Function] as PropType<boolean | TransferFilter>,
-    default: null
+    default: null,
   },
   emptyText: String,
   keyConfig: Object as PropType<TransferKeyConfig>,
@@ -45,7 +45,7 @@ export const transferProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   slots: Object as PropType<TransferSlots>,
   onChange: eventProp<(values: Values) => void>(),
-  onSelect: eventProp<SelectHandler>()
+  onSelect: eventProp<SelectHandler>(),
 })
 
 export type TransferProps = ExtractPropTypes<typeof transferProps>

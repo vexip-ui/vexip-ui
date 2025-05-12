@@ -7,7 +7,7 @@ import type {
   TabNavAlign,
   TabNavOptions,
   TabNavPlacement,
-  TabNavSlots
+  TabNavSlots,
 } from './symbol'
 
 export const tabNavProps = buildProps({
@@ -21,7 +21,7 @@ export const tabNavProps = buildProps({
   slots: Object as PropType<TabNavSlots>,
   onChange: eventProp<EventListener<ChangeEvent>>(),
   onAdd: eventProp(),
-  onClose: eventProp<EventListener<ChangeEvent>>()
+  onClose: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type TabNavProps = ExtractPropTypes<typeof tabNavProps>
@@ -32,7 +32,7 @@ export const tabNavItemProps = buildProps({
   disabled: booleanProp,
   icon: iconProp,
   closable: booleanProp,
-  onToggle: eventProp<(active: boolean) => void>()
+  onToggle: eventProp<(active: boolean) => void>(),
 })
 
 export type TabNavItemProps = ExtractPropTypes<typeof tabNavItemProps>

@@ -21,7 +21,7 @@ async function toggleMove(el: HTMLElement, value = 40) {
     height: value * 2,
     right: 0,
     bottom: 0,
-    toJSON: noop
+    toJSON: noop,
   })
 
   const downEvent = new CustomEvent('pointerdown') as any
@@ -47,7 +47,7 @@ async function toggleMove(el: HTMLElement, value = 40) {
 describe('ColorPicker', () => {
   it('render', () => {
     const wrapper = mount(ColorPicker, {
-      props: { visible: true }
+      props: { visible: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-color-picker-vars')
@@ -109,7 +109,7 @@ describe('ColorPicker', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(ColorPicker, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -133,18 +133,18 @@ describe('ColorPicker', () => {
     const wrapper = mount(ColorPicker)
 
     expect(wrapper.find('.vxp-color-picker__popper').attributes('style')).toContain(
-      'display: none;'
+      'display: none;',
     )
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-color-picker__popper').attributes('style') || '').not.toContain(
-      'display: none;'
+      'display: none;',
     )
   })
 
   it('popper will be removed when alive false', async () => {
     const wrapper = mount(ColorPicker, {
-      props: { popperAlive: false }
+      props: { popperAlive: false },
     })
 
     expect(wrapper.find('.vxp-color-picker__popper').exists()).toBe(false)
@@ -170,7 +170,7 @@ describe('ColorPicker', () => {
     const wrapper = mount(() => (
       <ColorPicker prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </ColorPicker>
     ))
@@ -201,7 +201,7 @@ describe('ColorPicker', () => {
     const wrapper = mount(() => (
       <ColorPicker suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </ColorPicker>
     ))
@@ -215,7 +215,7 @@ describe('ColorPicker', () => {
     const wrapper = mount(() => <ColorPicker size={'large'}></ColorPicker>)
 
     expect(wrapper.find('.vxp-color-picker__selector').classes()).toContain(
-      'vxp-color-picker__selector--large'
+      'vxp-color-picker__selector--large',
     )
   })
 
@@ -224,7 +224,7 @@ describe('ColorPicker', () => {
       const wrapper = mount(() => <ColorPicker state={state}></ColorPicker>)
 
       expect(wrapper.find('.vxp-color-picker__selector').classes()).toContain(
-        `vxp-color-picker__selector--${state}`
+        `vxp-color-picker__selector--${state}`,
       )
     })
   })
@@ -266,7 +266,7 @@ describe('ColorPicker', () => {
     const palette = wrapper.find('.vxp-color-picker__palette')
     await toggleMove(palette.element as HTMLElement)
     expect(palette.find('.vxp-color-picker__palette-handler').attributes('style')).toContain(
-      'top: 50%; left: 50%;'
+      'top: 50%; left: 50%;',
     )
   })
 
@@ -295,20 +295,20 @@ describe('ColorPicker', () => {
 
     await toggleMove(alpha.element as HTMLElement)
     expect(alpha.find('.vxp-color-picker__alpha-handler').attributes('style')).toContain(
-      'left: 50%;'
+      'left: 50%;',
     )
   })
 
   it('shortcut', async () => {
     const wrapper = mount(ColorPicker, {
-      props: { visible: true, shortcut: true }
+      props: { visible: true, shortcut: true },
     })
 
     expect(wrapper.find('.vxp-color-picker__shortcuts').exists()).toBe(true)
     expect(wrapper.find('.vxp-color-picker__shortcut-item').exists()).toBe(true)
 
     await wrapper.setProps({
-      shortcut: ['#fff', '#000']
+      shortcut: ['#fff', '#000'],
     })
     expect(wrapper.find('.vxp-color-picker__shortcuts').exists()).toBe(true)
     expect(wrapper.findAll('.vxp-color-picker__shortcut-item').length).toEqual(2)

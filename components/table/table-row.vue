@@ -18,24 +18,24 @@ defineOptions({ name: 'TableRow' })
 const props = defineProps({
   row: {
     type: Object as PropType<TableRowState>,
-    default: () => ({})
+    default: () => ({}),
   },
   index: {
     type: Number,
-    default: null
+    default: null,
   },
   isHead: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isFoot: {
     type: Boolean,
-    default: false
+    default: false,
   },
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
@@ -53,7 +53,7 @@ const expandEl = ref<HTMLElement>()
 
 const instance = reactive({
   el: wrapper,
-  row: toRef(props, 'row')
+  row: toRef(props, 'row'),
 })
 
 const rowKey = computed(() => props.row.key)
@@ -77,13 +77,13 @@ const className = computed(() => {
       [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
       [nh.bem('row', 'checked')]: props.row.checked,
       [nh.bem('row', 'dragging')]: dragging.value,
-      [nh.bem('row', 'drag-over')]: isDragOver.value
+      [nh.bem('row', 'drag-over')]: isDragOver.value,
     },
-    customClass
+    customClass,
   ]
 })
 const maxHeight = computed(() =>
-  Math.max(...Object.values(props.row.cellHeights || {}), state.rowMinHeight)
+  Math.max(...Object.values(props.row.cellHeights || {}), state.rowMinHeight),
 )
 const style = computed(() => {
   let customStyle: any = ''
@@ -101,8 +101,8 @@ const style = computed(() => {
     {
       height: !state.rowHeight ? `${maxHeight.value}px` : `${state.rowHeight}px`,
       minHeight: state.rowHeight ? undefined : `${state.rowMinHeight}px`,
-      border: '0'
-    }
+      border: '0',
+    },
   ]
 })
 const attrs = computed(() => {
@@ -126,7 +126,7 @@ const groupStyle = computed(() => {
     state.heightBITree && !rowType.value && props.index ? state.heightBITree.sum(props.index) : 0
 
   return {
-    transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined
+    transform: offset ? `translate3d(0, ${offset}px, 0)` : undefined,
   }
 })
 const cellDraggable = computed(() => {
@@ -202,7 +202,7 @@ function buildEventPayload(event: Event) {
     row: props.row.data,
     key: props.row.key,
     index: props.index,
-    event
+    event,
   }
 }
 

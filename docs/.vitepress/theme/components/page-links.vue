@@ -34,7 +34,7 @@ const candidates = computed(() => {
     childField: 'items',
     depthFirst: true,
     injectId: false,
-    filter: menu => !!menu.link
+    filter: menu => !!menu.link,
   })
 })
 const index = computed(() => {
@@ -59,7 +59,7 @@ function createLink(item: false | string | AsideMenuItem, fallback?: AsideMenuIt
         link: (typeof item === 'object' ? item.link : undefined) ?? fallback?.link,
         subtext: (typeof item === 'object' ? item.subtext : undefined) ?? fallback?.subtext,
         subI18n: (typeof item === 'object' ? item.subI18n : undefined) ?? fallback?.subI18n,
-        noSub: (typeof item === 'object' ? item.noSub : undefined) ?? fallback?.noSub ?? []
+        noSub: (typeof item === 'object' ? item.noSub : undefined) ?? fallback?.noSub ?? [],
       }
 }
 </script>

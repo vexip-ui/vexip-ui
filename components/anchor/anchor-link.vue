@@ -8,7 +8,7 @@ import {
   reactive,
   ref,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
@@ -32,18 +32,18 @@ const state = reactive({
   el: link,
   to: toRef(props, 'to'),
   active,
-  indent
+  indent,
 })
 
 const linkClass = computed(() => {
   return {
     [nh.be('link')]: true,
-    [nh.bem('link', 'active')]: state.active
+    [nh.bem('link', 'active')]: state.active,
   }
 })
 const linkStyle = computed(() => {
   return {
-    paddingInlineStart: `${baseIndentWidth * indent.value}px`
+    paddingInlineStart: `${baseIndentWidth * indent.value}px`,
   }
 })
 
@@ -54,7 +54,7 @@ if (anchorState) {
     () => anchorState.currentActive,
     value => {
       active.value = value === props.to
-    }
+    },
   )
 
   onMounted(() => {

@@ -9,7 +9,7 @@ import App from './app.vue'
 
 // @ts-expect-error Custom window property
 window.VUE_DEVTOOLS_CONFIG = {
-  defaultSelectedAppId: 'id:repl'
+  defaultSelectedAppId: 'id:repl',
 }
 
 createApp(App).use(install).mount('#app')

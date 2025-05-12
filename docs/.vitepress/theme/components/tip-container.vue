@@ -4,16 +4,16 @@ import { useI18n } from 'vue-i18n'
 defineProps({
   type: {
     type: String,
-    default: 'primary'
+    default: 'primary',
   },
   i18n: {
     type: Boolean,
-    default: false
+    default: false,
   },
   title: {
     type: String,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { t } = useI18n()

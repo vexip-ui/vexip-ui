@@ -19,7 +19,7 @@ export const globalNamespace = computed(() => 'vxp' as Namespace)
  */
 export function configNamespace<N extends string = Namespace>(
   sourceNamespace: MaybeRef<N>,
-  app?: App
+  app?: App,
 ) {
   if (app) {
     const namespace = computed(() => {
@@ -50,7 +50,7 @@ export function useNamespace<N extends string = Namespace>() {
  */
 export function useNameHelper<B extends string, N extends string = Namespace>(
   block: B,
-  namespace: MaybeRef<N> = useNamespace()
+  namespace: MaybeRef<N> = useNamespace(),
 ) {
   return useBEM(block, isVar => (isVar ? 'vxp' : unref(namespace)))
 }

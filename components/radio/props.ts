@@ -6,7 +6,7 @@ import {
   iconProp,
   sizeProp,
   stateProp,
-  valueProp
+  valueProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -26,7 +26,7 @@ export const radioProps = buildProps({
   loadingLock: booleanProp,
   name: String,
   shape: String as PropType<RadioShape>,
-  onChange: eventProp<EventListener<ChangeEvent>>()
+  onChange: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type RadioProps = ExtractPropTypes<typeof radioProps>
@@ -44,7 +44,7 @@ export const radioGroupProps = buildProps({
   loadingLock: booleanProp,
   loadingEffect: String as PropType<IconEffect>,
   shape: String as PropType<RadioGroupShape>,
-  onChange: eventProp<EventListener<ChangeEvent>>()
+  onChange: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type RadioGroupProps = ExtractPropTypes<typeof radioGroupProps>

@@ -17,14 +17,14 @@ describe('SSR for Layout', () => {
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
 
     try {
@@ -35,15 +35,15 @@ describe('SSR for Layout', () => {
             sign-name={'Vexip UI'}
             user={{
               name: 'VexipUI',
-              email: 'email@vexip-ui.com'
+              email: 'email@vexip-ui.com',
             }}
             menus={menus}
           >
             {{
-              main: () => <div class={'main'}></div>
+              main: () => <div class={'main'}></div>,
             }}
           </Layout>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

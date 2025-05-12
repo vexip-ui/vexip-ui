@@ -26,7 +26,7 @@ const className = computed(() => {
     [baseClass]: true,
     [`${baseClass}--disabled`]: props.disabled,
     [`${baseClass}--selected`]: !props.disabled && props.selected,
-    [`${baseClass}--divided`]: props.divided
+    [`${baseClass}--divided`]: props.divided,
   }
 })
 

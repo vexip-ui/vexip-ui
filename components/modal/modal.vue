@@ -13,7 +13,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { getGlobalCount, isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
@@ -32,7 +32,7 @@ const props = useProps('modal', _props, {
   transfer: false,
   active: {
     default: false,
-    static: true
+    static: true,
   },
   width: positionProp,
   height: positionProp,
@@ -52,7 +52,7 @@ const props = useProps('modal', _props, {
   resizable: false,
   onBeforeClose: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   loading: false,
   minWidth: 150,
@@ -68,7 +68,7 @@ const props = useProps('modal', _props, {
   xOffset: 0,
   yOffset: 0,
   disableEsc: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -97,7 +97,7 @@ const rect = reactive({
   bottom: normalizeStyle(props.bottom),
   left: normalizeStyle(props.left),
   width: normalizeStyle(props.width),
-  height: normalizeStyle(props.height)
+  height: normalizeStyle(props.height),
 })
 const maskerRect = reactive({ width: 0, height: 0 })
 const modalRect = reactive({ width: 0, height: 0 })
@@ -131,7 +131,7 @@ const { target: header, moving: dragging } = useMoving({
 
     emitEvent(props.onDragStart, {
       top: state.yStart,
-      left: state.xStart
+      left: state.xStart,
     })
   },
   onMove: state => {
@@ -140,15 +140,15 @@ const { target: header, moving: dragging } = useMoving({
 
     emitEvent(props.onDragMove, {
       top: state.yEnd,
-      left: state.xEnd
+      left: state.xEnd,
     })
   },
   onEnd: state => {
     emitEvent(props.onDragEnd, {
       top: state.yEnd,
-      left: state.xEnd
+      left: state.xEnd,
     })
-  }
+  },
 })
 
 const { target: resizer, moving: resizing } = useMoving({
@@ -176,7 +176,7 @@ const { target: resizer, moving: resizing } = useMoving({
 
     emitEvent(props.onResizeStart, {
       width: state.xStart,
-      height: state.yStart
+      height: state.yStart,
     })
   },
   onMove: state => {
@@ -193,7 +193,7 @@ const { target: resizer, moving: resizing } = useMoving({
     const height = Math.max(state.minHeight as number, state.yEnd)
 
     emitEvent(props.onResizeEnd, { width, height })
-  }
+  },
 })
 
 // const shouldParse = computed(() => !props.draggable && !props.resizable)
@@ -206,8 +206,8 @@ const className = computed(() => {
       [nh.bm('inner')]: props.inner,
       [nh.bm('draggable')]: props.draggable,
       [nh.bm('resizable')]: props.resizable,
-      [nh.bm('undivided')]: props.undivided
-    }
+      [nh.bm('undivided')]: props.undivided,
+    },
   ]
 })
 const wrapperClass = computed(() => {
@@ -216,9 +216,9 @@ const wrapperClass = computed(() => {
     {
       [nh.bem('wrapper', 'closable')]: props.closable,
       [nh.bem('wrapper', 'dragging')]: dragging.value,
-      [nh.bem('wrapper', 'resizing')]: resizing.value
+      [nh.bem('wrapper', 'resizing')]: resizing.value,
     },
-    props.modalClass
+    props.modalClass,
   ]
 })
 const transform = computed(() => {
@@ -244,8 +244,8 @@ const wrapperStyle = computed(() => {
     {
       ...rect,
       height: rect.height !== 'auto' ? rect.height : undefined,
-      transform: transform.value
-    }
+      transform: transform.value,
+    },
   ]
 })
 const transformOrigin = computed(() => {
@@ -303,7 +303,7 @@ for (const style of Object.keys(rect) as Array<keyof typeof rect>) {
     () => props[style],
     value => {
       rect[style] = normalizeStyle(value)
-    }
+    },
   )
 }
 
@@ -311,7 +311,7 @@ watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 watch(currentActive, value => {
   props.hideMask && value && handleResize()
@@ -349,7 +349,7 @@ defineExpose({
   handleResize,
   handleConfirm,
   handleCancel,
-  handleClose
+  handleClose,
 })
 
 const slotParams = shallowReadonly(
@@ -359,8 +359,8 @@ const slotParams = shallowReadonly(
     handleResize,
     handleConfirm,
     handleCancel,
-    handleClose
-  })
+    handleClose,
+  }),
 )
 
 function setActive(active: boolean) {
@@ -433,14 +433,14 @@ function transferRect(withSize = true) {
       top: `${offsetTop}px`,
       right: 'auto',
       bottom: 'auto',
-      left: `${offsetLeft}px`
+      left: `${offsetLeft}px`,
     },
     withSize
       ? {
           width: `${offsetWidth}px`,
-          height: `${offsetHeight}px`
+          height: `${offsetHeight}px`,
         }
-      : {}
+      : {},
   )
 }
 

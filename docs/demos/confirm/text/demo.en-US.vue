@@ -12,7 +12,7 @@ async function confirm() {
     content: 'Are you sure want to uninstall?',
     confirmType: 'success',
     confirmText: 'Uninstall',
-    cancelText: 'Reconsider'
+    cancelText: 'Reconsider',
   })
 
   if (isConfirm) {

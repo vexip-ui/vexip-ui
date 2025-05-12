@@ -13,18 +13,18 @@ const MenuGroup = defineComponent({
   name: 'MenuGroup',
   props: {
     label: String,
-    children: Array as PropType<MenuOptions[]>
+    children: Array as PropType<MenuOptions[]>,
   },
   setup(_props, { slots }) {
     const props = useProps('menuGroup', _props, {
       label: {
         default: '',
-        static: true
+        static: true,
       },
       children: {
         default: () => [],
-        static: true
-      }
+        static: true,
+      },
     })
 
     const menuState = inject(MENU_STATE, null)
@@ -42,7 +42,7 @@ const MenuGroup = defineComponent({
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
-          : `calc(${menuNh.gcv('indent-width')} * ${indent.value})`
+          : `calc(${menuNh.gcv('indent-width')} * ${indent.value})`,
       }
     })
     const onlyShowSlot = computed(() => {
@@ -104,7 +104,7 @@ const MenuGroup = defineComponent({
         </li>
       )
     }
-  }
+  },
 })
 
 // eslint-disable-next-line vue/require-direct-export

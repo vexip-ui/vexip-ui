@@ -16,8 +16,8 @@ export function getGuideConfig(): GuideGroup[] {
         { name: 'vexip-ui', i18n: 'vexipui' },
         { name: 'getting-started', i18n: 'gettingStarted' },
         { name: 'name-origin', i18n: 'nameOrigin' },
-        { name: 'logo-origin', i18n: 'logoOrigin' }
-      ]
+        { name: 'logo-origin', i18n: 'logoOrigin' },
+      ],
     },
     {
       name: 'further',
@@ -28,8 +28,8 @@ export function getGuideConfig(): GuideGroup[] {
         { name: 'ssr', i18n: 'ssr' },
         { name: 'custom-form-control', i18n: 'customFormControl' },
         { name: 'development-guide', i18n: 'developmentGuide' },
-        { name: 'change-icons', i18n: 'changeIcons' }
-      ]
-    }
+        { name: 'change-icons', i18n: 'changeIcons' },
+      ],
+    },
   ]
 }

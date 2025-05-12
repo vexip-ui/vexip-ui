@@ -4,7 +4,7 @@ import {
   buildProps,
   classProp,
   eventProp,
-  styleProp
+  styleProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -33,13 +33,13 @@ export const tooltipProps = buildProps({
   virtual: Object as PropType<TooltipVirtual>,
   shift: {
     type: [Boolean, String] as PropType<boolean | TooltipShift>,
-    default: null
+    default: null,
   },
   onToggle: eventProp<(visible: boolean) => void>(),
   onTipEnter: eventProp(),
   onTipLeave: eventProp(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp()
+  onOutsideClose: eventProp(),
 })
 
 export type TooltipProps = ExtractPropTypes<typeof tooltipProps>

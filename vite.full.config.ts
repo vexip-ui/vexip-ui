@@ -27,7 +27,7 @@ export default defineConfig(async () => {
     logLevel: (logLevel || 'info') as LogLevel,
     publicDir: false,
     define: {
-      __VERSION__: JSON.stringify(pkg.version)
+      __VERSION__: JSON.stringify(pkg.version),
     },
     resolve: {
       alias: [
@@ -38,13 +38,13 @@ export default defineConfig(async () => {
         // },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
-          replacement: resolve(__dirname, 'common/$1/src')
-        }
-      ]
+          replacement: resolve(__dirname, 'common/$1/src'),
+        },
+      ],
     },
     esbuild: {
       drop: ['debugger'],
-      pure: ['console.log']
+      pure: ['console.log'],
     },
     build: {
       outDir,
@@ -53,20 +53,20 @@ export default defineConfig(async () => {
         entry: resolve(__dirname, 'full-lib.ts'),
         formats: ['es', 'cjs', 'iife'],
         name: 'VexipUI',
-        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : format === 'cjs' ? 'cjs' : 'js'}`
+        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : format === 'cjs' ? 'cjs' : 'js'}`,
       },
       rollupOptions: {
         external: ['vue'],
         output: {
           globals: {
-            vue: 'Vue'
-          }
-        }
+            vue: 'Vue',
+          },
+        },
       },
       commonjsOptions: {
-        sourceMap: false
+        sourceMap: false,
       },
-      chunkSizeWarningLimit: 10000
+      chunkSizeWarningLimit: 10000,
     },
     plugins: [
       vue(),
@@ -78,7 +78,7 @@ export default defineConfig(async () => {
           'directives',
           'index.ts',
           'full-lib.ts',
-          'types.d.ts'
+          'types.d.ts',
         ],
         exclude: ['node_modules', 'components/*/tests'],
         outDir,
@@ -89,13 +89,13 @@ export default defineConfig(async () => {
             '@vexip-ui/config': ['common/config/src'],
             'vexip-ui': ['.'],
             'vue-router': ['node_modules/vue-router'],
-            csstype: ['node_modules/csstype']
-          }
+            csstype: ['node_modules/csstype'],
+          },
         },
         copyDtsFiles: true,
         pathsToAliases: false,
-        aliasesExclude: [/^@vexip-ui\/(bem-helper|utils|hooks|config)/]
-      })
-    ]
+        aliasesExclude: [/^@vexip-ui\/(bem-helper|utils|hooks|config)/],
+      }),
+    ],
   }
 })

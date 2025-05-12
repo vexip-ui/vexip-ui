@@ -32,7 +32,7 @@ const values = ref<number[]>([])
 const disabled = ref(false)
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `Option ${i + 1}`,
-  value: i + 1
+  value: i + 1,
 }))
 </script>
 

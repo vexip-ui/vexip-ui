@@ -4,7 +4,7 @@ import {
   eventProp,
   iconProp,
   localeProp,
-  sizeProp
+  sizeProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -34,7 +34,7 @@ export const formProps = buildProps({
   inline: booleanProp,
   gap: [Number, Array] as PropType<number | number[]>,
   justify: String as PropType<RowGridJustify>,
-  align: String as PropType<RowGridAlign>
+  align: String as PropType<RowGridAlign>,
 })
 
 export type FormProps = ExtractPropTypes<typeof formProps>
@@ -54,7 +54,7 @@ export const formItemProps = buildProps({
   errorTransition: String,
   defaultValue: {
     type: [String, Number, Boolean, Object, Array, Function] as PropType<any>,
-    default: null
+    default: null,
   },
   hideErrorTip: booleanProp,
   validateAll: booleanProp,
@@ -74,7 +74,7 @@ export const formItemProps = buildProps({
   lg: mediaProp,
   xl: mediaProp,
   xxl: mediaProp,
-  flex: [Number, String]
+  flex: [Number, String],
 })
 
 export type FormItemProps = ExtractPropTypes<typeof formItemProps>
@@ -100,7 +100,7 @@ export const formSubmitProps = buildProps({
   tag: String,
   onBeforeSubmit: Function as PropType<() => unknown>,
   onSubmit: eventProp(),
-  onError: eventProp<(errors: string[]) => void>()
+  onError: eventProp<(errors: string[]) => void>(),
 })
 
 export type FormSubmitProps = ExtractPropTypes<typeof formSubmitProps>
@@ -126,7 +126,7 @@ export const formResetProps = buildProps({
   block: booleanProp,
   tag: String,
   onBeforeReset: Function as PropType<() => unknown>,
-  onReset: eventProp()
+  onReset: eventProp(),
 })
 
 export type FormResetProps = ExtractPropTypes<typeof formResetProps>

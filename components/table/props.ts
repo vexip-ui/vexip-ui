@@ -5,7 +5,7 @@ import {
   eventProp,
   localeProp,
   sizeProp,
-  styleProp
+  styleProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -43,7 +43,7 @@ import type {
   TableSorterOptions,
   TableSorterProfile,
   TableSummaryOptions,
-  TableTextAlign
+  TableTextAlign,
 } from './symbol'
 
 export const tableProps = buildProps({
@@ -111,7 +111,7 @@ export const tableProps = buildProps({
   noCascaded: booleanProp,
   colResizable: {
     type: [Boolean, String] as PropType<boolean | TableColResizeType>,
-    default: null
+    default: null,
   },
   cellSpan: Function as PropType<TableCellSpanFn>,
   sidePadding: [Number, Array] as PropType<number | number[]>,
@@ -157,7 +157,7 @@ export const tableProps = buildProps({
   onFootLeave: eventProp<(payload: TableFootPayload) => void>(),
   onFootClick: eventProp<(payload: TableFootPayload) => void>(),
   onFootDblclick: eventProp<(payload: TableFootPayload) => void>(),
-  onFootContextmenu: eventProp<(payload: TableFootPayload) => void>()
+  onFootContextmenu: eventProp<(payload: TableFootPayload) => void>(),
 })
 
 export type TableProps = ExtractPropTypes<typeof tableProps>
@@ -172,7 +172,7 @@ export const tableColumnProps = buildProps({
   accessor: Function as PropType<Accessor>,
   fixed: {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
-    default: null
+    default: null,
   },
   class: classProp,
   style: styleProp,
@@ -182,7 +182,7 @@ export const tableColumnProps = buildProps({
   filter: Object as PropType<TableFilterOptions<any, any>>,
   sorter: {
     type: [Boolean, Object] as PropType<boolean | TableSorterOptions<any>>,
-    default: null
+    default: null,
   },
   renderer: Function as PropType<ColumnRenderFn>,
   headRenderer: Function as PropType<HeadRenderFn>,
@@ -202,7 +202,7 @@ export const tableColumnProps = buildProps({
   summaryRenderer: Function as PropType<ColumnSummaryRenderFn>,
   indented: booleanProp,
   formatter: Function as PropType<(value: any) => unknown>,
-  singleSelect: booleanProp
+  singleSelect: booleanProp,
 })
 
 export type TableColumnProps = ExtractPropTypes<typeof tableColumnProps>
@@ -224,13 +224,13 @@ export const tableColumnGroupProps = buildProps({
   name: String,
   fixed: {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
-    default: null
+    default: null,
   },
   order: Number,
   ellipsis: booleanProp,
   textAlign: String as PropType<TableTextAlign>,
   renderer: Function as PropType<() => any>,
-  children: Array as PropType<TableColumnRawOptions[]>
+  children: Array as PropType<TableColumnRawOptions[]>,
 })
 
 export type TableColumnGroupProps = ExtractPropTypes<typeof tableColumnGroupProps>
@@ -246,7 +246,7 @@ export const tableSummaryProps = buildProps({
   order: Number,
   above: booleanProp,
   meta: Object as PropType<any>,
-  renderer: Function as PropType<SummaryRenderFn>
+  renderer: Function as PropType<SummaryRenderFn>,
 })
 
 export type TableSummaryProps = ExtractPropTypes<typeof tableSummaryProps>

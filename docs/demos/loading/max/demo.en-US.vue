@@ -31,7 +31,7 @@ function doLoading(percent: number, maxPercent: number, state: LoadingState = 'd
   Loading.open({
     percent,
     maxPercent,
-    state: percent === 100 ? state : 'default'
+    state: percent === 100 ? state : 'default',
   })
 }
 </script>

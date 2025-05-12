@@ -14,7 +14,7 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import {
@@ -25,7 +25,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { createSlotRender, useModifier, useRtl } from '@vexip-ui/hooks'
 import { boundRange, decide, isClient, isNull, range } from '@vexip-ui/utils'
@@ -34,7 +34,7 @@ import { paginationProps } from './props'
 const enum PaginationMode {
   LEFT = 'left',
   CENTER = 'center',
-  RIGHT = 'right'
+  RIGHT = 'right',
 }
 
 export default defineComponent({
@@ -48,39 +48,39 @@ export default defineComponent({
       total: {
         default: 0,
         validator: value => value >= 0,
-        static: true
+        static: true,
       },
       noBorder: false,
       background: false,
       pageSize: {
         default: 10,
-        validator: value => value > 0
+        validator: value => value > 0,
       },
       sizeOptions: () => [10, 20, 50, 100],
       itemCount: {
         default: 7,
-        validator: value => Number.isInteger(value) && value > 6
+        validator: value => Number.isInteger(value) && value > 6,
       },
       active: {
         default: 1,
         validator: value => value > 0,
-        static: true
+        static: true,
       },
       disabled: false,
       disableItem: {
         default: () => false,
-        isFunc: true
+        isFunc: true,
       },
       turnPageCount: 5,
       itemUnit: null,
       plugins: {
         default: () => [],
-        validator: value => Array.isArray(value)
+        validator: value => Array.isArray(value),
       },
       noTitle: false,
       itemTag: 'li',
       listTag: null,
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const { isRtl } = useRtl()
@@ -118,7 +118,7 @@ export default defineComponent({
 
                   target.focus()
                 }
-              }
+              },
             ],
             [
               () => modifier.enter || modifier.space,
@@ -133,15 +133,15 @@ export default defineComponent({
                     activeEl?.focus()
                   }
                 }
-              }
-            ]
+              },
+            ],
           ],
           {
             beforeMatchAny: () => event.preventDefault(),
-            afterMatchAny: modifier.resetAll
-          }
+            afterMatchAny: modifier.resetAll,
+          },
         )
-      }
+      },
     })
 
     const className = computed(() => {
@@ -152,7 +152,7 @@ export default defineComponent({
         [nh.bm(props.size)]: props.size !== 'default',
         [nh.bm('background')]: props.background,
         [nh.bm('no-border')]: props.noBorder,
-        [nh.bm('disabled')]: props.disabled
+        [nh.bm('disabled')]: props.disabled,
       }
     })
     const pagerCount = computed(() => {
@@ -205,7 +205,7 @@ export default defineComponent({
       return props.sizeOptions.map(size => {
         return {
           value: size,
-          label: `${size} ${locale.value.perPage}`
+          label: `${size} ${locale.value.perPage}`,
         }
       })
     })
@@ -216,7 +216,7 @@ export default defineComponent({
       return {
         total: plugins.findIndex(p => p === 'total') - pagerPosition,
         size: plugins.findIndex(p => p === 'size') - pagerPosition,
-        jump: plugins.findIndex(p => p === 'jump') - pagerPosition
+        jump: plugins.findIndex(p => p === 'jump') - pagerPosition,
       }
     })
     const jumpInputWidth = computed(() => {
@@ -237,7 +237,7 @@ export default defineComponent({
       () => props.active,
       value => {
         changeActive(value, false)
-      }
+      },
     )
     watch(() => props.itemCount, computePagers)
     watch(pagerCount, computePagers)
@@ -245,7 +245,7 @@ export default defineComponent({
       () => props.pageSize,
       value => {
         currentPageSize.value = value
-      }
+      },
     )
     watch(currentPageSize, (value, prevValue) => {
       emit('update:page-size', value)
@@ -279,9 +279,9 @@ export default defineComponent({
       itemElList.push(
         ...Array.from(
           wrapper.value.querySelectorAll<HTMLElement>(
-            `${nh.cbe('item')}:not(${nh.cbem('item', 'disabled')})`
-          )
-        )
+            `${nh.cbe('item')}:not(${nh.cbem('item', 'disabled')})`,
+          ),
+        ),
       )
     })
 
@@ -453,7 +453,7 @@ export default defineComponent({
           class={[
             nh.be('item'),
             nh.bem('item', 'prev'),
-            disabled ? nh.bem('item', 'disabled') : ''
+            disabled ? nh.bem('item', 'disabled') : '',
           ]}
           title={props.noTitle ? undefined : locale.value.prevPage}
           role={'menuitem'}
@@ -467,7 +467,7 @@ export default defineComponent({
           {renderSlot(slots, 'prev', { disabled }, () => [
             <Renderer renderer={props.slots.prev} data={{ disabled }}>
               <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-            </Renderer>
+            </Renderer>,
           ])}
         </Tag>
       )
@@ -483,7 +483,7 @@ export default defineComponent({
           class={[
             nh.be('item'),
             nh.bem('item', 'next'),
-            disabled ? nh.bem('item', 'disabled') : ''
+            disabled ? nh.bem('item', 'disabled') : '',
           ]}
           title={props.noTitle ? undefined : locale.value.nextPage}
           role={'menuitem'}
@@ -497,7 +497,7 @@ export default defineComponent({
           {renderSlot(slots, 'next', { disabled }, () => [
             <Renderer renderer={props.slots.next} data={{ disabled }}>
               <Icon {...arrow} scale={+(arrow.scale || 1)}></Icon>
-            </Renderer>
+            </Renderer>,
           ])}
         </Tag>
       )
@@ -514,7 +514,7 @@ export default defineComponent({
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'more')]: true,
-            [nh.bem('item', 'disabled')]: disabled
+            [nh.bem('item', 'disabled')]: disabled,
           }}
           title={props.noTitle ? undefined : prevTurnPageTitle.value}
           role={'menuitem'}
@@ -558,7 +558,7 @@ export default defineComponent({
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'more')]: true,
-            [nh.bem('item', 'disabled')]: disabled
+            [nh.bem('item', 'disabled')]: disabled,
           }}
           title={props.noTitle ? undefined : nextTurnPageTitle.value}
           role={'menuitem'}
@@ -601,7 +601,7 @@ export default defineComponent({
           class={{
             [nh.be('item')]: true,
             [nh.bem('item', 'disabled')]: disabled,
-            [nh.bem('item', 'active')]: active
+            [nh.bem('item', 'active')]: active,
           }}
           title={props.noTitle ? undefined : page}
           role={'menuitemradio'}
@@ -616,7 +616,7 @@ export default defineComponent({
           {renderSlot(slots, 'item', { page, disabled, active }, () => [
             <Renderer renderer={props.slots.item} data={{ page, disabled, active }}>
               {page}
-            </Renderer>
+            </Renderer>,
           ])}
         </Tag>
       )
@@ -632,7 +632,7 @@ export default defineComponent({
         >
           {`${locale.value.total} ${getCountWord(
             props.itemUnit ?? locale.value.itemUnit,
-            props.total
+            props.total,
           )}`}
         </div>
       )
@@ -709,5 +709,5 @@ export default defineComponent({
         </div>
       )
     }
-  }
+  },
 })

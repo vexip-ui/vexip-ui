@@ -31,7 +31,7 @@ const data = [
   { id: 11, label: 'Node 11', parent: 8 },
   { id: 12, label: 'Node 12', parent: 5 },
   { id: 13, label: 'Node 13', parent: 7 },
-  { id: 15, label: 'Node 15', parent: 4 }
+  { id: 15, label: 'Node 15', parent: 4 },
 ]
 
 for (const item of data) {

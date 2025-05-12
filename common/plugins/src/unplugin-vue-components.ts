@@ -69,7 +69,7 @@ function queryVersion() {
     if ((lowerVersion = compare(version!, '2.1.10', '<'))) {
       warnOnce(
         "[vexip-ui:plugins] style has been refactored in vexip-ui@2.1.10, you'd better " +
-          'upgrade vexip-ui to support import style via esm.'
+          'upgrade vexip-ui to support import style via esm.',
       )
     }
 
@@ -122,7 +122,7 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
 
     warnOnce(
       "[vexip-ui:plugins] 'fullStyle' requires vexip-ui@2.2.8 or newer, you'd better " +
-        'upgrade vexip-ui to support the feature.'
+        'upgrade vexip-ui to support the feature.',
     )
   }
 
@@ -137,13 +137,13 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
       return [
         'vexip-ui/style/preset.scss',
         ...(importDarkTheme ? ['vexip-ui/style/dark/preset.scss'] : []),
-        `vexip-ui/style/${name}.scss`
+        `vexip-ui/style/${name}.scss`,
       ]
     } else if (importStyle === true || importStyle === 'css') {
       return [
         'vexip-ui/css/preset.css',
         ...(importDarkTheme ? ['vexip-ui/themes/dark/index.css'] : []),
-        `vexip-ui/css/${name}.css`
+        `vexip-ui/css/${name}.css`,
       ]
     }
 
@@ -159,7 +159,7 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
 
 function resolveComponent(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!components) return
 
@@ -176,13 +176,13 @@ function resolveComponent(
   return {
     name,
     from: 'vexip-ui',
-    sideEffects: getSideEffects(name, options)
+    sideEffects: getSideEffects(name, options),
   }
 }
 
 function resolveDirective(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!options.directives || !directives) return
 
@@ -197,10 +197,10 @@ function resolveDirective(
     sideEffects: relatedComponents.length
       ? [
           ...new Set(
-            relatedComponents.map(component => getSideEffects(component, options) || []).flat()
-          )
+            relatedComponents.map(component => getSideEffects(component, options) || []).flat(),
+          ),
         ]
-      : undefined
+      : undefined,
   }
 }
 
@@ -209,7 +209,7 @@ const firstNumberRE = /^I[0-9].*/
 
 function resolveIconComponent(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!options.resolveIcon) return
 
@@ -229,7 +229,7 @@ function resolveIconComponent(
 
   return {
     name,
-    from: '@vexip-ui/icons'
+    from: '@vexip-ui/icons',
   }
 }
 
@@ -251,7 +251,7 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
         !components && queryMetaData()
 
         return resolveComponent(name, options)
-      }
+      },
     },
     {
       type: 'directive',
@@ -260,11 +260,11 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
         !directives && queryMetaData()
 
         return resolveDirective(name, options)
-      }
+      },
     },
     {
       type: 'component',
-      resolve: name => resolveIconComponent(name, options)
-    }
+      resolve: name => resolveIconComponent(name, options),
+    },
   ]
 }

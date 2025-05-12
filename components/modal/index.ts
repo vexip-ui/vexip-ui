@@ -86,15 +86,15 @@ export function useModal(options: Partial<ModalOptions> = {}): () => Promise<voi
         transfer: false,
         autoRemove: false,
         loading: unref(loading),
-        onHide: Array.isArray(onHide) ? [...onHide, destroy] : onHide ? [onHide, destroy] : destroy
+        onHide: Array.isArray(onHide) ? [...onHide, destroy] : onHide ? [onHide, destroy] : destroy,
       },
       {
         header: headerRenderer,
         title: titleRenderer,
         close: closeRenderer,
         default: renderer,
-        footer: footerRenderer
-      }
+        footer: footerRenderer,
+      },
     )
   }
 

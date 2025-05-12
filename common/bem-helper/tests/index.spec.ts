@@ -25,7 +25,7 @@ describe('transform', () => {
     expect(bem.cv('color')).toEqual('--button-color')
     expect(bem.cvm({ color: '#333', 'bg-color': '#fff' })).toMatchObject({
       '--button-color': '#333',
-      '--button-bg-color': '#fff'
+      '--button-bg-color': '#fff',
     })
     expect(bem.gcv('color')).toEqual('var(--button-color)')
     expect(bem.scv('color', '#444')).toEqual('--button-color: #444;')
@@ -49,14 +49,14 @@ describe('transform', () => {
     expect(bem.cv('color')).toEqual('--vxp-button-color')
     expect(bem.cvm({ color: '#333', 'bg-color': '#fff' })).toMatchObject({
       '--vxp-button-color': '#333',
-      '--vxp-button-bg-color': '#fff'
+      '--vxp-button-bg-color': '#fff',
     })
     expect(bem.gcv('color')).toEqual('var(--vxp-button-color)')
     expect(bem.scv('color', '#444')).toEqual('--vxp-button-color: #444;')
     expect(bem.nv('color')).toEqual('--vxp-color')
     expect(bem.nvm({ color: '#333', 'bg-color': '#fff' })).toMatchObject({
       '--vxp-color': '#333',
-      '--vxp-bg-color': '#fff'
+      '--vxp-bg-color': '#fff',
     })
     expect(bem.gnv('color')).toEqual('var(--vxp-color)')
     expect(bem.snv('color', '#444')).toEqual('--vxp-color: #444;')

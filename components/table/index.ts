@@ -18,7 +18,7 @@ export {
   defineColumn,
   defineColumns,
   defineSummary,
-  defineSummaries
+  defineSummaries,
 } from './helper'
 
 export type TableExposed = ComponentPublicInstance & InstanceType<typeof Table>
@@ -52,5 +52,5 @@ export type {
   TableColResizePayload,
   TableCellSpanFn,
   TableSummaryOptions,
-  TableSummaryData
+  TableSummaryData,
 } from './symbol'

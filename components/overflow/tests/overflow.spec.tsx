@@ -11,8 +11,8 @@ describe('Option', () => {
       props: { items },
       slots: {
         default: ({ item }: { item: { index: number } }) => <div class={'item'}>{item.index}</div>,
-        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>
-      }
+        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>,
+      },
     })
     const wrapperEl = wrapper.element
     const itemList = wrapper.findAll('.item')
@@ -24,13 +24,13 @@ describe('Option', () => {
 
     Object.defineProperty(wrapperEl, 'offsetWidth', {
       configurable: true,
-      get: () => 30
+      get: () => 30,
     })
 
     itemList.forEach(item => {
       Object.defineProperty(item.element, 'offsetWidth', {
         configurable: true,
-        get: () => 10
+        get: () => 10,
       })
     })
     ;(wrapper.vm as any).refresh()
@@ -58,8 +58,8 @@ describe('Option', () => {
               {item.index}
             </div>
           )),
-        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>
-      }
+        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>,
+      },
     })
     const wrapperEl = wrapper.element
     const itemList = wrapper.findAll('.item')
@@ -71,13 +71,13 @@ describe('Option', () => {
 
     Object.defineProperty(wrapperEl, 'offsetWidth', {
       configurable: true,
-      get: () => 30
+      get: () => 30,
     })
 
     itemList.forEach(item => {
       Object.defineProperty(item.element, 'offsetWidth', {
         configurable: true,
-        get: () => 10
+        get: () => 10,
       })
     })
     ;(wrapper.vm as any).refresh()
@@ -101,8 +101,8 @@ describe('Option', () => {
       props: { items, maxCount: 3 },
       slots: {
         default: ({ item }: { item: { index: number } }) => <div class={'item'}>{item.index}</div>,
-        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>
-      }
+        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>,
+      },
     })
     const itemList = wrapper.findAll('.item')
 

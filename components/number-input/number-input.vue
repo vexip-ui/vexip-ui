@@ -14,7 +14,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import {
   boundRange,
@@ -26,7 +26,7 @@ import {
   plus,
   throttle,
   toFixed,
-  toNumber
+  toNumber,
 } from '@vexip-ui/utils'
 import { numberInputProps } from './props'
 
@@ -49,7 +49,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<number>(focus)
 
 const _props = defineProps(numberInputProps)
@@ -64,11 +64,11 @@ const props = useProps('numberInput', _props, {
   // 格式化后显示
   formatter: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   min: -Infinity,
   max: Infinity,
@@ -98,9 +98,9 @@ const props = useProps('numberInput', _props, {
   controlAttrs: null,
   name: {
     default: '',
-    static: true
+    static: true,
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -138,7 +138,7 @@ useModifier({
 
       changeStep(
         modifier.up ? 'plus' : 'minus',
-        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined,
       )
       modifier.resetAll()
     } else if (modifier.enter) {
@@ -154,7 +154,7 @@ useModifier({
     if (event.key === 'Enter') {
       handleEnter()
     }
-  }
+  },
 })
 
 const idIndex = `${getGlobalCount()}`
@@ -200,8 +200,8 @@ const className = computed(() => {
       [nh.bm(props.state)]: props.state !== 'default',
       [nh.bm(`control-${display}`)]: display !== 'right',
       [nh.bm('control-fade')]: fade,
-      [nh.bm('out-of-range')]: outOfRange.value
-    }
+      [nh.bm('out-of-range')]: outOfRange.value,
+    },
   ]
 })
 const hasPrefix = computed(() => {
@@ -250,7 +250,7 @@ watch(
       parseValue()
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(inputting, value => {
   if (!value) {
@@ -273,7 +273,7 @@ defineExpose({
   wrapper,
   input: control,
   focus,
-  blur: () => control.value?.blur()
+  blur: () => control.value?.blur(),
 })
 
 function setInputValue(value?: number | string | null) {
@@ -356,7 +356,7 @@ function plusNumber(event: PointerEvent) {
   !focused.value && focus()
   changeStep(
     'plus',
-    event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+    event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined,
   )
 }
 
@@ -364,7 +364,7 @@ function minusNumber(event: PointerEvent) {
   !focused.value && focus()
   changeStep(
     'minus',
-    event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+    event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined,
   )
 }
 

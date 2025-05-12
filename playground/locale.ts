@@ -12,7 +12,7 @@ const config = {
     other: 'Other',
     apply: 'Apply',
     loading: 'Loading #{0}...',
-    format: 'Format codes'
+    format: 'Format codes',
   },
   zh: {
     doDelete: '确定要删除 #{0} 吗？',
@@ -27,8 +27,8 @@ const config = {
     other: '其他',
     apply: '应用',
     loading: '加载 #{0} 中...',
-    format: '格式化代码'
-  }
+    format: '格式化代码',
+  },
 }
 
 type Language = keyof typeof config

@@ -12,5 +12,5 @@ export const resultTypes = Object.freeze<ResultType[]>([
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])

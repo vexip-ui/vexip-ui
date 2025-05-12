@@ -53,5 +53,5 @@ export const objectFitValues = Object.freeze<ImageObjectFit[]>([
   'contain',
   'cover',
   'none',
-  'scale-down'
+  'scale-down',
 ])

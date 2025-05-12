@@ -49,13 +49,13 @@ const currentStep = ref(1)
 const steps = [
   { text: 'First description.' },
   { text: 'Second description.' },
-  { text: 'Last description.' }
+  { text: 'Last description.' },
 ]
 
 function getStateClass(index: number) {
   return {
     finished: currentStep.value > index,
-    'in-progress': currentStep.value === index
+    'in-progress': currentStep.value === index,
   }
 }
 </script>

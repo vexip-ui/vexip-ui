@@ -15,12 +15,12 @@ export default defineConfig({
       { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
       {
         find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
-        replacement: resolve(__dirname, 'common/$1/src')
-      }
-    ]
+        replacement: resolve(__dirname, 'common/$1/src'),
+      },
+    ],
   },
   optimizeDeps: {
-    include: ['@vexip-ui/icons']
+    include: ['@vexip-ui/icons'],
   },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],
@@ -31,12 +31,12 @@ export default defineConfig({
       exclude: [
         ...dirs.filter(f => f !== 'components').map(f => `${f}/**`),
         '**/*.style.ts',
-        '**/*.css.ts'
+        '**/*.css.ts',
       ],
       reporter: ['text', 'html'],
-      extension: ['ts', 'tsx', 'vue']
+      extension: ['ts', 'tsx', 'vue'],
     },
-    testTimeout: 10000
+    testTimeout: 10000,
   },
-  plugins: [vue(), vueJsx()]
+  plugins: [vue(), vueJsx()],
 })

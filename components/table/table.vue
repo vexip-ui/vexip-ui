@@ -13,7 +13,7 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import TableColumn from './table-column'
@@ -33,7 +33,7 @@ import {
   nextFrameOnce,
   noop,
   removeArrayItem,
-  toNumber
+  toNumber,
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
@@ -60,7 +60,7 @@ import type {
   TableRowPayload,
   TableRowState,
   TableSlots,
-  TableSummaryOptions
+  TableSummaryOptions,
 } from './symbol'
 
 const defaultKeyConfig: Required<TableKeyConfig> = {
@@ -69,7 +69,7 @@ const defaultKeyConfig: Required<TableKeyConfig> = {
   checked: 'checked',
   height: 'height',
   expanded: 'expanded',
-  treeExpanded: 'treeExpanded'
+  treeExpanded: 'treeExpanded',
 }
 
 defineOptions({ name: 'Table' })
@@ -79,15 +79,15 @@ const props = useProps('table', _props, {
   locale: null,
   columns: {
     default: () => [],
-    static: true
+    static: true,
   },
   summaries: {
     default: () => [],
-    static: true
+    static: true,
   },
   data: {
     default: () => [],
-    static: true
+    static: true,
   },
   width: null,
   height: null,
@@ -104,32 +104,32 @@ const props = useProps('table', _props, {
   rowDraggable: false,
   rowHeight: {
     default: null,
-    validator: value => value > 0
+    validator: value => value > 0,
   },
   rowMinHeight: {
     default: 36,
-    validator: value => value > 0
+    validator: value => value > 0,
   },
   virtual: false,
   bufferCount: {
     default: 5,
-    validator: value => value >= 0
+    validator: value => value >= 0,
   },
   scrollClass: () => ({}),
   expandRenderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   currentPage: {
     default: 1,
     validator: value => value > 0,
-    static: true
+    static: true,
   },
   pageSize: 0,
   transparent: false,
   tooltipTheme: {
     default: 'dark',
-    validator: value => ['light', 'dark'].includes(value)
+    validator: value => ['light', 'dark'].includes(value),
   },
   tooltipWidth: 500,
   singleSorter: false,
@@ -152,18 +152,18 @@ const props = useProps('table', _props, {
   colResizable: false,
   cellSpan: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   sidePadding: 0,
   icons: () => ({}),
   borderWidth: 1,
   dataFilter: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   noTransition: false,
   ellipsis: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 // only for dnd end payload
@@ -243,13 +243,13 @@ const syncToStoreProps = [
   'sidePadding',
   'borderWidth',
   'dataFilter',
-  'ellipsis'
+  'ellipsis',
 ] as const
 
 const store = useStore({
   ...(syncToStoreProps.reduce(
     (prev, current) => ((prev[current] = props[current]), prev),
-    {} as any
+    {} as any,
   ) as StoreOptions),
   columns: allColumns.value,
   summaries: allSummaries.value,
@@ -262,7 +262,7 @@ const store = useStore({
   colResizable: props.colResizable === true ? 'lazy' : props.colResizable,
   sidePadding: Array.isArray(props.sidePadding)
     ? props.sidePadding
-    : [props.sidePadding, props.sidePadding]
+    : [props.sidePadding, props.sidePadding],
 })
 
 provide(TABLE_STORE, store)
@@ -295,7 +295,7 @@ provide(TABLE_ACTIONS, {
   updateColumns: () => debounceMinor(updateColumns),
   setColumnProp,
   updateSummaries: () => debounceMinor(updateSummaries),
-  setSummaryProp
+  setSummaryProp,
 })
 provide(TABLE_SLOTS, slots as Slots)
 
@@ -318,7 +318,7 @@ const className = computed(() => {
     [nh.bm('locked')]: mergedLocked.value,
     [nh.bm('above-foot')]: state.aboveSummaries.length,
     [nh.bm('below-foot')]: state.belowSummaries.length,
-    [nh.bm('using-bar')]: state.barScrolling
+    [nh.bm('using-bar')]: state.barScrolling,
   }
 })
 const style = computed(() => {
@@ -329,7 +329,7 @@ const style = computed(() => {
     [nh.cv('row-indent-width')]:
       typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
     [nh.cv('b-width')]: `${props.borderWidth}px`,
-    [nh.cv('expanded-width')]: `${bodyWidth.value}px`
+    [nh.cv('expanded-width')]: `${bodyWidth.value}px`,
   }
 
   if (padLeft) {
@@ -407,7 +407,7 @@ const {
   refreshRowDepth,
   queryRow,
   handleCheck,
-  setTreeExpanded
+  setTreeExpanded,
 } = mutations
 
 watch(allColumns, updateColumns)
@@ -425,7 +425,7 @@ watch(
     setVirtual(value)
     setData(props.data)
     refreshPercentScroll()
-  }
+  },
 )
 watch(
   keyConfig,
@@ -433,14 +433,14 @@ watch(
     setKeyConfig(config)
     setData(props.data)
   },
-  { deep: true }
+  { deep: true },
 )
 watch(
   () => props.disabledTree,
   value => {
     setDisabledTree(value)
     setData(props.data)
-  }
+  },
 )
 watch([() => props.rowHeight, () => props.rowMinHeight], () => {
   refresh()
@@ -520,7 +520,7 @@ defineExpose({
   getSelected,
   getData: getCurrentData,
   selectRow: setRowChecked,
-  treeExpandRow: setRowTreeExpanded
+  treeExpandRow: setRowTreeExpanded,
 })
 
 function forceRefreshData(data = props.data) {
@@ -608,7 +608,7 @@ function handleXScroll({ clientX, percentX }: { clientX: number, percentX: numbe
   emitEvent(props.onScroll, {
     type: 'horizontal',
     client: clientX,
-    percent: percentX
+    percent: percentX,
   })
 }
 
@@ -733,7 +733,7 @@ function emitRowFilter() {
         name: column.name,
         key: column.key,
         meta: column.meta!,
-        active: filters.get(key)!.active!
+        active: filters.get(key)!.active!,
       }
     })
 
@@ -741,7 +741,7 @@ function emitRowFilter() {
   emitEvent(
     props.onRowFilter,
     profiles,
-    getters.filteredData.map(row => row.data)
+    getters.filteredData.map(row => row.data),
   )
 }
 
@@ -759,7 +759,7 @@ function emitRowSort() {
         key: column.key,
         meta: column.meta!,
         type: sorter.type!,
-        order: sorter.order
+        order: sorter.order,
       }
     })
 
@@ -767,7 +767,7 @@ function emitRowSort() {
   emitEvent(
     props.onRowSort,
     profiles,
-    getters.sortedData.map(row => row.data)
+    getters.sortedData.map(row => row.data),
   )
 }
 
@@ -785,7 +785,7 @@ function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
     tableRect: wrapper.value!.getBoundingClientRect(),
     willDropRow: null,
     dropType: DropType.BEFORE,
-    dropped: false
+    dropped: false,
   }
 
   setDragging(true)
@@ -859,7 +859,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
 
     if (!parent) {
       parent = {
-        children: state.treeRowData
+        children: state.treeRowData,
       } as TableRowState
     }
 
@@ -889,7 +889,7 @@ function handleRowDrop(rowInstance: TableRowInstance, event: DragEvent) {
 
     if (!parent) {
       parent = {
-        children: state.treeRowData
+        children: state.treeRowData,
       } as TableRowState
     }
 
@@ -960,7 +960,7 @@ function computeRenderRows(force = false) {
 
   const viewHeight = Math.max(
     Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0),
-    bodyMinHeight.value
+    bodyMinHeight.value,
   )
 
   if (!viewHeight) {
@@ -1016,7 +1016,7 @@ function refreshPercentScroll() {
 
     yScrollPercent.value = Math.max(
       Math.min((bodyYScroll / (totalHeight - (bodyScrollHeight.value ?? 0) || 1)) * 100, 100),
-      0
+      0,
     )
     syncBarScroll()
     nextTick(() => {

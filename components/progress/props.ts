@@ -12,7 +12,7 @@ export const progressProps = buildProps({
   precision: Number,
   activated: booleanProp,
   strokeColor: [String, Array, Function] as PropType<ProgressStrokeColor>,
-  slots: Object as PropType<ProgressSlots>
+  slots: Object as PropType<ProgressSlots>,
 })
 
 export type ProgressProps = ExtractPropTypes<typeof progressProps>

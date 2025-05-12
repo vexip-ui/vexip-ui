@@ -52,7 +52,7 @@ const remoteOptions: Option[] = [
   { label: 'Jingdezhen', value: 19 },
   { label: 'Xinyu', value: 20 },
   { label: 'Yichun', value: 21 },
-  { label: 'Guangzhou', value: 22 }
+  { label: 'Guangzhou', value: 22 },
 ]
 
 const value = ref<number>()

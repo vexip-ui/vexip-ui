@@ -15,52 +15,52 @@ defineOptions({ name: 'SliderTrigger' })
 const props = defineProps({
   value: {
     type: Number,
-    default: 0
+    default: 0,
   },
   tipTransfer: {
     type: [Boolean, String],
-    default: false
+    default: false,
   },
   hideTip: {
     type: Boolean,
-    default: false
+    default: false,
   },
   vertical: {
     type: Boolean,
-    default: false
+    default: false,
   },
   min: {
     type: Number,
-    default: 0
+    default: 0,
   },
   max: {
     type: Number,
-    default: 100
+    default: 100,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   reverse: {
     type: Boolean,
-    default: false
+    default: false,
   },
   sliding: {
     type: Boolean,
-    default: false
+    default: false,
   },
   tipHover: {
     type: Boolean,
-    default: false
+    default: false,
   },
   tipProps: {
     type: Object as PropType<SliderTipProps>,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 })
 
 const emit = defineEmits(['key-minus', 'key-plus'])
@@ -96,7 +96,7 @@ const { target: wrapper } = useModifier({
         emit('key-plus', extraType)
       }
     }
-  }
+  },
 })
 
 const tipClass = computed(() => [nh.be('tip'), props.tipProps?.tipClass])

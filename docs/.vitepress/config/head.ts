@@ -57,6 +57,6 @@ export function getHeadConfig(): HeadConfig[] {
     ['script', {}, LANG_SCRIPT],
     ['script', {}, GOOGLE_MANAGER],
     ['script', {}, GOOGLE_GTAG],
-    ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-YDXQW4BVVX' }]
+    ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-YDXQW4BVVX' }],
   ]
 }

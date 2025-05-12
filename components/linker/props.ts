@@ -11,7 +11,7 @@ export const linkerProps = buildProps({
   underline: booleanProp,
   disabled: booleanProp,
   target: String,
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type LinkerProps = ExtractPropTypes<typeof linkerProps>

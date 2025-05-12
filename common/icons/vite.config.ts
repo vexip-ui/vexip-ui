@@ -12,7 +12,7 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
 
 const externalPkgs = ['@vue'].concat(
   Object.keys(pkg.dependencies || {}),
-  Object.keys(pkg.peerDependencies || {})
+  Object.keys(pkg.peerDependencies || {}),
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
@@ -24,7 +24,7 @@ export default defineConfig(async (): Promise<UserConfig> => {
       sourcemap: false,
       lib: {
         entry: resolve(__dirname, 'vue/index.ts'),
-        name: 'VexipUIIcon'
+        name: 'VexipUIIcon',
       },
       rollupOptions: {
         input: [resolve(__dirname, 'vue/index.ts')],
@@ -35,21 +35,21 @@ export default defineConfig(async (): Promise<UserConfig> => {
             preserveModules: true,
             preserveModulesRoot: resolve(__dirname, 'vue'),
             dir: 'lib',
-            entryFileNames: '[name].js'
+            entryFileNames: '[name].js',
           },
           {
             format: 'es',
             preserveModules: true,
             preserveModulesRoot: resolve(__dirname, 'vue'),
             dir: 'es',
-            entryFileNames: '[name].mjs'
-          }
-        ]
+            entryFileNames: '[name].mjs',
+          },
+        ],
       },
       commonjsOptions: {
-        sourceMap: false
-      }
+        sourceMap: false,
+      },
     },
-    plugins: [vue()]
+    plugins: [vue()],
   }
 })

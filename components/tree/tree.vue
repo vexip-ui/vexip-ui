@@ -12,7 +12,7 @@ import {
   ref,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import TreeNode from './tree-node.vue'
@@ -30,7 +30,7 @@ import {
   queryAll,
   removeArrayItem,
   transformTree,
-  walkTree
+  walkTree,
 } from '@vexip-ui/utils'
 import { treeProps } from './props'
 import { useCascadedChecked } from './hooks'
@@ -45,7 +45,7 @@ import type {
   TreeNodeInstance,
   TreeNodeProps,
   TreeNodeState,
-  TreeSlots
+  TreeSlots,
 } from './symbol'
 
 defineOptions({ name: 'Tree' })
@@ -54,11 +54,11 @@ const _props = defineProps(treeProps)
 const props = useProps('tree', _props, {
   arrow: {
     default: 'auto',
-    validator: value => typeof value === 'boolean' || value === 'auto'
+    validator: value => typeof value === 'boolean' || value === 'auto',
   },
   data: {
     default: () => [],
-    static: true
+    static: true,
   },
   noBuildTree: false,
   emptyText: null,
@@ -68,15 +68,15 @@ const props = useProps('tree', _props, {
   suffixCheckbox: false,
   renderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   prefixRenderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   suffixRenderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   multiple: false,
   indent: '16px',
@@ -86,7 +86,7 @@ const props = useProps('tree', _props, {
   floorSelect: false,
   onAsyncLoad: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   cacheNode: false,
   rootId: null,
@@ -98,19 +98,19 @@ const props = useProps('tree', _props, {
   linkLine: false,
   postCreate: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   virtual: false,
   nodeMinHeight: {
     default: 26,
-    validator: value => value > 0
+    validator: value => value > 0,
   },
   useYBar: false,
   noTransition: false,
   arrowIcon: createIconProp(),
   blockEffect: false,
   filterLeaf: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<TreeSlots>()
@@ -157,7 +157,7 @@ const defaultNodeProperties = {
   selectDisabled: false,
   expandDisabled: false,
   checkDisabled: false,
-  isLeaf: 'auto' as boolean | 'auto'
+  isLeaf: 'auto' as boolean | 'auto',
 }
 
 const boundAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
@@ -167,7 +167,7 @@ const linkLine = computed(() => {
 const style = computed(() => {
   return {
     [nh.cv('indent-width')]: typeof props.indent === 'number' ? `${props.indent}px` : props.indent,
-    [nh.cv('link-line-type')]: linkLine.value || undefined
+    [nh.cv('link-line-type')]: linkLine.value || undefined,
   }
 })
 const visibleNodes = computed(() => flatNodes(treeNodes.value))
@@ -283,10 +283,10 @@ watch(
     () => keyConfig.id,
     () => keyConfig.children,
     () => keyConfig.parent,
-    () => props.rootId
+    () => props.rootId,
   ],
   parseAndTransformData,
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   [treeNodes, () => props.rootId],
@@ -297,10 +297,10 @@ watch(
       childField: 'children',
       rootId: props.rootId,
       injectId: false,
-      depthFirst: true
+      depthFirst: true,
     })
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(expandedNodeIds, (value, prev) => {
   if (props.noTransition) {
@@ -364,7 +364,7 @@ watch(expandedNodeIds, (value, prev) => {
 
   const loop = [
     addedId != null && { id: addedId, type: 'expand' },
-    removedId != null && { id: removedId, type: 'reduce' }
+    removedId != null && { id: removedId, type: 'reduce' },
   ]
 
   for (const meta of loop) {
@@ -384,7 +384,7 @@ watch(expandedNodeIds, (value, prev) => {
           collapse: true,
           type,
           height: virtual ? addedNodes.length * nodeHeight : undefined,
-          nodes: virtual ? addedNodes.slice(0, viewCount) : addedNodes
+          nodes: virtual ? addedNodes.slice(0, viewCount) : addedNodes,
         } as any)
       }
     }
@@ -429,16 +429,16 @@ provide(
     handleNodeDragEnd,
     handleHittingChange,
     handleNodeHitting,
-    handleLabelClick
-  })
+    handleLabelClick,
+  }),
 )
 provide(
   TREE_NODE_STATE,
   reactive({
     depth: -1,
     disabled: toRef(props, 'disabled'),
-    readonly: toRef(props, 'readonly')
-  })
+    readonly: toRef(props, 'readonly'),
+  }),
 )
 
 defineExpose({
@@ -475,14 +475,14 @@ defineExpose({
   toggleAllExpanded,
   getTreeData,
   getFlattedData,
-  updateVisibleNodeEls
+  updateVisibleNodeEls,
 })
 
 onMounted(updateVisibleNodeEls)
 
 const { updateCheckedUpward, updateCheckedDown } = useCascadedChecked({
   getNode: key => nodeMap.get(key),
-  disableNode: node => node.disabled
+  disableNode: node => node.disabled,
 })
 
 function getIndexId() {
@@ -527,7 +527,7 @@ function flatNodes(nodes: TreeNodeProps[], expandedIds?: Set<Key>) {
         (node.matched || node.childMatched || node.upperMatched) &&
         (!parentNode || (expandedIds ? expandedIds.has(parentNode.id) : parentNode.expanded))
       )
-    }
+    },
   })
 }
 
@@ -563,7 +563,7 @@ function buildTreeNodes(nodes: TreeNodeProps[]) {
     keyField: 'id',
     parentField: 'parent',
     childField: 'children',
-    rootId: props.rootId
+    rootId: props.rootId,
   })
 
   refreshNodesDepth()
@@ -601,7 +601,7 @@ function parseAndTransformData() {
         nodes.push(node)
         nodeDataMap.set(item, node)
       },
-      { childField: keyConfig.children, depthFirst: true }
+      { childField: keyConfig.children, depthFirst: true },
     )
   } else {
     const data = props.data
@@ -662,7 +662,7 @@ function forceUpdateData() {
     selectDisabled: selectDisabledKey,
     expandDisabled: expandDisabledKey,
     checkDisabled: checkDisabledKey,
-    isLeaf: isLeafKey
+    isLeaf: isLeafKey,
   } = keyConfig
 
   const refresh = (node: TreeNodeProps, item: Data) => {
@@ -681,7 +681,7 @@ function forceUpdateData() {
       [selectDisabledKey]: selectDisabled = node.selectDisabled,
       [expandDisabledKey]: expandDisabled = node.expandDisabled,
       [checkDisabledKey]: checkDisabled = node.checkDisabled,
-      [isLeafKey]: isLeaf = node.isLeaf
+      [isLeafKey]: isLeaf = node.isLeaf,
     } = item
 
     node.visible = visible
@@ -720,7 +720,7 @@ function forceUpdateData() {
 
         nodes.push(node)
       },
-      { childField: keyConfig.children, depthFirst: true }
+      { childField: keyConfig.children, depthFirst: true },
     )
   } else {
     const data = props.data
@@ -782,7 +782,7 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     selectDisabled: selectDisabledKey,
     expandDisabled: expandDisabledKey,
     checkDisabled: checkDisabledKey,
-    isLeaf: isLeafKey
+    isLeaf: isLeafKey,
   } = keyConfig
 
   const {
@@ -800,7 +800,7 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     [selectDisabledKey]: selectDisabled = defaults.selectDisabled,
     [expandDisabledKey]: expandDisabled = defaults.expandDisabled,
     [checkDisabledKey]: checkDisabled = defaults.checkDisabled,
-    [isLeafKey]: isLeaf = defaults.isLeaf
+    [isLeafKey]: isLeaf = defaults.isLeaf,
   } = data
   const id = props.noBuildTree ? null : data[idKey]
   const parent = props.noBuildTree ? null : data[parentKey]
@@ -823,7 +823,7 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     selectDisabled,
     expandDisabled,
     checkDisabled,
-    isLeaf
+    isLeaf,
   }
 
   if (typeof props.postCreate === 'function') {
@@ -843,7 +843,7 @@ function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeP
     last: false,
     // inLastCount: 0,
     upstreamLast: [],
-    lineIndexes: []
+    lineIndexes: [],
   })
 }
 
@@ -851,7 +851,7 @@ function computeCheckedState(originNode: TreeNodeProps, able: boolean) {
   if (!props.noCascaded) {
     const nodeList = [originNode].concat(
       // 需要包含被禁用且被勾选的节点
-      flattedNodes.value.filter(item => (item.disabled || item.checkDisabled) && item.checked)
+      flattedNodes.value.filter(item => (item.disabled || item.checkDisabled) && item.checked),
     )
 
     for (let i = 0, len = nodeList.length; i < len; ++i) {
@@ -880,7 +880,7 @@ function handleNodeSelect(node: TreeNodeProps) {
     emitEvent(
       props.onNodeSelect,
       selectedNodes.map(item => item.data),
-      selectedNodes
+      selectedNodes,
     )
   } else {
     const currentId = node.id
@@ -941,7 +941,7 @@ function handleNodeDragStart(nodeInstance: TreeNodeInstance) {
     draggingNode: nodeInstance.node,
     treeRect: wrapper.value.getBoundingClientRect(),
     willDropNode: null,
-    dropType: DropType.BEFORE
+    dropType: DropType.BEFORE,
   }
 
   dragging.value = true
@@ -1015,7 +1015,7 @@ function handleNodeDrop(nodeInstance: TreeNodeInstance) {
 
     if (!parent) {
       parent = {
-        children: treeNodes.value
+        children: treeNodes.value,
       } as TreeNodeProps
     }
 
@@ -1040,7 +1040,7 @@ function handleNodeDrop(nodeInstance: TreeNodeInstance) {
     if (!parent) {
       parent = {
         parent: undefined! as Key,
-        children: treeNodes.value
+        children: treeNodes.value,
       } as TreeNodeProps
     }
 
@@ -1231,7 +1231,7 @@ function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
 
   return (
     flattedNodes.value.find(
-      item => item.data === data || item.data[idKey] === data[idKey as keyof T]
+      item => item.data === data || item.data[idKey] === data[idKey as keyof T],
     ) ?? null
   )
 }
@@ -1269,7 +1269,7 @@ function checkNodeByData<T extends Data>(data: T, checked?: boolean) {
 
     if (!props.noCascaded) {
       const nodeList = [node].concat(
-        flattedNodes.value.filter(item => item.disabled && item.checked)
+        flattedNodes.value.filter(item => item.disabled && item.checked),
       )
 
       for (let i = 0, len = nodeList.length; i < len; ++i) {
@@ -1304,10 +1304,10 @@ function getTreeData(withFilter = false) {
       ? filterTree(treeNodes.value, node => node.matched, {
         childField: 'children',
         leafOnly: props.filterLeaf,
-        isLeaf: isLeafNode
+        isLeaf: isLeafNode,
       })
       : treeNodes.value,
-    node => ({ ...node.data })
+    node => ({ ...node.data }),
   )
 }
 

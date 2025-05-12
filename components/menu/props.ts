@@ -22,7 +22,7 @@ export const menuProps = buildProps({
   indent: [String, Number],
   onSelect: eventProp<(label: string, meta: any) => void>(),
   onExpand: eventProp<(label: string, meta: any) => void>(),
-  onReduce: eventProp<(label: string, meta: any) => void>()
+  onReduce: eventProp<(label: string, meta: any) => void>(),
 })
 
 export type MenuProps = ExtractPropTypes<typeof menuProps>
@@ -39,7 +39,7 @@ export const menuItemProps = buildProps({
   meta: Object,
   children: Array as PropType<MenuOptions[]>,
   route: [String, Object] as PropType<RouteLocationRaw>,
-  onSelect: eventProp()
+  onSelect: eventProp(),
 })
 
 export type MenuItemProps = ExtractPropTypes<typeof menuItemProps>
@@ -47,7 +47,7 @@ export type MenuItemCProps = ConfigurableProps<MenuItemProps, 'children'>
 
 export const menuGroupProps = buildProps({
   label: String,
-  children: Array as PropType<MenuOptions[]>
+  children: Array as PropType<MenuOptions[]>,
 })
 
 export type MenuGroupProps = ExtractPropTypes<typeof menuGroupProps>

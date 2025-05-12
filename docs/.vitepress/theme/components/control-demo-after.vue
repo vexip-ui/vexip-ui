@@ -33,24 +33,24 @@ import type { ComponentSize, ComponentState } from 'vexip-ui'
 const props = defineProps({
   value: {
     type: String,
-    default: null
+    default: null,
   },
   disabled: {
     type: Boolean,
-    default: null
+    default: null,
   },
   loading: {
     type: Boolean,
-    default: null
+    default: null,
   },
   state: {
     type: String as PropType<ComponentState>,
-    default: null
+    default: null,
   },
   size: {
     type: String as PropType<ComponentSize>,
-    default: null
-  }
+    default: null,
+  },
 })
 const emit = defineEmits(['change', 'update:value'])
 
@@ -63,7 +63,7 @@ const store = reactive({
   disabled: computed(() => get(props.disabled, field.disabled.value)),
   loading: computed(() => get(props.loading, field.loading.value)),
   state: computed(() => get(props.state, field.state.value)),
-  size: computed(() => get(props.size, field.size.value))
+  size: computed(() => get(props.size, field.size.value)),
 })
 
 const bem = useBEM('input')
@@ -75,7 +75,7 @@ defineExpose({ focus })
 
 watch(
   () => store.value,
-  value => (currentValue.value = value)
+  value => (currentValue.value = value),
 )
 
 function handleChange(event: Event) {

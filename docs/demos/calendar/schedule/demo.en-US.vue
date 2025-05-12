@@ -18,7 +18,7 @@ const badgeTypes = ['primary', 'warning', 'success', 'error', 'info', 'disabled'
 const dataMap: Record<number, ReturnType<typeof randomList>> = {
   5: randomList(2),
   12: randomList(3),
-  21: randomList(7)
+  21: randomList(7),
 }
 
 function randomList(count: number) {

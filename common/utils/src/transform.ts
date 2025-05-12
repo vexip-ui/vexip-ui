@@ -88,7 +88,7 @@ export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
   accessor: (item: T) => O = v => v as any,
-  isMap = false
+  isMap = false,
 ) {
   const map = (isMap ? new Map<string, any>() : {}) as any
 
@@ -112,7 +112,7 @@ export function listToMap<T = any, O = T>(
 
 export {
   /** @deprecated please use listToMap to replace it */
-  listToMap as transformListToMap
+  listToMap as transformListToMap,
 }
 
 /**
@@ -127,7 +127,7 @@ export {
 export function removeArrayItem<T = any>(
   array: T[],
   item: T | ((item: T) => boolean),
-  isFn = false
+  isFn = false,
 ): T | null {
   let index = -1
 
@@ -154,7 +154,7 @@ export function removeArrayItem<T = any>(
  */
 export function groupByProps<T = any>(
   list: T[],
-  props: Array<string | ((item: T) => any)> | string | ((item: T) => any) = []
+  props: Array<string | ((item: T) => any)> | string | ((item: T) => any) = [],
 ): Record<string, T[]> {
   if (typeof props === 'string' || typeof props === 'function') {
     props = [props]
@@ -213,7 +213,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
     keyField = 'id' as keyof T,
     childField = 'children' as keyof T,
     parentField = 'parent' as keyof T,
-    rootId = null
+    rootId = null,
   } = options
 
   const hasRootId = isDefined(rootId) && rootId !== ''
@@ -280,7 +280,7 @@ export function flatTree<T = any>(
     cascaded?: boolean,
     /** 是否强制为节点插入 ID 值 */
     forceInject?: boolean
-  } = {}
+  } = {},
 ) {
   const {
     keyField = 'id' as keyof T,
@@ -292,7 +292,7 @@ export function flatTree<T = any>(
     buildId = i => i,
     filter = toTrue,
     cascaded = false,
-    forceInject = false
+    forceInject = false,
   } = options
 
   let idCount = 1
@@ -359,7 +359,7 @@ export function walkTree<T = any>(
     /** 是否为深度优先遍历 */
     depthFirst?: boolean,
     childField?: keyof T
-  } = {}
+  } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false } = options
   const loop = [...tree.map(item => ({ item, depth: 0, parent: null as T | null }))]
@@ -372,7 +372,7 @@ export function walkTree<T = any>(
 
     if (isIterable(children)) {
       loop[depthFirst ? 'unshift' : 'push'](
-        ...Array.from(children).map(child => ({ item: child, depth: depth + 1, parent: item }))
+        ...Array.from(children).map(child => ({ item: child, depth: depth + 1, parent: item })),
       )
     }
   }
@@ -396,7 +396,7 @@ export function mapTree<T = any, R = any>(
     childField?: keyof T,
     /** 是否强制重置 `children` 字段 */
     clearChildren?: boolean
-  } = {}
+  } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false, clearChildren = true } = options
   const result: R[] = []
@@ -423,8 +423,8 @@ export function mapTree<T = any, R = any>(
             item: child,
             depth: depth + 1,
             parent: item,
-            result: newItem[childField]
-          }))
+            result: newItem[childField],
+          })),
         )
       }
     }
@@ -451,12 +451,12 @@ export function filterTree<T = any>(
     /** 是否只对叶子节点进行过滤 */
     leafOnly?: boolean,
     childField?: keyof T
-  } = {}
+  } = {},
 ) {
   const {
     childField = 'children' as keyof T,
     leafOnly = false,
-    isLeaf = item => !isIterable(item[childField])
+    isLeaf = item => !isIterable(item[childField]),
   } = options
 
   const filter = (data: T[], depth: number, parent: T | null): T[] => {
@@ -528,7 +528,7 @@ const defaultSortMethod = (prev: any, next: any) => {
  */
 export function sortByProps<T = any>(
   list: T[],
-  props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[]
+  props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[],
 ) {
   if (
     !list.sort ||
@@ -551,9 +551,9 @@ export function sortByProps<T = any>(
           ? {
               key: value,
               method: defaultSortMethod,
-              type: 'asc'
+              type: 'asc',
             }
-          : value) as SortOptions<keyof T>
+          : value) as SortOptions<keyof T>,
     )
     .map(value => {
       if (typeof value.accessor !== 'function') {
@@ -600,7 +600,7 @@ export function sortByProps<T = any>(
 export function mergeObjects<T extends Record<string, any>, U extends Record<string, any>>(
   sourceObj: T,
   targetObj: U,
-  isNewObj = true
+  isNewObj = true,
 ) {
   sourceObj = isNewObj ? deepClone(sourceObj) : sourceObj
 
@@ -610,8 +610,8 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
   }> = [
     {
       source: sourceObj,
-      target: targetObj
-    }
+      target: targetObj,
+    },
   ]
 
   while (loop.length) {
@@ -625,7 +625,7 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
 
         loop.push({
           source: source[key],
-          target: target[key]
+          target: target[key],
         })
       } else if (Array.isArray(target[key])) {
         if (!Array.isArray(source[key])) {
@@ -634,7 +634,7 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
 
         loop.push({
           source: source[key],
-          target: target[key]
+          target: target[key],
         })
       } else {
         source[key] = target[key]

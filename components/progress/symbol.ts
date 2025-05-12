@@ -21,5 +21,5 @@ export const infoTypes = Object.freeze<ProgressInfoType[]>([
   'bubble',
   'bubble-top',
   'bubble-bottom',
-  'none'
+  'none',
 ])

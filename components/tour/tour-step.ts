@@ -15,7 +15,7 @@ const ignoredProps: StepPropKey[] = ['renderer']
 const funcProp = {
   default: null,
   isFunc: true,
-  static: true
+  static: true,
 }
 
 export default defineComponent({
@@ -25,17 +25,17 @@ export default defineComponent({
     const props = useProps('tourStep', _props, {
       target: {
         default: null,
-        static: true
+        static: true,
       },
       placement: 'bottom',
       title: '',
       content: '',
       order: {
         default: 0,
-        static: true
+        static: true,
       },
       type: 'default',
-      renderer: funcProp
+      renderer: funcProp,
     })
 
     const tourState = inject(TOUR_STATE, null)
@@ -49,7 +49,7 @@ export default defineComponent({
         value => {
           ;(options[key as keyof TourStepOptions] as any) = value
         },
-        { immediate: true, deep: deepProps.includes(key) }
+        { immediate: true, deep: deepProps.includes(key) },
       )
     }
 
@@ -74,5 +74,5 @@ export default defineComponent({
     }
 
     return () => null
-  }
+  },
 })

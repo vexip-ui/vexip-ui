@@ -15,16 +15,16 @@ defineOptions({ name: 'PopupItem' })
 const props = defineProps({
   state: {
     type: Object as PropType<PopupItemState>,
-    default: () => ({})
+    default: () => ({}),
   },
   transitionName: {
     type: String,
-    default: null
+    default: null,
   },
   innerClass: {
     type: classProp,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const emit = defineEmits(['enter', 'leave'])

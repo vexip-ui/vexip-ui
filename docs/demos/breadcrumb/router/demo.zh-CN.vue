@@ -21,7 +21,7 @@ const router = createRouter({
       component: {},
       meta: {
         label: '1',
-        name: '菜单 1'
+        name: '菜单 1',
       },
       children: [
         {
@@ -29,21 +29,21 @@ const router = createRouter({
           name: '子菜单 1',
           component: {},
           meta: {
-            label: '1-1'
+            label: '1-1',
           },
           children: [
             {
               path: 'cc1',
               component: {},
               meta: {
-                name: '子菜单 1-1'
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                name: '子菜单 1-1',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
 })
 
 // 模拟 push 方法
@@ -54,23 +54,23 @@ router.push = async (to: /* RouteLocationRaw */ any) => {
         path: '/m1',
         meta: {
           label: '1',
-          name: '菜单 1'
-        }
+          name: '菜单 1',
+        },
       },
       {
         path: '/m1/c1',
         name: '子菜单 1',
         meta: {
-          label: '1-1'
-        }
+          label: '1-1',
+        },
       },
       {
         path: '/m1/c1/cc1',
         meta: {
-          name: '子菜单 1-1'
-        }
-      }
-    ]
+          name: '子菜单 1-1',
+        },
+      },
+    ],
   }
 }
 

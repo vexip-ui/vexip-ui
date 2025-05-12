@@ -22,12 +22,12 @@ export default defineComponent({
           { key: 'Option 1' },
           { key: 'Option 2' },
           { key: 'Option 3' },
-          { key: 'Option 4' }
-        ]
+          { key: 'Option 4' },
+        ],
       })
 
       console.info(selectedKeys)
-    }
-  }
+    },
+  },
 })
 </script>

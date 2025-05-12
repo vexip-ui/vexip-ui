@@ -16,22 +16,22 @@ const _props = defineProps(uploadListProps)
 const props = useProps('uploadList', _props, {
   files: {
     default: () => [],
-    static: true
+    static: true,
   },
   selectToAdd: false,
   iconRenderer: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   type: {
     default: 'name',
-    validator: value => uploadListTypes.includes(value)
+    validator: value => uploadListTypes.includes(value),
   },
   loadingText: null,
   style: null,
   precision: 2,
   // 'canPreview' using UploadFile default
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<UploadListSlots>()

@@ -19,7 +19,7 @@ function handleClick() {
     width: '30vw',
     renderer: () => {
       return Array.from({ length: 3 }, () => h('p', 'Some content'))
-    }
+    },
   })
 
   setTimeout(close, 3000)

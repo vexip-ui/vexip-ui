@@ -15,8 +15,8 @@ import type { UploadFileOptions, UploadFileState } from 'vexip-ui'
 const fileList = ref<UploadFileOptions[]>([
   {
     name: 'qmhc.jpg',
-    url: 'qmhc.jpg'
-  }
+    url: 'qmhc.jpg',
+  },
 ])
 
 function beforeUpload(file: UploadFileState) {

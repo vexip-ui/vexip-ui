@@ -22,7 +22,7 @@ export type TableIcons = Partial<Record<TableIconName, Record<string, any> | (()
 export const enum DropType {
   BEFORE = 'before',
   INNER = 'inner',
-  AFTER = 'after'
+  AFTER = 'after',
 }
 
 export interface CellSpanResult {
@@ -127,7 +127,7 @@ export type SummaryRenderFn<D = Data, Val extends string | number = string | num
 
 export type ColumnSummaryRenderFn<
   D = Data,
-  Val extends string | number = string | number
+  Val extends string | number = string | number,
 > = (data: {
   column: TableColumnOptions<D, Val>,
   index: number,
@@ -210,7 +210,7 @@ export type TableColumnOptions<D = Data, Val extends string | number = string | 
 
 export type ColumnWithKey<
   D = Data,
-  Val extends string | number = string | number
+  Val extends string | number = string | number,
 > = TableColumnOptions<D, Val> & {
   key: Key,
   rowSpan: number,
@@ -292,13 +292,13 @@ export type ColumnProfile<D = Data, Val extends string | number = string | numbe
 >
 export type TableFilterProfile<
   D = Data,
-  Val extends string | number = string | number
+  Val extends string | number = string | number,
 > = ColumnProfile<D, Val> & {
   active: Val | Val[]
 }
 export type TableSorterProfile<
   D = Data,
-  Val extends string | number = string | number
+  Val extends string | number = string | number,
 > = ColumnProfile<D, Val> & {
   type: 'asc' | 'desc',
   order: number
@@ -319,7 +319,7 @@ export interface TableSummaryOptions<D = Data, Val extends string | number = str
 
 export type SummaryWithKey<
   D = Data,
-  Val extends string | number = string | number
+  Val extends string | number = string | number,
 > = TableSummaryOptions<D, Val> & { key: Key }
 
 /** @internal */

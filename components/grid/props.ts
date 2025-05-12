@@ -18,8 +18,8 @@ export const gridProps = buildProps({
   align: String as PropType<GridAlign>,
   cellFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type GridProps = ExtractPropTypes<typeof gridProps>
@@ -43,8 +43,8 @@ export const cellProps = buildProps({
   xxl: mediaProp,
   useFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type CellProps = ExtractPropTypes<typeof cellProps>

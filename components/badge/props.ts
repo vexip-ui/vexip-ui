@@ -12,7 +12,7 @@ export const badgeProps = buildProps({
   type: String as PropType<BadgeType>,
   color: String,
   slots: Object as PropType<BadgeSlots>,
-  onBadgeClick: eventProp<(event: MouseEvent) => void>()
+  onBadgeClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type BadgeProps = ExtractPropTypes<typeof badgeProps>

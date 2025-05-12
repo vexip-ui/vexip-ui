@@ -4,7 +4,7 @@ import {
   buildProps,
   classProp,
   eventProp,
-  wrapProps
+  wrapProps,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -28,7 +28,7 @@ export const dropdownProps = buildProps({
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp()
+  onOutsideClose: eventProp(),
 })
 
 export type DropdownProps = ExtractPropTypes<typeof dropdownProps>
@@ -37,29 +37,29 @@ export type DropdownCProps = ConfigurableProps<DropdownProps>
 export const dropdownItemProps = wrapProps({
   label: {
     type: [String, Number],
-    default: null
+    default: null,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   selected: {
     type: Boolean,
-    default: false
+    default: false,
   },
   divided: {
     type: Boolean,
-    default: false
+    default: false,
   },
   reference: {
     type: Boolean,
-    default: false
+    default: false,
   },
   meta: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
-  onSelect: eventProp<(label: string | number) => void>()
+  onSelect: eventProp<(label: string | number) => void>(),
 })
 
 export type DropdownItemProps = ExtractPropTypes<typeof dropdownItemProps>

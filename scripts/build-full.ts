@@ -22,8 +22,8 @@ async function main() {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
+      SOURCE_MAP: sourceMap ? 'true' : '',
+    },
   })
 
   logger.ln()

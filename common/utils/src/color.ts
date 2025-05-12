@@ -272,7 +272,7 @@ export const NAMED_COLORS = Object.freeze({
   white: 'fff',
   whitesmoke: 'f5f5f5',
   yellow: 'ff0',
-  yellowgreen: '9acd32'
+  yellowgreen: '9acd32',
 })
 
 export type ColorName = keyof typeof NAMED_COLORS
@@ -346,7 +346,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       g: g * 255,
       b: b * 255,
       format: 'rgb',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -359,7 +359,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       b: b * 255,
       a: normalizeAlpha(match[4]),
       format: 'rgba',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -378,7 +378,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       l,
       a: normalizeAlpha(match[4]),
       format: 'hsla',
-      toString: toHslString
+      toString: toHslString,
     }
   }
 
@@ -397,7 +397,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       v,
       a: normalizeAlpha(match[4]),
       format: 'hsva',
-      toString: toHsvString
+      toString: toHsvString,
     }
   }
 
@@ -407,7 +407,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       g: parseInt(`${match[2]}${match[2]}`, 16),
       b: parseInt(`${match[3]}${match[3]}`, 16),
       format: named ? 'name' : 'hex3',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -418,7 +418,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       b: parseInt(`${match[3]}${match[3]}`, 16),
       a: convertHexToDecimal(`${match[4]}${match[4]}`),
       format: named ? 'name' : 'hex4',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -428,7 +428,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       g: parseInt(match[2], 16),
       b: parseInt(match[3], 16),
       format: named ? 'name' : 'hex6',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -439,7 +439,7 @@ export function parseStringColor(color: string): ObjectColor | null {
       b: parseInt(match[3], 16),
       a: convertHexToDecimal(match[4]),
       format: named ? 'name' : 'hex8',
-      toString: toRgbString
+      toString: toRgbString,
     }
   }
 
@@ -475,7 +475,7 @@ export function parseColor(color: Color): ColorMeta {
     hsva: { ...hsv, a, format: 'hsva' },
     hex8,
     gray: rgbToGrayScale(rgb),
-    origin: color
+    origin: color,
   }
 }
 
@@ -531,7 +531,7 @@ export function normalizeHsl(h: number | string, s: number | string, l: number |
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1)
+    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1),
   }
 }
 
@@ -548,7 +548,7 @@ export function normalizeRgb(r: number | string, g: number | string, b: number |
   return {
     r: boundRange(r, 0, 255) / 255,
     g: boundRange(g, 0, 255) / 255,
-    b: boundRange(b, 0, 255) / 255
+    b: boundRange(b, 0, 255) / 255,
   }
 }
 
@@ -565,7 +565,7 @@ export function normalizeHsv(h: number | string, s: number | string, v: number |
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1)
+    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1),
   }
 }
 
@@ -792,14 +792,14 @@ export function rgbToHex(
   r: number | string,
   g: number | string,
   b: number | string,
-  allow3Char = false
+  allow3Char = false,
 ) {
   ;({ r, g, b } = normalizeRgb(r, g, b))
 
   const hex = [
     repairDigits(Math.round(r * 255).toString(16)),
     repairDigits(Math.round(g * 255).toString(16)),
-    repairDigits(Math.round(b * 255).toString(16))
+    repairDigits(Math.round(b * 255).toString(16)),
   ]
 
   if (allow3Char && isRepetitive(hex[0]) && isRepetitive(hex[1]) && isRepetitive(hex[2])) {
@@ -825,7 +825,7 @@ export function rgbaToHex(
   g: number | string,
   b: number | string,
   a: number | string,
-  allow4Char = false
+  allow4Char = false,
 ) {
   ;({ r, g, b } = normalizeRgb(r, g, b))
 
@@ -833,7 +833,7 @@ export function rgbaToHex(
     repairDigits(Math.round(r * 255).toString(16)),
     repairDigits(Math.round(g * 255).toString(16)),
     repairDigits(Math.round(b * 255).toString(16)),
-    repairDigits(convertDecimalToHex(normalizeAlpha(a)))
+    repairDigits(convertDecimalToHex(normalizeAlpha(a))),
   ]
 
   if (
@@ -883,7 +883,7 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor 
     b: Math.round(rgba1.b * weight1 + rgba2.b * weight2),
     a: Math.round(rgba1.a * originalWeight + rgba2.a * (1 - originalWeight)),
     format: 'rgba',
-    toString: toRgbString
+    toString: toRgbString,
   }
 }
 
@@ -949,7 +949,7 @@ export function randomColor(withAlpha = false, type: ColorType = 'hex') {
 export function randomPreferColor(
   prefer: 'hard' | 'soft',
   withAlpha = false,
-  type: ColorType = 'hex'
+  type: ColorType = 'hex',
 ) {
   const h = Math.round(Math.random() * 360)
   const s = Math.round(prefer === 'hard' ? 80 + Math.random() * 20 : 20 + Math.random() * 70) / 100

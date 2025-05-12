@@ -6,7 +6,7 @@ import {
   eventProp,
   localeProp,
   sizeProp,
-  styleProp
+  styleProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -21,7 +21,7 @@ export const positionValidator = (value: string | number) => {
 }
 export const positionProp = {
   default: 'auto' as const,
-  validator: positionValidator
+  validator: positionValidator,
 }
 
 export const modalProps = buildProps({
@@ -71,7 +71,7 @@ export const modalProps = buildProps({
   onDragEnd: eventProp<(position: PositionPayload) => void>(),
   onResizeStart: eventProp<(size: SizePayload) => void>(),
   onResizeMove: eventProp<(size: SizePayload) => void>(),
-  onResizeEnd: eventProp<(size: SizePayload) => void>()
+  onResizeEnd: eventProp<(size: SizePayload) => void>(),
 })
 
 export type ModalProps = ExtractPropTypes<typeof modalProps>

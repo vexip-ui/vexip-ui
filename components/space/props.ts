@@ -13,7 +13,7 @@ export const spaceProps = buildProps({
   noWrap: booleanProp,
   size: [String, Number, Array] as PropType<ComponentSize | number | [number, number]>,
   itemStyle: styleProp,
-  gapDisabled: booleanProp
+  gapDisabled: booleanProp,
 })
 
 export type SpaceProps = ExtractPropTypes<typeof spaceProps>

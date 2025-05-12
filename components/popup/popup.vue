@@ -24,27 +24,27 @@ defineOptions({ name: 'Popup' })
 const props = defineProps({
   transitionName: {
     type: String,
-    default: null
+    default: null,
   },
   innerClass: {
     type: classProp,
-    default: null
+    default: null,
   },
   startOffset: {
     type: Number,
-    default: 30
+    default: 30,
   },
   placement: {
     default: 'top-right' as PopupPlacement,
-    validator: (value: PopupPlacement) => popupPlacements.includes(value)
+    validator: (value: PopupPlacement) => popupPlacements.includes(value),
   },
   itemOffset: {
     type: Number,
-    default: 16
+    default: 16,
   },
   itemType: {
-    type: Function
-  }
+    type: Function,
+  },
 })
 
 defineSlots<{ item: (item: any) => any }>()
@@ -68,7 +68,7 @@ watch(
     items.value.forEach(item => {
       item.verticalPosition += value - prevValue
     })
-  }
+  },
 )
 
 provide(DELETE_HANDLER, deleteItem)
@@ -80,7 +80,7 @@ defineExpose({
   remove,
   has,
   find,
-  clear
+  clear,
 })
 
 function getItemStyle(item: PopupItemState) {
@@ -114,7 +114,7 @@ function add(options: Record<string, any>) {
 
     queue.push({
       type: 'add',
-      param: options
+      param: options,
     })
 
     if (!pending) {
@@ -139,7 +139,7 @@ function remove(key: Key) {
 
     queue.push({
       type: 'clear',
-      param: key
+      param: key,
     })
 
     if (!pending) {
@@ -189,15 +189,15 @@ function renderItem(options: Record<string, any>) {
           onOpen: noop,
           onClose: noop,
           onEnter: noop,
-          onLeave: noop
+          onLeave: noop,
         },
         options,
         {
           height: 0,
           visible: true,
-          verticalPosition: currentVertical
-        }
-      )
+          verticalPosition: currentVertical,
+        },
+      ),
     )
 
     items.value.push(item)

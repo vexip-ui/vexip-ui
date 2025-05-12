@@ -24,7 +24,7 @@ describe('Collapse', () => {
   it('toggle active', async () => {
     const wrapper = mount(Collapse, {
       props: {
-        expanded: ['2']
+        expanded: ['2'],
       },
       slots: {
         default: () => (
@@ -33,8 +33,8 @@ describe('Collapse', () => {
             <CollapsePanel label={'2'}>{'2'}</CollapsePanel>
             <CollapsePanel label={'3'}>{'3'}</CollapsePanel>
           </>
-        )
-      }
+        ),
+      },
     })
     const panels = wrapper.findAll('.vxp-collapse__panel')
 
@@ -129,7 +129,7 @@ describe('Collapse', () => {
 
     expect(wrapper.find('.vxp-collapse').classes()).toContain('vxp-collapse--card')
     expect(wrapper.find('.vxp-collapse__panel').classes()).not.toContain(
-      'vxp-collapse__panel--card'
+      'vxp-collapse__panel--card',
     )
   })
 
@@ -142,7 +142,7 @@ describe('Collapse', () => {
 
     expect(wrapper.find('.vxp-collapse').classes()).toContain('vxp-collapse--ghost')
     expect(wrapper.find('.vxp-collapse__panel').classes()).not.toContain(
-      'vxp-collapse__panel--ghost'
+      'vxp-collapse__panel--ghost',
     )
   })
 
@@ -156,7 +156,7 @@ describe('Collapse', () => {
 
       expect(wrapper.find('.vxp-collapse').classes()).toContain(`vxp-collapse--arrow-${type}`)
       expect(wrapper.find('.vxp-collapse__panel').classes()).toContain(
-        `vxp-collapse__panel--arrow-${type}`
+        `vxp-collapse__panel--arrow-${type}`,
       )
     })
   })
@@ -171,7 +171,7 @@ describe('Collapse', () => {
 
     await wrapper.find('.vxp-collapse__header').trigger('click')
     expect(wrapper.find('.vxp-collapse__panel').classes()).toContain(
-      'vxp-collapse__panel--expanded'
+      'vxp-collapse__panel--expanded',
     )
     expect(wrapper.find('.vxp-collapse__content').exists()).toBe(true)
     expect(wrapper.find('.vxp-collapse__content').text()).toEqual('content')
@@ -194,7 +194,7 @@ describe('Collapse', () => {
       const wrapper = mount(() => <CollapsePanel arrow-type={type}></CollapsePanel>)
 
       expect(wrapper.find('.vxp-collapse__panel').classes()).toContain(
-        `vxp-collapse__panel--arrow-${type}`
+        `vxp-collapse__panel--arrow-${type}`,
       )
     })
   })
@@ -209,7 +209,7 @@ describe('Collapse', () => {
   it('panel toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(CollapsePanel, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.find('.vxp-collapse__header').trigger('click')
@@ -223,7 +223,7 @@ describe('Collapse', () => {
   it('panel disabled', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(CollapsePanel, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-collapse__panel--disabled')

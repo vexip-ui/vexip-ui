@@ -6,7 +6,7 @@ import {
   configLocale,
   configNamespace,
   configProps,
-  configZIndex
+  configZIndex,
 } from '@vexip-ui/config'
 import { isEmpty, toCapitalCase } from '@vexip-ui/utils'
 
@@ -33,7 +33,7 @@ export function buildInstall(components: any[] = [], defaultLocale?: LocaleConfi
       locale = defaultLocale,
       zIndex,
       icons = {},
-      hoverDelay = 100
+      hoverDelay = 100,
     } = options
 
     const withDefaultLocale = computed(() => {
@@ -80,7 +80,7 @@ function proxyConfigProps(props: MaybeRef<PropsOptions>, app?: App) {
  */
 export function provideConfig(
   config: Omit<InstallOptions, 'prefix' | 'namespace'> = {},
-  app?: App
+  app?: App,
 ) {
   const { props = {}, locale = {}, zIndex, icons = {} } = config
 

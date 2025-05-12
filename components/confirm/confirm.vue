@@ -17,7 +17,7 @@ const positionValidator = (value: string | number) => {
 }
 const positionProp = {
   default: 'auto',
-  validator: positionValidator
+  validator: positionValidator,
 }
 
 const confirmButtonTypes = Object.freeze<ConfirmButtonType[]>([
@@ -26,7 +26,7 @@ const confirmButtonTypes = Object.freeze<ConfirmButtonType[]>([
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])
 
 defineOptions({ name: 'Confirm' })
@@ -36,7 +36,7 @@ const props = useProps('confirm', _props, {
   locale: null,
   width: {
     default: 420,
-    validator: positionValidator
+    validator: positionValidator,
   },
   height: positionProp,
   top: positionProp,
@@ -46,24 +46,24 @@ const props = useProps('confirm', _props, {
   maskClose: false,
   confirmType: {
     default: 'primary',
-    validator: value => confirmButtonTypes.includes(value)
+    validator: value => confirmButtonTypes.includes(value),
   },
   cancelType: {
     default: 'default',
-    validator: value => confirmButtonTypes.includes(value)
+    validator: value => confirmButtonTypes.includes(value),
   },
   confirmText: null,
   cancelText: null,
   icon: {
     isFunc: true,
-    default: false
+    default: false,
   },
   className: null,
   style: null,
   renderer: {
     default: null,
     isFunc: true,
-    static: true
+    static: true,
   },
   iconProps: () => ({}),
   closable: false,
@@ -72,7 +72,7 @@ const props = useProps('confirm', _props, {
   actionsAlign: 'right',
   cancelable: true,
   xOffset: 0,
-  yOffset: 0
+  yOffset: 0,
 })
 
 const nh = useNameHelper('confirm')
@@ -101,7 +101,7 @@ const commonProps = [
   'bottom',
   'left',
   'xOffset',
-  'yOffset'
+  'yOffset',
 ] as const
 
 const state = reactive<ConfirmState>({
@@ -110,7 +110,7 @@ const state = reactive<ConfirmState>({
   loading: false,
   title: '',
   content: '',
-  raw: {}
+  raw: {},
 })
 
 const rendererR = ref<ConfirmRenderFn | null>(props.renderer)

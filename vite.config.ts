@@ -24,7 +24,7 @@ const logLevel = process.env.LOG_LEVEL
 
 const externalPkgs = ['@vue'].concat(
   Object.keys(pkg.dependencies || {}),
-  Object.keys(pkg.peerDependencies || {})
+  Object.keys(pkg.peerDependencies || {}),
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
@@ -32,7 +32,7 @@ export default defineConfig(async (): Promise<UserConfig> => {
   const input = await glob('components/**/*.{ts,vue}', {
     cwd: __dirname,
     absolute: true,
-    onlyFiles: true
+    onlyFiles: true,
   })
 
   input.push(resolve(__dirname, 'index.ts'))
@@ -41,25 +41,25 @@ export default defineConfig(async (): Promise<UserConfig> => {
     logLevel: (logLevel || 'info') as LogLevel,
     publicDir: false,
     define: {
-      __VERSION__: JSON.stringify(pkg.version)
+      __VERSION__: JSON.stringify(pkg.version),
     },
     resolve: {
       alias: [
         { find: /^@\/components/, replacement: resolve(__dirname, 'components') },
-        { find: /^@\/directives/, replacement: resolve(__dirname, 'directives') }
+        { find: /^@\/directives/, replacement: resolve(__dirname, 'directives') },
         // { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
-      ]
+      ],
     },
     esbuild: {
       drop: ['debugger'],
-      pure: ['console.log']
+      pure: ['console.log'],
     },
     build: {
       outDir: 'es',
       sourcemap: true,
       lib: {
         entry: resolve(__dirname, 'index.ts'),
-        name: 'VexipUI'
+        name: 'VexipUI',
       },
       rollupOptions: {
         input,
@@ -70,22 +70,22 @@ export default defineConfig(async (): Promise<UserConfig> => {
             preserveModules: true,
             preserveModulesRoot: __dirname,
             dir: 'lib',
-            entryFileNames: '[name].cjs'
+            entryFileNames: '[name].cjs',
           },
           {
             format: 'es',
             preserveModules: true,
             preserveModulesRoot: __dirname,
             dir: 'es',
-            entryFileNames: '[name].mjs'
-          }
+            entryFileNames: '[name].mjs',
+          },
         ],
-        treeshake: false
+        treeshake: false,
       },
       commonjsOptions: {
-        sourceMap: false
+        sourceMap: false,
       },
-      chunkSizeWarningLimit: 10000
+      chunkSizeWarningLimit: 10000,
     },
     plugins: [
       createResolvePlugin(),
@@ -94,9 +94,9 @@ export default defineConfig(async (): Promise<UserConfig> => {
       visualizer({
         filename: 'temp/stats-[format].html',
         gzipSize: true,
-        brotliSize: true
-      }) as any
-    ]
+        brotliSize: true,
+      }) as any,
+    ],
   }
 })
 
@@ -113,14 +113,14 @@ function createResolvePlugin(): Plugin {
       if (id.startsWith('@/style')) {
         return {
           id: id.replace(/@\/style\/(.+).scss$/, 'vexip-ui/style/$1.scss'),
-          external: 'absolute'
+          external: 'absolute',
         }
       }
 
       if (id.startsWith('@/css')) {
         return {
           id: id.replace(/@\/css\/(.+).css$/, 'vexip-ui/css/$1.css'),
-          external: 'absolute'
+          external: 'absolute',
         }
       }
     },
@@ -130,24 +130,24 @@ function createResolvePlugin(): Plugin {
         this.emitFile({
           type: 'chunk',
           id: resolve('components', name, 'style.ts'),
-          name: `style/${name}`
+          name: `style/${name}`,
         })
         this.emitFile({
           type: 'chunk',
           id: resolve('components', name, 'css.ts'),
-          name: `css/${name}`
+          name: `css/${name}`,
         })
       }
 
       this.emitFile({
         type: 'chunk',
         id: resolve('components', 'style.ts'),
-        name: 'style/index'
+        name: 'style/index',
       })
       this.emitFile({
         type: 'chunk',
         id: resolve('components', 'css.ts'),
-        name: 'css/index'
+        name: 'css/index',
       })
     },
 
@@ -162,9 +162,9 @@ function createResolvePlugin(): Plugin {
 
         return {
           code,
-          map: new MagicString(code).generateMap()
+          map: new MagicString(code).generateMap(),
         }
       }
-    }
+    },
   }
 }

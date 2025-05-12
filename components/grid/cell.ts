@@ -28,7 +28,7 @@ export default defineComponent({
       lg: null,
       xl: null,
       xxl: null,
-      useFlex: null
+      useFlex: null,
     })
 
     const gridState = inject(GRID_STATE, null)
@@ -42,7 +42,7 @@ export default defineComponent({
       bottom: props.bottom,
       left: props.left,
       width: props.width,
-      height: props.height
+      height: props.height,
     })
     const layoutKeys = Object.keys(layoutState) as (
       | 'top'
@@ -88,7 +88,7 @@ export default defineComponent({
           layoutState.width = defaultWidth.value
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     const className = computed(() => {
@@ -99,12 +99,12 @@ export default defineComponent({
           ? props.useFlex === true
             ? { justify: 'start', align: 'top' }
             : props.useFlex
-          : {})
+          : {}),
       }
       const className: ClassType = {
         [nh.b()]: true,
         [nh.bm('inherit')]: gridState || props.inherit,
-        [nh.bm('flex')]: cellFlex
+        [nh.bm('flex')]: cellFlex,
       }
 
       if (cellFlex) {
@@ -178,11 +178,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default?.()
-        }
+          default: () => slots.default?.(),
+        },
       )
-  }
+  },
 })

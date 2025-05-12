@@ -17,7 +17,7 @@ const _props = defineProps(spinProps)
 const props = useProps('spin', _props, {
   active: {
     default: false,
-    static: true
+    static: true,
   },
   icon: createIconProp(),
   inner: false,
@@ -28,7 +28,7 @@ const props = useProps('spin', _props, {
   maskClass: null,
   transitionName: () => nh.ns('fade'),
   iconEffect: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<SpinSlots>()
@@ -81,14 +81,14 @@ watch(
     } else {
       currentActive.value = value
     }
-  }
+  },
 )
 
 defineExpose({
   currentActive,
   hasTip,
   handleShow,
-  handleHide
+  handleHide,
 })
 
 function handleMaskClick(event: MouseEvent) {

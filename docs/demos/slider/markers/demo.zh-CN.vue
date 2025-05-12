@@ -51,7 +51,7 @@ import { computed, reactive, ref } from 'vue'
 const state = reactive({
   disabled: false,
   reverse: false,
-  flipMarker: false
+  flipMarker: false,
 })
 
 const withLabel = ref(true)
@@ -61,14 +61,14 @@ const labelMarkers = {
   42: '42°C',
   68: {
     style: 'color: #fbc037',
-    label: '68°C'
+    label: '68°C',
   },
   100: {
     style: {
-      color: '#f03e3e'
+      color: '#f03e3e',
     },
-    label: '100°C'
-  }
+    label: '100°C',
+  },
 }
 const noLabelMarkers = [0, 42, 68, 100]
 

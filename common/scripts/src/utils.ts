@@ -50,7 +50,7 @@ export const logger = {
   },
   errorText: (msg: string) => {
     console.error(`${red(msg)}`)
-  }
+  },
 }
 
 export async function run(bin: string, args: string[], opts: Options = {}) {
@@ -86,7 +86,7 @@ export interface SpecifyOptions {
 export async function specifyFromList(
   args: ParsedArgs,
   list: string[],
-  options: SpecifyOptions = {}
+  options: SpecifyOptions = {},
 ) {
   const matchedItems = args._.length ? fuzzyMatch(args._, list, true) : ['']
 
@@ -100,14 +100,14 @@ export async function specifyFromList(
         message: options.message || 'Select one from below:',
         choices: (matchedItems.length > 1 ? matchedItems : list).map(name => ({
           title: name,
-          value: name
+          value: name,
         })),
         onState(this: any) {
           this.fallback = { title: this.input, value: this.input }
           if (this.suggestions.length === 0) {
             this.value = this.fallback.value
           }
-        }
+        },
       })
     ).item
   } else {
@@ -195,6 +195,6 @@ export function getPkgInfo(pkgDir: string, errorIfPrivate = false) {
     pkgPath,
     pkg,
     rawPkg,
-    pkgName
+    pkgName,
   }
 }

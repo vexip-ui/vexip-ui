@@ -41,7 +41,7 @@ describe('NumberInput', () => {
 
   it('value', async () => {
     const wrapper = mount(NumberInput, {
-      props: { value: NUMBER }
+      props: { value: NUMBER },
     })
 
     expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
@@ -52,7 +52,7 @@ describe('NumberInput', () => {
 
   it('invalid value', async () => {
     const wrapper = mount(NumberInput, {
-      props: { value: NUMBER }
+      props: { value: NUMBER },
     })
 
     expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
@@ -64,7 +64,7 @@ describe('NumberInput', () => {
   it('scientific notation', async () => {
     const value = 1.1641532182693484e-10
     const wrapper = mount(NumberInput, {
-      props: { value }
+      props: { value },
     })
 
     expect(getValue(wrapper.find('input'))).toEqual(String(value))
@@ -106,7 +106,7 @@ describe('NumberInput', () => {
     const wrapper = mount(() => (
       <NumberInput prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </NumberInput>
     ))
@@ -137,7 +137,7 @@ describe('NumberInput', () => {
     const wrapper = mount(() => (
       <NumberInput suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </NumberInput>
     ))
@@ -191,7 +191,7 @@ describe('NumberInput', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { onChange }
+      props: { onChange },
     })
     const input = wrapper.find('input')
 
@@ -206,7 +206,7 @@ describe('NumberInput', () => {
   it('input event', async () => {
     const onInput = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { onInput }
+      props: { onInput },
     })
     const input = wrapper.find('input')
 
@@ -219,7 +219,7 @@ describe('NumberInput', () => {
   it('input throttle', async () => {
     const onInput = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { onInput }
+      props: { onInput },
     })
     const input = wrapper.find('input')
 
@@ -238,7 +238,7 @@ describe('NumberInput', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const input = wrapper.find('input')
 
@@ -261,8 +261,8 @@ describe('NumberInput', () => {
       props: {
         clearable: true,
         suffix: Github,
-        onClear
-      }
+        onClear,
+      },
     })
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
@@ -284,8 +284,8 @@ describe('NumberInput', () => {
       props: {
         clearable: true,
         sync: true,
-        onClear
-      }
+        onClear,
+      },
     })
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
@@ -347,13 +347,13 @@ describe('NumberInput', () => {
     await plus.trigger('pointerdown')
     expect(getValue(input)).toEqual('1')
     expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
-      'vxp-number-input__plus--holding'
+      'vxp-number-input__plus--holding',
     )
 
     await minus.trigger('pointerdown')
     expect(getValue(input)).toEqual('0')
     expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
-      'vxp-number-input__minus--holding'
+      'vxp-number-input__minus--holding',
     )
 
     await plus.trigger('pointerdown.ctrl')
@@ -378,8 +378,8 @@ describe('NumberInput', () => {
   it('formatter', async () => {
     const wrapper = mount(NumberInput, {
       props: {
-        formatter: (v: number) => `${v}Y`
-      }
+        formatter: (v: number) => `${v}Y`,
+      },
     })
 
     await wrapper.setProps({ value: NUMBER })
@@ -394,7 +394,7 @@ describe('NumberInput', () => {
 
   it('precision', async () => {
     const wrapper = mount(NumberInput, {
-      props: { value: 100.222, precision: 2 }
+      props: { value: 100.222, precision: 2 },
     })
 
     expect(getValue(wrapper.find('input'))).toEqual('100.22')
@@ -441,7 +441,7 @@ describe('NumberInput', () => {
   it('sync', async () => {
     const onChange = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { sync: true, onChange }
+      props: { sync: true, onChange },
     })
     const input = wrapper.find('input')
     const plus = wrapper.find('.vxp-number-input__plus')
@@ -468,7 +468,7 @@ describe('NumberInput', () => {
   it('sync step', async () => {
     const onChange = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { syncStep: true, onChange }
+      props: { syncStep: true, onChange },
     })
     const input = wrapper.find('input')
     const plus = wrapper.find('.vxp-number-input__plus')
@@ -493,7 +493,7 @@ describe('NumberInput', () => {
   it('range', async () => {
     const onChange = vi.fn()
     const wrapper = mount(NumberInput, {
-      props: { min: 5, max: 10, onChange }
+      props: { min: 5, max: 10, onChange },
     })
     const input = wrapper.find('input')
 
@@ -501,14 +501,14 @@ describe('NumberInput', () => {
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(10)
     expect(wrapper.find('.vxp-number-input__plus').classes()).toContain(
-      'vxp-number-input__plus--disabled'
+      'vxp-number-input__plus--disabled',
     )
 
     emitChange(input, 4)
     await nextTick()
     expect(onChange).toHaveBeenLastCalledWith(5)
     expect(wrapper.find('.vxp-number-input__minus').classes()).toContain(
-      'vxp-number-input__minus--disabled'
+      'vxp-number-input__minus--disabled',
     )
 
     emitInput(input, 11)
@@ -520,7 +520,7 @@ describe('NumberInput', () => {
   // # 365
   it('ensure value sync when two way binding', async () => {
     const wrapper = mount(NumberInput, {
-      props: { precision: 2 }
+      props: { precision: 2 },
     })
     const input = wrapper.find('input')
 
@@ -540,7 +540,7 @@ describe('NumberInput', () => {
 
   it('ignore invalid init value', () => {
     const wrapper = mount(NumberInput, {
-      props: { value: 'invalid' }
+      props: { value: 'invalid' },
     })
 
     expect(getValue(wrapper.find('input'))).toEqual('')

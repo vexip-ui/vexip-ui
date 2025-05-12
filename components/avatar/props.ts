@@ -19,7 +19,7 @@ export const avatarProps = buildProps({
   background: String,
   slots: Object as PropType<AvatarSlots>,
   onError: eventProp<(event: Event) => void>(),
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type AvatarProps = ExtractPropTypes<typeof avatarProps>
@@ -36,7 +36,7 @@ export const avatarGroupProps = buildProps({
   offset: Number,
   restColor: String,
   restBackground: String,
-  slots: Object as PropType<AvatarGroupSlots>
+  slots: Object as PropType<AvatarGroupSlots>,
 })
 
 export type AvatarGroupProps = ExtractPropTypes<typeof avatarGroupProps>

@@ -28,8 +28,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}` }))
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
@@ -60,8 +60,8 @@ describe('Table', () => {
       {
         name: 'Value',
         key: 'value',
-        accessor: (item: any) => item.value
-      }
+        accessor: (item: any) => item.value,
+      },
     ]
     const data = [{ value: 100 }]
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
@@ -79,14 +79,14 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        formatter: (n: string) => `Name: ${n}`
+        formatter: (n: string) => `Name: ${n}`,
       },
       {
         name: 'Value',
         key: 'value',
         accessor: (item: any) => item.value,
-        formatter: (v: number) => v + 1
-      }
+        formatter: (v: number) => v + 1,
+      },
     ]
     const data = [{ name: 'n', value: 100 }]
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
@@ -104,12 +104,12 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = [{ name: '1' }]
     const wrapper = mount(Table, {
-      props: { columns, data }
+      props: { columns, data },
     })
 
     await runScrollTimers()
@@ -125,8 +125,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const wrapper = mount(() => <Table columns={columns} locale={{ empty: 'empty' }}></Table>)
 
@@ -138,13 +138,13 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const wrapper = mount(() => (
       <Table columns={columns}>
         {{
-          empty: () => <span class={'empty'}></span>
+          empty: () => <span class={'empty'}></span>,
         }}
       </Table>
     ))
@@ -181,8 +181,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -213,18 +213,18 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
+        key: 'name',
       },
       {
         name: 'Title',
         key: 'title',
-        order: -1
-      }
+        order: -1,
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({
       name: `n${i}`,
       label: `l${i}`,
-      title: `t${i}`
+      title: `t${i}`,
     }))
     const wrapper = mount(() => (
       <Table columns={columns} data={data}>
@@ -248,8 +248,8 @@ describe('Table', () => {
         data,
         stripe: true,
         border: true,
-        transparent: true
-      }
+        transparent: true,
+      },
     })
 
     await runScrollTimers()
@@ -272,8 +272,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}` }))
     const wrapper = mount(() => <Table highlight columns={columns} data={data}></Table>)
@@ -300,8 +300,8 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        class: 'test1'
-      }
+        class: 'test1',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -330,16 +330,16 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(Table, {
       props: {
         columns,
         data,
-        rowClass: 'test'
-      }
+        rowClass: 'test',
+      },
     })
 
     await runScrollTimers()
@@ -350,7 +350,7 @@ describe('Table', () => {
     })
 
     await wrapper.setProps({
-      rowClass: (data: any, i: number) => (i % 2 ? 'o' : 'e')
+      rowClass: (data: any, i: number) => (i % 2 ? 'o' : 'e'),
     })
     rows.forEach((row, i) => {
       expect(row.classes()).toContain(i % 2 ? 'o' : 'e')
@@ -362,8 +362,8 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        fixed: true
-      }
+        fixed: true,
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -393,14 +393,14 @@ describe('Table', () => {
         order: -1,
         sorter: {
           able: true,
-          method: sortMethod
-        }
-      }
+          method: sortMethod,
+        },
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({
       id: i,
       name: `n${Math.floor(i / 2)}`,
-      label: `l${i % 2}`
+      label: `l${i % 2}`,
     })).sort(() => Math.random() - 0.5)
     const wrapper = mount(() => (
       <Table columns={columns} data={data}>
@@ -439,7 +439,7 @@ describe('Table', () => {
       'n3',
       'n3',
       'n4',
-      'n4'
+      'n4',
     ])
     expect(sortMethod).toHaveBeenCalled()
 
@@ -454,7 +454,7 @@ describe('Table', () => {
       'n1',
       'n1',
       'n0',
-      'n0'
+      'n0',
     ])
 
     await clickSorter(headCells[1], 'desc')
@@ -468,7 +468,7 @@ describe('Table', () => {
       'l1n1',
       'l0n1',
       'l1n0',
-      'l0n0'
+      'l0n0',
     ])
 
     await clickSorter(headCells[1], 'asc')
@@ -482,7 +482,7 @@ describe('Table', () => {
       'l0n1',
       'l1n1',
       'l0n0',
-      'l1n0'
+      'l1n0',
     ])
 
     // api method
@@ -500,15 +500,15 @@ describe('Table', () => {
         filter: {
           able: true,
           options: [{ label: 'Includes A', value: 'A' }],
-          method: (value: string, data: any) => data.name.includes(value)
-        }
-      }
+          method: (value: string, data: any) => data.name.includes(value),
+        },
+      },
     ]
     const multipleFilter = {
       able: true,
       options: [
         { label: 'Starts with D', value: 'D' },
-        { label: 'Starts with F', value: 'F' }
+        { label: 'Starts with F', value: 'F' },
       ],
       multiple: true,
       method: (values: string[], data: any) => {
@@ -519,14 +519,14 @@ describe('Table', () => {
         }
 
         return false
-      }
+      },
     }
     const data = [
       { name: 'Angelique', label: 'Walsh' },
       { name: 'Aeris', label: 'Drake' },
       { name: 'Elisabeth', label: 'Rogers' },
       { name: 'Sharon', label: 'Tanner' },
-      { name: 'Evie', label: 'Farmer' }
+      { name: 'Evie', label: 'Farmer' },
     ]
     const wrapper = mount(() => (
       <Table columns={columns} data={data}>
@@ -557,7 +557,7 @@ describe('Table', () => {
     expect(rows.length).toEqual(2)
     expect(rows.map(row => row.findAll('.vxp-table__cell')[1].text())).toEqual([
       'Angelique',
-      'Aeris'
+      'Aeris',
     ])
 
     singleItems[0].dispatchEvent(new Event('click'))
@@ -612,7 +612,7 @@ describe('Table', () => {
       { name: 'Aeris', label: 'Drake' },
       { name: 'Elisabeth', label: 'Rogers' },
       { name: 'Sharon', label: 'Tanner' },
-      { name: 'Evie', label: 'Farmer' }
+      { name: 'Evie', label: 'Farmer' },
     ]
     const wrapper = mount(() => (
       <Table data={data} data-filter={filter}>
@@ -639,12 +639,12 @@ describe('Table', () => {
     const columns = [
       {
         type: 'selection',
-        key: 'selection'
+        key: 'selection',
       },
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -698,12 +698,12 @@ describe('Table', () => {
       {
         type: 'order',
         key: 'order',
-        name: 'Order'
+        name: 'Order',
       },
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -728,8 +728,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
     const wrapper = mount(() => (
@@ -762,19 +762,19 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
     const wrapper = mount(Table, {
       props: {
         columns,
         data,
-        pageSize: 6
+        pageSize: 6,
       },
       slots: {
-        default: () => <TableColumn id-key={'label'} name={'Label'}></TableColumn>
-      }
+        default: () => <TableColumn id-key={'label'} name={'Label'}></TableColumn>,
+      },
     })
 
     await runScrollTimers()
@@ -794,8 +794,8 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
-      }
+        key: 'name',
+      },
     ]
 
     const data = Array.from<any, any>({ length: 3 }, (_, i) => ({ label: `l${i}` }))
@@ -818,14 +818,14 @@ describe('Table', () => {
     expect(rows.length).toEqual(6)
     expect(rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').exists()).toBe(true)
     expect(
-      rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes()
+      rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes(),
     ).not.toContain('vxp-table__tree-expand--hidden')
     expect(rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').exists()).toBe(true)
     expect(
-      rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes()
+      rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').classes(),
     ).not.toContain('vxp-table__tree-expand--hidden')
     expect(rows[1].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
-      '--vxp-table-row-depth: 1;'
+      '--vxp-table-row-depth: 1;',
     )
 
     await rows[1].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
@@ -833,7 +833,7 @@ describe('Table', () => {
     rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
     expect(rows.length).toEqual(9)
     expect(rows[2].find('.vxp-table__cell').find('.vxp-table__pad').attributes('style')).toContain(
-      '--vxp-table-row-depth: 2;'
+      '--vxp-table-row-depth: 2;',
     )
 
     await rows[0].find('.vxp-table__cell').find('.vxp-table__tree-expand').trigger('click')
@@ -852,18 +852,18 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
+        key: 'name',
       },
       {
         name: 'Indented',
         key: 'indented',
-        indented: true
+        indented: true,
       },
       {
         name: 'Indented1',
         key: 'indented1',
-        indented: true
-      }
+        indented: true,
+      },
     ]
 
     const data = Array.from<any, any>({ length: 3 }, (_, i) => ({ label: `l${i}` }))
@@ -888,11 +888,11 @@ describe('Table', () => {
     const onEnd = vi.fn(({ width }) => (currentWidth = width))
     const columns = [
       { name: 'Label', key: 'label' },
-      { name: 'Name', key: 'name' }
+      { name: 'Name', key: 'name' },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({
       name: `n${i}`,
-      label: `l${i}`
+      label: `l${i}`,
     }))
     const wrapper = mount(() => (
       <Table
@@ -923,7 +923,7 @@ describe('Table', () => {
       height: 0,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     })
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -964,7 +964,7 @@ describe('Table', () => {
           if (index === 3) {
             return { colSpan: 2 }
           }
-        }
+        },
       },
       {
         name: 'Label',
@@ -973,7 +973,7 @@ describe('Table', () => {
           if (index === 3) {
             return { colSpan: 2 }
           }
-        }
+        },
       },
       {
         name: 'Address',
@@ -982,7 +982,7 @@ describe('Table', () => {
           if (index === 1) {
             return { rowSpan: 2 }
           }
-        }
+        },
       },
       {
         name: 'Job',
@@ -991,7 +991,7 @@ describe('Table', () => {
           if (index === 3) {
             return { colSpan: 3, rowSpan: 3 }
           }
-        }
+        },
       },
       {
         name: 'Value',
@@ -1000,8 +1000,8 @@ describe('Table', () => {
           if (index === 0) {
             return { colSpan: 2, rowSpan: 2 }
           }
-        }
-      }
+        },
+      },
     ])
     const data = Array.from({ length: 5 }, (_, i) => ({
       id: i,
@@ -1009,7 +1009,7 @@ describe('Table', () => {
       label: `l${i}`,
       address: `a${i}`,
       job: `j${i}`,
-      value: i + 1
+      value: i + 1,
     }))
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
 
@@ -1046,23 +1046,23 @@ describe('Table', () => {
     const columns = defineColumns([
       {
         name: 'Name',
-        key: 'name'
+        key: 'name',
       },
       {
         name: 'Label',
         key: 'label',
-        headSpan: 3
+        headSpan: 3,
       },
       {
         name: 'Address',
-        key: 'address'
-      }
+        key: 'address',
+      },
     ])
     const data = Array.from({ length: 5 }, (_, i) => ({
       id: i,
       name: `n${i}`,
       label: `l${i}`,
-      address: `a${i}`
+      address: `a${i}`,
     }))
     const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
 
@@ -1082,18 +1082,18 @@ describe('Table', () => {
       <Table data={data}>
         <TableColumn id-key={'name'} name={'Name'}>
           {{
-            summary: ({ summary }: any) => summary.name
+            summary: ({ summary }: any) => summary.name,
           }}
         </TableColumn>
         <TableColumn id-key={'value'} name={'Value'}></TableColumn>
         <TableSummary id-key={'sum'} name={'Sum'} above>
           {{
-            default: ({ meta }: any) => meta.sum
+            default: ({ meta }: any) => meta.sum,
           }}
         </TableSummary>
         <TableSummary id-key={'min'} name={'Min'}>
           {{
-            default: ({ meta }: any) => meta.min
+            default: ({ meta }: any) => meta.min,
           }}
         </TableSummary>
       </Table>
@@ -1117,16 +1117,16 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
+        key: 'name',
       },
       {
         name: 'Label',
-        key: 'label'
+        key: 'label',
       },
       {
         name: 'Value',
-        key: 'value'
-      }
+        key: 'value',
+      },
     ]
     const summaries = defineSummaries([
       {
@@ -1137,7 +1137,7 @@ describe('Table', () => {
           if (index === 1) {
             return { colSpan: 2 }
           }
-        }
+        },
       },
       {
         name: 'Min',
@@ -1146,18 +1146,18 @@ describe('Table', () => {
           if (index === 1) {
             return { colSpan: 3, rowSpan: 3 }
           }
-        }
+        },
       },
       {
         name: 'Max',
-        key: 'max'
-      }
+        key: 'max',
+      },
     ])
     const data = Array.from({ length: 5 }, (_, i) => ({
       id: i,
       name: `n${i}`,
       label: i,
-      value: i + 1
+      value: i + 1,
     }))
     const wrapper = mount(() => <Table columns={columns} summaries={summaries} data={data}></Table>)
 
@@ -1192,23 +1192,23 @@ describe('Table', () => {
         filter: {
           able: true,
           options: [{ label: 'Includes A', value: 'A' }],
-          method: (value: string, data: any) => data.name.includes(value)
-        }
+          method: (value: string, data: any) => data.name.includes(value),
+        },
       },
       { type: 'expand' },
-      { type: 'drag' }
+      { type: 'drag' },
     ]
     const data = [
       {
         name: 'Angelique',
         children: [{ name: 'Aeris' }],
-        treeExpanded: true
+        treeExpanded: true,
       },
       {
         name: 'Elisabeth',
-        children: [{ name: 'Sharon' }]
+        children: [{ name: 'Sharon' }],
       },
-      { name: 'Evie', label: 'Farmer' }
+      { name: 'Evie', label: 'Farmer' },
     ]
     const icons = {
       filter: User,
@@ -1217,7 +1217,7 @@ describe('Table', () => {
       expand: User,
       dragger: User,
       plus: User,
-      minus: User
+      minus: User,
     }
     const wrapper = mount(() => <Table columns={columns} data={data} icons={icons}></Table>)
 
@@ -1237,13 +1237,13 @@ describe('Table', () => {
       rows[0]
         .find('.vxp-table__tree-expand:not(.vxp-table__tree-expand--hidden)')
         .findComponent(User)
-        .exists()
+        .exists(),
     ).toBe(true)
     expect(
       rows[2]
         .find('.vxp-table__tree-expand:not(.vxp-table__tree-expand--hidden)')
         .findComponent(User)
-        .exists()
+        .exists(),
     ).toBe(true)
   })
 
@@ -1252,16 +1252,16 @@ describe('Table', () => {
       {
         name: 'Name',
         key: 'name',
-        ellipsis: true
+        ellipsis: true,
       },
       {
         name: 'Value',
-        key: 'value'
-      }
+        key: 'value',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, value: i }))
     const wrapper = mount(Table, {
-      props: { columns, data }
+      props: { columns, data },
     })
 
     await runScrollTimers()
@@ -1286,16 +1286,16 @@ describe('Table', () => {
     const columns = [
       {
         name: 'Name',
-        key: 'name'
+        key: 'name',
       },
       {
         name: 'Value',
-        key: 'value'
-      }
+        key: 'value',
+      },
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({ name: `n${i}`, value: i }))
     const wrapper = mount(Table, {
-      props: { columns, data }
+      props: { columns, data },
     })
 
     await runScrollTimers()

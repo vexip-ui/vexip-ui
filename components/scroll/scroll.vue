@@ -11,7 +11,7 @@ import {
   shallowReadonly,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -34,7 +34,7 @@ const props = useProps('scroll', _props, {
   scrollAttrs: null,
   mode: {
     default: 'vertical',
-    validator: value => scrollModes.includes(value)
+    validator: value => scrollModes.includes(value),
   },
   width: '',
   height: '',
@@ -45,11 +45,11 @@ const props = useProps('scroll', _props, {
   wheel: true,
   scrollX: {
     default: 0,
-    static: true
+    static: true,
   },
   scrollY: {
     default: 0,
-    static: true
+    static: true,
   },
   useXBar: false,
   useYBar: false,
@@ -61,10 +61,10 @@ const props = useProps('scroll', _props, {
   noTransition: false,
   onBeforeScroll: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   useBarTrack: false,
-  scrollTag: 'div'
+  scrollTag: 'div',
 })
 
 const emitter = createEventEmitter()
@@ -106,7 +106,7 @@ const {
   verifyScroll,
   computePercent,
   refresh,
-  triggerUpdate
+  triggerUpdate,
 } = useScrollWrapper({
   mode,
   disabled: toRef(props, 'disabled'),
@@ -125,7 +125,7 @@ const {
       initialized = true
       startAutoplay()
     }
-  }
+  },
 })
 
 const slotParams = shallowReadonly({
@@ -134,7 +134,7 @@ const slotParams = shallowReadonly({
   scrollTo,
   scrollBy,
   scrollToElement,
-  ensureInView
+  ensureInView,
 })
 
 /* autoplay */
@@ -230,8 +230,8 @@ const className = computed(() => {
       [nh.bm('using-bar')]: usingBar.value,
       [nh.bm('scrolling')]: scrolling.value,
       [nh.bm('no-ready')]: !isReady.value,
-      [nh.bm('no-transition')]: props.noTransition
-    }
+      [nh.bm('no-transition')]: props.noTransition,
+    },
   ]
 })
 const style = computed(() => {
@@ -251,7 +251,7 @@ const style = computed(() => {
           ? height
           : `${Number(height)}px`
         : `${height}px`
-      : undefined
+      : undefined,
   }
 })
 const wrapperClass = computed(() => {
@@ -331,7 +331,7 @@ defineExpose({
   getXScrollLimit,
   getYScrollLimit,
   addScrollListener,
-  removeScrollListener
+  removeScrollListener,
 })
 
 function getCommonPayload() {
@@ -339,7 +339,7 @@ function getCommonPayload() {
     clientX: -x.value,
     clientY: -y.value,
     percentX: percentX.value,
-    percentY: percentY.value
+    percentY: percentY.value,
   }
 }
 
@@ -500,7 +500,7 @@ function handleWheel(event: WheelEvent, type: 'vertical' | 'horizontal') {
   emitEvent(props.onWheel, {
     ...getCommonPayload(),
     type,
-    sign: -sign as 1 | -1
+    sign: -sign as 1 | -1,
   })
 
   startAutoplay()
@@ -538,7 +538,7 @@ function handleXBarScroll(percent: number) {
 
   emitEvent(props.onBarScroll, {
     ...getCommonPayload(),
-    type: 'horizontal'
+    type: 'horizontal',
   })
   emitScrollEvent('horizontal')
 }
@@ -550,7 +550,7 @@ function handleYBarScroll(percent: number) {
 
   emitEvent(props.onBarScroll, {
     ...getCommonPayload(),
-    type: 'vertical'
+    type: 'vertical',
   })
   emitScrollEvent('vertical')
 }
@@ -558,11 +558,11 @@ function handleYBarScroll(percent: number) {
 function emitScrollEvent(type: Exclude<ScrollMode, 'horizontal-exact'>) {
   emitEvent(props.onScroll, {
     ...getCommonPayload(),
-    type
+    type,
   })
   emitter.emit('scroll', {
     ...getCommonPayload(),
-    type
+    type,
   })
 }
 
@@ -582,7 +582,7 @@ function getState() {
     percentX,
     percentY,
     enableXScroll: enableXScroll.value,
-    enableYScroll: enableYScroll.value
+    enableYScroll: enableYScroll.value,
   }
 }
 

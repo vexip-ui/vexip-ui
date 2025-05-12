@@ -45,7 +45,7 @@ function createOptions(depth = 1, prefix = 'Op', hasChild = true) {
       label: `${prefix}-${i}`,
       disabled: i % 4 === 0,
       index: i,
-      children: null
+      children: null,
     })
   }
 

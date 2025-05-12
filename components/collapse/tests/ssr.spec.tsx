@@ -18,7 +18,7 @@ describe('SSR for Collapse', () => {
           <Collapse>
             <CollapsePanel></CollapsePanel>
           </Collapse>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

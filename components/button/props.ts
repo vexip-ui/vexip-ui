@@ -25,7 +25,7 @@ export const buttonProps = buildProps({
   noPulse: booleanProp,
   badge: [String, Number],
   slots: Object as PropType<ButtonSlots>,
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type ButtonProps = ExtractPropTypes<typeof buttonProps>
@@ -34,7 +34,7 @@ export type ButtonCProps = ConfigurableProps<ButtonProps>
 export const buttonGroupProps = buildProps({
   size: sizeProp,
   type: String as PropType<ButtonType>,
-  circle: booleanProp
+  circle: booleanProp,
 })
 
 export type ButtonGroupProps = ExtractPropTypes<typeof buttonGroupProps>

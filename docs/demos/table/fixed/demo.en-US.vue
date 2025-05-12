@@ -20,44 +20,44 @@ const columns = reactive(
     {
       type: 'order',
       name: 'Order',
-      fixed: true
+      fixed: true,
     },
     {
       name: 'First Name',
       key: 'firstName',
-      width: 160
+      width: 160,
     },
     {
       name: 'Last Name',
       key: 'lastName',
-      width: 160
+      width: 160,
     },
     {
       name: 'Company',
       key: 'company',
-      width: 180
+      width: 180,
     },
     {
       name: 'Job',
       key: 'job',
-      width: 120
+      width: 120,
     },
     {
       name: 'Age',
       key: 'age',
       width: 60,
       textAlign: 'center',
-      fixed: 'right'
+      fixed: 'right',
     },
     {
       name: 'Address',
       key: 'address',
-      width: 200
+      width: 200,
     },
     {
       name: 'Email',
       key: 'email',
-      width: 240
+      width: 240,
     },
     {
       name: 'Action',
@@ -65,9 +65,9 @@ const columns = reactive(
       width: 120,
       textAlign: 'center',
       fixed: 'right',
-      renderer: () => h('a', { href: 'javascript:void 0' }, ['Action'])
-    }
-  ])
+      renderer: () => h('a', { href: 'javascript:void 0' }, ['Action']),
+    },
+  ]),
 )
 const data = reactive(
   Array.from({ length: 10 }, (_, index) => {
@@ -79,8 +79,8 @@ const data = reactive(
       job: `Job ${index}`,
       age: 20 + index,
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 </script>

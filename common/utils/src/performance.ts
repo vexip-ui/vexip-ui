@@ -16,7 +16,7 @@ export const raf = isClient
  */
 export function throttle<T extends (...args: any[]) => any>(
   method: T,
-  interval = 16
+  interval = 16,
 ): (...args: Parameters<T>) => void {
   if (typeof method !== 'function') {
     return noop
@@ -48,7 +48,7 @@ export function throttle<T extends (...args: any[]) => any>(
           lastCall = Date.now()
           invoke(...args)
         },
-        Math.max(0, interval - elapsed)
+        Math.max(0, interval - elapsed),
       )
     }
   }
@@ -64,7 +64,7 @@ export function throttle<T extends (...args: any[]) => any>(
  */
 export function debounce<T extends (...args: any[]) => any>(
   method: T,
-  delay = 100
+  delay = 100,
 ): (...args: Parameters<T>) => void {
   if (typeof method !== 'function') {
     return noop
@@ -149,7 +149,7 @@ export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
           promise = undefined!
 
           resolve(method(...lastArgs))
-        })
+        }),
       )
     }
 
@@ -237,7 +237,7 @@ export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...a
 export async function runParallel<T>(
   maxConcurrency: number,
   source: T[],
-  iteratorFn: (item: T, source: T[]) => Promise<any>
+  iteratorFn: (item: T, source: T[]) => Promise<any>,
 ) {
   const ret: Array<Promise<any>> = []
   const executing: Array<Promise<any>> = []

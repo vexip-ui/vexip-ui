@@ -27,8 +27,8 @@ const conveniences: Record<ToastType, Record<string, any>> = {
   warning: {},
   error: {},
   loading: {
-    showMask: true
-  }
+    showMask: true,
+  },
 }
 
 export class ToastManager {
@@ -52,7 +52,7 @@ export class ToastManager {
   constructor(options: Partial<ToastOptions> = {}) {
     options = {
       ...options,
-      duration: options.duration ? toNumber(options.duration) : 2000
+      duration: options.duration ? toNumber(options.duration) : 2000,
     }
 
     this._mountedApp = null
@@ -194,7 +194,7 @@ export class ToastManager {
       ...convenienceOptions,
       ...options,
       type: type ?? options.type,
-      onClose
+      onClose,
     }
 
     if (item.icon && typeof item.icon !== 'function') {

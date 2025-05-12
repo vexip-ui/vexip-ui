@@ -41,8 +41,8 @@ const users: {
     name: 'Fantastic-admin',
     slogan: '开箱即用的管理系统框架',
     logo: '/fantastic-admin.png',
-    link: 'https://fantastic-admin.github.io/'
-  }
+    link: 'https://fantastic-admin.github.io/',
+  },
 ]
 </script>
 
@@ -202,8 +202,8 @@ const users: {
 
     img {
       height: 100%;
-      object-fit: contain;
       pointer-events: none;
+      object-fit: contain;
     }
   }
 }

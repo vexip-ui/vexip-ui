@@ -17,8 +17,8 @@ async function main() {
   await run('pnpm', ['props'])
   await run('vite', ['build', '--config', 'vite.config.ts'], {
     env: {
-      NODE_ENV: env
-    }
+      NODE_ENV: env,
+    },
   })
 
   logger.ln()
@@ -26,8 +26,8 @@ async function main() {
   await run('vite', ['build', '--config', 'vite.full.config.ts'], {
     stdio: 'inherit',
     env: {
-      NODE_ENV: env
-    }
+      NODE_ENV: env,
+    },
   })
   await run('pnpm', ['build:style'])
 

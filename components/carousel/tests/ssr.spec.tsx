@@ -21,7 +21,7 @@ describe('SSR for Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </Carousel>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

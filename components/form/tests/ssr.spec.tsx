@@ -21,7 +21,7 @@ describe('SSR for Form', () => {
               <Input></Input>
             </FormItem>
           </Form>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

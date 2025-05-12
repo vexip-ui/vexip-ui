@@ -17,7 +17,7 @@ export function useTrack({
   onDown = noop,
   onMove = noop,
   onUp = noop,
-  onScroll = noop
+  onScroll = noop,
 }: {
   currentScroll: Ref<number>,
   type: Ref<ScrollbarType>,
@@ -105,7 +105,7 @@ export function useTrack({
 
     targetScroll = Math.max(
       0,
-      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100)
+      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100),
     )
     forward = targetScroll >= currentScroll.value
 
@@ -134,7 +134,7 @@ export function useTrack({
 
     targetScroll = Math.max(
       0,
-      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100)
+      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100),
     )
 
     !processing && animateMoveBar()
@@ -165,7 +165,7 @@ export function useTrack({
     barLength,
     disabled,
 
-    handleMouseDown
+    handleMouseDown,
   }
 }
 

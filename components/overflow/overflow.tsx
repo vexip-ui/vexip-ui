@@ -8,7 +8,7 @@ import {
   nextTick,
   onMounted,
   ref,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -26,12 +26,12 @@ export default defineComponent({
     const props = useProps('overflow', _props, {
       items: {
         default: null,
-        static: true
+        static: true,
       },
       tag: 'div',
       attrFlag: false,
       static: false,
-      maxCount: 0
+      maxCount: 0,
     })
 
     const nh = useNameHelper('overflow')
@@ -47,8 +47,8 @@ export default defineComponent({
         nh.bs('vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm('manual')]: props.maxCount > 0
-        }
+          [nh.bm('manual')]: props.maxCount > 0,
+        },
       ]
     })
     const hiddenFlag = computed(() => {
@@ -252,5 +252,5 @@ export default defineComponent({
 
       return <ResizeObserver onResize={refresh}>{render()}</ResizeObserver>
     }
-  }
+  },
 })

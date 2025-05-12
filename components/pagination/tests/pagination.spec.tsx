@@ -24,7 +24,7 @@ describe('Pagination', () => {
 
   it('size', async () => {
     const wrapper = mount(Pagination, {
-      props: { size: 'small' }
+      props: { size: 'small' },
     })
 
     expect(wrapper.classes()).toContain('vxp-pagination--small')
@@ -38,8 +38,8 @@ describe('Pagination', () => {
       props: {
         active: 3,
         total: 50,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
     await nextTick()
     await nextTick()

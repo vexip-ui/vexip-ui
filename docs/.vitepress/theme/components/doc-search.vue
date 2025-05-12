@@ -31,8 +31,8 @@ const searchOptions = computed(() => {
   for (const group of getComponentConfig()) {
     rawOptions.push(
       ...group.components.map(
-        ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : '')
-      )
+        ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : ''),
+      ),
     )
   }
 

@@ -9,8 +9,8 @@ describe('Space', () => {
   it('render', () => {
     const wrapper = mount(Space, {
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-space-vars')
@@ -43,14 +43,14 @@ describe('Space', () => {
 
         if (justify === 'start' || justify === 'end') {
           expect(wrapper.find('.vxp-space').attributes('style')).toContain(
-            `justify-content: flex-${justify};`
+            `justify-content: flex-${justify};`,
           )
         } else {
           expect(wrapper.find('.vxp-space').attributes('style')).toContain(
-            `justify-content: ${justify};`
+            `justify-content: ${justify};`,
           )
         }
-      }
+      },
     )
   })
 
@@ -60,7 +60,7 @@ describe('Space', () => {
 
       if (align === 'start' || align === 'end') {
         expect(wrapper.find('.vxp-space').attributes('style')).toContain(
-          `align-items: flex-${align};`
+          `align-items: flex-${align};`,
         )
       } else {
         expect(wrapper.find('.vxp-space').attributes('style')).toContain(`align-items: ${align};`)
@@ -72,8 +72,8 @@ describe('Space', () => {
     const wrapper = mount(Space, {
       props: { size: 16 },
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.find('.vxp-space').attributes('style')).toContain('--vxp-space-h-gap: 16px;')
@@ -88,8 +88,8 @@ describe('Space', () => {
   it('no wrap', async () => {
     const wrapper = mount(Space, {
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-space--no-wrap')

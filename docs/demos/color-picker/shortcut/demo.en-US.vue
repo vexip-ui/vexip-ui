@@ -20,6 +20,6 @@ const shortcuts = [
   '#228be6',
   '#1c7ed6',
   '#1971c2',
-  '#1864ab'
+  '#1864ab',
 ]
 </script>

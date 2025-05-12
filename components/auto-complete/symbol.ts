@@ -1,7 +1,7 @@
 import type {
   SelectKeyConfig,
   SelectOptionState,
-  SelectRawOption
+  SelectRawOption,
 } from '@/components/select/symbol'
 
 export type AutoCompleteKeyConfig = Omit<SelectKeyConfig, 'label'>

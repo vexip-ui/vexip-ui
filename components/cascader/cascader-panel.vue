@@ -19,48 +19,48 @@ defineOptions({ name: 'CascaderPanel' })
 const props = defineProps({
   options: {
     type: Array as PropType<CascaderOptionState[]>,
-    default: () => []
+    default: () => [],
   },
   openedId: {
     type: Number,
-    default: null
+    default: null,
   },
   values: {
     type: Array as PropType<string[]>,
-    default: () => []
+    default: () => [],
   },
   ready: {
     type: Boolean,
-    default: false
+    default: false,
   },
   multiple: {
     type: Boolean,
-    default: false
+    default: false,
   },
   checkIcon: {
     type: Object,
-    default: null
+    default: null,
   },
   isAsync: {
     type: Boolean,
-    default: false
+    default: false,
   },
   merged: {
     type: Boolean,
-    default: false
+    default: false,
   },
   noCascaded: {
     type: Boolean,
-    default: false
+    default: false,
   },
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   labeledBy: {
     type: String,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 const emit = defineEmits(['select', 'check', 'hover', 'open', 'back', 'close'])
@@ -100,10 +100,10 @@ const { target: wrapper } = useModifier({
             currentHitting.value = boundRange(
               findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
               0,
-              props.options.length - 1
+              props.options.length - 1,
             )
             ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
-          }
+          },
         ],
         [
           () => modifier.left || modifier.right,
@@ -117,7 +117,7 @@ const { target: wrapper } = useModifier({
             } else {
               emit('back')
             }
-          }
+          },
         ],
         [
           () => modifier.enter || modifier.space,
@@ -133,15 +133,15 @@ const { target: wrapper } = useModifier({
                 handleSelect(option, currentHitting.value)
               }
             }
-          }
-        ]
+          },
+        ],
       ],
       {
         beforeMatchAny: () => event.preventDefault(),
-        afterMatchAny: modifier.resetAll
-      }
+        afterMatchAny: modifier.resetAll,
+      },
     )
-  }
+  },
 })
 
 let listHeight = 0

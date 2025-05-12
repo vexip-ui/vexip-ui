@@ -12,7 +12,7 @@ import type {
   MessageInstance,
   MessageOptions,
   MessagePlacement,
-  MessageType
+  MessageType,
 } from './symbol'
 
 export type { MessageConfig, MessageType, MessagePlacement, MessageOptions }
@@ -56,7 +56,7 @@ export class MessageManager {
   constructor(options: ManagerOptions = {}) {
     options = {
       ...options,
-      duration: options.duration ? toNumber(options.duration) : 3000
+      duration: options.duration ? toNumber(options.duration) : 3000,
     }
 
     this._mountedApp = null
@@ -103,7 +103,7 @@ export class MessageManager {
     state: boolean,
     success: string | MessageOptions,
     error: string | MessageOptions,
-    duration?: number
+    duration?: number,
   ) {
     if (state) {
       this.success(success, duration)
@@ -123,7 +123,7 @@ export class MessageManager {
   config({ placement, ...others }: MessageConfig & MessageOptions) {
     if (placement) {
       this._getInstance()?.config({
-        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
       })
     }
 
@@ -257,7 +257,7 @@ export class MessageManager {
       type: type ?? options.type,
       onClose,
       onEnter,
-      onLeave
+      onLeave,
     }
 
     if (item.icon && typeof item.icon !== 'function') {

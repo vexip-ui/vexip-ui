@@ -9,20 +9,20 @@ defineOptions({ name: 'WheelItem' })
 const props = defineProps({
   value: {
     type: [Number, String],
-    default: null
+    default: null,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   active: {
     type: Boolean,
-    default: false
+    default: false,
   },
   meta: {
     type: [String, Number, Object],
-    default: null
-  }
+    default: null,
+  },
 })
 
 const nh = useNameHelper('wheel')
@@ -40,13 +40,13 @@ const state = reactive({
   el: wrapper,
   value: toRef(props, 'value'),
   disabled: toRef(props, 'disabled'),
-  meta: toRef(props, 'meta')
+  meta: toRef(props, 'meta'),
 })
 
 const style = computed(() => {
   return {
     width: width.value ? `${width.value}px` : undefined,
-    height: height.value ? `${height.value}px` : undefined
+    height: height.value ? `${height.value}px` : undefined,
   }
 })
 

@@ -32,7 +32,7 @@ export const calendarPanelProps = buildProps({
   range: booleanProp,
   slots: Object as PropType<CalendarPanelSlots>,
   onSelect: eventProp<(date: Date) => void>(),
-  onHover: eventProp<(date: Date | null) => void>()
+  onHover: eventProp<(date: Date | null) => void>(),
 })
 
 export type CalendarPanelProps = ExtractPropTypes<typeof calendarPanelProps>
@@ -56,7 +56,7 @@ export const calendarProps = buildProps({
   slots: Object as PropType<CalendarSlots>,
   onSelect: eventProp<(date: Date) => void>(),
   onYearChange: eventProp<(year: number, month: number) => void>(),
-  onMonthChange: eventProp<(year: number, month: number) => void>()
+  onMonthChange: eventProp<(year: number, month: number) => void>(),
 })
 
 export type CalendarProps = ExtractPropTypes<typeof calendarProps>

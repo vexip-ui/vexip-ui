@@ -46,7 +46,7 @@ describe('Anchor', () => {
                 <AnchorLink to={'#2'}>{'2'}</AnchorLink>
                 <AnchorLink to={'#3'}>{'3'}</AnchorLink>
               </>
-            )
+            ),
           }}
         </AnchorLink>
         <AnchorLink to={'#4'}></AnchorLink>
@@ -66,7 +66,7 @@ describe('Anchor', () => {
       Object.defineProperty(el, 'offsetTop', {
         configurable: true,
         get: () => top,
-        set: v => (top = v)
+        set: v => (top = v),
       })
 
       if (id) el.setAttribute('id', id)
@@ -81,7 +81,7 @@ describe('Anchor', () => {
 
     Object.defineProperty(viewer, 'scrollHeight', {
       configurable: true,
-      get: () => 60
+      get: () => 60,
     })
 
     const scrollToMock = vi

@@ -4,8 +4,8 @@ defineOptions({ name: 'Portal' })
 defineProps({
   to: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 </script>
 

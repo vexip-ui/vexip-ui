@@ -14,8 +14,8 @@ describe('Skeleton', () => {
   it('block', async () => {
     const wrapper = mount(Skeleton, {
       props: {
-        block: true
-      }
+        block: true,
+      },
     })
     expect(wrapper.classes()).toContain('vxp-skeleton--block')
   })
@@ -23,8 +23,8 @@ describe('Skeleton', () => {
   it('image', async () => {
     const wrapper = mount(Skeleton, {
       props: {
-        image: true
-      }
+        image: true,
+      },
     })
     expect(wrapper.classes()).toContain('vxp-skeleton--image')
   })
@@ -32,8 +32,8 @@ describe('Skeleton', () => {
   it('circle', async () => {
     const wrapper = mount(Skeleton, {
       props: {
-        circle: true
-      }
+        circle: true,
+      },
     })
     expect(wrapper.classes()).toContain('vxp-skeleton--circle')
   })
@@ -42,12 +42,12 @@ describe('Skeleton', () => {
     const wrapper = mount(Skeleton, {
       props: {
         block: true,
-        width: 20
-      }
+        width: 20,
+      },
     })
 
     expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
-      '--vxp-skeleton-width: 20px;'
+      '--vxp-skeleton-width: 20px;',
     )
   })
 
@@ -55,12 +55,12 @@ describe('Skeleton', () => {
     const wrapper = mount(Skeleton, {
       props: {
         block: true,
-        height: 20
-      }
+        height: 20,
+      },
     })
 
     expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
-      '--vxp-skeleton-height: 20px;'
+      '--vxp-skeleton-height: 20px;',
     )
   })
 
@@ -68,20 +68,20 @@ describe('Skeleton', () => {
     const wrapper = mount(Skeleton, {
       props: {
         block: true,
-        spread: 20
-      }
+        spread: 20,
+      },
     })
 
     expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
-      '--vxp-skeleton-spread: 20px;'
+      '--vxp-skeleton-spread: 20px;',
     )
   })
 
   it('tag', () => {
     const wrapper = mount(Skeleton, {
       props: {
-        tag: 'xxx'
-      }
+        tag: 'xxx',
+      },
     })
     expect(wrapper.find('.vxp-skeleton').element.tagName).toEqual('XXX')
   })
@@ -89,8 +89,8 @@ describe('Skeleton', () => {
   it('repeat', () => {
     const wrapper = mount(Skeleton, {
       props: {
-        repeat: 2
-      }
+        repeat: 2,
+      },
     })
     expect(wrapper.findAll('.vxp-skeleton').length).toBe(2)
   })
@@ -98,16 +98,16 @@ describe('Skeleton', () => {
   it('slot', async () => {
     const wrapper = mount(Skeleton, {
       props: {
-        loading: true
+        loading: true,
       },
       slots: {
-        default: () => <span class={'content'}>{TEXT}</span>
-      }
+        default: () => <span class={'content'}>{TEXT}</span>,
+      },
     })
 
     expect(wrapper.find('.content').exists()).toBe(false)
     await wrapper.setProps({
-      loading: false
+      loading: false,
     })
     expect(wrapper.find('.content').exists()).toBe(true)
   })

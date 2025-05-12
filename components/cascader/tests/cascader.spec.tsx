@@ -25,7 +25,7 @@ function createOptions(depth = 3, prefix = '', iterator = 1) {
       value: `l${prefix}-${i}`,
       label: `v${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 
@@ -68,7 +68,7 @@ function getData(options: CascaderOption[], indexs: number[]) {
 describe('Cascader', () => {
   it('render', () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true }
+      props: { visible: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-cascader-vars')
@@ -81,7 +81,7 @@ describe('Cascader', () => {
 
   it('has empty', async () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true, options: createOptions() }
+      props: { visible: true, options: createOptions() },
     })
 
     expect(wrapper.find('.vxp-cascader__empty').exists()).toBe(false)
@@ -92,7 +92,7 @@ describe('Cascader', () => {
 
   it('transfer', async () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true, transfer: true, options: createOptions() }
+      props: { visible: true, transfer: true, options: createOptions() },
     })
 
     await nextTick()
@@ -107,12 +107,12 @@ describe('Cascader', () => {
       props: {
         visible: true,
         value: getValues(options, [2, 2, 2]),
-        options
-      }
+        options,
+      },
     })
 
     expect(wrapper.find('.vxp-cascader__control').text()).toEqual(
-      getLabels(options, [2, 2, 2]).join('/')
+      getLabels(options, [2, 2, 2]).join('/'),
     )
     expect(wrapper.findAll('.vxp-option--selected').length).toBe(3)
   })
@@ -172,7 +172,7 @@ describe('Cascader', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(Cascader, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -194,20 +194,20 @@ describe('Cascader', () => {
 
   it('popper show', async () => {
     const wrapper = mount(Cascader, {
-      props: { options: createOptions() }
+      props: { options: createOptions() },
     })
 
     expect(wrapper.find('.vxp-cascader__popper').attributes('style')).toContain('display: none;')
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-cascader__popper').attributes('style') || '').not.toContain(
-      'display: none;'
+      'display: none;',
     )
   })
 
   it('popper will be removed when alive false', async () => {
     const wrapper = mount(Cascader, {
-      props: { popperAlive: false, options: createOptions() }
+      props: { popperAlive: false, options: createOptions() },
     })
 
     expect(wrapper.find('.vxp-cascader__popper').exists()).toBe(false)
@@ -263,7 +263,7 @@ describe('Cascader', () => {
     const wrapper = mount(() => (
       <Cascader prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </Cascader>
     ))
@@ -294,7 +294,7 @@ describe('Cascader', () => {
     const wrapper = mount(() => (
       <Cascader suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </Cascader>
     ))
@@ -308,7 +308,7 @@ describe('Cascader', () => {
     const wrapper = mount(() => <Cascader size={'large'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__selector').classes()).toContain(
-      'vxp-cascader__selector--large'
+      'vxp-cascader__selector--large',
     )
   })
 
@@ -317,7 +317,7 @@ describe('Cascader', () => {
       const wrapper = mount(() => <Cascader state={state}></Cascader>)
 
       expect(wrapper.find('.vxp-cascader__selector').classes()).toContain(
-        `vxp-cascader__selector--${state}`
+        `vxp-cascader__selector--${state}`,
       )
     })
   })
@@ -358,8 +358,8 @@ describe('Cascader', () => {
         visible: true,
         popperAlive: false,
         options,
-        onChange
-      }
+        onChange,
+      },
     })
     const getPanels = () => wrapper.findAll('.vxp-cascader__panel')
 
@@ -375,7 +375,7 @@ describe('Cascader', () => {
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenLastCalledWith(
       getValues(options, [0, 0, 0]),
-      getData(options, [0, 0, 0])
+      getData(options, [0, 0, 0]),
     )
     expect(getPanels().length).toEqual(0)
 
@@ -391,8 +391,8 @@ describe('Cascader', () => {
         clearable: true,
         placeholder: TEXT,
         options,
-        onClear
-      }
+        onClear,
+      },
     })
     const selector = wrapper.find('.vxp-cascader__selector')
 
@@ -420,18 +420,18 @@ describe('Cascader', () => {
             c: [
               {
                 l: 'l-1-1',
-                v: 'v-1-1'
-              }
-            ]
-          }
+                v: 'v-1-1',
+              },
+            ],
+          },
         ],
         value: ['v-1', 'v-1-1'],
         keyConfig: {
           label: 'l',
           value: 'v',
-          children: 'c'
-        }
-      }
+          children: 'c',
+        },
+      },
     })
 
     expect(wrapper.find('.vxp-cascader__control').text()).toEqual('l-1/l-1-1')

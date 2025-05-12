@@ -35,15 +35,15 @@ export default defineComponent({
       },
       validator: (value: RGBColor) => {
         return 'r' in value && 'g' in value && 'b' in value
-      }
+      },
     },
     alpha: {
       type: Number,
       default: 1,
       validator: (value: number) => {
         return value >= 0 && value <= 1
-      }
-    }
+      },
+    },
   },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
@@ -68,7 +68,7 @@ export default defineComponent({
           prevLeft = currentLeft.value
           handleChange()
         }
-      }
+      },
     })
 
     const { moving: editing } = useMoving({
@@ -100,7 +100,7 @@ export default defineComponent({
       },
       onEnd: () => {
         emit('edit-end')
-      }
+      },
     })
 
     const rgbString = computed(() => {
@@ -117,7 +117,7 @@ export default defineComponent({
         currentLeft.value = value * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function verifyPosition() {
@@ -135,8 +135,8 @@ export default defineComponent({
 
       rgbString,
 
-      wrapper
+      wrapper,
     }
-  }
+  },
 })
 </script>

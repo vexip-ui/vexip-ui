@@ -12,7 +12,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { useMoving, useSetTimeout } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
@@ -30,13 +30,13 @@ const props = useProps('captcha', _props, {
   size: createSizeProp(size),
   target: {
     default: 100,
-    validator: value => value >= 0 && value <= 100
+    validator: value => value >= 0 && value <= 100,
   },
   tip: null,
   successTip: null,
   tolerance: {
     default: 1,
-    validator: value => value >= 0
+    validator: value => value >= 0,
   },
   disabled: () => disabled.value,
   loading: () => loading.value,
@@ -45,9 +45,9 @@ const props = useProps('captcha', _props, {
   loadingEffect: null,
   onBeforeTest: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 defineSlots<CaptchaSliderSlots>()
@@ -142,7 +142,7 @@ const { target: trigger, moving: dragging } = useMoving({
 
     clearTimeout(timer.testing)
     testing.value = false
-  }
+  },
 })
 
 const isLoading = computed(() => props.loading || testLoading.value)
@@ -155,25 +155,25 @@ const className = computed(() => {
     [`${baseCls}--success`]: isSuccess.value,
     [`${baseCls}--disabled`]: props.disabled,
     [`${baseCls}--loading`]: isLoading.value,
-    [`${baseCls}--${props.size}`]: props.size !== 'default'
+    [`${baseCls}--${props.size}`]: props.size !== 'default',
   }
 })
 const fillerStyle = computed(() => {
   return {
     [nh.cv('filler-transition')]: resetting.value ? 'transform 250ms ease' : undefined,
-    transform: `scaleX(${currentLeft.value / 100})`
+    transform: `scaleX(${currentLeft.value / 100})`,
   }
 })
 const tipStyle = computed(() => {
   return {
     [nh.cv('tip-transition')]: resetting.value ? 'background-position 250ms ease' : undefined,
-    backgroundPosition: `-${currentLeft.value}%`
+    backgroundPosition: `-${currentLeft.value}%`,
   }
 })
 const triggerStyle = computed(() => {
   return {
     left: `${currentLeft.value}%`,
-    [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
+    [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined,
   }
 })
 
@@ -190,7 +190,7 @@ watch(
 
       isSuccess.value = true
     }
-  }
+  },
 )
 watch(readonly, value => value && reset())
 
@@ -204,7 +204,7 @@ defineExpose({
   track,
   trigger,
   focus,
-  reset
+  reset,
 })
 
 function verifyPosition() {

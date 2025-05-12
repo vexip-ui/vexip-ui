@@ -15,7 +15,7 @@ export function useScrollWrapper({
   scrollY,
   onResize,
   onBeforeRefresh,
-  onAfterRefresh
+  onAfterRefresh,
 }: {
   mode: Ref<Exclude<ScrollMode, 'horizontal-exact'>>,
   disabled: Ref<boolean>,
@@ -36,14 +36,14 @@ export function useScrollWrapper({
   const wrapper = reactive({
     el: wrapperEl,
     width: toNumber(width.value),
-    height: toNumber(height.value)
+    height: toNumber(height.value),
   })
 
   // 内容长宽
   const content = reactive({
     el: contentEl,
     width: 0,
-    height: 0
+    height: 0,
   })
 
   const x = manualRef(-scrollX.value)
@@ -257,7 +257,7 @@ export function useScrollWrapper({
             onAfterRefresh()
           }
         },
-        isMounted ? 20 : 100
+        isMounted ? 20 : 100,
       )
     })
   }
@@ -284,6 +284,6 @@ export function useScrollWrapper({
     verifyScroll,
     computePercent,
     refresh,
-    triggerUpdate
+    triggerUpdate,
   }
 }

@@ -30,9 +30,9 @@ const props = useProps('toast', _props, {
   renderer: {
     default: null,
     isFunc: true,
-    static: true
+    static: true,
   },
-  parseHtml: false
+  parseHtml: false,
 })
 
 const getIndex = useZIndex()
@@ -42,7 +42,7 @@ const predefinedIcons = computed(() => ({
   success: icons.value.success,
   warning: icons.value.warning,
   error: icons.value.error,
-  loading: icons.value.loading
+  loading: icons.value.loading,
 }))
 
 const state = reactive({
@@ -62,7 +62,7 @@ const state = reactive({
   parseHtml: props.parseHtml,
   textOnly: false,
   renderer: props.renderer,
-  onClose: null as (() => void) | null
+  onClose: null as (() => void) | null,
 })
 
 const mountedPromise = new Promise<void>(resolve => {

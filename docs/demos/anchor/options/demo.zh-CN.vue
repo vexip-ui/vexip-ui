@@ -70,8 +70,8 @@ const anchorLinks = ref([
     children: [
       { to: '#anchor-3-1', label: '锚点 3-1' },
       { to: '#anchor-3-2', label: '锚点 3-2' },
-      { to: '#anchor-3-3', label: '锚点 3-3' }
-    ]
-  }
+      { to: '#anchor-3-3', label: '锚点 3-3' },
+    ],
+  },
 ])
 </script>

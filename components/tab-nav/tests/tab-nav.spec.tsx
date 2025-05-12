@@ -31,26 +31,26 @@ describe('TabNav', () => {
             <TabNavItem label={'1'}>{'1'}</TabNavItem>
             <TabNavItem label={'2'}>{'2'}</TabNavItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-tab-nav__item')
 
     await nextTick()
     await nextTick()
     expect(items[0].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(items[1].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
 
     await wrapper.setProps({ active: '2' })
     expect(items[0].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
   })
 
@@ -67,14 +67,14 @@ describe('TabNav', () => {
     await nextTick()
     await items[1].find('.vxp-tab-nav__content').trigger('click')
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith('2')
 
     await items[0].find('.vxp-tab-nav__content').trigger('click')
     expect(items[0].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
   })
 
@@ -92,11 +92,11 @@ describe('TabNav', () => {
 
     await nextTick()
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--disabled'
+      'vxp-tab-nav__content--disabled',
     )
     await items[1].find('.vxp-tab-nav__content').trigger('click')
     expect(items[1].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(onChange).not.toHaveBeenCalled()
   })

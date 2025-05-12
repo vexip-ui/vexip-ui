@@ -23,7 +23,7 @@ const doFetch: UploadFetchMethod = ({
   withCredentials,
   onSuccess,
   onError,
-  onAbort
+  onAbort,
 }) => {
   const controller = new AbortController()
   const { signal } = controller
@@ -46,7 +46,7 @@ const doFetch: UploadFetchMethod = ({
     body: formData,
     headers: headers,
     credentials: withCredentials ? 'include' : 'same-origin',
-    signal
+    signal,
   })
     .then(async response => {
       if (!response.ok) {

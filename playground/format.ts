@@ -15,7 +15,7 @@ const parsers: Record<string, BuiltInParserName> = {
   vue: 'vue',
   js: 'babel',
   ts: 'typescript',
-  json: 'json'
+  json: 'json',
 }
 
 export async function prettierCode(name: string, code: string) {
@@ -26,7 +26,7 @@ export async function prettierCode(name: string, code: string) {
       load('parser-html.mjs').then(m => m.default),
       load('parser-typescript.mjs').then(m => m.default),
       load('parser-babel.mjs').then(m => m.default),
-      load('parser-postcss.mjs').then(m => m.default)
+      load('parser-postcss.mjs').then(m => m.default),
     ])
 
     setTimeout(close, 500)
@@ -53,6 +53,6 @@ export async function prettierCode(name: string, code: string) {
     tabWidth: 2,
     trailingComma: 'none',
     useTabs: false,
-    vueIndentScriptAndStyle: false
+    vueIndentScriptAndStyle: false,
   })
 }

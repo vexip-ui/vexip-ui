@@ -31,7 +31,7 @@ export interface TreeNodeKeyConfig {
 export const enum DropType {
   BEFORE = 'before',
   INNER = 'inner',
-  AFTER = 'after'
+  AFTER = 'after',
 }
 
 export type TreeNodeProps<D = Data> = {
@@ -186,5 +186,5 @@ export const defaultKeyConfig: Required<TreeNodeKeyConfig> = {
   selectDisabled: 'selectDisabled',
   expandDisabled: 'expandDisabled',
   checkDisabled: 'checkDisabled',
-  isLeaf: 'isLeaf'
+  isLeaf: 'isLeaf',
 }

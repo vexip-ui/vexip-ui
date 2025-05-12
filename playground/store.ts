@@ -39,19 +39,19 @@ const pkgPathMap: Record<string, string | PathMeta> = {
   vue: 'dist/vue.runtime.esm-browser.js',
   'vue/server-renderer': {
     pkg: '@vue/server-renderer',
-    path: 'dist/server-renderer.esm-browser.js'
+    path: 'dist/server-renderer.esm-browser.js',
   },
   'vexip-ui': 'dist/vexip-ui.mjs',
   'vexip-ui/style.css': {
     pkg: 'vexip-ui',
-    path: 'dist/style.css'
+    path: 'dist/style.css',
   },
   '@vexip-ui/icons': 'dist/index.mjs',
-  '@vexip-ui/utils': 'dist/index.mjs'
+  '@vexip-ui/utils': 'dist/index.mjs',
 }
 
 const internalFiles: Record<string, string> = {
-  [themeFile]: themeCode
+  [themeFile]: themeCode,
 }
 
 function utoa(data: string): string {
@@ -84,7 +84,7 @@ export function useReplStore(options: ReplOptions = {}) {
     showOutput: false,
     outputMode: 'preview',
     versions: {},
-    ...options
+    ...options,
   }
 
   const versions = reactive({ ...options.versions })
@@ -127,7 +127,7 @@ export function useReplStore(options: ReplOptions = {}) {
     vueRuntimeURL: '',
     vueServerRendererURL: '',
     typescriptLocale: undefined,
-    typescriptVersion: computed(() => versions.typescript || 'latest')
+    typescriptVersion: computed(() => versions.typescript || 'latest'),
   })
 
   const customImports = computed(() => {
@@ -149,9 +149,9 @@ export function useReplStore(options: ReplOptions = {}) {
     return <ImportMap>{
       imports: {
         ...internalImports.value,
-        ...(customImports.value.imports || {})
+        ...(customImports.value.imports || {}),
       },
-      scopes: customImports.value.scopes
+      scopes: customImports.value.scopes,
     }
   })
 
@@ -168,7 +168,7 @@ export function useReplStore(options: ReplOptions = {}) {
     getImportMap,
     getTsConfig,
     reloadLanguageTools: undefined,
-    customElement: /\.ce\.vue$/
+    customElement: /\.ce\.vue$/,
   })
 
   // watch(
@@ -189,14 +189,14 @@ export function useReplStore(options: ReplOptions = {}) {
         mainFile,
         mainCode.replace(
           '__VEXIP_UI_STYLE__',
-          getCdnUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
+          getCdnUrl('vexip-ui', 'dist/style.css', versions['vexip-ui']),
         ),
-        true
+        true,
       )
 
       compiler.value && compileFile(store, state.files[mainFile])
     },
-    { immediate: true, deep: true }
+    { immediate: true, deep: true },
   )
 
   function normalizeFilename(origin: string) {
@@ -275,7 +275,7 @@ export function useReplStore(options: ReplOptions = {}) {
       content: doDelete.replace('#{0}', filename),
       confirmType: 'error',
       confirmText: del,
-      cancelText: cancel
+      cancelText: cancel,
     }).then(isConfirm => {
       if (!isConfirm) return
 
@@ -351,7 +351,7 @@ export function useReplStore(options: ReplOptions = {}) {
     init,
     serialize,
     getFiles,
-    setVersions
+    setVersions,
   }
 }
 

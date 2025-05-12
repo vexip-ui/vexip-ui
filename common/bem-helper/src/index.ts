@@ -30,7 +30,7 @@ export function useBEM<B extends string, N extends string>(
 ): NBEM<B, N>
 export function useBEM<B extends string, N extends string>(
   block: B,
-  namespace?: N | ((isVar?: boolean) => N)
+  namespace?: N | ((isVar?: boolean) => N),
 ) {
   if (!namespace) {
     return <BEM<B>>{
@@ -55,7 +55,7 @@ export function useBEM<B extends string, N extends string>(
         return s
       },
       gcv: v => gcv(`${block}-${v}`),
-      scv: (v, s) => scv(`${block}-${v}`, s)
+      scv: (v, s) => scv(`${block}-${v}`, s),
     }
   }
 
@@ -99,6 +99,6 @@ export function useBEM<B extends string, N extends string>(
       return s
     },
     gnv: v => gcv(`${n(true)}-${v}`),
-    snv: (v, s) => scv(`${n(true)}-${v}`, s)
+    snv: (v, s) => scv(`${n(true)}-${v}`, s),
   }
 }

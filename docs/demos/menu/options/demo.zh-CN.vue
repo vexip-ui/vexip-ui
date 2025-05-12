@@ -22,21 +22,21 @@ const options: MenuOptions[] = [
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
         icon: City,
-        disabled: true
+        disabled: true,
       },
       {
         label: '3',
         name: '菜单 3',
-        icon: ChartPie
-      }
-    ]
+        icon: ChartPie,
+      },
+    ],
   },
   {
     label: '分组 2',
@@ -45,15 +45,15 @@ const options: MenuOptions[] = [
       {
         label: '4',
         name: () => '菜单 4',
-        icon: () => h(Icon, { icon: User })
+        icon: () => h(Icon, { icon: User }),
       },
       {
         label: '5',
         name: '菜单 5',
-        icon: Marker
-      }
-    ]
-  }
+        icon: Marker,
+      },
+    ],
+  },
 ]
 
 function handleSelect(label: string) {

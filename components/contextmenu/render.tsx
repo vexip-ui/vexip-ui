@@ -40,7 +40,7 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
         onContextmenu: (event: MouseEvent) => {
           event.preventDefault()
           event.stopPropagation()
-        }
+        },
       }}
     >
       {{
@@ -77,12 +77,12 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
                 : nh.bem('list', 'no-icon'),
               item.children!.some(c => c.children?.length)
                 ? nh.bem('list', 'arrows')
-                : nh.bem('list', 'no-arrow')
+                : nh.bem('list', 'no-arrow'),
             ]}
           >
             {item.children!.map(i => renderItem({ nh, config: i }))}
           </DropdownList>
-        )
+        ),
       }}
     </Dropdown>
   )

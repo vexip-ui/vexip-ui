@@ -12,7 +12,7 @@ import {
   emitEvent,
   useIcons,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { switchProps } from './props'
@@ -30,7 +30,7 @@ const {
   size,
   validateField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<boolean>(() => input.value?.focus())
 
 const _props = defineProps(switchProps)
@@ -39,7 +39,7 @@ const props = useProps('switch', _props, {
   state: createStateProp(state),
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   disabled: () => disabled.value,
   openColor: '',
@@ -53,14 +53,14 @@ const props = useProps('switch', _props, {
   closeText: '',
   onBeforeChange: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   rectangle: false,
   name: {
     default: '',
-    static: true
+    static: true,
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -84,18 +84,18 @@ const className = computed(() => {
       [nh.bm(props.state)]: props.state !== 'default',
       [nh.bm('disabled')]: props.disabled,
       [nh.bm('loading')]: props.loading,
-      [nh.bm('rectangle')]: props.rectangle
-    }
+      [nh.bm('rectangle')]: props.rectangle,
+    },
   ]
 })
 const style = computed(() => {
   return {
-    backgroundColor: currentValue.value ? props.openColor : props.closeColor
+    backgroundColor: currentValue.value ? props.openColor : props.closeColor,
   }
 })
 const signalStyle = computed(() => {
   return {
-    color: currentValue.value ? props.openColor : props.closeColor
+    color: currentValue.value ? props.openColor : props.closeColor,
   }
 })
 const isDisabled = computed(() => {
@@ -106,7 +106,7 @@ watch(
   () => props.value,
   value => {
     currentValue.value = value
-  }
+  },
 )
 
 defineExpose({
@@ -115,7 +115,7 @@ defineExpose({
   currentValue,
   input,
   focus: (options?: FocusOptions) => input.value?.focus(options),
-  blur: () => input.value?.blur()
+  blur: () => input.value?.blur(),
 })
 
 async function handleChange(checked = !currentValue.value) {

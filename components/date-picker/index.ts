@@ -17,5 +17,5 @@ export type {
   DateShortcut,
   TimeShortcut,
   DatePickerSlots,
-  TimePickerSlots
+  TimePickerSlots,
 } from './symbol'

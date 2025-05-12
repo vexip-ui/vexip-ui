@@ -69,7 +69,7 @@ export function addActiveThemes(themes: (string | InitThemeOptions)[]) {
     const {
       name,
       rootClass = name,
-      varsClass = `vxp-theme-vars-${rootClass}`
+      varsClass = `vxp-theme-vars-${rootClass}`,
     } = typeof theme === 'string' ? ({ name: theme } as InitThemeOptions) : theme
 
     activeThemes.set(name, [rootClass, varsClass])

@@ -19,7 +19,7 @@ import {
   useHover,
   useModifier,
   useMounted,
-  usePopper
+  usePopper,
 } from '@vexip-ui/hooks'
 import {
   createIconProp,
@@ -29,7 +29,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import {
   decide,
@@ -37,7 +37,7 @@ import {
   getRangeWidth,
   isNull,
   removeArrayItem,
-  toAttrValue
+  toAttrValue,
 } from '@vexip-ui/utils'
 import { selectProps } from './props'
 import { defaultKeyConfig } from './symbol'
@@ -52,7 +52,7 @@ import type {
   SelectEvent,
   SelectOptionState,
   SelectSlots,
-  SelectValue
+  SelectValue,
 } from './symbol'
 
 function isSameValue(newValue: SelectValue, oldValue: SelectValue) {
@@ -88,7 +88,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<SelectValue>(focus)
 
 const nh = useNameHelper('select')
@@ -100,11 +100,11 @@ const props = useProps('select', _props, {
   locale: null,
   visible: {
     default: false,
-    static: true
+    static: true,
   },
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   disabled: () => disabled.value,
   transitionName: () => nh.ns('drop'),
@@ -117,7 +117,7 @@ const props = useProps('select', _props, {
   noSuffix: false,
   value: {
     default: () => getFieldValue()!,
-    static: true
+    static: true,
   },
   multiple: false,
   clearable: false,
@@ -125,7 +125,7 @@ const props = useProps('select', _props, {
   listClass: null,
   placement: {
     default: 'bottom',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: false,
   optionCheck: false,
@@ -148,12 +148,12 @@ const props = useProps('select', _props, {
   fitPopper: false,
   name: {
     default: '',
-    static: true
+    static: true,
   },
   popperAlive: null,
   countLimit: 0,
   filterPosition: 'in-control',
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value', 'update:visible', 'update:label'])
@@ -191,7 +191,7 @@ const dynamicOption = reactive<SelectOptionState>({
   parent: null,
   hidden: false,
   hitting: true,
-  data: ''
+  data: '',
 })
 
 const optionValues = reactive(new Set<string | number>())
@@ -216,7 +216,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
-  isDrop: true
+  isDrop: true,
 })
 const { isHover } = useHover(reference)
 
@@ -257,7 +257,7 @@ function initOptionState() {
     divided: dividedKey,
     title: titleKey,
     group: groupKey,
-    children: childrenKey
+    children: childrenKey,
   } = keyConfig.value
   const oldMap = optionValueMap.value
   const map = new Map<string | number, SelectOptionState>()
@@ -286,7 +286,7 @@ function initOptionState() {
       [disabledKey]: disabled = false,
       [dividedKey]: divided = false,
       [titleKey]: title = '',
-      [childrenKey]: children = null
+      [childrenKey]: children = null,
     } = rawOption
     const oldState = oldMap.get(rawOption.value)
     const optionState = reactive({
@@ -300,7 +300,7 @@ function initOptionState() {
       parent,
       hidden: oldState?.hidden ?? false,
       hitting: oldState?.hitting ?? false,
-      data: option
+      data: option,
     }) as SelectOptionState
 
     states.push(optionState)
@@ -316,7 +316,7 @@ function initOptionState() {
           .map(child => {
             return { option: child, depth: depth + 1, parent: optionState }
           })
-          .reverse()
+          .reverse(),
       )
     }
   }
@@ -375,7 +375,7 @@ useModifier({
             }
 
             updateHitting(index)
-          }
+          },
         ],
         [
           () => modifier.enter || (!props.filter && modifier.space),
@@ -387,18 +387,18 @@ useModifier({
             } else {
               setVisible(false)
             }
-          }
-        ]
+          },
+        ],
       ],
       {
         beforeMatchAny: () => {
           event.preventDefault()
           event.stopPropagation()
         },
-        afterMatchAny: modifier.resetAll
-      }
+        afterMatchAny: modifier.resetAll,
+      },
     )
-  }
+  },
 })
 
 const className = computed(() => {
@@ -410,7 +410,7 @@ const className = computed(() => {
     [nh.bm('multiple')]: props.multiple,
     [nh.bm('filter')]: props.filter,
     [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0,
-    [nh.bm('disabled')]: props.disabled
+    [nh.bm('disabled')]: props.disabled,
   }
 })
 const readonly = computed(() => props.loading && props.loadingLock)
@@ -427,11 +427,11 @@ const selectorClass = computed(() => {
     [`${baseCls}--${props.state}`]: props.state !== 'default',
     [`${baseCls}--has-prefix`]: hasPrefix.value,
     [`${baseCls}--has-suffix`]: !props.noSuffix,
-    [`${baseCls}--transparent`]: props.transparent
+    [`${baseCls}--transparent`]: props.transparent,
   }
 })
 const hasValue = computed(
-  () => !isNull(currentValues.value[0]) && (props.multiple || currentValues.value[0] !== '')
+  () => !isNull(currentValues.value[0]) && (props.multiple || currentValues.value[0] !== ''),
 )
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
 const showDynamic = computed(() => {
@@ -515,7 +515,7 @@ watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 watch(currentVisible, value => {
   if (value) {
@@ -538,7 +538,7 @@ watch(
       initValueAndLabel(value)
       syncInputValue()
     }
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -546,7 +546,7 @@ watch(
     if (value) {
       setVisible(false)
     }
-  }
+  },
 )
 watch(readonly, value => {
   if (value) {
@@ -591,7 +591,7 @@ defineExpose({
   blur: () => {
     input.value?.blur()
     reference.value?.blur()
-  }
+  },
 })
 
 onMounted(() => {
@@ -639,7 +639,7 @@ function initValueAndLabel(value: SelectValue | null) {
         parent: null,
         hidden: true,
         hitting: false,
-        data: value
+        data: value,
       }) as SelectOptionState
 
       cachedSelected.set(value, option)
@@ -810,7 +810,7 @@ function handleSelect(option?: SelectOptionState | null) {
   emitEvent(
     props[props.multiple && selected ? 'onCancel' : 'onSelect'] as SelectEvent,
     value,
-    option.data
+    option.data,
   )
   handleChange(option)
 
@@ -850,7 +850,7 @@ function handleChange(option: SelectOptionState) {
     emitEvent(
       props.onChange as ChangeEvent,
       emittedValue,
-      emittedValue.map(value => getOptionFromMap(value)?.data ?? value)
+      emittedValue.map(value => getOptionFromMap(value)?.data ?? value),
     )
     validateField()
   } else {
@@ -963,7 +963,7 @@ function handleFilterInput() {
     hittingIndex = 0
   } else {
     hittingIndex = visibleOptions.value.findIndex(
-      option => String(option.label) === currentFilter.value
+      option => String(option.label) === currentFilter.value,
     )
     hittingIndex = hittingIndex === -1 ? 0 : hittingIndex
   }
@@ -971,7 +971,7 @@ function handleFilterInput() {
   requestAnimationFrame(() => {
     if (!hittingIndex) {
       hittingIndex = visibleOptions.value.findIndex(
-        option => !currentValues.value.includes(option.value)
+        option => !currentValues.value.includes(option.value),
       )
     }
 

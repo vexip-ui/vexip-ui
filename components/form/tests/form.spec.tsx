@@ -51,7 +51,7 @@ describe('Form', () => {
 
   it('form rule required', () => {
     const rules = {
-      input: { required: true }
+      input: { required: true },
     }
     const wrapper = mount(() => (
       <Form rules={rules}>
@@ -238,7 +238,7 @@ describe('Form', () => {
         <FormItem required label={'input'} prop={'input'}>
           {{
             default: () => <Input></Input>,
-            help: () => <span class={'help'}>{'help'}</span>
+            help: () => <span class={'help'}>{'help'}</span>,
           }}
         </FormItem>
       </Form>

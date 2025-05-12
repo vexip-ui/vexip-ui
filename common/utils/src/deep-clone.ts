@@ -36,8 +36,8 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
     {
       parent: temp,
       prop: 'root',
-      data: obj
-    }
+      data: obj,
+    },
   ]
 
   const referenceMap = new WeakMap<any, any>()
@@ -81,7 +81,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
             loopList.push({
               parent: cloned,
               prop: i,
-              data: item
+              data: item,
             })
           } else {
             cloned[i] = item
@@ -103,7 +103,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
               loopList.push({
                 parent: clonedEntry,
                 prop: i,
-                data: item
+                data: item,
               })
             } else {
               clonedEntry[i] = item
@@ -128,7 +128,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
           loopList.push({
             parent: cloned,
             prop: key,
-            data: item
+            data: item,
           })
         } else {
           cloned[key] = item

@@ -24,7 +24,7 @@ const currentAlign = ref<FormLabelAlign>('right')
 const aligns: Array<{ label: FormLabelAlign, content: string }> = [
   { label: 'left', content: 'Left' },
   { label: 'right', content: 'Right' },
-  { label: 'top', content: 'Top' }
+  { label: 'top', content: 'Top' },
 ]
 
 const formModel = reactive({})

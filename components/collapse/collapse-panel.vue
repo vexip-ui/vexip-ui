@@ -16,7 +16,7 @@ const _props = defineProps(collapsePanelProps)
 const props = useProps('collapsePanel', _props, {
   label: {
     default: null,
-    static: true
+    static: true,
   },
   title: '',
   disabled: false,
@@ -25,10 +25,10 @@ const props = useProps('collapsePanel', _props, {
   card: false,
   arrowType: {
     default: 'right' as CollapseArrowType,
-    validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value)
+    validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value),
   },
   icon: createIconProp(),
-  ghost: false
+  ghost: false,
 })
 
 const emit = defineEmits(['update:expanded'])
@@ -77,8 +77,8 @@ const className = computed(() => {
       [nh.bem('panel', 'card')]: useCard.value,
       [nh.bem('panel', 'ghost')]: !useCard.value && useGhost.value,
       [nh.bem('panel', 'expanded')]: currentExpanded.value,
-      [nh.bem('panel', 'disabled')]: props.disabled
-    }
+      [nh.bem('panel', 'disabled')]: props.disabled,
+    },
   ]
 })
 
@@ -87,7 +87,7 @@ if (collapseState) {
     tab,
     label: currentLabel,
     expanded: currentExpanded,
-    setExpanded
+    setExpanded,
   })
 
   watch(
@@ -95,7 +95,7 @@ if (collapseState) {
     value => {
       const prevValue = currentLabel.value
       currentLabel.value = value || value === 0 ? value : prevValue
-    }
+    },
   )
 
   collapseState.registerPanel(state)
@@ -108,7 +108,7 @@ if (collapseState) {
     () => props.expanded,
     value => {
       currentExpanded.value = value
-    }
+    },
   )
 }
 
@@ -135,7 +135,7 @@ defineExpose({
   tab,
   tabId,
   bodyId,
-  handleToggle
+  handleToggle,
 })
 </script>
 

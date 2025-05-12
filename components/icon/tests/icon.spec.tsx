@@ -54,7 +54,7 @@ describe('Icon', () => {
 
   it('spin', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'spin-in', icon: Loader2 }
+      props: { effect: 'spin-in', icon: Loader2 },
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--spin-in')
@@ -65,7 +65,7 @@ describe('Icon', () => {
 
   it('pulse', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'pulse-in', icon: Loader2 }
+      props: { effect: 'pulse-in', icon: Loader2 },
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--pulse-in')
@@ -77,7 +77,7 @@ describe('Icon', () => {
   it('flip', () => {
     ;(['horizontal', 'vertical', 'both'] as const).forEach(flip => {
       const wrapper = mount(Icon, {
-        props: { flip, icon: Loader2 }
+        props: { flip, icon: Loader2 },
       })
 
       expect(wrapper.classes()).toContain(`vxp-icon--flip-${flip}`)
@@ -86,7 +86,7 @@ describe('Icon', () => {
 
   it('scale', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Loader2 }
+      props: { icon: Loader2 },
     })
 
     expect(wrapper.attributes('style')).toBeUndefined()
@@ -100,7 +100,7 @@ describe('Icon', () => {
 
   it('custom effect', async () => {
     const wrapper = mount(Icon, {
-      props: { effect: 'effect', icon: Loader2 }
+      props: { effect: 'effect', icon: Loader2 },
     })
 
     expect(wrapper.classes()).toContain('effect')
@@ -108,7 +108,7 @@ describe('Icon', () => {
 
   it('size', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Loader2 }
+      props: { icon: Loader2 },
     })
 
     expect(wrapper.attributes('style')).toBeUndefined()
@@ -128,7 +128,7 @@ describe('Icon', () => {
 
   it('rotate', async () => {
     const wrapper = mount(Icon, {
-      props: { icon: Loader2, rotate: 1 }
+      props: { icon: Loader2, rotate: 1 },
     })
 
     expect(wrapper.attributes('style')).toContain('--vxp-icon-rotate: 0.25turn;')

@@ -14,79 +14,79 @@ defineOptions({ name: 'DateControl' })
 const props = defineProps({
   unitType: {
     type: String as PropType<DateTimeType | ''>,
-    default: ''
+    default: '',
   },
   enabled: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   activated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   dateValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default: () => ({})
+    default: () => ({}),
   },
   dateSeparator: {
     type: String,
-    default: '/'
+    default: '/',
   },
   timeSeparator: {
     type: String,
-    default: ':'
+    default: ':',
   },
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   focused: {
     type: Boolean,
-    default: false
+    default: false,
   },
   filler: {
     type: String,
     default: '-',
     validator: (value: string) => {
       return value.length === 1
-    }
+    },
   },
   steps: {
     type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
+    default: () => [1, 1, 1],
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
+    default: () => [5, 5, 5],
   },
   labels: {
     type: Object as PropType<Partial<Record<DateTimeType, string>>>,
-    default: () => ({})
+    default: () => ({}),
   },
   hasError: {
     type: Boolean,
-    default: false
+    default: false,
   },
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   readonly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   labeledBy: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   locale: {
     type: Object as PropType<LocaleConfig['calendar'] & LocaleConfig['datePicker']>,
-    default: () => ({})
+    default: () => ({}),
   },
   dateUnitOrder: {
     type: Array as PropType<DateType[]>,
-    default: () => ['year', 'month', 'date']
-  }
+    default: () => ['year', 'month', 'date'],
+  },
 })
 
 const emit = defineEmits([
@@ -98,7 +98,7 @@ const emit = defineEmits([
   'unit-focus',
   'prev-unit',
   'next-unit',
-  'blur'
+  'blur',
 ])
 
 const nh = useNameHelper('date-picker')
@@ -115,7 +115,7 @@ const className = computed(() => {
   return {
     [nh.be('input')]: true,
     [nh.bem('input', 'activated')]: isActivated.value,
-    [nh.bem('input', 'error')]: props.hasError
+    [nh.bem('input', 'error')]: props.hasError,
   }
 })
 const showTimeUnits = computed(() => {
@@ -148,7 +148,7 @@ const dateUnitOrder = computed(() => {
   return {
     [one]: -4,
     [two]: -2,
-    [three]: 0
+    [three]: 0,
   }
 })
 
@@ -160,7 +160,7 @@ defineExpose({
   },
   blur: () => {
     wrapper.value?.blur()
-  }
+  },
 })
 
 function formatValue(type: DateTimeType) {

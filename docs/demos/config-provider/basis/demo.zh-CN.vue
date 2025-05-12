@@ -32,7 +32,7 @@ const months = [
   '九月',
   '十月',
   '十一月',
-  '十二月'
+  '十二月',
 ]
 const provideProps = reactive({
   datePicker: {
@@ -41,22 +41,22 @@ const provideProps = reactive({
         h(
           'div',
           {
-            class: 'vxp-date-picker__month-label-inner'
+            class: 'vxp-date-picker__month-label-inner',
           },
-          months[month - 1]
-        )
-    }
+          months[month - 1],
+        ),
+    },
   },
   tag: {
     size: 'large',
     simple: true,
-    closable: true
-  }
+    closable: true,
+  },
 }) as PropsOptions
 
 const locale = reactive({
   input: {
-    placeholder: '随便输入点什么'
-  }
+    placeholder: '随便输入点什么',
+  },
 })
 </script>

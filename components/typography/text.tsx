@@ -20,7 +20,7 @@ export default defineComponent({
       disabled: false,
       keyboard: false,
       thin: false,
-      reversed: false
+      reversed: false,
     })
 
     const nh = useNameHelper('text')
@@ -40,7 +40,7 @@ export default defineComponent({
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('keyboard')]: props.keyboard,
         [nh.bm('thin')]: props.thin,
-        [nh.bm('reversed')]: props.reversed
+        [nh.bm('reversed')]: props.reversed,
       }
     })
 
@@ -58,5 +58,5 @@ export default defineComponent({
         <CustomTag class={className.value}>{children}</CustomTag>
       )
     }
-  }
+  },
 })

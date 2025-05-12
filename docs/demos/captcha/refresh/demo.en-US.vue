@@ -15,7 +15,7 @@ import type { CaptchaExposed } from 'vexip-ui'
 
 const images = [
   { url: 'https://www.vexipui.com/picture-2.jpg', target: 40 },
-  { url: 'https://www.vexipui.com/picture-4.jpg', target: 55 }
+  { url: 'https://www.vexipui.com/picture-4.jpg', target: 55 },
 ]
 
 const image = ref(images[0].url)

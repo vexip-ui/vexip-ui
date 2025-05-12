@@ -65,7 +65,7 @@ import {
   X,
   XCircle,
   ZoomIn,
-  ZoomOut
+  ZoomOut,
 } from 'lucide-vue-next'
 import { ensureArray } from '@vexip-ui/utils'
 
@@ -239,7 +239,7 @@ const iconMap: IconsConfig = {
   playState: Play,
   pauseState: Pause,
   playPrev: SkipBack,
-  playNext: SkipForward
+  playNext: SkipForward,
 }
 
 export const iconNames = Object.freeze(Object.keys(iconMap) as IconName[])

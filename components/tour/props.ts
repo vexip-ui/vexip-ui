@@ -21,7 +21,7 @@ export const tourProps = buildProps({
   onToggle: eventProp<(active: boolean) => void>(),
   onChange: eventProp<(index: number, step: TourStepOptions) => void>(),
   onClose: eventProp(),
-  onMaskClick: eventProp<(event: MouseEvent) => void>()
+  onMaskClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type TourProps = ExtractPropTypes<typeof tourProps>
@@ -36,7 +36,7 @@ export const tourStepProps = buildProps({
   type: String as PropType<TourType>,
   renderer: Function as PropType<TourStepRenderFn>,
   onPrev: eventProp(),
-  onNext: eventProp()
+  onNext: eventProp(),
 })
 
 export type TourStepProps = ExtractPropTypes<typeof tourStepProps>

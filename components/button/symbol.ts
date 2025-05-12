@@ -31,5 +31,5 @@ export const buttonTypes = Object.freeze<ButtonType[]>([
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])

@@ -15,7 +15,7 @@ describe('Avatar', () => {
 
   it('size', async () => {
     const wrapper = mount(Avatar, {
-      props: { size: 'large' }
+      props: { size: 'large' },
     })
 
     expect(wrapper.find('.vxp-avatar').classes()).toContain('vxp-avatar--large')
@@ -42,8 +42,8 @@ describe('Avatar', () => {
       props: {
         src: 'unknown image',
         fallbackSrc: IMAGE,
-        onError
-      }
+        onError,
+      },
     })
 
     expect(wrapper.find('.vxp-avatar__image').attributes('src')).toEqual('unknown image')
