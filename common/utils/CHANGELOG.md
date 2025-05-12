@@ -1,3 +1,13 @@
+## [2.16.2](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.1...utils@2.16.2) (2025-05-12)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** replace empty object definition with Object.create ([e6d4ba1](https://github.com/vexip-ui/vexip-ui/commit/e6d4ba106ac545fca4b81d923bb147e1f1938d1c))
+* **utils:** use Object.create(null) instead of {} ([846c9d8](https://github.com/vexip-ui/vexip-ui/commit/846c9d838e39f5623af292279218ba9ca8967161))
+
+
+
 ## [2.16.1](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.0...utils@2.16.1) (2024-07-28)
 
 
