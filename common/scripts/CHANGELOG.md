@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.2.0...scripts@1.3.0) (2025-05-12)
+
+
+### ✨ Features
+
+* **scripts:** add updateVersionByType option for release ([66a40c2](https://github.com/vexip-ui/vexip-ui/commit/66a40c215808f33a42341fe31deaa6705047d03e))
+
+
+
 ## 1.2.0 (2025-01-14)
 
 * build: upgrade dev dependencies ([c4be7dd](https://github.com/vexip-ui/vexip-ui/commit/c4be7dd))
