@@ -68,7 +68,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
 
     // 初始化克隆对象
     const cloned: any = (parent[prop] =
-      type === 'Array' || type === 'Set' || type === 'Map' ? [] : {})
+      type === 'Array' || type === 'Set' || type === 'Map' ? [] : Object.create(null))
 
     if (type === 'Set' || type === 'Map') {
       let i = 0
