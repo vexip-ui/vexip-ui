@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.0...scripts@1.3.1) (2025-05-14)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** should log package name for process ([9772b87](https://github.com/vexip-ui/vexip-ui/commit/9772b878cfa1ddc25fec094770e541203e8e319f))
+
+
+
 # [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.2.0...scripts@1.3.0) (2025-05-12)
 
 
