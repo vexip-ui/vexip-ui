@@ -53,10 +53,10 @@ const logSkipped = (msg = 'Skipped') => logger.warningText(`(${msg})`)
 export async function release(options: ReleaseOptions) {
   const isDryRun = !!options.isDryRun
   const runIfNotDry = isDryRun ? dryRun : run
-  const { pkg, pkgPath } = getPkgInfo(options.pkgDir, true)
+  const { pkg, pkgPath, pkgName } = getPkgInfo(options.pkgDir, true)
 
   if (isDryRun) {
-    logger.withBothLn(() => logger.infoText('Dry run release...'))
+    logger.withBothLn(() => logger.infoText(`Dry run release ${pkgName}...`))
   }
 
   let version: string
@@ -79,10 +79,12 @@ export async function release(options: ReleaseOptions) {
     const { confirm } = await prompts({
       type: 'confirm',
       name: 'confirm',
-      message: `Confirm release ${version}?`,
+      message: `Confirm release ${pkgName}@${version}?`,
     })
 
     if (!confirm) return
+  } else {
+    logger.withBothLn(() => logger.infoText(`Releasing ${pkgName}@${version}...`))
   }
 
   logStep('Running test...')
