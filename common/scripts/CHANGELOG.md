@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.1...scripts@1.4.0) (2025-05-14)
+
+
+### ✨ Features
+
+* **scripts:** add secondConfirmMsg option for relase ([a95a8bc](https://github.com/vexip-ui/vexip-ui/commit/a95a8bc684424bc13063e31fff0d090f1a7a7cf5))
+
+
+
 ## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.0...scripts@1.3.1) (2025-05-14)
 
 
