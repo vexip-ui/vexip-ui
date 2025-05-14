@@ -14,6 +14,7 @@ export interface ReleaseOptions {
    * @default true
    */
   secondConfirm?: boolean,
+  secondConfirmMsg?: string | ((pkgName: string, version: string) => string),
   preId?: string,
   /**
    * If false, will use current package.json version as release version
@@ -76,13 +77,17 @@ export async function release(options: ReleaseOptions) {
   }
 
   if (options.secondConfirm !== false) {
+    const message =
+      (typeof options.secondConfirmMsg === 'function'
+        ? options.secondConfirmMsg(pkgName, version)
+        : options.secondConfirmMsg) || `Confirm release ${pkgName}@${version}?`
     const { confirm } = await prompts({
+      message,
       type: 'confirm',
       name: 'confirm',
-      message: `Confirm release ${pkgName}@${version}?`,
     })
 
-    if (!confirm) return
+    if (!confirm) return false
   } else {
     logger.withBothLn(() => logger.infoText(`Releasing ${pkgName}@${version}...`))
   }
@@ -174,6 +179,8 @@ export async function release(options: ReleaseOptions) {
       logger.success(options.successMessage || `Release ${tag} successfully`)
     }
   })
+
+  return true
 }
 
 function updateVersionByType(
