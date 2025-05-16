@@ -46,6 +46,175 @@ describe('transform', () => {
         true,
       ),
     ).toMatchObject(new Map().set('1', '1').set('2', '2'))
+    expect(listToMap([{ id: '1' }, { id: '2' }], i => i.id, undefined, true)).toMatchObject(
+      new Map().set('1', { id: '1' }).set('2', { id: '2' }),
+    )
+    expect(
+      listToMap(
+        [{ id: '1' }, { id: '2' }],
+        i => i.id,
+        i => i.id,
+        false,
+      ),
+    ).toMatchObject({
+      1: '1',
+      2: '2',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => i.name,
+      ),
+    ).toMatchObject({
+      1: 'Alice',
+      2: 'Bob',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => i.name,
+      ),
+    ).toMatchObject({
+      1: 'Alice',
+      2: 'Bob',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => i.name,
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', 'Alice').set('2', 'Bob'))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => i.name,
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', 'Alice').set('2', 'Bob'))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        undefined,
+        true,
+      ),
+    ).toMatchObject(
+      new Map().set('1', { id: '1', name: 'Alice' }).set('2', { id: '2', name: 'Bob' }),
+    )
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        undefined,
+        true,
+      ),
+    ).toMatchObject(
+      new Map().set('1', { id: '1', name: 'Alice' }).set('2', { id: '2', name: 'Bob' }),
+    )
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => ({ name: i.name }),
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => ({ name: i.name }),
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => ({ name: i.name }),
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', { name: 'Alice' }).set('2', { name: 'Bob' }))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => ({ name: i.name }),
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', { name: 'Alice' }).set('2', { name: 'Bob' }))
+    expect(listToMap([], 'id')).toMatchObject({})
+    expect(listToMap([], 'id', undefined, true)).toMatchObject(new Map())
+    expect(listToMap([{ name: 'Alice' }], 'id' as any)).toMatchObject({})
+    expect(listToMap([{ id: '1' }, { id: '1' }], 'id')).toMatchObject({
+      1: { id: '1' },
+    })
+    expect(listToMap([1, 2, 3], i => i)).toMatchObject({
+      1: 1,
+      2: 2,
+      3: 3,
+    })
+    expect(() => listToMap(null as any, 'id')).toThrow()
+    expect(() => listToMap(undefined as any, 'id')).toThrow()
+    expect(() => listToMap('invalid' as any, 'id')).toThrow()
+    expect(
+      listToMap([{ id: '1' }, null as any, { id: '2' }, undefined as any], 'id'),
+    ).toMatchObject({
+      1: { id: '1' },
+      2: { id: '2' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', details: { name: 'Alice' } },
+          { id: '2', details: { name: 'Bob' } },
+        ],
+        'id',
+        i => i.details,
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
   })
 
   it('sortByProps', () => {

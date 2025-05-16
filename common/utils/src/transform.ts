@@ -56,6 +56,8 @@ export function getLast(value: string | any[]) {
   return value[value.length - 1]
 }
 
+const defaultAccessor = (v: unknown) => v
+
 /**
  * 根据数组元素中某个或多个属性的值转换为映射对象
  *
@@ -66,44 +68,71 @@ export function getLast(value: string | any[]) {
  *
  * @returns 转换后的映射对象
  */
+// 常规对象键值只能是 string，所以这里的签名可以吧 prop 两种情况整合
+export function listToMap<T = any>(
+  list: T[],
+  prop: keyof T | ((item: T) => any),
+  useMap?: false
+): Record<string, T>
 export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
   accessor?: (item: T) => O,
-  isMap?: false
+  useMap?: false
 ): Record<string, O>
+export function listToMap<T = any, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  useMap?: true
+): Map<T[K], T>
 export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
   accessor?: (item: T) => O,
-  isMap?: true
+  useMap?: true
 ): Map<T[K], O>
+export function listToMap<T = any, K = any>(
+  list: T[],
+  prop: (item: T) => K,
+  useMap?: true
+): Map<K, T>
 export function listToMap<T = any, O = T, K = any>(
   list: T[],
   prop: (item: T) => K,
   accessor?: (item: T) => O,
-  isMap?: true
-): Map<K extends keyof T ? T[K] : unknown, O>
+  useMap?: true
+): Map<K, O>
 export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor: (item: T) => O = v => v as any,
-  isMap = false,
+  accessor?: boolean | ((item: T) => O),
+  useMap?: boolean,
 ) {
-  const map = (isMap ? new Map<string, any>() : {}) as any
+  let normalizeAccessor: (item: T) => O
+
+  if (typeof accessor !== 'function' && useMap === undefined) {
+    useMap = !!accessor
+    normalizeAccessor = defaultAccessor as any
+  } else {
+    normalizeAccessor = typeof accessor === 'function' ? accessor : (defaultAccessor as any)
+  }
+
+  const map = (useMap ? new Map<string, any>() : {}) as any
 
   if (!isDefined(prop)) return map
 
-  const set = isMap
+  const set = useMap
     ? (key: any, value: O) => map.set(key, value)
     : (key: any, value: O) => (map[key] = value)
   const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
+    if (!isDefined(item)) return
+
     const key = propAccessor(item)
 
     if (isDefined(key)) {
-      set(key, accessor(item))
+      set(key, normalizeAccessor(item))
     }
   })
 
