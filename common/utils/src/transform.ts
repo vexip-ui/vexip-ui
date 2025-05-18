@@ -56,30 +56,32 @@ export function getLast(value: string | any[]) {
   return value[value.length - 1]
 }
 
+type RecordKey = string | number | symbol
+
 const defaultAccessor = (v: unknown) => v
 
-/**
- * 根据数组元素中某个或多个属性的值转换为映射对象
- *
- * @param list 需要被转换的数组
- * @param prop 需要被转换的属性或提供一个读取方法
- * @param accessor 映射的值的读取方法，默认返回元素本身
- * @param isMap 是否使用 Map 对象储存结果
- *
- * @returns 转换后的映射对象
- */
-// 常规对象键值只能是 string，所以这里的签名可以吧 prop 两种情况整合
-export function listToMap<T = any>(
+export function listToMap<T = any, K extends keyof T = keyof T>(
   list: T[],
-  prop: keyof T | ((item: T) => any),
+  prop: K,
   useMap?: false
-): Record<string, T>
-export function listToMap<T = any, O = T>(
+): Record<T[K] extends RecordKey ? T[K] : RecordKey, T>
+export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
-  prop: keyof T | ((item: T) => any),
+  prop: K,
   accessor?: (item: T) => O,
   useMap?: false
-): Record<string, O>
+): Record<T[K] extends RecordKey ? T[K] : RecordKey, O>
+export function listToMap<T = any, K = RecordKey>(
+  list: T[],
+  prop: (item: T) => K,
+  useMap?: false
+): Record<K extends RecordKey ? K : RecordKey, T>
+export function listToMap<T = any, O = T, K = RecordKey>(
+  list: T[],
+  prop: (item: T) => K,
+  accessor?: (item: T) => O,
+  useMap?: false
+): Record<K extends RecordKey ? K : RecordKey, O>
 export function listToMap<T = any, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
@@ -102,6 +104,16 @@ export function listToMap<T = any, O = T, K = any>(
   accessor?: (item: T) => O,
   useMap?: true
 ): Map<K, O>
+/**
+ * 根据数组元素中某个或多个属性的值转换为映射对象
+ *
+ * @param list 需要被转换的数组
+ * @param prop 需要被转换的属性或提供一个读取方法
+ * @param accessor 映射的值的读取方法，默认返回元素本身
+ * @param useMap 是否使用 Map 对象储存结果
+ *
+ * @returns 转换后的映射对象
+ */
 export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
