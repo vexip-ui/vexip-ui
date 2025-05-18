@@ -189,6 +189,9 @@ const inputValue = computed(() => {
 const columnFlex = computed(() => {
   return { justify: props.action ? 'center' : 'start', align: 'middle' } as const
 })
+const labelWidthDefined = computed(
+  () => !!(formProps.labelWidth && formProps.labelWidth !== 'auto') || props.labelWidth > 0,
+)
 
 const instances = new Set<any>()
 
@@ -387,7 +390,13 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       :value="inputValue"
       style="display: none"
     />
-    <span v-if="hasLabel && labelAlign !== 'top'" ref="placeholder" :class="nh.be('placeholder')">
+    <span
+      v-if="hasLabel && labelAlign !== 'top' && !labelWidthDefined"
+      ref="placeholder"
+      :class="nh.be('placeholder')"
+      role="none"
+    >
+      <Icon v-if="props.help || slots.help" v-bind="icons.help" :class="nh.be('help')"></Icon>
       <slot name="label">
         {{ props.label + (formProps.labelSuffix || '') }}
       </slot>
