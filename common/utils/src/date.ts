@@ -637,7 +637,7 @@ export function differenceMilliseconds(left: Dateable, right: Dateable) {
  * @returns 相差的秒数
  */
 export function differenceSeconds(left: Dateable, right: Dateable) {
-  const diff = differenceMilliseconds(left, right) / SECOND_ON_MILLS
+  const diff = differenceMilliseconds(left, right) / SECOND_ON_MILLISECONDS
 
   return diff > 0 ? Math.floor(diff) : Math.ceil(diff)
 }
@@ -651,7 +651,7 @@ export function differenceSeconds(left: Dateable, right: Dateable) {
  * @returns 相差的分钟数
  */
 export function differenceMinutes(left: Dateable, right: Dateable) {
-  const diff = differenceMilliseconds(left, right) / MINUTE_ON_MILLS
+  const diff = differenceMilliseconds(left, right) / MINUTE_ON_MILLISECONDS
 
   return diff > 0 ? Math.floor(diff) : Math.ceil(diff)
 }
@@ -665,7 +665,7 @@ export function differenceMinutes(left: Dateable, right: Dateable) {
  * @returns 相差的小时数
  */
 export function differenceHours(left: Dateable, right: Dateable) {
-  const diff = differenceMilliseconds(left, right) / HOUR_ON_MILLS
+  const diff = differenceMilliseconds(left, right) / HOUR_ON_MILLISECONDS
 
   return diff > 0 ? Math.floor(diff) : Math.ceil(diff)
 }
@@ -682,7 +682,7 @@ export function differenceDays(left: Dateable, right: Dateable) {
   left = startOfDay(left)
   right = startOfDay(right)
 
-  return (right.getTime() - left.getTime()) / DAY_ON_MILLS
+  return (right.getTime() - left.getTime()) / DAY_ON_MILLISECONDS
 }
 
 /**
@@ -690,15 +690,15 @@ export function differenceDays(left: Dateable, right: Dateable) {
  *
  * @param left 原始日期
  * @param right 原始日期
- * @param weekStartOn 设定周的第一天，默认为周日
+ * @param weekStart 设定周的第一天，默认为周日（0 表示周日）
  *
  * @returns 相差的周数
  */
-export function differenceWeeks(left: Dateable, right: Dateable, weekStartOn = 0) {
-  left = startOfWeek(left, weekStartOn)
-  right = startOfWeek(right, weekStartOn)
+export function differenceWeeks(left: Dateable, right: Dateable, weekStart = 0) {
+  left = startOfWeek(left, weekStart)
+  right = startOfWeek(right, weekStart)
 
-  return (right.getTime() - left.getTime()) / WEEK_ON_MILLS
+  return (right.getTime() - left.getTime()) / WEEK_ON_MILLISECONDS
 }
 
 /**
@@ -912,4 +912,58 @@ export function differenceFullYears(left: Dateable, right: Dateable) {
   const isLastNotFull = compareDesc(left, right) === -sign
 
   return sign * (difference - (isLastNotFull ? 1 : 0))
+}
+
+/**
+ * 获取指定年份和周数的第一天日期
+ *
+ * @param year 年份
+ * @param week 周数（1 表示第一周）
+ * @param startOn 设定周的第一天，默认为周日（0 表示周日）
+ *
+ * @returns 对应日期
+ */
+export function yearWeekToDate(year: number, week: number, startOn = 0): Date {
+  startOn = startOn % 7
+
+  if (startOn < 0) {
+    startOn += 7
+  }
+
+  // 创建该年1月1日的日期对象
+  const date = new Date(year, 0, 1)
+  const day = date.getDay()
+  const difference = (day < startOn ? 7 : 0) + day - startOn
+
+  date.setDate(date.getDate() - difference + (week - 1) * 7)
+
+  return date
+}
+
+/**
+ * 获取指定日期是本年的第几周
+ *
+ * @param date 日期
+ * @param startOn 设定周的第一天，默认为周日（0 表示周日）
+ *
+ * @returns 第几周（从 1 开始）
+ */
+export function getWeekOfYear(date: Dateable, startOn = 0): number {
+  startOn = startOn % 7
+
+  if (startOn < 0) {
+    startOn += 7
+  }
+
+  date = startOfDay(date)
+  const year = date.getFullYear()
+  const yearStart = new Date(year, 0, 1)
+  const day = yearStart.getDay()
+
+  const difference = (day < startOn ? 7 : 0) + day - startOn
+
+  const firstWeekStart = new Date(year, 0, 1 - difference, 0, 0, 0, 0)
+  const diffDays = (date.getTime() - firstWeekStart.getTime()) / DAY_ON_MILLISECONDS
+
+  return Math.floor(diffDays / 7) + 1
 }

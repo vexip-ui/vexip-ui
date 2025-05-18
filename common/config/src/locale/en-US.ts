@@ -93,6 +93,7 @@ export function enUSLocale() {
       placeholder: {
         year: 'year',
         month: 'month',
+        week: 'week',
         date: 'date',
         datetime: 'datetime',
         start: 'Start',

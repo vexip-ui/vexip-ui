@@ -8,7 +8,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { callIfFunc, range as rangeNumbers, toDate } from '@vexip-ui/utils'
+import { callIfFunc, range as rangeNumbers, toDate, yearWeekToDate } from '@vexip-ui/utils'
 import { useRtl } from '@vexip-ui/hooks'
 import { datePickerTypes } from './symbol'
 
@@ -21,8 +21,8 @@ import type {
   DatePickerType,
   DateShortcut,
   DateShortcutsPlacement,
-  DateTimeType,
   DateType,
+  DateUnitType,
   DisabledTime,
   TimeType,
 } from './symbol'
@@ -35,15 +35,15 @@ const props = defineProps({
     validator: (value: DatePickerType) => datePickerTypes.includes(value),
   },
   enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   startValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<DateUnitType, number>>,
     default: null,
   },
   endValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<DateUnitType, number>>,
     default: null,
   },
   shortcuts: {
@@ -79,11 +79,11 @@ const props = defineProps({
     default: false,
   },
   startActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   endActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   min: {
@@ -177,10 +177,18 @@ const panelStyle = computed(() => {
 const startActivated = computed(() => {
   const activated = props.startActivated
 
+  if (props.type === 'week') {
+    return activated.year && activated.week
+  }
+
   return activated.year && activated.month && activated.date
 })
 const endActivated = computed(() => {
   const activated = props.endActivated
+
+  if (props.type === 'week') {
+    return activated.year && activated.week
+  }
 
   return activated.year && activated.month && activated.date
 })
@@ -225,7 +233,15 @@ defineExpose({ refreshCalendar })
 function getStringValue(type: 'start' | 'end') {
   const value = type === 'start' ? props.startValue : props.endValue
 
-  return value ? `${value.year}-${value.month}-${value.date}` : ''
+  let { month, date } = value
+
+  if (props.type === 'week') {
+    const realDate = yearWeekToDate(value.year, value.week)
+    month = realDate.getMonth() + 1
+    date = realDate.getDate()
+  }
+
+  return value ? `${value.year}-${month}-${date}` : ''
 }
 
 function getMonthLabel(index: number) {
@@ -518,6 +534,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
   <div
     :class="{
       [nh.be('panel')]: true,
+      [nh.bem('panel', type)]: true,
       [nh.bem('panel', 'vertical')]:
         shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
     }"
@@ -677,6 +694,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
               :max="max"
               :week-start="weekStart"
               :week-days="weekDays"
+              :select-row="type === 'week'"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             >

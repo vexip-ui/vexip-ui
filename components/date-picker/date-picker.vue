@@ -33,13 +33,16 @@ import {
   doubleDigits,
   format,
   getTime,
+  getWeekOfYear,
   isLeapYear,
   isObject,
   mergeObjects,
   startOfMonth,
+  startOfWeek,
   toAttrValue,
   toDate,
   toFalse,
+  yearWeekToDate,
 } from '@vexip-ui/utils'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -52,7 +55,7 @@ import type {
   DatePickerFormatFn,
   DatePickerSlots,
   DateTimeType,
-  DateType,
+  DateUnitType,
   TimeType,
 } from './symbol'
 
@@ -101,7 +104,7 @@ const props = useProps('datePicker', _props, {
   clearable: false,
   noAction: false,
   labels: () => ({}),
-  dateSeparator: '/',
+  dateSeparator: null,
   timeSeparator: ':',
   shortcuts: () => [],
   disabledDate: {
@@ -160,7 +163,7 @@ const lastValue = ref('')
 const firstSelected = ref<number[] | undefined>()
 const hoveredDate = ref(new Date())
 const staticWheel = ref(false)
-const dateUnitOrder = ref<DateType[]>([])
+const dateUnitOrder = ref<DateUnitType[]>([])
 
 const { timer } = useSetTimeout()
 
@@ -242,9 +245,18 @@ const hasPrefix = computed(() => {
 })
 const currentValue = computed(() => {
   const values = [startState, endState].map(state => {
-    const values = Object.values(state.dateValue).map(doubleDigits)
+    const { year, week, hour, minute, second } = state.dateValue
+    let { month, date } = state.dateValue
 
-    return `${values.slice(0, 3).join('-')} ${values.slice(3).join(':')}`
+    if (props.type === 'week') {
+      const realDate = yearWeekToDate(year, week)
+      month = realDate.getMonth() + 1
+      date = realDate.getDate()
+    }
+
+    return `${year.toString().padStart(4, '0')}-${doubleDigits(month)}-${doubleDigits(
+      date,
+    )} ${doubleDigits(hour)}:${doubleDigits(minute)}:${doubleDigits(second)}`
   })
 
   return props.range ? values : values[0]
@@ -263,11 +275,22 @@ const showClear = computed(() => {
 })
 const min = computed(() => {
   if (props.min) {
-    const date = rawValueToDate(props.min, invalidDate)
+    let date = rawValueToDate(props.min, invalidDate)
 
     if (Number.isNaN(+date)) return -Infinity
 
     date.setHours(0, 0, 0, 0)
+
+    if (props.type !== 'datetime') {
+      if (props.type === 'year') {
+        date.setMonth(0)
+        date.setDate(1)
+      } else if (props.type === 'month') {
+        date = startOfMonth(date)
+      } else if (props.type === 'week') {
+        date = startOfWeek(date)
+      }
+    }
 
     return date.getTime()
   }
@@ -289,6 +312,10 @@ const max = computed(() => {
       } else if (props.type === 'month') {
         date.setMonth(date.getMonth() + 1)
         date = startOfMonth(date)
+        date.setDate(date.getDate() - 1)
+      } else if (props.type === 'week') {
+        date.setDate(date.getDate() + 7)
+        date = startOfWeek(date)
         date.setDate(date.getDate() - 1)
       }
     }
@@ -355,7 +382,7 @@ const startReversed = computed(() => {
     types = ['year']
   } else if (props.type === 'month') {
     types = ['year', 'month']
-  } else if (props.type === 'date') {
+  } else if (props.type === 'date' || props.type === 'week') {
     types = ['year', 'month', 'date']
   } else {
     types = ['year', 'month', 'date', 'hour', 'minute', 'second']
@@ -368,6 +395,7 @@ const startReversed = computed(() => {
 
   return false
 })
+const dateSeparator = computed(() => props.dateSeparator ?? (props.type === 'week' ? '-' : '/'))
 
 const startTimeBound = useTimeBound(startMinTime, startMaxTime)
 const endTimeBound = useTimeBound(endMinTime, endMaxTime)
@@ -511,15 +539,17 @@ function createDateState() {
   const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
     'year',
     'month',
+    'week',
     'date',
     'hour',
     'minute',
     'second',
-  ] as DateTimeType[])
+  ] as DateUnitType[])
 
   const dateValue = reactive({
     year: 1970,
     month: 1, // 1 ~ 12
+    week: 1, // 1 ~ 53
     date: 1,
     hour: 0,
     minute: 0,
@@ -528,6 +558,7 @@ function createDateState() {
   const activated = reactive({
     year: false,
     month: false,
+    week: false,
     date: false,
     hour: false,
     minute: false,
@@ -607,7 +638,7 @@ function parseValue<T extends Dateable | null>(value: T | T[]) {
 }
 
 function parseDateUnitOrder() {
-  const orderSet = new Set<DateType>()
+  const orderSet = new Set<DateUnitType>()
 
   // to ignore 'xxx'
   let inQuotation = false
@@ -619,6 +650,7 @@ function parseDateUnitOrder() {
       inQuotation = !inQuotation
     } else if (!inQuotation) {
       switch (char) {
+        case 'Y':
         case 'y':
           orderSet.add('year')
           break
@@ -628,6 +660,10 @@ function parseDateUnitOrder() {
         case 'd':
           orderSet.add('date')
           break
+        case 'W':
+        case 'w':
+          orderSet.add('week')
+          break
       }
     }
   }
@@ -635,10 +671,15 @@ function parseDateUnitOrder() {
   dateUnitOrder.value = [...orderSet]
 }
 
-function parseTimeUnitEnabled() {
+function parseUnitEnabled() {
   const isDatetime = props.type === 'datetime'
+  const isWeek = props.type === 'week'
 
   ;[startState, endState].forEach(state => {
+    state.enabled.year = true
+    state.enabled.month = true
+    state.enabled.week = false
+    state.enabled.date = true
     state.enabled.hour = false
     state.enabled.minute = false
     state.enabled.second = false
@@ -667,12 +708,18 @@ function parseTimeUnitEnabled() {
         }
       }
     }
+
+    if (isWeek) {
+      state.enabled.month = false
+      state.enabled.week = true
+      state.enabled.date = false
+    }
   })
 }
 
 function parseFormat() {
   parseDateUnitOrder()
-  parseTimeUnitEnabled()
+  parseUnitEnabled()
 }
 
 function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
@@ -793,7 +840,7 @@ function finishInput(shouldChange = true) {
   endState.resetColumn()
 }
 
-function verifyValue(type: DateTimeType) {
+function verifyValue(type: DateUnitType) {
   const dateValue = getCurrentState().dateValue
 
   switch (type) {
@@ -803,6 +850,10 @@ function verifyValue(type: DateTimeType) {
     }
     case 'month': {
       dateValue.month = boundRange(dateValue.month, 1, 12)
+      break
+    }
+    case 'week': {
+      dateValue.week = boundRange(dateValue.week, 1, 53)
       break
     }
     case 'date': {
@@ -899,7 +950,7 @@ function handleInput(value: number) {
   }
 }
 
-function handleInputNumber(type: DateTimeType, number: number) {
+function handleInputNumber(type: DateUnitType, number: number) {
   const state = getCurrentState()
   const prev = state.dateValue[type]
 
@@ -914,13 +965,13 @@ function handleInputNumber(type: DateTimeType, number: number) {
   emitEvent(props.onInput, type, state.dateValue[type])
 }
 
-function setActivatedTrue(type: DateTimeType) {
+function setActivatedTrue(type: DateUnitType) {
   const activated = getCurrentState().activated
 
   if (type === 'date') {
     activated.year = true
     activated.month = true
-  } else if (type === 'month') {
+  } else if (type === 'month' || type === 'week') {
     activated.year = true
   } else if (type === 'minute') {
     activated.hour = true
@@ -932,11 +983,11 @@ function setActivatedTrue(type: DateTimeType) {
   activated[type] = true
 }
 
-function handleInputFocus(type: DateTimeType) {
+function handleInputFocus(type: DateUnitType) {
   getCurrentState().column = type
 }
 
-function isTimeType(type: DateTimeType): type is TimeType {
+function isTimeType(type: DateUnitType): type is TimeType {
   return ['hour', 'minute', 'second'].includes(type)
 }
 
@@ -1078,8 +1129,14 @@ function handleDateHover(hoverDate: Date | null) {
   }
 }
 
+function updateWeekFromDate(valueType?: 'start' | 'end') {
+  const state = valueType ? (valueType === 'start' ? startState : endState) : getCurrentState()
+
+  state.dateValue.week = getWeekOfYear(state.getDate(), props.weekStart)
+}
+
 function handlePanelChange(values: number[]) {
-  let types: DateTimeType[]
+  let types: DateUnitType[]
 
   if (props.type === 'year') {
     types = ['year']
@@ -1093,6 +1150,11 @@ function handlePanelChange(values: number[]) {
     for (let i = 0, len = types.length; i < len; ++i) {
       startState.dateValue[types[i]] = values[i]
       updateDateActivated(types[i], 'start')
+    }
+
+    if (props.type === 'week') {
+      updateWeekFromDate('start')
+      updateDateActivated('week', 'start')
     }
 
     if (noActionMode.value) handleEnter()
@@ -1109,6 +1171,13 @@ function handlePanelChange(values: number[]) {
       updateDateActivated(types[i], 'start')
       updateDateActivated(types[i], 'end')
     }
+
+    if (props.type === 'week') {
+      updateWeekFromDate('start')
+      updateWeekFromDate('end')
+      updateDateActivated('week', 'start')
+      updateDateActivated('week', 'end')
+    }
   } else {
     const [year, month, date] = firstSelected.value
     const firstTime = new Date(`${year}-${month}-${date}`).getTime()
@@ -1121,6 +1190,13 @@ function handlePanelChange(values: number[]) {
       endState.dateValue[types[i]] = end[i]
       updateDateActivated(types[i], 'start')
       updateDateActivated(types[i], 'end')
+    }
+
+    if (props.type === 'week') {
+      updateWeekFromDate('start')
+      updateWeekFromDate('end')
+      updateDateActivated('week', 'start')
+      updateDateActivated('week', 'end')
     }
 
     verifyRangeValue()
@@ -1139,7 +1215,7 @@ function handleTimeChange(valueType: 'start' | 'end', type: TimeType, time: numb
   updateDateActivated('second', valueType)
 }
 
-function updateDateActivated(type: DateTimeType, valueType?: 'start' | 'end') {
+function updateDateActivated(type: DateUnitType, valueType?: 'start' | 'end') {
   const state = valueType ? (valueType === 'start' ? startState : endState) : getCurrentState()
 
   if (type === 'month') {
@@ -1261,7 +1337,7 @@ function handleClickOutside() {
           :ctrl-steps="props.ctrlSteps"
           :focused="focused"
           :visible="currentVisible"
-          :date-separator="props.dateSeparator"
+          :date-separator="dateSeparator"
           :time-separator="props.timeSeparator"
           :filler="props.filler"
           :labels="props.labels"
@@ -1298,7 +1374,7 @@ function handleClickOutside() {
             :ctrl-steps="props.ctrlSteps"
             :focused="focused"
             :visible="currentVisible"
-            :date-separator="props.dateSeparator"
+            :date-separator="dateSeparator"
             :time-separator="props.timeSeparator"
             :filler="props.filler"
             :labels="props.labels"

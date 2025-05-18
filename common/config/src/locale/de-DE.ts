@@ -93,6 +93,7 @@ export function deDELocale() {
       placeholder: {
         year: 'Jahr',
         month: 'Monat',
+        week: 'Woche',
         date: 'Datum',
         datetime: 'Datum/Zeit',
         start: 'Start',

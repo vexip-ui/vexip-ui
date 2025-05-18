@@ -324,6 +324,10 @@ $date-picker: map.merge(
       &__index {
         width: 28px;
         height: 28px;
+
+        &-inner {
+          line-height: 1;
+        }
       }
     }
   }
@@ -377,6 +381,7 @@ $date-picker: map.merge(
         justify-content: center;
         width: 100%;
         height: 100%;
+        line-height: 1;
         background-color: value('date-picker-item-bg-color');
         border-radius: value('date-picker-item-radius');
         transition: value('transition-color'), value('transition-background');

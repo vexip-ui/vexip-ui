@@ -2,30 +2,30 @@
 import { computed, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
-import { doubleDigits, getLastDayOfMonth } from '@vexip-ui/utils'
+import { debounce, doubleDigits, getLastDayOfMonth, getOrdinalSuffix } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
 import type { LocaleConfig } from '@vexip-ui/config'
-import type { DateTimeType, DateType } from './symbol'
+import type { DateTimeType, DateUnitType } from './symbol'
 
 defineOptions({ name: 'DateControl' })
 
 const props = defineProps({
   unitType: {
-    type: String as PropType<DateTimeType | ''>,
+    type: String as PropType<DateUnitType | ''>,
     default: '',
   },
   enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   activated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   dateValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<DateUnitType, number>>,
     default: () => ({}),
   },
   dateSeparator: {
@@ -60,7 +60,7 @@ const props = defineProps({
     default: () => [5, 5, 5],
   },
   labels: {
-    type: Object as PropType<Partial<Record<DateTimeType, string>>>,
+    type: Object as PropType<Partial<Record<DateUnitType, string>>>,
     default: () => ({}),
   },
   hasError: {
@@ -84,8 +84,8 @@ const props = defineProps({
     default: () => ({}),
   },
   dateUnitOrder: {
-    type: Array as PropType<DateType[]>,
-    default: () => ['year', 'month', 'date'],
+    type: Array as PropType<DateUnitType[]>,
+    default: () => ['year', 'month', 'week', 'date'],
   },
 })
 
@@ -127,6 +127,9 @@ const formattedYear = computed(() => {
 const formattedMonth = computed(() => {
   return formatValue('month')
 })
+const formattedWeek = computed(() => {
+  return formatValue('week')
+})
 const formattedDate = computed(() => {
   return formatValue('date')
 })
@@ -163,7 +166,7 @@ defineExpose({
   },
 })
 
-function formatValue(type: DateTimeType) {
+function formatValue(type: DateUnitType) {
   const isYear = type === 'year'
   const filler = props.filler
 
@@ -174,11 +177,11 @@ function formatValue(type: DateTimeType) {
     : `${isYear ? `${filler}${filler}` : ''}${filler}${filler}`
 }
 
-function getUnitFocusClass(type: DateTimeType) {
+function getUnitFocusClass(type: DateUnitType) {
   return props.visible && props.unitType === type ? nh.bem('unit', 'focused') : null
 }
 
-function handleInputFocus(type: DateTimeType) {
+function handleInputFocus(type: DateUnitType) {
   if (props.readonly) return
 
   emit('unit-focus', type)
@@ -240,6 +243,8 @@ function handleInput(event: KeyboardEvent) {
 function handleBlur() {
   emit('blur')
 }
+
+const debounceHandleInput = debounce(handleInput, 32)
 </script>
 
 <template>
@@ -248,7 +253,7 @@ function handleBlur() {
     :class="className"
     role="none"
     tabindex="-1"
-    @keydown="handleInput"
+    @keydown="debounceHandleInput"
     @blur="handleBlur"
   >
     <div v-if="!focused && !isActivated" :class="nh.be('placeholder')">
@@ -260,7 +265,7 @@ function handleBlur() {
         :class="[nh.be('unit'), getUnitFocusClass('year')]"
         role="spinbutton"
         :aria-label="label.year"
-        :aria-valuenow="props.dateValue.year"
+        :aria-valuenow="dateValue.year"
         :aria-valuetext="formattedYear"
         :aria-valuemin="1"
         :aria-valuemax="9999"
@@ -292,7 +297,7 @@ function handleBlur() {
           :class="[nh.be('unit'), getUnitFocusClass('month')]"
           role="spinbutton"
           :aria-label="label.month"
-          :aria-valuenow="props.dateValue.month"
+          :aria-valuenow="dateValue.month"
           :aria-valuetext="formattedMonth"
           :aria-valuemin="1"
           :aria-valuemax="12"
@@ -312,6 +317,39 @@ function handleBlur() {
           {{ labels.month }}
         </div>
       </template>
+      <template v-if="enabled.week">
+        <div
+          v-if="enabled.year"
+          :class="nh.be('separator')"
+          aria-hidden
+          style="order: -3"
+        >
+          {{ dateSeparator }}
+        </div>
+        <div
+          :class="[nh.be('unit'), getUnitFocusClass('week')]"
+          role="spinbutton"
+          :aria-label="label.week"
+          :aria-valuenow="dateValue.week"
+          :aria-valuetext="formattedWeek"
+          :aria-valuemin="1"
+          :aria-valuemax="53"
+          :aria-labelledby="labeledBy"
+          :style="{ order: dateUnitOrder['week'] }"
+          @click="handleInputFocus('week')"
+        >
+          {{ formattedWeek }}
+        </div>
+        <div
+          v-if="labels.week || activated.week"
+          :class="nh.be('label')"
+          aria-hidden
+          :style="{ order: dateUnitOrder['week'] }"
+          @click="handleInputFocus('week')"
+        >
+          {{ labels.week || getOrdinalSuffix(dateValue.week) }}
+        </div>
+      </template>
       <template v-if="enabled.date">
         <div
           v-if="enabled.month || enabled.year"
@@ -325,7 +363,7 @@ function handleBlur() {
           :class="[nh.be('unit'), getUnitFocusClass('date')]"
           role="spinbutton"
           :aria-label="label.date"
-          :aria-valuenow="props.dateValue.date"
+          :aria-valuenow="dateValue.date"
           :aria-valuetext="formattedDate"
           :aria-valuemin="1"
           :aria-valuemax="maxDateCount || 31"
@@ -353,7 +391,7 @@ function handleBlur() {
           :class="[nh.be('unit'), getUnitFocusClass('hour')]"
           role="spinbutton"
           :aria-label="label.hour"
-          :aria-valuenow="props.dateValue.hour"
+          :aria-valuenow="dateValue.hour"
           :aria-valuetext="formattedHour"
           :aria-valuemin="0"
           :aria-valuemax="23"
@@ -378,7 +416,7 @@ function handleBlur() {
             :class="[nh.be('unit'), getUnitFocusClass('minute')]"
             role="spinbutton"
             :aria-label="label.minute"
-            :aria-valuenow="props.dateValue.minute"
+            :aria-valuenow="dateValue.minute"
             :aria-valuetext="formattedMinute"
             :aria-valuemin="0"
             :aria-valuemax="59"
@@ -404,7 +442,7 @@ function handleBlur() {
             :class="[nh.be('unit'), getUnitFocusClass('second')]"
             role="spinbutton"
             :aria-label="label.second"
-            :aria-valuenow="props.dateValue.second"
+            :aria-valuenow="dateValue.second"
             :aria-valuetext="formattedSecond"
             :aria-valuemin="0"
             :aria-valuemax="59"

@@ -6,11 +6,13 @@ export type DateType = 'year' | 'month' | 'date'
 export type TimeType = 'hour' | 'minute' | 'second'
 export type DateTimeType = DateType | TimeType
 
-export type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
+export type DatePickerType = 'date' | 'datetime' | 'year' | 'month' | 'week'
 export type DateShortcutsPlacement = 'top' | 'right' | 'bottom' | 'left'
 export type TimeShortcutsPlacement = DateShortcutsPlacement
 
 export type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => unknown
+
+export type DateUnitType = DateTimeType | 'week'
 
 export interface DateShortcut {
   name: string,
@@ -53,6 +55,7 @@ export const datePickerTypes = Object.freeze<DatePickerType[]>([
   'datetime',
   'year',
   'month',
+  'week',
 ])
 
 export const invalidDate = new Date('')

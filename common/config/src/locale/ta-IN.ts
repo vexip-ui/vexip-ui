@@ -93,6 +93,7 @@ export function taINLocale() {
       placeholder: {
         year: 'வருடம்',
         month: 'மாதம்',
+        week: 'வாரம்',
         date: 'தேதி',
         datetime: 'தேதி நேரம்',
         start: 'தொடக்கம்',

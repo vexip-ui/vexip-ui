@@ -91,6 +91,7 @@ export interface LocaleConfig {
     placeholder: {
       year: string,
       month: string,
+      week: string,
       date: string,
       datetime: string,
       start: string,

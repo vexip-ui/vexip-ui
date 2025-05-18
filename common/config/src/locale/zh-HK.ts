@@ -93,6 +93,7 @@ export function zhHKLocale() {
       placeholder: {
         year: '年份',
         month: '月份',
+        week: '周',
         date: '日期',
         datetime: '日期時間',
         start: '開始',

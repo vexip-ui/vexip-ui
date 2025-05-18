@@ -356,6 +356,22 @@ export function random(max: number, min = 0) {
   return Math.random() * (max - min) + min
 }
 
+const ordinalSuffixes = ['th', 'st', 'nd', 'rd']
+
+export function getOrdinalSuffix(number: number) {
+  if (number < 0) {
+    return 'th'
+  }
+
+  const rest = number % 100
+
+  return ordinalSuffixes[rest] || ordinalSuffixes[number % 10] || ordinalSuffixes[0]
+}
+
+export function getOrdinal(number: number) {
+  return `${number}${getOrdinalSuffix(number)}`
+}
+
 /**
  * 将数字处理为的指定的有效位数
  *
