@@ -320,6 +320,11 @@ $date-picker: map.merge(
       &__row--week {
         margin-bottom: 6px;
       }
+
+      &__index {
+        width: 28px;
+        height: 28px;
+      }
     }
   }
 

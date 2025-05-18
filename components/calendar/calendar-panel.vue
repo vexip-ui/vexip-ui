@@ -9,6 +9,7 @@ import { useHover } from '@vexip-ui/hooks'
 import {
   debounceMinor,
   differenceDays,
+  differenceWeeks,
   endOfDay,
   rangeDate,
   startOfDay,
@@ -57,6 +58,7 @@ const props = useProps('calendarBase', _props, {
   min: null,
   max: null,
   range: null,
+  selectRow: false,
   slots: () => ({}),
 })
 
@@ -71,7 +73,7 @@ const endValue = ref<Date | null>(null)
 const dateRange = ref<Date[]>([])
 const hoveredDate = ref<Date | null>(null)
 
-const { wrapper, isHover } = useHover()
+const { wrapper: body, isHover } = useHover()
 const locale = useLocale('calendar', toRef(props, 'locale'))
 
 const min = computed(() => (props.min ? +startOfDay(props.min) : -Infinity))
@@ -103,7 +105,7 @@ watch(hoveredDate, value => {
 defineExpose({
   startValue,
   endValue,
-  body: wrapper,
+  body,
   isSelected,
   isHovered,
   isPrevMonth,
@@ -142,14 +144,19 @@ function parseValue(value: Dateable | Dateable[]) {
   }
 }
 
+function isSameRow(current: Date, target: Date) {
+  return props.selectRow && differenceWeeks(current, target) === 0
+}
+
 function isSelected(date: Date) {
   if (!date || (!startValue.value && !endValue.value)) {
     return false
   }
 
   return !!(
-    (startValue.value && !differenceDays(date, startValue.value)) ||
-    (endValue.value && !differenceDays(date, endValue.value))
+    (startValue.value &&
+      (!differenceDays(date, startValue.value) || isSameRow(date, startValue.value))) ||
+    (endValue.value && (!differenceDays(date, endValue.value) || isSameRow(date, endValue.value)))
   )
 }
 
@@ -180,7 +187,7 @@ function isHovered(date: Date) {
     return false
   }
 
-  return !differenceDays(date, hoveredDate.value)
+  return !differenceDays(date, hoveredDate.value) || isSameRow(date, hoveredDate.value)
 }
 
 function isPrevMonth(date: Date) {
@@ -265,7 +272,12 @@ function isInRange(date: Date) {
 
 <template>
   <div
-    :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]"
+    :class="[
+      nh.be('panel'),
+      nh.bs('vars'),
+      props.selectRow && nh.bem('panel', 'select-row'),
+      props.inherit && nh.bem('panel', 'inherit')
+    ]"
     role="grid"
   >
     <slot name="header">

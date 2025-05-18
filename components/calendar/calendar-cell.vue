@@ -111,6 +111,7 @@ const label = computed(() => {
         :class="{
           [nh.be('index')]: true,
           [nh.bem('index', 'selected')]: selected,
+          [nh.bem('index', 'hovered')]: hovered,
           [nh.bem('index', 'prev')]: isPrev,
           [nh.bem('index', 'next')]: isNext,
           [nh.bem('index', 'today')]: isToday,
