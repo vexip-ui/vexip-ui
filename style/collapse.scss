@@ -11,6 +11,8 @@ $collapse: map.merge(
     header-color-disabled: value('content-color-disabled'),
     header-bg-color: transparent,
     header-bg-color-card: value('fill-color-background'),
+    header-v-padding: 8px,
+    header-h-padding: 16px,
     arrow-color: value('content-color-secondary'),
     arrow-color-hover: value('color-primary-base'),
     arrow-color-disabled: value('content-color-humble'),
@@ -37,6 +39,7 @@ $collapse: map.merge(
   $divider: value('collapse-divider');
   $radius: value('collapse-radius');
 
+  $header-padding: value('collapse-header-v-padding') value('collapse-header-h-padding');
   $content-padding: value('collapse-content-v-padding') value('collapse-content-h-padding');
 
   @include basis {
@@ -110,7 +113,7 @@ $collapse: map.merge(
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 8px 14px;
+    padding: $header-padding;
     line-height: inherit;
     color: value('collapse-header-color');
     cursor: pointer;
@@ -129,25 +132,27 @@ $collapse: map.merge(
     }
   }
 
+  $with-arrow-padding: calc(value('collapse-header-h-padding') + 20px);
+
   &--arrow-left,
   &__panel--arrow-left {
     #{$header} {
-      padding-inline-start: 36px;
+      padding-inline-start: $with-arrow-padding;
     }
 
     #{$arrow} {
-      inset-inline-start: 16px;
+      inset-inline-start: value('collapse-header-h-padding');
     }
   }
 
   &--arrow-right,
   &__panel--arrow-right {
     #{$header} {
-      padding-inline-end: 36px;
+      padding-inline-end: $with-arrow-padding;
     }
 
     #{$arrow} {
-      inset-inline-start: calc(100% - 16px);
+      inset-inline-start: calc(100% - value('collapse-header-h-padding'));
     }
   }
 
