@@ -73,6 +73,7 @@
 
     &--active {
       position: relative;
+      z-index: 1;
       opacity: 100%;
     }
   }
