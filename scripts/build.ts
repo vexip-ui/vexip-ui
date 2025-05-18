@@ -14,7 +14,7 @@ async function main() {
   logger.withBothLn(() => logger.successText('start building lib...'))
 
   await run('pnpm', ['bootstrap'])
-  await run('pnpm', ['props'])
+  await run('pnpm', ['gen:props'])
   await run('vite', ['build', '--config', 'vite.config.ts'], {
     env: {
       NODE_ENV: env,

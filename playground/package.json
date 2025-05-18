@@ -5,8 +5,8 @@
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
-    "preview": "vite preview",
-    "serve": "vite"
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@vexip-ui/icons": "workspace:*",

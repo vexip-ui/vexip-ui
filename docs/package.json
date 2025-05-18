@@ -5,8 +5,8 @@
   "author": "qmhc",
   "scripts": {
     "build": "vitepress build",
-    "preview": "vitepress preview",
-    "serve": "NODE_ENV=development vitepress dev --test"
+    "dev": "NODE_ENV=development vitepress dev --test",
+    "preview": "vitepress preview"
   },
   "dependencies": {
     "@vexip-ui/bem-helper": "workspace:*",
