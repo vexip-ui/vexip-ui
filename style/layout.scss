@@ -162,6 +162,7 @@ $layout: map.merge(
   }
 
   &--no-aside &__section {
+    min-height: value('layout-view-height');
     padding-inline-start: 0;
   }
 
@@ -250,6 +251,11 @@ $layout: map.merge(
       height: calc(100% - var(--vxp-layout-header-height));
       overflow: hidden;
     }
+  }
+
+  &--no-header &__main--fixed,
+  &--header-main &__main--fixed {
+    height: 100%;
   }
 
   &__footer {
