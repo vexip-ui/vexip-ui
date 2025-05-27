@@ -1,3 +1,7 @@
+## [2.8.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.8.0...hooks@2.8.1) (2025-05-27)
+
+
+
 ## 2.8.0 (2025-01-29)
 
 * feat(hooks): useListener support disabled option ([a92674b](https://github.com/vexip-ui/vexip-ui/commit/a92674b))
